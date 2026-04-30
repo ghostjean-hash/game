@@ -61,6 +61,7 @@ function newState(puzzle) {
     pausedAt: null,
     pausedTotal: 0,
     undo: [],
+    lastChanged: null, // 마지막으로 값이 변경된 셀 인덱스 (클리어 확산 중심)
   };
 }
 
@@ -185,9 +186,125 @@ function onCellClick(i) {
 function setCell(i, value) {
   if (state.given[i]) return false;
   if (state.cells[i] === value) return false;
+  const prev = state.cells.slice();
   state.undo.push({ cell: i, before: state.cells[i] });
   state.cells[i] = value;
+  state.lastChanged = i;
+  // 새로 완성된 행/열/박스가 있으면 웨이브 펄스. 지우기(0)는 트리거 안 함.
+  if (value !== 0) {
+    const comp = detectNewCompletions(prev, state.cells);
+    if (comp.rows.length || comp.cols.length || comp.boxes.length) {
+      triggerCompletionPulse(comp);
+    }
+  }
   return true;
+}
+
+// === 완성 감지 ===
+function isGroupComplete(indices, cells) {
+  const seen = new Set();
+  for (const i of indices) {
+    const v = cells[i];
+    if (!v) return false;
+    if (seen.has(v)) return false;
+    seen.add(v);
+  }
+  return seen.size === 9;
+}
+
+function detectNewCompletions(prev, next) {
+  const rows = [], cols = [], boxes = [];
+  for (let r = 0; r < 9; r++) {
+    const idx = [];
+    for (let c = 0; c < 9; c++) idx.push(r * 9 + c);
+    if (!isGroupComplete(idx, prev) && isGroupComplete(idx, next)) rows.push(r);
+  }
+  for (let c = 0; c < 9; c++) {
+    const idx = [];
+    for (let r = 0; r < 9; r++) idx.push(r * 9 + c);
+    if (!isGroupComplete(idx, prev) && isGroupComplete(idx, next)) cols.push(c);
+  }
+  for (let b = 0; b < 9; b++) {
+    const br = Math.floor(b / 3) * 3, bc = (b % 3) * 3;
+    const idx = [];
+    for (let dr = 0; dr < 3; dr++) for (let dc = 0; dc < 3; dc++) idx.push((br + dr) * 9 + (bc + dc));
+    if (!isGroupComplete(idx, prev) && isGroupComplete(idx, next)) boxes.push(b);
+  }
+  return { rows, cols, boxes };
+}
+
+// === 펄스 적용 ===
+const LINE_STEP_MS = 50;
+const CLEAR_STEP_MS = 70;
+const PULSE_LINE_DURATION = 520;
+const PULSE_CLEAR_DURATION = 800;
+
+function applyPulse(delays, klass, durationMs) {
+  let maxDelay = 0;
+  for (const [i, d] of delays.entries()) {
+    if (d > maxDelay) maxDelay = d;
+    const el = cellEls[i];
+    el.classList.remove(klass);
+    el.style.setProperty("--pulse-delay", `${d}ms`);
+    // 강제 reflow로 애니메이션 재시작
+    void el.offsetWidth;
+    el.classList.add(klass);
+  }
+  // 가장 늦은 펄스가 끝난 후 클래스 제거(중첩 방지)
+  setTimeout(() => {
+    for (const [i] of delays.entries()) cellEls[i].classList.remove(klass);
+  }, maxDelay + durationMs + 50);
+}
+
+function triggerCompletionPulse(comp) {
+  // 행/열은 같은 클래스(pulse-line), 박스는 별도(pulse-box)로 톤 차별.
+  // 동일 셀에 두 트리거 겹치면 더 짧은 delay 채택.
+  const lineDelays = new Map();
+  const boxDelays = new Map();
+  for (const r of comp.rows) {
+    for (let c = 0; c < 9; c++) {
+      const i = r * 9 + c;
+      const d = c * LINE_STEP_MS;
+      if (!lineDelays.has(i) || lineDelays.get(i) > d) lineDelays.set(i, d);
+    }
+  }
+  for (const c of comp.cols) {
+    for (let r = 0; r < 9; r++) {
+      const i = r * 9 + c;
+      const d = r * LINE_STEP_MS;
+      if (!lineDelays.has(i) || lineDelays.get(i) > d) lineDelays.set(i, d);
+    }
+  }
+  for (const b of comp.boxes) {
+    const br = Math.floor(b / 3) * 3, bc = (b % 3) * 3;
+    for (let dr = 0; dr < 3; dr++) {
+      for (let dc = 0; dc < 3; dc++) {
+        const i = (br + dr) * 9 + (bc + dc);
+        const d = (dr * 3 + dc) * LINE_STEP_MS;
+        if (!boxDelays.has(i) || boxDelays.get(i) > d) boxDelays.set(i, d);
+      }
+    }
+  }
+  if (lineDelays.size) applyPulse(lineDelays, "pulse-line", PULSE_LINE_DURATION);
+  if (boxDelays.size) applyPulse(boxDelays, "pulse-box", PULSE_LINE_DURATION);
+}
+
+function triggerClearPulse(centerIdx) {
+  const idx = centerIdx == null ? 40 : centerIdx;
+  const r0 = Math.floor(idx / 9), c0 = idx % 9;
+  const delays = new Map();
+  for (let i = 0; i < 81; i++) {
+    const r = Math.floor(i / 9), c = i % 9;
+    const dist = Math.max(Math.abs(r - r0), Math.abs(c - c0)); // 체비셰프 거리
+    delays.set(i, dist * CLEAR_STEP_MS);
+  }
+  applyPulse(delays, "pulse-clear", PULSE_CLEAR_DURATION);
+  // 기준 셀(마지막 입력)은 별도 클래스로 더 강하게 빛나서 시작점을 명확히.
+  const origin = cellEls[idx];
+  origin.classList.remove("pulse-clear-origin");
+  void origin.offsetWidth; // 애니메이션 재시작 트릭
+  origin.classList.add("pulse-clear-origin");
+  setTimeout(() => origin.classList.remove("pulse-clear-origin"), 1050);
 }
 
 function inputNumber(n) {
@@ -303,6 +420,17 @@ async function onCleared() {
   // 타이머 동결
   const finalMs = elapsedMs();
   timerEl.textContent = fmtTime(finalMs);
+  // 라인/박스 펄스가 확산 위에 겹쳐 기준점을 흐리지 않도록 즉시 정리.
+  for (const el of cellEls) {
+    el.classList.remove("pulse-line", "pulse-box");
+  }
+  // 한 프레임 대기 후 확산 시작(시작점이 깔끔하게 보이도록).
+  await new Promise((r) => requestAnimationFrame(() => r()));
+  // 마지막 입력 셀 기준 확산 펄스
+  triggerClearPulse(state.lastChanged);
+  // 가장 먼 셀(체비셰프 거리 최대 8) + animation duration까지 보여준 뒤 모달 노출
+  const maxDist = 8;
+  await new Promise((r) => setTimeout(r, maxDist * CLEAR_STEP_MS + PULSE_CLEAR_DURATION + 50));
   // 베스트 갱신(M1: 단순 시간 기록)
   const key = `best.${state.puzzle.difficulty}.classic`;
   const prev = store.get(key, null);

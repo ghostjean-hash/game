@@ -1,3 +1,21 @@
+/* 스도쿠 전용 라이트 톤. 다른 게임/허브에는 영향 없음.
+   글로벌 토큰을 .page.sudoku 스코프에서만 오버라이드. */
+.page.sudoku {
+  --bg: #ffffff;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #f4f5f7;
+  --fg: #1a1d23;
+  --fg-dim: #4a5160;
+  --fg-mute: #8b94a3;
+  --line: #d6d9de;
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+  --bad: #d92d20;
+
+  background: var(--bg);
+  color: var(--fg);
+}
+
 /* 폰 세로 우선. 보드 정사각, 패드 보드 아래.
    topbar 슬림(테트리스와 동일 톤). */
 
@@ -40,6 +58,7 @@
   padding: 4px 8px;
   border: 1px solid var(--line);
   border-radius: var(--r-1);
+  background: var(--bg-elev);
 }
 
 .sudoku .timer {
@@ -65,17 +84,17 @@
 }
 .sudoku .topbar .icon-btn:active { background: var(--bg-elev); transform: scale(0.96); }
 
-/* 보드 영역: 정사각으로 가운데 배치. 패드 아래에 두고 grid 1fr */
+/* 보드 영역: 정사각으로 가운데 배치. */
 .sudoku .stage {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 0;
   padding: 8px;
+  background: var(--bg);
 }
 
 .sudoku .board {
-  /* 가용 폭/높이 중 작은 쪽 기반의 정사각 */
   width: min(100%, calc(100dvh - 220px));
   aspect-ratio: 1 / 1;
   max-width: 100%;
@@ -83,10 +102,10 @@
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(9, 1fr);
   background: var(--bg-elev);
-  border: 2px solid var(--fg-mute);
+  border: 2px solid #1a1d23;
   border-radius: var(--r-2);
   overflow: hidden;
-  box-shadow: var(--shadow-1);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
 }
 
 .sudoku .cell {
@@ -98,42 +117,98 @@
   font-weight: 600;
   color: var(--fg);
   background: var(--bg-elev);
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid #e6e8ec;
   user-select: none;
   -webkit-user-select: none;
   cursor: pointer;
   position: relative;
-  /* 셀은 button 기본 패딩 제거 */
   padding: 0;
 }
-/* 3x3 박스 굵은 경계 */
-.sudoku .cell.b-right { border-right: 2px solid var(--fg-mute); }
-.sudoku .cell.b-bottom { border-bottom: 2px solid var(--fg-mute); }
+/* 3x3 박스 굵은 경계: 검정 톤 */
+.sudoku .cell.b-right { border-right: 2px solid #1a1d23; }
+.sudoku .cell.b-bottom { border-bottom: 2px solid #1a1d23; }
 
+/* 단서: 굵은 검정. 빈칸과 동일 흰 배경(균일한 보드 톤 유지) */
 .sudoku .cell.given {
   font-weight: 800;
-  color: var(--fg);
-  background: var(--bg-elev-2);
+  color: #1a1d23;
+  background: var(--bg-elev);
 }
+/* 사용자 입력: 파랑으로 단서와 구분 */
 .sudoku .cell.user {
   color: var(--accent);
+  font-weight: 700;
 }
 .sudoku .cell.error {
-  color: var(--bad, #ff6b81);
+  color: var(--bad);
 }
 
-/* 선택/관련/같은숫자 하이라이트 (약 → 강 순서) */
-.sudoku .cell.related { background: rgba(90, 169, 255, 0.06); }
-.sudoku .cell.given.related { background: rgba(90, 169, 255, 0.10); }
-.sudoku .cell.same-num { background: rgba(90, 169, 255, 0.18); }
-.sudoku .cell.given.same-num { background: rgba(90, 169, 255, 0.22); }
-.sudoku .cell.selected { background: rgba(90, 169, 255, 0.30); outline: 2px solid var(--accent); outline-offset: -2px; z-index: 1; }
-.sudoku .cell.given.selected { background: rgba(90, 169, 255, 0.30); }
+/* 강조 톤: 알록달록 방지. 회색-파랑 계열로만 점층. */
+.sudoku .cell.related { background: #eef1f5; }            /* 같은 행/열/박스 */
+.sudoku .cell.same-num { background: #d6e4fb; }            /* 같은 숫자 */
+.sudoku .cell.selected {
+  background: #b9d2fa;
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+/* given에 같은 강조 적용(별도 규칙 불필요) */
 
 /* 일시정지 시 보드 가림 */
 .sudoku.is-paused .board { filter: blur(8px); pointer-events: none; }
 
-/* 패드: 보드 아래. 모바일 폰 한 손 조작 친화 크기. */
+/* 셀 펄스 이펙트(행/열/박스 완성, 전체 클리어).
+   ::after 오버레이로 selected/related 등 다른 강조 클래스와 충돌하지 않음. */
+.sudoku .cell { overflow: hidden; }
+.sudoku .cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.85);
+  z-index: 2;
+}
+.sudoku .cell.pulse-line::after {
+  background: var(--accent);
+  animation: cellPulseLine 480ms ease-out;
+  animation-delay: var(--pulse-delay, 0ms);
+}
+.sudoku .cell.pulse-box::after {
+  /* 박스 완성: 약간 다른 톤으로 영역 구분 */
+  background: #7c3aed;
+  animation: cellPulseLine 520ms ease-out;
+  animation-delay: var(--pulse-delay, 0ms);
+}
+.sudoku .cell.pulse-clear::after {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  animation: cellPulseClear 760ms ease-out;
+  animation-delay: var(--pulse-delay, 0ms);
+}
+/* 확산 기준 셀(마지막 입력): 외곽으로 퍼지기 전 그 셀이 먼저 강하게 빛난다. */
+.sudoku .cell.pulse-clear-origin::after {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  animation: cellPulseOrigin 980ms ease-out !important;
+  animation-delay: 0ms !important;
+  opacity: 1;
+}
+@keyframes cellPulseLine {
+  0%   { opacity: 0;    transform: scale(0.85); }
+  30%  { opacity: 0.55; transform: scale(1.0); }
+  100% { opacity: 0;    transform: scale(1.08); }
+}
+@keyframes cellPulseClear {
+  0%   { opacity: 0;    transform: scale(0.85); }
+  30%  { opacity: 0.9;  transform: scale(1.05); }
+  100% { opacity: 0;    transform: scale(1.18); }
+}
+@keyframes cellPulseOrigin {
+  0%   { opacity: 1;    transform: scale(0.6); }
+  25%  { opacity: 1;    transform: scale(1.0); }
+  100% { opacity: 0;    transform: scale(1.35); }
+}
+
+/* 패드: 보드 아래. */
 .sudoku .pad {
   display: grid;
   gap: 6px;
@@ -156,7 +231,7 @@
   min-height: 44px;
   font-size: 16px;
 }
-.sudoku .pad-num { font-size: 20px; }
+.sudoku .pad-num { font-size: 20px; color: var(--accent); }
 .sudoku .pad-btn:active,
 .sudoku .pad-num:active { background: var(--bg-elev); transform: scale(0.96); }
 .sudoku .pad-num.depleted {
@@ -171,11 +246,65 @@
   }
 }
 
-/* 가로/태블릿: 보드 세로 공간 더 활용 */
-@media (orientation: landscape) and (min-height: 320px) {
-  .sudoku .board {
-    width: min(100%, calc(100dvh - 180px));
+/* 가로 모드 + 태블릿/PC: 패드를 보드 우측 사이드에 배치.
+   보드는 좌측에서 정사각 최대화, 우측 패드는 3x3 키패드 형태.
+   버튼 크기는 vmin 기반 clamp로 화면에 비례하되, 상한을 두어 보드 셀보다 커지지 않게. */
+@media (orientation: landscape) and (min-width: 600px),
+       (min-width: 900px) {
+  .sudoku {
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr minmax(240px, 360px);
+    grid-template-areas:
+      "top top"
+      "stage pad";
   }
-  .sudoku .pad-btn,
-  .sudoku .pad-num { min-height: 40px; }
+  .sudoku .topbar { grid-area: top; }
+  .sudoku .stage  { grid-area: stage; }
+  .sudoku .pad    {
+    grid-area: pad;
+    border-top: none;
+    border-left: 1px solid var(--line);
+    align-content: center;
+    padding: 12px 12px calc(env(safe-area-inset-bottom) + 12px);
+    gap: clamp(6px, 1.2vmin, 12px);
+  }
+  .sudoku .pad-row { gap: clamp(6px, 1.2vmin, 12px); }
+  .sudoku .pad-actions { grid-template-columns: 1fr 1fr; }
+  .sudoku .pad-numbers {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+  }
+  /* 버튼 크기: 화면 세로(가로 모드 vmin)에 비례.
+     상한 80px(숫자)/64px(액션)로 보드 셀보다 커지지 않도록 제한. */
+  .sudoku .pad-num {
+    min-height: clamp(48px, 9vmin, 80px);
+    font-size: clamp(20px, 4vmin, 32px);
+  }
+  .sudoku .pad-btn {
+    min-height: clamp(40px, 7vmin, 64px);
+    font-size: clamp(14px, 3vmin, 22px);
+  }
+  .sudoku .board {
+    width: min(100%, calc(100dvh - 80px));
+  }
+}
+
+/* 모달은 글로벌 토큰을 따른다(다크 잔재). 스도쿠에서 모달이 열릴 때만 라이트로. */
+.page.sudoku ~ .modal-backdrop .modal,
+body:has(.page.sudoku) .modal-backdrop .modal {
+  background: #ffffff;
+  color: #1a1d23;
+  border-color: #d6d9de;
+}
+body:has(.page.sudoku) .modal-backdrop .modal h2 { color: #1a1d23; }
+body:has(.page.sudoku) .modal-backdrop .modal p { color: #4a5160; }
+body:has(.page.sudoku) .modal-backdrop .modal .btn {
+  background: #f4f5f7;
+  color: #1a1d23;
+  border-color: #d6d9de;
+}
+body:has(.page.sudoku) .modal-backdrop .modal .btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: transparent;
 }
