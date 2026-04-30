@@ -1,5 +1,5 @@
 // Cache version. 배포마다 bump해서 stale 캐시 무효화.
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 셸(런처 + 공통 모듈) 사전 캐시. 게임은 첫 방문 시 lazy 캐시.
@@ -7,9 +7,10 @@ const PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./icons/icon-192.svg",
-  "./icons/icon-512.svg",
-  "./icons/icon-maskable.svg",
+  "./icons/icon-180.png",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+  "./icons/icon-maskable.png",
   "./shared/tokens.css",
   "./shared/base.css",
   "./shared/input.js",
