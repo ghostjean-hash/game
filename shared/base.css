@@ -96,7 +96,7 @@ canvas { display: block; touch-action: none; }
   box-shadow: var(--shadow-2);
 }
 .modal h2 { margin: 0 0 var(--sp-3); font-size: 20px; }
-.modal p { margin: 0 0 var(--sp-4); color: var(--fg-dim); }
+.modal p { margin: 0 0 var(--sp-4); color: var(--fg-dim); white-space: pre-line; }
 .modal-actions { display: flex; gap: var(--sp-2); justify-content: flex-end; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 

@@ -1,9 +1,13 @@
 import { createInput } from "../../shared/input.js";
 import { createStorage } from "../../shared/storage.js";
 import { createLoop } from "../../shared/loop.js";
-import { showModal, registerServiceWorker } from "../../shared/ui.js";
+import { showModal, showToast, registerServiceWorker } from "../../shared/ui.js";
 
 registerServiceWorker("/service-worker.js");
+
+const CONTROLS_HELP =
+  "터치: 좌우 스와이프 이동 · 탭 회전 · 아래 스와이프 하드드롭 · 길게 누름 홀드\n" +
+  "키보드: ←→ 이동 · ↑/X 회전 · Z 반대회전 · ↓ 소프트드롭 · Space 하드드롭 · Shift/C 홀드 · P 일시정지";
 
 const COLS = 10;
 const ROWS = 20;
@@ -492,12 +496,18 @@ function updateHud() {
 }
 
 async function gameOver() {
-  const best = store.get("highscore", 0);
-  if (state.score > best) store.set("highscore", state.score);
+  const prevBest = store.get("highscore", 0);
+  const isNewBest = state.score > prevBest;
+  if (isNewBest) store.set("highscore", state.score);
   updateHud();
+  const lines = [
+    `점수 ${state.score}${isNewBest ? "  (신기록!)" : ""}`,
+    `라인 ${state.lines} · 레벨 ${state.level}`,
+    `최고 ${Math.max(prevBest, state.score)}`,
+  ].join("\n");
   const choice = await showModal({
     title: "Game Over",
-    body: `점수 ${state.score} · 라인 ${state.lines} · 레벨 ${state.level}`,
+    body: lines,
     actions: [
       { label: "다시 시작", primary: true, value: "restart" },
       { label: "메뉴로", value: "menu" },
@@ -510,10 +520,10 @@ async function gameOver() {
 async function togglePause() {
   if (state.over) return;
   state.paused = true;
-  pauseBtn.textContent = "재개";
+  pauseBtn.textContent = "▶";
   const choice = await showModal({
     title: "일시정지",
-    body: "계속 플레이하려면 재개를 누르세요.",
+    body: CONTROLS_HELP,
     actions: [
       { label: "재개", primary: true, value: "resume" },
       { label: "다시 시작", value: "restart" },
@@ -523,7 +533,7 @@ async function togglePause() {
   if (choice === "menu") { location.href = "../../"; return; }
   if (choice === "restart") { restart(); return; }
   state.paused = false;
-  pauseBtn.textContent = "일시정지";
+  pauseBtn.textContent = "⏸";
 }
 
 function restart() {
@@ -547,6 +557,7 @@ function init() {
   setupInput();
   resize();
   window.addEventListener("resize", resize);
+  window.addEventListener("orientationchange", () => setTimeout(resize, 100));
   pauseBtn.addEventListener("click", togglePause);
 
   loop = createLoop({
@@ -554,6 +565,12 @@ function init() {
     render: () => render(),
   });
   loop.start();
+
+  // 첫 방문 안내 토스트(한 번만)
+  if (!store.get("seen-help", false)) {
+    showToast("일시정지 버튼 ⏸ 에서 컨트롤 가이드 확인", 2800);
+    store.set("seen-help", true);
+  }
 }
 
 init();

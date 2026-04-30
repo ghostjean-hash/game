@@ -17,32 +17,20 @@
   <div class="topbar">
     <a href="../../" class="home" aria-label="홈으로">←</a>
     <h1>Tetris</h1>
+    <div class="mini-hud" aria-live="polite">
+      <span class="mh"><small>SCR</small><b id="score">0</b></span>
+      <span class="mh sep">·</span>
+      <span class="mh"><small>LV</small><b id="level">1</b></span>
+      <span class="mh sep">·</span>
+      <span class="mh"><small>L</small><b id="lines">0</b></span>
+      <span class="mh sep best-sep">·</span>
+      <span class="mh best"><small>★</small><b id="best">0</b></span>
+    </div>
     <div class="spacer"></div>
-    <button id="btn-pause" class="btn" type="button">일시정지</button>
-  </div>
-  <div class="hudbar" id="hudbar">
-    <div class="hud">
-      <span class="hud-label">Score</span>
-      <span class="hud-value" id="score">0</span>
-    </div>
-    <div class="hud">
-      <span class="hud-label">Lines</span>
-      <span class="hud-value" id="lines">0</span>
-    </div>
-    <div class="hud">
-      <span class="hud-label">Level</span>
-      <span class="hud-value" id="level">1</span>
-    </div>
-    <div class="hud">
-      <span class="hud-label">Best</span>
-      <span class="hud-value" id="best">0</span>
-    </div>
+    <button id="btn-pause" class="icon-btn" type="button" aria-label="일시정지">⏸</button>
   </div>
   <div class="stage">
     <canvas id="board"></canvas>
-  </div>
-  <div class="controls">
-    <span class="help">스와이프: 이동/하드드롭 · 탭: 회전 · 길게: 홀드</span>
   </div>
 </div>
 <script type="module" src="game.js"></script>

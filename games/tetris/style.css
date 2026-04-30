@@ -1,34 +1,107 @@
+/* 폰 세로에서 보드 면적을 최대화하는 게 최우선.
+   HUD는 topbar에 인라인으로 흡수하여 별도 행을 만들지 않는다. */
+
 .tetris {
   flex: 1;
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-3) var(--sp-3);
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  padding: 0;
   min-height: 0;
 }
 
-/* HUD: 모바일 세로에서는 상단 가로 일렬, 보드를 가리지 않음 */
-.tetris .hudbar {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--sp-2);
+/* topbar: 슬림하게. 폰에서 약 44px 높이. */
+.tetris .topbar {
+  padding: 6px 10px;
+  gap: 8px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--line);
+  min-height: 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
-.tetris .hudbar .hud {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0;
-  padding: var(--sp-2) var(--sp-3);
-  min-width: 0;
+.tetris .topbar h1 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg-dim);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
-.tetris .hudbar .hud-label { font-size: 10px; }
-.tetris .hudbar .hud-value { font-size: 16px; }
+.tetris .topbar .home {
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-1);
+  flex-shrink: 0;
+  color: var(--fg);
+}
+.tetris .topbar .home:active { background: var(--bg-elev-2); }
 
-/* 스테이지: 보드만. 다른 오버레이 없음 */
+.tetris .topbar .icon-btn {
+  width: 36px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-1);
+  border: 1px solid var(--line);
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.tetris .topbar .icon-btn:active { background: var(--bg-elev); transform: scale(0.96); }
+
+/* mini HUD: topbar 안 인라인. 폰에서 한 줄 유지. */
+.tetris .mini-hud {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg);
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.tetris .mini-hud .mh {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.tetris .mini-hud .mh small {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--fg-mute);
+  text-transform: uppercase;
+}
+.tetris .mini-hud .mh b {
+  font-weight: 700;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+.tetris .mini-hud .sep { color: var(--fg-mute); padding: 0 1px; }
+.tetris .mini-hud .best b { color: var(--accent); }
+
+/* 매우 좁은 폰(360px 이하 또는 점수 길어짐 대비): Best는 숨겨서 핵심만 */
+@media (max-width: 380px) {
+  .tetris .mini-hud .best,
+  .tetris .mini-hud .best-sep { display: none; }
+}
+
+/* stage: 보드만. 외곽 padding 최소. 화면 폭/높이 활용 극대화. */
 .tetris .stage {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 0;
+  padding: 4px;
 }
 
 .tetris canvas {
@@ -38,47 +111,15 @@
   max-height: 100%;
   max-width: 100%;
   box-shadow: var(--shadow-1);
+  display: block;
 }
 
-.tetris .controls {
-  display: flex;
-  gap: var(--sp-2);
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: var(--fg-mute);
-  padding: 0 var(--sp-1);
-  text-align: center;
-}
-
-.tetris .topbar .home {
-  font-size: 18px;
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--r-1);
-}
-.tetris .topbar .home:hover { background: var(--bg-elev-2); }
-
-/* 가로 화면이거나 충분히 넓으면 HUD를 우측 사이드 컬럼으로 */
-@media (min-width: 720px), (orientation: landscape) and (min-height: 480px) {
-  .tetris {
-    grid-template-columns: 1fr 180px;
-    grid-template-rows: auto 1fr auto;
-  }
-  .tetris .topbar { grid-column: 1 / -1; }
-  .tetris .controls { grid-column: 1 / -1; }
-  .tetris .hudbar {
-    grid-column: 2;
-    grid-row: 2;
-    grid-template-columns: 1fr;
-    align-content: start;
-    gap: var(--sp-2);
-  }
-  .tetris .stage {
-    grid-column: 1;
-    grid-row: 2;
-  }
+/* 가로/태블릿: 동일 topbar 유지(이미 슬림함), 보드는 stage가 알아서 최대 크기로 잡힘.
+   별도 사이드 컬럼 없음 - mini HUD가 충분히 정보 전달. */
+@media (orientation: landscape) and (min-height: 320px) {
+  .tetris .topbar { padding: 6px 14px; gap: 12px; }
+  .tetris .topbar h1 { font-size: 14px; }
+  .tetris .mini-hud { font-size: 14px; gap: 8px; }
+  .tetris .mini-hud .mh small { font-size: 10px; }
+  .tetris .stage { padding: 8px; }
 }

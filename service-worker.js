@@ -1,5 +1,5 @@
 // Cache version. 배포마다 bump해서 stale 캐시 무효화.
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "v4";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 셸(런처 + 공통 모듈) 사전 캐시. 게임은 첫 방문 시 lazy 캐시.
