@@ -297,7 +297,8 @@ function lockPiece() {
 }
 
 function applyClear() {
-  const rows = state.flashRows.rows;
+  // 큰 인덱스부터 지워야 하위 인덱스가 어긋나지 않는다.
+  const rows = state.flashRows.rows.slice().sort((a, b) => b - a);
   for (const r of rows) state.grid.splice(r, 1);
   for (let i = 0; i < rows.length; i++) state.grid.unshift(Array(COLS).fill(null));
   state.flashRows = null;
