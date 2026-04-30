@@ -16,17 +16,25 @@
 <div class="page tetris">
   <div class="topbar">
     <a href="../../" class="home" aria-label="홈으로">←</a>
-    <h1>Tetris</h1>
+    <h1 class="sr-only">Tetris</h1>
+    <div class="score-big" aria-live="polite" aria-label="점수">
+      <b id="score">0</b>
+    </div>
     <div class="mini-hud" aria-live="polite">
-      <span class="mh"><small>SCR</small><b id="score">0</b></span>
-      <span class="mh sep">·</span>
       <span class="mh"><small>LV</small><b id="level">1</b></span>
       <span class="mh sep">·</span>
       <span class="mh"><small>L</small><b id="lines">0</b></span>
       <span class="mh sep best-sep">·</span>
       <span class="mh best"><small>★</small><b id="best">0</b></span>
     </div>
-    <div class="spacer"></div>
+    <div class="piece-slot" aria-label="홀드 블록">
+      <small>HLD</small>
+      <canvas id="hold" class="piece-mini"></canvas>
+    </div>
+    <div class="piece-slot" aria-label="다음 블록">
+      <small>NXT</small>
+      <canvas id="next" class="piece-mini"></canvas>
+    </div>
     <button id="btn-pause" class="icon-btn" type="button" aria-label="일시정지">⏸</button>
   </div>
   <div class="stage">

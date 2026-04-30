@@ -126,6 +126,10 @@ const linesEl = document.getElementById("lines");
 const levelEl = document.getElementById("level");
 const bestEl = document.getElementById("best");
 const pauseBtn = document.getElementById("btn-pause");
+const nextEl = document.getElementById("next");
+const nextCtx = nextEl?.getContext("2d") || null;
+const holdEl = document.getElementById("hold");
+const holdCtx = holdEl?.getContext("2d") || null;
 
 const store = createStorage("tetris");
 
@@ -414,16 +418,37 @@ let input;
 let loop;
 
 function setupInput() {
-  input = createInput(board, {
+  // 입력 영역을 캔버스(board)가 아닌 페이지 전체로 확장.
+  // 보드 외 잉여 영역(stage 좌우/상하 여백, 안전영역 패딩 등)에서도 탭/스와이프가 동작.
+  // topbar의 button/a는 input.js의 가드가 처리.
+  const inputTarget = document.querySelector(".page.tetris") || board;
+  // 가로 드래그(pan) 시작 시점의 piece.x 스냅샷.
+  let panAnchorX = 0;
+  input = createInput(inputTarget, {
     onTap: () => { if (canPlay()) tryRotate(1); },
     onSwipe: (dir) => {
+      // 가로 이동은 pan(드래그 추적)에서 처리. 여기는 세로 제스처만 의미.
       if (!canPlay()) return;
-      if (dir === "left") tryMove(-1, 0);
-      else if (dir === "right") tryMove(1, 0);
-      else if (dir === "down") hardDrop();
+      if (dir === "down") hardDrop();
       else if (dir === "up") holdPiece();
     },
     onHold: () => { if (canPlay()) holdPiece(); },
+    onPanStart: () => {
+      if (!canPlay() || !state.current) return;
+      panAnchorX = state.current.x;
+    },
+    onPan: ({ dx }) => {
+      // 손가락 가로 이동량을 셀 단위로 환산해, 시작 위치 + offset만큼 따라감.
+      // 매 호출에서 목표 X까지 한 칸씩 tryMove로 진행(벽/충돌이 있으면 거기서 멈춤).
+      if (!canPlay() || !state.current || !cellSize) return;
+      const targetX = panAnchorX + Math.round(dx / cellSize);
+      while (state.current.x < targetX) {
+        if (!tryMove(1, 0)) break;
+      }
+      while (state.current.x > targetX) {
+        if (!tryMove(-1, 0)) break;
+      }
+    },
     onKey: (key, ev) => {
       if (ev.type !== "keydown") return;
       if (!canPlay()) {
@@ -495,6 +520,65 @@ function updateHud() {
   levelEl.textContent = state.level;
   const best = store.get("highscore", 0);
   bestEl.textContent = best;
+  drawNext();
+  drawHold();
+}
+
+// 미니 피스 슬롯(NEXT/HOLD) 공통 렌더러.
+// dim=true면 흐리게 표시(예: 홀드 락 상태).
+function drawPieceMini(canvas, c, type, dim = false) {
+  if (!canvas || !c) return;
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = canvas.clientWidth || 32;
+  const cssH = canvas.clientHeight || 32;
+  const targetW = Math.round(cssW * dpr);
+  const targetH = Math.round(cssH * dpr);
+  if (canvas.width !== targetW || canvas.height !== targetH) {
+    canvas.width = targetW;
+    canvas.height = targetH;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  c.clearRect(0, 0, cssW, cssH);
+  if (!type) return; // 빈 슬롯
+  const cells = SHAPES[type][0];
+  let minX = 4, maxX = -1, minY = 4, maxY = -1;
+  for (const [cx, cy] of cells) {
+    if (cx < minX) minX = cx;
+    if (cx > maxX) maxX = cx;
+    if (cy < minY) minY = cy;
+    if (cy > maxY) maxY = cy;
+  }
+  const w = maxX - minX + 1;
+  const h = maxY - minY + 1;
+  const padding = 3;
+  const sz = Math.max(2, Math.floor(Math.min((cssW - padding * 2) / w, (cssH - padding * 2) / h)));
+  const offX = Math.floor((cssW - sz * w) / 2);
+  const offY = Math.floor((cssH - sz * h) / 2);
+  c.globalAlpha = dim ? 0.35 : 1;
+  c.fillStyle = COLORS[type];
+  for (const [cx, cy] of cells) {
+    const px = offX + (cx - minX) * sz;
+    const py = offY + (cy - minY) * sz;
+    c.fillRect(px + 1, py + 1, sz - 2, sz - 2);
+  }
+  c.fillStyle = "rgba(255,255,255,0.18)";
+  for (const [cx, cy] of cells) {
+    const px = offX + (cx - minX) * sz;
+    const py = offY + (cy - minY) * sz;
+    c.fillRect(px + 1, py + 1, sz - 2, 2);
+  }
+  c.globalAlpha = 1;
+}
+
+function drawNext() {
+  if (!state || !state.queue || !state.queue.length) return;
+  drawPieceMini(nextEl, nextCtx, state.queue[0]);
+}
+
+function drawHold() {
+  if (!state) return;
+  // 홀드 락(현 피스 동안 이미 사용)이면 흐리게.
+  drawPieceMini(holdEl, holdCtx, state.hold || null, !state.canHold);
 }
 
 async function gameOver() {
