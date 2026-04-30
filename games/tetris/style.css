@@ -1,15 +1,30 @@
 .tetris {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr auto;
-  gap: var(--sp-3);
-  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  grid-template-rows: auto auto 1fr auto;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3) var(--sp-3);
   min-height: 0;
 }
 
+/* HUD: 모바일 세로에서는 상단 가로 일렬, 보드를 가리지 않음 */
+.tetris .hudbar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-2);
+}
+.tetris .hudbar .hud {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: var(--sp-2) var(--sp-3);
+  min-width: 0;
+}
+.tetris .hudbar .hud-label { font-size: 10px; }
+.tetris .hudbar .hud-value { font-size: 16px; }
+
+/* 스테이지: 보드만. 다른 오버레이 없음 */
 .tetris .stage {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,32 +40,14 @@
   box-shadow: var(--shadow-1);
 }
 
-.tetris .side {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-  padding: var(--sp-2);
-  pointer-events: none;
-}
-
-.tetris .side .hud { pointer-events: auto; padding: var(--sp-2) var(--sp-3); flex-direction: column; align-items: flex-start; gap: 2px; }
-.tetris .side .hud-label { font-size: 10px; }
-.tetris .side .hud-value { font-size: 16px; }
-
 .tetris .controls {
   display: flex;
   gap: var(--sp-2);
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   font-size: 12px;
   color: var(--fg-mute);
   padding: 0 var(--sp-1);
-}
-.tetris .controls .help {
-  flex: 1;
   text-align: center;
 }
 
@@ -65,11 +62,23 @@
 }
 .tetris .topbar .home:hover { background: var(--bg-elev-2); }
 
-@media (min-width: 720px) {
+/* 가로 화면이거나 충분히 넓으면 HUD를 우측 사이드 컬럼으로 */
+@media (min-width: 720px), (orientation: landscape) and (min-height: 480px) {
   .tetris {
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 180px;
+    grid-template-rows: auto 1fr auto;
   }
   .tetris .topbar { grid-column: 1 / -1; }
-  .tetris .stage { grid-column: 1 / -1; }
+  .tetris .controls { grid-column: 1 / -1; }
+  .tetris .hudbar {
+    grid-column: 2;
+    grid-row: 2;
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: var(--sp-2);
+  }
+  .tetris .stage {
+    grid-column: 1;
+    grid-row: 2;
+  }
 }
