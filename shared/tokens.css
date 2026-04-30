@@ -1,0 +1,52 @@
+/* 디자인 토큰. 모든 게임이 공유하여 통일감 확보. */
+:root {
+  /* Color */
+  --bg: #0e0f13;
+  --bg-elev: #161823;
+  --bg-elev-2: #1f2233;
+  --fg: #e8ecf5;
+  --fg-dim: #9aa3b8;
+  --fg-mute: #6b7388;
+  --accent: #7cf3c4;
+  --accent-strong: #4ad8a3;
+  --warn: #f7c948;
+  --danger: #ff6b81;
+  --line: #2a2e44;
+
+  /* 게임 블록 팔레트(테트리스/스도쿠 등 공유) */
+  --c1: #7cf3c4; /* I */
+  --c2: #f7c948; /* O */
+  --c3: #b48cff; /* T */
+  --c4: #4ad8a3; /* S */
+  --c5: #ff6b81; /* Z */
+  --c6: #5aa9ff; /* J */
+  --c7: #ffa05c; /* L */
+
+  /* Type */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* Radius */
+  --r-1: 6px;
+  --r-2: 10px;
+  --r-3: 14px;
+  --r-4: 20px;
+
+  /* Shadow */
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-2: 0 4px 16px rgba(0,0,0,0.4);
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-1: 120ms;
+  --dur-2: 220ms;
+}

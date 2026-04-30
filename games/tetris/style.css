@@ -1,0 +1,75 @@
+.tetris {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  min-height: 0;
+}
+
+.tetris .stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.tetris canvas {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  max-height: 100%;
+  max-width: 100%;
+  box-shadow: var(--shadow-1);
+}
+
+.tetris .side {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  pointer-events: none;
+}
+
+.tetris .side .hud { pointer-events: auto; padding: var(--sp-2) var(--sp-3); flex-direction: column; align-items: flex-start; gap: 2px; }
+.tetris .side .hud-label { font-size: 10px; }
+.tetris .side .hud-value { font-size: 16px; }
+
+.tetris .controls {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--fg-mute);
+  padding: 0 var(--sp-1);
+}
+.tetris .controls .help {
+  flex: 1;
+  text-align: center;
+}
+
+.tetris .topbar .home {
+  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-1);
+}
+.tetris .topbar .home:hover { background: var(--bg-elev-2); }
+
+@media (min-width: 720px) {
+  .tetris {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .tetris .topbar { grid-column: 1 / -1; }
+  .tetris .stage { grid-column: 1 / -1; }
+}

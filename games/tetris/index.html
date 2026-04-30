@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0e0f13" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon" href="../../icons/icon-192.svg" />
+<link rel="stylesheet" href="../../shared/tokens.css" />
+<link rel="stylesheet" href="../../shared/base.css" />
+<link rel="stylesheet" href="style.css" />
+<title>Tetris - game_ghost</title>
+</head>
+<body>
+<div class="page tetris">
+  <div class="topbar">
+    <a href="../../" class="home" aria-label="홈으로">←</a>
+    <h1>Tetris</h1>
+    <div class="spacer"></div>
+    <button id="btn-pause" class="btn" type="button">일시정지</button>
+  </div>
+  <div class="stage">
+    <canvas id="board"></canvas>
+    <div class="side">
+      <div class="hud">
+        <span class="hud-label">Score</span>
+        <span class="hud-value" id="score">0</span>
+      </div>
+      <div class="hud">
+        <span class="hud-label">Lines</span>
+        <span class="hud-value" id="lines">0</span>
+      </div>
+      <div class="hud">
+        <span class="hud-label">Level</span>
+        <span class="hud-value" id="level">1</span>
+      </div>
+      <div class="hud">
+        <span class="hud-label">Best</span>
+        <span class="hud-value" id="best">0</span>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <span class="help">스와이프: 이동/하드드롭 · 탭: 회전 · 길게: 홀드</span>
+  </div>
+</div>
+<script type="module" src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "games": [
+    {
+      "id": "tetris",
+      "title": "Tetris",
+      "subtitle": "라인을 지워라",
+      "path": "games/tetris/",
+      "status": "playable",
+      "controls": ["touch", "keyboard"],
+      "accent": "#7cf3c4"
+    }
+  ]
+}
