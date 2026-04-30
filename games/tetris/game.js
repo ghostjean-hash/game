@@ -148,6 +148,7 @@ function newState() {
     lockTimer: 0,
     locking: false,
     over: false,
+    overHandled: false,
     paused: false,
     flashRows: null, // { rows:[...], t:number }
   };
@@ -542,12 +543,16 @@ function restart() {
   ensureBag();
   spawn();
   updateHud();
-  pauseBtn.textContent = "일시정지";
+  pauseBtn.textContent = "⏸";
 }
 
 function tickHud() {
   updateHud();
-  if (state.over) gameOver();
+  // 게임 오버 모달은 단 한 번만 띄운다(매 프레임 호출 방지)
+  if (state.over && !state.overHandled) {
+    state.overHandled = true;
+    gameOver();
+  }
 }
 
 function init() {
