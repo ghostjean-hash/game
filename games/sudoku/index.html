@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0e0f13" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../icons/icon-180.png" />
+<link rel="stylesheet" href="../../shared/tokens.css" />
+<link rel="stylesheet" href="../../shared/base.css" />
+<link rel="stylesheet" href="style.css" />
+<title>Sudoku - game_ghost</title>
+</head>
+<body>
+<div class="page sudoku">
+  <div class="topbar">
+    <a href="../../" class="home" aria-label="홈으로">←</a>
+    <span class="diff-label" id="diff-label">입문</span>
+    <div class="timer" id="timer" aria-live="polite">00:00</div>
+    <div class="spacer"></div>
+    <button id="btn-pause" class="icon-btn" type="button" aria-label="일시정지">⏸</button>
+  </div>
+  <div class="stage">
+    <div class="board" id="board" role="grid" aria-label="스도쿠 보드"></div>
+  </div>
+  <div class="pad" aria-label="입력 패드">
+    <div class="pad-row pad-actions">
+      <button class="pad-btn" id="btn-erase" type="button" aria-label="지우기">지우기</button>
+      <button class="pad-btn" id="btn-undo" type="button" aria-label="실행취소">↶</button>
+    </div>
+    <div class="pad-row pad-numbers" id="pad-numbers">
+      <button class="pad-num" data-num="1" type="button">1</button>
+      <button class="pad-num" data-num="2" type="button">2</button>
+      <button class="pad-num" data-num="3" type="button">3</button>
+      <button class="pad-num" data-num="4" type="button">4</button>
+      <button class="pad-num" data-num="5" type="button">5</button>
+      <button class="pad-num" data-num="6" type="button">6</button>
+      <button class="pad-num" data-num="7" type="button">7</button>
+      <button class="pad-num" data-num="8" type="button">8</button>
+      <button class="pad-num" data-num="9" type="button">9</button>
+    </div>
+  </div>
+</div>
+<script type="module" src="game.js"></script>
+</body>
+</html>

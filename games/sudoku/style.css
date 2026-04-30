@@ -1,0 +1,181 @@
+/* 폰 세로 우선. 보드 정사각, 패드 보드 아래.
+   topbar 슬림(테트리스와 동일 톤). */
+
+.sudoku {
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0;
+  padding: 0;
+  min-height: 0;
+  touch-action: none;
+}
+
+.sudoku .topbar {
+  padding: 6px 10px;
+  gap: 8px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--line);
+  min-height: 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.sudoku .topbar .home {
+  font-size: 18px;
+  width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--r-1);
+  flex-shrink: 0;
+  color: var(--fg);
+}
+.sudoku .topbar .home:active { background: var(--bg-elev-2); }
+
+.sudoku .diff-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--fg-dim);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+}
+
+.sudoku .timer {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+.sudoku .topbar .icon-btn {
+  width: 36px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--r-1);
+  border: 1px solid var(--line);
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.sudoku .topbar .icon-btn:active { background: var(--bg-elev); transform: scale(0.96); }
+
+/* 보드 영역: 정사각으로 가운데 배치. 패드 아래에 두고 grid 1fr */
+.sudoku .stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 8px;
+}
+
+.sudoku .board {
+  /* 가용 폭/높이 중 작은 쪽 기반의 정사각 */
+  width: min(100%, calc(100dvh - 220px));
+  aspect-ratio: 1 / 1;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+  background: var(--bg-elev);
+  border: 2px solid var(--fg-mute);
+  border-radius: var(--r-2);
+  overflow: hidden;
+  box-shadow: var(--shadow-1);
+}
+
+.sudoku .cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: clamp(14px, 4.6vmin, 28px);
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg-elev);
+  border: 1px solid rgba(255,255,255,0.05);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  position: relative;
+  /* 셀은 button 기본 패딩 제거 */
+  padding: 0;
+}
+/* 3x3 박스 굵은 경계 */
+.sudoku .cell.b-right { border-right: 2px solid var(--fg-mute); }
+.sudoku .cell.b-bottom { border-bottom: 2px solid var(--fg-mute); }
+
+.sudoku .cell.given {
+  font-weight: 800;
+  color: var(--fg);
+  background: var(--bg-elev-2);
+}
+.sudoku .cell.user {
+  color: var(--accent);
+}
+.sudoku .cell.error {
+  color: var(--bad, #ff6b81);
+}
+
+/* 선택/관련/같은숫자 하이라이트 (약 → 강 순서) */
+.sudoku .cell.related { background: rgba(90, 169, 255, 0.06); }
+.sudoku .cell.given.related { background: rgba(90, 169, 255, 0.10); }
+.sudoku .cell.same-num { background: rgba(90, 169, 255, 0.18); }
+.sudoku .cell.given.same-num { background: rgba(90, 169, 255, 0.22); }
+.sudoku .cell.selected { background: rgba(90, 169, 255, 0.30); outline: 2px solid var(--accent); outline-offset: -2px; z-index: 1; }
+.sudoku .cell.given.selected { background: rgba(90, 169, 255, 0.30); }
+
+/* 일시정지 시 보드 가림 */
+.sudoku.is-paused .board { filter: blur(8px); pointer-events: none; }
+
+/* 패드: 보드 아래. 모바일 폰 한 손 조작 친화 크기. */
+.sudoku .pad {
+  display: grid;
+  gap: 6px;
+  padding: 8px 8px calc(env(safe-area-inset-bottom) + 8px);
+  background: var(--bg-elev);
+  border-top: 1px solid var(--line);
+}
+.sudoku .pad-row { display: grid; gap: 6px; }
+.sudoku .pad-actions { grid-template-columns: 1fr 1fr; }
+.sudoku .pad-numbers { grid-template-columns: repeat(9, 1fr); }
+
+.sudoku .pad-btn,
+.sudoku .pad-num {
+  border: 1px solid var(--line);
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border-radius: var(--r-1);
+  min-height: 44px;
+  font-size: 16px;
+}
+.sudoku .pad-num { font-size: 20px; }
+.sudoku .pad-btn:active,
+.sudoku .pad-num:active { background: var(--bg-elev); transform: scale(0.96); }
+.sudoku .pad-num.depleted {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* 좁은 폰: 패드 숫자 두 줄(5+4)로 분할 */
+@media (max-width: 360px) {
+  .sudoku .pad-numbers {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* 가로/태블릿: 보드 세로 공간 더 활용 */
+@media (orientation: landscape) and (min-height: 320px) {
+  .sudoku .board {
+    width: min(100%, calc(100dvh - 180px));
+  }
+  .sudoku .pad-btn,
+  .sudoku .pad-num { min-height: 40px; }
+}

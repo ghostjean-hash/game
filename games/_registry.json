@@ -8,6 +8,15 @@
       "status": "playable",
       "controls": ["touch", "keyboard"],
       "accent": "#7cf3c4"
+    },
+    {
+      "id": "sudoku",
+      "title": "Sudoku",
+      "subtitle": "스마트 힌트로 배우는 스도쿠",
+      "path": "games/sudoku/",
+      "status": "wip",
+      "controls": ["touch", "keyboard"],
+      "accent": "#5aa9ff"
     }
   ]
 }
