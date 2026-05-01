@@ -1,6 +1,12 @@
 // Cache version. 배포마다 bump해서 stale 캐시 무효화.
-const CACHE_VERSION = "v6";
+const CACHE_VERSION = "v8";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
+
+// 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
+const NETWORK_FIRST_PATHS = [
+  "/games/_registry.json",
+  "/games/lotto/src/data/draws.json",
+];
 
 // 셸(런처 + 공통 모듈) 사전 캐시. 게임은 첫 방문 시 lazy 캐시.
 const PRECACHE = [
@@ -59,6 +65,22 @@ self.addEventListener("fetch", (event) => {
           return res;
         })
         .catch(() => caches.match(req).then((c) => c || caches.match("./index.html")))
+    );
+    return;
+  }
+
+  // _registry.json 등은 항상 network-first. 게임 추가 / 변경 즉시 반영.
+  if (NETWORK_FIRST_PATHS.some((p) => url.pathname.endsWith(p))) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res && res.status === 200) {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then((c) => c.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(req))
     );
     return;
   }

@@ -65,11 +65,49 @@ export function showToast(message, duration = 1600) {
 }
 
 // service worker 등록 (각 페이지에서 호출). 루트 스코프.
+//
+// 개발 환경(localhost / 127.0.0.1)에서는 SW 자체를 차단합니다.
+// SW가 살아 있으면 캐시 동기화가 매번 골치 아프기 때문입니다.
+// 운영 환경(GitHub Pages 등)에서만 SW를 register 합니다.
 export function registerServiceWorker(swPath = "/service-worker.js") {
   if (!("serviceWorker" in navigator)) return;
-  // 상대 경로로 처리(GitHub Pages 서브패스 대응)
+
+  const host = location.hostname;
+  const isDev = host === "localhost" || host === "127.0.0.1";
+
+  if (isDev) {
+    // 기존 SW 모두 unregister + 모든 캐시 삭제. 첫 진입 시 1회 자동 reload.
+    Promise.all([
+      navigator.serviceWorker.getRegistrations().then((rs) =>
+        Promise.all(rs.map((r) => r.unregister())).then(() => rs.length)
+      ),
+      caches.keys().then((ks) => Promise.all(ks.map((k) => caches.delete(k)))),
+    ])
+      .then(([unregisteredCount]) => {
+        if (unregisteredCount > 0 && !sessionStorage.getItem("__sw_purged")) {
+          sessionStorage.setItem("__sw_purged", "1");
+          location.reload();
+        }
+      })
+      .catch(() => {});
+    return;
+  }
+
+  // 프로덕션: 등록 + 새 SW activate 시 1회 자동 reload.
   window.addEventListener("load", () => {
     const path = swPath.startsWith("/") ? "." + swPath : swPath;
-    navigator.serviceWorker.register(path).catch(() => {});
+    navigator.serviceWorker
+      .register(path)
+      .then((reg) => {
+        try { reg.update(); } catch {}
+      })
+      .catch(() => {});
+  });
+
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (reloaded) return;
+    reloaded = true;
+    location.reload();
   });
 }

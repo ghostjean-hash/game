@@ -17,6 +17,15 @@
       "status": "wip",
       "controls": ["touch", "keyboard"],
       "accent": "#5aa9ff"
+    },
+    {
+      "id": "lotto",
+      "title": "Blessed Lotto",
+      "subtitle": "축복받은 캐릭터의 번호 카드",
+      "path": "games/lotto/",
+      "status": "wip",
+      "controls": ["touch", "keyboard"],
+      "accent": "#d4a657"
     }
   ]
 }
