@@ -1156,9 +1156,11 @@ a.btn-secondary,
   outline-offset: -2px;
 }
 
-/* #app은 하단 탭 높이만큼 padding 추가 (마지막 콘텐츠 가림 방지) */
+/* #app은 하단 탭 높이 + 안전 마진만큼 padding 추가 (마지막 Luck 바가 가리지 않도록).
+   탭 실제 높이 = .tab-item min-height(56) + .bottom-tabs border/shadow + safe-area.
+   여유 24px 추가해 화면 끝에서도 마지막 콘텐츠 아래에 호흡 공간 확보. */
 #app {
-  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  padding-bottom: calc(56px + var(--space-5) + env(safe-area-inset-bottom));
 }
 
 /* 탭 페이지 공통 헤더 */
@@ -1357,7 +1359,7 @@ a.btn-secondary,
   /* 더 좁은 폭에서 탭 폰트 미세 조정 */
   .tab-item { font-size: 10px; padding: 6px 2px; min-height: 52px; }
   .tab-icon .icon { width: 18px; height: 18px; }
-  #app { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
+  #app { padding-bottom: calc(52px + var(--space-5) + env(safe-area-inset-bottom)); }
 
   /* 번호 카드 갭 더 축소 */
   .draw-main .num,
