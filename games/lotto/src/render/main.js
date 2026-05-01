@@ -1,14 +1,17 @@
-// 메인 화면 wire-up.
-// 캐릭터(정체성) + 전략(추첨 도구)을 분리해서 표시.
+// 메인 wire-up. 5개 탭 라우팅 (추첨/통계/전적/휠링/설정).
+// 추첨 탭: 슬롯 → 번호(hero) → 운세 → 전략 1줄 → 캐릭터 카드(압축).
+// SSOT: docs/01_spec.md 4장.
 import { renderCharacterForm } from './character-form.js';
 import { characterCardHtml } from './character-card.js';
 import { drawCardHtml } from './draw-card.js';
 import { characterSlotsHtml } from './character-slots.js';
-import { strategyPickerHtml } from './strategy-picker.js';
+import { strategyBarHtml, openStrategySheet } from './strategy-sheet.js';
 import { renderStatsPage } from './stats-page.js';
 import { renderHistoryPage } from './history-page.js';
-import { renderWheelingPage } from './wheeling-page.js';
-import { showModal } from './modal.js';
+import { renderWheelingPage, renderWheelingDisabled } from './wheeling-page.js';
+import { renderSettingsPage } from './settings-page.js';
+import { bottomTabsHtml, TABS } from './bottom-tabs.js';
+import { showModal, showDisclaimer } from './modal.js';
 import { recommend } from '../core/recommend.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
@@ -23,7 +26,6 @@ import {
 import { STRATEGY_DEFAULT } from '../data/numbers.js';
 
 // 페치 데이터 없을 때 기본값. 페치 후엔 자동으로 latest + 1로 갱신됨.
-// 2026-05-01 기준 1222회차가 다음 추첨(2026-05-02 토)으로 확인됨.
 const DEFAULT_DRWNO = 1222;
 
 let appEl = null;
@@ -36,6 +38,7 @@ const state = {
   bonusStats: [],
   cooccur: [],
   options: { applyFilters: false, advancedMode: false },
+  currentTab: 'home',
 };
 
 export function initRender(rootEl) {
@@ -53,6 +56,12 @@ export function initRender(rootEl) {
     state.drwNo = sorted[0].drwNo + 1;
   }
 
+  renderApp();
+}
+
+function setTab(tabId) {
+  if (!TABS.find((t) => t.id === tabId)) return;
+  state.currentTab = tabId;
   renderApp();
 }
 
@@ -85,24 +94,18 @@ function deleteActive() {
   renderApp();
 }
 
-function renderApp() {
-  if (state.characters.length === 0) {
-    renderCharacterForm(appEl, (character) => {
-      addAndActivate(character);
-    });
-    return;
-  }
-
+function getActive() {
   let active = state.characters.find((c) => c.id === state.activeId);
   if (!active) {
     active = state.characters[0];
     state.activeId = active.id;
     saveActiveCharacterId(active.id);
   }
+  return active;
+}
 
-  // 활성 캐릭터의 마지막 사용 전략 (없으면 기본)
+function getRecAndFortune(active) {
   const strategyId = active.lastUsedStrategy || STRATEGY_DEFAULT;
-
   const drawForFortune = state.draws.find((d) => d.drwNo === state.drwNo) || null;
   const fortune = fortuneFor(active.seed, state.drwNo, active.animalSign, drawForFortune, active.dayPillar);
   const rec = recommend({
@@ -116,6 +119,39 @@ function renderApp() {
     zodiac: active.zodiac,
     mbti: active.mbti,
   });
+  return { strategyId, rec, fortune };
+}
+
+function homeTabHtml(active, strategyId, rec, fortune) {
+  const banner = state.draws.length === 0
+    ? `<section class="data-banner">
+        <strong>회차 데이터 없음.</strong> 통계 / 일진 / 일부 전략이 데이터 기반으로 동작하려면 페치 1회 필요.
+        <br /><code>scripts\\fetch-lotto-draws.bat</code> 더블클릭. (1초 미만)
+      </section>`
+    : '';
+
+  return `
+    <header class="app-header tab-header home-header">
+      <h1 class="app-title">Blessed Lotto</h1>
+      <p class="app-subtitle">참고용 추천 - 매 회차 1/8,145,060</p>
+    </header>
+
+    ${characterSlotsHtml(state.characters, state.activeId)}
+
+    ${drawCardHtml(state.drwNo, rec, fortune)}
+
+    ${strategyBarHtml(strategyId)}
+
+    ${characterCardHtml(active, fortune)}
+
+    ${banner}
+    <p class="legal">본 추천은 참고용입니다. 매 회차 모든 조합의 당첨 확률은 1/8,145,060로 동일합니다.</p>
+  `;
+}
+
+function renderHome(content) {
+  const active = getActive();
+  const { strategyId, rec, fortune } = getRecAndFortune(active);
 
   // 이력 자동 기록 + 매칭 + Luck 성장
   let updated = recordRecommendation(active, {
@@ -127,42 +163,13 @@ function renderApp() {
   });
   updated = matchHistory(updated, state.draws);
   updated = applyLuckGrowth(updated);
-  state.characters = state.characters.map((c) => (c.id === active.id ? updated : c));
+  state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
   saveCharacters(state.characters);
-  active = updated;
 
-  appEl.innerHTML = `
-    <header class="app-header">
-      <h1 class="app-title">Blessed Lotto</h1>
-      <p class="app-subtitle">캐릭터 시드 기반 6/45 추천 (참고용)</p>
-    </header>
-    ${characterSlotsHtml(state.characters, state.activeId)}
-    ${strategyPickerHtml(strategyId)}
-    ${characterCardHtml(active, fortune)}
-    ${drawCardHtml(state.drwNo, rec, fortune)}
-    <div class="actions">
-      <button type="button" class="btn-secondary" data-action="prev-draw">‹ 이전 회차</button>
-      <button type="button" class="btn-secondary" data-action="next-draw">다음 회차 ›</button>
-    </div>
-    <div class="actions">
-      <button type="button" class="btn-secondary" data-action="stats">통계 보기</button>
-      <button type="button" class="btn-secondary" data-action="history">전적 보기</button>
-    </div>
-    <div class="actions">
-      <button type="button" class="btn-secondary" data-action="toggle-advanced">${state.options.advancedMode ? '다구좌 모드 ON' : '다구좌 모드 OFF'}</button>
-      ${state.options.advancedMode ? '<button type="button" class="btn-secondary" data-action="wheeling">휠링 보기</button>' : ''}
-    </div>
-    ${state.draws.length === 0 ? `
-      <section class="data-banner">
-        <strong>회차 데이터 없음.</strong> 통계 / 일진 / 일부 전략이 데이터 기반으로 동작하려면 1회 페치가 필요합니다.
-        <br /><code>scripts\\fetch-lotto-draws.bat</code> 더블클릭 또는 <code>node scripts/fetch-lotto-draws.mjs</code>. (약 12분)
-      </section>
-    ` : ''}
-    <p class="legal">본 추천은 참고용입니다. 매 회차 모든 조합의 당첨 확률은 1/8,145,060로 동일합니다.</p>
-  `;
+  content.innerHTML = homeTabHtml(updated, strategyId, rec, fortune);
 
-  // 슬롯 클릭 (캐릭터 전환)
-  appEl.querySelectorAll('[data-slot-id]').forEach((el) => {
+  // 슬롯 클릭
+  content.querySelectorAll('[data-slot-id]').forEach((el) => {
     el.addEventListener('click', () => {
       const id = el.dataset.slotId;
       if (id === state.activeId) return;
@@ -172,68 +179,113 @@ function renderApp() {
     });
   });
 
-  // 전략 picker 클릭
-  appEl.querySelectorAll('[data-strategy-id]').forEach((el) => {
-    el.addEventListener('click', () => {
-      const id = el.dataset.strategyId;
-      const cur = state.characters.find((c) => c.id === state.activeId);
-      if (!cur || cur.lastUsedStrategy === id) return;
-      cur.lastUsedStrategy = id;
-      saveCharacters(state.characters);
-      renderApp();
-    });
-  });
-
-  // 추가 / 삭제
-  appEl.querySelector('[data-action="add-character"]')?.addEventListener('click', openAddCharacterModal);
-  appEl.querySelector('[data-action="delete-active"]')?.addEventListener('click', deleteActive);
+  // 슬롯 추가/삭제
+  content.querySelector('[data-action="add-character"]')?.addEventListener('click', openAddCharacterModal);
+  content.querySelector('[data-action="delete-active"]')?.addEventListener('click', deleteActive);
 
   // 회차 이동
-  appEl.querySelector('[data-action="prev-draw"]').addEventListener('click', () => {
+  content.querySelector('[data-action="prev-draw"]').addEventListener('click', () => {
     if (state.drwNo > 1) {
       state.drwNo -= 1;
       renderApp();
     }
   });
-  appEl.querySelector('[data-action="next-draw"]').addEventListener('click', () => {
+  content.querySelector('[data-action="next-draw"]').addEventListener('click', () => {
     state.drwNo += 1;
     renderApp();
   });
-  appEl.querySelector('[data-action="stats"]').addEventListener('click', () => {
-    renderStatsPage(appEl, () => renderApp());
-  });
-  appEl.querySelector('[data-action="history"]').addEventListener('click', () => {
-    const cur = state.characters.find((c) => c.id === state.activeId);
-    if (cur) renderHistoryPage(appEl, cur, () => renderApp());
-  });
 
-  // 다구좌 모드 토글 (첫 ON 시 윤리 안내 모달)
-  appEl.querySelector('[data-action="toggle-advanced"]').addEventListener('click', () => {
-    if (state.options.advancedMode) {
-      state.options.advancedMode = false;
-      saveOptions(state.options);
+  // 전략 시트
+  content.querySelector('[data-action="open-strategy-sheet"]').addEventListener('click', () => {
+    openStrategySheet(showModal, strategyId, (newStrategyId) => {
+      const cur = state.characters.find((c) => c.id === state.activeId);
+      if (!cur || cur.lastUsedStrategy === newStrategyId) return;
+      cur.lastUsedStrategy = newStrategyId;
+      saveCharacters(state.characters);
       renderApp();
-      return;
+    });
+  });
+}
+
+function activateAdvanced(after) {
+  if (state.options.advancedMode) {
+    if (after) after();
+    return;
+  }
+  showModal(`
+    <h2>다구좌 모드 안내</h2>
+    <p>휠링 같은 분산 구매 도구를 활성화합니다.</p>
+    <p><strong>중요:</strong></p>
+    <p>각 티켓의 1등 확률은 동일합니다 (1/8,145,060). 티켓 수만큼 비례 증가할 뿐입니다.</p>
+    <p>휠링은 <strong>부분 당첨 보장</strong>이며, 1등 보장이 아닙니다.</p>
+    <p>비용 증가에 비례한 가치 보장은 없습니다. 본 게임은 도박 권유가 아닙니다.</p>
+    <button type="button" class="modal-confirm" data-action="confirm">이해했습니다</button>
+  `, {
+    onConfirm: () => {
+      state.options.advancedMode = true;
+      saveOptions(state.options);
+      if (after) after();
+      renderApp();
+    },
+  });
+}
+
+function toggleAdvancedFromSettings() {
+  if (state.options.advancedMode) {
+    state.options.advancedMode = false;
+    saveOptions(state.options);
+    renderApp();
+    return;
+  }
+  activateAdvanced();
+}
+
+function renderApp() {
+  if (state.characters.length === 0) {
+    renderCharacterForm(appEl, (character) => {
+      addAndActivate(character);
+    });
+    return;
+  }
+
+  // 탭 컨테이너 + 하단 탭 구조
+  appEl.innerHTML = `
+    <div id="tab-content"></div>
+    ${bottomTabsHtml(state.currentTab)}
+  `;
+  const content = appEl.querySelector('#tab-content');
+
+  // 본문 분기
+  if (state.currentTab === 'home') {
+    renderHome(content);
+  } else if (state.currentTab === 'stats') {
+    renderStatsPage(content);
+  } else if (state.currentTab === 'history') {
+    const active = getActive();
+    renderHistoryPage(content, active);
+  } else if (state.currentTab === 'wheeling') {
+    if (state.options.advancedMode) {
+      const active = getActive();
+      const { rec } = getRecAndFortune(active);
+      renderWheelingPage(content, rec);
+    } else {
+      renderWheelingDisabled(content, () => activateAdvanced(() => setTab('wheeling')));
     }
-    showModal(`
-      <h2>다구좌 모드 안내</h2>
-      <p>휠링 같은 분산 구매 도구를 활성화합니다.</p>
-      <p><strong>중요:</strong></p>
-      <p>각 티켓의 1등 확률은 동일합니다 (1/8,145,060). 티켓 수만큼 비례 증가할 뿐입니다.</p>
-      <p>휠링은 <strong>부분 당첨 보장</strong>이며, 1등 보장이 아닙니다.</p>
-      <p>비용 증가에 비례한 가치 보장은 없습니다. 본 게임은 도박 권유가 아닙니다.</p>
-      <button type="button" class="modal-confirm" data-action="confirm">이해했습니다</button>
-    `, {
-      onConfirm: () => {
-        state.options.advancedMode = true;
-        saveOptions(state.options);
+  } else if (state.currentTab === 'settings') {
+    renderSettingsPage(content, {
+      onAdvancedToggle: toggleAdvancedFromSettings,
+      onShowDisclaimer: () => showDisclaimer(),
+      onResetAll: () => {
+        state.characters = [];
+        state.activeId = null;
+        state.options = { applyFilters: false, advancedMode: false };
         renderApp();
       },
     });
-  });
+  }
 
-  // 휠링 페이지
-  appEl.querySelector('[data-action="wheeling"]')?.addEventListener('click', () => {
-    renderWheelingPage(appEl, rec, () => renderApp());
+  // 하단 탭 바인딩
+  appEl.querySelectorAll('.tab-item[data-tab-id]').forEach((el) => {
+    el.addEventListener('click', () => setTab(el.dataset.tabId));
   });
 }

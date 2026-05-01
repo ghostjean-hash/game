@@ -8,6 +8,32 @@ body {
   font-size: var(--font-size-md);
   line-height: var(--line-height);
   height: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* iOS Safari 자동 zoom 방지 - input 16px 미만이면 포커스 시 화면 확대됨.
+   font-family inherit으로 라벨과 톤 통일. */
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+}
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* 모든 인터랙티브 요소 터치 타겟 최소 44x44 (iOS HIG / Material 48dp 절충). */
+button,
+[role="button"],
+a.btn-primary,
+a.btn-secondary,
+.strategy,
+.slot {
+  min-height: 44px;
 }
 
 /* 모션 감소 옵션 존중 (접근성) */
@@ -45,6 +71,9 @@ body {
 #app {
   min-height: 100%;
   padding: var(--space-4);
+  padding-left: max(var(--space-4), env(safe-area-inset-left));
+  padding-right: max(var(--space-4), env(safe-area-inset-right));
+  padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
   max-width: 640px;
   margin: 0 auto;
 }
@@ -92,9 +121,8 @@ body {
   color: var(--color-text);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--font-size-md);
-  font-family: inherit;
+  padding: var(--space-3);
+  min-height: 44px;
 }
 .character-form input:focus,
 .character-form select:focus {
@@ -267,8 +295,8 @@ body {
   flex-shrink: 0;
 }
 .slot-add, .slot-del {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   color: var(--color-text);
@@ -378,10 +406,17 @@ body {
   border-left-color: var(--color-accent);
 }
 .draw-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
+  gap: var(--space-2);
   margin-bottom: var(--space-4);
+}
+.draw-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 .draw-no {
   font-size: var(--font-size-lg);
@@ -389,11 +424,35 @@ body {
   color: var(--color-accent);
 }
 .draw-tag {
-  font-size: var(--font-size-sm);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--color-text-dim);
   border: 1px solid var(--color-border);
   border-radius: 999px;
   padding: 2px var(--space-2);
+}
+.draw-nav {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-dim);
+  border: 1px solid var(--color-border);
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.draw-nav:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.draw-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 .draw-numbers {
   display: flex;
@@ -409,25 +468,53 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #ffffff;
-  color: #1a1a1f;
-  font-weight: bold;
+  /* background-color는 인라인 style이 한국 6/45 표준색(numberColor)으로 주입.
+     background-image는 좌상단 하이라이트로 입체감 형성. */
+  background-image: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 50%);
+  background-repeat: no-repeat;
+  color: #ffffff;
+  font-weight: 900;
   font-size: var(--font-size-md);
-  border: 2px solid var(--color-border);
+  font-variant-numeric: tabular-nums;
+  border: none;
+  /* 입체감: 우하 안쪽 그림자 + 외곽 드롭 그림자 */
+  box-shadow:
+    inset -3px -4px 8px rgba(0, 0, 0, 0.22),
+    inset 1px 2px 3px rgba(255, 255, 255, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.15);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 0 1px rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.01em;
 }
 .draw-bonus {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-1);
-  margin-bottom: var(--space-3);
+  gap: var(--space-2);
+  margin: var(--space-2) 0 var(--space-3);
 }
-.bonus-plus { color: var(--color-text-dim); font-size: var(--font-size-lg); }
-.bonus-num {
-  background: #fff3d9;
-  color: #b88830;
-  border-color: rgba(184, 136, 48, 0.4);
+.bonus-divider {
+  color: var(--color-text-dim);
+  font-size: var(--font-size-xl);
+  font-weight: 300;
+  margin: 0 var(--space-1);
+  user-select: none;
 }
+.bonus-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.bonus-label {
+  font-size: 10px;
+  color: var(--color-text-dim);
+  letter-spacing: 0.1em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+/* 보너스볼도 본번호와 동일한 표준색 공. 외곽 링 없음 (라벨로 차별화). */
 .draw-reasons {
   list-style: none;
   margin: 0;
@@ -497,8 +584,8 @@ body {
 }
 .pool-num {
   cursor: pointer;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   font-size: var(--font-size-sm);
 }
 .pool-num:hover {
@@ -521,13 +608,12 @@ body {
   color: var(--color-text-dim);
 }
 .pool-input input {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-3);
   background: var(--color-surface);
   color: var(--color-text);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  font-size: var(--font-size-md);
-  font-family: inherit;
+  min-height: 44px;
 }
 
 .wheel-tickets {
@@ -568,6 +654,15 @@ body {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: var(--space-2);
+  /* 긴 차트 스크롤 중에도 갱신 / 메인 접근 유지 */
+  position: sticky;
+  top: 0;
+  z-index: var(--z-overlay);
+  background: var(--color-bg);
+  padding-top: max(var(--space-2), env(safe-area-inset-top));
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-3);
 }
 .stats-header .app-title {
   text-align: center;
@@ -758,7 +853,8 @@ body {
 }
 .bar-row {
   display: grid;
-  grid-template-columns: 56px 1fr 50px;
+  /* 라벨은 내용에 맞춰 늘어남(페어 "12 - 34" 가독성), 트랙은 최소 80px 보장. */
+  grid-template-columns: minmax(56px, max-content) minmax(80px, 1fr) minmax(40px, max-content);
   align-items: center;
   gap: var(--space-2);
 }
@@ -766,6 +862,7 @@ body {
   color: var(--color-text-dim);
   font-family: var(--font-mono);
   text-align: right;
+  white-space: nowrap;
 }
 .bar-track {
   background: var(--color-bg);
@@ -835,3 +932,286 @@ body {
 }
 .modal-confirm:hover { filter: brightness(1.05); }
 .modal-confirm:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; }
+
+/* ===== 하단 탭 (5개) ===== */
+.bottom-tabs {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  z-index: var(--z-overlay);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+}
+.bottom-tabs-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.tab-item {
+  background: transparent;
+  border: none;
+  color: var(--color-text-dim);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 10px 4px;
+  min-height: 56px;
+  transition: color 0.15s ease;
+}
+.tab-item:hover { color: var(--color-text); }
+.tab-item.is-active {
+  color: var(--color-accent);
+  font-weight: bold;
+}
+.tab-item:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+/* #app은 하단 탭 높이만큼 padding 추가 (마지막 콘텐츠 가림 방지) */
+#app {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+}
+
+/* 탭 페이지 공통 헤더 */
+.tab-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.home-header {
+  text-align: center;
+  margin-bottom: var(--space-3);
+}
+
+/* ===== 추첨 탭 - 전략 한 줄 바 ===== */
+.strategy-bar {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  margin: var(--space-3) 0;
+  min-height: 52px;
+}
+.strategy-bar:hover { border-color: var(--color-accent); }
+.strategy-bar-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+}
+.strategy-bar-name {
+  font-weight: bold;
+  color: var(--color-accent);
+}
+.strategy-bar-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.strategy-bar-caret {
+  color: var(--color-text-dim);
+  font-size: var(--font-size-md);
+}
+
+/* ===== 전략 시트 (modal-card 변형) ===== */
+.sheet-card {
+  max-width: 520px;
+  padding: var(--space-4);
+}
+.sheet-title {
+  margin: 0 0 var(--space-1) 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-accent);
+}
+.sheet-help {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+}
+.sheet-strategy-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.sheet-strategy {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  color: var(--color-text);
+  min-height: 56px;
+}
+.sheet-strategy:hover { border-color: var(--color-accent); }
+.sheet-strategy.is-active {
+  border-color: var(--color-accent);
+  background: rgba(201, 160, 80, 0.08);
+}
+.sheet-strategy-short {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: 50%;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+.sheet-strategy-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.sheet-strategy-name {
+  font-weight: bold;
+  color: var(--color-text);
+}
+.sheet-strategy-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+}
+
+/* ===== 번호 카드 반응형 (한 줄 강제) ===== */
+.draw-numbers {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(4px, 1.5vw, 8px);
+  max-width: 100%;
+  margin: 0 auto var(--space-3);
+  justify-items: center;
+}
+.draw-numbers .num {
+  width: 100%;
+  height: auto;
+  max-width: 56px;
+  aspect-ratio: 1;
+  font-size: clamp(13px, 4vw, 18px);
+}
+.draw-bonus .num {
+  /* 보너스볼은 절대 크기 유지 (단일 원소) */
+  width: 44px;
+  height: 44px;
+  font-size: var(--font-size-md);
+}
+
+/* ===== 설정 탭 ===== */
+.settings-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+.settings-row input[type="checkbox"] {
+  margin-top: 4px;
+  min-width: 20px;
+  min-height: 20px;
+}
+.settings-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.settings-hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+}
+.danger-zone .stats-title { color: var(--color-danger); }
+
+/* ===== 모바일 (480px 이하): 좁은 폭 미세 조정 ===== */
+@media (max-width: 480px) {
+  #app {
+    padding: var(--space-3);
+    padding-left: max(var(--space-3), env(safe-area-inset-left));
+    padding-right: max(var(--space-3), env(safe-area-inset-right));
+    padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
+  }
+
+  .app-title { font-size: 22px; }
+  .app-header { margin-bottom: var(--space-4); }
+
+  .stats-header { gap: var(--space-1); }
+  .stats-section { padding: var(--space-3); margin-bottom: var(--space-4); }
+  .stats-meta { font-size: 11px; }
+  .btn-refresh { padding: 6px 10px; font-size: 12px; }
+
+  .slot-list { gap: var(--space-1); }
+  .slot { font-size: 11px; max-width: 120px; padding: var(--space-1) var(--space-2); }
+
+  .num { width: 40px; height: 40px; font-size: 13px; border-width: 2px; }
+
+  .strategy-list { gap: var(--space-1); }
+  .strategy { padding: var(--space-2); font-size: 12px; }
+
+  .modal-backdrop { padding: var(--space-3); align-items: flex-start; padding-top: max(var(--space-5), env(safe-area-inset-top)); }
+  .modal-card { padding: var(--space-4); max-height: 88vh; }
+
+  /* 차트 라벨 좁아진 라벨 영역에서도 가독성 유지 (charts.js의 grid-template-columns 보정) */
+  .bar-row {
+    gap: var(--space-1);
+    grid-template-columns: minmax(48px, max-content) minmax(64px, 1fr) minmax(36px, max-content);
+  }
+  .bar-label, .bar-value { font-size: 11px; }
+  .bar-track { height: 12px; }
+
+  /* 추첨 탭 - 전략 바: 좁은 폭에서 desc는 다음 줄로 */
+  .strategy-bar {
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas:
+      "label name caret"
+      "desc desc desc";
+    row-gap: 4px;
+  }
+  .strategy-bar-label { grid-area: label; }
+  .strategy-bar-name { grid-area: name; }
+  .strategy-bar-caret { grid-area: caret; }
+  .strategy-bar-desc { grid-area: desc; white-space: normal; }
+
+  /* 하단 탭 폰트 축소 */
+  .tab-item { font-size: 12px; padding: 8px 2px; }
+}
+
+/* ===== 매우 좁은 폭 (360px 이하): 추가 보정 ===== */
+@media (max-width: 360px) {
+  #app { padding: var(--space-2); }
+  .app-title { font-size: 20px; }
+  .num { width: 36px; height: 36px; font-size: 12px; }
+  .slot { max-width: 100px; }
+
+  .bar-row {
+    grid-template-columns: minmax(40px, max-content) minmax(48px, 1fr) minmax(28px, max-content);
+  }
+  .bar-label, .bar-value { font-size: 10px; }
+  .bar-track { height: 10px; }
+
+  /* 더 좁은 폭에서 탭 폰트 미세 조정 */
+  .tab-item { font-size: 11px; padding: 8px 2px; min-height: 52px; }
+  #app { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
+
+  /* 번호 카드 갭 더 축소 */
+  .draw-numbers .num { max-width: 44px; }
+}

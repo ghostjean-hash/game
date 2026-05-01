@@ -1,16 +1,22 @@
 // 캐릭터 전적 / 이력 페이지.
 import { characterStats } from '../core/history.js';
+import { numberColor } from '../data/colors.js';
 
 const RANK_LABELS = { 1: '1등', 2: '2등', 3: '3등', 4: '4등', 5: '5등' };
 const RANK_COLORS = { 1: '#c9a050', 2: '#b88830', 3: '#10b981', 4: '#06b6d4', 5: '#6b6b75' };
 
+function colorNum(n, extraClass = '') {
+  const c = numberColor(n);
+  const cls = extraClass ? `num ${extraClass}` : 'num';
+  return `<span class="${cls}" style="background-color:${c.bg};">${n}</span>`;
+}
+
 /**
- * 전적 페이지 렌더.
+ * 전적 페이지 렌더 (탭 모델: 백버튼 없음, 헤더는 sticky 탭 영역).
  * @param {HTMLElement} container
  * @param {object} character 활성 캐릭터
- * @param {() => void} onBack
  */
-export function renderHistoryPage(container, character, onBack) {
+export function renderHistoryPage(container, character) {
   const stats = characterStats(character);
   const sortedHistory = [...character.history].sort((a, b) => b.drwNo - a.drwNo);
 
@@ -34,7 +40,7 @@ export function renderHistoryPage(container, character, onBack) {
   `;
 
   const historyItems = sortedHistory.length === 0
-    ? '<section class="empty-state"><p>추천 이력이 없습니다. 메인에서 추천 카드를 보면 자동으로 기록됩니다.</p></section>'
+    ? '<section class="empty-state"><p>추천 이력이 없습니다. 추첨 탭에서 추천 카드를 보면 자동으로 기록됩니다.</p></section>'
     : `<section class="stats-section">
         <h2 class="stats-title">이력 (${sortedHistory.length}건, 최근 회차순)</h2>
         <div class="history-list">
@@ -43,29 +49,27 @@ export function renderHistoryPage(container, character, onBack) {
       </section>`;
 
   container.innerHTML = `
-    <header class="app-header stats-header">
-      <button type="button" class="btn-secondary" data-action="back">‹ 메인</button>
+    <header class="app-header tab-header">
       <h1 class="app-title">전적</h1>
     </header>
     ${summaryHtml}
     ${historyItems}
   `;
-
-  container.querySelector('[data-action="back"]').addEventListener('click', onBack);
 }
 
 function historyItemHtml(h) {
   const rank = h.matchedRank;
   const rankLabel = rank ? RANK_LABELS[rank] : (rank === null ? '미적중 / 미발표' : '-');
   const rankColor = rank ? RANK_COLORS[rank] : 'var(--color-text-dim)';
-  const numsHtml = h.numbers.map((n) => `<span class="num history-num">${n}</span>`).join('');
+  const numsHtml = h.numbers.map((n) => colorNum(n, 'history-num')).join('');
+  const bonusHtml = colorNum(h.bonus, 'history-bonus');
   return `
     <article class="history-item">
       <header class="history-header">
         <span class="history-drw">${h.drwNo}회차</span>
         <span class="history-rank" style="color: ${rankColor}">${rankLabel}</span>
       </header>
-      <div class="history-numbers">${numsHtml} <span class="num history-bonus">+${h.bonus}</span></div>
+      <div class="history-numbers">${numsHtml} <span class="bonus-divider" aria-hidden="true">+</span> ${bonusHtml}</div>
     </article>
   `;
 }

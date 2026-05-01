@@ -30,14 +30,14 @@ export function renderCharacterForm(container, onCreated) {
       <h2>캐릭터 생성</h2>
       <p class="form-help">캐릭터는 정체성(이름/띠/별자리/시드)이고, 추첨 전략은 메인 화면에서 매 추첨마다 선택합니다.</p>
       <form id="character-form">
-        <label>이름 <input type="text" name="name" required maxlength="20" placeholder="예: 검은바람" /></label>
+        <label>이름 <input type="text" name="name" required maxlength="20" placeholder="예: 검은바람" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" /></label>
         <label>생년월일 <input type="date" name="birth" required /></label>
         <label>별자리
           <select name="zodiac" required>
             ${ZODIACS.map((z) => `<option value="${z.id}">${z.label}</option>`).join('')}
           </select>
         </label>
-        <label>행운의 단어 <input type="text" name="luckyWord" required maxlength="20" placeholder="예: 바람" /></label>
+        <label>행운의 단어 <input type="text" name="luckyWord" required maxlength="20" placeholder="예: 바람" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" /></label>
         <label>MBTI (선택)
           <select name="mbti">
             <option value="">미지정</option>

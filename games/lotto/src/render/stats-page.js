@@ -2,24 +2,24 @@
 import { horizontalBarsHtml } from './charts.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
 import { loadDraws, syncDrawsIfNewer } from '../data/storage.js';
+import { numberColor } from '../data/colors.js';
 
 /**
- * 통계 페이지 렌더.
+ * 통계 페이지 렌더 (탭 모델: 백버튼 없음).
  * 진입 즉시 캐시 기반으로 렌더 후, 백그라운드에서 미러 latest와 비교해
  * 새 회차가 있을 때만 자동 갱신. "갱신" 버튼은 강제 체크.
  *
- * @param {HTMLElement} container 메인 #app 엘리먼트
- * @param {() => void} onBack 뒤로 가기 (메인 복귀)
+ * @param {HTMLElement} container
  */
-export function renderStatsPage(container, onBack) {
+export function renderStatsPage(container) {
   let currentDraws = loadDraws();
   let busy = false;
 
   function emptyHtml() {
     return `
       <header class="app-header stats-header">
-        <button type="button" class="btn-secondary" data-action="back">‹ 메인</button>
         <h1 class="app-title">통계</h1>
+        <button type="button" class="btn-refresh" data-action="refresh" aria-label="최신 데이터 확인" disabled style="visibility:hidden;">↻</button>
       </header>
       <section class="empty-state">
         <p><strong>회차 데이터를 받아오는 중입니다.</strong></p>
@@ -38,7 +38,7 @@ export function renderStatsPage(container, onBack) {
     const cooccur = computeCooccur(draws);
 
     const numberItems = numberStats
-      .map((s) => ({ label: String(s.number), value: s.totalCount }))
+      .map((s) => ({ label: String(s.number), value: s.totalCount, color: numberColor(s.number).bg }))
       .sort((a, b) => b.value - a.value);
 
     const bonusItems = bonusStats
@@ -62,7 +62,6 @@ export function renderStatsPage(container, onBack) {
 
     return `
       <header class="app-header stats-header">
-        <button type="button" class="btn-secondary" data-action="back">‹ 메인</button>
         <h1 class="app-title">통계</h1>
         <button type="button" class="btn-refresh" data-action="refresh" aria-label="최신 데이터 확인">↻ 갱신</button>
       </header>
@@ -109,10 +108,8 @@ export function renderStatsPage(container, onBack) {
   }
 
   function bindHandlers() {
-    const backBtn = container.querySelector('[data-action="back"]');
-    if (backBtn) backBtn.addEventListener('click', onBack);
     const refreshBtn = container.querySelector('[data-action="refresh"]');
-    if (refreshBtn) refreshBtn.addEventListener('click', () => doSync(true));
+    if (refreshBtn && !refreshBtn.disabled) refreshBtn.addEventListener('click', () => doSync(true));
   }
 
   function rerender() {

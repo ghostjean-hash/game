@@ -1,11 +1,38 @@
-// 휠링 페이지. 다구좌 모드 사용자에게만 노출.
+// 휠링 페이지. 다구좌 모드 ON일 때 본문, OFF면 활성화 안내.
 // Full Wheel (모든 조합) + Abbreviated Wheel (시드 기반 N장 + 4-if-4 자동 검증).
 import { fullWheel, abbreviatedWheel, combinationCount } from '../core/wheeling.js';
 import { NUMBER_MIN, NUMBER_MAX, PICK_COUNT } from '../data/numbers.js';
+import { numberColor } from '../data/colors.js';
 
 const TICKET_COST = 1000;
 
-export function renderWheelingPage(container, currentRecommendation, onBack) {
+function colorNum(n, extraClass = '') {
+  const c = numberColor(n);
+  const cls = extraClass ? `num ${extraClass}` : 'num';
+  return `<span class="${cls}" style="background-color:${c.bg};">${n}</span>`;
+}
+
+/**
+ * 다구좌 OFF 시 활성화 안내 화면.
+ * @param {HTMLElement} container
+ * @param {() => void} onActivate 활성화 클릭 콜백 (윤리 모달 → advancedMode true 후 재렌더)
+ */
+export function renderWheelingDisabled(container, onActivate) {
+  container.innerHTML = `
+    <header class="app-header tab-header">
+      <h1 class="app-title">휠링</h1>
+    </header>
+    <section class="empty-state">
+      <p><strong>다구좌 모드가 꺼져 있습니다.</strong></p>
+      <p>휠링은 분산 구매(Full / Abbreviated Wheel) 도구로, <strong>부분 당첨 보장</strong>이 목적입니다.</p>
+      <p>1등 확률을 높이는 도구가 아니며, 비용 증가분에 비례한 가치 보장은 없습니다.</p>
+      <button type="button" class="btn-primary" data-action="enable-advanced">다구좌 모드 켜기</button>
+    </section>
+  `;
+  container.querySelector('[data-action="enable-advanced"]').addEventListener('click', onActivate);
+}
+
+export function renderWheelingPage(container, currentRecommendation) {
   let pool = currentRecommendation && Array.isArray(currentRecommendation.numbers)
     ? [...currentRecommendation.numbers]
     : [];
@@ -23,8 +50,7 @@ export function renderWheelingPage(container, currentRecommendation, onBack) {
     }
 
     container.innerHTML = `
-      <header class="app-header stats-header">
-        <button type="button" class="btn-secondary" data-action="back">‹ 메인</button>
+      <header class="app-header tab-header">
         <h1 class="app-title">휠링 (다구좌 모드)</h1>
         <p class="app-subtitle">부분 당첨 보장 도구. 당첨 확률은 높이지 않습니다.</p>
       </header>
@@ -34,12 +60,15 @@ export function renderWheelingPage(container, currentRecommendation, onBack) {
         <p class="stats-note">최소 ${PICK_COUNT}개. 8~10개 권장.</p>
         <div class="pool-display" role="list" aria-label="현재 풀">
           ${pool.length > 0
-            ? [...pool].sort((a, b) => a - b).map((n) => `<button type="button" class="num pool-num" data-pool-num="${n}" aria-label="${n}번 제거" title="제거">${n}</button>`).join('')
+            ? [...pool].sort((a, b) => a - b).map((n) => {
+                const c = numberColor(n);
+                return `<button type="button" class="num pool-num" data-pool-num="${n}" aria-label="${n}번 제거" title="제거" style="background-color:${c.bg};">${n}</button>`;
+              }).join('')
             : '<span class="empty-note">풀이 비어있습니다.</span>'}
         </div>
         <div class="pool-input">
           <label>번호 추가
-            <input type="number" id="pool-input-num" min="${NUMBER_MIN}" max="${NUMBER_MAX}" placeholder="1~45" />
+            <input type="number" id="pool-input-num" min="${NUMBER_MIN}" max="${NUMBER_MAX}" placeholder="1~45" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
           </label>
           <button type="button" class="btn-secondary" data-action="add-num">추가</button>
           <button type="button" class="btn-secondary" data-action="clear">전체 비우기</button>
@@ -65,7 +94,7 @@ export function renderWheelingPage(container, currentRecommendation, onBack) {
         ${wheelType === 'abbreviated' && fullCount > 0 ? `
           <div class="pool-input">
             <label>티켓 수 (1 ~ ${fullCount})
-              <input type="number" id="abbreviated-count" min="1" max="${fullCount}" value="${abbreviatedCount}" />
+              <input type="number" id="abbreviated-count" min="1" max="${fullCount}" value="${abbreviatedCount}" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
             </label>
             <button type="button" class="btn-secondary" data-action="apply-count">적용</button>
           </div>
@@ -93,7 +122,7 @@ export function renderWheelingPage(container, currentRecommendation, onBack) {
     }
     const cost = wheel.ticketCount * TICKET_COST;
     const ticketsHtml = wheel.tickets.map((t, i) => {
-      const numsHtml = t.map((n) => `<span class="num history-num">${n}</span>`).join('');
+      const numsHtml = t.map((n) => colorNum(n, 'history-num')).join('');
       return `<div class="wheel-ticket"><span class="wheel-idx">${i + 1}</span><div class="wheel-nums">${numsHtml}</div></div>`;
     }).join('');
     const tooManyWarn = wheel.ticketCount > 100
@@ -122,8 +151,6 @@ export function renderWheelingPage(container, currentRecommendation, onBack) {
   }
 
   function bindEvents() {
-    container.querySelector('[data-action="back"]').addEventListener('click', onBack);
-
     container.querySelector('[data-action="add-num"]')?.addEventListener('click', () => {
       const input = container.querySelector('#pool-input-num');
       const v = parseInt(input.value, 10);

@@ -39,6 +39,85 @@
 - `docs/03_architecture.md` 폴더 트리에 charts.js / stats-page.js 반영.
 - 데이터 없을 때(`draws.json` 비어 있음) empty-state로 페치 명령 안내.
 
+## 2.25. 회차 이동을 추천 카드 헤더에 통합 (회차 = 리소스 명시)
+
+- 추천 카드 헤더를 grid 3컬럼으로: `‹ {회차} ›`. 좌우 화살표가 회차 이동.
+- 별도 `.actions-draw` 영역 제거 (메인 액션 자리를 부수 액션이 차지하던 문제).
+- 회차가 `recommend()` ctx + `fortuneFor()` 입력으로 들어가는 **리소스**임을 UI 컨텍스트로 명확화 (회차 = 추천의 입력).
+- `.draw-nav` 원형 버튼 (44×44, 디스에이블 시 흐림). drwNo ≤ 1이면 prev 비활성.
+- `.draw-tag` "추천" 배지 폰트 축소 + 대문자 letter-spacing.
+
+## 2.24. 번호 공 시각 보강 + 보너스 표시 재설계
+
+- `.num` 라이팅 강화: `radial-gradient` 좌상단 하이라이트 + 진한 inset 그림자(우하) + 외곽 드롭 그림자 + `text-shadow` 강화 + `font-weight: 900` + `font-variant-numeric: tabular-nums` + `letter-spacing`. 단조로운 단색 원에서 동행복권 영상 톤의 입체 공으로.
+- 인라인 style 키 변경: `background:${bg}` → `background-color:${bg}` (CSS의 `background-image` 그라디언트와 분리).
+- **보너스 표시 재설계**: 외곽 링(outline) 제거 (떠 있는 링 어색). 새 구조 = "+ 디바이더 + 보너스 라벨 + 같은 공 디자인".
+  - `.bonus-divider` (전 `.bonus-plus`) - 본번호와 보너스 셀 사이 + 기호.
+  - `.bonus-cell` - 라벨 위, 공 아래 column.
+  - `.bonus-label` - 작은 대문자 라벨 ("보너스").
+  - 보너스볼도 본번호와 똑같은 공 디자인. 차별화는 라벨로.
+- history-page의 `.bonus-plus` → `.bonus-divider` 클래스 통합.
+
+## 2.23. 정보 구조 재설계 (5탭 + 전략 시트 + 번호 hero + 한국 6/45 표준 컬러볼)
+
+- **5탭 모델**: 추첨 / 통계 / 전적 / 휠링 / 설정. 하단 fixed 탭. 백 버튼 폐기.
+- **추첨 탭 재배치 (번호 hero)**: 슬롯 → 추천 카드(hero) → 회차 이동 → 전략 한 줄 바 → 캐릭터 카드(압축).
+- **전략 시트**: 11개 칩 평면 노출 → 한 줄 바("전략 ▾ {이름} - {설명}") + 탭 시 시트 그리드.
+  - `src/render/strategy-sheet.js` 신규 (`strategyBarHtml` / `openStrategySheet`).
+  - 기존 `strategy-picker.js`는 `STRATEGY_LIST`만 export로 남김.
+- **하단 탭**: `src/render/bottom-tabs.js` 신규 (5탭 + 활성 표시).
+- **설정 탭**: `src/render/settings-page.js` 신규.
+  - 옵션 필터 / 다구좌 토글 / 면책 다시 보기 / 데이터 메타 / 전체 초기화.
+- **휠링 탭 통합**:
+  - `renderWheelingDisabled` 신규 (다구좌 OFF 시 안내 + 활성화 버튼).
+  - 다구좌 ON이면 기존 휠링 본문. "‹ 메인" 버튼 제거.
+- **통계 / 전적 페이지**: `onBack` 인자 제거, 백 버튼 제거 (탭 전환으로 대체).
+- **한국 6/45 공식 컬러볼 적용**:
+  - `src/data/colors.js` `NUMBER_RANGE_COLORS` 검증값 (1-10 #fbc400 / 11-20 #69c8f2 / 21-30 #ff7272 / 31-40 #aaaaaa / 41-45 #b0d840). 동행복권 영상 표준, 다수 미러 일치 검증.
+  - `numberColor(n)` 헬퍼 (bg 반환).
+  - `.num` CSS: 흰 텍스트 + `text-shadow: 0 1px 1px rgba(0,0,0,0.3)` + `box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2)` (입체감) + 테두리 제거.
+  - draw-card / history-page / wheeling-page 모든 번호 표시에 적용.
+  - 통계 페이지 본번호 빈도 차트 막대도 동일 색상.
+  - 보너스볼은 같은 색 + accent 색 외곽 링(`outline`)으로 차별화.
+- **번호 카드 반응형 한 줄 강제**:
+  - `.draw-numbers`: `grid-template-columns: repeat(6, 1fr)` + `aspect-ratio: 1` + `font-size: clamp(13px, 4vw, 18px)`.
+  - 좁은 폭에서도 6개 한 줄, 셀 크기 자동 축소.
+- **CSS 신규**: `.bottom-tabs / .tab-item / .strategy-bar / .sheet-card / .sheet-strategy / .actions-draw / .settings-row / .danger-zone / .home-header / .tab-header`.
+- **CSS 모바일 보강 (480/360px)**:
+  - 하단 탭 폰트 / padding 축소.
+  - 전략 바 desc 다음 줄로.
+  - 번호 카드 max-width 축소.
+- `docs/01_spec.md` 4장 5탭 모델로 재작성.
+
+## 2.22. 모바일 최적화 2차 (통계 sticky 헤더 + 차트 가독성)
+
+- `styles/main.css`:
+  - `.stats-header`: `position: sticky; top: 0` + `safe-area-inset-top` padding + `border-bottom` + `z-overlay`. 긴 차트 스크롤 중에도 갱신 / 메인 버튼 접근.
+  - `.bar-row` grid를 `minmax`로 전환. 페어 라벨("12 - 34") 같은 긴 라벨도 잘림 없이 표시 + 트랙 최소 80px 보장.
+  - `.bar-label` `white-space: nowrap`.
+  - 480px 이하: `.bar-row` minmax 폭 축소 (48/64/36) + `.bar-label/.bar-value` 11px + 트랙 12px.
+  - 360px 이하: minmax 폭 추가 축소 (40/48/28) + 폰트 10px + 트랙 10px.
+
+## 2.21. 모바일 최적화 1차 (theme / safe-area / 브레이크포인트 / 터치 / input)
+
+- `index.html`:
+  - viewport에 `viewport-fit=cover` 추가.
+  - `theme-color` `#0e0e10` → `#c9a050` (라이트 테마 일치).
+  - `apple-mobile-web-app-capable` / `apple-mobile-web-app-title` / `format-detection telephone=no` 추가.
+- `styles/main.css`:
+  - 글로벌 `input/select/textarea { font-size: 16px }` (iOS Safari 자동 zoom 방지).
+  - 글로벌 `button/role=button/strategy/slot { min-height: 44px }` (iOS HIG 터치 타겟).
+  - `#app` padding에 `safe-area-inset` 적용.
+  - `.character-form input/select` / `.pool-input input` 패딩 + min-height 44 보강.
+  - `.slot-add / .slot-del` 36×36 → 44×44.
+  - `.pool-num` 36×36 → 44×44.
+  - `@media (max-width: 480px)` 모바일 브레이크포인트 신규 (패딩 / 폰트 / 카드 / 모달 미세 조정).
+  - `@media (max-width: 360px)` 추가 보정 (iPhone SE 등).
+- `src/render/character-form.js`:
+  - 이름 / 행운 단어 input에 `autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"` 추가.
+- `src/render/wheeling-page.js`:
+  - 풀 번호 입력 / 티켓 수 입력에 `inputmode="numeric" pattern="[0-9]*" autocomplete="off"` 추가.
+
 ## 2.20. 통계 페이지 갱신 흐름 (날짜 기준 자동/명시)
 
 - `src/data/storage.js` `syncDrawsIfNewer()` 신규.
