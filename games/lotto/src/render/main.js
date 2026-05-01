@@ -5,7 +5,9 @@ import { renderCharacterForm } from './character-form.js';
 import { characterCardHtml } from './character-card.js';
 import { drawCardHtml } from './draw-card.js';
 import { characterSlotsHtml } from './character-slots.js';
-import { strategyBarHtml, openStrategySheet } from './strategy-sheet.js';
+import { strategyTabsHtml } from './strategy-tabs.js';
+import { nextDrawCardHtml, startCountdown } from './next-draw-card.js';
+import { nextDraw } from '../core/schedule.js';
 import { renderStatsPage } from './stats-page.js';
 import { renderHistoryPage } from './history-page.js';
 import { renderWheelingPage, renderWheelingDisabled } from './wheeling-page.js';
@@ -15,7 +17,7 @@ import { showModal, showDisclaimer } from './modal.js';
 import { recommend } from '../core/recommend.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
-import { recordRecommendation, matchHistory } from '../core/history.js';
+import { recordRecommendation, matchHistory, backfillRecommendations } from '../core/history.js';
 import { applyLuckGrowth } from '../core/luck.js';
 import {
   loadCharacters, saveCharacters,
@@ -29,6 +31,8 @@ import { STRATEGY_DEFAULT } from '../data/numbers.js';
 const DEFAULT_DRWNO = 1222;
 
 let appEl = null;
+let stopCountdown = null; // 카운트다운 interval 정리 함수. 매 렌더 시작 전 정리.
+let strategyScrollLeft = 0; // 전략 탭 가로 스크롤 위치 보존 (클릭 → 재렌더 시 리셋 방지).
 const state = {
   characters: [],
   activeId: null,
@@ -119,10 +123,10 @@ function getRecAndFortune(active) {
     zodiac: active.zodiac,
     mbti: active.mbti,
   });
-  return { strategyId, rec, fortune };
+  return { strategyId, rec, fortune, drawForFortune };
 }
 
-function homeTabHtml(active, strategyId, rec, fortune) {
+function homeTabHtml(active, strategyId, rec, fortune, drawForFortune) {
   const banner = state.draws.length === 0
     ? `<section class="data-banner">
         <strong>회차 데이터 없음.</strong> 통계 / 일진 / 일부 전략이 데이터 기반으로 동작하려면 페치 1회 필요.
@@ -130,31 +134,45 @@ function homeTabHtml(active, strategyId, rec, fortune) {
       </section>`
     : '';
 
+  const nextInfo = nextDraw(state.draws);
+  // 추천 회차 = 다음 추첨 회차로 항상 고정. nav 제거됨 (spec 5.4 결정론은 history에 보존).
+  state.drwNo = nextInfo.drwNo || state.drwNo;
+  const heroFortuneClass = fortune === 'bad' ? ' is-bad' : (fortune === 'great' ? ' is-great' : '');
+
   return `
     <header class="app-header tab-header home-header">
       <h1 class="app-title">Blessed Lotto</h1>
-      <p class="app-subtitle">참고용 추천 - 매 회차 1/8,145,060</p>
     </header>
+
+    <section class="home-hero${heroFortuneClass}" aria-label="다음 추첨 + 추천">
+      ${nextDrawCardHtml(nextInfo)}
+      ${drawCardHtml(state.drwNo, rec, fortune)}
+    </section>
 
     ${characterSlotsHtml(state.characters, state.activeId)}
 
-    ${drawCardHtml(state.drwNo, rec, fortune)}
+    ${strategyTabsHtml(strategyId)}
 
-    ${strategyBarHtml(strategyId)}
-
-    ${characterCardHtml(active, fortune)}
+    ${characterCardHtml(active, fortune, drawForFortune || state.drwNo)}
 
     ${banner}
-    <p class="legal">본 추천은 참고용입니다. 매 회차 모든 조합의 당첨 확률은 1/8,145,060로 동일합니다.</p>
   `;
 }
 
 function renderHome(content) {
   const active = getActive();
-  const { strategyId, rec, fortune } = getRecAndFortune(active);
+  const { strategyId, rec, fortune, drawForFortune } = getRecAndFortune(active);
+
+  // 백캐스트: 캐릭터에 최근 30회 결정론적 추천이 history에 없으면 1회 백필.
+  // Luck 부트스트랩 목적. SSOT: docs/01_spec.md 7.5.
+  let updated = backfillRecommendations(active, state.draws, strategyId, {
+    numberStats: state.numberStats,
+    bonusStats: state.bonusStats,
+    cooccur: state.cooccur,
+  });
 
   // 이력 자동 기록 + 매칭 + Luck 성장
-  let updated = recordRecommendation(active, {
+  updated = recordRecommendation(updated, {
     drwNo: state.drwNo,
     numbers: rec.numbers,
     bonus: rec.bonus,
@@ -166,7 +184,51 @@ function renderHome(content) {
   state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
   saveCharacters(state.characters);
 
-  content.innerHTML = homeTabHtml(updated, strategyId, rec, fortune);
+  content.innerHTML = homeTabHtml(updated, strategyId, rec, fortune, drawForFortune);
+
+  // 카운트다운 시작 (이전 interval은 renderApp 시작 시 정리됨).
+  // 추첨 시각 도달 시 자동 재렌더 → 다음 회차 정보로 갱신.
+  stopCountdown = startCountdown(content, state.draws, () => renderApp());
+
+  // 전략 탭: 스크롤 위치 복원 + 활성 탭 잘림 보정 + fade 토글 + PC 휠 → 가로 변환.
+  const stratScroll = content.querySelector('.strategy-tabs');
+  if (stratScroll) {
+    stratScroll.scrollLeft = strategyScrollLeft;
+
+    // 활성 탭이 좌/우 가장자리에서 잘려있으면 안으로 들어오도록 보정.
+    // 완전히 보이는 경우 변동 0. fade gradient(24px) 안쪽으로 padding 줘서 자연스럽게.
+    const activeTab = stratScroll.querySelector('.strategy-tab.is-active');
+    if (activeTab) {
+      const cRect = stratScroll.getBoundingClientRect();
+      const bRect = activeTab.getBoundingClientRect();
+      const FADE_PAD = 24; // .strategy-tabs --fade-w와 동일
+      if (bRect.left < cRect.left + FADE_PAD) {
+        stratScroll.scrollLeft -= (cRect.left + FADE_PAD - bRect.left);
+      } else if (bRect.right > cRect.right - FADE_PAD) {
+        stratScroll.scrollLeft += (bRect.right - (cRect.right - FADE_PAD));
+      }
+      strategyScrollLeft = stratScroll.scrollLeft; // 보정된 위치를 기억
+    }
+
+    function updateFade() {
+      const atStart = stratScroll.scrollLeft <= 1;
+      const atEnd = stratScroll.scrollLeft + stratScroll.clientWidth >= stratScroll.scrollWidth - 1;
+      stratScroll.classList.toggle('is-start', atStart);
+      stratScroll.classList.toggle('is-end', atEnd);
+    }
+    stratScroll.addEventListener('scroll', updateFade, { passive: true });
+    updateFade();
+
+    // PC 마우스 휠 → 가로 스크롤 변환.
+    // 트랙패드 가로 스와이프(deltaX 우세)는 OS 기본 동작 유지, 마우스 휠(deltaY 우세)만 변환.
+    // 모바일 터치는 wheel 이벤트 발생 안 해서 영향 없음.
+    stratScroll.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return; // 트랙패드 가로 그대로
+      if (e.deltaY === 0) return;
+      e.preventDefault();
+      stratScroll.scrollBy({ left: e.deltaY, behavior: 'auto' });
+    }, { passive: false });
+  }
 
   // 슬롯 클릭
   content.querySelectorAll('[data-slot-id]').forEach((el) => {
@@ -183,23 +245,18 @@ function renderHome(content) {
   content.querySelector('[data-action="add-character"]')?.addEventListener('click', openAddCharacterModal);
   content.querySelector('[data-action="delete-active"]')?.addEventListener('click', deleteActive);
 
-  // 회차 이동
-  content.querySelector('[data-action="prev-draw"]').addEventListener('click', () => {
-    if (state.drwNo > 1) {
-      state.drwNo -= 1;
-      renderApp();
-    }
-  });
-  content.querySelector('[data-action="next-draw"]').addEventListener('click', () => {
-    state.drwNo += 1;
-    renderApp();
-  });
-
-  // 전략 시트
-  content.querySelector('[data-action="open-strategy-sheet"]').addEventListener('click', () => {
-    openStrategySheet(showModal, strategyId, (newStrategyId) => {
+  // 전략 탭 직접 클릭 (시트 모달 폐기, 즉시 활성 변경)
+  content.querySelectorAll('.strategy-tab[data-strategy-id]').forEach((el) => {
+    // mousedown에서 default 차단 → 클릭은 살리되 button focus 시 자동 scrollIntoView 차단.
+    // (일부 Chromium 빌드는 focus가 컨테이너 안쪽으로 이동 시 자동 scrollIntoViewIfNeeded 발동.)
+    el.addEventListener('mousedown', (e) => e.preventDefault());
+    el.addEventListener('click', () => {
+      const newStrategyId = el.dataset.strategyId;
       const cur = state.characters.find((c) => c.id === state.activeId);
       if (!cur || cur.lastUsedStrategy === newStrategyId) return;
+      // 클릭 직전 스크롤 위치 저장 → renderApp 후 복원에 사용
+      const tabsEl = content.querySelector('.strategy-tabs');
+      if (tabsEl) strategyScrollLeft = tabsEl.scrollLeft;
       cur.lastUsedStrategy = newStrategyId;
       saveCharacters(state.characters);
       renderApp();
@@ -241,6 +298,9 @@ function toggleAdvancedFromSettings() {
 }
 
 function renderApp() {
+  // 이전 interval 정리 (탭 전환 / 재렌더 시 카운트다운 누수 방지)
+  if (stopCountdown) { stopCountdown(); stopCountdown = null; }
+
   if (state.characters.length === 0) {
     renderCharacterForm(appEl, (character) => {
       addAndActivate(character);

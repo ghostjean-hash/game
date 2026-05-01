@@ -106,3 +106,13 @@ import { foo } from 'https://esm.sh/some-lib@1.0.0';
 
 6.2. type: `feat` / `fix` / `docs` / `chore` / `refactor` / `test`.
 6.3. PROGRESS.md 6장 커밋 히스토리 표에 한 줄 추가.
+
+## 8. 아이콘 / 글리프
+
+8.1. **텍스트 글리프 금지.** UI에서 `>`, `<`, `+`, `×`, `↻`, `▾`, `‹`, `›` 등 아이콘 의도의 텍스트 문자 사용 금지. 키보드/이모지 한자도 동일.
+8.2. 모든 UI 아이콘은 `src/render/icons.js`의 SVG 헬퍼로만 출력.
+8.3. 색은 SVG 내부에 하드코딩하지 않고 `currentColor`로 위임. 부모 요소의 `color`로 제어.
+8.4. 크기는 호출처 클래스(`.icon` / `.icon-sm` / `.icon-lg`)로 결정. SVG 자체에 width/height 인라인 금지.
+8.5. 의미 있는 아이콘 단독 버튼은 `aria-label` 필수, 장식용 아이콘은 `aria-hidden="true"` (헬퍼가 자동 부여).
+8.6. 새 아이콘이 필요하면 `icons.js`에 export 함수로 추가 후 사용.
+8.7. 적용 대상: 회차 nav (이전 / 다음), 캐릭터 슬롯 (추가 / 삭제), 통계 갱신, 전략 caret, 본번호-보너스 분리자(+) 등.

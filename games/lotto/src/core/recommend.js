@@ -147,8 +147,19 @@ function balancedSample(weights, count, drawSeed) {
   return weightedSample(weights, count, drawSeed);
 }
 
-function weightedSample(weights, count, seed) {
-  const pool = weights.map((w, i) => ({ n: i + 1, w: Math.max(w, WEIGHT_MIN_FLOOR) }));
+/**
+ * 가중치 기반 비복원 추출.
+ * @param {number[]} weights length 45 (index 0 = number 1)
+ * @param {number} count
+ * @param {number} seed
+ * @param {Set<number>} [exclude] 풀에서 사전 제외할 번호 집합 (예: 보너스 추출 시 본번호)
+ * @returns {number[]}
+ */
+function weightedSample(weights, count, seed, exclude = null) {
+  let pool = weights.map((w, i) => ({ n: i + 1, w: Math.max(w, WEIGHT_MIN_FLOOR) }));
+  if (exclude && exclude.size > 0) {
+    pool = pool.filter((x) => !exclude.has(x.n));
+  }
   const rng = mulberry32(seed);
   const picked = [];
   for (let k = 0; k < count; k += 1) {
@@ -195,51 +206,51 @@ export function recommend(ctx) {
   if (strategyId === STRATEGY_BLESSED) {
     mainWeights = uniformWeights();
     bonusW = uniformWeights();
-    reasons.push('축복받은 자: 시드 + Luck 분산 적용.');
+    reasons.push('축복받은 자: 모든 번호 균등 + Luck이 시드 번호 가중치 강화.');
   } else if (strategyId === STRATEGY_STATISTICIAN) {
     mainWeights = statsToWeights(numberStats);
     bonusW = uniformWeights();
-    reasons.push('통계학자: 본번호 누적 빈도 가중.');
+    reasons.push('통계 추첨: 역대 회차에 가장 많이 나온 번호 위주.');
   } else if (strategyId === STRATEGY_SECOND_STAR) {
     mainWeights = uniformWeights();
     bonusW = statsToWeights(bonusStats);
-    reasons.push('2등의 별: 보너스볼 빈도 극대화.');
+    reasons.push('보너스볼 사냥: 역대 보너스볼로 자주 나온 번호 위주.');
   } else if (strategyId === STRATEGY_REGRESSIONIST) {
     mainWeights = gapWeights(numberStats);
     bonusW = uniformWeights();
-    reasons.push('회귀주의자: 오래 미출현 번호 우대.');
+    reasons.push('미출현 회귀: 오랫동안 안 나온 번호 위주.');
   } else if (strategyId === STRATEGY_PAIR_TRACKER) {
     const keyNumber = keyNumberFromSeed(seed);
     mainWeights = pairWeights(cooccur, keyNumber);
     bonusW = uniformWeights();
-    reasons.push(`짝궁추적자: 키번호 ${keyNumber}번과 자주 함께 나온 번호 가중.`);
+    reasons.push(`짝꿍 번호: 캐릭터 키번호 ${keyNumber}번과 자주 함께 나왔던 번호 묶음.`);
   } else if (strategyId === STRATEGY_ASTROLOGER) {
     mainWeights = zodiacWeights(zodiac);
     bonusW = uniformWeights();
     const label = zodiac || '미지정';
-    reasons.push(`점성술사: ${label} 행운 번호 가중.`);
+    reasons.push(`별자리 행운: ${label} 행운 번호 위주.`);
   } else if (strategyId === STRATEGY_TREND_FOLLOWER) {
     mainWeights = trendWeights(numberStats);
     bonusW = uniformWeights();
-    reasons.push('추세추종자: 최근 30회 Hot 번호 가중.');
+    reasons.push('최근 트렌드: 최근 30회에 자주 나온 번호 위주.');
   } else if (strategyId === STRATEGY_INTUITIVE) {
     mainWeights = intuitiveWeights(drawSeed);
     bonusW = uniformWeights();
-    reasons.push('직감주의자: 매 회차 다른 가중치 (시드 결정론).');
+    reasons.push('직감: 회차마다 다른 분포 (같은 캐릭터는 같은 결과).');
   } else if (strategyId === STRATEGY_BALANCER) {
     mainWeights = uniformWeights();
     bonusW = uniformWeights();
-    reasons.push(`균형주의자: 합 ${SUM_RANGE_MIN}~${SUM_RANGE_MAX} + 홀짝 ${ODD_EVEN_PREFERRED.join(':')} 필터 통과 조합.`);
+    reasons.push(`균형 조합: 번호 합 ${SUM_RANGE_MIN}~${SUM_RANGE_MAX} + 홀짝 ${ODD_EVEN_PREFERRED.join(':')} 필터를 통과한 조합만.`);
   } else if (strategyId === STRATEGY_MBTI) {
     mainWeights = mbtiWeights(mbti);
     bonusW = uniformWeights();
-    reasons.push(`MBTI: ${mbti || '미지정'} 행운 번호 가중.`);
+    reasons.push(`MBTI 행운: ${mbti || '미지정'} 행운 번호 위주.`);
   } else if (strategyId === STRATEGY_ZODIAC_ELEMENT) {
     mainWeights = zodiacElementWeights(zodiac);
     bonusW = uniformWeights();
     const el = zodiacElementOf(zodiac);
     const elLabel = el ? `${el}` : '미지정';
-    reasons.push(`별자리 원소: ${elLabel} 그룹 행운 번호 가중.`);
+    reasons.push(`별자리 4원소: ${elLabel} 그룹 행운 번호 위주.`);
   } else {
     throw new Error(`Unknown strategy: ${strategyId}`);
   }
@@ -248,7 +259,8 @@ export function recommend(ctx) {
   const numbers = strategyId === STRATEGY_BALANCER
     ? balancedSample(lucked, PICK_COUNT, drawSeed).sort((a, b) => a - b)
     : weightedSample(lucked, PICK_COUNT, drawSeed).sort((a, b) => a - b);
-  const bonusArr = weightedSample(bonusW, BONUS_COUNT, bonusSeed);
+  // 6/45 룰: 보너스는 본번호와 겹치지 않아야 함. 본번호 6개를 풀에서 제외하고 추출.
+  const bonusArr = weightedSample(bonusW, BONUS_COUNT, bonusSeed, new Set(numbers));
   const bonus = bonusArr[0];
 
   return { numbers, bonus, reasons };

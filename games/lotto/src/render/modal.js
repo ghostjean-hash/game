@@ -1,5 +1,6 @@
 // 모달 / 면책 안내. render/는 DOM 사용 OK.
 // SSOT: docs/01_spec.md 4.1 (첫 진입 면책).
+import { close as closeIcon } from './icons.js';
 
 const DISCLAIMER_HTML = `
   <h2>잠깐, 알림</h2>
@@ -27,9 +28,15 @@ function ensureContainer() {
  */
 export function showModal(html, opts = {}) {
   const root = ensureContainer();
+  // dismissible 기본 true. 면책 모달처럼 강제 확인이 필요한 경우만 false 전달.
+  const dismissible = opts.dismissible !== false;
+  const closeBtn = dismissible
+    ? `<button type="button" class="modal-close" data-action="close" aria-label="닫기">${closeIcon()}</button>`
+    : '';
   root.innerHTML = `
     <div class="modal-backdrop">
       <div class="modal-card" role="dialog" aria-modal="true" tabindex="-1">
+        ${closeBtn}
         ${html}
       </div>
     </div>
@@ -47,7 +54,7 @@ export function showModal(html, opts = {}) {
   }
 
   function onKey(e) {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && dismissible) {
       close();
     } else if (e.key === 'Enter') {
       const confirmBtn = root.querySelector('[data-action="confirm"]');
@@ -57,13 +64,20 @@ export function showModal(html, opts = {}) {
   document.addEventListener('keydown', onKey);
 
   root.addEventListener('click', (e) => {
-    const t = e.target;
-    if (!(t instanceof HTMLElement)) return;
-    if (t.dataset.action === 'confirm') {
+    const t = e.target.closest('[data-action]');
+    if (t && t.dataset.action === 'confirm') {
       close();
       if (opts.onConfirm) opts.onConfirm();
-    } else if (opts.dismissible && t.classList.contains('modal-backdrop')) {
+      return;
+    }
+    if (t && t.dataset.action === 'close' && dismissible) {
       close();
+      if (opts.onClose) opts.onClose();
+      return;
+    }
+    if (dismissible && e.target.classList && e.target.classList.contains('modal-backdrop')) {
+      close();
+      if (opts.onClose) opts.onClose();
     }
   });
 
@@ -75,5 +89,6 @@ export function showModal(html, opts = {}) {
  * @param {() => void} onConfirm 확인 클릭 시 호출
  */
 export function showDisclaimer(onConfirm) {
-  showModal(DISCLAIMER_HTML, { onConfirm });
+  // 면책은 강제 확인. 닫기 버튼 / backdrop / Esc 불가 → 'dismissible: false'.
+  showModal(DISCLAIMER_HTML, { onConfirm, dismissible: false });
 }

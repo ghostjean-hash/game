@@ -1,7 +1,9 @@
-// 이력 저장 / 매칭 / 캐릭터 통계.
+// 이력 저장 / 매칭 / 캐릭터 통계 / 백캐스트.
 // core/는 DOM 금지. 순수 함수.
 
 import { matchRank } from './match.js';
+import { recommend } from './recommend.js';
+import { BACKFILL_RECENT_COUNT } from '../data/numbers.js';
 
 /**
  * 캐릭터 history에 추천 항목 기록 (같은 drwNo는 덮어쓰기).
@@ -43,6 +45,56 @@ export function matchHistory(character, draws) {
     return { ...h, matchedRank: rank };
   });
   return { ...character, history: next };
+}
+
+/**
+ * 백캐스트: 최근 N회 draws에 대해 결정론적 추천을 history에 백필 + 매칭.
+ * 이미 history에 있는 회차는 건너뜀 (idempotent).
+ * Luck 부트스트랩 목적. 다음 추첨(미래)은 발표 전이라 매칭 불가하므로 과거 회차로 충당.
+ *
+ * 통계 인자(numberStats / bonusStats / cooccur)는 "현재 시점" 통계를 모든 회차에 사용.
+ * 결정론(같은 시점, 같은 캐릭터, 같은 회차 = 같은 결과). 회차별 시점 통계는 본 함수의 책임 아님.
+ *
+ * @param {object} character
+ * @param {Array<{drwNo:number, drwDate:string, numbers:number[], bonus:number}>} draws
+ * @param {string} strategyId
+ * @param {{ numberStats:Array, bonusStats:Array, cooccur:Array }} stats
+ * @param {number} [lastN=BACKFILL_RECENT_COUNT]
+ * @returns {object} 갱신된 character
+ */
+export function backfillRecommendations(character, draws, strategyId, stats, lastN = BACKFILL_RECENT_COUNT) {
+  if (!Array.isArray(draws) || draws.length === 0) return character;
+  const sorted = [...draws].sort((a, b) => b.drwNo - a.drwNo);
+  const recent = sorted.slice(0, lastN);
+  const existing = new Set(character.history.map((h) => h.drwNo));
+
+  const newEntries = [];
+  for (const draw of recent) {
+    if (existing.has(draw.drwNo)) continue;
+    const rec = recommend({
+      seed: character.seed,
+      strategyId,
+      luck: character.luck,
+      drwNo: draw.drwNo,
+      numberStats: stats.numberStats,
+      bonusStats: stats.bonusStats,
+      cooccur: stats.cooccur,
+      zodiac: character.zodiac,
+      mbti: character.mbti,
+    });
+    newEntries.push({
+      drwNo: draw.drwNo,
+      numbers: rec.numbers,
+      bonus: rec.bonus,
+      reasons: rec.reasons,
+      createdAt: character.createdAt,
+      matchedRank: matchRank({ numbers: rec.numbers, bonus: rec.bonus }, draw),
+      luckApplied: false,
+    });
+  }
+  if (newEntries.length === 0) return character;
+  // history는 drwNo 오름차순 보장하지 않음 (기존 동작 유지). 단순 append.
+  return { ...character, history: [...character.history, ...newEntries] };
 }
 
 /**

@@ -2,12 +2,105 @@
 
 # 1. 현재 상태
 
-1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 모두 완료. 페치 적재 + 사용자 시안 검증 단계.
+1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-01 (데이터 출처 dhlottery → smok95 미러 전환).
+1.3. **마지막 갱신**: 2026-05-02 (동행복권 결과 페이지 호환 디자인 + 게임 메커닉 정리).
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.26. 동행복권 결과 페이지 정합성 + 게임 메커닉 정리 (2026-05-02)
+
+대형 정합성 작업. 디자인 / 메커닉 / UX 다층 변경.
+
+### 2.26.1. 동행복권 결과 페이지 호환 디자인
+
+- **번호공 5색 진한 톤**: 추첨 영상 표준색 → **결과 페이지 변종**으로 교체. `#f5a200` / `#1c41a1` / `#c4253a` / `#8a8a8a` / `#80b438`. 02_data.md 2.4 신설.
+- **번호공 완전 평면화**: 그라디언트 / 외곽 그림자 / inset 음영 / text-shadow / letter-spacing 모두 제거. 단색 평면 원 + 흰 글자.
+- **라벨 양옆 가로선 패턴**: 번호 패널 위 가로선 제거, 라벨이 가로선의 일부로 박힘 (`.draw-label::before/::after` flex 1px). 본번호 영역 = "추천번호", 보너스 영역 = "보너스번호".
+- **그리드 비율 통일**: 본번호 6칸 / + / 보너스 1칸을 `6fr : auto : 1fr`로 매핑 → 본번호 칸 폭 = 보너스 칸 폭 → 공 크기 자동 동일.
+- **Noto Sans KR 웹폰트**: Google Fonts로 명시 로드 (index.html). `--font-sans` 우선순위 1 = Noto Sans KR. 동행복권과 동일 본고딕 자형.
+- **사행성 회피**: 라벨은 "추천번호" 사용 (당첨번호 X). CLAUDE.md 6.3 일관성. spec 5.2.1.5.
+
+### 2.26.2. SVG 아이콘 시스템 (텍스트 글리프 폐기)
+
+- `src/render/icons.js` 신규. 모든 UI 텍스트 아이콘(`<` `>` `+` `×` `↻` `▾`)을 SVG 헬퍼로 교체.
+- 헬퍼: `chevronLeft / chevronRight / chevronDown / plus / close / refresh` + 하단 탭용 5개(`sparkles / barChart / clock / grid / gear`).
+- 색은 `currentColor`로 부모 위임. 크기는 `.icon` / `.icon-sm` / `.icon-lg` 클래스로.
+- 적용처: draw-card 회차 nav (이후 폐기), character-slots +/×, stats-page 갱신, strategy 캐럿, history-page 분리자, modal 닫기 버튼, 하단 탭 5개.
+- docs/04_conventions.md 8장 신설 (텍스트 글리프 금지 + SSOT).
+
+### 2.26.3. 카운트다운 카드 + 추천 카드 통합 Hero
+
+- `src/core/schedule.js` 신규 (`nextDraw / nextDrawTimeFromNow / drawDateToEpochMs / diffParts / formatKstDate`). DOM 미사용, 결정론.
+- `src/render/next-draw-card.js` 신규. 동행복권 결과 페이지 카운트다운 카드 1:1 모사:
+  - "제N회" 28px / 800 / 검정 (`--font-size-2xl` 신규 토큰).
+  - "YYYY-MM-DD 추첨 예정" 핑크빨강 (`--color-lotto-red: #ee2738` 신규, `--color-danger`와 다른 톤).
+  - 카운트다운 4컬럼: 64px 옅은 회색 동그라미(`--color-surface-soft: #f0f0f2`) + 22px 핑크빨강 숫자 + 회색 단위 라벨.
+  - 1초 tick 텍스트 노드만 갱신 (리플로우 최소화). 추첨 시각 도달 시 자동 재렌더.
+- 추첨 시각: `20:35` → **`20:00`**. 동행복권 사이트 카운트다운은 판매 마감 시각 기준 (실제 추첨 방송은 20:35).
+- `tests/suites/schedule.test.js` 17 케이스.
+- **회차 nav 폐기**. 카운트다운 카드의 "제N회"가 단일 회차 SSOT. `state.drwNo`는 `nextInfo.drwNo`로 자동 고정. 결정론 검증은 전적 탭의 history.
+- **`.home-hero` wrapper**: 카운트다운 + 추천 카드를 한 박스로 묶음. 사이 1px 가로 구분선. 흉/대길 외곽 톤 wrapper에 부여.
+
+### 2.26.4. 백캐스트 (Luck 부트스트랩)
+
+- 다음 추첨 회차(미래)는 발표 전이라 매칭 영원히 불가 → Luck 영원히 10. 구조적 결손.
+- `src/core/history.js` `backfillRecommendations(character, draws, strategyId, stats, lastN=30)` 신규.
+- 캐릭터 첫 추첨 탭 진입 시 최근 30회 결정론적 추천 + 매칭을 history에 backfill. idempotent.
+- 같은 시점 통계를 모든 백필에 사용 (의미: "현재 능력으로 과거 N회 시뮬").
+- `src/data/numbers.js` `BACKFILL_RECENT_COUNT: 30`. 02_data.md 1.16 / 01_spec.md 7.5.
+- `tests/suites/history.test.js` 신규.
+
+### 2.26.5. 6/45 룰 보너스 제약 버그 수정
+
+- 보너스 추출 시 본번호 6개를 풀에서 제외 안 해서 `bonus ∈ numbers` 가능했음.
+- `core/recommend.js` `weightedSample(weights, count, seed, exclude)` 4번째 인자 추가. 보너스 호출 시 `new Set(numbers)` 전달.
+- 50개 시드 + 11개 전략 모두에서 `bonus ∉ numbers` 검증 (recommend.test.js).
+- 01_spec.md 5.2 / 5.2.0.1 명문화.
+
+### 2.26.6. 캐릭터 폼 개선
+
+- **별자리 자동 계산**: 별자리 select 제거, 생년월일 입력 시 `zodiacFromBirthDate` 호출해 자동 계산. 02_data.md 2.6 신설 (12별자리 경계일 표).
+- **모달 닫기 버튼**: SVG × 우상단. 면책 모달은 `dismissible: false`로 강제 확인 유지.
+- **input/select 세로 높이 통일**: 모두 `height: 44px` + `box-sizing: border-box` + `line-height: 1`. select는 커스텀 화살표 SVG 배경.
+- `core/zodiac.js` `zodiacFromBirthDate(YYYY-MM-DD)` + 21 케이스 테스트 (경계일 포함).
+
+### 2.26.7. 운세 카드 카피 + 띠 관계
+
+- spec 5.1.2 결손 보강. 평/길도 카피 표시.
+- `character-card.js` `FORTUNE_COPY` 4종 + `RELATION_LABEL` 4종 (same/sahap/chung/normal).
+- `fortuneRelation` 호출로 캐릭터 띠 ↔ 회차 일진 관계 표시.
+
+### 2.26.8. 전략 가로 스크롤 탭 (시트 모달 폐기)
+
+- `src/render/strategy-tabs.js` 신규. 11개 전략을 한 줄 가로 스크롤. 클릭 즉시 활성 변경.
+- `strategy-sheet.js` 삭제 (시트 모달 폐기).
+- **PC 휠 → 가로 변환**: `wheel` 이벤트에서 `|deltaY| > |deltaX|`이면 `scrollBy(deltaY)`. 트랙패드 가로 스와이프는 OS 기본 유지.
+- **fade gradient affordance**: 양옆 24px `mask-image`. `.is-start` / `.is-end` 클래스로 끝 도달 시 fade 자동 제거.
+- **활성 탭 잘림 보정**: 재렌더 후 활성 탭이 fade 영역에 잘려있으면 안으로 스크롤. 완전히 보이는 경우 변동 0.
+- **scroll-snap 미사용**: 초기 적용했으나 활성 탭 폭 변동 + snap 자동 보정으로 클릭마다 미끄러짐 → 제거. 활성/비활성 모두 `font-weight: 600` 고정으로 폭 변동 자체 차단.
+- **mousedown preventDefault**: button focus → 자동 scrollIntoView 차단.
+- **라벨/설명 직관화**: 11개 전략 라벨 + 설명을 보자마자 이해되는 톤으로. 설명 줄에서 라벨 단어 반복 제거. 02_data.md 1.5 표 갱신.
+
+### 2.26.9. 하단 탭 SVG 아이콘
+
+- 5개 탭 (추첨/통계/전적/휠링/설정)에 아이콘 추가: sparkles / barChart / clock / grid / gear.
+- `.tab-item`을 flex column으로 변경 (아이콘 + 라벨 stack).
+- 480px / 360px 미디어 쿼리에서 아이콘 / 폰트 사이즈 비례 축소.
+
+### 2.26.10. 추첨 탭 정리
+
+- 헤더 부제 "참고용 추천 - 매 회차 1/8,145,060" 삭제 (Hero 카드와 중복).
+- 추천 카드 reasons 영역 삭제 (전략 바와 중복. 데이터는 history에 보존).
+- 푸터 "본 추천은 참고용..." 삭제 (면책 모달 + 설정 탭으로 충분).
+- 캐릭터 슬롯을 추천 카드 **아래로** 이동 (Hero 카드 직후가 회차 헤더와 시각 연결).
+
+### 2.26.11. 새 토큰 (tokens.css)
+
+- `--color-lotto-red: #ee2738` (동행복권 결과 페이지 강조 빨강).
+- `--color-surface-soft: #f0f0f2` (카운트다운 동그라미 등 카드 안 보조 면).
+- `--font-size-2xl: 28px` (회차 타이틀 등).
 
 ## 2.1. M0 (기획 골격 + 표준 적용)
 
@@ -380,3 +473,4 @@
 | (예정) | M0 + M1 일괄: html-game v0.2 표준 + lotto 적용 + 코어 + UI MVP |
 | (예정) | M2 1단계: 캐릭터 슬롯 / 추가 모달 / 전환 / 삭제 |
 | (예정) | dev 환경: SW 차단 + dev-server.mjs 정적 서버 |
+| 2026-05-02 | 2.26 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 + 보너스 버그 수정 + 폼/탭 개선 + 11전략 직관화 |

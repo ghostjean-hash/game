@@ -2,7 +2,7 @@ import { suite, test, assertEqual, assertTrue } from '../core.js';
 import {
   yearToAnimalSign, animalSignIndex,
   drwNoToAnimalSign, dateToAnimalSign, drawToAnimalSign,
-  zodiacRelation,
+  zodiacRelation, zodiacFromBirthDate,
 } from '../../src/core/zodiac.js';
 
 suite('core/zodiac - yearToAnimalSign', () => {
@@ -61,4 +61,37 @@ suite('core/zodiac - drawToAnimalSign', () => {
   test('완전 잘못된 인자는 null', () => {
     assertEqual(drawToAnimalSign({}), null);
   });
+});
+
+suite('core/zodiac - zodiacFromBirthDate', () => {
+  // 12개 별자리 중심 날짜
+  test('1990-04-05 → aries (양자리)', () => assertEqual(zodiacFromBirthDate('1990-04-05'), 'aries'));
+  test('1990-05-01 → taurus', () => assertEqual(zodiacFromBirthDate('1990-05-01'), 'taurus'));
+  test('1990-06-01 → gemini', () => assertEqual(zodiacFromBirthDate('1990-06-01'), 'gemini'));
+  test('1990-07-01 → cancer', () => assertEqual(zodiacFromBirthDate('1990-07-01'), 'cancer'));
+  test('1990-08-01 → leo', () => assertEqual(zodiacFromBirthDate('1990-08-01'), 'leo'));
+  test('1990-09-01 → virgo', () => assertEqual(zodiacFromBirthDate('1990-09-01'), 'virgo'));
+  test('1990-10-01 → libra', () => assertEqual(zodiacFromBirthDate('1990-10-01'), 'libra'));
+  test('1990-11-01 → scorpio', () => assertEqual(zodiacFromBirthDate('1990-11-01'), 'scorpio'));
+  test('1990-12-01 → sagittarius', () => assertEqual(zodiacFromBirthDate('1990-12-01'), 'sagittarius'));
+  test('1990-01-01 → capricorn', () => assertEqual(zodiacFromBirthDate('1990-01-01'), 'capricorn'));
+  test('1990-02-01 → aquarius', () => assertEqual(zodiacFromBirthDate('1990-02-01'), 'aquarius'));
+  test('1990-03-01 → pisces', () => assertEqual(zodiacFromBirthDate('1990-03-01'), 'pisces'));
+
+  // 경계일 (양자리 시작 3/21)
+  test('1990-03-20 → pisces (3/20은 물고기)', () => assertEqual(zodiacFromBirthDate('1990-03-20'), 'pisces'));
+  test('1990-03-21 → aries (3/21은 양자리 시작)', () => assertEqual(zodiacFromBirthDate('1990-03-21'), 'aries'));
+
+  // 12/22 염소자리 시작 (해 넘어감)
+  test('1990-12-21 → sagittarius (12/21)', () => assertEqual(zodiacFromBirthDate('1990-12-21'), 'sagittarius'));
+  test('1990-12-22 → capricorn (12/22 시작)', () => assertEqual(zodiacFromBirthDate('1990-12-22'), 'capricorn'));
+  test('1990-12-31 → capricorn', () => assertEqual(zodiacFromBirthDate('1990-12-31'), 'capricorn'));
+  test('1991-01-19 → capricorn', () => assertEqual(zodiacFromBirthDate('1991-01-19'), 'capricorn'));
+  test('1991-01-20 → aquarius (1/20 시작)', () => assertEqual(zodiacFromBirthDate('1991-01-20'), 'aquarius'));
+
+  // 잘못된 입력
+  test('빈 문자열 → null', () => assertEqual(zodiacFromBirthDate(''), null));
+  test('잘못된 형식 → null', () => assertEqual(zodiacFromBirthDate('1990/04/05'), null));
+  test('null → null', () => assertEqual(zodiacFromBirthDate(null), null));
+  test('월 범위 밖 → null', () => assertEqual(zodiacFromBirthDate('1990-13-01'), null));
 });

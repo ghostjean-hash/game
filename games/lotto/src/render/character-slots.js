@@ -1,4 +1,5 @@
 // 캐릭터 슬롯 HTML. 캐릭터 정체성(이름)만 표시. 전략은 별도 picker.
+import { plus, close } from './icons.js';
 
 export function characterSlotsHtml(characters, activeId) {
   const slots = characters.map((c) => {
@@ -22,8 +23,8 @@ export function characterSlotsHtml(characters, activeId) {
     <section class="character-slots" aria-label="캐릭터 슬롯">
       <div class="slot-list" role="group">${slots}</div>
       <div class="slot-actions">
-        <button type="button" class="slot-add" data-action="add-character" aria-label="새 캐릭터 추가">+</button>
-        <button type="button" class="slot-del" data-action="delete-active" ${!canDelete ? 'disabled' : ''} aria-label="활성 캐릭터 삭제">×</button>
+        <button type="button" class="slot-add" data-action="add-character" aria-label="새 캐릭터 추가">${plus()}</button>
+        <button type="button" class="slot-del" data-action="delete-active" ${!canDelete ? 'disabled' : ''} aria-label="활성 캐릭터 삭제">${close()}</button>
       </div>
     </section>
   `;

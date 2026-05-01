@@ -23,17 +23,19 @@ export const RANK_GLOW_COLORS = Object.freeze({
   5: '#6b6b75',
 });
 
-// 한국 6/45 로또 공식 번호 색상 (10단위 구간).
+// 한국 6/45 로또 번호 색상 (10단위 구간).
 // SSOT: docs/02_data.md 2.4.
-// 출처: 동행복권 영상/디자인 표준 (다수 미러 / 분석 사이트 일치 검증).
-//   1-10 #fbc400, 11-20 #69c8f2, 21-30 #ff7272, 31-40 #aaaaaa, 41-45 #b0d840.
-//   텍스트는 모두 흰색 + text-shadow + 입체감용 box-shadow inset (CSS .num에서 처리).
+// 출처: 동행복권 결과 페이지 변종(평면 진한색). 추첨 영상 표준 5색
+//   (#fbc400 / #69c8f2 / #ff7272 / #aaaaaa / #b0d840)이 아니라
+//   결과 페이지에서 사용되는 진한 채도의 단색을 사용.
+//   사유: 결과 페이지 시각 통일성 (사용자 요청 2026-05-02).
+//   텍스트는 모두 흰색. 입체감 / 그림자 없음 (CSS .num은 완전 평면 단색).
 export const NUMBER_RANGE_COLORS = Object.freeze([
-  { from: 1, to: 10, bg: '#fbc400' },   // 노랑
-  { from: 11, to: 20, bg: '#69c8f2' },  // 파랑
-  { from: 21, to: 30, bg: '#ff7272' },  // 빨강
-  { from: 31, to: 40, bg: '#aaaaaa' },  // 회색
-  { from: 41, to: 45, bg: '#b0d840' },  // 초록
+  { from: 1, to: 10, bg: '#f5a200' },   // 진황금
+  { from: 11, to: 20, bg: '#1c41a1' },  // 진청 (navy)
+  { from: 21, to: 30, bg: '#c4253a' },  // 진홍 (carmine)
+  { from: 31, to: 40, bg: '#8a8a8a' },  // 짙은 회색
+  { from: 41, to: 45, bg: '#80b438' },  // 진연두
 ]);
 
 /**

@@ -15,5 +15,7 @@ import './suites/match.test.js';
 import './suites/zodiac.test.js';
 import './suites/saju.test.js';
 import './suites/wheeling.test.js';
+import './suites/schedule.test.js';
+import './suites/history.test.js';
 
 done();

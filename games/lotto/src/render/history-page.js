@@ -1,6 +1,7 @@
 // 캐릭터 전적 / 이력 페이지.
 import { characterStats } from '../core/history.js';
 import { numberColor } from '../data/colors.js';
+import { plus } from './icons.js';
 
 const RANK_LABELS = { 1: '1등', 2: '2등', 3: '3등', 4: '4등', 5: '5등' };
 const RANK_COLORS = { 1: '#c9a050', 2: '#b88830', 3: '#10b981', 4: '#06b6d4', 5: '#6b6b75' };
@@ -69,7 +70,7 @@ function historyItemHtml(h) {
         <span class="history-drw">${h.drwNo}회차</span>
         <span class="history-rank" style="color: ${rankColor}">${rankLabel}</span>
       </header>
-      <div class="history-numbers">${numsHtml} <span class="bonus-divider" aria-hidden="true">+</span> ${bonusHtml}</div>
+      <div class="history-numbers">${numsHtml} <span class="draw-plus" aria-hidden="true">${plus('icon icon-sm')}</span> ${bonusHtml}</div>
     </article>
   `;
 }

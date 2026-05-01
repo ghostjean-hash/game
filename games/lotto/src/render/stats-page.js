@@ -3,6 +3,10 @@ import { horizontalBarsHtml } from './charts.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
 import { loadDraws, syncDrawsIfNewer } from '../data/storage.js';
 import { numberColor } from '../data/colors.js';
+import { refresh as iconRefresh } from './icons.js';
+
+// 갱신 버튼 본문 (정상 상태). 아이콘 + 라벨.
+const REFRESH_LABEL_HTML = `${iconRefresh()}<span class="btn-refresh-label">갱신</span>`;
 
 /**
  * 통계 페이지 렌더 (탭 모델: 백버튼 없음).
@@ -19,7 +23,7 @@ export function renderStatsPage(container) {
     return `
       <header class="app-header stats-header">
         <h1 class="app-title">통계</h1>
-        <button type="button" class="btn-refresh" data-action="refresh" aria-label="최신 데이터 확인" disabled style="visibility:hidden;">↻</button>
+        <button type="button" class="btn-refresh" data-action="refresh" aria-label="최신 데이터 확인" disabled style="visibility:hidden;">${iconRefresh()}</button>
       </header>
       <section class="empty-state">
         <p><strong>회차 데이터를 받아오는 중입니다.</strong></p>
@@ -63,7 +67,7 @@ export function renderStatsPage(container) {
     return `
       <header class="app-header stats-header">
         <h1 class="app-title">통계</h1>
-        <button type="button" class="btn-refresh" data-action="refresh" aria-label="최신 데이터 확인">↻ 갱신</button>
+        <button type="button" class="btn-refresh" data-action="refresh" aria-label="최신 데이터 확인">${REFRESH_LABEL_HTML}</button>
       </header>
 
       <p class="stats-meta" aria-live="polite">${metaLine}</p>
@@ -127,7 +131,7 @@ export function renderStatsPage(container) {
     const refreshBtn = container.querySelector('[data-action="refresh"]');
     if (refreshBtn) {
       refreshBtn.disabled = true;
-      refreshBtn.textContent = '확인 중…';
+      refreshBtn.innerHTML = `${iconRefresh('icon spin')}<span class="btn-refresh-label">확인 중…</span>`;
     }
 
     let result;
@@ -150,7 +154,7 @@ export function renderStatsPage(container) {
       const btn = container.querySelector('[data-action="refresh"]');
       if (btn) {
         btn.disabled = false;
-        btn.textContent = '↻ 갱신';
+        btn.innerHTML = REFRESH_LABEL_HTML;
       }
       if (result.reason === 'already-latest') {
         showToast('이미 최신 데이터입니다');
@@ -164,7 +168,7 @@ export function renderStatsPage(container) {
       const btn = container.querySelector('[data-action="refresh"]');
       if (btn) {
         btn.disabled = false;
-        btn.textContent = '↻ 갱신';
+        btn.innerHTML = REFRESH_LABEL_HTML;
       }
     }
   }

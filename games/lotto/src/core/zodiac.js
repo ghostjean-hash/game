@@ -70,6 +70,48 @@ export function drawToAnimalSign(drawOrDrwNo) {
   return null;
 }
 
+// 서양 12별자리 경계일. SSOT: docs/02_data.md 2.6.
+// (월, 일) 미만이면 직전 별자리, 이상이면 해당 별자리.
+// 양력 기준. 음력 입력은 호출자가 변환 후 전달.
+const ZODIAC_BOUNDARIES = [
+  { id: 'capricorn',   month: 1,  day: 1  }, // 1/1 ~ 1/19
+  { id: 'aquarius',    month: 1,  day: 20 }, // 1/20 ~ 2/18
+  { id: 'pisces',      month: 2,  day: 19 }, // 2/19 ~ 3/20
+  { id: 'aries',       month: 3,  day: 21 }, // 3/21 ~ 4/19
+  { id: 'taurus',      month: 4,  day: 20 }, // 4/20 ~ 5/20
+  { id: 'gemini',      month: 5,  day: 21 }, // 5/21 ~ 6/20
+  { id: 'cancer',      month: 6,  day: 21 }, // 6/21 ~ 7/22
+  { id: 'leo',         month: 7,  day: 23 }, // 7/23 ~ 8/22
+  { id: 'virgo',       month: 8,  day: 23 }, // 8/23 ~ 9/22
+  { id: 'libra',       month: 9,  day: 23 }, // 9/23 ~ 10/22
+  { id: 'scorpio',     month: 10, day: 23 }, // 10/23 ~ 11/21
+  { id: 'sagittarius', month: 11, day: 22 }, // 11/22 ~ 12/21
+  { id: 'capricorn2',  month: 12, day: 22 }, // 12/22 ~ 12/31 → capricorn
+];
+
+/**
+ * 'YYYY-MM-DD' 양력 생일 → 서양 12별자리 ID.
+ * 잘못된 입력은 null.
+ * @param {string} dateStr
+ * @returns {string | null} 'aries' / 'taurus' / ... / 'pisces' 또는 null
+ */
+export function zodiacFromBirthDate(dateStr) {
+  if (typeof dateStr !== 'string') return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+  if (!m) return null;
+  const month = Number(m[2]);
+  const day = Number(m[3]);
+  if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+  // ZODIAC_BOUNDARIES를 거꾸로 훑으며 (month, day) >= 경계인 첫 항목.
+  for (let i = ZODIAC_BOUNDARIES.length - 1; i >= 0; i -= 1) {
+    const b = ZODIAC_BOUNDARIES[i];
+    if (month > b.month || (month === b.month && day >= b.day)) {
+      return b.id === 'capricorn2' ? 'capricorn' : b.id;
+    }
+  }
+  return null;
+}
+
 /**
  * 두 12간지 관계.
  *   same:   동일 띠 (대길 우세)

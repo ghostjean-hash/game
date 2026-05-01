@@ -36,6 +36,32 @@ suite('core/recommend - 형식', () => {
     assertTrue(r.bonus >= 1 && r.bonus <= 45);
   });
 
+  test('bonus는 본번호와 겹치지 않음 (6/45 룰)', () => {
+    // 다양한 시드로 50회 검증 - 결정론 + 6/45 룰 모두 통과
+    for (let i = 0; i < 50; i += 1) {
+      const r = recommend({ ...baseCtx, seed: 0x10000 + i, drwNo: 1000 + i });
+      const set = new Set(r.numbers);
+      assertTrue(!set.has(r.bonus), `bonus ${r.bonus}이 본번호 [${r.numbers.join(',')}]에 포함됨 (seed=${0x10000 + i})`);
+    }
+  });
+
+  test('전 전략에서도 bonus ∉ numbers', () => {
+    const strategies = [
+      STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
+      STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
+      STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
+      STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT,
+    ];
+    for (const strategyId of strategies) {
+      const r = recommend({
+        ...baseCtx, strategyId,
+        zodiac: 'aries', mbti: 'INTJ',
+      });
+      const set = new Set(r.numbers);
+      assertTrue(!set.has(r.bonus), `${strategyId}: bonus ${r.bonus} ∈ numbers [${r.numbers.join(',')}]`);
+    }
+  });
+
   test('reasons 비어있지 않음', () => {
     const r = recommend(baseCtx);
     assertTrue(r.reasons.length > 0);

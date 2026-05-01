@@ -50,6 +50,23 @@ export const FORTUNE_BAD = 'bad';
 export const WEIGHT_MIN_FLOOR = 0.0001;
 export const WEIGHT_MAX_BIAS = 50.0;
 
+// 1.16. 백캐스트 (Luck 성장 부트스트랩)
+// SSOT: docs/02_data.md 1.16, docs/01_spec.md 7.5.
+// 캐릭터 첫 추첨 탭 진입 시 최근 N회에 대해 결정론적 추천 + 매칭을 history에 백필.
+// 다음 추첨 회차(미래)는 발표 전이라 매칭 불가 → 과거 회차로 luck 부트스트랩.
+export const BACKFILL_RECENT_COUNT = 30;
+
+// 1.15. 추첨 일정 (한국 동행복권 6/45)
+// SSOT: docs/02_data.md 1.15.
+// 카운트다운 기준 시각은 동행복권 사이트와 동일하게 "판매 마감 시각" = 토 20:00 KST.
+// 실제 추첨 방송은 20:35지만, 사이트의 카운트다운은 20:00에 0이 된다.
+// (DRAW_*는 호환을 위해 이름 유지. 의미는 "카운트다운 타깃 시각".)
+export const DRAW_DAY_OF_WEEK = 6;     // 토요일 (Date.getDay 기준 일=0..토=6)
+export const DRAW_HOUR_KST = 20;       // 판매 마감 / 카운트다운 타깃 시
+export const DRAW_MIN_KST = 0;         // 판매 마감 / 카운트다운 타깃 분
+export const DRAW_TZ_OFFSET_MIN = 9 * 60; // KST = UTC+9 (분 단위)
+export const COUNTDOWN_TICK_MS = 1000;
+
 // 1.11. 별자리별 행운 번호 (점성술사 전략용. 임의 매핑, 추첨 확률에는 영향 없음)
 export const ZODIAC_LUCKY = Object.freeze({
   aries:       [3, 9, 21, 27, 33, 39, 45],

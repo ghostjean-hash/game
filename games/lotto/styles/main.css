@@ -115,19 +115,52 @@ a.btn-secondary,
   font-size: var(--font-size-sm);
   color: var(--color-text-dim);
 }
+/* input/select 세로 높이 통일.
+   브라우저 기본은 select가 input보다 line-height가 다르고 padding 적용 방식이 달라
+   같은 padding을 줘도 시각 높이가 달라진다. height + box-sizing으로 강제 통일. */
 .character-form input,
 .character-form select {
   background: var(--color-surface);
   color: var(--color-text);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--space-3);
-  min-height: 44px;
+  padding: 0 var(--space-3);
+  height: 44px;
+  box-sizing: border-box;
+  font-family: inherit;
+  line-height: 1;
+  width: 100%;
+}
+.character-form select {
+  /* select 고유 화살표가 줄어드는 padding-right */
+  padding-right: var(--space-4);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b75' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+}
+.character-form input[type="date"] {
+  /* iOS Safari date input은 line-height 미적용. height만으로 통일. */
+  font-family: inherit;
 }
 .character-form input:focus,
 .character-form select:focus {
   outline: 2px solid var(--color-accent);
   outline-offset: 1px;
+}
+.form-zodiac-preview {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  background: var(--color-surface-soft);
+  border-radius: var(--radius-md);
+}
+.form-zodiac-preview.is-valid {
+  color: var(--color-accent);
+  font-weight: 600;
 }
 .form-class-desc {
   margin: 0;
@@ -295,6 +328,9 @@ a.btn-secondary,
   flex-shrink: 0;
 }
 .slot-add, .slot-del {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 44px;
   height: 44px;
   border: 1px solid var(--color-border);
@@ -302,8 +338,7 @@ a.btn-secondary,
   color: var(--color-text);
   border-radius: var(--radius-md);
   cursor: pointer;
-  font-size: var(--font-size-md);
-  font-weight: bold;
+  padding: 0;
 }
 .slot-add:hover { border-color: var(--color-accent); color: var(--color-accent); }
 .slot-del:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -358,9 +393,23 @@ a.btn-secondary,
   align-items: center;
   gap: var(--space-2);
   font-size: var(--font-size-md);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-1);
+  font-weight: 600;
 }
 .fortune-icon { font-size: 18px; }
+.fortune-label { font-weight: 600; }
+/* 운세 한 줄 카피 (등급 의미) */
+.fortune-copy {
+  margin: 0 0 var(--space-1) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+/* 띠 관계 (캐릭터 띠 ↔ 회차 일진) */
+.fortune-relation {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+}
 .char-luck { font-size: var(--font-size-sm); color: var(--color-text-dim); }
 .luck-label { margin-bottom: var(--space-1); }
 .luck-label strong { color: var(--color-text); }
@@ -376,7 +425,103 @@ a.btn-secondary,
   transition: width 200ms ease;
 }
 
-/* 추천 카드 */
+/* ===== 다음 추첨 카운트다운 카드 (SSOT: docs/01_spec.md 5.2.2) =====
+   동행복권 결과 페이지 카드와 동일.
+   - 회차 타이틀: 28px / 800 / 검정 (--font-size-2xl)
+   - 추첨 예정일: 핑크빨강(--color-lotto-red), 양옆 짧은 dashed 라인 장식
+   - 카운트다운: 4개의 회색 원(--color-surface-soft) 안에 핑크빨강 숫자
+*/
+.next-draw-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.next-draw-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 0 0 var(--space-1) 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.next-draw-date {
+  font-size: 13px;
+  color: var(--color-lotto-red);
+  margin: 0 0 var(--space-4) 0;
+  font-weight: 500;
+}
+.next-draw-label {
+  font-size: 13px;
+  color: var(--color-text-dim);
+  margin: 0 0 var(--space-2) 0;
+  font-weight: 500;
+}
+.next-draw-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+.next-draw-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+.next-draw-num {
+  /* 동행복권: 옅은 회색 동그라미 배경 + 빨강 숫자. 완전히 평면. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-surface-soft);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-lotto-red);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.next-draw-unit {
+  font-size: 13px;
+  color: var(--color-text-dim);
+  font-weight: 400;
+}
+
+/* ===== 홈 hero: 카운트다운 + 추천을 한 박스로 묶는 wrapper =====
+   .next-draw-card / .draw-card는 wrapper 안에서 자체 카드 스타일 무력화. */
+.home-hero {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: border-color 200ms ease;
+}
+.home-hero.is-bad { border-color: rgba(239, 68, 68, 0.5); }
+.home-hero.is-great { border-color: rgba(201, 160, 80, 0.6); }
+.home-hero > .next-draw-card,
+.home-hero > .draw-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0;
+}
+.home-hero > .next-draw-card + .draw-card {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+/* 추천 카드 (wrapper 밖에서 단독으로 쓰일 때를 위한 기본). */
 .draw-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -405,62 +550,84 @@ a.btn-secondary,
   background: rgba(201, 160, 80, 0.08);
   border-left-color: var(--color-accent);
 }
-.draw-header {
+/* 회차 헤더(.draw-header / -nav / -title / -no / -tag)는 spec 5.2.1 통합 구조에서 제거됨.
+   회차 표시는 카운트다운 카드의 "제N회"가 단일 SSOT. nav 자체도 폐기(spec 5.4 결정론은 history로 보존). */
+
+/* ===== 동행복권 결과 페이지 호환 번호 패널 (SSOT: docs/01_spec.md 5.2.1) =====
+   구조:
+     .draw-panel
+       └ .draw-balls   (가로선 없음. 6볼 / + / 1볼 그리드)
+       └ .draw-labels  (그리드 6:1, 라벨이 양옆 가로선 사이에 박힘)
+*/
+.draw-panel {
+  margin: var(--space-3) 0;
+}
+.draw-balls {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 6fr auto 1fr;
   align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  gap: clamp(6px, 2vw, 14px);
+  padding: var(--space-2) 0;
 }
-.draw-title {
-  display: flex;
-  flex-direction: column;
+.draw-main {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(4px, 1.5vw, 10px);
+  justify-items: center;
   align-items: center;
-  gap: 2px;
 }
-.draw-no {
-  font-size: var(--font-size-lg);
-  font-weight: bold;
-  color: var(--color-accent);
-}
-.draw-tag {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-text-dim);
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  padding: 2px var(--space-2);
-}
-.draw-nav {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--color-text-dim);
-  border: 1px solid var(--color-border);
-  font-size: 22px;
-  font-weight: bold;
-  cursor: pointer;
-  font-family: inherit;
-  line-height: 1;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-.draw-nav:hover:not(:disabled) {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-.draw-nav:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-.draw-numbers {
-  display: flex;
-  gap: var(--space-2);
-  flex-wrap: wrap;
+.draw-plus {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-3);
+  color: #444;
+  user-select: none;
+  line-height: 1;
 }
+.draw-plus .icon {
+  width: 22px;
+  height: 22px;
+  stroke-width: 3;
+}
+.draw-bonus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.draw-labels {
+  display: grid;
+  grid-template-columns: 6fr auto 1fr;
+  align-items: center;
+  gap: clamp(6px, 2vw, 14px);
+  margin-top: var(--space-2);
+}
+/* 2번째 컬럼(+ 기호 자리)은 빈 공간으로 둠 */
+.draw-labels::before {
+  content: '';
+  grid-column: 2;
+}
+.draw-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.draw-label::before,
+.draw-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+.draw-label > span {
+  flex-shrink: 0;
+}
+.draw-label-main { grid-column: 1; }
+.draw-label-bonus { grid-column: 3; }
+
 .num {
   display: inline-flex;
   align-items: center;
@@ -468,66 +635,39 @@ a.btn-secondary,
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  /* background-color는 인라인 style이 한국 6/45 표준색(numberColor)으로 주입.
-     background-image는 좌상단 하이라이트로 입체감 형성. */
-  background-image: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 50%);
-  background-repeat: no-repeat;
+  /* 결과 페이지 변종(SSOT: docs/02_data.md 2.4): 완전 평면 단색.
+     배경색은 numberColor()가 인라인 style로 주입. 그라디언트 / 그림자 없음. */
+  background-image: none;
   color: #ffffff;
-  font-weight: 900;
+  font-weight: 700;
   font-size: var(--font-size-md);
   font-variant-numeric: tabular-nums;
   border: none;
-  /* 입체감: 우하 안쪽 그림자 + 외곽 드롭 그림자 */
-  box-shadow:
-    inset -3px -4px 8px rgba(0, 0, 0, 0.22),
-    inset 1px 2px 3px rgba(255, 255, 255, 0.25),
-    0 2px 4px rgba(0, 0, 0, 0.15);
-  text-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.5),
-    0 0 1px rgba(0, 0, 0, 0.6);
-  letter-spacing: 0.01em;
+  box-shadow: none;
+  text-shadow: none;
+  letter-spacing: 0;
 }
-.draw-bonus {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  margin: var(--space-2) 0 var(--space-3);
-}
-.bonus-divider {
-  color: var(--color-text-dim);
-  font-size: var(--font-size-xl);
-  font-weight: 300;
-  margin: 0 var(--space-1);
-  user-select: none;
-}
-.bonus-cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.bonus-label {
-  font-size: 10px;
-  color: var(--color-text-dim);
-  letter-spacing: 0.1em;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-/* 보너스볼도 본번호와 동일한 표준색 공. 외곽 링 없음 (라벨로 차별화). */
-.draw-reasons {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-dim);
-}
-.draw-reasons li {
-  padding: var(--space-1) 0;
-  border-top: 1px solid var(--color-border);
-}
-.draw-reasons li:first-child { border-top: none; }
 
+/* ===== SVG 아이콘 공용 (텍스트 아이콘 금지, SSOT: docs/04_conventions.md 5장) ===== */
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+.icon-sm { width: 14px; height: 14px; }
+.icon-lg { width: 24px; height: 24px; }
+@media (prefers-reduced-motion: no-preference) {
+  .icon.spin {
+    animation: lotto-spin 0.9s linear infinite;
+    transform-origin: 50% 50%;
+  }
+}
+@keyframes lotto-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 /* 액션 / 면책 */
 .actions {
   display: flex;
@@ -669,16 +809,21 @@ a.btn-secondary,
   margin: 0;
 }
 .btn-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: transparent;
   color: var(--color-text);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 6px 12px;
-  font-family: var(--font-mono);
+  font-family: inherit;
   font-size: var(--font-size-sm);
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease;
 }
+.btn-refresh .icon { width: 16px; height: 16px; }
+.btn-refresh-label { line-height: 1; }
 .btn-refresh:hover:not(:disabled) {
   border-color: var(--color-accent);
   color: var(--color-accent);
@@ -898,6 +1043,7 @@ a.btn-secondary,
   padding: var(--space-4);
 }
 .modal-card {
+  position: relative;
   background: var(--color-surface);
   color: var(--color-text);
   border: 1px solid var(--color-border);
@@ -908,6 +1054,32 @@ a.btn-secondary,
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+.modal-close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dim);
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.modal-close:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.modal-close .icon {
+  width: 18px;
+  height: 18px;
 }
 .modal-card h2 { margin: 0 0 var(--space-3) 0; font-size: var(--font-size-lg); }
 .modal-card p { margin: 0 0 var(--space-3) 0; color: var(--color-text-dim); }
@@ -952,16 +1124,28 @@ a.btn-secondary,
   grid-template-columns: repeat(5, 1fr);
 }
 .tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   background: transparent;
   border: none;
   color: var(--color-text-dim);
-  font-size: 13px;
+  font-size: 11px;
   font-family: inherit;
   cursor: pointer;
-  padding: 10px 4px;
+  padding: 8px 4px;
   min-height: 56px;
   transition: color 0.15s ease;
 }
+.tab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.tab-icon .icon { width: 22px; height: 22px; }
+.tab-label { line-height: 1; }
 .tab-item:hover { color: var(--color-text); }
 .tab-item.is-active {
   color: var(--color-accent);
@@ -988,135 +1172,100 @@ a.btn-secondary,
   margin-bottom: var(--space-3);
 }
 
-/* ===== 추첨 탭 - 전략 한 줄 바 ===== */
-.strategy-bar {
-  display: grid;
-  grid-template-columns: auto auto 1fr auto;
-  align-items: center;
-  gap: var(--space-2);
-  width: 100%;
+/* ===== 추첨 탭 - 전략 가로 스크롤 탭 (SSOT: docs/01_spec.md 4.7) ===== */
+.strategy-tabs-section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.strategy-tabs {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  /* scroll-behavior: smooth 제거. 클릭 후 scrollLeft 복원이 부드럽게 이동해
+     "스크롤이 발생하는" 것처럼 보이는 것을 방지. */
+  -webkit-overflow-scrolling: touch;
+  /* scroll-snap 제거. 활성 탭의 font-weight 변경으로 폭이 미세하게 바뀌어
+     proximity가 가장 가까운 snap point로 자동 보정 → 클릭마다 미끄러짐 발생.
+     자유 스크롤이 더 안정적. */
+  /* 스크롤바 완전 숨김 (모바일 PWA 톤) */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* 양옆 fade gradient. 더 있음을 암시. is-start/is-end 클래스로 동적 조정. */
+  --fade-w: 24px;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black var(--fade-w),
+    black calc(100% - var(--fade-w)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black var(--fade-w),
+    black calc(100% - var(--fade-w)),
+    transparent 100%
+  );
+  transition: -webkit-mask-image 0.15s ease, mask-image 0.15s ease;
+}
+.strategy-tabs::-webkit-scrollbar { display: none; }
+/* 좌측 끝에 닿음 → 좌측 fade 제거 */
+.strategy-tabs.is-start {
+  -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - var(--fade-w)), transparent 100%);
+  mask-image: linear-gradient(to right, black 0, black calc(100% - var(--fade-w)), transparent 100%);
+}
+/* 우측 끝에 닿음 → 우측 fade 제거 */
+.strategy-tabs.is-end {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--fade-w), black 100%);
+  mask-image: linear-gradient(to right, transparent 0, black var(--fade-w), black 100%);
+}
+/* 양 끝 모두 닿음(짧은 화면 + 적은 탭) → 마스크 없음 */
+.strategy-tabs.is-start.is-end {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+.strategy-tab {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
   background: var(--color-surface);
   color: var(--color-text);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   cursor: pointer;
   font-family: inherit;
-  text-align: left;
-  margin: var(--space-3) 0;
-  min-height: 52px;
-}
-.strategy-bar:hover { border-color: var(--color-accent); }
-.strategy-bar-label {
   font-size: var(--font-size-sm);
-  color: var(--color-text-dim);
-}
-.strategy-bar-name {
-  font-weight: bold;
-  color: var(--color-accent);
-}
-.strategy-bar-desc {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-dim);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 600; /* 활성/비활성 모두 동일 weight. 활성 시 weight 증가로 폭 변동되는 것 방지. */
   white-space: nowrap;
-  min-width: 0;
+  min-height: 36px;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
-.strategy-bar-caret {
-  color: var(--color-text-dim);
-  font-size: var(--font-size-md);
-}
-
-/* ===== 전략 시트 (modal-card 변형) ===== */
-.sheet-card {
-  max-width: 520px;
-  padding: var(--space-4);
-}
-.sheet-title {
-  margin: 0 0 var(--space-1) 0;
-  font-size: var(--font-size-lg);
-  color: var(--color-accent);
-}
-.sheet-help {
-  margin: 0 0 var(--space-3) 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-dim);
-}
-.sheet-strategy-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  max-height: 60vh;
-  overflow-y: auto;
-}
-.sheet-strategy {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-family: inherit;
-  text-align: left;
-  color: var(--color-text);
-  min-height: 56px;
-}
-.sheet-strategy:hover { border-color: var(--color-accent); }
-.sheet-strategy.is-active {
+.strategy-tab:hover { border-color: var(--color-accent); }
+.strategy-tab.is-active {
   border-color: var(--color-accent);
   background: rgba(201, 160, 80, 0.08);
+  color: var(--color-accent);
 }
-.sheet-strategy-short {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: var(--color-accent);
-  color: #fff;
-  border-radius: 50%;
-  font-weight: bold;
-  flex-shrink: 0;
-}
-.sheet-strategy-body {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-.sheet-strategy-name {
-  font-weight: bold;
-  color: var(--color-text);
-}
-.sheet-strategy-desc {
+.strategy-desc {
+  margin: var(--space-2) 0 0 0;
+  padding: var(--space-2) 0 0 0;
+  border-top: 1px solid var(--color-border);
   font-size: var(--font-size-sm);
   color: var(--color-text-dim);
 }
 
-/* ===== 번호 카드 반응형 (한 줄 강제) ===== */
-.draw-numbers {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: clamp(4px, 1.5vw, 8px);
-  max-width: 100%;
-  margin: 0 auto var(--space-3);
-  justify-items: center;
-}
-.draw-numbers .num {
+/* ===== 번호공 반응형 (본번호 / 보너스 동일 크기) ===== */
+.draw-main .num,
+.draw-bonus .num {
+  /* .draw-balls 그리드(6fr / auto / 1fr)에서 본번호 1칸 폭 = 보너스 칸 폭.
+     공은 칸 폭의 100%를 채우되 max-width로 상한. 본번호 / 보너스 자동 동일 크기. */
   width: 100%;
   height: auto;
-  max-width: 56px;
+  max-width: 52px;
   aspect-ratio: 1;
   font-size: clamp(13px, 4vw, 18px);
-}
-.draw-bonus .num {
-  /* 보너스볼은 절대 크기 유지 (단일 원소) */
-  width: 44px;
-  height: 44px;
-  font-size: var(--font-size-md);
 }
 
 /* ===== 설정 탭 ===== */
@@ -1154,6 +1303,11 @@ a.btn-secondary,
   .app-title { font-size: 22px; }
   .app-header { margin-bottom: var(--space-4); }
 
+  /* 카운트다운 카드 모바일 */
+  .next-draw-card { padding: var(--space-4) var(--space-3); }
+  .next-draw-title { font-size: 24px; }
+  .next-draw-num { width: 56px; height: 56px; font-size: 20px; }
+
   .stats-header { gap: var(--space-1); }
   .stats-section { padding: var(--space-3); margin-bottom: var(--space-4); }
   .stats-meta { font-size: 11px; }
@@ -1178,21 +1332,9 @@ a.btn-secondary,
   .bar-label, .bar-value { font-size: 11px; }
   .bar-track { height: 12px; }
 
-  /* 추첨 탭 - 전략 바: 좁은 폭에서 desc는 다음 줄로 */
-  .strategy-bar {
-    grid-template-columns: auto auto 1fr;
-    grid-template-areas:
-      "label name caret"
-      "desc desc desc";
-    row-gap: 4px;
-  }
-  .strategy-bar-label { grid-area: label; }
-  .strategy-bar-name { grid-area: name; }
-  .strategy-bar-caret { grid-area: caret; }
-  .strategy-bar-desc { grid-area: desc; white-space: normal; }
-
   /* 하단 탭 폰트 축소 */
-  .tab-item { font-size: 12px; padding: 8px 2px; }
+  .tab-item { font-size: 10px; padding: 6px 2px; }
+  .tab-icon .icon { width: 20px; height: 20px; }
 }
 
 /* ===== 매우 좁은 폭 (360px 이하): 추가 보정 ===== */
@@ -1202,6 +1344,10 @@ a.btn-secondary,
   .num { width: 36px; height: 36px; font-size: 12px; }
   .slot { max-width: 100px; }
 
+  /* 카운트다운 카드 추가 축소 */
+  .next-draw-title { font-size: 22px; }
+  .next-draw-num { width: 50px; height: 50px; font-size: 18px; }
+
   .bar-row {
     grid-template-columns: minmax(40px, max-content) minmax(48px, 1fr) minmax(28px, max-content);
   }
@@ -1209,9 +1355,11 @@ a.btn-secondary,
   .bar-track { height: 10px; }
 
   /* 더 좁은 폭에서 탭 폰트 미세 조정 */
-  .tab-item { font-size: 11px; padding: 8px 2px; min-height: 52px; }
+  .tab-item { font-size: 10px; padding: 6px 2px; min-height: 52px; }
+  .tab-icon .icon { width: 18px; height: 18px; }
   #app { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
 
   /* 번호 카드 갭 더 축소 */
-  .draw-numbers .num { max-width: 44px; }
+  .draw-main .num,
+  .draw-bonus .num { max-width: 40px; }
 }
