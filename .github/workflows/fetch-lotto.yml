@@ -1,0 +1,36 @@
+name: Fetch Lotto Draws
+
+on:
+  schedule:
+    # 매주 일요일 03:00 KST = 매주 토요일 18:00 UTC.
+    # 한국 토요일 21시 추첨 후 안전한 시점.
+    - cron: '0 18 * * 6'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch lotto draws (incremental)
+        run: node scripts/fetch-lotto-draws.mjs
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name "lotto-bot"
+          git config user.email "lotto-bot@users.noreply.github.com"
+          git add games/lotto/src/data/draws.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "chore(lotto): weekly draws sync"
+            git push
+          fi
