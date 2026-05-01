@@ -4,7 +4,7 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 모두 완료. 페치 적재 + 사용자 시안 검증 단계.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-01.
+1.3. **마지막 갱신**: 2026-05-01 (데이터 출처 dhlottery → smok95 미러 전환).
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
@@ -38,6 +38,22 @@
 - `styles/main.css` 갱신 (통계 섹션 / empty-state / 막대 차트).
 - `docs/03_architecture.md` 폴더 트리에 charts.js / stats-page.js 반영.
 - 데이터 없을 때(`draws.json` 비어 있음) empty-state로 페치 명령 안내.
+
+## 2.20. 통계 페이지 갱신 흐름 (날짜 기준 자동/명시)
+
+- `src/data/storage.js` `syncDrawsIfNewer()` 신규.
+  - 미러 `latest.json` 한 방 peek → cached max drwNo와 비교.
+  - 새 회차 있을 때만 정적 `draws.json` 다시 fetch + `saveDraws()`.
+  - 결과 객체 `{ updated, reason, draws, latestDrwNo, latestDrwDate }` 반환.
+- `src/render/stats-page.js` 갱신 UI:
+  - 헤더 우측에 "↻ 갱신" 버튼.
+  - 헤더 아래 메타 라인 "{N}회까지 반영 · 최근 추첨 YYYY-MM-DD".
+  - 페이지 진입 시 자동 sync (조용히, 새 회차 있을 때만 토스트).
+  - 갱신 버튼 클릭 시 모든 결과 토스트로 통보 (이미 최신 / 미러 실패 / CI 지연).
+- `styles/main.css`: `.btn-refresh` / `.stats-meta` / `.stats-toast` + `.stats-header` grid 3컬럼.
+- `docs/01_spec.md` 5.3.1 신규.
+- `docs/02_data.md` 4.3 클라이언트 동기화 두 갈래(boot syncDraws / 통계 syncDrawsIfNewer) 명시.
+- 사용자 결정(2026-05-01): "날짜 기준 새 정보 있을 때만". 새 회차 없으면 무동작 + 화면 깜빡임 없음.
 
 ## 2.19. 페치 사용성 개선 (.bat + 메시지 톤 + 데이터 배너)
 
@@ -241,7 +257,8 @@
 ## 3.1. 페치 (사용자 액션 대기)
 
 - `scripts/fetch-lotto-draws.bat` 더블클릭 (또는 `node scripts/fetch-lotto-draws.mjs`).
-- 약 12분 페치 후 통계 / 전적 / 일진 정밀화 / 데이터 의존 4전략(통계학자 / 2등의 별 / 회귀주의자 / 추세추종자) 모두 실데이터 동작.
+- 데이터 출처: smok95/lotto GitHub Pages 미러 (`all.json` bundle, 1회~1221회 단일 GET).
+- **1초 미만** 페치 후 통계 / 전적 / 일진 정밀화 / 데이터 의존 4전략(통계학자 / 2등의 별 / 회귀주의자 / 추세추종자) 모두 실데이터 동작.
 
 ## 3.2. 보류 / 후순위 옵션
 
@@ -264,6 +281,7 @@
 - localhost / 127.0.0.1에서는 SW 자동 차단 + 캐시 클리어 + 1회 자동 reload.
 - `scripts/dev-server.mjs` 정적 서버를 표준 dev 환경으로 권장 (Live Server 대체).
 4.5. 살아있는 룰의 단일 소스는 `CLAUDE.md` + `standards/html-game/STANDARD.md`.
+4.6. **데이터 출처 변경 (2026-05-01)**: 동행복권 `common.do` API + 결과 페이지 외부 직접 접근 영구 차단 확인. smok95/lotto GitHub Pages 미러로 전환. 미러는 매주 토 GitHub Actions 자동 갱신. 미러 갱신 끊김 시 사용자 수동 입력 fallback (`docs/02_data.md` 4.6).
 
 # 5. 미해결 / 개선 여지
 
@@ -273,7 +291,7 @@
 5.3. 휠링 시스템 비스코프 (윤리 검토 후 재논의).
 5.4. sudoku / tetris의 html-game 표준 적용 여부 (사용자 결정 - 나중).
 5.5. core/ 모든 모듈 테스트 작성 완료. render/ 모듈 테스트는 선택 (현재 미작성).
-5.6. 페치 스크립트 첫 실행 (사용자 액션 대기).
+5.6. 페치 스크립트 첫 실행 (사용자 액션 대기). smok95 미러 채택 후 표본 검증 끝(1/500/1100/1221회 200 OK, 평균 240ms).
 5.7. 표준 위반 작은 이슈: render/main.js가 직접 이벤트 리스너 등록 (input/ 책임 일부 흡수). MVP 단순성 우선. M2 마무리 단계에서 input/ 분리 검토.
 
 # 6. 커밋 히스토리

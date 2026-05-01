@@ -1,13 +1,20 @@
 #!/usr/bin/env node
-// 동행복권 회차 데이터 페치 → games/lotto/src/data/draws.json.
+// 로또 회차 데이터 페치 → games/lotto/src/data/draws.json.
+//
+// 데이터 출처: smok95/lotto GitHub Pages 미러 (https://github.com/smok95/lotto).
+//   동행복권 직접 페치 차단(2026-05 이후 외부 접근 불가)으로 미러 사용.
+//   미러는 GitHub Actions로 매주 토 추첨 후 자동 갱신.
 //
 // 사용:
-//   node scripts/fetch-lotto-draws.mjs              # 자동: 기존 draws.json 마지막 회차 + 1 ~ 최신 (증분)
-//   node scripts/fetch-lotto-draws.mjs 1100         # drwNo 1100 한 건만
-//   node scripts/fetch-lotto-draws.mjs 1100 1110    # 1100회차 ~ 1110회차
-//   node scripts/fetch-lotto-draws.mjs --full       # 강제 전수 (1회차부터)
+//   node scripts/fetch-lotto-draws.mjs              # 자동: all.json 한 방으로 전수 동기화
+//   node scripts/fetch-lotto-draws.mjs 1100         # drwNo 1100 한 건만 (단건 endpoint)
+//   node scripts/fetch-lotto-draws.mjs 1100 1110    # 1100 ~ 1110 (단건 endpoint × N)
+//   node scripts/fetch-lotto-draws.mjs --full       # 자동과 동일 (호환용)
 //
-// 페이싱: 1초당 ~1.5건. 첫 전수 적재 약 12분, 증분은 보통 1건.
+// 시간:
+//   - 자동 / --full: all.json 단일 GET, 1초 미만.
+//   - 범위 지정: 단건 endpoint × N, 1초당 ~3건.
+//
 // SSOT: games/lotto/docs/02_data.md 4장.
 
 import fs from 'node:fs/promises';
@@ -19,91 +26,63 @@ const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '..');
 const OUT_PATH = path.join(REPO_ROOT, 'games', 'lotto', 'src', 'data', 'draws.json');
 
-const ENDPOINT = 'https://www.dhlottery.co.kr/common.do';
-const PACE_MS = 700;
+const ENDPOINT = 'https://smok95.github.io/lotto/results';
+const PACE_MS = 300;
 
 const FETCH_HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  'Accept': 'application/json,text/plain,*/*',
-  'Accept-Language': 'ko,en;q=0.9',
+  'User-Agent': 'blessed-lotto-fetcher/2.1 (+https://github.com/ghostjean-hash/game)',
+  'Accept': 'application/json',
 };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function fetchDraw(no) {
-  const url = `${ENDPOINT}?method=getLottoNumber&drwNo=${no}`;
+function mapRecord(src) {
+  if (!src || typeof src.draw_no !== 'number') return null;
+  if (!Array.isArray(src.numbers) || src.numbers.length !== 6) return null;
+  if (typeof src.bonus_no !== 'number') return null;
+  const drwDate = typeof src.date === 'string' ? src.date.slice(0, 10) : '';
+  const div0 = Array.isArray(src.divisions) && src.divisions.length > 0 ? src.divisions[0] : {};
+  return {
+    drwNo: src.draw_no,
+    drwDate,
+    numbers: src.numbers.slice(),
+    bonus: src.bonus_no,
+    firstWinners: typeof div0?.winners === 'number' ? div0.winners : 0,
+    firstPrize: typeof div0?.prize === 'number' ? div0.prize : 0,
+    totalSales: typeof src.total_sales_amount === 'number' ? src.total_sales_amount : 0,
+  };
+}
+
+async function fetchJson(url, timeoutMs = 30000) {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000);
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
   let res;
   try {
     res = await fetch(url, { headers: FETCH_HEADERS, signal: controller.signal });
-  } catch (err) {
+  } catch {
     clearTimeout(timeoutId);
     return null;
   }
   clearTimeout(timeoutId);
   if (!res.ok) return null;
   const text = await res.text();
-  let data;
   try {
-    data = JSON.parse(text);
+    return JSON.parse(text);
   } catch {
     return null;
   }
-  if (data.returnValue !== 'success') return null;
-  return {
-    drwNo: data.drwNo,
-    drwDate: data.drwNoDate,
-    numbers: [data.drwtNo1, data.drwtNo2, data.drwtNo3, data.drwtNo4, data.drwtNo5, data.drwtNo6],
-    bonus: data.bnusNo,
-    firstWinners: data.firstPrzwnerCo,
-    firstPrize: data.firstWinamnt,
-    totalSales: data.totSellamnt,
-  };
 }
 
-async function findLatestDrwNo(seed = 1230) {
-  console.log('Detecting latest drwNo (network probe)...');
+async function fetchAll() {
+  const data = await fetchJson(`${ENDPOINT}/all.json`, 30000);
+  if (!Array.isArray(data)) return null;
+  const mapped = data.map(mapRecord).filter(Boolean);
+  return mapped;
+}
 
-  // 1단계: seed가 존재하는지 확인. 없으면 -50씩 후퇴.
-  let upper = seed;
-  while (upper > 0) {
-    console.log(`  probe drwNo ${upper.toString().padStart(4)} ...`);
-    const draw = await fetchDraw(upper);
-    await sleep(PACE_MS);
-    if (draw) {
-      console.log(`  probe drwNo ${upper.toString().padStart(4)} EXISTS`);
-      break;
-    }
-    console.log(`  probe drwNo ${upper.toString().padStart(4)} miss, retrying lower`);
-    upper -= 50;
-  }
-  if (upper <= 0) return 1;
-
-  // 2단계: upper에서 +50씩 늘려가며 미존재 만날 때까지.
-  while (true) {
-    const next = upper + 50;
-    console.log(`  probe drwNo ${next.toString().padStart(4)} ...`);
-    const draw = await fetchDraw(next);
-    await sleep(PACE_MS);
-    if (!draw) {
-      console.log(`  probe drwNo ${next.toString().padStart(4)} miss (upper bound found)`);
-      break;
-    }
-    console.log(`  probe drwNo ${next.toString().padStart(4)} EXISTS`);
-    upper = next;
-  }
-
-  // 3단계: upper ~ upper+50 사이 선형 탐색.
-  let latest = upper;
-  console.log(`  narrowing between ${upper + 1} and ${upper + 50} ...`);
-  for (let n = upper + 1; n <= upper + 50; n += 1) {
-    const draw = await fetchDraw(n);
-    await sleep(PACE_MS);
-    if (!draw) break;
-    latest = n;
-  }
-  return latest;
+async function fetchDraw(no) {
+  const data = await fetchJson(`${ENDPOINT}/${no}.json`, 10000);
+  return mapRecord(data);
 }
 
 async function loadExisting() {
@@ -116,36 +95,41 @@ async function loadExisting() {
   }
 }
 
-async function main() {
-  const args = process.argv.slice(2);
-  const isFull = args.includes('--full');
-  const numericArgs = args.filter((a) => !a.startsWith('--')).map((a) => parseInt(a, 10)).filter(Number.isInteger);
+async function writeMerged(existing, newDraws) {
+  const map = new Map(existing.map((d) => [d.drwNo, d]));
+  for (const d of newDraws) map.set(d.drwNo, d);
+  const merged = [...map.values()].sort((a, b) => a.drwNo - b.drwNo);
+  await fs.mkdir(path.dirname(OUT_PATH), { recursive: true });
+  await fs.writeFile(OUT_PATH, JSON.stringify(merged, null, 2));
+  return merged;
+}
 
-  let existing = isFull ? [] : await loadExisting();
-  let from;
-  let to;
+async function runBundleSync() {
+  const existing = await loadExisting();
+  const lastExisting = existing.length > 0 ? Math.max(...existing.map((d) => d.drwNo)) : 0;
+  console.log(`Existing: ${existing.length} draws (last drwNo: ${lastExisting})`);
+  console.log(`Fetching all.json bundle from ${ENDPOINT}/all.json ...`);
 
-  if (numericArgs.length === 2) {
-    from = numericArgs[0];
-    to = numericArgs[1];
-  } else if (numericArgs.length === 1) {
-    from = numericArgs[0];
-    to = numericArgs[0];
-  } else {
-    const lastExisting = existing.length > 0 ? Math.max(...existing.map((d) => d.drwNo)) : 0;
-    console.log(`Existing: ${existing.length} draws (last drwNo: ${lastExisting})`);
-    console.log('Detecting latest drwNo...');
-    to = await findLatestDrwNo(Math.max(lastExisting, 1100));
-    console.log(`Latest drwNo: ${to}`);
-    from = lastExisting > 0 ? lastExisting + 1 : 1;
-    if (from > to) {
-      console.log('Already up to date. Nothing to fetch.');
-      return;
-    }
+  const t0 = Date.now();
+  const all = await fetchAll();
+  const dt = ((Date.now() - t0) / 1000).toFixed(2);
+
+  if (!all) {
+    console.error('Failed to fetch all.json. Network or mirror issue.');
+    process.exit(1);
   }
+  console.log(`Got ${all.length} records in ${dt}s.`);
 
+  const merged = await writeMerged(existing, all);
+  const added = Math.max(0, merged.length - existing.length);
+  const lastNew = merged.length > 0 ? merged[merged.length - 1].drwNo : 0;
+  console.log(`Saved ${merged.length} total (added ${added}, last drwNo: ${lastNew}) to ${OUT_PATH}`);
+}
+
+async function runRangeSync(from, to) {
+  const existing = await loadExisting();
   const total = to - from + 1;
-  console.log(`Fetching ${from} ~ ${to} (${total} draws)`);
+  console.log(`Range mode: fetching ${from} ~ ${to} (${total} draws) via per-round endpoint`);
   console.log('-'.repeat(60));
 
   const startTime = Date.now();
@@ -180,9 +164,7 @@ async function main() {
       );
       if (consecutiveFailures >= 20) {
         console.log('-'.repeat(60));
-        console.log(`Aborting: 20 consecutive failures.`);
-        console.log(`Likely cause: Korean IP required, or anti-bot block.`);
-        console.log(`Saved ${newDraws.length} draws so far.`);
+        console.log('Aborting: 20 consecutive failures.');
         break;
       }
     }
@@ -191,14 +173,32 @@ async function main() {
   }
   console.log('-'.repeat(60));
 
-  // 기존 + 신규 병합 (drwNo 기준 dedupe, 신규가 우선)
-  const map = new Map(existing.map((d) => [d.drwNo, d]));
-  for (const d of newDraws) map.set(d.drwNo, d);
-  const merged = [...map.values()].sort((a, b) => a.drwNo - b.drwNo);
-
-  await fs.mkdir(path.dirname(OUT_PATH), { recursive: true });
-  await fs.writeFile(OUT_PATH, JSON.stringify(merged, null, 2));
+  const merged = await writeMerged(existing, newDraws);
   console.log(`Saved ${merged.length} total (added ${newDraws.length}) to ${OUT_PATH}`);
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const numericArgs = args.filter((a) => !a.startsWith('--')).map((a) => parseInt(a, 10)).filter(Number.isInteger);
+
+  // 자동 / --full: all.json 한 방.
+  // 인자 없거나 --full만 있으면 bundle 모드.
+  if (numericArgs.length === 0) {
+    await runBundleSync();
+    return;
+  }
+
+  // 단건 / 범위: 단건 endpoint × N.
+  let from;
+  let to;
+  if (numericArgs.length === 1) {
+    from = numericArgs[0];
+    to = numericArgs[0];
+  } else {
+    from = numericArgs[0];
+    to = numericArgs[1];
+  }
+  await runRangeSync(from, to);
 }
 
 main().catch((err) => {

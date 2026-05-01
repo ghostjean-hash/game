@@ -64,6 +64,8 @@ export function clearAll() {
 // 페이지 진입 시 호출. fetch 실패하면 기존 캐시 유지.
 
 const DRAWS_JSON_URL = './src/data/draws.json';
+// 미러 latest 단건 (가벼운 peek용). SSOT: docs/02_data.md 4.1.
+const MIRROR_LATEST_URL = 'https://smok95.github.io/lotto/results/latest.json';
 
 async function fetchDrawsJson() {
   try {
@@ -72,6 +74,21 @@ async function fetchDrawsJson() {
     const data = await res.json();
     if (!Array.isArray(data)) return null;
     return data;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchMirrorLatest() {
+  try {
+    const res = await fetch(MIRROR_LATEST_URL, { cache: 'no-cache' });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data || typeof data.draw_no !== 'number') return null;
+    return {
+      drwNo: data.draw_no,
+      drwDate: typeof data.date === 'string' ? data.date.slice(0, 10) : '',
+    };
   } catch {
     return null;
   }
@@ -93,4 +110,76 @@ export async function syncDraws() {
     return fetched;
   }
   return cached;
+}
+
+/**
+ * 날짜 기준 새 정보가 있을 때만 갱신.
+ * 1. 미러 latest.json만 가볍게 GET → cached max drwNo와 비교.
+ * 2. 새 회차 없으면 무동작.
+ * 3. 새 회차 있으면 정적 draws.json (자동 갱신된 번들) 다시 fetch + saveDraws.
+ *
+ * @returns {Promise<{updated: boolean, reason: string, draws: Array, latestDrwNo: number, latestDrwDate: string}>}
+ *   - updated: 캐시가 갱신됐는지
+ *   - reason: 'new-rounds' | 'already-latest' | 'mirror-unreachable' | 'sync-failed'
+ *   - draws: 사용 가능한 draws 배열
+ *   - latestDrwNo / latestDrwDate: 가장 최신 회차 정보 (미러 또는 캐시)
+ */
+export async function syncDrawsIfNewer() {
+  const cached = loadDraws();
+  const cachedMax = cached.length > 0 ? Math.max(...cached.map((d) => d.drwNo)) : 0;
+  const cachedLast = cached.length > 0 ? cached[cached.length - 1] : null;
+
+  const remote = await fetchMirrorLatest();
+  if (!remote) {
+    return {
+      updated: false,
+      reason: 'mirror-unreachable',
+      draws: cached,
+      latestDrwNo: cachedMax,
+      latestDrwDate: cachedLast ? cachedLast.drwDate : '',
+    };
+  }
+
+  if (remote.drwNo <= cachedMax) {
+    return {
+      updated: false,
+      reason: 'already-latest',
+      draws: cached,
+      latestDrwNo: cachedMax,
+      latestDrwDate: cachedLast ? cachedLast.drwDate : remote.drwDate,
+    };
+  }
+
+  // 새 회차 있음 → 정적 draws.json (CI가 갱신한 번들) 다시 받기
+  const fetched = await fetchDrawsJson();
+  if (!fetched || fetched.length === 0) {
+    return {
+      updated: false,
+      reason: 'sync-failed',
+      draws: cached,
+      latestDrwNo: cachedMax,
+      latestDrwDate: cachedLast ? cachedLast.drwDate : '',
+    };
+  }
+  const fetchedMax = Math.max(...fetched.map((d) => d.drwNo));
+  if (fetchedMax > cachedMax) {
+    saveDraws(fetched);
+    const last = fetched[fetched.length - 1];
+    return {
+      updated: true,
+      reason: 'new-rounds',
+      draws: fetched,
+      latestDrwNo: last.drwNo,
+      latestDrwDate: last.drwDate,
+    };
+  }
+
+  // 미러는 새거였는데 정적 draws.json은 아직 갱신 안 됨 (CI 지연 등)
+  return {
+    updated: false,
+    reason: 'sync-failed',
+    draws: cached,
+    latestDrwNo: cachedMax,
+    latestDrwDate: cachedLast ? cachedLast.drwDate : '',
+  };
 }

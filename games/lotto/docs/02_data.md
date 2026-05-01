@@ -352,36 +352,63 @@
 
 ## 4. 외부 데이터 출처
 
-### 4.1. 동행복권 회차 엔드포인트
+### 4.1. 회차 엔드포인트 - smok95/lotto 미러
 
-`https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo={회차}`
-
+- **전수 묶음**: `https://smok95.github.io/lotto/results/all.json` (1회~최신 단일 배열, ~400KB).
+- 단건: `https://smok95.github.io/lotto/results/{회차}.json`
+- 최신: `https://smok95.github.io/lotto/results/latest.json`
+- 출처 저장소: https://github.com/smok95/lotto (MIT, 매주 토 GitHub Actions 자동 갱신).
 - 인증 불필요, JSON 응답.
-- 응답 매핑은 3.3 Draw 스키마 참조.
-- 페이싱: 1초당 1~2건.
-- 갱신: 매주 토요일 추첨 후.
-- 실패 시: 마지막 캐시로 동작 (오프라인 fallback).
+- 응답 매핑: 3.3 Draw 스키마 참조 (필드 매핑은 4.5 참조).
+
+### 4.1.1. 출처 변경 사유 (2026-05-01)
+
+- 동행복권 `common.do?method=getLottoNumber` API 외부 직접 호출 차단(영구 추정).
+- 결과 페이지 `gameResult.do?method=byWin / allWin`도 사용자 PC에서 errorPage 리다이렉트.
+- 정상 사용자도 결과 페이지 직접 도달 불가 상태에서, 봇 차단 우회 없는 정공 채널이 부재.
+- smok95/lotto는 GitHub Pages 정적 파일 호스팅이라 dhlottery 차단과 무관.
+- 미러도 결국 dhlottery 백엔드 의존이므로, 미러 갱신 끊기면 4.6 fallback으로 전환.
 
 ### 4.2. 적재 범위
 
 - **1회차 전수**. 1회차부터 최신 회차까지.
 - 결과는 `src/data/draws.json` 정적 파일.
-- 첫 적재 비용: 약 12분 (1초당 1.5건 페이싱).
+- 첫 적재 비용: **1초 미만** (`all.json` bundle 단일 GET).
 
 ### 4.3. 갱신 정책
 
 - **자동화**: `.github/workflows/fetch-lotto.yml`이 매주 일요일 03:00 KST에 페치 → 변경 시 commit & push.
 - **증분 모드**: 페치 스크립트가 기존 `draws.json` 마지막 drwNo 이후만 자동 fetch.
-- **수동 실행**: 사용자 PC에서 `node scripts/fetch-lotto-draws.mjs`.
-- **클라이언트 동기화**: 페이지 진입 시 `data/storage.js` `syncDraws()`가 정적 JSON → localStorage.
+- **수동 실행**: 사용자 PC에서 `node scripts/fetch-lotto-draws.mjs` 또는 `scripts/fetch-lotto-draws.bat`.
+- **클라이언트 동기화**:
+  - **boot 시점**: `data/storage.js` `syncDraws()`가 정적 JSON → localStorage (전체 갱신).
+  - **통계 페이지 진입 / 갱신 버튼**: `syncDrawsIfNewer()`가 미러 `latest.json` peek → cached max drwNo와 비교 → **새 회차 있을 때만** 정적 JSON 재fetch + saveDraws (날짜 기준 갱신).
 - **SW 정책**: `_registry.json`과 `draws.json` 모두 `NETWORK_FIRST_PATHS`. 캐시 stale 없음.
 
 ### 4.4. 페치 스크립트
 
 - 위치: `D:\claude_code\game\scripts\fetch-lotto-draws.mjs` (게임 허브 공용).
 - 실행:
-  - `node scripts/fetch-lotto-draws.mjs` - 자동 (증분 또는 전수 자동 판별)
-  - `node scripts/fetch-lotto-draws.mjs 1100 1110` - 범위 지정
-  - `node scripts/fetch-lotto-draws.mjs --full` - 강제 전수 재적재
+  - `node scripts/fetch-lotto-draws.mjs` - 자동 (`all.json` bundle 한 방, 1초 미만)
+  - `node scripts/fetch-lotto-draws.mjs 1100 1110` - 범위 지정 (단건 endpoint × N)
+  - `node scripts/fetch-lotto-draws.mjs --full` - 자동과 동일 (호환용)
 - 출력: `games/lotto/src/data/draws.json`.
-- 차단 환경(해외 IP / sandbox)에서는 사용자 본인 PC 또는 GitHub Actions에서 실행.
+- 기본 모드는 항상 bundle 동기화. 미러는 매주 토 GitHub Actions로 갱신되므로 전수 재적재가 안전.
+
+### 4.5. 미러 응답 → Draw 스키마 매핑
+
+| 우리 필드 (3.3) | 미러 필드 | 변환 |
+|---|---|---|
+| `drwNo` | `draw_no` | 그대로 |
+| `drwDate` | `date` | ISO datetime → `YYYY-MM-DD` (앞 10글자) |
+| `numbers` | `numbers` | 그대로 (6원소 배열) |
+| `bonus` | `bonus_no` | 그대로 |
+| `firstWinners` | `divisions[0].winners` | 빈 객체면 0 (예: 1회차 1등 미당첨) |
+| `firstPrize` | `divisions[0].prize` | 빈 객체면 0 |
+| `totalSales` | `total_sales_amount` | 그대로 |
+
+### 4.6. Fallback (미러 갱신 끊김 시)
+
+- 미러 latest.json이 1주 이상 갱신 안 되면 미러 의존 중단.
+- 신규 회차는 사용자가 동행복권 정상 채널(앱/모바일)로 확인 후 자비스에 수동 입력.
+- 입력 양식: `drwNo / YYYY-MM-DD / 본번호 6 / 보너스`. 자비스가 `draws.json`에 1건 추가.
