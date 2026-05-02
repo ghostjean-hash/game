@@ -1,12 +1,11 @@
 // 하단 탭 네비게이션. SSOT: docs/01_spec.md 4장.
-// 탭 5개: 추첨 / 통계 / 전적 / 휠링 / 설정.
-import { sparkles, barChart, clock, grid, gear } from './icons.js';
+// 탭 4개: 추첨 / 통계 / 전적 / 설정. 휠링은 다구좌 모드 ON 시 설정 탭에서 진입(T2).
+import { sparkles, barChart, clock, gear } from './icons.js';
 
 export const TABS = Object.freeze([
   { id: 'home', label: '추첨', short: '추첨', icon: sparkles },
   { id: 'stats', label: '통계', short: '통계', icon: barChart },
   { id: 'history', label: '전적', short: '전적', icon: clock },
-  { id: 'wheeling', label: '휠링', short: '휠링', icon: grid },
   { id: 'settings', label: '설정', short: '설정', icon: gear },
 ]);
 

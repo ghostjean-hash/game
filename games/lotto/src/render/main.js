@@ -14,16 +14,19 @@ import { renderWheelingPage, renderWheelingDisabled } from './wheeling-page.js';
 import { renderSettingsPage } from './settings-page.js';
 import { bottomTabsHtml, TABS } from './bottom-tabs.js';
 import { showModal, showDisclaimer } from './modal.js';
+import { ritualWidgetHtml, openRitualModal } from './ritual-widget.js';
 import { recommend } from '../core/recommend.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
 import { recordRecommendation, matchHistory, backfillRecommendations } from '../core/history.js';
 import { applyLuckGrowth } from '../core/luck.js';
+import { ensureCurrentState, performRitual, applyRitualBonus } from '../core/ritual.js';
 import {
   loadCharacters, saveCharacters,
   loadActiveCharacterId, saveActiveCharacterId,
   loadDraws,
   loadOptions, saveOptions,
+  loadRitualState, saveRitualState,
 } from '../data/storage.js';
 import { STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK } from '../data/numbers.js';
 
@@ -40,6 +43,7 @@ const state = {
   cooccur: [],
   options: { applyFilters: false, advancedMode: false },
   currentTab: 'home',
+  ritual: null, // T4: 행운 의식 상태 (charId+drwNo 기준 격리, 회차 변경 시 자동 리셋)
 };
 
 export function initRender(rootEl) {
@@ -51,6 +55,7 @@ export function initRender(rootEl) {
   state.bonusStats = computeBonusStats(state.draws);
   state.cooccur = computeCooccur(state.draws);
   state.options = loadOptions();
+  state.ritual = loadRitualState(); // T4: 회차/캐릭터 변경 시 ensureCurrentState로 갱신
 
   if (state.draws.length > 0) {
     const sorted = [...state.draws].sort((a, b) => b.drwNo - a.drwNo);
@@ -84,6 +89,7 @@ function openAddCharacterModal() {
 }
 
 function deleteActive() {
+  // T1: 추첨 탭 슬롯에서 호출 안 됨. 설정 탭의 캐릭터 삭제 핸들러는 deleteCharacterById.
   if (state.characters.length <= 1) return;
   const active = state.characters.find((c) => c.id === state.activeId);
   const ok = window.confirm(`'${active ? active.name : '활성'}' 캐릭터를 삭제할까요?`);
@@ -92,6 +98,67 @@ function deleteActive() {
   state.activeId = state.characters[0].id;
   saveCharacters(state.characters);
   saveActiveCharacterId(state.activeId);
+  renderApp();
+}
+
+function deleteCharacterById(id) {
+  // T1: 설정 탭에서 임의 캐릭터 삭제. 마지막 1명일 때 비활성.
+  if (state.characters.length <= 1) return;
+  const target = state.characters.find((c) => c.id === id);
+  if (!target) return;
+  const ok = window.confirm(`'${target.name}' 캐릭터를 삭제할까요?`);
+  if (!ok) return;
+  state.characters = state.characters.filter((c) => c.id !== id);
+  if (state.activeId === id) {
+    state.activeId = state.characters[0].id;
+    saveActiveCharacterId(state.activeId);
+  }
+  saveCharacters(state.characters);
+  renderApp();
+}
+
+/**
+ * T4: 행운 의식 모달 열기 + 행위 수행 콜백 wiring.
+ * 행위 수행 후 만땅이면 Luck +5 보너스 적용. 모달 닫힐 때 메인 재렌더로 게이지 위젯 + 캐릭터 카드 갱신.
+ */
+function openRitualModalForActive() {
+  const active = getActive();
+  state.ritual = ensureCurrentState(state.ritual, active.id, state.drwNo);
+
+  let currentClose = null;
+  const onClose = () => renderApp();
+
+  const onPerform = (ritualId) => {
+    const result = performRitual(state.ritual, ritualId);
+    if (!result.didApply) return;
+    state.ritual = result.state;
+
+    if (result.justFilled) {
+      // 만땅 → Luck 보너스 적용 + 캐릭터 갱신
+      const cur = state.characters.find((c) => c.id === state.ritual.charId) || active;
+      const bonus = applyRitualBonus(cur, state.ritual);
+      if (bonus.applied) {
+        state.ritual = bonus.state;
+        state.characters = state.characters.map((c) => (c.id === cur.id ? bonus.character : c));
+        saveCharacters(state.characters);
+      }
+    }
+    saveRitualState(state.ritual);
+
+    // 모달 닫고 다시 열어 갱신된 state로 그림 (게이지 진행 시각화)
+    if (currentClose) currentClose();
+    currentClose = openRitualModal(state.ritual, onPerform, onClose);
+  };
+
+  currentClose = openRitualModal(state.ritual, onPerform, onClose);
+}
+
+function activateCharacterById(id) {
+  // T1: 설정 탭에서 캐릭터 활성 전환.
+  const target = state.characters.find((c) => c.id === id);
+  if (!target) return;
+  state.activeId = id;
+  saveActiveCharacterId(id);
   renderApp();
 }
 
@@ -137,6 +204,10 @@ function homeTabHtml(active, strategyId, rec, fortune, drawForFortune) {
   state.drwNo = nextInfo.drwNo || state.drwNo;
   const heroFortuneClass = fortune === 'bad' ? ' is-bad' : (fortune === 'great' ? ' is-great' : '');
 
+  // T4: 행운 의식 게이지 위젯 (회차/캐릭터 변경 시 자동 리셋)
+  state.ritual = ensureCurrentState(state.ritual, active.id, state.drwNo);
+  saveRitualState(state.ritual);
+
   return `
     <header class="app-header tab-header home-header">
       <h1 class="app-title">Blessed Lotto</h1>
@@ -148,6 +219,8 @@ function homeTabHtml(active, strategyId, rec, fortune, drawForFortune) {
     </section>
 
     ${characterSlotsHtml(state.characters, state.activeId)}
+
+    ${ritualWidgetHtml(state.ritual)}
 
     ${strategyTabsHtml(strategyId)}
 
@@ -239,9 +312,12 @@ function renderHome(content) {
     });
   });
 
-  // 슬롯 추가/삭제
-  content.querySelector('[data-action="add-character"]')?.addEventListener('click', openAddCharacterModal);
-  content.querySelector('[data-action="delete-active"]')?.addEventListener('click', deleteActive);
+  // T1: 슬롯의 +/× 버튼 폐기. 추가/삭제는 설정 탭에서.
+
+  // T4: 행운 의식 위젯 클릭 → 8행위 모달
+  content.querySelector('[data-action="open-ritual"]')?.addEventListener('click', () => {
+    openRitualModalForActive();
+  });
 
   // 전략 탭 직접 클릭 (시트 모달 폐기, 즉시 활성 변경)
   content.querySelectorAll('.strategy-tab[data-strategy-id]').forEach((el) => {
@@ -339,6 +415,10 @@ function renderApp() {
         state.options = { applyFilters: false, advancedMode: false };
         renderApp();
       },
+      onAddCharacter: openAddCharacterModal,
+      onDeleteCharacter: deleteCharacterById,
+      onActivateCharacter: activateCharacterById,
+      onOpenWheeling: () => setTab('wheeling'),
     });
   }
 

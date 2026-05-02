@@ -72,6 +72,26 @@ export const STATS_POWER = 1.5;
 // 실측: gap ratio 19 → 46 (2.42배). SSOT: docs/02_data.md 1.7.3.
 export const GAP_POWER = 1.3;
 
+// 1.19. 행운 의식 (T4, 2026-05-02 신설)
+// SSOT: docs/02_data.md 1.19, docs/01_spec.md 5.6.
+// 해석 B: 정성 / 콘텐츠 게이지. 추첨 확률 영향 없음. 만땅 시 Luck +5 보너스만.
+// 회차 변경 시 게이지 + 행위 쿨다운 모두 리셋.
+export const RITUAL_GAUGE_MAX = 100;
+export const RITUAL_GAIN_PER_ACTION = 12.5;  // 8 행위 × 12.5 = 100
+export const LUCK_BONUS_RITUAL = 5;          // 만땅 1회 Luck 보너스
+
+// 행위 8종. 라벨에 "확률" / "필승" 단어 0건. 종교 / IP 회피 톤.
+export const RITUAL_LIST = Object.freeze([
+  { id: 'meditate',   label: '명상하기',     desc: '마음을 가라앉히고 호흡을 정돈한다',          short: '명' },
+  { id: 'training',   label: '수련하기',     desc: '108배 동작으로 몸과 정신을 단련한다',        short: '수' },
+  { id: 'water',      label: '정화수 의식',  desc: '새벽 정화수를 떠놓고 정성을 기울인다',       short: '정' },
+  { id: 'qi',         label: '기 모으기',    desc: '하늘의 기를 두 손에 모은다',                short: '기' },
+  { id: 'ancestor',   label: '가문 의식',    desc: '가문의 인연에 감사를 전한다',               short: '가' },
+  { id: 'talisman',   label: '부적 그리기',  desc: '한 획 한 획 정성껏 부적을 완성한다',         short: '부' },
+  { id: 'coin',       label: '행운 동전',    desc: '동전 한 닢을 던져 길흉을 점친다',           short: '동' },
+  { id: 'starlight',  label: '별빛 의식',    desc: '밤하늘의 별 운행에 마음을 맞춘다',          short: '별' },
+]);
+
 // 1.16. 백캐스트 (Luck 성장 부트스트랩)
 // SSOT: docs/02_data.md 1.16, docs/01_spec.md 7.5.
 // 캐릭터 첫 추첨 탭 진입 시 최근 N회에 대해 결정론적 추천 + 매칭을 history에 백필.

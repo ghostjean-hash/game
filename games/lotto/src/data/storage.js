@@ -52,6 +52,11 @@ export function saveOptions(options) { write('options', options); }
 export function hasSeenHelp() { return read('seen_help', false) === true; }
 export function markSeenHelp() { write('seen_help', true); }
 
+// 행운 의식 상태 (T4). SSOT: docs/02_data.md 1.19.
+// 회차 + 캐릭터 변경 시 자동 리셋 (core/ritual.js ensureCurrentState).
+export function loadRitualState() { return read('rituals', null); }
+export function saveRitualState(state) { write('rituals', state); }
+
 // 전체 초기화 (테스트 / 사용자 reset)
 export function clearAll() {
   for (let i = localStorage.length - 1; i >= 0; i -= 1) {

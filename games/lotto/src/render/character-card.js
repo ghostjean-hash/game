@@ -1,12 +1,16 @@
 // 캐릭터 카드 HTML. SSOT: docs/01_spec.md 5.1 / 5.1.2.
 // 클래스(전략)는 카드에 표시하지 않습니다. 전략은 추첨 시 선택.
-import { FORTUNE_COLORS } from '../data/colors.js';
+// T3: 사주(일주 오행) 행운 번호 영구 표시.
+import { FORTUNE_COLORS, numberColor } from '../data/colors.js';
 import {
   FORTUNE_GREAT, FORTUNE_GOOD, FORTUNE_NEUTRAL, FORTUNE_BAD,
   ANIMAL_SIGNS,
+  FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
 } from '../data/numbers.js';
 import { dayPillarLabel } from '../core/saju.js';
 import { fortuneRelation } from '../core/fortune.js';
+
+const ELEMENT_LABELS = { wood: '목', fire: '화', earth: '토', metal: '금', water: '수' };
 
 const ANIMAL_LABELS = Object.fromEntries(ANIMAL_SIGNS.map((a) => [a.id, a.label]));
 
@@ -94,7 +98,37 @@ export function characterCardHtml(character, fortune, drawOrDrwNo) {
           <span style="width: ${character.luck}%; background: ${fortuneColor};"></span>
         </div>
       </div>
+      ${luckyNumbersHtml(character)}
     </section>
+  `;
+}
+
+/**
+ * T3: 사주(일주 오행) 기반 영구 행운 번호 표시.
+ * dayPillar 없는 캐릭터는 출력 생략 (마이그레이션 케이스).
+ * 추첨 결과의 큰 번호공과 시각 차별화 위해 작은 컬러볼.
+ */
+function luckyNumbersHtml(character) {
+  if (!character.dayPillar || !character.dayPillar.stem) return '';
+  const element = STEM_TO_ELEMENT[character.dayPillar.stem];
+  if (!element) return '';
+  const lucky = FIVE_ELEMENTS_LUCKY[element];
+  if (!lucky || lucky.length === 0) return '';
+  const elementLabel = ELEMENT_LABELS[element] || element;
+
+  const balls = lucky.map((n) => {
+    const { bg } = numberColor(n);
+    return `<span class="lucky-num" style="background-color:${bg};" aria-label="행운 번호 ${n}">${n}</span>`;
+  }).join('');
+
+  return `
+    <div class="char-lucky" aria-label="${escapeHtml(elementLabel)} 오행 행운 번호">
+      <div class="lucky-label">
+        <span class="lucky-element" title="일주 천간 오행">${escapeHtml(elementLabel)} 오행</span>
+        <span class="lucky-caption">행운 번호 (참고용, 추첨 확률 영향 없음)</span>
+      </div>
+      <div class="lucky-balls">${balls}</div>
+    </div>
   `;
 }
 

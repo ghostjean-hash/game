@@ -17,5 +17,6 @@ import './suites/saju.test.js';
 import './suites/wheeling.test.js';
 import './suites/schedule.test.js';
 import './suites/history.test.js';
+import './suites/ritual.test.js';
 
 done();

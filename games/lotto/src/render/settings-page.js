@@ -1,29 +1,68 @@
 // 설정 탭. SSOT: docs/01_spec.md 4장.
-// 옵션 / 다구좌 토글 / 면책 / 데이터 메타 / 캐릭터 초기화.
+// 캐릭터 관리(T1) + 옵션 + 다구좌 모드 + 휠링 진입(T2) + 면책 + 데이터 + 초기화.
 import {
   loadOptions, saveOptions,
-  loadDraws,
+  loadDraws, loadCharacters, loadActiveCharacterId,
   clearAll,
 } from '../data/storage.js';
+import { plus, close } from './icons.js';
 
 /**
  * 설정 페이지 렌더 (탭 모델).
  * @param {HTMLElement} container
- * @param {{ onAdvancedToggle: () => void, onShowDisclaimer: () => void, onResetAll: () => void }} handlers
+ * @param {{
+ *   onAdvancedToggle: () => void,
+ *   onShowDisclaimer: () => void,
+ *   onResetAll: () => void,
+ *   onAddCharacter: () => void,
+ *   onDeleteCharacter: (id: string) => void,
+ *   onActivateCharacter: (id: string) => void,
+ *   onOpenWheeling: () => void,
+ * }} handlers
  */
 export function renderSettingsPage(container, handlers) {
   const options = loadOptions();
   const draws = loadDraws();
+  const characters = loadCharacters();
+  const activeId = loadActiveCharacterId();
   const lastDraw = draws.length > 0 ? draws[draws.length - 1] : null;
 
   const dataMeta = lastDraw
     ? `<strong>${lastDraw.drwNo}회</strong>까지 반영 · 최근 추첨 ${lastDraw.drwDate}`
     : '<strong>회차 데이터 없음</strong>';
 
+  const canDelete = characters.length > 1;
+  const charRows = characters.map((c) => {
+    const isActive = c.id === activeId;
+    return `
+      <li class="char-row${isActive ? ' is-active' : ''}">
+        <button type="button" class="char-row-main" data-char-id="${escapeAttr(c.id)}"
+                aria-pressed="${isActive ? 'true' : 'false'}"
+                title="${escapeAttr(c.name)}로 활성">
+          <span class="char-row-name">${escapeHtml(c.name)}</span>
+          <span class="char-row-meta">${escapeHtml(animalLabel(c.animalSign))} · ${escapeHtml(zodiacLabelShort(c.zodiac))}</span>
+          ${isActive ? '<span class="char-row-active-badge">활성</span>' : ''}
+        </button>
+        <button type="button" class="char-row-del" data-char-del-id="${escapeAttr(c.id)}"
+                ${!canDelete ? 'disabled' : ''}
+                aria-label="${escapeAttr(c.name)} 캐릭터 삭제">${close()}</button>
+      </li>
+    `;
+  }).join('');
+
   container.innerHTML = `
     <header class="app-header tab-header">
       <h1 class="app-title">설정</h1>
     </header>
+
+    <section class="stats-section">
+      <h2 class="stats-title">캐릭터 관리</h2>
+      <p class="stats-note">캐릭터 추가 / 삭제는 본 영역에서 합니다. 추첨 탭의 슬롯은 빠른 전환 전용.</p>
+      <ul class="char-list">${charRows}</ul>
+      <button type="button" class="btn-primary char-add" data-action="add-character">
+        ${plus()} 새 캐릭터 추가
+      </button>
+    </section>
 
     <section class="stats-section">
       <h2 class="stats-title">데이터</h2>
@@ -43,11 +82,14 @@ export function renderSettingsPage(container, handlers) {
     </section>
 
     <section class="stats-section">
-      <h2 class="stats-title">다구좌 모드</h2>
-      <p class="stats-note">휠링 (Full / Abbreviated Wheel) 사용 가능. 1등 확률 향상 도구가 아닙니다.</p>
-      <button type="button" class="btn-primary" data-action="toggle-advanced">
-        ${options.advancedMode ? '다구좌 모드 끄기' : '다구좌 모드 켜기'}
-      </button>
+      <h2 class="stats-title">다구좌 모드 (휠링)</h2>
+      <p class="stats-note">여러 장 분산 구매로 부분 당첨 보장. 1등 확률 향상 도구가 아닙니다. 라이트 사용자에겐 권장하지 않습니다.</p>
+      <div class="settings-row-actions">
+        <button type="button" class="btn-primary" data-action="toggle-advanced">
+          ${options.advancedMode ? '다구좌 모드 끄기' : '다구좌 모드 켜기'}
+        </button>
+        ${options.advancedMode ? '<button type="button" class="btn-secondary" data-action="open-wheeling">휠링 페이지 열기</button>' : ''}
+      </div>
     </section>
 
     <section class="stats-section">
@@ -76,4 +118,42 @@ export function renderSettingsPage(container, handlers) {
     clearAll();
     handlers.onResetAll();
   });
+  container.querySelector('[data-action="add-character"]').addEventListener('click', handlers.onAddCharacter);
+
+  // 휠링 페이지 진입 (T2)
+  const openWheelBtn = container.querySelector('[data-action="open-wheeling"]');
+  if (openWheelBtn) openWheelBtn.addEventListener('click', handlers.onOpenWheeling);
+
+  // 캐릭터 행 활성 / 삭제
+  container.querySelectorAll('[data-char-id]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.charId;
+      if (id !== activeId) handlers.onActivateCharacter(id);
+    });
+  });
+  container.querySelectorAll('[data-char-del-id]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (el.disabled) return;
+      const id = el.dataset.charDelId;
+      handlers.onDeleteCharacter(id);
+    });
+  });
 }
+
+const ANIMAL_LABELS = {
+  rat: '쥐띠', ox: '소띠', tiger: '호랑이띠', rabbit: '토끼띠', dragon: '용띠', snake: '뱀띠',
+  horse: '말띠', goat: '양띠', monkey: '원숭이띠', rooster: '닭띠', dog: '개띠', pig: '돼지띠',
+};
+function animalLabel(id) { return ANIMAL_LABELS[id] || ''; }
+
+const ZODIAC_LABELS_SHORT = {
+  aries: '양', taurus: '황소', gemini: '쌍둥이', cancer: '게', leo: '사자', virgo: '처녀',
+  libra: '천칭', scorpio: '전갈', sagittarius: '궁수', capricorn: '염소', aquarius: '물병', pisces: '물고기',
+};
+function zodiacLabelShort(id) { return ZODIAC_LABELS_SHORT[id] || ''; }
+
+function escapeHtml(text) {
+  return String(text).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
+}
+function escapeAttr(text) { return escapeHtml(text); }

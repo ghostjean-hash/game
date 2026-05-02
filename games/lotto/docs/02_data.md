@@ -191,6 +191,46 @@
 
 1.13.1. 임의 매핑. 추첨 확률에는 영향 없음.
 
+### 1.19. 행운 의식 (T4, 2026-05-02 신설, 정성 콘텐츠)
+
+해석 B 채택. "당첨 확률 높이기" 메커닉 아님. 만땅 시 Luck +5 1회 보너스. SSOT: docs/01_spec.md 5.6.
+
+| 상수 | 값 | 의미 |
+|---|---|---|
+| `RITUAL_GAUGE_MAX` | 100 | 게이지 만땅 |
+| `RITUAL_GAIN_PER_ACTION` | 12.5 | 행위 1회 게이지 증가 (8 × 12.5 = 100) |
+| `LUCK_BONUS_RITUAL` | 5 | 만땅 시 캐릭터 Luck 보너스 |
+
+1.19.1. 위치: `src/data/numbers.js`. 핵심 로직: `src/core/ritual.js`. UI: `src/render/ritual-widget.js`.
+1.19.2. 행위 8종 라인업 (`RITUAL_LIST`): 종교 / IP 회피 톤으로 큐레이션.
+
+| ID | 라벨 | 설명 |
+|---|---|---|
+| `meditate` | 명상하기 | 마음을 가라앉히고 호흡을 정돈한다 |
+| `training` | 수련하기 | 108배 동작으로 몸과 정신을 단련한다 |
+| `water` | 정화수 의식 | 새벽 정화수를 떠놓고 정성을 기울인다 |
+| `qi` | 기 모으기 | 하늘의 기를 두 손에 모은다 |
+| `ancestor` | 가문 의식 | 가문의 인연에 감사를 전한다 |
+| `talisman` | 부적 그리기 | 한 획 한 획 정성껏 부적을 완성한다 |
+| `coin` | 행운 동전 | 동전 한 닢을 던져 길흉을 점친다 |
+| `starlight` | 별빛 의식 | 밤하늘의 별 운행에 마음을 맞춘다 |
+
+1.19.3. **데이터 스키마 (`lotto_rituals`)**: 단일 객체.
+
+```js
+{
+  charId: string,           // 캐릭터별 격리
+  drwNo: number,            // 회차별 격리 (변경 시 리셋)
+  performed: string[],      // 수행된 ritual id 배열
+  gauge: number,            // 0~100
+  appliedBonus: boolean,    // 만땅 시 Luck 보너스 적용 잠금
+}
+```
+
+1.19.4. 회차 / 캐릭터 변경 시 리셋(`ensureCurrentState`). 같은 charId+drwNo면 보존.
+1.19.5. 추첨 결과 / 추천 알고리즘과 **완전 무관**. 캐릭터 luck 보너스를 통해서만 영향(시드 분산도). 당첨 확률 영향 0.
+1.19.6. UI 라벨에 "확률" / "필승" / "당첨" 단어 사용 금지. 모달 하단 면책 강제.
+
 ### 1.18. 천간 오행 5원소 + 원소별 행운 번호 (사주 전략용)
 
 캐릭터 일주의 천간 오행(목/화/토/금/수) → 행운 번호 임의 매핑. 4원소(서양, 1.14)와 병렬 짝.
@@ -379,6 +419,7 @@
 | `lotto_active_character` | `string` (id) | 캐릭터 전환 |
 | `lotto_options` | `{ applyFilters, advancedMode, ... }` | 사용자 토글 변경 |
 | `lotto_seen_help` | `boolean` | 첫 진입 안내 표시 |
+| `lotto_rituals` | `RitualState` (1.19.3) | 행위 수행 시 / 회차 변경 시 자동 리셋 |
 
 3.2.1. `lotto_options.advancedMode`: 다구좌 모드(휠링) 활성화 여부. 기본 false. 첫 활성화 시 윤리 안내 모달 강제.
 
