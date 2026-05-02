@@ -49,11 +49,13 @@ export function nextDrawTimeFromNow(nowMs) {
 
   let daysAhead = (DRAW_DAY_OF_WEEK - day + 7) % 7;
   if (daysAhead === 0) {
-    // 같은 토요일이면 추첨 시각 이전인지 확인
+    // 같은 토요일이면 추첨 시각 이전인지 확인.
+    // 정각(20:00:00.000)은 "이미 시작" 처리 → 다음 주로 넘어감.
+    // SSOT: docs/01_spec.md 5.2.2.6 (0에 도달하면 다음 토요일로 갱신).
+    void curS; void curMs; // intentionally unused
     const isBeforeDraw =
       curH < targetH ||
-      (curH === targetH && curM < targetM) ||
-      (curH === targetH && curM === targetM && curS === 0 && curMs === 0);
+      (curH === targetH && curM < targetM);
     if (!isBeforeDraw) daysAhead = 7;
   }
 

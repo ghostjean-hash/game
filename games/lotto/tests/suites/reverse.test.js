@@ -47,12 +47,13 @@ suite('core/reverse - reverseSearch', () => {
     assertEqual(r.counts.miss, 3);
   });
 
-  test('5등 (3개 일치)', () => {
-    // [1, 2, 3, ...] 입력 → drw 100과 6개 일치(1등), drw 102와 3개 일치(5등)
-    // → 최고 등수는 1등이지만 counts[5]에도 1 카운트되어야
+  test('5등 (3개 일치) - 동률 2회 (drw 100 + drw 102)', () => {
+    // 입력: [1, 2, 3, 11, 12, 13]
+    // drw 100 [1,2,3,4,5,6]: 1,2,3 일치 = 5등 (보너스 7도 입력에 없음)
+    // drw 101 [10,20,30,40,41,42]: 0개 일치 = 미적중
+    // drw 102 [1,2,3,7,8,9]: 1,2,3 일치 = 5등 (보너스 4도 입력에 없음)
     const r = reverseSearch([1, 2, 3, 11, 12, 13], sampleDraws);
-    assertEqual(r.counts[5], 1); // drw 102: 1,2,3 일치 = 5등
-    // drw 100: 1,2,3 일치 = 5등
+    assertEqual(r.counts[5], 2);
     assertEqual(r.bestRank, 5);
   });
 

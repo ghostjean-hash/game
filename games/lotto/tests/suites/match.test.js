@@ -33,7 +33,9 @@ suite('core/match - matchRank', () => {
     assertEqual(matchRank({ numbers: [40, 41, 42, 43, 44, 45], bonus: 18 }, draw), null);
   });
 
-  test('5등 경계: 본번호 3개', () => {
-    assertEqual(matchRank({ numbers: [3, 7, 12, 40, 41, 42], bonus: 1 }, draw), 5);
+  test('5등 경계: 본번호 3개 (41은 입력에 없음)', () => {
+    // 발표 본번호: [3, 7, 12, 25, 33, 41]
+    // 입력: [3, 7, 12, ...] → 3개 일치 → 5등
+    assertEqual(matchRank({ numbers: [3, 7, 12, 40, 42, 43], bonus: 1 }, draw), 5);
   });
 });

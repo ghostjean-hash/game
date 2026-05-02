@@ -1,0 +1,28 @@
+name: Test Lotto
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'games/lotto/**'
+      - '.github/workflows/test-lotto.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'games/lotto/**'
+      - '.github/workflows/test-lotto.yml'
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run lotto tests (Node CLI)
+        working-directory: games/lotto
+        run: node tests/run-node.js

@@ -44,6 +44,7 @@ node scripts/dev-server.mjs 8000
 | 워크플로우 | 일정 | 작업 |
 |---|---|---|
 | `.github/workflows/fetch-lotto.yml` | 매주 일요일 03:00 KST | lotto 회차 증분 페치 + commit/push |
+| `.github/workflows/test-lotto.yml` | push/PR (lotto 경로 변경 시) | `node tests/run-node.js` 자동 회귀 검증 |
 
 # 5. 커밋 컨벤션
 

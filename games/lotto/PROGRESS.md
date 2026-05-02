@@ -4,10 +4,65 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-02 (Sprint 016 - 매핑 정직성 강화 #10 A안).
+1.3. **마지막 갱신**: 2026-05-02 (Sprint 017 - Node CLI 테스트 + GitHub Actions 자동 회귀 환경).
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.38. Sprint 017 완료 - 자동 회귀 환경 + 결손 3건 정정 (2026-05-02)
+
+리뷰에서 식별된 가장 큰 위험("render/ 미테스트 + 자동 회귀 환경 부재")의 후자 우선 보강. 자율 진행 가능 범위.
+
+### 2.38.1. S7-T1 Node CLI 테스트 진입점
+
+- `tests/core.js`: `typeof document` 환경 가드 추가. 브라우저는 DOM 출력, Node는 console + process.exit. 0 의존성.
+- `tests/run-node.js` 신설: localStorage polyfill (MemoryStorage) + fetch no-op + runner.js dynamic import. `node tests/run-node.js` 단일 명령으로 전체 suite 실행 (98ms, 275 케이스).
+- 기존 브라우저 진입점(`tests/test.html` → `runner.js`)은 무변경. 양쪽 환경 모두 동작.
+
+### 2.38.2. S7-T2 GitHub Actions 워크플로우
+
+- `.github/workflows/test-lotto.yml` 신설.
+- trigger: push to main / PR to main (path filter: `games/lotto/**` + 워크플로우 자체).
+- 단일 step: `node tests/run-node.js` (lotto 폴더에서). FAIL 시 exit 1 → CI 빨간불.
+- 기존 `fetch-lotto.yml`과 분리 (관심사 분리).
+
+### 2.38.3. CI 도입 즉시 가치: 기존 결손 3건 자동 노출 + 정정
+
+자동화의 본질적 가치 = "내가 모르는 결손 발견". 도입 첫 실행에서 3건 노출:
+
+| # | 결손 | 정정 |
+|---|---|---|
+| 1 | `match.test.js` "5등 경계" - 입력 [3,7,12,40,**41**,42]에 41이 발표 본번호에 있어 4개 일치 → 4등이 정답이지만 expected 5 (테스트 의도와 어긋남) | 입력을 [3,7,12,40,42,43]로 정정 (5등 경계 재현) |
+| 2 | `schedule.js nextDrawTimeFromNow` 정각 처리 - 토 20:00 정각이면 isBeforeDraw=true로 같은 날 반환. spec 5.2.2.6 ("0에 도달하면 다음 토요일로 갱신")과 충돌 | 정각도 isBeforeDraw=false 처리 → 다음 주로 넘어감. 코드 결손 정정 |
+| 3 | `reverse.test.js` "5등 (3개 일치)" - 입력 [1,2,3,11,12,13]에 대해 sampleDraws의 drw 100과 drw 102 모두 5등 매칭이라 counts[5]=2가 정답이지만 expected 1 (주석 자체가 "drw 100 + drw 102"라며 의도는 2였으나 잘못 적힘) | counts[5]=2로 정정 + 테스트 이름에 "동률 2회" 명시 |
+
+275/275 PASS. 결손 0건.
+
+### 2.38.4. 영향 파일 (8건)
+
+- 신규 2건: `tests/run-node.js`, `.github/workflows/test-lotto.yml`.
+- 수정 6건: `tests/core.js` / `src/core/schedule.js` / `tests/suites/match.test.js` / `tests/suites/reverse.test.js` / `games/lotto/CLAUDE.md` / `games/CLAUDE.md` / `PROGRESS.md`.
+
+### 2.38.5. QA 결과
+
+- core/ DOM 의존성: 0건.
+- 사행성 표현: 0건.
+- 옛 라벨 잔존: 0건.
+- 매직 넘버: 0건.
+- docs SSOT: lotto CLAUDE.md 7장 + 8장 갱신, hub CLAUDE.md 4장 갱신.
+- 테스트 통과: 275/275 (Node CLI 98ms).
+
+### 2.38.6. 트레이드오프 (잔존)
+
+- `render/` 미테스트 상태는 본 sprint 비범위. 본질적으로 DOM 의존이라 jsdom 도입 비용 큼. 향후 별도 sprint에서 체크.
+- 회귀 자동화 = core/ + data/ 한정. render/ wiring 회귀는 여전히 사용자 수동 검증.
+- localStorage polyfill = MemoryStorage (in-memory). 브라우저 환경의 영속성 / 다른 탭 동기화 등은 검증 불가. 단순 read/write 정상성만 보장.
+
+### 2.38.7. 다음 sprint 후보
+
+- Sprint 018 (Safety+): jsdom 도입해 render/ 일부 테스트 추가. 작업량 큼.
+- Sprint 019: hub 표준 워크플로우 sudoku/tetris로 확장 (현재 lotto 전용).
+- 보류 항목 그대로 (#7 OCR 사용자 보류 / 결제 / i18n).
 
 ## 2.37. Sprint 016 완료 - 매핑 정직성 강화 (#10 A안) (2026-05-02)
 
@@ -990,6 +1045,32 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 - `docs/03_architecture.md` 폴더 트리.
 
 # 3. 다음 액션
+
+## 3.-6. Sprint 017 (완료, 2026-05-02 - Safety Net: 자동 회귀)
+
+리뷰에서 가장 큰 위험으로 식별된 "render/ 미테스트 + 자동 회귀 부재" 중 후자 보강. 결과는 2.38 영구 이력 참조.
+
+### 3.-6.1. 작업 범위 (3건, 모두 완료)
+
+| ID | 작업 | 양 | 상태 |
+|---|---|---|---|
+| S7-T1 | Node CLI 테스트 진입점 (`tests/run-node.js` + core.js 환경 가드) | 중 | **완료** |
+| S7-T2 | GitHub Actions 워크플로우 (`test-lotto.yml`) | 작 | **완료** |
+| S7-T3 | 문서화 (lotto CLAUDE 7/8장 + hub CLAUDE 4장) | 작 | **완료** |
+
+### 3.-6.2. 자율 결정 사항
+
+- 0 의존성 우선. jsdom/Playwright 미사용 (core/data만 검증).
+- localStorage는 MemoryStorage polyfill (data/storage.js + storage.test.js 동작 보장).
+- 진입점 분리: 브라우저(`tests/test.html`) / Node(`tests/run-node.js`). core.js는 양쪽 호환 (`typeof document` 가드).
+- workflow는 lotto 전용 (sudoku/tetris 표준 적용은 별개 sprint).
+- 도입 즉시 발견된 결손 3건은 **본 sprint에서 정정** (CI 가치 = 결손 발견 + 정정).
+
+### 3.-6.3. 비범위
+
+- jsdom 기반 render/ 테스트 (Sprint 018 후보)
+- sudoku/tetris CI (별개 sprint)
+- coverage 리포트 (현재 PASS/FAIL만)
 
 ## 3.-5. Sprint 016 (완료, 2026-05-02 - Honesty: #10 A안)
 
