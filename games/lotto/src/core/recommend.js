@@ -15,11 +15,13 @@ import {
   ZODIAC_LUCKY,
   ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY,
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
+  SAJU_RELATION_BOOST,
   MULTI_STRATEGY_MAX,
   FIVE_SETS_COUNT, FIVE_SETS_SALT_BASE,
 } from '../data/numbers.js';
 import { applyLuck } from './luck.js';
 import { mulberry32, mixSeeds } from './random.js';
+import { dateToDayPillar, elementRelation } from './saju.js';
 
 const VECTOR_LEN = NUMBER_MAX - NUMBER_MIN + 1;
 
@@ -135,17 +137,44 @@ function fiveElementOf(dayPillar) {
   return STEM_TO_ELEMENT[dayPillar.stem] || null;
 }
 
-/** 5원소 행운 번호 → weight 벡터 (사주 전략). */
-function fiveElementsWeights(dayPillar) {
+/**
+ * 5원소 행운 번호 → weight 벡터 (사주 전략).
+ * S16(2026-05-02): 추첨일 일진 보너스 강화. 출생 일주 lucky × 5 (영원) +
+ *   추첨일 일주 lucky × SAJU_RELATION_BOOST[관계] (매주 변동).
+ * @param {{stem: string, branch: string}|null} dayPillar 캐릭터 출생 일주
+ * @param {string} [drawDate] 추첨일 YYYY-MM-DD (선택). 있으면 일진 보너스 적용.
+ * @returns {{weights: number[], relation: string|null, drawElement: string|null}}
+ */
+function fiveElementsWeights(dayPillar, drawDate) {
   const arr = new Array(VECTOR_LEN);
   for (let i = 0; i < arr.length; i += 1) arr[i] = 1;
   const el = fiveElementOf(dayPillar);
-  if (!el) return arr;
-  const lucky = FIVE_ELEMENTS_LUCKY[el] || [];
-  for (const n of lucky) {
-    if (n >= NUMBER_MIN && n <= NUMBER_MAX) arr[n - 1] = arr[n - 1] * 5;
+  let relation = null;
+  let drawElement = null;
+  if (el) {
+    const lucky = FIVE_ELEMENTS_LUCKY[el] || [];
+    for (const n of lucky) {
+      if (n >= NUMBER_MIN && n <= NUMBER_MAX) arr[n - 1] = arr[n - 1] * 5;
+    }
   }
-  return arr;
+  // S16: 추첨일 일진 보너스 (매주 변동)
+  if (el && drawDate) {
+    const drawPillar = dateToDayPillar(drawDate);
+    if (drawPillar) {
+      drawElement = STEM_TO_ELEMENT[drawPillar.stem] || null;
+      if (drawElement) {
+        relation = elementRelation(dayPillar, drawPillar);
+        const boost = SAJU_RELATION_BOOST[relation] || 1;
+        if (boost > 1) {
+          const drawLucky = FIVE_ELEMENTS_LUCKY[drawElement] || [];
+          for (const n of drawLucky) {
+            if (n >= NUMBER_MIN && n <= NUMBER_MAX) arr[n - 1] = arr[n - 1] * boost;
+          }
+        }
+      }
+    }
+  }
+  return { weights: arr, relation, drawElement };
 }
 
 /**
@@ -207,12 +236,14 @@ function weightedSample(weights, count, seed, exclude = null) {
  * @param {object[]} [ctx.cooccur]
  * @param {string} [ctx.zodiac] - 별자리 행운 / 별자리 원소 전략용
  * @param {{ stem: string, branch: string }} [ctx.dayPillar] - 사주 전략(fiveElements)용 일주
+ * @param {string} [ctx.drawDate] - 추첨일 YYYY-MM-DD (S16 사주 일진 보너스용)
  * @returns {{ numbers: number[], bonus: number, reasons: string[] }}
  */
 export function recommend(ctx) {
   const {
     seed, strategyId, luck, drwNo,
     numberStats = [], bonusStats = [], cooccur = [], zodiac = null, dayPillar = null,
+    drawDate = null,
   } = ctx;
   const drawSeed = mixSeeds(seed, drwNo);
   const bonusSeed = mixSeeds(drawSeed, 0x12345678);
@@ -252,7 +283,7 @@ export function recommend(ctx) {
     mainWeights = zodiacWeights(zodiac);
     bonusW = uniformWeights();
     const label = zodiac || '미지정';
-    reasons.push(`별자리 행운: ${label} 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
+    reasons.push(`별자리 행운: ${label} (Sun Sign + Ruler Planet 전통 점성술 출처, 추첨 결과 보장 없음).`);
   } else if (strategyId === STRATEGY_TREND_FOLLOWER) {
     mainWeights = trendWeights(numberStats);
     bonusW = uniformWeights();
@@ -270,13 +301,19 @@ export function recommend(ctx) {
     bonusW = uniformWeights();
     const el = zodiacElementOf(zodiac);
     const elLabel = el ? `${el}` : '미지정';
-    reasons.push(`원소 행운: ${elLabel} 그룹 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
+    reasons.push(`원소 행운: ${elLabel} 그룹 (전통 점성술 4원소 출처, 추첨 결과 보장 없음).`);
   } else if (strategyId === STRATEGY_FIVE_ELEMENTS) {
-    mainWeights = fiveElementsWeights(dayPillar);
+    const fe = fiveElementsWeights(dayPillar, drawDate);
+    mainWeights = fe.weights;
     bonusW = uniformWeights();
     const el = fiveElementOf(dayPillar);
     const elLabel = el ? `${el}` : '미지정';
-    reasons.push(`사주 행운: ${elLabel} 그룹 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
+    // S16: 일진 보너스가 있으면 reasons에 추가 명시
+    if (fe.relation && fe.drawElement) {
+      const REL_LABEL = { self: '비견', generate: '식상', beGenerated: '인성', overcome: '재성', beOvercome: '관성', normal: '무관' };
+      reasons.push(`사주 일진 (S16): 추첨일 ${fe.drawElement} 오행 vs 출생 ${elLabel} 오행 = ${REL_LABEL[fe.relation] || fe.relation} (×${SAJU_RELATION_BOOST[fe.relation]} 추가 boost, 매주 변동).`);
+    }
+    reasons.push(`사주 행운: ${elLabel} 오행 (河圖數 출처 / 易經, 추첨 결과 보장 없음).`);
   } else {
     throw new Error(`Unknown strategy: ${strategyId}`);
   }

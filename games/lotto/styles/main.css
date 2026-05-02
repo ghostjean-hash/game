@@ -1954,6 +1954,46 @@ a.btn-secondary,
   font-size: 11px;
   color: var(--color-text-dim);
 }
+/* S16: 행운 번호 변동성 chip ("주간 변경" / "평생 동일") */
+.lucky-variability {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.lucky-variability-weekly {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+.lucky-variability-lifetime {
+  background: #f3f4f6;
+  color: #4b5563;
+  border-color: #d1d5db;
+}
+.strategy-variability {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+.strategy-variability-weekly {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+.strategy-variability-lifetime {
+  background: #f3f4f6;
+  color: #4b5563;
+  border-color: #d1d5db;
+}
 .lucky-balls {
   display: flex;
   gap: 6px;

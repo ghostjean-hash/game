@@ -64,10 +64,20 @@ export function strategyTabsHtml(activeIds, opts = {}) {
     ? `<p class="strategy-multi-hint">다중 전략 모드 · ${activeSet.size} / ${MULTI_STRATEGY_MAX} 선택. 분배는 균등 (6 / N).</p>`
     : '';
 
-  // S6-T1 + S10(통합): 운세 카테고리는 임의 매핑 면책 1줄. 점성술·명리학 분야 모두 명시.
+  // S15(2026-05-02): 학설 기반 재작성 후 면책 톤 변경. 출처 + 비과학 + 보장 없음 3축 명시.
+  // S16(2026-05-02): 운세 카테고리 전략별 variability chip ("주간 변경" / "평생 동일").
   const isMappingCat = cur.category === '운세';
+  const STRATEGY_VARIABILITY = {
+    astrologer: 'lifetime',     // 출생 별자리 = 평생 동일
+    zodiacElement: 'lifetime',  // 출생 별자리 4원소 = 평생 동일
+    fiveElements: 'weekly',     // 출생 일주 + 추첨일 일진 보너스 (S16) = 주간 변경
+  };
+  const variabilityKind = STRATEGY_VARIABILITY[cur.id];
+  const variabilityChip = variabilityKind
+    ? `<span class="strategy-variability strategy-variability-${variabilityKind}">${variabilityKind === 'weekly' ? '주간 변경' : '평생 동일'}</span>`
+    : '';
   const mappingNote = isMappingCat
-    ? '<p class="strategy-mapping-note">임의 매핑 · 점성술·명리학 학설과 무관 · 추첨 확률 영향 없음</p>'
+    ? `<p class="strategy-mapping-note">${variabilityChip} 전통 학설 출처 (점성술 / 河圖數) · 학설 자체는 과학 검증 없음 · 추첨 결과 보장 없음</p>`
     : '';
 
   return `

@@ -142,6 +142,7 @@ function luckyNumbersHtml(character) {
            ${i === activeIdx ? '' : 'hidden'}>
         <div class="lucky-label">
           <span class="lucky-element lucky-element-${src.kind}" title="${escapeHtml(src.tabTitle)}">${escapeHtml(src.elementLabel)}</span>
+          ${src.variability ? `<span class="lucky-variability lucky-variability-${src.variability === '주간 변경' ? 'weekly' : 'lifetime'}" title="번호 변동성">${escapeHtml(src.variability)}</span>` : ''}
           <span class="lucky-caption">${escapeHtml(src.caption)}</span>
         </div>
         <div class="lucky-balls">${balls}</div>
@@ -173,7 +174,8 @@ function collectLuckySources(character) {
         tabLabel: '사주',
         tabTitle: '일주 천간 오행',
         elementLabel: `${ELEMENT_LABELS[element] || element} 오행`,
-        caption: '임의 매핑 · 명리학 학설과 무관 · 추첨 확률 영향 없음',
+        variability: '주간 변경',
+        caption: '전통 河圖數 출처 (易經) + 추첨일 일진 보너스 · 학설 자체는 과학 검증 없음 · 추첨 결과 보장 없음',
         numbers: FIVE_ELEMENTS_LUCKY[element],
       });
     }
@@ -186,7 +188,8 @@ function collectLuckySources(character) {
       tabLabel: '별자리',
       tabTitle: '서양 12별자리',
       elementLabel: ZODIAC_NAME[character.zodiac] || character.zodiac,
-      caption: '임의 매핑 · 점성술 학설과 무관 · 추첨 확률 영향 없음',
+      variability: '평생 동일',
+      caption: '전통 점성술 출처 (Sun Sign + Ruler Planet) · 학설 자체는 과학 검증 없음 · 추첨 결과 보장 없음',
       numbers: ZODIAC_LUCKY[character.zodiac],
     });
   }
@@ -203,7 +206,8 @@ function collectLuckySources(character) {
         tabLabel: '4원소',
         tabTitle: '서양 4원소 (불/땅/공기/물)',
         elementLabel: `${ZODIAC_ELEMENT_LABELS[element] || element} 그룹`,
-        caption: '임의 매핑 · 점성술 학설과 무관 · 추첨 확률 영향 없음',
+        variability: '평생 동일',
+        caption: '전통 점성술 4원소 출처 (별자리 합집합) · 학설 자체는 과학 검증 없음 · 추첨 결과 보장 없음',
         numbers: ZODIAC_ELEMENT_LUCKY[element],
       });
     }

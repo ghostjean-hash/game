@@ -194,6 +194,19 @@ function getRecAndFortune(active) {
   const drawForFortune = state.draws.find((d) => d.drwNo === state.drwNo) || null;
   const fortune = fortuneFor(active.seed, state.drwNo, active.animalSign, drawForFortune, active.dayPillar);
 
+  // S16: 추첨일 ISO 날짜 (사주 일진 보너스용). 발표된 회차면 drwDate 그대로,
+  // 미래 회차면 nextDraw().drawAtMs를 KST 토요일 기준 YYYY-MM-DD로 변환.
+  let drawDate = drawForFortune ? drawForFortune.drwDate : null;
+  if (!drawDate) {
+    const next = nextDraw(state.draws);
+    if (next && next.drawAtMs) {
+      const d = new Date(next.drawAtMs);
+      // KST 변환: epoch ms는 UTC 기준이라 KST(+09:00)로 toISOString 후 자르기.
+      const kst = new Date(d.getTime() + 9 * 3600 * 1000);
+      drawDate = kst.toISOString().slice(0, 10);
+    }
+  }
+
   const ctxBase = {
     seed: active.seed,
     luck: active.luck,
@@ -203,6 +216,7 @@ function getRecAndFortune(active) {
     cooccur: state.cooccur,
     zodiac: active.zodiac,
     dayPillar: active.dayPillar,
+    drawDate,
   };
 
   // S3-T1: 다중 전략 모드 분기

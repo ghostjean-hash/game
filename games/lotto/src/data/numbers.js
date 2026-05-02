@@ -132,23 +132,35 @@ export const COUNTDOWN_TICK_MS = 1000;
 // spec 시점이 크게 변경되면 본 값을 갱신하거나, draws.json을 페치해 자연스럽게 무력화.
 export const DEFAULT_DRWNO_FALLBACK = 1222;
 
-// 1.11. 별자리별 행운 번호 (별자리 행운 전략용. 임의 매핑, 추첨 확률에는 영향 없음)
+// 1.11. 별자리별 행운 번호 (S15, 2026-05-02 학설 기반 재작성).
+// 출처: 점성술 numerology 전통 - 각 별자리별 (Sun Sign Number + Ruler Planet Number) 합집합 + 끝자리 동일 1~45 확장.
+//   Sun Sign Number = 12궁 순서 (Aries=1 ... Pisces=12, 12는 3으로 reduce).
+//   Ruler Planet Number = Sephariel / Cheiro 등 numerological astrology 행성 매핑:
+//     Sun=1, Moon=2, Jupiter=3, Uranus=4, Mercury=5, Venus=6, Neptune=7, Saturn=8, Mars=9.
+//   전통 통치자(traditional ruler) 채택 - 현대 통치자(Pluto/Uranus/Neptune) 대신.
+// SSOT: docs/02_data.md 1.11. 학설 자체는 과학 검증 없음, 추첨 결과 보장 없음 (면책 강제).
 export const ZODIAC_LUCKY = Object.freeze({
-  aries:       [3, 9, 21, 27, 33, 39, 45],
-  taurus:      [2, 6, 8, 14, 26, 32, 44],
-  gemini:      [5, 11, 17, 23, 29, 35, 41],
-  cancer:      [4, 7, 16, 22, 25, 34, 43],
-  leo:         [1, 10, 19, 28, 37, 40, 42],
-  virgo:       [6, 13, 15, 24, 30, 36, 42],
-  libra:       [2, 8, 12, 18, 30, 36, 40],
-  scorpio:     [4, 13, 22, 31, 38, 40, 44],
-  sagittarius: [3, 9, 18, 24, 27, 33, 39],
-  capricorn:   [5, 14, 20, 26, 32, 37, 41],
-  aquarius:    [11, 17, 23, 25, 29, 35, 38],
-  pisces:      [4, 12, 16, 20, 31, 33, 45],
+  aries:       [1, 9, 11, 19, 21, 29, 31, 39, 41],          // Sun#1 + Ruler Mars#9
+  taurus:      [2, 6, 12, 16, 22, 26, 32, 36, 42],          // Sun#2 + Ruler Venus#6
+  gemini:      [3, 5, 13, 15, 23, 25, 33, 35, 43, 45],      // Sun#3 + Ruler Mercury#5
+  cancer:      [2, 4, 12, 14, 22, 24, 32, 34, 42, 44],      // Sun#4 + Ruler Moon#2
+  leo:         [1, 5, 11, 15, 21, 25, 31, 35, 41, 45],      // Sun#5 + Ruler Sun#1
+  virgo:       [5, 6, 15, 16, 25, 26, 35, 36, 45],          // Sun#6 + Ruler Mercury#5
+  libra:       [6, 7, 16, 17, 26, 27, 36, 37],              // Sun#7 + Ruler Venus#6
+  scorpio:     [8, 9, 18, 19, 28, 29, 38, 39],              // Sun#8 + Ruler Mars#9 (전통)
+  sagittarius: [3, 9, 13, 19, 23, 29, 33, 39, 43],          // Sun#9 + Ruler Jupiter#3
+  capricorn:   [8, 10, 18, 20, 28, 30, 38, 40],             // Sun#10 + Ruler Saturn#8
+  aquarius:    [1, 4, 11, 14, 21, 24, 31, 34, 41, 44],      // Sun#11→1 + Ruler Saturn#8 전통/Uranus#4 현대 → 4 채택
+  pisces:      [2, 3, 12, 13, 22, 23, 32, 33, 42, 43],      // Sun#12→3 + Ruler Jupiter#3 전통 → 3 / 보조 Moon#2
 });
 
-// 1.14. 별자리 4원소 분류 + 원소별 행운 번호 (별자리 원소 전략용)
+// 1.14. 별자리 4원소 분류 + 원소별 행운 번호 (S15, 2026-05-02 학설 기반).
+// 출처: 점성술 4원소 - 각 원소에 속한 3별자리의 Ruler Number 합집합 + 끝자리 동일 1~45 확장.
+//   불(Aries/Leo/Sag) Ruler = Mars#9 + Sun#1 + Jupiter#3 → 1, 3, 9
+//   땅(Taurus/Virgo/Cap) Ruler = Venus#6 + Mercury#5 + Saturn#8 → 5, 6, 8
+//   공기(Gemini/Libra/Aqu) Ruler = Mercury#5 + Venus#6 + Uranus#4(현대)/Saturn#8(전통) → 4, 5, 6
+//   물(Cancer/Sco/Pisces) Ruler = Moon#2 + Mars#9 전통 + Jupiter#3 전통 → 2, 3, 9
+// SSOT: docs/02_data.md 1.14.
 export const ZODIAC_ELEMENTS = Object.freeze({
   fire:  ['aries', 'leo', 'sagittarius'],
   earth: ['taurus', 'virgo', 'capricorn'],
@@ -157,20 +169,46 @@ export const ZODIAC_ELEMENTS = Object.freeze({
 });
 
 export const ZODIAC_ELEMENT_LUCKY = Object.freeze({
-  fire:  [1, 9, 19, 27, 33, 41, 45],
-  earth: [2, 6, 14, 22, 28, 36, 44],
-  air:   [5, 11, 17, 23, 29, 35, 39],
-  water: [4, 12, 16, 22, 30, 38, 43],
+  fire:  [1, 3, 9, 11, 13, 19, 21, 23, 29, 31, 33, 39, 41, 43],         // 1 / 3 / 9
+  earth: [5, 6, 8, 15, 16, 18, 25, 26, 28, 35, 36, 38, 45],             // 5 / 6 / 8
+  air:   [4, 5, 6, 14, 15, 16, 24, 25, 26, 34, 35, 36, 44, 45],         // 4 / 5 / 6
+  water: [2, 3, 9, 12, 13, 19, 22, 23, 29, 32, 33, 39, 42, 43],         // 2 / 3 / 9
 });
 
-// 1.18. 천간 오행 5원소 + 행운 번호 (사주 전략용. 임의 매핑, 추첨 확률 영향 없음).
-// SSOT: docs/02_data.md 1.18. 4원소(서양, ZODIAC_ELEMENT_LUCKY)와 병렬 짝.
+// 1.18. 천간 오행 5원소 + 행운 번호 (S15, 2026-05-02 河圖數 학설 기반).
+// 출처: 河圖 (易經 / 河圖洛書, BC 약 2000년, public domain).
+//   "天一生水, 地六成之" → 水 = 1, 6
+//   "地二生火, 天七成之" → 火 = 2, 7
+//   "天三生木, 地八成之" → 木 = 3, 8
+//   "地四生金, 天九成之" → 金 = 4, 9
+//   "天五生土, 地十成之" → 土 = 5, 10
+// 1~45 확장: 끝자리 동일 (河圖數의 "끝자리 = 오행" 자연 해석). 5×9=45 균등 분포.
+// SSOT: docs/02_data.md 1.18.
 export const FIVE_ELEMENTS_LUCKY = Object.freeze({
-  wood:  [1, 8, 14, 21, 28, 35, 42],
-  fire:  [3, 9, 16, 22, 29, 36, 43],
-  earth: [5, 10, 17, 24, 30, 37, 44],
-  metal: [7, 13, 20, 26, 33, 39, 45],
-  water: [2, 6, 12, 18, 25, 31, 38],
+  water: [1, 6, 11, 16, 21, 26, 31, 36, 41],   // 河圖 1, 6
+  fire:  [2, 7, 12, 17, 22, 27, 32, 37, 42],   // 河圖 2, 7
+  wood:  [3, 8, 13, 18, 23, 28, 33, 38, 43],   // 河圖 3, 8
+  metal: [4, 9, 14, 19, 24, 29, 34, 39, 44],   // 河圖 4, 9
+  earth: [5, 10, 15, 20, 25, 30, 35, 40, 45],  // 河圖 5, 10
+});
+
+// 1.18.7. 사주 행운 추첨일 일진 보너스 (S16, 2026-05-02 일진 강화).
+// 캐릭터 출생 일주 오행 × 추첨일 일주 오행의 통변성 관계별 추가 boost.
+// 출처: 명리학 통변성(通變星) - BC 음양가, 한대 정착.
+//   self        (비견): 같은 오행 → 균형 / 자기 강화
+//   generate    (식상): 캐릭터가 회차를 생함 → 표현 / 행동
+//   beGenerated (인성): 회차가 캐릭터를 생함 → 도움 받음 (가장 유리)
+//   overcome    (재성): 캐릭터가 회차를 극함 → 재물 추구
+//   beOvercome  (관성): 회차가 캐릭터를 극함 → 압박 / 의무 (보너스 없음)
+//   normal     : 무관계 (실제로는 발생 안 함, 안전 fallback)
+// 본 boost는 추첨일 일주 오행의 河圖 lucky 9개에 추가 적용 (출생 일주 lucky × 5와 별도).
+export const SAJU_RELATION_BOOST = Object.freeze({
+  self: 1.5,         // 비견
+  generate: 2.0,     // 식상
+  beGenerated: 3.0,  // 인성 (가장 유리)
+  overcome: 1.5,     // 재성
+  beOvercome: 1.0,   // 관성 (페널티 없음, 무영향)
+  normal: 1.0,
 });
 
 // 천간(stem) → 오행 매핑. SSOT: docs/02_data.md 1.12.1.
