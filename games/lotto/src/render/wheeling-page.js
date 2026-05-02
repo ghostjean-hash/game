@@ -1,8 +1,14 @@
 // 휠링 페이지. 다구좌 모드 ON일 때 본문, OFF면 활성화 안내.
 // Full Wheel (모든 조합) + Abbreviated Wheel (시드 기반 N장 + 4-if-4 자동 검증).
+// Sprint 012 / S2-T2: 페이지 헤더에 "← 설정" 백 버튼 추가 (하단 탭에서 휠링 제거됨).
 import { fullWheel, abbreviatedWheel, combinationCount } from '../core/wheeling.js';
 import { NUMBER_MIN, NUMBER_MAX, PICK_COUNT } from '../data/numbers.js';
 import { numberColor } from '../data/colors.js';
+import { chevronLeft } from './icons.js';
+
+function backButtonHtml() {
+  return `<button type="button" class="wheel-back" data-action="back-to-settings" aria-label="설정으로 돌아가기">${chevronLeft()} <span>설정</span></button>`;
+}
 
 const TICKET_COST = 1000;
 
@@ -16,10 +22,12 @@ function colorNum(n, extraClass = '') {
  * 다구좌 OFF 시 활성화 안내 화면.
  * @param {HTMLElement} container
  * @param {() => void} onActivate 활성화 클릭 콜백 (윤리 모달 → advancedMode true 후 재렌더)
+ * @param {() => void} [onBack] 설정으로 돌아가기 콜백 (S2-T2)
  */
-export function renderWheelingDisabled(container, onActivate) {
+export function renderWheelingDisabled(container, onActivate, onBack) {
   container.innerHTML = `
     <header class="app-header tab-header">
+      ${onBack ? backButtonHtml() : ''}
       <h1 class="app-title">휠링</h1>
     </header>
     <section class="empty-state">
@@ -30,9 +38,17 @@ export function renderWheelingDisabled(container, onActivate) {
     </section>
   `;
   container.querySelector('[data-action="enable-advanced"]').addEventListener('click', onActivate);
+  if (onBack) {
+    container.querySelector('[data-action="back-to-settings"]')?.addEventListener('click', onBack);
+  }
 }
 
-export function renderWheelingPage(container, currentRecommendation) {
+/**
+ * @param {HTMLElement} container
+ * @param {object} currentRecommendation
+ * @param {() => void} [onBack] 설정으로 돌아가기 콜백 (S2-T2)
+ */
+export function renderWheelingPage(container, currentRecommendation, onBack) {
   let pool = currentRecommendation && Array.isArray(currentRecommendation.numbers)
     ? [...currentRecommendation.numbers]
     : [];
@@ -51,6 +67,7 @@ export function renderWheelingPage(container, currentRecommendation) {
 
     container.innerHTML = `
       <header class="app-header tab-header">
+        ${onBack ? backButtonHtml() : ''}
         <h1 class="app-title">휠링 (다구좌 모드)</h1>
         <p class="app-subtitle">부분 당첨 보장 도구. 당첨 확률은 높이지 않습니다.</p>
       </header>
@@ -198,6 +215,11 @@ export function renderWheelingPage(container, currentRecommendation) {
         render();
       }
     });
+
+    // S2-T2: 백 버튼 → 설정 탭
+    if (onBack) {
+      container.querySelector('[data-action="back-to-settings"]')?.addEventListener('click', onBack);
+    }
   }
 
   function escapeHtml(text) {

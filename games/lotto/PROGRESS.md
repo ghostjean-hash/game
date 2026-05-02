@@ -9,6 +9,60 @@
 
 # 2. 완료 마일스톤
 
+## 2.33. Sprint 012 완료 - 역추첨 게임 + 휠링 백 버튼 (2026-05-02)
+
+자율 진행. 결정 필요 없는 즉시 가능 작업 2건.
+
+### 2.33.1. S2-T1 역추첨 게임 탭 (#4)
+
+사용자 발화 "번호 6개를 고르면 가장 높은 순위의 회차와 순위가 표시되는 게임" 구현.
+
+- 신규 파일:
+  - `src/core/reverse.js`: `reverseSearch(numbers, draws)` + `validateUserNumbers(numbers)`. matchRank 재사용.
+  - `src/render/reverse-page.js`: 9칸 그리드 + 선택 요약 + 결과 카드 + 등수별 카운트.
+  - `tests/suites/reverse.test.js`: 11 케이스 (검증 + 1~5등 + 미적중 + 동률 회차 + 보너스 일치 2등).
+- 하단 탭 4 → 5 복귀 (역추첨 추가, grid 아이콘 재사용).
+- 사용자 입력은 모듈 변수로 보존 (탭 이동 후 복귀 시 유지).
+- 동률 시 가장 최근 회차 매칭 표시 + bestRankCount로 매칭 횟수도 함께 안내.
+- "랜덤 6개 선택" 보조 버튼.
+- 면책 카피: "로또 6/45는 매 회차 독립 시행이므로 과거 매칭 횟수가 미래 적중률을 보장하지 않습니다. 참고용."
+- docs/01_spec.md 5.7 신설 + 4장 5탭 갱신.
+- 03_architecture.md 폴더 트리에 reverse.js / reverse-page.js / reverse.test.js 추가.
+- styles/main.css: .reverse-grid (9-7-6 컬럼 반응형) / .reverse-cell / .reverse-best (골드 그라디언트 애니메이션) / .rank-counts.
+
+### 2.33.2. S2-T2 휠링 페이지 백 버튼 (폴리싱)
+
+T2(Sprint 011)로 하단 탭에서 휠링이 빠진 후, 휠링 페이지에서 설정으로 돌아오는 명시적 동선 부재 → 헤더에 "← 설정" 버튼 추가.
+
+- wheeling-page.js: backButtonHtml 헬퍼 + onBack 콜백 받음 (renderWheelingPage / renderWheelingDisabled 모두).
+- main.js: onBack = setTab('settings') 전달.
+- 하단 탭으로 돌아가는 길은 그대로 유지 (선택지 추가 + 명시 동선).
+- styles/main.css: .wheel-back (chevronLeft 아이콘 + "설정" 라벨).
+
+### 2.33.3. 영향 파일
+
+- 신규: src/core/reverse.js / src/render/reverse-page.js / tests/suites/reverse.test.js
+- 수정: src/render/bottom-tabs.js / src/render/main.js / src/render/wheeling-page.js / styles/main.css / docs/01_spec.md / docs/03_architecture.md / tests/runner.js / PROGRESS.md
+
+### 2.33.4. QA 결과
+
+- core/ DOM 의존성: 0건
+- 사행성 표현 위반: 0건 (부정 톤 유지)
+- 옛 라벨 잔존: 0건
+- 매직 넘버: 0건 (NUMBER_MIN/MAX/PICK_COUNT 모두 import)
+- docs SSOT 정합: 2종 갱신
+- 시뮬 회귀: 없음 (신규 파일이라 영향 없음)
+
+### 2.33.5. 다음 후보
+
+- #1 행운 번호 4분면 (영구/주간 × 공통/개별) - 결정 필요
+- #2 다중 전략 분배 - 결정 필요
+- #3 5세트 - 결정 필요
+- #6 전적 강화 - 정의 필요
+- #7 카메라 OCR - 범위 필요
+- #10 명망 로직 - 출처 필요
+- 폴리싱: 역추첨 매칭 동률 모든 회차 보기 / 기간 필터 / 보너스 입력
+
 ## 2.32. Sprint 011 완료 - T1/T2/T3/T4 (2026-05-02)
 
 FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선) 첫 적용 결과.
@@ -706,6 +760,32 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 - `docs/03_architecture.md` 폴더 트리.
 
 # 3. 다음 액션
+
+## 3.-1. Sprint 012 (완료, 2026-05-02)
+
+자율 진행. 결과는 2.33 영구 이력 참조.
+
+### 3.-1.1. 작업 범위 (모두 완료)
+
+| ID | 작업 | 양 | 상태 |
+|---|---|---|---|
+| S2-T1 | 역추첨 게임 탭 (#4) - 6개 골라 최고 등수 확인 | 중 | **완료** |
+| S2-T2 | 휠링 페이지 헤더 "← 설정" 백 버튼 (폴리싱) | 작 | **완료** |
+
+### 3.-1.2. 자율 결정 사항
+
+- S2-T1 입력: 본번호 6개만 (보너스 미입력).
+- 알고리즘: 모든 회차 순회 → 최고 등수 + 가장 최근 매칭 회차. matchRank 재사용.
+- 결과: 최고 등수 + 매칭 회차 + 발표 번호 + 등수별 카운트(1~5등 + 미적중).
+- 탭 위치: 하단 탭 4 → 5 복귀 (역추첨 추가). 모바일 폰트 축소로 대응.
+- S2-T2: 휠링 페이지 좌상단 "← 설정" 버튼.
+
+### 3.-1.3. 비범위
+
+- 보너스 번호 입력 (2차)
+- 동률 다회차 매칭 결과 전체 목록 (현재는 최근 1건만)
+- 기간 필터 (특정 회차 범위만)
+- 카드 / 시각 글로우 강화
 
 ## 3.0. Sprint 011 (완료, 2026-05-02)
 

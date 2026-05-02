@@ -26,7 +26,8 @@ games/lotto/
 │   │   ├── saju.js      # 사주 일주 + 오행 (운세 추가 보정)
 │   │   ├── schedule.js  # 다음 추첨 회차 / 카운트다운 타깃 시각
 │   │   ├── wheeling.js  # Full / Abbreviated Wheel + 4-if-4 검증
-│   │   └── ritual.js    # 행운 의식 (정성 게이지, Luck +5 보너스, 추첨 무관) - T4
+│   │   ├── ritual.js    # 행운 의식 (정성 게이지, Luck +5 보너스, 추첨 무관) - T4
+│   │   └── reverse.js   # 역추첨 (사용자 6개 → 전 회차 최고 등수 매칭) - S2-T1
 │   ├── render/          # DOM 렌더
 │   │   ├── main.js              # 5탭 라우팅 + wire-up
 │   │   ├── modal.js             # 모달 / 면책 안내 / 닫기 버튼
@@ -44,7 +45,8 @@ games/lotto/
 │   │   ├── history-page.js      # 캐릭터 전적 / 이력 페이지
 │   │   ├── wheeling-page.js     # 휠링 페이지 (Full / Abbreviated)
 │   │   ├── settings-page.js     # 설정 탭 (캐릭터 관리 + 옵션 + 다구좌 + 휠링 진입 + 면책 + 초기화)
-│   │   └── ritual-widget.js     # 행운 의식 게이지 위젯 + 8행위 모달 - T4
+│   │   ├── ritual-widget.js     # 행운 의식 게이지 위젯 + 8행위 모달 - T4
+│   │   └── reverse-page.js      # 역추첨 게임 페이지 (6개 그리드 + 매칭 결과) - S2-T1
 │   ├── input/           # 키보드 / 터치 이벤트 (현재 render/main.js가 흡수)
 │   └── data/
 │       ├── colors.js    # 게임 색상 상수 (운세 / 카드 / 적중 / 번호공)
@@ -72,7 +74,8 @@ games/lotto/
         ├── schedule.test.js
         ├── wheeling.test.js
         ├── history.test.js
-        └── ritual.test.js
+        ├── ritual.test.js
+        └── reverse.test.js
 ```
 
 ## 2. 모듈 의존성 방향

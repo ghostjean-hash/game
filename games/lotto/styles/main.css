@@ -1262,6 +1262,167 @@ a.btn-secondary,
   gap: var(--space-2);
 }
 
+/* Sprint 012 / S2-T2: 휠링 페이지 백 버튼. */
+.wheel-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px var(--space-2);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-dim);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-2);
+  align-self: flex-start;
+}
+.wheel-back:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Sprint 012: 역추첨 탭. SSOT: docs/01_spec.md 5.7. */
+.reverse-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 4px;
+  margin-bottom: var(--space-3);
+}
+@media (max-width: 480px) {
+  .reverse-grid { grid-template-columns: repeat(7, 1fr); gap: 3px; }
+}
+@media (max-width: 360px) {
+  .reverse-grid { grid-template-columns: repeat(6, 1fr); gap: 2px; }
+}
+.reverse-cell {
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: clamp(11px, 3vw, 14px);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  font-family: var(--font-sans);
+  padding: 0;
+}
+.reverse-cell:hover:not(.is-picked) {
+  border-color: var(--color-accent);
+  transform: scale(1.05);
+}
+.reverse-cell.is-picked {
+  color: #fff;
+  border-color: transparent;
+  font-weight: 800;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.reverse-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.reverse-selected {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.reverse-best {
+  text-align: center;
+  padding: var(--space-3);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+}
+.reverse-best.has-rank {
+  border-color: var(--color-accent);
+  background: rgba(201, 160, 80, 0.06);
+}
+.reverse-best-rank {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--color-accent);
+  line-height: 1.1;
+}
+.reverse-best.has-rank .reverse-best-rank {
+  background: linear-gradient(90deg, #c9a050, #b88830, #c9a050);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: ritual-flame-flow 3s linear infinite;
+}
+.reverse-best-meta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  margin-top: var(--space-2);
+}
+.reverse-best-draw {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-surface-soft);
+  border-radius: var(--radius-md);
+}
+.reverse-best-draw-meta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+  margin-bottom: var(--space-2);
+  text-align: center;
+}
+.reverse-best-draw-balls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.reverse-best-draw-balls .num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  opacity: 0.5;
+}
+.reverse-best-draw-balls .num.is-matched {
+  opacity: 1;
+  box-shadow: 0 0 0 3px rgba(201, 160, 80, 0.5);
+}
+.rank-counts {
+  list-style: none;
+  margin: var(--space-2) 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rank-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-soft);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+.rank-row.has-hits {
+  background: rgba(16, 185, 129, 0.08);
+  font-weight: 700;
+}
+.rank-row.miss {
+  background: var(--color-surface-soft);
+  color: var(--color-text-dim);
+}
+.rank-label { font-weight: 600; }
+.rank-count { font-variant-numeric: tabular-nums; }
+
 /* T4: 행운 의식 게이지 위젯 + 모달. SSOT: docs/01_spec.md 5.6, docs/02_data.md 1.19. */
 .ritual-widget {
   margin: var(--space-3) 0;

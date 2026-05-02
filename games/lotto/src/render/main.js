@@ -10,6 +10,7 @@ import { nextDrawCardHtml, startCountdown } from './next-draw-card.js';
 import { nextDraw } from '../core/schedule.js';
 import { renderStatsPage } from './stats-page.js';
 import { renderHistoryPage } from './history-page.js';
+import { renderReversePage } from './reverse-page.js';
 import { renderWheelingPage, renderWheelingDisabled } from './wheeling-page.js';
 import { renderSettingsPage } from './settings-page.js';
 import { bottomTabsHtml, TABS } from './bottom-tabs.js';
@@ -397,13 +398,16 @@ function renderApp() {
   } else if (state.currentTab === 'history') {
     const active = getActive();
     renderHistoryPage(content, active);
+  } else if (state.currentTab === 'reverse') {
+    renderReversePage(content, state.draws);
   } else if (state.currentTab === 'wheeling') {
+    const goBackToSettings = () => setTab('settings'); // S2-T2: 설정으로 돌아가기
     if (state.options.advancedMode) {
       const active = getActive();
       const { rec } = getRecAndFortune(active);
-      renderWheelingPage(content, rec);
+      renderWheelingPage(content, rec, goBackToSettings);
     } else {
-      renderWheelingDisabled(content, () => activateAdvanced(() => setTab('wheeling')));
+      renderWheelingDisabled(content, () => activateAdvanced(() => setTab('wheeling')), goBackToSettings);
     }
   } else if (state.currentTab === 'settings') {
     renderSettingsPage(content, {
