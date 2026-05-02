@@ -9,6 +9,41 @@
 
 # 2. 완료 마일스톤
 
+## 2.27. 객관 전략 캐릭터 무관 분리 (2026-05-02)
+
+사용자 지적 ("통계 추첨이 사람마다 다른 게 이상함") 정정.
+
+### 2.27.1. 결손 진단
+
+- `statistician` 등 5개 객관 전략(통계/빈도 데이터)이 캐릭터 시드 + Luck에 의존했음.
+- 두 경로:
+  1. `applyLuck(weights, drawSeed, luck)`이 시드 6개에 +boost
+  2. `weightedSample`의 PRNG 시드 = `mixSeeds(seed, drwNo)` → 캐릭터별 다른 추출
+- 의도와 어긋남: "통계"는 객관이어야.
+
+### 2.27.2. 분류 도입
+
+- `numbers.js` `OBJECTIVE_STRATEGIES` Set + `OBJECTIVE_SEED_SALT` 신설.
+- 객관(5): statistician / secondStar / regressionist / trendFollower / balancer.
+- 시드 의존(6): blessed / pairTracker / astrologer / intuitive / mbti / zodiacElement.
+
+### 2.27.3. recommend.js 분기
+
+- `objectiveSeed = mixSeeds(drwNo, OBJECTIVE_SEED_SALT)`. 캐릭터 무관, 회차로만 결정.
+- 객관 전략: `applyLuck` 미적용 + `weightedSample` seed = `objectiveSeed`.
+- 시드 의존: 기존 `drawSeed` + `applyLuck` 유지.
+- 보너스 시드도 동일 분기 (`objectiveBonusSeed`).
+
+### 2.27.4. 검증
+
+- 새 테스트 (recommend.test.js): "객관 5개 = seed/luck 달라도 같은 결과", "drwNo 다르면 다른 결과", "시드 의존 3개 = seed 다르면 다른 결과".
+- 결정론은 강화 (객관은 회차로만, 시드 의존은 시드+회차로).
+
+### 2.27.5. spec / data 갱신
+
+- 02_data.md 1.5: "의존성" 컬럼 추가. 1.5.1 객관 vs 시드 의존 정책 신설.
+- 01_spec.md 5.4: 결정론 분류 명문화.
+
 ## 2.26. 동행복권 결과 페이지 정합성 + 게임 메커닉 정리 (2026-05-02)
 
 대형 정합성 작업. 디자인 / 메커닉 / UX 다층 변경.
@@ -474,3 +509,4 @@
 | (예정) | M2 1단계: 캐릭터 슬롯 / 추가 모달 / 전환 / 삭제 |
 | (예정) | dev 환경: SW 차단 + dev-server.mjs 정적 서버 |
 | 2026-05-02 | 2.26 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 + 보너스 버그 수정 + 폼/탭 개선 + 11전략 직관화 |
+| 2026-05-02 | 2.27 객관 전략(통계/빈도/필터) 캐릭터 무관 분리 - "통계 추첨이 사람마다 다른" 결손 정정 |

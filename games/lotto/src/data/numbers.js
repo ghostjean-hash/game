@@ -40,6 +40,19 @@ export const STRATEGY_MBTI = 'mbti';
 export const STRATEGY_ZODIAC_ELEMENT = 'zodiacElement';
 export const STRATEGY_DEFAULT = STRATEGY_BLESSED;
 
+// 1.5.1. 객관 전략 (캐릭터 시드 / Luck 무관. 회차 데이터로만 결정).
+// 같은 회차에서 모든 캐릭터가 같은 결과를 받음. SSOT: docs/02_data.md 1.5.
+export const OBJECTIVE_STRATEGIES = Object.freeze(new Set([
+  STRATEGY_STATISTICIAN,
+  STRATEGY_SECOND_STAR,
+  STRATEGY_REGRESSIONIST,
+  STRATEGY_TREND_FOLLOWER,
+  STRATEGY_BALANCER,
+]));
+
+// 객관 전략용 PRNG salt. drwNo와 mix해 회차별 분포를 분산하되 캐릭터 무관 보장.
+export const OBJECTIVE_SEED_SALT = 0xCAFEBABE;
+
 // 1.6. 운세 등급 ID
 export const FORTUNE_GREAT = 'great';
 export const FORTUNE_GOOD = 'good';

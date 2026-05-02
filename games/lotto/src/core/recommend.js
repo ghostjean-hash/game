@@ -8,6 +8,7 @@ import {
   STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
   STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT,
+  OBJECTIVE_STRATEGIES, OBJECTIVE_SEED_SALT,
   WEIGHT_MIN_FLOOR,
   SUM_RANGE_MIN, SUM_RANGE_MAX,
   ODD_EVEN_PREFERRED,
@@ -135,16 +136,17 @@ function zodiacElementWeights(zodiac) {
 /**
  * 균형주의자: 시드 변형으로 최대 50회 재추첨하여 필터 통과 조합 찾기.
  * 못 찾으면 첫 시도 반환 (fallback).
+ * @param {number} samplingSeed 객관 전략은 드wNo 기반 객관 시드, 시드 의존 전략은 drawSeed.
  */
-function balancedSample(weights, count, drawSeed) {
+function balancedSample(weights, count, samplingSeed) {
   for (let attempt = 0; attempt < 50; attempt += 1) {
-    const seed = mixSeeds(drawSeed, attempt);
+    const seed = mixSeeds(samplingSeed, attempt);
     const picked = weightedSample(weights, count, seed);
     if (passesBalanceFilters(picked)) {
       return picked;
     }
   }
-  return weightedSample(weights, count, drawSeed);
+  return weightedSample(weights, count, samplingSeed);
 }
 
 /**
@@ -198,6 +200,10 @@ export function recommend(ctx) {
   } = ctx;
   const drawSeed = mixSeeds(seed, drwNo);
   const bonusSeed = mixSeeds(drawSeed, 0x12345678);
+  // 객관 전략용 시드: 캐릭터 시드 무관, 회차만으로 결정. SSOT: docs/02_data.md 1.5.
+  const objectiveSeed = mixSeeds(drwNo, OBJECTIVE_SEED_SALT);
+  const objectiveBonusSeed = mixSeeds(objectiveSeed, 0x12345678);
+  const isObjective = OBJECTIVE_STRATEGIES.has(strategyId);
 
   let mainWeights;
   let bonusW;
@@ -255,12 +261,17 @@ export function recommend(ctx) {
     throw new Error(`Unknown strategy: ${strategyId}`);
   }
 
-  const lucked = applyLuck(mainWeights, drawSeed, luck);
+  // 객관 전략: 캐릭터 시드 / Luck 무관. 회차만으로 결정 (모든 캐릭터 동일 결과).
+  // 시드 의존 전략: drawSeed + applyLuck (캐릭터별 다른 결과).
+  const finalWeights = isObjective ? mainWeights : applyLuck(mainWeights, drawSeed, luck);
+  const samplingSeed = isObjective ? objectiveSeed : drawSeed;
+  const samplingBonusSeed = isObjective ? objectiveBonusSeed : bonusSeed;
+
   const numbers = strategyId === STRATEGY_BALANCER
-    ? balancedSample(lucked, PICK_COUNT, drawSeed).sort((a, b) => a - b)
-    : weightedSample(lucked, PICK_COUNT, drawSeed).sort((a, b) => a - b);
+    ? balancedSample(finalWeights, PICK_COUNT, samplingSeed).sort((a, b) => a - b)
+    : weightedSample(finalWeights, PICK_COUNT, samplingSeed).sort((a, b) => a - b);
   // 6/45 룰: 보너스는 본번호와 겹치지 않아야 함. 본번호 6개를 풀에서 제외하고 추출.
-  const bonusArr = weightedSample(bonusW, BONUS_COUNT, bonusSeed, new Set(numbers));
+  const bonusArr = weightedSample(bonusW, BONUS_COUNT, samplingBonusSeed, new Set(numbers));
   const bonus = bonusArr[0];
 
   return { numbers, bonus, reasons };

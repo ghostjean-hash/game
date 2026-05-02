@@ -84,12 +84,73 @@ suite('core/recommend - 결정론', () => {
     assertTrue(aStr !== bStr || a.bonus !== b.bonus, 'expect different draw');
   });
 
-  test('seed 다르면 다른 결과 (대부분)', () => {
+  test('seed 다르면 다른 결과 (대부분, blessed = 시드 의존)', () => {
     const a = recommend(baseCtx);
     const b = recommend({ ...baseCtx, seed: 0x12345678 });
     const aStr = a.numbers.join(',');
     const bStr = b.numbers.join(',');
     assertTrue(aStr !== bStr || a.bonus !== b.bonus);
+  });
+});
+
+suite('core/recommend - 객관 전략 캐릭터 무관 (SSOT: 02_data.md 1.5)', () => {
+  // 객관 5개: statistician / secondStar / regressionist / trendFollower / balancer
+  // → 같은 회차 + 같은 통계 = 모든 캐릭터에 동일 결과 (시드 / Luck 무관)
+  const numberStats = Array.from({ length: 45 }, (_, i) => ({
+    number: i + 1, totalCount: 100 + i, recent10: 0, recent30: i, recent100: 0,
+    lastSeenDrw: 1000, currentGap: 45 - i,
+  }));
+  const bonusStats = Array.from({ length: 45 }, (_, i) => ({
+    number: i + 1, totalCount: 50 + i, recent30: 0, lastSeenDrw: 1000,
+  }));
+  const objectiveStrategies = [
+    STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR, STRATEGY_REGRESSIONIST,
+    STRATEGY_TREND_FOLLOWER, STRATEGY_BALANCER,
+  ];
+
+  test('seed 달라도 같은 결과 (5개 전략)', () => {
+    for (const strategyId of objectiveStrategies) {
+      const ctxA = { ...baseCtx, strategyId, seed: 0xAAAAAAAA, luck: 50, numberStats, bonusStats };
+      const ctxB = { ...baseCtx, strategyId, seed: 0xBBBBBBBB, luck: 50, numberStats, bonusStats };
+      const a = recommend(ctxA);
+      const b = recommend(ctxB);
+      assertDeepEqual(a.numbers, b.numbers);
+      assertEqual(a.bonus, b.bonus);
+    }
+  });
+
+  test('luck 달라도 같은 결과 (Luck boost 미적용)', () => {
+    for (const strategyId of objectiveStrategies) {
+      const a = recommend({ ...baseCtx, strategyId, luck: 0, numberStats, bonusStats });
+      const b = recommend({ ...baseCtx, strategyId, luck: 100, numberStats, bonusStats });
+      assertDeepEqual(a.numbers, b.numbers);
+      assertEqual(a.bonus, b.bonus);
+    }
+  });
+
+  test('drwNo 다르면 다른 결과 (회차는 영향)', () => {
+    for (const strategyId of objectiveStrategies) {
+      const a = recommend({ ...baseCtx, strategyId, drwNo: 1100, numberStats, bonusStats });
+      const b = recommend({ ...baseCtx, strategyId, drwNo: 1101, numberStats, bonusStats });
+      const aStr = a.numbers.join(',') + '|' + a.bonus;
+      const bStr = b.numbers.join(',') + '|' + b.bonus;
+      assertTrue(aStr !== bStr, `${strategyId}: drwNo 1100 vs 1101 결과 같음`);
+    }
+  });
+});
+
+suite('core/recommend - 시드 의존 전략 (캐릭터별 다른 결과)', () => {
+  const seedStrategies = [
+    STRATEGY_BLESSED, STRATEGY_PAIR_TRACKER, STRATEGY_INTUITIVE,
+  ];
+  test('seed 다르면 다른 결과 (3개 시드 의존 전략)', () => {
+    for (const strategyId of seedStrategies) {
+      const a = recommend({ ...baseCtx, strategyId, seed: 0xAAAAAAAA });
+      const b = recommend({ ...baseCtx, strategyId, seed: 0xBBBBBBBB });
+      const aStr = a.numbers.join(',') + '|' + a.bonus;
+      const bStr = b.numbers.join(',') + '|' + b.bonus;
+      assertTrue(aStr !== bStr, `${strategyId}: 같은 결과 (시드 의존이어야 함)`);
+    }
   });
 });
 
