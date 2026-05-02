@@ -35,7 +35,7 @@ import { STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK } from '../data/numbers.js';
 
 let appEl = null;
 let stopCountdown = null; // 카운트다운 interval 정리 함수. 매 렌더 시작 전 정리.
-let strategyScrollLeft = 0; // 전략 탭 가로 스크롤 위치 보존 (클릭 → 재렌더 시 리셋 방지).
+// strategyScrollLeft: S9 카테고리 그룹화로 가로 스크롤 자체 폐기되어 모듈 변수 제거.
 const state = {
   characters: [],
   activeId: null,
@@ -131,10 +131,13 @@ function openRitualModalForActive() {
   let currentClose = null;
   const onClose = () => renderApp();
 
-  const onPerform = (ritualId) => {
+  const onPerform = (ritualId, animStageEl) => {
     const result = performRitual(state.ritual, ritualId);
     if (!result.didApply) return;
     state.ritual = result.state;
+
+    // S14: 매 행위 클릭마다 빈 애니메이션 영역에서 작은 burst (모달 재렌더 전 anchor 사용).
+    if (animStageEl) spawnRitualBurst(animStageEl);
 
     let burstNow = false;
     if (result.justFilled) {
@@ -145,7 +148,7 @@ function openRitualModalForActive() {
         state.ritual = bonus.state;
         state.characters = state.characters.map((c) => (c.id === cur.id ? bonus.character : c));
         saveCharacters(state.characters);
-        burstNow = true; // S4-T2: 만땅 진입 직후 파티클 트리거
+        burstNow = true; // S4-T2: 만땅 진입 직후 추가 파티클
       }
     }
     saveRitualState(state.ritual);
@@ -154,14 +157,13 @@ function openRitualModalForActive() {
     if (currentClose) currentClose();
     currentClose = openRitualModal(state.ritual, onPerform, onClose);
 
-    // S4-T2: 만땅 진입 trigger Canvas 파티클. 모달 재렌더 직후 (banner DOM 잡힘).
+    // S14: 만땅 진입 시 추가 burst. anchor를 새 모달의 .ritual-anim-stage로 (모달 가림 회피).
     if (burstNow) {
-      // microtask 1단 늦춰 새 모달의 banner 노드가 DOM에 attach된 후 좌표 측정.
       window.requestAnimationFrame(() => {
-        const banner = document.querySelector('.ritual-complete-banner')
+        const stage = document.querySelector('[data-role="ritual-anim-stage"]')
           || document.querySelector('[data-role="ritual-modal"]')
           || document.body;
-        spawnRitualBurst(banner);
+        spawnRitualBurst(stage);
       });
     }
   };
@@ -287,13 +289,14 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
       ${fiveSetsExtraHtml(sets, computeFiveSetsMatchInfos(sets, state.draws))}
     </section>
 
-    ${characterSlotsHtml(state.characters, state.activeId)}
-
     ${ritualWidgetHtml(state.ritual)}
 
     ${state.options.multiStrategy
       ? strategyTabsHtml(strategyIds, { multi: true })
       : strategyTabsHtml(strategyId)}
+
+    ${/* S13(2026-05-02): 슬롯 + 카드 묶음. 시각 인접으로 "캐릭터 세트" 인지. */ ''}
+    ${characterSlotsHtml(state.characters, state.activeId)}
 
     ${characterCardHtml(active, fortune, drawForFortune || state.drwNo)}
 
@@ -332,45 +335,8 @@ function renderHome(content) {
   // 추첨 시각 도달 시 자동 재렌더 → 다음 회차 정보로 갱신.
   stopCountdown = startCountdown(content, state.draws, () => renderApp());
 
-  // 전략 탭: 스크롤 위치 복원 + 활성 탭 잘림 보정 + fade 토글 + PC 휠 → 가로 변환.
-  const stratScroll = content.querySelector('.strategy-tabs');
-  if (stratScroll) {
-    stratScroll.scrollLeft = strategyScrollLeft;
-
-    // 활성 탭이 좌/우 가장자리에서 잘려있으면 안으로 들어오도록 보정.
-    // 완전히 보이는 경우 변동 0. fade gradient(24px) 안쪽으로 padding 줘서 자연스럽게.
-    const activeTab = stratScroll.querySelector('.strategy-tab.is-active');
-    if (activeTab) {
-      const cRect = stratScroll.getBoundingClientRect();
-      const bRect = activeTab.getBoundingClientRect();
-      const FADE_PAD = 24; // .strategy-tabs --fade-w와 동일
-      if (bRect.left < cRect.left + FADE_PAD) {
-        stratScroll.scrollLeft -= (cRect.left + FADE_PAD - bRect.left);
-      } else if (bRect.right > cRect.right - FADE_PAD) {
-        stratScroll.scrollLeft += (bRect.right - (cRect.right - FADE_PAD));
-      }
-      strategyScrollLeft = stratScroll.scrollLeft; // 보정된 위치를 기억
-    }
-
-    function updateFade() {
-      const atStart = stratScroll.scrollLeft <= 1;
-      const atEnd = stratScroll.scrollLeft + stratScroll.clientWidth >= stratScroll.scrollWidth - 1;
-      stratScroll.classList.toggle('is-start', atStart);
-      stratScroll.classList.toggle('is-end', atEnd);
-    }
-    stratScroll.addEventListener('scroll', updateFade, { passive: true });
-    updateFade();
-
-    // PC 마우스 휠 → 가로 스크롤 변환.
-    // 트랙패드 가로 스와이프(deltaX 우세)는 OS 기본 동작 유지, 마우스 휠(deltaY 우세)만 변환.
-    // 모바일 터치는 wheel 이벤트 발생 안 해서 영향 없음.
-    stratScroll.addEventListener('wheel', (e) => {
-      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return; // 트랙패드 가로 그대로
-      if (e.deltaY === 0) return;
-      e.preventDefault();
-      stratScroll.scrollBy({ left: e.deltaY, behavior: 'auto' });
-    }, { passive: false });
-  }
+  // S9: 전략 탭이 카테고리별 wrap 그룹으로 변경되어 가로 스크롤 / fade / 휠 변환 / scrollLeft 보존 모두 폐기.
+  // (SSOT: docs/01_spec.md 4.7.4)
 
   // 슬롯 클릭
   content.querySelectorAll('[data-slot-id]').forEach((el) => {
@@ -423,8 +389,7 @@ function renderHome(content) {
       const newStrategyId = el.dataset.strategyId;
       const cur = state.characters.find((c) => c.id === state.activeId);
       if (!cur) return;
-      const tabsEl = content.querySelector('.strategy-tabs');
-      if (tabsEl) strategyScrollLeft = tabsEl.scrollLeft;
+      // S9: 가로 스크롤 폐기로 scrollLeft 캡처 불필요.
 
       if (state.options.multiStrategy) {
         // 다중 모드: 토글

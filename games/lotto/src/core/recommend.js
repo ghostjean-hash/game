@@ -270,13 +270,13 @@ export function recommend(ctx) {
     bonusW = uniformWeights();
     const el = zodiacElementOf(zodiac);
     const elLabel = el ? `${el}` : '미지정';
-    reasons.push(`별자리 4원소: ${elLabel} 그룹 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
+    reasons.push(`원소 행운: ${elLabel} 그룹 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
   } else if (strategyId === STRATEGY_FIVE_ELEMENTS) {
     mainWeights = fiveElementsWeights(dayPillar);
     bonusW = uniformWeights();
     const el = fiveElementOf(dayPillar);
     const elLabel = el ? `${el}` : '미지정';
-    reasons.push(`일주 오행: ${elLabel} 그룹 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
+    reasons.push(`사주 행운: ${elLabel} 그룹 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
   } else {
     throw new Error(`Unknown strategy: ${strategyId}`);
   }

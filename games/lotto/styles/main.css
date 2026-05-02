@@ -1171,52 +1171,46 @@ a.btn-secondary,
   padding: var(--space-3);
   margin-bottom: var(--space-4);
 }
+/* S9 (2026-05-02): 카테고리별 wrap 그룹. 가로 스크롤 / fade / 휠→가로 변환 폐기.
+   SSOT: docs/01_spec.md 4.7.1~4.7.5. */
 .strategy-tabs {
   display: flex;
+  flex-direction: column;
   gap: var(--space-2);
-  overflow-x: auto;
-  /* scroll-behavior: smooth 제거. 클릭 후 scrollLeft 복원이 부드럽게 이동해
-     "스크롤이 발생하는" 것처럼 보이는 것을 방지. */
-  -webkit-overflow-scrolling: touch;
-  /* scroll-snap 제거. 활성 탭의 font-weight 변경으로 폭이 미세하게 바뀌어
-     proximity가 가장 가까운 snap point로 자동 보정 → 클릭마다 미끄러짐 발생.
-     자유 스크롤이 더 안정적. */
-  /* 스크롤바 완전 숨김 (모바일 PWA 톤) */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  /* 양옆 fade gradient. 더 있음을 암시. is-start/is-end 클래스로 동적 조정. */
-  --fade-w: 24px;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black var(--fade-w),
-    black calc(100% - var(--fade-w)),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black var(--fade-w),
-    black calc(100% - var(--fade-w)),
-    transparent 100%
-  );
-  transition: -webkit-mask-image 0.15s ease, mask-image 0.15s ease;
 }
-.strategy-tabs::-webkit-scrollbar { display: none; }
-/* 좌측 끝에 닿음 → 좌측 fade 제거 */
-.strategy-tabs.is-start {
-  -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - var(--fade-w)), transparent 100%);
-  mask-image: linear-gradient(to right, black 0, black calc(100% - var(--fade-w)), transparent 100%);
+.strategy-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
 }
-/* 우측 끝에 닿음 → 우측 fade 제거 */
-.strategy-tabs.is-end {
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--fade-w), black 100%);
-  mask-image: linear-gradient(to right, transparent 0, black var(--fade-w), black 100%);
+.strategy-row-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  flex: 1 1 auto;
 }
-/* 양 끝 모두 닿음(짧은 화면 + 적은 탭) → 마스크 없음 */
-.strategy-tabs.is-start.is-end {
-  -webkit-mask-image: none;
-  mask-image: none;
+.strategy-row-label {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+  white-space: nowrap;
+  min-width: 56px;
+  text-align: center;
+}
+.strategy-row.is-stats .strategy-row-label {
+  background: #e0f2fe; color: #0369a1; border-color: #bae6fd;
+}
+.strategy-row.is-mapping .strategy-row-label {
+  background: #fce7f3; color: #be185d; border-color: #fbcfe8;
+}
+/* S10: .strategy-row.is-saju 룰 제거 (운세 카테고리 통합). */
+.strategy-row.is-random .strategy-row-label {
+  background: #f3f4f6; color: #4b5563; border-color: #e5e7eb;
 }
 .strategy-tab {
   flex-shrink: 0;
@@ -1339,7 +1333,7 @@ a.btn-secondary,
 }
 .num-source-dot.is-stats { background: #0369a1; }
 .num-source-dot.is-mapping { background: #be185d; }
-.num-source-dot.is-saju { background: #92400e; }
+/* S10: .num-source-dot.is-saju 룰 제거 (운세 카테고리 통합). */
 .num-source-dot.is-random { background: #6b7280; }
 
 /* S4-T1: 5세트 동시 추천 컴팩트 카드 (#2~#5). SSOT: docs/01_spec.md 5.1.3.2. */
@@ -1519,7 +1513,7 @@ a.btn-secondary,
   color: var(--color-text-dim);
   text-align: center;
 }
-/* S6-T1: 운세 매핑 / 사주 카테고리 면책. 한 줄로 톤 일관성. */
+/* S6-T1 + S10: 운세 카테고리 면책. 한 줄로 톤 일관성. */
 .strategy-mapping-note {
   margin-top: 4px;
   margin-bottom: 0;
@@ -1691,72 +1685,115 @@ a.btn-secondary,
 .rank-count { font-variant-numeric: tabular-nums; }
 
 /* T4: 행운 의식 게이지 위젯 + 모달. SSOT: docs/01_spec.md 5.6, docs/02_data.md 1.19. */
-.ritual-widget {
+/* S14 (2026-05-02): 게이지 바 + % 표시 폐기. 한 줄 바 + 8 아이콘 진척도.
+   영역 전체가 button. 이전 .ritual-widget / .ritual-bar / .ritual-pct / .ritual-flame /
+   .ritual-actions / .ritual-caption / .ritual-title / .ritual-header 룰 모두 폐기. */
+
+.ritual-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
   margin: var(--space-3) 0;
-  padding: var(--space-3);
+  padding: var(--space-2) var(--space-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
-}
-.ritual-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: var(--space-2);
-}
-.ritual-title {
-  font-weight: 700;
-  color: var(--color-text);
-}
-.ritual-pct {
+  font-family: inherit;
   font-size: var(--font-size-sm);
-  color: var(--color-text-dim);
-  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
-.ritual-bar {
-  position: relative;
-  height: 12px;
-  background: var(--color-surface-soft);
-  border-radius: 999px;
-  overflow: hidden;
-  margin-bottom: var(--space-2);
-}
-.ritual-bar-fill {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, #fbbf24, #f59e0b, #ef4444);
-  transition: width 0.6s ease-out;
-}
-.ritual-widget.is-filled .ritual-bar-fill {
-  background: linear-gradient(90deg, #f97316, #ef4444, #f59e0b, #f97316);
+.ritual-row:hover { border-color: var(--color-accent); }
+.ritual-row.is-filled {
+  border-color: #f59e0b;
+  background: linear-gradient(90deg, rgba(254, 243, 199, 0.5), rgba(253, 230, 138, 0.5), rgba(254, 243, 199, 0.5));
   background-size: 200% 100%;
-  animation: ritual-flame-flow 1.6s linear infinite;
+  animation: ritual-flame-flow 2.4s linear infinite;
 }
-.ritual-flame {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse at 50% 100%, rgba(245, 158, 11, 0.6), transparent 60%);
-  filter: blur(4px);
-  animation: ritual-flame-pulse 1.2s ease-in-out infinite;
+.ritual-row-label {
+  font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
+.ritual-row-icons {
+  display: flex;
+  gap: 4px;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+}
+.ritual-row-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-surface-soft);
+  color: var(--color-text-dim);
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--color-border);
+}
+.ritual-row-icon.is-done {
+  background: linear-gradient(135deg, #fde68a, #f59e0b);
+  color: #ffffff;
+  border-color: #f59e0b;
+}
+.ritual-row.is-filled .ritual-row-icon.is-done {
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
+}
+.ritual-row-bonus {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  font-size: 11px;
+  font-weight: 700;
+}
+.ritual-row-cta {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-soft);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  border: 1px solid var(--color-border);
+}
+.ritual-row.is-filled .ritual-row-cta {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+.ritual-row:hover .ritual-row-cta {
+  border-color: var(--color-accent);
+}
+/* 모달 내 동일 정보 행 (사용자 클릭 X, aria-hidden) */
+.ritual-row-in-modal {
+  margin: 0 0 var(--space-2) 0;
+  cursor: default;
+}
+.ritual-row-in-modal:hover { border-color: var(--color-border); }
+
 @keyframes ritual-flame-flow {
   0% { background-position: 0% 0%; }
   100% { background-position: -200% 0%; }
 }
-@keyframes ritual-flame-pulse {
-  0%, 100% { opacity: 0.6; transform: scaleY(0.9); }
-  50% { opacity: 1; transform: scaleY(1.2); }
-}
-.ritual-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-}
-.ritual-caption {
-  font-size: 11px;
-  color: var(--color-text-dim);
+
+/* S14: 모달 빈 애니메이션 영역. 행위 클릭 burst + 만땅 진입 burst의 anchor.
+   상단 정보와 행위 그리드 사이 시각 호흡. */
+.ritual-anim-stage {
+  position: relative;
+  min-height: 80px;
+  margin: var(--space-2) 0;
+  border-radius: var(--radius-md);
+  background: radial-gradient(circle at 50% 50%, rgba(254, 243, 199, 0.25), transparent 70%);
+  pointer-events: none;
 }
 
 /* 의식 모달 그리드 */
@@ -1855,8 +1892,7 @@ a.btn-secondary,
 
 /* 접근성: 모션 감소 */
 @media (prefers-reduced-motion: reduce) {
-  .ritual-bar-fill,
-  .ritual-flame,
+  .ritual-row,
   .ritual-card,
   .ritual-card.is-performing,
   .ritual-complete-banner {
@@ -2021,7 +2057,8 @@ a.btn-secondary,
   flex-wrap: wrap;
 }
 
-/* 전략 카테고리 배지 (통계 / 운세 매핑 / 사주 / 랜덤). SSOT: docs/02_data.md 1.5.2. */
+/* 전략 카테고리 배지 (통계 / 운세 / 랜덤). SSOT: docs/02_data.md 1.5.2.
+   S10(2026-05-02): .is-saju 룰 제거. 운세 카테고리 통합. */
 .strategy-category {
   display: inline-block;
   padding: 2px var(--space-2);
@@ -2042,11 +2079,6 @@ a.btn-secondary,
   color: #be185d;
   border-color: #fbcfe8;
 }
-.strategy-category.is-saju {
-  background: #fef3c7;
-  color: #92400e;
-  border-color: #fde68a;
-}
 .strategy-category.is-random {
   background: #f3f4f6;
   color: #4b5563;
@@ -2054,6 +2086,14 @@ a.btn-secondary,
 }
 
 /* ===== 번호공 반응형 (본번호 / 보너스 동일 크기) ===== */
+/* Sprint 013에서 .num-cell 래퍼가 도입되며 .num의 width:100% 기준이
+   inline-flex 부모(num-cell)의 컨텐츠 폭으로 바뀌어 순환 참조 발생.
+   래퍼에 명시적 width를 주어 grid 1fr → num-cell → num 순으로 폭을 cascade. */
+.draw-main .num-cell,
+.draw-bonus .num-cell {
+  width: 100%;
+  max-width: 52px;
+}
 .draw-main .num,
 .draw-bonus .num {
   /* .draw-balls 그리드(6fr / auto / 1fr)에서 본번호 1칸 폭 = 보너스 칸 폭.
@@ -2157,6 +2197,8 @@ a.btn-secondary,
   #app { padding-bottom: calc(52px + var(--space-5) + env(safe-area-inset-bottom)); }
 
   /* 번호 카드 갭 더 축소 */
+  .draw-main .num-cell,
+  .draw-bonus .num-cell { max-width: 40px; }
   .draw-main .num,
   .draw-bonus .num { max-width: 40px; }
 }

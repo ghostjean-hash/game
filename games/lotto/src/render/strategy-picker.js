@@ -16,9 +16,9 @@ const STRATEGIES = [
   { id: STRATEGY_REGRESSIONIST, label: '미출현 회귀', short: '회', desc: '오랫동안 안 나온 번호 위주', category: '통계' },
   { id: STRATEGY_PAIR_TRACKER, label: '짝꿍 번호', short: '짝', desc: '캐릭터 키번호와 자주 함께 나왔던 번호 묶음', category: '통계' },
   { id: STRATEGY_TREND_FOLLOWER, label: '최근 트렌드', short: '추', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
-  { id: STRATEGY_ASTROLOGER, label: '별자리 행운', short: '점', desc: '캐릭터 별자리 12종의 행운 번호 위주', category: '운세 매핑' },
-  { id: STRATEGY_ZODIAC_ELEMENT, label: '별자리 4원소', short: '원', desc: '별자리 4원소(불/땅/공기/물) 그룹 행운 번호', category: '운세 매핑' },
-  { id: STRATEGY_FIVE_ELEMENTS, label: '일주 오행', short: '오', desc: '캐릭터 일주의 천간 오행(목/화/토/금/수) 행운 번호', category: '사주' },
+  { id: STRATEGY_ASTROLOGER, label: '별자리 행운', short: '점', desc: '캐릭터 별자리 12종의 행운 번호 위주', category: '운세' },
+  { id: STRATEGY_ZODIAC_ELEMENT, label: '원소 행운', short: '원', desc: '별자리 4원소(불/땅/공기/물) 그룹 행운 번호', category: '운세' },
+  { id: STRATEGY_FIVE_ELEMENTS, label: '사주 행운', short: '사', desc: '캐릭터 일주의 천간 오행(목/화/토/금/수) 행운 번호', category: '운세' },
   { id: STRATEGY_INTUITIVE, label: '직감', short: '직', desc: '회차마다 다른 분포 (같은 캐릭터는 같은 결과)', category: '랜덤' },
   { id: STRATEGY_BALANCER, label: '균형 조합', short: '균', desc: '번호 합 121~160 + 홀짝 3:3 필터를 통과한 조합만', category: '랜덤' },
 ];

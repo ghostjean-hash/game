@@ -298,7 +298,7 @@ suite('core/recommend - 전략', () => {
   test('zodiacElement 정상 동작 (zodiac 미지정도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_ZODIAC_ELEMENT });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('별자리 4원소'));
+    assertTrue(r.reasons[0].includes('원소 행운'));
   });
 
   test('zodiacElement: leo는 fire 그룹', () => {
@@ -314,7 +314,7 @@ suite('core/recommend - 전략', () => {
   test('fiveElements 정상 동작 (dayPillar 미지정도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_FIVE_ELEMENTS });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('일주 오행'));
+    assertTrue(r.reasons[0].includes('사주 행운'));
   });
 
   test('fiveElements: gap(갑) → wood 그룹', () => {

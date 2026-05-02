@@ -5,10 +5,10 @@ import { numberColor } from '../data/colors.js';
 import { STRATEGY_CATEGORIES } from '../data/numbers.js';
 import { plus } from './icons.js';
 
+// S10(2026-05-02): saju → mapping 통합. 운세 카테고리 단일 색.
 const CATEGORY_DOT_CLASS = {
   stats: 'is-stats',
   mapping: 'is-mapping',
-  saju: 'is-saju',
   random: 'is-random',
 };
 

@@ -41,10 +41,11 @@ export const STRATEGY_FIVE_ELEMENTS = 'fiveElements';
 export const STRATEGY_DEFAULT = STRATEGY_BLESSED;
 
 // 1.5.3. 전략 카테고리 ID (다중 전략 모드 출처 라벨 dot 색용. SSOT: docs/02_data.md 1.5.2).
+// S10(2026-05-02): fiveElements 'saju' → 'mapping' 통합. 운세 단일 카테고리.
 export const STRATEGY_CATEGORIES = Object.freeze({
   blessed: 'random', statistician: 'stats', secondStar: 'stats', regressionist: 'stats',
   pairTracker: 'stats', astrologer: 'mapping', trendFollower: 'stats', intuitive: 'random',
-  balancer: 'random', zodiacElement: 'mapping', fiveElements: 'saju',
+  balancer: 'random', zodiacElement: 'mapping', fiveElements: 'mapping',
 });
 
 // 다중 전략 모드 최대 선택 수 (분배 1+1+1+1+1+1 = 6).
