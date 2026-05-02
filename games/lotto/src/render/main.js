@@ -25,10 +25,7 @@ import {
   loadDraws,
   loadOptions, saveOptions,
 } from '../data/storage.js';
-import { STRATEGY_DEFAULT } from '../data/numbers.js';
-
-// 페치 데이터 없을 때 기본값. 페치 후엔 자동으로 latest + 1로 갱신됨.
-const DEFAULT_DRWNO = 1222;
+import { STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK } from '../data/numbers.js';
 
 let appEl = null;
 let stopCountdown = null; // 카운트다운 interval 정리 함수. 매 렌더 시작 전 정리.
@@ -36,7 +33,7 @@ let strategyScrollLeft = 0; // 전략 탭 가로 스크롤 위치 보존 (클릭
 const state = {
   characters: [],
   activeId: null,
-  drwNo: DEFAULT_DRWNO,
+  drwNo: DEFAULT_DRWNO_FALLBACK,
   draws: [],
   numberStats: [],
   bonusStats: [],
@@ -122,6 +119,7 @@ function getRecAndFortune(active) {
     cooccur: state.cooccur,
     zodiac: active.zodiac,
     mbti: active.mbti,
+    dayPillar: active.dayPillar,
   });
   return { strategyId, rec, fortune, drawForFortune };
 }

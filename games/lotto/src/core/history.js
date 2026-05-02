@@ -81,6 +81,7 @@ export function backfillRecommendations(character, draws, strategyId, stats, las
       cooccur: stats.cooccur,
       zodiac: character.zodiac,
       mbti: character.mbti,
+      dayPillar: character.dayPillar,
     });
     newEntries.push({
       drwNo: draw.drwNo,

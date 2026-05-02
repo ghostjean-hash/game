@@ -34,10 +34,13 @@
 - 인라인 매직 값 금지
 
 ## 7. 실행
-- 로컬: `python -m http.server` 후 localhost:8000
-- 테스트: tests/test.html을 브라우저에서 열기
-- 배포: main 브랜치 push → GitHub Pages 자동 배포
+- 로컬 dev 서버 (권장): 게임 허브 루트에서 `node scripts/dev-server.mjs 8000` → `http://127.0.0.1:8000/games/lotto/`. Cache-Control no-store, SW 무관.
+- Live Server (VS Code): 5500 포트로도 동작하나 SW / 캐시 충돌 가능. 개발환경 자동 SW 차단은 `shared/ui.js`가 처리.
+- 테스트: `tests/test.html`을 브라우저에서 열기 (모든 suites 자동 실행).
+- 페치: `scripts/fetch-lotto-draws.bat` 더블클릭(Windows) 또는 `node scripts/fetch-lotto-draws.mjs`. smok95/lotto 미러 bundle 한 방, 1초 미만.
+- 배포: main 브랜치 push → GitHub Pages 자동 배포. 회차 데이터는 매주 일요일 03:00 KST에 GitHub Actions가 자동 페치 + commit.
 
 ## 8. 변경 이력
 - 2026-05-01: html-game v0.1 적용 (초기 셋업)
 - 2026-05-01: html-game v0.2 마이그레이션 (8.4 항목 일반화 반영)
+- 2026-05-02: 7장 실행 안내를 dev-server.mjs / .bat 페치 / 자동화 워크플로우 기준으로 갱신.

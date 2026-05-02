@@ -15,34 +15,40 @@ games/lotto/
 │   ├── main.js          # 진입점. 모든 모듈 wire-up
 │   ├── core/            # 순수 로직 (DOM 금지)
 │   │   ├── seed.js      # FNV-1a + characterSeed
-│   │   ├── random.js    # Mulberry32 PRNG
-│   │   ├── luck.js      # Luck 분산도 적용
-│   │   ├── stats.js     # 통계 캐시 계산
-│   │   ├── recommend.js # 추천 엔진
-│   │   ├── fortune.js   # 운세 산출 (대길/길/평/흉)
+│   │   ├── random.js    # Mulberry32 PRNG + mixSeeds
+│   │   ├── luck.js      # Luck 분산도 적용 + 성장 룰
+│   │   ├── stats.js     # 통계 캐시 계산 (본번호 / 보너스 / 동시출현)
+│   │   ├── recommend.js # 추천 엔진 (객관 5 + 시드 의존 6 분기)
+│   │   ├── fortune.js   # 운세 산출 (대길/길/평/흉) + 띠/사주 보정
 │   │   ├── match.js     # 추천 vs 발표 매칭 (등수)
-│   │   ├── history.js   # 이력 기록 / 매칭 / 캐릭터 통계
-│   │   ├── zodiac.js    # 12간지 + 관계 (운세 정밀화)
+│   │   ├── history.js   # 이력 기록 / 매칭 / 백캐스트
+│   │   ├── zodiac.js    # 12간지 + 서양 12별자리 + 관계
 │   │   ├── saju.js      # 사주 일주 + 오행 (운세 추가 보정)
-│   │   └── wheeling.js  # Full Wheel 생성 (다구좌 모드 옵션)
+│   │   ├── schedule.js  # 다음 추첨 회차 / 카운트다운 타깃 시각
+│   │   └── wheeling.js  # Full / Abbreviated Wheel + 4-if-4 검증
 │   ├── render/          # DOM 렌더
-│   │   ├── modal.js            # 모달 / 면책 안내
-│   │   ├── character-form.js   # 캐릭터 생성 폼
-│   │   ├── character-card.js   # 캐릭터 카드 HTML
-│   │   ├── character-slots.js  # 캐릭터 슬롯 (목록 / 추가 / 삭제)
-│   │   ├── strategy-picker.js  # 추첨 전략 선택 UI (캐릭터와 분리)
-│   │   ├── draw-card.js        # 추천 카드 HTML
-│   │   ├── charts.js           # 막대 차트 헬퍼
-│   │   ├── stats-page.js       # 통계 시각화 페이지
-│   │   ├── history-page.js     # 캐릭터 전적 / 이력 페이지
-│   │   ├── wheeling-page.js    # 휠링 페이지 (다구좌 모드)
-│   │   └── main.js             # 메인 화면 wire-up
-│   ├── input/           # 키보드 / 터치 이벤트 (M2 예정)
+│   │   ├── main.js              # 5탭 라우팅 + wire-up
+│   │   ├── modal.js             # 모달 / 면책 안내 / 닫기 버튼
+│   │   ├── icons.js             # SVG 아이콘 헬퍼 (텍스트 글리프 대체)
+│   │   ├── bottom-tabs.js       # 하단 5탭 바 (추첨 / 통계 / 전적 / 휠링 / 설정)
+│   │   ├── character-form.js    # 캐릭터 생성 폼 (별자리 자동 계산)
+│   │   ├── character-card.js    # 캐릭터 카드 HTML
+│   │   ├── character-slots.js   # 캐릭터 슬롯 (목록 / 추가 / 삭제)
+│   │   ├── strategy-tabs.js     # 추첨 전략 가로 스크롤 탭 (시트 모달 폐기)
+│   │   ├── strategy-picker.js   # STRATEGY_LIST export (라벨/설명 SSOT)
+│   │   ├── next-draw-card.js    # 다음 추첨 카운트다운 카드
+│   │   ├── draw-card.js         # 추천 카드 HTML (동행복권 결과 페이지 패턴)
+│   │   ├── charts.js            # 막대 차트 헬퍼 (외부 lib 없음)
+│   │   ├── stats-page.js        # 통계 시각화 페이지 (자동 / 명시 갱신)
+│   │   ├── history-page.js      # 캐릭터 전적 / 이력 페이지
+│   │   ├── wheeling-page.js     # 휠링 페이지 (Full / Abbreviated)
+│   │   └── settings-page.js     # 설정 탭 (옵션 / 다구좌 / 면책 / 초기화)
+│   ├── input/           # 키보드 / 터치 이벤트 (현재 render/main.js가 흡수)
 │   └── data/
-│       ├── colors.js    # 게임 색상 상수
-│       ├── numbers.js   # 02_data 1장 수치 상수
-│       ├── storage.js   # localStorage 입출력 + syncDraws()
-│       └── draws.json   # 회차 정적 JSON (페치 결과)
+│       ├── colors.js    # 게임 색상 상수 (운세 / 카드 / 적중 / 번호공)
+│       ├── numbers.js   # 02_data 1장 수치 상수 (단일 SSOT)
+│       ├── storage.js   # localStorage 입출력 + syncDraws / syncDrawsIfNewer
+│       └── draws.json   # 회차 정적 JSON (페치 결과, 모듈 아님)
 ├── styles/
 │   ├── tokens.css       # UI 디자인 토큰
 │   └── main.css         # 레이아웃
@@ -50,12 +56,20 @@ games/lotto/
     ├── test.html        # 테스트 진입
     ├── runner.js        # entrypoint (suite 등록 + done() 호출)
     ├── core.js          # 러너 코어 (suite/test/assert)
-    └── suites/          # 테스트 파일
+    └── suites/          # 테스트 파일 (core/ 모든 모듈 + storage)
         ├── seed.test.js
         ├── random.test.js
         ├── luck.test.js
         ├── stats.test.js
-        └── recommend.test.js
+        ├── recommend.test.js
+        ├── storage.test.js
+        ├── fortune.test.js
+        ├── match.test.js
+        ├── zodiac.test.js
+        ├── saju.test.js
+        ├── schedule.test.js
+        ├── wheeling.test.js
+        └── history.test.js
 ```
 
 ## 2. 모듈 의존성 방향
@@ -95,41 +109,46 @@ games/lotto/
 ```
 사용자 진입
   → main.js
-  → data/storage.js (localStorage 로드)
-  → data/draws.js (정적 JSON 또는 캐시 로드)
+  → data/storage.js (localStorage 로드 + syncDraws로 draws.json 동기화)
+  → data/draws.json (정적 JSON, 모듈 아님)
   → core/stats.js (통계 캐시 계산)
-  → render/main.js (메인 렌더)
-  → input/main.js (이벤트 리스너 등록)
+  → core/schedule.js (다음 추첨 회차 산출)
+  → render/main.js (메인 렌더 + 이벤트 리스너 흡수)
 ```
 
 ### 3.2. 추천 1회
 
 ```
-사용자 "다시 뽑기"
-  → input/main.js (클릭 이벤트)
-  → core/recommend.js (시드 + 클래스 + Luck + 토글 → 본번호 6 + 보너스 1 + 근거)
-  → data/storage.js (이력 저장)
-  → render/card.js (카드 갱신)
+전략 탭 클릭 / 캐릭터 전환 (재렌더 트리거)
+  → render/main.js (이벤트 핸들러)
+  → core/recommend.js (시드 + 전략 + Luck + 회차 → 본번호 6 + 보너스 1 + 근거)
+    └─ 객관 5: drwNo + OBJECTIVE_SEED_SALT만. 캐릭터 시드 / Luck 무관.
+    └─ 시드 의존 6: mixSeeds(seed, drwNo) + applyLuck.
+  → core/history.js (recordRecommendation + matchHistory + backfillRecommendations)
+  → core/luck.js (applyLuckGrowth, 적중 1회 보너스)
+  → data/storage.js (saveCharacters)
+  → render/draw-card.js (카드 갱신)
 ```
 
 ### 3.3. 회차 발표 후 매칭
 
 ```
-draws 갱신 감지 (data/draws.js)
+draws 갱신 (boot syncDraws 또는 통계 탭 진입 syncDrawsIfNewer)
   → core/match.js (이력 vs 발표 번호 매칭, 등수 라벨)
-  → data/storage.js (이력 갱신)
-  → core/luck.js (Luck 보너스 계산)
-  → render/history.js (이력 페이지 갱신)
+  → core/history.js (matchHistory)
+  → core/luck.js (applyLuckGrowth, luckApplied 잠금)
+  → data/storage.js (saveCharacters)
+  → render/history-page.js (이력 페이지 갱신)
 ```
 
 ## 4. core / render / input / data 책임 경계
 
-| 모듈 | 책임 | 예시 파일 (예정) |
+| 모듈 | 책임 | 예시 파일 |
 |---|---|---|
-| `core/` | 추첨 알고리즘, 통계 계산, 시드 해시, 가중치 계산, 매칭 | recommend.js / stats.js / seed.js / luck.js / match.js / fortune.js |
-| `render/` | DOM 갱신, 카드 / 차트 / 모달 / 이펙트 | main.js / card.js / stats.js / modal.js / history.js |
-| `input/` | 키보드 / 터치 이벤트 → core 호출 | main.js / keyboard.js / touch.js |
-| `data/` | 게임 상수, 외부 API, localStorage 입출력 | colors.js / storage.js / draws.js / numbers.js |
+| `core/` | 추첨 알고리즘, 통계 계산, 시드 해시, 가중치 계산, 매칭, 운세 / 사주, 휠링, 추첨 일정 | recommend / stats / seed / random / luck / match / fortune / zodiac / saju / schedule / history / wheeling |
+| `render/` | DOM 갱신, 카드 / 차트 / 모달 / 탭 / SVG 아이콘 | main / draw-card / next-draw-card / character-* / strategy-tabs / stats-page / history-page / wheeling-page / settings-page / bottom-tabs / icons / modal / charts |
+| `input/` | 키보드 / 터치 이벤트 → core 호출 (현재 render/main.js가 흡수, M2 마무리 단계 분리 검토) | (분리 보류) |
+| `data/` | 게임 상수, 외부 API, localStorage 입출력 | colors.js / storage.js / numbers.js + draws.json (정적 JSON) |
 
 ### 4.1. 책임 충돌 시
 

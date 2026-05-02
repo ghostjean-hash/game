@@ -37,7 +37,7 @@ export function renderSettingsPage(container, handlers) {
         <input type="checkbox" data-setting="applyFilters" ${options.applyFilters ? 'checked' : ''} />
         <span class="settings-label">
           <strong>비율 필터 적용</strong>
-          <span class="settings-hint">번호 합 / 홀짝 / AC값 등 통계 필터 통과 조합만 추천 (균형주의자 외 전략에도 영향).</span>
+          <span class="settings-hint">번호 합 / 홀짝 / AC값 등 통계 필터 통과 조합만 추천 (균형 조합 외 전략에도 영향).</span>
         </span>
       </label>
     </section>

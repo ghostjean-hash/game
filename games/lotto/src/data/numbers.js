@@ -38,6 +38,7 @@ export const STRATEGY_INTUITIVE = 'intuitive';
 export const STRATEGY_BALANCER = 'balancer';
 export const STRATEGY_MBTI = 'mbti';
 export const STRATEGY_ZODIAC_ELEMENT = 'zodiacElement';
+export const STRATEGY_FIVE_ELEMENTS = 'fiveElements';
 export const STRATEGY_DEFAULT = STRATEGY_BLESSED;
 
 // 1.5.1. 객관 전략 (캐릭터 시드 / Luck 무관. 회차 데이터로만 결정).
@@ -59,9 +60,17 @@ export const FORTUNE_GOOD = 'good';
 export const FORTUNE_NEUTRAL = 'neutral';
 export const FORTUNE_BAD = 'bad';
 
-// 1.7. 추첨 가중치 한계
+// 1.7. 추첨 가중치 한계 + 통계 효과 증폭
+// SSOT: docs/02_data.md 1.7.
 export const WEIGHT_MIN_FLOOR = 0.0001;
 export const WEIGHT_MAX_BIAS = 50.0;
+// 누적 빈도 weight 증폭 지수. 1221회 실측 ±19% 편차 (133~182)로 거의 균등 인상 → 분포 차이 증폭.
+// statistician / secondStar에 적용. trendFollower는 raw 유지 (recent30 ratio 9배로 이미 두드러짐).
+// 실측 효과: weight ratio 1.368 → 1.601, 10000회 추출 빈도 ratio 1.587. SSOT: docs/02_data.md 1.7.2.
+export const STATS_POWER = 1.5;
+// 미출현 갭 weight 증폭 지수. gap은 이미 편차 큼 → 약한 증폭. regressionist에 적용.
+// 실측: gap ratio 19 → 46 (2.42배). SSOT: docs/02_data.md 1.7.3.
+export const GAP_POWER = 1.3;
 
 // 1.16. 백캐스트 (Luck 성장 부트스트랩)
 // SSOT: docs/02_data.md 1.16, docs/01_spec.md 7.5.
@@ -80,7 +89,14 @@ export const DRAW_MIN_KST = 0;         // 판매 마감 / 카운트다운 타깃
 export const DRAW_TZ_OFFSET_MIN = 9 * 60; // KST = UTC+9 (분 단위)
 export const COUNTDOWN_TICK_MS = 1000;
 
-// 1.11. 별자리별 행운 번호 (점성술사 전략용. 임의 매핑, 추첨 확률에는 영향 없음)
+// 1.17. draws 캐시 비어있을 때 fallback 회차 번호.
+// SSOT: docs/02_data.md 1.17.
+// 페치 후엔 자동으로 latest + 1로 덮어써짐. 이 값은 "데이터가 전혀 없는 첫 진입" 한정.
+// PROGRESS.md 5.0의 시점 결정값 (2026-05-02 = 1222회).
+// spec 시점이 크게 변경되면 본 값을 갱신하거나, draws.json을 페치해 자연스럽게 무력화.
+export const DEFAULT_DRWNO_FALLBACK = 1222;
+
+// 1.11. 별자리별 행운 번호 (별자리 행운 전략용. 임의 매핑, 추첨 확률에는 영향 없음)
 export const ZODIAC_LUCKY = Object.freeze({
   aries:       [3, 9, 21, 27, 33, 39, 45],
   taurus:      [2, 6, 8, 14, 26, 32, 44],
@@ -136,6 +152,26 @@ export const ZODIAC_ELEMENT_LUCKY = Object.freeze({
   earth: [2, 6, 14, 22, 28, 36, 44],
   air:   [5, 11, 17, 23, 29, 35, 39],
   water: [4, 12, 16, 22, 30, 38, 43],
+});
+
+// 1.18. 천간 오행 5원소 + 행운 번호 (사주 전략용. 임의 매핑, 추첨 확률 영향 없음).
+// SSOT: docs/02_data.md 1.18. 4원소(서양, ZODIAC_ELEMENT_LUCKY)와 병렬 짝.
+export const FIVE_ELEMENTS_LUCKY = Object.freeze({
+  wood:  [1, 8, 14, 21, 28, 35, 42],
+  fire:  [3, 9, 16, 22, 29, 36, 43],
+  earth: [5, 10, 17, 24, 30, 37, 44],
+  metal: [7, 13, 20, 26, 33, 39, 45],
+  water: [2, 6, 12, 18, 25, 31, 38],
+});
+
+// 천간(stem) → 오행 매핑. SSOT: docs/02_data.md 1.12.1.
+// (saju.js의 STEM_TO_ELEMENT와 동일하지만 data 레이어에서도 직접 참조 가능하도록 export.)
+export const STEM_TO_ELEMENT = Object.freeze({
+  gap: 'wood', eul: 'wood',
+  byeong: 'fire', jeong: 'fire',
+  mu: 'earth', gi: 'earth',
+  gyeong: 'metal', sin: 'metal',
+  im: 'water', gye: 'water',
 });
 
 // 1.10. 12간지 (M5)

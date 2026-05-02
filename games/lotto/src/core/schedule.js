@@ -12,13 +12,14 @@ const MS_PER_DAY = 86400000;
 const MS_PER_WEEK = 7 * MS_PER_DAY;
 
 /**
- * 주어진 'YYYY-MM-DD' 추첨일을 KST 추첨 시각(Date)로 변환.
- * 예: '2026-04-25' → 2026-04-25T20:35:00+09:00.
+ * 주어진 'YYYY-MM-DD' 추첨일을 KST 카운트다운 타깃 시각(Date)로 변환.
+ * 카운트다운 타깃 = 판매 마감 = 20:00 KST (실제 추첨 방송은 20:35지만 사이트는 20:00에 0).
+ * 예: '2026-04-25' → 2026-04-25T20:00:00+09:00.
  * @param {string} drwDate
  * @returns {number} epoch ms
  */
 export function drawDateToEpochMs(drwDate) {
-  // 'YYYY-MM-DDT20:35:00+09:00'을 직접 만들면 호스트 TZ 무관 결정론.
+  // 'YYYY-MM-DDT20:00:00+09:00'을 직접 만들면 호스트 TZ 무관 결정론.
   const hh = String(DRAW_HOUR_KST).padStart(2, '0');
   const mm = String(DRAW_MIN_KST).padStart(2, '0');
   const offHrs = Math.trunc(DRAW_TZ_OFFSET_MIN / 60);
@@ -29,9 +30,9 @@ export function drawDateToEpochMs(drwDate) {
 }
 
 /**
- * KST 기준 다음 토요일 20:35의 epoch ms 반환.
- * 입력 시각 자체가 토요일 20:35 이전이면 그 토요일 20:35.
- * 이후거나 다른 요일이면 다음 토요일 20:35.
+ * KST 기준 다음 토요일 카운트다운 타깃 시각(20:00)의 epoch ms 반환.
+ * 입력 시각 자체가 토요일 타깃 시각 이전이면 그 토요일 타깃.
+ * 이후거나 다른 요일이면 다음 토요일 타깃.
  * @param {number} nowMs epoch ms
  * @returns {number} epoch ms
  */

@@ -4,7 +4,7 @@ import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
   STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
-  STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT,
+  STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
 } from '../../src/data/numbers.js';
 
 const baseCtx = {
@@ -50,12 +50,12 @@ suite('core/recommend - 형식', () => {
       STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
       STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
       STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
-      STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT,
+      STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
     ];
     for (const strategyId of strategies) {
       const r = recommend({
         ...baseCtx, strategyId,
-        zodiac: 'aries', mbti: 'INTJ',
+        zodiac: 'aries', mbti: 'INTJ', dayPillar: { stem: 'gap', branch: 'rat' },
       });
       const set = new Set(r.numbers);
       assertTrue(!set.has(r.bonus), `${strategyId}: bonus ${r.bonus} ∈ numbers [${r.numbers.join(',')}]`);
@@ -164,13 +164,66 @@ suite('core/recommend - 전략', () => {
   test('statistician 정상 동작 (빈 stats여도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_STATISTICIAN });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('통계학자'));
+    assertTrue(r.reasons[0].includes('통계 추첨'));
   });
 
   test('secondStar 정상 동작 (빈 stats여도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_SECOND_STAR });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('2등의 별'));
+    assertTrue(r.reasons[0].includes('보너스볼 사냥'));
+  });
+
+  test('secondStar: 본번호도 bonusStats 빈도 가중 (라벨-동작 일치)', () => {
+    // bonusStats에 특정 번호만 압도적 빈도 → 본번호로도 자주 등장해야 함.
+    // PROGRESS 2.29: secondStar 본번호가 균등이던 결손 정정.
+    const bonusStats = Array.from({ length: 45 }, (_, i) => ({
+      number: i + 1, totalCount: 1, recent30: 0, lastSeenDrw: 1000,
+    }));
+    // 1, 7, 13, 19, 25, 31번에 1000배 가중
+    [1, 7, 13, 19, 25, 31].forEach((n) => { bonusStats[n - 1].totalCount = 1000; });
+    const r = recommend({ ...baseCtx, strategyId: STRATEGY_SECOND_STAR, bonusStats });
+    // 본번호 6개 중 최소 4개는 가중 번호여야 함 (압도적 가중이라 거의 다 포함 기대)
+    const heavySet = new Set([1, 7, 13, 19, 25, 31]);
+    const hits = r.numbers.filter((n) => heavySet.has(n)).length;
+    assertTrue(hits >= 4, `expected >= 4 heavy-weighted in main, got ${hits} (numbers=[${r.numbers.join(',')}])`);
+  });
+
+  test('statistician: 압도적 가중 번호가 본번호에 등장 (power 보정 효과)', () => {
+    // PROGRESS 2.30: STATS_POWER=1.5로 분포 차이 증폭 검증.
+    const numberStats = Array.from({ length: 45 }, (_, i) => ({
+      number: i + 1, totalCount: 100, recent10: 0, recent30: 0, recent100: 0,
+      lastSeenDrw: 1000, currentGap: 5,
+    }));
+    [2, 8, 14, 20, 26, 32].forEach((n) => { numberStats[n - 1].totalCount = 5000; });
+    const r = recommend({ ...baseCtx, strategyId: STRATEGY_STATISTICIAN, numberStats });
+    const heavySet = new Set([2, 8, 14, 20, 26, 32]);
+    const hits = r.numbers.filter((n) => heavySet.has(n)).length;
+    assertTrue(hits >= 4, `statistician power: expected >= 4 hits, got ${hits} (numbers=[${r.numbers.join(',')}])`);
+  });
+
+  test('regressionist: 압도적 gap 번호가 본번호에 등장 (power 보정 효과)', () => {
+    const numberStats = Array.from({ length: 45 }, (_, i) => ({
+      number: i + 1, totalCount: 100, recent10: 0, recent30: 0, recent100: 0,
+      lastSeenDrw: 1000, currentGap: 1,
+    }));
+    [3, 9, 15, 21, 27, 33].forEach((n) => { numberStats[n - 1].currentGap = 200; });
+    const r = recommend({ ...baseCtx, strategyId: STRATEGY_REGRESSIONIST, numberStats });
+    const heavySet = new Set([3, 9, 15, 21, 27, 33]);
+    const hits = r.numbers.filter((n) => heavySet.has(n)).length;
+    assertTrue(hits >= 4, `regressionist power: expected >= 4 hits, got ${hits} (numbers=[${r.numbers.join(',')}])`);
+  });
+
+  test('trendFollower: 압도적 recent30 번호가 본번호에 등장 (raw 가중)', () => {
+    // PROGRESS 2.31: trendFollower는 raw 유지. recent30은 자연 분포(0~9)로 두드러져 power 불필요.
+    const numberStats = Array.from({ length: 45 }, (_, i) => ({
+      number: i + 1, totalCount: 100, recent10: 0, recent30: 1, recent100: 0,
+      lastSeenDrw: 1000, currentGap: 5,
+    }));
+    [4, 10, 16, 22, 28, 34].forEach((n) => { numberStats[n - 1].recent30 = 100; });
+    const r = recommend({ ...baseCtx, strategyId: STRATEGY_TREND_FOLLOWER, numberStats });
+    const heavySet = new Set([4, 10, 16, 22, 28, 34]);
+    const hits = r.numbers.filter((n) => heavySet.has(n)).length;
+    assertTrue(hits >= 4, `trendFollower raw: expected >= 4 hits, got ${hits} (numbers=[${r.numbers.join(',')}])`);
   });
 
   test('알 수 없는 전략은 에러', () => {
@@ -186,19 +239,19 @@ suite('core/recommend - 전략', () => {
   test('regressionist 정상 동작 (빈 stats여도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_REGRESSIONIST });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('회귀주의자'));
+    assertTrue(r.reasons[0].includes('미출현 회귀'));
   });
 
   test('pairTracker 정상 동작 (빈 cooccur여도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_PAIR_TRACKER });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('짝궁추적자'));
+    assertTrue(r.reasons[0].includes('짝꿍 번호'));
   });
 
   test('astrologer 정상 동작 (zodiac 미지정 가능)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_ASTROLOGER });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('점성술사'));
+    assertTrue(r.reasons[0].includes('별자리 행운'));
   });
 
   test('astrologer 별자리 reasons에 포함', () => {
@@ -217,14 +270,14 @@ suite('core/recommend - 전략', () => {
   test('trendFollower 정상 동작', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_TREND_FOLLOWER });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('추세추종자'));
+    assertTrue(r.reasons[0].includes('최근 트렌드'));
   });
 
   test('intuitive 정상 동작 (결정론)', () => {
     const a = recommend({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
     const b = recommend({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
     assertDeepEqual(a.numbers, b.numbers);
-    assertTrue(a.reasons[0].includes('직감주의자'));
+    assertTrue(a.reasons[0].includes('직감'));
   });
 
   test('intuitive 다른 회차에 다른 분포', () => {
@@ -238,7 +291,7 @@ suite('core/recommend - 전략', () => {
   test('balancer 정상 동작', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_BALANCER });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('균형주의자'));
+    assertTrue(r.reasons[0].includes('균형 조합'));
   });
 
   test('mbti 정상 동작 (mbti 없어도)', () => {
@@ -255,7 +308,7 @@ suite('core/recommend - 전략', () => {
   test('zodiacElement 정상 동작 (zodiac 미지정도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_ZODIAC_ELEMENT });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('별자리 원소'));
+    assertTrue(r.reasons[0].includes('별자리 4원소'));
   });
 
   test('zodiacElement: leo는 fire 그룹', () => {
@@ -266,6 +319,51 @@ suite('core/recommend - 전략', () => {
   test('zodiacElement: cancer는 water 그룹', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_ZODIAC_ELEMENT, zodiac: 'cancer' });
     assertTrue(r.reasons[0].includes('water'));
+  });
+
+  test('fiveElements 정상 동작 (dayPillar 미지정도)', () => {
+    const r = recommend({ ...baseCtx, strategyId: STRATEGY_FIVE_ELEMENTS });
+    assertEqual(r.numbers.length, 6);
+    assertTrue(r.reasons[0].includes('일주 오행'));
+  });
+
+  test('fiveElements: gap(갑) → wood 그룹', () => {
+    const r = recommend({
+      ...baseCtx, strategyId: STRATEGY_FIVE_ELEMENTS,
+      dayPillar: { stem: 'gap', branch: 'rat' },
+    });
+    assertTrue(r.reasons[0].includes('wood'));
+  });
+
+  test('fiveElements: byeong(병) → fire 그룹', () => {
+    const r = recommend({
+      ...baseCtx, strategyId: STRATEGY_FIVE_ELEMENTS,
+      dayPillar: { stem: 'byeong', branch: 'rat' },
+    });
+    assertTrue(r.reasons[0].includes('fire'));
+  });
+
+  test('fiveElements: gye(계) → water 그룹', () => {
+    const r = recommend({
+      ...baseCtx, strategyId: STRATEGY_FIVE_ELEMENTS,
+      dayPillar: { stem: 'gye', branch: 'rat' },
+    });
+    assertTrue(r.reasons[0].includes('water'));
+  });
+
+  test('fiveElements: 다른 dayPillar = 다른 그룹 (캐릭터 차별화)', () => {
+    // wood (gap) vs metal (gyeong)은 행운 번호 매핑이 완전 분리.
+    const wood = recommend({
+      ...baseCtx, strategyId: STRATEGY_FIVE_ELEMENTS,
+      dayPillar: { stem: 'gap', branch: 'rat' },
+    });
+    const metal = recommend({
+      ...baseCtx, strategyId: STRATEGY_FIVE_ELEMENTS,
+      dayPillar: { stem: 'gyeong', branch: 'rat' },
+    });
+    const aStr = wood.numbers.join(',');
+    const bStr = metal.numbers.join(',');
+    assertTrue(aStr !== bStr, 'wood vs metal 결과 같음');
   });
 
   test('balancer 결과는 (대부분) 합 121~160 + 홀짝 3:3 통과', () => {

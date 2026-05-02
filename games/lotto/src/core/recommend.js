@@ -7,14 +7,15 @@ import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
   STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
-  STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT,
+  STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
   OBJECTIVE_STRATEGIES, OBJECTIVE_SEED_SALT,
-  WEIGHT_MIN_FLOOR,
+  WEIGHT_MIN_FLOOR, STATS_POWER, GAP_POWER,
   SUM_RANGE_MIN, SUM_RANGE_MAX,
   ODD_EVEN_PREFERRED,
   ZODIAC_LUCKY,
   MBTI_LUCKY,
   ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY,
+  FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
 } from '../data/numbers.js';
 import { applyLuck } from './luck.js';
 import { mulberry32, mixSeeds } from './random.js';
@@ -28,19 +29,24 @@ function uniformWeights() {
 }
 
 function statsToWeights(stats) {
+  // count^STATS_POWER 보정. SSOT: docs/02_data.md 1.7.
+  // 1222회 시점 본번호 totalCount는 ±10% 편차로 거의 균등 → power 보정으로 분포 차이 증폭.
   const arr = new Array(VECTOR_LEN);
   for (let i = 0; i < arr.length; i += 1) arr[i] = WEIGHT_MIN_FLOOR;
   for (const s of stats) {
-    arr[s.number - 1] = Math.max(s.totalCount, WEIGHT_MIN_FLOOR);
+    const base = Math.max(s.totalCount, WEIGHT_MIN_FLOOR);
+    arr[s.number - 1] = Math.pow(base, STATS_POWER);
   }
   return arr;
 }
 
 function gapWeights(numberStats) {
+  // gap^GAP_POWER 보정. gap은 이미 편차 큼 → 약한 증폭(1.3).
   const arr = new Array(VECTOR_LEN);
   for (let i = 0; i < arr.length; i += 1) arr[i] = 1;
   for (const s of numberStats) {
-    arr[s.number - 1] = Math.max(s.currentGap, 1);
+    const base = Math.max(s.currentGap, 1);
+    arr[s.number - 1] = Math.pow(base, GAP_POWER);
   }
   return arr;
 }
@@ -70,7 +76,7 @@ function zodiacWeights(zodiac) {
   return arr;
 }
 
-/** 최근 30회 가중 (추세추종자). */
+/** 최근 30회 가중 (최근 트렌드 전략). raw 유지 (실측 결과 1.5 보정 시 27배 증폭으로 과도, 2026-05-02 시뮬). */
 function trendWeights(numberStats) {
   const arr = new Array(VECTOR_LEN);
   for (let i = 0; i < arr.length; i += 1) arr[i] = WEIGHT_MIN_FLOOR;
@@ -80,7 +86,7 @@ function trendWeights(numberStats) {
   return arr;
 }
 
-/** 시드 기반 의사난수 가중치 (직감주의자). 매 회차 다른 분포. */
+/** 시드 기반 의사난수 가중치 (직감 전략). 매 회차 다른 분포. */
 function intuitiveWeights(seed) {
   const rng = mulberry32(seed);
   const arr = new Array(VECTOR_LEN);
@@ -133,8 +139,27 @@ function zodiacElementWeights(zodiac) {
   return arr;
 }
 
+/** 일주(dayPillar) → 천간 오행 (목/화/토/금/수). */
+function fiveElementOf(dayPillar) {
+  if (!dayPillar || !dayPillar.stem) return null;
+  return STEM_TO_ELEMENT[dayPillar.stem] || null;
+}
+
+/** 5원소 행운 번호 → weight 벡터 (사주 전략). */
+function fiveElementsWeights(dayPillar) {
+  const arr = new Array(VECTOR_LEN);
+  for (let i = 0; i < arr.length; i += 1) arr[i] = 1;
+  const el = fiveElementOf(dayPillar);
+  if (!el) return arr;
+  const lucky = FIVE_ELEMENTS_LUCKY[el] || [];
+  for (const n of lucky) {
+    if (n >= NUMBER_MIN && n <= NUMBER_MAX) arr[n - 1] = arr[n - 1] * 5;
+  }
+  return arr;
+}
+
 /**
- * 균형주의자: 시드 변형으로 최대 50회 재추첨하여 필터 통과 조합 찾기.
+ * 균형 조합: 시드 변형으로 최대 50회 재추첨하여 필터 통과 조합 찾기.
  * 못 찾으면 첫 시도 반환 (fallback).
  * @param {number} samplingSeed 객관 전략은 드wNo 기반 객관 시드, 시드 의존 전략은 drawSeed.
  */
@@ -190,13 +215,15 @@ function weightedSample(weights, count, seed, exclude = null) {
  * @param {object[]} [ctx.numberStats]
  * @param {object[]} [ctx.bonusStats]
  * @param {object[]} [ctx.cooccur]
- * @param {string} [ctx.zodiac] - 점성술사 전략용 별자리
+ * @param {string} [ctx.zodiac] - 별자리 행운 / 별자리 원소 전략용
+ * @param {string} [ctx.mbti] - MBTI 전략용
+ * @param {{ stem: string, branch: string }} [ctx.dayPillar] - 사주 전략(fiveElements)용 일주
  * @returns {{ numbers: number[], bonus: number, reasons: string[] }}
  */
 export function recommend(ctx) {
   const {
     seed, strategyId, luck, drwNo,
-    numberStats = [], bonusStats = [], cooccur = [], zodiac = null, mbti = null,
+    numberStats = [], bonusStats = [], cooccur = [], zodiac = null, mbti = null, dayPillar = null,
   } = ctx;
   const drawSeed = mixSeeds(seed, drwNo);
   const bonusSeed = mixSeeds(drawSeed, 0x12345678);
@@ -218,9 +245,11 @@ export function recommend(ctx) {
     bonusW = uniformWeights();
     reasons.push('통계 추첨: 역대 회차에 가장 많이 나온 번호 위주.');
   } else if (strategyId === STRATEGY_SECOND_STAR) {
-    mainWeights = uniformWeights();
+    // 보너스볼 빈도가 높은 번호는 본번호로도 자주 나오는 경향이 있다.
+    // 본번호와 보너스 모두 보너스볼 통계 가중을 적용해 라벨-동작 일관성 확보.
+    mainWeights = statsToWeights(bonusStats);
     bonusW = statsToWeights(bonusStats);
-    reasons.push('보너스볼 사냥: 역대 보너스볼로 자주 나온 번호 위주.');
+    reasons.push('보너스볼 사냥: 역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두).');
   } else if (strategyId === STRATEGY_REGRESSIONIST) {
     mainWeights = gapWeights(numberStats);
     bonusW = uniformWeights();
@@ -257,6 +286,12 @@ export function recommend(ctx) {
     const el = zodiacElementOf(zodiac);
     const elLabel = el ? `${el}` : '미지정';
     reasons.push(`별자리 4원소: ${elLabel} 그룹 행운 번호 위주.`);
+  } else if (strategyId === STRATEGY_FIVE_ELEMENTS) {
+    mainWeights = fiveElementsWeights(dayPillar);
+    bonusW = uniformWeights();
+    const el = fiveElementOf(dayPillar);
+    const elLabel = el ? `${el}` : '미지정';
+    reasons.push(`일주 오행: ${elLabel} 그룹 행운 번호 위주.`);
   } else {
     throw new Error(`Unknown strategy: ${strategyId}`);
   }

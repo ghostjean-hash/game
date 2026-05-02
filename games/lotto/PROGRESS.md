@@ -9,6 +9,181 @@
 
 # 2. 완료 마일스톤
 
+## 2.31. 통계 power 보정 실측 시뮬레이션 + trendFollower 보정 제거 (2026-05-02)
+
+2.30 직후 검증. 1221회 실데이터로 STATS_POWER / GAP_POWER 효과 측정.
+
+### 2.31.1. 시뮬레이션 스크립트 신설
+
+- `scripts/simulate-stats-power.mjs` (게임 허브 루트).
+- 1221회 본번호 통계 산출 → 보정 전/후 weight 분포 + 10000회 가중 추출 시뮬.
+- 재측정 가능 (페치 후 회차 늘어나면 재실행).
+
+### 2.31.2. statistician 실측 결과 (STATS_POWER=1.5)
+
+| 지표 | 추정치 (도입 시 docs) | 실측 (1221회) |
+|---|---|---|
+| count 범위 | 145~180 (±10%) | 133~182 (±19%) |
+| 보정 전 weight ratio | 1.24배 | **1.368배** |
+| 보정 후 weight ratio | 1.38배 | **1.601배** |
+| 10000회 추출 빈도 ratio | - | **1.587배** |
+
+- 사용자 인지 가능 수준 (mean 1333, max 1590, min 1002 / 번호당 추출).
+- "확률 향상" 톤 회피 유지. STATS_POWER=1.5 적정.
+
+### 2.31.3. regressionist 실측 결과 (GAP_POWER=1.3)
+
+- gap 0~19 → weight ratio 19 → 46 (2.42배 증폭). 적정.
+
+### 2.31.4. trendFollower 보정 제거 결정
+
+- recent30 raw ratio = **9배** (이미 충분히 두드러짐).
+- 1.5 보정 시 ratio 27배로 증폭. **과도하다 판단**.
+- raw 자연 분포가 더 정직 → power 보정 제거.
+- recommend.js trendWeights 함수에서 STATS_POWER 적용 제거 + 주석 명시.
+- 02_data.md 1.5 표 갱신: trendFollower 가중치 정책 "raw, recent30 0~9 자연 분포".
+- 02_data.md 1.7.4 신설 (제거 사유).
+
+### 2.31.5. STATS_POWER 사용자 옵션화 보류
+
+- 4.2 잔존 후보였으나 실측에서 1.5 / 1.3 적정 확인 → 옵션화 불필요.
+- 게임 도메인 원칙(단일 결정 / 라이트 사용자 부담 회피) 유지.
+- 향후 회차 누적으로 분포 변동 시 재시뮬 후 상수 조정으로 충분.
+
+### 2.31.6. docs / 코드 정정 영향
+
+- 02_data.md 1.7 추정치 → 실측치로 교체 + 1.7.7 시뮬레이션 스크립트 인덱스.
+- recommend.js trendWeights raw 복귀 + 헤더 주석.
+- numbers.js STATS_POWER 적용 범위 주석 갱신 (statistician / secondStar에 한정).
+
+## 2.30. 통계 효과 증폭 + README 동기화 (2026-05-02)
+
+전략 4분류(2.29) 직후 후속. 통계 카테고리의 효과 가시성 향상.
+
+### 2.30.1. 통계 weight power 보정 (배경)
+
+- 1222회 데이터 기준 본번호 totalCount는 평균 ≈ 163, 편차 ±10% 수준.
+- 비복원 가중 추출에서 weight 비율 0.85~1.15는 거의 균등과 구분 안 됨.
+- 사용자가 statistician / trendFollower 선택 시 "그냥 랜덤" 인상 받는 합리적 원인.
+
+### 2.30.2. STATS_POWER / GAP_POWER 신설
+
+- `numbers.js`: STATS_POWER = 1.5, GAP_POWER = 1.3 export.
+- `02_data.md` 1.7에 power 상수 + 1.7.1~1.7.5 정책 신설.
+- 1.5 표 가중치 정책 컬럼에 `count^STATS_POWER` / `gap^GAP_POWER` 명시.
+
+### 2.30.3. 적용 함수
+
+- `statsToWeights`: count^1.5. statistician / secondStar 본번호 + 보너스에 적용.
+- `trendWeights`: recent30^1.5. trendFollower.
+- `gapWeights`: gap^1.3. regressionist (이미 편차 큼 → 약한 증폭).
+
+### 2.30.4. 효과 추정
+
+- count 145 → 145^1.5 ≈ 1746
+- count 180 → 180^1.5 ≈ 2415
+- 비율 1.24배 → **1.38배** 증폭. 사용자 인지 가능 수준.
+- "확률 향상" 톤 회피 (본질은 콘텐츠 가시성, 실제 당첨 확률 무관).
+
+### 2.30.5. 테스트
+
+- 압도적 가중 번호 6개 → 본번호 6개 중 4개 이상 포함 검증 3 케이스 추가 (statistician / regressionist / trendFollower).
+- 기존 객관성 / 결정론 테스트는 power 보정 영향 없음 (분포 비율만 변경).
+
+### 2.30.6. README.md 동기화 (2.29 작업의 외부 문서 후속)
+
+- 11종 → 12종 전략 표 갱신.
+- 4카테고리(통계 / 운세 매핑 / 사주 / 랜덤) 그룹 표시.
+- 페치 가능 전략 목록을 새 라벨로 갱신.
+- 페치 시간 "약 12분" → smok95 미러 bundle "1초 미만" 정정.
+- 테스트 케이스 수 170+ → 200+.
+
+## 2.29. 전략 4분류 + 사주 카테고리 신설 + secondStar 결손 정정 (2026-05-02)
+
+사용자 지적 ("전략 번호 추출에 신뢰가 없다, 멋대로 랜덤 같다") 정정.
+11전략을 통계 / 운세 매핑 / 사주 / 랜덤 4카테고리로 재분류 + 빈 사주 카테고리 채움.
+
+### 2.29.1. 전략 카테고리 4분류 (콘텐츠 차원)
+
+- 02_data.md 1.5 표에 카테고리 컬럼 추가 + 1.5.2 신설.
+- 결정론 차원(객관/시드 의존, 1.5.1)과 직교하는 별도 차원.
+
+| 카테고리 | 본질 | 멤버 |
+|---|---|---|
+| 통계 | 회차 데이터 weight 소스 | statistician / secondStar / regressionist / trendFollower / pairTracker |
+| 운세 매핑(서양) | 별자리 / MBTI 임의 매핑 | astrologer / mbti / zodiacElement |
+| 사주(동양) | 일주 천간 오행 임의 매핑 | fiveElements (신설) |
+| 랜덤 | 균등 + 시드 / 필터 | blessed / intuitive / balancer |
+
+### 2.29.2. 사주 카테고리 신설: `fiveElements` (12번째 전략)
+
+- 캐릭터 dayPillar.stem → 천간 오행(목/화/토/금/수) → 행운 번호 매핑.
+- 사주 자산(이미 캐릭터 생성 시 dateToDayPillar로 산출)을 추첨에 활용.
+- 4원소(서양 zodiacElement) vs 5원소(동양 fiveElements) 의도적 병렬.
+- numbers.js: STRATEGY_FIVE_ELEMENTS / FIVE_ELEMENTS_LUCKY / STEM_TO_ELEMENT export.
+- recommend.js: ctx.dayPillar 받음 + fiveElementsWeights 함수 + 분기.
+- 02_data.md 1.18 신설 (5원소별 행운 번호 표).
+- 시드 의존 (캐릭터별 다른 결과). 객관 5 / 시드 의존 7로 갱신.
+- **임의 매핑이라 추첨 확률 영향 없음**. 콘텐츠 / 캐릭터 정체성 강화 목적.
+
+### 2.29.3. secondStar 결손 정정 (라벨-동작 미스매치)
+
+- 기존: 본번호 균등 + 보너스만 빈도 가중. 라벨 "보너스볼로 자주 나온 번호 위주"인데 본번호와 무관.
+- 정정: 본번호도 bonusStats 가중 적용. 보너스볼 빈도 높은 번호는 본번호로도 자주 등장 경향.
+- recommend.js secondStar 분기: `mainWeights = statsToWeights(bonusStats)` (기존 uniformWeights 대체).
+- 새 테스트: 압도적 가중 6개 번호 → 본번호 6개 중 4개 이상 포함 검증.
+- 결과: 라벨 정직성 + 통계 의미 모두 회복. 객관 카테고리 유지.
+
+### 2.29.4. UI 카테고리 배지
+
+- strategy-tabs.js 활성 전략 desc 앞에 카테고리 배지 표시 (통계 / 운세 매핑 / 사주 / 랜덤).
+- 배지 색상 4종: is-stats(파랑) / is-mapping(분홍) / is-saju(황) / is-random(회색).
+- 사용자가 선택 전략의 본질을 한눈에 파악 → 신뢰 격차 해소.
+- main.css `.strategy-category` + 4 카테고리 클래스.
+
+### 2.29.5. 옛 라벨 잔존 결손 동시 정정
+
+- recommend.test.js의 reasons 검사가 옛 라벨("통계학자"/"회귀주의자"/"짝궁추적자"/"점성술사"/"추세추종자"/"직감주의자"/"균형주의자"/"2등의 별")에 묶여 깨진 상태였음.
+- 2.26.8 라벨 직관화 시 테스트 갱신 누락. CLAUDE.md 2장 워크플로우 위반 사례.
+- 모두 새 톤("통계 추첨"/"미출현 회귀"/"짝꿍 번호"/"별자리 행운"/"최근 트렌드"/"직감"/"균형 조합"/"보너스볼 사냥")으로 동기화.
+
+### 2.29.6. 영향 파일
+
+- docs: 02_data.md(1.5 / 1.5.1 / 1.5.2 / 1.18) / 01_spec.md(5.1.3 / 5.4)
+- 코드: numbers.js / recommend.js / history.js / render/main.js / strategy-picker.js / strategy-tabs.js
+- 스타일: main.css (.strategy-category 배지)
+- 테스트: recommend.test.js (라벨 동기화 + secondStar 가중 검증 + fiveElements 4 케이스)
+
+## 2.28. 전체 검증 + 결손 4건 정정 (2026-05-02)
+
+전체 코드 / docs / 룰 검증 후 발견된 4건 일괄 정정.
+
+### 2.28.1. docs/03_architecture.md 폴더 트리 갱신
+
+- 신규 파일 13개 누락 상태였음. 갱신 완료:
+  - core/: schedule.js 추가 (12개로).
+  - render/: next-draw-card / settings-page / bottom-tabs / icons / strategy-tabs 추가 (16개로).
+  - tests/suites/: storage / fortune / match / zodiac / saju / wheeling / schedule / history 추가 (13개로).
+- 데이터 흐름 다이어그램의 `data/draws.js` → `data/draws.json` (정적 JSON, 모듈 아님).
+- 4장 책임 표 갱신: input/은 분리 보류, render/는 SVG 아이콘 포함, core/는 객관 5 + 시드 의존 6 분기 명시.
+
+### 2.28.2. core/schedule.js 헤더 주석 stale 정정
+
+- 코드는 20:00(판매 마감)이지만 주석은 20:35(실제 방송) 표기였음.
+- 함수 주석 line 16/21/32-34 모두 20:00 + "실제 방송은 20:35지만 사이트 카운트다운은 20:00에 0" 컨텍스트로 정리.
+
+### 2.28.3. games/lotto/CLAUDE.md 7장 실행 안내 갱신
+
+- `python -m http.server` → 게임 허브 표준인 `node scripts/dev-server.mjs 8000` 권장.
+- 페치 .bat / 자동화 워크플로우(매주 일 03:00 KST GitHub Actions) 안내 추가.
+
+### 2.28.4. DEFAULT_DRWNO 매직 넘버 → numbers.js 이동
+
+- `src/render/main.js`에서 직접 정의되어 있던 `const DEFAULT_DRWNO = 1222`가 CLAUDE.md 4장 "매직 넘버 0개" 룰 위반.
+- `src/data/numbers.js`에 `DEFAULT_DRWNO_FALLBACK` export로 이동.
+- `docs/02_data.md` 1.17 신설 (의미 / 무력화 조건 / 시점 결정 명시).
+- 트레이드오프: 본질이 fallback인데 데이터 상수처럼 보임. 그러나 SSOT 일관성 우선.
+
 ## 2.27. 객관 전략 캐릭터 무관 분리 (2026-05-02)
 
 사용자 지적 ("통계 추첨이 사람마다 다른 게 이상함") 정정.
