@@ -41,7 +41,8 @@ export function saveActiveCharacterId(id) { write('active_character', id); }
 
 // 옵션
 // multiStrategy: 다중 전략 모드 (S3-T1). 기본 OFF (라이트 사용자 비노출).
-const OPTIONS_DEFAULT = { applyFilters: false, advancedMode: false, multiStrategy: false };
+// fiveSets: 5세트 동시 추천 모드 (S4-T1). 기본 OFF.
+const OPTIONS_DEFAULT = { applyFilters: false, advancedMode: false, multiStrategy: false, fiveSets: false };
 export function loadOptions() {
   const opts = read('options', OPTIONS_DEFAULT);
   // 누락 키 채우기 (마이그레이션)

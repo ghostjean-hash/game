@@ -19,6 +19,7 @@ import { plus, close } from './icons.js';
  *   onActivateCharacter: (id: string) => void,
  *   onOpenWheeling: () => void,
  *   onMultiStrategyToggle: () => void,
+ *   onFiveSetsToggle: () => void,
  * }} handlers
  */
 export function renderSettingsPage(container, handlers) {
@@ -87,6 +88,13 @@ export function renderSettingsPage(container, handlers) {
           <span class="settings-hint">전략 탭에서 1~6개 토글 선택. 각 전략별로 본번호를 균등 분배(6/N)하여 추천. 추천 카드에 번호별 출처 색 dot 표시.</span>
         </span>
       </label>
+      <label class="settings-row">
+        <input type="checkbox" data-setting="fiveSets" ${options.fiveSets ? 'checked' : ''} />
+        <span class="settings-label">
+          <strong>5세트 동시 추천</strong>
+          <span class="settings-hint">한 회차에 시드 변형으로 5장 결정론 추천 표시 (메인 1장 + 컴팩트 4장). 이력 기록 / Luck 매칭은 메인만. 5장 구매 권유 아님, 당첨 확률 변화 없음.</span>
+        </span>
+      </label>
     </section>
 
     <section class="stats-section">
@@ -123,6 +131,13 @@ export function renderSettingsPage(container, handlers) {
     opts.multiStrategy = e.target.checked;
     saveOptions(opts);
     handlers.onMultiStrategyToggle();
+  });
+
+  container.querySelector('[data-setting="fiveSets"]').addEventListener('change', (e) => {
+    const opts = loadOptions();
+    opts.fiveSets = e.target.checked;
+    saveOptions(opts);
+    handlers.onFiveSetsToggle();
   });
 
   container.querySelector('[data-action="toggle-advanced"]').addEventListener('click', handlers.onAdvancedToggle);

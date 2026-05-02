@@ -92,6 +92,24 @@
 1.5.4.4. **최소 1개 보장**: 다중 모드에서 마지막 1개 토글 제거는 무시 (전략 0개 방지).
 1.5.4.5. **백캐스트 영향 없음**: `backfillRecommendations`은 단일 전략으로 결정론 유지. 다중 모드여도 history는 첫 전략 기준.
 
+#### 1.5.5. 5세트 동시 추천 (S4-T1, 2026-05-02 신설)
+
+옵션 `options.fiveSets = true` 활성 시 한 회차에 5장의 추천 세트를 동시 표시. 시드 변형(salt)으로 5개 다른 결정론 결과. 다중 전략 모드와 직교(병행 가능).
+
+| 상수 | 값 | 의미 |
+|---|---|---|
+| `FIVE_SETS_COUNT` | 5 | 한 번에 노출할 세트 수 |
+| `FIVE_SETS_SALT_BASE` | `0x5E7A` | 세트별 시드 변형 솔트 베이스 |
+
+1.5.5.1. **시드 변형 룰**: 세트 i (0~4)의 입력 시드 = `mixSeeds(baseSeed, FIVE_SETS_SALT_BASE + i)` 단, i=0은 baseSeed 그대로(메인 = 기존 동작 호환).
+1.5.5.2. **결정론 유지**: 같은 캐릭터 + 같은 회차 + 같은 전략 = 같은 5세트. 다중 모드 ON이면 각 세트 안에서 다중 분배 동일 룰 적용.
+1.5.5.3. **객관 전략 처리**: 객관 전략(1.5.1)은 캐릭터 시드 무관 → 5세트가 모두 같은 결과가 되면 의미 없음. 따라서 5세트 모드의 객관 전략은 시드 변형을 `mixSeeds(drwNo, OBJECTIVE_SEED_SALT + i)`로 바꿔 회차 내부에서 5개 분기 시드를 만든다(여전히 캐릭터 무관, 회차 단위 결정론).
+1.5.5.4. **이력 / Luck 영향**: history 기록 + Luck 매칭은 **#1(메인)에만** 적용. #2~#5는 표시 전용(서사적 "다른 시도"). 백캐스트 영향 없음. 의식 만땅 보너스(Luck +5)는 #1에만 작용(추천 알고리즘 영향 없음 원칙 유지).
+1.5.5.5. **다중 모드 + 5세트 호환**: ON+ON 시 각 세트가 strategySources 라벨을 별도 보유. 5장 모두 색 dot 표시.
+1.5.5.6. **알고리즘**: `core/recommend.js` `recommendFiveSets(ctx)` → `RecommendationSet[]` 길이 `FIVE_SETS_COUNT`. 단일/다중 분기는 내부에서.
+1.5.5.7. **사행성 회피**: 라벨에 "확률" / "필승" / "당첨 보장" 사용 금지. 5세트는 "5번의 다른 시도", "한 회차의 다양한 가능성"으로만 표현. 비용 권장 표기 금지(실제 5장 구매 권유 아님).
+1.5.5.8. **기본 OFF**. 라이트 사용자 비노출(설정 탭 토글로만 진입). 다중 모드와 동일한 노출 정책.
+
 #### 1.5.2. 카테고리 (콘텐츠 차원)
 
 12전략을 가중치 소스 본질로 분류. 결정론 차원(1.5.1)과 직교하는 별도 차원.
@@ -442,12 +460,13 @@
 | `lotto_stats_cooccur` | `Cooccur[]` (페어 빈도) | draws 갱신 후 자동 |
 | `lotto_characters` | `Character[]` | 캐릭터 생성 / 삭제 / 이력 갱신 |
 | `lotto_active_character` | `string` (id) | 캐릭터 전환 |
-| `lotto_options` | `{ applyFilters, advancedMode, multiStrategy, ... }` | 사용자 토글 변경 |
+| `lotto_options` | `{ applyFilters, advancedMode, multiStrategy, fiveSets, ... }` | 사용자 토글 변경 |
 | `lotto_seen_help` | `boolean` | 첫 진입 안내 표시 |
 | `lotto_rituals` | `RitualState` (1.19.3) | 행위 수행 시 / 회차 변경 시 자동 리셋 |
 
 3.2.1. `lotto_options.advancedMode`: 다구좌 모드(휠링) 활성화 여부. 기본 false. 첫 활성화 시 윤리 안내 모달 강제.
 3.2.2. `lotto_options.multiStrategy`: 다중 전략 모드 (S3-T1). 기본 false (라이트 사용자 비노출). 설정 탭 토글로 변경. ON 시 전략 탭이 토글 동작 + 추천 카드에 출처 dot 표시.
+3.2.3. `lotto_options.fiveSets`: 5세트 동시 추천 모드 (S4-T1). 기본 false. 설정 탭 토글로 변경. ON 시 추첨 탭에 메인 카드 1장 + 컴팩트 4장(#2~#5) 세로 스택. 1.5.5 참조.
 
 ### 3.3. Draw 스키마
 
@@ -520,7 +539,7 @@
 3.6.3. `name`과 `animalSign`은 표시 / 운세 산출 목적상 별도 보관. `animalSign`은 생년에서 자동 계산.
 3.6.4. **마이그레이션**: 기존 캐릭터의 `className`은 무시 (lastUsedStrategy 누락 시 `STRATEGY_DEFAULT`로 fallback). `lastUsedStrategies` 누락 시 `[lastUsedStrategy || STRATEGY_DEFAULT]`로 자동 변환 (S3-T1, render/main.js `activeStrategyIds`).
 
-### 3.6.5. Recommendation 결과 스키마 (다중 전략 추가 필드)
+### 3.6.5. Recommendation 결과 스키마 (다중 전략 + 5세트 추가 필드)
 
 `recommendMulti` 호출 시 `strategySources: string[]` 필드가 추가됨. 단일 모드 (`recommend`)는 미반환.
 
@@ -531,6 +550,18 @@
   reasons: string[],
   strategySources: string[],   // numbers와 동일 순서. 다중 모드에서만 채워짐. 카테고리 dot용.
 }
+```
+
+`recommendFiveSets` 호출 시 위 객체의 배열(길이 `FIVE_SETS_COUNT` = 5) 반환. `[0]`이 메인(이력 기록 대상), `[1]~[4]`는 서사 표시용.
+
+```js
+[
+  { numbers, bonus, reasons, strategySources },  // setIndex 0 = 메인
+  { numbers, bonus, reasons, strategySources },  // setIndex 1
+  { numbers, bonus, reasons, strategySources },  // setIndex 2
+  { numbers, bonus, reasons, strategySources },  // setIndex 3
+  { numbers, bonus, reasons, strategySources },  // setIndex 4
+]
 ```
 
 ### 3.7. Recommendation 스키마

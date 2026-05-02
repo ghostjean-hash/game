@@ -1,10 +1,11 @@
 import { suite, test, assertEqual, assertTrue, assertDeepEqual } from '../core.js';
-import { recommend, recommendMulti, distributeCounts } from '../../src/core/recommend.js';
+import { recommend, recommendMulti, distributeCounts, recommendFiveSets } from '../../src/core/recommend.js';
 import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
   STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
   STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
+  FIVE_SETS_COUNT,
 } from '../../src/data/numbers.js';
 
 const baseCtx = {
@@ -445,5 +446,80 @@ suite('core/recommend - 전략', () => {
     }
     // 30번 중 25번 이상 통과 기대 (fallback 5번 미만)
     assertTrue(pass >= 25, `pass ${pass}/30, expected >= 25`);
+  });
+
+  // ========== S4-T1: 5세트 동시 추천 ==========
+
+  test('S4-T1 recommendFiveSets: 길이 = FIVE_SETS_COUNT(5)', () => {
+    const sets = recommendFiveSets({ ...baseCtx, strategyId: STRATEGY_BLESSED });
+    assertEqual(sets.length, FIVE_SETS_COUNT);
+    assertEqual(sets.length, 5);
+  });
+
+  test('S4-T1 recommendFiveSets: 각 세트는 numbers 6개 정렬 + bonus 1개 + bonus ∉ numbers', () => {
+    const sets = recommendFiveSets({ ...baseCtx, strategyId: STRATEGY_BLESSED });
+    for (const s of sets) {
+      assertEqual(s.numbers.length, 6);
+      assertEqual(new Set(s.numbers).size, 6);
+      for (const n of s.numbers) assertTrue(n >= 1 && n <= 45);
+      for (let i = 1; i < s.numbers.length; i += 1) assertTrue(s.numbers[i - 1] < s.numbers[i]);
+      assertTrue(!s.numbers.includes(s.bonus), `bonus ${s.bonus} ∈ numbers ${s.numbers}`);
+    }
+  });
+
+  test('S4-T1 recommendFiveSets: [0]은 메인 (단일 recommend와 동일 결과)', () => {
+    const main = recommend({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
+    const sets = recommendFiveSets({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
+    assertDeepEqual(sets[0].numbers, main.numbers);
+    assertEqual(sets[0].bonus, main.bonus);
+  });
+
+  test('S4-T1 recommendFiveSets: 시드 의존 전략은 [0]과 [1..4] 결과가 다름 (변형 효과)', () => {
+    const sets = recommendFiveSets({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
+    // [0]과 [1..4] 중 최소 하나는 numbers가 달라야 (시드 변형 효과)
+    let differs = 0;
+    for (let i = 1; i < sets.length; i += 1) {
+      if (JSON.stringify(sets[0].numbers) !== JSON.stringify(sets[i].numbers)) differs += 1;
+    }
+    assertTrue(differs >= 3, `[1..4] 중 최소 3개는 [0]과 달라야 함 (실제 ${differs})`);
+  });
+
+  test('S4-T1 recommendFiveSets: 결정론 (같은 ctx → 같은 5세트)', () => {
+    const a = recommendFiveSets({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
+    const b = recommendFiveSets({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
+    for (let i = 0; i < a.length; i += 1) {
+      assertDeepEqual(a[i].numbers, b[i].numbers);
+      assertEqual(a[i].bonus, b[i].bonus);
+    }
+  });
+
+  test('S4-T1 recommendFiveSets: 객관 전략(statistician)도 회차 변형 → [1..4]가 [0]과 다름', () => {
+    // 통계 압도 가중치 6개 (객관 전략도 5세트 다양화 검증)
+    const numberStats = [];
+    for (let n = 1; n <= 45; n += 1) {
+      numberStats.push({ number: n, totalCount: n <= 6 ? 100 : 1, recent10: 0, recent30: 0, recent100: 0, lastSeenDrw: 0, currentGap: 0 });
+    }
+    const sets = recommendFiveSets({
+      ...baseCtx, strategyId: STRATEGY_STATISTICIAN, numberStats,
+    });
+    // 객관 전략은 캐릭터 시드 무관이지만, 5세트는 drwNo 변형으로 분기 → 모두 동일 numbers면 안 됨
+    let differs = 0;
+    for (let i = 1; i < sets.length; i += 1) {
+      if (JSON.stringify(sets[0].numbers) !== JSON.stringify(sets[i].numbers)) differs += 1;
+    }
+    assertTrue(differs >= 1, `객관 전략 5세트는 회차 변형으로 최소 1세트는 [0]과 달라야 (실제 ${differs})`);
+  });
+
+  test('S4-T1 recommendFiveSets: 다중 모드 호환 (multi=true) - strategySources 채워짐', () => {
+    const sets = recommendFiveSets(
+      { ...baseCtx, strategyIds: [STRATEGY_BLESSED, STRATEGY_INTUITIVE] },
+      { multi: true }
+    );
+    assertEqual(sets.length, 5);
+    for (const s of sets) {
+      assertEqual(s.numbers.length, 6);
+      assertTrue(Array.isArray(s.strategySources));
+      assertEqual(s.strategySources.length, 6);
+    }
   });
 });

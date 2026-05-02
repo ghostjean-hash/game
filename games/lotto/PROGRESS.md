@@ -4,10 +4,69 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-02 (동행복권 결과 페이지 호환 디자인 + 게임 메커닉 정리).
+1.3. **마지막 갱신**: 2026-05-02 (Sprint 014 - 5세트 동시 추천 + 의식 폴리싱).
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.35. Sprint 014 완료 - 5세트 동시 추천 + 의식 폴리싱 (2026-05-02)
+
+Charm 우선. 콘텐츠 풍부함 + 라이트 사용자 비노출(기본 OFF) 유지.
+
+### 2.35.1. S4-T1 5세트 동시 추천 (#3)
+
+"한 회차의 다양한 시도"를 시드 변형으로 5장 결정론 추천. 다중 모드와 직교(병행 가능).
+
+- numbers.js: `FIVE_SETS_COUNT=5` / `FIVE_SETS_SALT_BASE=0x5E7A` 신설.
+- recommend.js: `recommendFiveSets(ctx, opts)` 신설.
+  - `i=0` = baseSeed 그대로(메인, 기존 동작 호환).
+  - `i=1..4` = `mixSeeds(baseSeed, FIVE_SETS_SALT_BASE + i)` 변형(시드 의존 전략).
+  - 객관 전략은 캐릭터 시드 무관 → drwNo 분기 솔트로 회차 내부 5분기(객관성 유지, 시드 영향 0).
+  - 다중 모드 호환: `opts.multi=true`이면 각 세트 안에서 `recommendMulti`.
+- storage.js: `options.fiveSets` 신설(기본 false).
+- main.js:
+  - `getRecAndFortune`을 `(rec, sets)` 반환으로 확장. 5세트 OFF면 `sets=null`.
+  - `homeTabHtml`에 `sets` 인자 추가 + hero 안에 `fiveSetsExtraHtml(sets)` 삽입.
+  - 이력 / Luck / 의식 보너스 영향은 `#1`만(서사 표시 #2~#5는 표시 전용). 백캐스트 영향 없음.
+  - `OPTIONS_DEFAULT` reset 시 `multiStrategy / fiveSets` 명시 reset.
+- draw-card.js: `fiveSetsExtraHtml(sets)` export(SSOT). #2~#5만 컴팩트 카드(인덱스 + 본번호 + 보너스). 면책 카피 1회 노출.
+- settings-page.js: "5세트 동시 추천" 토글 + `onFiveSetsToggle` 핸들러.
+- styles/main.css: `.five-sets-extra` / `.five-set-row` / `.five-set-balls`(6fr:auto:1fr) / `.five-set-main`(repeat-6) / 모바일 반응형 30px → 26px.
+- 테스트: 7 케이스(길이 / numbers / [0]=메인 / 시드 변형 / 결정론 / 객관 변형 / 다중 호환).
+
+### 2.35.2. S4-T2 의식 폴리싱 - Canvas 파티클
+
+만땅 진입 직후(`appliedBonus` false → true 전환) 0.9초 단발 방사형 파티클. `prefers-reduced-motion` 시 비활성.
+
+- 신규 파일: `src/render/ritual-particles.js`.
+  - `spawnRitualBurst(anchor)`: anchor 중심에서 30개 입자, RADIUS_MAX=140px, ease-out + alpha 페이드.
+  - body에 fixed canvas 마운트, `requestAnimationFrame` 단일 루프, 종료 후 자동 detach + setTimeout 안전 가드.
+  - `matchMedia('(prefers-reduced-motion: reduce)')` 즉시 종료(canvas 마운트 자체 스킵).
+- main.js `openRitualModalForActive` 안 `onPerform`:
+  - `result.justFilled && bonus.applied`인 순간 `burstNow=true` 플래그.
+  - 모달 재렌더 후 `requestAnimationFrame` 1단 늦춰 `.ritual-complete-banner`를 anchor로 spawn(좌표 측정 안전성).
+- styles/main.css: `@media (prefers-reduced-motion: reduce) { .ritual-burst-canvas { display: none !important; } }` (JS 가드 + CSS 이중 가드).
+
+### 2.35.3. 영향 파일 (10건)
+
+- 신규 1건: `src/render/ritual-particles.js`.
+- 수정 9건: docs/01_spec.md / docs/02_data.md / docs/03_architecture.md / src/data/numbers.js / src/data/storage.js / src/core/recommend.js / src/render/main.js / src/render/draw-card.js / src/render/settings-page.js / styles/main.css / tests/suites/recommend.test.js / PROGRESS.md.
+
+### 2.35.4. QA 결과
+
+- core/ DOM 의존성: 0건(`recommendFiveSets`는 순수 함수, ritual-particles.js는 render/).
+- 사행성 표현 위반: 0건(컴팩트 카드 면책에 "5장 구매 권유 아님 / 당첨 확률 변화 없음" 명시).
+- 옛 라벨 잔존: 0건.
+- 매직 넘버: 0건(`FIVE_SETS_COUNT` / `FIVE_SETS_SALT_BASE` 모두 numbers.js. 파티클 시각 효과 파라미터는 ritual-widget 패턴 따라 모듈 내부 상수).
+- docs SSOT 정합: 3종 갱신(02 1.5.5 / 3.2 / 3.6.5, 01 5.1.3.2 / 5.6.7~8, 03 폴더 트리).
+- 시뮬 회귀: 영향 없음(객관 전략 5세트 변형 검증).
+- Node 스모크 49/49 통과(단일/다중/5세트/결정론/분배 카운트).
+
+### 2.35.5. 다음 sprint 후보
+
+- Sprint 015 (Depth): #10 명망 로직(사주/별자리/MBTI 매핑 출처 결정 필요) + #1 4분면 행운 번호.
+- Sprint 016 (Tech): #7 OCR(영수증 형식 결정 필요).
+- 폴리싱 후보: 5세트 결과를 휠링 시드 풀로 활용 / 5세트 매칭 회차 표시 / 의식 만땅 시 5세트 #1 강조 글로우.
 
 ## 2.34. Sprint 013 완료 - 다중 전략 + 전적 강화 + 4종 행운 토글 (2026-05-02)
 
@@ -833,6 +892,33 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 - `docs/03_architecture.md` 폴더 트리.
 
 # 3. 다음 액션
+
+## 3.-3. Sprint 014 (완료, 2026-05-02 - Charm 우선)
+
+자율 진행. 사용자 "다음 진행" 위임. 결과는 2.35 영구 이력 참조.
+
+### 3.-3.1. 작업 범위 (2건)
+
+| ID | 작업 | 양 | 상태 |
+|---|---|---|---|
+| S4-T1 | #3 5세트 동시 추천 (시드 변형, 다중 모드 호환) | 큼 | **완료** |
+| S4-T2 | 의식 폴리싱 - Canvas 파티클 (만땅 진입 트리거 + reduced-motion) | 중 | **완료** |
+
+### 3.-3.2. 자율 결정 사항
+
+- 5세트 의미 = A안(시드 변형). 다중 모드(B)와 의미 분리. `i=0`은 baseSeed 그대로(메인=기존 호환), `i=1..4`는 `mixSeeds(baseSeed, FIVE_SETS_SALT_BASE + i)`.
+- 객관 전략은 캐릭터 시드 무관 → 시드 변형 의미 없음. 대신 drwNo 분기 솔트로 회차 내부 5분기(객관성 유지, 시드 영향 0).
+- 진입 = 설정 탭 "5세트 동시 추천" 토글. 기본 OFF(라이트 사용자 비노출, multiStrategy와 동일 노출 정책).
+- 이력 / Luck / 의식 보너스 = #1만(추천 알고리즘 영향 없음 원칙 유지). #2~#5는 표시 전용.
+- UI = #1 hero 카드 + #2~#5 컴팩트 4장(인덱스 + 본번호줄 + 보너스, 30px 컬러볼). 면책 카피 1회 노출.
+- 의식 파티클 = 만땅 진입(`appliedBonus` false→true 전환) 직후 0.9초 단발. `prefers-reduced-motion` 시 비활성.
+
+### 3.-3.3. 비범위
+
+- 5세트 매칭 회차 표시(현재는 표시 전용, 이력/Luck #1만)
+- 5세트 결과를 휠링 시드 풀로 활용
+- 의식 만땅 보너스의 #1 강조 글로우(폴리싱 후순위)
+- 다중 매칭 회차 보기 / 기간 필터 (Sprint 013 후보 그대로 유지)
 
 ## 3.-2. Sprint 013 (완료, 2026-05-02 - Trust 우선)
 

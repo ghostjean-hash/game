@@ -1353,6 +1353,81 @@ a.btn-secondary,
 .num-source-dot.is-saju { background: #92400e; }
 .num-source-dot.is-random { background: #6b7280; }
 
+/* S4-T1: 5세트 동시 추천 컴팩트 카드 (#2~#5). SSOT: docs/01_spec.md 5.1.3.2. */
+.five-sets-extra {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.five-set-row {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-1);
+  border-bottom: 1px dashed var(--color-border);
+}
+.five-set-row:last-of-type { border-bottom: none; }
+.five-set-idx {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  letter-spacing: 0.02em;
+}
+.five-set-balls {
+  display: grid;
+  grid-template-columns: 6fr auto 1fr;
+  align-items: center;
+  gap: var(--space-2);
+}
+.five-set-main {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  justify-items: center;
+}
+.five-set-bonus {
+  display: flex;
+  justify-content: center;
+}
+.five-set-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+}
+.five-set-plus .icon { width: 14px; height: 14px; }
+/* 컴팩트 번호공: 메인보다 작게. .num-cell의 숫자 칸을 축소. */
+.five-set-row .num-cell .num {
+  width: 30px; height: 30px; min-width: 30px; min-height: 30px;
+  font-size: 13px;
+}
+.five-set-row .num-source-dot { width: 6px; height: 6px; }
+.five-sets-disclaimer {
+  margin: var(--space-1) 0 0;
+  font-size: 11px;
+  color: var(--color-text-dim);
+  line-height: 1.5;
+}
+@media (max-width: 480px) {
+  .five-set-row { grid-template-columns: 30px 1fr; gap: var(--space-1); }
+  .five-set-row .num-cell .num {
+    width: 26px; height: 26px; min-width: 26px; min-height: 26px;
+    font-size: 12px;
+  }
+  .five-set-idx { font-size: 12px; }
+}
+
+/* S4-T2: 의식 만땅 파티클 캔버스. JS가 fixed로 직접 마운트하지만, prefers-reduced-motion 시 추가 보호. */
+@media (prefers-reduced-motion: reduce) {
+  .ritual-burst-canvas { display: none !important; }
+}
+
 .strategy-tab.is-disabled {
   opacity: 0.35;
   cursor: not-allowed;

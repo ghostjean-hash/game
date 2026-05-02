@@ -3,7 +3,7 @@
 // SSOT: docs/01_spec.md 4장.
 import { renderCharacterForm } from './character-form.js';
 import { characterCardHtml } from './character-card.js';
-import { drawCardHtml } from './draw-card.js';
+import { drawCardHtml, fiveSetsExtraHtml } from './draw-card.js';
 import { characterSlotsHtml } from './character-slots.js';
 import { strategyTabsHtml } from './strategy-tabs.js';
 import { nextDrawCardHtml, startCountdown } from './next-draw-card.js';
@@ -16,7 +16,8 @@ import { renderSettingsPage } from './settings-page.js';
 import { bottomTabsHtml, TABS } from './bottom-tabs.js';
 import { showModal, showDisclaimer } from './modal.js';
 import { ritualWidgetHtml, openRitualModal } from './ritual-widget.js';
-import { recommend, recommendMulti } from '../core/recommend.js';
+import { spawnRitualBurst } from './ritual-particles.js';
+import { recommend, recommendMulti, recommendFiveSets } from '../core/recommend.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
 import { recordRecommendation, matchHistory, backfillRecommendations } from '../core/history.js';
@@ -42,7 +43,7 @@ const state = {
   numberStats: [],
   bonusStats: [],
   cooccur: [],
-  options: { applyFilters: false, advancedMode: false },
+  options: { applyFilters: false, advancedMode: false, multiStrategy: false, fiveSets: false },
   currentTab: 'home',
   ritual: null, // T4: 행운 의식 상태 (charId+drwNo 기준 격리, 회차 변경 시 자동 리셋)
 };
@@ -134,6 +135,7 @@ function openRitualModalForActive() {
     if (!result.didApply) return;
     state.ritual = result.state;
 
+    let burstNow = false;
     if (result.justFilled) {
       // 만땅 → Luck 보너스 적용 + 캐릭터 갱신
       const cur = state.characters.find((c) => c.id === state.ritual.charId) || active;
@@ -142,6 +144,7 @@ function openRitualModalForActive() {
         state.ritual = bonus.state;
         state.characters = state.characters.map((c) => (c.id === cur.id ? bonus.character : c));
         saveCharacters(state.characters);
+        burstNow = true; // S4-T2: 만땅 진입 직후 파티클 트리거
       }
     }
     saveRitualState(state.ritual);
@@ -149,6 +152,17 @@ function openRitualModalForActive() {
     // 모달 닫고 다시 열어 갱신된 state로 그림 (게이지 진행 시각화)
     if (currentClose) currentClose();
     currentClose = openRitualModal(state.ritual, onPerform, onClose);
+
+    // S4-T2: 만땅 진입 trigger Canvas 파티클. 모달 재렌더 직후 (banner DOM 잡힘).
+    if (burstNow) {
+      // microtask 1단 늦춰 새 모달의 banner 노드가 DOM에 attach된 후 좌표 측정.
+      window.requestAnimationFrame(() => {
+        const banner = document.querySelector('.ritual-complete-banner')
+          || document.querySelector('[data-role="ritual-modal"]')
+          || document.body;
+        spawnRitualBurst(banner);
+      });
+    }
   };
 
   currentClose = openRitualModal(state.ritual, onPerform, onClose);
@@ -190,16 +204,25 @@ function getRecAndFortune(active) {
   };
 
   // S3-T1: 다중 전략 모드 분기
-  if (state.options.multiStrategy) {
-    const strategyIds = activeStrategyIds(active);
-    const rec = recommendMulti({ ...ctxBase, strategyIds });
-    return { strategyId: strategyIds[0], strategyIds, rec, fortune, drawForFortune };
+  const isMulti = !!state.options.multiStrategy;
+  const strategyIds = isMulti ? activeStrategyIds(active) : null;
+  const strategyId = isMulti ? strategyIds[0] : (active.lastUsedStrategy || STRATEGY_DEFAULT);
+
+  // S4-T1: 5세트 모드. ON이면 메인(rec) = sets[0], 추가 sets[1..4]를 함께 반환.
+  if (state.options.fiveSets) {
+    const ctx = isMulti ? { ...ctxBase, strategyIds } : { ...ctxBase, strategyId };
+    const sets = recommendFiveSets(ctx, { multi: isMulti });
+    return { strategyId, strategyIds: isMulti ? strategyIds : [strategyId], rec: sets[0], sets, fortune, drawForFortune };
   }
 
-  // 단일 전략 모드 (기존 동작)
-  const strategyId = active.lastUsedStrategy || STRATEGY_DEFAULT;
+  // 5세트 OFF: 기존 동작
+  if (isMulti) {
+    const rec = recommendMulti({ ...ctxBase, strategyIds });
+    return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune };
+  }
+
   const rec = recommend({ ...ctxBase, strategyId });
-  return { strategyId, strategyIds: [strategyId], rec, fortune, drawForFortune };
+  return { strategyId, strategyIds: [strategyId], rec, sets: null, fortune, drawForFortune };
 }
 
 /**
@@ -213,7 +236,7 @@ function activeStrategyIds(character) {
   return [character.lastUsedStrategy || STRATEGY_DEFAULT];
 }
 
-function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune) {
+function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune, sets) {
   const banner = state.draws.length === 0
     ? `<section class="data-banner">
         <strong>회차 데이터 없음.</strong> 통계 / 일진 / 일부 전략이 데이터 기반으로 동작하려면 페치 1회 필요.
@@ -238,6 +261,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     <section class="home-hero${heroFortuneClass}" aria-label="다음 추첨 + 추천">
       ${nextDrawCardHtml(nextInfo)}
       ${drawCardHtml(state.drwNo, rec, fortune)}
+      ${fiveSetsExtraHtml(sets)}
     </section>
 
     ${characterSlotsHtml(state.characters, state.activeId)}
@@ -256,7 +280,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
 
 function renderHome(content) {
   const active = getActive();
-  const { strategyId, strategyIds, rec, fortune, drawForFortune } = getRecAndFortune(active);
+  const { strategyId, strategyIds, rec, sets, fortune, drawForFortune } = getRecAndFortune(active);
 
   // 백캐스트: 캐릭터에 최근 30회 결정론적 추천이 history에 없으면 1회 백필.
   // Luck 부트스트랩 목적. SSOT: docs/01_spec.md 7.5.
@@ -279,7 +303,7 @@ function renderHome(content) {
   state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
   saveCharacters(state.characters);
 
-  content.innerHTML = homeTabHtml(updated, strategyId, strategyIds, rec, fortune, drawForFortune);
+  content.innerHTML = homeTabHtml(updated, strategyId, strategyIds, rec, fortune, drawForFortune, sets);
 
   // 카운트다운 시작 (이전 interval은 renderApp 시작 시 정리됨).
   // 추첨 시각 도달 시 자동 재렌더 → 다음 회차 정보로 갱신.
@@ -481,7 +505,7 @@ function renderApp() {
       onResetAll: () => {
         state.characters = [];
         state.activeId = null;
-        state.options = { applyFilters: false, advancedMode: false };
+        state.options = { applyFilters: false, advancedMode: false, multiStrategy: false, fiveSets: false };
         renderApp();
       },
       onAddCharacter: openAddCharacterModal,
@@ -490,6 +514,11 @@ function renderApp() {
       onOpenWheeling: () => setTab('wheeling'),
       onMultiStrategyToggle: () => {
         // S3-T1: 토글 후 state 갱신 + 추첨 탭으로 이동해 즉시 효과 확인
+        state.options = loadOptions();
+        renderApp();
+      },
+      onFiveSetsToggle: () => {
+        // S4-T1: 5세트 토글 후 state 갱신
         state.options = loadOptions();
         renderApp();
       },

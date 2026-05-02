@@ -17,6 +17,7 @@ import {
   ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY,
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
   MULTI_STRATEGY_MAX,
+  FIVE_SETS_COUNT, FIVE_SETS_SALT_BASE,
 } from '../data/numbers.js';
 import { applyLuck } from './luck.js';
 import { mulberry32, mixSeeds } from './random.js';
@@ -403,4 +404,54 @@ export function recommendMulti(ctx) {
     reasons: allReasons,
     strategySources: paired.map((p) => p.source),
   };
+}
+
+/**
+ * 5세트 동시 추천 (S4-T1). SSOT: docs/02_data.md 1.5.5, docs/01_spec.md 5.1.3.2.
+ * 시드 변형으로 5개 결정론적 다른 결과. i=0이 메인(이력 기록 대상), i=1..4는 표시 전용.
+ *
+ * 객관 전략은 캐릭터 시드 무관 → 시드 변형이 의미 없음.
+ *   대신 mixSeeds(drwNo, OBJECTIVE_SEED_SALT + i)로 회차 내부 5분기.
+ *   객관성(캐릭터 무관) 유지.
+ *
+ * 다중 모드 호환: opts.multi=true이면 각 세트 안에서 recommendMulti 사용.
+ *
+ * @param {object} ctx recommend / recommendMulti와 동일 ctx
+ * @param {object} [opts]
+ * @param {boolean} [opts.multi=false] 다중 전략 모드면 true (ctx.strategyIds 필수).
+ * @returns {Array<{numbers: number[], bonus: number, reasons: string[], strategySources?: string[]}>}
+ *   길이 FIVE_SETS_COUNT.
+ */
+export function recommendFiveSets(ctx, opts = {}) {
+  const { multi = false } = opts;
+  const baseSeed = (ctx.seed || 0) >>> 0;
+  const drwNo = (ctx.drwNo || 0) >>> 0;
+
+  // 객관 전략 판정. 다중 모드면 strategyIds[0] 기준.
+  const probeStrategyId = multi
+    ? (Array.isArray(ctx.strategyIds) && ctx.strategyIds.length > 0 ? ctx.strategyIds[0] : STRATEGY_BLESSED)
+    : ctx.strategyId;
+  const isObjective = OBJECTIVE_STRATEGIES.has(probeStrategyId);
+
+  const out = [];
+  for (let i = 0; i < FIVE_SETS_COUNT; i += 1) {
+    let setCtx;
+    if (i === 0) {
+      // 메인 = 기존 동작과 완전 동일 (호환).
+      setCtx = ctx;
+    } else if (isObjective) {
+      // 객관 전략: drwNo 분기 솔트로 회차 내부 5세트. 캐릭터 시드 영향 없음.
+      // recommend 내부 objectiveSeed = mixSeeds(drwNo, OBJECTIVE_SEED_SALT)인데
+      // 외부에서 drwNo만으로 다양화하려면 drwNo를 분기 솔트로 mix.
+      const drwNoVariant = mixSeeds(drwNo, FIVE_SETS_SALT_BASE + i);
+      setCtx = { ...ctx, drwNo: drwNoVariant };
+    } else {
+      // 시드 의존 전략: baseSeed 변형.
+      const seedVariant = mixSeeds(baseSeed, FIVE_SETS_SALT_BASE + i);
+      setCtx = { ...ctx, seed: seedVariant };
+    }
+    const rec = multi ? recommendMulti(setCtx) : recommend(setCtx);
+    out.push(rec);
+  }
+  return out;
 }

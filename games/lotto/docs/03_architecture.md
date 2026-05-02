@@ -46,6 +46,7 @@ games/lotto/
 │   │   ├── wheeling-page.js     # 휠링 페이지 (Full / Abbreviated)
 │   │   ├── settings-page.js     # 설정 탭 (캐릭터 관리 + 옵션 + 다구좌 + 휠링 진입 + 면책 + 초기화)
 │   │   ├── ritual-widget.js     # 행운 의식 게이지 위젯 + 8행위 모달 - T4
+│   │   ├── ritual-particles.js  # 의식 만땅 진입 Canvas 파티클 (S4-T2)
 │   │   └── reverse-page.js      # 역추첨 게임 페이지 (6개 그리드 + 매칭 결과) - S2-T1
 │   ├── input/           # 키보드 / 터치 이벤트 (현재 render/main.js가 흡수)
 │   └── data/

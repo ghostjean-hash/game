@@ -51,6 +51,12 @@ export const STRATEGY_CATEGORIES = Object.freeze({
 // 다중 전략 모드 최대 선택 수 (분배 1+1+1+1+1+1 = 6).
 export const MULTI_STRATEGY_MAX = 6;
 
+// 1.5.5. 5세트 동시 추천 (S4-T1, 2026-05-02 신설). SSOT: docs/02_data.md 1.5.5.
+// "한 회차의 다양한 시도"를 5장 카드로 한 번에 노출. 사행성 톤 회피 (구매 권유 X, 확률 변화 X).
+// 시드 변형: setIndex i (0~4)에 대해 mixSeeds(baseSeed, FIVE_SETS_SALT_BASE + i) (i=0은 base 그대로).
+export const FIVE_SETS_COUNT = 5;
+export const FIVE_SETS_SALT_BASE = 0x5E7A;
+
 // 1.5.1. 객관 전략 (캐릭터 시드 / Luck 무관. 회차 데이터로만 결정).
 // 같은 회차에서 모든 캐릭터가 같은 결과를 받음. SSOT: docs/02_data.md 1.5.
 export const OBJECTIVE_STRATEGIES = Object.freeze(new Set([

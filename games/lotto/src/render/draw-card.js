@@ -55,3 +55,36 @@ export function drawCardHtml(drwNo, recommendation, fortune) {
     </section>
   `;
 }
+
+/**
+ * S4-T1: 5세트 컴팩트 카드 (#2~#5). SSOT: docs/01_spec.md 5.1.3.2.
+ * 메인 카드(#1)는 drawCardHtml로 별도 렌더. 본 함수는 후속 sets.length-1장만.
+ * 라벨 / 배너 / 운세 외곽 없음. 인덱스 + 번호줄 + 보너스만.
+ * @param {Array<{numbers: number[], bonus: number, strategySources?: string[]}>} sets
+ */
+export function fiveSetsExtraHtml(sets) {
+  if (!Array.isArray(sets) || sets.length <= 1) return '';
+  const extras = sets.slice(1);
+  const items = extras.map((rec, i) => {
+    const idx = i + 2; // 표시용 (#2부터)
+    const sources = rec.strategySources || [];
+    const balls = rec.numbers.map((n, k) => numHtml(n, undefined, sources[k] || null)).join('');
+    const bonus = numHtml(rec.bonus, `보너스 ${rec.bonus}번`, null);
+    return `
+      <div class="five-set-row" aria-label="추천 세트 ${idx}번">
+        <span class="five-set-idx" aria-hidden="true">#${idx}</span>
+        <div class="five-set-balls" role="list">
+          <div class="five-set-main" role="list" aria-label="세트 ${idx} 본번호">${balls}</div>
+          <span class="five-set-plus" aria-hidden="true">${plus('icon')}</span>
+          <div class="five-set-bonus" role="list" aria-label="세트 ${idx} 보너스">${bonus}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  return `
+    <section class="five-sets-extra" aria-label="추가 추천 세트 ${extras.length}장">
+      ${items}
+      <p class="five-sets-disclaimer">5세트는 '한 회차의 다양한 시도'를 보여주는 콘텐츠입니다. 5장 구매 권유가 아니며, 당첨 확률 변화도 없습니다.</p>
+    </section>
+  `;
+}
