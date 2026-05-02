@@ -9,6 +9,79 @@
 
 # 2. 완료 마일스톤
 
+## 2.34. Sprint 013 완료 - 다중 전략 + 전적 강화 + 4종 행운 토글 (2026-05-02)
+
+Trust 우선. 사용자 "전략 추출 신뢰 없다" 결손 정면 해결.
+
+### 2.34.1. S3-T1 다중 전략 분배 + 번호별 출처 라벨 (#2)
+
+추천 신뢰성의 가시화. 사용자가 카드를 보면 "어느 번호가 어느 전략에서 나왔는지" 즉시 인지.
+
+- numbers.js: STRATEGY_CATEGORIES 매핑 + MULTI_STRATEGY_MAX=6 신설.
+- recommend.js:
+  - distributeCounts(n) export: 6/N 균등 + 나머지 첫 N에 +1.
+  - recommendMulti(ctx) export: 각 전략 순회 + 중복 제외 + fallback (blessed 균등) + 보너스 본번호 겹침 시 균등 재추출.
+  - strategySources 필드 반환 (다중 모드만).
+- storage.js: options.multiStrategy 신규 (기본 false).
+- character-form.js: lastUsedStrategies 배열 초기값 추가.
+- main.js:
+  - getRecAndFortune 분기 (단일 / 다중).
+  - activeStrategyIds 헬퍼 (lastUsedStrategies → fallback lastUsedStrategy).
+  - 전략 탭 클릭 핸들러 다중 모드 토글 + 만선 비활성 + 최소 1개 보장.
+  - onMultiStrategyToggle 핸들러로 즉시 재렌더.
+- strategy-tabs.js: activeIds 배열 받음 + multi 옵션 + 만선 비활성 (.is-disabled) + multiHint 줄.
+- draw-card.js: numHtml(n, label, source) → 카테고리 색 dot 추가 (단일 모드는 dot 미표시).
+- settings-page.js: "다중 전략 모드" 토글 추가.
+- styles/main.css: .num-cell 컬럼 + .num-source-dot 4색 + .strategy-tab.is-disabled + .strategy-multi-hint.
+- recommend.test.js: 신규 7 케이스 (distributeCounts 1~6 + 범위 밖 에러 + recommendMulti 단일/2/6 전략 + 보너스 ∉ numbers + 빈 배열 에러).
+- 02_data.md 1.5.4 신설 + 3.6 / 3.6.5 스키마 갱신.
+- 01_spec.md 5.1.3.1 신설.
+
+### 2.34.2. S3-T2 전적 페이지 강화 (#6 자율 부분)
+
+기존 단일 리스트 → 4섹션. 사용자 정의 못 받은 부분(캘린더 등)은 별도 작업으로 분리.
+
+- history-page.js:
+  - summaryHtml 강화: 적중률(%) + Luck 추가, 6셀 그리드.
+  - rankChartHtml 신규: horizontalBarsHtml로 1~5등 + 미적중 막대 (등수별 색).
+  - timelineHtml 신규: 최근 30회 도트 + legend (등수별 + 미적중).
+  - 면책 카피: "참고용. 매 회차 독립 시행이므로 누적 분포가 미래 적중률을 보장하지 않습니다."
+- styles/main.css: .summary-grid (3-2 반응형) + .timeline-dots + .timeline-legend.
+- 01_spec.md 5.8 신설.
+
+### 2.34.3. S3-T3 캐릭터 카드 4종 행운 토글 (T3 Sprint 011 후속)
+
+T3 사주 단독 → 4종 토글로 확장. 사용자 발화 "사주에 따른 행운의 번호 같은 것" 의도 충족.
+
+- character-card.js:
+  - collectLuckySources(character): 4종 매핑 수집 (사주 → 별자리 → 4원소 → MBTI 우선순위).
+  - 데이터 없는 종류는 탭 미생성 (마이그레이션 케이스 안전).
+  - luckyNumbersHtml: 탭 + panels 구조. 기본 활성 = 첫 종류.
+- main.js: 카드 행운 토글 핸들러 (탭 클릭 → panel hidden 속성 토글).
+- styles/main.css: .lucky-tabs / .lucky-tab / .lucky-element-* 4색.
+- 01_spec.md 5.9 신설.
+
+### 2.34.4. 영향 파일 (13건)
+
+- 신규 0건.
+- 수정: docs/01_spec.md / docs/02_data.md / src/data/numbers.js / src/data/storage.js / src/core/recommend.js / src/render/main.js / src/render/character-card.js / src/render/character-form.js / src/render/draw-card.js / src/render/history-page.js / src/render/settings-page.js / src/render/strategy-tabs.js / styles/main.css / tests/suites/recommend.test.js / PROGRESS.md.
+
+### 2.34.5. QA 결과
+
+- core/ DOM 의존성: 0건
+- 사행성 표현 위반: 0건 (부정 톤 유지)
+- 옛 라벨 잔존: 0건
+- 매직 넘버 직접 사용: 0건 (MULTI_STRATEGY_MAX / STRATEGY_CATEGORIES 모두 numbers.js)
+- docs SSOT 정합: 2종 갱신
+- 시뮬 회귀: 영향 없음 (분배 로직 추가, 단일 추천 영향 없음)
+
+### 2.34.6. 다음 sprint 후보
+
+- Sprint 014 (Charm): #3 5세트 동시 추천 (S3-T1 위에 자연 확장) + 의식 폴리싱 (Canvas 파티클)
+- Sprint 015 (Depth): #10 명망 로직 (사주/별자리/MBTI 매핑 출처 결정 필요) + #1 4분면 행운 번호
+- Sprint 016 (Tech): #7 OCR (영수증 형식 결정 필요)
+- 폴리싱 후보: 다중 모드 전체 매칭 회차 보기 / 기간 필터 / 결제 시스템 (별도 윤리 가이드)
+
 ## 2.33. Sprint 012 완료 - 역추첨 게임 + 휠링 백 버튼 (2026-05-02)
 
 자율 진행. 결정 필요 없는 즉시 가능 작업 2건.
@@ -760,6 +833,46 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 - `docs/03_architecture.md` 폴더 트리.
 
 # 3. 다음 액션
+
+## 3.-2. Sprint 013 (완료, 2026-05-02 - Trust 우선)
+
+자비스 권장안 A안 채택. 사용자 "전략 추출 신뢰 없다" 결손을 정면으로.
+
+### 3.-2.1. 작업 범위 (3건)
+
+| ID | 작업 | 양 | 상태 |
+|---|---|---|---|
+| S3-T1 | #2 다중 전략 분배 + 번호별 출처 라벨 (Trust 핵심) | 큼 | **완료** |
+| S3-T2 | #6 전적 강화 - 자율 가능 4항목 (등수별 차트 / 누적 통계 / 회차 타임라인 / history 페이지 분리) | 중 | **완료** |
+| S3-T3 | 캐릭터 카드 4종 행운 토글 (T3 Sprint 011 후속) | 작 | **완료** |
+
+### 3.-2.2. 자율 결정 사항
+
+- 분배 룰 = A안 (균등). 6/N 베이스 + 나머지 첫 N개 전략에 +1. N=7 이상 비활성.
+- 다중 전략 진입 = 설정 탭 "다중 전략 모드" 토글. 기본 OFF (현재 동작 유지, 라이트 사용자 비노출).
+- 출처 라벨 = 다중 모드일 때만 본번호 아래 카테고리 색 dot (통계/운세 매핑/사주/랜덤 4색).
+- 카드 4종 행운 = 토글로 1종 보기. 기본 = 사주.
+- character 스키마 마이그레이션: lastUsedStrategy → lastUsedStrategies(배열). 기존 단일은 자동 변환.
+
+### 3.-2.3. 비범위
+
+- 슬롯 기반 분배 / 우선순위 가중 분배 (B/C 옵션은 보류)
+- 분배 변경 즉시 미리보기 / 비율 표시
+- 5세트 동시 추천 (#3, Sprint 014로 분리)
+- 캘린더 시각화 (#6 자율 비범위, 정의 받은 후)
+- 그래프 종류 추가 (선 그래프 / 도넛 등)
+
+### 3.-2.4. S3-T1 분배 룰 (A안 균등)
+
+| N | 분배 |
+|---|---|
+| 1 | 6 |
+| 2 | 3 + 3 |
+| 3 | 2 + 2 + 2 |
+| 4 | 2 + 2 + 1 + 1 |
+| 5 | 2 + 1 + 1 + 1 + 1 |
+| 6 | 1 + 1 + 1 + 1 + 1 + 1 |
+| 7+ | 비활성 (선택 불가) |
 
 ## 3.-1. Sprint 012 (완료, 2026-05-02)
 

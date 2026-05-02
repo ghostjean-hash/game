@@ -1,17 +1,35 @@
 // 추천 번호 패널. SSOT: docs/01_spec.md 5.2.1 (동행복권 결과 페이지 호환).
 // 회차 헤더(nav 포함)는 카운트다운 카드와 통합되어 제거됨. 본 컴포넌트는 번호 패널만 책임.
+// S3-T1: 다중 전략 모드면 본번호 아래 카테고리 색 dot으로 출처 표시.
 import { numberColor } from '../data/colors.js';
+import { STRATEGY_CATEGORIES } from '../data/numbers.js';
 import { plus } from './icons.js';
 
-function numHtml(n, ariaLabel) {
+const CATEGORY_DOT_CLASS = {
+  stats: 'is-stats',
+  mapping: 'is-mapping',
+  saju: 'is-saju',
+  random: 'is-random',
+};
+
+function numHtml(n, ariaLabel, source) {
   const c = numberColor(n);
   const label = ariaLabel || `${n}번`;
-  return `<span class="num" role="listitem" aria-label="${label}" style="background-color:${c.bg};">${n}</span>`;
+  const sourceCat = source ? STRATEGY_CATEGORIES[source] : null;
+  const dotCls = sourceCat ? CATEGORY_DOT_CLASS[sourceCat] : '';
+  const dotHtml = sourceCat
+    ? `<span class="num-source-dot ${dotCls}" data-source="${source}" aria-label="${source} 출처" title="${source}"></span>`
+    : '';
+  return `<span class="num-cell" role="listitem" aria-label="${label}">
+    <span class="num" style="background-color:${c.bg};">${n}</span>
+    ${dotHtml}
+  </span>`;
 }
 
 export function drawCardHtml(drwNo, recommendation, fortune) {
-  const mainHtml = recommendation.numbers.map((n) => numHtml(n)).join('');
-  const bonusHtml = numHtml(recommendation.bonus, `보너스 ${recommendation.bonus}번`);
+  const sources = recommendation.strategySources || []; // 단일 모드면 빈 배열 → dot 미표시
+  const mainHtml = recommendation.numbers.map((n, i) => numHtml(n, undefined, sources[i] || null)).join('');
+  const bonusHtml = numHtml(recommendation.bonus, `보너스 ${recommendation.bonus}번`, null);
   const isBad = fortune === 'bad';
   const isGreat = fortune === 'great';
   const cardClass = `draw-card${isBad ? ' is-bad' : ''}${isGreat ? ' is-great' : ''}`;

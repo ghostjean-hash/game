@@ -1262,6 +1262,108 @@ a.btn-secondary,
   gap: var(--space-2);
 }
 
+/* Sprint 013 / S3-T2: 전적 강화 (요약 그리드 + 타임라인 도트). */
+.summary-grid {
+  list-style: none;
+  margin: 0 0 var(--space-3) 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+@media (max-width: 480px) {
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.summary-grid li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2);
+  background: var(--color-surface-soft);
+  border-radius: var(--radius-sm);
+}
+.summary-label {
+  font-size: 11px;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.summary-value {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+.timeline-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: var(--space-2) 0;
+}
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #d1d5db;
+  display: inline-block;
+}
+.timeline-dot.is-miss {
+  background: #d1d5db;
+  opacity: 0.5;
+}
+.timeline-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  font-size: 11px;
+  color: var(--color-text-dim);
+  margin-top: var(--space-2);
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.legend-dot.legend-miss {
+  background: #d1d5db;
+  opacity: 0.5;
+}
+
+/* Sprint 013 / S3-T1: 다중 전략 모드 출처 dot + 만선 비활성. */
+.num-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.num-source-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.num-source-dot.is-stats { background: #0369a1; }
+.num-source-dot.is-mapping { background: #be185d; }
+.num-source-dot.is-saju { background: #92400e; }
+.num-source-dot.is-random { background: #6b7280; }
+
+.strategy-tab.is-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.strategy-multi-hint {
+  margin-top: var(--space-2);
+  font-size: 11px;
+  color: var(--color-text-dim);
+  text-align: center;
+}
+
 /* Sprint 012 / S2-T2: 휠링 페이지 백 버튼. */
 .wheel-back {
   display: inline-flex;
@@ -1597,6 +1699,33 @@ a.btn-secondary,
     transition: none !important;
   }
 }
+
+/* S3-T3: 캐릭터 카드 4종 행운 토글. */
+.lucky-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: var(--space-2);
+  flex-wrap: wrap;
+}
+.lucky-tab {
+  padding: 4px var(--space-2);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-text-dim);
+}
+.lucky-tab.is-active {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+.lucky-element-saju { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+.lucky-element-zodiac { background: #fce7f3; color: #be185d; border-color: #fbcfe8; }
+.lucky-element-zelement { background: #fce7f3; color: #be185d; border-color: #fbcfe8; }
+.lucky-element-mbti { background: #d1fae5; color: #065f46; border-color: #a7f3d0; }
 
 /* T3: 캐릭터 카드 사주 행운 번호 영구 표시. */
 .char-lucky {

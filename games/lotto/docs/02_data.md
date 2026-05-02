@@ -67,6 +67,31 @@
 - 분류 위치: `src/data/numbers.js` `OBJECTIVE_STRATEGIES` Set. 분기 위치: `src/core/recommend.js`.
 - 트레이드오프: 객관 전략은 사용자가 캐릭터를 바꿔도 결과 동일. 그것이 객관 통계의 본질. 캐릭터 차별화는 시드 의존 7개에서.
 
+#### 1.5.4. 다중 전략 분배 (S3-T1, 2026-05-02 신설)
+
+다중 전략 모드(`options.multiStrategy = true`) 활성 시 전략 탭이 토글로 동작해 1~6개 선택. 각 전략별로 본번호를 균등 분배 후 카드에 카테고리 색 dot으로 출처 표시.
+
+| 상수 | 값 | 의미 |
+|---|---|---|
+| `MULTI_STRATEGY_MAX` | 6 | 다중 모드 최대 선택 수 (분배 1+1+1+1+1+1) |
+
+1.5.4.1. **분배 룰 (A안 균등)**: `distributeCounts(n)` = base 6/n + 나머지를 첫 N에 +1.
+
+| N | 분배 |
+|---|---|
+| 1 | 6 |
+| 2 | 3 + 3 |
+| 3 | 2 + 2 + 2 |
+| 4 | 2 + 2 + 1 + 1 |
+| 5 | 2 + 1 + 1 + 1 + 1 |
+| 6 | 1 + 1 + 1 + 1 + 1 + 1 |
+| 7+ | 비활성 (선택 불가, 만선 시 비활성 탭) |
+
+1.5.4.2. **알고리즘**: `core/recommend.js` `recommendMulti(ctx)`. 각 전략 순회 → recommend 호출 → 분배 카운트만큼 중복 제외 후 채택. 부족분은 blessed 균등 fallback. 보너스는 첫 전략 채택, 본번호와 겹치면 균등 재추출.
+1.5.4.3. **출처 라벨**: 결과 객체에 `strategySources: string[]` (numbers와 동일 순서). draw-card에서 카테고리 색 dot 표시 (단일 모드는 빈 배열 → dot 미표시).
+1.5.4.4. **최소 1개 보장**: 다중 모드에서 마지막 1개 토글 제거는 무시 (전략 0개 방지).
+1.5.4.5. **백캐스트 영향 없음**: `backfillRecommendations`은 단일 전략으로 결정론 유지. 다중 모드여도 history는 첫 전략 기준.
+
 #### 1.5.2. 카테고리 (콘텐츠 차원)
 
 12전략을 가중치 소스 본질로 분류. 결정론 차원(1.5.1)과 직교하는 별도 차원.
@@ -417,11 +442,12 @@
 | `lotto_stats_cooccur` | `Cooccur[]` (페어 빈도) | draws 갱신 후 자동 |
 | `lotto_characters` | `Character[]` | 캐릭터 생성 / 삭제 / 이력 갱신 |
 | `lotto_active_character` | `string` (id) | 캐릭터 전환 |
-| `lotto_options` | `{ applyFilters, advancedMode, ... }` | 사용자 토글 변경 |
+| `lotto_options` | `{ applyFilters, advancedMode, multiStrategy, ... }` | 사용자 토글 변경 |
 | `lotto_seen_help` | `boolean` | 첫 진입 안내 표시 |
 | `lotto_rituals` | `RitualState` (1.19.3) | 행위 수행 시 / 회차 변경 시 자동 리셋 |
 
 3.2.1. `lotto_options.advancedMode`: 다구좌 모드(휠링) 활성화 여부. 기본 false. 첫 활성화 시 윤리 안내 모달 강제.
+3.2.2. `lotto_options.multiStrategy`: 다중 전략 모드 (S3-T1). 기본 false (라이트 사용자 비노출). 설정 탭 토글로 변경. ON 시 전략 탭이 토글 동작 + 추천 카드에 출처 dot 표시.
 
 ### 3.3. Draw 스키마
 
@@ -482,7 +508,8 @@
   dayPillar: { stem: 'gap' | ..., branch: 'rat' | ... },  // 생년월일 → 일주 (운세 사주 보정용 + 일주 오행 전략용)
   mbti: 'INTJ' | 'INTP' | ... | 'ESFP' | null,   // 16 MBTI 또는 미지정 (MBTI 전략용)
   luck: number,                             // 0~100
-  lastUsedStrategy: 'blessed' | 'statistician' | ... | 'astrologer',
+  lastUsedStrategy: 'blessed' | 'statistician' | ... | 'fiveElements',
+  lastUsedStrategies: string[],   // 다중 전략 모드 (S3-T1). 단일 모드 시 [lastUsedStrategy] 1개 배열.
   createdAt: 'YYYY-MM-DDTHH:mm:ss',
   history: Recommendation[]
 }
@@ -491,7 +518,20 @@
 3.6.1. **캐릭터에 전략(`className`) 속성 없음.** 전략은 추첨 시 매번 사용자가 선택, `lastUsedStrategy`로 마지막 선택만 캐싱.
 3.6.2. 시드 입력의 birthYMD / luckyWord는 시드 해시 후 폐기. zodiac은 별자리 행운 전략용으로 별도 보관.
 3.6.3. `name`과 `animalSign`은 표시 / 운세 산출 목적상 별도 보관. `animalSign`은 생년에서 자동 계산.
-3.6.4. **마이그레이션**: 기존 캐릭터의 `className`은 무시 (lastUsedStrategy 누락 시 `STRATEGY_DEFAULT`로 fallback).
+3.6.4. **마이그레이션**: 기존 캐릭터의 `className`은 무시 (lastUsedStrategy 누락 시 `STRATEGY_DEFAULT`로 fallback). `lastUsedStrategies` 누락 시 `[lastUsedStrategy || STRATEGY_DEFAULT]`로 자동 변환 (S3-T1, render/main.js `activeStrategyIds`).
+
+### 3.6.5. Recommendation 결과 스키마 (다중 전략 추가 필드)
+
+`recommendMulti` 호출 시 `strategySources: string[]` 필드가 추가됨. 단일 모드 (`recommend`)는 미반환.
+
+```js
+{
+  numbers: [number, number, number, number, number, number],
+  bonus: number,
+  reasons: string[],
+  strategySources: string[],   // numbers와 동일 순서. 다중 모드에서만 채워짐. 카테고리 dot용.
+}
+```
 
 ### 3.7. Recommendation 스키마
 

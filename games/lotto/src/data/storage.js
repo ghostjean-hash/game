@@ -40,7 +40,8 @@ export function loadActiveCharacterId() { return read('active_character', null);
 export function saveActiveCharacterId(id) { write('active_character', id); }
 
 // 옵션
-const OPTIONS_DEFAULT = { applyFilters: false, advancedMode: false };
+// multiStrategy: 다중 전략 모드 (S3-T1). 기본 OFF (라이트 사용자 비노출).
+const OPTIONS_DEFAULT = { applyFilters: false, advancedMode: false, multiStrategy: false };
 export function loadOptions() {
   const opts = read('options', OPTIONS_DEFAULT);
   // 누락 키 채우기 (마이그레이션)

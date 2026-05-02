@@ -41,6 +41,16 @@ export const STRATEGY_ZODIAC_ELEMENT = 'zodiacElement';
 export const STRATEGY_FIVE_ELEMENTS = 'fiveElements';
 export const STRATEGY_DEFAULT = STRATEGY_BLESSED;
 
+// 1.5.3. 전략 카테고리 ID (다중 전략 모드 출처 라벨 dot 색용. SSOT: docs/02_data.md 1.5.2).
+export const STRATEGY_CATEGORIES = Object.freeze({
+  blessed: 'random', statistician: 'stats', secondStar: 'stats', regressionist: 'stats',
+  pairTracker: 'stats', astrologer: 'mapping', trendFollower: 'stats', intuitive: 'random',
+  balancer: 'random', mbti: 'mapping', zodiacElement: 'mapping', fiveElements: 'saju',
+});
+
+// 다중 전략 모드 최대 선택 수 (분배 1+1+1+1+1+1 = 6).
+export const MULTI_STRATEGY_MAX = 6;
+
 // 1.5.1. 객관 전략 (캐릭터 시드 / Luck 무관. 회차 데이터로만 결정).
 // 같은 회차에서 모든 캐릭터가 같은 결과를 받음. SSOT: docs/02_data.md 1.5.
 export const OBJECTIVE_STRATEGIES = Object.freeze(new Set([

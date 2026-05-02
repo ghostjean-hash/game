@@ -1,8 +1,9 @@
 // 추첨 전략 가로 스크롤 탭 + 활성 전략 설명 + 카테고리 배지.
 // SSOT: docs/01_spec.md 4.7, docs/02_data.md 1.5.2 (카테고리).
 // 12개 전략을 가로 일렬로 나열. 폭 초과 시 좌우 스크롤. 클릭 즉시 활성 변경.
-// 활성 전략 desc 앞에 카테고리 배지([통계]/[운세 매핑]/[사주]/[랜덤])로 가중치 본질 시각화.
+// S3-T1: 다중 전략 모드(multi=true)면 탭 클릭 = 토글, 활성 N개 표시.
 import { STRATEGY_LIST } from './strategy-picker.js';
+import { MULTI_STRATEGY_MAX } from '../data/numbers.js';
 
 const CATEGORY_CLASS = {
   '통계': 'is-stats',
@@ -11,30 +12,50 @@ const CATEGORY_CLASS = {
   '랜덤': 'is-random',
 };
 
-export function strategyTabsHtml(activeId) {
-  const cur = STRATEGY_LIST.find((s) => s.id === activeId) || STRATEGY_LIST[0];
+/**
+ * @param {string | string[]} activeIds 단일 모드면 string, 다중 모드면 string[]
+ * @param {{ multi?: boolean }} [opts]
+ */
+export function strategyTabsHtml(activeIds, opts = {}) {
+  const multi = opts.multi === true;
+  const activeSet = new Set(Array.isArray(activeIds) ? activeIds : [activeIds]);
+  const firstActive = Array.isArray(activeIds) ? activeIds[0] : activeIds;
+  const cur = STRATEGY_LIST.find((s) => s.id === firstActive) || STRATEGY_LIST[0];
+
+  const isAtMax = multi && activeSet.size >= MULTI_STRATEGY_MAX;
+
   const tabs = STRATEGY_LIST.map((s) => {
-    const isActive = s.id === activeId;
+    const isActive = activeSet.has(s.id);
     const catCls = CATEGORY_CLASS[s.category] || '';
+    // 다중 모드 + 만선 + 비활성 탭 = 클릭 안 됨 표시
+    const disabled = multi && !isActive && isAtMax;
     return `
       <button type="button"
-              class="strategy-tab${isActive ? ' is-active' : ''} ${catCls}"
+              class="strategy-tab${isActive ? ' is-active' : ''}${disabled ? ' is-disabled' : ''} ${catCls}"
               data-strategy-id="${s.id}"
               data-category="${escapeAttr(s.category)}"
               aria-pressed="${isActive ? 'true' : 'false'}"
+              ${disabled ? 'aria-disabled="true"' : ''}
               title="[${escapeAttr(s.category)}] ${escapeAttr(s.label)}: ${escapeAttr(s.desc)}">
         ${escapeHtml(s.label)}
       </button>
     `;
   }).join('');
   const curCatCls = CATEGORY_CLASS[cur.category] || '';
+
+  // 다중 모드 표시: "N / MAX 선택. 토글로 변경"
+  const multiHint = multi
+    ? `<p class="strategy-multi-hint">다중 전략 모드 · ${activeSet.size} / ${MULTI_STRATEGY_MAX} 선택. 분배는 균등 (6 / N).</p>`
+    : '';
+
   return `
-    <section class="strategy-tabs-section" aria-label="추첨 전략 선택">
+    <section class="strategy-tabs-section${multi ? ' is-multi' : ''}" aria-label="추첨 전략 선택">
       <div class="strategy-tabs" role="tablist">${tabs}</div>
       <p class="strategy-desc" aria-live="polite">
         <span class="strategy-category ${curCatCls}">${escapeHtml(cur.category)}</span>
         ${escapeHtml(cur.desc)}
       </p>
+      ${multiHint}
     </section>
   `;
 }

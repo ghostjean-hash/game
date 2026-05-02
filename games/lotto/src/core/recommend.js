@@ -16,6 +16,7 @@ import {
   MBTI_LUCKY,
   ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY,
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
+  MULTI_STRATEGY_MAX,
 } from '../data/numbers.js';
 import { applyLuck } from './luck.js';
 import { mulberry32, mixSeeds } from './random.js';
@@ -310,4 +311,96 @@ export function recommend(ctx) {
   const bonus = bonusArr[0];
 
   return { numbers, bonus, reasons };
+}
+
+/**
+ * 다중 전략 분배 카운트 (S3-T1, A안 균등). SSOT: docs/02_data.md 1.5.4.
+ * 6 / N 베이스 + 나머지를 첫 N에 +1.
+ * @param {number} n 전략 개수 (1~MULTI_STRATEGY_MAX)
+ * @returns {number[]} 길이 n. 합계 PICK_COUNT(6).
+ */
+export function distributeCounts(n) {
+  if (!Number.isInteger(n) || n < 1 || n > MULTI_STRATEGY_MAX) {
+    throw new Error(`다중 전략은 1~${MULTI_STRATEGY_MAX} 범위만 가능합니다`);
+  }
+  const base = Math.floor(PICK_COUNT / n);
+  const extra = PICK_COUNT % n;
+  const counts = new Array(n).fill(base);
+  for (let i = 0; i < extra; i += 1) counts[i] += 1;
+  return counts;
+}
+
+/**
+ * 다중 전략 추천 (S3-T1). 각 전략별 분배 카운트만큼 본번호 + 출처 라벨.
+ * 보너스는 첫 전략 결과 채택 (본번호와 겹치면 균등 추출로 fallback).
+ * @param {object} ctx
+ * @param {string[]} ctx.strategyIds 1~MULTI_STRATEGY_MAX개
+ * @returns {{
+ *   numbers: number[],
+ *   bonus: number,
+ *   reasons: string[],
+ *   strategySources: string[],  // numbers와 동일 순서, 각 번호의 출처 strategyId
+ * }}
+ */
+export function recommendMulti(ctx) {
+  const { strategyIds, ...rest } = ctx;
+  if (!Array.isArray(strategyIds) || strategyIds.length === 0) {
+    throw new Error('strategyIds가 비어있음');
+  }
+  const distribution = distributeCounts(strategyIds.length);
+  const collected = [];
+  const sources = [];
+  const allReasons = [];
+  let bonus = null;
+
+  for (let i = 0; i < strategyIds.length; i += 1) {
+    const sid = strategyIds[i];
+    const targetCount = distribution[i];
+    const sub = recommend({ ...rest, strategyId: sid });
+    if (i === 0) bonus = sub.bonus;
+
+    // sub.numbers에서 중복 제외하고 targetCount만큼 채택
+    let added = 0;
+    for (const n of sub.numbers) {
+      if (added >= targetCount) break;
+      if (collected.includes(n)) continue;
+      collected.push(n);
+      sources.push(sid);
+      added += 1;
+    }
+    allReasons.push(...sub.reasons);
+  }
+
+  // 부족분 (모든 전략의 sub.numbers가 collected와 겹쳐서 채워지지 않은 케이스) 보충.
+  // blessed 균등 추출 1회로 fallback. 보충 출처도 'blessed'로 표기.
+  if (collected.length < PICK_COUNT) {
+    const fallback = recommend({ ...rest, strategyId: STRATEGY_BLESSED });
+    for (const n of fallback.numbers) {
+      if (collected.length >= PICK_COUNT) break;
+      if (collected.includes(n)) continue;
+      collected.push(n);
+      sources.push(STRATEGY_BLESSED);
+    }
+  }
+
+  // numbers + sources 함께 정렬
+  const paired = collected
+    .map((n, i) => ({ n, source: sources[i] }))
+    .sort((a, b) => a.n - b.n);
+
+  // 보너스가 본번호와 겹치면 균등 fallback
+  const numbersOnly = paired.map((p) => p.n);
+  if (numbersOnly.includes(bonus)) {
+    const { seed = 0, drwNo = 0 } = rest;
+    const fbSeed = mixSeeds(mixSeeds(seed >>> 0, drwNo >>> 0), 0xBABA1234);
+    const fb = weightedSample(uniformWeights(), 1, fbSeed, new Set(numbersOnly));
+    bonus = fb[0];
+  }
+
+  return {
+    numbers: numbersOnly,
+    bonus,
+    reasons: allReasons,
+    strategySources: paired.map((p) => p.source),
+  };
 }

@@ -1,5 +1,5 @@
 import { suite, test, assertEqual, assertTrue, assertDeepEqual } from '../core.js';
-import { recommend } from '../../src/core/recommend.js';
+import { recommend, recommendMulti, distributeCounts } from '../../src/core/recommend.js';
 import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
   STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
@@ -364,6 +364,74 @@ suite('core/recommend - 전략', () => {
     const aStr = wood.numbers.join(',');
     const bStr = metal.numbers.join(',');
     assertTrue(aStr !== bStr, 'wood vs metal 결과 같음');
+  });
+
+  test('S3-T1 distributeCounts: 1~6 분배', () => {
+    assertDeepEqual(distributeCounts(1), [6]);
+    assertDeepEqual(distributeCounts(2), [3, 3]);
+    assertDeepEqual(distributeCounts(3), [2, 2, 2]);
+    assertDeepEqual(distributeCounts(4), [2, 2, 1, 1]);
+    assertDeepEqual(distributeCounts(5), [2, 1, 1, 1, 1]);
+    assertDeepEqual(distributeCounts(6), [1, 1, 1, 1, 1, 1]);
+  });
+
+  test('S3-T1 distributeCounts: 범위 밖 에러', () => {
+    let threw = false;
+    try { distributeCounts(0); } catch { threw = true; }
+    assertTrue(threw);
+    threw = false;
+    try { distributeCounts(7); } catch { threw = true; }
+    assertTrue(threw);
+  });
+
+  test('S3-T1 recommendMulti: 단일 전략은 recommend와 동일 형태', () => {
+    const r = recommendMulti({ ...baseCtx, strategyIds: [STRATEGY_BLESSED] });
+    assertEqual(r.numbers.length, 6);
+    assertTrue(Number.isInteger(r.bonus));
+    assertEqual(r.strategySources.length, 6);
+    for (const s of r.strategySources) assertEqual(s, STRATEGY_BLESSED);
+  });
+
+  test('S3-T1 recommendMulti: 2전략 분배 + 출처', () => {
+    const r = recommendMulti({
+      ...baseCtx,
+      strategyIds: [STRATEGY_BLESSED, STRATEGY_INTUITIVE],
+    });
+    assertEqual(r.numbers.length, 6);
+    const sourceSet = new Set(r.strategySources);
+    // 2 전략 모두 등장 가능 (분배 3+3, 중복 제외 후에도 양쪽이 채워짐)
+    assertTrue(sourceSet.size >= 1, '최소 1전략은 출처에 등장');
+    assertTrue(sourceSet.size <= 2, '최대 2전략');
+  });
+
+  test('S3-T1 recommendMulti: 6전략 모두 1개씩', () => {
+    const r = recommendMulti({
+      ...baseCtx,
+      strategyIds: [
+        STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_REGRESSIONIST,
+        STRATEGY_PAIR_TRACKER, STRATEGY_INTUITIVE, STRATEGY_TREND_FOLLOWER,
+      ],
+    });
+    assertEqual(r.numbers.length, 6);
+    assertEqual(r.strategySources.length, 6);
+  });
+
+  test('S3-T1 recommendMulti: bonus ∉ numbers', () => {
+    for (let i = 0; i < 30; i += 1) {
+      const r = recommendMulti({
+        ...baseCtx,
+        seed: 0x10000 + i,
+        drwNo: 1000 + i,
+        strategyIds: [STRATEGY_BLESSED, STRATEGY_INTUITIVE, STRATEGY_BALANCER],
+      });
+      assertTrue(!r.numbers.includes(r.bonus), `bonus=${r.bonus} ∈ numbers=[${r.numbers}]`);
+    }
+  });
+
+  test('S3-T1 recommendMulti: 빈 strategyIds는 에러', () => {
+    let threw = false;
+    try { recommendMulti({ ...baseCtx, strategyIds: [] }); } catch { threw = true; }
+    assertTrue(threw);
   });
 
   test('balancer 결과는 (대부분) 합 121~160 + 홀짝 3:3 통과', () => {

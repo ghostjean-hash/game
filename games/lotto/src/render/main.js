@@ -16,7 +16,7 @@ import { renderSettingsPage } from './settings-page.js';
 import { bottomTabsHtml, TABS } from './bottom-tabs.js';
 import { showModal, showDisclaimer } from './modal.js';
 import { ritualWidgetHtml, openRitualModal } from './ritual-widget.js';
-import { recommend } from '../core/recommend.js';
+import { recommend, recommendMulti } from '../core/recommend.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
 import { recordRecommendation, matchHistory, backfillRecommendations } from '../core/history.js';
@@ -174,12 +174,11 @@ function getActive() {
 }
 
 function getRecAndFortune(active) {
-  const strategyId = active.lastUsedStrategy || STRATEGY_DEFAULT;
   const drawForFortune = state.draws.find((d) => d.drwNo === state.drwNo) || null;
   const fortune = fortuneFor(active.seed, state.drwNo, active.animalSign, drawForFortune, active.dayPillar);
-  const rec = recommend({
+
+  const ctxBase = {
     seed: active.seed,
-    strategyId,
     luck: active.luck,
     drwNo: state.drwNo,
     numberStats: state.numberStats,
@@ -188,11 +187,33 @@ function getRecAndFortune(active) {
     zodiac: active.zodiac,
     mbti: active.mbti,
     dayPillar: active.dayPillar,
-  });
-  return { strategyId, rec, fortune, drawForFortune };
+  };
+
+  // S3-T1: 다중 전략 모드 분기
+  if (state.options.multiStrategy) {
+    const strategyIds = activeStrategyIds(active);
+    const rec = recommendMulti({ ...ctxBase, strategyIds });
+    return { strategyId: strategyIds[0], strategyIds, rec, fortune, drawForFortune };
+  }
+
+  // 단일 전략 모드 (기존 동작)
+  const strategyId = active.lastUsedStrategy || STRATEGY_DEFAULT;
+  const rec = recommend({ ...ctxBase, strategyId });
+  return { strategyId, strategyIds: [strategyId], rec, fortune, drawForFortune };
 }
 
-function homeTabHtml(active, strategyId, rec, fortune, drawForFortune) {
+/**
+ * S3-T1: 캐릭터의 다중 전략 선택 목록 반환. 마이그레이션 fallback 포함.
+ */
+function activeStrategyIds(character) {
+  if (Array.isArray(character.lastUsedStrategies) && character.lastUsedStrategies.length > 0) {
+    return character.lastUsedStrategies;
+  }
+  // 마이그레이션: 단일 lastUsedStrategy → 배열
+  return [character.lastUsedStrategy || STRATEGY_DEFAULT];
+}
+
+function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune) {
   const banner = state.draws.length === 0
     ? `<section class="data-banner">
         <strong>회차 데이터 없음.</strong> 통계 / 일진 / 일부 전략이 데이터 기반으로 동작하려면 페치 1회 필요.
@@ -223,7 +244,9 @@ function homeTabHtml(active, strategyId, rec, fortune, drawForFortune) {
 
     ${ritualWidgetHtml(state.ritual)}
 
-    ${strategyTabsHtml(strategyId)}
+    ${state.options.multiStrategy
+      ? strategyTabsHtml(strategyIds, { multi: true })
+      : strategyTabsHtml(strategyId)}
 
     ${characterCardHtml(active, fortune, drawForFortune || state.drwNo)}
 
@@ -233,7 +256,7 @@ function homeTabHtml(active, strategyId, rec, fortune, drawForFortune) {
 
 function renderHome(content) {
   const active = getActive();
-  const { strategyId, rec, fortune, drawForFortune } = getRecAndFortune(active);
+  const { strategyId, strategyIds, rec, fortune, drawForFortune } = getRecAndFortune(active);
 
   // 백캐스트: 캐릭터에 최근 30회 결정론적 추천이 history에 없으면 1회 백필.
   // Luck 부트스트랩 목적. SSOT: docs/01_spec.md 7.5.
@@ -256,7 +279,7 @@ function renderHome(content) {
   state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
   saveCharacters(state.characters);
 
-  content.innerHTML = homeTabHtml(updated, strategyId, rec, fortune, drawForFortune);
+  content.innerHTML = homeTabHtml(updated, strategyId, strategyIds, rec, fortune, drawForFortune);
 
   // 카운트다운 시작 (이전 interval은 renderApp 시작 시 정리됨).
   // 추첨 시각 도달 시 자동 재렌더 → 다음 회차 정보로 갱신.
@@ -315,24 +338,66 @@ function renderHome(content) {
 
   // T1: 슬롯의 +/× 버튼 폐기. 추가/삭제는 설정 탭에서.
 
+  // S3-T3: 캐릭터 카드 행운 토글 (4종 중 1종 보기)
+  const luckyCard = content.querySelector('.char-lucky');
+  if (luckyCard) {
+    const tabs = luckyCard.querySelectorAll('[data-lucky-tab-idx]');
+    const panels = luckyCard.querySelectorAll('[data-lucky-panel-idx]');
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const idx = tab.dataset.luckyTabIdx;
+        tabs.forEach((t) => {
+          const isActive = t.dataset.luckyTabIdx === idx;
+          t.classList.toggle('is-active', isActive);
+          t.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+        panels.forEach((p) => {
+          const isActive = p.dataset.luckyPanelIdx === idx;
+          p.classList.toggle('is-active', isActive);
+          if (isActive) p.removeAttribute('hidden');
+          else p.setAttribute('hidden', '');
+        });
+      });
+    });
+  }
+
   // T4: 행운 의식 위젯 클릭 → 8행위 모달
   content.querySelector('[data-action="open-ritual"]')?.addEventListener('click', () => {
     openRitualModalForActive();
   });
 
-  // 전략 탭 직접 클릭 (시트 모달 폐기, 즉시 활성 변경)
+  // 전략 탭 직접 클릭. 다중 모드면 토글, 단일 모드면 활성 변경. (S3-T1)
   content.querySelectorAll('.strategy-tab[data-strategy-id]').forEach((el) => {
     // mousedown에서 default 차단 → 클릭은 살리되 button focus 시 자동 scrollIntoView 차단.
-    // (일부 Chromium 빌드는 focus가 컨테이너 안쪽으로 이동 시 자동 scrollIntoViewIfNeeded 발동.)
     el.addEventListener('mousedown', (e) => e.preventDefault());
     el.addEventListener('click', () => {
+      if (el.classList.contains('is-disabled')) return; // 다중 모드 만선 비활성
+
       const newStrategyId = el.dataset.strategyId;
       const cur = state.characters.find((c) => c.id === state.activeId);
-      if (!cur || cur.lastUsedStrategy === newStrategyId) return;
-      // 클릭 직전 스크롤 위치 저장 → renderApp 후 복원에 사용
+      if (!cur) return;
       const tabsEl = content.querySelector('.strategy-tabs');
       if (tabsEl) strategyScrollLeft = tabsEl.scrollLeft;
-      cur.lastUsedStrategy = newStrategyId;
+
+      if (state.options.multiStrategy) {
+        // 다중 모드: 토글
+        const list = activeStrategyIds(cur);
+        let next;
+        if (list.includes(newStrategyId)) {
+          // 제거. 단 마지막 1개는 보존 (최소 1개 필수).
+          if (list.length === 1) return;
+          next = list.filter((id) => id !== newStrategyId);
+        } else {
+          if (list.length >= 6) return; // MULTI_STRATEGY_MAX cap
+          next = [...list, newStrategyId];
+        }
+        cur.lastUsedStrategies = next;
+        cur.lastUsedStrategy = next[0]; // 단일 모드 호환 유지
+      } else {
+        if (cur.lastUsedStrategy === newStrategyId) return;
+        cur.lastUsedStrategy = newStrategyId;
+        cur.lastUsedStrategies = [newStrategyId]; // 다중 모드 진입 시 일관성
+      }
       saveCharacters(state.characters);
       renderApp();
     });
@@ -423,6 +488,11 @@ function renderApp() {
       onDeleteCharacter: deleteCharacterById,
       onActivateCharacter: activateCharacterById,
       onOpenWheeling: () => setTab('wheeling'),
+      onMultiStrategyToggle: () => {
+        // S3-T1: 토글 후 state 갱신 + 추첨 탭으로 이동해 즉시 효과 확인
+        state.options = loadOptions();
+        renderApp();
+      },
     });
   }
 

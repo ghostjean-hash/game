@@ -1,16 +1,24 @@
 // 캐릭터 카드 HTML. SSOT: docs/01_spec.md 5.1 / 5.1.2.
 // 클래스(전략)는 카드에 표시하지 않습니다. 전략은 추첨 시 선택.
 // T3: 사주(일주 오행) 행운 번호 영구 표시.
+// S3-T3: 4종 행운 토글 (사주 / 별자리 / 4원소 / MBTI).
 import { FORTUNE_COLORS, numberColor } from '../data/colors.js';
 import {
   FORTUNE_GREAT, FORTUNE_GOOD, FORTUNE_NEUTRAL, FORTUNE_BAD,
   ANIMAL_SIGNS,
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
+  ZODIAC_LUCKY, ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY, MBTI_LUCKY,
 } from '../data/numbers.js';
 import { dayPillarLabel } from '../core/saju.js';
 import { fortuneRelation } from '../core/fortune.js';
 
 const ELEMENT_LABELS = { wood: '목', fire: '화', earth: '토', metal: '금', water: '수' };
+const ZODIAC_ELEMENT_LABELS = { fire: '불', earth: '땅', air: '공기', water: '물' };
+const ZODIAC_NAME = {
+  aries: '양자리', taurus: '황소자리', gemini: '쌍둥이자리', cancer: '게자리',
+  leo: '사자자리', virgo: '처녀자리', libra: '천칭자리', scorpio: '전갈자리',
+  sagittarius: '궁수자리', capricorn: '염소자리', aquarius: '물병자리', pisces: '물고기자리',
+};
 
 const ANIMAL_LABELS = Object.fromEntries(ANIMAL_SIGNS.map((a) => [a.id, a.label]));
 
@@ -104,32 +112,118 @@ export function characterCardHtml(character, fortune, drawOrDrwNo) {
 }
 
 /**
- * T3: 사주(일주 오행) 기반 영구 행운 번호 표시.
- * dayPillar 없는 캐릭터는 출력 생략 (마이그레이션 케이스).
+ * S3-T3: 4종 행운 번호 토글 (사주 / 별자리 / 4원소 / MBTI).
+ * 1차 표시는 사주(가장 정체성 강한 매핑). 토글로 다른 종류 보기.
  * 추첨 결과의 큰 번호공과 시각 차별화 위해 작은 컬러볼.
+ * 데이터 없는 종류는 탭에서도 비활성.
  */
 function luckyNumbersHtml(character) {
-  if (!character.dayPillar || !character.dayPillar.stem) return '';
-  const element = STEM_TO_ELEMENT[character.dayPillar.stem];
-  if (!element) return '';
-  const lucky = FIVE_ELEMENTS_LUCKY[element];
-  if (!lucky || lucky.length === 0) return '';
-  const elementLabel = ELEMENT_LABELS[element] || element;
+  const sources = collectLuckySources(character);
+  if (sources.length === 0) return '';
 
-  const balls = lucky.map((n) => {
-    const { bg } = numberColor(n);
-    return `<span class="lucky-num" style="background-color:${bg};" aria-label="행운 번호 ${n}">${n}</span>`;
+  // 4종 토글. 기본 활성 = 첫 (사주 우선)
+  const activeIdx = 0;
+  const tabs = sources.map((src, i) => `
+    <button type="button"
+            class="lucky-tab${i === activeIdx ? ' is-active' : ''} lucky-tab-${src.kind}"
+            data-lucky-tab-idx="${i}"
+            aria-pressed="${i === activeIdx ? 'true' : 'false'}"
+            title="${escapeHtml(src.tabTitle)}">
+      ${escapeHtml(src.tabLabel)}
+    </button>
+  `).join('');
+
+  const panels = sources.map((src, i) => {
+    const balls = src.numbers.map((n) => {
+      const { bg } = numberColor(n);
+      return `<span class="lucky-num" style="background-color:${bg};" aria-label="행운 번호 ${n}">${n}</span>`;
+    }).join('');
+    return `
+      <div class="lucky-panel${i === activeIdx ? ' is-active' : ''}"
+           data-lucky-panel-idx="${i}"
+           ${i === activeIdx ? '' : 'hidden'}>
+        <div class="lucky-label">
+          <span class="lucky-element lucky-element-${src.kind}" title="${escapeHtml(src.tabTitle)}">${escapeHtml(src.elementLabel)}</span>
+          <span class="lucky-caption">${escapeHtml(src.caption)}</span>
+        </div>
+        <div class="lucky-balls">${balls}</div>
+      </div>
+    `;
   }).join('');
 
   return `
-    <div class="char-lucky" aria-label="${escapeHtml(elementLabel)} 오행 행운 번호">
-      <div class="lucky-label">
-        <span class="lucky-element" title="일주 천간 오행">${escapeHtml(elementLabel)} 오행</span>
-        <span class="lucky-caption">행운 번호 (참고용, 추첨 확률 영향 없음)</span>
-      </div>
-      <div class="lucky-balls">${balls}</div>
+    <div class="char-lucky" aria-label="행운 번호 (${sources.length}종)">
+      <div class="lucky-tabs" role="tablist">${tabs}</div>
+      ${panels}
     </div>
   `;
+}
+
+/**
+ * 캐릭터의 4종 행운 매핑 수집. 데이터 있는 종류만 반환.
+ * 우선순위: 사주 → 별자리 → 별자리 4원소 → MBTI.
+ */
+function collectLuckySources(character) {
+  const sources = [];
+
+  // 사주
+  if (character.dayPillar && character.dayPillar.stem) {
+    const element = STEM_TO_ELEMENT[character.dayPillar.stem];
+    if (element && FIVE_ELEMENTS_LUCKY[element]) {
+      sources.push({
+        kind: 'saju',
+        tabLabel: '사주',
+        tabTitle: '일주 천간 오행',
+        elementLabel: `${ELEMENT_LABELS[element] || element} 오행`,
+        caption: '일주 오행 행운 (참고용, 추첨 확률 영향 없음)',
+        numbers: FIVE_ELEMENTS_LUCKY[element],
+      });
+    }
+  }
+
+  // 서양 12별자리
+  if (character.zodiac && ZODIAC_LUCKY[character.zodiac]) {
+    sources.push({
+      kind: 'zodiac',
+      tabLabel: '별자리',
+      tabTitle: '서양 12별자리',
+      elementLabel: ZODIAC_NAME[character.zodiac] || character.zodiac,
+      caption: '별자리 행운 (참고용, 추첨 확률 영향 없음)',
+      numbers: ZODIAC_LUCKY[character.zodiac],
+    });
+  }
+
+  // 서양 4원소
+  if (character.zodiac) {
+    let element = null;
+    for (const [el, list] of Object.entries(ZODIAC_ELEMENTS)) {
+      if (list.includes(character.zodiac)) { element = el; break; }
+    }
+    if (element && ZODIAC_ELEMENT_LUCKY[element]) {
+      sources.push({
+        kind: 'zelement',
+        tabLabel: '4원소',
+        tabTitle: '서양 4원소 (불/땅/공기/물)',
+        elementLabel: `${ZODIAC_ELEMENT_LABELS[element] || element} 그룹`,
+        caption: '4원소 행운 (참고용, 추첨 확률 영향 없음)',
+        numbers: ZODIAC_ELEMENT_LUCKY[element],
+      });
+    }
+  }
+
+  // MBTI
+  if (character.mbti && MBTI_LUCKY[character.mbti]) {
+    sources.push({
+      kind: 'mbti',
+      tabLabel: 'MBTI',
+      tabTitle: `MBTI ${character.mbti}`,
+      elementLabel: character.mbti,
+      caption: 'MBTI 행운 (참고용, 추첨 확률 영향 없음)',
+      numbers: MBTI_LUCKY[character.mbti],
+    });
+  }
+
+  return sources;
 }
 
 function escapeHtml(text) {

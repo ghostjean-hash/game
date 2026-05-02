@@ -83,6 +83,7 @@ export function renderCharacterForm(container, onCreated) {
       mbti,
       luck: LUCK_INITIAL,
       lastUsedStrategy: STRATEGY_DEFAULT,
+      lastUsedStrategies: [STRATEGY_DEFAULT], // S3-T1: 다중 전략 모드용 (단일 모드 시 무시)
       createdAt: new Date().toISOString(),
       history: [],
     };
