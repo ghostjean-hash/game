@@ -265,7 +265,7 @@ export function recommend(ctx) {
     mainWeights = zodiacWeights(zodiac);
     bonusW = uniformWeights();
     const label = zodiac || '미지정';
-    reasons.push(`별자리 행운: ${label} 행운 번호 위주.`);
+    reasons.push(`별자리 행운: ${label} 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
   } else if (strategyId === STRATEGY_TREND_FOLLOWER) {
     mainWeights = trendWeights(numberStats);
     bonusW = uniformWeights();
@@ -281,19 +281,19 @@ export function recommend(ctx) {
   } else if (strategyId === STRATEGY_MBTI) {
     mainWeights = mbtiWeights(mbti);
     bonusW = uniformWeights();
-    reasons.push(`MBTI 행운: ${mbti || '미지정'} 행운 번호 위주.`);
+    reasons.push(`MBTI 행운: ${mbti || '미지정'} 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
   } else if (strategyId === STRATEGY_ZODIAC_ELEMENT) {
     mainWeights = zodiacElementWeights(zodiac);
     bonusW = uniformWeights();
     const el = zodiacElementOf(zodiac);
     const elLabel = el ? `${el}` : '미지정';
-    reasons.push(`별자리 4원소: ${elLabel} 그룹 행운 번호 위주.`);
+    reasons.push(`별자리 4원소: ${elLabel} 그룹 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
   } else if (strategyId === STRATEGY_FIVE_ELEMENTS) {
     mainWeights = fiveElementsWeights(dayPillar);
     bonusW = uniformWeights();
     const el = fiveElementOf(dayPillar);
     const elLabel = el ? `${el}` : '미지정';
-    reasons.push(`일주 오행: ${elLabel} 그룹 행운 번호 위주.`);
+    reasons.push(`일주 오행: ${elLabel} 그룹 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
   } else {
     throw new Error(`Unknown strategy: ${strategyId}`);
   }

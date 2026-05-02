@@ -175,7 +175,7 @@ function collectLuckySources(character) {
         tabLabel: '사주',
         tabTitle: '일주 천간 오행',
         elementLabel: `${ELEMENT_LABELS[element] || element} 오행`,
-        caption: '일주 오행 행운 (참고용, 추첨 확률 영향 없음)',
+        caption: '임의 매핑 · 명리학 학설과 무관 · 추첨 확률 영향 없음',
         numbers: FIVE_ELEMENTS_LUCKY[element],
       });
     }
@@ -188,7 +188,7 @@ function collectLuckySources(character) {
       tabLabel: '별자리',
       tabTitle: '서양 12별자리',
       elementLabel: ZODIAC_NAME[character.zodiac] || character.zodiac,
-      caption: '별자리 행운 (참고용, 추첨 확률 영향 없음)',
+      caption: '임의 매핑 · 점성술 학설과 무관 · 추첨 확률 영향 없음',
       numbers: ZODIAC_LUCKY[character.zodiac],
     });
   }
@@ -205,7 +205,7 @@ function collectLuckySources(character) {
         tabLabel: '4원소',
         tabTitle: '서양 4원소 (불/땅/공기/물)',
         elementLabel: `${ZODIAC_ELEMENT_LABELS[element] || element} 그룹`,
-        caption: '4원소 행운 (참고용, 추첨 확률 영향 없음)',
+        caption: '임의 매핑 · 점성술 학설과 무관 · 추첨 확률 영향 없음',
         numbers: ZODIAC_ELEMENT_LUCKY[element],
       });
     }
@@ -218,7 +218,7 @@ function collectLuckySources(character) {
       tabLabel: 'MBTI',
       tabTitle: `MBTI ${character.mbti}`,
       elementLabel: character.mbti,
-      caption: 'MBTI 행운 (참고용, 추첨 확률 영향 없음)',
+      caption: '임의 매핑 · 16Personalities 학설과 무관 · 추첨 확률 영향 없음',
       numbers: MBTI_LUCKY[character.mbti],
     });
   }

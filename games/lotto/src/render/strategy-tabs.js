@@ -48,6 +48,12 @@ export function strategyTabsHtml(activeIds, opts = {}) {
     ? `<p class="strategy-multi-hint">다중 전략 모드 · ${activeSet.size} / ${MULTI_STRATEGY_MAX} 선택. 분배는 균등 (6 / N).</p>`
     : '';
 
+  // S6-T1: 운세 매핑 / 사주 카테고리는 임의 매핑 면책 1줄.
+  const isMappingCat = cur.category === '운세 매핑' || cur.category === '사주';
+  const mappingNote = isMappingCat
+    ? '<p class="strategy-mapping-note">임의 매핑 · 점성술·명리학 학설과 무관 · 추첨 확률 영향 없음</p>'
+    : '';
+
   return `
     <section class="strategy-tabs-section${multi ? ' is-multi' : ''}" aria-label="추첨 전략 선택">
       <div class="strategy-tabs" role="tablist">${tabs}</div>
@@ -55,6 +61,7 @@ export function strategyTabsHtml(activeIds, opts = {}) {
         <span class="strategy-category ${curCatCls}">${escapeHtml(cur.category)}</span>
         ${escapeHtml(cur.desc)}
       </p>
+      ${mappingNote}
       ${multiHint}
     </section>
   `;

@@ -1530,6 +1530,15 @@ a.btn-secondary,
   color: var(--color-text-dim);
   text-align: center;
 }
+/* S6-T1: 운세 매핑 / 사주 카테고리 면책. 한 줄로 톤 일관성. */
+.strategy-mapping-note {
+  margin-top: 4px;
+  margin-bottom: 0;
+  font-size: 11px;
+  color: var(--color-text-dim);
+  text-align: center;
+  font-style: italic;
+}
 
 /* Sprint 012 / S2-T2: 휠링 페이지 백 버튼. */
 .wheel-back {
