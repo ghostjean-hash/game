@@ -26,13 +26,21 @@ function numHtml(n, ariaLabel, source) {
   </span>`;
 }
 
-export function drawCardHtml(drwNo, recommendation, fortune) {
+/**
+ * @param {number} drwNo
+ * @param {object} recommendation
+ * @param {string} fortune
+ * @param {{ ritualFilled?: boolean }} [opts] S5-T2: 의식 만땅 시 골드 글로우.
+ */
+export function drawCardHtml(drwNo, recommendation, fortune, opts = {}) {
+  const { ritualFilled = false } = opts;
   const sources = recommendation.strategySources || []; // 단일 모드면 빈 배열 → dot 미표시
   const mainHtml = recommendation.numbers.map((n, i) => numHtml(n, undefined, sources[i] || null)).join('');
   const bonusHtml = numHtml(recommendation.bonus, `보너스 ${recommendation.bonus}번`, null);
   const isBad = fortune === 'bad';
   const isGreat = fortune === 'great';
-  const cardClass = `draw-card${isBad ? ' is-bad' : ''}${isGreat ? ' is-great' : ''}`;
+  const ritualCls = ritualFilled ? ' is-blessed-ritual' : '';
+  const cardClass = `draw-card${isBad ? ' is-bad' : ''}${isGreat ? ' is-great' : ''}${ritualCls}`;
   const banner = isBad
     ? '<p class="draw-banner is-bad">흉일. 방어 모드 권장 - 이번 회차는 신중히.</p>'
     : isGreat
@@ -61,15 +69,24 @@ export function drawCardHtml(drwNo, recommendation, fortune) {
  * 메인 카드(#1)는 drawCardHtml로 별도 렌더. 본 함수는 후속 sets.length-1장만.
  * 라벨 / 배너 / 운세 외곽 없음. 인덱스 + 번호줄 + 보너스만.
  * @param {Array<{numbers: number[], bonus: number, strategySources?: string[]}>} sets
+ * @param {Array<{bestRank: number|null, bestRankCount: number}|null>} [matchInfos]
+ *   S5-T1: sets와 동일 길이의 reverseSearch 결과(또는 null). 인덱스 0은 무시(메인 #1은 hero).
  */
-export function fiveSetsExtraHtml(sets) {
+export function fiveSetsExtraHtml(sets, matchInfos = null) {
   if (!Array.isArray(sets) || sets.length <= 1) return '';
   const extras = sets.slice(1);
+  const infos = Array.isArray(matchInfos) ? matchInfos.slice(1) : [];
   const items = extras.map((rec, i) => {
     const idx = i + 2; // 표시용 (#2부터)
     const sources = rec.strategySources || [];
     const balls = rec.numbers.map((n, k) => numHtml(n, undefined, sources[k] || null)).join('');
     const bonus = numHtml(rec.bonus, `보너스 ${rec.bonus}번`, null);
+    const info = infos[i] || null;
+    const chip = info
+      ? (info.bestRank
+        ? `<span class="five-set-chip has-rank" title="과거 회차 매칭 횟수">과거 최고 ${info.bestRank}등 · ${info.bestRankCount}회</span>`
+        : '<span class="five-set-chip" title="과거 회차 매칭 없음">과거 매칭 없음</span>')
+      : '';
     return `
       <div class="five-set-row" aria-label="추천 세트 ${idx}번">
         <span class="five-set-idx" aria-hidden="true">#${idx}</span>
@@ -78,13 +95,14 @@ export function fiveSetsExtraHtml(sets) {
           <span class="five-set-plus" aria-hidden="true">${plus('icon')}</span>
           <div class="five-set-bonus" role="list" aria-label="세트 ${idx} 보너스">${bonus}</div>
         </div>
+        ${chip}
       </div>
     `;
   }).join('');
   return `
     <section class="five-sets-extra" aria-label="추가 추천 세트 ${extras.length}장">
       ${items}
-      <p class="five-sets-disclaimer">5세트는 '한 회차의 다양한 시도'를 보여주는 콘텐츠입니다. 5장 구매 권유가 아니며, 당첨 확률 변화도 없습니다.</p>
+      <p class="five-sets-disclaimer">5세트는 '한 회차의 다양한 시도'를 보여주는 콘텐츠입니다. 5장 구매 권유가 아니며, 당첨 확률 변화도 없습니다. 과거 매칭 횟수는 미래 적중률과 무관합니다.</p>
     </section>
   `;
 }

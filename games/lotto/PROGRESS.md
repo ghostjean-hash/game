@@ -4,10 +4,62 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-02 (Sprint 014 - 5세트 동시 추천 + 의식 폴리싱).
+1.3. **마지막 갱신**: 2026-05-02 (Sprint 015 - 폴리싱 묶음: 5세트 chip + 의식 글로우 + 역추첨 펼치기).
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.36. Sprint 015 완료 - 폴리싱 묶음 (2026-05-02)
+
+자율 진행. 결정 보류 옵션 채택 - 사용자 결정 0개로 폴리싱 3건. 모두 직전 sprint(013/014) 상위에 자연 확장.
+
+### 2.36.1. S5-T1 5세트 #2~#5 과거 매칭 chip
+
+#2~#5 컴팩트 카드 우측에 `과거 최고 N등 (M회)` chip. 5세트 가치 가시화 ("왜 5세트?" 답변).
+
+- core/reverse.js: 기존 `reverseSearch` 재활용 (호출만).
+- src/render/main.js: `computeFiveSetsMatchInfos(sets, draws)` 헬퍼 - sets 길이 배열 반환 ([0]은 hero가 처리하므로 null).
+- src/render/draw-card.js: `fiveSetsExtraHtml(sets, matchInfos)` 시그니처 확장 (matchInfos 옵션). chip 두 가지 톤 (`has-rank` 골드 + 일반 회색). 면책 카피 "과거 매칭 횟수는 미래 적중률과 무관" 추가.
+- styles/main.css: `.five-set-chip` + `.has-rank` 골드. 모바일은 chip을 다음 줄로 (`grid-column: 1 / -1`).
+
+### 2.36.2. S5-T2 의식 만땅 추천 카드 #1 골드 글로우
+
+만땅 보상 가시화 강화. 게이지 바뿐 아니라 추천 카드 #1에도 골드 펄스.
+
+- src/render/main.js: `homeTabHtml`에서 `state.ritual.appliedBonus`로 `ritualFilled` 계산 → `drawCardHtml`에 옵션 전달.
+- src/render/draw-card.js: `drawCardHtml(drwNo, rec, fortune, opts)` 시그니처 확장. `opts.ritualFilled` true면 `.is-blessed-ritual` 클래스 추가.
+- styles/main.css: `@keyframes blessed-ritual-pulse` 2.4s ease-in-out 무한. `prefers-reduced-motion` 시 정적 골드 외곽 fallback.
+- 5세트 #2~#5는 미적용 (서사 표시 전용 일관성).
+
+### 2.36.3. S5-T3 역추첨 동률 다회차 펼치기
+
+기존: 가장 최근 매칭 회차 1건만 표시. 동률 K회 시 사용자가 나머지 매칭 회차 확인 불가.
+
+- core/reverse.js: `findMatchingDraws(userNumbers, draws, rank)` 신설. drwNo 내림차순 정렬 (가장 최근 우선).
+- src/render/reverse-page.js:
+  - `bestRankCount > 1`일 때 결과 카드 아래 "전체 보기 (N건)" 버튼.
+  - 클릭 시 `showModal`로 모든 매칭 회차 리스트 (회차 + 추첨일 + 발표 번호 + 일치 강조).
+- styles/main.css: `.reverse-best-expand` 버튼 + `.reverse-all-modal` / `.reverse-all-list` / `.reverse-all-item`.
+- tests/suites/reverse.test.js: 5 케이스 추가 (5등 동률 3건 / 1등 1건 / 매칭 0건 / 잘못된 rank / 빈 draws).
+
+### 2.36.4. 영향 파일 (10건)
+
+- 신규 0건.
+- 수정 10건: docs/01_spec.md / src/core/reverse.js / src/render/main.js / src/render/draw-card.js / src/render/reverse-page.js / styles/main.css / tests/suites/reverse.test.js / PROGRESS.md.
+
+### 2.36.5. QA 결과
+
+- core/ DOM 의존성: 0건 (`findMatchingDraws` 순수 함수).
+- 사행성 표현 위반: 0건 (chip / 모달 모두 부정 톤 - "과거 매칭은 미래 적중률과 무관" 명시).
+- 옛 라벨 잔존: 0건.
+- 매직 넘버: 0건 (rank 검증은 `[1,2,3,4,5]` 리터럴이지만 게임 규칙 그 자체이며 `numbers.js` import 형태 아님 - 기존 reverseSearch와 동일 패턴).
+- docs SSOT 정합: 01_spec.md 5.1.3.2 / 5.6.7 / 5.7.8 갱신.
+- 회귀: Sprint 014 12 케이스 모두 통과 + 신규 8 케이스 통과.
+
+### 2.36.6. 다음 sprint 후보
+
+- Sprint 016 (Decision-blocked): #10 명망 로직 / #7 OCR - 사용자 결정 필요 항목.
+- 폴리싱 후순위: 통계 페이지 갱신 토스트 위치 미세 / 기간 필터 / 결제 시스템 (별도 윤리 가이드).
 
 ## 2.35. Sprint 014 완료 - 5세트 동시 추천 + 의식 폴리싱 (2026-05-02)
 
@@ -892,6 +944,30 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 - `docs/03_architecture.md` 폴더 트리.
 
 # 3. 다음 액션
+
+## 3.-4. Sprint 015 (완료, 2026-05-02 - Polish 묶음)
+
+자율 진행. 결정 0개 옵션 채택. 결과는 2.36 영구 이력 참조.
+
+### 3.-4.1. 작업 범위 (3건)
+
+| ID | 작업 | 양 | 상태 |
+|---|---|---|---|
+| S5-T1 | 5세트 #2~#5 과거 매칭 chip (reverseSearch 재활용) | 중 | **완료** |
+| S5-T2 | 의식 만땅 시 추천 카드 #1 골드 글로우 | 작 | **완료** |
+| S5-T3 | 역추첨 동률 다회차 펼치기 (`findMatchingDraws` 신설) | 작 | **완료** |
+
+### 3.-4.2. 자율 결정 사항
+
+- S5-T1: chip은 #2~#5에만. #1 hero는 정보 과밀 회피. `bestRank=null`은 "과거 매칭 없음" 회색 chip.
+- S5-T2: `.is-blessed-ritual` 클래스. 운세 외곽(`is-bad`/`is-great`)과 별도 레이어. `prefers-reduced-motion` 시 정적 fallback.
+- S5-T3: `findMatchingDraws` 함수 신설 (drwNo 내림차순). 모달은 `showModal` 재활용. `bestRankCount=1`이면 버튼 미노출 (현재 표시 동일).
+
+### 3.-4.3. 비범위
+
+- 5세트 #2~#5 매칭 회차의 발표 번호 표시 (chip만, 자세한 발표 번호는 역추첨 페이지로 위임)
+- 의식 만땅 5세트 전체에 글로우 (현재는 #1만 - 일관성 유지)
+- 역추첨 펼치기 모달의 페이징 (현재는 단일 스크롤, 매칭 100건 이상도 동작)
 
 ## 3.-3. Sprint 014 (완료, 2026-05-02 - Charm 우선)
 

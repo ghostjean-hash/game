@@ -1,6 +1,6 @@
 // Sprint 012 / S2-T1: 역추첨 검증.
 import { suite, test, assertEqual, assertTrue } from '../core.js';
-import { reverseSearch, validateUserNumbers } from '../../src/core/reverse.js';
+import { reverseSearch, validateUserNumbers, findMatchingDraws } from '../../src/core/reverse.js';
 
 const sampleDraws = [
   { drwNo: 100, drwDate: '2024-01-06', numbers: [1, 2, 3, 4, 5, 6], bonus: 7 },
@@ -73,5 +73,37 @@ suite('core/reverse - reverseSearch', () => {
     // 입력 [1,2,3,4,5,7] → drw 100 (1,2,3,4,5 일치 + 7은 발표 보너스) = 2등
     const r = reverseSearch([1, 2, 3, 4, 5, 7], sampleDraws);
     assertEqual(r.bestRank, 2);
+  });
+});
+
+// S5-T3: 동률 다회차 모두 반환.
+suite('core/reverse - findMatchingDraws (S5-T3)', () => {
+  test('5등 동률 매칭 회차 모두 반환 (drwNo 내림차순)', () => {
+    const matched = findMatchingDraws([1, 2, 3, 11, 12, 13], sampleDraws, 5);
+    assertEqual(matched.length, 2);
+    // drw 102가 더 최근 → 첫 번째
+    assertEqual(matched[0].drwNo, 102);
+    assertEqual(matched[1].drwNo, 100);
+  });
+
+  test('1등 매칭 1건만 반환', () => {
+    const matched = findMatchingDraws([1, 2, 3, 4, 5, 6], sampleDraws, 1);
+    assertEqual(matched.length, 1);
+    assertEqual(matched[0].drwNo, 100);
+  });
+
+  test('매칭 0건이면 빈 배열', () => {
+    const matched = findMatchingDraws([1, 2, 3, 4, 5, 6], sampleDraws, 3);
+    assertEqual(matched.length, 0);
+  });
+
+  test('잘못된 rank는 빈 배열', () => {
+    assertEqual(findMatchingDraws([1, 2, 3, 4, 5, 6], sampleDraws, 0).length, 0);
+    assertEqual(findMatchingDraws([1, 2, 3, 4, 5, 6], sampleDraws, 6).length, 0);
+    assertEqual(findMatchingDraws([1, 2, 3, 4, 5, 6], sampleDraws, null).length, 0);
+  });
+
+  test('빈 draws는 빈 배열', () => {
+    assertEqual(findMatchingDraws([1, 2, 3, 4, 5, 6], [], 1).length, 0);
   });
 });

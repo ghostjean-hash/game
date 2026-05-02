@@ -1428,6 +1428,98 @@ a.btn-secondary,
   .ritual-burst-canvas { display: none !important; }
 }
 
+/* S5-T1: 5세트 컴팩트 카드 매칭 chip. */
+.five-set-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  background: var(--color-surface-soft, #f3f4f6);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  white-space: nowrap;
+  margin-top: 4px;
+  justify-self: end;
+}
+.five-set-chip.has-rank {
+  color: #92400e;
+  background: #fef3c7;
+  border-color: #fcd34d;
+}
+.five-set-row {
+  /* chip이 우측에 들어갈 수 있도록 grid 재조정. 모바일은 wrap 허용. */
+  grid-template-columns: 36px 1fr auto;
+}
+@media (max-width: 480px) {
+  .five-set-row {
+    grid-template-columns: 30px 1fr;
+  }
+  .five-set-chip {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-left: 30px;
+  }
+}
+
+/* S5-T2: 의식 만땅 추천 카드 #1 골드 글로우. 운세 외곽(is-bad/is-great)과 별도 레이어. */
+.draw-card.is-blessed-ritual {
+  position: relative;
+  outline: 2px solid #f6c445;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px rgba(246, 196, 69, 0.3), 0 0 24px rgba(246, 196, 69, 0.35);
+  animation: blessed-ritual-pulse 2.4s ease-in-out infinite;
+}
+@keyframes blessed-ritual-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(246, 196, 69, 0.3), 0 0 16px rgba(246, 196, 69, 0.25); }
+  50% { box-shadow: 0 0 0 2px rgba(246, 196, 69, 0.5), 0 0 32px rgba(246, 196, 69, 0.55); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .draw-card.is-blessed-ritual {
+    animation: none;
+    box-shadow: 0 0 0 1px rgba(246, 196, 69, 0.4);
+  }
+}
+
+/* S5-T3: 역추첨 동률 펼치기 버튼 + 모달 안 회차 리스트. */
+.reverse-best-expand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-2);
+  padding: 6px 12px;
+  font-size: 12px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  color: var(--color-text);
+  cursor: pointer;
+}
+.reverse-best-expand:hover { background: var(--color-surface-soft, #f3f4f6); }
+.reverse-all-modal {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.reverse-all-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-2) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.reverse-all-item {
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  background: var(--color-surface);
+}
+.reverse-all-item-meta {
+  font-size: 12px;
+  color: var(--color-text-dim);
+  margin-bottom: 4px;
+}
+
 .strategy-tab.is-disabled {
   opacity: 0.35;
   cursor: not-allowed;

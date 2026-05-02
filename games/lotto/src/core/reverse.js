@@ -52,6 +52,27 @@ export function reverseSearch(userNumbers, draws) {
 }
 
 /**
+ * 특정 등수에 매칭된 모든 회차를 반환 (S5-T3).
+ * SSOT: docs/01_spec.md 5.7.8.
+ * @param {number[]} userNumbers
+ * @param {Array} draws
+ * @param {1|2|3|4|5} rank
+ * @returns {Array} 매칭 회차 배열 (drwNo 내림차순, 가장 최근 우선)
+ */
+export function findMatchingDraws(userNumbers, draws, rank) {
+  if (!Array.isArray(draws) || draws.length === 0) return [];
+  if (![1, 2, 3, 4, 5].includes(rank)) return [];
+  const matched = [];
+  for (const draw of draws) {
+    if (matchRank({ numbers: userNumbers, bonus: 0 }, draw) === rank) {
+      matched.push(draw);
+    }
+  }
+  matched.sort((a, b) => b.drwNo - a.drwNo);
+  return matched;
+}
+
+/**
  * 사용자 입력 검증. 6개 / 1~45 / 중복 없음.
  * @param {number[]} numbers
  * @returns {{ valid: boolean, reason: string }}

@@ -4,6 +4,7 @@
 import { renderCharacterForm } from './character-form.js';
 import { characterCardHtml } from './character-card.js';
 import { drawCardHtml, fiveSetsExtraHtml } from './draw-card.js';
+import { reverseSearch } from '../core/reverse.js';
 import { characterSlotsHtml } from './character-slots.js';
 import { strategyTabsHtml } from './strategy-tabs.js';
 import { nextDrawCardHtml, startCountdown } from './next-draw-card.js';
@@ -236,6 +237,20 @@ function activeStrategyIds(character) {
   return [character.lastUsedStrategy || STRATEGY_DEFAULT];
 }
 
+/**
+ * S5-T1: 5세트 #2~#5에 대해 reverseSearch로 과거 매칭 정보 산출.
+ * sets와 동일 길이 배열. [0]은 hero가 처리하므로 null 자리.
+ */
+function computeFiveSetsMatchInfos(sets, draws) {
+  if (!Array.isArray(sets) || sets.length === 0) return null;
+  if (!Array.isArray(draws) || draws.length === 0) return sets.map(() => null);
+  return sets.map((s, i) => {
+    if (i === 0) return null; // 메인 #1은 hero에서 별도 처리
+    const r = reverseSearch(s.numbers, draws);
+    return { bestRank: r.bestRank, bestRankCount: r.bestRankCount };
+  });
+}
+
 function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune, sets) {
   const banner = state.draws.length === 0
     ? `<section class="data-banner">
@@ -253,6 +268,9 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   state.ritual = ensureCurrentState(state.ritual, active.id, state.drwNo);
   saveRitualState(state.ritual);
 
+  // S5-T2: 의식 만땅 시 추천 카드 #1 골드 글로우.
+  const ritualFilled = !!(state.ritual && state.ritual.appliedBonus);
+
   return `
     <header class="app-header tab-header home-header">
       <h1 class="app-title">Blessed Lotto</h1>
@@ -260,8 +278,8 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
 
     <section class="home-hero${heroFortuneClass}" aria-label="다음 추첨 + 추천">
       ${nextDrawCardHtml(nextInfo)}
-      ${drawCardHtml(state.drwNo, rec, fortune)}
-      ${fiveSetsExtraHtml(sets)}
+      ${drawCardHtml(state.drwNo, rec, fortune, { ritualFilled })}
+      ${fiveSetsExtraHtml(sets, computeFiveSetsMatchInfos(sets, state.draws))}
     </section>
 
     ${characterSlotsHtml(state.characters, state.activeId)}

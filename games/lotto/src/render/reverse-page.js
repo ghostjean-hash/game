@@ -2,7 +2,8 @@
 // SSOT: docs/01_spec.md 5.7.
 import { numberColor } from '../data/colors.js';
 import { NUMBER_MIN, NUMBER_MAX, PICK_COUNT } from '../data/numbers.js';
-import { reverseSearch, validateUserNumbers } from '../core/reverse.js';
+import { reverseSearch, validateUserNumbers, findMatchingDraws } from '../core/reverse.js';
+import { showModal } from './modal.js';
 
 const RANK_LABELS = { 1: '1등', 2: '2등', 3: '3등', 4: '4등', 5: '5등' };
 
@@ -55,6 +56,12 @@ export function renderReversePage(container, draws) {
   container.querySelector('[data-action="reverse-random"]')?.addEventListener('click', () => {
     selected = randomPick();
     renderReversePage(container, draws);
+  });
+
+  // S5-T3: 동률 다회차 펼치기
+  container.querySelector('[data-action="reverse-expand"]')?.addEventListener('click', () => {
+    if (!result || !result.bestRank) return;
+    openAllMatchingModal(result.bestRank, draws);
   });
 }
 
@@ -138,6 +145,14 @@ function resultHtml(result, totalDraws) {
     </li>
   `;
 
+  // S5-T3: 동률 다회차일 때 펼치기 버튼.
+  const expandBtn = (bestRank && bestRankCount > 1)
+    ? `<button type="button" class="reverse-best-expand" data-action="reverse-expand"
+              aria-label="${RANK_LABELS[bestRank]} 매칭 회차 ${bestRankCount}건 모두 보기">
+         전체 보기 (${bestRankCount}건)
+       </button>`
+    : '';
+
   return `
     <section class="stats-section">
       <h2 class="stats-title">최고 등수</h2>
@@ -146,6 +161,7 @@ function resultHtml(result, totalDraws) {
         ${bestRankCount > 0 ? `<div class="reverse-best-meta">총 ${totalDraws}회 중 ${bestRankCount}회 매칭</div>` : ''}
       </div>
       ${bestDrawHtml}
+      ${expandBtn}
     </section>
 
     <section class="stats-section">
@@ -154,6 +170,39 @@ function resultHtml(result, totalDraws) {
       <p class="stats-note">로또 6/45는 매 회차 독립 시행이므로 과거 매칭 횟수가 미래 적중률을 보장하지 않습니다. 참고용.</p>
     </section>
   `;
+}
+
+/** S5-T3: 동률 매칭 회차 모두 모달로 표시. */
+function openAllMatchingModal(rank, draws) {
+  const matched = findMatchingDraws(selected, draws, rank);
+  if (matched.length === 0) return;
+  const userSet = new Set(selected);
+  const items = matched.map((draw) => {
+    const balls = draw.numbers.map((n) => {
+      const { bg } = numberColor(n);
+      const isMatch = userSet.has(n);
+      return `<span class="num${isMatch ? ' is-matched' : ''}" style="background-color:${bg};">${n}</span>`;
+    }).join('');
+    const bonusColor = numberColor(draw.bonus).bg;
+    const bonusMatched = userSet.has(draw.bonus);
+    return `
+      <li class="reverse-all-item">
+        <div class="reverse-all-item-meta"><strong>${draw.drwNo}회</strong> · ${draw.drwDate}</div>
+        <div class="reverse-best-draw-balls">
+          ${balls}
+          <span class="bonus-divider" aria-hidden="true">+</span>
+          <span class="num bonus${bonusMatched ? ' is-matched' : ''}" style="background-color:${bonusColor};">${draw.bonus}</span>
+        </div>
+      </li>
+    `;
+  }).join('');
+  showModal(`
+    <div class="reverse-all-modal">
+      <h2>${RANK_LABELS[rank]} 매칭 회차 (${matched.length}건)</h2>
+      <ul class="reverse-all-list">${items}</ul>
+      <p class="stats-note">과거 매칭은 미래 적중률과 무관합니다. 참고용.</p>
+    </div>
+  `);
 }
 
 function emptyResultHtml() {
