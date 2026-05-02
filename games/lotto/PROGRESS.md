@@ -4,10 +4,54 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-02 (Sprint 017 - Node CLI 테스트 + GitHub Actions 자동 회귀 환경).
+1.3. **마지막 갱신**: 2026-05-02 (Sprint 018 - MBTI 전면 폐지 / 11전략 / 3종 행운).
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.39. Sprint 018 완료 - MBTI 전면 폐지 (2026-05-02)
+
+사용자 의문 ("MBTI가 들어가는 게 맞나?") → B안 채택 → 코드 / docs / 테스트 / CSS 모두 정리.
+
+### 2.39.1. 폐지 사유 (3건)
+
+1. **데이터 출처 이질성**: 사주/별자리는 생년월일 자동 산출 / MBTI만 사용자 직접 입력. 캐릭터 정체성 견고함 약화.
+2. **컨셉 부정합**: 사주/별자리는 운명론 전통이지만 MBTI는 심리유형 분류라 "행운"과 결이 다름.
+3. **IP 회색 지대**: "MBTI"는 The Myers-Briggs Company 등록 상표. 게임 도메인에서 광범위하게 사용되지만 굳이 위험 떠안을 이유 없음.
+
+### 2.39.2. 작업 범위 (4건)
+
+- **S8-T1 코드**: `numbers.js` (STRATEGY_MBTI / MBTI_TYPES / MBTI_LUCKY 삭제, STRATEGY_CATEGORIES 재정의), `recommend.js` (mbtiWeights / 분기 / mbti 파라미터 삭제), `character-form.js` (MBTI select / 파싱 / 저장 삭제), `character-card.js` (4종→3종 토글 / collectLuckySources MBTI 케이스 삭제 / mbtiLabel 삭제), `strategy-picker.js` (STRATEGY_MBTI 라인 삭제), `main.js` (ctx.mbti 전달 삭제), `history.js` (mbti 보관 삭제), `styles/main.css` (`.char-mbti`, `.lucky-element-mbti` 삭제).
+- **S8-T2 docs SSOT**: 02_data 1.5 표 12→11 / 1.5.1 시드 의존 7→6 / 1.5.2 카테고리 운세 매핑 3→2 / 1.5.2.5 4종→3종 / 1.13 폐지 명시 / 3.6 Character.mbti deprecated. 01_spec 4장 / 5.1.3 / 5.4 / 5.9 갱신. README.md 12→11 + MBTI 라인 삭제.
+- **S8-T3 테스트**: recommend.test.js MBTI 케이스 2개 + import 정리, history.test.js fakeCharacter mbti 필드 삭제.
+- **S8-T4 마이그레이션**: 기존 `character.mbti` 필드는 localStorage에 잔존하나 미사용 처리 (load 시 무시). `lastUsedStrategy === 'mbti'` 캐릭터는 main.js에서 `STRATEGY_DEFAULT`로 fallback. `lastUsedStrategies` 배열도 `'mbti'` 필터링 + 빈 배열 시 default 보완.
+
+### 2.39.3. 영향 파일 (15건)
+
+- 신규 0건. 삭제 0건. 모두 수정.
+- 수정: docs/01_spec.md / docs/02_data.md / src/data/numbers.js / src/core/recommend.js / src/core/history.js / src/render/character-form.js / src/render/character-card.js / src/render/strategy-picker.js / src/render/main.js / styles/main.css / tests/suites/recommend.test.js / tests/suites/history.test.js / README.md / PROGRESS.md.
+
+### 2.39.4. QA 결과
+
+- core/ DOM 의존성: 0건.
+- 사행성 표현: 0건.
+- 옛 라벨 잔존: 0건.
+- 매직 넘버: 0건.
+- 코드 내 MBTI 잔존 = **마이그레이션 가드 + 주석만** (실 사용 0건).
+- docs SSOT: 02_data 4종 + 01_spec 4종 + README 갱신.
+- 테스트: 273/273 통과 (275에서 MBTI 2건 제거됨, 65~70ms).
+
+### 2.39.5. 트레이드오프
+
+- 잃은 것: 12전략 → 11전략, 4종 행운 → 3종, 캐릭터 정체성 1축 (MBTI).
+- 얻은 것: IP 위험 0, 컨셉 일관성 (사주/별자리 = 운명론, MBTI 이질성 제거), 캐릭터 폼 단순화, 자동 산출 100% (사용자 직접 입력 0).
+- localStorage `mbti` 필드는 잔존 안전 (미사용 처리). 강제 마이그레이션 없음.
+
+### 2.39.6. 다음 sprint 후보
+
+- Sprint 019: jsdom 기반 render/ 일부 테스트 (Sprint 017 위험 4.2 보강).
+- Sprint 020: hub CI 표준 sudoku/tetris로 확장.
+- 보류 항목 (#7 OCR / 결제 / i18n).
 
 ## 2.38. Sprint 017 완료 - 자동 회귀 환경 + 결손 3건 정정 (2026-05-02)
 
@@ -1045,6 +1089,31 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 - `docs/03_architecture.md` 폴더 트리.
 
 # 3. 다음 액션
+
+## 3.-7. Sprint 018 (완료, 2026-05-02 - Cleanup: MBTI 폐지)
+
+사용자 결정 = B안. 결과는 2.39 영구 이력 참조.
+
+### 3.-7.1. 작업 범위 (4건, 모두 완료)
+
+| ID | 작업 | 양 | 상태 |
+|---|---|---|---|
+| S8-T1 | 코드 - 8개 파일 정리 | 큼 | **완료** |
+| S8-T2 | docs SSOT + README | 중 | **완료** |
+| S8-T3 | 테스트 정리 | 중 | **완료** |
+| S8-T4 | 마이그레이션 fallback | 작 | **완료** |
+
+### 3.-7.2. 자율 결정 사항
+
+- 기존 `character.mbti` 필드는 localStorage 잔존 안전. 강제 마이그레이션 없음.
+- `lastUsedStrategy === 'mbti'`는 `STRATEGY_DEFAULT`로 fallback.
+- `lastUsedStrategies` 배열 내 `'mbti'`는 필터링 + 빈 배열 시 default 보완.
+- 코드 내 'mbti' 잔존은 **마이그레이션 가드 + 주석만** (실 사용 0).
+
+### 3.-7.3. 비범위
+
+- localStorage 필드 강제 삭제 (load 시 미사용으로 충분)
+- Character 스키마 `mbti` 필드 완전 제거 (deprecated 표기로 충분)
 
 ## 3.-6. Sprint 017 (완료, 2026-05-02 - Safety Net: 자동 회귀)
 

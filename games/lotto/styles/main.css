@@ -259,17 +259,6 @@ a.btn-secondary,
   font-family: var(--font-mono);
   background: rgba(201, 160, 80, 0.05);
 }
-.char-mbti {
-  display: inline-block;
-  font-size: var(--font-size-sm);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  padding: 2px var(--space-2);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  font-weight: bold;
-}
-
 /* 캐릭터 슬롯 */
 .character-slots {
   display: flex;
@@ -1901,7 +1890,6 @@ a.btn-secondary,
 .lucky-element-saju { background: #fef3c7; color: #92400e; border-color: #fde68a; }
 .lucky-element-zodiac { background: #fce7f3; color: #be185d; border-color: #fbcfe8; }
 .lucky-element-zelement { background: #fce7f3; color: #be185d; border-color: #fbcfe8; }
-.lucky-element-mbti { background: #d1fae5; color: #065f46; border-color: #a7f3d0; }
 
 /* T3: 캐릭터 카드 사주 행운 번호 영구 표시. */
 .char-lucky {

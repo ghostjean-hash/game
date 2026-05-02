@@ -36,7 +36,6 @@ export const STRATEGY_ASTROLOGER = 'astrologer';
 export const STRATEGY_TREND_FOLLOWER = 'trendFollower';
 export const STRATEGY_INTUITIVE = 'intuitive';
 export const STRATEGY_BALANCER = 'balancer';
-export const STRATEGY_MBTI = 'mbti';
 export const STRATEGY_ZODIAC_ELEMENT = 'zodiacElement';
 export const STRATEGY_FIVE_ELEMENTS = 'fiveElements';
 export const STRATEGY_DEFAULT = STRATEGY_BLESSED;
@@ -45,7 +44,7 @@ export const STRATEGY_DEFAULT = STRATEGY_BLESSED;
 export const STRATEGY_CATEGORIES = Object.freeze({
   blessed: 'random', statistician: 'stats', secondStar: 'stats', regressionist: 'stats',
   pairTracker: 'stats', astrologer: 'mapping', trendFollower: 'stats', intuitive: 'random',
-  balancer: 'random', mbti: 'mapping', zodiacElement: 'mapping', fiveElements: 'saju',
+  balancer: 'random', zodiacElement: 'mapping', fiveElements: 'saju',
 });
 
 // 다중 전략 모드 최대 선택 수 (분배 1+1+1+1+1+1 = 6).
@@ -146,33 +145,6 @@ export const ZODIAC_LUCKY = Object.freeze({
   capricorn:   [5, 14, 20, 26, 32, 37, 41],
   aquarius:    [11, 17, 23, 25, 29, 35, 38],
   pisces:      [4, 12, 16, 20, 31, 33, 45],
-});
-
-// 1.13. MBTI 16종 + 행운 번호 (MBTI 전략용. 임의 매핑, 추첨 확률 영향 없음)
-export const MBTI_TYPES = Object.freeze([
-  'INTJ', 'INTP', 'ENTJ', 'ENTP',
-  'INFJ', 'INFP', 'ENFJ', 'ENFP',
-  'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ',
-  'ISTP', 'ISFP', 'ESTP', 'ESFP',
-]);
-
-export const MBTI_LUCKY = Object.freeze({
-  INTJ: [3, 11, 17, 24, 32, 38, 44],
-  INTP: [4, 9, 16, 23, 29, 35, 41],
-  ENTJ: [1, 8, 15, 22, 29, 36, 43],
-  ENTP: [2, 7, 13, 21, 27, 33, 39],
-  INFJ: [5, 12, 19, 26, 33, 40, 45],
-  INFP: [6, 14, 20, 28, 31, 37, 42],
-  ENFJ: [3, 10, 18, 25, 31, 38, 44],
-  ENFP: [7, 13, 19, 27, 34, 40, 45],
-  ISTJ: [4, 11, 17, 24, 30, 36, 41],
-  ISFJ: [2, 9, 15, 22, 28, 35, 42],
-  ESTJ: [1, 8, 14, 21, 27, 34, 40],
-  ESFJ: [6, 13, 20, 26, 32, 38, 45],
-  ISTP: [5, 12, 18, 25, 31, 37, 43],
-  ISFP: [3, 10, 16, 23, 29, 36, 42],
-  ESTP: [7, 14, 21, 28, 35, 41, 44],
-  ESFP: [4, 11, 17, 24, 30, 37, 43],
 });
 
 // 1.14. 별자리 4원소 분류 + 원소별 행운 번호 (별자리 원소 전략용)

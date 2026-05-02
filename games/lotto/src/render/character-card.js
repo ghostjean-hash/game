@@ -1,13 +1,13 @@
 // 캐릭터 카드 HTML. SSOT: docs/01_spec.md 5.1 / 5.1.2.
 // 클래스(전략)는 카드에 표시하지 않습니다. 전략은 추첨 시 선택.
 // T3: 사주(일주 오행) 행운 번호 영구 표시.
-// S3-T3: 4종 행운 토글 (사주 / 별자리 / 4원소 / MBTI).
+// S3-T3: 3종 행운 토글 (사주 / 별자리 / 4원소). MBTI는 S8(2026-05-02) 폐지.
 import { FORTUNE_COLORS, numberColor } from '../data/colors.js';
 import {
   FORTUNE_GREAT, FORTUNE_GOOD, FORTUNE_NEUTRAL, FORTUNE_BAD,
   ANIMAL_SIGNS,
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
-  ZODIAC_LUCKY, ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY, MBTI_LUCKY,
+  ZODIAC_LUCKY, ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY,
 } from '../data/numbers.js';
 import { dayPillarLabel } from '../core/saju.js';
 import { fortuneRelation } from '../core/fortune.js';
@@ -72,7 +72,6 @@ export function characterCardHtml(character, fortune, drawOrDrwNo) {
   const animalLabel = character.animalSign ? (ANIMAL_LABELS[character.animalSign] || '') : '';
   const zodiacLabel = character.zodiac ? (ZODIAC_LABELS[character.zodiac] || '') : '';
   const pillarLabel = character.dayPillar ? dayPillarLabel(character.dayPillar) : '';
-  const mbtiLabel = character.mbti || '';
 
   // 회차 일진 띠 관계 (spec 5.1.1)
   let relationLabel = '';
@@ -91,7 +90,6 @@ export function characterCardHtml(character, fortune, drawOrDrwNo) {
         ${animalLabel ? `<span class="char-animal">${escapeHtml(animalLabel)}띠</span>` : ''}
         ${zodiacLabel ? `<span class="char-zodiac">${escapeHtml(zodiacLabel)}</span>` : ''}
         ${pillarLabel ? `<span class="char-pillar" title="일주 (사주)">${escapeHtml(pillarLabel)}일</span>` : ''}
-        ${mbtiLabel ? `<span class="char-mbti" title="MBTI">${escapeHtml(mbtiLabel)}</span>` : ''}
       </div>
       <h2 class="char-name">${escapeHtml(character.name)}</h2>
       <div class="char-fortune" style="color: ${fortuneColor}" aria-label="운세 ${escapeHtml(fortuneLabel)}">
@@ -112,7 +110,7 @@ export function characterCardHtml(character, fortune, drawOrDrwNo) {
 }
 
 /**
- * S3-T3: 4종 행운 번호 토글 (사주 / 별자리 / 4원소 / MBTI).
+ * S3-T3: 3종 행운 번호 토글 (사주 / 별자리 / 4원소). S8(2026-05-02) MBTI 폐지.
  * 1차 표시는 사주(가장 정체성 강한 매핑). 토글로 다른 종류 보기.
  * 추첨 결과의 큰 번호공과 시각 차별화 위해 작은 컬러볼.
  * 데이터 없는 종류는 탭에서도 비활성.
@@ -161,7 +159,7 @@ function luckyNumbersHtml(character) {
 
 /**
  * 캐릭터의 4종 행운 매핑 수집. 데이터 있는 종류만 반환.
- * 우선순위: 사주 → 별자리 → 별자리 4원소 → MBTI.
+ * 우선순위: 사주 → 별자리 → 별자리 4원소.
  */
 function collectLuckySources(character) {
   const sources = [];
@@ -209,18 +207,6 @@ function collectLuckySources(character) {
         numbers: ZODIAC_ELEMENT_LUCKY[element],
       });
     }
-  }
-
-  // MBTI
-  if (character.mbti && MBTI_LUCKY[character.mbti]) {
-    sources.push({
-      kind: 'mbti',
-      tabLabel: 'MBTI',
-      tabTitle: `MBTI ${character.mbti}`,
-      elementLabel: character.mbti,
-      caption: '임의 매핑 · 16Personalities 학설과 무관 · 추첨 확률 영향 없음',
-      numbers: MBTI_LUCKY[character.mbti],
-    });
   }
 
   return sources;

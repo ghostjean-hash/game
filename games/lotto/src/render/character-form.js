@@ -1,6 +1,6 @@
 // 캐릭터 생성 폼. 전략은 별도 (메인 화면 picker).
 // 별자리는 생년월일에서 자동 계산 (별도 입력 없음). SSOT: docs/02_data.md 2.6.
-import { LUCK_INITIAL, STRATEGY_DEFAULT, MBTI_TYPES } from '../data/numbers.js';
+import { LUCK_INITIAL, STRATEGY_DEFAULT } from '../data/numbers.js';
 import { characterSeed } from '../core/seed.js';
 import { yearToAnimalSign, zodiacFromBirthDate } from '../core/zodiac.js';
 import { dateToDayPillar } from '../core/saju.js';
@@ -25,12 +25,6 @@ export function renderCharacterForm(container, onCreated) {
         <label>이름 <input type="text" name="name" required maxlength="20" placeholder="예: 검은바람" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" /></label>
         <label>생년월일 <input type="date" name="birth" required /></label>
         <label>행운의 단어 <input type="text" name="luckyWord" required maxlength="20" placeholder="예: 바람" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" /></label>
-        <label>MBTI (선택)
-          <select name="mbti">
-            <option value="">미지정</option>
-            ${MBTI_TYPES.map((t) => `<option value="${t}">${t}</option>`).join('')}
-          </select>
-        </label>
         <p class="form-zodiac-preview" data-role="zodiac-preview" aria-live="polite">생년월일 입력 시 별자리 자동 계산</p>
         <button type="submit" class="btn-primary">캐릭터 생성</button>
       </form>
@@ -61,7 +55,6 @@ export function renderCharacterForm(container, onCreated) {
     const name = String(fd.get('name')).trim();
     const birth = String(fd.get('birth'));
     const luckyWord = String(fd.get('luckyWord')).trim();
-    const mbti = String(fd.get('mbti') || '').trim() || null;
 
     const zodiac = zodiacFromBirthDate(birth);
     if (!zodiac) {
@@ -80,7 +73,6 @@ export function renderCharacterForm(container, onCreated) {
       animalSign,
       zodiac,
       dayPillar,
-      mbti,
       luck: LUCK_INITIAL,
       lastUsedStrategy: STRATEGY_DEFAULT,
       lastUsedStrategies: [STRATEGY_DEFAULT], // S3-T1: 다중 전략 모드용 (단일 모드 시 무시)

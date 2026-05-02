@@ -3,7 +3,7 @@ import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
   STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
-  STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
+  STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
 } from '../data/numbers.js';
 
 // 라벨/설명 톤 가이드: 라벨은 직관적으로, 설명은 "어떻게 뽑는지" 한 줄로.
@@ -17,7 +17,6 @@ const STRATEGIES = [
   { id: STRATEGY_PAIR_TRACKER, label: '짝꿍 번호', short: '짝', desc: '캐릭터 키번호와 자주 함께 나왔던 번호 묶음', category: '통계' },
   { id: STRATEGY_TREND_FOLLOWER, label: '최근 트렌드', short: '추', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
   { id: STRATEGY_ASTROLOGER, label: '별자리 행운', short: '점', desc: '캐릭터 별자리 12종의 행운 번호 위주', category: '운세 매핑' },
-  { id: STRATEGY_MBTI, label: 'MBTI 행운', short: 'M', desc: '캐릭터 MBTI 16종의 행운 번호 위주', category: '운세 매핑' },
   { id: STRATEGY_ZODIAC_ELEMENT, label: '별자리 4원소', short: '원', desc: '별자리 4원소(불/땅/공기/물) 그룹 행운 번호', category: '운세 매핑' },
   { id: STRATEGY_FIVE_ELEMENTS, label: '일주 오행', short: '오', desc: '캐릭터 일주의 천간 오행(목/화/토/금/수) 행운 번호', category: '사주' },
   { id: STRATEGY_INTUITIVE, label: '직감', short: '직', desc: '회차마다 다른 분포 (같은 캐릭터는 같은 결과)', category: '랜덤' },

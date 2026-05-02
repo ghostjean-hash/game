@@ -4,7 +4,7 @@ import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
   STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
-  STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
+  STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
   FIVE_SETS_COUNT,
 } from '../../src/data/numbers.js';
 
@@ -51,12 +51,12 @@ suite('core/recommend - 형식', () => {
       STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
       STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
       STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
-      STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
+      STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
     ];
     for (const strategyId of strategies) {
       const r = recommend({
         ...baseCtx, strategyId,
-        zodiac: 'aries', mbti: 'INTJ', dayPillar: { stem: 'gap', branch: 'rat' },
+        zodiac: 'aries', dayPillar: { stem: 'gap', branch: 'rat' },
       });
       const set = new Set(r.numbers);
       assertTrue(!set.has(r.bonus), `${strategyId}: bonus ${r.bonus} ∈ numbers [${r.numbers.join(',')}]`);
@@ -293,17 +293,6 @@ suite('core/recommend - 전략', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_BALANCER });
     assertEqual(r.numbers.length, 6);
     assertTrue(r.reasons[0].includes('균형 조합'));
-  });
-
-  test('mbti 정상 동작 (mbti 없어도)', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_MBTI });
-    assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('MBTI'));
-  });
-
-  test('mbti reasons에 타입 포함', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_MBTI, mbti: 'INTJ' });
-    assertTrue(r.reasons[0].includes('INTJ'));
   });
 
   test('zodiacElement 정상 동작 (zodiac 미지정도)', () => {

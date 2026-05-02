@@ -200,14 +200,15 @@ function getRecAndFortune(active) {
     bonusStats: state.bonusStats,
     cooccur: state.cooccur,
     zodiac: active.zodiac,
-    mbti: active.mbti,
     dayPillar: active.dayPillar,
   };
 
   // S3-T1: 다중 전략 모드 분기
   const isMulti = !!state.options.multiStrategy;
   const strategyIds = isMulti ? activeStrategyIds(active) : null;
-  const strategyId = isMulti ? strategyIds[0] : (active.lastUsedStrategy || STRATEGY_DEFAULT);
+  // S8 마이그레이션: lastUsedStrategy === 'mbti'였던 캐릭터는 STRATEGY_DEFAULT로 fallback.
+  const rawSingleId = active.lastUsedStrategy || STRATEGY_DEFAULT;
+  const strategyId = isMulti ? strategyIds[0] : (rawSingleId === 'mbti' ? STRATEGY_DEFAULT : rawSingleId);
 
   // S4-T1: 5세트 모드. ON이면 메인(rec) = sets[0], 추가 sets[1..4]를 함께 반환.
   if (state.options.fiveSets) {
@@ -228,13 +229,17 @@ function getRecAndFortune(active) {
 
 /**
  * S3-T1: 캐릭터의 다중 전략 선택 목록 반환. 마이그레이션 fallback 포함.
+ * S8: 'mbti' 잔존 ID는 필터링 (폐지됨).
  */
 function activeStrategyIds(character) {
+  let raw;
   if (Array.isArray(character.lastUsedStrategies) && character.lastUsedStrategies.length > 0) {
-    return character.lastUsedStrategies;
+    raw = character.lastUsedStrategies;
+  } else {
+    raw = [character.lastUsedStrategy || STRATEGY_DEFAULT];
   }
-  // 마이그레이션: 단일 lastUsedStrategy → 배열
-  return [character.lastUsedStrategy || STRATEGY_DEFAULT];
+  const filtered = raw.filter((id) => id !== 'mbti');
+  return filtered.length > 0 ? filtered : [STRATEGY_DEFAULT];
 }
 
 /**

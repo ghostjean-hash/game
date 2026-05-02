@@ -25,7 +25,6 @@ function fakeCharacter() {
     animalSign: 'dragon',
     zodiac: 'aries',
     dayPillar: { stem: 'gap', branch: 'rat' },
-    mbti: 'INTJ',
     luck: LUCK_INITIAL,
     lastUsedStrategy: STRATEGY_DEFAULT,
     createdAt: '2024-01-01T00:00:00.000Z',

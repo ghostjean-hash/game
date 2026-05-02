@@ -7,13 +7,12 @@ import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
   STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
-  STRATEGY_MBTI, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
+  STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
   OBJECTIVE_STRATEGIES, OBJECTIVE_SEED_SALT,
   WEIGHT_MIN_FLOOR, STATS_POWER, GAP_POWER,
   SUM_RANGE_MIN, SUM_RANGE_MAX,
   ODD_EVEN_PREFERRED,
   ZODIAC_LUCKY,
-  MBTI_LUCKY,
   ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY,
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
   MULTI_STRATEGY_MAX,
@@ -106,17 +105,6 @@ function passesBalanceFilters(numbers) {
   const [oddPref] = ODD_EVEN_PREFERRED;
   if (oddCount !== oddPref) return false;
   return true;
-}
-
-/** MBTI별 행운 번호 → weight 벡터. */
-function mbtiWeights(mbti) {
-  const arr = new Array(VECTOR_LEN);
-  for (let i = 0; i < arr.length; i += 1) arr[i] = 1;
-  const lucky = MBTI_LUCKY[mbti] || [];
-  for (const n of lucky) {
-    if (n >= NUMBER_MIN && n <= NUMBER_MAX) arr[n - 1] = arr[n - 1] * 5;
-  }
-  return arr;
 }
 
 /** 별자리 → 4원소 (fire / earth / air / water). */
@@ -218,14 +206,13 @@ function weightedSample(weights, count, seed, exclude = null) {
  * @param {object[]} [ctx.bonusStats]
  * @param {object[]} [ctx.cooccur]
  * @param {string} [ctx.zodiac] - 별자리 행운 / 별자리 원소 전략용
- * @param {string} [ctx.mbti] - MBTI 전략용
  * @param {{ stem: string, branch: string }} [ctx.dayPillar] - 사주 전략(fiveElements)용 일주
  * @returns {{ numbers: number[], bonus: number, reasons: string[] }}
  */
 export function recommend(ctx) {
   const {
     seed, strategyId, luck, drwNo,
-    numberStats = [], bonusStats = [], cooccur = [], zodiac = null, mbti = null, dayPillar = null,
+    numberStats = [], bonusStats = [], cooccur = [], zodiac = null, dayPillar = null,
   } = ctx;
   const drawSeed = mixSeeds(seed, drwNo);
   const bonusSeed = mixSeeds(drawSeed, 0x12345678);
@@ -278,10 +265,6 @@ export function recommend(ctx) {
     mainWeights = uniformWeights();
     bonusW = uniformWeights();
     reasons.push(`균형 조합: 번호 합 ${SUM_RANGE_MIN}~${SUM_RANGE_MAX} + 홀짝 ${ODD_EVEN_PREFERRED.join(':')} 필터를 통과한 조합만.`);
-  } else if (strategyId === STRATEGY_MBTI) {
-    mainWeights = mbtiWeights(mbti);
-    bonusW = uniformWeights();
-    reasons.push(`MBTI 행운: ${mbti || '미지정'} 행운 번호 위주 (임의 매핑, 추첨 확률 영향 없음).`);
   } else if (strategyId === STRATEGY_ZODIAC_ELEMENT) {
     mainWeights = zodiacElementWeights(zodiac);
     bonusW = uniformWeights();
