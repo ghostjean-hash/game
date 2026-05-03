@@ -355,8 +355,11 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   const ritualFilled = !!(state.ritual && state.ritual.appliedBonus);
 
   // S26: 누적 추천 세트 섹션. active.savedSets는 renderHome에서 ensureSavedSetsForRound로 보장됨.
+  // labelStart: 메인 카드가 "추천1" 점유. 5세트 ON 시 컴팩트가 추천2~5 점유 → 누적은 추천6부터.
+  //   5세트 OFF면 메인만 추천1 → 누적은 추천2부터.
   const savedList = active.savedSets?.list || [];
-  const savedSectionHtml = savedSetsSectionHtml(savedList);
+  const labelStart = state.options.fiveSets ? 6 : 2;
+  const savedSectionHtml = savedSetsSectionHtml(savedList, labelStart);
   const addBarHtml = savedSetsAddBarHtml(savedList.length, SAVED_SETS_CAP);
 
   return `

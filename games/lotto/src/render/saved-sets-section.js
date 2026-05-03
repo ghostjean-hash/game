@@ -30,19 +30,23 @@ function numHtml(n, source) {
 
 /**
  * @param {Array} list character.savedSets.list
+ * @param {number} [labelStart=2] 라벨 시작 인덱스. 메인 카드가 "추천1"을 점유하므로
+ *   누적 첫 항목은 "추천2"부터. 5세트 모드 ON 시 컴팩트 카드가 추천2~5를 점유 → labelStart=6.
+ *   SSOT: docs/01_spec.md 5.2.5.
  * @returns {string} html. list 비면 빈 문자열.
  */
-export function savedSetsSectionHtml(list) {
+export function savedSetsSectionHtml(list, labelStart = 2) {
   if (!Array.isArray(list) || list.length === 0) return '';
 
   const items = list.map((set, i) => {
+    const label = `추천${labelStart + i}`;
     const sources = Array.isArray(set.strategySources) ? set.strategySources : [];
     const ballsHtml = set.numbers.map((n, k) => numHtml(n, sources[k] || null)).join('');
     return `
-      <div class="saved-set-row" data-saved-idx="${i}" aria-label="추천${i + 1}">
-        <span class="saved-set-idx" aria-hidden="true">추천${i + 1}</span>
+      <div class="saved-set-row" data-saved-idx="${i}" aria-label="${label}">
+        <span class="saved-set-idx" aria-hidden="true">${label}</span>
         <div class="saved-set-balls" role="list">${ballsHtml}</div>
-        <button type="button" class="saved-set-remove" data-action="remove-saved-set" data-saved-idx="${i}" aria-label="추천${i + 1} 삭제" title="삭제">×</button>
+        <button type="button" class="saved-set-remove" data-action="remove-saved-set" data-saved-idx="${i}" aria-label="${label} 삭제" title="삭제">×</button>
       </div>
     `;
   }).join('');

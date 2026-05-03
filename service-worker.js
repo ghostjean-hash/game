@@ -4,7 +4,8 @@
 // v10 (2026-05-03): lotto S24 - 흉/대길 배너 제거.
 // v11 (2026-05-03): lotto S25 - 다중 전략 C+E안 (풀에서 직접 추출 + strategyIds 정규화).
 // v12 (2026-05-03): lotto S26 - 누적 추천 세트 (조립식 N장 누적 + 회차 자동 비움).
-const CACHE_VERSION = "v12";
+// v13 (2026-05-03): lotto S26 hotfix - 누적 라벨 추천1 중복 정정 (추천2부터 시작).
+const CACHE_VERSION = "v13";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
