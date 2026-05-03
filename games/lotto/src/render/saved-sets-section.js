@@ -29,14 +29,20 @@ function numHtml(n, source) {
 }
 
 /**
+ * 추천 리스트 섹션. S27: 메인 카드 폐기 후 추첨 탭의 유일한 추천 표시 영역.
  * @param {Array} list character.savedSets.list
- * @param {number} [labelStart=2] 라벨 시작 인덱스. 메인 카드가 "추천1"을 점유하므로
- *   누적 첫 항목은 "추천2"부터. 5세트 모드 ON 시 컴팩트 카드가 추천2~5를 점유 → labelStart=6.
+ * @param {number} [labelStart=1] 라벨 시작 인덱스. S27 이후 메인 카드 폐기로 1부터 시작.
  *   SSOT: docs/01_spec.md 5.2.5.
- * @returns {string} html. list 비면 빈 문자열.
+ * @returns {string} html. list 비면 빈 상태 안내(추첨 탭 빈 화면 회피).
  */
-export function savedSetsSectionHtml(list, labelStart = 2) {
-  if (!Array.isArray(list) || list.length === 0) return '';
+export function savedSetsSectionHtml(list, labelStart = 1) {
+  if (!Array.isArray(list) || list.length === 0) {
+    return `
+      <section class="saved-sets-section is-empty" aria-label="추천 리스트 (비어있음)">
+        <p class="saved-sets-empty">아래 전략을 골라 조립식을 만든 뒤 <strong>+ 1세트</strong> 또는 <strong>+ 5세트</strong>로 추천을 추가하세요.</p>
+      </section>
+    `;
+  }
 
   const items = list.map((set, i) => {
     const label = `추천${labelStart + i}`;
@@ -54,11 +60,11 @@ export function savedSetsSectionHtml(list, labelStart = 2) {
   return `
     <section class="saved-sets-section" aria-label="저장된 추천 세트">
       <header class="saved-sets-header">
-        <h2 class="saved-sets-title">저장된 추천 세트 (${list.length})</h2>
-        <button type="button" class="saved-sets-clear" data-action="clear-saved-sets" aria-label="저장된 추천 세트 모두 삭제">전체 비우기</button>
+        <h2 class="saved-sets-title">추천 리스트 (${list.length})</h2>
+        <button type="button" class="saved-sets-clear" data-action="clear-saved-sets" aria-label="추천 리스트 모두 삭제">전체 비우기</button>
       </header>
       <div class="saved-sets-list">${items}</div>
-      <p class="saved-sets-disclaimer">비교 / 보관용. 추첨 결과 보장 없음. 회차 전환 시 자동 비워집니다.</p>
+      <p class="saved-sets-disclaimer">추첨 결과 보장 없음. 회차 전환 시 자동 비워집니다.</p>
     </section>
   `;
 }

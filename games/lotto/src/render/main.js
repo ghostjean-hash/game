@@ -354,12 +354,12 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   // S5-T2: 의식 만땅 시 추천 카드 #1 골드 글로우.
   const ritualFilled = !!(state.ritual && state.ritual.appliedBonus);
 
+  // S27 (2026-05-03): 메인 카드(미리보기) + 5세트 컴팩트 추첨 탭에서 노출 폐기.
+  //   누적 리스트(추천1, 추천2, ...)만 표시. + 버튼은 전략 영역 아래로 이동.
+  //   라벨 시작 = 1 (메인이 없으니).
   // S26: 누적 추천 세트 섹션. active.savedSets는 renderHome에서 ensureSavedSetsForRound로 보장됨.
-  // labelStart: 메인 카드가 "추천1" 점유. 5세트 ON 시 컴팩트가 추천2~5 점유 → 누적은 추천6부터.
-  //   5세트 OFF면 메인만 추천1 → 누적은 추천2부터.
   const savedList = active.savedSets?.list || [];
-  const labelStart = state.options.fiveSets ? 6 : 2;
-  const savedSectionHtml = savedSetsSectionHtml(savedList, labelStart);
+  const savedSectionHtml = savedSetsSectionHtml(savedList, 1);
   const addBarHtml = savedSetsAddBarHtml(savedList.length, SAVED_SETS_CAP);
 
   return `
@@ -367,17 +367,16 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
       <h1 class="app-title">Blessed Lotto</h1>
     </header>
 
-    <section class="home-hero${heroFortuneClass}" aria-label="다음 추첨 + 추천">
+    <section class="home-hero${heroFortuneClass}" aria-label="다음 추첨 + 추천 리스트">
       ${nextDrawCardHtml(nextInfo)}
-      ${drawCardHtml(state.drwNo, rec, fortune, { ritualFilled })}
-      ${fiveSetsExtraHtml(sets, computeFiveSetsMatchInfos(sets, state.draws))}
-      ${addBarHtml}
+      ${savedSectionHtml}
     </section>
-
-    ${savedSectionHtml}
 
     ${/* S19: 항상 다중 모드 (multi=true). 1전략도 토글 1개로 동작. */ ''}
     ${strategyTabsHtml(strategyIds, { multi: true })}
+
+    ${/* S27: + 1세트 / + 5세트 버튼을 전략 영역 직하로 이동. 조립식 정의 후 즉시 등록 동선. */ ''}
+    ${addBarHtml}
 
     ${/* S17(2026-05-02): 행운 쌓기를 전략 탭 하위로 이동 (이전 = 히어로 직하). */ ''}
     ${ritualWidgetHtml(state.ritual)}

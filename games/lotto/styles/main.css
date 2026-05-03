@@ -1453,12 +1453,15 @@ a.btn-secondary,
 
 /* S26 (2026-05-03): 누적 추천 세트 + 추가 버튼 바.
    사용자가 strategy 조합 바꿔가며 N세트 누적. 회차 단위 격납.
+   S27 (2026-05-03): 메인 카드 폐기. 누적 리스트가 추첨 탭 유일 추천 영역.
+     + 버튼은 전략 영역 직하로 이동. 번호공 크기 메인 카드 수준으로 키움.
    SSOT: docs/01_spec.md 5.2.5 / docs/02_data.md 1.5.8. */
 .saved-add-bar {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
-  margin-top: var(--space-2);
+  margin: var(--space-2) auto;
   padding: var(--space-2) var(--space-3);
   flex-wrap: wrap;
 }
@@ -1493,6 +1496,22 @@ a.btn-secondary,
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-2);
+}
+.saved-sets-section.is-empty {
+  text-align: center;
+  padding: var(--space-3) var(--space-3);
+  background: transparent;
+  border: 1px dashed var(--color-border);
+}
+.saved-sets-empty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+}
+.saved-sets-empty strong {
+  color: var(--color-accent);
+  font-weight: 700;
 }
 .saved-sets-header {
   display: flex;
@@ -1544,16 +1563,16 @@ a.btn-secondary,
   gap: 4px;
   justify-items: center;
 }
-/* 누적 세트 번호공 = 5세트 컴팩트와 동일 크기 (시각 톤 일관). */
+/* S27: 누적 세트 번호공 = 메인 카드와 동일 크기 (시각 통일, 메인 카드 폐기 후). */
 .saved-set-row .num-cell .num {
-  width: 30px; height: 30px; min-width: 30px; min-height: 30px;
-  font-size: 13px;
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+  font-size: var(--font-size-md);
 }
 .saved-set-row .num-source-tag {
-  min-width: 10px;
-  height: 10px;
-  font-size: 8px;
-  border-radius: 5px;
+  min-width: 12px;
+  height: 12px;
+  font-size: 9px;
+  border-radius: 6px;
 }
 .saved-set-remove {
   width: 24px;
@@ -1579,13 +1598,19 @@ a.btn-secondary,
   line-height: 1.5;
 }
 @media (max-width: 480px) {
-  .saved-set-row { grid-template-columns: 36px 1fr 24px; gap: var(--space-1); }
+  .saved-set-row { grid-template-columns: 40px 1fr 24px; gap: var(--space-1); }
   .saved-set-row .num-cell .num {
-    width: 26px; height: 26px; min-width: 26px; min-height: 26px;
+    width: 36px; height: 36px; min-width: 36px; min-height: 36px;
     font-size: 12px;
   }
   .saved-set-idx { font-size: 12px; }
   .saved-set-remove { width: 22px; height: 22px; font-size: 14px; }
+}
+@media (max-width: 360px) {
+  .saved-set-row .num-cell .num {
+    width: 32px; height: 32px; min-width: 32px; min-height: 32px;
+    font-size: 11px;
+  }
 }
 
 /* S5-T1: 5세트 컴팩트 카드 매칭 chip. */
