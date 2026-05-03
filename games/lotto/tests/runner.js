@@ -19,5 +19,6 @@ import './suites/schedule.test.js';
 import './suites/history.test.js';
 import './suites/ritual.test.js';
 import './suites/reverse.test.js';
+import './suites/saved-sets.test.js';
 
 done();

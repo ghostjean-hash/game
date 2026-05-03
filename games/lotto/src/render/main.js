@@ -19,11 +19,16 @@ import { showModal, showDisclaimer } from './modal.js';
 import { ritualWidgetHtml, openRitualModal } from './ritual-widget.js';
 import { spawnRitualBurst } from './ritual-particles.js';
 import { recommend, recommendMulti, recommendFiveSets } from '../core/recommend.js';
+import { mixSeeds } from '../core/random.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
 import { recordRecommendation, matchHistory, backfillRecommendations } from '../core/history.js';
 import { applyLuckGrowth } from '../core/luck.js';
 import { ensureCurrentState, performRitual, applyRitualBonus } from '../core/ritual.js';
+import {
+  ensureSavedSetsForRound, addSavedSets, removeSavedSetAt, clearSavedSets,
+} from '../core/saved-sets.js';
+import { savedSetsSectionHtml, savedSetsAddBarHtml } from './saved-sets-section.js';
 import {
   loadCharacters, saveCharacters,
   loadActiveCharacterId, saveActiveCharacterId,
@@ -31,7 +36,11 @@ import {
   loadOptions, saveOptions,
   loadRitualState, saveRitualState,
 } from '../data/storage.js';
-import { STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK } from '../data/numbers.js';
+import {
+  STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK,
+  SAVED_SETS_CAP, SAVED_SETS_BATCH_SMALL, SAVED_SETS_BATCH_LARGE, SAVED_SETS_SALT_BASE,
+  OBJECTIVE_STRATEGIES,
+} from '../data/numbers.js';
 
 let appEl = null;
 let stopCountdown = null; // 카운트다운 interval 정리 함수. 매 렌더 시작 전 정리.
@@ -238,6 +247,68 @@ function getRecAndFortune(active) {
  * S3-T1: 캐릭터의 다중 전략 선택 목록 반환. 마이그레이션 fallback 포함.
  * S8: 'mbti' 잔존 ID는 필터링 (폐지됨).
  */
+/**
+ * S26: 같은 조립식으로 batchN세트 시드 변형 생성 후 누적 list에 push.
+ * 시드 변형 룰:
+ *   - 객관 strategy 포함이면 drwNo 변형 (recommendFiveSets 객관 분기 동일 패턴).
+ *   - 그 외(시드 의존 strategy 포함)면 seed 변형.
+ *   - 솔트 base는 SAVED_SETS_SALT_BASE + (현재 list 길이 + i)로 매번 다른 시드 → 결정론.
+ *   - 같은 numbers 조합이 이미 있으면 saved-sets.js의 hasSameNumbers가 자동 skip.
+ */
+function addSavedSetsBatch(batchN) {
+  const active = getActive();
+  const { strategyIds } = getRecAndFortune(active);
+  const ensured = ensureSavedSetsForRound(active, state.drwNo);
+  let cur = ensured.character;
+  const startIdx = cur.savedSets?.list?.length || 0;
+
+  // 조립식이 객관 전략 1개 이상 포함 = drwNo 변형 / 아니면 seed 변형.
+  const hasObjective = strategyIds.some((id) => OBJECTIVE_STRATEGIES.has(id));
+  const baseSeed = (active.seed || 0) >>> 0;
+  const baseDrwNo = (state.drwNo || 0) >>> 0;
+
+  // S16: 추첨일 ISO 날짜 (사주 일진 보너스용) - getRecAndFortune과 동일 로직.
+  const drawForFortune = state.draws.find((d) => d.drwNo === state.drwNo) || null;
+  let drawDate = drawForFortune ? drawForFortune.drwDate : null;
+  if (!drawDate) {
+    const next = nextDraw(state.draws);
+    if (next && next.drawAtMs) {
+      const d = new Date(next.drawAtMs);
+      const kst = new Date(d.getTime() + 9 * 3600 * 1000);
+      drawDate = kst.toISOString().slice(0, 10);
+    }
+  }
+
+  const newSets = [];
+  for (let i = 0; i < batchN; i += 1) {
+    const salt = SAVED_SETS_SALT_BASE + startIdx + i;
+    const ctxBase = {
+      seed: hasObjective ? baseSeed : mixSeeds(baseSeed, salt),
+      drwNo: hasObjective ? mixSeeds(baseDrwNo, salt) : baseDrwNo,
+      luck: active.luck,
+      numberStats: state.numberStats,
+      bonusStats: state.bonusStats,
+      cooccur: state.cooccur,
+      zodiac: active.zodiac,
+      dayPillar: active.dayPillar,
+      drawDate,
+      strategyIds,
+    };
+    const r = recommendMulti(ctxBase);
+    newSets.push({
+      numbers: r.numbers,
+      strategyIds,
+      strategySources: r.strategySources,
+    });
+  }
+
+  const result = addSavedSets(cur, newSets);
+  cur = result.character;
+  state.characters = state.characters.map((c) => (c.id === cur.id ? cur : c));
+  saveCharacters(state.characters);
+  renderApp();
+}
+
 function activeStrategyIds(character) {
   let raw;
   if (Array.isArray(character.lastUsedStrategies) && character.lastUsedStrategies.length > 0) {
@@ -283,6 +354,11 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   // S5-T2: 의식 만땅 시 추천 카드 #1 골드 글로우.
   const ritualFilled = !!(state.ritual && state.ritual.appliedBonus);
 
+  // S26: 누적 추천 세트 섹션. active.savedSets는 renderHome에서 ensureSavedSetsForRound로 보장됨.
+  const savedList = active.savedSets?.list || [];
+  const savedSectionHtml = savedSetsSectionHtml(savedList);
+  const addBarHtml = savedSetsAddBarHtml(savedList.length, SAVED_SETS_CAP);
+
   return `
     <header class="app-header tab-header home-header">
       <h1 class="app-title">Blessed Lotto</h1>
@@ -292,7 +368,10 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
       ${nextDrawCardHtml(nextInfo)}
       ${drawCardHtml(state.drwNo, rec, fortune, { ritualFilled })}
       ${fiveSetsExtraHtml(sets, computeFiveSetsMatchInfos(sets, state.draws))}
+      ${addBarHtml}
     </section>
+
+    ${savedSectionHtml}
 
     ${/* S19: 항상 다중 모드 (multi=true). 1전략도 토글 1개로 동작. */ ''}
     ${strategyTabsHtml(strategyIds, { multi: true })}
@@ -331,6 +410,11 @@ function renderHome(content) {
   });
   updated = matchHistory(updated, state.draws);
   updated = applyLuckGrowth(updated);
+
+  // S26: 누적 세트 회차 보장 (drwNo 변경 시 자동 비움).
+  const ensured = ensureSavedSetsForRound(updated, state.drwNo);
+  updated = ensured.character;
+
   state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
   saveCharacters(state.characters);
 
@@ -382,6 +466,36 @@ function renderHome(content) {
   // T4: 행운 의식 위젯 클릭 → 8행위 모달
   content.querySelector('[data-action="open-ritual"]')?.addEventListener('click', () => {
     openRitualModalForActive();
+  });
+
+  // S26: 누적 세트 - 추가 / 삭제 / 전체 비우기 핸들러.
+  content.querySelector('[data-action="add-saved-1"]')?.addEventListener('click', () => {
+    addSavedSetsBatch(SAVED_SETS_BATCH_SMALL);
+  });
+  content.querySelector('[data-action="add-saved-5"]')?.addEventListener('click', () => {
+    addSavedSetsBatch(SAVED_SETS_BATCH_LARGE);
+  });
+  content.querySelectorAll('[data-action="remove-saved-set"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.savedIdx, 10);
+      if (Number.isNaN(idx)) return;
+      const cur = getActive();
+      const next = removeSavedSetAt(cur, idx);
+      state.characters = state.characters.map((c) => (c.id === next.id ? next : c));
+      saveCharacters(state.characters);
+      renderApp();
+    });
+  });
+  content.querySelector('[data-action="clear-saved-sets"]')?.addEventListener('click', () => {
+    const cur = getActive();
+    const count = cur.savedSets?.list?.length || 0;
+    if (count === 0) return;
+    const ok = window.confirm(`저장된 ${count}세트가 모두 삭제됩니다. 진행할까요?`);
+    if (!ok) return;
+    const next = clearSavedSets(cur);
+    state.characters = state.characters.map((c) => (c.id === next.id ? next : c));
+    saveCharacters(state.characters);
+    renderApp();
   });
 
   // 전략 탭 직접 클릭. 다중 모드면 토글, 단일 모드면 활성 변경. (S3-T1)

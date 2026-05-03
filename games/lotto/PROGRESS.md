@@ -4,10 +4,54 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-03 (Sprint 034 - 다중 전략 C+E안 + 흉/대길 배너 제거 / S24-S25).
+1.3. **마지막 갱신**: 2026-05-03 (Sprint 035 - 누적 추천 세트 / S26).
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.56. Sprint 035 완료 - 누적 추천 세트 (S26) (2026-05-03)
+
+사용자 지시: "추천을 여러개 받고 싶어 → 전략은 세트 1개를 완성시키기 위한 조립식. 같은 조립식으로 세트 5개를 만들 수도 있고, 다른 조립식으로 또 추가. 추천1, 추천2, 추천3 형태로 세로 누적. 초기화 / 개별 삭제 가능 → 진행 (권장 묶음)".
+
+### 2.56.1. 모델
+
+조립식 = strategy 조합 + 캐릭터 시드 + 회차. 메인 카드 = 미리보기. 사용자가 "+ 1세트 / + 5세트" 버튼으로 누적 list에 push. 다른 조립식으로 또 추가 가능. 회차 전환 시 자동 비움.
+
+### 2.56.2. 변경 파일
+
+- `src/data/numbers.js`: `SAVED_SETS_CAP=20` / `SAVED_SETS_BATCH_SMALL=1` / `SAVED_SETS_BATCH_LARGE=5` / `SAVED_SETS_SALT_BASE=0x5A1ED` 상수
+- `src/core/saved-sets.js` (신규): `ensureSavedSetsForRound` / `addSavedSets` / `removeSavedSetAt` / `clearSavedSets` / `recipeIdFor` / `hasSameNumbers`
+- `src/render/saved-sets-section.js` (신규): 섹션 + 추가 버튼 바 HTML
+- `src/render/main.js`: `addSavedSetsBatch` 헬퍼 + 핸들러 + `renderHome` ensure 호출
+- `styles/main.css`: `.saved-add-bar` / `.saved-sets-section` / `.saved-set-row` 스타일
+- `tests/suites/saved-sets.test.js` (신규): 14건
+- `tests/runner.js`: saved-sets suite 등록
+- `docs/01_spec.md` 5.2.5 신규
+- `docs/02_data.md` 1.5.8 신규
+- `service-worker.js`: CACHE_VERSION v11 → v12
+
+### 2.56.3. 동작
+
+3.1. 사용자가 strategy 토글 → 메인 카드 미리보기 갱신.
+3.2. **"+ 1세트"** 또는 **"+ 5세트"** 클릭 → 시드 변형으로 N세트 list push (객관 포함이면 drwNo 변형, 그 외는 seed 변형). 같은 numbers는 자동 skip.
+3.3. strategy 조합 변경 → 미리보기 갱신. 추가 시 새 조립식 N세트 누적.
+3.4. 추천N 옆 × → 인덱스 1개 삭제. 라벨 자동 재번호.
+3.5. "전체 비우기" → confirm 후 list = [].
+3.6. drwNo 변경 감지 시 list 자동 비움 (`ensureSavedSetsForRound`).
+
+### 2.56.4. cap + 사행성 톤
+
+- `SAVED_SETS_CAP = 20`. 도달 시 두 버튼 모두 비활성. "+ 5세트"는 잔여 < 5면 비활성.
+- 섹션 disclaimer: "비교 / 보관용. 추첨 결과 보장 없음. 회차 전환 시 자동 비워집니다."
+- "전체 비우기" 모달: 명확한 삭제 카운트 표기.
+
+### 2.56.5. 검증
+
+`node tests/run-node.js` → **290/290 PASS** (276 → 290, saved-sets 14건 추가).
+
+### 2.56.6. 5세트 토글과 직교
+
+기존 `options.fiveSets` 토글 유지. ON이어도 누적 모델 동작에 영향 없음. 메인 카드 + 컴팩트 4 + 누적 list 모두 표시 가능. 시각 복잡도 ↑이라 5세트 OFF + 누적 사용 권장.
 
 ## 2.55. Sprint 034 완료 - 다중 전략 C+E안 (풀 직접 추출 + 정규화) (S25) (2026-05-03)
 

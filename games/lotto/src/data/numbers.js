@@ -77,6 +77,16 @@ export const STATS_POOL_SIZE = 10;
 export const FIVE_SETS_COUNT = 5;
 export const FIVE_SETS_SALT_BASE = 0x5E7A;
 
+// S26 (2026-05-03): 누적 추천 세트 (조립식 N장 누적). SSOT: docs/02_data.md 1.5.8.
+// 사용자가 strategy 조합을 바꿔가며 N세트 누적. 회차 단위 격납 + 다음 회차 자동 비움.
+// "여러 세트 = 적중 ↑" 사행성 톤 회피용 cap.
+export const SAVED_SETS_CAP = 20;
+// 같은 조립식으로 한 번에 만들 수 있는 batch 단위 (UI "+ N세트" 버튼).
+export const SAVED_SETS_BATCH_SMALL = 1;
+export const SAVED_SETS_BATCH_LARGE = 5;
+// 누적 세트 시드 변형 솔트 베이스 (FIVE_SETS_SALT_BASE와 충돌 회피).
+export const SAVED_SETS_SALT_BASE = 0x5A1ED;
+
 // 1.5.1. 객관 전략 (캐릭터 시드 / Luck 무관. 회차 데이터로만 결정).
 // 같은 회차에서 모든 캐릭터가 같은 결과를 받음. SSOT: docs/02_data.md 1.5.
 export const OBJECTIVE_STRATEGIES = Object.freeze(new Set([

@@ -212,6 +212,67 @@ const objectiveSeed = mixSeeds(mixSeeds(drwNo, OBJECTIVE_SEED_SALT), strategyHas
 
 `strategyHash(sid)` = djb2 32bit unsigned 해시 (`recommend.js` private). 결정론 (같은 ID = 같은 해시).
 
+#### 1.5.8. 누적 추천 세트 (S26, 2026-05-03)
+
+조립식(strategy 조합 + 캐릭터 시드 + 회차)으로 생성된 1세트(6번호)를 사용자가 명시적으로 누적. 5세트 토글(1.5.5)과 별개의 직교 모델.
+
+##### 1.5.8.1. 데이터 모델
+
+캐릭터 객체 안:
+
+```
+character.savedSets = {
+  drwNo: 1223,
+  list: [
+    {
+      numbers: [3, 4, 9, 12, 19, 24],
+      strategyIds: ['astrologer', 'zodiacElement', 'fiveElements'],
+      strategySources: ['astrologer', 'fiveElements', 'astrologer', 'zodiacElement', 'fiveElements', 'astrologer'],
+      recipeId: 'astrologer-fiveElements-zodiacElement',
+      createdAt: 1714723200000,
+    },
+    ...
+  ],
+}
+```
+
+##### 1.5.8.2. 상수
+
+| 상수 | 값 | 의미 |
+|---|---|---|
+| `SAVED_SETS_CAP` | 20 | 누적 list 상한 (사행성 톤 회피) |
+| `SAVED_SETS_BATCH_SMALL` | 1 | "+ 1세트" 버튼 batch |
+| `SAVED_SETS_BATCH_LARGE` | 5 | "+ 5세트" 버튼 batch |
+| `SAVED_SETS_SALT_BASE` | `0x5A1ED` | 시드 변형 솔트 base (FIVE_SETS_SALT_BASE와 충돌 회피) |
+
+##### 1.5.8.3. 시드 변형 룰
+
+같은 조립식으로 N장 만들 때 매번 다른 결정론 결과:
+
+- 객관 strategy 포함: `drwNo` 변형. `mixSeeds(baseDrwNo, SAVED_SETS_SALT_BASE + offset)`.
+- 그 외: `seed` 변형. `mixSeeds(baseSeed, SAVED_SETS_SALT_BASE + offset)`.
+- offset = `현재 list 길이 + i`. 매 batch 호출마다 다른 시드 → 매번 다른 결과 (단 같은 시점 재호출은 결정론).
+
+##### 1.5.8.4. 회차 격납 + 자동 비움
+
+`ensureSavedSetsForRound(character, drwNo)`:
+- savedSets 부재 시 `{ drwNo, list: [] }` 생성.
+- `drwNo` 일치 시 그대로.
+- `drwNo` 불일치 시 list 비움 + reset 플래그 반환.
+
+추첨 탭 진입 / 캐릭터 전환 시마다 자동 호출 (`renderHome` 안). 다음 회차로 넘어가면 이전 누적은 자동 폐기.
+
+##### 1.5.8.5. 중복 차단
+
+같은 `numbers` 조합(정렬 동일)은 추가 시 skip. `addSavedSets` 결과의 `skipped.duplicate` 카운트로 보고.
+
+##### 1.5.8.6. 적용 위치
+
+- `src/core/saved-sets.js` (신규): `ensureSavedSetsForRound` / `addSavedSets` / `removeSavedSetAt` / `clearSavedSets` / `recipeIdFor` / `hasSameNumbers`.
+- `src/render/saved-sets-section.js` (신규): UI (섹션 + 추가 버튼 바).
+- `src/render/main.js`: `addSavedSetsBatch` 핸들러 + 회차 ensure 호출.
+- `src/data/numbers.js`: 상수.
+
 **객관성 정의 유지**: 1.5.1 "캐릭터 시드와 Luck 모두 무관". `strategyId`는 캐릭터 속성이 아니라 사용자가 회차별로 선택하는 정책 ID → 시드 분산에 활용해도 객관성 위배 아님. 같은 회차 + 같은 전략은 모든 캐릭터에 동일 결과 (객관성 보장).
 
 **5세트 호환**: 1.5.5.3의 `mixSeeds(drwNo, OBJECTIVE_SEED_SALT + i)`는 외부에서 `drwNoVariant`로 처리되어 본 변경과 직교. 5세트 안에서 각 세트가 다른 `drwNo`를 받고, 그 위에 strategyId 솔트가 추가로 적용됨.
