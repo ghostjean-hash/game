@@ -129,7 +129,7 @@ games/lotto/
 전략 탭 클릭 / 캐릭터 전환 (재렌더 트리거)
   → render/main.js (이벤트 핸들러)
   → core/recommend.js (시드 + 전략 + Luck + 회차 → 본번호 6 + 보너스 1 + 근거)
-    └─ 객관 5: drwNo + OBJECTIVE_SEED_SALT만. 캐릭터 시드 / Luck 무관.
+    └─ 객관 5: mixSeeds(mixSeeds(drwNo, OBJECTIVE_SEED_SALT), strategyHash(strategyId)). 캐릭터 시드 / Luck 무관 (S21).
     └─ 시드 의존 6: mixSeeds(seed, drwNo) + applyLuck.
   → core/history.js (recordRecommendation + matchHistory + backfillRecommendations)
   → core/luck.js (applyLuckGrowth, 적중 1회 보너스)

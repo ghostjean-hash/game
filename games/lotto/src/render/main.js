@@ -44,7 +44,7 @@ const state = {
   numberStats: [],
   bonusStats: [],
   cooccur: [],
-  options: { applyFilters: false, advancedMode: false, multiStrategy: false, fiveSets: false },
+  options: { applyFilters: false, advancedMode: false, fiveSets: false },
   currentTab: 'home',
   ritual: null, // T4: 행운 의식 상태 (charId+drwNo 기준 격리, 회차 변경 시 자동 리셋)
 };
@@ -219,28 +219,19 @@ function getRecAndFortune(active) {
     drawDate,
   };
 
-  // S3-T1: 다중 전략 모드 분기
-  const isMulti = !!state.options.multiStrategy;
-  const strategyIds = isMulti ? activeStrategyIds(active) : null;
-  // S8 마이그레이션: lastUsedStrategy === 'mbti'였던 캐릭터는 STRATEGY_DEFAULT로 fallback.
-  const rawSingleId = active.lastUsedStrategy || STRATEGY_DEFAULT;
-  const strategyId = isMulti ? strategyIds[0] : (rawSingleId === 'mbti' ? STRATEGY_DEFAULT : rawSingleId);
+  // S19 (2026-05-02): multiStrategy 옵션 폐기. 항상 다중 모드 = 1~6 전략 토글.
+  // 단일 전략 = 1개 토글. 분배 cap 6 유지 ("어정쩡 금지" 정책).
+  const strategyIds = activeStrategyIds(active);
+  const strategyId = strategyIds[0]; // 호환용: 첫 전략 (활성 desc 표시 등)
 
   // S4-T1: 5세트 모드. ON이면 메인(rec) = sets[0], 추가 sets[1..4]를 함께 반환.
   if (state.options.fiveSets) {
-    const ctx = isMulti ? { ...ctxBase, strategyIds } : { ...ctxBase, strategyId };
-    const sets = recommendFiveSets(ctx, { multi: isMulti });
-    return { strategyId, strategyIds: isMulti ? strategyIds : [strategyId], rec: sets[0], sets, fortune, drawForFortune };
+    const sets = recommendFiveSets({ ...ctxBase, strategyIds }, { multi: true });
+    return { strategyId, strategyIds, rec: sets[0], sets, fortune, drawForFortune };
   }
 
-  // 5세트 OFF: 기존 동작
-  if (isMulti) {
-    const rec = recommendMulti({ ...ctxBase, strategyIds });
-    return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune };
-  }
-
-  const rec = recommend({ ...ctxBase, strategyId });
-  return { strategyId, strategyIds: [strategyId], rec, sets: null, fortune, drawForFortune };
+  const rec = recommendMulti({ ...ctxBase, strategyIds });
+  return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune };
 }
 
 /**
@@ -303,11 +294,11 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
       ${fiveSetsExtraHtml(sets, computeFiveSetsMatchInfos(sets, state.draws))}
     </section>
 
-    ${ritualWidgetHtml(state.ritual)}
+    ${/* S19: 항상 다중 모드 (multi=true). 1전략도 토글 1개로 동작. */ ''}
+    ${strategyTabsHtml(strategyIds, { multi: true })}
 
-    ${state.options.multiStrategy
-      ? strategyTabsHtml(strategyIds, { multi: true })
-      : strategyTabsHtml(strategyId)}
+    ${/* S17(2026-05-02): 행운 쌓기를 전략 탭 하위로 이동 (이전 = 히어로 직하). */ ''}
+    ${ritualWidgetHtml(state.ritual)}
 
     ${/* S13(2026-05-02): 슬롯 + 카드 묶음. 시각 인접으로 "캐릭터 세트" 인지. */ ''}
     ${characterSlotsHtml(state.characters, state.activeId)}
@@ -405,25 +396,18 @@ function renderHome(content) {
       if (!cur) return;
       // S9: 가로 스크롤 폐기로 scrollLeft 캡처 불필요.
 
-      if (state.options.multiStrategy) {
-        // 다중 모드: 토글
-        const list = activeStrategyIds(cur);
-        let next;
-        if (list.includes(newStrategyId)) {
-          // 제거. 단 마지막 1개는 보존 (최소 1개 필수).
-          if (list.length === 1) return;
-          next = list.filter((id) => id !== newStrategyId);
-        } else {
-          if (list.length >= 6) return; // MULTI_STRATEGY_MAX cap
-          next = [...list, newStrategyId];
-        }
-        cur.lastUsedStrategies = next;
-        cur.lastUsedStrategy = next[0]; // 단일 모드 호환 유지
+      // S19: 항상 다중 모드 토글. 분배 cap 6 ("어정쩡 금지" 정책).
+      const list = activeStrategyIds(cur);
+      let next;
+      if (list.includes(newStrategyId)) {
+        if (list.length === 1) return; // 마지막 1개 보존
+        next = list.filter((id) => id !== newStrategyId);
       } else {
-        if (cur.lastUsedStrategy === newStrategyId) return;
-        cur.lastUsedStrategy = newStrategyId;
-        cur.lastUsedStrategies = [newStrategyId]; // 다중 모드 진입 시 일관성
+        if (list.length >= 6) return; // MULTI_STRATEGY_MAX cap (분배 0 발생 차단)
+        next = [...list, newStrategyId];
       }
+      cur.lastUsedStrategies = next;
+      cur.lastUsedStrategy = next[0]; // 마이그레이션 호환 (deprecated)
       saveCharacters(state.characters);
       renderApp();
     });
@@ -507,18 +491,13 @@ function renderApp() {
       onResetAll: () => {
         state.characters = [];
         state.activeId = null;
-        state.options = { applyFilters: false, advancedMode: false, multiStrategy: false, fiveSets: false };
+        state.options = { applyFilters: false, advancedMode: false, fiveSets: false };
         renderApp();
       },
       onAddCharacter: openAddCharacterModal,
       onDeleteCharacter: deleteCharacterById,
       onActivateCharacter: activateCharacterById,
       onOpenWheeling: () => setTab('wheeling'),
-      onMultiStrategyToggle: () => {
-        // S3-T1: 토글 후 state 갱신 + 추첨 탭으로 이동해 즉시 효과 확인
-        state.options = loadOptions();
-        renderApp();
-      },
       onFiveSetsToggle: () => {
         // S4-T1: 5세트 토글 후 state 갱신
         state.options = loadOptions();

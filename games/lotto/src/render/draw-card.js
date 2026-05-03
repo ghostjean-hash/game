@@ -1,12 +1,18 @@
-// 추천 번호 패널. SSOT: docs/01_spec.md 5.2.1 (동행복권 결과 페이지 호환).
-// 회차 헤더(nav 포함)는 카운트다운 카드와 통합되어 제거됨. 본 컴포넌트는 번호 패널만 책임.
-// S3-T1: 다중 전략 모드면 본번호 아래 카테고리 색 dot으로 출처 표시.
-import { numberColor } from '../data/colors.js';
+// 추천 번호 패널. SSOT: docs/01_spec.md 5.2.1.
+// S20(2026-05-02): 추천에서 보너스 번호 폐기 (실제 로또 구매 시 사용자는 6개만 선택).
+//   UI = 본번호 6개 + "추천N" 라벨 (앞쪽). 보너스 그리드 / "추천번호·보너스번호" 라벨 폐기.
+//   데이터 차원 rec.bonus는 매칭 호환 위해 유지(미표시).
+// S3-T1 / S22(2026-05-03): 다중 전략 모드면 본번호 아래 출처 표시.
+//   S3-T1 = 카테고리 색 dot. S22 = dot 폐기, 1글자 short 라벨로 교체 (같은 카테고리 안 전략 식별 가능).
+import { numberColor, strategyTagColor } from '../data/colors.js';
 import { STRATEGY_CATEGORIES } from '../data/numbers.js';
-import { plus } from './icons.js';
+import { strategyShort, strategyLabel } from './strategy-picker.js';
 
 // S10(2026-05-02): saju → mapping 통합. 운세 카테고리 단일 색.
-const CATEGORY_DOT_CLASS = {
+// S22(2026-05-03): tag(1글자 short) 배경색 카테고리 별로 유지.
+// S23(2026-05-03): 전략별 색 차등 (계열은 카테고리 hue 유지). 클래스 fallback 유지 +
+//   배경은 inline style로 strategyTagColor 적용. SSOT: src/data/colors.js STRATEGY_TAG_COLORS.
+const CATEGORY_TAG_CLASS = {
   stats: 'is-stats',
   mapping: 'is-mapping',
   random: 'is-random',
@@ -16,13 +22,16 @@ function numHtml(n, ariaLabel, source) {
   const c = numberColor(n);
   const label = ariaLabel || `${n}번`;
   const sourceCat = source ? STRATEGY_CATEGORIES[source] : null;
-  const dotCls = sourceCat ? CATEGORY_DOT_CLASS[sourceCat] : '';
-  const dotHtml = sourceCat
-    ? `<span class="num-source-dot ${dotCls}" data-source="${source}" aria-label="${source} 출처" title="${source}"></span>`
+  const tagCls = sourceCat ? CATEGORY_TAG_CLASS[sourceCat] : '';
+  const short = source ? strategyShort(source) : null;
+  const fullLabel = source ? strategyLabel(source) : '';
+  const tagBg = source ? strategyTagColor(source) : null;
+  const tagHtml = (sourceCat && short)
+    ? `<span class="num-source-tag ${tagCls}" style="background-color:${tagBg};" data-source="${source}" aria-label="${fullLabel} 출처" title="${fullLabel}">${short}</span>`
     : '';
   return `<span class="num-cell" role="listitem" aria-label="${label}">
     <span class="num" style="background-color:${c.bg};">${n}</span>
-    ${dotHtml}
+    ${tagHtml}
   </span>`;
 }
 
@@ -34,9 +43,8 @@ function numHtml(n, ariaLabel, source) {
  */
 export function drawCardHtml(drwNo, recommendation, fortune, opts = {}) {
   const { ritualFilled = false } = opts;
-  const sources = recommendation.strategySources || []; // 단일 모드면 빈 배열 → dot 미표시
+  const sources = recommendation.strategySources || [];
   const mainHtml = recommendation.numbers.map((n, i) => numHtml(n, undefined, sources[i] || null)).join('');
-  const bonusHtml = numHtml(recommendation.bonus, `보너스 ${recommendation.bonus}번`, null);
   const isBad = fortune === 'bad';
   const isGreat = fortune === 'great';
   const ritualCls = ritualFilled ? ' is-blessed-ritual' : '';
@@ -50,14 +58,9 @@ export function drawCardHtml(drwNo, recommendation, fortune, opts = {}) {
     <section class="${cardClass}" aria-label="제${drwNo}회 추천 번호">
       ${banner}
       <div class="draw-panel">
-        <div class="draw-balls">
+        <div class="draw-row">
+          <span class="draw-row-idx" aria-hidden="true">추천1</span>
           <div class="draw-main" role="list" aria-label="추천 본번호">${mainHtml}</div>
-          <span class="draw-plus" aria-hidden="true">${plus('icon')}</span>
-          <div class="draw-bonus" role="list" aria-label="보너스볼">${bonusHtml}</div>
-        </div>
-        <div class="draw-labels" aria-hidden="true">
-          <div class="draw-label draw-label-main"><span>추천번호</span></div>
-          <div class="draw-label draw-label-bonus"><span>보너스번호</span></div>
         </div>
       </div>
     </section>
@@ -77,23 +80,21 @@ export function fiveSetsExtraHtml(sets, matchInfos = null) {
   const extras = sets.slice(1);
   const infos = Array.isArray(matchInfos) ? matchInfos.slice(1) : [];
   const items = extras.map((rec, i) => {
-    const idx = i + 2; // 표시용 (#2부터)
+    const idx = i + 2; // 표시용 (추천2부터)
     const sources = rec.strategySources || [];
     const balls = rec.numbers.map((n, k) => numHtml(n, undefined, sources[k] || null)).join('');
-    const bonus = numHtml(rec.bonus, `보너스 ${rec.bonus}번`, null);
     const info = infos[i] || null;
     const chip = info
       ? (info.bestRank
         ? `<span class="five-set-chip has-rank" title="과거 회차 매칭 횟수">과거 최고 ${info.bestRank}등 · ${info.bestRankCount}회</span>`
         : '<span class="five-set-chip" title="과거 회차 매칭 없음">과거 매칭 없음</span>')
       : '';
+    // S20: 보너스 영역 제거. "#N" → "추천N".
     return `
       <div class="five-set-row" aria-label="추천 세트 ${idx}번">
-        <span class="five-set-idx" aria-hidden="true">#${idx}</span>
+        <span class="five-set-idx" aria-hidden="true">추천${idx}</span>
         <div class="five-set-balls" role="list">
-          <div class="five-set-main" role="list" aria-label="세트 ${idx} 본번호">${balls}</div>
-          <span class="five-set-plus" aria-hidden="true">${plus('icon')}</span>
-          <div class="five-set-bonus" role="list" aria-label="세트 ${idx} 보너스">${bonus}</div>
+          <div class="five-set-main" role="list" aria-label="추천${idx} 본번호">${balls}</div>
         </div>
         ${chip}
       </div>

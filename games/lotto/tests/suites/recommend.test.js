@@ -165,66 +165,69 @@ suite('core/recommend - 전략', () => {
   test('statistician 정상 동작 (빈 stats여도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_STATISTICIAN });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('통계 추첨'));
+    assertTrue(r.reasons[0].includes('많이 나온 수'));
   });
 
   test('secondStar 정상 동작 (빈 stats여도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_SECOND_STAR });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('보너스볼 사냥'));
+    assertTrue(r.reasons[0].includes('보너스볼'));
   });
 
   test('secondStar: 본번호도 bonusStats 빈도 가중 (라벨-동작 일치)', () => {
-    // bonusStats에 특정 번호만 압도적 빈도 → 본번호로도 자주 등장해야 함.
+    // bonusStats heavy 10개 (= STATS_POOL_SIZE) → 풀 = heavy 10. 추출 6 = heavy 6 (100%).
     // PROGRESS 2.29: secondStar 본번호가 균등이던 결손 정정.
+    // S21 (2026-05-03): heavy 6 → 10으로 강화 (시드 운 의존 제거).
     const bonusStats = Array.from({ length: 45 }, (_, i) => ({
       number: i + 1, totalCount: 1, recent30: 0, lastSeenDrw: 1000,
     }));
-    // 1, 7, 13, 19, 25, 31번에 1000배 가중
-    [1, 7, 13, 19, 25, 31].forEach((n) => { bonusStats[n - 1].totalCount = 1000; });
+    const heavy = [1, 7, 13, 19, 25, 31, 37, 43, 4, 10];
+    heavy.forEach((n) => { bonusStats[n - 1].totalCount = 1000; });
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_SECOND_STAR, bonusStats });
-    // 본번호 6개 중 최소 4개는 가중 번호여야 함 (압도적 가중이라 거의 다 포함 기대)
-    const heavySet = new Set([1, 7, 13, 19, 25, 31]);
+    const heavySet = new Set(heavy);
     const hits = r.numbers.filter((n) => heavySet.has(n)).length;
-    assertTrue(hits >= 4, `expected >= 4 heavy-weighted in main, got ${hits} (numbers=[${r.numbers.join(',')}])`);
+    assertTrue(hits === 6, `expected 6 heavy hits in main, got ${hits} (numbers=[${r.numbers.join(',')}])`);
   });
 
-  test('statistician: 압도적 가중 번호가 본번호에 등장 (power 보정 효과)', () => {
-    // PROGRESS 2.30: STATS_POWER=1.5로 분포 차이 증폭 검증.
+  test('statistician: 압도적 가중 번호가 본번호에 등장 (풀 컷팅 효과)', () => {
+    // S18 풀 컷팅: heavy 10개 = STATS_POOL_SIZE → 풀 = heavy 10. 추출 6 = heavy 6 (100%).
+    // S21 (2026-05-03): heavy 6 → 10으로 강화. 시드 의존 fragile 제거 (이전엔 풀 4자리가 보통 번호로 채워져 운).
     const numberStats = Array.from({ length: 45 }, (_, i) => ({
       number: i + 1, totalCount: 100, recent10: 0, recent30: 0, recent100: 0,
       lastSeenDrw: 1000, currentGap: 5,
     }));
-    [2, 8, 14, 20, 26, 32].forEach((n) => { numberStats[n - 1].totalCount = 5000; });
+    const heavy = [2, 8, 14, 20, 26, 32, 38, 5, 11, 17];
+    heavy.forEach((n) => { numberStats[n - 1].totalCount = 5000; });
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_STATISTICIAN, numberStats });
-    const heavySet = new Set([2, 8, 14, 20, 26, 32]);
+    const heavySet = new Set(heavy);
     const hits = r.numbers.filter((n) => heavySet.has(n)).length;
-    assertTrue(hits >= 4, `statistician power: expected >= 4 hits, got ${hits} (numbers=[${r.numbers.join(',')}])`);
+    assertTrue(hits === 6, `statistician pool: expected 6 hits, got ${hits} (numbers=[${r.numbers.join(',')}])`);
   });
 
-  test('regressionist: 압도적 gap 번호가 본번호에 등장 (power 보정 효과)', () => {
+  test('regressionist: 압도적 gap 번호가 본번호에 등장 (풀 컷팅 효과)', () => {
     const numberStats = Array.from({ length: 45 }, (_, i) => ({
       number: i + 1, totalCount: 100, recent10: 0, recent30: 0, recent100: 0,
       lastSeenDrw: 1000, currentGap: 1,
     }));
-    [3, 9, 15, 21, 27, 33].forEach((n) => { numberStats[n - 1].currentGap = 200; });
+    const heavy = [3, 9, 15, 21, 27, 33, 39, 6, 12, 18];
+    heavy.forEach((n) => { numberStats[n - 1].currentGap = 200; });
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_REGRESSIONIST, numberStats });
-    const heavySet = new Set([3, 9, 15, 21, 27, 33]);
+    const heavySet = new Set(heavy);
     const hits = r.numbers.filter((n) => heavySet.has(n)).length;
-    assertTrue(hits >= 4, `regressionist power: expected >= 4 hits, got ${hits} (numbers=[${r.numbers.join(',')}])`);
+    assertTrue(hits === 6, `regressionist pool: expected 6 hits, got ${hits} (numbers=[${r.numbers.join(',')}])`);
   });
 
-  test('trendFollower: 압도적 recent30 번호가 본번호에 등장 (raw 가중)', () => {
-    // PROGRESS 2.31: trendFollower는 raw 유지. recent30은 자연 분포(0~9)로 두드러져 power 불필요.
+  test('trendFollower: 압도적 recent30 번호가 본번호에 등장 (raw 가중 + 풀 컷팅)', () => {
     const numberStats = Array.from({ length: 45 }, (_, i) => ({
       number: i + 1, totalCount: 100, recent10: 0, recent30: 1, recent100: 0,
       lastSeenDrw: 1000, currentGap: 5,
     }));
-    [4, 10, 16, 22, 28, 34].forEach((n) => { numberStats[n - 1].recent30 = 100; });
+    const heavy = [4, 10, 16, 22, 28, 34, 40, 7, 13, 19];
+    heavy.forEach((n) => { numberStats[n - 1].recent30 = 100; });
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_TREND_FOLLOWER, numberStats });
-    const heavySet = new Set([4, 10, 16, 22, 28, 34]);
+    const heavySet = new Set(heavy);
     const hits = r.numbers.filter((n) => heavySet.has(n)).length;
-    assertTrue(hits >= 4, `trendFollower raw: expected >= 4 hits, got ${hits} (numbers=[${r.numbers.join(',')}])`);
+    assertTrue(hits === 6, `trendFollower pool: expected 6 hits, got ${hits} (numbers=[${r.numbers.join(',')}])`);
   });
 
   test('알 수 없는 전략은 에러', () => {
@@ -240,7 +243,7 @@ suite('core/recommend - 전략', () => {
   test('regressionist 정상 동작 (빈 stats여도)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_REGRESSIONIST });
     assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('미출현 회귀'));
+    assertTrue(r.reasons[0].includes('안 나온 수'));
   });
 
   test('pairTracker 정상 동작 (빈 cooccur여도)', () => {

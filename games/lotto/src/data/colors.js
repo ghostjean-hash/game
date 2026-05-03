@@ -49,3 +49,36 @@ export function numberColor(n) {
   }
   return { bg: NUMBER_CARD_COLORS.bg };
 }
+
+// S23 (2026-05-03): 전략별 출처 태그 색.
+// 카테고리 hue 유지 + 명도 단계로 같은 카테고리 안 식별.
+// 사용자 결정 = "같은 운세라도 색 계열은 같지만 색은 다르게".
+//   통계 5종: 파랑 계열 (sky-500 → blue-900) 5단계.
+//   운세 3종: 분홍 계열 (pink-500 → pink-800) 3단계.
+//   랜덤 3종: 회색 계열 (gray-500 → gray-700) 3단계.
+// SSOT: docs/02_data.md 2.7.
+export const STRATEGY_TAG_COLORS = Object.freeze({
+  // 통계 (파랑 계열)
+  trendFollower: '#0ea5e9',   // sky-500
+  statistician:  '#0284c7',   // sky-600
+  pairTracker:   '#0369a1',   // sky-700
+  secondStar:    '#075985',   // sky-800
+  regressionist: '#0c4a6e',   // sky-900
+  // 운세 (분홍 계열)
+  astrologer:    '#ec4899',   // pink-500
+  zodiacElement: '#be185d',   // pink-700
+  fiveElements:  '#9d174d',   // pink-800
+  // 랜덤 (회색 계열)
+  blessed:       '#6b7280',   // gray-500
+  intuitive:     '#4b5563',   // gray-600
+  balancer:      '#374151',   // gray-700
+});
+
+/**
+ * 전략 ID → 출처 태그 배경색.
+ * @param {string} sid strategy id
+ * @returns {string} hex 색. 매핑 없으면 기본 회색.
+ */
+export function strategyTagColor(sid) {
+  return STRATEGY_TAG_COLORS[sid] || '#6b7280';
+}

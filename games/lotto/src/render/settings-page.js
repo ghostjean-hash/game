@@ -82,13 +82,6 @@ export function renderSettingsPage(container, handlers) {
         </span>
       </label>
       <label class="settings-row">
-        <input type="checkbox" data-setting="multiStrategy" ${options.multiStrategy ? 'checked' : ''} />
-        <span class="settings-label">
-          <strong>다중 전략 모드</strong>
-          <span class="settings-hint">전략 탭에서 1~6개 토글 선택. 각 전략별로 본번호를 균등 분배(6/N)하여 추천. 추천 카드에 번호별 출처 색 dot 표시.</span>
-        </span>
-      </label>
-      <label class="settings-row">
         <input type="checkbox" data-setting="fiveSets" ${options.fiveSets ? 'checked' : ''} />
         <span class="settings-label">
           <strong>5세트 동시 추천</strong>
@@ -124,13 +117,6 @@ export function renderSettingsPage(container, handlers) {
     const opts = loadOptions();
     opts.applyFilters = e.target.checked;
     saveOptions(opts);
-  });
-
-  container.querySelector('[data-setting="multiStrategy"]').addEventListener('change', (e) => {
-    const opts = loadOptions();
-    opts.multiStrategy = e.target.checked;
-    saveOptions(opts);
-    handlers.onMultiStrategyToggle();
   });
 
   container.querySelector('[data-setting="fiveSets"]').addEventListener('change', (e) => {

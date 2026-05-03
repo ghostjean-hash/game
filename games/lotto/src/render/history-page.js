@@ -3,7 +3,7 @@
 import { characterStats } from '../core/history.js';
 import { numberColor } from '../data/colors.js';
 import { horizontalBarsHtml } from './charts.js';
-import { plus } from './icons.js';
+// S20: 보너스 표시 폐기로 plus 아이콘 미사용.
 
 const RANK_LABELS = { 1: '1등', 2: '2등', 3: '3등', 4: '4등', 5: '5등' };
 const RANK_COLORS = { 1: '#c9a050', 2: '#b88830', 3: '#10b981', 4: '#06b6d4', 5: '#6b6b75' };
@@ -108,18 +108,18 @@ function timelineDotHtml(h) {
 }
 
 function historyItemHtml(h) {
+  // S20(2026-05-02): 추천에서 보너스 폐기. 이력 카드도 본번호 6개만 표시.
   const rank = h.matchedRank;
   const rankLabel = rank ? RANK_LABELS[rank] : (rank === null ? '미적중 / 미발표' : '-');
   const rankColor = rank ? RANK_COLORS[rank] : 'var(--color-text-dim)';
   const numsHtml = h.numbers.map((n) => colorNum(n, 'history-num')).join('');
-  const bonusHtml = colorNum(h.bonus, 'history-bonus');
   return `
     <article class="history-item">
       <header class="history-header">
         <span class="history-drw">${h.drwNo}회차</span>
         <span class="history-rank" style="color: ${rankColor}">${rankLabel}</span>
       </header>
-      <div class="history-numbers">${numsHtml} <span class="draw-plus" aria-hidden="true">${plus('icon icon-sm')}</span> ${bonusHtml}</div>
+      <div class="history-numbers">${numsHtml}</div>
     </article>
   `;
 }

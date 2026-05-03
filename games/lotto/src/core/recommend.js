@@ -17,6 +17,7 @@ import {
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
   SAJU_RELATION_BOOST,
   MULTI_STRATEGY_MAX,
+  STATS_POOL_SIZE,
   FIVE_SETS_COUNT, FIVE_SETS_SALT_BASE,
 } from '../data/numbers.js';
 import { applyLuck } from './luck.js';
@@ -25,10 +26,54 @@ import { dateToDayPillar, elementRelation } from './saju.js';
 
 const VECTOR_LEN = NUMBER_MAX - NUMBER_MIN + 1;
 
+/**
+ * S21 (2026-05-03): 전략 ID 결정론 해시 (djb2, 32bit unsigned).
+ * 객관 전략 시드 분산용. 같은 strategyId는 항상 같은 해시 → 결정론.
+ * 다른 strategyId는 다른 해시 → 풀 안 다른 위치 추출.
+ * SSOT: docs/02_data.md 1.5.1.
+ */
+function strategyHash(sid) {
+  let h = 5381;
+  for (let i = 0; i < sid.length; i += 1) {
+    h = ((h << 5) + h + sid.charCodeAt(i)) >>> 0;
+  }
+  return h >>> 0;
+}
+
 function uniformWeights() {
   const arr = new Array(VECTOR_LEN);
   for (let i = 0; i < arr.length; i += 1) arr[i] = 1;
   return arr;
+}
+
+/**
+ * S18 (2026-05-02): 풀 컷팅 + 균등 weight.
+ * 원본 weight에서 상위 poolSize 인덱스만 1, 나머지는 0 (절대 안 뽑힘).
+ * weight 비례 PRNG의 모호성 제거: "1등 자주 / 30등 가끔" → "상위 N 안에서 균등".
+ * SSOT: docs/02_data.md 1.5.6.
+ */
+function poolFromWeights(weights, poolSize) {
+  const indexed = weights.map((w, i) => ({ w, i }));
+  indexed.sort((a, b) => b.w - a.w);
+  const topSet = new Set(indexed.slice(0, poolSize).map((x) => x.i));
+  const out = new Array(weights.length);
+  for (let i = 0; i < weights.length; i += 1) {
+    out[i] = topSet.has(i) ? 1 : 0;
+  }
+  return out;
+}
+
+/**
+ * S18: 인덱스 집합에서 풀 균등 weight 벡터 생성.
+ * 운세 매핑(이미 풀 정의된 전략)용. 풀 안 = 1, 풀 밖 = 0.
+ */
+function poolFromIndices(indices) {
+  const out = new Array(VECTOR_LEN);
+  for (let i = 0; i < VECTOR_LEN; i += 1) out[i] = 0;
+  for (const n of indices) {
+    if (n >= NUMBER_MIN && n <= NUMBER_MAX) out[n - 1] = 1;
+  }
+  return out;
 }
 
 function statsToWeights(stats) {
@@ -69,14 +114,10 @@ function pairWeights(cooccur, keyNumber) {
   return arr;
 }
 
+// S18: 풀 컷팅. lucky 풀 안 = 1, 풀 밖 = 0 (절대 안 뽑힘).
 function zodiacWeights(zodiac) {
-  const arr = new Array(VECTOR_LEN);
-  for (let i = 0; i < arr.length; i += 1) arr[i] = 1;
   const lucky = ZODIAC_LUCKY[zodiac] || [];
-  for (const n of lucky) {
-    if (n >= NUMBER_MIN && n <= NUMBER_MAX) arr[n - 1] = arr[n - 1] * 5;
-  }
-  return arr;
+  return poolFromIndices(lucky);
 }
 
 /** 최근 30회 가중 (최근 트렌드 전략). raw 유지 (실측 결과 1.5 보정 시 27배 증폭으로 과도, 2026-05-02 시뮬). */
@@ -118,17 +159,12 @@ function zodiacElementOf(zodiac) {
   return null;
 }
 
-/** 별자리 원소별 행운 번호 → weight 벡터. */
+/** S18: 별자리 원소 풀 컷팅 + 균등. */
 function zodiacElementWeights(zodiac) {
-  const arr = new Array(VECTOR_LEN);
-  for (let i = 0; i < arr.length; i += 1) arr[i] = 1;
   const el = zodiacElementOf(zodiac);
-  if (!el) return arr;
+  if (!el) return uniformWeights();
   const lucky = ZODIAC_ELEMENT_LUCKY[el] || [];
-  for (const n of lucky) {
-    if (n >= NUMBER_MIN && n <= NUMBER_MAX) arr[n - 1] = arr[n - 1] * 5;
-  }
-  return arr;
+  return poolFromIndices(lucky);
 }
 
 /** 일주(dayPillar) → 천간 오행 (목/화/토/금/수). */
@@ -139,42 +175,37 @@ function fiveElementOf(dayPillar) {
 
 /**
  * 5원소 행운 번호 → weight 벡터 (사주 전략).
- * S16(2026-05-02): 추첨일 일진 보너스 강화. 출생 일주 lucky × 5 (영원) +
- *   추첨일 일주 lucky × SAJU_RELATION_BOOST[관계] (매주 변동).
- * @param {{stem: string, branch: string}|null} dayPillar 캐릭터 출생 일주
- * @param {string} [drawDate] 추첨일 YYYY-MM-DD (선택). 있으면 일진 보너스 적용.
+ * S16: 추첨일 일진 보너스 (출생 일주 + 추첨일 일주 통변성).
+ * S18: 풀 컷팅 + 균등. 출생 풀 ∪ 추첨일 풀 (관계가 보너스 발생 케이스만)이 단일 풀.
+ *   풀 안 = 1 (균등), 풀 밖 = 0. 일진은 풀 합집합 자체로 매주 변경 (보너스 boost 차등 폐기).
  * @returns {{weights: number[], relation: string|null, drawElement: string|null}}
  */
 function fiveElementsWeights(dayPillar, drawDate) {
-  const arr = new Array(VECTOR_LEN);
-  for (let i = 0; i < arr.length; i += 1) arr[i] = 1;
   const el = fiveElementOf(dayPillar);
+  if (!el) return { weights: uniformWeights(), relation: null, drawElement: null };
+
+  const poolSet = new Set();
+  // 출생 일주 풀 (영원)
+  for (const n of FIVE_ELEMENTS_LUCKY[el] || []) poolSet.add(n);
+
   let relation = null;
   let drawElement = null;
-  if (el) {
-    const lucky = FIVE_ELEMENTS_LUCKY[el] || [];
-    for (const n of lucky) {
-      if (n >= NUMBER_MIN && n <= NUMBER_MAX) arr[n - 1] = arr[n - 1] * 5;
-    }
-  }
-  // S16: 추첨일 일진 보너스 (매주 변동)
-  if (el && drawDate) {
+  if (drawDate) {
     const drawPillar = dateToDayPillar(drawDate);
     if (drawPillar) {
       drawElement = STEM_TO_ELEMENT[drawPillar.stem] || null;
       if (drawElement) {
         relation = elementRelation(dayPillar, drawPillar);
         const boost = SAJU_RELATION_BOOST[relation] || 1;
+        // 보너스가 발생하는 관계(boost > 1)만 추첨일 풀 추가. boost = 1(관성)은 풀 추가 X.
         if (boost > 1) {
-          const drawLucky = FIVE_ELEMENTS_LUCKY[drawElement] || [];
-          for (const n of drawLucky) {
-            if (n >= NUMBER_MIN && n <= NUMBER_MAX) arr[n - 1] = arr[n - 1] * boost;
-          }
+          for (const n of FIVE_ELEMENTS_LUCKY[drawElement] || []) poolSet.add(n);
         }
       }
     }
   }
-  return { weights: arr, relation, drawElement };
+
+  return { weights: poolFromIndices(Array.from(poolSet)), relation, drawElement };
 }
 
 /**
@@ -247,8 +278,11 @@ export function recommend(ctx) {
   } = ctx;
   const drawSeed = mixSeeds(seed, drwNo);
   const bonusSeed = mixSeeds(drawSeed, 0x12345678);
-  // 객관 전략용 시드: 캐릭터 시드 무관, 회차만으로 결정. SSOT: docs/02_data.md 1.5.
-  const objectiveSeed = mixSeeds(drwNo, OBJECTIVE_SEED_SALT);
+  // 객관 전략용 시드: 캐릭터 시드 무관, 회차 + 전략ID로 결정. SSOT: docs/02_data.md 1.5.1.
+  // S21 (2026-05-03): strategyId 솔트 추가. 단일 시드(drwNo+SALT)면 모든 객관 전략이
+  //   풀 안 동일 상대 인덱스를 뽑아 작은 번호 편향 발생. 전략별 분산 필요.
+  //   객관성 정의 = "캐릭터 시드 / Luck 무관" 유지 (strategyId는 캐릭터 속성 아님).
+  const objectiveSeed = mixSeeds(mixSeeds(drwNo, OBJECTIVE_SEED_SALT), strategyHash(strategyId));
   const objectiveBonusSeed = mixSeeds(objectiveSeed, 0x12345678);
   const isObjective = OBJECTIVE_STRATEGIES.has(strategyId);
 
@@ -261,33 +295,36 @@ export function recommend(ctx) {
     bonusW = uniformWeights();
     reasons.push('축복받은 자: 모든 번호 균등 + Luck이 시드 번호 가중치 강화.');
   } else if (strategyId === STRATEGY_STATISTICIAN) {
-    mainWeights = statsToWeights(numberStats);
+    // S18: 풀 컷팅. count 상위 STATS_POOL_SIZE 등 풀 + 균등 weight.
+    mainWeights = poolFromWeights(statsToWeights(numberStats), STATS_POOL_SIZE);
     bonusW = uniformWeights();
-    reasons.push('통계 추첨: 역대 회차에 가장 많이 나온 번호 위주.');
+    reasons.push(`많이 나온 수: 역대 회차 빈도 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
   } else if (strategyId === STRATEGY_SECOND_STAR) {
-    // 보너스볼 빈도가 높은 번호는 본번호로도 자주 나오는 경향이 있다.
-    // 본번호와 보너스 모두 보너스볼 통계 가중을 적용해 라벨-동작 일관성 확보.
-    mainWeights = statsToWeights(bonusStats);
-    bonusW = statsToWeights(bonusStats);
-    reasons.push('보너스볼 사냥: 역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두).');
+    // 보너스볼 빈도 상위 풀. S18: 풀 컷팅.
+    mainWeights = poolFromWeights(statsToWeights(bonusStats), STATS_POOL_SIZE);
+    bonusW = poolFromWeights(statsToWeights(bonusStats), STATS_POOL_SIZE);
+    reasons.push(`보너스볼: 역대 보너스볼 빈도 상위 ${STATS_POOL_SIZE}등 풀 (본번호 + 보너스 모두).`);
   } else if (strategyId === STRATEGY_REGRESSIONIST) {
-    mainWeights = gapWeights(numberStats);
+    // S18: gap 상위 풀.
+    mainWeights = poolFromWeights(gapWeights(numberStats), STATS_POOL_SIZE);
     bonusW = uniformWeights();
-    reasons.push('미출현 회귀: 오랫동안 안 나온 번호 위주.');
+    reasons.push(`안 나온 수: 가장 오래 안 나온 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
   } else if (strategyId === STRATEGY_PAIR_TRACKER) {
     const keyNumber = keyNumberFromSeed(seed);
-    mainWeights = pairWeights(cooccur, keyNumber);
+    // S18: 짝꿍 동시출현 상위 풀.
+    mainWeights = poolFromWeights(pairWeights(cooccur, keyNumber), STATS_POOL_SIZE);
     bonusW = uniformWeights();
-    reasons.push(`짝꿍 번호: 캐릭터 키번호 ${keyNumber}번과 자주 함께 나왔던 번호 묶음.`);
+    reasons.push(`짝꿍 번호: 키번호 ${keyNumber}번과 동시출현 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
   } else if (strategyId === STRATEGY_ASTROLOGER) {
     mainWeights = zodiacWeights(zodiac);
     bonusW = uniformWeights();
     const label = zodiac || '미지정';
     reasons.push(`별자리 행운: ${label} (Sun Sign + Ruler Planet 전통 점성술 출처, 추첨 결과 보장 없음).`);
   } else if (strategyId === STRATEGY_TREND_FOLLOWER) {
-    mainWeights = trendWeights(numberStats);
+    // S18: 최근 30회 빈도 상위 풀.
+    mainWeights = poolFromWeights(trendWeights(numberStats), STATS_POOL_SIZE);
     bonusW = uniformWeights();
-    reasons.push('최근 트렌드: 최근 30회에 자주 나온 번호 위주.');
+    reasons.push(`최근 트렌드: 최근 30회 빈도 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
   } else if (strategyId === STRATEGY_INTUITIVE) {
     mainWeights = intuitiveWeights(drawSeed);
     bonusW = uniformWeights();
@@ -308,10 +345,15 @@ export function recommend(ctx) {
     bonusW = uniformWeights();
     const el = fiveElementOf(dayPillar);
     const elLabel = el ? `${el}` : '미지정';
-    // S16: 일진 보너스가 있으면 reasons에 추가 명시
+    // S18: 일진 보너스(풀 합집합) 발생 시 reasons에 명시
     if (fe.relation && fe.drawElement) {
       const REL_LABEL = { self: '비견', generate: '식상', beGenerated: '인성', overcome: '재성', beOvercome: '관성', normal: '무관' };
-      reasons.push(`사주 일진 (S16): 추첨일 ${fe.drawElement} 오행 vs 출생 ${elLabel} 오행 = ${REL_LABEL[fe.relation] || fe.relation} (×${SAJU_RELATION_BOOST[fe.relation]} 추가 boost, 매주 변동).`);
+      const boost = SAJU_RELATION_BOOST[fe.relation];
+      if (boost > 1) {
+        reasons.push(`사주 일진 (S18): 추첨일 ${fe.drawElement} 오행 풀 추가 (${REL_LABEL[fe.relation] || fe.relation}, 매주 변동).`);
+      } else {
+        reasons.push(`사주 일진: 추첨일 ${fe.drawElement} 오행 = ${REL_LABEL[fe.relation] || fe.relation} (보너스 없음, 출생 풀만).`);
+      }
     }
     reasons.push(`사주 행운: ${elLabel} 오행 (河圖數 출처 / 易經, 추첨 결과 보장 없음).`);
   } else {

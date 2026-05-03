@@ -40,13 +40,14 @@ export function loadActiveCharacterId() { return read('active_character', null);
 export function saveActiveCharacterId(id) { write('active_character', id); }
 
 // 옵션
-// multiStrategy: 다중 전략 모드 (S3-T1). 기본 OFF (라이트 사용자 비노출).
 // fiveSets: 5세트 동시 추천 모드 (S4-T1). 기본 OFF.
-const OPTIONS_DEFAULT = { applyFilters: false, advancedMode: false, multiStrategy: false, fiveSets: false };
+// S19 (2026-05-02): multiStrategy 옵션 폐기. 항상 다중 모드. 기존 localStorage 잔존은 무시.
+const OPTIONS_DEFAULT = { applyFilters: false, advancedMode: false, fiveSets: false };
 export function loadOptions() {
   const opts = read('options', OPTIONS_DEFAULT);
-  // 누락 키 채우기 (마이그레이션)
-  return { ...OPTIONS_DEFAULT, ...opts };
+  // 누락 키 채우기 + S19 폐기 키 제거
+  const { multiStrategy: _drop, ...rest } = opts || {};
+  return { ...OPTIONS_DEFAULT, ...rest };
 }
 export function saveOptions(options) { write('options', options); }
 
