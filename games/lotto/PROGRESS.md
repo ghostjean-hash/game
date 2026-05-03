@@ -4,10 +4,77 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-03 (Sprint 032 - 출처 태그 전략별 색 차등 / S23).
+1.3. **마지막 갱신**: 2026-05-03 (Sprint 034 - 다중 전략 C+E안 + 흉/대길 배너 제거 / S24-S25).
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.55. Sprint 034 완료 - 다중 전략 C+E안 (풀 직접 추출 + 정규화) (S25) (2026-05-03)
+
+사용자 지시: "운세 3개를 선택하면 주로 앞자리만 나오는데, 이 문제를 근본적으로 수정. 어떤 번호가 앞자리에 올지도 터치 순서에 따라 달라지지 않을까? 가장 좋은 안 제시 → 진행 (C+E안)".
+
+### 2.55.1. 문제 - S21 잔여 + 신규
+
+S21에서 객관 시드 분산은 했지만 `recommendMulti`가 **각 sub.numbers(정렬된 6개)의 앞쪽 N개**만 채택 → 풀 평균 수렴 안 됨. 운세 3개 = 평균 6~9 (작은 번호 편향).
+
+추가로: 사용자 클릭 순서가 strategyIds 배열 순서가 되어 같은 strategy 조합이 다른 결과 / 다른 source 매핑 → implicit dependency.
+
+### 2.55.2. 해결 - C안 (풀 직접 추출) + E안 (정규화)
+
+#### 2.55.2.1. C안
+
+`computeStrategyContext(ctx)` helper 분리: weight + reasons + 시드 계산만 담당. recommend / recommendMulti 양쪽 공유.
+
+`recommendMulti`:
+```js
+const sc = computeStrategyContext({ ...rest, strategyId: sid });
+const excludeSet = new Set(collected);
+const picked = weightedSample(sc.finalWeights, targetCount, sc.samplingSeed, excludeSet);
+```
+
+→ 각 strategy의 풀에서 targetCount개를 **풀 안 균등으로 직접 추출**. "잘라쓰기" 휴리스틱 폐기.
+
+#### 2.55.2.2. E안
+
+`STRATEGY_ORDER` 상수 추가 (`src/data/numbers.js`): 운세 3 / 랜덤 3 / 통계 5 (UI 노출 순서). `normalizeStrategyIds(ids)`로 진입 직후 sort.
+
+→ 같은 strategy 조합 = 같은 결과 + 같은 source 매핑. 클릭 순서 무관.
+
+### 2.55.3. 시뮬 검증 (1223회, cancer + wood, drawDate=2026-05-09)
+
+| 케이스 | S25 이전 평균 | S25 이후 결과 | 평균 |
+|---|---|---|---|
+| 운세 3 | ~6 (스크린샷 3,4,9,12,19,24) | 28,33,38,42,43,44 | 38.0 |
+| 통계 5 | ~10 | 4,9,15,28,33,41 | 21.7 |
+| 6 strat | 6.8 (S21 시뮬) | 4,9,15,27,28,33 | 19.3 |
+
+정규화: 운세 3개를 [A,F,Z] / [F,Z,A] / [Z,A,F] 3가지 순서로 호출 → 결과 모두 동일 (numbers + bonus + sources).
+
+### 2.55.4. 변경 파일
+
+- `src/data/numbers.js`: `STRATEGY_ORDER` 추가
+- `src/core/recommend.js`: `computeStrategyContext` 분리 + `recommend`를 wrapper로 + `normalizeStrategyIds` 신규 + `recommendMulti` C+E안 재작성
+- `tests/suites/recommend.test.js`: 정규화 검증 2건 + 풀 평균 수렴 1건 (273 → 276)
+- `docs/02_data.md` 1.5.4: 알고리즘 / 정규화 순서 / 풀 평균 수렴 검증 신설
+- `service-worker.js`: CACHE_VERSION v10 → v11
+
+### 2.55.5. 검증
+
+`node tests/run-node.js` → **276/276 PASS**.
+
+### 2.55.6. 트레이드오프
+
+- **얻음**: 풀 평균 수렴 / 결정론 명확 / 터치 순서 무관 / weight 계산 재사용성.
+- **잃음**: recommendMulti 출력 변경 (이력 호환). history는 단일 strategy 백캐스트라 영향 없음. lastUsedStrategies 결정론 변화는 사용자 직접 영향 0.
+- **balancer 다중 모드**: 균형 필터(합 121~160 + 홀짝 3:3) 미적용. count<6이라 검증 불가 (의도된 트레이드오프).
+
+## 2.54. Sprint 033 완료 - 흉/대길 배너 제거 (S24) (2026-05-03)
+
+사용자 지시: 화살표로 "흉일. 방어 모드 권장" 배너 가리키며 "내용 제거".
+
+운세 카피는 캐릭터 카드의 "운세 · 흉/대길"에 이미 노출되어 추천 카드 배너는 중복. 외곽 톤(`is-bad` / `is-great`)은 유지하여 운세 시각 단서 보존.
+
+변경: `src/render/draw-card.js` (banner 변수 + ${banner} 제거), `docs/01_spec.md` 5.1.2 ("배너 폐기 S24" 명시), `service-worker.js` CACHE_VERSION v9 → v10.
 
 ## 2.53. Sprint 032 완료 - 출처 태그 전략별 색 차등 (S23) (2026-05-03)
 

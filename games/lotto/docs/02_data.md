@@ -86,10 +86,24 @@
 | 6 | 1 + 1 + 1 + 1 + 1 + 1 |
 | 7+ | 비활성 (선택 불가, 만선 시 비활성 탭) |
 
-1.5.4.2. **알고리즘**: `core/recommend.js` `recommendMulti(ctx)`. 각 전략 순회 → recommend 호출 → 분배 카운트만큼 중복 제외 후 채택. 부족분은 blessed 균등 fallback. 보너스는 첫 전략 채택, 본번호와 겹치면 균등 재추출.
-1.5.4.3. **출처 라벨**: 결과 객체에 `strategySources: string[]` (numbers와 동일 순서). draw-card에서 1글자 short(`strategy.short`) + 카테고리 색 배경 표시 (단일 모드는 빈 배열 → 라벨 미표시). S22 (2026-05-03) 이전엔 카테고리 색 dot이었으나 같은 카테고리 안 여러 전략 식별 불가 → short 1글자로 교체.
-1.5.4.4. **최소 1개 보장**: 다중 모드에서 마지막 1개 토글 제거는 무시 (전략 0개 방지).
-1.5.4.5. **백캐스트 영향 없음**: `backfillRecommendations`은 단일 전략으로 결정론 유지. 다중 모드여도 history는 첫 전략 기준.
+1.5.4.2. **알고리즘 (S25, 2026-05-03 재작성 / C+E안)**: `core/recommend.js` `recommendMulti(ctx)`.
+- **C안 - 풀에서 직접 count 추출**: 각 strategy의 weight를 `computeStrategyContext`로 계산 후, `weightedSample(weights, targetCount, seed, exclude=collected)`로 풀 안에서 직접 targetCount개 추출. 누적 collected를 exclude로 풀에서 사전 제외해 중복 0. **이전(S3-T1~S24): sub recommend 6개 추출 → 정렬 후 앞쪽 N개 채택 (잘라쓰기 휴리스틱)** → 작은 번호 편향. S25에서 폐기.
+- **E안 - strategyIds 정규화**: 진입 직후 `STRATEGY_ORDER` 기준 sort. 사용자 클릭 순서 무관 → 같은 strategy 조합은 항상 같은 결과 + 같은 source 매핑.
+- 부족분(풀 작은 strategy + 누적 exclude로 풀 비는 케이스): blessed 균등 fallback.
+- 보너스: 정규화 후 첫 strategy의 보너스 풀에서 추출. 본번호와 겹치면 균등 재추출.
+- balancer 다중 모드: 균형 필터(합 121~160 + 홀짝 3:3) 미적용. count<6이라 검증 불가.
+
+1.5.4.3. **정규화 순서 (S25)**: `STRATEGY_ORDER` (`src/data/numbers.js`).
+운세 3 → 랜덤 3 → 통계 5 (UI 노출 순서와 일치).
+- 운세: astrologer → zodiacElement → fiveElements
+- 랜덤: blessed → intuitive → balancer
+- 통계: trendFollower → statistician → pairTracker → secondStar → regressionist
+
+1.5.4.4. **출처 라벨**: 결과 객체에 `strategySources: string[]` (numbers와 동일 순서). draw-card에서 1글자 short(`strategy.short`) + 카테고리 색 배경 표시 (단일 모드는 빈 배열 → 라벨 미표시). S22 (2026-05-03) 이전엔 카테고리 색 dot이었으나 같은 카테고리 안 여러 전략 식별 불가 → short 1글자로 교체.
+1.5.4.5. **최소 1개 보장**: 다중 모드에서 마지막 1개 토글 제거는 무시 (전략 0개 방지).
+1.5.4.6. **백캐스트 영향 없음**: `backfillRecommendations`은 단일 전략으로 결정론 유지. 다중 모드여도 history는 첫 전략 기준.
+
+1.5.4.7. **S25 풀 평균 수렴 검증**: 운세 3개(별자리/원소/사주) 결과 평균이 풀 합집합 평균(22~30 케이스 의존)에 수렴. 이전 S3-T1~S24는 평균 6~9 (작은 번호 편향). 회귀 테스트 `tests/suites/recommend.test.js` "S25 recommendMulti: 운세 3개 평균 풀 평균에 수렴".
 
 #### 1.5.5. 5세트 동시 추천 (S4-T1, 2026-05-02 신설)
 

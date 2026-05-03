@@ -2,7 +2,8 @@
 // v9 (2026-05-03): lotto Sprint 026-032 (S17-S23) - 추천 카드 보너스 폐기 / 통계 라벨 / 출처 식별성 / 시드 분산.
 //   stale-while-revalidate라 옛 lotto 파일이 캐시되어 사용자 새로고침 후에도 옛 화면 노출되던 문제 해결.
 // v10 (2026-05-03): lotto S24 - 흉/대길 배너 제거.
-const CACHE_VERSION = "v10";
+// v11 (2026-05-03): lotto S25 - 다중 전략 C+E안 (풀에서 직접 추출 + strategyIds 정규화).
+const CACHE_VERSION = "v11";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

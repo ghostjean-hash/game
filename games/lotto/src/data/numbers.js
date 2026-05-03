@@ -51,6 +51,21 @@ export const STRATEGY_CATEGORIES = Object.freeze({
 // 다중 전략 모드 최대 선택 수 (분배 1+1+1+1+1+1 = 6).
 export const MULTI_STRATEGY_MAX = 6;
 
+// S25 (2026-05-03): 다중 전략 정규화 순서 (E안). UI 클릭 순서와 무관하게 결정론 보장.
+// recommendMulti가 strategyIds를 본 순서로 sort 후 처리.
+// 사유: 사용자가 같은 N개 strategy를 어떤 순서로 켜든 같은 결과 + 같은 source 매핑.
+// 기준: 카테고리(운세 → 랜덤 → 통계) + 카테고리 안 의미 순 (UI 노출 순서와 일치).
+// SSOT: docs/02_data.md 1.5.4.
+export const STRATEGY_ORDER = Object.freeze([
+  // 운세
+  STRATEGY_ASTROLOGER, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
+  // 랜덤
+  STRATEGY_BLESSED, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
+  // 통계
+  STRATEGY_TREND_FOLLOWER, STRATEGY_STATISTICIAN, STRATEGY_PAIR_TRACKER,
+  STRATEGY_SECOND_STAR, STRATEGY_REGRESSIONIST,
+]);
+
 // S18 (2026-05-02): 통계계 5전략의 풀 크기. 상위 N등 풀에서 균등 추첨.
 // "어정쩡한 weight 비례 PRNG" 회피.
 // SSOT: docs/02_data.md 1.5.6.

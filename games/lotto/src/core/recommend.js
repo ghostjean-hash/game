@@ -19,6 +19,7 @@ import {
   MULTI_STRATEGY_MAX,
   STATS_POOL_SIZE,
   FIVE_SETS_COUNT, FIVE_SETS_SALT_BASE,
+  STRATEGY_ORDER,
 } from '../data/numbers.js';
 import { applyLuck } from './luck.js';
 import { mulberry32, mixSeeds } from './random.js';
@@ -256,21 +257,20 @@ function weightedSample(weights, count, seed, exclude = null) {
 }
 
 /**
- * 추천 결과. 결정론.
- * @param {object} ctx
- * @param {number} ctx.seed - 캐릭터 시드
- * @param {string} ctx.strategyId - 추첨 전략 (사용자가 선택)
- * @param {number} ctx.luck - 0~100
- * @param {number} ctx.drwNo - 다음 회차 번호
- * @param {object[]} [ctx.numberStats]
- * @param {object[]} [ctx.bonusStats]
- * @param {object[]} [ctx.cooccur]
- * @param {string} [ctx.zodiac] - 별자리 행운 / 별자리 원소 전략용
- * @param {{ stem: string, branch: string }} [ctx.dayPillar] - 사주 전략(fiveElements)용 일주
- * @param {string} [ctx.drawDate] - 추첨일 YYYY-MM-DD (S16 사주 일진 보너스용)
- * @returns {{ numbers: number[], bonus: number, reasons: string[] }}
+ * S25 (2026-05-03): strategy weight + 시드 + reasons 계산만 분리.
+ * recommend / recommendMulti 양쪽이 공유. 외부 호출 안 됨 (내부 helper).
+ *
+ * @returns {{
+ *   finalWeights: number[],
+ *   bonusW: number[],
+ *   samplingSeed: number,
+ *   samplingBonusSeed: number,
+ *   isObjective: boolean,
+ *   isBalancer: boolean,
+ *   reasons: string[],
+ * }}
  */
-export function recommend(ctx) {
+function computeStrategyContext(ctx) {
   const {
     seed, strategyId, luck, drwNo,
     numberStats = [], bonusStats = [], cooccur = [], zodiac = null, dayPillar = null,
@@ -278,13 +278,11 @@ export function recommend(ctx) {
   } = ctx;
   const drawSeed = mixSeeds(seed, drwNo);
   const bonusSeed = mixSeeds(drawSeed, 0x12345678);
-  // 객관 전략용 시드: 캐릭터 시드 무관, 회차 + 전략ID로 결정. SSOT: docs/02_data.md 1.5.1.
-  // S21 (2026-05-03): strategyId 솔트 추가. 단일 시드(drwNo+SALT)면 모든 객관 전략이
-  //   풀 안 동일 상대 인덱스를 뽑아 작은 번호 편향 발생. 전략별 분산 필요.
-  //   객관성 정의 = "캐릭터 시드 / Luck 무관" 유지 (strategyId는 캐릭터 속성 아님).
+  // 객관 전략용 시드 (S21): 캐릭터 시드 무관, drwNo + SALT + strategyHash. SSOT: docs/02_data.md 1.5.1.
   const objectiveSeed = mixSeeds(mixSeeds(drwNo, OBJECTIVE_SEED_SALT), strategyHash(strategyId));
   const objectiveBonusSeed = mixSeeds(objectiveSeed, 0x12345678);
   const isObjective = OBJECTIVE_STRATEGIES.has(strategyId);
+  const isBalancer = strategyId === STRATEGY_BALANCER;
 
   let mainWeights;
   let bonusW;
@@ -295,23 +293,19 @@ export function recommend(ctx) {
     bonusW = uniformWeights();
     reasons.push('축복받은 자: 모든 번호 균등 + Luck이 시드 번호 가중치 강화.');
   } else if (strategyId === STRATEGY_STATISTICIAN) {
-    // S18: 풀 컷팅. count 상위 STATS_POOL_SIZE 등 풀 + 균등 weight.
     mainWeights = poolFromWeights(statsToWeights(numberStats), STATS_POOL_SIZE);
     bonusW = uniformWeights();
     reasons.push(`많이 나온 수: 역대 회차 빈도 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
   } else if (strategyId === STRATEGY_SECOND_STAR) {
-    // 보너스볼 빈도 상위 풀. S18: 풀 컷팅.
     mainWeights = poolFromWeights(statsToWeights(bonusStats), STATS_POOL_SIZE);
     bonusW = poolFromWeights(statsToWeights(bonusStats), STATS_POOL_SIZE);
     reasons.push(`보너스볼: 역대 보너스볼 빈도 상위 ${STATS_POOL_SIZE}등 풀 (본번호 + 보너스 모두).`);
   } else if (strategyId === STRATEGY_REGRESSIONIST) {
-    // S18: gap 상위 풀.
     mainWeights = poolFromWeights(gapWeights(numberStats), STATS_POOL_SIZE);
     bonusW = uniformWeights();
     reasons.push(`안 나온 수: 가장 오래 안 나온 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
   } else if (strategyId === STRATEGY_PAIR_TRACKER) {
     const keyNumber = keyNumberFromSeed(seed);
-    // S18: 짝꿍 동시출현 상위 풀.
     mainWeights = poolFromWeights(pairWeights(cooccur, keyNumber), STATS_POOL_SIZE);
     bonusW = uniformWeights();
     reasons.push(`짝꿍 번호: 키번호 ${keyNumber}번과 동시출현 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
@@ -321,7 +315,6 @@ export function recommend(ctx) {
     const label = zodiac || '미지정';
     reasons.push(`별자리 행운: ${label} (Sun Sign + Ruler Planet 전통 점성술 출처, 추첨 결과 보장 없음).`);
   } else if (strategyId === STRATEGY_TREND_FOLLOWER) {
-    // S18: 최근 30회 빈도 상위 풀.
     mainWeights = poolFromWeights(trendWeights(numberStats), STATS_POOL_SIZE);
     bonusW = uniformWeights();
     reasons.push(`최근 트렌드: 최근 30회 빈도 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
@@ -345,7 +338,6 @@ export function recommend(ctx) {
     bonusW = uniformWeights();
     const el = fiveElementOf(dayPillar);
     const elLabel = el ? `${el}` : '미지정';
-    // S18: 일진 보너스(풀 합집합) 발생 시 reasons에 명시
     if (fe.relation && fe.drawElement) {
       const REL_LABEL = { self: '비견', generate: '식상', beGenerated: '인성', overcome: '재성', beOvercome: '관성', normal: '무관' };
       const boost = SAJU_RELATION_BOOST[fe.relation];
@@ -360,20 +352,38 @@ export function recommend(ctx) {
     throw new Error(`Unknown strategy: ${strategyId}`);
   }
 
-  // 객관 전략: 캐릭터 시드 / Luck 무관. 회차만으로 결정 (모든 캐릭터 동일 결과).
-  // 시드 의존 전략: drawSeed + applyLuck (캐릭터별 다른 결과).
+  // 객관: 캐릭터 시드 / Luck 무관. 시드 의존: drawSeed + applyLuck.
   const finalWeights = isObjective ? mainWeights : applyLuck(mainWeights, drawSeed, luck);
   const samplingSeed = isObjective ? objectiveSeed : drawSeed;
   const samplingBonusSeed = isObjective ? objectiveBonusSeed : bonusSeed;
 
-  const numbers = strategyId === STRATEGY_BALANCER
-    ? balancedSample(finalWeights, PICK_COUNT, samplingSeed).sort((a, b) => a - b)
-    : weightedSample(finalWeights, PICK_COUNT, samplingSeed).sort((a, b) => a - b);
-  // 6/45 룰: 보너스는 본번호와 겹치지 않아야 함. 본번호 6개를 풀에서 제외하고 추출.
-  const bonusArr = weightedSample(bonusW, BONUS_COUNT, samplingBonusSeed, new Set(numbers));
-  const bonus = bonusArr[0];
+  return { finalWeights, bonusW, samplingSeed, samplingBonusSeed, isObjective, isBalancer, reasons };
+}
 
-  return { numbers, bonus, reasons };
+/**
+ * 추천 결과. 결정론.
+ * @param {object} ctx
+ * @param {number} ctx.seed - 캐릭터 시드
+ * @param {string} ctx.strategyId - 추첨 전략 (사용자가 선택)
+ * @param {number} ctx.luck - 0~100
+ * @param {number} ctx.drwNo - 다음 회차 번호
+ * @param {object[]} [ctx.numberStats]
+ * @param {object[]} [ctx.bonusStats]
+ * @param {object[]} [ctx.cooccur]
+ * @param {string} [ctx.zodiac] - 별자리 행운 / 별자리 원소 전략용
+ * @param {{ stem: string, branch: string }} [ctx.dayPillar] - 사주 전략(fiveElements)용 일주
+ * @param {string} [ctx.drawDate] - 추첨일 YYYY-MM-DD (S16 사주 일진 보너스용)
+ * @returns {{ numbers: number[], bonus: number, reasons: string[] }}
+ */
+export function recommend(ctx) {
+  const c = computeStrategyContext(ctx);
+  const numbers = c.isBalancer
+    ? balancedSample(c.finalWeights, PICK_COUNT, c.samplingSeed).sort((a, b) => a - b)
+    : weightedSample(c.finalWeights, PICK_COUNT, c.samplingSeed).sort((a, b) => a - b);
+  // 6/45 룰: 보너스는 본번호와 겹치지 않아야 함.
+  const bonusArr = weightedSample(c.bonusW, BONUS_COUNT, c.samplingBonusSeed, new Set(numbers));
+  const bonus = bonusArr[0];
+  return { numbers, bonus, reasons: c.reasons };
 }
 
 /**
@@ -394,15 +404,39 @@ export function distributeCounts(n) {
 }
 
 /**
- * 다중 전략 추천 (S3-T1). 각 전략별 분배 카운트만큼 본번호 + 출처 라벨.
- * 보너스는 첫 전략 결과 채택 (본번호와 겹치면 균등 추출로 fallback).
+ * S25 (2026-05-03): strategyIds 결정론 정규화 (E안).
+ * STRATEGY_ORDER 기준으로 sort. 사용자 클릭 순서 무관 → 같은 strategy 조합은 항상 같은 결과.
+ * 알 수 없는 ID는 끝으로 (안전 fallback).
+ */
+function normalizeStrategyIds(ids) {
+  const orderIdx = new Map();
+  STRATEGY_ORDER.forEach((id, i) => orderIdx.set(id, i));
+  const indexed = ids.map((id, originalIdx) => ({
+    id,
+    order: orderIdx.has(id) ? orderIdx.get(id) : (STRATEGY_ORDER.length + originalIdx),
+  }));
+  indexed.sort((a, b) => a.order - b.order);
+  return indexed.map((x) => x.id);
+}
+
+/**
+ * 다중 전략 추천 (S3-T1, S25 재작성). C+E안.
+ * S25 변경:
+ *   C안: 각 strategy 풀에서 직접 targetCount개 추출 (recommend 6개 추출 → 잘라쓰기 폐기).
+ *        누적 collected를 exclude로 weightedSample → 풀 안 균등하게 풀 평균에 수렴.
+ *        balancer는 다중 모드에서 일반 균등(균형 필터 미적용 - count<6이라 합/홀짝 검증 불가).
+ *   E안: strategyIds를 STRATEGY_ORDER 기준 정규화 → 클릭 순서 무관 결정론.
+ * 보너스: 정규화 후 첫 전략 결과 채택. 본번호와 겹치면 균등 추출 fallback.
+ *
+ * SSOT: docs/02_data.md 1.5.4.
+ *
  * @param {object} ctx
- * @param {string[]} ctx.strategyIds 1~MULTI_STRATEGY_MAX개
+ * @param {string[]} ctx.strategyIds 1~MULTI_STRATEGY_MAX개 (정규화 전)
  * @returns {{
  *   numbers: number[],
  *   bonus: number,
  *   reasons: string[],
- *   strategySources: string[],  // numbers와 동일 순서, 각 번호의 출처 strategyId
+ *   strategySources: string[],
  * }}
  */
 export function recommendMulti(ctx) {
@@ -410,32 +444,37 @@ export function recommendMulti(ctx) {
   if (!Array.isArray(strategyIds) || strategyIds.length === 0) {
     throw new Error('strategyIds가 비어있음');
   }
-  const distribution = distributeCounts(strategyIds.length);
+  // E안: 정규화. 같은 조합 = 같은 결과 보장.
+  const normalized = normalizeStrategyIds(strategyIds);
+  const distribution = distributeCounts(normalized.length);
   const collected = [];
   const sources = [];
   const allReasons = [];
   let bonus = null;
 
-  for (let i = 0; i < strategyIds.length; i += 1) {
-    const sid = strategyIds[i];
+  for (let i = 0; i < normalized.length; i += 1) {
+    const sid = normalized[i];
     const targetCount = distribution[i];
-    const sub = recommend({ ...rest, strategyId: sid });
-    if (i === 0) bonus = sub.bonus;
+    const sc = computeStrategyContext({ ...rest, strategyId: sid });
 
-    // sub.numbers에서 중복 제외하고 targetCount만큼 채택
-    let added = 0;
-    for (const n of sub.numbers) {
-      if (added >= targetCount) break;
-      if (collected.includes(n)) continue;
+    if (i === 0) {
+      // 보너스는 첫 정규화 strategy의 보너스 풀에서 추출 (본번호 미정 → exclude 없이).
+      const bonusArr = weightedSample(sc.bonusW, BONUS_COUNT, sc.samplingBonusSeed);
+      bonus = bonusArr[0];
+    }
+
+    // C안: 풀에서 targetCount개 직접 추출. 누적 collected를 exclude로 풀에서 사전 제외.
+    //   풀 안 균등 분포 → 풀 평균에 수렴. "잘라쓰기 휴리스틱" 제거.
+    const excludeSet = new Set(collected);
+    const picked = weightedSample(sc.finalWeights, targetCount, sc.samplingSeed, excludeSet);
+    for (const n of picked) {
       collected.push(n);
       sources.push(sid);
-      added += 1;
     }
-    allReasons.push(...sub.reasons);
+    allReasons.push(...sc.reasons);
   }
 
-  // 부족분 (모든 전략의 sub.numbers가 collected와 겹쳐서 채워지지 않은 케이스) 보충.
-  // blessed 균등 추출 1회로 fallback. 보충 출처도 'blessed'로 표기.
+  // 부족분 (풀 작은 strategy + 누적 exclude로 풀이 비는 경우) 보충.
   if (collected.length < PICK_COUNT) {
     const fallback = recommend({ ...rest, strategyId: STRATEGY_BLESSED });
     for (const n of fallback.numbers) {
@@ -446,12 +485,12 @@ export function recommendMulti(ctx) {
     }
   }
 
-  // numbers + sources 함께 정렬
+  // numbers + sources 함께 오름차순 정렬 (카드 표시 순서).
   const paired = collected
-    .map((n, i) => ({ n, source: sources[i] }))
+    .map((n, idx) => ({ n, source: sources[idx] }))
     .sort((a, b) => a.n - b.n);
 
-  // 보너스가 본번호와 겹치면 균등 fallback
+  // 보너스가 본번호와 겹치면 균등 fallback.
   const numbersOnly = paired.map((p) => p.n);
   if (numbersOnly.includes(bonus)) {
     const { seed = 0, drwNo = 0 } = rest;

@@ -427,6 +427,51 @@ suite('core/recommend - 전략', () => {
     assertTrue(threw);
   });
 
+  test('S25 recommendMulti: strategyIds 정규화 - 클릭 순서 무관 결정론', () => {
+    // 같은 3 strategy 다른 순서로 호출 → 결과 numbers + bonus + sources 모두 동일.
+    const a = recommendMulti({
+      ...baseCtx, zodiac: 'cancer', dayPillar: { stem: 'gap', branch: 'rat' },
+      strategyIds: [STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_ZODIAC_ELEMENT],
+    });
+    const b = recommendMulti({
+      ...baseCtx, zodiac: 'cancer', dayPillar: { stem: 'gap', branch: 'rat' },
+      strategyIds: [STRATEGY_FIVE_ELEMENTS, STRATEGY_ZODIAC_ELEMENT, STRATEGY_ASTROLOGER],
+    });
+    const c = recommendMulti({
+      ...baseCtx, zodiac: 'cancer', dayPillar: { stem: 'gap', branch: 'rat' },
+      strategyIds: [STRATEGY_ZODIAC_ELEMENT, STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS],
+    });
+    assertDeepEqual(a.numbers, b.numbers);
+    assertDeepEqual(b.numbers, c.numbers);
+    assertEqual(a.bonus, b.bonus);
+    assertEqual(b.bonus, c.bonus);
+    assertDeepEqual(a.strategySources, b.strategySources);
+    assertDeepEqual(b.strategySources, c.strategySources);
+  });
+
+  test('S25 recommendMulti: 통계 + 운세 혼합 정규화', () => {
+    // 통계 + 운세 혼합 6전략. 클릭 순서 다양하게 → 동일 결과.
+    const ids1 = [STRATEGY_FIVE_ELEMENTS, STRATEGY_TREND_FOLLOWER, STRATEGY_STATISTICIAN, STRATEGY_PAIR_TRACKER, STRATEGY_SECOND_STAR, STRATEGY_REGRESSIONIST];
+    const ids2 = [STRATEGY_REGRESSIONIST, STRATEGY_FIVE_ELEMENTS, STRATEGY_PAIR_TRACKER, STRATEGY_TREND_FOLLOWER, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR];
+    const a = recommendMulti({ ...baseCtx, dayPillar: { stem: 'gap', branch: 'rat' }, strategyIds: ids1 });
+    const b = recommendMulti({ ...baseCtx, dayPillar: { stem: 'gap', branch: 'rat' }, strategyIds: ids2 });
+    assertDeepEqual(a.numbers, b.numbers);
+    assertDeepEqual(a.strategySources, b.strategySources);
+  });
+
+  test('S25 recommendMulti: 운세 3개 결과 평균이 풀 평균에 수렴 (작은 번호 편향 정정)', () => {
+    // 운세 3개(별자리/원소/사주) - 풀 합집합 평균이 22~30 정도. 결과 평균이 작은 쪽(< 12) 편향이면 실패.
+    // S25 이전(잘라쓰기): 평균 6~9 (작은 번호 편향).
+    // S25 이후(풀에서 직접 추출): 풀 평균에 수렴 → 12 이상 기대.
+    const r = recommendMulti({
+      ...baseCtx, zodiac: 'cancer', dayPillar: { stem: 'gap', branch: 'rat' },
+      drawDate: '2026-05-09',
+      strategyIds: [STRATEGY_ASTROLOGER, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS],
+    });
+    const avg = r.numbers.reduce((s, n) => s + n, 0) / r.numbers.length;
+    assertTrue(avg >= 12, `평균 ${avg.toFixed(1)} - 작은 번호 편향 의심 (>=12 기대, S25 잘라쓰기 폐기 검증).`);
+  });
+
   test('balancer 결과는 (대부분) 합 121~160 + 홀짝 3:3 통과', () => {
     // 50번 시도 보장이지만 fallback 가능. 통과율 검증.
     let pass = 0;
