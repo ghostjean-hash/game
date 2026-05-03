@@ -27,7 +27,8 @@ games/lotto/
 │   │   ├── schedule.js  # 다음 추첨 회차 / 카운트다운 타깃 시각
 │   │   ├── wheeling.js  # Full / Abbreviated Wheel + 4-if-4 검증
 │   │   ├── ritual.js    # 행운 의식 (정성 게이지, Luck +5 보너스, 추첨 무관) - T4
-│   │   └── reverse.js   # 역추첨 (사용자 6개 → 전 회차 최고 등수 매칭) - S2-T1
+│   │   ├── reverse.js   # 역추첨 (사용자 6개 → 전 회차 최고 등수 매칭) - S2-T1
+│   │   └── saved-sets.js # 누적 추천 세트 (회차 격납 / 추가 / 삭제 / 중복 차단) - S26
 │   ├── render/          # DOM 렌더
 │   │   ├── main.js              # 5탭 라우팅 + wire-up
 │   │   ├── modal.js             # 모달 / 면책 안내 / 닫기 버튼
@@ -47,7 +48,8 @@ games/lotto/
 │   │   ├── settings-page.js     # 설정 탭 (캐릭터 관리 + 옵션 + 다구좌 + 휠링 진입 + 면책 + 초기화)
 │   │   ├── ritual-widget.js     # 행운 의식 게이지 위젯 + 8행위 모달 - T4
 │   │   ├── ritual-particles.js  # 의식 만땅 진입 Canvas 파티클 (S4-T2)
-│   │   └── reverse-page.js      # 역추첨 게임 페이지 (6개 그리드 + 매칭 결과) - S2-T1
+│   │   ├── reverse-page.js      # 역추첨 게임 페이지 (6개 그리드 + 매칭 결과) - S2-T1
+│   │   └── saved-sets-section.js # 추천 리스트 섹션 + 추가 버튼 바 (S26 / S27 메인 카드 폐기 후 단일 표시 영역)
 │   ├── input/           # 키보드 / 터치 이벤트 (현재 render/main.js가 흡수)
 │   └── data/
 │       ├── colors.js    # 게임 색상 상수 (운세 / 카드 / 적중 / 번호공)
@@ -123,18 +125,24 @@ games/lotto/
   → render/main.js (메인 렌더 + 이벤트 리스너 흡수)
 ```
 
-### 3.2. 추천 1회
+### 3.2. 추천 등록 (S27: 메인 카드 폐기 → 사용자 명시 + 버튼 트리거)
 
 ```
-전략 탭 클릭 / 캐릭터 전환 (재렌더 트리거)
-  → render/main.js (이벤트 핸들러)
-  → core/recommend.js (시드 + 전략 + Luck + 회차 → 본번호 6 + 보너스 1 + 근거)
-    └─ 객관 5: mixSeeds(mixSeeds(drwNo, OBJECTIVE_SEED_SALT), strategyHash(strategyId)). 캐릭터 시드 / Luck 무관 (S21).
-    └─ 시드 의존 6: mixSeeds(seed, drwNo) + applyLuck.
-  → core/history.js (recordRecommendation + matchHistory + backfillRecommendations)
-  → core/luck.js (applyLuckGrowth, 적중 1회 보너스)
-  → data/storage.js (saveCharacters)
-  → render/draw-card.js (카드 갱신)
++ 1세트 / + 5세트 클릭 (전략 영역 직하)
+  → render/main.js addSavedSetsBatch
+  → core/recommend.js recommendMulti (조립식 = 정규화된 strategyIds + 시드 변형 솔트)
+    └─ 객관 포함: drwNo 변형 (mixSeeds(drwNo, SAVED_SETS_SALT_BASE + offset))
+    └─ 그 외: seed 변형
+    └─ 객관 시드: mixSeeds(mixSeeds(drwNo, OBJECTIVE_SEED_SALT), strategyHash(strategyId)) (S21)
+    └─ 시드 의존: mixSeeds(seed, drwNo) + applyLuck
+  → core/saved-sets.js addSavedSets (중복 numbers skip, cap 차단)
+  → data/storage.js saveCharacters (savedSets 영속)
+  → render/saved-sets-section.js (추천 리스트 갱신)
+
+자동 백캐스트 (luck 부트스트랩)
+  → core/history.js backfillRecommendations (캐릭터 첫 진입 시 1회, 단일 strategy 결정론)
+  → core/luck.js applyLuckGrowth (출석 + 적중 보너스)
+  → 메인 카드 노출은 폐기 (S27)
 ```
 
 ### 3.3. 회차 발표 후 매칭
