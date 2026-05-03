@@ -49,14 +49,10 @@ export function drawCardHtml(drwNo, recommendation, fortune, opts = {}) {
   const isGreat = fortune === 'great';
   const ritualCls = ritualFilled ? ' is-blessed-ritual' : '';
   const cardClass = `draw-card${isBad ? ' is-bad' : ''}${isGreat ? ' is-great' : ''}${ritualCls}`;
-  const banner = isBad
-    ? '<p class="draw-banner is-bad">흉일. 방어 모드 권장 - 이번 회차는 신중히.</p>'
-    : isGreat
-    ? '<p class="draw-banner is-great">대길. 캐릭터 운세 최상.</p>'
-    : '';
+  // S24 (2026-05-03): 흉/대길 배너 제거. 운세 정보는 캐릭터 카드의 "운세 · 흉/대길"에 이미 노출 - 중복.
+  //   카드 외곽 톤(is-bad / is-great)은 유지하여 운세 시각 단서 보존.
   return `
     <section class="${cardClass}" aria-label="제${drwNo}회 추천 번호">
-      ${banner}
       <div class="draw-panel">
         <div class="draw-row">
           <span class="draw-row-idx" aria-hidden="true">추천1</span>
