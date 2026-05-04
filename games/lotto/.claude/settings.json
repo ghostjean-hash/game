@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -NoProfile -Command \"Get-ChildItem -Path 'f:\\\\claude_code\\\\game_ghost\\\\games\\\\lotto' -Filter 'PROGRESS*' -Recurse | Select-Object FullName, Length, LastWriteTime\")",
+      "Bash(powershell -NoProfile -Command \"\\(Get-Content 'f:\\\\claude_code\\\\game_ghost\\\\games\\\\lotto\\\\PROGRESS.md'\\).Count\")",
+      "Bash(git -C \"f:/claude_code/game_ghost\" status)",
+      "Bash(git -C \"f:/claude_code/game_ghost\" log --oneline -5)",
+      "Bash(git -C \"f:/claude_code/game_ghost\" diff --stat HEAD)",
+      "Bash(git -C \"f:/claude_code/game_ghost\" add games/lotto/PROGRESS.md games/lotto/PROGRESS_ARCHIVE.md)",
+      "Bash(git -C f:/claude_code/game_ghost commit -m ' *)"
+    ]
+  }
+}
