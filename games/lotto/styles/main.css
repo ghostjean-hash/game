@@ -1263,6 +1263,12 @@ a.btn-secondary,
   background: rgba(201, 160, 80, 0.08);
   color: var(--color-accent);
 }
+/* S30 (2026-05-04): 포커스 = 활성 토글 중 desc 표시 대상 1개. outline ring으로 활성 다른 토글과 구분.
+   포커스 = 활성 list 마지막 원소 (가장 최근 활성). 토글 ON/OFF에 따라 자동 이동. */
+.strategy-tab.is-focused {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
 .strategy-desc {
   margin: var(--space-2) 0 0 0;
   padding: var(--space-2) 0 0 0;
@@ -2318,10 +2324,31 @@ a.btn-secondary,
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  color: #fff;
+  color: var(--color-on-accent);
   font-weight: 700;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-family: var(--font-sans);
+}
+/* S30.6 (2026-05-04): 사주 패널 일진 보너스 블록. 출생 풀 + 이번 주 추첨일 풀 시각 분리. */
+.lucky-bonus {
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--color-border);
+}
+.lucky-bonus-title {
+  display: inline-block;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-right: var(--space-2);
+}
+.lucky-bonus-meta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dim);
+}
+.lucky-balls-bonus {
+  margin-top: var(--space-1);
+  opacity: 0.95;
 }
 
 /* T1: 설정 탭 캐릭터 관리 섹션. */

@@ -19,16 +19,25 @@ const CATEGORY_CLASS = {
 const CATEGORY_ROW_ORDER = ['운세', '랜덤', '통계'];
 
 /**
- * @param {string | string[]} activeIds 단일 모드면 string, 다중 모드면 string[]
- * @param {{ multi?: boolean, pool?: number[] }} [opts]
- *   pool: S29.2 - 활성 전략들의 사용 번호 풀 합집합. multiHint 자리에 번호공으로 표시.
+ * @param {string | string[]} activeIds 단일 모드면 string, 다중 모드면 string[].
+ *   다중 모드 시 배열 순서 = 활성화 순서 (push 순서 보존). 마지막 원소 = 가장 최근 활성.
+ * @param {{ multi?: boolean, pool?: number[], poolNote?: string }} [opts]
+ *   pool: S29.2 / S30.1 - 포커스 전략 1개 풀.
+ *   poolNote: S30.3 - 풀 라벨 동적 노트 (짝꿍 키번호 등). 사용자 직관 ↑.
+ *
+ * S30 (2026-05-04): 포커스 분리. desc 표시 대상 = activeIds 마지막 원소(가장 최근 활성).
+ *   토글 ON 시: push로 그 전략이 자동 포커스. 토글 OFF (포커스 전략) 시: filter 후 직전 활성이 자동 포커스.
+ *   활성 0개 케이스 없음 (마지막 1개 보존 룰).
  */
 export function strategyTabsHtml(activeIds, opts = {}) {
   const multi = opts.multi === true;
   const pool = Array.isArray(opts.pool) ? opts.pool : null;
-  const activeSet = new Set(Array.isArray(activeIds) ? activeIds : [activeIds]);
-  const firstActive = Array.isArray(activeIds) ? activeIds[0] : activeIds;
-  const cur = STRATEGY_LIST.find((s) => s.id === firstActive) || STRATEGY_LIST[0];
+  const poolNote = typeof opts.poolNote === 'string' ? opts.poolNote : null;
+  const arr = Array.isArray(activeIds) ? activeIds : [activeIds];
+  const activeSet = new Set(arr);
+  // S30: 포커스 = 활성 list 마지막 (가장 최근 활성). 빈 배열이면 STRATEGY_LIST[0]로 폴백.
+  const focusedId = arr.length > 0 ? arr[arr.length - 1] : null;
+  const cur = STRATEGY_LIST.find((s) => s.id === focusedId) || STRATEGY_LIST[0];
 
   const isAtMax = multi && activeSet.size >= MULTI_STRATEGY_MAX;
 
@@ -39,10 +48,11 @@ export function strategyTabsHtml(activeIds, opts = {}) {
     const catCls = CATEGORY_CLASS[cat] || '';
     const tabs = members.map((s) => {
       const isActive = activeSet.has(s.id);
+      const isFocused = s.id === focusedId; // S30: 포커스 시각 표시
       const disabled = multi && !isActive && isAtMax;
       return `
         <button type="button"
-                class="strategy-tab${isActive ? ' is-active' : ''}${disabled ? ' is-disabled' : ''} ${catCls}"
+                class="strategy-tab${isActive ? ' is-active' : ''}${isFocused ? ' is-focused' : ''}${disabled ? ' is-disabled' : ''} ${catCls}"
                 data-strategy-id="${s.id}"
                 data-category="${escapeAttr(s.category)}"
                 aria-pressed="${isActive ? 'true' : 'false'}"
@@ -63,19 +73,21 @@ export function strategyTabsHtml(activeIds, opts = {}) {
   const curCatCls = CATEGORY_CLASS[cur.category] || '';
 
   // S29.2 (2026-05-04): 기존 "다중 전략 모드 · N/6 선택. 분배는 균등(6/N)" 메타 텍스트 폐기.
-  //   대체: 활성 전략들의 사용 번호 풀 합집합을 번호공으로 표시 (사용자 신뢰 + 사행성 회피).
-  //   풀이 비거나 multi=false면 미표시.
+  //   대체: 활성 전략의 사용 번호 풀을 번호공으로 표시 (사용자 신뢰 + 사행성 회피).
+  // S30.1 (2026-05-04): 합집합 → 포커스 전략 1개 풀. 랜덤 카테고리는 호출부에서 pool=null로 미전달.
+  //   풀이 비거나 null이면 미표시.
   let poolBlock = '';
   if (pool && pool.length > 0) {
-    const isFullPool = pool.length >= 45;
     const poolNumsHtml = pool.map((n) => {
       const c = numberColor(n);
       return `<span class="strategy-pool-num" style="background-color:${c.bg};" aria-label="${n}번">${n}</span>`;
     }).join('');
-    const sizeLabel = isFullPool ? '전 풀 (45)' : `${pool.length}개`;
+    // S30.3: poolNote가 있으면 라벨에 결합 → "사용 풀 · 18개 (키번호 7번과 자주 함께)"
+    const noteSuffix = poolNote ? ` · ${escapeHtml(poolNote)}` : '';
+    const sizeSuffix = `${pool.length}개`;
     poolBlock = `
-      <div class="strategy-pool" aria-label="활성 전략 사용 번호 풀">
-        <span class="strategy-pool-label">사용 풀 · ${sizeLabel}</span>
+      <div class="strategy-pool" aria-label="포커스 전략 사용 번호 풀">
+        <span class="strategy-pool-label">사용 풀 · ${sizeSuffix}${noteSuffix}</span>
         <div class="strategy-pool-list" role="list">${poolNumsHtml}</div>
       </div>
     `;

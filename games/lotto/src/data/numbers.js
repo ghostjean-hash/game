@@ -89,12 +89,14 @@ export const SAVED_SETS_SALT_BASE = 0x5A1ED;
 
 // 1.5.1. 객관 전략 (캐릭터 시드 / Luck 무관. 회차 데이터로만 결정).
 // 같은 회차에서 모든 캐릭터가 같은 결과를 받음. SSOT: docs/02_data.md 1.5.
+// S30.4 (2026-05-04): pairTracker 객관 승격 - 키번호 anchor 폐기, 동시출현 빈도 상위 페어 합집합으로 재설계.
 export const OBJECTIVE_STRATEGIES = Object.freeze(new Set([
   STRATEGY_STATISTICIAN,
   STRATEGY_SECOND_STAR,
   STRATEGY_REGRESSIONIST,
   STRATEGY_TREND_FOLLOWER,
   STRATEGY_BALANCER,
+  STRATEGY_PAIR_TRACKER,
 ]));
 
 // 객관 전략용 PRNG salt. drwNo와 mix해 회차별 분포를 분산하되 캐릭터 무관 보장.

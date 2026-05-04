@@ -104,12 +104,13 @@ suite('core/recommend - 객관 전략 캐릭터 무관 (SSOT: 02_data.md 1.5)', 
   const bonusStats = Array.from({ length: 45 }, (_, i) => ({
     number: i + 1, totalCount: 50 + i, recent30: 0, lastSeenDrw: 1000,
   }));
+  // S30.4 (2026-05-04): pairTracker 객관 승격 - 6개 전략으로 확장.
   const objectiveStrategies = [
     STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR, STRATEGY_REGRESSIONIST,
-    STRATEGY_TREND_FOLLOWER, STRATEGY_BALANCER,
+    STRATEGY_TREND_FOLLOWER, STRATEGY_BALANCER, STRATEGY_PAIR_TRACKER,
   ];
 
-  test('seed 달라도 같은 결과 (5개 전략)', () => {
+  test('seed 달라도 같은 결과 (6개 전략)', () => {
     for (const strategyId of objectiveStrategies) {
       const ctxA = { ...baseCtx, strategyId, seed: 0xAAAAAAAA, luck: 50, numberStats, bonusStats };
       const ctxB = { ...baseCtx, strategyId, seed: 0xBBBBBBBB, luck: 50, numberStats, bonusStats };
@@ -141,10 +142,11 @@ suite('core/recommend - 객관 전략 캐릭터 무관 (SSOT: 02_data.md 1.5)', 
 });
 
 suite('core/recommend - 시드 의존 전략 (캐릭터별 다른 결과)', () => {
+  // S30.4 (2026-05-04): pairTracker 객관 승격으로 시드 의존 목록에서 제거.
   const seedStrategies = [
-    STRATEGY_BLESSED, STRATEGY_PAIR_TRACKER, STRATEGY_INTUITIVE,
+    STRATEGY_BLESSED, STRATEGY_INTUITIVE,
   ];
-  test('seed 다르면 다른 결과 (3개 시드 의존 전략)', () => {
+  test('seed 다르면 다른 결과 (2개 시드 의존 전략)', () => {
     for (const strategyId of seedStrategies) {
       const a = recommend({ ...baseCtx, strategyId, seed: 0xAAAAAAAA });
       const b = recommend({ ...baseCtx, strategyId, seed: 0xBBBBBBBB });

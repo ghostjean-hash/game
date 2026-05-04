@@ -39,7 +39,7 @@ import {
 import {
   STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK,
   SAVED_SETS_CAP, SAVED_SETS_BATCH_SMALL, SAVED_SETS_BATCH_LARGE, SAVED_SETS_SALT_BASE,
-  OBJECTIVE_STRATEGIES,
+  OBJECTIVE_STRATEGIES, STRATEGY_CATEGORIES,
 } from '../data/numbers.js';
 
 let appEl = null;
@@ -233,17 +233,28 @@ function getRecAndFortune(active) {
   const strategyIds = activeStrategyIds(active);
   const strategyId = strategyIds[0]; // 호환용: 첫 전략 (활성 desc 표시 등)
 
-  // S29.2 (2026-05-04): 활성 전략들의 사용 풀 합집합. UI 메타 텍스트 자리에 표시.
-  const pool = computePoolForStrategies(strategyIds, ctxBase);
+  // S29.2 (2026-05-04): 사용 풀 표시. UI 메타 텍스트 자리.
+  // S30.1 (2026-05-04): 합집합 → 포커스 전략 1개 풀로 변경. 랜덤 카테고리(blessed/intuitive/balancer)는
+  //   풀이 1~45 균등 분포 = "전 풀"이라 풀 표시 의미 없음 → 랜덤 카테고리는 미표시 (pool=null).
+  //   포커스 = strategyIds 마지막 원소 (S30 활성화 순서상 가장 최근 활성).
+  const focusedId = strategyIds.length > 0 ? strategyIds[strategyIds.length - 1] : null;
+  const focusedCat = focusedId ? STRATEGY_CATEGORIES[focusedId] : null;
+  const pool = (focusedId && focusedCat !== 'random')
+    ? computePoolForStrategies([focusedId], ctxBase)
+    : null;
+  // S30.3 (2026-05-04) → S30.4 (2026-05-04): 짝꿍 객관 승격으로 키번호 anchor 폐기. poolNote 제거.
+  //   짝꿍 desc 자체가 "역대 동시출현 상위 페어 합집합"이라 추가 노트 불필요.
+  const poolNote = null;
 
   // S4-T1: 5세트 모드. ON이면 메인(rec) = sets[0], 추가 sets[1..4]를 함께 반환.
+  // S30.6 (2026-05-04): drawDate도 반환. character-card 사주 패널 일진 보너스 표시용.
   if (state.options.fiveSets) {
     const sets = recommendFiveSets({ ...ctxBase, strategyIds }, { multi: true });
-    return { strategyId, strategyIds, rec: sets[0], sets, fortune, drawForFortune, pool };
+    return { strategyId, strategyIds, rec: sets[0], sets, fortune, drawForFortune, pool, poolNote, drawDate };
   }
 
   const rec = recommendMulti({ ...ctxBase, strategyIds });
-  return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune, pool };
+  return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune, pool, poolNote, drawDate };
 }
 
 /**
@@ -337,7 +348,7 @@ function computeFiveSetsMatchInfos(sets, draws) {
   });
 }
 
-function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool) {
+function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool, poolNote, drawDate) {
   const banner = state.draws.length === 0
     ? `<section class="data-banner">
         <strong>회차 데이터 없음.</strong> 통계 / 일진 / 일부 전략이 데이터 기반으로 동작하려면 페치 1회 필요.
@@ -384,8 +395,8 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     ${addBarHtml}
 
     ${/* S29(2026-05-04): 전략(조립) - + 버튼 아래로 이동.
-         S29.2: pool 인자로 활성 전략들의 사용 번호 풀 합집합 전달 → 메타 텍스트 대신 풀 표시. */ ''}
-    ${strategyTabsHtml(strategyIds, { multi: true, pool })}
+         S29.2 / S30.1 / S30.3: pool은 포커스 전략 1개 풀. poolNote는 동적 노트(짝꿍 키번호 등). */ ''}
+    ${strategyTabsHtml(strategyIds, { multi: true, pool, poolNote })}
 
     ${/* S17(2026-05-02): 행운 쌓기를 전략 탭 하위로 이동 (이전 = 히어로 직하). */ ''}
     ${ritualWidgetHtml(state.ritual)}
@@ -393,7 +404,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     ${/* S13(2026-05-02): 슬롯 + 카드 묶음. 시각 인접으로 "캐릭터 세트" 인지. */ ''}
     ${characterSlotsHtml(state.characters, state.activeId)}
 
-    ${characterCardHtml(active, fortune, drawForFortune || state.drwNo)}
+    ${characterCardHtml(active, fortune, drawForFortune || state.drwNo, drawDate)}
 
     ${banner}
   `;
@@ -401,7 +412,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
 
 function renderHome(content) {
   const active = getActive();
-  const { strategyId, strategyIds, rec, sets, fortune, drawForFortune, pool } = getRecAndFortune(active);
+  const { strategyId, strategyIds, rec, sets, fortune, drawForFortune, pool, poolNote, drawDate } = getRecAndFortune(active);
 
   // 백캐스트: 캐릭터에 최근 30회 결정론적 추천이 history에 없으면 1회 백필.
   // Luck 부트스트랩 목적. SSOT: docs/01_spec.md 7.5.
@@ -429,7 +440,7 @@ function renderHome(content) {
   state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
   saveCharacters(state.characters);
 
-  content.innerHTML = homeTabHtml(updated, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool);
+  content.innerHTML = homeTabHtml(updated, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool, poolNote, drawDate);
 
   // 카운트다운 시작 (이전 interval은 renderApp 시작 시 정리됨).
   // 추첨 시각 도달 시 자동 재렌더 → 다음 회차 정보로 갱신.

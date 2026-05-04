@@ -4,13 +4,190 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-04 (Sprint 038 - 채팅 UX 패턴 + 액션바 통합 / S29).
+1.3. **마지막 갱신**: 2026-05-04 (Sprint 039 - 포커스 분리 + 풀 신뢰 회복 + 사주 일진 가시화 / S30.0~.6).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리** (2026-05-04): 직전 5 Sprint(032~036)만 본 파일에 활성. Sprint 010 이전 ~ Sprint 031 영역과 옛 백로그(3.-18 ~ 3.0)는 `PROGRESS_ARCHIVE.md`로 이전. 새 세션 토큰 약 70%↓.
 
 # 2. 완료 마일스톤 (활성: 직전 5~7 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.52, M0~M6 / 폴리싱 / Sprint 010~031) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.60. Sprint 039 완료 - 포커스 분리 + 풀 신뢰 회복 + 사주 일진 가시화 (S30.0~.6) (2026-05-04)
+
+사용자 지시:
+1. "각 전략의 설명부분이 모호하게 처리되어 있어. 단일 전략 선택일때는 상관없었는데, 지금은 복수 전략 선택이다 보니 헷갈리는 상태."
+2. "전부 표시하는 걸 하고 싶지 않다고. 전략을 버튼으로 표시한 의도 자체가 컴팩트."
+3. "선택/해제 이외에 포커스 개념을 추가해볼까?"
+4. "마지막 활성화 안도 포커스 방식을 같이 쓰면 좋을 듯".
+
+### 2.60.1. 모델 - 토글 ≠ 포커스 분리
+
+| 개념 | 의미 | 데이터 |
+|---|---|---|
+| 토글 (선택/해제) | 그 전략을 추첨에 사용할지 | `lastUsedStrategies` 배열 |
+| 포커스 | desc 표시 대상 1개 | `lastUsedStrategies` 마지막 원소 (자동) |
+
+**별도 state 추가 0건**. 활성 list가 push 순서를 자연 보존(`[...list, newId]`)하므로 마지막 원소 = 가장 최근 활성 = 포커스.
+
+### 2.60.2. 동작 룰
+
+| 상태 | 클릭 | 결과 |
+|---|---|---|
+| 비활성 토글 | ON | push로 끝에 추가 → 자동 포커스 |
+| 활성 + 포커스 토글 (= 마지막 원소) | OFF | filter → 새 마지막 = 직전 활성으로 자동 포커스 |
+| 활성 + 포커스 아닌 토글 | OFF | filter, 마지막 원소(포커스) 그대로 |
+| 마지막 1개 활성 토글 | OFF 차단 | 보존 룰 (`list.length === 1 return`) |
+
+활성 0개 케이스 없음. desc 영역은 *항상 활성 전략의 의미*와 정합.
+
+### 2.60.3. 변경 파일
+
+- `src/render/strategy-tabs.js`: `firstActive` → `focusedId` (= activeIds 마지막 원소). 각 토글에 `is-focused` 클래스. desc / mappingNote 모두 포커스 기준.
+- `styles/main.css`: `.strategy-tab.is-focused` 신규 - outline 2px `--color-accent` + offset 2px ring. 활성 토글 중 1개만 ring.
+- `docs/01_spec.md` 5.1.3.1: S30 포커스 분리 정책 명문화.
+- `service-worker.js`: CACHE_VERSION v16 → v17.
+
+### 2.60.4. 검증
+
+`node tests/run-node.js` → **286/286 PASS** (storage 4건 환경 5.8 미해결).
+
+### 2.60.5.6. S30.6 - 사주 행운 일진 보너스 가시화 (B안 / 사용자 명시)
+
+사용자 지시: "사주 행운은 왜 안맞지?" + "B안으로 해, 근데 왜 내 정보의 사주와 다른거야?"
+
+원인 정리: S16 일진 보너스 사양 - 풀 = 출생 오행 ∪ 추첨일 오행(보너스 시). 캐릭터 카드는 출생 오행만 표시 → 보너스 발생 회차에 풀이 카드보다 큼. 10천간 중 6/10 케이스가 매주 추첨일 오행에 따라 불일치.
+
+해결 (B안): 캐릭터 카드 사주 패널에 일진 보너스 정보 + 추첨일 풀 별도 줄로 추가. 카드 = 추천 풀 100% 일치.
+
+변경:
+- `src/render/main.js`: `getRecAndFortune` 반환에 `drawDate` 추가. `homeTabHtml` / `characterCardHtml` 호출 chain에 전달.
+- `src/render/character-card.js`:
+  - `characterCardHtml(character, fortune, drawOrDrwNo, drawDate)` signature 확장.
+  - `luckyNumbersHtml(character, drawDate)` 인자 추가.
+  - `collectLuckySources(character, drawDate)` saju 항목에 `bonus` 필드 추가 (`{element, elementLabel, relation, relationLabel, numbers}`).
+  - 사주 패널 렌더 시 bonus 있으면 별도 블록 렌더 (제목 + 메타 + 추가 풀 번호공).
+  - `SAJU_RELATION_KO` 한국어 라벨 (비견/식상/인성/재성/관성).
+- `styles/main.css`: `.lucky-bonus` / `.lucky-bonus-title` / `.lucky-bonus-meta` / `.lucky-balls-bonus` 신규 (모두 토큰 사용). 기존 `.lucky-num`의 `#fff` / `12px` → `var(--color-on-accent)` / `var(--font-size-sm)` 토큰화.
+
+표시 예 (출생 火 / 추첨일 金 / 재성 케이스):
+```
+사주 행운 [화 오행] [주간 변경]
+  [2][7][12][17][22][27][32][37][42]    ← 출생 火 9개
+
+  이번 주 일진 보너스 · 추첨일 금 오행 · 재성 (출생이 추첨일을 극함)
+  [4][9][14][19][24][29][34][39][44]    ← 추첨일 金 9개
+```
+
+추천 풀 (fiveElements 활성 시) = 위 18개 합집합. 카드 = 풀 100% 일치.
+
+### 2.60.5.5. S30.5 - **인덱스 버그 fix** + 11전략 전수 검증 (사용자 명시)
+
+사용자 통찰: "전략 전체가 신뢰되지 않아. ... 별자리, 원소 등 사용 풀과 유저 정보의 숫자가 전혀 일치하지 않아. 통계도 완전 엉망이야. 모든 전략에 대해 전수 조사하고 검증해."
+
+**원인**: `computePoolForStrategies`가 `mainWeights[i]`로 1-based 접근 (i=1~45). 그러나 모든 weight 함수(`statsToWeights` / `gapWeights` / `poolFromIndices` / `objectivePairWeights` / `zodiacWeights` 등)는 `arr[number - 1]` (0-based)로 저장. **인덱스 -1 shift**.
+
+영향: 풀 표시되는 8전략(랜덤 3종 제외) 모두 풀이 -1 shift돼 캐릭터 카드 행운 번호와 정확히 1씩 어긋남.
+
+검증 (cancer 별자리 / water 4원소 / wood 오행 케이스):
+| 전략 | 캐릭터 카드 | fix 전 풀 (-1 shift) | fix 후 풀 |
+|---|---|---|---|
+| astrologer (cancer) | [2,4,12,14,22,24,32,34,42,44] | [1,3,11,13,21,23,31,33,41,43] | [2,4,12,14,22,24,32,34,42,44] ✓ |
+| zodiacElement (water) | [2,3,9,12,13,19,22,23,29,32,33,39,42,43] | [1,2,8,11,12,18,21,22,28,31,32,38,41,42] | [2,3,9,12,13,19,22,23,29,32,33,39,42,43] ✓ |
+| fiveElements (wood) | [3,8,13,18,23,28,33,38,43] | [2,7,12,17,22,27,32,37,42] | [3,8,13,18,23,28,33,38,43] ✓ |
+
+추첨 결과 자체(`weightedSample`)는 0-based weight + `n = i + 1` 변환으로 **정확**했음. 풀 표시(UI)만 잘못된 경로.
+
+#### 2.60.5.5.1. 11전략 전수 검증
+
+| ID | 카테고리 | 의존성 | 풀 정의 | 캐릭터 카드 일치 | 데이터 의존 |
+|---|---|---|---|---|---|
+| `blessed` | 랜덤 | 시드+Luck | uniformWeights = 1~45 (전 풀, 미표시) | N/A | 없음 |
+| `intuitive` | 랜덤 | 시드 | intuitiveWeights = 0.5~2.0 (전 풀, 미표시) | N/A | 없음 |
+| `balancer` | 랜덤 | 객관 | uniformWeights + 합/홀짝 필터 (미표시) | N/A | 없음 |
+| `statistician` | 통계 | 객관 (numberStats) | totalCount 상위 18 | N/A | 페치 후 정확 |
+| `secondStar` | 통계 | 객관 (bonusStats) | 보너스볼 빈도 상위 18 | N/A | 페치 후 정확 |
+| `regressionist` | 통계 | 객관 (numberStats) | currentGap 상위 18 | N/A | 페치 후 정확 |
+| `trendFollower` | 통계 | 객관 (numberStats) | recent30 상위 18 | N/A | 페치 후 정확 |
+| `pairTracker` | 통계 | 객관 (cooccur, S30.4) | 동시출현 상위 페어 합집합 ≤18 | N/A | 페치 후 정확 |
+| `astrologer` | 운세 | 시드 (zodiac) | `ZODIAC_LUCKY[zodiac]` | **일치 (S30.5 fix 후)** | 없음 |
+| `zodiacElement` | 운세 | 시드 (zodiac→4원소) | `ZODIAC_ELEMENT_LUCKY[element]` | **일치 (S30.5 fix 후)** | 없음 |
+| `fiveElements` | 운세 | 시드 (dayPillar→오행, drawDate) | `FIVE_ELEMENTS_LUCKY[birth]` ∪ `[draw]`(보너스 시) | **출생 풀 일치 / 일진 보너스 시 합집합으로 확장** | drawDate |
+
+#### 2.60.5.5.2. 잔여 우려
+
+- `fiveElements` 일진 보너스 케이스: 풀 = 출생 ∪ 추첨일. 캐릭터 카드는 출생만 표시 → 보너스 발생 회차에 풀이 더 큼. 사용자에게 *왜 풀이 더 큰지* 노출 필요 시 별도 sprint에서 캐릭터 카드 / 풀 라벨에 일진 보너스 명시.
+- 통계 4종은 `state.draws`가 비어있으면 numberStats / cooccur 모두 빈 배열 → 풀이 의미 없음. 페치 후엔 정확.
+
+### 2.60.5.4. S30.4 - 짝꿍 번호 객관 승격 (사용자 명시 - B안 채택)
+
+사용자 통찰: "짜증나, 그냥 캐릭터 시드로 랜덤값 뽑아서 그 번호랑 연관된 번호를 추천한다는거잖아? 첫 번호가 잘못 뽑히면 그냥 다 엉망이 되는 구조네" + "짝꿍 단독이라면 B안을 생각하지 않을까?"
+
+설계 결함 인정:
+- 키번호 = 캐릭터 시드 % 45 + 1 = 사실상 랜덤 1개.
+- 풀 18개가 그 랜덤 anchor 1개에 전부 종속.
+- anchor가 cold 번호면 풀도 cold 편향 → 추천 6개 모두 영향.
+- 사용자 직관 "절대적 짝꿍" 의미와 괴리.
+
+해결 (B안 - 객관 짝꿍):
+- `OBJECTIVE_STRATEGIES`에 `pairTracker` 추가 (시드 / Luck 무관).
+- `pairWeights(cooccur, keyNumber)` (구) → `objectivePairWeights(cooccur, poolSize)` (신).
+  - 동시출현 페어를 `count` 내림차순 정렬.
+  - 위에서부터 합집합 size가 `STATS_POOL_SIZE` 도달까지 수집.
+  - 풀 번호 weight = 그 번호가 포함된 상위 페어들의 count 누적.
+- `recommend.js` `STRATEGY_PAIR_TRACKER` 분기: `keyNumber` 변수 폐기. reason = "역대 회차 동시출현 빈도 상위 페어 합집합(N개 풀)에서 추첨".
+- `strategy-picker.js` desc: "캐릭터 키번호와 자주 함께 나왔던 번호 묶음" → "역대 회차에서 가장 자주 함께 추첨된 번호 쌍 모음".
+- `main.js` poolNote 폐기 (키번호 노출 자체 사라짐). `keyNumberFromSeed` import 제거.
+- `tests/recommend.test.js`: pairTracker를 시드 의존 → 객관 그룹으로 이동. 객관 5개 → 6개 / 시드 의존 3개 → 2개.
+- `docs/02_data.md` 1.5 표: pairTracker 의존성 "시드" → "**객관** (S30.4)" / 가중치 정책 갱신.
+
+테스트: 286/286 PASS.
+
+SW v17 → v18 (캐시 새로고침).
+
+### 2.60.5.3. S30.3 - 짝꿍 번호 키번호 노출 (사용자 명시)
+
+사용자 지시: "짝꿍 번호는 번호를 봐도 해석이 잘 안 돼, 어떻게 짝꿍이라는 거야?"
+
+원인: 짝꿍 번호의 풀은 *키번호와 동시출현 상위 N개*인데, 키번호가 어디에도 노출되지 않아 사용자가 풀 해석 불가.
+
+해결:
+- `src/core/recommend.js`: `keyNumberFromSeed` export.
+- `src/render/main.js`: 포커스 = `pairTracker`이면 `poolNote = "키번호 N번과 자주 함께"` 생성.
+- `src/render/strategy-tabs.js`: pool 라벨에 poolNote 결합 → "사용 풀 · 18개 · 키번호 7번과 자주 함께".
+
+운세 3종(별자리 / 원소 / 사주) 적용 보류: 사용자 직접 지적은 짝꿍 한정. 캐릭터 카드에 zodiac / dayPillar 이미 노출 → 직관 부족 시 별도 sprint에서 동일 패턴 적용 가능.
+
+### 2.60.5.2. S30.2 - 풀 확장 버그 수정 (사용자 명시)
+
+사용자 지시: "짝꿍 번호는 사용풀 전부네?" + "별자리 행운, 원소 행운, 사주 행운도 왜 모든 수가 되지?"
+
+원인:
+- `core/luck.js` `applyLuck()`의 `Math.max(w, WEIGHT_MIN_FLOOR)`가 풀 컷팅 후 0인 weight를 양수 floor로 끌어올림.
+- 시드 의존 전략(pairTracker / astrologer / zodiacElement / fiveElements)은 `finalWeights = applyLuck(mainWeights, ...)`이라 풀 외 0이 floor로 양수 변환 → `computePoolForStrategies`의 `> 0` 체크에서 모두 통과 → 풀 1~45로 확장.
+- 객관 전략은 `finalWeights == mainWeights`(applyLuck 미적용)라 영향 없었음.
+
+해결:
+- `core/recommend.js` `computeStrategyContext` 반환에 `mainWeights` 추가 (applyLuck 전).
+- `computePoolForStrategies`가 `mainWeights > 0` 기준으로 풀 계산 변경 (이전 `finalWeights > 0`).
+- 결과: 짝꿍 / 별자리 / 원소 / 사주 풀이 풀 컷팅 정의대로 정확히 표시 (각 STATS_POOL_SIZE / zodiac 풀 / 4원소 / 河圖 오행 풀).
+
+### 2.60.5.1. S30.1 - 풀도 포커스 단일 + 랜덤 미표시 (사용자 명시)
+
+사용자 지시: "설명란의 사용풀도 섞지 말고 해당 전략에 대해서만 작성해줘. 즉, 랜덤 전략에는 표시되면 안돼".
+
+해결:
+- `src/render/main.js` `getRecAndFortune`: `pool = computePoolForStrategies(strategyIds, ctx)` (활성 전체 합집합) → `pool = computePoolForStrategies([focusedId], ctx)` (포커스 단일 전략).
+- 추가: 포커스 카테고리가 'random'(blessed/intuitive/balancer)이면 `pool = null` → 풀 영역 자동 미표시. 풀이 1~45 균등 분포라 표시 의미 없음.
+- `src/render/strategy-tabs.js`: "전 풀 (45)" 라벨 분기 폐기 (이제 도달 안 함). 라벨은 단순 "사용 풀 · N개".
+- `docs/01_spec.md` 5.1.3.1: S30.1 정책 명문화.
+
+의미 통일: desc / 풀 모두 *포커스 전략 1개 기준*. 사용자 헷갈림 방지.
+
+### 2.60.5. 트레이드오프
+
+- **얻음**: 사용자 의문(헷갈림 / 비활성 desc 잔존 어색) 즉시 해소. 별도 state 0 / 학습 비용 0 / 시각 단서 1개(ring). desc 영역 항상 활성과 정합.
+- **잃음**: 활성 N개 중 *다른 desc* 보고 싶으면 그 전략 OFF 후 ON 두 번 클릭. 흔치 않은 케이스라 비용 작음.
+- **확장 가능**: 향후 길게 누르기 = 포커스 분리 트리거 추가 가능 (현재 미적용).
 
 ## 2.59. Sprint 038 완료 - 채팅 UX 패턴 + 액션바 통합 + 휴지통 아이콘 (S29) (2026-05-04)
 

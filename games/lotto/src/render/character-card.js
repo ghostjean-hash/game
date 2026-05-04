@@ -8,9 +8,20 @@ import {
   ANIMAL_SIGNS,
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
   ZODIAC_LUCKY, ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY,
+  SAJU_RELATION_BOOST,
 } from '../data/numbers.js';
-import { dayPillarLabel } from '../core/saju.js';
+import { dayPillarLabel, dateToDayPillar, elementRelation } from '../core/saju.js';
 import { fortuneRelation } from '../core/fortune.js';
+
+// S30.6 (2026-05-04): 사주 일진 관계 한국어 라벨. 사주 행운 패널 일진 보너스 표시용.
+const SAJU_RELATION_KO = {
+  self: '비견 (동일 오행)',
+  generate: '식상 (출생이 추첨일을 생함)',
+  beGenerated: '인성 (추첨일이 출생을 생함)',
+  overcome: '재성 (출생이 추첨일을 극함)',
+  beOvercome: '관성 (추첨일이 출생을 극함)',
+  normal: '관계 없음',
+};
 
 const ELEMENT_LABELS = { wood: '목', fire: '화', earth: '토', metal: '금', water: '수' };
 const ZODIAC_ELEMENT_LABELS = { fire: '불', earth: '땅', air: '공기', water: '물' };
@@ -63,8 +74,9 @@ const RELATION_LABEL = {
  * @param {object} character
  * @param {string} fortune 등급
  * @param {{ drwNo: number, drwDate?: string } | number} [drawOrDrwNo] 회차 정보. 없으면 관계 표시 생략
+ * @param {string} [drawDate] 추첨일 ISO 문자열 (YYYY-MM-DD). S30.6: 사주 일진 보너스 표시용.
  */
-export function characterCardHtml(character, fortune, drawOrDrwNo) {
+export function characterCardHtml(character, fortune, drawOrDrwNo, drawDate) {
   const fortuneLabel = FORTUNE_LABELS[fortune] || fortune;
   const fortuneColor = FORTUNE_COLORS[fortune] || FORTUNE_COLORS.neutral;
   const fortuneIcon = FORTUNE_ICON[fortune] || '●';
@@ -104,7 +116,7 @@ export function characterCardHtml(character, fortune, drawOrDrwNo) {
           <span style="width: ${character.luck}%; background: ${fortuneColor};"></span>
         </div>
       </div>
-      ${luckyNumbersHtml(character)}
+      ${luckyNumbersHtml(character, drawDate)}
     </section>
   `;
 }
@@ -115,8 +127,8 @@ export function characterCardHtml(character, fortune, drawOrDrwNo) {
  * 추첨 결과의 큰 번호공과 시각 차별화 위해 작은 컬러볼.
  * 데이터 없는 종류는 탭에서도 비활성.
  */
-function luckyNumbersHtml(character) {
-  const sources = collectLuckySources(character);
+function luckyNumbersHtml(character, drawDate) {
+  const sources = collectLuckySources(character, drawDate);
   if (sources.length === 0) return '';
 
   // 4종 토글. 기본 활성 = 첫 (사주 우선)
@@ -136,6 +148,22 @@ function luckyNumbersHtml(character) {
       const { bg } = numberColor(n);
       return `<span class="lucky-num" style="background-color:${bg};" aria-label="행운 번호 ${n}">${n}</span>`;
     }).join('');
+    // S30.6 (2026-05-04): 사주 패널에 일진 보너스 정보 + 추첨일 추가 풀 표시.
+    //   풀 = 출생 ∪ 추첨일(보너스 시). 캐릭터 카드와 추천 풀 100% 일치.
+    let bonusBlock = '';
+    if (src.kind === 'saju' && src.bonus) {
+      const bonusBalls = src.bonus.numbers.map((n) => {
+        const { bg } = numberColor(n);
+        return `<span class="lucky-num" style="background-color:${bg};" aria-label="일진 보너스 ${n}">${n}</span>`;
+      }).join('');
+      bonusBlock = `
+        <div class="lucky-bonus" aria-label="이번 주 일진 보너스">
+          <span class="lucky-bonus-title">이번 주 일진 보너스</span>
+          <span class="lucky-bonus-meta">추첨일 ${escapeHtml(src.bonus.elementLabel)} 오행 · ${escapeHtml(src.bonus.relationLabel)}</span>
+          <div class="lucky-balls lucky-balls-bonus">${bonusBalls}</div>
+        </div>
+      `;
+    }
     return `
       <div class="lucky-panel${i === activeIdx ? ' is-active' : ''}"
            data-lucky-panel-idx="${i}"
@@ -146,6 +174,7 @@ function luckyNumbersHtml(character) {
           <span class="lucky-caption">${escapeHtml(src.caption)}</span>
         </div>
         <div class="lucky-balls">${balls}</div>
+        ${bonusBlock}
       </div>
     `;
   }).join('');
@@ -161,14 +190,35 @@ function luckyNumbersHtml(character) {
 /**
  * 캐릭터의 4종 행운 매핑 수집. 데이터 있는 종류만 반환.
  * 우선순위: 사주 → 별자리 → 별자리 4원소.
+ * S30.6 (2026-05-04): drawDate 인자 추가. 사주 행운에 일진 보너스(추첨일 오행 풀) 합산.
+ *   풀이 추천 전략(fiveElements)과 100% 일치.
  */
-function collectLuckySources(character) {
+function collectLuckySources(character, drawDate) {
   const sources = [];
 
   // 사주
   if (character.dayPillar && character.dayPillar.stem) {
     const element = STEM_TO_ELEMENT[character.dayPillar.stem];
     if (element && FIVE_ELEMENTS_LUCKY[element]) {
+      // S30.6: 일진 보너스 계산 - 출생과 추첨일 오행 관계가 boost > 1이고 다른 오행이면 풀 추가.
+      let bonus = null;
+      if (drawDate) {
+        const drawPillar = dateToDayPillar(drawDate);
+        if (drawPillar) {
+          const drawElement = STEM_TO_ELEMENT[drawPillar.stem];
+          const relation = elementRelation(character.dayPillar, drawPillar);
+          const boost = SAJU_RELATION_BOOST[relation] || 1;
+          if (boost > 1 && drawElement && drawElement !== element && FIVE_ELEMENTS_LUCKY[drawElement]) {
+            bonus = {
+              element: drawElement,
+              elementLabel: ELEMENT_LABELS[drawElement] || drawElement,
+              relation,
+              relationLabel: SAJU_RELATION_KO[relation] || relation,
+              numbers: FIVE_ELEMENTS_LUCKY[drawElement],
+            };
+          }
+        }
+      }
       sources.push({
         kind: 'saju',
         tabLabel: '사주',
@@ -177,6 +227,7 @@ function collectLuckySources(character) {
         variability: '주간 변경',
         caption: '전통 河圖數 출처 (易經) + 추첨일 일진 보너스 · 학설 자체는 과학 검증 없음 · 추첨 결과 보장 없음',
         numbers: FIVE_ELEMENTS_LUCKY[element],
+        bonus,
       });
     }
   }

@@ -88,10 +88,22 @@
 - 메인 화면 상단의 전략 picker UI에서 변경.
 - 카테고리 분류 (docs/02_data.md 1.5.2): 통계 5 / 운세 3 / 랜덤 3.
 
-#### 5.1.3.1. 다중 전략 모드 (S3-T1 / S19, 2026-05-02 기본 ON 승격 / S29.2 풀 표시 2026-05-04)
+#### 5.1.3.1. 다중 전략 모드 (S3-T1 / S19 / S29.2 풀 표시 / S30 포커스 분리)
 
 - **S19**: 옵션(`options.multiStrategy`) 폐기. **항상 다중 모드**. 단일 = 1전략 토글. 사용자가 선택한 전략 수에 따라 자동 분배.
-- **S29.2**: 활성 전략 설명 아래 "다중 전략 모드 · N/6 선택. 분배는 균등(6/N)" 메타 텍스트 폐기. 대체 = **활성 전략들의 사용 번호 풀 합집합**을 번호공으로 표시 (`computePoolForStrategies()`). 사용자에게 "이 번호 N개 중 6개가 추출됩니다" 투명. 풀이 1~45 전체면 "전 풀 (45)" 라벨 (랜덤 카테고리 = blessed/intuitive/balancer은 균등 분포라 풀 = 전체).
+- **S29.2 / S30.1 / S30.2**: 활성 전략 설명 아래 "다중 전략 모드 · N/6 선택. 분배는 균등(6/N)" 메타 텍스트 폐기. 대체 = **포커스 전략의 사용 번호 풀**을 번호공으로 표시 (`computePoolForStrategies([focusedId], ctx)`). 사용자에게 "이 번호 N개 중 추출됩니다" 투명.
+  - **S30.1**: 합집합 → 포커스 전략 1개 풀로 정정. 다중 활성 시 desc / 풀 모두 *포커스 전략 1개 기준*으로 통일.
+  - **S30.2 (2026-05-04 - 버그 수정)**: 풀 정의를 `mainWeights > 0`(applyLuck 전) 기준으로 정정. `applyLuck`의 `WEIGHT_MIN_FLOOR`가 풀 외 0을 양수로 만들어 시드 의존 전략(pairTracker / astrologer / zodiacElement / fiveElements)의 풀이 1~45로 확장되던 버그 수정. 객관 전략(statistician/secondStar/regressionist/trendFollower/balancer)은 `finalWeights == mainWeights`라 영향 0.
+  - **랜덤 카테고리(blessed/intuitive/balancer)**: 풀이 1~45 균등 분포 = 전 풀이라 표시 의미 없음 → **풀 영역 미표시** (pool=null). 통계/운세 카테고리만 풀 표시.
+- **S30 (2026-05-04) - 포커스 분리**:
+  - 토글(선택/해제) ≠ **포커스**(설명 표시 대상). 두 개념 분리.
+  - 포커스 정의 = `lastUsedStrategies` 마지막 원소 (활성화 순서상 가장 최근 활성).
+  - 토글 ON 시: push로 그 전략이 자동 포커스.
+  - 토글 OFF (포커스 전략) 시: filter 후 *직전 활성*이 자동 포커스 (stack pop 자연 동작).
+  - 토글 OFF (포커스 아닌 전략) 시: 포커스 그대로.
+  - 활성 0개 케이스 없음 (마지막 1개 보존 룰 `if (list.length === 1) return;`).
+  - 시각: 포커스 토글에 `is-focused` 클래스 → outline 2px `--color-accent` ring.
+  - 데이터 모델 변경 0건. `lastUsedStrategies`가 활성화 순서를 자연 보존 (push/filter)하므로 별도 state 불필요.
 - 동작: 전략 탭이 토글(추가/제거)로 동작. 1~6개 선택 가능. 만선 시 비활성 탭 회색 표시 (분배 0 발생 차단 = "어정쩡 금지").
 - 분배: 6 / N 균등 + 나머지 첫 N에 +1 (docs/02_data.md 1.5.4).
 - 출처: **추천 리스트(5.2.5)**의 각 번호 아래 1글자 short 라벨 + 카테고리 색 배경 (통계 파랑 / 운세 분홍 / 랜덤 회색). short 매핑: 축/추/많/짝/별/안/점/원/사/직/균. (S22 dot → 1글자 라벨. S27 메인 카드 폐기 후 노출 위치 = 누적 리스트.)

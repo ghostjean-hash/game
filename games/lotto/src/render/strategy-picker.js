@@ -16,7 +16,7 @@ const STRATEGIES = [
   { id: STRATEGY_BLESSED, label: '축복받은 자', short: '축', desc: '모든 번호에서 균등 추출, Luck이 시드 번호 가중치를 강화', category: '랜덤' },
   { id: STRATEGY_TREND_FOLLOWER, label: '최근 트렌드', short: '추', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
   { id: STRATEGY_STATISTICIAN, label: '많이 나온 수', short: '많', desc: '역대 회차에 가장 많이 나온 번호 위주', category: '통계' },
-  { id: STRATEGY_PAIR_TRACKER, label: '짝꿍 번호', short: '짝', desc: '캐릭터 키번호와 자주 함께 나왔던 번호 묶음', category: '통계' },
+  { id: STRATEGY_PAIR_TRACKER, label: '짝꿍 번호', short: '짝', desc: '역대 회차에서 가장 자주 함께 추첨된 번호 쌍 모음', category: '통계' },
   { id: STRATEGY_SECOND_STAR, label: '보너스볼', short: '별', desc: '역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두)', category: '통계' },
   { id: STRATEGY_REGRESSIONIST, label: '안 나온 수', short: '안', desc: '오랫동안 안 나온 번호 위주', category: '통계' },
   { id: STRATEGY_ASTROLOGER, label: '별자리 행운', short: '점', desc: '캐릭터 별자리 12종의 행운 번호 위주', category: '운세' },

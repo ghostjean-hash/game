@@ -103,15 +103,37 @@ function gapWeights(numberStats) {
 function keyNumberFromSeed(seed) {
   return ((seed >>> 0) % VECTOR_LEN) + 1;
 }
+// S30.3 (2026-05-04): 외부 노출 - 짝꿍 번호 전략의 키번호를 UI 풀 라벨에 표시 (사용자 직관 ↑).
+export { keyNumberFromSeed };
 
-function pairWeights(cooccur, keyNumber) {
-  const arr = new Array(VECTOR_LEN);
-  for (let i = 0; i < arr.length; i += 1) arr[i] = WEIGHT_MIN_FLOOR;
-  for (const p of cooccur) {
-    if (p.a === keyNumber) arr[p.b - 1] = Math.max(p.count, WEIGHT_MIN_FLOOR);
-    else if (p.b === keyNumber) arr[p.a - 1] = Math.max(p.count, WEIGHT_MIN_FLOOR);
+/**
+ * S30.4 (2026-05-04): 객관 짝꿍 페어 풀 weight.
+ * 시드 무관. 동시출현 빈도 상위 페어들의 합집합 = 풀.
+ * 각 풀 번호의 weight = 그 번호가 포함된 상위 페어들의 count 합 (중복 등장 시 가중).
+ *
+ * 알고리즘:
+ *   1. cooccur 페어를 count 내림차순 정렬.
+ *   2. 위에서부터 페어들의 합집합 size가 STATS_POOL_SIZE(18) 도달 또는 초과될 때까지 수집.
+ *   3. 수집된 페어들의 a/b 번호에 weight = count 누적.
+ *   4. 풀 외 = 0.
+ *
+ * @param {Array<{a:number,b:number,count:number}>} cooccur 동시출현 매트릭스.
+ * @param {number} poolSize 합집합 목표 크기 (보통 STATS_POOL_SIZE).
+ * @returns {number[]} length VECTOR_LEN(45). 풀 번호는 weight 양수, 풀 외 0.
+ */
+function objectivePairWeights(cooccur, poolSize) {
+  const arr = new Array(VECTOR_LEN).fill(0);
+  if (!Array.isArray(cooccur) || cooccur.length === 0) return arr;
+  // 동시출현 페어를 count 내림차순 정렬 (불변).
+  const sorted = [...cooccur].sort((p, q) => q.count - p.count);
+  const inPool = new Set();
+  for (const p of sorted) {
+    if (inPool.size >= poolSize) break;
+    inPool.add(p.a);
+    inPool.add(p.b);
+    arr[p.a - 1] += p.count;
+    arr[p.b - 1] += p.count;
   }
-  arr[keyNumber - 1] = Math.max(arr[keyNumber - 1], 1);
   return arr;
 }
 
@@ -262,6 +284,7 @@ function weightedSample(weights, count, seed, exclude = null) {
  *
  * @returns {{
  *   finalWeights: number[],
+ *   mainWeights: number[],
  *   bonusW: number[],
  *   samplingSeed: number,
  *   samplingBonusSeed: number,
@@ -305,10 +328,12 @@ function computeStrategyContext(ctx) {
     bonusW = uniformWeights();
     reasons.push(`안 나온 수: 가장 오래 안 나온 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
   } else if (strategyId === STRATEGY_PAIR_TRACKER) {
-    const keyNumber = keyNumberFromSeed(seed);
-    mainWeights = poolFromWeights(pairWeights(cooccur, keyNumber), STATS_POOL_SIZE);
+    // S30.4 (2026-05-04): 객관 승격. 키번호 anchor 폐기. 동시출현 빈도 상위 페어 합집합 풀.
+    //   - 시드 / Luck 무관. 모든 캐릭터 동일 결과.
+    //   - 사용자 직관 일치: "역대 회차에서 가장 자주 함께 추첨된 번호 쌍".
+    mainWeights = objectivePairWeights(cooccur, STATS_POOL_SIZE);
     bonusW = uniformWeights();
-    reasons.push(`짝꿍 번호: 키번호 ${keyNumber}번과 동시출현 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
+    reasons.push(`짝꿍 번호: 역대 회차 동시출현 빈도 상위 페어 합집합(${STATS_POOL_SIZE}개 풀)에서 추첨.`);
   } else if (strategyId === STRATEGY_ASTROLOGER) {
     mainWeights = zodiacWeights(zodiac);
     bonusW = uniformWeights();
@@ -357,7 +382,10 @@ function computeStrategyContext(ctx) {
   const samplingSeed = isObjective ? objectiveSeed : drawSeed;
   const samplingBonusSeed = isObjective ? objectiveBonusSeed : bonusSeed;
 
-  return { finalWeights, bonusW, samplingSeed, samplingBonusSeed, isObjective, isBalancer, reasons };
+  // S30.2 (2026-05-04): mainWeights를 노출.
+  //   풀 표시(computePoolForStrategies)는 mainWeights 기준 (applyLuck 전).
+  //   applyLuck의 WEIGHT_MIN_FLOOR가 풀 외 0을 양수로 만들어 풀이 1~45로 확장되는 문제 해결.
+  return { finalWeights, mainWeights, bonusW, samplingSeed, samplingBonusSeed, isObjective, isBalancer, reasons };
 }
 
 /**
@@ -508,15 +536,16 @@ export function recommendMulti(ctx) {
 }
 
 /**
- * S29.2 (2026-05-04): 활성 전략들의 사용 풀 합집합 계산.
- * UI에서 "이 번호들 중 6개가 추출됩니다"를 사용자에게 투명하게 표시 (사행성 회피 + 신뢰).
+ * S29.2 (2026-05-04) / S30.1: 사용 풀 계산 (호출부에서 strategyIds=[focusedId] 단일 전달).
  *
- * 합집합 정의: 각 활성 전략의 finalWeights에서 weight > 0인 번호의 합집합 (1~45).
- * blessed / intuitive / balancer 등 균등 분포 전략은 풀 = 1~45 (정직 표시).
+ * **풀 정의 (S30.2 정정)**: `mainWeights > 0`인 번호 (applyLuck 전). 풀 컷팅 직후 weight 기준.
+ *   applyLuck의 `WEIGHT_MIN_FLOOR`가 풀 외 0을 양수로 만들어 시드 의존 전략(pairTracker /
+ *   astrologer / zodiacElement / fiveElements)의 풀이 1~45로 확장되는 문제 해결.
+ *   객관 전략은 finalWeights == mainWeights라 영향 없음.
  *
- * @param {string[]} strategyIds 활성 전략 ID 배열 (1개 이상).
- * @param {object} ctx recommend / recommendMulti와 동일한 ctx (seed / luck / drwNo / numberStats 등).
- * @returns {number[]} 합집합 풀 번호 (오름차순). 비어있으면 [].
+ * @param {string[]} strategyIds 1개 이상의 전략 ID. S30.1: 호출부가 [focusedId] 단일 전달 권장.
+ * @param {object} ctx recommend / recommendMulti와 동일한 ctx.
+ * @returns {number[]} 풀 번호 (오름차순).
  */
 export function computePoolForStrategies(strategyIds, ctx) {
   if (!Array.isArray(strategyIds) || strategyIds.length === 0) return [];
@@ -524,8 +553,12 @@ export function computePoolForStrategies(strategyIds, ctx) {
   const union = new Set();
   for (const sid of sids) {
     const sc = computeStrategyContext({ ...ctx, strategyId: sid });
-    for (let i = 1; i <= 45; i += 1) {
-      if ((sc.finalWeights[i] || 0) > 0) union.add(i);
+    // S30.5 (2026-05-04 - 인덱스 버그 fix): mainWeights는 0-based (arr[number-1] = ...).
+    //   기존 (i=1~45, mainWeights[i])는 1-based로 잘못 읽어 모든 풀이 -1 shift됐음.
+    //   결과: 캐릭터 카드 별자리/원소/사주 행운 번호와 풀 표시가 정확히 1씩 어긋남 (사용자 지적).
+    //   fix: mainWeights[number - 1]로 0-based 접근, union.add(number)로 1-based 번호 추가.
+    for (let n = 1; n <= 45; n += 1) {
+      if ((sc.mainWeights[n - 1] || 0) > 0) union.add(n);
     }
   }
   return [...union].sort((a, b) => a - b);
