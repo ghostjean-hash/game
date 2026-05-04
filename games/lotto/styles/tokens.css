@@ -11,6 +11,8 @@
   --color-border: #e0e0e6;
   --color-success: #10b981;
   --color-danger: #ef4444;
+  /* S29.4 (2026-05-04): accent/danger 배경 위에 올라가는 텍스트 색 (번호공 흰 글자 등). */
+  --color-on-accent: #ffffff;
   /* 동행복권 결과 페이지 강조 빨강(추첨 예정 / 카운트다운 숫자).
      --color-danger와 색조가 다름(#ef4444는 정통 적색, 본 토큰은 핑크빨강). */
   --color-lotto-red: #ee2738;
@@ -34,6 +36,8 @@
      Malgun Gothic / system-ui 순으로 폴백. */
   --font-sans: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Segoe UI', system-ui, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  /* S29.4 (2026-05-04): 가장 작은 메타 텍스트 사이즈 (모바일 풀 번호공 등). 12 미만 사용처 흡수. */
+  --font-size-xs: 10px;
   --font-size-sm: 12px;
   --font-size-md: 14px;
   --font-size-lg: 18px;

@@ -18,7 +18,7 @@ import { bottomTabsHtml, TABS } from './bottom-tabs.js';
 import { showModal, showDisclaimer } from './modal.js';
 import { ritualWidgetHtml, openRitualModal } from './ritual-widget.js';
 import { spawnRitualBurst } from './ritual-particles.js';
-import { recommend, recommendMulti, recommendFiveSets } from '../core/recommend.js';
+import { recommend, recommendMulti, recommendFiveSets, computePoolForStrategies } from '../core/recommend.js';
 import { mixSeeds } from '../core/random.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
@@ -233,14 +233,17 @@ function getRecAndFortune(active) {
   const strategyIds = activeStrategyIds(active);
   const strategyId = strategyIds[0]; // 호환용: 첫 전략 (활성 desc 표시 등)
 
+  // S29.2 (2026-05-04): 활성 전략들의 사용 풀 합집합. UI 메타 텍스트 자리에 표시.
+  const pool = computePoolForStrategies(strategyIds, ctxBase);
+
   // S4-T1: 5세트 모드. ON이면 메인(rec) = sets[0], 추가 sets[1..4]를 함께 반환.
   if (state.options.fiveSets) {
     const sets = recommendFiveSets({ ...ctxBase, strategyIds }, { multi: true });
-    return { strategyId, strategyIds, rec: sets[0], sets, fortune, drawForFortune };
+    return { strategyId, strategyIds, rec: sets[0], sets, fortune, drawForFortune, pool };
   }
 
   const rec = recommendMulti({ ...ctxBase, strategyIds });
-  return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune };
+  return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune, pool };
 }
 
 /**
@@ -334,7 +337,7 @@ function computeFiveSetsMatchInfos(sets, draws) {
   });
 }
 
-function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune, sets) {
+function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool) {
   const banner = state.draws.length === 0
     ? `<section class="data-banner">
         <strong>회차 데이터 없음.</strong> 통계 / 일진 / 일부 전략이 데이터 기반으로 동작하려면 페치 1회 필요.
@@ -355,10 +358,11 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   const ritualFilled = !!(state.ritual && state.ritual.appliedBonus);
 
   // S27 (2026-05-03): 메인 카드(미리보기) + 5세트 컴팩트 추첨 탭에서 노출 폐기.
-  //   누적 리스트(추천1, 추천2, ...)만 표시. + 버튼은 전략 영역 아래로 이동.
-  //   라벨 시작 = 1 (메인이 없으니).
-  // S28 (2026-05-04): 추천 리스트를 hero에서 분리하여 + 버튼 직하로 이동.
-  //   조립(전략) → 실행(+) → 결과(리스트) ↑→↓ 일직선 흐름. SSOT: docs/01_spec.md 5.2.5.2.
+  //   누적 리스트(추천1, 추천2, ...)만 표시. 라벨 시작 = 1 (메인이 없으니).
+  // S28 (2026-05-04): 추천 리스트를 hero에서 분리. (S29에 의해 위치 재정정)
+  // S29 (2026-05-04): 채팅 UX 패턴 적용. 결과(추천 리스트)는 위에 누적, 도구(+ 버튼 → 전략)는 아래.
+  //   배치: 카운트다운 → 추천 리스트(결과) → + 버튼(실행) → 전략(조립) → 행운 → 캐릭터.
+  //   결과 ↔ 실행 인접 (시선 0 왕복). 모바일 엄지 한 방향 동선. SSOT: docs/01_spec.md 5.2.5.2.
   // S26: 누적 추천 세트 섹션. active.savedSets는 renderHome에서 ensureSavedSetsForRound로 보장됨.
   const savedList = active.savedSets?.list || [];
   const savedSectionHtml = savedSetsSectionHtml(savedList, 1);
@@ -373,14 +377,15 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
       ${nextDrawCardHtml(nextInfo)}
     </section>
 
-    ${/* S19: 항상 다중 모드 (multi=true). 1전략도 토글 1개로 동작. */ ''}
-    ${strategyTabsHtml(strategyIds, { multi: true })}
+    ${/* S29(2026-05-04): 추천 리스트(결과)는 카운트다운 직하 - 위에 누적. */ ''}
+    ${savedSectionHtml}
 
-    ${/* S27: + 1세트 / + 5세트 버튼을 전략 영역 직하로 이동. 조립식 정의 후 즉시 등록 동선. */ ''}
+    ${/* S29(2026-05-04): + 1세트 / + 5세트 (실행) - 결과 바로 아래. 결과↔실행 인접. */ ''}
     ${addBarHtml}
 
-    ${/* S28(2026-05-04): 추천 리스트를 + 버튼 직하로 이동 (이전 = hero 안). 시선 역행 해소. */ ''}
-    ${savedSectionHtml}
+    ${/* S29(2026-05-04): 전략(조립) - + 버튼 아래로 이동.
+         S29.2: pool 인자로 활성 전략들의 사용 번호 풀 합집합 전달 → 메타 텍스트 대신 풀 표시. */ ''}
+    ${strategyTabsHtml(strategyIds, { multi: true, pool })}
 
     ${/* S17(2026-05-02): 행운 쌓기를 전략 탭 하위로 이동 (이전 = 히어로 직하). */ ''}
     ${ritualWidgetHtml(state.ritual)}
@@ -396,7 +401,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
 
 function renderHome(content) {
   const active = getActive();
-  const { strategyId, strategyIds, rec, sets, fortune, drawForFortune } = getRecAndFortune(active);
+  const { strategyId, strategyIds, rec, sets, fortune, drawForFortune, pool } = getRecAndFortune(active);
 
   // 백캐스트: 캐릭터에 최근 30회 결정론적 추천이 history에 없으면 1회 백필.
   // Luck 부트스트랩 목적. SSOT: docs/01_spec.md 7.5.
@@ -424,7 +429,7 @@ function renderHome(content) {
   state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
   saveCharacters(state.characters);
 
-  content.innerHTML = homeTabHtml(updated, strategyId, strategyIds, rec, fortune, drawForFortune, sets);
+  content.innerHTML = homeTabHtml(updated, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool);
 
   // 카운트다운 시작 (이전 interval은 renderApp 시작 시 정리됨).
   // 추첨 시각 도달 시 자동 재렌더 → 다음 회차 정보로 갱신.

@@ -7,6 +7,7 @@
 // S3-T1: 다중 전략 모드(multi=true)면 탭 클릭 = 토글, 활성 N개 표시.
 import { STRATEGY_LIST } from './strategy-picker.js';
 import { MULTI_STRATEGY_MAX } from '../data/numbers.js';
+import { numberColor } from '../data/colors.js';
 
 const CATEGORY_CLASS = {
   '통계': 'is-stats',
@@ -19,10 +20,12 @@ const CATEGORY_ROW_ORDER = ['운세', '랜덤', '통계'];
 
 /**
  * @param {string | string[]} activeIds 단일 모드면 string, 다중 모드면 string[]
- * @param {{ multi?: boolean }} [opts]
+ * @param {{ multi?: boolean, pool?: number[] }} [opts]
+ *   pool: S29.2 - 활성 전략들의 사용 번호 풀 합집합. multiHint 자리에 번호공으로 표시.
  */
 export function strategyTabsHtml(activeIds, opts = {}) {
   const multi = opts.multi === true;
+  const pool = Array.isArray(opts.pool) ? opts.pool : null;
   const activeSet = new Set(Array.isArray(activeIds) ? activeIds : [activeIds]);
   const firstActive = Array.isArray(activeIds) ? activeIds[0] : activeIds;
   const cur = STRATEGY_LIST.find((s) => s.id === firstActive) || STRATEGY_LIST[0];
@@ -59,10 +62,24 @@ export function strategyTabsHtml(activeIds, opts = {}) {
 
   const curCatCls = CATEGORY_CLASS[cur.category] || '';
 
-  // 다중 모드 표시: "N / MAX 선택. 토글로 변경"
-  const multiHint = multi
-    ? `<p class="strategy-multi-hint">다중 전략 모드 · ${activeSet.size} / ${MULTI_STRATEGY_MAX} 선택. 분배는 균등 (6 / N).</p>`
-    : '';
+  // S29.2 (2026-05-04): 기존 "다중 전략 모드 · N/6 선택. 분배는 균등(6/N)" 메타 텍스트 폐기.
+  //   대체: 활성 전략들의 사용 번호 풀 합집합을 번호공으로 표시 (사용자 신뢰 + 사행성 회피).
+  //   풀이 비거나 multi=false면 미표시.
+  let poolBlock = '';
+  if (pool && pool.length > 0) {
+    const isFullPool = pool.length >= 45;
+    const poolNumsHtml = pool.map((n) => {
+      const c = numberColor(n);
+      return `<span class="strategy-pool-num" style="background-color:${c.bg};" aria-label="${n}번">${n}</span>`;
+    }).join('');
+    const sizeLabel = isFullPool ? '전 풀 (45)' : `${pool.length}개`;
+    poolBlock = `
+      <div class="strategy-pool" aria-label="활성 전략 사용 번호 풀">
+        <span class="strategy-pool-label">사용 풀 · ${sizeLabel}</span>
+        <div class="strategy-pool-list" role="list">${poolNumsHtml}</div>
+      </div>
+    `;
+  }
 
   // S15(2026-05-02): 학설 기반 재작성 후 면책 톤 변경. 출처 + 비과학 + 보장 없음 3축 명시.
   // S16(2026-05-02): 운세 카테고리 전략별 variability chip ("주간 변경" / "평생 동일").
@@ -88,7 +105,7 @@ export function strategyTabsHtml(activeIds, opts = {}) {
         ${escapeHtml(cur.desc)}
       </p>
       ${mappingNote}
-      ${multiHint}
+      ${poolBlock}
     </section>
   `;
 }

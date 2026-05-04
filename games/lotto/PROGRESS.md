@@ -4,13 +4,169 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-04 (Sprint 037 - 추천 리스트 위치 정정 / S28).
+1.3. **마지막 갱신**: 2026-05-04 (Sprint 038 - 채팅 UX 패턴 + 액션바 통합 / S29).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리** (2026-05-04): 직전 5 Sprint(032~036)만 본 파일에 활성. Sprint 010 이전 ~ Sprint 031 영역과 옛 백로그(3.-18 ~ 3.0)는 `PROGRESS_ARCHIVE.md`로 이전. 새 세션 토큰 약 70%↓.
 
-# 2. 완료 마일스톤 (활성: 직전 5~6 Sprint)
+# 2. 완료 마일스톤 (활성: 직전 5~7 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.52, M0~M6 / 폴리싱 / Sprint 010~031) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.59. Sprint 038 완료 - 채팅 UX 패턴 + 액션바 통합 + 휴지통 아이콘 (S29) (2026-05-04)
+
+사용자 지시 (3차):
+1. "로또를 추천하는 UX가 진짜 별로야. 회차 / 추천 번호 ↑ / 생성 버튼 / 생성 전략 / 행운 쌓기 / 유저명 / 유저 정보".
+2. "전체 비우기 버튼도 + 1, + 5 버튼과 나란히 배치".
+3. "삭제 버튼 외형 타원은 일부러 그렇게한거야?? 일부러 보기 싫게 하려고?? 휴지통 아이콘으로 바꿔."
+
+추가 지적: "버튼들이랑 전체적인 스타일을 니 멋대로 하는거야? 디자인 토큰 사용 안해????"
+
+### 2.59.1. S28 폐기 사유
+
+S28(B안)은 "전략 → + 버튼 → 추천 리스트" 순서로 배치했지만 사용자 의도는 채팅 UX 패턴(결과는 위에 누적, 도구는 아래)이었다. 자비스가 권장안을 단정하면서 사용자 의도 1차 진단(2장 4안)에 없던 정답을 놓침. **권장안 결정 시 사용자 재확인 필수** 교훈.
+
+### 2.59.2. S29 - 채팅 UX 패턴
+
+새 동선 (위→아래):
+```
+1. 카운트다운 (회차)
+2. 추천 리스트 (결과 - 위에 누적)
+3. + 1세트 / + 5세트 / 전체 비우기 (실행 - 한 줄)
+4. 전략 탭 (조립 - 한 번 정하고 잊는다)
+5. 행운 쌓기
+6. 캐릭터 슬롯 (유저명)
+7. 캐릭터 카드 (유저 정보)
+```
+
+핵심: 결과 ↔ 실행 인접 (시선 0 왕복). 모바일 엄지 = 화면 하단 모든 조작.
+
+### 2.59.3. 액션바 통합
+
+"전체 비우기"를 추천 리스트 헤더에서 + 버튼 액션바로 이동. 한 줄 = `[+ 1세트] [+ 5세트] [🗑 전체 비우기]`. list 비어있으면 "전체 비우기" disable. 헤더는 타이틀("추천 리스트 (N)")만.
+
+### 2.59.4. 휴지통 아이콘
+
+- `src/render/icons.js`: `trash(cls)` 신규 export (Lucide-style 휴지통 SVG, currentColor 상속).
+- `src/render/saved-sets-section.js`: 개별 row의 `×` 텍스트 → `${trash('icon icon-sm')}`. "전체 비우기" 버튼 라벨에도 휴지통 아이콘 + 텍스트.
+- `styles/main.css` `.saved-set-remove`: **타원 외곽 폐기**. `border` 제거 / `border-radius: 50%` 폐기 / `background: transparent`. 아이콘 색만 hover 시 danger 전환.
+
+### 2.59.5. 토큰 사용 정직화
+
+사용자 지적 "디자인 토큰 사용 안해????"에 대한 정직 답:
+- **본 sprint(S28/S29) 신규 스타일은 토큰만 사용** (`var(--font-size-md)` / `var(--font-size-sm)` / `var(--space-1)` / `var(--radius-md)` 등).
+- **부수 정정**: `.saved-add-btn` / `.saved-sets-clear`의 `var(--radius-1)` (tokens.css 미정의 = 깨진 참조) → `var(--radius-md)`. 직접 영향 받는 2건만 본 sprint에 묶음.
+- **잔여**: styles/main.css 매직 픽셀 값 254건 + 깨진 토큰 4건 (`--radius-1`/`--radius-2` 잔여) → 별도 sprint(S30)에서 토큰 정리.
+
+### 2.59.6. 변경 파일
+
+- `src/render/main.js`: `homeTabHtml` 호출 순서 = nextDrawCard / savedSection / addBar / strategyTabs / ritual / slots / card. (S28 = strategyTabs / addBar / savedSection 폐기)
+- `src/render/icons.js`: `trash()` 신규.
+- `src/render/saved-sets-section.js`: 헤더에서 "전체 비우기" 제거, addBar에 통합. row의 `×` → 휴지통 아이콘.
+- `styles/main.css`: `.saved-sets-header` justify 제거, `.saved-sets-clear` 액션바 룰 재작성, `.saved-set-remove` 타원 외곽 폐기, `.saved-add-btn` `--radius-1` → `--radius-md`.
+- `docs/01_spec.md` 4장 / 5.2.5 / 5.2.5.2: S29 동선 명문화.
+- `service-worker.js`: CACHE_VERSION v15 → v16.
+
+### 2.59.12. S29.4 - 디자인 토큰 정리 (사용자 명시)
+
+사용자 지시: "디자인 토큰 제대로 정리했어?" → 정직 답: 부분 어김. A안(즉시 확장 + 일괄 치환) 진행.
+
+#### 2.59.12.1. tokens.css 확장 (신규 토큰 2개만)
+
+- `--font-size-xs: 10px;` (가장 작은 메타 텍스트. 모바일 풀 번호공 등)
+- `--color-on-accent: #ffffff;` (accent/danger 배경 위 텍스트 색)
+
+#### 2.59.12.2. 매직 값 → 토큰 일괄 치환 (본 sprint 영역)
+
+| 변경 전 (매직) | 변경 후 (토큰) | 위치 |
+|---|---|---|
+| `padding: 6px 14px;` `font-size: 13px;` | `padding: var(--space-2) var(--space-3);` `font-size: var(--font-size-md);` | `.saved-add-btn` 데스크톱 |
+| `padding: 6px 12px;` | `padding: var(--space-2) var(--space-3);` | `.saved-sets-clear` 데스크톱 |
+| `padding: 6px 10px;` (480/360↓) | `padding: var(--space-2);` | `.saved-add-btn` `.saved-sets-clear` 모바일 |
+| `font-size: 13px;` | `font-size: var(--font-size-md);` | `.saved-sets-empty` |
+| `font-size: 11px;` (360↓) | `font-size: var(--font-size-sm);` | `.saved-set-idx` 모바일 |
+| `font-size: 13px;` 데스크톱 | `font-size: var(--font-size-sm);` | `.saved-set-idx` |
+| `font-size: 10px;` (480↓) | `font-size: var(--font-size-xs);` | `.strategy-pool-num` 모바일 |
+| `color: #fff;` | `color: var(--color-on-accent);` | `.strategy-pool-num` |
+| `width: 24/22/20px;` | `width: var(--space-5);` | `.saved-set-remove` (모든 break point 통일) |
+| `grid-template-columns: 44px 1fr 28px;` | `grid-template-columns: 44px 1fr var(--space-6);` | `.saved-set-row` 데스크톱 (28→32) |
+| `grid-template-columns: 32px 1fr 22px;` | `grid-template-columns: var(--space-6) 1fr var(--space-5);` | `.saved-set-row` 360↓ |
+| `gap: 4px;` | `gap: var(--space-1);` | `.saved-set-balls` |
+
+#### 2.59.12.3. 깨진 토큰 잔여 정리
+
+`--radius-1`/`--radius-2` (tokens.css 미정의) 잔여 3건 → `--radius-md` / `--radius-lg`로 정정:
+- `.five-sets-extra` `--radius-2` → `--radius-lg`
+- `.reverse-best-expand` `--radius-1` → `--radius-md`
+- `.reverse-all-item` `--radius-1` → `--radius-md`
+
+깨진 토큰 실 사용 잔여: **0건** (1건은 코멘트 이력 보존용).
+
+#### 2.59.12.4. 토큰화 보류 (정당 사유)
+
+- `44px` 번호공 / `12/9/6px` num-source-tag: spec 명시 데이터 사이즈 (디자인 토큰이 아닌 데이터 차원).
+- `40px` 라벨 (480↓): 번호공 36x36과 동기 의도, 토큰 명명이 의미 약함. 코멘트로 명시.
+- `@media (max-width: NNNpx)`: CSS 한계 (미디어 쿼리는 `var()` 미지원).
+- `1px solid` border: 표준 디자인 컨벤션. 토큰화 가치 약함.
+- 기타 main.css 영역 약 200~250건: 본 sprint 영역 외, **S30 토큰 대청소** 대기.
+
+#### 2.59.12.5. 검증
+
+`node tests/run-node.js` → **286/286 PASS**. 본 sprint 영역 매직 값 검출 (grep `[0-9]+px`) = 잔여 = spec 명시 데이터 사이즈 + 미디어 break point 만.
+
+### 2.59.11. S29.3 - 모바일 폭 최적화 (사용자 명시)
+
+사용자 지시: "폭이 핸드폰에 맞지 않은 듯 한데, 핸드폰에 최적화되게 폭 맞춰줘".
+
+진단:
+- `.saved-add-bar` grid 1fr auto 1fr이 좁은 화면(특히 320~360px)에서 좌측 spacer가 거의 0이 되어 압박.
+- `.saved-set-row` 320px↓ 케어 미흡 (number 6개 + 라벨 + 휴지통 한 줄 fit 빠듯).
+- `.strategy-pool-num` 24x24 + gap이 모바일에서 wrap 자주 발생 (가독성 저하).
+- `#app` 좌우 padding 16px이 모바일에서 가용 폭 약 32px 잠식.
+
+해결:
+- `#app`: 모바일 480px↓에서 좌우 padding `--space-4`(16px) → `--space-2`(8px). safe-area-inset 보호 유지.
+- `.home-hero`: 360px↓에서 padding `--space-4` → `--space-3` (12px).
+- `.saved-sets-section`: 480px↓에서 padding `--space-3` → `--space-2`. 360px↓ 추가 축소.
+- `.saved-add-bar`: 480px↓에서 grid 1열로 폴드 (1행 + 버튼 가운데 / 2행 전체 비우기 우측 끝 / 3행 hint 가운데). 사용자 의도(전체 비우기 우측 끝)를 모바일에서도 보존.
+- `.saved-add-btn` / `.saved-sets-clear`: 360px↓에서 padding 축소 + font `--font-size-sm`. 320px대에서 "전체 비우기" 텍스트 숨기고 휴지통 아이콘만 (aria-label로 의미 보존).
+- `.saved-set-row`: 360px↓에서 라벨 32px / 휴지통 20px / number 32x32 / `.saved-set-balls` gap `--space-1`.
+- `.strategy-pool-num`: 480px↓에서 24x24 → `--space-4`(16x16) / font 10px.
+
+### 2.59.10. S29.2 - 사용 번호 풀 투명화 (사용자 명시)
+
+사용자 지시: "통계는 저기 영역에 스트링을 지우고, 실제 사용할 번호 풀을 표시해줘" (활성 전략 설명 아래 "다중 전략 모드 · 2/6 선택. 분배는 균등 (6/N)" 텍스트 가리키며).
+
+해결:
+- `src/core/recommend.js`: `computePoolForStrategies(strategyIds, ctx)` 신규 export. 활성 전략들의 `finalWeights > 0` 번호 합집합 (1~45 정렬).
+- `src/render/strategy-tabs.js`: `pool` 인자 받음. `multiHint` 자리에 풀 번호공 표시. 풀이 1~45 전체면 "전 풀 (45)" 라벨 (랜덤 카테고리는 균등 분포).
+- `src/render/main.js`: `getRecAndFortune`이 `computePoolForStrategies` 호출 후 pool 반환. `homeTabHtml` 시그니처에 pool 추가 → `strategyTabsHtml`에 전달.
+- `styles/main.css`: `.strategy-pool` / `.strategy-pool-label` / `.strategy-pool-list` / `.strategy-pool-num` 신규 (모두 토큰 사용. `--space-5` (24px)로 번호공 크기 / `--font-size-sm` 12px / `numberColor()` 데이터 색).
+- `docs/01_spec.md` 5.1.3.1: 풀 표시 정책 명문화.
+
+의도: 사용자에게 "어떤 번호 풀에서 6개가 뽑히는지" 시각 투명 → 신뢰 ↑ + 사행성 회피 (의심을 즉시 데이터로 해소).
+
+스코프: 통계 한정이 아닌 **모든 활성 전략** 적용. 운세는 풀 작아 의미 큼, 랜덤은 "전 풀 (45)"로 정직 표시.
+
+### 2.59.7. S29.1 추가 정정 (사용자 4건 명시)
+
+사용자 지시:
+1. "추천 리스트 배경도 위쪽 배경과 동일하게 라운드 사각" → `.saved-sets-section` border-radius `--radius-2`(깨진 토큰) → `--radius-lg`(hero와 동일 16px).
+2. "추천 리스트 제목 좌우 중앙 정렬" → `.saved-sets-header` `justify-content: center`.
+3. "+ 1, + 5 버튼 가운데 / 전체 비우기 우측 끝" → `.saved-add-bar` grid 3열 (1fr auto 1fr). 좌 spacer / 가운데 + 버튼 그룹(.saved-add-buttons) / 우측 끝 전체 비우기(.saved-add-actions justify-self end). hint는 grid-column 1/-1 + text-align center로 두 번째 줄 가운데.
+4. "추첨 결과 보장 없음" disclaimer 삭제 → saved-sets-section.js의 `<p class="saved-sets-disclaimer">` 폐기 + CSS 룰 폐기. 사행성 회피 카피는 첫 진입 면책 모달 + 설정 탭 + spec 5.2.5.8로 일원화.
+
+부수: `--radius-2` 깨진 토큰 → `--radius-lg`로 정정 (직접 영향 받는 1건만, 나머지 잔여 3건은 S30 토큰 정리 대기).
+
+### 2.59.8. 검증
+
+`node tests/run-node.js` → **286/286 PASS** (storage 4건은 기존 5.8 미해결).
+
+### 2.59.9. 트레이드오프
+
+- **얻음**: 사용자 의도 정확 반영 / 결과↔실행 인접 / 모바일 엄지 동선 / 삭제 액션 시각 노이즈 폭감(타원 폐기) / 액션 한 줄 = 일관성 ↑ / 추천 리스트 시각이 hero와 통일.
+- **잃음**: 채팅 UX 패턴은 "결과 = 화면 위 누적"인데 카운트다운(정보)이 위에 있어 결과 자리가 2번째. 단 카운트다운은 정적 정보라 시선 비용 약함. 별도 sprint에서 카운트다운 자체 축소(부제처럼) 검토 가능.
+- **disclaimer 폐기 위험**: 사행성 회피 카피 1채널 줄어듦. 첫 진입 면책 + 설정 탭 + 4분면 분류 등 다른 채널이 보강. 별도 sprint에서 감사(audit) 권장.
+- **신뢰 비용**: S28(자비스 권장 B안)의 잘못된 단정 = 사용자 시간 낭비. 향후 권장안 결정은 사용자 재확인 후 실행 (4.7 결정 이력 추가 검토).
 
 ## 2.58. Sprint 037 완료 - 추천 리스트 위치 정정 (S28) (2026-05-04)
 

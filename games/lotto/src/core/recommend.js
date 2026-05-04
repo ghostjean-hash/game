@@ -508,6 +508,30 @@ export function recommendMulti(ctx) {
 }
 
 /**
+ * S29.2 (2026-05-04): 활성 전략들의 사용 풀 합집합 계산.
+ * UI에서 "이 번호들 중 6개가 추출됩니다"를 사용자에게 투명하게 표시 (사행성 회피 + 신뢰).
+ *
+ * 합집합 정의: 각 활성 전략의 finalWeights에서 weight > 0인 번호의 합집합 (1~45).
+ * blessed / intuitive / balancer 등 균등 분포 전략은 풀 = 1~45 (정직 표시).
+ *
+ * @param {string[]} strategyIds 활성 전략 ID 배열 (1개 이상).
+ * @param {object} ctx recommend / recommendMulti와 동일한 ctx (seed / luck / drwNo / numberStats 등).
+ * @returns {number[]} 합집합 풀 번호 (오름차순). 비어있으면 [].
+ */
+export function computePoolForStrategies(strategyIds, ctx) {
+  if (!Array.isArray(strategyIds) || strategyIds.length === 0) return [];
+  const sids = normalizeStrategyIds(strategyIds);
+  const union = new Set();
+  for (const sid of sids) {
+    const sc = computeStrategyContext({ ...ctx, strategyId: sid });
+    for (let i = 1; i <= 45; i += 1) {
+      if ((sc.finalWeights[i] || 0) > 0) union.add(i);
+    }
+  }
+  return [...union].sort((a, b) => a - b);
+}
+
+/**
  * 5세트 동시 추천 (S4-T1). SSOT: docs/02_data.md 1.5.5, docs/01_spec.md 5.1.3.2.
  * 시드 변형으로 5개 결정론적 다른 결과. i=0이 메인(이력 기록 대상), i=1..4는 표시 전용.
  *
