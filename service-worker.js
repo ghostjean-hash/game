@@ -6,7 +6,8 @@
 // v12 (2026-05-03): lotto S26 - 누적 추천 세트 (조립식 N장 누적 + 회차 자동 비움).
 // v13 (2026-05-03): lotto S26 hotfix - 누적 라벨 추천1 중복 정정 (추천2부터 시작).
 // v14 (2026-05-03): lotto S27 - 메인 카드 폐기 / 누적 리스트 단일 영역 / + 버튼 전략 영역 이동.
-const CACHE_VERSION = "v14";
+// v15 (2026-05-04): lotto S28 - 추천 리스트를 + 버튼 직하로 이동 (조립→실행→결과 ↑→↓ 일직선).
+const CACHE_VERSION = "v15";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

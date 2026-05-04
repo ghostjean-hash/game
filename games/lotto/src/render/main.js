@@ -357,6 +357,8 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   // S27 (2026-05-03): 메인 카드(미리보기) + 5세트 컴팩트 추첨 탭에서 노출 폐기.
   //   누적 리스트(추천1, 추천2, ...)만 표시. + 버튼은 전략 영역 아래로 이동.
   //   라벨 시작 = 1 (메인이 없으니).
+  // S28 (2026-05-04): 추천 리스트를 hero에서 분리하여 + 버튼 직하로 이동.
+  //   조립(전략) → 실행(+) → 결과(리스트) ↑→↓ 일직선 흐름. SSOT: docs/01_spec.md 5.2.5.2.
   // S26: 누적 추천 세트 섹션. active.savedSets는 renderHome에서 ensureSavedSetsForRound로 보장됨.
   const savedList = active.savedSets?.list || [];
   const savedSectionHtml = savedSetsSectionHtml(savedList, 1);
@@ -367,9 +369,8 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
       <h1 class="app-title">Blessed Lotto</h1>
     </header>
 
-    <section class="home-hero${heroFortuneClass}" aria-label="다음 추첨 + 추천 리스트">
+    <section class="home-hero${heroFortuneClass}" aria-label="다음 추첨">
       ${nextDrawCardHtml(nextInfo)}
-      ${savedSectionHtml}
     </section>
 
     ${/* S19: 항상 다중 모드 (multi=true). 1전략도 토글 1개로 동작. */ ''}
@@ -377,6 +378,9 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
 
     ${/* S27: + 1세트 / + 5세트 버튼을 전략 영역 직하로 이동. 조립식 정의 후 즉시 등록 동선. */ ''}
     ${addBarHtml}
+
+    ${/* S28(2026-05-04): 추천 리스트를 + 버튼 직하로 이동 (이전 = hero 안). 시선 역행 해소. */ ''}
+    ${savedSectionHtml}
 
     ${/* S17(2026-05-02): 행운 쌓기를 전략 탭 하위로 이동 (이전 = 히어로 직하). */ ''}
     ${ritualWidgetHtml(state.ritual)}
