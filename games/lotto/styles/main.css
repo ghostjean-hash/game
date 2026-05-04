@@ -1632,10 +1632,12 @@ a.btn-secondary,
   font-weight: 700;
   color: var(--color-accent);
 }
+/* S32 (2026-05-04): 번호공 사이 간격을 토큰 기준 80%로 압축 (사용자 명시).
+   var(--space-1)(4px) * 0.8 = 3.2px. 매직 픽셀 추가 0 / 토큰 베이스 비율로 정직. */
 .saved-set-balls {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: var(--space-1);
+  gap: calc(var(--space-1) * 0.8);
   justify-items: center;
 }
 /* S27: 누적 세트 번호공 = 메인 카드와 동일 크기 (시각 통일, 메인 카드 폐기 후). spec 5.2.1.1 명시 사이즈. */
@@ -1674,7 +1676,7 @@ a.btn-secondary,
      S29.4: 매직 값 → 토큰. 라벨 40px 매직은 데스크톱 44px와 별도 (디자인 외 명시 사이즈). */
   .saved-sets-section { padding: var(--space-2); }
   .saved-set-row { grid-template-columns: 40px 1fr var(--space-5); gap: var(--space-1); }
-  .saved-set-balls { gap: var(--space-1); }
+  .saved-set-balls { gap: calc(var(--space-1) * 0.8); }
   .saved-set-row .num-cell .num {
     width: 36px; height: 36px; min-width: 36px; min-height: 36px;
     font-size: var(--font-size-sm);
