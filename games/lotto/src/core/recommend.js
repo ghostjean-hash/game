@@ -547,6 +547,30 @@ export function recommendMulti(ctx) {
  * @param {object} ctx recommend / recommendMulti와 동일한 ctx.
  * @returns {number[]} 풀 번호 (오름차순).
  */
+/**
+ * S31 (2026-05-04): 짝꿍 번호 전략의 페어 list (UI 페어 단위 표시용).
+ * `objectivePairWeights`와 동일 알고리즘 - 동시출현 count 내림차순 정렬 + 합집합 size 도달까지 수집.
+ * 단 weight 누적 대신 페어 객체 list 반환 (UI에서 두 번호를 한 묶음으로 시각화).
+ *
+ * @param {object} ctx recommend / recommendMulti와 동일한 ctx (cooccur 사용).
+ * @param {number} [poolSize] 합집합 목표 크기 (기본 STATS_POOL_SIZE).
+ * @returns {Array<{a:number, b:number, count:number}>} 정렬된 페어 list.
+ */
+export function computePairsForPairTracker(ctx, poolSize = STATS_POOL_SIZE) {
+  const { cooccur = [] } = ctx;
+  if (!Array.isArray(cooccur) || cooccur.length === 0) return [];
+  const sorted = [...cooccur].sort((p, q) => q.count - p.count);
+  const inPool = new Set();
+  const pairs = [];
+  for (const p of sorted) {
+    if (inPool.size >= poolSize) break;
+    inPool.add(p.a);
+    inPool.add(p.b);
+    pairs.push({ a: p.a, b: p.b, count: p.count });
+  }
+  return pairs;
+}
+
 export function computePoolForStrategies(strategyIds, ctx) {
   if (!Array.isArray(strategyIds) || strategyIds.length === 0) return [];
   const sids = normalizeStrategyIds(strategyIds);

@@ -4,13 +4,63 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-04 (Sprint 039 - 포커스 분리 + 풀 신뢰 회복 + 사주 일진 가시화 / S30.0~.6).
+1.3. **마지막 갱신**: 2026-05-04 (Sprint 040 - 짝꿍 페어 단위 표시 / S31).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리** (2026-05-04): 직전 5 Sprint(032~036)만 본 파일에 활성. Sprint 010 이전 ~ Sprint 031 영역과 옛 백로그(3.-18 ~ 3.0)는 `PROGRESS_ARCHIVE.md`로 이전. 새 세션 토큰 약 70%↓.
 
 # 2. 완료 마일스톤 (활성: 직전 5~7 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.52, M0~M6 / 폴리싱 / Sprint 010~031) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.61. Sprint 040 완료 - 짝꿍 페어 단위 표시 + 라벨 축약 + 좌측 padding (S31) (2026-05-04)
+
+사용자 지시 (3건):
+1. "짝꿍 번호는 짝꿍끼리 묶어서 표시"
+2. "추천 리스트 배경 박스와 '추천1' 사이 왼쪽 마진 지금의 1.5배로"
+3. "전략 라벨 축약: 별자리행운→별자리, 원소행운→4원소, 사주행운→사주, 최근트렌드→최신, 많이나온수→많이, 안나온수→적게, 짝꿍번호→페어, 보너스볼→보너스, 균형조합→균형, 축복받은자→축복"
+
+### 2.61.1. 짝꿍 페어 단위 표시
+
+짝꿍 풀을 단순 번호 list에서 *페어 박스 list*로 변경. 각 페어 = 두 번호공 + 횟수 라벨.
+
+- `src/core/recommend.js`: `computePairsForPairTracker(ctx, poolSize)` 신규 export. `objectivePairWeights`와 동일 알고리즘(count 내림차순 + 합집합 size 도달까지)으로 페어 객체 list `{a, b, count}[]` 반환.
+- `src/render/main.js`: `getRecAndFortune` 반환에 `pairs` 추가. 포커스 = `pairTracker`일 때만 계산.
+- `src/render/strategy-tabs.js`: `pairs` 인자 받음. pairs 있으면 `.strategy-pool-pairs` 페어 박스 단위 렌더 (pool 대체). 라벨 = "짝꿍 페어 · N쌍".
+- `styles/main.css`: `.strategy-pool-pairs` / `.strategy-pool-pair` / `.strategy-pool-pair-count` 신규 (모두 토큰 사용. surface-soft 배경 + border + radius-md).
+
+### 2.61.2. 추천 리스트 좌측 padding 1.5배
+
+- `styles/main.css` `.saved-sets-section`: `padding-left: calc(var(--space-3) * 1.5)` (12px → 18px). 위/오/아래는 그대로 `--space-3`(12px). "추천N" 라벨이 박스 왼쪽에 너무 붙던 문제 해소.
+
+### 2.61.3. 전략 라벨 축약
+
+`src/render/strategy-picker.js` STRATEGIES 배열 label 필드만 변경. short / desc / category는 그대로(출처 태그 / 도움말 / 카테고리 그룹 영향 0).
+
+| 이전 | 변경 |
+|---|---|
+| 축복받은 자 | 축복 |
+| 최근 트렌드 | 최신 |
+| 많이 나온 수 | 많이 |
+| 짝꿍 번호 | 페어 |
+| 보너스볼 | 보너스 |
+| 안 나온 수 | 적게 |
+| 별자리 행운 | 별자리 |
+| 원소 행운 | 4원소 |
+| 사주 행운 | 사주 |
+| 균형 조합 | 균형 |
+| 직감 | (그대로) |
+
+표시 예 (1222회 시점 cooccur 시뮬):
+```
+짝꿍 페어 · 9쌍
+[17][27] 60회   [1][38] 55회   [12][34] 52회
+[9][18]  50회   [5][25] 48회   [3][33]  47회
+[14][41] 45회   [7][22] 44회   [11][19] 43회
+```
+
+cap STATS_POOL_SIZE = 18 합집합 도달까지 페어 수집. 9쌍 × 2 = 18.
+
+검증: `node tests/run-node.js` → 286/286 PASS.
 
 ## 2.60. Sprint 039 완료 - 포커스 분리 + 풀 신뢰 회복 + 사주 일진 가시화 (S30.0~.6) (2026-05-04)
 

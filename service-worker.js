@@ -12,7 +12,8 @@
 // v18 (2026-05-04): lotto S30.4 캐시 새로고침용 SW bump.
 // v19 (2026-05-04): lotto S30.5 - **중대 버그 fix**. computePoolForStrategies 인덱스 1-based ↔ 0-based 불일치로 운세/통계 풀 표시가 정확히 -1 shift됐던 문제 정정. 추첨 결과 자체는 정확했음(weightedSample 별도 경로). 사용자 신뢰 회복.
 // v20 (2026-05-04): lotto S30.6 - 사주 행운 일진 보너스 가시화 (B안). 캐릭터 카드 사주 패널에 추첨일 오행 + 관계 라벨 + 보너스 풀 별도 줄로 표시. 카드 = 추천 풀 100% 일치.
-const CACHE_VERSION = "v20";
+// v21 (2026-05-04): lotto S31 - 짝꿍 풀을 페어 박스 단위로 표시 (computePairsForPairTracker) + 전략 라벨 축약(축복/최신/많이/페어/보너스/적게/별자리/4원소/사주/균형) + 추천 리스트 좌측 padding 1.5배(12→18px).
+const CACHE_VERSION = "v21";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

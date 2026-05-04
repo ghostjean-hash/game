@@ -1547,10 +1547,12 @@ a.btn-secondary,
 }
 
 /* S29.1 (2026-05-04): 추천 리스트 배경을 위쪽 hero(.home-hero)와 동일한 라운드(--radius-lg)로 통일.
-   기존 --radius-2는 tokens.css 미정의(깨진 토큰) → --radius-lg로 정정. */
+   기존 --radius-2는 tokens.css 미정의(깨진 토큰) → --radius-lg로 정정.
+   S31 (2026-05-04): 좌측 padding 1.5배 (12px → 18px) - "추천N" 라벨이 박스 왼쪽에 너무 붙던 문제. */
 .saved-sets-section {
   margin-top: var(--space-3);
   padding: var(--space-3);
+  padding-left: calc(var(--space-3) * 1.5);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -1830,6 +1832,31 @@ a.btn-secondary,
     height: var(--space-4);
     font-size: var(--font-size-xs);
   }
+}
+/* S31 (2026-05-04): 짝꿍 페어 박스 - 두 번호공 + 횟수 라벨을 한 묶음으로. */
+.strategy-pool-pairs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+}
+.strategy-pool-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.strategy-pool-pair-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-dim);
+  margin-left: var(--space-1);
+}
+@media (max-width: 480px) {
+  .strategy-pool-pair { padding: var(--space-1); gap: var(--space-1); }
+  .strategy-pool-pair-count { font-size: var(--font-size-xs); }
 }
 /* S6-T1 + S10: 운세 카테고리 면책. 한 줄로 톤 일관성. */
 .strategy-mapping-note {

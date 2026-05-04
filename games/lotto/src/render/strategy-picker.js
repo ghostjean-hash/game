@@ -12,18 +12,20 @@ import {
 // S21 (2026-05-03): 통계 5종 라벨 직관화 + 순서 변경.
 //   "통계 추첨"→"많이 나온 수", "보너스볼 사냥"→"보너스볼", "미출현 회귀"→"안 나온 수".
 //   통계 표시 순서: 최근 트렌드 / 많이 나온 수 / 짝꿍 번호 / 보너스볼 / 안 나온 수.
+// S31 (2026-05-04): label 축약 - 토글 시각 컴팩트 + 모바일 wrap 회피.
+//   short / desc / category는 그대로 (출처 태그 / 도움말 / 카테고리 그룹 그대로 유지).
 const STRATEGIES = [
-  { id: STRATEGY_BLESSED, label: '축복받은 자', short: '축', desc: '모든 번호에서 균등 추출, Luck이 시드 번호 가중치를 강화', category: '랜덤' },
-  { id: STRATEGY_TREND_FOLLOWER, label: '최근 트렌드', short: '추', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
-  { id: STRATEGY_STATISTICIAN, label: '많이 나온 수', short: '많', desc: '역대 회차에 가장 많이 나온 번호 위주', category: '통계' },
-  { id: STRATEGY_PAIR_TRACKER, label: '짝꿍 번호', short: '짝', desc: '역대 회차에서 가장 자주 함께 추첨된 번호 쌍 모음', category: '통계' },
-  { id: STRATEGY_SECOND_STAR, label: '보너스볼', short: '별', desc: '역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두)', category: '통계' },
-  { id: STRATEGY_REGRESSIONIST, label: '안 나온 수', short: '안', desc: '오랫동안 안 나온 번호 위주', category: '통계' },
-  { id: STRATEGY_ASTROLOGER, label: '별자리 행운', short: '점', desc: '캐릭터 별자리 12종의 행운 번호 위주', category: '운세' },
-  { id: STRATEGY_ZODIAC_ELEMENT, label: '원소 행운', short: '원', desc: '별자리 4원소(불/땅/공기/물) 그룹 행운 번호', category: '운세' },
-  { id: STRATEGY_FIVE_ELEMENTS, label: '사주 행운', short: '사', desc: '캐릭터 일주의 천간 오행(목/화/토/금/수) 행운 번호', category: '운세' },
+  { id: STRATEGY_BLESSED, label: '축복', short: '축', desc: '모든 번호에서 균등 추출, Luck이 시드 번호 가중치를 강화', category: '랜덤' },
+  { id: STRATEGY_TREND_FOLLOWER, label: '최신', short: '추', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
+  { id: STRATEGY_STATISTICIAN, label: '많이', short: '많', desc: '역대 회차에 가장 많이 나온 번호 위주', category: '통계' },
+  { id: STRATEGY_PAIR_TRACKER, label: '페어', short: '짝', desc: '역대 회차에서 가장 자주 함께 추첨된 번호 쌍 모음', category: '통계' },
+  { id: STRATEGY_SECOND_STAR, label: '보너스', short: '별', desc: '역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두)', category: '통계' },
+  { id: STRATEGY_REGRESSIONIST, label: '적게', short: '안', desc: '오랫동안 안 나온 번호 위주', category: '통계' },
+  { id: STRATEGY_ASTROLOGER, label: '별자리', short: '점', desc: '캐릭터 별자리 12종의 행운 번호 위주', category: '운세' },
+  { id: STRATEGY_ZODIAC_ELEMENT, label: '4원소', short: '원', desc: '별자리 4원소(불/땅/공기/물) 그룹 행운 번호', category: '운세' },
+  { id: STRATEGY_FIVE_ELEMENTS, label: '사주', short: '사', desc: '캐릭터 일주의 천간 오행(목/화/토/금/수) 행운 번호', category: '운세' },
   { id: STRATEGY_INTUITIVE, label: '직감', short: '직', desc: '회차마다 다른 분포 (같은 캐릭터는 같은 결과)', category: '랜덤' },
-  { id: STRATEGY_BALANCER, label: '균형 조합', short: '균', desc: '번호 합 121~160 + 홀짝 3:3 필터를 통과한 조합만', category: '랜덤' },
+  { id: STRATEGY_BALANCER, label: '균형', short: '균', desc: '번호 합 121~160 + 홀짝 3:3 필터를 통과한 조합만', category: '랜덤' },
 ];
 
 export const STRATEGY_LIST = STRATEGIES;
