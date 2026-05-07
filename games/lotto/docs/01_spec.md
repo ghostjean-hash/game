@@ -305,6 +305,13 @@
 - **객관 전략(5개, docs/02_data.md 1.5.1)**: 같은 회차 + 같은 통계 = 모든 캐릭터에 동일 결과 (캐릭터 시드 / Luck 무관). 통계가 객관 데이터이므로 캐릭터에 따라 변하면 안 됨. statistician / secondStar / regressionist / trendFollower / balancer.
 - 모든 가중치 토글 OFF + `blessed` = 균등 랜덤.
 
+### 5.4.1. 풀 외 번호 차단 (S33, 2026-05-08)
+
+- **별자리 / 4원소 / 사주 / 짝꿍 추첨 결과는 학설 풀 안 번호로만 구성된다.** 풀 외 번호는 weight 0 유지로 추첨 자체에서 차단.
+- S18에서 풀 정의(`mainWeights`)는 풀 외 = 0이었으나 `applyLuck` + `weightedSample`의 `WEIGHT_MIN_FLOOR` floor가 풀 외 0을 양수화하여 풀 외도 추첨될 수 있던 잠재 버그를 S33에서 fix.
+- 사용자 직관: "별자리 8개 행운 번호" = 그 8개 안에서만 추첨. 카드 풀 표시와 실제 추첨 100% 일치.
+- 데이터 부재 fallback: zodiac 미지정 / 빈 cooccur 등 풀이 비어있는 케이스에 한해 균등 추첨. SSOT: docs/02_data.md 1.5.6.4.
+
 ### 5.1.4. 사주 정밀화 (오행 보정)
 
 캐릭터 생년월일 → 일주(천간 + 지지) 자동 계산. 회차 발표일 → 일주. 두 일주의 천간 오행 관계(self / generate / beGenerated / overcome / beOvercome / normal)에 따라 5.1.1 분포에 ±보정 가산 후 정규화.

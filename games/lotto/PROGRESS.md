@@ -4,13 +4,46 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-07 (Sprint 042 - 누적 추천 dedupe 강화 + 풀 한계 안내 / S32 후속).
+1.3. **마지막 갱신**: 2026-05-08 (Sprint 043 - 풀 외 추첨 차단 fix / S33).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리** (2026-05-04): 직전 5 Sprint(032~036)만 본 파일에 활성. Sprint 010 이전 ~ Sprint 031 영역과 옛 백로그(3.-18 ~ 3.0)는 `PROGRESS_ARCHIVE.md`로 이전. 새 세션 토큰 약 70%↓.
 
 # 2. 완료 마일스톤 (활성: 직전 5~7 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.52, M0~M6 / 폴리싱 / Sprint 010~031) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.64. Sprint 043 완료 - 풀 외 추첨 차단 fix (S33, 2026-05-08)
+
+배경: Sprint 042 검증 중 발견. 시드 의존 전략(별자리 / 4원소 / 사주 / 짝꿍)에서 학설 풀 외 번호가 매우 낮은 확률로 추첨되던 잠재 버그. S18(풀 정의 = 풀 밖 0)의 의도는 "절대 차단"이었으나 `applyLuck`과 `weightedSample`의 `WEIGHT_MIN_FLOOR` floor가 풀 외 0을 0.0001로 양수화. S30.2가 풀 *표시*만 정정 후 실제 추첨 정정이 후순위로 남아있던 사안.
+
+### 2.64.1. fix
+
+- `src/core/luck.js` `applyLuck`: `Math.max(w, WEIGHT_MIN_FLOOR)` → `w > 0 ? Math.max(w, WEIGHT_MIN_FLOOR) : 0`. 원본 0(풀 외)은 0 유지.
+- `src/core/recommend.js` `weightedSample`: 동일 패턴 적용. `total <= 0` 가드는 그대로 → 모든 weight=0 케이스도 안전 break.
+
+### 2.64.2. 데이터 부재 fallback
+
+floor 제거로 풀 자체가 비어있는 케이스(zodiac 미지정 / 빈 cooccur)에서 추첨 0개가 될 수 있어 안전망 추가:
+
+- `src/core/recommend.js` `zodiacWeights`: 빈 lucky → `uniformWeights()` (균등 fallback).
+- `src/core/recommend.js` `objectivePairWeights`: 빈 cooccur → `Array(45).fill(1)` (균등 fallback).
+- `zodiacElementWeights` / `fiveElementsWeights`는 기존부터 fallback 보유 (변경 0).
+
+### 2.64.3. SSOT
+
+- `docs/01_spec.md` 5.4.1 (풀 외 번호 차단 절) 신설. SSOT: 학설 풀 안 번호로만 추첨.
+- `docs/02_data.md` 1.5.6.4 (풀 외 = 절대 안 뽑힘) 갱신 - S18 의도 + S33 실제 차단 + 데이터 부재 fallback 명시.
+
+### 2.64.4. 검증
+
+- `tests/suites/saved-sets.test.js` S33 회귀 2건 신규 - libra / aries 추첨 결과가 학설 풀 부분집합. 모두 PASS.
+- 기존 recommend.test.js `pairTracker 빈 cooccur` / `astrologer zodiac 미지정` 2건 fallback 적용으로 PASS 유지.
+- `node tests/run-node.js` → 292/292 PASS (사전 storage 4건 FAIL 무관).
+
+### 2.64.5. 사용자 영향
+
+- 캐릭터 카드의 "별자리 행운 번호" / "오행 행운 번호" 등 풀 표시 = 실제 추첨 결과 100% 일치 (이전엔 불일치 가능).
+- 사용자 직관 ("별자리 8개 행운 번호 안에서만 추첨") 보장.
 
 ## 2.63. Sprint 042 완료 - 누적 추천 dedupe 강화 + 풀 한계 안내 (S32 후속, 2026-05-07)
 

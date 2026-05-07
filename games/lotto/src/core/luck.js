@@ -31,10 +31,16 @@ export function preferredNumbers(seed, count = PICK_COUNT) {
 /**
  * Luck 분산도 적용. 선호 번호에 boost. 다른 번호는 그대로.
  * Luck 0 = boost 1.0 (변화 없음). Luck 100 = boost WEIGHT_MAX_BIAS.
+ *
+ * S33 (2026-05-07): 풀 외 0 유지 정책. 원본 weight 0(풀 외)은 0으로 유지하고
+ *   양수만 floor 적용. 이전 구현은 모든 번호를 WEIGHT_MIN_FLOOR로 양수화하여
+ *   시드 의존 전략(astrologer / zodiacElement / fiveElements / pairTracker)의 풀 외
+ *   번호도 매우 낮은 확률로 추첨되던 문제 해소. SSOT: docs/02_data.md 1.7 + 1.5.2.5.
+ *
  * @param {number[]} weights length 45 (index 0 = number 1)
  * @param {number} seed unsigned 32bit
  * @param {number} luck 0~100
- * @returns {number[]} 변형된 weight (정규화 안 함)
+ * @returns {number[]} 변형된 weight (정규화 안 함). 원본 0은 0 유지.
  */
 export function applyLuck(weights, seed, luck) {
   const clamped = Math.max(LUCK_MIN, Math.min(LUCK_MAX, luck));
@@ -42,9 +48,11 @@ export function applyLuck(weights, seed, luck) {
   const boost = 1 + ratio * (WEIGHT_MAX_BIAS - 1);
 
   const preferred = preferredNumbers(seed);
-  const result = weights.map((w) => Math.max(w, WEIGHT_MIN_FLOOR));
+  // S33: 원본 0은 0 유지 (풀 외 차단). 양수는 WEIGHT_MIN_FLOOR floor 적용 (수치 안정).
+  const result = weights.map((w) => (w > 0 ? Math.max(w, WEIGHT_MIN_FLOOR) : 0));
 
   for (const n of preferred) {
+    // 풀 외 번호(0)에 boost 적용해도 0 * boost = 0 → 풀 외 차단 보존.
     result[n - 1] = result[n - 1] * boost;
   }
   return result;

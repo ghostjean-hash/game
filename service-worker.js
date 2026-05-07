@@ -15,7 +15,8 @@
 // v21 (2026-05-04): lotto S31 - 짝꿍 풀을 페어 박스 단위로 표시 (computePairsForPairTracker) + 전략 라벨 축약(축복/최신/많이/페어/보너스/적게/별자리/4원소/사주/균형) + 추천 리스트 좌측 padding 1.5배(12→18px).
 // v22 (2026-05-04): lotto S32 - 추천 리스트 번호공 gap 80% (var(--space-1) * 0.8 = 3.2px). 시각 컴팩트.
 // v23 (2026-05-07): lotto S32 후속 (Sprint 042) - 누적 추천 dedupe 재시도 50회 + 풀 한계 안내 4 케이스(토스트 / 배너 / hint / cap). 별자리·사주 좁은 풀에서 unique 조합 보장 + 사용자 인지.
-const CACHE_VERSION = "v23";
+// v24 (2026-05-08): lotto S33 (Sprint 043) - 풀 외 추첨 차단 fix. applyLuck + weightedSample의 WEIGHT_MIN_FLOOR가 풀 외 0을 양수화하던 잠재 버그 정정. 별자리/4원소/사주/짝꿍 추첨 결과 = 학설 풀 부분집합 100% 보장.
+const CACHE_VERSION = "v24";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

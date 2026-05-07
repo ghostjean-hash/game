@@ -117,13 +117,19 @@ export { keyNumberFromSeed };
  *   3. 수집된 페어들의 a/b 번호에 weight = count 누적.
  *   4. 풀 외 = 0.
  *
+ * S33 (2026-05-07): 빈 cooccur fallback 명시. 데이터 없을 때 균등 추첨 보장.
+ *   weightedSample의 floor 제거(S33)로 모든 weight 0이면 추첨 0개가 되므로 안전망 필요.
+ *
  * @param {Array<{a:number,b:number,count:number}>} cooccur 동시출현 매트릭스.
  * @param {number} poolSize 합집합 목표 크기 (보통 STATS_POOL_SIZE).
- * @returns {number[]} length VECTOR_LEN(45). 풀 번호는 weight 양수, 풀 외 0.
+ * @returns {number[]} length VECTOR_LEN(45). 풀 번호는 weight 양수, 풀 외 0. 빈 cooccur 시 모두 1(uniform fallback).
  */
 function objectivePairWeights(cooccur, poolSize) {
   const arr = new Array(VECTOR_LEN).fill(0);
-  if (!Array.isArray(cooccur) || cooccur.length === 0) return arr;
+  // S33: 빈 cooccur는 통계 데이터 없음 → 균등 fallback. 풀 0개 추첨 방지.
+  if (!Array.isArray(cooccur) || cooccur.length === 0) {
+    return new Array(VECTOR_LEN).fill(1);
+  }
   // 동시출현 페어를 count 내림차순 정렬 (불변).
   const sorted = [...cooccur].sort((p, q) => q.count - p.count);
   const inPool = new Set();
@@ -138,8 +144,11 @@ function objectivePairWeights(cooccur, poolSize) {
 }
 
 // S18: 풀 컷팅. lucky 풀 안 = 1, 풀 밖 = 0 (절대 안 뽑힘).
+// S33 (2026-05-08): 별자리 미지정 fallback 명시. zodiac 없으면 균등.
+//   weightedSample의 floor 제거(S33)로 모든 weight 0이면 추첨 0개가 되므로 안전망.
 function zodiacWeights(zodiac) {
   const lucky = ZODIAC_LUCKY[zodiac] || [];
+  if (lucky.length === 0) return uniformWeights();
   return poolFromIndices(lucky);
 }
 
@@ -256,7 +265,10 @@ function balancedSample(weights, count, samplingSeed) {
  * @returns {number[]}
  */
 function weightedSample(weights, count, seed, exclude = null) {
-  let pool = weights.map((w, i) => ({ n: i + 1, w: Math.max(w, WEIGHT_MIN_FLOOR) }));
+  // S33 (2026-05-07): 풀 외 0 유지. 원본 0(풀 외)은 0으로 유지하여 추첨 차단.
+  //   이전 구현은 모든 weight를 WEIGHT_MIN_FLOOR로 floor → 풀 외도 추첨 가능.
+  //   total <= 0 가드로 모든 weight=0 케이스도 안전. SSOT: docs/02_data.md 1.5.2.5 / 1.7.
+  let pool = weights.map((w, i) => ({ n: i + 1, w: w > 0 ? Math.max(w, WEIGHT_MIN_FLOOR) : 0 }));
   if (exclude && exclude.size > 0) {
     pool = pool.filter((x) => !exclude.has(x.n));
   }

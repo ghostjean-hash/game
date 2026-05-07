@@ -9,6 +9,7 @@ import {
   SAVED_SETS_CAP, SAVED_SETS_RETRY_MAX,
   SAVED_SETS_TOAST_NORMAL_MS, SAVED_SETS_TOAST_PARTIAL_MS,
   SAVED_SETS_SALT_BASE,
+  ZODIAC_LUCKY,
 } from '../../src/data/numbers.js';
 
 function makeChar(overrides = {}) {
@@ -223,9 +224,26 @@ suite('S32 풀 한계 재시도 - 별자리 좁은 풀', () => {
     assertEqual(keys.size, 20);
   });
 
-  // [별도 발견] 별자리 추첨 결과가 풀 외 번호를 포함하는 케이스 존재.
-  //   원인 추정: `recommend.js:381` `applyLuck`이 풀 외 weight 0을 양수로 만듦.
-  //   S30.2에서 풀 표시(mainWeights)는 정정됐으나 실제 추첨(finalWeights)은 미수정.
-  //   본 sprint(S32 dedupe + 안내) 범위 밖. 별도 sprint 결정 사안.
-  //   여기서는 unique 조합 보장만 검증, 풀 부분집합 강제는 미검증.
+  // S33 (2026-05-07): 풀 외 추첨 차단 회귀.
+  //   applyLuck + weightedSample의 floor가 풀 외 weight 0을 양수화하던 버그 fix.
+  //   별자리 / 원소 / 사주 / 짝꿍 추첨 결과는 학설 풀 안 번호로만 구성됨.
+  test('S33 풀 외 추첨 차단 - libra 추첨은 학설 풀 부분집합', () => {
+    const r = simulateBatch({ poolKey: 'libra', batchN: 10 });
+    const pool = new Set(ZODIAC_LUCKY.libra);
+    for (const set of r.list) {
+      for (const n of set.numbers) {
+        assertTrue(pool.has(n), `번호 ${n}는 libra 풀 ${[...pool]} 밖 - applyLuck floor 누설`);
+      }
+    }
+  });
+
+  test('S33 풀 외 추첨 차단 - aries 추첨은 학설 풀 부분집합', () => {
+    const r = simulateBatch({ poolKey: 'aries', batchN: 10 });
+    const pool = new Set(ZODIAC_LUCKY.aries);
+    for (const set of r.list) {
+      for (const n of set.numbers) {
+        assertTrue(pool.has(n), `번호 ${n}는 aries 풀 ${[...pool]} 밖`);
+      }
+    }
+  });
 });
