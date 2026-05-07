@@ -31,15 +31,23 @@ function numHtml(n, source) {
 
 /**
  * 추천 리스트 섹션. S27: 메인 카드 폐기 후 추첨 탭의 유일한 추천 표시 영역.
+ * S32 (2026-05-07): poolExhausted 배너 슬롯 추가. SSOT: docs/01_spec.md 5.2.5.4 / docs/02_data.md 1.5.8.6.
  * @param {Array} list character.savedSets.list
  * @param {number} [labelStart=1] 라벨 시작 인덱스. S27 이후 메인 카드 폐기로 1부터 시작.
- *   SSOT: docs/01_spec.md 5.2.5.
+ * @param {boolean} [poolExhausted=false] 같은 strategyIds로 풀 한계 도달 상태. true면 배너 노출.
  * @returns {string} html. list 비면 빈 상태 안내(추첨 탭 빈 화면 회피).
  */
-export function savedSetsSectionHtml(list, labelStart = 1) {
-  if (!Array.isArray(list) || list.length === 0) {
+export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false) {
+  const isEmpty = !Array.isArray(list) || list.length === 0;
+  // S32: 풀 한계 배너. 비어있어도 노출 (사용자가 0세트 상태에서 풀 한계 인지 가능).
+  const bannerHtml = poolExhausted
+    ? `<div class="saved-sets-banner" role="status" aria-live="polite">이 전략 조합으로 만들 수 있는 모든 추천을 가져왔습니다 (총 ${list?.length || 0}세트). 다른 전략을 골라 추가할 수 있어요.</div>`
+    : '';
+
+  if (isEmpty) {
     return `
       <section class="saved-sets-section is-empty" aria-label="추천 리스트 (비어있음)">
+        ${bannerHtml}
         <p class="saved-sets-empty">아래 전략을 골라 조립식을 만든 뒤 <strong>+ 1세트</strong> 또는 <strong>+ 5세트</strong>로 추천을 추가하세요.</p>
       </section>
     `;
@@ -63,6 +71,7 @@ export function savedSetsSectionHtml(list, labelStart = 1) {
       <header class="saved-sets-header">
         <h2 class="saved-sets-title">추천 리스트 (${list.length})</h2>
       </header>
+      ${bannerHtml}
       <div class="saved-sets-list">${items}</div>
     </section>
   `;
@@ -71,16 +80,25 @@ export function savedSetsSectionHtml(list, labelStart = 1) {
 /**
  * 추천 리스트 액션 바.
  * S29.1 (2026-05-04): grid 3열 (좌 spacer / 가운데 + 1세트 + 5세트 / 우측 전체 비우기). hint는 두 번째 줄 가운데.
+ * S32 (2026-05-07): poolExhausted 시 + 버튼 비활성. 우선순위 cap > poolExhausted > 정상.
+ *   토스트 슬롯(`[data-role="saved-toast"]`) 추가 (정상 / 부분 중복 케이스).
  * 누적 cap 도달 시 + 버튼 disable. list 비어있으면 전체 비우기 disable.
  */
-export function savedSetsAddBarHtml(currentCount, cap) {
+export function savedSetsAddBarHtml(currentCount, cap, poolExhausted = false) {
   const remain = cap - currentCount;
-  const disabledAttr = remain <= 0 ? 'disabled aria-disabled="true"' : '';
-  const fiveDisabledAttr = remain < 5 ? 'disabled aria-disabled="true"' : '';
+  const capDisabled = remain <= 0;
+  // S32: cap 우선. cap이면 cap hint, cap 아닌데 poolExhausted면 풀 한계 hint, 그 외 정상 hint.
+  const disabledAttr = (capDisabled || poolExhausted) ? 'disabled aria-disabled="true"' : '';
+  const fiveDisabledAttr = (remain < 5 || poolExhausted) ? 'disabled aria-disabled="true"' : '';
   const clearDisabledAttr = currentCount <= 0 ? 'disabled aria-disabled="true"' : '';
-  const hint = remain <= 0
-    ? `<span class="saved-add-hint is-cap">최대 ${cap}세트 도달. 일부 삭제 후 추가하세요.</span>`
-    : `<span class="saved-add-hint">${remain}세트 더 추가 가능</span>`;
+  let hint;
+  if (capDisabled) {
+    hint = `<span class="saved-add-hint is-cap">최대 ${cap}세트에 도달했습니다 · 일부 삭제 후 추가 가능</span>`;
+  } else if (poolExhausted) {
+    hint = `<span class="saved-add-hint is-exhausted">전략을 변경하면 추가 가능</span>`;
+  } else {
+    hint = `<span class="saved-add-hint">${remain}세트 더 추가 가능</span>`;
+  }
   return `
     <div class="saved-add-bar" aria-label="추천 리스트 액션">
       <div class="saved-add-buttons">
@@ -91,6 +109,7 @@ export function savedSetsAddBarHtml(currentCount, cap) {
         <button type="button" class="saved-sets-clear" data-action="clear-saved-sets" aria-label="추천 리스트 모두 삭제" title="전체 비우기" ${clearDisabledAttr}>${trash('icon icon-sm')}<span class="saved-clear-text">전체 비우기</span></button>
       </div>
       ${hint}
+      <div class="saved-add-toast" data-role="saved-toast" role="status" aria-live="polite" hidden></div>
     </div>
   `;
 }

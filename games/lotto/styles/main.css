@@ -1519,6 +1519,28 @@ a.btn-secondary,
   color: var(--color-text-dim);
 }
 .saved-add-hint.is-cap { color: var(--color-danger); }
+/* S32 (2026-05-07): 풀 한계 hint - 경고 아닌 정보 톤 (dim 유지, accent 살짝). */
+.saved-add-hint.is-exhausted {
+  color: var(--color-text-dim);
+  font-style: italic;
+}
+/* S32 (2026-05-07): 누적 결과 일시 토스트 (정상 / 부분 중복).
+   stats-toast 패턴 차용 - 액션바 안에 그리드 마지막 행으로 등장. */
+.saved-add-toast {
+  grid-column: 1 / -1;
+  margin: var(--space-1) auto 0 auto;
+  max-width: 28rem;
+  padding: 6px 12px;
+  background: rgba(201, 160, 80, 0.12);
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .saved-add-toast { transition: opacity 0.2s ease; }
+}
 /* S29.3 (2026-05-04): 모바일 480px↓에서 grid 1열로 폴드.
    1행 + 버튼 가운데 / 2행 전체 비우기 우측 끝 / 3행 hint 가운데. 사용자 의도(전체 비우기 우측 끝) 모바일에서도 보존. */
 @media (max-width: 480px) {
@@ -1587,6 +1609,19 @@ a.btn-secondary,
   font-size: var(--font-size-md);
   font-weight: 700;
   color: var(--color-text);
+}
+/* S32 (2026-05-07): 풀 한계 배너 (지속 안내). 노란 정보 톤 - 경고 아님.
+   strategyIds 변경 시 자동 사라짐. SSOT: docs/02_data.md 1.5.8.6. */
+.saved-sets-banner {
+  margin: 0 0 var(--space-2) 0;
+  padding: var(--space-2) var(--space-3);
+  background: rgba(201, 160, 80, 0.08);
+  border: 1px solid var(--color-accent);
+  border-left-width: 3px;
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
 }
 /* S29 (2026-05-04): "전체 비우기"를 헤더에서 .saved-add-bar로 이동.
    휴지통 아이콘 + 텍스트 라벨. + 1세트 / + 5세트와 한 줄. */

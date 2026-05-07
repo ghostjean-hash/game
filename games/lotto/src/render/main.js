@@ -26,7 +26,7 @@ import { recordRecommendation, matchHistory, backfillRecommendations } from '../
 import { applyLuckGrowth } from '../core/luck.js';
 import { ensureCurrentState, performRitual, applyRitualBonus } from '../core/ritual.js';
 import {
-  ensureSavedSetsForRound, addSavedSets, removeSavedSetAt, clearSavedSets,
+  ensureSavedSetsForRound, addSavedSets, removeSavedSetAt, clearSavedSets, recipeIdFor,
 } from '../core/saved-sets.js';
 import { savedSetsSectionHtml, savedSetsAddBarHtml } from './saved-sets-section.js';
 import {
@@ -39,6 +39,7 @@ import {
 import {
   STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK,
   SAVED_SETS_CAP, SAVED_SETS_BATCH_SMALL, SAVED_SETS_BATCH_LARGE, SAVED_SETS_SALT_BASE,
+  SAVED_SETS_RETRY_MAX, SAVED_SETS_TOAST_NORMAL_MS, SAVED_SETS_TOAST_PARTIAL_MS,
   OBJECTIVE_STRATEGIES, STRATEGY_CATEGORIES,
 } from '../data/numbers.js';
 
@@ -56,6 +57,9 @@ const state = {
   options: { applyFilters: false, advancedMode: false, fiveSets: false },
   currentTab: 'home',
   ritual: null, // T4: 행운 의식 상태 (charId+drwNo 기준 격리, 회차 변경 시 자동 리셋)
+  // S32 (2026-05-07): 풀 한계 도달 시 그 strategyIds 정규화 키 보관. 같은 키일 때 배너 노출.
+  //   strategyIds 변경(다른 키) 시 자동 무시 → 배너 사라짐. SSOT: docs/02_data.md 1.5.8.6.3.
+  poolExhaustedRecipeId: null,
 };
 
 export function initRender(rootEl) {
@@ -266,11 +270,25 @@ function getRecAndFortune(active) {
  */
 /**
  * S26: 같은 조립식으로 batchN세트 시드 변형 생성 후 누적 list에 push.
+ * S32 (2026-05-07): 풀 한계 재시도 루프 + 결과 분기 (정상 / 부분중복 / 풀한계 / cap).
+ *   SSOT: docs/01_spec.md 5.2.5.4 / docs/02_data.md 1.5.8.5 ~ 1.5.8.6.
+ *
  * 시드 변형 룰:
  *   - 객관 strategy 포함이면 drwNo 변형 (recommendFiveSets 객관 분기 동일 패턴).
  *   - 그 외(시드 의존 strategy 포함)면 seed 변형.
- *   - 솔트 base는 SAVED_SETS_SALT_BASE + (현재 list 길이 + i)로 매번 다른 시드 → 결정론.
+ *   - 솔트 base는 SAVED_SETS_SALT_BASE + (현재 list 길이 + 누적 시도 idx)로 매번 다른 시드 → 결정론.
  *   - 같은 numbers 조합이 이미 있으면 saved-sets.js의 hasSameNumbers가 자동 skip.
+ *
+ * 재시도 룰 (S32):
+ *   - batchN 채워질 때까지 시드 offset을 증가시키며 추가 추첨.
+ *   - 누적 시도 SAVED_SETS_RETRY_MAX(50) 도달 또는 cap 도달 시 종료.
+ *   - 재시도 한계 도달 + addedCount < batchN + cap 미발생 = 풀 한계 (exhausted).
+ *
+ * 결과 분기:
+ *   - A. 정상: addedCount === batchN → 토스트 (NORMAL_MS).
+ *   - B. 부분 중복: addedCount < batchN, !exhausted, !cap → 토스트 (PARTIAL_MS) + 중복 카운트.
+ *   - C. 풀 한계: exhausted → state.poolExhaustedRecipeId 갱신. 배너는 다음 렌더에서 노출.
+ *   - D. cap 도달: capSkip > 0 → 액션바 hint (기존 강화). 토스트 미노출 (액션바가 정보 가짐).
  */
 function addSavedSetsBatch(batchN) {
   const active = getActive();
@@ -278,6 +296,7 @@ function addSavedSetsBatch(batchN) {
   const ensured = ensureSavedSetsForRound(active, state.drwNo);
   let cur = ensured.character;
   const startIdx = cur.savedSets?.list?.length || 0;
+  const currentRecipeId = recipeIdFor(strategyIds);
 
   // 조립식이 객관 전략 1개 이상 포함 = drwNo 변형 / 아니면 seed 변형.
   const hasObjective = strategyIds.some((id) => OBJECTIVE_STRATEGIES.has(id));
@@ -296,10 +315,9 @@ function addSavedSetsBatch(batchN) {
     }
   }
 
-  const newSets = [];
-  for (let i = 0; i < batchN; i += 1) {
-    const salt = SAVED_SETS_SALT_BASE + startIdx + i;
-    const ctxBase = {
+  function buildCtxFor(offset) {
+    const salt = SAVED_SETS_SALT_BASE + startIdx + offset;
+    return {
       seed: hasObjective ? baseSeed : mixSeeds(baseSeed, salt),
       drwNo: hasObjective ? mixSeeds(baseDrwNo, salt) : baseDrwNo,
       luck: active.luck,
@@ -311,19 +329,76 @@ function addSavedSetsBatch(batchN) {
       drawDate,
       strategyIds,
     };
-    const r = recommendMulti(ctxBase);
-    newSets.push({
-      numbers: r.numbers,
-      strategyIds,
-      strategySources: r.strategySources,
-    });
   }
 
-  const result = addSavedSets(cur, newSets);
-  cur = result.character;
+  // S32: 재시도 루프. 누적 시도 attempts < SAVED_SETS_RETRY_MAX, 누적 added < batchN, cap 미도달.
+  let attempts = 0;
+  let totalAdded = 0;
+  let totalDup = 0;
+  let totalCapSkip = 0;
+  while (totalAdded < batchN && attempts < SAVED_SETS_RETRY_MAX && totalCapSkip === 0) {
+    const remaining = batchN - totalAdded;
+    const newSets = [];
+    for (let i = 0; i < remaining && attempts < SAVED_SETS_RETRY_MAX; i += 1) {
+      const ctxBase = buildCtxFor(attempts);
+      const r = recommendMulti(ctxBase);
+      newSets.push({
+        numbers: r.numbers,
+        strategyIds,
+        strategySources: r.strategySources,
+      });
+      attempts += 1;
+    }
+    const result = addSavedSets(cur, newSets);
+    cur = result.character;
+    totalAdded += result.addedCount;
+    totalDup += result.skipped.duplicate;
+    totalCapSkip += result.skipped.cap;
+  }
+
+  // 결과 분기 판정.
+  const isCap = totalCapSkip > 0;
+  const exhausted = !isCap && totalAdded < batchN && attempts >= SAVED_SETS_RETRY_MAX;
+
+  // state 갱신.
   state.characters = state.characters.map((c) => (c.id === cur.id ? cur : c));
   saveCharacters(state.characters);
+  if (exhausted) {
+    state.poolExhaustedRecipeId = currentRecipeId;
+  } else if (totalAdded > 0) {
+    // 추가 성공 시 같은 recipeId의 풀 한계 플래그는 그대로 유지 가능 (이번 호출이 풀 안에서 새 조합을 찾았으므로 사실상 자동 reset).
+    // 안전망: 새 조합이 추가되면 풀 한계 상태 해제 (다음 호출이 또 한계 도달이면 다시 set됨).
+    if (state.poolExhaustedRecipeId === currentRecipeId) {
+      state.poolExhaustedRecipeId = null;
+    }
+  }
+
   renderApp();
+
+  // 토스트 분기 (A / B). C는 배너로 처리 (rerender), D는 액션바 hint.
+  if (!isCap && !exhausted) {
+    if (totalAdded === batchN && totalDup === 0) {
+      flashSavedSetsToast(`추천 ${totalAdded}세트를 추가했습니다`, SAVED_SETS_TOAST_NORMAL_MS);
+    } else if (totalAdded > 0 && totalDup > 0) {
+      flashSavedSetsToast(`추천 ${totalAdded}세트 추가 · 같은 조합 ${totalDup}개는 자동 제외`, SAVED_SETS_TOAST_PARTIAL_MS);
+    }
+  }
+}
+
+/**
+ * S32 (2026-05-07): 추천 리스트 액션바의 토스트 슬롯에 일시 메시지 표시.
+ * SSOT: docs/02_data.md 1.5.8.6 (토스트 카피 + 노출 시간 상수).
+ */
+function flashSavedSetsToast(message, durationMs) {
+  const el = document.querySelector('[data-role="saved-toast"]');
+  if (!el) return;
+  el.textContent = message;
+  el.hidden = false;
+  setTimeout(() => {
+    if (el && el.textContent === message) {
+      el.hidden = true;
+    }
+  }, durationMs);
 }
 
 function activeStrategyIds(character) {
@@ -378,9 +453,14 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   //   배치: 카운트다운 → 추천 리스트(결과) → + 버튼(실행) → 전략(조립) → 행운 → 캐릭터.
   //   결과 ↔ 실행 인접 (시선 0 왕복). 모바일 엄지 한 방향 동선. SSOT: docs/01_spec.md 5.2.5.2.
   // S26: 누적 추천 세트 섹션. active.savedSets는 renderHome에서 ensureSavedSetsForRound로 보장됨.
+  // S32 (2026-05-07): 풀 한계 배너 + 액션바 비활성. 현재 strategyIds의 정규화 키가 state.poolExhaustedRecipeId와 같을 때만 노출.
+  //   strategyIds 변경 시 자동 무시 (다른 키) → 배너 사라짐. SSOT: docs/02_data.md 1.5.8.6.3.
   const savedList = active.savedSets?.list || [];
-  const savedSectionHtml = savedSetsSectionHtml(savedList, 1);
-  const addBarHtml = savedSetsAddBarHtml(savedList.length, SAVED_SETS_CAP);
+  const currentRecipeId = recipeIdFor(strategyIds);
+  const poolExhausted = state.poolExhaustedRecipeId !== null
+    && state.poolExhaustedRecipeId === currentRecipeId;
+  const savedSectionHtml = savedSetsSectionHtml(savedList, 1, poolExhausted);
+  const addBarHtml = savedSetsAddBarHtml(savedList.length, SAVED_SETS_CAP, poolExhausted);
 
   return `
     <header class="app-header tab-header home-header">

@@ -246,6 +246,9 @@ character.savedSets = {
 | `SAVED_SETS_BATCH_SMALL` | 1 | "+ 1세트" 버튼 batch |
 | `SAVED_SETS_BATCH_LARGE` | 5 | "+ 5세트" 버튼 batch |
 | `SAVED_SETS_SALT_BASE` | `0x5A1ED` | 시드 변형 솔트 base (FIVE_SETS_SALT_BASE와 충돌 회피) |
+| `SAVED_SETS_RETRY_MAX` | 50 | 풀 한계 시 dedupe 재시도 상한 (S32, 2026-05-07) |
+| `SAVED_SETS_TOAST_NORMAL_MS` | 1500 | 정상 / cap 토스트 노출 시간 |
+| `SAVED_SETS_TOAST_PARTIAL_MS` | 2500 | 부분 중복 토스트 노출 시간 (부연 카피 길어 1초 가산) |
 
 ##### 1.5.8.3. 시드 변형 룰
 
@@ -264,15 +267,37 @@ character.savedSets = {
 
 추첨 탭 진입 / 캐릭터 전환 시마다 자동 호출 (`renderHome` 안). 다음 회차로 넘어가면 이전 누적은 자동 폐기.
 
-##### 1.5.8.5. 중복 차단
+##### 1.5.8.5. 중복 차단 + 풀 한계 재시도 (S32, 2026-05-07)
 
 같은 `numbers` 조합(정렬 동일)은 추가 시 skip. `addSavedSets` 결과의 `skipped.duplicate` 카운트로 보고.
 
-##### 1.5.8.6. 적용 위치
+**재시도 룰 (S32 신규)**: 별자리 / 사주 행운 등 풀 좁은 전략에서 시드 변형해도 새 unique 조합이 안 나오는 한계 케이스 대응.
 
-- `src/core/saved-sets.js` (신규): `ensureSavedSetsForRound` / `addSavedSets` / `removeSavedSetAt` / `clearSavedSets` / `recipeIdFor` / `hasSameNumbers`.
-- `src/render/saved-sets-section.js` (신규): UI (섹션 + 추가 버튼 바).
-- `src/render/main.js`: `addSavedSetsBatch` 핸들러 + 회차 ensure 호출.
+1.5.8.5.1. + 클릭 시 batchN개 추첨 → dedupe 미달분만큼 시드 offset 증가 + 재추첨.
+1.5.8.5.2. 누적 시도 횟수가 `SAVED_SETS_RETRY_MAX` 도달 또는 batchN 채워지면 종료.
+1.5.8.5.3. 결과 = `{ addedCount, requestedCount, exhausted: boolean }`. `exhausted`는 재시도 한계 도달 + addedCount < requestedCount일 때 true.
+1.5.8.5.4. cap 도달은 재시도 룰과 별개. cap 우선 (cap 차서 skip 발생 시 `exhausted` false로 보고).
+
+##### 1.5.8.6. 결과 안내 카피 (S32, 2026-05-07 신규)
+
+| 케이스 | 트리거 | 노출 | 카피 |
+|---|---|---|---|
+| A. 정상 | `addedCount === requestedCount` | 토스트 `SAVED_SETS_TOAST_NORMAL_MS` | `추천 {N}세트를 추가했습니다` |
+| B. 부분 중복 | `addedCount < requestedCount && !exhausted && !cap` | 토스트 `SAVED_SETS_TOAST_PARTIAL_MS` | `추천 {M}세트 추가 · 같은 조합 {D}개는 자동 제외` |
+| C. 풀 한계 | `exhausted === true` | 누적 리스트 상단 배너 (지속) | `이 전략 조합으로 만들 수 있는 모든 추천을 가져왔습니다 (총 {totalN}세트). 다른 전략을 골라 추가할 수 있어요.` |
+| D. cap 도달 | `skipped.cap > 0` 또는 list 길이 = `SAVED_SETS_CAP` | 액션바 hint + 버튼 비활성 | `최대 {SAVED_SETS_CAP}세트에 도달했습니다 · 일부 삭제 후 추가 가능` |
+
+1.5.8.6.1. 변수 표기 : `{N}`(요청 수), `{M}`(추가된 수), `{D}`(중복 제외 수), `{totalN}`(현재 list 길이).
+1.5.8.6.2. **금지 단어** (CLAUDE.md 6.3 일관) : "확률" / "필승" / "당첨 향상" / "적중" - 카피 어디에도 사용 금지. "참고용" 톤 유지.
+1.5.8.6.3. **C 배너 해제 정책** : `state.poolExhaustedRecipeId`(정규화된 `recipeId`)와 현재 활성 `strategyIds`의 정규화 키가 일치할 때만 배너 노출. strategyIds 변경 시 키 불일치 → 자동 해제.
+1.5.8.6.4. **D hint 해제** : 세트 1개 이상 삭제로 cap 풀리면 자동 해제 (액션바 hint는 cap 충족 시점만 표시).
+1.5.8.6.5. 우선순위(동시 발생 시) : D > C > B > A. 예) cap 도달이면 풀 한계 배너 무시하고 D만 노출 (cap이 더 절대적인 차단).
+
+##### 1.5.8.7. 적용 위치
+
+- `src/core/saved-sets.js`: `ensureSavedSetsForRound` / `addSavedSets` / `removeSavedSetAt` / `clearSavedSets` / `recipeIdFor` / `hasSameNumbers` + (S32) 재시도 결과 구조 확장.
+- `src/render/saved-sets-section.js`: UI (섹션 + 추가 버튼 바) + (S32) 풀 한계 배너 슬롯.
+- `src/render/main.js`: `addSavedSetsBatch` 핸들러 (S32 재시도 + 토스트 분기) + 회차 ensure 호출.
 - `src/data/numbers.js`: 상수.
 
 **객관성 정의 유지**: 1.5.1 "캐릭터 시드와 Luck 모두 무관". `strategyId`는 캐릭터 속성이 아니라 사용자가 회차별로 선택하는 정책 ID → 시드 분산에 활용해도 객관성 위배 아님. 같은 회차 + 같은 전략은 모든 캐릭터에 동일 결과 (객관성 보장).

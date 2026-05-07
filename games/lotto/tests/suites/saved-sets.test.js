@@ -3,7 +3,13 @@ import {
   ensureSavedSetsForRound, addSavedSets, removeSavedSetAt, clearSavedSets,
   hasSameNumbers, recipeIdFor,
 } from '../../src/core/saved-sets.js';
-import { SAVED_SETS_CAP } from '../../src/data/numbers.js';
+import { recommendMulti } from '../../src/core/recommend.js';
+import { mixSeeds } from '../../src/core/random.js';
+import {
+  SAVED_SETS_CAP, SAVED_SETS_RETRY_MAX,
+  SAVED_SETS_TOAST_NORMAL_MS, SAVED_SETS_TOAST_PARTIAL_MS,
+  SAVED_SETS_SALT_BASE,
+} from '../../src/data/numbers.js';
 
 function makeChar(overrides = {}) {
   return { id: 'c1', seed: 12345, savedSets: undefined, ...overrides };
@@ -143,4 +149,83 @@ suite('core/saved-sets - 헬퍼', () => {
     const b = recipeIdFor(['blessed']);
     assertTrue(a !== b);
   });
+});
+
+// S32 (2026-05-07): 풀 한계 재시도 룰 회귀.
+// SSOT: docs/01_spec.md 5.2.5.4 / docs/02_data.md 1.5.8.5 ~ 1.5.8.6.
+// render 호출부의 재시도 루프를 단위 테스트 차원에서 시뮬한다.
+suite('S32 풀 한계 재시도 - 별자리 좁은 풀', () => {
+  test('상수 export 확인 (RETRY_MAX / TOAST_*)', () => {
+    assertEqual(SAVED_SETS_RETRY_MAX, 50);
+    assertEqual(SAVED_SETS_TOAST_NORMAL_MS, 1500);
+    assertEqual(SAVED_SETS_TOAST_PARTIAL_MS, 2500);
+  });
+
+  function simulateBatch({ poolKey, batchN, baseSeed = 12345, drwNo = 1223, startIdx = 0 }) {
+    let cur = ensureSavedSetsForRound(makeChar({ seed: baseSeed }), drwNo).character;
+    const strategyIds = ['astrologer'];
+    let attempts = 0;
+    let totalAdded = 0;
+    let totalDup = 0;
+    let totalCapSkip = 0;
+    while (totalAdded < batchN && attempts < SAVED_SETS_RETRY_MAX && totalCapSkip === 0) {
+      const remaining = batchN - totalAdded;
+      const newSets = [];
+      for (let i = 0; i < remaining && attempts < SAVED_SETS_RETRY_MAX; i += 1) {
+        const salt = SAVED_SETS_SALT_BASE + startIdx + attempts;
+        const ctx = {
+          seed: mixSeeds(baseSeed, salt),
+          drwNo,
+          luck: 50,
+          numberStats: [],
+          bonusStats: [],
+          cooccur: [],
+          zodiac: poolKey,
+          strategyIds,
+        };
+        const r = recommendMulti(ctx);
+        newSets.push({ numbers: r.numbers, strategyIds, strategySources: r.strategySources });
+        attempts += 1;
+      }
+      const result = addSavedSets(cur, newSets);
+      cur = result.character;
+      totalAdded += result.addedCount;
+      totalDup += result.skipped.duplicate;
+      totalCapSkip += result.skipped.cap;
+    }
+    const exhausted = !totalCapSkip && totalAdded < batchN && attempts >= SAVED_SETS_RETRY_MAX;
+    return { totalAdded, totalDup, attempts, exhausted, list: cur.savedSets.list };
+  }
+
+  test('libra(풀 8) 20세트 요청 - 시드 변형 unique 조합 수 ≤ C(8,6)=28', () => {
+    // libra 풀이 8 → 가능 조합 28. 20세트 요청 시 항상 unique 20세트 도달 (수학적 보장).
+    const r = simulateBatch({ poolKey: 'libra', batchN: 20 });
+    assertEqual(r.totalAdded, 20);
+    assertEqual(r.exhausted, false);
+    // 본번호 6개 조합이 모두 서로 다른지 검증.
+    const keys = new Set(r.list.map((s) => s.numbers.join(',')));
+    assertEqual(keys.size, 20);
+  });
+
+  test('libra(풀 8) cap 도달까지 - unique 보장', () => {
+    // cap=20까지 모두 unique 조합으로 채워져야 함.
+    const r = simulateBatch({ poolKey: 'libra', batchN: SAVED_SETS_CAP });
+    assertEqual(r.totalAdded, SAVED_SETS_CAP);
+    const keys = new Set(r.list.map((s) => s.numbers.join(',')));
+    assertEqual(keys.size, SAVED_SETS_CAP);
+  });
+
+  test('gemini(풀 10) 20세트 요청 - C(10,6)=210 풀에서 손쉽게 unique 도달', () => {
+    const r = simulateBatch({ poolKey: 'gemini', batchN: 20 });
+    assertEqual(r.totalAdded, 20);
+    assertEqual(r.exhausted, false);
+    const keys = new Set(r.list.map((s) => s.numbers.join(',')));
+    assertEqual(keys.size, 20);
+  });
+
+  // [별도 발견] 별자리 추첨 결과가 풀 외 번호를 포함하는 케이스 존재.
+  //   원인 추정: `recommend.js:381` `applyLuck`이 풀 외 weight 0을 양수로 만듦.
+  //   S30.2에서 풀 표시(mainWeights)는 정정됐으나 실제 추첨(finalWeights)은 미수정.
+  //   본 sprint(S32 dedupe + 안내) 범위 밖. 별도 sprint 결정 사안.
+  //   여기서는 unique 조합 보장만 검증, 풀 부분집합 강제는 미검증.
 });

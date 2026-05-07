@@ -86,6 +86,13 @@ export const SAVED_SETS_BATCH_SMALL = 1;
 export const SAVED_SETS_BATCH_LARGE = 5;
 // 누적 세트 시드 변형 솔트 베이스 (FIVE_SETS_SALT_BASE와 충돌 회피).
 export const SAVED_SETS_SALT_BASE = 0x5A1ED;
+// S32 (2026-05-07): 풀 한계 시 dedupe 재시도 상한. SSOT: docs/02_data.md 1.5.8.2.
+//   별자리 / 사주 행운 / 원소 등 풀 좁은 전략에서 시드 변형해도 새 unique 조합이 안 나오는 한계 검출용.
+//   batchN개 추첨 후 dedupe 미달분만큼 시드 offset 증가 + 재추첨, 누적 시도 RETRY_MAX 도달 시 종료.
+export const SAVED_SETS_RETRY_MAX = 50;
+// S32 (2026-05-07): 누적 세트 결과 토스트 노출 시간 (밀리초). SSOT: docs/02_data.md 1.5.8.2.
+export const SAVED_SETS_TOAST_NORMAL_MS = 1500;
+export const SAVED_SETS_TOAST_PARTIAL_MS = 2500;
 
 // 1.5.1. 객관 전략 (캐릭터 시드 / Luck 무관. 회차 데이터로만 결정).
 // 같은 회차에서 모든 캐릭터가 같은 결과를 받음. SSOT: docs/02_data.md 1.5.
