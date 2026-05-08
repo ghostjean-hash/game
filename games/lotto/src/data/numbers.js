@@ -271,29 +271,26 @@ export const PRESET_LABEL_MAX = 8;
 export const PRESET_SUBTITLE_MAX = 20;
 
 // 기본 프리셋 3종 (사용자 첫 진입 또는 reset 시 주입).
-// S43 (2026-05-08, 알고리즘 처음부터 재구축 1단계): 사용자 화남 - 학설+통계+Luck+풀 컷팅+합 필터 누적 보정으로
-//   "끝자리 패턴 충돌(2/3/4, 21/22/24 같은 인접 클러스터링)" 발생. 매 fix가 부분 해결 + 또 다른 결함 노출.
-//   결정: 모든 프리셋을 직감(intuitive) 단독 묶음으로 단순화. 직감 = 풀 1-45 + 회차마다 셔플 weight = 한국 실 분포 정확.
-//   학설/통계/Luck 보너스/풀 컷팅/합 필터 모두 우회. 인접 클러스터링 0. 1번대 무조건 노출 0.
-//   각 프리셋 부제로 차별 인지만 보존. 추후 sprint에서 진짜 알고리즘 코드 재설계 + 학설 약한 가중 도입.
-//   통계 신봉 / 학설 신봉 사용자는 편집 모달에서 직접 묶음 가능 (자기 책임 영역).
+// S43.7 (2026-05-09): 모든 프리셋이 직감 단독으로 동일 묶음이라 "전략 내용 똑같다" 불만.
+//   새 architecture(S43)는 가중 보너스 합성 + 단일 추첨이라 1번대 편향 / 인접 클러스터링 없음 (시뮬 검증).
+//   → 옛 차별화 묶음 복원 안전.
 export const DEFAULT_PRESETS = Object.freeze([
   Object.freeze({
     id: 'preset-1',
     label: '균형',
-    subtitle: '한국 6/45 자연 분포',
-    strategyIds: Object.freeze([STRATEGY_INTUITIVE]),
+    subtitle: '최신·운세·직감 한 번에',
+    strategyIds: Object.freeze([STRATEGY_TREND_FOLLOWER, STRATEGY_ASTROLOGER, STRATEGY_INTUITIVE]),
   }),
   Object.freeze({
     id: 'preset-2',
     label: '분산파',
     subtitle: '남들이 덜 고르는 조합',
-    strategyIds: Object.freeze([STRATEGY_INTUITIVE]),
+    strategyIds: Object.freeze([STRATEGY_REGRESSIONIST, STRATEGY_INTUITIVE, STRATEGY_BALANCER]),
   }),
   Object.freeze({
     id: 'preset-3',
     label: '운세파',
-    subtitle: '별자리·사주 + 즉흥',
-    strategyIds: Object.freeze([STRATEGY_INTUITIVE]),
+    subtitle: '서양·동양·원소 운세',
+    strategyIds: Object.freeze([STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_ZODIAC_ELEMENT]),
   }),
 ]);

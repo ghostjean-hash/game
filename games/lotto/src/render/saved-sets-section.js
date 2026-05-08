@@ -48,7 +48,7 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
     return `
       <section class="saved-sets-section is-empty" aria-label="추천 리스트 (비어있음)">
         ${bannerHtml}
-        <p class="saved-sets-empty">아래 전략을 골라 조립식을 만든 뒤 <strong>+ 1세트</strong> 또는 <strong>+ 5세트</strong>로 추천을 추가하세요.</p>
+        <p class="saved-sets-empty">아래 프리셋을 고르고 <strong>+ 1세트</strong> 또는 <strong>+ 5세트</strong>로 추천을 받으세요.</p>
       </section>
     `;
   }

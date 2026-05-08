@@ -63,6 +63,15 @@ export function loadPresets() {
   if (!Array.isArray(raw) || raw.length === 0) {
     return JSON.parse(JSON.stringify(DEFAULT_PRESETS));
   }
+  // S43.7 (2026-05-09) 마이그레이션: Sprint 053 임시 단순화로 모든 슬롯이 직감 단독인 옛 데이터 자동 갱신.
+  //   조건: 모든 슬롯의 strategyIds가 ['intuitive']로 동일 + 사용자 편집 흔적 없음(기본 라벨 유지).
+  const allDuplicate = raw.length > 0 && raw.every((p) =>
+    Array.isArray(p.strategyIds)
+    && p.strategyIds.length === 1
+    && p.strategyIds[0] === 'intuitive');
+  if (allDuplicate) {
+    return JSON.parse(JSON.stringify(DEFAULT_PRESETS));
+  }
   return raw;
 }
 export function savePresets(presets) { write('presets', presets); }

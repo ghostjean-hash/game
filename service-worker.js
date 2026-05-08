@@ -30,7 +30,8 @@
 // v36 (2026-05-08): lotto S43.5 (Sprint 055) - docs SSOT 정리. 02_data.md 1.4 / 1.5.1 / 1.5.4 / 1.5.7 폐기 마크. SAJU_RELATION_BOOST 보존 결정 (시각 라벨 전용).
 // v37 (2026-05-08): lotto S43.6 (Sprint 056) - 호환 wrapper 폐기. recommend / distributeCounts 통째 삭제. 테스트 28건 호출 일괄 recommendMulti로 변환. recommendMulti 진입점에 ctx.strategyId 호환 처리 추가.
 // v38 (2026-05-09): lotto S43.7 hotfix - main.js의 잔존 'recommend' import 제거 (Sprint 056에서 폐기됐는데 import만 남아 모든 페이지 빈 화면). 자비스 사전 검증 누락 사고. 전 모듈 import 검증 통과.
-const CACHE_VERSION = "v38";
+// v39 (2026-05-09): lotto S43.7 hotfix2 - DEFAULT_PRESETS 차별화 복원 (균형/분산파/운세파 묶음 다름). 옛 안내 카피 갱신. loadPresets 마이그레이션(모두 직감 단독이면 자동 reset). 시뮬: 모든 프리셋 1-9 19.5-19.7%, 인접 0.66-0.68 정상.
+const CACHE_VERSION = "v39";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
