@@ -4,13 +4,50 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-08 (Sprint 054 - 옛 상수 폐기 + main.js 객관 분기 폐기 / S43.4).
+1.3. **마지막 갱신**: 2026-05-08 (Sprint 055 - docs SSOT 정리 + SAJU_RELATION_BOOST 보존 결정 / S43.5).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 직전 5 Sprint(040~044)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.76. Sprint 055 완료 - docs SSOT 정리 + SAJU_RELATION_BOOST 결정 (S43.5, 2026-05-08)
+
+배경: 사용자 지시 "다음 진행" - Sprint 054 후속 권장.
+
+### 2.76.1. docs/02_data.md 옛 architecture 절 폐기 마크 (4.2 부분)
+
+| 절 | 변경 |
+|---|---|
+| 1.4 비율 필터 | 폐기 마크 + 사유. SUM_RANGE / ODD_EVEN / AC_VALUE 폐기 명시 |
+| 1.5.1 객관 vs 시드 의존 | 폐기 마크. OBJECTIVE_STRATEGIES / OBJECTIVE_SEED_SALT 폐기 명시 |
+| 1.5.4 다중 전략 분배 | 폐기 마크. distributeCounts 호환 wrapper 보존 |
+| 1.5.7 객관 전략 시드 분산 | 1.5.1 동반 폐기 |
+
+기존에 이미 폐기 표기된 절 (1.5.6 풀 컷팅 / 1.7 가중치 한계)는 그대로 보존. docs/01_spec.md 5.1.3.0 (S43 architecture)와 교차 참조.
+
+### 2.76.2. SAJU_RELATION_BOOST 보존 결정 (4.3)
+
+| 항목 | 분석 |
+|---|---|
+| 사용 위치 | `src/render/character-card.js` (시각 라벨 전용) |
+| 추첨 영향 | 0 (새 architecture는 fiveElements lucky +0.4 가중만 사용) |
+| 사용자 가치 | 사주 통변성 관계(인성/식상/재성/관성/비견) 시각 노출 = 학설 깊이 표현 |
+| **결정** | **보존**. 시각 정보로 가치 있음. 추첨 영향 0이라 알고리즘 부담 없음 |
+
+### 2.76.3. 4.1 호환 wrapper 폐기 - 별도 sprint 이월
+
+`recommend` (단일) / `distributeCounts` 호환 wrapper 폐기는 35건 테스트 호출 영향. 안전 일괄 변환 위해 별도 sprint(테스트 일괄 갱신 전용) 권장.
+
+### 2.76.4. 검증
+
+- `node tests/run-node.js` → 271/275 PASS (사전 storage 4건 Node 환경 무관). 신규 FAIL 0.
+
+### 2.76.5. 다음 sprint 후보
+
+- **호환 wrapper 폐기 sprint**: recommend.test.js 35건 호출을 recommendMulti로 일괄 변환. 테스트 갱신 전용.
+- 기타 1.5.2 / 1.5.5 / 1.5.8 등 docs 절 점검 (필요 시).
 
 ## 2.75. Sprint 054 완료 - 옛 상수 폐기 + main.js 객관 분기 폐기 (S43.4, 2026-05-08)
 

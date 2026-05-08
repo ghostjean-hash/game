@@ -27,7 +27,8 @@
 // v33 (2026-05-08): lotto S43.2 (Sprint 052) - 권장 사항 일괄. backcast(history.js) + recommendFiveSets를 모두 recommendMulti로 통일. SSOT(01_spec 5.1.3.0 신설 / 02_data 1.5.6 폐기 사유). recommend 단일 + applyLuck @deprecated 마크.
 // v34 (2026-05-08): lotto S43.3 (Sprint 053) - 권장안 일괄. recommend.js 676→240줄 (옛 함수 17개 폐기). luck.js 88→33줄 (preferredNumbers/applyLuck 폐기). 옛 architecture 단언 일괄 정리. recommend/distributeCounts는 호환 wrapper 보존.
 // v35 (2026-05-08): lotto S43.4 (Sprint 054) - 권장안 후속. main.js 객관 분기 폐기. numbers.js 옛 상수 9개 폐기 (SUM_RANGE, ODD_EVEN, AC_VALUE, STATS_POOL_SIZE, OBJECTIVE_STRATEGIES, OBJECTIVE_SEED_SALT, WEIGHT_MAX_BIAS, STATS_POWER, GAP_POWER).
-const CACHE_VERSION = "v35";
+// v36 (2026-05-08): lotto S43.5 (Sprint 055) - docs SSOT 정리. 02_data.md 1.4 / 1.5.1 / 1.5.4 / 1.5.7 폐기 마크. SAJU_RELATION_BOOST 보존 결정 (시각 라벨 전용).
+const CACHE_VERSION = "v36";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
