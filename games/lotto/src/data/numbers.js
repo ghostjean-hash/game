@@ -126,7 +126,11 @@ export const FORTUNE_BAD = 'bad';
 // 1.7. 추첨 가중치 한계 + 통계 효과 증폭
 // SSOT: docs/02_data.md 1.7.
 export const WEIGHT_MIN_FLOOR = 0.0001;
-export const WEIGHT_MAX_BIAS = 50.0;
+// S42 (2026-05-08): 50.0 → 5.0. 사용자 통찰 "알고리즘이 무조건 아래쪽 편향. 분명 실수".
+//   진단: Luck=50 시 boost 25.5배 → 시드 의존 전략(별자리/4원소/사주)에서 시드 6번호가 풀 안에 있으면 weight 25.5 vs 다른 1 → 채택 확률 84%. 매 추천 시드 번호 확정.
+//   사용자 캐릭터 시드에 우연히 작은 번호(2,4,5 등) 포함 → 모든 추천에 2,4,5 반복.
+//   fix: 50 → 5. boost 3배(Luck=50). 시드 번호 채택 ~37.5% = 자연 가중. 다른 번호도 정상 추첨.
+export const WEIGHT_MAX_BIAS = 5.0;
 // 누적 빈도 weight 증폭 지수. 1221회 실측 ±19% 편차 (133~182)로 거의 균등 인상 → 분포 차이 증폭.
 // statistician / secondStar에 적용. trendFollower는 raw 유지 (recent30 ratio 9배로 이미 두드러짐).
 // 실측 효과: weight ratio 1.368 → 1.601, 10000회 추출 빈도 ratio 1.587. SSOT: docs/02_data.md 1.7.2.
@@ -315,7 +319,11 @@ export const DEFAULT_PRESETS = Object.freeze([
   Object.freeze({
     id: 'preset-3',
     label: '운세파',
-    subtitle: '동·서양 운세 합',
-    strategyIds: Object.freeze([STRATEGY_ASTROLOGER, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS]),
+    subtitle: '별자리·사주 + 즉흥',
+    // S41 (2026-05-08): zodiacElement(4원소) 폐기 + intuitive(직감) 추가. 사용자 피드백 "운세파 1-9 무조건 노출".
+    //   학설 풀이 끝자리 1-9 베이스라 시드 변형 9세트 + 추첨일 일진 보너스 ×3 인성 부스트가 1-9 31.5% 편향 만듦.
+    //   4원소 fire = [1,3,9,...] 1-9 안 3개로 가장 1-9 비중 높은 학설 → 폐기.
+    //   직감 추가로 풀 1-45 균등 weight + 회차마다 셔플 = 자연 분산. 시뮬: 1-9 20.0% (한국 실측 20%).
+    strategyIds: Object.freeze([STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_INTUITIVE]),
   }),
 ]);
