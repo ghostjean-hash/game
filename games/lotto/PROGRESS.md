@@ -4,13 +4,58 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-08 (Sprint 052 - S43 후속 정리 / backcast 통일 + SSOT 갱신 + dead code 마크).
+1.3. **마지막 갱신**: 2026-05-08 (Sprint 053 - dead code 폐기 + 옛 architecture 단언 정리 / S43.3).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 직전 5 Sprint(040~044)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.74. Sprint 053 완료 - dead code 폐기 + 옛 architecture 단언 정리 (S43.3, 2026-05-08)
+
+배경: 사용자 지시 "권장안대로 진행" - Sprint 052 후속 권장 일괄.
+
+### 2.74.1. 변경
+
+| 파일 | 이전 | 이후 |
+|---|---|---|
+| `src/core/recommend.js` | 676줄 (옛 architecture 함수 17개) | ~240줄 (새 architecture만) |
+| `src/core/luck.js` | 88줄 (`preferredNumbers` / `applyLuck` / `applyLuckGrowth` / `rankLuckBonus`) | 33줄 (`applyLuckGrowth` / `rankLuckBonus`만) |
+
+폐기 함수 (`recommend.js` + `luck.js`):
+- `recommend` (단일) - wrapper 보존 (외부 테스트 호환).
+- `distributeCounts` - wrapper 보존 (외부 테스트 호환).
+- `strategyHash` / `poolFromWeights` / `poolFromIndices` / `statsToWeights` / `gapWeights` / `zodiacWeights` / `trendWeights` / `intuitiveWeights` / `passesBalanceFilters` / `zodiacElementOf` / `zodiacElementWeights` / `fiveElementOf` / `fiveElementsWeights` / `balancedSample` / `computeStrategyContext` - 통째로 삭제.
+- `applyLuck` / `preferredNumbers` (luck.js) - 통째로 삭제.
+
+### 2.74.2. 옛 architecture 테스트 단언 정리
+
+`tests/suites/recommend.test.js` + `tests/suites/luck.test.js`에서 옛 architecture 검증 단언 일괄 갱신/폐기:
+
+- `reasons` 메시지 키워드 단언 (`'축복'`, `'fire'`, `'wood'` 등) → 폐기. 새 architecture는 reasons 단순 카운트.
+- 풀 컷팅 효과 6/6 hit → 약화 (hit 비율로 검증).
+- `distributeCounts` 범위 밖 에러 → 폐기 (호환 wrapper).
+- `balancer` 합 121-160 / 홀짝 3:3 통과율 → 폐기 (post-filter 폐기).
+- 객관 strategy "seed 달라도 같은 결과" → 폐기 (객관 개념 폐기).
+- 알 수 없는 전략 에러 → 폐기 (호환 wrapper).
+- `preferredNumbers` / `applyLuck` 단언 (luck.test.js) → 통째로 폐기.
+
+### 2.74.3. recommendFiveSets 통일 (S43.2 후속)
+
+`recommendFiveSets` 안의 시드 변형 단순화:
+- 옛 분기: 객관 전략 → drwNo 변형 / 시드 의존 → seed 변형.
+- 새 단일: seed 변형만. 객관/시드 의존 분기 폐기.
+
+### 2.74.4. 검증
+
+- `node tests/run-node.js` → 271/275 PASS (사전 storage 4건 Node 환경 무관).
+- 신규 회귀 5건 (S43 분포 정상성) 그대로 PASS.
+
+### 2.74.5. 보존 대상 (다음 sprint 검토)
+
+- `recommend` (단일) / `distributeCounts` 호환 wrapper - 다음 sprint에서 테스트 호출도 `recommendMulti`로 일괄 변경 후 wrapper 폐기.
+- `numbers.js` 옛 상수 (`STATS_POOL_SIZE` / `WEIGHT_MAX_BIAS` / `STATS_POWER` / `GAP_POWER` / `SUM_RANGE_*` / `ODD_EVEN_PREFERRED` / `OBJECTIVE_STRATEGIES` / `OBJECTIVE_SEED_SALT` / `SAJU_RELATION_BOOST`) - 일부 외부 사용 (main.js / character-card.js / strategy-tabs.js). 점진 폐기.
 
 ## 2.73. Sprint 052 완료 - S43 후속 정리 (S43.2, 2026-05-08)
 
