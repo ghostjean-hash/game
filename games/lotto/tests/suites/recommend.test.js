@@ -561,3 +561,87 @@ suite('core/recommend - 전략', () => {
     }
   });
 });
+
+// S43 (2026-05-08) - 알고리즘 재구축 회귀 테스트.
+suite('S43 단일 추첨 architecture - 분포 정상성', () => {
+  test('1-9 비율이 한국 실측 20% ±5% 안 (직감 단독, 1000회)', () => {
+    const counts = new Array(46).fill(0);
+    const N_T = 1000;
+    for (let i = 0; i < N_T; i++) {
+      const r = recommendMulti({
+        seed: 0xCAFEBABE + i, drwNo: 1223 + i, luck: 50,
+        numberStats: [], bonusStats: [], cooccur: [],
+        zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: [STRATEGY_INTUITIVE],
+      });
+      r.numbers.forEach((n) => counts[n]++);
+    }
+    let c19 = 0;
+    for (let n = 1; n <= 9; n++) c19 += counts[n];
+    const ratio = c19 / (N_T * 6);
+    assertTrue(ratio >= 0.15 && ratio <= 0.25, `1-9 비율 ${(ratio*100).toFixed(1)}% (기대 20% ±5%)`);
+  });
+
+  test('인접 클러스터링: 6번호 중 인접쌍 평균 < 1.5 (한국 실측 ~1.0)', () => {
+    let adjTotal = 0;
+    const N_T = 1000;
+    for (let i = 0; i < N_T; i++) {
+      const r = recommendMulti({
+        seed: 0xCAFEBABE + i, drwNo: 1223 + i, luck: 50,
+        numberStats: [], bonusStats: [], cooccur: [],
+        zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: [STRATEGY_INTUITIVE],
+      });
+      for (let k = 0; k < r.numbers.length - 1; k++) {
+        if (r.numbers[k+1] - r.numbers[k] === 1) adjTotal++;
+      }
+    }
+    const avgAdj = adjTotal / N_T;
+    assertTrue(avgAdj < 1.5, `인접쌍 평균 ${avgAdj.toFixed(2)}/세트 (기대 < 1.5, 한국 실측 ~1.0)`);
+  });
+
+  test('1-9 0개 세트 비율 한국 실측 24% ±10% 안', () => {
+    let zero = 0;
+    const N_T = 1000;
+    for (let i = 0; i < N_T; i++) {
+      const r = recommendMulti({
+        seed: 0xCAFEBABE + i, drwNo: 1223 + i, luck: 50,
+        numberStats: [], bonusStats: [], cooccur: [],
+        zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: [STRATEGY_INTUITIVE],
+      });
+      if (!r.numbers.some(n => n <= 9)) zero++;
+    }
+    const ratio = zero / N_T;
+    assertTrue(ratio >= 0.14 && ratio <= 0.34, `1-9 0개 세트 ${(ratio*100).toFixed(1)}% (기대 24% ±10%)`);
+  });
+
+  test('보너스가 본번호와 겹치지 않음 (1000회)', () => {
+    let dup = 0;
+    const N_T = 1000;
+    for (let i = 0; i < N_T; i++) {
+      const r = recommendMulti({
+        seed: 0xCAFEBABE + i, drwNo: 1223 + i, luck: 50,
+        numberStats: [], bonusStats: [], cooccur: [],
+        zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: [STRATEGY_INTUITIVE],
+      });
+      if (r.bonus && r.numbers.includes(r.bonus)) dup++;
+    }
+    assertEqual(dup, 0, `보너스 충돌 ${dup}건 (기대 0)`);
+  });
+
+  test('strategySources 길이 6 + 모두 strategyIds 안 ID', () => {
+    const sids = [STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_INTUITIVE];
+    const r = recommendMulti({
+      seed: 0xCAFEBABE, drwNo: 1223, luck: 50,
+      numberStats: [], bonusStats: [], cooccur: [],
+      zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+      strategyIds: sids,
+    });
+    assertEqual(r.strategySources.length, 6);
+    for (const src of r.strategySources) {
+      assertTrue(sids.includes(src), `source ${src}가 strategyIds 안에 없음`);
+    }
+  });
+});

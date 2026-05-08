@@ -520,9 +520,11 @@ function computeUnifiedWeights(ctx, strategyIds) {
   return w;
 }
 
-/** 번호가 어느 학설 풀에 속하는지 매핑 (시각 라벨용. 추첨 영향 0). */
+/** 번호가 어느 strategy 풀에 속하는지 매핑 (시각 라벨용. 추첨 영향 0).
+ *  매핑 우선순위: 학설 풀 안 매칭 → BLESSED 시드 6번호 → INTUITIVE → 첫 strategy.
+ *  학설 풀 외 번호가 학설 라벨 부착되는 모순 방지. */
 function assignSourceForNumber(n, ctx, strategyIds) {
-  const { zodiac, dayPillar } = ctx;
+  const { seed = 0, zodiac, dayPillar } = ctx;
   const elMap = {
     aries: 'fire', leo: 'fire', sagittarius: 'fire',
     taurus: 'earth', virgo: 'earth', capricorn: 'earth',
@@ -540,6 +542,20 @@ function assignSourceForNumber(n, ctx, strategyIds) {
       if (lucky.includes(n)) return sid;
     }
   }
+  // BLESSED 시드 6번호 매칭
+  if (strategyIds.includes(STRATEGY_BLESSED)) {
+    const pool = [];
+    for (let i = 1; i <= 45; i += 1) pool.push(i);
+    const rng = mulberry32(seed >>> 0);
+    for (let i = pool.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(rng() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    if (pool.slice(0, 6).includes(n)) return STRATEGY_BLESSED;
+  }
+  // 학설 / 시드 매칭 안 되면 INTUITIVE 우선 → 통계계 → 첫 strategy
+  if (strategyIds.includes(STRATEGY_INTUITIVE)) return STRATEGY_INTUITIVE;
+  if (strategyIds.includes(STRATEGY_BALANCER)) return STRATEGY_BALANCER;
   return strategyIds[0];
 }
 

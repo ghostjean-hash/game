@@ -23,7 +23,8 @@
 // v29 (2026-05-08): lotto S39+S40 (Sprint 049) - 1번대 무조건 노출 해소. STATS_POOL_SIZE 10→25 / SUM_RANGE 121-160→100-180. 분산파 = regr+intuitive 단순화(balancer 폐기). 시뮬 1000회: 1-9 0개 세트 24~30%로 한국 실측(24%) 일치.
 // v30 (2026-05-08): lotto S41+S42 (Sprint 050) - 운세파 4원소 폐기 + 직감 추가 / WEIGHT_MAX_BIAS 50→5. 사용자 통찰 "낮은 수 무조건". 진단: Luck=50 시 boost 25배라 시드 6번호 채택 84% 확정. 시드 작은 번호 포함 → 매 추천 반복. fix 후 boost 3배 / 채택 37%로 자연 분산.
 // v31 (2026-05-08): lotto S43 (Sprint 051) - 알고리즘 처음부터 재구축. 사용자 결정타 "근본 잘못. 부분 fix 의미 없다". 단일 추첨 architecture: 모든 strategy 가중을 1-45 base 1.0 + 보너스 +0.3~+0.5로 합성 후 weightedSample 1번. 다중 분배/풀 컷팅/Luck 25배/balancer 합 필터/풀 외 차단 모두 폐기. 시뮬 2000회: 한국 실측(20/22/22/22/13)과 정확 일치. 인접 클러스터링 0.68/세트로 자연.
-const CACHE_VERSION = "v31";
+// v32 (2026-05-08): lotto S43.1 (Sprint 051 후속) - 전면 재검증 + QA + Review + 회귀 테스트 5건 추가. assignSourceForNumber 라벨 매핑 fix(학설 풀 외 → INTUITIVE/BLESSED 우선). 카이제곱 검정 통과. 보너스 충돌 0.
+const CACHE_VERSION = "v32";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
