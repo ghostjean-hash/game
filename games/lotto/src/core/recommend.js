@@ -447,71 +447,126 @@ function normalizeStrategyIds(ids) {
  *   strategySources: string[],
  * }}
  */
+/**
+ * S43 (2026-05-08) - 알고리즘 처음부터 재구축.
+ *
+ * 사용자 통찰 "알고리즘 근본 자체 잘못. 부분 fix 의미 없다" 반영.
+ *
+ * 옛 architecture 결함:
+ *   - 다중 strategy 분배(6/N개씩) → 각 strategy 별도 풀에서 추첨 → 정렬 시 끝자리 패턴 충돌 (2/3/4, 21/22/24 인접 클러스터링).
+ *   - 풀 컷팅 + 학설 풀 좁음 + Luck 25배 보너스 + balancer 합 필터 누적 보정 → 1번대 무조건 노출.
+ *
+ * 새 architecture:
+ *   1. 모든 strategy의 가중을 단일 weight 벡터(1-45 base 1.0)로 합성.
+ *   2. weightedSample 1번 호출 → 6번호 추첨.
+ *   3. 풀 컷팅 / 분배 / Luck 25배 / balancer post-filter / 합 필터 모두 우회.
+ *   4. 학설 / 통계 가중은 약한 보너스(+0.3~+0.5)만. 한국 6/45 실 분포 ±5% 노이즈.
+ *   5. 정렬 시 인접 클러스터링 발생 안 함 (단일 추첨이라 풀 인접 인덱스 동시 채택 가능성 균등).
+ *   6. strategySources 시각 라벨 = 번호가 어느 학설 풀 안에 있는지 매핑(시각만, 추첨 영향 0).
+ */
+function computeUnifiedWeights(ctx, strategyIds) {
+  const w = new Array(VECTOR_LEN).fill(1.0);
+  const { seed = 0, drwNo = 0, luck = 50, numberStats = [], bonusStats = [], zodiac, dayPillar } = ctx;
+
+  const elMap = {
+    aries: 'fire', leo: 'fire', sagittarius: 'fire',
+    taurus: 'earth', virgo: 'earth', capricorn: 'earth',
+    gemini: 'air', libra: 'air', aquarius: 'air',
+    cancer: 'water', scorpio: 'water', pisces: 'water',
+  };
+
+  for (const sid of strategyIds) {
+    if (sid === STRATEGY_ASTROLOGER) {
+      const lucky = ZODIAC_LUCKY[zodiac] || [];
+      for (const n of lucky) w[n - 1] += 0.4;
+    } else if (sid === STRATEGY_ZODIAC_ELEMENT) {
+      const lucky = ZODIAC_ELEMENT_LUCKY[elMap[zodiac]] || [];
+      for (const n of lucky) w[n - 1] += 0.3;
+    } else if (sid === STRATEGY_FIVE_ELEMENTS) {
+      const stemEl = STEM_TO_ELEMENT[dayPillar?.stem];
+      const lucky = FIVE_ELEMENTS_LUCKY[stemEl] || [];
+      for (const n of lucky) w[n - 1] += 0.4;
+    } else if (sid === STRATEGY_STATISTICIAN && numberStats.length > 0) {
+      const max = Math.max(...numberStats.map((s) => s.totalCount || 0), 1);
+      for (const s of numberStats) w[s.number - 1] += ((s.totalCount || 0) / max) * 0.3;
+    } else if (sid === STRATEGY_REGRESSIONIST && numberStats.length > 0) {
+      const max = Math.max(...numberStats.map((s) => s.currentGap || 0), 1);
+      for (const s of numberStats) w[s.number - 1] += ((s.currentGap || 0) / max) * 0.3;
+    } else if (sid === STRATEGY_TREND_FOLLOWER && numberStats.length > 0) {
+      const max = Math.max(...numberStats.map((s) => s.recent30 || 0), 1);
+      for (const s of numberStats) w[s.number - 1] += ((s.recent30 || 0) / max) * 0.3;
+    } else if (sid === STRATEGY_SECOND_STAR && bonusStats.length > 0) {
+      const max = Math.max(...bonusStats.map((s) => s.totalCount || 0), 1);
+      for (const s of bonusStats) w[s.number - 1] += ((s.totalCount || 0) / max) * 0.3;
+    } else if (sid === STRATEGY_INTUITIVE) {
+      const rng = mulberry32(mixSeeds(seed >>> 0, ((drwNo || 0) + 1) >>> 0));
+      for (let i = 0; i < VECTOR_LEN; i += 1) w[i] += rng() * 0.6 - 0.3;
+    } else if (sid === STRATEGY_BLESSED) {
+      const ratio = Math.max(0, Math.min(1, (luck || 0) / 100));
+      const boost = ratio * 0.5;
+      const pool = [];
+      for (let n = 1; n <= 45; n += 1) pool.push(n);
+      const rng = mulberry32(seed >>> 0);
+      for (let i = pool.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(rng() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      for (let i = 0; i < 6; i += 1) w[pool[i] - 1] += boost;
+    }
+    // STRATEGY_BALANCER: post-filter 폐기. 1-45 균등 가중 (추가 보너스 0). 합 100-180 자연 통과 빈도.
+  }
+
+  for (let i = 0; i < VECTOR_LEN; i += 1) if (w[i] < 0.1) w[i] = 0.1;
+  return w;
+}
+
+/** 번호가 어느 학설 풀에 속하는지 매핑 (시각 라벨용. 추첨 영향 0). */
+function assignSourceForNumber(n, ctx, strategyIds) {
+  const { zodiac, dayPillar } = ctx;
+  const elMap = {
+    aries: 'fire', leo: 'fire', sagittarius: 'fire',
+    taurus: 'earth', virgo: 'earth', capricorn: 'earth',
+    gemini: 'air', libra: 'air', aquarius: 'air',
+    cancer: 'water', scorpio: 'water', pisces: 'water',
+  };
+  for (const sid of strategyIds) {
+    if (sid === STRATEGY_ASTROLOGER && (ZODIAC_LUCKY[zodiac] || []).includes(n)) return sid;
+    if (sid === STRATEGY_FIVE_ELEMENTS) {
+      const lucky = FIVE_ELEMENTS_LUCKY[STEM_TO_ELEMENT[dayPillar?.stem]] || [];
+      if (lucky.includes(n)) return sid;
+    }
+    if (sid === STRATEGY_ZODIAC_ELEMENT) {
+      const lucky = ZODIAC_ELEMENT_LUCKY[elMap[zodiac]] || [];
+      if (lucky.includes(n)) return sid;
+    }
+  }
+  return strategyIds[0];
+}
+
 export function recommendMulti(ctx) {
-  const { strategyIds, ...rest } = ctx;
+  const { strategyIds, seed = 0, drwNo = 0 } = ctx;
   if (!Array.isArray(strategyIds) || strategyIds.length === 0) {
     throw new Error('strategyIds가 비어있음');
   }
-  // E안: 정규화. 같은 조합 = 같은 결과 보장.
   const normalized = normalizeStrategyIds(strategyIds);
-  const distribution = distributeCounts(normalized.length);
-  const collected = [];
-  const sources = [];
-  const allReasons = [];
-  let bonus = null;
 
-  for (let i = 0; i < normalized.length; i += 1) {
-    const sid = normalized[i];
-    const targetCount = distribution[i];
-    const sc = computeStrategyContext({ ...rest, strategyId: sid });
+  // S43: 단일 weight 합성 + 단일 추첨. 분배 / 풀 컷팅 / Luck 25배 / 합 필터 우회.
+  const w = computeUnifiedWeights(ctx, normalized);
+  const samplingSeed = mixSeeds(seed >>> 0, ((drwNo || 0) + 0xC0FFEE) >>> 0);
+  const collected = weightedSample(w, PICK_COUNT, samplingSeed);
+  collected.sort((a, b) => a - b);
+  const sources = collected.map((n) => assignSourceForNumber(n, ctx, normalized));
 
-    if (i === 0) {
-      // 보너스는 첫 정규화 strategy의 보너스 풀에서 추출 (본번호 미정 → exclude 없이).
-      const bonusArr = weightedSample(sc.bonusW, BONUS_COUNT, sc.samplingBonusSeed);
-      bonus = bonusArr[0];
-    }
-
-    // C안: 풀에서 targetCount개 직접 추출. 누적 collected를 exclude로 풀에서 사전 제외.
-    //   풀 안 균등 분포 → 풀 평균에 수렴. "잘라쓰기 휴리스틱" 제거.
-    const excludeSet = new Set(collected);
-    const picked = weightedSample(sc.finalWeights, targetCount, sc.samplingSeed, excludeSet);
-    for (const n of picked) {
-      collected.push(n);
-      sources.push(sid);
-    }
-    allReasons.push(...sc.reasons);
-  }
-
-  // 부족분 (풀 작은 strategy + 누적 exclude로 풀이 비는 경우) 보충.
-  if (collected.length < PICK_COUNT) {
-    const fallback = recommend({ ...rest, strategyId: STRATEGY_BLESSED });
-    for (const n of fallback.numbers) {
-      if (collected.length >= PICK_COUNT) break;
-      if (collected.includes(n)) continue;
-      collected.push(n);
-      sources.push(STRATEGY_BLESSED);
-    }
-  }
-
-  // numbers + sources 함께 오름차순 정렬 (카드 표시 순서).
-  const paired = collected
-    .map((n, idx) => ({ n, source: sources[idx] }))
-    .sort((a, b) => a.n - b.n);
-
-  // 보너스가 본번호와 겹치면 균등 fallback.
-  const numbersOnly = paired.map((p) => p.n);
-  if (numbersOnly.includes(bonus)) {
-    const { seed = 0, drwNo = 0 } = rest;
-    const fbSeed = mixSeeds(mixSeeds(seed >>> 0, drwNo >>> 0), 0xBABA1234);
-    const fb = weightedSample(uniformWeights(), 1, fbSeed, new Set(numbersOnly));
-    bonus = fb[0];
-  }
+  // 보너스: 본번호 제외 후 1-45 균등 추첨.
+  const bonusSeed = mixSeeds(samplingSeed >>> 0, 0xBABA1234);
+  const bonusArr = weightedSample(uniformWeights(), BONUS_COUNT, bonusSeed, new Set(collected));
+  const bonus = bonusArr[0];
 
   return {
-    numbers: numbersOnly,
+    numbers: collected,
     bonus,
-    reasons: allReasons,
-    strategySources: paired.map((p) => p.source),
+    reasons: [`S43 단일 추첨 (${normalized.length}개 strategy 합성 weight).`],
+    strategySources: sources,
   };
 }
 

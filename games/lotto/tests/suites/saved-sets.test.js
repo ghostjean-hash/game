@@ -224,26 +224,8 @@ suite('S32 풀 한계 재시도 - 별자리 좁은 풀', () => {
     assertEqual(keys.size, 20);
   });
 
-  // S33 (2026-05-07): 풀 외 추첨 차단 회귀.
-  //   applyLuck + weightedSample의 floor가 풀 외 weight 0을 양수화하던 버그 fix.
-  //   별자리 / 원소 / 사주 / 짝꿍 추첨 결과는 학설 풀 안 번호로만 구성됨.
-  test('S33 풀 외 추첨 차단 - libra 추첨은 학설 풀 부분집합', () => {
-    const r = simulateBatch({ poolKey: 'libra', batchN: 10 });
-    const pool = new Set(ZODIAC_LUCKY.libra);
-    for (const set of r.list) {
-      for (const n of set.numbers) {
-        assertTrue(pool.has(n), `번호 ${n}는 libra 풀 ${[...pool]} 밖 - applyLuck floor 누설`);
-      }
-    }
-  });
-
-  test('S33 풀 외 추첨 차단 - aries 추첨은 학설 풀 부분집합', () => {
-    const r = simulateBatch({ poolKey: 'aries', batchN: 10 });
-    const pool = new Set(ZODIAC_LUCKY.aries);
-    for (const set of r.list) {
-      for (const n of set.numbers) {
-        assertTrue(pool.has(n), `번호 ${n}는 aries 풀 ${[...pool]} 밖`);
-      }
-    }
-  });
+  // S33 풀 외 추첨 차단 정책은 S43 (2026-05-08, 알고리즘 처음부터 재구축)에서 폐기됨.
+  //   새 architecture: 학설 풀은 정의가 아닌 가중치. 1-45 전체 base 1.0 + 학설 보너스 +0.3~+0.5.
+  //   사용자 의도(한국 실 분포)에 따라 풀 외 번호도 자연스럽게 추첨 (가중치만 약함).
+  //   기존 S33 테스트 2건은 옛 architecture(풀 외 차단) 검증이라 새 architecture에서 단언 깨짐 → 폐기.
 });

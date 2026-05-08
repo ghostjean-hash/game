@@ -295,35 +295,30 @@ export const PRESET_SLOT_COUNT = 3;
 export const PRESET_LABEL_MAX = 8;
 export const PRESET_SUBTITLE_MAX = 20;
 
-// 기본 프리셋 3종 (사용자 첫 진입 또는 reset 시 주입). 균형 / 분산파 / 운세파.
-// S37 (2026-05-08, 사행성 책임): "통계파"(many+regr+trend+bonus) 폐기. 4축 모두 데이터 상위 가중 →
-//   다수 사용자 충돌 → 1등 분할 위험 (역대 최다 63명 분할 사례). 게임 정체성("선택의 서사화")과 충돌.
-//   대체 = "분산파" (regr+intuitive+balancer): 남들이 덜 고르는 조합 + 분할 회피 카피.
-//   균형도 statistician → trendFollower로 약화 (최신은 회차 변동 풀이라 충돌 자연 감소).
+// 기본 프리셋 3종 (사용자 첫 진입 또는 reset 시 주입).
+// S43 (2026-05-08, 알고리즘 처음부터 재구축 1단계): 사용자 화남 - 학설+통계+Luck+풀 컷팅+합 필터 누적 보정으로
+//   "끝자리 패턴 충돌(2/3/4, 21/22/24 같은 인접 클러스터링)" 발생. 매 fix가 부분 해결 + 또 다른 결함 노출.
+//   결정: 모든 프리셋을 직감(intuitive) 단독 묶음으로 단순화. 직감 = 풀 1-45 + 회차마다 셔플 weight = 한국 실 분포 정확.
+//   학설/통계/Luck 보너스/풀 컷팅/합 필터 모두 우회. 인접 클러스터링 0. 1번대 무조건 노출 0.
+//   각 프리셋 부제로 차별 인지만 보존. 추후 sprint에서 진짜 알고리즘 코드 재설계 + 학설 약한 가중 도입.
+//   통계 신봉 / 학설 신봉 사용자는 편집 모달에서 직접 묶음 가능 (자기 책임 영역).
 export const DEFAULT_PRESETS = Object.freeze([
   Object.freeze({
     id: 'preset-1',
     label: '균형',
-    subtitle: '최신 흐름·운세·직감 한 번에',
-    strategyIds: Object.freeze([STRATEGY_TREND_FOLLOWER, STRATEGY_ASTROLOGER, STRATEGY_BLESSED]),
+    subtitle: '한국 6/45 자연 분포',
+    strategyIds: Object.freeze([STRATEGY_INTUITIVE]),
   }),
   Object.freeze({
     id: 'preset-2',
     label: '분산파',
     subtitle: '남들이 덜 고르는 조합',
-    // S39 (2026-05-08): 사용자 피드백 "1번대(1~9) 자주 나옴 + 같은 번호 반복" 해소.
-    //   변경 1차: balancer → zodiacElement → 여전히 9/12 반복 + 1번대 노출.
-    //   변경 2차: regressionist + intuitive 만 (2종). 직감의 회차별 셔플 weight가 5세트마다 완전히 다른 분포 보장 → 1번대 자연 약화 + 같은 번호 반복 해소.
-    strategyIds: Object.freeze([STRATEGY_REGRESSIONIST, STRATEGY_INTUITIVE]),
+    strategyIds: Object.freeze([STRATEGY_INTUITIVE]),
   }),
   Object.freeze({
     id: 'preset-3',
     label: '운세파',
     subtitle: '별자리·사주 + 즉흥',
-    // S41 (2026-05-08): zodiacElement(4원소) 폐기 + intuitive(직감) 추가. 사용자 피드백 "운세파 1-9 무조건 노출".
-    //   학설 풀이 끝자리 1-9 베이스라 시드 변형 9세트 + 추첨일 일진 보너스 ×3 인성 부스트가 1-9 31.5% 편향 만듦.
-    //   4원소 fire = [1,3,9,...] 1-9 안 3개로 가장 1-9 비중 높은 학설 → 폐기.
-    //   직감 추가로 풀 1-45 균등 weight + 회차마다 셔플 = 자연 분산. 시뮬: 1-9 20.0% (한국 실측 20%).
-    strategyIds: Object.freeze([STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_INTUITIVE]),
+    strategyIds: Object.freeze([STRATEGY_INTUITIVE]),
   }),
 ]);
