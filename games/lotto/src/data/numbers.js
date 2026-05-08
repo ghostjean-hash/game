@@ -286,19 +286,23 @@ export const PRESET_SLOT_COUNT = 3;
 export const PRESET_LABEL_MAX = 8;
 export const PRESET_SUBTITLE_MAX = 20;
 
-// 기본 프리셋 3종 (사용자 첫 진입 또는 reset 시 주입). 균형 / 통계파 / 운세파.
+// 기본 프리셋 3종 (사용자 첫 진입 또는 reset 시 주입). 균형 / 분산파 / 운세파.
+// S37 (2026-05-08, 사행성 책임): "통계파"(many+regr+trend+bonus) 폐기. 4축 모두 데이터 상위 가중 →
+//   다수 사용자 충돌 → 1등 분할 위험 (역대 최다 63명 분할 사례). 게임 정체성("선택의 서사화")과 충돌.
+//   대체 = "분산파" (regr+intuitive+balancer): 남들이 덜 고르는 조합 + 분할 회피 카피.
+//   균형도 statistician → trendFollower로 약화 (최신은 회차 변동 풀이라 충돌 자연 감소).
 export const DEFAULT_PRESETS = Object.freeze([
   Object.freeze({
     id: 'preset-1',
     label: '균형',
-    subtitle: '통계·운세·직감 한 번에',
-    strategyIds: Object.freeze([STRATEGY_STATISTICIAN, STRATEGY_ASTROLOGER, STRATEGY_BLESSED]),
+    subtitle: '최신 흐름·운세·직감 한 번에',
+    strategyIds: Object.freeze([STRATEGY_TREND_FOLLOWER, STRATEGY_ASTROLOGER, STRATEGY_BLESSED]),
   }),
   Object.freeze({
     id: 'preset-2',
-    label: '통계파',
-    subtitle: '데이터 4축 통합',
-    strategyIds: Object.freeze([STRATEGY_STATISTICIAN, STRATEGY_REGRESSIONIST, STRATEGY_TREND_FOLLOWER, STRATEGY_SECOND_STAR]),
+    label: '분산파',
+    subtitle: '남들이 덜 고르는 조합',
+    strategyIds: Object.freeze([STRATEGY_REGRESSIONIST, STRATEGY_INTUITIVE, STRATEGY_BALANCER]),
   }),
   Object.freeze({
     id: 'preset-3',
