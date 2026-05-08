@@ -20,8 +20,10 @@ export const RECENT_MID = 30;
 export const RECENT_LONG = 100;
 
 // 1.4. 비율 필터
-export const SUM_RANGE_MIN = 121;
-export const SUM_RANGE_MAX = 160;
+// S40 (2026-05-08): 합 121-160 → 100-180. 사용자 통찰 "1번대 무조건 노출".
+//   합 121-160(평균 ±19)은 좁아서 작은 번호 자주 통과. 한국 6/45 실측 평균 138 ±40으로 확장 = 약 90% 회차 커버.
+export const SUM_RANGE_MIN = 100;
+export const SUM_RANGE_MAX = 180;
 export const AC_VALUE_MIN = 6;
 export const AC_VALUE_MAX = 10;
 export const ODD_EVEN_PREFERRED = Object.freeze([3, 3]);
@@ -72,8 +74,11 @@ export const STRATEGY_ORDER = Object.freeze([
 
 // S18 (2026-05-02): 통계계 5전략의 풀 크기. 상위 N등 풀에서 균등 추첨.
 // "어정쩡한 weight 비례 PRNG" 회피.
+// S40 (2026-05-08): 10 → 25. 사용자 통찰 "10번 이하가 안 나올 수 있는데 무조건 나옴".
+//   풀 10이라 1-9 안 번호가 풀에 1-2개 들어가면 6번호 추첨에서 거의 확정 노출. 한국 6/45 실제로는 24% 회차가 1-9 0개.
+//   풀 25 = 1-45의 절반 이상 → 1-9 가중 자연 약화 → 추천 분포가 한국 실제 분포에 가까워짐.
 // SSOT: docs/02_data.md 1.5.6.
-export const STATS_POOL_SIZE = 10;
+export const STATS_POOL_SIZE = 25;
 
 // 1.5.5. 5세트 동시 추천 (S4-T1, 2026-05-02 신설). SSOT: docs/02_data.md 1.5.5.
 // "한 회차의 다양한 시도"를 5장 카드로 한 번에 노출. 사행성 톤 회피 (구매 권유 X, 확률 변화 X).
@@ -302,7 +307,10 @@ export const DEFAULT_PRESETS = Object.freeze([
     id: 'preset-2',
     label: '분산파',
     subtitle: '남들이 덜 고르는 조합',
-    strategyIds: Object.freeze([STRATEGY_REGRESSIONIST, STRATEGY_INTUITIVE, STRATEGY_BALANCER]),
+    // S39 (2026-05-08): 사용자 피드백 "1번대(1~9) 자주 나옴 + 같은 번호 반복" 해소.
+    //   변경 1차: balancer → zodiacElement → 여전히 9/12 반복 + 1번대 노출.
+    //   변경 2차: regressionist + intuitive 만 (2종). 직감의 회차별 셔플 weight가 5세트마다 완전히 다른 분포 보장 → 1번대 자연 약화 + 같은 번호 반복 해소.
+    strategyIds: Object.freeze([STRATEGY_REGRESSIONIST, STRATEGY_INTUITIVE]),
   }),
   Object.freeze({
     id: 'preset-3',

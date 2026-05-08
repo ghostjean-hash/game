@@ -6,7 +6,7 @@ import {
   STRATEGY_REGRESSIONIST, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
   STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
-  FIVE_SETS_COUNT,
+  FIVE_SETS_COUNT, STATS_POOL_SIZE,
 } from '../../src/data/numbers.js';
 
 const baseCtx = {
@@ -179,13 +179,11 @@ suite('core/recommend - 전략', () => {
   });
 
   test('secondStar: 본번호도 bonusStats 빈도 가중 (라벨-동작 일치)', () => {
-    // bonusStats heavy 10개 (= STATS_POOL_SIZE) → 풀 = heavy 10. 추출 6 = heavy 6 (100%).
-    // PROGRESS 2.29: secondStar 본번호가 균등이던 결손 정정.
-    // S21 (2026-05-03): heavy 6 → 10으로 강화 (시드 운 의존 제거).
+    // S40 (2026-05-08): STATS_POOL_SIZE 10→25 확장. heavy를 풀 size로 동기화.
     const bonusStats = Array.from({ length: 45 }, (_, i) => ({
       number: i + 1, totalCount: 1, recent30: 0, lastSeenDrw: 1000,
     }));
-    const heavy = [1, 7, 13, 19, 25, 31, 37, 43, 4, 10];
+    const heavy = Array.from({ length: STATS_POOL_SIZE }, (_, i) => i + 1);
     heavy.forEach((n) => { bonusStats[n - 1].totalCount = 1000; });
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_SECOND_STAR, bonusStats });
     const heavySet = new Set(heavy);
@@ -194,13 +192,12 @@ suite('core/recommend - 전략', () => {
   });
 
   test('statistician: 압도적 가중 번호가 본번호에 등장 (풀 컷팅 효과)', () => {
-    // S18 풀 컷팅: heavy 10개 = STATS_POOL_SIZE → 풀 = heavy 10. 추출 6 = heavy 6 (100%).
-    // S21 (2026-05-03): heavy 6 → 10으로 강화. 시드 의존 fragile 제거 (이전엔 풀 4자리가 보통 번호로 채워져 운).
+    // S40 (2026-05-08): STATS_POOL_SIZE 10→25. heavy = 풀 size.
     const numberStats = Array.from({ length: 45 }, (_, i) => ({
       number: i + 1, totalCount: 100, recent10: 0, recent30: 0, recent100: 0,
       lastSeenDrw: 1000, currentGap: 5,
     }));
-    const heavy = [2, 8, 14, 20, 26, 32, 38, 5, 11, 17];
+    const heavy = Array.from({ length: STATS_POOL_SIZE }, (_, i) => i + 1);
     heavy.forEach((n) => { numberStats[n - 1].totalCount = 5000; });
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_STATISTICIAN, numberStats });
     const heavySet = new Set(heavy);
@@ -209,11 +206,12 @@ suite('core/recommend - 전략', () => {
   });
 
   test('regressionist: 압도적 gap 번호가 본번호에 등장 (풀 컷팅 효과)', () => {
+    // S40 (2026-05-08): STATS_POOL_SIZE 10→25. heavy = 풀 size.
     const numberStats = Array.from({ length: 45 }, (_, i) => ({
       number: i + 1, totalCount: 100, recent10: 0, recent30: 0, recent100: 0,
       lastSeenDrw: 1000, currentGap: 1,
     }));
-    const heavy = [3, 9, 15, 21, 27, 33, 39, 6, 12, 18];
+    const heavy = Array.from({ length: STATS_POOL_SIZE }, (_, i) => i + 1);
     heavy.forEach((n) => { numberStats[n - 1].currentGap = 200; });
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_REGRESSIONIST, numberStats });
     const heavySet = new Set(heavy);
@@ -222,11 +220,12 @@ suite('core/recommend - 전략', () => {
   });
 
   test('trendFollower: 압도적 recent30 번호가 본번호에 등장 (raw 가중 + 풀 컷팅)', () => {
+    // S40 (2026-05-08): STATS_POOL_SIZE 10→25. heavy = 풀 size.
     const numberStats = Array.from({ length: 45 }, (_, i) => ({
       number: i + 1, totalCount: 100, recent10: 0, recent30: 1, recent100: 0,
       lastSeenDrw: 1000, currentGap: 5,
     }));
-    const heavy = [4, 10, 16, 22, 28, 34, 40, 7, 13, 19];
+    const heavy = Array.from({ length: STATS_POOL_SIZE }, (_, i) => i + 1);
     heavy.forEach((n) => { numberStats[n - 1].recent30 = 100; });
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_TREND_FOLLOWER, numberStats });
     const heavySet = new Set(heavy);

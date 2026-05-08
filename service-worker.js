@@ -20,7 +20,8 @@
 // v26 (2026-05-08): lotto S35 라벨 변경 + S36 프리셋 3슬롯 + 캐릭터 카드 아코디언 + S36.2 UX 정돈 (Sprint 045+046). 축복→랜덤 라벨. 메인 전략 picker → 프리셋 3슬롯(균형/통계파/운세파) + 편집 모달. 캐릭터 카드 한 줄 토글 row(흉일 강제 펼침). 닫기 버튼 보더 / 라운드 제거.
 // v27 (2026-05-08): lotto S37 (Sprint 047) - 통계파 프리셋 폐기 → 분산파 신설(사행성 책임). 통계 4축 묶음이 다수 사용자 동시 선택 → 1등 분할 위험. 분산파(적게+직감+균형) = 남들이 덜 고르는 조합. 균형도 statistician → trendFollower로 약화.
 // v28 (2026-05-08): lotto S38 (Sprint 048) - 통계 풀 컷팅 데이터 부재 fix. poolFromWeights가 모든 weight 동률 시 인덱스 0~9(=번호 1~10) 풀 결정론 버그. 페치 전/새 캐릭터에서 1~9 편향(균형 프리셋 41.9%) → fix 후 18.4%로 정상화. max===min 가드 추가.
-const CACHE_VERSION = "v28";
+// v29 (2026-05-08): lotto S39+S40 (Sprint 049) - 1번대 무조건 노출 해소. STATS_POOL_SIZE 10→25 / SUM_RANGE 121-160→100-180. 분산파 = regr+intuitive 단순화(balancer 폐기). 시뮬 1000회: 1-9 0개 세트 24~30%로 한국 실측(24%) 일치.
+const CACHE_VERSION = "v29";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
