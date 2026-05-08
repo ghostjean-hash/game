@@ -4,13 +4,127 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-08 (Sprint 044 - 짝꿍 페어 폐기 + 랜덤 카테고리 카피 정체성 강화 / S34).
+1.3. **마지막 갱신**: 2026-05-08 (Sprint 046 - 프리셋 3슬롯 + 캐릭터 카드 아코디언 / S36).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 직전 5 Sprint(040~044)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.67. Sprint 046 완료 - 프리셋 3슬롯 + 캐릭터 카드 아코디언 (S36 / S36.2 정돈, 2026-05-08)
+
+### 2.67.0. S36.2 UX 정돈 (사용자 피드백 후 즉시 정리)
+
+사용자 지적: "편집 버튼 / 확장 버튼 등 ux 너무 별로야. 깔끔하게 잘 정리좀해봐". 시각 노이즈 정돈:
+
+| 영역 | 이전 (S36 1차) | 정돈 (S36.2) |
+|---|---|---|
+| 프리셋 컨테이너 | 보더 박스 + 패딩 + "추천 프리셋" 타이틀 + ✏ 박스 버튼 | 박스 / 타이틀 폐기. 슬롯 3개만 단독 노출 |
+| 편집 버튼 | 박스 + ✏ 이모지 + "편집" 라벨 (헤더 우측) | 슬롯 list 하단 우측 작은 텍스트 링크 "편집"만 |
+| 슬롯 안 칩(.preset-tags) | 묶인 전략 라벨 칩 N개 | 폐기. 라벨 + 부제만 |
+| 슬롯 활성 표시 | accent border 2px + inset shadow 2px | accent border 1px + 미세 accent 배경 (8% alpha) |
+| 캐릭터 토글 | 한 줄 카드 + 별도 "접기 bar" 박스 (펼침 상태) | 한 줄 row 자체가 카드 헤더로 흡수. row(▲) + 카드 본문 = 한 덩어리 |
+| 토글 row 카피 | 텍스트(이름·메타) + 우측 운세 한국어 + caret | 운 이모지(좌) + 이름 강조 + 메타 희미 + caret 우 |
+
+수정 파일: `preset-buttons.js` (구조 단순화) / `character-summary.js` (`characterToggleRowHtml` 단일 export로 통합) / `main.js` (import / homeTabHtml 분기 단순화) / `styles/main.css` (S36 블록 전체 교체).
+
+검증: `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 무관). 신규 FAIL 0.
+
+
+배경: 사용자 지적 - "전략 선택하는 게 짜증남. 복잡한 전략은 접어두고 묶음을 1버튼으로. 메인에 버튼 3개. 사용자 정보도 아코디언 한 줄". 전략 10종 카드 노출 + 캐릭터 카드 항상 펼침이 메인 인지 부담 큰 문제.
+
+사용자 결정 (자비스 권장안 일괄 채택): 슬롯 3개 고정 / 기본 균형·통계파·운세파 / ✏ 인라인 편집 / 부제 표시 / 캐릭터 한 줄 카피 = 이름·별자리·띠·일주·운 / 흉일 자동 펼침 / 첫 진입 펼침 학습.
+
+### 2.67.1. 신규 / 변경
+
+| 영역 | 변경 |
+|---|---|
+| `src/data/numbers.js` | 1.20 추가 - `PRESET_SLOT_COUNT=3` / `PRESET_LABEL_MAX=8` / `PRESET_SUBTITLE_MAX=20` / `DEFAULT_PRESETS` (균형·통계파·운세파 3종 freeze) |
+| `src/data/storage.js` | `loadPresets` / `savePresets` / `loadCharCardCollapsed` / `saveCharCardCollapsed` 신규. `lotto_presets` / `lotto_char_card_collapsed` 키 |
+| `src/render/preset-buttons.js` | 신규 - 3슬롯 카드 + 활성 비교 + 편집 진입 ✏ |
+| `src/render/preset-editor.js` | 신규 - 편집 모달 (라벨/부제/카테고리별 체크리스트 / 기본값 복원) |
+| `src/render/character-summary.js` | 신규 - 한 줄 카드(이름·별자리·띠·일주·운 이모지) + 펼침 토글 / 흉일 빨강 |
+| `src/render/main.js` | import 추가 / `state.presets` / `state.charCardCollapsed` / `homeTabHtml` 구조 변경 (전략 picker 영역 → 프리셋 영역, 캐릭터 카드 collapsed 분기) / 클릭 핸들러 3종 (`preset-pick` / `preset-edit` / `char-card-toggle`) |
+| `styles/main.css` | S36 블록 추가 - 프리셋 카드 / 편집 모달 / 한 줄 요약 / 토글 / 모바일 480↓ 압축. 매직 픽셀 0(토큰 베이스) |
+| `docs/01_spec.md` | 5.1.5 (프리셋 시스템) / 5.1.6 (캐릭터 카드 아코디언) 신설. 5.1.3 한 줄 보강 |
+| `docs/02_data.md` | 1.20 (프리셋 시스템) 신설 - 상수 / 기본값 / 저장 키 / Preset 스키마 / 활성 비교 룰 |
+
+### 2.67.2. 흉일 강제 펼침 룰
+
+`fortune === 'bad'`이면 `state.charCardCollapsed` 값 무시하고 펼침. 사용자 보호 카피 (방어 모드 권장 배너) 강제 노출. 사행성 도메인 책임. SSOT: `docs/01_spec.md` 5.1.6.2.
+
+### 2.67.3. 보존 (다음 sprint 정리)
+
+- `src/render/strategy-tabs.js`: 메인에서 호출 안 됨. dead code지만 호환 보존. 다음 sprint 폐기 검토.
+- `src/render/strategy-picker.js`: `STRATEGY_LIST` / `strategyLabel` / `strategyShort` export는 편집 모달 / 추천 라벨 / saved-sets에서 계속 사용. picker UI(`strategyPickerHtml`)만 dead code.
+- `main.js`의 `.strategy-tab[data-strategy-id]` 클릭 핸들러: forEach가 빈 NodeList라 무동작. 보존.
+
+### 2.67.4. 사용자 동선 변화
+
+| 사용자 | 이전 | 이후 |
+|---|---|---|
+| 라이트 (90%) | 메인 → 전략 10카드 중 1개 토글 → 추천. 인지 부담 큼 | 메인 → 프리셋 3카드 중 1탭 → 추천. **2탭 끝** |
+| 헤비 (10%) | 메인에서 직접 전략 1~6개 토글 | 메인 ✏ → 모달에서 묶음 편집 → 저장 → 자기 묶음 1탭 |
+
+### 2.67.5. 검증
+
+- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 FAIL 무관). 신규 FAIL 0.
+- 라벨 / 묶음 / 카드 토글은 브라우저 시각 검증 필요 (사용자 확인 후 폴리싱).
+
+### 2.67.6. 잠재 리뷰 포인트
+
+| 항목 | 비고 |
+|---|---|
+| 카테고리 "랜덤" 그룹 + 전략 "랜덤" 동일 단어 | S35 사용자 결정 옵션 A. 인지 부담 수용. |
+| short '축' vs 라벨 '랜덤' 첫 글자 어긋남 | S35 후속. 사용자 검토 후 동기화 sprint. |
+| `recommend.js` reasons "축복받은 자: ..." | S35 후속. 운영 텍스트라 별도 결정. |
+| 통계 / 회차 / 휠링은 추첨 탭 안 아코디언 X | 기존 하단 탭 라우팅 그대로 (사용자 시안 외). |
+| 슬롯 추가 / 삭제 불가 | 3개 고정. 사용자 명시 결정. 향후 5개 확장 검토 가능. |
+| dead code (strategy-tabs.js 등) | 다음 sprint 정리 권장. |
+
+### 2.67.7. 사용자 영향 (재진입 시)
+
+- 기존 캐릭터의 `lastUsedStrategies`는 보존. 첫 진입 시 `DEFAULT_PRESETS` 자동 주입 + 메인 프리셋 3슬롯 노출.
+- 프리셋 클릭 = `lastUsedStrategies` 즉시 갱신. 이전 다중 토글 학습은 슬롯 클릭으로 덮어씀.
+- 캐릭터 카드 첫 진입 펼침. "접기" 버튼 1회 클릭하면 다음 진입에 접힘 학습.
+
+## 2.66. Sprint 045 완료 - "축복" 라벨을 "랜덤"으로 변경 (S35, 2026-05-08)
+
+사용자 지시: "라벨만 변경" (축복 → 랜덤). 이름만 변경, 그 외 일체 손대지 않음.
+
+### 2.66.1. 변경
+
+| 영역 | 이전 | 이후 |
+|---|---|---|
+| 전략 카드 라벨 (`STRATEGY_BLESSED`) | 축복 | 랜덤 |
+| `docs/02_data.md` 1.5 표 UI 라벨 | 축복받은 자 | 랜덤 |
+| `docs/02_data.md` 1.5.6 풀 표 | 축복받은 자 | 랜덤 |
+| `docs/01_spec.md` 5.1.3 전략 10종 list | 축복받은 자 | 랜덤 |
+| `README.md` 3.2 카테고리 표 | 축복받은 자 | 랜덤 |
+| `README.md` 5 페치 없이 가능 list | 축복받은 자 / 짝꿍 번호 | 랜덤 (짝꿍 함께 정리 - S34 후속) |
+
+손 안 댄 영역 (사용자 "라벨만" 명시):
+
+- `STRATEGIES.short` ('축') - 라벨 첫 글자 패턴 어긋나지만 미변경.
+- `STRATEGIES.desc` (정체성 카피) - Sprint 044에서 강화한 정체성 카피 그대로.
+- 카테고리 라벨 ('랜덤' 그룹) - 사용자 결정 옵션 A (전략 라벨과 동일 단어 허용).
+- `src/core/recommend.js` reasons 메시지 ("축복받은 자: ..." 운영 텍스트).
+- 이력 문서 (PROGRESS / ARCHIVE) - 시점 기록 보존.
+- 테스트 (`recommend.test.js` reasons 검증) - reasons 미변경이라 PASS 유지.
+
+### 2.66.2. 인지 부담 (사용자 결정으로 수용)
+
+- 카테고리 "랜덤" + 전략 "랜덤" 동일 단어 → 카드 hover에서 "랜덤 카테고리 > 랜덤 전략" 표시.
+- 카드 short '축' 잔존 → 라벨 첫 글자 패턴(별자리=점, 사주=사) 어긋남.
+- reasons "축복받은 자: ..." 잔존 → 카드 라벨 ≠ reasons 라벨 차이.
+
+위 3건은 다음 세션에서 사용자가 짚어주면 동기화 작업 별도 sprint.
+
+### 2.66.3. 검증
+
+- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 FAIL 무관).
+- 라벨 변경으로 인한 신규 FAIL 0.
 
 ## 2.65. Sprint 044 완료 - 짝꿍 페어 전략 폐기 + 랜덤 카테고리 카피 정체성 강화 (S34, 2026-05-08)
 

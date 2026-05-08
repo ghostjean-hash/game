@@ -3,10 +3,13 @@
 // SSOT: docs/01_spec.md 4장.
 import { renderCharacterForm } from './character-form.js';
 import { characterCardHtml } from './character-card.js';
+import { characterToggleRowHtml } from './character-summary.js';
 import { drawCardHtml, fiveSetsExtraHtml } from './draw-card.js';
 import { reverseSearch } from '../core/reverse.js';
 import { characterSlotsHtml } from './character-slots.js';
 import { strategyTabsHtml } from './strategy-tabs.js';
+import { presetButtonsHtml } from './preset-buttons.js';
+import { openPresetEditor } from './preset-editor.js';
 import { nextDrawCardHtml, startCountdown } from './next-draw-card.js';
 import { nextDraw } from '../core/schedule.js';
 import { renderStatsPage } from './stats-page.js';
@@ -36,6 +39,7 @@ import {
   loadDraws,
   loadOptions, saveOptions,
   loadRitualState, saveRitualState,
+  loadPresets, loadCharCardCollapsed, saveCharCardCollapsed,
 } from '../data/storage.js';
 import {
   STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK,
@@ -61,6 +65,9 @@ const state = {
   // S32 (2026-05-07): 풀 한계 도달 시 그 strategyIds 정규화 키 보관. 같은 키일 때 배너 노출.
   //   strategyIds 변경(다른 키) 시 자동 무시 → 배너 사라짐. SSOT: docs/02_data.md 1.5.8.6.3.
   poolExhaustedRecipeId: null,
+  // S36 (2026-05-08): 프리셋 + 캐릭터 카드 아코디언. SSOT: docs/01_spec.md 5.1.5 / 5.1.6.
+  presets: [],
+  charCardCollapsed: false,
 };
 
 export function initRender(rootEl) {
@@ -73,6 +80,8 @@ export function initRender(rootEl) {
   state.cooccur = computeCooccur(state.draws);
   state.options = loadOptions();
   state.ritual = loadRitualState(); // T4: 회차/캐릭터 변경 시 ensureCurrentState로 갱신
+  state.presets = loadPresets(); // S36: 사용자 프리셋 (DEFAULT_PRESETS fallback).
+  state.charCardCollapsed = loadCharCardCollapsed(); // S36: 한 번 접으면 학습.
 
   if (state.draws.length > 0) {
     const sorted = [...state.draws].sort((a, b) => b.drwNo - a.drwNo);
@@ -477,10 +486,9 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     ${/* S29(2026-05-04): + 1세트 / + 5세트 (실행) - 결과 바로 아래. 결과↔실행 인접. */ ''}
     ${addBarHtml}
 
-    ${/* S29(2026-05-04): 전략(조립) - + 버튼 아래로 이동.
-         S29.2 / S30.1: pool은 포커스 전략 1개 풀.
-         S34 (2026-05-08): pairs 인자 폐기 - 짝꿍 페어 박스 폐기 동반. */ ''}
-    ${strategyTabsHtml(strategyIds, { multi: true, pool, poolNote })}
+    ${/* S36(2026-05-08): 전략 picker → 프리셋 3슬롯 버튼.
+         사용자가 자주 쓰는 묶음을 1버튼. 편집 모달로 묶음 / 라벨 / 부제 변경. */ ''}
+    ${presetButtonsHtml(state.presets, strategyIds)}
 
     ${/* S17(2026-05-02): 행운 쌓기를 전략 탭 하위로 이동 (이전 = 히어로 직하). */ ''}
     ${ritualWidgetHtml(state.ritual)}
@@ -488,7 +496,14 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     ${/* S13(2026-05-02): 슬롯 + 카드 묶음. 시각 인접으로 "캐릭터 세트" 인지. */ ''}
     ${characterSlotsHtml(state.characters, state.activeId)}
 
-    ${characterCardHtml(active, fortune, drawForFortune || state.drwNo, drawDate)}
+    ${/* S36(2026-05-08): 캐릭터 카드 아코디언. 흉일이면 강제 펼침 (사용자 보호 카피 노출).
+         S36.2: 한 줄 row가 카드 헤더로 흡수. 접힘=row만, 펼침=row(▲) + card. */ ''}
+    ${(() => {
+      const isExpanded = !state.charCardCollapsed || fortune === 'bad';
+      const row = characterToggleRowHtml(active, fortune, isExpanded);
+      if (!isExpanded) return row;
+      return `<div class="char-accordion is-expanded">${row}${characterCardHtml(active, fortune, drawForFortune || state.drwNo, drawDate)}</div>`;
+    })()}
 
     ${banner}
   `;
@@ -604,7 +619,41 @@ function renderHome(content) {
     renderApp();
   });
 
+  // S36(2026-05-08): 프리셋 클릭 → lastUsedStrategies 갱신 + renderApp.
+  content.querySelectorAll('[data-action="preset-pick"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const presetId = el.dataset.presetId;
+      const preset = state.presets.find((p) => p.id === presetId);
+      if (!preset || !Array.isArray(preset.strategyIds) || preset.strategyIds.length === 0) return;
+      const cur = state.characters.find((c) => c.id === state.activeId);
+      if (!cur) return;
+      cur.lastUsedStrategies = [...preset.strategyIds];
+      cur.lastUsedStrategy = preset.strategyIds[0];
+      saveCharacters(state.characters);
+      renderApp();
+    });
+  });
+
+  // S36(2026-05-08): 프리셋 편집 모달 진입.
+  content.querySelector('[data-action="preset-edit"]')?.addEventListener('click', () => {
+    openPresetEditor(state.presets, (newPresets) => {
+      state.presets = newPresets;
+      renderApp();
+    });
+  });
+
+  // S36(2026-05-08): 캐릭터 카드 접힘 / 펼침 토글 + localStorage 학습.
+  content.querySelectorAll('[data-action="char-card-toggle"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      state.charCardCollapsed = !state.charCardCollapsed;
+      saveCharCardCollapsed(state.charCardCollapsed);
+      renderApp();
+    });
+  });
+
   // 전략 탭 직접 클릭. 다중 모드면 토글, 단일 모드면 활성 변경. (S3-T1)
+  // S36(2026-05-08): 프리셋 도입 후 메인에서 노출 X. 편집 모달의 체크리스트가 같은 역할.
+  //   기존 핸들러는 dead code지만 strategy-tabs.js 호환 보존을 위해 유지 (다음 sprint 정리).
   content.querySelectorAll('.strategy-tab[data-strategy-id]').forEach((el) => {
     // mousedown에서 default 차단 → 클릭은 살리되 button focus 시 자동 scrollIntoView 차단.
     el.addEventListener('mousedown', (e) => e.preventDefault());

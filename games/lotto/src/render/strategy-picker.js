@@ -15,7 +15,7 @@ import {
 //   통계 카테고리 5종 → 4종(최신/많이/보너스/적게). 동시출현 매트릭스 자체는 통계 탭에서 유지.
 // S34 (2026-05-08): 랜덤 카테고리 3종 desc 정체성 강화 - 정체성 라벨 + 사용자 가치 차별화.
 const STRATEGIES = [
-  { id: STRATEGY_BLESSED, label: '축복', short: '축', desc: '캐릭터 정체성: 키운 Luck만큼 시드 6번호에 보너스. 운세에 가장 민감', category: '랜덤' },
+  { id: STRATEGY_BLESSED, label: '랜덤', short: '축', desc: '캐릭터 정체성: 키운 Luck만큼 시드 6번호에 보너스. 운세에 가장 민감', category: '랜덤' },
   { id: STRATEGY_TREND_FOLLOWER, label: '최신', short: '추', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
   { id: STRATEGY_STATISTICIAN, label: '많이', short: '많', desc: '역대 회차에 가장 많이 나온 번호 위주', category: '통계' },
   { id: STRATEGY_SECOND_STAR, label: '보너스', short: '별', desc: '역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두)', category: '통계' },

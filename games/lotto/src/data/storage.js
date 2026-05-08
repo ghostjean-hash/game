@@ -55,6 +55,23 @@ export function saveOptions(options) { write('options', options); }
 export function hasSeenHelp() { return read('seen_help', false) === true; }
 export function markSeenHelp() { write('seen_help', true); }
 
+// 프리셋. SSOT: docs/02_data.md 1.20 (S36, 2026-05-08).
+// 사용자 첫 진입 / 데이터 손상 시 DEFAULT_PRESETS 주입. 사용자 편집은 자유.
+import { DEFAULT_PRESETS } from './numbers.js';
+export function loadPresets() {
+  const raw = read('presets', null);
+  if (!Array.isArray(raw) || raw.length === 0) {
+    return JSON.parse(JSON.stringify(DEFAULT_PRESETS));
+  }
+  return raw;
+}
+export function savePresets(presets) { write('presets', presets); }
+
+// 캐릭터 카드 접힘 학습 (S36). 한 번 접으면 다음 진입에도 접힌 채 시작.
+// 흉일에는 main.js에서 강제 펼침 (사용자 보호 카피 노출).
+export function loadCharCardCollapsed() { return read('char_card_collapsed', false) === true; }
+export function saveCharCardCollapsed(collapsed) { write('char_card_collapsed', collapsed === true); }
+
 // 행운 의식 상태 (T4). SSOT: docs/02_data.md 1.19.
 // 회차 + 캐릭터 변경 시 자동 리셋 (core/ritual.js ensureCurrentState).
 export function loadRitualState() { return read('rituals', null); }

@@ -278,3 +278,32 @@ export const ANIMAL_SIGNS = Object.freeze([
   { id: 'dog', label: '개' },
   { id: 'pig', label: '돼지' },
 ]);
+
+// 1.20. 프리셋 시스템 (S36, 2026-05-08). SSOT: docs/02_data.md 1.20.
+// 사용자가 자주 쓰는 전략 묶음을 1버튼으로. 메인 = 3슬롯 고정.
+// 사용자 편집 가능 (라벨 / 부제 / 묶음). 슬롯 추가 / 삭제는 불가.
+export const PRESET_SLOT_COUNT = 3;
+export const PRESET_LABEL_MAX = 8;
+export const PRESET_SUBTITLE_MAX = 20;
+
+// 기본 프리셋 3종 (사용자 첫 진입 또는 reset 시 주입). 균형 / 통계파 / 운세파.
+export const DEFAULT_PRESETS = Object.freeze([
+  Object.freeze({
+    id: 'preset-1',
+    label: '균형',
+    subtitle: '통계·운세·직감 한 번에',
+    strategyIds: Object.freeze([STRATEGY_STATISTICIAN, STRATEGY_ASTROLOGER, STRATEGY_BLESSED]),
+  }),
+  Object.freeze({
+    id: 'preset-2',
+    label: '통계파',
+    subtitle: '데이터 4축 통합',
+    strategyIds: Object.freeze([STRATEGY_STATISTICIAN, STRATEGY_REGRESSIONIST, STRATEGY_TREND_FOLLOWER, STRATEGY_SECOND_STAR]),
+  }),
+  Object.freeze({
+    id: 'preset-3',
+    label: '운세파',
+    subtitle: '동·서양 운세 합',
+    strategyIds: Object.freeze([STRATEGY_ASTROLOGER, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS]),
+  }),
+]);
