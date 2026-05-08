@@ -155,13 +155,36 @@ function newState() {
     overHandled: false,
     paused: false,
     flashRows: null, // { rows:[...], t:number }
+    capNoticed: false,
   };
 }
 
+// 난이도 1차 패치 (docs/difficulty-redesign.md): 곡선 완만화 + 모바일 L10/PC L12 캡 + 모바일 시작 보정.
+const SPEED_CURVE_MOBILE = [0, 0.91, 1.05, 1.22, 1.67, 2.04, 2.56, 3.23, 3.85, 4.55, 5.00];
+const SPEED_CURVE_PC = [0, 1.00, 1.18, 1.39, 1.67, 2.04, 2.56, 3.23, 3.85, 4.55, 5.00, 5.71, 6.67];
+const CAP_LEVEL_MOBILE = 10;
+const CAP_LEVEL_PC = 12;
+
+function isCoarsePointer() {
+  return matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
+}
+
 function levelGravity(level) {
-  // 초당 셀 수 (정수 단계)
-  const speeds = [0, 1, 1.5, 2, 3, 4, 5, 7, 9, 12, 16, 22, 30];
-  return speeds[Math.min(level, speeds.length - 1)] || 30;
+  const mobile = isCoarsePointer();
+  const curve = mobile ? SPEED_CURVE_MOBILE : SPEED_CURVE_PC;
+  const cap = mobile ? CAP_LEVEL_MOBILE : CAP_LEVEL_PC;
+  return curve[Math.min(level, cap)];
+}
+
+function applyLevelChange(newLevel) {
+  if (newLevel === state.level) return;
+  state.level = newLevel;
+  state.gravity = levelGravity(newLevel);
+  const cap = isCoarsePointer() ? CAP_LEVEL_MOBILE : CAP_LEVEL_PC;
+  if (!state.capNoticed && newLevel >= cap) {
+    state.capNoticed = true;
+    showToast("리듬에 들어왔다.", 1800);
+  }
 }
 
 function ensureBag() {
@@ -292,10 +315,7 @@ function lockPiece() {
     state.score += bonus;
     state.lines += cleared.length;
     const newLevel = 1 + Math.floor(state.lines / 10);
-    if (newLevel !== state.level) {
-      state.level = newLevel;
-      state.gravity = levelGravity(newLevel);
-    }
+    applyLevelChange(newLevel);
   } else {
     spawn();
   }
