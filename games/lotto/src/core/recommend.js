@@ -383,6 +383,12 @@ function computeStrategyContext(ctx) {
  * @param {string} [ctx.drawDate] - 추첨일 YYYY-MM-DD (S16 사주 일진 보너스용)
  * @returns {{ numbers: number[], bonus: number, reasons: string[] }}
  */
+/**
+ * @deprecated S43 (2026-05-08): 알고리즘 처음부터 재구축. 새 architecture는 `recommendMulti`만 사용.
+ *   본 함수 + 옛 헬퍼들(`distributeCounts` / `computeStrategyContext` / `poolFromWeights` / 통계 weight 함수)은
+ *   외부 호출 0건. 다음 sprint에서 폐기. 현재는 테스트 import 영향 보존용.
+ *   SSOT: docs/01_spec.md 5.1.3.0.
+ */
 export function recommend(ctx) {
   const c = computeStrategyContext(ctx);
   const numbers = c.isBalancer
@@ -661,7 +667,9 @@ export function recommendFiveSets(ctx, opts = {}) {
       const seedVariant = mixSeeds(baseSeed, FIVE_SETS_SALT_BASE + i);
       setCtx = { ...ctx, seed: seedVariant };
     }
-    const rec = multi ? recommendMulti(setCtx) : recommend(setCtx);
+    // S43.2: 모든 호출을 recommendMulti로 통일 (단일 strategy → strategyIds 1개 list).
+    const sids = ctx.strategyIds || (ctx.strategyId ? [ctx.strategyId] : []);
+    const rec = recommendMulti({ ...setCtx, strategyIds: sids });
     out.push(rec);
   }
   return out;

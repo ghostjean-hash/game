@@ -29,6 +29,10 @@ export function preferredNumbers(seed, count = PICK_COUNT) {
 }
 
 /**
+ * @deprecated S43 (2026-05-08): 알고리즘 재구축. 새 architecture(`recommendMulti`)는 본 함수 호출 X.
+ *   `computeUnifiedWeights` 안에서 시드 6번호 + Luck 비례 가중을 직접 처리.
+ *   본 함수는 외부 테스트(luck.test.js) import 보존용. 다음 sprint 정리.
+ *
  * Luck 분산도 적용. 선호 번호에 boost. 다른 번호는 그대로.
  * Luck 0 = boost 1.0 (변화 없음). Luck 100 = boost WEIGHT_MAX_BIAS.
  *

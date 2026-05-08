@@ -505,8 +505,9 @@ suite('core/recommend - 전략', () => {
     }
   });
 
-  test('S4-T1 recommendFiveSets: [0]은 메인 (단일 recommend와 동일 결과)', () => {
-    const main = recommend({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
+  test('S4-T1 recommendFiveSets: [0]은 메인 (recommendMulti와 동일 결과) [S43.2]', () => {
+    // S43.2 (2026-05-08): recommend 단일 폐기. recommendFiveSets는 모든 호출을 recommendMulti로 통일.
+    const main = recommendMulti({ ...baseCtx, strategyIds: [STRATEGY_INTUITIVE] });
     const sets = recommendFiveSets({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
     assertDeepEqual(sets[0].numbers, main.numbers);
     assertEqual(sets[0].bonus, main.bonus);

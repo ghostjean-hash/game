@@ -2,7 +2,7 @@
 // core/는 DOM 금지. 순수 함수.
 
 import { matchRank } from './match.js';
-import { recommend } from './recommend.js';
+import { recommendMulti } from './recommend.js';
 import { BACKFILL_RECENT_COUNT } from '../data/numbers.js';
 
 /**
@@ -71,9 +71,10 @@ export function backfillRecommendations(character, draws, strategyId, stats, las
   const newEntries = [];
   for (const draw of recent) {
     if (existing.has(draw.drwNo)) continue;
-    const rec = recommend({
+    // S43.2 (2026-05-08): recommend 단일 → recommendMulti + strategyIds 단일 list 통일.
+    const rec = recommendMulti({
       seed: character.seed,
-      strategyId,
+      strategyIds: [strategyId],
       luck: character.luck,
       drwNo: draw.drwNo,
       numberStats: stats.numberStats,

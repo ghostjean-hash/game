@@ -4,13 +4,53 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-08 (Sprint 051 - 알고리즘 처음부터 재구축 / S43 단일 추첨 architecture).
+1.3. **마지막 갱신**: 2026-05-08 (Sprint 052 - S43 후속 정리 / backcast 통일 + SSOT 갱신 + dead code 마크).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 직전 5 Sprint(040~044)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.73. Sprint 052 완료 - S43 후속 정리 (S43.2, 2026-05-08)
+
+배경: 사용자 지시 "권장 사항 진행" - Sprint 051 후속 권장 3건 일괄 처리.
+
+### 2.73.1. backcast 알고리즘 통일
+
+- `src/core/history.js` `backfillRecommendations`: `recommend` 단일 → `recommendMulti({...strategyIds: [strategyId]})`. 새 architecture로 통일.
+- `src/core/recommend.js` `recommendFiveSets`: `multi ? recommendMulti : recommend` 분기 → 항상 `recommendMulti({...strategyIds: sids})` 호출. 단일/다중 분기 폐기.
+- 결과: 사용자 노출 추천 + backcast 백필 + 5세트 모두 동일 architecture (단일 추첨 합성 weight).
+
+### 2.73.2. SSOT 갱신
+
+- `docs/01_spec.md` 5.1.3.0 (추천 알고리즘 architecture) 신설. 옛 architecture 결함 / 새 architecture 룰 / 검증 수치 명시.
+- `docs/02_data.md` 1.5.6 (풀 컷팅) 폐기 사유 추가. 1.7 (가중치 한계) WEIGHT_MAX_BIAS 폐기 명시.
+
+### 2.73.3. Dead code @deprecated 마크
+
+| 파일 | 함수 | 상태 |
+|---|---|---|
+| `src/core/recommend.js` | `recommend` (단일) | @deprecated. 외부 호출 0 |
+| `src/core/luck.js` | `applyLuck` | @deprecated. 외부 호출 0 (테스트 import만) |
+
+내부 헬퍼(`distributeCounts` / `computeStrategyContext` / `poolFromWeights` / `statsToWeights` / `gapWeights` / `trendWeights` / `intuitiveWeights` / `zodiacWeights` / `passesBalanceFilters` / `strategyHash`)도 사실상 dead. 테스트 import 영향 보존. 다음 sprint에서 폐기.
+
+### 2.73.4. 테스트 갱신
+
+- `S4-T1 recommendFiveSets: [0]은 메인` 단언: `recommend` 단일 비교 → `recommendMulti` 비교. S43.2 통일 반영.
+
+### 2.73.5. 검증
+
+- `node tests/run-node.js` → 294/298 PASS (사전 storage 4건 Node 환경 무관). 신규 FAIL 0.
+- 신규 회귀 테스트 5건(S43 분포 정상성)도 그대로 PASS.
+
+### 2.73.6. 다음 sprint 후보
+
+- `recommend` 단일 + 옛 헬퍼 함수 실제 코드 삭제. 테스트 import 함께 정리.
+- `applyLuck` / `WEIGHT_MAX_BIAS` 상수 폐기.
+- `STATS_POOL_SIZE` / `SUM_RANGE_MIN/MAX` 등 옛 architecture 상수 폐기 검토.
+- `backfillRecommendations`의 `strategyId` 단일 인자 → `strategyIds` list로 갱신.
 
 ## 2.72. Sprint 051 완료 - 알고리즘 처음부터 재구축 (S43, 2026-05-08)
 
