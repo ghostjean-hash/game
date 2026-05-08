@@ -18,7 +18,8 @@ import { bottomTabsHtml, TABS } from './bottom-tabs.js';
 import { showModal, showDisclaimer } from './modal.js';
 import { ritualWidgetHtml, openRitualModal } from './ritual-widget.js';
 import { spawnRitualBurst } from './ritual-particles.js';
-import { recommend, recommendMulti, recommendFiveSets, computePoolForStrategies, computePairsForPairTracker } from '../core/recommend.js';
+// S34 (2026-05-08): computePairsForPairTracker import 제거 (짝꿍 페어 박스 폐기 동반).
+import { recommend, recommendMulti, recommendFiveSets, computePoolForStrategies } from '../core/recommend.js';
 import { mixSeeds } from '../core/random.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
@@ -246,22 +247,18 @@ function getRecAndFortune(active) {
   const pool = (focusedId && focusedCat !== 'random')
     ? computePoolForStrategies([focusedId], ctxBase)
     : null;
-  // S30.3 (2026-05-04) → S30.4 (2026-05-04): 짝꿍 객관 승격으로 키번호 anchor 폐기. poolNote 제거.
-  //   짝꿍 desc 자체가 "역대 동시출현 상위 페어 합집합"이라 추가 노트 불필요.
+  // S34 (2026-05-08): poolNote / pairs 폐기 - 짝꿍 페어 박스 폐기 동반.
   const poolNote = null;
-  // S31 (2026-05-04): 짝꿍 포커스 시 페어 list 계산 → strategy-tabs에서 페어 박스 단위로 표시.
-  const pairs = focusedId === 'pairTracker' ? computePairsForPairTracker(ctxBase) : null;
 
   // S4-T1: 5세트 모드. ON이면 메인(rec) = sets[0], 추가 sets[1..4]를 함께 반환.
   // S30.6 (2026-05-04): drawDate도 반환. character-card 사주 패널 일진 보너스 표시용.
-  // S31 (2026-05-04): pairs 반환. 짝꿍 포커스 시 strategy-tabs에서 페어 박스 단위로 표시.
   if (state.options.fiveSets) {
     const sets = recommendFiveSets({ ...ctxBase, strategyIds }, { multi: true });
-    return { strategyId, strategyIds, rec: sets[0], sets, fortune, drawForFortune, pool, poolNote, drawDate, pairs };
+    return { strategyId, strategyIds, rec: sets[0], sets, fortune, drawForFortune, pool, poolNote, drawDate };
   }
 
   const rec = recommendMulti({ ...ctxBase, strategyIds });
-  return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune, pool, poolNote, drawDate, pairs };
+  return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune, pool, poolNote, drawDate };
 }
 
 /**
@@ -401,6 +398,9 @@ function flashSavedSetsToast(message, durationMs) {
   }, durationMs);
 }
 
+// S34 (2026-05-08): 'pairTracker' 잔존 ID 추가 필터 (짝꿍 폐기 마이그레이션). S8 mbti 패턴 재사용.
+const DEPRECATED_STRATEGY_IDS = new Set(['mbti', 'pairTracker']);
+
 function activeStrategyIds(character) {
   let raw;
   if (Array.isArray(character.lastUsedStrategies) && character.lastUsedStrategies.length > 0) {
@@ -408,7 +408,7 @@ function activeStrategyIds(character) {
   } else {
     raw = [character.lastUsedStrategy || STRATEGY_DEFAULT];
   }
-  const filtered = raw.filter((id) => id !== 'mbti');
+  const filtered = raw.filter((id) => !DEPRECATED_STRATEGY_IDS.has(id));
   return filtered.length > 0 ? filtered : [STRATEGY_DEFAULT];
 }
 
@@ -426,7 +426,7 @@ function computeFiveSetsMatchInfos(sets, draws) {
   });
 }
 
-function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool, poolNote, drawDate, pairs) {
+function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool, poolNote, drawDate) {
   const banner = state.draws.length === 0
     ? `<section class="data-banner">
         <strong>회차 데이터 없음.</strong> 통계 / 일진 / 일부 전략이 데이터 기반으로 동작하려면 페치 1회 필요.
@@ -479,8 +479,8 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
 
     ${/* S29(2026-05-04): 전략(조립) - + 버튼 아래로 이동.
          S29.2 / S30.1: pool은 포커스 전략 1개 풀.
-         S31: pairs는 짝꿍 포커스 시 페어 박스 단위 표시용. */ ''}
-    ${strategyTabsHtml(strategyIds, { multi: true, pool, poolNote, pairs })}
+         S34 (2026-05-08): pairs 인자 폐기 - 짝꿍 페어 박스 폐기 동반. */ ''}
+    ${strategyTabsHtml(strategyIds, { multi: true, pool, poolNote })}
 
     ${/* S17(2026-05-02): 행운 쌓기를 전략 탭 하위로 이동 (이전 = 히어로 직하). */ ''}
     ${ritualWidgetHtml(state.ritual)}
@@ -496,7 +496,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
 
 function renderHome(content) {
   const active = getActive();
-  const { strategyId, strategyIds, rec, sets, fortune, drawForFortune, pool, poolNote, drawDate, pairs } = getRecAndFortune(active);
+  const { strategyId, strategyIds, rec, sets, fortune, drawForFortune, pool, poolNote, drawDate } = getRecAndFortune(active);
 
   // 백캐스트: 캐릭터에 최근 30회 결정론적 추천이 history에 없으면 1회 백필.
   // Luck 부트스트랩 목적. SSOT: docs/01_spec.md 7.5.
@@ -524,7 +524,7 @@ function renderHome(content) {
   state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
   saveCharacters(state.characters);
 
-  content.innerHTML = homeTabHtml(updated, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool, poolNote, drawDate, pairs);
+  content.innerHTML = homeTabHtml(updated, strategyId, strategyIds, rec, fortune, drawForFortune, sets, pool, poolNote, drawDate);
 
   // 카운트다운 시작 (이전 interval은 renderApp 시작 시 정리됨).
   // 추첨 시각 도달 시 자동 재렌더 → 다음 회차 정보로 갱신.

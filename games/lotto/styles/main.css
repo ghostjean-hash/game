@@ -1870,31 +1870,7 @@ a.btn-secondary,
     font-size: var(--font-size-xs);
   }
 }
-/* S31 (2026-05-04): 짝꿍 페어 박스 - 두 번호공 + 횟수 라벨을 한 묶음으로. */
-.strategy-pool-pairs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-2);
-}
-.strategy-pool-pair {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-1) var(--space-2);
-  background: var(--color-surface-soft);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-}
-.strategy-pool-pair-count {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-dim);
-  margin-left: var(--space-1);
-}
-@media (max-width: 480px) {
-  .strategy-pool-pair { padding: var(--space-1); gap: var(--space-1); }
-  .strategy-pool-pair-count { font-size: var(--font-size-xs); }
-}
+/* S34 (2026-05-08): 짝꿍 페어 박스 css 폐기 (.strategy-pool-pairs / .strategy-pool-pair / .strategy-pool-pair-count). 짝꿍 전략 폐기 동반. */
 /* S6-T1 + S10: 운세 카테고리 면책. 한 줄로 톤 일관성. */
 .strategy-mapping-note {
   margin-top: 4px;

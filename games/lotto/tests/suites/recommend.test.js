@@ -1,8 +1,9 @@
 import { suite, test, assertEqual, assertTrue, assertDeepEqual } from '../core.js';
 import { recommend, recommendMulti, distributeCounts, recommendFiveSets } from '../../src/core/recommend.js';
+// S34 (2026-05-08): STRATEGY_PAIR_TRACKER 폐기 - import / 사용처 모두 제거.
 import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
-  STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
+  STRATEGY_REGRESSIONIST, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
   STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
   FIVE_SETS_COUNT,
@@ -49,7 +50,7 @@ suite('core/recommend - 형식', () => {
   test('전 전략에서도 bonus ∉ numbers', () => {
     const strategies = [
       STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
-      STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
+      STRATEGY_REGRESSIONIST, STRATEGY_ASTROLOGER,
       STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
       STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
     ];
@@ -105,9 +106,10 @@ suite('core/recommend - 객관 전략 캐릭터 무관 (SSOT: 02_data.md 1.5)', 
     number: i + 1, totalCount: 50 + i, recent30: 0, lastSeenDrw: 1000,
   }));
   // S30.4 (2026-05-04): pairTracker 객관 승격 - 6개 전략으로 확장.
+  // S34 (2026-05-08): pairTracker 폐기 - 5개 전략으로 환원.
   const objectiveStrategies = [
     STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR, STRATEGY_REGRESSIONIST,
-    STRATEGY_TREND_FOLLOWER, STRATEGY_BALANCER, STRATEGY_PAIR_TRACKER,
+    STRATEGY_TREND_FOLLOWER, STRATEGY_BALANCER,
   ];
 
   test('seed 달라도 같은 결과 (6개 전략)', () => {
@@ -248,11 +250,7 @@ suite('core/recommend - 전략', () => {
     assertTrue(r.reasons[0].includes('안 나온 수'));
   });
 
-  test('pairTracker 정상 동작 (빈 cooccur여도)', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_PAIR_TRACKER });
-    assertEqual(r.numbers.length, 6);
-    assertTrue(r.reasons[0].includes('짝꿍 번호'));
-  });
+  // S34 (2026-05-08): pairTracker 정상 동작 테스트 폐기 - 전략 자체 폐기.
 
   test('astrologer 정상 동작 (zodiac 미지정 가능)', () => {
     const r = recommend({ ...baseCtx, strategyId: STRATEGY_ASTROLOGER });
@@ -400,11 +398,12 @@ suite('core/recommend - 전략', () => {
   });
 
   test('S3-T1 recommendMulti: 6전략 모두 1개씩', () => {
+    // S34 (2026-05-08): pairTracker 폐기 - balancer로 대체.
     const r = recommendMulti({
       ...baseCtx,
       strategyIds: [
         STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_REGRESSIONIST,
-        STRATEGY_PAIR_TRACKER, STRATEGY_INTUITIVE, STRATEGY_TREND_FOLLOWER,
+        STRATEGY_BALANCER, STRATEGY_INTUITIVE, STRATEGY_TREND_FOLLOWER,
       ],
     });
     assertEqual(r.numbers.length, 6);
@@ -453,8 +452,9 @@ suite('core/recommend - 전략', () => {
 
   test('S25 recommendMulti: 통계 + 운세 혼합 정규화', () => {
     // 통계 + 운세 혼합 6전략. 클릭 순서 다양하게 → 동일 결과.
-    const ids1 = [STRATEGY_FIVE_ELEMENTS, STRATEGY_TREND_FOLLOWER, STRATEGY_STATISTICIAN, STRATEGY_PAIR_TRACKER, STRATEGY_SECOND_STAR, STRATEGY_REGRESSIONIST];
-    const ids2 = [STRATEGY_REGRESSIONIST, STRATEGY_FIVE_ELEMENTS, STRATEGY_PAIR_TRACKER, STRATEGY_TREND_FOLLOWER, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR];
+    // S34 (2026-05-08): pairTracker 폐기 - balancer로 대체 (랜덤 카테고리지만 정규화 회귀 검증 목적상 무관).
+    const ids1 = [STRATEGY_FIVE_ELEMENTS, STRATEGY_TREND_FOLLOWER, STRATEGY_STATISTICIAN, STRATEGY_BALANCER, STRATEGY_SECOND_STAR, STRATEGY_REGRESSIONIST];
+    const ids2 = [STRATEGY_REGRESSIONIST, STRATEGY_FIVE_ELEMENTS, STRATEGY_BALANCER, STRATEGY_TREND_FOLLOWER, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR];
     const a = recommendMulti({ ...baseCtx, dayPillar: { stem: 'gap', branch: 'rat' }, strategyIds: ids1 });
     const b = recommendMulti({ ...baseCtx, dayPillar: { stem: 'gap', branch: 'rat' }, strategyIds: ids2 });
     assertDeepEqual(a.numbers, b.numbers);

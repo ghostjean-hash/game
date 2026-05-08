@@ -31,7 +31,9 @@ export const STRATEGY_BLESSED = 'blessed';
 export const STRATEGY_STATISTICIAN = 'statistician';
 export const STRATEGY_SECOND_STAR = 'secondStar';
 export const STRATEGY_REGRESSIONIST = 'regressionist';
-export const STRATEGY_PAIR_TRACKER = 'pairTracker';
+// S34 (2026-05-08): STRATEGY_PAIR_TRACKER('pairTracker') 폐기.
+//   페어 동행 보장 못 함 + 사용자 가치 의문으로 통계 카테고리 5종 → 4종 단순화.
+//   동시출현 매트릭스(cooccur)는 통계 탭에서 학습 자산으로 유지.
 export const STRATEGY_ASTROLOGER = 'astrologer';
 export const STRATEGY_TREND_FOLLOWER = 'trendFollower';
 export const STRATEGY_INTUITIVE = 'intuitive';
@@ -42,9 +44,10 @@ export const STRATEGY_DEFAULT = STRATEGY_BLESSED;
 
 // 1.5.3. 전략 카테고리 ID (다중 전략 모드 출처 라벨 dot 색용. SSOT: docs/02_data.md 1.5.2).
 // S10(2026-05-02): fiveElements 'saju' → 'mapping' 통합. 운세 단일 카테고리.
+// S34 (2026-05-08): pairTracker 항목 제거 (폐기 동반).
 export const STRATEGY_CATEGORIES = Object.freeze({
   blessed: 'random', statistician: 'stats', secondStar: 'stats', regressionist: 'stats',
-  pairTracker: 'stats', astrologer: 'mapping', trendFollower: 'stats', intuitive: 'random',
+  astrologer: 'mapping', trendFollower: 'stats', intuitive: 'random',
   balancer: 'random', zodiacElement: 'mapping', fiveElements: 'mapping',
 });
 
@@ -56,13 +59,14 @@ export const MULTI_STRATEGY_MAX = 6;
 // 사유: 사용자가 같은 N개 strategy를 어떤 순서로 켜든 같은 결과 + 같은 source 매핑.
 // 기준: 카테고리(운세 → 랜덤 → 통계) + 카테고리 안 의미 순 (UI 노출 순서와 일치).
 // SSOT: docs/02_data.md 1.5.4.
+// S34 (2026-05-08): STRATEGY_PAIR_TRACKER 제거. 통계 4종.
 export const STRATEGY_ORDER = Object.freeze([
   // 운세
   STRATEGY_ASTROLOGER, STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
   // 랜덤
   STRATEGY_BLESSED, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
   // 통계
-  STRATEGY_TREND_FOLLOWER, STRATEGY_STATISTICIAN, STRATEGY_PAIR_TRACKER,
+  STRATEGY_TREND_FOLLOWER, STRATEGY_STATISTICIAN,
   STRATEGY_SECOND_STAR, STRATEGY_REGRESSIONIST,
 ]);
 
@@ -96,14 +100,13 @@ export const SAVED_SETS_TOAST_PARTIAL_MS = 2500;
 
 // 1.5.1. 객관 전략 (캐릭터 시드 / Luck 무관. 회차 데이터로만 결정).
 // 같은 회차에서 모든 캐릭터가 같은 결과를 받음. SSOT: docs/02_data.md 1.5.
-// S30.4 (2026-05-04): pairTracker 객관 승격 - 키번호 anchor 폐기, 동시출현 빈도 상위 페어 합집합으로 재설계.
+// S34 (2026-05-08): pairTracker 폐기로 5종 → 4종.
 export const OBJECTIVE_STRATEGIES = Object.freeze(new Set([
   STRATEGY_STATISTICIAN,
   STRATEGY_SECOND_STAR,
   STRATEGY_REGRESSIONIST,
   STRATEGY_TREND_FOLLOWER,
   STRATEGY_BALANCER,
-  STRATEGY_PAIR_TRACKER,
 ]));
 
 // 객관 전략용 PRNG salt. drwNo와 mix해 회차별 분포를 분산하되 캐릭터 무관 보장.

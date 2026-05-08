@@ -82,7 +82,7 @@
 
 ### 5.1.3. 추첨 전략 (캐릭터와 분리)
 
-- 전략 11종: 축복받은 자 / 최근 트렌드 / 많이 나온 수 / 짝꿍 번호 / 보너스볼 / 안 나온 수 / 별자리 행운 / 원소 행운 / 사주 행운 / 직감 / 균형 조합. (S8, 2026-05-02 MBTI 폐지 / S12 라벨 직관화 / S21, 2026-05-03 통계 5종 라벨 직관화 + 순서 변경)
+- 전략 10종: 축복받은 자 / 최근 트렌드 / 많이 나온 수 / 보너스볼 / 안 나온 수 / 별자리 행운 / 원소 행운 / 사주 행운 / 직감 / 균형 조합. (S8 MBTI 폐지 / S12 라벨 직관화 / S21 통계 라벨 직관화 + 순서 변경 / **S34, 2026-05-08 짝꿍 페어 폐기** - 동행 보장 못 함 + 사용자 가치 의문)
 - **전략은 캐릭터 속성이 아닙니다.** 추첨 시 사용자가 매번 선택. 같은 캐릭터로 다른 전략 시도 가능.
 - 마지막 선택은 캐릭터별로 `lastUsedStrategy`(단일 모드) / `lastUsedStrategies`(다중 모드)에 캐시 (캐릭터 전환 시 자동 복원).
 - 메인 화면 상단의 전략 picker UI에서 변경.
@@ -93,7 +93,7 @@
 - **S19**: 옵션(`options.multiStrategy`) 폐기. **항상 다중 모드**. 단일 = 1전략 토글. 사용자가 선택한 전략 수에 따라 자동 분배.
 - **S29.2 / S30.1 / S30.2**: 활성 전략 설명 아래 "다중 전략 모드 · N/6 선택. 분배는 균등(6/N)" 메타 텍스트 폐기. 대체 = **포커스 전략의 사용 번호 풀**을 번호공으로 표시 (`computePoolForStrategies([focusedId], ctx)`). 사용자에게 "이 번호 N개 중 추출됩니다" 투명.
   - **S30.1**: 합집합 → 포커스 전략 1개 풀로 정정. 다중 활성 시 desc / 풀 모두 *포커스 전략 1개 기준*으로 통일.
-  - **S30.2 (2026-05-04 - 버그 수정)**: 풀 정의를 `mainWeights > 0`(applyLuck 전) 기준으로 정정. `applyLuck`의 `WEIGHT_MIN_FLOOR`가 풀 외 0을 양수로 만들어 시드 의존 전략(pairTracker / astrologer / zodiacElement / fiveElements)의 풀이 1~45로 확장되던 버그 수정. 객관 전략(statistician/secondStar/regressionist/trendFollower/balancer)은 `finalWeights == mainWeights`라 영향 0.
+  - **S30.2 (2026-05-04 - 버그 수정)**: 풀 정의를 `mainWeights > 0`(applyLuck 전) 기준으로 정정. `applyLuck`의 `WEIGHT_MIN_FLOOR`가 풀 외 0을 양수로 만들어 시드 의존 전략(astrologer / zodiacElement / fiveElements)의 풀이 1~45로 확장되던 버그 수정. 객관 전략(statistician/secondStar/regressionist/trendFollower/balancer)은 `finalWeights == mainWeights`라 영향 0. (S34 pairTracker 폐기로 시드 의존 전략 목록에서 제거)
   - **랜덤 카테고리(blessed/intuitive/balancer)**: 풀이 1~45 균등 분포 = 전 풀이라 표시 의미 없음 → **풀 영역 미표시** (pool=null). 통계/운세 카테고리만 풀 표시.
 - **S30 (2026-05-04) - 포커스 분리**:
   - 토글(선택/해제) ≠ **포커스**(설명 표시 대상). 두 개념 분리.
@@ -301,13 +301,13 @@
 
 ### 5.4. 결정론성
 
-- **시드 의존 전략(6개)**: 같은 캐릭터 + 같은 회차 + 같은 토글 = 같은 결과. blessed / pairTracker / astrologer / intuitive / zodiacElement / fiveElements.
+- **시드 의존 전략(5개, S34 짝꿍 폐기로 6 → 5)**: 같은 캐릭터 + 같은 회차 + 같은 토글 = 같은 결과. blessed / astrologer / intuitive / zodiacElement / fiveElements.
 - **객관 전략(5개, docs/02_data.md 1.5.1)**: 같은 회차 + 같은 통계 = 모든 캐릭터에 동일 결과 (캐릭터 시드 / Luck 무관). 통계가 객관 데이터이므로 캐릭터에 따라 변하면 안 됨. statistician / secondStar / regressionist / trendFollower / balancer.
 - 모든 가중치 토글 OFF + `blessed` = 균등 랜덤.
 
 ### 5.4.1. 풀 외 번호 차단 (S33, 2026-05-08)
 
-- **별자리 / 4원소 / 사주 / 짝꿍 추첨 결과는 학설 풀 안 번호로만 구성된다.** 풀 외 번호는 weight 0 유지로 추첨 자체에서 차단.
+- **별자리 / 4원소 / 사주 추첨 결과는 학설 풀 안 번호로만 구성된다.** 풀 외 번호는 weight 0 유지로 추첨 자체에서 차단.
 - S18에서 풀 정의(`mainWeights`)는 풀 외 = 0이었으나 `applyLuck` + `weightedSample`의 `WEIGHT_MIN_FLOOR` floor가 풀 외 0을 양수화하여 풀 외도 추첨될 수 있던 잠재 버그를 S33에서 fix.
 - 사용자 직관: "별자리 8개 행운 번호" = 그 8개 안에서만 추첨. 카드 풀 표시와 실제 추첨 100% 일치.
 - 데이터 부재 fallback: zodiac 미지정 / 빈 cooccur 등 풀이 비어있는 케이스에 한해 균등 추첨. SSOT: docs/02_data.md 1.5.6.4.

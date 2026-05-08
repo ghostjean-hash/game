@@ -2,10 +2,11 @@
 // core/는 DOM 금지. 순수 함수.
 // 전략(strategy)은 캐릭터 속성이 아니라 추첨 시 사용자가 선택하는 가중치 정책.
 
+// S34 (2026-05-08): STRATEGY_PAIR_TRACKER import 제거 (전략 폐기 동반).
 import {
   NUMBER_MIN, NUMBER_MAX, PICK_COUNT, BONUS_COUNT,
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
-  STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
+  STRATEGY_REGRESSIONIST, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
   STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
   OBJECTIVE_STRATEGIES, OBJECTIVE_SEED_SALT,
@@ -100,48 +101,8 @@ function gapWeights(numberStats) {
   return arr;
 }
 
-function keyNumberFromSeed(seed) {
-  return ((seed >>> 0) % VECTOR_LEN) + 1;
-}
-// S30.3 (2026-05-04): 외부 노출 - 짝꿍 번호 전략의 키번호를 UI 풀 라벨에 표시 (사용자 직관 ↑).
-export { keyNumberFromSeed };
-
-/**
- * S30.4 (2026-05-04): 객관 짝꿍 페어 풀 weight.
- * 시드 무관. 동시출현 빈도 상위 페어들의 합집합 = 풀.
- * 각 풀 번호의 weight = 그 번호가 포함된 상위 페어들의 count 합 (중복 등장 시 가중).
- *
- * 알고리즘:
- *   1. cooccur 페어를 count 내림차순 정렬.
- *   2. 위에서부터 페어들의 합집합 size가 STATS_POOL_SIZE(18) 도달 또는 초과될 때까지 수집.
- *   3. 수집된 페어들의 a/b 번호에 weight = count 누적.
- *   4. 풀 외 = 0.
- *
- * S33 (2026-05-07): 빈 cooccur fallback 명시. 데이터 없을 때 균등 추첨 보장.
- *   weightedSample의 floor 제거(S33)로 모든 weight 0이면 추첨 0개가 되므로 안전망 필요.
- *
- * @param {Array<{a:number,b:number,count:number}>} cooccur 동시출현 매트릭스.
- * @param {number} poolSize 합집합 목표 크기 (보통 STATS_POOL_SIZE).
- * @returns {number[]} length VECTOR_LEN(45). 풀 번호는 weight 양수, 풀 외 0. 빈 cooccur 시 모두 1(uniform fallback).
- */
-function objectivePairWeights(cooccur, poolSize) {
-  const arr = new Array(VECTOR_LEN).fill(0);
-  // S33: 빈 cooccur는 통계 데이터 없음 → 균등 fallback. 풀 0개 추첨 방지.
-  if (!Array.isArray(cooccur) || cooccur.length === 0) {
-    return new Array(VECTOR_LEN).fill(1);
-  }
-  // 동시출현 페어를 count 내림차순 정렬 (불변).
-  const sorted = [...cooccur].sort((p, q) => q.count - p.count);
-  const inPool = new Set();
-  for (const p of sorted) {
-    if (inPool.size >= poolSize) break;
-    inPool.add(p.a);
-    inPool.add(p.b);
-    arr[p.a - 1] += p.count;
-    arr[p.b - 1] += p.count;
-  }
-  return arr;
-}
+// S34 (2026-05-08): keyNumberFromSeed / objectivePairWeights 폐기 - 짝꿍 전략 폐기 동반.
+//   동시출현 매트릭스(cooccur) 자체는 stats.js에서 통계 탭 노출용으로 유지.
 
 // S18: 풀 컷팅. lucky 풀 안 = 1, 풀 밖 = 0 (절대 안 뽑힘).
 // S33 (2026-05-08): 별자리 미지정 fallback 명시. zodiac 없으면 균등.
@@ -339,13 +300,6 @@ function computeStrategyContext(ctx) {
     mainWeights = poolFromWeights(gapWeights(numberStats), STATS_POOL_SIZE);
     bonusW = uniformWeights();
     reasons.push(`안 나온 수: 가장 오래 안 나온 상위 ${STATS_POOL_SIZE}등 풀에서 시드 추첨.`);
-  } else if (strategyId === STRATEGY_PAIR_TRACKER) {
-    // S30.4 (2026-05-04): 객관 승격. 키번호 anchor 폐기. 동시출현 빈도 상위 페어 합집합 풀.
-    //   - 시드 / Luck 무관. 모든 캐릭터 동일 결과.
-    //   - 사용자 직관 일치: "역대 회차에서 가장 자주 함께 추첨된 번호 쌍".
-    mainWeights = objectivePairWeights(cooccur, STATS_POOL_SIZE);
-    bonusW = uniformWeights();
-    reasons.push(`짝꿍 번호: 역대 회차 동시출현 빈도 상위 페어 합집합(${STATS_POOL_SIZE}개 풀)에서 추첨.`);
   } else if (strategyId === STRATEGY_ASTROLOGER) {
     mainWeights = zodiacWeights(zodiac);
     bonusW = uniformWeights();
@@ -559,29 +513,7 @@ export function recommendMulti(ctx) {
  * @param {object} ctx recommend / recommendMulti와 동일한 ctx.
  * @returns {number[]} 풀 번호 (오름차순).
  */
-/**
- * S31 (2026-05-04): 짝꿍 번호 전략의 페어 list (UI 페어 단위 표시용).
- * `objectivePairWeights`와 동일 알고리즘 - 동시출현 count 내림차순 정렬 + 합집합 size 도달까지 수집.
- * 단 weight 누적 대신 페어 객체 list 반환 (UI에서 두 번호를 한 묶음으로 시각화).
- *
- * @param {object} ctx recommend / recommendMulti와 동일한 ctx (cooccur 사용).
- * @param {number} [poolSize] 합집합 목표 크기 (기본 STATS_POOL_SIZE).
- * @returns {Array<{a:number, b:number, count:number}>} 정렬된 페어 list.
- */
-export function computePairsForPairTracker(ctx, poolSize = STATS_POOL_SIZE) {
-  const { cooccur = [] } = ctx;
-  if (!Array.isArray(cooccur) || cooccur.length === 0) return [];
-  const sorted = [...cooccur].sort((p, q) => q.count - p.count);
-  const inPool = new Set();
-  const pairs = [];
-  for (const p of sorted) {
-    if (inPool.size >= poolSize) break;
-    inPool.add(p.a);
-    inPool.add(p.b);
-    pairs.push({ a: p.a, b: p.b, count: p.count });
-  }
-  return pairs;
-}
+// S34 (2026-05-08): computePairsForPairTracker 폐기. 짝꿍 페어 박스 UI 동반 제거.
 
 export function computePoolForStrategies(strategyIds, ctx) {
   if (!Array.isArray(strategyIds) || strategyIds.length === 0) return [];

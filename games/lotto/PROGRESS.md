@@ -4,13 +4,64 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-08 (Sprint 043 - 풀 외 추첨 차단 fix / S33).
+1.3. **마지막 갱신**: 2026-05-08 (Sprint 044 - 짝꿍 페어 폐기 + 랜덤 카테고리 카피 정체성 강화 / S34).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리** (2026-05-04): 직전 5 Sprint(032~036)만 본 파일에 활성. Sprint 010 이전 ~ Sprint 031 영역과 옛 백로그(3.-18 ~ 3.0)는 `PROGRESS_ARCHIVE.md`로 이전. 새 세션 토큰 약 70%↓.
 
 # 2. 완료 마일스톤 (활성: 직전 5~7 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.52, M0~M6 / 폴리싱 / Sprint 010~031) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.65. Sprint 044 완료 - 짝꿍 페어 전략 폐기 + 랜덤 카테고리 카피 정체성 강화 (S34, 2026-05-08)
+
+배경:
+
+1. 사용자 지적 1 - "축복 / 직감 / 균형의 차이가 뭔지 모르겠어". 랜덤 카테고리 3종이 풀 1~45 전 범위 + 시드 의존 공통이라 차별성 미묘. desc 한 줄로 정체성 못 드러냄.
+2. 사용자 지적 2 - "페어는 진짜 페어가 선택되어야 하는데 그냥 숫자가 랜덤하게 추천되네". 짝꿍 전략(pairTracker)의 페어 박스 시각(S31)과 추첨 룰(합집합 풀에서 개별 번호) 불일치. 페어 동행 보장 안 됨.
+3. 사용자 결정 - "그냥 삭제할까? 페어가 의미 있어?" → 짝꿍 전략 폐기 + 랜덤 카테고리 카피 정체성 강화 결정.
+
+### 2.65.1. 카피 정체성 강화 (랜덤 카테고리 3종)
+
+`src/render/strategy-picker.js` STRATEGIES 배열의 desc만 변경 (label / short / category 그대로):
+
+| 전략 | 이전 desc | 신규 desc |
+|---|---|---|
+| 축복 | 모든 번호에서 균등 추출, Luck이 시드 번호 가중치를 강화 | **캐릭터 정체성**: 키운 Luck만큼 시드 6번호에 보너스. 운세에 가장 민감 |
+| 직감 | 회차마다 다른 분포 (같은 캐릭터는 같은 결과) | **회차 색깔**: 매주 분포가 통째로 바뀝니다. 같은 캐릭터도 회차마다 다른 추천 |
+| 균형 | 번호 합 121~160 + 홀짝 3:3 필터를 통과한 조합만 | **통계 패턴**: 역대 1등 번호 합·홀짝이 모이는 구간에 맞춘 조합만 |
+
+각 desc 앞에 정체성 라벨(굵게) → 사용자 카드 hover / aria-label에서 차별 즉답.
+
+### 2.65.2. 짝꿍 페어(pairTracker) 전략 폐기
+
+폐기 사유: (1) 페어 동행 보장 X (시각/추첨 불일치). (2) 페어 fix(시드 셔플 + 3쌍) + 단독 활성 차단 룰 = UX 부담 vs 사용자 가치 ↓. (3) 통계 4종(많이/적게/최신/보너스)으로 충분히 직관적.
+
+| 영역 | 변경 |
+|---|---|
+| 코드 | `STRATEGY_PAIR_TRACKER` 상수 / `objectivePairWeights` / `computePairsForPairTracker` / `keyNumberFromSeed` 제거. recommend.js 분기 제거. |
+| 카테고리 | `OBJECTIVE_STRATEGIES` 6 → 5종. `STRATEGY_ORDER` 통계 5 → 4종. `STRATEGY_CATEGORIES` 항목 제거. |
+| UI | strategy-picker STRATEGIES에서 짝꿍 entry 제거. strategy-tabs.js `pairs` 옵션 / 페어 박스 분기 폐기. main.js `pairs` 변수 / 호출부 인자 제거. |
+| 색 | `STRATEGY_TAG_COLORS` pairTracker 항목 제거. |
+| css | `.strategy-pool-pairs` / `.strategy-pool-pair` / `.strategy-pool-pair-count` 폐기. |
+| 마이그레이션 | render/main.js `DEPRECATED_STRATEGY_IDS = new Set(['mbti', 'pairTracker'])` - lastUsedStrategy(s) 잔존 ID 자동 필터. S8 mbti 패턴 재사용. |
+| 보존 | 동시출현 매트릭스(cooccur) - 통계 탭 학습 자산. stats.js / storage 그대로. |
+
+### 2.65.3. SSOT
+
+- `docs/01_spec.md` 5.1.3 (전략 11종 → 10종) / 5.4 (시드 의존 6 → 5종) / 5.4.1 (학설 풀 안 추첨 - 짝꿍 항목 제거) 갱신.
+- `docs/02_data.md` 1.5 표 (pairTracker 행 삭제) / 1.5.1 (시드 의존 6 → 5종) / 1.5.2 (정렬 순서) / 1.5.6.4 (S33 풀 외 차단 - 짝꿍 항목 제거) / 2.7 (색 표 - pairTracker 제거) 갱신.
+
+### 2.65.4. 검증
+
+- `tests/suites/recommend.test.js` pairTracker 정상 동작 테스트 폐기. 6전략 multi 테스트 / 정규화 테스트의 `STRATEGY_PAIR_TRACKER` → `STRATEGY_BALANCER` 대체. 객관 전략 6 → 5종.
+- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 FAIL 무관).
+
+### 2.65.5. 사용자 영향
+
+- 전략 그리드 카드 11 → 10. 통계 줄 5 → 4 (짝꿍 사라짐).
+- 기존 캐릭터의 `lastUsedStrategy` / `lastUsedStrategies`에 짝꿍 잔존 시 자동 필터 → 활성 전략 0 케이스 시 축복으로 fallback.
+- 동시출현 매트릭스 데이터는 통계 탭에서 그대로 노출 (학습 자산 유지).
+- 랜덤 카테고리 3종 카드의 hover / 접근성 라벨에서 정체성 한 줄 즉답 가능.
 
 ## 2.64. Sprint 043 완료 - 풀 외 추첨 차단 fix (S33, 2026-05-08)
 

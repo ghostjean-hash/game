@@ -1,7 +1,7 @@
 // 추첨 전략 선택 UI. 캐릭터 카드와 분리. 매 추첨마다 사용자가 선택.
 import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
-  STRATEGY_REGRESSIONIST, STRATEGY_PAIR_TRACKER, STRATEGY_ASTROLOGER,
+  STRATEGY_REGRESSIONIST, STRATEGY_ASTROLOGER,
   STRATEGY_TREND_FOLLOWER, STRATEGY_INTUITIVE, STRATEGY_BALANCER,
   STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
 } from '../data/numbers.js';
@@ -10,22 +10,21 @@ import {
 // 설명에서 라벨 단어 반복 금지 (UI 줄에서 라벨 + 설명 동시 노출).
 // SSOT: docs/02_data.md 1.5 / 1.5.2 (카테고리).
 // S21 (2026-05-03): 통계 5종 라벨 직관화 + 순서 변경.
-//   "통계 추첨"→"많이 나온 수", "보너스볼 사냥"→"보너스볼", "미출현 회귀"→"안 나온 수".
-//   통계 표시 순서: 최근 트렌드 / 많이 나온 수 / 짝꿍 번호 / 보너스볼 / 안 나온 수.
 // S31 (2026-05-04): label 축약 - 토글 시각 컴팩트 + 모바일 wrap 회피.
-//   short / desc / category는 그대로 (출처 태그 / 도움말 / 카테고리 그룹 그대로 유지).
+// S34 (2026-05-08): 짝꿍(pairTracker) 폐기 - 페어 동행 보장 X로 사용자 가치 의문 + 학습 부담.
+//   통계 카테고리 5종 → 4종(최신/많이/보너스/적게). 동시출현 매트릭스 자체는 통계 탭에서 유지.
+// S34 (2026-05-08): 랜덤 카테고리 3종 desc 정체성 강화 - 정체성 라벨 + 사용자 가치 차별화.
 const STRATEGIES = [
-  { id: STRATEGY_BLESSED, label: '축복', short: '축', desc: '모든 번호에서 균등 추출, Luck이 시드 번호 가중치를 강화', category: '랜덤' },
+  { id: STRATEGY_BLESSED, label: '축복', short: '축', desc: '캐릭터 정체성: 키운 Luck만큼 시드 6번호에 보너스. 운세에 가장 민감', category: '랜덤' },
   { id: STRATEGY_TREND_FOLLOWER, label: '최신', short: '추', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
   { id: STRATEGY_STATISTICIAN, label: '많이', short: '많', desc: '역대 회차에 가장 많이 나온 번호 위주', category: '통계' },
-  { id: STRATEGY_PAIR_TRACKER, label: '페어', short: '짝', desc: '역대 회차에서 가장 자주 함께 추첨된 번호 쌍 모음', category: '통계' },
   { id: STRATEGY_SECOND_STAR, label: '보너스', short: '별', desc: '역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두)', category: '통계' },
   { id: STRATEGY_REGRESSIONIST, label: '적게', short: '안', desc: '오랫동안 안 나온 번호 위주', category: '통계' },
   { id: STRATEGY_ASTROLOGER, label: '별자리', short: '점', desc: '캐릭터 별자리 12종의 행운 번호 위주', category: '운세' },
   { id: STRATEGY_ZODIAC_ELEMENT, label: '4원소', short: '원', desc: '별자리 4원소(불/땅/공기/물) 그룹 행운 번호', category: '운세' },
   { id: STRATEGY_FIVE_ELEMENTS, label: '사주', short: '사', desc: '캐릭터 일주의 천간 오행(목/화/토/금/수) 행운 번호', category: '운세' },
-  { id: STRATEGY_INTUITIVE, label: '직감', short: '직', desc: '회차마다 다른 분포 (같은 캐릭터는 같은 결과)', category: '랜덤' },
-  { id: STRATEGY_BALANCER, label: '균형', short: '균', desc: '번호 합 121~160 + 홀짝 3:3 필터를 통과한 조합만', category: '랜덤' },
+  { id: STRATEGY_INTUITIVE, label: '직감', short: '직', desc: '회차 색깔: 매주 분포가 통째로 바뀝니다. 같은 캐릭터도 회차마다 다른 추천', category: '랜덤' },
+  { id: STRATEGY_BALANCER, label: '균형', short: '균', desc: '통계 패턴: 역대 1등 번호 합·홀짝이 모이는 구간에 맞춘 조합만', category: '랜덤' },
 ];
 
 export const STRATEGY_LIST = STRATEGIES;

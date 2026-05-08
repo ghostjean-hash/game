@@ -34,7 +34,7 @@ export function preferredNumbers(seed, count = PICK_COUNT) {
  *
  * S33 (2026-05-07): 풀 외 0 유지 정책. 원본 weight 0(풀 외)은 0으로 유지하고
  *   양수만 floor 적용. 이전 구현은 모든 번호를 WEIGHT_MIN_FLOOR로 양수화하여
- *   시드 의존 전략(astrologer / zodiacElement / fiveElements / pairTracker)의 풀 외
+ *   시드 의존 전략(astrologer / zodiacElement / fiveElements)의 풀 외
  *   번호도 매우 낮은 확률로 추첨되던 문제 해소. SSOT: docs/02_data.md 1.7 + 1.5.2.5.
  *
  * @param {number[]} weights length 45 (index 0 = number 1)

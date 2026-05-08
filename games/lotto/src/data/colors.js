@@ -57,11 +57,11 @@ export function numberColor(n) {
 //   운세 3종: 분홍 계열 (pink-500 → pink-800) 3단계.
 //   랜덤 3종: 회색 계열 (gray-500 → gray-700) 3단계.
 // SSOT: docs/02_data.md 2.7.
+// S34 (2026-05-08): pairTracker 항목 제거 (짝꿍 폐기 동반). 통계 4종.
 export const STRATEGY_TAG_COLORS = Object.freeze({
   // 통계 (파랑 계열)
   trendFollower: '#0ea5e9',   // sky-500
   statistician:  '#0284c7',   // sky-600
-  pairTracker:   '#0369a1',   // sky-700
   secondStar:    '#075985',   // sky-800
   regressionist: '#0c4a6e',   // sky-900
   // 운세 (분홍 계열)
