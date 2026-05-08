@@ -198,6 +198,10 @@ S33 fix: `applyLuck` + `weightedSample`의 floor를 "원본 0 유지(풀 외) / 
 
 **데이터 부재 fallback (S33)**: `zodiac` 미지정 / 빈 `cooccur`처럼 풀 자체가 비어있는 케이스에 한해 균등 추첨 fallback (`zodiacWeights` / `objectivePairWeights`가 빈 풀일 때 `uniformWeights()` 반환). 풀 외 차단의 정상 동작은 데이터가 *있을 때* 한정.
 
+**S38 (2026-05-08) 통계 풀 컷팅 데이터 부재 fix**: `statsToWeights` / `gapWeights` / `trendWeights`가 빈 stats 입력 시 모든 weight를 같은 값(`WEIGHT_MIN_FLOOR` 또는 1)으로 채워, `poolFromWeights` 정렬이 동률이라 인덱스 0~9(=번호 1~10)가 항상 풀로 잡히는 결정론 버그. 사용자가 페치 전 / 새 캐릭터 / 신규 구좌에서 "1~9 위주 추천" 시청. 균형 프리셋(trendFollower 포함)이 본 결함을 가장 강하게 노출 (시뮬: 1-9 41.9% / top10 = 1~10).
+
+S38 fix: `poolFromWeights`에 가드 추가. `max === min`이면 풀 컷팅 의미 없음 → 1~45 균등 반환. 정상 데이터(가중 차등 있음)는 영향 0. 시뮬 회복: 균형 1-9 41.9% → 18.4%, 모든 strategy 거의 균등.
+
 ##### 1.5.6.5. 적용 위치
 
 `src/core/recommend.js`:

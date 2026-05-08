@@ -55,6 +55,20 @@ function uniformWeights() {
  * SSOT: docs/02_data.md 1.5.6.
  */
 function poolFromWeights(weights, poolSize) {
+  // S38 (2026-05-08): 데이터 부재 fix. 모든 weight 동일이면 풀 컷팅 의미 없음.
+  //   기존: 데이터 비어있어 모두 WEIGHT_MIN_FLOOR/1 균등 → sort stable → 인덱스 0~9(=번호 1~10) 풀 결정론.
+  //   사용자가 페치 전 / 새 캐릭터 / 신규 구좌에서 "1~9 위주 추천" 시청. 균형 프리셋(trendFollower 포함)이 본 결함 노출.
+  //   fix: max === min이면 풀 컷팅 우회 → 1~45 균등 반환. 정상 데이터(가중 차등)는 영향 0.
+  if (!Array.isArray(weights) || weights.length === 0) return [];
+  let max = -Infinity;
+  let min = Infinity;
+  for (const w of weights) {
+    if (w > max) max = w;
+    if (w < min) min = w;
+  }
+  if (max === min) {
+    return new Array(weights.length).fill(1);
+  }
   const indexed = weights.map((w, i) => ({ w, i }));
   indexed.sort((a, b) => b.w - a.w);
   const topSet = new Set(indexed.slice(0, poolSize).map((x) => x.i));
