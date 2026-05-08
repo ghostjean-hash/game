@@ -168,8 +168,13 @@ function assignSourceForNumber(n, ctx, strategyIds) {
  * @returns {{numbers: number[], bonus: number, reasons: string[], strategySources: string[]}}
  */
 export function recommendMulti(ctx) {
-  const { strategyIds, seed = 0, drwNo = 0 } = ctx;
+  // S43.6 (2026-05-08): ctx.strategyId 단일 입력 호환 (recommend wrapper 폐기 동반).
+  let { strategyIds } = ctx;
+  const { strategyId, seed = 0, drwNo = 0 } = ctx;
   if (!Array.isArray(strategyIds) || strategyIds.length === 0) {
+    strategyIds = strategyId ? [strategyId] : [];
+  }
+  if (strategyIds.length === 0) {
     throw new Error('strategyIds가 비어있음');
   }
   const normalized = normalizeStrategyIds(strategyIds);
@@ -210,27 +215,6 @@ export function computePoolForStrategies(strategyIds, ctx) {
     }
   }
   return [...union].sort((a, b) => a - b);
-}
-
-/**
- * @deprecated S43.3 (2026-05-08) - 단일 strategy 호환 wrapper. 새 코드는 recommendMulti 직접 호출.
- *   외부 테스트 import 호환 보존용. 다음 sprint에서 테스트 갱신 후 폐기.
- */
-export function recommend(ctx) {
-  const sid = ctx.strategyId || (ctx.strategyIds && ctx.strategyIds[0]) || STRATEGY_BLESSED;
-  return recommendMulti({ ...ctx, strategyIds: [sid] });
-}
-
-/**
- * @deprecated S43.3 (2026-05-08) - 다중 분배 폐기. 호환 wrapper.
- *   새 architecture는 단일 추첨이라 분배 룰 의미 없음.
- */
-export function distributeCounts(n) {
-  const base = Math.floor(PICK_COUNT / n);
-  const rem = PICK_COUNT % n;
-  const out = new Array(n).fill(base);
-  for (let i = 0; i < rem; i += 1) out[i] += 1;
-  return out;
 }
 
 /**

@@ -1,5 +1,5 @@
 import { suite, test, assertEqual, assertTrue, assertDeepEqual } from '../core.js';
-import { recommend, recommendMulti, distributeCounts, recommendFiveSets } from '../../src/core/recommend.js';
+import { recommendMulti, recommendFiveSets } from '../../src/core/recommend.js';
 // S34 (2026-05-08): STRATEGY_PAIR_TRACKER 폐기 - import / 사용처 모두 제거.
 import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
@@ -20,7 +20,7 @@ const baseCtx = {
 
 suite('core/recommend - 형식', () => {
   test('numbers 길이 6, 정렬, 중복 없음, 1~45 범위', () => {
-    const r = recommend(baseCtx);
+    const r = recommendMulti(baseCtx);
     assertEqual(r.numbers.length, 6);
     const set = new Set(r.numbers);
     assertEqual(set.size, 6);
@@ -33,7 +33,7 @@ suite('core/recommend - 형식', () => {
   });
 
   test('bonus는 1~45 정수', () => {
-    const r = recommend(baseCtx);
+    const r = recommendMulti(baseCtx);
     assertTrue(Number.isInteger(r.bonus));
     assertTrue(r.bonus >= 1 && r.bonus <= 45);
   });
@@ -41,7 +41,7 @@ suite('core/recommend - 형식', () => {
   test('bonus는 본번호와 겹치지 않음 (6/45 룰)', () => {
     // 다양한 시드로 50회 검증 - 결정론 + 6/45 룰 모두 통과
     for (let i = 0; i < 50; i += 1) {
-      const r = recommend({ ...baseCtx, seed: 0x10000 + i, drwNo: 1000 + i });
+      const r = recommendMulti({ ...baseCtx, seed: 0x10000 + i, drwNo: 1000 + i });
       const set = new Set(r.numbers);
       assertTrue(!set.has(r.bonus), `bonus ${r.bonus}이 본번호 [${r.numbers.join(',')}]에 포함됨 (seed=${0x10000 + i})`);
     }
@@ -55,7 +55,7 @@ suite('core/recommend - 형식', () => {
       STRATEGY_ZODIAC_ELEMENT, STRATEGY_FIVE_ELEMENTS,
     ];
     for (const strategyId of strategies) {
-      const r = recommend({
+      const r = recommendMulti({
         ...baseCtx, strategyId,
         zodiac: 'aries', dayPillar: { stem: 'gap', branch: 'rat' },
       });
@@ -65,30 +65,30 @@ suite('core/recommend - 형식', () => {
   });
 
   test('reasons 비어있지 않음', () => {
-    const r = recommend(baseCtx);
+    const r = recommendMulti(baseCtx);
     assertTrue(r.reasons.length > 0);
   });
 });
 
 suite('core/recommend - 결정론', () => {
   test('같은 ctx는 같은 결과', () => {
-    const a = recommend(baseCtx);
-    const b = recommend(baseCtx);
+    const a = recommendMulti(baseCtx);
+    const b = recommendMulti(baseCtx);
     assertDeepEqual(a.numbers, b.numbers);
     assertEqual(a.bonus, b.bonus);
   });
 
   test('drwNo 다르면 다른 결과 (대부분)', () => {
-    const a = recommend(baseCtx);
-    const b = recommend({ ...baseCtx, drwNo: 1101 });
+    const a = recommendMulti(baseCtx);
+    const b = recommendMulti({ ...baseCtx, drwNo: 1101 });
     const aStr = a.numbers.join(',');
     const bStr = b.numbers.join(',');
     assertTrue(aStr !== bStr || a.bonus !== b.bonus, 'expect different draw');
   });
 
   test('seed 다르면 다른 결과 (대부분, blessed = 시드 의존)', () => {
-    const a = recommend(baseCtx);
-    const b = recommend({ ...baseCtx, seed: 0x12345678 });
+    const a = recommendMulti(baseCtx);
+    const b = recommendMulti({ ...baseCtx, seed: 0x12345678 });
     const aStr = a.numbers.join(',');
     const bStr = b.numbers.join(',');
     assertTrue(aStr !== bStr || a.bonus !== b.bonus);
@@ -116,8 +116,8 @@ suite('core/recommend - 객관 전략 캐릭터 무관 (SSOT: 02_data.md 1.5)', 
 
   test('luck 달라도 같은 결과 (Luck boost 미적용)', () => {
     for (const strategyId of objectiveStrategies) {
-      const a = recommend({ ...baseCtx, strategyId, luck: 0, numberStats, bonusStats });
-      const b = recommend({ ...baseCtx, strategyId, luck: 100, numberStats, bonusStats });
+      const a = recommendMulti({ ...baseCtx, strategyId, luck: 0, numberStats, bonusStats });
+      const b = recommendMulti({ ...baseCtx, strategyId, luck: 100, numberStats, bonusStats });
       assertDeepEqual(a.numbers, b.numbers);
       assertEqual(a.bonus, b.bonus);
     }
@@ -125,8 +125,8 @@ suite('core/recommend - 객관 전략 캐릭터 무관 (SSOT: 02_data.md 1.5)', 
 
   test('drwNo 다르면 다른 결과 (회차는 영향)', () => {
     for (const strategyId of objectiveStrategies) {
-      const a = recommend({ ...baseCtx, strategyId, drwNo: 1100, numberStats, bonusStats });
-      const b = recommend({ ...baseCtx, strategyId, drwNo: 1101, numberStats, bonusStats });
+      const a = recommendMulti({ ...baseCtx, strategyId, drwNo: 1100, numberStats, bonusStats });
+      const b = recommendMulti({ ...baseCtx, strategyId, drwNo: 1101, numberStats, bonusStats });
       const aStr = a.numbers.join(',') + '|' + a.bonus;
       const bStr = b.numbers.join(',') + '|' + b.bonus;
       assertTrue(aStr !== bStr, `${strategyId}: drwNo 1100 vs 1101 결과 같음`);
@@ -141,8 +141,8 @@ suite('core/recommend - 시드 의존 전략 (캐릭터별 다른 결과)', () =
   ];
   test('seed 다르면 다른 결과 (2개 시드 의존 전략)', () => {
     for (const strategyId of seedStrategies) {
-      const a = recommend({ ...baseCtx, strategyId, seed: 0xAAAAAAAA });
-      const b = recommend({ ...baseCtx, strategyId, seed: 0xBBBBBBBB });
+      const a = recommendMulti({ ...baseCtx, strategyId, seed: 0xAAAAAAAA });
+      const b = recommendMulti({ ...baseCtx, strategyId, seed: 0xBBBBBBBB });
       const aStr = a.numbers.join(',') + '|' + a.bonus;
       const bStr = b.numbers.join(',') + '|' + b.bonus;
       assertTrue(aStr !== bStr, `${strategyId}: 같은 결과 (시드 의존이어야 함)`);
@@ -153,17 +153,17 @@ suite('core/recommend - 시드 의존 전략 (캐릭터별 다른 결과)', () =
 suite('core/recommend - 전략', () => {
   // S43.3 (2026-05-08): reasons 메시지 단언 폐기. 새 architecture는 단순 카운트만 reasons에 노출.
   test('blessed 정상 동작', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_BLESSED });
+    const r = recommendMulti({ ...baseCtx, strategyId: STRATEGY_BLESSED });
     assertEqual(r.numbers.length, 6);
   });
 
   test('statistician 정상 동작 (빈 stats여도)', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_STATISTICIAN });
+    const r = recommendMulti({ ...baseCtx, strategyId: STRATEGY_STATISTICIAN });
     assertEqual(r.numbers.length, 6);
   });
 
   test('secondStar 정상 동작 (빈 stats여도)', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_SECOND_STAR });
+    const r = recommendMulti({ ...baseCtx, strategyId: STRATEGY_SECOND_STAR });
     assertEqual(r.numbers.length, 6);
   });
 
@@ -175,7 +175,7 @@ suite('core/recommend - 전략', () => {
     heavy.forEach((n) => { bonusStats[n - 1].totalCount = 1000; });
     let hits = 0;
     for (let i = 0; i < 50; i++) {
-      const r = recommend({ ...baseCtx, seed: 0x1000 + i, strategyId: STRATEGY_SECOND_STAR, bonusStats });
+      const r = recommendMulti({ ...baseCtx, seed: 0x1000 + i, strategyId: STRATEGY_SECOND_STAR, bonusStats });
       hits += r.numbers.filter((n) => heavy.includes(n)).length;
     }
     // 균등 기대 = 50회 × 6 × (6/45) = 40. heavy 보너스로 평균 이상 기대 (약하게).
@@ -185,58 +185,58 @@ suite('core/recommend - 전략', () => {
   // S43.3: 알 수 없는 전략 에러 단언 폐기. 호환 wrapper가 unknown strategy를 그대로 전달.
 
   test('regressionist 정상 동작 (빈 stats여도)', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_REGRESSIONIST });
+    const r = recommendMulti({ ...baseCtx, strategyId: STRATEGY_REGRESSIONIST });
     assertEqual(r.numbers.length, 6);
   });
 
   // S34 (2026-05-08): pairTracker 정상 동작 테스트 폐기 - 전략 자체 폐기.
 
   test('astrologer 정상 동작 (zodiac 미지정 가능)', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_ASTROLOGER });
+    const r = recommendMulti({ ...baseCtx, strategyId: STRATEGY_ASTROLOGER });
     assertEqual(r.numbers.length, 6);
   });
 
   test('같은 캐릭터 + 다른 전략 = 다른 추천 (대부분)', () => {
-    const a = recommend({ ...baseCtx, strategyId: STRATEGY_BLESSED });
-    const b = recommend({ ...baseCtx, strategyId: STRATEGY_ASTROLOGER, zodiac: 'leo' });
+    const a = recommendMulti({ ...baseCtx, strategyId: STRATEGY_BLESSED });
+    const b = recommendMulti({ ...baseCtx, strategyId: STRATEGY_ASTROLOGER, zodiac: 'leo' });
     const aStr = a.numbers.join(',');
     const bStr = b.numbers.join(',');
     assertTrue(aStr !== bStr || a.bonus !== b.bonus, '전략별 차이 있어야');
   });
 
   test('trendFollower 정상 동작', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_TREND_FOLLOWER });
+    const r = recommendMulti({ ...baseCtx, strategyId: STRATEGY_TREND_FOLLOWER });
     assertEqual(r.numbers.length, 6);
   });
 
   test('intuitive 정상 동작 (결정론)', () => {
-    const a = recommend({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
-    const b = recommend({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
+    const a = recommendMulti({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
+    const b = recommendMulti({ ...baseCtx, strategyId: STRATEGY_INTUITIVE });
     assertDeepEqual(a.numbers, b.numbers);
   });
 
   test('intuitive 다른 회차에 다른 분포', () => {
-    const a = recommend({ ...baseCtx, strategyId: STRATEGY_INTUITIVE, drwNo: 1100 });
-    const b = recommend({ ...baseCtx, strategyId: STRATEGY_INTUITIVE, drwNo: 1101 });
+    const a = recommendMulti({ ...baseCtx, strategyId: STRATEGY_INTUITIVE, drwNo: 1100 });
+    const b = recommendMulti({ ...baseCtx, strategyId: STRATEGY_INTUITIVE, drwNo: 1101 });
     const aStr = a.numbers.join(',');
     const bStr = b.numbers.join(',');
     assertTrue(aStr !== bStr || a.bonus !== b.bonus);
   });
 
   test('balancer 정상 동작', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_BALANCER });
+    const r = recommendMulti({ ...baseCtx, strategyId: STRATEGY_BALANCER });
     assertEqual(r.numbers.length, 6);
   });
 
   // S43.3 (2026-05-08): 옛 architecture reasons 단언(원소 행운/사주 행운/fire/wood/water 등)은
   //   새 architecture에서 reasons 메시지가 단순화됨에 따라 폐기. 형식 + 결정성만 검증.
   test('zodiacElement 정상 동작 (zodiac 미지정도)', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_ZODIAC_ELEMENT });
+    const r = recommendMulti({ ...baseCtx, strategyId: STRATEGY_ZODIAC_ELEMENT });
     assertEqual(r.numbers.length, 6);
   });
 
   test('fiveElements 정상 동작 (dayPillar 미지정도)', () => {
-    const r = recommend({ ...baseCtx, strategyId: STRATEGY_FIVE_ELEMENTS });
+    const r = recommendMulti({ ...baseCtx, strategyId: STRATEGY_FIVE_ELEMENTS });
     assertEqual(r.numbers.length, 6);
   });
 
@@ -244,11 +244,11 @@ suite('core/recommend - 전략', () => {
     // 약한 가중 차이로 결과 차이 발생률 검증. 30회 중 1회 이상이면 차별화 동작 확인.
     let differ = 0;
     for (let i = 0; i < 30; i++) {
-      const wood = recommend({
+      const wood = recommendMulti({
         ...baseCtx, seed: 0xAA00 + i, strategyId: STRATEGY_FIVE_ELEMENTS,
         dayPillar: { stem: 'gap', branch: 'rat' },
       });
-      const metal = recommend({
+      const metal = recommendMulti({
         ...baseCtx, seed: 0xAA00 + i, strategyId: STRATEGY_FIVE_ELEMENTS,
         dayPillar: { stem: 'gyeong', branch: 'rat' },
       });
@@ -257,14 +257,7 @@ suite('core/recommend - 전략', () => {
     assertTrue(differ >= 1, `wood vs metal 30회 모두 동일 - 차별화 안 됨 (differ=${differ})`);
   });
 
-  test('S3-T1 distributeCounts: 1~6 분배', () => {
-    assertDeepEqual(distributeCounts(1), [6]);
-    assertDeepEqual(distributeCounts(2), [3, 3]);
-    assertDeepEqual(distributeCounts(3), [2, 2, 2]);
-    assertDeepEqual(distributeCounts(4), [2, 2, 1, 1]);
-    assertDeepEqual(distributeCounts(5), [2, 1, 1, 1, 1]);
-    assertDeepEqual(distributeCounts(6), [1, 1, 1, 1, 1, 1]);
-  });
+  // S43.6 (2026-05-08): distributeCounts 폐기. 새 architecture는 분배 룰 미사용. 단언 폐기.
 
   // S43.3 (2026-05-08): distributeCounts 호환 wrapper는 범위 검증 폐기. 단언 폐기.
 
@@ -313,9 +306,13 @@ suite('core/recommend - 전략', () => {
     }
   });
 
-  test('S3-T1 recommendMulti: 빈 strategyIds는 에러', () => {
+  test('S3-T1 recommendMulti: strategyIds + strategyId 모두 없으면 에러', () => {
+    // S43.6: ctx.strategyId 호환 처리 추가. 둘 다 없을 때만 throw.
     let threw = false;
-    try { recommendMulti({ ...baseCtx, strategyIds: [] }); } catch { threw = true; }
+    try {
+      const { strategyId: _drop, ...rest } = baseCtx;
+      recommendMulti({ ...rest, strategyIds: [] });
+    } catch { threw = true; }
     assertTrue(threw);
   });
 

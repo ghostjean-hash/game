@@ -4,13 +4,51 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-08 (Sprint 055 - docs SSOT 정리 + SAJU_RELATION_BOOST 보존 결정 / S43.5).
+1.3. **마지막 갱신**: 2026-05-08 (Sprint 056 - 호환 wrapper 폐기 + 테스트 일괄 변환 / S43.6).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 직전 5 Sprint(040~044)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.77. Sprint 056 완료 - 호환 wrapper 폐기 + 테스트 일괄 변환 (S43.6, 2026-05-08)
+
+배경: 사용자 지시 "권장안 진행" - Sprint 055에서 이월된 4.1 호환 wrapper 폐기 작업.
+
+### 2.77.1. recommendMulti 호환 처리
+
+`src/core/recommend.js` `recommendMulti` 진입점에 ctx.strategyId 단일 입력 호환:
+
+- `ctx.strategyIds`가 비어있으면 `ctx.strategyId`로 fallback (단일 list 변환).
+- 둘 다 없으면 throw.
+- 옛 호출 패턴(`recommend({...strategyId: X})`) 그대로 동작.
+
+### 2.77.2. 테스트 일괄 변환
+
+Python 정규식으로 `tests/suites/recommend.test.js`의 `recommend(...)` 호출 28건을 `recommendMulti(...)`로 일괄 치환. 변환 후 import 정리 (`recommend` / `distributeCounts` 제거).
+
+### 2.77.3. wrapper 2개 폐기
+
+| 함수 | 처리 |
+|---|---|
+| `recommend` (단일) | 통째로 삭제 |
+| `distributeCounts` | 통째로 삭제 + 테스트 단언 폐기 |
+
+### 2.77.4. 빈 strategyIds 단언 갱신
+
+옛: `strategyIds: []` 단독 입력 시 throw.
+새: `strategyIds: []` + `strategyId: undefined` 둘 다 없을 때 throw. baseCtx에 strategyId 포함이라 단언 강화.
+
+### 2.77.5. 검증
+
+- `node tests/run-node.js` → 270/274 PASS (사전 storage 4건 Node 환경 무관). 신규 FAIL 0.
+
+### 2.77.6. 결과
+
+- `recommend.js`는 새 architecture(`recommendMulti` / `recommendFiveSets` / `computePoolForStrategies`)만 export.
+- 옛 architecture 흔적 0건.
+- 호환 wrapper / dead code 모두 정리.
 
 ## 2.76. Sprint 055 완료 - docs SSOT 정리 + SAJU_RELATION_BOOST 결정 (S43.5, 2026-05-08)
 
