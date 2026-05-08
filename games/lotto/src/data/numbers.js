@@ -19,14 +19,9 @@ export const RECENT_SHORT = 10;
 export const RECENT_MID = 30;
 export const RECENT_LONG = 100;
 
-// 1.4. 비율 필터
-// S40 (2026-05-08): 합 121-160 → 100-180. 사용자 통찰 "1번대 무조건 노출".
-//   합 121-160(평균 ±19)은 좁아서 작은 번호 자주 통과. 한국 6/45 실측 평균 138 ±40으로 확장 = 약 90% 회차 커버.
-export const SUM_RANGE_MIN = 100;
-export const SUM_RANGE_MAX = 180;
-export const AC_VALUE_MIN = 6;
-export const AC_VALUE_MAX = 10;
-export const ODD_EVEN_PREFERRED = Object.freeze([3, 3]);
+// 1.4. ~~비율 필터~~ S43.4 (2026-05-08, Sprint 054) 폐기.
+//   옛 architecture의 balancer post-filter용. 새 architecture는 풀 1-45 균등 가중 추첨이라 필터 미사용.
+//   AC_VALUE는 미구현 상태로 잔존. 폐기 검토.
 
 // 1.5. 추첨 전략 ID (캐릭터 속성이 아니라 추첨 시 사용자가 선택하는 가중치 정책)
 export const STRATEGY_BLESSED = 'blessed';
@@ -77,8 +72,7 @@ export const STRATEGY_ORDER = Object.freeze([
 // S40 (2026-05-08): 10 → 25. 사용자 통찰 "10번 이하가 안 나올 수 있는데 무조건 나옴".
 //   풀 10이라 1-9 안 번호가 풀에 1-2개 들어가면 6번호 추첨에서 거의 확정 노출. 한국 6/45 실제로는 24% 회차가 1-9 0개.
 //   풀 25 = 1-45의 절반 이상 → 1-9 가중 자연 약화 → 추천 분포가 한국 실제 분포에 가까워짐.
-// SSOT: docs/02_data.md 1.5.6.
-export const STATS_POOL_SIZE = 25;
+// ~~STATS_POOL_SIZE~~ S43.4 (2026-05-08, Sprint 054) 폐기. 새 architecture는 풀 컷팅 폐기.
 
 // 1.5.5. 5세트 동시 추천 (S4-T1, 2026-05-02 신설). SSOT: docs/02_data.md 1.5.5.
 // "한 회차의 다양한 시도"를 5장 카드로 한 번에 노출. 사행성 톤 회피 (구매 권유 X, 확률 변화 X).
@@ -103,19 +97,8 @@ export const SAVED_SETS_RETRY_MAX = 50;
 export const SAVED_SETS_TOAST_NORMAL_MS = 1500;
 export const SAVED_SETS_TOAST_PARTIAL_MS = 2500;
 
-// 1.5.1. 객관 전략 (캐릭터 시드 / Luck 무관. 회차 데이터로만 결정).
-// 같은 회차에서 모든 캐릭터가 같은 결과를 받음. SSOT: docs/02_data.md 1.5.
-// S34 (2026-05-08): pairTracker 폐기로 5종 → 4종.
-export const OBJECTIVE_STRATEGIES = Object.freeze(new Set([
-  STRATEGY_STATISTICIAN,
-  STRATEGY_SECOND_STAR,
-  STRATEGY_REGRESSIONIST,
-  STRATEGY_TREND_FOLLOWER,
-  STRATEGY_BALANCER,
-]));
-
-// 객관 전략용 PRNG salt. drwNo와 mix해 회차별 분포를 분산하되 캐릭터 무관 보장.
-export const OBJECTIVE_SEED_SALT = 0xCAFEBABE;
+// ~~OBJECTIVE_STRATEGIES / OBJECTIVE_SEED_SALT~~ S43.4 (2026-05-08, Sprint 054) 폐기.
+//   객관 vs 시드 의존 분기 폐기. 새 architecture는 모든 strategy가 samplingSeed = mix(seed, drwNo) 의존.
 
 // 1.6. 운세 등급 ID
 export const FORTUNE_GREAT = 'great';
@@ -125,19 +108,11 @@ export const FORTUNE_BAD = 'bad';
 
 // 1.7. 추첨 가중치 한계 + 통계 효과 증폭
 // SSOT: docs/02_data.md 1.7.
+// WEIGHT_MIN_FLOOR: weightedSample 안전망 (weight 0 합 방지). 보존.
 export const WEIGHT_MIN_FLOOR = 0.0001;
-// S42 (2026-05-08): 50.0 → 5.0. 사용자 통찰 "알고리즘이 무조건 아래쪽 편향. 분명 실수".
-//   진단: Luck=50 시 boost 25.5배 → 시드 의존 전략(별자리/4원소/사주)에서 시드 6번호가 풀 안에 있으면 weight 25.5 vs 다른 1 → 채택 확률 84%. 매 추천 시드 번호 확정.
-//   사용자 캐릭터 시드에 우연히 작은 번호(2,4,5 등) 포함 → 모든 추천에 2,4,5 반복.
-//   fix: 50 → 5. boost 3배(Luck=50). 시드 번호 채택 ~37.5% = 자연 가중. 다른 번호도 정상 추첨.
-export const WEIGHT_MAX_BIAS = 5.0;
-// 누적 빈도 weight 증폭 지수. 1221회 실측 ±19% 편차 (133~182)로 거의 균등 인상 → 분포 차이 증폭.
-// statistician / secondStar에 적용. trendFollower는 raw 유지 (recent30 ratio 9배로 이미 두드러짐).
-// 실측 효과: weight ratio 1.368 → 1.601, 10000회 추출 빈도 ratio 1.587. SSOT: docs/02_data.md 1.7.2.
-export const STATS_POWER = 1.5;
-// 미출현 갭 weight 증폭 지수. gap은 이미 편차 큼 → 약한 증폭. regressionist에 적용.
-// 실측: gap ratio 19 → 46 (2.42배). SSOT: docs/02_data.md 1.7.3.
-export const GAP_POWER = 1.3;
+
+// ~~WEIGHT_MAX_BIAS / STATS_POWER / GAP_POWER~~ S43.4 (2026-05-08, Sprint 054) 폐기.
+//   옛 architecture(applyLuck / statsToWeights / gapWeights)만 사용. 새 architecture는 직접 가중치 합성.
 
 // 1.19. 행운 의식 (T4, 2026-05-02 신설)
 // SSOT: docs/02_data.md 1.19, docs/01_spec.md 5.6.

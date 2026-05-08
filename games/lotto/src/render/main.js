@@ -45,7 +45,7 @@ import {
   STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK,
   SAVED_SETS_CAP, SAVED_SETS_BATCH_SMALL, SAVED_SETS_BATCH_LARGE, SAVED_SETS_SALT_BASE,
   SAVED_SETS_RETRY_MAX, SAVED_SETS_TOAST_NORMAL_MS, SAVED_SETS_TOAST_PARTIAL_MS,
-  OBJECTIVE_STRATEGIES, STRATEGY_CATEGORIES,
+  STRATEGY_CATEGORIES,
 } from '../data/numbers.js';
 
 let appEl = null;
@@ -304,8 +304,8 @@ function addSavedSetsBatch(batchN) {
   const startIdx = cur.savedSets?.list?.length || 0;
   const currentRecipeId = recipeIdFor(strategyIds);
 
-  // 조립식이 객관 전략 1개 이상 포함 = drwNo 변형 / 아니면 seed 변형.
-  const hasObjective = strategyIds.some((id) => OBJECTIVE_STRATEGIES.has(id));
+  // S43.4 (2026-05-08): 객관 vs 시드 의존 분기 폐기. 새 architecture는 단일 추첨 + samplingSeed = mix(seed, drwNo)
+  //   라 seed만 변형해도 모든 strategy 결과 다양화. 이전 hasObjective 분기 의미 없음.
   const baseSeed = (active.seed || 0) >>> 0;
   const baseDrwNo = (state.drwNo || 0) >>> 0;
 
@@ -324,8 +324,8 @@ function addSavedSetsBatch(batchN) {
   function buildCtxFor(offset) {
     const salt = SAVED_SETS_SALT_BASE + startIdx + offset;
     return {
-      seed: hasObjective ? baseSeed : mixSeeds(baseSeed, salt),
-      drwNo: hasObjective ? mixSeeds(baseDrwNo, salt) : baseDrwNo,
+      seed: mixSeeds(baseSeed, salt),
+      drwNo: baseDrwNo,
       luck: active.luck,
       numberStats: state.numberStats,
       bonusStats: state.bonusStats,

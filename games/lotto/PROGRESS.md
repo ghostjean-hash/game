@@ -4,13 +4,52 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-08 (Sprint 053 - dead code 폐기 + 옛 architecture 단언 정리 / S43.3).
+1.3. **마지막 갱신**: 2026-05-08 (Sprint 054 - 옛 상수 폐기 + main.js 객관 분기 폐기 / S43.4).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 직전 5 Sprint(040~044)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.75. Sprint 054 완료 - 옛 상수 폐기 + main.js 객관 분기 폐기 (S43.4, 2026-05-08)
+
+배경: 사용자 지시 "권장안 진행" - Sprint 053 후속 권장.
+
+### 2.75.1. main.js 객관 vs 시드 의존 분기 폐기 (4.3)
+
+`addSavedSetsBatch` `buildCtxFor`:
+- 옛: `hasObjective` 분기로 객관 전략 → drwNo 변형 / 시드 의존 → seed 변형.
+- 새: 모든 strategy가 samplingSeed = mix(seed, drwNo) 의존 → seed 변형 단일.
+- `OBJECTIVE_STRATEGIES` import 제거.
+
+### 2.75.2. numbers.js 옛 상수 폐기 (4.2)
+
+| 상수 | 사유 |
+|---|---|
+| `SUM_RANGE_MIN` / `SUM_RANGE_MAX` | balancer post-filter 폐기 |
+| `ODD_EVEN_PREFERRED` | balancer post-filter 폐기 |
+| `AC_VALUE_MIN` / `AC_VALUE_MAX` | 미구현 |
+| `STATS_POOL_SIZE` | 풀 컷팅 폐기 |
+| `OBJECTIVE_STRATEGIES` / `OBJECTIVE_SEED_SALT` | 객관 분기 폐기 |
+| `WEIGHT_MAX_BIAS` | applyLuck 폐기 |
+| `STATS_POWER` / `GAP_POWER` | statsToWeights / gapWeights 폐기 |
+
+`WEIGHT_MIN_FLOOR` 보존 (weightedSample 안전망).
+
+### 2.75.3. 호환 wrapper 폐기 (4.1) - 보류
+
+`recommend` (단일) / `distributeCounts` 호환 wrapper는 35건 테스트 호출 영향 → 다음 sprint로 이월. 대신 `STATS_POOL_SIZE` import만 정리.
+
+### 2.75.4. 검증
+
+- `node tests/run-node.js` → 271/275 PASS (사전 storage 4건 Node 환경 무관). 신규 FAIL 0.
+
+### 2.75.5. 다음 sprint 후보
+
+- 호환 wrapper(`recommend` / `distributeCounts`) 폐기 + 35건 테스트 호출 일괄 갱신 (`recommendMulti`로).
+- `docs/02_data.md` 1.4 / 1.5.6 / 1.7 옛 상수 절 정리.
+- `SAJU_RELATION_BOOST` (character-card.js 사용) 새 architecture 통합 또는 보존 결정.
 
 ## 2.74. Sprint 053 완료 - dead code 폐기 + 옛 architecture 단언 정리 (S43.3, 2026-05-08)
 
