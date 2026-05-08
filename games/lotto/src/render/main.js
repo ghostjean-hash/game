@@ -22,7 +22,7 @@ import { showModal, showDisclaimer } from './modal.js';
 import { ritualWidgetHtml, openRitualModal } from './ritual-widget.js';
 import { spawnRitualBurst } from './ritual-particles.js';
 // S34 (2026-05-08): computePairsForPairTracker import 제거 (짝꿍 페어 박스 폐기 동반).
-import { recommend, recommendMulti, recommendFiveSets, computePoolForStrategies } from '../core/recommend.js';
+import { recommendMulti, recommendFiveSets, computePoolForStrategies } from '../core/recommend.js';
 import { mixSeeds } from '../core/random.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
