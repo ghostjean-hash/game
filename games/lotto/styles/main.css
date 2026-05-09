@@ -187,7 +187,7 @@ a.btn-secondary,
   margin-top: var(--space-2);
   padding: var(--space-3) var(--space-4);
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-on-accent);
   border: none;
   border-radius: var(--radius-md);
   font-weight: bold;
@@ -247,7 +247,7 @@ a.btn-secondary,
   width: 20px;
   height: 20px;
   background: var(--color-text-dim);
-  color: #ffffff;
+  color: var(--color-on-accent);
   border-radius: 50%;
   font-size: 11px;
   font-weight: bold;
@@ -311,7 +311,7 @@ a.btn-secondary,
   width: 20px;
   height: 20px;
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-on-accent);
   border-radius: 50%;
   font-size: 11px;
   font-weight: bold;
@@ -657,7 +657,7 @@ a.btn-secondary,
   /* 결과 페이지 변종(SSOT: docs/02_data.md 2.4): 완전 평면 단색.
      배경색은 numberColor()가 인라인 style로 주입. 그라디언트 / 그림자 없음. */
   background-image: none;
-  color: #ffffff;
+  color: var(--color-on-accent);
   font-weight: 700;
   font-size: var(--font-size-md);
   font-variant-numeric: tabular-nums;
@@ -1111,7 +1111,7 @@ a.btn-secondary,
   margin-top: var(--space-3);
   padding: var(--space-2) var(--space-4);
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-on-accent);
   border: none;
   border-radius: var(--radius-md);
   font-weight: bold;
@@ -1372,7 +1372,7 @@ a.btn-secondary,
   font-size: 9px;
   font-weight: 600;
   line-height: 1;
-  color: #ffffff;
+  color: var(--color-on-accent);
   letter-spacing: -0.02em;
   user-select: none;
 }
@@ -1929,7 +1929,7 @@ a.btn-secondary,
   transform: scale(1.05);
 }
 .reverse-cell.is-picked {
-  color: #fff;
+  color: var(--color-on-accent);
   border-color: transparent;
   font-weight: 800;
   transform: scale(1.05);
@@ -2002,7 +2002,7 @@ a.btn-secondary,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--color-on-accent);
   font-weight: 700;
   font-size: 14px;
   opacity: 0.5;
@@ -2094,7 +2094,7 @@ a.btn-secondary,
 }
 .ritual-row-icon.is-done {
   background: linear-gradient(135deg, #fde68a, #f59e0b);
-  color: #ffffff;
+  color: var(--color-on-accent);
   border-color: #f59e0b;
 }
 .ritual-row.is-filled .ritual-row-icon.is-done {
