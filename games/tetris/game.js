@@ -124,6 +124,8 @@ const ctx = board.getContext("2d");
 const scoreEl = document.getElementById("score");
 const linesEl = document.getElementById("lines");
 const levelEl = document.getElementById("level");
+const levelLabelEl = document.getElementById("level-label");
+const linesLabelEl = document.getElementById("lines-label");
 const bestEl = document.getElementById("best");
 const pauseBtn = document.getElementById("btn-pause");
 const nextEl = document.getElementById("next");
@@ -135,8 +137,9 @@ const store = createStorage("tetris");
 
 let state;
 
-function newState() {
+function newState(mode = getCurrentMode()) {
   return {
+    mode,
     grid: Array.from({ length: TOTAL_ROWS }, () => Array(COLS).fill(null)),
     bag: [],
     queue: [],
@@ -146,7 +149,7 @@ function newState() {
     score: 0,
     lines: 0,
     level: 1,
-    gravity: levelGravity(1),
+    gravity: MODES[mode].gravity(1),
     softDrop: false,
     fallTimer: 0,
     lockTimer: 0,
@@ -156,6 +159,8 @@ function newState() {
     paused: false,
     flashRows: null, // { rows:[...], t:number }
     capNoticed: false,
+    elapsed: 0,       // 활성 게임 시간(초). 일시정지/플래시 동안에도 누적은 update 분기에서 결정
+    finished: false,  // 모드 종료 조건 충족 (예: 스프린트 40라인). over=true와 함께 set
   };
 }
 
@@ -177,13 +182,80 @@ function levelGravity(level) {
 }
 
 function applyLevelChange(newLevel) {
+  const mode = MODES[state.mode];
+  if (!mode.levelUp) return;
   if (newLevel === state.level) return;
   state.level = newLevel;
-  state.gravity = levelGravity(newLevel);
+  state.gravity = mode.gravity(newLevel);
+  if (!mode.capToast) return;
   const cap = isCoarsePointer() ? CAP_LEVEL_MOBILE : CAP_LEVEL_PC;
   if (!state.capNoticed && newLevel >= cap) {
     state.capNoticed = true;
     showToast("리듬에 들어왔다.", 1800);
+  }
+}
+
+// === 모드 시스템 (docs/difficulty-redesign.md 4장) ===
+const MODE_MARATHON = "marathon";
+const MODE_ZEN = "zen";
+const MODE_SPRINT = "sprint";
+const VALID_MODES = [MODE_MARATHON, MODE_ZEN, MODE_SPRINT];
+
+const ZEN_GRAVITY = 1 / 0.500;        // 0.500초/라인 (기획서 4.2.1)
+const SPRINT_GRAVITY = 1 / 0.300;     // 0.300초/라인 (기획서 4.3.1)
+const SPRINT_TARGET_LINES = 40;       // 기획서 4.3.2
+
+const MODES = {
+  [MODE_MARATHON]: {
+    label: "마라톤",
+    levelUp: true,
+    gravity: (lv) => levelGravity(lv),
+    capToast: true,
+    endCondition: () => false,
+    hud: "level",
+  },
+  [MODE_ZEN]: {
+    label: "젠",
+    levelUp: false,
+    gravity: () => ZEN_GRAVITY,
+    capToast: false,
+    endCondition: () => false,
+    hud: "zen",
+  },
+  [MODE_SPRINT]: {
+    label: "스프린트",
+    levelUp: false,
+    gravity: () => SPRINT_GRAVITY,
+    capToast: false,
+    endCondition: (st) => st.lines >= SPRINT_TARGET_LINES,
+    hud: "sprint",
+  },
+};
+
+function getCurrentMode() {
+  const m = new URL(location.href).searchParams.get("mode");
+  return VALID_MODES.includes(m) ? m : MODE_MARATHON;
+}
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  const t = Math.floor((sec % 1) * 10);
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}.${t}`;
+}
+
+function setupHudLabels() {
+  if (!levelLabelEl || !linesLabelEl) return;
+  const hud = MODES[state.mode].hud;
+  if (hud === "level") {
+    levelLabelEl.textContent = "LV";
+    linesLabelEl.textContent = "L";
+  } else if (hud === "zen") {
+    levelLabelEl.textContent = "젠";
+    linesLabelEl.textContent = "L";
+  } else if (hud === "sprint") {
+    levelLabelEl.textContent = "⏱";
+    linesLabelEl.textContent = "남";
   }
 }
 
@@ -314,8 +386,14 @@ function lockPiece() {
     const bonus = [0, 100, 300, 500, 800][cleared.length] * state.level;
     state.score += bonus;
     state.lines += cleared.length;
-    const newLevel = 1 + Math.floor(state.lines / 10);
-    applyLevelChange(newLevel);
+    const mode = MODES[state.mode];
+    if (mode.levelUp) {
+      applyLevelChange(1 + Math.floor(state.lines / 10));
+    }
+    if (mode.endCondition(state)) {
+      state.finished = true;
+      state.over = true;
+    }
   } else {
     spawn();
   }
@@ -327,6 +405,7 @@ function applyClear() {
   for (const r of rows) state.grid.splice(r, 1);
   for (let i = 0; i < rows.length; i++) state.grid.unshift(Array(COLS).fill(null));
   state.flashRows = null;
+  if (state.over) return; // 모드 종료 조건 충족(예: 스프린트 클리어). 다음 피스 띄우지 않는다.
   spawn();
 }
 
@@ -513,6 +592,7 @@ function canPlay() {
 
 function update(dt) {
   if (state.paused || state.over) return;
+  state.elapsed += dt; // 활성 게임 시간 누적 (스프린트 시간 / 젠 플레이 시간 표기)
   if (state.flashRows) {
     state.flashRows.t += dt;
     if (state.flashRows.t >= 0.18) applyClear();
@@ -536,8 +616,17 @@ function update(dt) {
 
 function updateHud() {
   scoreEl.textContent = state.score;
-  linesEl.textContent = state.lines;
-  levelEl.textContent = state.level;
+  const hud = MODES[state.mode].hud;
+  if (hud === "level") {
+    levelEl.textContent = state.level;
+    linesEl.textContent = state.lines;
+  } else if (hud === "zen") {
+    levelEl.textContent = "∞";
+    linesEl.textContent = state.lines;
+  } else if (hud === "sprint") {
+    levelEl.textContent = formatTime(state.elapsed);
+    linesEl.textContent = Math.max(0, SPRINT_TARGET_LINES - state.lines);
+  }
   const best = store.get("highscore", 0);
   bestEl.textContent = best;
   drawNext();
@@ -606,14 +695,32 @@ async function gameOver() {
   const isNewBest = state.score > prevBest;
   if (isNewBest) store.set("highscore", state.score);
   updateHud();
-  const lines = [
-    `점수 ${state.score}${isNewBest ? "  (신기록!)" : ""}`,
-    `라인 ${state.lines} · 레벨 ${state.level}`,
-    `최고 ${Math.max(prevBest, state.score)}`,
-  ].join("\n");
+  let title;
+  let body;
+  if (state.mode === MODE_SPRINT && state.finished) {
+    title = "Sprint Clear";
+    body = [
+      `시간 ${formatTime(state.elapsed)}`,
+      `점수 ${state.score}`,
+    ].join("\n");
+  } else if (state.mode === MODE_ZEN) {
+    title = "젠 종료";
+    body = [
+      `점수 ${state.score}${isNewBest ? "  (신기록!)" : ""}`,
+      `라인 ${state.lines} · 시간 ${formatTime(state.elapsed)}`,
+      `최고 ${Math.max(prevBest, state.score)}`,
+    ].join("\n");
+  } else {
+    title = "Game Over";
+    body = [
+      `점수 ${state.score}${isNewBest ? "  (신기록!)" : ""}`,
+      `라인 ${state.lines} · 레벨 ${state.level}`,
+      `최고 ${Math.max(prevBest, state.score)}`,
+    ].join("\n");
+  }
   const choice = await showModal({
-    title: "Game Over",
-    body: lines,
+    title,
+    body,
     actions: [
       { label: "다시 시작", primary: true, value: "restart" },
       { label: "메뉴로", value: "menu" },
@@ -646,6 +753,7 @@ function restart() {
   state = newState();
   ensureBag();
   spawn();
+  setupHudLabels();
   updateHud();
   pauseBtn.textContent = "⏸";
 }
@@ -663,6 +771,7 @@ function init() {
   state = newState();
   ensureBag();
   spawn();
+  setupHudLabels();
   updateHud();
   setupInput();
   resize();
@@ -676,6 +785,10 @@ function init() {
   });
   loop.start();
 
+  // 마라톤 외 모드는 진입 시 모드명 안내 (URL 쿼리로 진입한 사용자가 모드 진입을 즉시 인지하도록)
+  if (state.mode !== MODE_MARATHON) {
+    showToast(`${MODES[state.mode].label} 모드`, 1800);
+  }
   // 첫 방문 안내 토스트(한 번만)
   if (!store.get("seen-help", false)) {
     showToast("일시정지 버튼 ⏸ 에서 컨트롤 가이드 확인", 2800);
