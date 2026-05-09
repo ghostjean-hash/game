@@ -46,7 +46,11 @@ import {
   SAVED_SETS_CAP, SAVED_SETS_BATCH_SMALL, SAVED_SETS_BATCH_LARGE, SAVED_SETS_SALT_BASE,
   SAVED_SETS_RETRY_MAX, SAVED_SETS_TOAST_NORMAL_MS, SAVED_SETS_TOAST_PARTIAL_MS,
   STRATEGY_CATEGORIES,
+  DRAW_TZ_OFFSET_MIN,
 } from '../data/numbers.js';
+
+// S58 (2026-05-09): KST 매직 넘버 `9 * 3600 * 1000` 2회 사용 → DRAW_TZ_OFFSET_MIN 위탁.
+const KST_OFFSET_MS = DRAW_TZ_OFFSET_MIN * 60 * 1000;
 
 let appEl = null;
 let stopCountdown = null; // 카운트다운 interval 정리 함수. 매 렌더 시작 전 정리.
@@ -224,8 +228,8 @@ function getRecAndFortune(active) {
     const next = nextDraw(state.draws);
     if (next && next.drawAtMs) {
       const d = new Date(next.drawAtMs);
-      // KST 변환: epoch ms는 UTC 기준이라 KST(+09:00)로 toISOString 후 자르기.
-      const kst = new Date(d.getTime() + 9 * 3600 * 1000);
+      // KST 변환: epoch ms는 UTC 기준이라 KST(+09:00) 오프셋 더한 후 toISOString 후 자르기.
+      const kst = new Date(d.getTime() + KST_OFFSET_MS);
       drawDate = kst.toISOString().slice(0, 10);
     }
   }
@@ -316,7 +320,7 @@ function addSavedSetsBatch(batchN) {
     const next = nextDraw(state.draws);
     if (next && next.drawAtMs) {
       const d = new Date(next.drawAtMs);
-      const kst = new Date(d.getTime() + 9 * 3600 * 1000);
+      const kst = new Date(d.getTime() + KST_OFFSET_MS);
       drawDate = kst.toISOString().slice(0, 10);
     }
   }

@@ -23,6 +23,14 @@ export const RANK_GLOW_COLORS = Object.freeze({
   5: '#6b6b75',
 });
 
+// 미적중 / 미발표 색. SSOT: docs/02_data.md 2.3 (S58, 2026-05-09).
+// 사용처: 이력 도넛 차트의 "미적중" 슬라이스, 회차 카드 비활성 글로우.
+export const RANK_MISS_COLOR = '#d1d5db';
+
+// 행운 의식 만땅 파티클 버스트 색. SSOT: docs/02_data.md 1.19.7.
+// 입자별로 두 색 중 랜덤 선택. 골드 / 앰버.
+export const RITUAL_PARTICLE_COLORS = Object.freeze(['#f6c445', '#f59e0b']);
+
 // 한국 6/45 로또 번호 색상 (10단위 구간).
 // SSOT: docs/02_data.md 2.4.
 // 출처: 동행복권 결과 페이지 변종(평면 진한색). 추첨 영상 표준 5색

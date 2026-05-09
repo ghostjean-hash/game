@@ -134,6 +134,14 @@ export const RITUAL_LIST = Object.freeze([
   { id: 'starlight',  label: '별빛 의식',    desc: '밤하늘의 별 운행에 마음을 맞춘다',          short: '별' },
 ]);
 
+// 1.19.7. 만땅 진입 파티클 버스트 상수 (S58, 2026-05-09 명문화).
+// SSOT: docs/02_data.md 1.19.7. 색상은 colors.js RITUAL_PARTICLE_COLORS.
+// 추첨 결과 영향 0. prefers-reduced-motion 시 비활성.
+export const RITUAL_PARTICLE_COUNT = 30;
+export const RITUAL_PARTICLE_DURATION_MS = 900;
+export const RITUAL_PARTICLE_RADIUS_MAX = 140;  // 최대 비행 반경(px)
+export const RITUAL_PARTICLE_SIZE = 4;          // 입자 base 반지름(px)
+
 // 1.16. 백캐스트 (Luck 성장 부트스트랩)
 // SSOT: docs/02_data.md 1.16, docs/01_spec.md 7.5.
 // 캐릭터 첫 추첨 탭 진입 시 최근 N회에 대해 결정론적 추천 + 매칭을 history에 백필.

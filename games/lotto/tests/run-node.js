@@ -18,7 +18,10 @@ class MemoryStorage {
   clear() { this._data.clear(); }
 }
 
-if (typeof globalThis.localStorage === 'undefined') {
+// Node 25+는 localStorage를 빈 builtin 객체(메서드 없음)로 노출. 빈 객체도 polyfill 강제 주입.
+// 가드 조건: 'undefined' OR setItem 함수 부재. (S58, 2026-05-09 가드 강화)
+if (typeof globalThis.localStorage === 'undefined'
+    || typeof globalThis.localStorage.setItem !== 'function') {
   globalThis.localStorage = new MemoryStorage();
 }
 

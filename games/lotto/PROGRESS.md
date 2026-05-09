@@ -4,13 +4,59 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-09 (Sprint 057 - S43.7 hotfix 2건 / 빈 화면 + 프리셋 차별화 복원).
+1.3. **마지막 갱신**: 2026-05-09 (Sprint 058 - 전체 재검증 + 매직 넘버 정리 + Node 25 polyfill 가드).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 직전 5 Sprint(040~044)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.79. Sprint 058 완료 - 전체 재검증 + 매직 넘버 정리 + Node 25 가드 (S58, 2026-05-09)
+
+배경: 사용자 지시 "전체 코드 재검증, 정합성 검증, 문서 검증". 4영역(테스트 / docs / 코드 절대 규칙 / docs-code 일치) 병렬 점검.
+
+### 2.79.1. 검증 발견
+
+| 영역 | 결과 | 결함 |
+|---|---|---|
+| 테스트 회귀 | FAIL 4건 | Node 25.7 환경 (storage.test.js) |
+| 문서 정합성 | 양호 | 거짓 양성 3건 |
+| 코드 절대 규칙 | 위반 3건 | 매직 넘버 (색상 / KST / 파티클) |
+| docs-code 일치 | 양호 | - |
+| hotfix S43.7 회귀 | PASS | - |
+
+### 2.79.2. fix #1 - tests/run-node.js polyfill 가드 강화
+
+- 원인: Node 25.7이 `localStorage`를 빈 builtin 객체(메서드 없음)로 노출. 기존 `typeof === 'undefined'` 가드가 빈 객체 통과시켜 polyfill 미주입 → `setItem is not a function` 4건.
+- fix: 가드 조건 = `'undefined' OR setItem 함수 부재`. Node 18/20/25 모두 호환.
+
+### 2.79.3. fix #2 - 매직 넘버 정리 (CLAUDE.md 절대 규칙 #2 위반)
+
+| 파일 | 위반 | 위탁 |
+|---|---|---|
+| `render/history-page.js` | RANK_COLORS 6 hex + 미적중 `#d1d5db` | `colors.js` `RANK_GLOW_COLORS` 재사용 + `RANK_MISS_COLOR` 신설 |
+| `render/ritual-particles.js` | 6개 인라인(개수 / 시간 / 픽셀 / 색상 2종) | `numbers.js` `RITUAL_PARTICLE_*` + `colors.js` `RITUAL_PARTICLE_COLORS` 신설 |
+| `render/main.js:228, 319` | KST 오프셋 `9 * 3600 * 1000` 2회 | `numbers.js` `DRAW_TZ_OFFSET_MIN` 재사용. 모듈 상단 `KST_OFFSET_MS` 도출 |
+
+### 2.79.4. docs SSOT 갱신
+
+- `docs/02_data.md` 1.19.7 신설: 만땅 진입 파티클 버스트 상수 표 (5종).
+- `docs/02_data.md` 2.3 갱신: "적중 등수 글로우" → "적중 등수 색", 미적중 항목 추가, 사용처 명시.
+
+### 2.79.5. 검증
+
+- `node tests/run-node.js` → **274/274 PASS** (Node 25 환경에서 처음 풀 그린).
+- 전 모듈 ESM import 재검증 통과 (colors / numbers / history-page / ritual-particles / main.js).
+- `grep -n "#[0-9a-f]\{6\}\|9 \* 3600 \* 1000"` render/ → 0건 (인라인 hex / KST 매직 잔존 0).
+
+### 2.79.6. 거짓 양성 기록 (수정 없음)
+
+- `01_spec.md` L126 "전략 10종" - 실제 10종 정확 (`STRATEGY_DEFAULT`는 `STRATEGY_BLESSED` alias).
+- `01_spec.md` L148 "토글" - L140에서 "토글(선택/해제)"로 정의된 용어. 일관.
+- `02_data.md` L158 blessed "표식" - 시드 의존 의미상 정확.
+
+다음 검증 사이클에서 이 3건은 PASS로 분류해 노이즈 차단.
 
 ## 2.78. Sprint 057 완료 - S43.7 hotfix 2건 (2026-05-09)
 

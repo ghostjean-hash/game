@@ -1,13 +1,15 @@
 // 행운 의식 만땅 진입 Canvas 파티클 (S4-T2).
-// SSOT: docs/01_spec.md 5.6.7 / 5.6.8.
+// SSOT: docs/01_spec.md 5.6.7 / 5.6.8 + docs/02_data.md 1.19.7 (수치/색상).
 // 만땅 진입 trigger 시 단발 0.9초 방사형 입자 버스트. prefers-reduced-motion 시 비활성.
+// S58 (2026-05-09): 모듈 내 인라인 상수 → numbers.js + colors.js SSOT 위탁.
 
-const PARTICLE_COUNT = 30;
-const DURATION_MS = 900;
-const RADIUS_MAX = 140;       // 최대 비행 반경(px)
-const PARTICLE_SIZE = 4;      // 입자 base 반지름
-const COLOR_GOLD = '#f6c445';
-const COLOR_AMBER = '#f59e0b';
+import {
+  RITUAL_PARTICLE_COUNT,
+  RITUAL_PARTICLE_DURATION_MS,
+  RITUAL_PARTICLE_RADIUS_MAX,
+  RITUAL_PARTICLE_SIZE,
+} from '../data/numbers.js';
+import { RITUAL_PARTICLE_COLORS } from '../data/colors.js';
 
 /**
  * anchor 요소 중심에서 0.9초 단발 파티클 버스트.
@@ -46,14 +48,14 @@ export function spawnRitualBurst(anchor) {
 
   // 입자 초기화.
   const particles = [];
-  for (let i = 0; i < PARTICLE_COUNT; i += 1) {
-    const angle = (Math.PI * 2 * i) / PARTICLE_COUNT + Math.random() * 0.2;
-    const speed = 0.6 + Math.random() * 0.6; // 0.6~1.2 (RADIUS_MAX 비율)
+  for (let i = 0; i < RITUAL_PARTICLE_COUNT; i += 1) {
+    const angle = (Math.PI * 2 * i) / RITUAL_PARTICLE_COUNT + Math.random() * 0.2;
+    const speed = 0.6 + Math.random() * 0.6; // 0.6~1.2 (RITUAL_PARTICLE_RADIUS_MAX 비율)
     particles.push({
       angle,
       speed,
       sizeMul: 0.7 + Math.random() * 0.8,
-      color: i % 2 === 0 ? COLOR_GOLD : COLOR_AMBER,
+      color: RITUAL_PARTICLE_COLORS[i % RITUAL_PARTICLE_COLORS.length],
     });
   }
 
@@ -61,7 +63,7 @@ export function spawnRitualBurst(anchor) {
   let rafId = null;
 
   function draw(now) {
-    const t = (now - start) / DURATION_MS; // 0~1
+    const t = (now - start) / RITUAL_PARTICLE_DURATION_MS; // 0~1
     if (t >= 1) {
       // 종료
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -73,13 +75,13 @@ export function spawnRitualBurst(anchor) {
     const eased = 1 - (1 - t) * (1 - t);
     const alpha = 1 - t; // 페이드아웃
     for (const p of particles) {
-      const r = RADIUS_MAX * eased * p.speed;
+      const r = RITUAL_PARTICLE_RADIUS_MAX * eased * p.speed;
       const x = cx + Math.cos(p.angle) * r;
       const y = cy + Math.sin(p.angle) * r;
       ctx.globalAlpha = alpha;
       ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.arc(x, y, PARTICLE_SIZE * p.sizeMul, 0, Math.PI * 2);
+      ctx.arc(x, y, RITUAL_PARTICLE_SIZE * p.sizeMul, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
@@ -92,5 +94,5 @@ export function spawnRitualBurst(anchor) {
   setTimeout(() => {
     if (rafId) window.cancelAnimationFrame(rafId);
     if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
-  }, DURATION_MS + 200);
+  }, RITUAL_PARTICLE_DURATION_MS + 200);
 }
