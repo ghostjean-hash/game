@@ -4,13 +4,54 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-09 (Sprint 058 - 전체 재검증 + 매직 넘버 정리 + Node 25 polyfill 가드).
+1.3. **마지막 갱신**: 2026-05-09 (Sprint 059 - Node 매트릭스 + dead 토큰 + UI 흰색 토큰화 + chip 색 SSOT 정합).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 직전 5 Sprint(040~044)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.80. Sprint 059 완료 - Node 매트릭스 + dead 토큰 + UI 흰색 토큰화 + chip 색 SSOT 정합 (S59, 2026-05-09)
+
+배경: Sprint 058 전면 검증의 후속 정리. 발견 결함을 시각 회귀 위험도 순으로 단계 분할(S59.1~S59.3). 시각 회귀 0 영역부터 처리.
+
+### 2.80.1. 단계 1 - CI Node 매트릭스 + dead 토큰 정리 (S59.1, 커밋 4b2ebf3)
+
+- `.github/workflows/test-lotto.yml`: Node 단일 `20` → 매트릭스 `['18','20','22']` LTS 호환 검증. `fail-fast: false` (어느 LTS 실패해도 다른 버전 결과 노출). S58에서 Node 25 polyfill 가드는 강화했으나 CI 단일 버전 회귀 위험 차단.
+- `styles/tokens.css`:
+  * `--color-success` 삭제: UI 영역 미참조 + 의미 중복(운세 good 색은 `colors.js FORTUNE_COLORS`).
+  * `--z-base: 0` 보존 + 의도 주석(z-index 명시적 0 기준선).
+- 검증: 274/274 PASS. main.css 미참조 토큰 1건 삭제 → 시각 영향 0.
+
+### 2.80.2. 단계 2 - UI 흰색 hex → `var(--color-on-accent)` 토큰 마이그레이션 (S59.2, 커밋 b6914f5)
+
+배경: S58 검증에서 main.css 인라인 hex 64건 발견. 시각 회귀 0 보장 영역(흰색 9건)부터 우선 처리.
+
+- `styles/main.css`: `color: #ffffff` 7건 + `color: #fff` 2건 = 9건 → `color: var(--color-on-accent)`.
+- 토큰 정의: `tokens.css --color-on-accent: #ffffff` (S29.4 기존 정의). CSS 컴파일 결과 byte-identical, 시각 회귀 0.
+- 적용 셀렉터: `.btn-primary` / `.strategy-short` / `.slot-class` / `.num` / `.modal-confirm` / `.num-source-tag` / `.reverse-cell.is-picked` / `.reverse-best-draw-balls .num` / `.ritual-row-icon.is-done`.
+- 검증: 274/274 PASS. 잔존 `color: #(fff|ffffff)` 0건.
+
+### 2.80.3. 단계 3 - chip / ritual / 변동성 색 SSOT 정의 추가 (S59.3, 본 커밋)
+
+배경: main.css 인라인 hex 잔여 영역 중 게임 데이터 성격(전략 출처 / chip / 의식 / 변동성)을 SSOT 명문화. 단계 3 스코프는 **정의 추가까지**. 소비처화는 별도 sprint.
+
+- `src/data/colors.js`: 신규 export 3건.
+  * `CATEGORY_CHIP_COLORS` - stats / mapping / random (sky / pink / gray, lighter chip 톤. 출처 태그 진한 톤보다 한 단계 옅음).
+  * `RITUAL_CHIP_COLORS` - bg / fg / border / accent / warm (yellow~amber 5 stop. 행운 의식 row 활성 / 만땅 banner / 보너스 chip / cta 일관 톤).
+  * `VARIABILITY_CHIP_COLORS` - active(weekly, 녹색) / inactive(lifetime, 회색). inactive border `#d1d5db`는 `RANK_MISS_COLOR`와 의도된 일치(둘 다 비활성 시각 의미).
+- `docs/02_data.md` SSOT 신설:
+  * 1.19.8 행운 의식 chip / banner / cta 색 (5 키 표).
+  * 2.8 카테고리 chip 색 (stats / mapping / random 표).
+  * 2.9 변동성 chip 색 (active / inactive 표 + RANK_MISS_COLOR 중복 의도 명시).
+- 정합 정책: colors.js hex와 main.css 인라인 hex가 동기. 한쪽 변경 시 양쪽 갱신. 단일 소비처화는 후속 sprint.
+- 검증: import 측 영향 0건(정의만 추가, 소비처 0). 274/274 PASS 유지 예상.
+
+### 2.80.4. 잔여 / 후속 sprint 후보
+
+- S59.4 (대기): `tests/suites/storage.test.js` 커버리지 16/25 → 보강.
+- chip / ritual / 변동성 색 단일 소비처화 (별도 sprint): main.css 인라인 hex → colors.js 단일 소비처화 경로 결정(CSS 변수 주입 vs JS render inline style) + 마이그레이션 + 시각 회귀 검증.
 
 ## 2.79. Sprint 058 완료 - 전체 재검증 + 매직 넘버 정리 + Node 25 가드 (S58, 2026-05-09)
 

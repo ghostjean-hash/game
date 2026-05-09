@@ -90,3 +90,34 @@ export const STRATEGY_TAG_COLORS = Object.freeze({
 export function strategyTagColor(sid) {
   return STRATEGY_TAG_COLORS[sid] || '#6b7280';
 }
+
+// S059 (2026-05-09): main.css 게임 데이터 인라인 hex의 SSOT 정합화.
+// 본 export들은 정의(SSOT)이며, 실제 사용처는 main.css 인라인 hex와 동일 값.
+// 차후 sprint에서 JS render 측 inline style 또는 CSS 변수 주입 방식으로 단일 소비처화.
+
+// 카테고리 chip 색 (전략 행 라벨 / 출처 태그 / 카테고리 chip / 운세 lucky-element).
+// SSOT: docs/02_data.md 2.8 (S059 신설).
+// 톤: stats=sky / mapping=pink / random=gray. STRATEGY_TAG_COLORS보다 lighter (chip 배경 톤).
+export const CATEGORY_CHIP_COLORS = Object.freeze({
+  stats:   { bg: '#e0f2fe', fg: '#0369a1', border: '#bae6fd' },
+  mapping: { bg: '#fce7f3', fg: '#be185d', border: '#fbcfe8' },
+  random:  { bg: '#f3f4f6', fg: '#4b5563', border: '#e5e7eb' },
+});
+
+// 행운 의식 chip / banner / cta 색. SSOT: docs/02_data.md 1.19.8 (S059 신설).
+// 의식 row 활성 상태 + 만땅 banner + 보너스 chip에 일관 노랑/앰버 톤.
+export const RITUAL_CHIP_COLORS = Object.freeze({
+  bg: '#fef3c7',     // yellow-50 - row bg / cta bg
+  fg: '#92400e',     // amber-900 - 텍스트
+  border: '#fcd34d', // amber-300 - border
+  accent: '#f59e0b', // amber-500 - 강조(아이콘 / banner gradient stop)
+  warm:   '#fde68a', // amber-200 - banner gradient mid
+});
+
+// 변동성 chip 색 (lucky-variability / strategy-variability).
+// SSOT: docs/02_data.md 2.9 (S059 신설).
+// active = 주간 활성(녹색) / inactive = 평생 비활성(회색).
+export const VARIABILITY_CHIP_COLORS = Object.freeze({
+  active:   { bg: '#dcfce7', fg: '#166534', border: '#86efac' },
+  inactive: { bg: '#f3f4f6', fg: '#4b5563', border: '#d1d5db' },
+});
