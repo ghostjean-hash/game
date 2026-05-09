@@ -627,10 +627,40 @@ function updateHud() {
     levelEl.textContent = formatTime(state.elapsed);
     linesEl.textContent = Math.max(0, SPRINT_TARGET_LINES - state.lines);
   }
-  const best = store.get("highscore", 0);
-  bestEl.textContent = best;
+  bestEl.textContent = formatModeBest(state.mode);
   drawNext();
   drawHold();
+}
+
+// === 모드별 베스트 (docs/difficulty-redesign.md 4.6) ===
+// 키 체계: best.marathon (점수 number), best.zen (점수 number), best.sprint (시간 ms 또는 null)
+function getModeBest(mode) {
+  if (mode === MODE_SPRINT) return store.get("best.sprint", null);
+  return store.get(`best.${mode}`, 0);
+}
+function formatModeBest(mode) {
+  if (mode === MODE_SPRINT) {
+    const ms = getModeBest(mode);
+    return ms === null ? "—" : formatTime(ms / 1000);
+  }
+  return String(getModeBest(mode));
+}
+function maybeSaveModeBest(mode, value) {
+  if (mode === MODE_SPRINT) {
+    if (typeof value !== "number") return false;
+    const prev = store.get("best.sprint", null);
+    if (prev === null || value < prev) {
+      store.set("best.sprint", value);
+      return true;
+    }
+    return false;
+  }
+  const prev = store.get(`best.${mode}`, 0);
+  if (value > prev) {
+    store.set(`best.${mode}`, value);
+    return true;
+  }
+  return false;
 }
 
 // 미니 피스 슬롯(NEXT/HOLD) 공통 렌더러.
@@ -691,42 +721,54 @@ function drawHold() {
 }
 
 async function gameOver() {
-  const prevBest = store.get("highscore", 0);
-  const isNewBest = state.score > prevBest;
-  if (isNewBest) store.set("highscore", state.score);
-  updateHud();
   let title;
   let body;
+  let isNewBest = false;
   if (state.mode === MODE_SPRINT && state.finished) {
+    // 스프린트 클리어: 시간(ms) 짧을수록 베스트
+    const ms = Math.round(state.elapsed * 1000);
+    isNewBest = maybeSaveModeBest(MODE_SPRINT, ms);
     title = "Sprint Clear";
     body = [
+      `시간 ${formatTime(state.elapsed)}${isNewBest ? "  (신기록!)" : ""}`,
+      `최고 ${formatModeBest(MODE_SPRINT)}`,
+    ].join("\n");
+  } else if (state.mode === MODE_SPRINT) {
+    // 스프린트 토핑아웃 (실패): 베스트 갱신 없음
+    title = "Game Over";
+    body = [
+      `${state.lines} / ${SPRINT_TARGET_LINES} 라인에서 종료`,
       `시간 ${formatTime(state.elapsed)}`,
-      `점수 ${state.score}`,
+      `최고 ${formatModeBest(MODE_SPRINT)}`,
     ].join("\n");
   } else if (state.mode === MODE_ZEN) {
+    isNewBest = maybeSaveModeBest(MODE_ZEN, state.score);
     title = "젠 종료";
     body = [
       `점수 ${state.score}${isNewBest ? "  (신기록!)" : ""}`,
       `라인 ${state.lines} · 시간 ${formatTime(state.elapsed)}`,
-      `최고 ${Math.max(prevBest, state.score)}`,
+      `최고 ${formatModeBest(MODE_ZEN)}`,
     ].join("\n");
   } else {
+    // 마라톤 토핑아웃
+    isNewBest = maybeSaveModeBest(MODE_MARATHON, state.score);
     title = "Game Over";
     body = [
       `점수 ${state.score}${isNewBest ? "  (신기록!)" : ""}`,
       `라인 ${state.lines} · 레벨 ${state.level}`,
-      `최고 ${Math.max(prevBest, state.score)}`,
+      `최고 ${formatModeBest(MODE_MARATHON)}`,
     ].join("\n");
   }
+  updateHud();
   const choice = await showModal({
     title,
     body,
     actions: [
-      { label: "다시 시작", primary: true, value: "restart" },
-      { label: "메뉴로", value: "menu" },
+      { label: "모드 선택", primary: true, value: "menu" },
+      { label: "홈으로", value: "home" },
     ],
   });
-  if (choice === "restart") restart();
+  if (choice === "menu") goToMenu();
   else location.href = "../../";
 }
 
@@ -740,10 +782,12 @@ async function togglePause() {
     actions: [
       { label: "재개", primary: true, value: "resume" },
       { label: "다시 시작", value: "restart" },
-      { label: "메뉴로", value: "menu" },
+      { label: "모드 선택", value: "menu" },
+      { label: "홈으로", value: "home" },
     ],
   });
-  if (choice === "menu") { location.href = "../../"; return; }
+  if (choice === "home") { location.href = "../../"; return; }
+  if (choice === "menu") { goToMenu(); return; }
   if (choice === "restart") { restart(); return; }
   state.paused = false;
   pauseBtn.textContent = "⏸";
@@ -796,4 +840,84 @@ function init() {
   }
 }
 
-init();
+// === 라우팅 + 메뉴 (2차 2단계, docs/difficulty-redesign.md 4.4) ===
+const menuScreenEl = document.getElementById("menu-screen");
+const gameScreenEl = document.getElementById("game-screen");
+
+function isMenuRoute() {
+  return !new URL(location.href).searchParams.get("mode");
+}
+
+function showMenuScreen() {
+  if (menuScreenEl) menuScreenEl.hidden = false;
+  if (gameScreenEl) gameScreenEl.hidden = true;
+}
+function showGameScreen() {
+  if (menuScreenEl) menuScreenEl.hidden = true;
+  if (gameScreenEl) gameScreenEl.hidden = false;
+}
+
+function goToMenu() {
+  // 쿼리 제거 → 메뉴 라우트로 복귀
+  location.href = location.pathname;
+}
+
+async function maybeShowBestPurgeNotice() {
+  // 기획서 4.6.1: 기존 단일 베스트 폐기, 마이그레이션 없음. 1회 안내.
+  if (store.get("bestNoticeShown", false)) return;
+  const old = store.get("highscore", 0);
+  if (old <= 0) {
+    store.set("bestNoticeShown", true);
+    return;
+  }
+  await showModal({
+    title: "베스트 분리 안내",
+    body: [
+      "모드별로 베스트가 분리됩니다.",
+      "이전 단일 베스트는 더 이상 사용하지 않습니다.",
+      "새 모드와 함께 점수도 새로 시작한다.",
+    ].join("\n"),
+    actions: [{ label: "확인", primary: true, value: "ok" }],
+  });
+  store.set("bestNoticeShown", true);
+}
+
+async function setupMenu() {
+  showMenuScreen();
+  await maybeShowBestPurgeNotice();
+  const last = store.get("lastMode", MODE_MARATHON);
+  const cards = document.querySelectorAll(".mode-card");
+  cards.forEach((card) => {
+    const mode = card.dataset.mode;
+    if (mode === last) card.classList.add("active");
+    const bestCell = card.querySelector("[data-best]");
+    if (bestCell) {
+      if (mode === MODE_SPRINT) {
+        const ms = store.get("best.sprint", null);
+        bestCell.textContent = ms === null ? "⏱ —" : `⏱ ${formatTime(ms / 1000)}`;
+      } else {
+        bestCell.textContent = `★ ${store.get(`best.${mode}`, 0)}`;
+      }
+    }
+    card.addEventListener("click", () => {
+      store.set("lastMode", mode);
+      location.href = `?mode=${mode}`;
+    });
+  });
+  // 모바일 젠 [추천] 뱃지 (기획서 4.2.4)
+  if (isCoarsePointer()) {
+    const badge = document.querySelector("[data-zen-badge]");
+    if (badge) badge.hidden = false;
+  }
+}
+
+function bootstrap() {
+  if (isMenuRoute()) {
+    setupMenu();
+  } else {
+    showGameScreen();
+    init();
+  }
+}
+
+bootstrap();

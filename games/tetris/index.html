@@ -14,31 +14,62 @@
 </head>
 <body>
 <div class="page tetris">
-  <div class="topbar">
-    <a href="../../" class="home" aria-label="홈으로">←</a>
-    <h1 class="sr-only">Tetris</h1>
-    <div class="score-big" aria-live="polite" aria-label="점수">
-      <b id="score">0</b>
+  <!-- 메뉴 화면 (URL ?mode 쿼리 없을 때만 표시) -->
+  <div id="menu-screen" class="menu-screen" hidden>
+    <div class="topbar">
+      <a href="../../" class="home" aria-label="홈으로">←</a>
+      <h1 class="sr-only">Tetris</h1>
+      <div class="menu-title">Tetris</div>
     </div>
-    <div class="mini-hud" aria-live="polite">
-      <span class="mh"><small id="level-label">LV</small><b id="level">1</b></span>
-      <span class="mh sep">·</span>
-      <span class="mh"><small id="lines-label">L</small><b id="lines">0</b></span>
-      <span class="mh sep best-sep">·</span>
-      <span class="mh best"><small>★</small><b id="best">0</b></span>
+    <div class="menu-stage">
+      <div class="mode-cards">
+        <button class="mode-card" type="button" data-mode="marathon">
+          <span class="mode-card-name">마라톤</span>
+          <span class="mode-card-copy">라인을 지워라. 끝까지.</span>
+          <span class="mode-card-best" data-best="marathon">★ —</span>
+        </button>
+        <button class="mode-card" type="button" data-mode="zen">
+          <span class="mode-card-name">젠 <span class="mode-badge" data-zen-badge hidden>추천</span></span>
+          <span class="mode-card-copy">가속 없음. 호흡대로.</span>
+          <span class="mode-card-best" data-best="zen">★ —</span>
+        </button>
+        <button class="mode-card" type="button" data-mode="sprint">
+          <span class="mode-card-name">스프린트</span>
+          <span class="mode-card-copy">40라인. 최단 시간.</span>
+          <span class="mode-card-best" data-best="sprint">⏱ —</span>
+        </button>
+      </div>
     </div>
-    <div class="piece-slot" aria-label="홀드 블록">
-      <small>HLD</small>
-      <canvas id="hold" class="piece-mini"></canvas>
-    </div>
-    <div class="piece-slot" aria-label="다음 블록">
-      <small>NXT</small>
-      <canvas id="next" class="piece-mini"></canvas>
-    </div>
-    <button id="btn-pause" class="icon-btn" type="button" aria-label="일시정지">⏸</button>
   </div>
-  <div class="stage">
-    <canvas id="board"></canvas>
+
+  <!-- 게임 화면 (URL ?mode=... 일 때만 표시) -->
+  <div id="game-screen" class="game-screen" hidden>
+    <div class="topbar">
+      <a href="../../" class="home" aria-label="홈으로">←</a>
+      <h1 class="sr-only">Tetris</h1>
+      <div class="score-big" aria-live="polite" aria-label="점수">
+        <b id="score">0</b>
+      </div>
+      <div class="mini-hud" aria-live="polite">
+        <span class="mh"><small id="level-label">LV</small><b id="level">1</b></span>
+        <span class="mh sep">·</span>
+        <span class="mh"><small id="lines-label">L</small><b id="lines">0</b></span>
+        <span class="mh sep best-sep">·</span>
+        <span class="mh best"><small>★</small><b id="best">0</b></span>
+      </div>
+      <div class="piece-slot" aria-label="홀드 블록">
+        <small>HLD</small>
+        <canvas id="hold" class="piece-mini"></canvas>
+      </div>
+      <div class="piece-slot" aria-label="다음 블록">
+        <small>NXT</small>
+        <canvas id="next" class="piece-mini"></canvas>
+      </div>
+      <button id="btn-pause" class="icon-btn" type="button" aria-label="일시정지">⏸</button>
+    </div>
+    <div class="stage">
+      <canvas id="board"></canvas>
+    </div>
   </div>
 </div>
 <script type="module" src="game.js"></script>
