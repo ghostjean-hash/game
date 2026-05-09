@@ -18,6 +18,11 @@
   grid-template-rows: auto 1fr;
   min-height: 0;
 }
+/* hidden 속성이 CSS display: grid에 의해 무시되는 문제 명시 처리. */
+.tetris .menu-screen[hidden],
+.tetris .game-screen[hidden] {
+  display: none;
+}
 
 /* topbar: 슬림하게. 폰에서 약 44px 높이. */
 .tetris .topbar {
