@@ -16,12 +16,18 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # S058 (2026-05-09): Node 25.7가 localStorage builtin을 빈 객체로 노출하는 호환성 이슈를
+        #                    run-node.js polyfill 가드로 처리. CI는 LTS 18/20/22 호환 매트릭스로 검증.
+        node-version: ['18', '20', '22']
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
 
       - name: Run lotto tests (Node CLI)
         working-directory: games/lotto

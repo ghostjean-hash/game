@@ -9,7 +9,7 @@
   --color-text-dim: #6b6b75;
   --color-accent: #c9a050;
   --color-border: #e0e0e6;
-  --color-success: #10b981;
+  /* S059 (2026-05-09): --color-success 삭제. UI 영역 미참조 + 의미 중복(운세 good 색은 colors.js FORTUNE_COLORS). */
   --color-danger: #ef4444;
   /* S29.4 (2026-05-04): accent/danger 배경 위에 올라가는 텍스트 색 (번호공 흰 글자 등). */
   --color-on-accent: #ffffff;
@@ -45,7 +45,8 @@
   --font-size-2xl: 28px;  /* 회차 타이틀 등 */
   --line-height: 1.5;
 
-  /* z-index tokens */
+  /* z-index tokens
+     base는 z-index 레이어 시스템의 명시적 0 기준선(타 토큰 의미 고정용). 직접 참조 의도 없어도 보존. */
   --z-base: 0;
   --z-overlay: 10;
   --z-modal: 100;
