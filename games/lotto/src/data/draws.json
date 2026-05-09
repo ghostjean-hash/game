@@ -19550,5 +19550,21 @@
     "firstWinners": 24,
     "firstPrize": 1202986844,
     "totalSales": 124243558000
+  },
+  {
+    "drwNo": 1223,
+    "drwDate": "2026-05-09",
+    "numbers": [
+      16,
+      18,
+      20,
+      32,
+      33,
+      39
+    ],
+    "bonus": 26,
+    "firstWinners": 16,
+    "firstPrize": 1857554133,
+    "totalSales": 122621163000
   }
 ]
