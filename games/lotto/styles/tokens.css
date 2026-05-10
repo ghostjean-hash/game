@@ -56,4 +56,9 @@
   /* S068 (2026-05-10): 모바일 hit area 최소값. iOS HIG / Material 권장 44px.
      480px↓ 분기에서 인터랙티브 요소(button / [data-action])에 min-height로 적용. */
   --touch-min: 44px;
+
+  /* S069 (2026-05-10): 하단 탭 높이 토큰. .tab-item min-height와 #app padding-bottom 일관 적용.
+     데스크톱 56 / 모바일 480px↓ 52. 매직값 0 원칙. */
+  --bottom-tab-h: 56px;
+  --bottom-tab-h-sm: 52px;
 }

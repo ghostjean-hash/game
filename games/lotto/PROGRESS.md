@@ -4,13 +4,57 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-10 (Sprint 068 - 모바일 풀스코프 최적화 - sticky hover 가드 26개 / touch-action / tap-highlight / --touch-min 토큰).
+1.3. **마지막 갱신**: 2026-05-10 (Sprint 069 - 하단 탭 콘텐츠 가림 수정 + 매직 56/52 → --bottom-tab-h / --bottom-tab-h-sm 토큰화).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 직전 5 Sprint(060~064)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.90. Sprint 069 완료 - 하단 탭 콘텐츠 가림 수정 + 탭 높이 토큰화 (S69, 2026-05-10)
+
+배경: 사용자 보고 "아래탭 영역이 내용을 가림, 내용이 탭영역보다 더 위로 스크롤되어야 함" + "하단 탭이 크롬과 정확하게 sync 안 맞아 퀄리티 떨어져 보임".
+
+### 2.90.1. 콘텐츠 가림 수정 (즉시)
+
+| 영역 | 이전 | 이후 |
+|---|---|---|
+| `#app` padding-bottom 데스크톱 | `calc(56px + space-5 + safe-area)` = 80px+safe | `calc(--bottom-tab-h + space-6 + safe-area)` = **88px+safe** (여유 +8px) |
+| `#app` padding-bottom 모바일 480px↓ | `calc(52px + space-5 + safe-area)` = 76px+safe | `calc(--bottom-tab-h-sm + space-6 + safe-area)` = **84px+safe** (여유 +8px) |
+
+여유 공간 24 → 32px(space-5 → space-6, 한 단계 증가). 마지막 콘텐츠가 탭에 가리지 않고 호흡 공간 확보.
+
+### 2.90.2. 토큰화 (매직값 0)
+
+| 토큰 | 값 | 사용처 |
+|---|---|---|
+| `--bottom-tab-h` | 56px | 데스크톱 `.tab-item min-height` + `#app padding-bottom` |
+| `--bottom-tab-h-sm` | 52px | 모바일 480px↓ 동일 |
+
+매직 56 / 52 잔존 점검: `.char-row` / `.preset-manage-main` (양쪽 56px)은 별도 컴포넌트 데이터 사이즈로 본 sprint 범위 외.
+
+### 2.90.3. 검증
+
+- `node tests/run-node.js` → **305/305 PASS** (CSS-only, 회귀 0).
+- dev-server 응답: tokens.css에 `--bottom-tab-h` / `--bottom-tab-h-sm` 매치 / main.css에 `var(--bottom-tab-h*)` 4회 매치 (.tab-item × 2 + #app padding-bottom × 2).
+
+### 2.90.4. 후속 의제 (사용자 청취 필요 - 본 sprint 보류)
+
+사용자 보고 "크롬과 정확하게 sync 안 맞음 / 퀄리티 떨어짐"의 정확한 의미가 모호해 자비스 추정 변경 안 함.
+
+가설:
+- G1: 모바일 크롬 주소창 색(theme-color #c9a050 accent gold)과 lotto 본문/하단 탭 흰색 톤 어긋남
+- G2: 데스크톱 vs 모바일 크롬에서 lotto 자체 화면 정렬/폰트/여백 차이
+- G3: 모바일 시스템 navigation bar와 lotto 하단 탭 톤 어긋남
+- G4: 다른 의미
+
+theme-color 변경 옵션 (G1 가정):
+- A: `#ffffff` (white) - 위/본문/탭 통일, gold 정체성 약화
+- B: `#c9a050` 유지 + 하단 탭을 gold로 - 정체성 강화하나 시각 무거움
+- C: `#f7f7f9` (page bg) - 본문 톤과 자연 연결 (자비스 권장)
+
+사용자 캡쳐 또는 G1~G4 답변 후 별도 sprint 진행.
 
 ## 2.89. Sprint 068 완료 - 모바일 풀스코프 최적화 (S68, 2026-05-10)
 
