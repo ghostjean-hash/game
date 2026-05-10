@@ -6,7 +6,7 @@ import { showModal, showToast, registerServiceWorker } from "../../shared/ui.js"
 registerServiceWorker("/service-worker.js");
 
 const CONTROLS_HELP =
-  "터치: 좌우 스와이프 이동 · 탭 회전 · 아래 스와이프 하드드롭 · 길게 누름 홀드\n" +
+  "터치: 좌우 드래그 이동 · 탭 회전 · 아래 드래그 빨리 내리기 · 위 스와이프 즉시 내리기\n" +
   "키보드: ←→ 이동 · ↑/X 회전 · Z 반대회전 · ↓ 소프트드롭 · Space 하드드롭 · Shift/C 홀드 · P 일시정지";
 
 const COLS = 10;
@@ -16,6 +16,19 @@ const TOTAL_ROWS = ROWS + VANISH;
 const LOCK_DELAY = 0.5;       // 락 딜레이 (초)
 const LOCK_RESET_MAX = 15;    // 정통 SRS Move/Rotate Reset Limit
 const SOFT_DROP_MULT = 20;    // 소프트드롭 가속 배수 (정통 SRS *20G 정렬)
+
+// === T-spin (docs/tspin.md) ===
+const T_SPIN_BIG_KICK_INDEX = 4; // KICK_JLSTZ table 인덱스 4. TST 격상 판정용 (Mini → 정식).
+const T_SPIN_SCORE = {
+  miniNoLine: 100,
+  miniSingle: 200,
+  noLine: 400,
+  single: 800,
+  double: 1200,
+  triple: 1600,
+};
+const B2B_MULT = 1.5;          // T-spin Lines / Tetris 연속 시 점수 배수 (Tetris Guideline)
+const TOAST_TSPIN_MS = 1400;
 
 // 색 (tokens.css의 --c1..7과 시각적으로 매칭)
 const COLORS = {
@@ -157,7 +170,10 @@ function newState(mode = getCurrentMode()) {
     fallTimer: 0,
     lockTimer: 0,
     locking: false,
-    lockResets: 0,    // 락 한 번 동안 lockTimer를 리셋한 횟수. LOCK_RESET_MAX 도달 시 더 이상 리셋 안 함(정통 SRS Move/Rotate Reset Limit).
+    lockResets: 0,            // 락 한 번 동안 lockTimer를 리셋한 횟수. LOCK_RESET_MAX 도달 시 더 이상 리셋 안 함(정통 SRS Move/Rotate Reset Limit).
+    lastMoveWasRotation: false, // T-spin 후보 가드. 마지막 동작이 회전이어야 T-spin 인정.
+    lastKickIndex: -1,        // 마지막 회전에서 사용한 kick table 인덱스. TST 격상 판정용.
+    b2bChain: 0,              // T-spin Lines / Tetris 연속 카운트. 일반 라인이 끼면 0으로 리셋.
     over: false,
     overHandled: false,
     paused: false,
@@ -279,6 +295,8 @@ function spawn(type) {
   state.locking = false;
   state.lockTimer = 0;
   state.lockResets = 0;
+  state.lastMoveWasRotation = false;
+  state.lastKickIndex = -1;
   if (collides(p, p.x, p.y, p.r)) {
     state.over = true;
   }
@@ -317,6 +335,7 @@ function tryMove(dx, dy) {
   if (!p) return false;
   if (!collides(p, p.x + dx, p.y + dy, p.r)) {
     p.x += dx; p.y += dy;
+    state.lastMoveWasRotation = false;
     if (dy !== 0) {
       // 세로 이동(중력/소프트드롭): 락 상태 즉시 해제. step에서 다음 충돌 시 다시 진입.
       state.locking = false;
@@ -338,11 +357,14 @@ function tryRotate(dir) {
   const key = `${from}->${to}`;
   const table = (p.type === "I") ? KICK_I : KICK_JLSTZ;
   const kicks = table[key] || [[0,0]];
-  for (const [kx, ky] of kicks) {
+  for (let i = 0; i < kicks.length; i++) {
+    const [kx, ky] = kicks[i];
     if (!collides(p, p.x + kx, p.y - ky, to)) {
       p.x += kx;
       p.y -= ky;
       p.r = to;
+      state.lastMoveWasRotation = true;
+      state.lastKickIndex = i;
       refreshLockAfterMove();
       return true;
     }
@@ -359,6 +381,7 @@ function hardDrop() {
     drop += 1;
   }
   state.score += drop * 2;
+  state.lastMoveWasRotation = false;
   lockPiece();
 }
 
@@ -384,6 +407,48 @@ function step() {
   }
 }
 
+// === T-spin 감지 (docs/tspin.md 2장 - 3-corner 룰) ===
+
+// 코너 셀 막힘 검사. 보드 밖 / 벽 / 기존 블록 = 막힘. vanish 영역 위쪽(y<0)은 빈 칸으로 간주.
+function isCornerBlocked(p, dx, dy) {
+  const x = p.x + dx;
+  const y = p.y + dy;
+  if (x < 0 || x >= COLS || y >= TOTAL_ROWS) return true;
+  if (y < 0) return false;
+  return state.grid[y][x] !== null;
+}
+
+// 락 직전 호출. 반환: "none" / "mini" / "tspin".
+function detectTSpin() {
+  const p = state.current;
+  if (!p || p.type !== "T") return "none";
+  if (!state.lastMoveWasRotation) return "none";
+  // 4 코너 (T 박스 4x4 기준 (0,0), (2,0), (0,2), (2,2))
+  const tl = isCornerBlocked(p, 0, 0);
+  const tr = isCornerBlocked(p, 2, 0);
+  const bl = isCornerBlocked(p, 0, 2);
+  const br = isCornerBlocked(p, 2, 2);
+  const blockedCount = (tl ? 1 : 0) + (tr ? 1 : 0) + (bl ? 1 : 0) + (br ? 1 : 0);
+  if (blockedCount < 3) return "none";
+  // front / back 분류 (회전 상태 기준 머리쪽 2 코너 = front)
+  let frontA, frontB, backA, backB;
+  switch (p.r) {
+    case 0: frontA = tl; frontB = tr; backA = bl; backB = br; break;
+    case 1: frontA = tr; frontB = br; backA = tl; backB = bl; break;
+    case 2: frontA = bl; frontB = br; backA = tl; backB = tr; break;
+    case 3: frontA = tl; frontB = bl; backA = tr; backB = br; break;
+  }
+  const frontBlocked = (frontA ? 1 : 0) + (frontB ? 1 : 0);
+  const backBlocked = (backA ? 1 : 0) + (backB ? 1 : 0);
+  if (frontBlocked === 2 && backBlocked >= 1) return "tspin";
+  if (frontBlocked === 1 && backBlocked === 2) {
+    // TST 격상: 마지막 회전이 큰 kick(인덱스 4)이면 Mini → 정식.
+    if (state.lastKickIndex === T_SPIN_BIG_KICK_INDEX) return "tspin";
+    return "mini";
+  }
+  return "none";
+}
+
 function lockPiece() {
   const p = state.current;
   if (!p) return;
@@ -393,24 +458,67 @@ function lockPiece() {
     if (y >= 0) state.grid[y][x] = p.type;
     if (y < VANISH) lockedInVanish = true;
   }
-  state.current = null;
   // top-out: 보이지 않는 위쪽에 락이 박힌 상태. 다음 피스가 보이지 않는 잔재와 충돌해 시각상 "공중 정지"로 보이는 증상 차단.
   if (lockedInVanish) {
+    state.current = null;
     state.over = true;
     state.flashRows = null;
     return;
   }
+  // T-spin 감지는 state.current가 살아 있는 상태에서 (코너 셀 검사용). 락 후에 state.current 정리.
+  const tspinKind = detectTSpin();
+  state.current = null;
+
   // 라인 체크
   const cleared = [];
   for (let y = 0; y < TOTAL_ROWS; y++) {
     if (state.grid[y].every((c) => c !== null)) cleared.push(y);
   }
-  if (cleared.length) {
+  const linesCount = cleared.length;
+  const isSprint = state.mode === MODE_SPRINT;
+
+  // 점수 / 토스트 / B2B 분기 (스프린트는 T-spin 보너스 미적용)
+  let scoreGain = 0;
+  let kindLabel = "";
+  let isSpecial = false; // B2B chain 갱신 대상: T-spin Lines / Tetris
+
+  if (!isSprint && tspinKind !== "none") {
+    if (tspinKind === "tspin") {
+      if (linesCount === 0) { scoreGain = T_SPIN_SCORE.noLine;  kindLabel = "T-스핀"; }
+      else if (linesCount === 1) { scoreGain = T_SPIN_SCORE.single;  kindLabel = "T-스핀 싱글";  isSpecial = true; }
+      else if (linesCount === 2) { scoreGain = T_SPIN_SCORE.double;  kindLabel = "T-스핀 더블";  isSpecial = true; }
+      else if (linesCount === 3) { scoreGain = T_SPIN_SCORE.triple;  kindLabel = "T-스핀 트리플"; isSpecial = true; }
+    } else { // mini
+      if (linesCount === 0) { scoreGain = T_SPIN_SCORE.miniNoLine; kindLabel = "미니 T-스핀"; }
+      else if (linesCount === 1) { scoreGain = T_SPIN_SCORE.miniSingle; kindLabel = "미니 T-스핀 싱글"; isSpecial = true; }
+    }
+  } else if (linesCount > 0) {
+    scoreGain = [0, 100, 300, 500, 800][linesCount];
+    if (linesCount === 4) { kindLabel = "테트리스"; isSpecial = !isSprint; }
+  }
+
+  // B2B 보너스: 직전이 special이고 이번도 special일 때만 ×1.5
+  let b2bMult = 1;
+  if (isSpecial && state.b2bChain > 0) b2bMult = B2B_MULT;
+  const finalScore = Math.round(scoreGain * state.level * b2bMult);
+  state.score += finalScore;
+
+  // B2B chain 갱신 (스프린트 외)
+  if (!isSprint && linesCount > 0) {
+    if (isSpecial) state.b2bChain += 1;
+    else state.b2bChain = 0;
+  }
+
+  // 토스트
+  if (kindLabel) {
+    const chainTag = (b2bMult > 1) ? ` B2B ×${state.b2bChain}` : "";
+    showToast(`${kindLabel}!${chainTag}`, TOAST_TSPIN_MS);
+  }
+
+  // 라인 처리
+  if (linesCount > 0) {
     state.flashRows = { rows: cleared, t: 0 };
-    // 점수 (간단 모델)
-    const bonus = [0, 100, 300, 500, 800][cleared.length] * state.level;
-    state.score += bonus;
-    state.lines += cleared.length;
+    state.lines += linesCount;
     const mode = MODES[state.mode];
     if (mode.levelUp) {
       applyLevelChange(1 + Math.floor(state.lines / 10));
