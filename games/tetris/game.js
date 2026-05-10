@@ -541,7 +541,8 @@ function setupInput() {
       if (!canPlay()) return;
       if (dir === "up") hardDrop();
     },
-    onHold: () => { if (canPlay()) holdPiece(); },
+    // 터치 길게누름 → 홀드 매핑 폐기. 보드 본체에서 손가락 정지 시 오발 방지. (키보드 Shift/C는 유지)
+    onHold: () => {},
     onPanStart: (info = {}) => {
       if (!canPlay() || !state.current) return;
       panAnchorX = state.current.x;
