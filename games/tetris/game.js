@@ -371,10 +371,19 @@ function step() {
 function lockPiece() {
   const p = state.current;
   if (!p) return;
+  // 락 셀이 vanish 영역(y < VANISH)에 걸쳤는지 추적. 정통 테트리스 top-out 정의.
+  let lockedInVanish = false;
   for (const [x, y] of p.cells()) {
     if (y >= 0) state.grid[y][x] = p.type;
+    if (y < VANISH) lockedInVanish = true;
   }
   state.current = null;
+  // top-out: 보이지 않는 위쪽에 락이 박힌 상태. 다음 피스가 보이지 않는 잔재와 충돌해 시각상 "공중 정지"로 보이는 증상 차단.
+  if (lockedInVanish) {
+    state.over = true;
+    state.flashRows = null;
+    return;
+  }
   // 라인 체크
   const cleared = [];
   for (let y = 0; y < TOTAL_ROWS; y++) {
@@ -521,31 +530,44 @@ function setupInput() {
   // 보드 외 잉여 영역(stage 좌우/상하 여백, 안전영역 패딩 등)에서도 탭/스와이프가 동작.
   // topbar의 button/a는 input.js의 가드가 처리.
   const inputTarget = document.querySelector(".page.tetris") || board;
-  // 가로 드래그(pan) 시작 시점의 piece.x 스냅샷.
+  // 드래그(pan) 진입 시점의 피스 좌표/손가락 dy 스냅샷.
   let panAnchorX = 0;
+  let panAnchorY = 0;
+  let panEntryDy = 0;
   input = createInput(inputTarget, {
     onTap: () => { if (canPlay()) tryRotate(1); },
     onSwipe: (dir) => {
-      // 가로 이동은 pan(드래그 추적)에서 처리. 여기는 세로 제스처만 의미.
+      // 가로/세로(아래) 이동은 pan(드래그 추적)에서 처리. 위 스와이프 = 즉시 내리기(하드드롭).
       if (!canPlay()) return;
-      if (dir === "down") hardDrop();
-      else if (dir === "up") holdPiece();
+      if (dir === "up") hardDrop();
     },
     onHold: () => { if (canPlay()) holdPiece(); },
-    onPanStart: () => {
+    onPanStart: (info = {}) => {
       if (!canPlay() || !state.current) return;
       panAnchorX = state.current.x;
+      panAnchorY = state.current.y;
+      panEntryDy = info.dy || 0;
     },
-    onPan: ({ dx }) => {
-      // 손가락 가로 이동량을 셀 단위로 환산해, 시작 위치 + offset만큼 따라감.
-      // 매 호출에서 목표 X까지 한 칸씩 tryMove로 진행(벽/충돌이 있으면 거기서 멈춤).
+    onPan: ({ dx, dy }) => {
+      // 손가락 이동량을 셀 단위로 환산해, 시작 위치 + offset만큼 따라감.
+      // 매 호출에서 목표 좌표까지 한 칸씩 tryMove로 진행(벽/충돌이 있으면 거기서 멈춤).
       if (!canPlay() || !state.current || !cellSize) return;
+      // 가로: 양방향 추적
       const targetX = panAnchorX + Math.round(dx / cellSize);
       while (state.current.x < targetX) {
         if (!tryMove(1, 0)) break;
       }
       while (state.current.x > targetX) {
         if (!tryMove(-1, 0)) break;
+      }
+      // 세로: 진입 시점 기준 추가 이동량만, 단방향(아래로만). 칸당 +1점.
+      const dyAfterEntry = dy - panEntryDy;
+      if (dyAfterEntry > 0) {
+        const targetY = panAnchorY + Math.floor(dyAfterEntry / cellSize);
+        while (state.current.y < targetY) {
+          if (!tryMove(0, 1)) break;
+          state.score += 1;
+        }
       }
     },
     onKey: (key, ev) => {

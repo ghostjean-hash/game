@@ -71,10 +71,15 @@ export function createInput(target, handlers = {}) {
       // 가로 우세 + 임계 통과 → pan 진입
       if (adx > ady && adx > PAN_TRIGGER_PX) {
         start.mode = "pan";
-        h.onPanStart({ x: start.x, y: start.y });
+        h.onPanStart({ x: start.x, y: start.y, dx, dy });
+        h.onPan({ dx, dy });
+      } else if (ady >= adx && dy > PAN_TRIGGER_PX) {
+        // 세로 우세 + 아래쪽 임계 통과 → pan 진입 (위쪽은 swipe 후보로 유지)
+        start.mode = "pan";
+        h.onPanStart({ x: start.x, y: start.y, dx, dy });
         h.onPan({ dx, dy });
       }
-      // 세로 우세는 pending 유지(pointerup에서 swipe 판정)
+      // 세로 우세 + 위쪽은 pending 유지(pointerup에서 swipe 판정)
     } else if (start.mode === "pan") {
       h.onPan({ dx, dy });
     }
