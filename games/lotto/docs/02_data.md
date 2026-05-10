@@ -329,17 +329,21 @@ character.savedSets = {
 1.5.8.6.4. **D hint 해제** : 세트 1개 이상 삭제로 cap 풀리면 자동 해제 (액션바 hint는 cap 충족 시점만 표시).
 1.5.8.6.5. 우선순위(동시 발생 시) : D > C > B > A. 예) cap 도달이면 풀 한계 배너 무시하고 D만 노출 (cap이 더 절대적인 차단).
 1.5.8.6.6. **A 토스트 노출 위치 (S60)** : `body` 직속 lazy-init 컨테이너로 화면 하단 fixed (bottom-tabs 위 12px). z-index = `--z-toast`(50, overlay 10 < toast 50 < modal 100). 누적 리스트가 길어 액션바가 화면 밖으로 밀려도 메시지 인지 보장. 액션바 인라인 슬롯(`.saved-add-toast` data-role="saved-toast") 폐기.
-1.5.8.6.7. **A/B 펄스 (S60 / S62 시각 정정, 2026-05-10)** : `saved-set-row` 인덱스 `startIdx ~ startIdx + addedCount - 1`에 `is-just-added` 클래스 부여 + `SAVED_SETS_JUST_ADDED_MS`(1000ms) 후 제거. **S62 시각 명세 변경** - 초기안(inset 외곽선 + radius-sm)이 row 좌우 padding 0 환경에서 라벨 "추천N"에 외곽선이 닿아 "박스에 갇힌" 답답함이 보고됨. 권장안 D 적용:
+1.5.8.6.7. **A/B 펄스 (S60 / S62 / S66 시각 재정정, 2026-05-10)** : `saved-set-row` 인덱스 `startIdx ~ startIdx + addedCount - 1`에 `is-just-added` 클래스 부여 + `SAVED_SETS_JUST_ADDED_MS`(1000ms) 후 제거.
+
+**S66 (2026-05-10) 펄스 영역 재정정**: S62의 `.saved-set-row::before inset: 4px 8px` 패턴이 row 좌우 padding 0 환경에서 라벨 "추천N" 글자 일부를 가로지름. 사용자 보고 "추천1,2 스트링 중간만 하이라이트에 들어감". 펄스 영역을 row 전체 → **`.saved-set-balls`(번호공 컨테이너)** 로 좁힘. 의미적으로도 "새로 들어온 번호 6개"를 강조하는 게 정확. 라벨 / 휴지통 영역은 펄스 무관.
 
 | 항목 | 값 |
 |---|---|
-| 렌더 방식 | `::before` pseudo (`position: absolute`) - row layout 영향 0 |
-| pseudo inset | `4px 8px` (상하 4px, 좌우 8px - 라벨과 시각 거리 확보) |
+| 펄스 컨테이너 | `.saved-set-row.is-just-added .saved-set-balls` (라벨 / 휴지통 외) |
+| 렌더 방식 | `::before` pseudo (`position: absolute`) - layout 영향 0 |
+| pseudo inset | `0` (번호공 영역 정확히 덮음) |
 | 라운드 | `var(--radius-md)` |
 | 배경 | `rgba(201, 160, 80, 0.18)` 시작 → `transparent` 페이드 |
-| 외부 글로우 | `box-shadow: 0 0 14px rgba(201, 160, 80, 0.35)` 시작 → 0 |
-| 외곽선 (inset border) | **폐기** (시선을 끄는 데에 외부 글로우만으로 충분) |
+| 외부 글로우 | `box-shadow: 0 0 14px rgba(201, 160, 80, 0.35)` 시작 → 0 (글로우는 컨테이너 바깥으로 부드럽게 새어나감) |
+| 외곽선 (inset border) | **폐기** (시선은 외부 글로우만으로 충분) |
 | pointer-events | `none` (클릭 통과) |
+| z-index | pseudo 0 / 번호공 1 (글자 / 색이 펄스 위에 보임) |
 | reduced-motion | pseudo 표시 + 정적 옅은 배경 (animation 미적용) |
 
 ##### 1.5.8.7. 적용 위치

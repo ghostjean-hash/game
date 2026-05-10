@@ -4,13 +4,43 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-10 (Sprint 060~065 - 토스트 위치 / 펄스 시각 정정 / 프리셋 편집 진입 이동 / 부제 폐기 + 자동 list / storage 테스트 보강 / sync* fetch mock 회귀).
+1.3. **마지막 갱신**: 2026-05-10 (Sprint 060~066 - 토스트 위치 / 펄스 시각 정정 / 프리셋 편집 진입 이동 / 부제 폐기 + 자동 list / storage 테스트 보강 / sync* fetch mock 회귀 / 펄스 영역 재정정 + 들여쓰기 130%).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 직전 5 Sprint(060~064)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.87. Sprint 066 완료 - is-just-added 펄스 영역 재정정 + 추천 리스트 좌측 들여쓰기 130% (S66, 2026-05-10)
+
+배경: 사용자 보고 2건. (1) S62의 row 전체 펄스(`.saved-set-row::before inset: 4px 8px`)가 row 좌우 padding 0 환경에서 라벨 "추천N" 글자 일부를 가로지름. "추천1,2 스트링 중간만 하이라이트에 들어감". (2) "추천1,2 스트링이 좀 더 들여쓰기 되도록 130% 마진".
+
+### 2.87.1. 펄스 영역 재정정
+
+| 측면 | 이전 (S62) | 이후 (S66) |
+|---|---|---|
+| 셀렉터 | `.saved-set-row.is-just-added::before` | `.saved-set-row.is-just-added .saved-set-balls::before` |
+| pseudo inset | `4px 8px` (좌우 8px가 라벨에 닿음) | `0` (번호공 컨테이너 정확히 덮음) |
+| 강조 의미 | row 전체 | "새로 들어온 번호 6개" |
+| 라벨 / 휴지통 | 펄스 영역에 포함되어 글자 가로지름 | 펄스 영역 외 |
+| 외부 글로우 | 외곽선 폐기, box-shadow 14px accent | 동일 (글로우는 컨테이너 바깥으로 부드럽게 새어나감) |
+
+### 2.87.2. 좌측 들여쓰기 130%
+
+- `.saved-sets-section` `padding-left`: `calc(var(--space-3) * 1.5)` → `calc(var(--space-3) * 1.5 * 1.3)` (18 → 23.4px).
+- 토큰 베이스 비율 유지(매직 픽셀 0). 사용자 명시 130%.
+
+### 2.87.3. 변경 파일
+
+- `docs/02_data.md` 1.5.8.6.7 명세 표 갱신 (펄스 컨테이너 / inset 0 / z-index 분리 명시).
+- `styles/main.css`: 펄스 룰 재장소 + reduced-motion 폴백 동시 갱신 / `.saved-sets-section` padding-left 130%.
+- `service-worker.js` v43 → v44.
+
+### 2.87.4. 검증
+
+- `node tests/run-node.js` → **305 / 305 PASS** (CSS-only, 회귀 0).
+- dev-server 응답: main.css `.saved-set-balls::before` / `1.5 * 1.3` / SW v44 모두 200 + 컨텐츠 정상.
 
 ## 2.86. Sprint 065 완료 - syncDraws / syncDrawsIfNewer fetch mock 회귀 (S64.1, 2026-05-10)
 

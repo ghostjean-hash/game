@@ -35,7 +35,8 @@
 // v41 (2026-05-10): lotto S61 - 프리셋 편집 진입점을 추첨 탭 "편집" 텍스트 링크 → 설정 탭 "프리셋 관리" 섹션으로 이동. 추첨 탭 정리(편집은 정착 후 자주 발생 X). 설정 탭 슬롯 행 클릭 = 기존 모달 재활용. 기본값 복원 버튼 설정 탭에도 노출. dead CSS(.preset-edit-row / .preset-edit-link) 폐기.
 // v42 (2026-05-10): lotto S62 - is-just-added 펄스 시각 정정. inset 외곽선 + radius-sm → ::before pseudo + radius-md + 외부 글로우 + 좌우 8px inset. row 좌우 padding 0이라 외곽선이 "추천N" 라벨에 붙어 답답하던 사용자 보고 fix. row layout 영향 0(pseudo absolute). SSOT: docs/02_data.md 1.5.8.6.7.
 // v43 (2026-05-10): lotto S63 - 프리셋 슬롯 부제 폐기 + 묶인 전략 label list 자동 표시. 사용자 보고 "애매한 설명보다 실제 선택된 전략 표시" 반영. PRESET_SUBTITLE_MAX 상수 / DEFAULT_PRESETS subtitle 필드 / 편집 모달 부제 입력 / .preset-subtitle / .preset-manage-subtitle 모두 폐기. 추첨 탭 .preset-strategy-line + 설정 탭 .preset-manage-strategies(strategyLabel 통일) 자동 생성. SSOT: docs/01_spec.md 5.1.5 / docs/02_data.md 1.20.
-const CACHE_VERSION = "v43";
+// v44 (2026-05-10): lotto S66 - is-just-added 펄스 영역 재정정 + 추천 리스트 좌측 padding 130%. 사용자 보고 "추천1,2 스트링 중간만 하이라이트". 펄스 영역을 row 전체 → .saved-set-balls(번호공 컨테이너)로 좁힘. 라벨/휴지통 영역 펄스 무관. 좌측 padding 1.5배 → 1.5*1.3배 (18px → 23.4px). SSOT: docs/02_data.md 1.5.8.6.7.
+const CACHE_VERSION = "v44";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
