@@ -10,6 +10,8 @@ body {
   height: 100%;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* S068 (2026-05-10): 모바일 크롬 회색 깜빡임 차단. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* iOS Safari 자동 zoom 방지 - input 16px 미만이면 포커스 시 화면 확대됨.
@@ -26,14 +28,21 @@ textarea {
   font-size: 16px;
 }
 
-/* 모든 인터랙티브 요소 터치 타겟 최소 44x44 (iOS HIG / Material 48dp 절충). */
+/* 모든 인터랙티브 요소 터치 타겟 최소 44x44 (iOS HIG / Material 48dp 절충).
+   S068 (2026-05-10): touch-action manipulation으로 더블탭 줌 차단 + 즉시 click 발화.
+   min-height는 --touch-min 토큰으로 일원화 (매직값 0). */
 button,
 [role="button"],
 a.btn-primary,
 a.btn-secondary,
 .strategy,
 .slot {
-  min-height: 44px;
+  min-height: var(--touch-min);
+  touch-action: manipulation;
+}
+/* S068: data-action 핸들러 부착 요소도 동일 처리 (button이 아닌 케이스 cover). */
+[data-action] {
+  touch-action: manipulation;
 }
 
 /* 모션 감소 옵션 존중 (접근성) */
@@ -193,8 +202,9 @@ a.btn-secondary,
   font-weight: bold;
   font-size: var(--font-size-md);
   cursor: pointer;
+}@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover { filter: brightness(1.05); }
 }
-.btn-primary:hover { filter: brightness(1.05); }
 .btn-primary:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; }
 
 .btn-secondary {
@@ -205,8 +215,9 @@ a.btn-secondary,
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   cursor: pointer;
+}@media (hover: hover) and (pointer: fine) {
+  .btn-secondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
 }
-.btn-secondary:hover { border-color: var(--color-accent); color: var(--color-accent); }
 
 /* 전략 picker */
 .strategy-picker {
@@ -234,8 +245,9 @@ a.btn-secondary,
   font-size: var(--font-size-sm);
   cursor: pointer;
   font-family: inherit;
+}@media (hover: hover) and (pointer: fine) {
+  .strategy:hover { border-color: var(--color-accent); }
 }
-.strategy:hover { border-color: var(--color-accent); }
 .strategy.is-active {
   border-color: var(--color-accent);
   background: rgba(201, 160, 80, 0.08);
@@ -298,8 +310,9 @@ a.btn-secondary,
   cursor: pointer;
   font-family: inherit;
   max-width: 140px;
+}@media (hover: hover) and (pointer: fine) {
+  .slot:hover { border-color: var(--color-accent); }
 }
-.slot:hover { border-color: var(--color-accent); }
 .slot.is-active {
   border-color: var(--color-accent);
   background: rgba(201, 160, 80, 0.08);
@@ -339,10 +352,12 @@ a.btn-secondary,
   border-radius: var(--radius-md);
   cursor: pointer;
   padding: 0;
+}@media (hover: hover) and (pointer: fine) {
+  .slot-add:hover { border-color: var(--color-accent); color: var(--color-accent); }
 }
-.slot-add:hover { border-color: var(--color-accent); color: var(--color-accent); }
-.slot-del:disabled { opacity: 0.4; cursor: not-allowed; }
-.slot-del:not(:disabled):hover { border-color: var(--color-danger); color: var(--color-danger); }
+.slot-del:disabled { opacity: 0.4; cursor: not-allowed; }@media (hover: hover) and (pointer: fine) {
+  .slot-del:not(:disabled):hover { border-color: var(--color-danger); color: var(--color-danger); }
+}
 
 /* 캐릭터 카드 */
 .character-card {
@@ -746,10 +761,11 @@ a.btn-secondary,
   width: 44px;
   height: 44px;
   font-size: var(--font-size-sm);
-}
-.pool-num:hover {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: var(--color-danger);
+}@media (hover: hover) and (pointer: fine) {
+  .pool-num:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--color-danger);
+  }
 }
 .pool-input {
   display: flex;
@@ -842,10 +858,11 @@ a.btn-secondary,
   transition: border-color 0.15s ease, color 0.15s ease;
 }
 .btn-refresh .icon { width: 16px; height: 16px; }
-.btn-refresh-label { line-height: 1; }
-.btn-refresh:hover:not(:disabled) {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+.btn-refresh-label { line-height: 1; }@media (hover: hover) and (pointer: fine) {
+  .btn-refresh:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
 }
 .btn-refresh:disabled {
   opacity: 0.55;
@@ -1091,8 +1108,9 @@ a.btn-secondary,
   padding: 0;
   font-family: inherit;
   transition: color 0.15s ease;
+}@media (hover: hover) and (pointer: fine) {
+  .modal-close:hover { color: var(--color-accent); }
 }
-.modal-close:hover { color: var(--color-accent); }
 .modal-close .icon {
   width: 18px;
   height: 18px;
@@ -1117,8 +1135,9 @@ a.btn-secondary,
   font-weight: bold;
   cursor: pointer;
   font-size: var(--font-size-md);
+}@media (hover: hover) and (pointer: fine) {
+  .modal-confirm:hover { filter: brightness(1.05); }
 }
-.modal-confirm:hover { filter: brightness(1.05); }
 .modal-confirm:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; }
 
 /* ===== 하단 탭 (5개) ===== */
@@ -1161,8 +1180,9 @@ a.btn-secondary,
   justify-content: center;
 }
 .tab-icon .icon { width: 22px; height: 22px; }
-.tab-label { line-height: 1; }
-.tab-item:hover { color: var(--color-text); }
+.tab-label { line-height: 1; }@media (hover: hover) and (pointer: fine) {
+  .tab-item:hover { color: var(--color-text); }
+}
 .tab-item.is-active {
   color: var(--color-accent);
   font-weight: bold;
@@ -1253,8 +1273,9 @@ a.btn-secondary,
   white-space: nowrap;
   min-height: 36px;
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}@media (hover: hover) and (pointer: fine) {
+  .strategy-tab:hover { border-color: var(--color-accent); }
 }
-.strategy-tab:hover { border-color: var(--color-accent); }
 .strategy-tab.is-active {
   border-color: var(--color-accent);
   background: rgba(201, 160, 80, 0.08);
@@ -1500,10 +1521,11 @@ a.btn-secondary,
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
-}
-.saved-add-btn:hover:not(:disabled) {
-  background: var(--color-surface-soft);
-  border-color: var(--color-accent);
+}@media (hover: hover) and (pointer: fine) {
+  .saved-add-btn:hover:not(:disabled) {
+    background: var(--color-surface-soft);
+    border-color: var(--color-accent);
+  }
 }
 .saved-add-btn:disabled {
   opacity: 0.4;
@@ -1655,10 +1677,11 @@ a.btn-secondary,
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
-}
-.saved-sets-clear:hover:not(:disabled) {
-  color: var(--color-danger);
-  border-color: var(--color-danger);
+}@media (hover: hover) and (pointer: fine) {
+  .saved-sets-clear:hover:not(:disabled) {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+  }
 }
 .saved-sets-clear:disabled {
   opacity: 0.4;
@@ -1763,8 +1786,9 @@ a.btn-secondary,
   border: none;
   cursor: pointer;
   transition: color 0.15s;
+}@media (hover: hover) and (pointer: fine) {
+  .saved-set-remove:hover { color: var(--color-danger); }
 }
-.saved-set-remove:hover { color: var(--color-danger); }
 /* S29.1 (2026-05-04): .saved-sets-disclaimer 룰 폐기. disclaimer 본문 자체 제거 (사용자 지시).
    사행성 회피 카피는 첫 진입 면책 모달 + 설정 탭 면책으로 일원화. SSOT: docs/01_spec.md 5.2.5.8. */
 @media (max-width: 480px) {
@@ -1857,8 +1881,9 @@ a.btn-secondary,
   border-radius: var(--radius-md);
   color: var(--color-text);
   cursor: pointer;
+}@media (hover: hover) and (pointer: fine) {
+  .reverse-best-expand:hover { background: var(--color-surface-soft, #f3f4f6); }
 }
-.reverse-best-expand:hover { background: var(--color-surface-soft, #f3f4f6); }
 .reverse-all-modal {
   max-height: 70vh;
   overflow-y: auto;
@@ -1956,10 +1981,11 @@ a.btn-secondary,
   font-size: var(--font-size-sm);
   margin-bottom: var(--space-2);
   align-self: flex-start;
-}
-.wheel-back:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+}@media (hover: hover) and (pointer: fine) {
+  .wheel-back:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
 }
 
 /* Sprint 012: 역추첨 탭. SSOT: docs/01_spec.md 5.7. */
@@ -1987,10 +2013,11 @@ a.btn-secondary,
   transition: transform 0.1s ease;
   font-family: var(--font-sans);
   padding: 0;
-}
-.reverse-cell:hover:not(.is-picked) {
-  border-color: var(--color-accent);
-  transform: scale(1.05);
+}@media (hover: hover) and (pointer: fine) {
+  .reverse-cell:hover:not(.is-picked) {
+    border-color: var(--color-accent);
+    transform: scale(1.05);
+  }
 }
 .reverse-cell.is-picked {
   color: var(--color-on-accent);
@@ -2124,8 +2151,9 @@ a.btn-secondary,
   text-align: left;
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
+}@media (hover: hover) and (pointer: fine) {
+  .ritual-row:hover { border-color: var(--color-accent); }
 }
-.ritual-row:hover { border-color: var(--color-accent); }
 .ritual-row.is-filled {
   border-color: #f59e0b;
   background: linear-gradient(90deg, rgba(254, 243, 199, 0.5), rgba(253, 230, 138, 0.5), rgba(254, 243, 199, 0.5));
@@ -2188,16 +2216,18 @@ a.btn-secondary,
   background: #fef3c7;
   color: #92400e;
   border-color: #fcd34d;
-}
-.ritual-row:hover .ritual-row-cta {
-  border-color: var(--color-accent);
+}@media (hover: hover) and (pointer: fine) {
+  .ritual-row:hover .ritual-row-cta {
+    border-color: var(--color-accent);
+  }
 }
 /* 모달 내 동일 정보 행 (사용자 클릭 X, aria-hidden) */
 .ritual-row-in-modal {
   margin: 0 0 var(--space-2) 0;
   cursor: default;
+}@media (hover: hover) and (pointer: fine) {
+  .ritual-row-in-modal:hover { border-color: var(--color-border); }
 }
-.ritual-row-in-modal:hover { border-color: var(--color-border); }
 
 @keyframes ritual-flame-flow {
   0% { background-position: 0% 0%; }
@@ -2264,10 +2294,11 @@ a.btn-secondary,
   text-align: center;
   min-height: 100px;
   transition: transform 0.2s ease, border-color 0.2s ease;
-}
-.ritual-card:hover:not(:disabled):not(.is-performing) {
-  transform: translateY(-2px);
-  border-color: var(--color-accent);
+}@media (hover: hover) and (pointer: fine) {
+  .ritual-card:hover:not(:disabled):not(.is-performing) {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+  }
 }
 .ritual-card.is-performing {
   animation: ritual-perform 0.8s ease-out forwards;
@@ -2519,10 +2550,11 @@ a.btn-secondary,
 .char-row-del:disabled {
   opacity: 0.3;
   cursor: not-allowed;
-}
-.char-row-del:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.06);
-  color: var(--color-danger);
+}@media (hover: hover) and (pointer: fine) {
+  .char-row-del:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.06);
+    color: var(--color-danger);
+  }
 }
 .char-add {
   width: 100%;
@@ -2708,8 +2740,9 @@ a.btn-secondary,
   text-align: center;
   min-height: 72px;
   transition: border-color 0.12s ease, background 0.12s ease;
+}@media (hover: hover) and (pointer: fine) {
+  .preset-slot:hover { border-color: var(--color-accent); }
 }
-.preset-slot:hover { border-color: var(--color-accent); }
 .preset-slot.is-active {
   border-color: var(--color-accent);
   background: rgba(201, 160, 80, 0.08);
@@ -2765,9 +2798,10 @@ a.btn-secondary,
   text-align: left;
   min-height: 56px;
   color: var(--color-text);
-}
-.preset-manage-main:hover {
-  background: rgba(201, 160, 80, 0.06);
+}@media (hover: hover) and (pointer: fine) {
+  .preset-manage-main:hover {
+    background: rgba(201, 160, 80, 0.06);
+  }
 }
 .preset-manage-label {
   font-weight: 700;
@@ -2892,8 +2926,9 @@ a.btn-secondary,
   color: var(--color-text);
   font-size: var(--font-size-md);
   transition: border-color 0.12s ease, background 0.12s ease;
+}@media (hover: hover) and (pointer: fine) {
+  .char-toggle:hover { border-color: var(--color-accent); }
 }
-.char-toggle:hover { border-color: var(--color-accent); }
 .char-toggle.is-bad {
   border-color: var(--color-lotto-red);
   background: rgba(238, 39, 56, 0.04);

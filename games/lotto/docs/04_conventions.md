@@ -43,6 +43,16 @@
 4.6. 모션은 `prefers-reduced-motion: reduce` 미디어쿼리 시 0.01ms로 제거.
 4.7. 스킵 링크 (본문으로 건너뛰기) 제공.
 
+### 4.8. 모바일 표준 (S068, 2026-05-10)
+
+4.8.1. **터치 hit area 최소 44x44** - `--touch-min` 토큰. `button` / `[role="button"]` / `.strategy` / `.slot` 글로벌 base에 `min-height: var(--touch-min)` 적용. 컴포넌트별 더 큰 값(`.tab-item` 52, `.preset-slot` 64)은 base 위 override.
+4.8.2. **`:hover` 룰은 모두 `@media (hover: hover) and (pointer: fine)` 가드 안에 둘 것**. 모바일 sticky hover(탭 후 hover 잔존)로 인한 시각 혼동 차단.
+4.8.3. **`touch-action: manipulation`** - 인터랙티브 요소(`button` / `[data-action]` 등) 글로벌 base. 모바일 더블탭 줌 차단 + 즉시 click 발화 (300ms 지연 제거).
+4.8.4. **`-webkit-tap-highlight-color: transparent`** - `html, body` 글로벌. 모바일 크롬 회색 깜빡임 차단.
+4.8.5. **`viewport-fit=cover` + `env(safe-area-inset-*)`** - notch / 둥근 모서리 영역 대응. `#app` / `.bottom-tabs` / 모달에 적용 (이미 적용됨).
+4.8.6. **`font-display: swap`** - Google Fonts URL에 명시 (이미 적용됨). 첫 진입 글자 변동 차단.
+4.8.7. 새 인터랙티브 요소 추가 시 본 8.x 룰 자동 적용 검증. `:hover` 룰 추가하면 반드시 `@media (hover: hover)` 가드 동반.
+
 ## 5. 디자인 토큰 사용 규칙
 
 4.1. **UI 영역**(메뉴 / HUD / 배경 / 폰트 / 간격 / radius / z-index): `styles/tokens.css` CSS 변수만 사용.

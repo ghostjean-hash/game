@@ -4,13 +4,65 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-10 (Sprint 067 - 추천 번호 작위성 정량 검증 1차 / 2차 보고서. 알고리즘 결손 없음 확인. P1(render/ 테스트) 보류).
+1.3. **마지막 갱신**: 2026-05-10 (Sprint 068 - 모바일 풀스코프 최적화 - sticky hover 가드 26개 / touch-action / tap-highlight / --touch-min 토큰).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 직전 5 Sprint(060~064)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.89. Sprint 068 완료 - 모바일 풀스코프 최적화 (S68, 2026-05-10)
+
+배경: 사용자 보고 "핸드폰 크롬으로 테스트할 때 화면 일부가 다르게 나오던데 테스트해줘. github.io에서 테스트하는중" + "캐릭터 접기/펼치기가 모바일에서 잘 안되는것 같아". 사용자 명시 "모두 진행하길 원해, 모바일에 최적화 되어야 해".
+
+### 2.89.1. 진단 (코드 차원 풀스코프)
+
+| # | 모바일 이슈 | 점검 결과 | 영향 |
+|---|---|---|---|
+| H1 | **Sticky hover** (`:hover` 26 룰, 가드 0건) | `.char-toggle:hover` 등 모든 hover 룰이 모바일에서 sticky hover | **캐릭터 토글 시각 혼동 → 사용자 보고 핵심 원인** |
+| H2 | **touch-action 미설정** | 인터랙티브 요소 전수 누락 | 더블탭 줌 / 일부 lazy click |
+| H3 | **-webkit-tap-highlight-color 미설정** | 글로벌 누락 | 회색 박스 깜빡임 |
+| H4 | 모바일 hit area | `button` base에 `min-height: 44px` 이미 cover. .char-toggle 등 button 요소라 OK | 영향 적음 |
+| H5 | viewport / safe-area | `viewport-fit=cover` + `env(safe-area-inset-*)` 잘 적용됨 | OK |
+| H6 | font-display | Google Fonts URL `&display=swap` 이미 적용 | OK |
+| H7 | iOS 자동 zoom 방지 | `input { font-size: 16px; }` 이미 적용 | OK |
+
+H1, H2, H3가 핵심 결손 = 정도 수정 대상.
+
+### 2.89.2. 수정안 (땜방 금지 = 풀스코프)
+
+| 영역 | 변경 |
+|---|---|
+| `styles/tokens.css` | `--touch-min: 44px` 신규 토큰 (iOS HIG / Material 권장) |
+| `styles/main.css` 글로벌 base | `html, body`에 `-webkit-tap-highlight-color: transparent` / 인터랙티브 base에 `touch-action: manipulation` + `min-height: var(--touch-min)` (매직값 → 토큰) / `[data-action]`에도 `touch-action: manipulation` |
+| `styles/main.css` :hover 26 룰 | **모두 `@media (hover: hover) and (pointer: fine)` 가드 안으로** (Node 스크립트 일괄 처리, 외곽 토큰 단위 안전 변환). 모바일 sticky hover 차단. |
+| `docs/04_conventions.md` 4.8 | 모바일 표준 룰 7항목 신설. 향후 인터랙티브 요소 추가 시 룰 자동 적용 검증 |
+
+### 2.89.3. 변경 통계
+
+- :hover 룰 가드 적용: **26개 / 26개** (1:1 일치 검증)
+- 신규 토큰: 1개 (`--touch-min`)
+- 글로벌 base 추가: 3건 (tap-highlight / touch-action button base / touch-action data-action)
+- docs 신설: 4.8.1 ~ 4.8.7 (7 룰)
+- SW (`game/service-worker.js`): 본 sprint 범위 외 (게임 허브 자산. lotto 전용 아니므로 별도 의제).
+
+### 2.89.4. 검증
+
+- `node tests/run-node.js` → **305/305 PASS** (CSS-only, 회귀 0).
+- dev-server 응답: main.css 200 / tokens.css 200 / `@media (hover: hover) and (pointer: fine)` 26회 매치 / `--touch-min` 토큰 1회 매치.
+- 매직 44px 잔존: 컴포넌트별 명시 데이터 사이즈(번호공 / 라벨)만. 글로벌 base는 토큰 일원화.
+
+### 2.89.5. 사용자 인상 직접 대응
+
+캐릭터 접기/펼치기 모바일 미작동 인상의 가장 강한 후보 = **H1 (sticky hover)**. 모바일에서 첫 탭 시 `.char-toggle:hover`의 `border-color: var(--color-accent)` 적용 후 잔존 → 두 번째 탭은 시각 변화 없어 "안 눌린 듯" 인상. 본 sprint로 해당 hover 룰이 `@media (hover: hover) and (pointer: fine)` 가드 안에 들어가 모바일에서 발화하지 않음. 시각 일관성 회복.
+
+`touch-action: manipulation`로 모바일 크롬의 300ms 더블탭 zoom 지연도 제거 → 즉시 click 반응.
+
+### 2.89.6. 후속 / 미적용
+
+- SW cache busting (사용자 폰이 옛 v44 캐시 보고 있을 수 있음). `game/service-worker.js`는 게임 허브 자산이라 lotto sprint 범위 외. 별도 의제.
+- 사용자 폰에서 강력 새로고침 또는 시크릿 모드 권장 (PWA 설치 상태면 해제 후 재설치).
 
 ## 2.88. Sprint 067 완료 - 추천 번호 작위성 정량 검증 (S67, 2026-05-10)
 

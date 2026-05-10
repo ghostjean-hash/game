@@ -52,4 +52,8 @@
   --z-overlay: 10;
   --z-toast: 50;
   --z-modal: 100;
+
+  /* S068 (2026-05-10): 모바일 hit area 최소값. iOS HIG / Material 권장 44px.
+     480px↓ 분기에서 인터랙티브 요소(button / [data-action])에 min-height로 적용. */
+  --touch-min: 44px;
 }
