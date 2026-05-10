@@ -59,26 +59,29 @@ games/lotto/
 ├── styles/
 │   ├── tokens.css       # UI 디자인 토큰
 │   └── main.css         # 레이아웃
-└── tests/
-    ├── test.html        # 테스트 진입
-    ├── runner.js        # entrypoint (suite 등록 + done() 호출)
-    ├── core.js          # 러너 코어 (suite/test/assert)
-    └── suites/          # 테스트 파일 (core/ 모든 모듈 + storage)
-        ├── seed.test.js
-        ├── random.test.js
-        ├── luck.test.js
-        ├── stats.test.js
-        ├── recommend.test.js
-        ├── storage.test.js
-        ├── fortune.test.js
-        ├── match.test.js
-        ├── zodiac.test.js
-        ├── saju.test.js
-        ├── schedule.test.js
-        ├── wheeling.test.js
-        ├── history.test.js
-        ├── ritual.test.js
-        └── reverse.test.js
+├── tests/
+│   ├── test.html        # 테스트 진입
+│   ├── runner.js        # entrypoint (suite 등록 + done() 호출)
+│   ├── core.js          # 러너 코어 (suite/test/assert)
+│   ├── reports/         # 일회성 분석 보고서 (편향 / 분포 등). 날짜 prefix.
+│   └── suites/          # 테스트 파일 (core/ 모든 모듈 + storage)
+│       ├── seed.test.js
+│       ├── random.test.js
+│       ├── luck.test.js
+│       ├── stats.test.js
+│       ├── recommend.test.js
+│       ├── storage.test.js
+│       ├── fortune.test.js
+│       ├── match.test.js
+│       ├── zodiac.test.js
+│       ├── saju.test.js
+│       ├── schedule.test.js
+│       ├── wheeling.test.js
+│       ├── history.test.js
+│       ├── ritual.test.js
+│       └── reverse.test.js
+└── scripts/             # Node CLI 분석 도구 (S67, 2026-05-10). DOM 0, src/core + src/data만 import.
+    └── bias-report.mjs  # 전략별 추천 번호 분포 / 편향 정량 검증 (7차원 + K3 판정)
 ```
 
 ## 2. 모듈 의존성 방향
@@ -104,12 +107,14 @@ games/lotto/
 | `render/` | `core/`, `data/` | `input/` 직접 |
 | `input/` | `core/`, `data/` | `render/` 직접 |
 | `main.js` | 모두 | (없음) |
+| `scripts/` | `src/core/`, `src/data/`, Node `node:fs` / `node:path` | DOM, `src/render/`, `src/input/`, localStorage |
 
 ### 2.3. 절대 규칙
 
 2.3.1. `core/`는 어떤 브라우저 API도 import 금지. 순수 함수만.
 2.3.2. `render/`와 `input/`은 서로 직접 import 금지. main.js에서 wire-up으로 연결.
 2.3.3. localStorage 입출력은 반드시 `data/`를 통해서만.
+2.3.4. `scripts/`는 Node CLI 도구. DOM / `render/` / localStorage import 금지. 출력은 stdout 또는 `tests/reports/<date>_<topic>.md` 파일.
 
 ## 3. 데이터 흐름
 
@@ -164,6 +169,7 @@ draws 갱신 (boot syncDraws 또는 통계 탭 진입 syncDrawsIfNewer)
 | `render/` | DOM 갱신, 카드 / 차트 / 모달 / 탭 / SVG 아이콘 | main / draw-card / next-draw-card / character-* / strategy-tabs / stats-page / history-page / wheeling-page / settings-page / bottom-tabs / icons / modal / charts |
 | `input/` | 키보드 / 터치 이벤트 → core 호출 (현재 render/main.js가 흡수, M2 마무리 단계 분리 검토) | (분리 보류) |
 | `data/` | 게임 상수, 외부 API, localStorage 입출력 | colors.js / storage.js / numbers.js + draws.json (정적 JSON) |
+| `scripts/` | Node CLI 분석 / 검증 도구. 일회성 보고서 또는 영구 회귀 도구 | bias-report.mjs (S67) |
 
 ### 4.1. 책임 충돌 시
 
