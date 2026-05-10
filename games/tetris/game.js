@@ -13,6 +13,9 @@ const COLS = 10;
 const ROWS = 20;
 const VANISH = 2; // 위쪽 보이지 않는 여유 행
 const TOTAL_ROWS = ROWS + VANISH;
+const LOCK_DELAY = 0.5;       // 락 딜레이 (초)
+const LOCK_RESET_MAX = 15;    // 정통 SRS Move/Rotate Reset Limit
+const SOFT_DROP_MULT = 20;    // 소프트드롭 가속 배수 (정통 SRS *20G 정렬)
 
 // 색 (tokens.css의 --c1..7과 시각적으로 매칭)
 const COLORS = {
@@ -154,6 +157,7 @@ function newState(mode = getCurrentMode()) {
     fallTimer: 0,
     lockTimer: 0,
     locking: false,
+    lockResets: 0,    // 락 한 번 동안 lockTimer를 리셋한 횟수. LOCK_RESET_MAX 도달 시 더 이상 리셋 안 함(정통 SRS Move/Rotate Reset Limit).
     over: false,
     overHandled: false,
     paused: false,
@@ -270,12 +274,11 @@ function spawn(type) {
   const t = type || state.queue.shift();
   ensureBag();
   const p = new Piece(t);
-  // 시작 위치 보정 (I는 한 칸 위)
-  p.y = (t === "I") ? 0 : 0;
   state.current = p;
   state.canHold = true;
   state.locking = false;
   state.lockTimer = 0;
+  state.lockResets = 0;
   if (collides(p, p.x, p.y, p.r)) {
     state.over = true;
   }
@@ -293,15 +296,33 @@ function collides(p, x, y, r) {
   return false;
 }
 
+// 이동/회전 성공 후 락 상태 갱신. 정통 SRS 락 딜레이 룰 정렬.
+//   - 새 위치 아래가 비어 있으면 → locking 해제(공중 락 방지). 다시 fall.
+//   - 여전히 바닥이면 → lockTimer 리셋. 단 리셋 한도(LOCK_RESET_MAX) 도달하면 리셋 안 함.
+function refreshLockAfterMove() {
+  if (!state.locking || !state.current) return;
+  const p = state.current;
+  if (!collides(p, p.x, p.y + 1, p.r)) {
+    state.locking = false;
+    state.lockTimer = 0;
+  } else if (state.lockResets < LOCK_RESET_MAX) {
+    state.lockTimer = 0;
+    state.lockResets += 1;
+  }
+  // 리셋 한도 초과: lockTimer 그대로 두어 자연스럽게 락 진행.
+}
+
 function tryMove(dx, dy) {
   const p = state.current;
   if (!p) return false;
   if (!collides(p, p.x + dx, p.y + dy, p.r)) {
     p.x += dx; p.y += dy;
-    if (state.locking && dy === 0) state.lockTimer = 0; // 무브 락 리셋
     if (dy !== 0) {
+      // 세로 이동(중력/소프트드롭): 락 상태 즉시 해제. step에서 다음 충돌 시 다시 진입.
       state.locking = false;
       state.lockTimer = 0;
+    } else {
+      refreshLockAfterMove();
     }
     return true;
   }
@@ -322,7 +343,7 @@ function tryRotate(dir) {
       p.x += kx;
       p.y -= ky;
       p.r = to;
-      state.lockTimer = 0;
+      refreshLockAfterMove();
       return true;
     }
   }
@@ -341,12 +362,6 @@ function hardDrop() {
   lockPiece();
 }
 
-function softDropTick(dt) {
-  if (!state.softDrop) return;
-  state.fallTimer += dt * 20; // 빠른 하강
-  step();
-}
-
 function step() {
   const p = state.current;
   if (!p) return;
@@ -362,6 +377,7 @@ function step() {
       if (!state.locking) {
         state.locking = true;
         state.lockTimer = 0;
+        state.lockResets = 0;
       }
       break;
     }
@@ -623,15 +639,14 @@ function update(dt) {
   }
   if (!state.current) return;
 
-  // 중력
-  state.fallTimer += dt * (state.softDrop ? state.gravity * 6 : state.gravity);
+  // 중력. softDrop = 정상 중력 * SOFT_DROP_MULT (정통 SRS 정렬, 이중 가속 제거).
+  state.fallTimer += dt * (state.softDrop ? state.gravity * SOFT_DROP_MULT : state.gravity);
   step();
-  softDropTick(dt);
 
   // 락 딜레이
   if (state.locking) {
     state.lockTimer += dt;
-    if (state.lockTimer >= 0.5) {
+    if (state.lockTimer >= LOCK_DELAY) {
       lockPiece();
     }
   }

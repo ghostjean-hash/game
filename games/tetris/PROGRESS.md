@@ -31,6 +31,8 @@
 4.7. 터치 입력 재설계 코드 적용 완료. 아래 드래그(진입 임계 12px 통과 후) = 거리 비례 소프트드롭(칸당 +1점, 단방향, 락 진입 안 함). 좌우 pan과 동일 추적 메커니즘. 위 스와이프 = 즉시 내리기(하드드롭). 길게누름 = 홀드(단일 채널화). 키보드 매핑은 그대로(↓ 정통 소프트드롭, Space 하드드롭, Shift/C 홀드). 실기 검증 대기.
 4.8. 공중 정지 버그 정공법 fix 코드 적용 완료. `lockPiece`에서 활성 락 셀이 vanish 영역(y < VANISH=2)에 걸쳤으면 즉시 `state.over=true` 처리 → 보이지 않는 잔재가 다음 피스와 충돌해 시각상 "공중 정지"로 보이는 증상 차단(정통 테트리스 top-out 정의 정렬). 라인 클리어/스폰 모두 스킵. 실기 재현 검증 대기.
 4.9. 터치 홀드 매핑 폐기 코드 적용 완료. 길게누름(220ms+) → 홀드 발동 제거. 보드 본체에서 무의식적 손가락 정지로 인한 오발 방지. 키보드 Shift/C 홀드는 유지. 실기 검증 대기.
+4.10. 공중 락 버그 fix 코드 적용 완료. 락 딜레이 중 좌우 이동 / 회전 후 새 위치가 빈 공간 위인데도 0.5s 후 락되던 버그. `tryMove(dy=0)` / `tryRotate` 양쪽에서 새 위치 아래 셀 검사 → 빈 공간이면 `state.locking=false`로 fall 재개, 여전히 바닥이면 `lockTimer`만 리셋. 공통 처리 함수 `refreshLockAfterMove`로 추출. 정통 SRS 락 딜레이 룰 정렬. 실기 검증 대기.
+4.11. 코드 review 후속 정리 코드 적용 완료. (a) 락 리셋 한도 도입: `state.lockResets` 추가, `LOCK_RESET_MAX=15`(정통 SRS Move/Rotate Reset Limit) 도달 시 `lockTimer` 리셋 중단 → 무한 회전/이동으로 락 무한 지연 차단. (b) softDrop 이중 가속 정리: `update`의 `*6`과 별도 `softDropTick(*20)` 누적 → 단일 `*SOFT_DROP_MULT(=20)`로 통일. `softDropTick` 함수/호출 제거. (c) `spawn`의 의미 없는 `p.y = (t === "I") ? 0 : 0` 분기 제거(생성자에서 이미 0). (d) 매직 넘버 상수화: `LOCK_DELAY=0.5`, `LOCK_RESET_MAX=15`, `SOFT_DROP_MULT=20`. 실기 검증 대기.
 
 (공통 미해결은 루트 `PROGRESS.md` 4장 참조.)
 
