@@ -20,5 +20,7 @@ import './suites/history.test.js';
 import './suites/ritual.test.js';
 import './suites/reverse.test.js';
 import './suites/saved-sets.test.js';
+// S64.1 (2026-05-10): 비동기 storage 테스트. ESM top-level await로 모든 asyncTest 직렬 평가.
+import './suites/storage-async.test.js';
 
 done();

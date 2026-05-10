@@ -4,13 +4,45 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-10 (Sprint 060~064 - 토스트 위치 / 펄스 시각 정정 / 프리셋 편집 진입 이동 / 부제 폐기 + 자동 list / storage 테스트 보강).
+1.3. **마지막 갱신**: 2026-05-10 (Sprint 060~065 - 토스트 위치 / 펄스 시각 정정 / 프리셋 편집 진입 이동 / 부제 폐기 + 자동 list / storage 테스트 보강 / sync* fetch mock 회귀).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 직전 5 Sprint(060~064)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.86. Sprint 065 완료 - syncDraws / syncDrawsIfNewer fetch mock 회귀 (S64.1, 2026-05-10)
+
+배경: Sprint 064 잔여 백로그 = `syncDraws` / `syncDrawsIfNewer` 2 export 미커버. 본 sprint로 닫음. test framework가 sync only이라 비동기 진입점(`asyncSuite` / `asyncTest`) 신규 도입 + 별도 suite 파일로 격리해 기존 296 테스트 회귀 위험 0.
+
+### 2.86.1. test framework 비동기 확장
+
+- `tests/core.js`: `asyncSuite(name, asyncFn)` + `asyncTest(name, asyncFn)` 신규 export. 기존 `suite` / `test`는 그대로(sync). 호출부 패턴 = `await asyncSuite('...', async () => { await asyncTest('...', async () => {}); });`. ESM top-level await로 import 평가가 모든 asyncTest 끝까지 기다림 → done() 시점 카운트 보장.
+
+### 2.86.2. tests/suites/storage-async.test.js 신설 (9건)
+
+| 분기 | 카운트 | 핵심 |
+|---|---|---|
+| `new-rounds` | 1 | 미러 latest > cached + 정적 번들 갱신 → saveDraws + updated=true |
+| `already-latest` | 1 | 미러 latest === cached → cached 보존 |
+| `mirror-unreachable` | 2 | 미러 fetch throw / ok=false 두 케이스 모두 동일 분기 |
+| `sync-failed` | 2 | 정적 draws.json 비어있음 / fetchedMax <= cachedMax (CI 지연) |
+| syncDraws 단독 | 3 | 새 fetched save / fetched 비면 cached / fetchedMax === cachedMax 등호 포함 |
+
+fetch mock 패턴: `globalThis.fetch`를 일시 교체 후 `finally`로 원복. URL 식별 = `'latest'` / `'draws.json'` includes.
+
+### 2.86.3. 검증
+
+- `node tests/run-node.js` → 296 → **305 / 305 PASS** (9건 신규 모두 통과).
+- 기존 296 sync 테스트 회귀 0 (asyncSuite/asyncTest는 별도 export로 분리).
+- Node 25 polyfill 가드 + globalThis.fetch 호환 확인.
+
+### 2.86.4. 결과
+
+- storage 25 export 중 **25 / 25 모두 커버** (전건 회귀 보장).
+- S64.1 백로그 항목 = 닫힘.
+- 잔여 후속: 2.85.4의 S59.4 라인은 본 sprint와 함께 정리 (이번 PROGRESS 갱신에서 처리).
 
 ## 2.85. Sprint 064 완료 - storage 테스트 커버리지 보강 + 마이그레이션 회귀 (S64 / S59.4 백로그 1번 소화, 2026-05-10)
 
@@ -39,7 +71,7 @@
 
 ### 2.85.4. 잔여 / 후속
 
-- S64.1 (대기): syncDraws / syncDrawsIfNewer fetch mock + 분기 회귀 (`new-rounds` / `already-latest` / `mirror-unreachable` / `sync-failed`).
+- ~~S64.1 (대기)~~ **닫힘 - Sprint 065 (2026-05-10)에서 fetch mock 4분기 회귀 9건 추가. 305/305 PASS. storage 25/25 커버.**
 - S59.4 백로그 항목 = 본 sprint로 닫힘. PROGRESS 2.80.4의 S59.4 라인은 다음 정리에서 제거.
 
 ## 2.84. Sprint 063 완료 - 프리셋 부제 폐기 + 묶인 전략 label list 자동 표시 (S63, 2026-05-10)

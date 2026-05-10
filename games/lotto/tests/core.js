@@ -53,6 +53,40 @@ export function test(name, fn) {
   }
 }
 
+// S64.1 (2026-05-10): 비동기 suite. asyncTest 호출을 await로 직렬화.
+//   호출부 패턴: `await asyncSuite('...', async () => { await asyncTest(...); });`
+//   ESM top-level await로 import 평가가 모든 asyncTest 끝까지 기다림 = done() 시점 보장.
+export async function asyncSuite(name, fn) {
+  currentSuite = name;
+  if (IS_BROWSER) {
+    appendDom(`<div class="suite">${escape(name)}</div>`);
+  } else {
+    console.log(`\n  [${name}]`);
+  }
+  await fn();
+}
+
+// S64.1 (2026-05-10): 비동기 테스트(예: fetch mock) 전용. 기존 sync test()와 분리.
+//   호출부가 `await asyncTest(...)`로 직렬화. 카운트 / log 순서 sync test와 동일.
+export async function asyncTest(name, fn) {
+  try {
+    await fn();
+    passed += 1;
+    if (IS_BROWSER) {
+      appendDom(`<div class="case pass">PASS - ${escape(name)}</div>`);
+    } else {
+      console.log(`    PASS  ${name}`);
+    }
+  } catch (err) {
+    failed += 1;
+    if (IS_BROWSER) {
+      appendDom(`<div class="case fail">FAIL - ${escape(name)}: ${escape(err.message)}</div>`);
+    } else {
+      console.log(`    FAIL  ${name}\n          ${err.message}`);
+    }
+  }
+}
+
 export function assertEqual(actual, expected, message = '') {
   if (actual !== expected) {
     throw new Error(`${message} expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
