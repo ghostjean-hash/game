@@ -1,10 +1,14 @@
 // 설정 탭. SSOT: docs/01_spec.md 4장.
-// 캐릭터 관리(T1) + 옵션 + 다구좌 모드 + 휠링 진입(T2) + 면책 + 데이터 + 초기화.
+// 캐릭터 관리(T1) + 프리셋 관리(S61) + 옵션 + 다구좌 모드 + 휠링 진입(T2) + 면책 + 데이터 + 초기화.
 import {
   loadOptions, saveOptions,
   loadDraws, loadCharacters, loadActiveCharacterId,
+  loadPresets, savePresets,
   clearAll,
 } from '../data/storage.js';
+import { DEFAULT_PRESETS, PRESET_SLOT_COUNT } from '../data/numbers.js';
+import { strategyLabel } from './strategy-picker.js';
+import { openPresetEditor } from './preset-editor.js';
 import { plus, close } from './icons.js';
 
 /**
@@ -20,6 +24,7 @@ import { plus, close } from './icons.js';
  *   onOpenWheeling: () => void,
  *   onMultiStrategyToggle: () => void,
  *   onFiveSetsToggle: () => void,
+ *   onPresetsChanged?: () => void,
  * }} handlers
  */
 export function renderSettingsPage(container, handlers) {
@@ -27,11 +32,30 @@ export function renderSettingsPage(container, handlers) {
   const draws = loadDraws();
   const characters = loadCharacters();
   const activeId = loadActiveCharacterId();
+  const presets = loadPresets();
   const lastDraw = draws.length > 0 ? draws[draws.length - 1] : null;
 
   const dataMeta = lastDraw
     ? `<strong>${lastDraw.drwNo}회</strong>까지 반영 · 최근 추첨 ${lastDraw.drwDate}`
     : '<strong>회차 데이터 없음</strong>';
+
+  // S61 (2026-05-10): 프리셋 관리 섹션. 추첨 탭의 "편집" 텍스트 링크가 본 영역으로 이동.
+  // S63 (2026-05-10): subtitle 필드 폐기. 묶인 전략 label list 자동 표시 (추첨 탭 슬롯과 일관).
+  // SSOT: docs/01_spec.md 5.1.5.2.
+  const presetRows = (presets || []).slice(0, PRESET_SLOT_COUNT).map((p, idx) => {
+    const sids = Array.isArray(p?.strategyIds) ? p.strategyIds : [];
+    const strategyLine = sids.map((sid) => strategyLabel(sid)).filter(Boolean).join(' · ');
+    return `
+      <li class="preset-manage-row">
+        <button type="button" class="preset-manage-main" data-preset-id="${escapeAttr(p?.id || `preset-${idx + 1}`)}"
+                data-preset-idx="${idx}"
+                aria-label="슬롯 ${idx + 1} 편집">
+          <span class="preset-manage-label">${escapeHtml(p?.label || `슬롯 ${idx + 1}`)}</span>
+          <span class="preset-manage-strategies">${escapeHtml(strategyLine || '(전략 없음)')}</span>
+        </button>
+      </li>
+    `;
+  }).join('');
 
   const canDelete = characters.length > 1;
   const charRows = characters.map((c) => {
@@ -64,6 +88,13 @@ export function renderSettingsPage(container, handlers) {
       <button type="button" class="btn-primary char-add" data-action="add-character">
         ${plus()} 새 캐릭터 추가
       </button>
+    </section>
+
+    <section class="stats-section">
+      <h2 class="stats-title">프리셋 관리</h2>
+      <p class="stats-note">추첨 탭의 프리셋 ${PRESET_SLOT_COUNT}슬롯을 편집합니다. 슬롯 행을 누르면 라벨 / 부제 / 묶을 전략을 바꿀 수 있어요.</p>
+      <ul class="preset-manage-list">${presetRows}</ul>
+      <button type="button" class="btn-secondary" data-action="reset-presets">기본값 복원</button>
     </section>
 
     <section class="stats-section">
@@ -154,6 +185,24 @@ export function renderSettingsPage(container, handlers) {
       const id = el.dataset.charDelId;
       handlers.onDeleteCharacter(id);
     });
+  });
+
+  // S61 (2026-05-10): 프리셋 관리 - 슬롯 행 클릭 시 편집 모달, 기본값 복원 버튼.
+  container.querySelectorAll('[data-preset-idx]').forEach((el) => {
+    el.addEventListener('click', () => {
+      openPresetEditor(loadPresets(), () => {
+        // 모달 저장 후 설정 탭 자체 재렌더 + 추첨 탭 동기화 신호.
+        renderSettingsPage(container, handlers);
+        if (typeof handlers.onPresetsChanged === 'function') handlers.onPresetsChanged();
+      });
+    });
+  });
+  container.querySelector('[data-action="reset-presets"]')?.addEventListener('click', () => {
+    const ok = window.confirm('기본 3종 (균형 / 분산파 / 운세파)으로 되돌릴까요?');
+    if (!ok) return;
+    savePresets(JSON.parse(JSON.stringify(DEFAULT_PRESETS)));
+    renderSettingsPage(container, handlers);
+    if (typeof handlers.onPresetsChanged === 'function') handlers.onPresetsChanged();
   });
 }
 

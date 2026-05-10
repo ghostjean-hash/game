@@ -81,7 +81,8 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
  * 추천 리스트 액션 바.
  * S29.1 (2026-05-04): grid 3열 (좌 spacer / 가운데 + 1세트 + 5세트 / 우측 전체 비우기). hint는 두 번째 줄 가운데.
  * S32 (2026-05-07): poolExhausted 시 + 버튼 비활성. 우선순위 cap > poolExhausted > 정상.
- *   토스트 슬롯(`[data-role="saved-toast"]`) 추가 (정상 / 부분 중복 케이스).
+ * S60 (2026-05-10): 액션바 인라인 토스트 슬롯 폐기. 토스트는 화면 하단 fixed 팝업으로 이동 (main.js flashSavedSetsToast).
+ *   SSOT: docs/02_data.md 1.5.8.6.6.
  * 누적 cap 도달 시 + 버튼 disable. list 비어있으면 전체 비우기 disable.
  */
 export function savedSetsAddBarHtml(currentCount, cap, poolExhausted = false) {
@@ -109,7 +110,6 @@ export function savedSetsAddBarHtml(currentCount, cap, poolExhausted = false) {
         <button type="button" class="saved-sets-clear" data-action="clear-saved-sets" aria-label="추천 리스트 모두 삭제" title="전체 비우기" ${clearDisabledAttr}>${trash('icon icon-sm')}<span class="saved-clear-text">전체 비우기</span></button>
       </div>
       ${hint}
-      <div class="saved-add-toast" data-role="saved-toast" role="status" aria-live="polite" hidden></div>
     </div>
   `;
 }

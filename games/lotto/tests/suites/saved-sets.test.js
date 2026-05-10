@@ -8,6 +8,7 @@ import { mixSeeds } from '../../src/core/random.js';
 import {
   SAVED_SETS_CAP, SAVED_SETS_RETRY_MAX,
   SAVED_SETS_TOAST_NORMAL_MS, SAVED_SETS_TOAST_PARTIAL_MS,
+  SAVED_SETS_JUST_ADDED_MS,
   SAVED_SETS_SALT_BASE,
   ZODIAC_LUCKY,
 } from '../../src/data/numbers.js';
@@ -156,10 +157,13 @@ suite('core/saved-sets - 헬퍼', () => {
 // SSOT: docs/01_spec.md 5.2.5.4 / docs/02_data.md 1.5.8.5 ~ 1.5.8.6.
 // render 호출부의 재시도 루프를 단위 테스트 차원에서 시뮬한다.
 suite('S32 풀 한계 재시도 - 별자리 좁은 풀', () => {
-  test('상수 export 확인 (RETRY_MAX / TOAST_*)', () => {
+  test('상수 export 확인 (RETRY_MAX / TOAST_* / JUST_ADDED)', () => {
     assertEqual(SAVED_SETS_RETRY_MAX, 50);
     assertEqual(SAVED_SETS_TOAST_NORMAL_MS, 1500);
     assertEqual(SAVED_SETS_TOAST_PARTIAL_MS, 2500);
+    // S60 (2026-05-10): 카드 펄스 시간. 토스트보다 짧아야 (1000 < 1500 / 2500).
+    assertEqual(SAVED_SETS_JUST_ADDED_MS, 1000);
+    assertTrue(SAVED_SETS_JUST_ADDED_MS < SAVED_SETS_TOAST_NORMAL_MS);
   });
 
   function simulateBatch({ poolKey, batchN, baseSeed = 12345, drwNo = 1223, startIdx = 0 }) {

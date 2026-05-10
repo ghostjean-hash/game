@@ -46,8 +46,10 @@
   --line-height: 1.5;
 
   /* z-index tokens
-     base는 z-index 레이어 시스템의 명시적 0 기준선(타 토큰 의미 고정용). 직접 참조 의도 없어도 보존. */
+     base는 z-index 레이어 시스템의 명시적 0 기준선(타 토큰 의미 고정용). 직접 참조 의도 없어도 보존.
+     S60 (2026-05-10): toast 추가. overlay(bottom-tabs) 위, modal 아래. SSOT: docs/02_data.md 1.5.8.6.6. */
   --z-base: 0;
   --z-overlay: 10;
+  --z-toast: 50;
   --z-modal: 100;
 }

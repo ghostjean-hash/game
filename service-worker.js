@@ -31,7 +31,11 @@
 // v37 (2026-05-08): lotto S43.6 (Sprint 056) - 호환 wrapper 폐기. recommend / distributeCounts 통째 삭제. 테스트 28건 호출 일괄 recommendMulti로 변환. recommendMulti 진입점에 ctx.strategyId 호환 처리 추가.
 // v38 (2026-05-09): lotto S43.7 hotfix - main.js의 잔존 'recommend' import 제거 (Sprint 056에서 폐기됐는데 import만 남아 모든 페이지 빈 화면). 자비스 사전 검증 누락 사고. 전 모듈 import 검증 통과.
 // v39 (2026-05-09): lotto S43.7 hotfix2 - DEFAULT_PRESETS 차별화 복원 (균형/분산파/운세파 묶음 다름). 옛 안내 카피 갱신. loadPresets 마이그레이션(모두 직감 단독이면 자동 reset). 시뮬: 모든 프리셋 1-9 19.5-19.7%, 인접 0.66-0.68 정상.
-const CACHE_VERSION = "v39";
+// v40 (2026-05-10): lotto S60 - 누적 추천 토스트를 액션바 인라인 → 화면 하단 fixed 팝업으로 이동 + 추가된 세트 카드 1초 펄스("어디에" 시각 연결). 누적 리스트가 길어 액션바 밀려도 메시지 인지 보장. SSOT: docs/01_spec.md 5.2.5.4 / docs/02_data.md 1.5.8.6.6~7. 신규 토큰 --z-toast / 신규 상수 SAVED_SETS_JUST_ADDED_MS.
+// v41 (2026-05-10): lotto S61 - 프리셋 편집 진입점을 추첨 탭 "편집" 텍스트 링크 → 설정 탭 "프리셋 관리" 섹션으로 이동. 추첨 탭 정리(편집은 정착 후 자주 발생 X). 설정 탭 슬롯 행 클릭 = 기존 모달 재활용. 기본값 복원 버튼 설정 탭에도 노출. dead CSS(.preset-edit-row / .preset-edit-link) 폐기.
+// v42 (2026-05-10): lotto S62 - is-just-added 펄스 시각 정정. inset 외곽선 + radius-sm → ::before pseudo + radius-md + 외부 글로우 + 좌우 8px inset. row 좌우 padding 0이라 외곽선이 "추천N" 라벨에 붙어 답답하던 사용자 보고 fix. row layout 영향 0(pseudo absolute). SSOT: docs/02_data.md 1.5.8.6.7.
+// v43 (2026-05-10): lotto S63 - 프리셋 슬롯 부제 폐기 + 묶인 전략 label list 자동 표시. 사용자 보고 "애매한 설명보다 실제 선택된 전략 표시" 반영. PRESET_SUBTITLE_MAX 상수 / DEFAULT_PRESETS subtitle 필드 / 편집 모달 부제 입력 / .preset-subtitle / .preset-manage-subtitle 모두 폐기. 추첨 탭 .preset-strategy-line + 설정 탭 .preset-manage-strategies(strategyLabel 통일) 자동 생성. SSOT: docs/01_spec.md 5.1.5 / docs/02_data.md 1.20.
+const CACHE_VERSION = "v43";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

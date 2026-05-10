@@ -1,6 +1,9 @@
-// 프리셋 3슬롯 버튼 + 편집 진입. SSOT: docs/01_spec.md 5.1.5 (S36, 2026-05-08).
-// S36.2 (2026-05-08): UX 정돈 - 타이틀 / ✏ 박스 / 칩 폐기. 슬롯 + 편집 텍스트 링크 단일 구조.
+// 프리셋 3슬롯 버튼. SSOT: docs/01_spec.md 5.1.5 (S36, 2026-05-08).
+// S36.2 (2026-05-08): UX 정돈 - 타이틀 / ✏ 박스 / 칩 폐기.
+// S61 (2026-05-10): 추첨 탭의 "편집" 텍스트 링크 폐기. 편집 진입은 설정 탭 - 프리셋 관리로 일원화.
+// S63 (2026-05-10): 사용자 입력 부제 → 묶인 전략 label list 자동 표시. "애매한 설명"보다 정직한 노출.
 import { PRESET_SLOT_COUNT } from '../data/numbers.js';
+import { strategyLabel } from './strategy-picker.js';
 
 /**
  * 프리셋 3슬롯 버튼 HTML.
@@ -21,15 +24,18 @@ export function presetButtonsHtml(presets, activeStrategyIds) {
       `;
     }
     const active = isSamePresetActive(p.strategyIds, activeStrategyIds);
+    // S63 (2026-05-10): 묶인 전략 label list 자동 표시 (예: "최신 · 별자리 · 직감").
+    const sids = Array.isArray(p.strategyIds) ? p.strategyIds : [];
+    const strategyLine = sids.map((sid) => strategyLabel(sid)).filter(Boolean).join(' · ');
     return `
       <button type="button"
               class="preset-slot${active ? ' is-active' : ''}"
               data-preset-id="${p.id}"
               data-action="preset-pick"
               aria-pressed="${active ? 'true' : 'false'}"
-              aria-label="${escapeHtml(p.label)} - ${escapeHtml(p.subtitle || '')}">
+              aria-label="${escapeHtml(p.label)} - ${escapeHtml(strategyLine)}">
         <span class="preset-label">${escapeHtml(p.label || '')}</span>
-        ${p.subtitle ? `<span class="preset-subtitle">${escapeHtml(p.subtitle)}</span>` : ''}
+        ${strategyLine ? `<span class="preset-strategy-line">${escapeHtml(strategyLine)}</span>` : ''}
       </button>
     `;
   }).join('');
@@ -37,12 +43,6 @@ export function presetButtonsHtml(presets, activeStrategyIds) {
   return `
     <section class="preset-section" aria-label="추천 프리셋">
       <div class="preset-list" role="group">${buttons}</div>
-      <div class="preset-edit-row">
-        <button type="button"
-                class="preset-edit-link"
-                data-action="preset-edit"
-                aria-label="프리셋 편집">편집</button>
-      </div>
     </section>
   `;
 }

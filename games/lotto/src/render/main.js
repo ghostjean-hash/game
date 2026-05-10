@@ -9,7 +9,7 @@ import { reverseSearch } from '../core/reverse.js';
 import { characterSlotsHtml } from './character-slots.js';
 import { strategyTabsHtml } from './strategy-tabs.js';
 import { presetButtonsHtml } from './preset-buttons.js';
-import { openPresetEditor } from './preset-editor.js';
+// S61 (2026-05-10): preset-editor 직접 import 폐기. 진입은 settings-page.js로 위임.
 import { nextDrawCardHtml, startCountdown } from './next-draw-card.js';
 import { nextDraw } from '../core/schedule.js';
 import { renderStatsPage } from './stats-page.js';
@@ -45,6 +45,7 @@ import {
   STRATEGY_DEFAULT, DEFAULT_DRWNO_FALLBACK,
   SAVED_SETS_CAP, SAVED_SETS_BATCH_SMALL, SAVED_SETS_BATCH_LARGE, SAVED_SETS_SALT_BASE,
   SAVED_SETS_RETRY_MAX, SAVED_SETS_TOAST_NORMAL_MS, SAVED_SETS_TOAST_PARTIAL_MS,
+  SAVED_SETS_JUST_ADDED_MS,
   STRATEGY_CATEGORIES,
   DRAW_TZ_OFFSET_MIN,
 } from '../data/numbers.js';
@@ -385,6 +386,12 @@ function addSavedSetsBatch(batchN) {
 
   renderApp();
 
+  // S60 (2026-05-10): 추가된 카드 펄스 마킹. 토스트 / 배너와 독립.
+  //   토스트가 "몇 세트", 펄스가 "어디에" 역할 분리. SSOT: docs/02_data.md 1.5.8.6.7.
+  if (totalAdded > 0) {
+    markSavedSetsJustAdded(startIdx, totalAdded);
+  }
+
   // 토스트 분기 (A / B). C는 배너로 처리 (rerender), D는 액션바 hint.
   if (!isCap && !exhausted) {
     if (totalAdded === batchN && totalDup === 0) {
@@ -396,19 +403,52 @@ function addSavedSetsBatch(batchN) {
 }
 
 /**
- * S32 (2026-05-07): 추천 리스트 액션바의 토스트 슬롯에 일시 메시지 표시.
- * SSOT: docs/02_data.md 1.5.8.6 (토스트 카피 + 노출 시간 상수).
+ * S32 (2026-05-07) / S60 (2026-05-10): 화면 하단 fixed 팝업 토스트.
+ * 액션바 인라인 슬롯(`[data-role="saved-toast"]`)은 폐기. body 직속 lazy-init 컨테이너로 이동.
+ * 누적 리스트가 길어 액션바가 화면 밖으로 밀려도 메시지 인지 보장.
+ * SSOT: docs/02_data.md 1.5.8.6.6 (위치 / z-index) / 1.5.8.6 (카피 + 시간 상수).
  */
 function flashSavedSetsToast(message, durationMs) {
-  const el = document.querySelector('[data-role="saved-toast"]');
-  if (!el) return;
+  let el = document.getElementById('saved-toast-root');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'saved-toast-root';
+    el.className = 'saved-toast-root';
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
+    document.body.appendChild(el);
+  }
   el.textContent = message;
-  el.hidden = false;
+  el.classList.add('is-visible');
+  // 같은 메시지 + 같은 호출 시점에만 숨기기 (연속 호출 시 가장 마지막만 유효).
+  const token = `${message}#${Date.now()}`;
+  el.dataset.token = token;
   setTimeout(() => {
-    if (el && el.textContent === message) {
-      el.hidden = true;
+    if (el && el.dataset.token === token) {
+      el.classList.remove('is-visible');
     }
   }, durationMs);
+}
+
+/**
+ * S60 (2026-05-10): 추가된 세트 카드 펄스 마킹.
+ * 인덱스 `start ~ start + count - 1`에 `is-just-added` 클래스 부여, JUST_ADDED_MS 후 제거.
+ * render 사이에 DOM이 새로 만들어지면 자동 사라짐(querySelector miss는 무시).
+ * SSOT: docs/02_data.md 1.5.8.6.7.
+ */
+function markSavedSetsJustAdded(start, count) {
+  for (let i = 0; i < count; i += 1) {
+    const idx = start + i;
+    const row = document.querySelector(`.saved-set-row[data-saved-idx="${idx}"]`);
+    if (!row) continue;
+    row.classList.add('is-just-added');
+    setTimeout(() => {
+      // row가 다음 render로 사라졌으면 무시. 살아있으면 클래스 제거.
+      if (row && row.isConnected) {
+        row.classList.remove('is-just-added');
+      }
+    }, SAVED_SETS_JUST_ADDED_MS);
+  }
 }
 
 // S34 (2026-05-08): 'pairTracker' 잔존 ID 추가 필터 (짝꿍 폐기 마이그레이션). S8 mbti 패턴 재사용.
@@ -491,7 +531,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     ${addBarHtml}
 
     ${/* S36(2026-05-08): 전략 picker → 프리셋 3슬롯 버튼.
-         사용자가 자주 쓰는 묶음을 1버튼. 편집 모달로 묶음 / 라벨 / 부제 변경. */ ''}
+         사용자가 자주 쓰는 묶음을 1버튼. 편집은 설정 탭 - 프리셋 관리(S61, 2026-05-10). */ ''}
     ${presetButtonsHtml(state.presets, strategyIds)}
 
     ${/* S17(2026-05-02): 행운 쌓기를 전략 탭 하위로 이동 (이전 = 히어로 직하). */ ''}
@@ -639,12 +679,8 @@ function renderHome(content) {
   });
 
   // S36(2026-05-08): 프리셋 편집 모달 진입.
-  content.querySelector('[data-action="preset-edit"]')?.addEventListener('click', () => {
-    openPresetEditor(state.presets, (newPresets) => {
-      state.presets = newPresets;
-      renderApp();
-    });
-  });
+  // S61(2026-05-10): 추첨 탭 진입점 폐기. 편집은 설정 탭 - 프리셋 관리에서. 본 핸들러는 dead.
+  //   (data-action="preset-edit" 셀렉터가 추첨 탭 DOM에 없어 미동작. ?. 가드로 안전.)
 
   // S36(2026-05-08): 캐릭터 카드 접힘 / 펼침 토글 + localStorage 학습.
   content.querySelectorAll('[data-action="char-card-toggle"]').forEach((el) => {
@@ -775,6 +811,10 @@ function renderApp() {
         // S4-T1: 5세트 토글 후 state 갱신
         state.options = loadOptions();
         renderApp();
+      },
+      // S61 (2026-05-10): 설정 탭 - 프리셋 관리에서 편집 / 기본값 복원 후 추첨 탭 동기화 신호.
+      onPresetsChanged: () => {
+        state.presets = loadPresets();
       },
     });
   }

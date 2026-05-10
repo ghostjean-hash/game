@@ -96,6 +96,9 @@ export const SAVED_SETS_RETRY_MAX = 50;
 // S32 (2026-05-07): 누적 세트 결과 토스트 노출 시간 (밀리초). SSOT: docs/02_data.md 1.5.8.2.
 export const SAVED_SETS_TOAST_NORMAL_MS = 1500;
 export const SAVED_SETS_TOAST_PARTIAL_MS = 2500;
+// S60 (2026-05-10): 추가된 세트 카드 펄스 시간(밀리초). SSOT: docs/02_data.md 1.5.8.2 / 1.5.8.6.
+//   토스트와 동시 시작, 토스트보다 먼저 종료. 토스트 = "몇 세트", 펄스 = "어디에" 역할 분리.
+export const SAVED_SETS_JUST_ADDED_MS = 1000;
 
 // ~~OBJECTIVE_STRATEGIES / OBJECTIVE_SEED_SALT~~ S43.4 (2026-05-08, Sprint 054) 폐기.
 //   객관 vs 시드 의존 분기 폐기. 새 architecture는 모든 strategy가 samplingSeed = mix(seed, drwNo) 의존.
@@ -271,34 +274,33 @@ export const ANIMAL_SIGNS = Object.freeze([
   { id: 'pig', label: '돼지' },
 ]);
 
-// 1.20. 프리셋 시스템 (S36, 2026-05-08). SSOT: docs/02_data.md 1.20.
+// 1.20. 프리셋 시스템 (S36, 2026-05-08 / S63 부제 폐기, 2026-05-10). SSOT: docs/02_data.md 1.20.
 // 사용자가 자주 쓰는 전략 묶음을 1버튼으로. 메인 = 3슬롯 고정.
-// 사용자 편집 가능 (라벨 / 부제 / 묶음). 슬롯 추가 / 삭제는 불가.
+// 사용자 편집 가능 (라벨 / 묶음). 슬롯 추가 / 삭제는 불가.
+// S63 (2026-05-10): 부제 필드 폐기. 추첨 탭 슬롯 두 번째 행은 묶인 전략 label list 자동 표시.
 export const PRESET_SLOT_COUNT = 3;
 export const PRESET_LABEL_MAX = 8;
-export const PRESET_SUBTITLE_MAX = 20;
+// ~~PRESET_SUBTITLE_MAX~~ S63 (2026-05-10) 폐기. 부제 필드 자체 폐기.
 
 // 기본 프리셋 3종 (사용자 첫 진입 또는 reset 시 주입).
 // S43.7 (2026-05-09): 모든 프리셋이 직감 단독으로 동일 묶음이라 "전략 내용 똑같다" 불만.
 //   새 architecture(S43)는 가중 보너스 합성 + 단일 추첨이라 1번대 편향 / 인접 클러스터링 없음 (시뮬 검증).
 //   → 옛 차별화 묶음 복원 안전.
+// S63 (2026-05-10): subtitle 필드 제거.
 export const DEFAULT_PRESETS = Object.freeze([
   Object.freeze({
     id: 'preset-1',
     label: '균형',
-    subtitle: '최신·운세·직감 한 번에',
     strategyIds: Object.freeze([STRATEGY_TREND_FOLLOWER, STRATEGY_ASTROLOGER, STRATEGY_INTUITIVE]),
   }),
   Object.freeze({
     id: 'preset-2',
     label: '분산파',
-    subtitle: '남들이 덜 고르는 조합',
     strategyIds: Object.freeze([STRATEGY_REGRESSIONIST, STRATEGY_INTUITIVE, STRATEGY_BALANCER]),
   }),
   Object.freeze({
     id: 'preset-3',
     label: '운세파',
-    subtitle: '서양·동양·원소 운세',
     strategyIds: Object.freeze([STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_ZODIAC_ELEMENT]),
   }),
 ]);

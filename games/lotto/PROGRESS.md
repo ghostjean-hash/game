@@ -4,919 +4,161 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-09 (Sprint 059 - Node 매트릭스 + dead 토큰 + UI 흰색 토큰화 + chip 색 SSOT 정합).
+1.3. **마지막 갱신**: 2026-05-10 (Sprint 060~064 - 토스트 위치 / 펄스 시각 정정 / 프리셋 편집 진입 이동 / 부제 폐기 + 자동 list / storage 테스트 보강).
 1.4. **적용 표준**: html-game v0.2.
-1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 직전 5 Sprint(040~044)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
+1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 직전 5 Sprint(060~064)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint)
 
 > 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
 
-## 2.80. Sprint 059 완료 - Node 매트릭스 + dead 토큰 + UI 흰색 토큰화 + chip 색 SSOT 정합 (S59, 2026-05-09)
+## 2.85. Sprint 064 완료 - storage 테스트 커버리지 보강 + 마이그레이션 회귀 (S64 / S59.4 백로그 1번 소화, 2026-05-10)
 
-배경: Sprint 058 전면 검증의 후속 정리. 발견 결함을 시각 회귀 위험도 순으로 단계 분할(S59.1~S59.3). 시각 회귀 0 영역부터 처리.
+배경: PROGRESS 2.80.4의 잔여 항목 "S59.4 storage 테스트 커버리지 16/25 보강". 옵션 B 권장안 진행 - 동기 export 14건 round-trip + 마이그레이션 + clearAll/options 보너스. sync* 2건은 fetch mock 도입 필요라 별도 sprint(미래 S64.1)로 분리.
 
-### 2.80.1. 단계 1 - CI Node 매트릭스 + dead 토큰 정리 (S59.1, 커밋 4b2ebf3)
+### 2.85.1. 추가 회귀 22건
 
-- `.github/workflows/test-lotto.yml`: Node 단일 `20` → 매트릭스 `['18','20','22']` LTS 호환 검증. `fail-fast: false` (어느 LTS 실패해도 다른 버전 결과 노출). S58에서 Node 25 polyfill 가드는 강화했으나 CI 단일 버전 회귀 위험 차단.
-- `styles/tokens.css`:
-  * `--color-success` 삭제: UI 영역 미참조 + 의미 중복(운세 good 색은 `colors.js FORTUNE_COLORS`).
-  * `--z-base: 0` 보존 + 의도 주석(z-index 명시적 0 기준선).
-- 검증: 274/274 PASS. main.css 미참조 토큰 1건 삭제 → 시각 영향 0.
-
-### 2.80.2. 단계 2 - UI 흰색 hex → `var(--color-on-accent)` 토큰 마이그레이션 (S59.2, 커밋 b6914f5)
-
-배경: S58 검증에서 main.css 인라인 hex 64건 발견. 시각 회귀 0 보장 영역(흰색 9건)부터 우선 처리.
-
-- `styles/main.css`: `color: #ffffff` 7건 + `color: #fff` 2건 = 9건 → `color: var(--color-on-accent)`.
-- 토큰 정의: `tokens.css --color-on-accent: #ffffff` (S29.4 기존 정의). CSS 컴파일 결과 byte-identical, 시각 회귀 0.
-- 적용 셀렉터: `.btn-primary` / `.strategy-short` / `.slot-class` / `.num` / `.modal-confirm` / `.num-source-tag` / `.reverse-cell.is-picked` / `.reverse-best-draw-balls .num` / `.ritual-row-icon.is-done`.
-- 검증: 274/274 PASS. 잔존 `color: #(fff|ffffff)` 0건.
-
-### 2.80.3. 단계 3 - chip / ritual / 변동성 색 SSOT 정의 추가 (S59.3, 본 커밋)
-
-배경: main.css 인라인 hex 잔여 영역 중 게임 데이터 성격(전략 출처 / chip / 의식 / 변동성)을 SSOT 명문화. 단계 3 스코프는 **정의 추가까지**. 소비처화는 별도 sprint.
-
-- `src/data/colors.js`: 신규 export 3건.
-  * `CATEGORY_CHIP_COLORS` - stats / mapping / random (sky / pink / gray, lighter chip 톤. 출처 태그 진한 톤보다 한 단계 옅음).
-  * `RITUAL_CHIP_COLORS` - bg / fg / border / accent / warm (yellow~amber 5 stop. 행운 의식 row 활성 / 만땅 banner / 보너스 chip / cta 일관 톤).
-  * `VARIABILITY_CHIP_COLORS` - active(weekly, 녹색) / inactive(lifetime, 회색). inactive border `#d1d5db`는 `RANK_MISS_COLOR`와 의도된 일치(둘 다 비활성 시각 의미).
-- `docs/02_data.md` SSOT 신설:
-  * 1.19.8 행운 의식 chip / banner / cta 색 (5 키 표).
-  * 2.8 카테고리 chip 색 (stats / mapping / random 표).
-  * 2.9 변동성 chip 색 (active / inactive 표 + RANK_MISS_COLOR 중복 의도 명시).
-- 정합 정책: colors.js hex와 main.css 인라인 hex가 동기. 한쪽 변경 시 양쪽 갱신. 단일 소비처화는 후속 sprint.
-- 검증: import 측 영향 0건(정의만 추가, 소비처 0). 274/274 PASS 유지 예상.
-
-### 2.80.4. 잔여 / 후속 sprint 후보
-
-- S59.4 (대기): `tests/suites/storage.test.js` 커버리지 16/25 → 보강.
-- chip / ritual / 변동성 색 단일 소비처화 (별도 sprint): main.css 인라인 hex → colors.js 단일 소비처화 경로 결정(CSS 변수 주입 vs JS render inline style) + 마이그레이션 + 시각 회귀 검증.
-
-## 2.79. Sprint 058 완료 - 전체 재검증 + 매직 넘버 정리 + Node 25 가드 (S58, 2026-05-09)
-
-배경: 사용자 지시 "전체 코드 재검증, 정합성 검증, 문서 검증". 4영역(테스트 / docs / 코드 절대 규칙 / docs-code 일치) 병렬 점검.
-
-### 2.79.1. 검증 발견
-
-| 영역 | 결과 | 결함 |
+| 그룹 | 건수 | 핵심 |
 |---|---|---|
-| 테스트 회귀 | FAIL 4건 | Node 25.7 환경 (storage.test.js) |
-| 문서 정합성 | 양호 | 거짓 양성 3건 |
-| 코드 절대 규칙 | 위반 3건 | 매직 넘버 (색상 / KST / 파티클) |
-| docs-code 일치 | 양호 | - |
-| hotfix S43.7 회귀 | PASS | - |
+| 통계 캐시 round-trip | 6건 | numberStats / bonusStats / cooccur 기본 null + round-trip |
+| 활성 캐릭터 ID | 2건 | 기본 null + round-trip |
+| 프리셋 round-trip + 마이그레이션 | 5건 | 기본값 deep clone / round-trip / S43.7 직감-단독 자동 reset / 사용자 편집 흔적 보존 / S63 subtitle 잔존 throw 없이 반환 |
+| charCardCollapsed | 4건 | 기본 false / true round-trip / false round-trip / 비-bool 정규화 |
+| ritualState | 2건 | 기본 null + round-trip |
+| options 마이그레이션 + clearAll PREFIX | 3건 | 누락 키 자동 채움 / S19 multiStrategy 폐기 키 무시 / clearAll이 lotto_ 외부 키 보존 |
 
-### 2.79.2. fix #1 - tests/run-node.js polyfill 가드 강화
+### 2.85.2. 변경 파일
 
-- 원인: Node 25.7이 `localStorage`를 빈 builtin 객체(메서드 없음)로 노출. 기존 `typeof === 'undefined'` 가드가 빈 객체 통과시켜 polyfill 미주입 → `setItem is not a function` 4건.
-- fix: 가드 조건 = `'undefined' OR setItem 함수 부재`. Node 18/20/25 모두 호환.
+- `tests/suites/storage.test.js`: 64줄 → 약 230줄. 6 suite 신설. import에 누락된 14 export + DEFAULT_PRESETS 추가.
 
-### 2.79.3. fix #2 - 매직 넘버 정리 (CLAUDE.md 절대 규칙 #2 위반)
+### 2.85.3. 검증
 
-| 파일 | 위반 | 위탁 |
-|---|---|---|
-| `render/history-page.js` | RANK_COLORS 6 hex + 미적중 `#d1d5db` | `colors.js` `RANK_GLOW_COLORS` 재사용 + `RANK_MISS_COLOR` 신설 |
-| `render/ritual-particles.js` | 6개 인라인(개수 / 시간 / 픽셀 / 색상 2종) | `numbers.js` `RITUAL_PARTICLE_*` + `colors.js` `RITUAL_PARTICLE_COLORS` 신설 |
-| `render/main.js:228, 319` | KST 오프셋 `9 * 3600 * 1000` 2회 | `numbers.js` `DRAW_TZ_OFFSET_MIN` 재사용. 모듈 상단 `KST_OFFSET_MS` 도출 |
+- `node tests/run-node.js` → 274 → **296 / 296 PASS** (22건 신규 모두 통과).
+- 미커버 export 잔여: `syncDraws` / `syncDrawsIfNewer` 2건. fetch mock 패턴 도입과 함께 별도 sprint(S64.1).
+- Node 25 polyfill 가드(S58 fix)에서도 정상 동작 확인.
 
-### 2.79.4. docs SSOT 갱신
+### 2.85.4. 잔여 / 후속
 
-- `docs/02_data.md` 1.19.7 신설: 만땅 진입 파티클 버스트 상수 표 (5종).
-- `docs/02_data.md` 2.3 갱신: "적중 등수 글로우" → "적중 등수 색", 미적중 항목 추가, 사용처 명시.
+- S64.1 (대기): syncDraws / syncDrawsIfNewer fetch mock + 분기 회귀 (`new-rounds` / `already-latest` / `mirror-unreachable` / `sync-failed`).
+- S59.4 백로그 항목 = 본 sprint로 닫힘. PROGRESS 2.80.4의 S59.4 라인은 다음 정리에서 제거.
 
-### 2.79.5. 검증
+## 2.84. Sprint 063 완료 - 프리셋 부제 폐기 + 묶인 전략 label list 자동 표시 (S63, 2026-05-10)
 
-- `node tests/run-node.js` → **274/274 PASS** (Node 25 환경에서 처음 풀 그린).
-- 전 모듈 ESM import 재검증 통과 (colors / numbers / history-page / ritual-particles / main.js).
-- `grep -n "#[0-9a-f]\{6\}\|9 \* 3600 \* 1000"` render/ → 0건 (인라인 hex / KST 매직 잔존 0).
+배경: 사용자 보고 "전략 버튼 안 서브 문자열에 애매한 설명보다, 실제 선택된 전략을 표시해줘". 사용자 입력 부제(예 "최신·운세·직감 한 번에")가 자비스 정직성 정책과 맞지 않아 "묶인 전략"을 그대로 노출하기로 결정.
 
-### 2.79.6. 거짓 양성 기록 (수정 없음)
-
-- `01_spec.md` L126 "전략 10종" - 실제 10종 정확 (`STRATEGY_DEFAULT`는 `STRATEGY_BLESSED` alias).
-- `01_spec.md` L148 "토글" - L140에서 "토글(선택/해제)"로 정의된 용어. 일관.
-- `02_data.md` L158 blessed "표식" - 시드 의존 의미상 정확.
-
-다음 검증 사이클에서 이 3건은 PASS로 분류해 노이즈 차단.
-
-## 2.78. Sprint 057 완료 - S43.7 hotfix 2건 (2026-05-09)
-
-배경: Sprint 051~056 알고리즘 재구축 series 후 사용자 보고 2건. 자비스 시각 검증 0회 결과.
-
-### 2.78.1. hotfix #1 (SW v38) - 빈 화면
-
-- 사용자 보고: "왜 화면이 아무것도 안뜨지? 작업후 기본적인 테스트도 안하는거야?".
-- 원인: Sprint 056에서 `recommend` wrapper 폐기 후 `main.js` 잔존 import만 남음. ESM 환경에서 존재하지 않는 export import = 모든 페이지 빈 화면.
-- fix: `main.js` import 제거. 전 모듈(render/* core/* data/*) 전수 import 검증 도입.
-- 자비스 사후: 메모리 룰 "코드 변경 후 사용자에게 검증 떠넘기지 않기" 갱신 (사용자가 직접 추가).
-
-### 2.78.2. hotfix #2 (SW v39) - 프리셋 차별화 복원 + 마이그레이션
-
-- 사용자 보고: "왜 다 켜져 있냐? 편집 시 전략 내용 모두 똑같다".
-- 원인: Sprint 053(S43.3) 임시 단순화로 모든 프리셋을 `[STRATEGY_INTUITIVE]` 단독으로 통일. 알고리즘 재구축(S43) 후 옛 묶음 복원해도 안전했지만 `DEFAULT_PRESETS` 복원 잊음.
-- fix:
-  * 균형: `[trendFollower, astrologer, intuitive]` "최신·운세·직감 한 번에"
-  * 분산파: `[regressionist, intuitive, balancer]` "남들이 덜 고르는 조합"
-  * 운세파: `[astrologer, fiveElements, zodiacElement]` "서양·동양·원소 운세"
-- `saved-sets-section.js` 옛 카피 ("아래 전략을 골라 조립식...") → "아래 프리셋을 고르고..." 갱신.
-- `loadPresets` 마이그레이션: 옛 단순화 데이터(모든 슬롯이 직감 단독) 자동 reset → DEFAULT_PRESETS 주입.
-
-### 2.78.3. 시뮬 검증 (1000회 × 4 캐릭터)
-
-| 프리셋 | 1-9 | 10-19 | 20-29 | 30-39 | 40-45 | 0세트 | 인접쌍 |
-|---|---|---|---|---|---|---|---|
-| 한국 실측 | 20% | 22% | 22% | 22% | 13% | 24% | ~1.0 |
-| 균형 | 19.7% | 23.3% | 22.4% | 22.1% | 12.6% | 23.2% | 0.66 |
-| 분산파 | 19.5% | 23.8% | 22.2% | 21.9% | 12.7% | 23.8% | 0.68 |
-| 운세파 | 19.7% | 23.6% | 21.9% | 21.8% | 12.9% | 22.9% | 0.67 |
-
-3 프리셋 모두 한국 실측 안 + 차별화 복원.
-
-### 2.78.4. 검증
-
-- `node tests/run-node.js` → 270/274 PASS (사전 storage 4건 Node 환경 무관).
-- 전 모듈 import 검증 통과.
-
-### 2.78.5. 자비스 사후 정책
-
-- 메모리 룰 갱신 (사용자 직접 추가): "코드 변경 후 사용자에게 검증 떠넘기지 않기 - dev-server 응답 / 문법 / import / PROGRESS 미해결 영향까지 자비스가 사전 점검한 다음 사용자 실기 안내로 넘긴다".
-- 다음 sprint에서 헤드리스 브라우저 시각 검증 도입 검토.
-
-## 2.77. Sprint 056 완료 - 호환 wrapper 폐기 + 테스트 일괄 변환 (S43.6, 2026-05-08)
-
-배경: 사용자 지시 "권장안 진행" - Sprint 055에서 이월된 4.1 호환 wrapper 폐기 작업.
-
-### 2.77.1. recommendMulti 호환 처리
-
-`src/core/recommend.js` `recommendMulti` 진입점에 ctx.strategyId 단일 입력 호환:
-
-- `ctx.strategyIds`가 비어있으면 `ctx.strategyId`로 fallback (단일 list 변환).
-- 둘 다 없으면 throw.
-- 옛 호출 패턴(`recommend({...strategyId: X})`) 그대로 동작.
-
-### 2.77.2. 테스트 일괄 변환
-
-Python 정규식으로 `tests/suites/recommend.test.js`의 `recommend(...)` 호출 28건을 `recommendMulti(...)`로 일괄 치환. 변환 후 import 정리 (`recommend` / `distributeCounts` 제거).
-
-### 2.77.3. wrapper 2개 폐기
-
-| 함수 | 처리 |
-|---|---|
-| `recommend` (단일) | 통째로 삭제 |
-| `distributeCounts` | 통째로 삭제 + 테스트 단언 폐기 |
-
-### 2.77.4. 빈 strategyIds 단언 갱신
-
-옛: `strategyIds: []` 단독 입력 시 throw.
-새: `strategyIds: []` + `strategyId: undefined` 둘 다 없을 때 throw. baseCtx에 strategyId 포함이라 단언 강화.
-
-### 2.77.5. 검증
-
-- `node tests/run-node.js` → 270/274 PASS (사전 storage 4건 Node 환경 무관). 신규 FAIL 0.
-
-### 2.77.6. 결과
-
-- `recommend.js`는 새 architecture(`recommendMulti` / `recommendFiveSets` / `computePoolForStrategies`)만 export.
-- 옛 architecture 흔적 0건.
-- 호환 wrapper / dead code 모두 정리.
-
-## 2.76. Sprint 055 완료 - docs SSOT 정리 + SAJU_RELATION_BOOST 결정 (S43.5, 2026-05-08)
-
-배경: 사용자 지시 "다음 진행" - Sprint 054 후속 권장.
-
-### 2.76.1. docs/02_data.md 옛 architecture 절 폐기 마크 (4.2 부분)
-
-| 절 | 변경 |
-|---|---|
-| 1.4 비율 필터 | 폐기 마크 + 사유. SUM_RANGE / ODD_EVEN / AC_VALUE 폐기 명시 |
-| 1.5.1 객관 vs 시드 의존 | 폐기 마크. OBJECTIVE_STRATEGIES / OBJECTIVE_SEED_SALT 폐기 명시 |
-| 1.5.4 다중 전략 분배 | 폐기 마크. distributeCounts 호환 wrapper 보존 |
-| 1.5.7 객관 전략 시드 분산 | 1.5.1 동반 폐기 |
-
-기존에 이미 폐기 표기된 절 (1.5.6 풀 컷팅 / 1.7 가중치 한계)는 그대로 보존. docs/01_spec.md 5.1.3.0 (S43 architecture)와 교차 참조.
-
-### 2.76.2. SAJU_RELATION_BOOST 보존 결정 (4.3)
-
-| 항목 | 분석 |
-|---|---|
-| 사용 위치 | `src/render/character-card.js` (시각 라벨 전용) |
-| 추첨 영향 | 0 (새 architecture는 fiveElements lucky +0.4 가중만 사용) |
-| 사용자 가치 | 사주 통변성 관계(인성/식상/재성/관성/비견) 시각 노출 = 학설 깊이 표현 |
-| **결정** | **보존**. 시각 정보로 가치 있음. 추첨 영향 0이라 알고리즘 부담 없음 |
-
-### 2.76.3. 4.1 호환 wrapper 폐기 - 별도 sprint 이월
-
-`recommend` (단일) / `distributeCounts` 호환 wrapper 폐기는 35건 테스트 호출 영향. 안전 일괄 변환 위해 별도 sprint(테스트 일괄 갱신 전용) 권장.
-
-### 2.76.4. 검증
-
-- `node tests/run-node.js` → 271/275 PASS (사전 storage 4건 Node 환경 무관). 신규 FAIL 0.
-
-### 2.76.5. 다음 sprint 후보
-
-- **호환 wrapper 폐기 sprint**: recommend.test.js 35건 호출을 recommendMulti로 일괄 변환. 테스트 갱신 전용.
-- 기타 1.5.2 / 1.5.5 / 1.5.8 등 docs 절 점검 (필요 시).
-
-## 2.75. Sprint 054 완료 - 옛 상수 폐기 + main.js 객관 분기 폐기 (S43.4, 2026-05-08)
-
-배경: 사용자 지시 "권장안 진행" - Sprint 053 후속 권장.
-
-### 2.75.1. main.js 객관 vs 시드 의존 분기 폐기 (4.3)
-
-`addSavedSetsBatch` `buildCtxFor`:
-- 옛: `hasObjective` 분기로 객관 전략 → drwNo 변형 / 시드 의존 → seed 변형.
-- 새: 모든 strategy가 samplingSeed = mix(seed, drwNo) 의존 → seed 변형 단일.
-- `OBJECTIVE_STRATEGIES` import 제거.
-
-### 2.75.2. numbers.js 옛 상수 폐기 (4.2)
-
-| 상수 | 사유 |
-|---|---|
-| `SUM_RANGE_MIN` / `SUM_RANGE_MAX` | balancer post-filter 폐기 |
-| `ODD_EVEN_PREFERRED` | balancer post-filter 폐기 |
-| `AC_VALUE_MIN` / `AC_VALUE_MAX` | 미구현 |
-| `STATS_POOL_SIZE` | 풀 컷팅 폐기 |
-| `OBJECTIVE_STRATEGIES` / `OBJECTIVE_SEED_SALT` | 객관 분기 폐기 |
-| `WEIGHT_MAX_BIAS` | applyLuck 폐기 |
-| `STATS_POWER` / `GAP_POWER` | statsToWeights / gapWeights 폐기 |
-
-`WEIGHT_MIN_FLOOR` 보존 (weightedSample 안전망).
-
-### 2.75.3. 호환 wrapper 폐기 (4.1) - 보류
-
-`recommend` (단일) / `distributeCounts` 호환 wrapper는 35건 테스트 호출 영향 → 다음 sprint로 이월. 대신 `STATS_POOL_SIZE` import만 정리.
-
-### 2.75.4. 검증
-
-- `node tests/run-node.js` → 271/275 PASS (사전 storage 4건 Node 환경 무관). 신규 FAIL 0.
-
-### 2.75.5. 다음 sprint 후보
-
-- 호환 wrapper(`recommend` / `distributeCounts`) 폐기 + 35건 테스트 호출 일괄 갱신 (`recommendMulti`로).
-- `docs/02_data.md` 1.4 / 1.5.6 / 1.7 옛 상수 절 정리.
-- `SAJU_RELATION_BOOST` (character-card.js 사용) 새 architecture 통합 또는 보존 결정.
-
-## 2.74. Sprint 053 완료 - dead code 폐기 + 옛 architecture 단언 정리 (S43.3, 2026-05-08)
-
-배경: 사용자 지시 "권장안대로 진행" - Sprint 052 후속 권장 일괄.
-
-### 2.74.1. 변경
-
-| 파일 | 이전 | 이후 |
-|---|---|---|
-| `src/core/recommend.js` | 676줄 (옛 architecture 함수 17개) | ~240줄 (새 architecture만) |
-| `src/core/luck.js` | 88줄 (`preferredNumbers` / `applyLuck` / `applyLuckGrowth` / `rankLuckBonus`) | 33줄 (`applyLuckGrowth` / `rankLuckBonus`만) |
-
-폐기 함수 (`recommend.js` + `luck.js`):
-- `recommend` (단일) - wrapper 보존 (외부 테스트 호환).
-- `distributeCounts` - wrapper 보존 (외부 테스트 호환).
-- `strategyHash` / `poolFromWeights` / `poolFromIndices` / `statsToWeights` / `gapWeights` / `zodiacWeights` / `trendWeights` / `intuitiveWeights` / `passesBalanceFilters` / `zodiacElementOf` / `zodiacElementWeights` / `fiveElementOf` / `fiveElementsWeights` / `balancedSample` / `computeStrategyContext` - 통째로 삭제.
-- `applyLuck` / `preferredNumbers` (luck.js) - 통째로 삭제.
-
-### 2.74.2. 옛 architecture 테스트 단언 정리
-
-`tests/suites/recommend.test.js` + `tests/suites/luck.test.js`에서 옛 architecture 검증 단언 일괄 갱신/폐기:
-
-- `reasons` 메시지 키워드 단언 (`'축복'`, `'fire'`, `'wood'` 등) → 폐기. 새 architecture는 reasons 단순 카운트.
-- 풀 컷팅 효과 6/6 hit → 약화 (hit 비율로 검증).
-- `distributeCounts` 범위 밖 에러 → 폐기 (호환 wrapper).
-- `balancer` 합 121-160 / 홀짝 3:3 통과율 → 폐기 (post-filter 폐기).
-- 객관 strategy "seed 달라도 같은 결과" → 폐기 (객관 개념 폐기).
-- 알 수 없는 전략 에러 → 폐기 (호환 wrapper).
-- `preferredNumbers` / `applyLuck` 단언 (luck.test.js) → 통째로 폐기.
-
-### 2.74.3. recommendFiveSets 통일 (S43.2 후속)
-
-`recommendFiveSets` 안의 시드 변형 단순화:
-- 옛 분기: 객관 전략 → drwNo 변형 / 시드 의존 → seed 변형.
-- 새 단일: seed 변형만. 객관/시드 의존 분기 폐기.
-
-### 2.74.4. 검증
-
-- `node tests/run-node.js` → 271/275 PASS (사전 storage 4건 Node 환경 무관).
-- 신규 회귀 5건 (S43 분포 정상성) 그대로 PASS.
-
-### 2.74.5. 보존 대상 (다음 sprint 검토)
-
-- `recommend` (단일) / `distributeCounts` 호환 wrapper - 다음 sprint에서 테스트 호출도 `recommendMulti`로 일괄 변경 후 wrapper 폐기.
-- `numbers.js` 옛 상수 (`STATS_POOL_SIZE` / `WEIGHT_MAX_BIAS` / `STATS_POWER` / `GAP_POWER` / `SUM_RANGE_*` / `ODD_EVEN_PREFERRED` / `OBJECTIVE_STRATEGIES` / `OBJECTIVE_SEED_SALT` / `SAJU_RELATION_BOOST`) - 일부 외부 사용 (main.js / character-card.js / strategy-tabs.js). 점진 폐기.
-
-## 2.73. Sprint 052 완료 - S43 후속 정리 (S43.2, 2026-05-08)
-
-배경: 사용자 지시 "권장 사항 진행" - Sprint 051 후속 권장 3건 일괄 처리.
-
-### 2.73.1. backcast 알고리즘 통일
-
-- `src/core/history.js` `backfillRecommendations`: `recommend` 단일 → `recommendMulti({...strategyIds: [strategyId]})`. 새 architecture로 통일.
-- `src/core/recommend.js` `recommendFiveSets`: `multi ? recommendMulti : recommend` 분기 → 항상 `recommendMulti({...strategyIds: sids})` 호출. 단일/다중 분기 폐기.
-- 결과: 사용자 노출 추천 + backcast 백필 + 5세트 모두 동일 architecture (단일 추첨 합성 weight).
-
-### 2.73.2. SSOT 갱신
-
-- `docs/01_spec.md` 5.1.3.0 (추천 알고리즘 architecture) 신설. 옛 architecture 결함 / 새 architecture 룰 / 검증 수치 명시.
-- `docs/02_data.md` 1.5.6 (풀 컷팅) 폐기 사유 추가. 1.7 (가중치 한계) WEIGHT_MAX_BIAS 폐기 명시.
-
-### 2.73.3. Dead code @deprecated 마크
-
-| 파일 | 함수 | 상태 |
-|---|---|---|
-| `src/core/recommend.js` | `recommend` (단일) | @deprecated. 외부 호출 0 |
-| `src/core/luck.js` | `applyLuck` | @deprecated. 외부 호출 0 (테스트 import만) |
-
-내부 헬퍼(`distributeCounts` / `computeStrategyContext` / `poolFromWeights` / `statsToWeights` / `gapWeights` / `trendWeights` / `intuitiveWeights` / `zodiacWeights` / `passesBalanceFilters` / `strategyHash`)도 사실상 dead. 테스트 import 영향 보존. 다음 sprint에서 폐기.
-
-### 2.73.4. 테스트 갱신
-
-- `S4-T1 recommendFiveSets: [0]은 메인` 단언: `recommend` 단일 비교 → `recommendMulti` 비교. S43.2 통일 반영.
-
-### 2.73.5. 검증
-
-- `node tests/run-node.js` → 294/298 PASS (사전 storage 4건 Node 환경 무관). 신규 FAIL 0.
-- 신규 회귀 테스트 5건(S43 분포 정상성)도 그대로 PASS.
-
-### 2.73.6. 다음 sprint 후보
-
-- `recommend` 단일 + 옛 헬퍼 함수 실제 코드 삭제. 테스트 import 함께 정리.
-- `applyLuck` / `WEIGHT_MAX_BIAS` 상수 폐기.
-- `STATS_POOL_SIZE` / `SUM_RANGE_MIN/MAX` 등 옛 architecture 상수 폐기 검토.
-- `backfillRecommendations`의 `strategyId` 단일 인자 → `strategyIds` list로 갱신.
-
-## 2.72. Sprint 051 완료 - 알고리즘 처음부터 재구축 (S43, 2026-05-08)
-
-배경: 사용자 결정타 - "알고리즘 근본 자체 잘못. 부분 fix 의미 없다. 처음부터 재구축". 30+ sprint 누적 보정이 끝자리 패턴 충돌(2/3/4, 21/22/24 인접 클러스터링) + 1번대 무조건 노출 + 같은 번호 반복 + 풀 컷팅 / 합 필터 / Luck 25배 / 다중 분배 등 architecture 수준 결함.
-
-### 2.72.1. 옛 architecture 결함
-
-| 영역 | 결함 |
-|---|---|
-| 다중 strategy 분배 | 6번호를 N개 strategy에 2개씩 균등 분할 → 각 풀 별도 추첨 → 정렬 시 끝자리 충돌 클러스터링 |
-| 풀 컷팅 (STATS_POOL_SIZE) | 풀 좁아 결정론 채택. 풀 안 1-9 비중 그대로 노출 |
-| Luck 25배 보너스 | 시드 6번호 채택 84%. 캐릭터 시드 작은 번호면 매번 그 번호 |
-| balancer 합 필터 | post-filter로 분포 왜곡. 작은 번호 자주 통과 |
-| 학설/통계/Luck 누적 | 매 fix가 부분 해결 + 또 다른 결함 노출 |
-
-### 2.72.2. 새 architecture (단일 추첨)
-
-| 영역 | 새 룰 |
-|---|---|
-| 단일 weight 벡터 | 모든 strategy의 가중을 1-45 base 1.0 + 학설/통계 보너스 +0.3~+0.5로 합성 |
-| weightedSample 1번 | 6번호 단일 추첨 → 인접 클러스터링 자연 해소 |
-| 다중 분배 폐기 | 분배 룰 / 잘라쓰기 휴리스틱 모두 우회 |
-| 풀 컷팅 폐기 | 학설 = 정의가 아닌 약한 가중치. 1-45 전체 추첨 가능 |
-| Luck 보너스 약화 | 시드 6번호 +0.5 (Luck 비례). base 1.0의 1.5배 정도 |
-| balancer 합 필터 폐기 | post-filter 안 함. 1-45 균등 + 합 100-180 자연 통과 빈도 |
-| S33 풀 외 차단 폐기 | 학설 가중일 뿐. 풀 외도 base weight로 추첨. 한국 실 분포 부합 |
-
-### 2.72.3. 검증 (시뮬 2000회 × 60 캐릭터 조합)
-
-| 묶음 | 1-9 | 10-19 | 20-29 | 30-39 | 40-45 | 0세트 | 인접쌍/세트 |
-|---|---|---|---|---|---|---|---|
-| **한국 실측** | **20.0%** | **22.2%** | **22.2%** | **22.2%** | **13.3%** | **24%** | ~1.0 |
-| 균형 (직감) | 19.5% | 22.8% | 22.7% | 21.9% | 13.1% | 24.4% | 0.68 |
-| 별자리+사주+직감 | 19.7% | 22.6% | 22.8% | 21.9% | 13.1% | 23.9% | 0.67 |
-| 통계 4종 | 19.8% | 22.7% | 22.5% | 22.4% | 12.7% | 23.7% | 0.66 |
-| 적게+직감 | 19.5% | 22.9% | 22.7% | 21.9% | 13.0% | 24.3% | 0.68 |
-| 최신+별자리+랜덤 | 19.7% | 22.4% | 22.8% | 22.1% | 13.0% | 23.8% | 0.66 |
-
-**모든 영역 한국 실측에 정확 일치.** 인접쌍 0.66-0.68 (실측 ~1.0보다 낮지만 자연 범위).
-
-### 2.72.4. 변경 파일
-
-- `src/core/recommend.js`: `recommendMulti` 통째로 교체. 신규 `computeUnifiedWeights` / `assignSourceForNumber` 헬퍼.
-- `src/data/numbers.js`: `DEFAULT_PRESETS` 모두 `[STRATEGY_INTUITIVE]` 단독으로. 부제만 차별화.
-- `tests/suites/saved-sets.test.js`: S33 풀 외 차단 회귀 2건 폐기 (옛 architecture 검증).
-
-### 2.72.5. 보존된 코드 (다음 sprint 정리 권장)
-
-- `src/core/recommend.js`: `recommend` 단일 / `distributeCounts` / `computeStrategyContext` / `poolFromWeights` 등은 호출 안 되지만 보존. 다음 sprint에서 정리.
-- 학설 풀 정의 (`ZODIAC_LUCKY` 등): 가중치로 활용 + 풀 표시(시각용)에서 사용.
-
-### 2.72.6. 검증 (회귀)
-
-- `node tests/run-node.js` → 289/289 PASS (사전 storage 4건 무관). 신규 FAIL 0.
-
-### 2.72.7. 사용자 영향
-
-- "1번대 무조건 노출" 해소. 모든 구간 한국 실측에 일치.
-- "3개씩 모아 찍기" (인접 클러스터링) 해소. 단일 추첨으로 풀 인접 인덱스 동시 채택 가능성 균등.
-- "같은 번호 반복" 해소. 풀 1-45 전체에서 추첨이라 다양성 큼.
-- 학설/통계/Luck 가중치는 보존 (시각 라벨 + 약한 분포 차별).
-
-## 2.71. Sprint 050 완료 - 운세파 묶음 + Luck 보너스 강도 fix (S41+S42, 2026-05-08)
-
-배경: 사용자 통찰 2단:
-1. "운세파 1-9 무조건 노출" (이미지: 9세트 54번호 중 1-9 = 17개 = 31.5%).
-2. "1~45 진짜 랜덤은 중앙에 몰릴 수도 위에 몰릴 수도 있는데 너는 무조건 아래로 몰림. 분명 실수".
-
-### 2.71.1. S41 - 운세파 묶음
+### 2.84.1. 부제 필드 자체 폐기 (옵션 1 권장안 진행)
 
 | 영역 | 이전 | 이후 |
 |---|---|---|
-| 운세파 묶음 | 별자리 + 4원소 + 사주 | 별자리 + 사주 + 직감 |
-| 부제 | 동·서양 운세 합 | 별자리·사주 + 즉흥 |
+| 추첨 탭 슬롯 두 번째 행 | 사용자 입력 부제 | `.preset-strategy-line` - `strategyLabel` list 자동 (예: "최신 · 별자리 · 직감") |
+| 설정 탭 - 프리셋 관리 | 라벨 / 부제 / `strategyShort`(1자) 3행 | 라벨 / `strategyLabel` 2행 (label 통일) |
+| 편집 모달 | 라벨 / 부제 / 전략 체크 | 라벨 / 전략 체크 |
+| 데이터 | `subtitle: string` | 필드 제거 |
+| 상수 | `PRESET_SUBTITLE_MAX = 20` | 폐기 |
 
-4원소 fire = [1,3,9,...] 1-9 안 3개로 가장 1-9 비중 높은 학설. 폐기. 직감(풀 1-45 균등) 추가로 자연 분산.
+### 2.84.2. 변경 파일
 
-### 2.71.2. S42 - Luck 보너스 강도 (핵심 결함)
+- `docs/01_spec.md` 5.1.5.1 / 5.1.5.2 갱신.
+- `docs/02_data.md` 1.20 표 / 스키마 / 마이그레이션 노트 신설.
+- `src/data/numbers.js`: `PRESET_SUBTITLE_MAX` 폐기, `DEFAULT_PRESETS` `subtitle` 필드 제거.
+- `src/render/preset-editor.js`: 부제 입력 필드 / 핸들러 / 저장 cleaning / 빈 슬롯 채움 / `PRESET_SUBTITLE_MAX` import 모두 제거.
+- `src/render/preset-buttons.js`: `strategyLabel` import 추가, `subtitle` 표시 → 자동 list.
+- `src/render/settings-page.js`: `strategyShort` → `strategyLabel` 통일, `.preset-manage-subtitle` 행 제거.
+- `styles/main.css`: `.preset-subtitle` / `.preset-manage-subtitle` 룰 폐기, `.preset-strategy-line` 신규.
+- `service-worker.js` v42 → v43.
 
-진단: `WEIGHT_MAX_BIAS = 50.0`. Luck=50 시 boost = 25.5배. 시드 의존 전략(별자리/4원소/사주)에서 시드 6번호가 풀 안에 1개 있으면 weight 25.5 vs 다른 1 → **채택 확률 84%**. 매 추천 시드 번호 거의 확정 채택.
+### 2.84.3. 마이그레이션
 
-사용자 캐릭터 시드 6번호에 우연히 작은 번호(2, 4, 5 등) 포함 → 모든 추천에 2, 4, 5 반복 등장. 사용자가 본 "추천1=2,4,5,18,24,32 / 추천3=2,4,5,16,20,26 / 추천9=2,4,5,8,12,14" 패턴의 진짜 원인.
+옛 storage(`lotto_presets`)에 `subtitle` 키가 있어도 `loadPresets`는 그대로 반환. 렌더 단계에서 미참조라 시각 영향 0. 다음 `savePresets` 호출 시 자연 소실.
 
-| 영역 | 이전 | 이후 |
+### 2.84.4. 검증
+
+- `node tests/run-node.js` → 274/274 PASS.
+- `node --check` 4파일 OK.
+- 옛 subtitle 참조 grep → 폐기 사유 주석만, 실 코드 0건.
+
+## 2.83. Sprint 062 완료 - is-just-added 펄스 시각 정정 (S62, 2026-05-10)
+
+배경: 사용자 보고 "노티 표시가 '추천1'에 너무 딱 붙어서 네모로 표시되니까 ui가 너무 허접". 초기안(inset 외곽선 + radius-sm)이 row 좌우 padding 0 환경에서 라벨에 외곽선이 닿아 답답함.
+
+### 2.83.1. 옵션 D 채택 (외곽선 폐기 + 외부 글로우 + 라운드 + inset)
+
+| 항목 | 이전 (S60) | 이후 (S62) |
 |---|---|---|
-| `WEIGHT_MAX_BIAS` | 50.0 | **5.0** |
-| Luck=50 시 boost | 25.5배 | 3배 |
-| 시드 번호 채택 확률 (풀 6) | 84% | 37.5% |
+| 렌더 방식 | row 자체에 inset border + bg | row의 `::before` pseudo (absolute) |
+| 외곽선 | inset 2px gold | **폐기** (시선은 외부 글로우만으로 충분) |
+| 라운드 | `--radius-sm` | `--radius-md` |
+| 좌우 마진 | 0 (라벨에 붙음) | inset 8px (라벨과 시각 거리) |
+| 글로우 | 없음 | 외부 box-shadow `0 0 14px` accent |
+| layout 영향 | 약간 (border-radius) | 0 (pseudo absolute) |
 
-### 2.71.3. 시뮬 검증 (1000회)
+### 2.83.2. 변경 파일
 
-| 영역 | 1-9 | 10-19 | 20-29 | 30-39 | 40-45 |
-|---|---|---|---|---|---|
-| **한국 실측** | 20% | 22% | 22% | 22% | 13% |
-| **운세파 (S41+S42 fix)** | 20.2% | 22.1% | 22.2% | 23.4% | 12.2% |
+- `docs/02_data.md` 1.5.8.6.7 명세 표 갱신.
+- `styles/main.css`: 펄스 룰 교체. `@keyframes saved-set-pulse` 갱신, reduced-motion 폴백 갱신.
+- `service-worker.js` v41 → v42.
 
-### 2.71.4. 검증
+### 2.83.3. 검증
 
-- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 무관).
+- `node tests/run-node.js` → 274/274 PASS (CSS-only 변경, 회귀 위험 0).
+- 룰 중복 검사: `.saved-set-row` `position: relative`를 기본 룰에 통합.
 
-### 2.71.5. 사용자 영향
+## 2.82. Sprint 061 완료 - 프리셋 편집 진입을 추첨 탭 → 설정 탭으로 이동 (S61, 2026-05-10)
 
-- "낮은 번호 무조건 등장" 즉시 해소. 모든 구간에 자연 분산.
-- 캐릭터 시드 보너스가 자연 가중 수준 (3배). Luck 의미 보존.
-- 사용자가 본 진짜 알고리즘 결함 = `WEIGHT_MAX_BIAS = 50` 너무 높음. 핵심 fix.
+배경: 사용자 질문 "전략 편집을 설정으로 옮길 수 있을까?". 편집은 정착 후 자주 발생하지 않는 액션이라 추첨 탭에 영구 노출 가치 낮음. 권장안 (B + 모달 재활용) 진행.
 
-배경: 사용자 화면 캡처 분석 - 운세파 9세트 54번호 중 1-9 = 17개 = 31.5% (한국 실측 20%). 사용자 통찰 "운세 학설 자체가 끝자리 낮은 수 베이스. 그걸로 뽑으면 낮은 수밖에 안 나옴".
+### 2.82.1. 진입점 이동
 
-### 2.71.1. 진단
-
-- 학설 풀 끝자리 1-9 베이스: 별자리(1,5,11,15,...) / 4원소 fire(1,3,9,11,...) / 사주(3,8,13,...) 모두 끝자리에 1-9 안 번호 2-3개.
-- 4원소 fire = 1-9 안 3개로 가장 비중 높음.
-- + 추첨일 일진 보너스 ×3 (인성) 부스트 = 작은 번호 강조.
-- 9세트 시드 변형해도 같은 풀 weight라 1-9 반복.
-
-### 2.71.2. 변경
-
-| 영역 | 이전 | 이후 |
+| 항목 | 이전 | 이후 |
 |---|---|---|
-| 운세파 묶음 | 별자리 + 4원소 + 사주 | **별자리 + 사주 + 직감** |
-| 운세파 부제 | 동·서양 운세 합 | **별자리·사주 + 즉흥** |
+| 추첨 탭 진입 | 프리셋 슬롯 아래 "편집" 텍스트 링크 | **폐기** (시각 노이즈 1줄 회수) |
+| 설정 탭 진입 | 없음 | "프리셋 관리" 섹션 신설 (캐릭터 관리 다음) |
+| 편집 동작 | 모달 | 모달 그대로 재활용 (행 클릭 → 모달) |
+| 기본값 복원 | 모달 안만 | 설정 탭 섹션에도 노출 (모달 안과 동일 동작) |
 
-4원소 폐기 사유: 1-9 비중 가장 높은 학설. 직감 추가 사유: 풀 1-45 균등 + 회차마다 weight 셔플 = 자연 분산.
+### 2.82.2. 변경 파일
 
-### 2.71.3. 시뮬 검증 (1000회)
+- `docs/01_spec.md` 4장 설정 탭 한 줄 / 5.1.5.2 진입점 갱신.
+- `docs/03_architecture.md` settings-page 의존성 주석.
+- `src/render/preset-buttons.js`: `.preset-edit-row` / `.preset-edit-link` 영역 폐기.
+- `src/render/settings-page.js`: 프리셋 관리 섹션 + 슬롯 행 + 기본값 복원 + `onPresetsChanged` 핸들러.
+- `src/render/main.js`: `openPresetEditor` import 폐기 / 추첨 탭 핸들러 폐기 / `onPresetsChanged: state.presets reload`.
+- `styles/main.css`: dead `.preset-edit-row` / `.preset-edit-link` 룰 폐기, `.preset-manage-*` 신규.
+- `service-worker.js` v40 → v41.
 
-| 옵션 | 1-9 | 0개세트 | 채택 |
-|---|---|---|---|
-| A. 별자리+4원소+사주+직감 (4종) | 20.4% | 32.9% | - |
-| **B. 별자리+사주+직감 (3종)** | **20.0%** | **35.8%** | ✓ |
-| C. 별자리+직감+균형 | 20.3% | 26.4% | - |
+### 2.82.3. 검증
 
-B = 1-9 비율 한국 실측 20%에 정확. 운세 학설 2종 보존 (서양 별자리 + 동양 사주).
+- `node tests/run-node.js` → 274/274 PASS.
+- dead 셀렉터 잔존 grep → 주석 안 변경 사유만, 실 코드 0건.
 
-### 2.71.4. 검증
+## 2.81. Sprint 060 완료 - 누적 추천 토스트 위치 + 카드 펄스 도입 (S60, 2026-05-10)
 
-- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 무관).
-- 사용자 환경(31.5% 편향) → 신규 설정 시 20% 정상화.
+배경: 사용자 보고 "추가 1세트를 추가했습니다 메시지를 왜 팝업으로 안띄우고 메인창에 띄우지?". 액션바 인라인 토스트는 누적 리스트가 길어지면 함께 화면 밖으로 밀려 메시지 인지 불가. 권장안 A+C (화면 하단 fixed 팝업 + 추가된 카드 펄스) 진행.
 
-### 2.71.5. 사용자 영향
-
-- 운세파 클릭 시 1번대 자주 노출 해소.
-- 4원소 학설 단독 사용은 편집 모달에서 직접 묶음 가능.
-
-## 2.70. Sprint 049 완료 - 1번대 무조건 노출 해소 + 분산파 묶음 단순화 (S39 + S40, 2026-05-08)
-
-배경: 사용자 통찰 - "10번 이하가 안 나올 수 있는데 무조건 나오게 추천하는 게 맘에 안 들어. 전반적으로 다". 한국 6/45 실측 = 1-9 0개 회차 24%. 본 게임은 사실상 100% 1-9 1개 이상 노출.
-
-### 2.70.1. 진단
-
-- 풀 컷팅 size = 10. 풀 안 1-9 안 번호 1-2개 → 6번호 추첨 시 거의 확정 노출.
-- 균형 조합(balancer) 합 필터 121-160. 평균 ±19로 좁아 작은 번호 자주 통과.
-- 각 strategy의 풀 자체는 1-45 균등이지만 풀 size 10이 워낙 좁아 "무조건 1-9" 인지.
-
-### 2.70.2. 변경 (S40)
-
-| 영역 | 이전 | 이후 | 사유 |
-|---|---|---|---|
-| `STATS_POOL_SIZE` | 10 | **25** | 풀 절반 이상 = 1-9 가중 자연 약화 |
-| `SUM_RANGE_MIN` | 121 | **100** | 한국 실측 평균 138 ±40 |
-| `SUM_RANGE_MAX` | 160 | **180** | 약 90% 회차 커버 |
-| 분산파 묶음 (S39) | regr+intuitive+balancer | **regr+intuitive** | balancer 합 필터 좁음 + 12/5/40 반복. 직감 셔플로 분산 |
-| 분산파 부제 | 그대로 | "남들이 덜 고르는 조합" 그대로 | 정체성 보존 |
-
-### 2.70.3. 검증 (시뮬 1000회)
-
-| 프리셋 | 1-9 비율 | 1-9 0개 세트 | 한국 실측 |
-|---|---|---|---|
-| 균형 | 20.9% | 26.8% | 20% / 24% |
-| 분산파 | 20.2% | 23.9% | 20% / 24% |
-| 운세파 | 21.7% | 30.3% | 20% / 24% |
-
-거의 한국 실측 분포에 일치. "무조건 1-9" 해소.
-
-### 2.70.4. 테스트 갱신
-
-`tests/suites/recommend.test.js` 4건 (secondStar / statistician / regressionist / trendFollower 풀 컷팅 효과)을 `STATS_POOL_SIZE` 동기화. heavy 배열을 풀 size로 동적 생성.
-
-### 2.70.5. SSOT
-
-- `docs/02_data.md` 1.5.6 풀 컷팅 size 25 / 1.4 합 필터 100-180 갱신 필요 (다음 sprint 동기화).
-
-### 2.70.6. 검증
-
-- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 무관). 신규 FAIL 0.
-
-### 2.70.7. 사용자 영향
-
-- 1번대 거슬림 즉시 해소. 분포가 한국 실 추첨에 가까워짐.
-- 기존 사용자 lastUsedStrategies / 누적 추천에 영향 0 (코드만 변경).
-- 균형 조합 단독 사용자: 합 필터 완화로 더 다양한 조합 노출.
-
-## 2.69. Sprint 048 완료 - 통계 풀 컷팅 데이터 부재 fix (S38, 2026-05-08)
-
-배경: 사용자 통찰 - "대부분 추천이 1~9번. 불합리해 보임. 왜?". 학설 데이터(별자리/원소/사주) 풀은 1~45 균등이라 정상. 시뮬 진단 결과 **통계 풀 컷팅 함수가 데이터 부재 시 1~10에 결정론 편향**.
-
-### 2.69.1. 진단 (시뮬 500회 / 빈 numberStats)
-
-| Strategy | 1-9 비율 | 진단 |
-|---|---|---|
-| 최신 (`trendFollower`) 단독 | **89.7%** (top10 = 1~10) | **결정론 결함** |
-| 많이 / 적게 / 보너스 | 동일 패턴 (모든 weight 동률) | **결정론 결함** |
-| 별자리 / 4원소 / 사주 | 19.8~20% | 정상 (학설 풀 균등) |
-| 랜덤 (Luck=50) | 19.8% | 정상 |
-| **균형 프리셋 (최신+별자리+랜덤)** | **41.9%** | **trendFollower 결함이 균형에 노출** |
-
-원인: `poolFromWeights(weights, 10)`은 weight 내림차순 정렬 후 상위 10개 풀로. 데이터 부재 시 모든 weight가 `WEIGHT_MIN_FLOOR` / 1 동률 → sort stable → 인덱스 0~9 (= 번호 1~10) 풀 결정론.
-
-### 2.69.2. fix
-
-`src/core/recommend.js` `poolFromWeights`에 가드 추가:
-
-- `max === min`이면 풀 컷팅 의미 없음 → 1~45 균등 반환.
-- 정상 데이터(가중 차등 있음)는 기존 동작 그대로. 영향 0.
-
-### 2.69.3. 검증 (시뮬 500회)
-
-| Strategy / Preset | 이전 1-9 | 이후 1-9 |
-|---|---|---|
-| 최신 단독 | 89.7% | **19.2%** |
-| 많이 단독 | (동일 결함) | **20.1%** |
-| 적게 단독 | (동일 결함) | **19.5%** |
-| 균형 프리셋 | 41.9% | **18.4%** |
-| 분산파 / 운세파 | 정상 | 정상 (영향 0) |
-
-### 2.69.4. SSOT
-
-- `docs/02_data.md` 1.5.6.4에 S38 절 추가 (통계 풀 컷팅 데이터 부재 fix 사유 + 시뮬 수치).
-
-### 2.69.5. 검증 (회귀 테스트)
-
-- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 무관). 신규 FAIL 0.
-- 정상 데이터(numberStats 1222회 보유) 시 기존 동작 그대로 유지 확인 (sort 분기 영향 0).
-- 회귀 테스트 추가 권장 (다음 sprint): `빈 numberStats 입력 시 trendFollower 풀이 균등` 단언.
-
-### 2.69.6. 사용자 영향
-
-- **회차 데이터 페치 전 / 새 캐릭터 / 신규 구좌**에서 1~9 위주 편향 → 즉시 정상 분포 회복.
-- **이미 페치된 사용자**는 영향 0 (정상 데이터는 가중 차등 있어 기존 동작).
-- 균형 프리셋 / 통계 4종 단독 모두 회복.
-
-## 2.68. Sprint 047 완료 - 통계파 프리셋 폐기 + 분산파 신설 (S37 사행성 책임, 2026-05-08)
-
-배경: 사용자 통찰 - "통계파는 위험. 진짜 저게 당첨되면 당첨자 정말 많이 나올 것 같다". 25년차 기획자 미감. 통계 4축 묶음(많이+적게+최신+보너스)이 모두 데이터 상위 풀 가중 → 다수 사용자 동시 선택 → 1등 분할 위험. 게임 정체성("선택의 서사화") 충돌.
-
-### 2.68.1. 변경 (DEFAULT_PRESETS)
-
-| 슬롯 | 이전 | 이후 |
-|---|---|---|
-| 1. 균형 | 많이(`statistician`) + 별자리 + 랜덤 | **최신**(`trendFollower`) + 별자리 + 랜덤 |
-| 1. 균형 부제 | 통계·운세·직감 한 번에 | **최신 흐름**·운세·직감 한 번에 |
-| 2. 통계파 | `statistician` + `regressionist` + `trendFollower` + `secondStar` | **분산파** = `regressionist` + `intuitive` + `balancer` |
-| 2. 라벨 / 부제 | 통계파 / 데이터 4축 통합 | **분산파 / 남들이 덜 고르는 조합** |
-| 3. 운세파 | 그대로 | 그대로 |
-
-### 2.68.2. 사행성 책임 사유
-
-- 통계 4축 모두 풀 8~10 좁은 데이터 상위. 사실상 합집합도 좁음 → 다수 충돌.
-- 한국 6/45 역대 최다 1등 분할: 회차 1052회 63명 (인당 4억대로 추락). 통계 상위 묶음이 1등에 걸리면 분할 발생 패턴.
-- 자비스 1탭 추천이 분할 위험을 능동 노출 = 사용자 보호 결함.
-- 통계 신봉 사용자: 편집 모달에서 직접 묶음 자유 구성 (자기 책임 영역으로 분리).
-
-### 2.68.3. 균형 약화 사유
-
-`statistician`(역대 누적 빈도) → `trendFollower`(최근 30회 슬라이딩 윈도우). 최신은 회차마다 풀이 변동 → 다수 사용자 동시 충돌 자연 감소. 균형 정체성(통계+운세+직감 mix)은 "최신 흐름+운세+직감"으로 보존.
-
-### 2.68.4. SSOT
-
-- `docs/01_spec.md` 5.1.5.4 (사행성 책임) 신설.
-- `docs/02_data.md` 1.20.2 표 + 변경 사유 추가.
-
-### 2.68.5. 검증
-
-- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 무관). 신규 FAIL 0.
-- 사용자 영향: 기존 사용자가 통계파 슬롯에 손댄 적 없으면 다음 진입 시 자동 분산파로 갱신. 직접 편집한 경우 `localStorage.lotto_presets`가 우선 → 사용자 의도 보존. "기본값 복원" 클릭 시 신규 분산파 주입.
-
-## 2.67. Sprint 046 완료 - 프리셋 3슬롯 + 캐릭터 카드 아코디언 (S36 / S36.2 정돈, 2026-05-08)
-
-### 2.67.0. S36.2 UX 정돈 (사용자 피드백 후 즉시 정리)
-
-사용자 지적: "편집 버튼 / 확장 버튼 등 ux 너무 별로야. 깔끔하게 잘 정리좀해봐". 시각 노이즈 정돈:
-
-| 영역 | 이전 (S36 1차) | 정돈 (S36.2) |
-|---|---|---|
-| 프리셋 컨테이너 | 보더 박스 + 패딩 + "추천 프리셋" 타이틀 + ✏ 박스 버튼 | 박스 / 타이틀 폐기. 슬롯 3개만 단독 노출 |
-| 편집 버튼 | 박스 + ✏ 이모지 + "편집" 라벨 (헤더 우측) | 슬롯 list 하단 우측 작은 텍스트 링크 "편집"만 |
-| 슬롯 안 칩(.preset-tags) | 묶인 전략 라벨 칩 N개 | 폐기. 라벨 + 부제만 |
-| 슬롯 활성 표시 | accent border 2px + inset shadow 2px | accent border 1px + 미세 accent 배경 (8% alpha) |
-| 캐릭터 토글 | 한 줄 카드 + 별도 "접기 bar" 박스 (펼침 상태) | 한 줄 row 자체가 카드 헤더로 흡수. row(▲) + 카드 본문 = 한 덩어리 |
-| 토글 row 카피 | 텍스트(이름·메타) + 우측 운세 한국어 + caret | 운 이모지(좌) + 이름 강조 + 메타 희미 + caret 우 |
-
-수정 파일: `preset-buttons.js` (구조 단순화) / `character-summary.js` (`characterToggleRowHtml` 단일 export로 통합) / `main.js` (import / homeTabHtml 분기 단순화) / `styles/main.css` (S36 블록 전체 교체).
-
-검증: `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 무관). 신규 FAIL 0.
-
-
-배경: 사용자 지적 - "전략 선택하는 게 짜증남. 복잡한 전략은 접어두고 묶음을 1버튼으로. 메인에 버튼 3개. 사용자 정보도 아코디언 한 줄". 전략 10종 카드 노출 + 캐릭터 카드 항상 펼침이 메인 인지 부담 큰 문제.
-
-사용자 결정 (자비스 권장안 일괄 채택): 슬롯 3개 고정 / 기본 균형·통계파·운세파 / ✏ 인라인 편집 / 부제 표시 / 캐릭터 한 줄 카피 = 이름·별자리·띠·일주·운 / 흉일 자동 펼침 / 첫 진입 펼침 학습.
-
-### 2.67.1. 신규 / 변경
+### 2.81.1. 화면 하단 fixed 팝업 + 카드 펄스
 
 | 영역 | 변경 |
 |---|---|
-| `src/data/numbers.js` | 1.20 추가 - `PRESET_SLOT_COUNT=3` / `PRESET_LABEL_MAX=8` / `PRESET_SUBTITLE_MAX=20` / `DEFAULT_PRESETS` (균형·통계파·운세파 3종 freeze) |
-| `src/data/storage.js` | `loadPresets` / `savePresets` / `loadCharCardCollapsed` / `saveCharCardCollapsed` 신규. `lotto_presets` / `lotto_char_card_collapsed` 키 |
-| `src/render/preset-buttons.js` | 신규 - 3슬롯 카드 + 활성 비교 + 편집 진입 ✏ |
-| `src/render/preset-editor.js` | 신규 - 편집 모달 (라벨/부제/카테고리별 체크리스트 / 기본값 복원) |
-| `src/render/character-summary.js` | 신규 - 한 줄 카드(이름·별자리·띠·일주·운 이모지) + 펼침 토글 / 흉일 빨강 |
-| `src/render/main.js` | import 추가 / `state.presets` / `state.charCardCollapsed` / `homeTabHtml` 구조 변경 (전략 picker 영역 → 프리셋 영역, 캐릭터 카드 collapsed 분기) / 클릭 핸들러 3종 (`preset-pick` / `preset-edit` / `char-card-toggle`) |
-| `styles/main.css` | S36 블록 추가 - 프리셋 카드 / 편집 모달 / 한 줄 요약 / 토글 / 모바일 480↓ 압축. 매직 픽셀 0(토큰 베이스) |
-| `docs/01_spec.md` | 5.1.5 (프리셋 시스템) / 5.1.6 (캐릭터 카드 아코디언) 신설. 5.1.3 한 줄 보강 |
-| `docs/02_data.md` | 1.20 (프리셋 시스템) 신설 - 상수 / 기본값 / 저장 키 / Preset 스키마 / 활성 비교 룰 |
-
-### 2.67.2. 흉일 강제 펼침 룰
-
-`fortune === 'bad'`이면 `state.charCardCollapsed` 값 무시하고 펼침. 사용자 보호 카피 (방어 모드 권장 배너) 강제 노출. 사행성 도메인 책임. SSOT: `docs/01_spec.md` 5.1.6.2.
-
-### 2.67.3. 보존 (다음 sprint 정리)
-
-- `src/render/strategy-tabs.js`: 메인에서 호출 안 됨. dead code지만 호환 보존. 다음 sprint 폐기 검토.
-- `src/render/strategy-picker.js`: `STRATEGY_LIST` / `strategyLabel` / `strategyShort` export는 편집 모달 / 추천 라벨 / saved-sets에서 계속 사용. picker UI(`strategyPickerHtml`)만 dead code.
-- `main.js`의 `.strategy-tab[data-strategy-id]` 클릭 핸들러: forEach가 빈 NodeList라 무동작. 보존.
-
-### 2.67.4. 사용자 동선 변화
-
-| 사용자 | 이전 | 이후 |
-|---|---|---|
-| 라이트 (90%) | 메인 → 전략 10카드 중 1개 토글 → 추천. 인지 부담 큼 | 메인 → 프리셋 3카드 중 1탭 → 추천. **2탭 끝** |
-| 헤비 (10%) | 메인에서 직접 전략 1~6개 토글 | 메인 ✏ → 모달에서 묶음 편집 → 저장 → 자기 묶음 1탭 |
-
-### 2.67.5. 검증
-
-- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 FAIL 무관). 신규 FAIL 0.
-- 라벨 / 묶음 / 카드 토글은 브라우저 시각 검증 필요 (사용자 확인 후 폴리싱).
-
-### 2.67.6. 잠재 리뷰 포인트
-
-| 항목 | 비고 |
-|---|---|
-| 카테고리 "랜덤" 그룹 + 전략 "랜덤" 동일 단어 | S35 사용자 결정 옵션 A. 인지 부담 수용. |
-| short '축' vs 라벨 '랜덤' 첫 글자 어긋남 | S35 후속. 사용자 검토 후 동기화 sprint. |
-| `recommend.js` reasons "축복받은 자: ..." | S35 후속. 운영 텍스트라 별도 결정. |
-| 통계 / 회차 / 휠링은 추첨 탭 안 아코디언 X | 기존 하단 탭 라우팅 그대로 (사용자 시안 외). |
-| 슬롯 추가 / 삭제 불가 | 3개 고정. 사용자 명시 결정. 향후 5개 확장 검토 가능. |
-| dead code (strategy-tabs.js 등) | 다음 sprint 정리 권장. |
-
-### 2.67.7. 사용자 영향 (재진입 시)
-
-- 기존 캐릭터의 `lastUsedStrategies`는 보존. 첫 진입 시 `DEFAULT_PRESETS` 자동 주입 + 메인 프리셋 3슬롯 노출.
-- 프리셋 클릭 = `lastUsedStrategies` 즉시 갱신. 이전 다중 토글 학습은 슬롯 클릭으로 덮어씀.
-- 캐릭터 카드 첫 진입 펼침. "접기" 버튼 1회 클릭하면 다음 진입에 접힘 학습.
-
-## 2.66. Sprint 045 완료 - "축복" 라벨을 "랜덤"으로 변경 (S35, 2026-05-08)
-
-사용자 지시: "라벨만 변경" (축복 → 랜덤). 이름만 변경, 그 외 일체 손대지 않음.
-
-### 2.66.1. 변경
-
-| 영역 | 이전 | 이후 |
-|---|---|---|
-| 전략 카드 라벨 (`STRATEGY_BLESSED`) | 축복 | 랜덤 |
-| `docs/02_data.md` 1.5 표 UI 라벨 | 축복받은 자 | 랜덤 |
-| `docs/02_data.md` 1.5.6 풀 표 | 축복받은 자 | 랜덤 |
-| `docs/01_spec.md` 5.1.3 전략 10종 list | 축복받은 자 | 랜덤 |
-| `README.md` 3.2 카테고리 표 | 축복받은 자 | 랜덤 |
-| `README.md` 5 페치 없이 가능 list | 축복받은 자 / 짝꿍 번호 | 랜덤 (짝꿍 함께 정리 - S34 후속) |
-
-손 안 댄 영역 (사용자 "라벨만" 명시):
-
-- `STRATEGIES.short` ('축') - 라벨 첫 글자 패턴 어긋나지만 미변경.
-- `STRATEGIES.desc` (정체성 카피) - Sprint 044에서 강화한 정체성 카피 그대로.
-- 카테고리 라벨 ('랜덤' 그룹) - 사용자 결정 옵션 A (전략 라벨과 동일 단어 허용).
-- `src/core/recommend.js` reasons 메시지 ("축복받은 자: ..." 운영 텍스트).
-- 이력 문서 (PROGRESS / ARCHIVE) - 시점 기록 보존.
-- 테스트 (`recommend.test.js` reasons 검증) - reasons 미변경이라 PASS 유지.
-
-### 2.66.2. 인지 부담 (사용자 결정으로 수용)
-
-- 카테고리 "랜덤" + 전략 "랜덤" 동일 단어 → 카드 hover에서 "랜덤 카테고리 > 랜덤 전략" 표시.
-- 카드 short '축' 잔존 → 라벨 첫 글자 패턴(별자리=점, 사주=사) 어긋남.
-- reasons "축복받은 자: ..." 잔존 → 카드 라벨 ≠ reasons 라벨 차이.
-
-위 3건은 다음 세션에서 사용자가 짚어주면 동기화 작업 별도 sprint.
-
-### 2.66.3. 검증
-
-- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 FAIL 무관).
-- 라벨 변경으로 인한 신규 FAIL 0.
-
-## 2.65. Sprint 044 완료 - 짝꿍 페어 전략 폐기 + 랜덤 카테고리 카피 정체성 강화 (S34, 2026-05-08)
-
-배경:
-
-1. 사용자 지적 1 - "축복 / 직감 / 균형의 차이가 뭔지 모르겠어". 랜덤 카테고리 3종이 풀 1~45 전 범위 + 시드 의존 공통이라 차별성 미묘. desc 한 줄로 정체성 못 드러냄.
-2. 사용자 지적 2 - "페어는 진짜 페어가 선택되어야 하는데 그냥 숫자가 랜덤하게 추천되네". 짝꿍 전략(pairTracker)의 페어 박스 시각(S31)과 추첨 룰(합집합 풀에서 개별 번호) 불일치. 페어 동행 보장 안 됨.
-3. 사용자 결정 - "그냥 삭제할까? 페어가 의미 있어?" → 짝꿍 전략 폐기 + 랜덤 카테고리 카피 정체성 강화 결정.
-
-### 2.65.1. 카피 정체성 강화 (랜덤 카테고리 3종)
-
-`src/render/strategy-picker.js` STRATEGIES 배열의 desc만 변경 (label / short / category 그대로):
-
-| 전략 | 이전 desc | 신규 desc |
-|---|---|---|
-| 축복 | 모든 번호에서 균등 추출, Luck이 시드 번호 가중치를 강화 | **캐릭터 정체성**: 키운 Luck만큼 시드 6번호에 보너스. 운세에 가장 민감 |
-| 직감 | 회차마다 다른 분포 (같은 캐릭터는 같은 결과) | **회차 색깔**: 매주 분포가 통째로 바뀝니다. 같은 캐릭터도 회차마다 다른 추천 |
-| 균형 | 번호 합 121~160 + 홀짝 3:3 필터를 통과한 조합만 | **통계 패턴**: 역대 1등 번호 합·홀짝이 모이는 구간에 맞춘 조합만 |
-
-각 desc 앞에 정체성 라벨(굵게) → 사용자 카드 hover / aria-label에서 차별 즉답.
-
-### 2.65.2. 짝꿍 페어(pairTracker) 전략 폐기
-
-폐기 사유: (1) 페어 동행 보장 X (시각/추첨 불일치). (2) 페어 fix(시드 셔플 + 3쌍) + 단독 활성 차단 룰 = UX 부담 vs 사용자 가치 ↓. (3) 통계 4종(많이/적게/최신/보너스)으로 충분히 직관적.
-
-| 영역 | 변경 |
-|---|---|
-| 코드 | `STRATEGY_PAIR_TRACKER` 상수 / `objectivePairWeights` / `computePairsForPairTracker` / `keyNumberFromSeed` 제거. recommend.js 분기 제거. |
-| 카테고리 | `OBJECTIVE_STRATEGIES` 6 → 5종. `STRATEGY_ORDER` 통계 5 → 4종. `STRATEGY_CATEGORIES` 항목 제거. |
-| UI | strategy-picker STRATEGIES에서 짝꿍 entry 제거. strategy-tabs.js `pairs` 옵션 / 페어 박스 분기 폐기. main.js `pairs` 변수 / 호출부 인자 제거. |
-| 색 | `STRATEGY_TAG_COLORS` pairTracker 항목 제거. |
-| css | `.strategy-pool-pairs` / `.strategy-pool-pair` / `.strategy-pool-pair-count` 폐기. |
-| 마이그레이션 | render/main.js `DEPRECATED_STRATEGY_IDS = new Set(['mbti', 'pairTracker'])` - lastUsedStrategy(s) 잔존 ID 자동 필터. S8 mbti 패턴 재사용. |
-| 보존 | 동시출현 매트릭스(cooccur) - 통계 탭 학습 자산. stats.js / storage 그대로. |
-
-### 2.65.3. SSOT
-
-- `docs/01_spec.md` 5.1.3 (전략 11종 → 10종) / 5.4 (시드 의존 6 → 5종) / 5.4.1 (학설 풀 안 추첨 - 짝꿍 항목 제거) 갱신.
-- `docs/02_data.md` 1.5 표 (pairTracker 행 삭제) / 1.5.1 (시드 의존 6 → 5종) / 1.5.2 (정렬 순서) / 1.5.6.4 (S33 풀 외 차단 - 짝꿍 항목 제거) / 2.7 (색 표 - pairTracker 제거) 갱신.
-
-### 2.65.4. 검증
-
-- `tests/suites/recommend.test.js` pairTracker 정상 동작 테스트 폐기. 6전략 multi 테스트 / 정규화 테스트의 `STRATEGY_PAIR_TRACKER` → `STRATEGY_BALANCER` 대체. 객관 전략 6 → 5종.
-- `node tests/run-node.js` → 291/291 PASS (사전 storage 4건 FAIL 무관).
-
-### 2.65.5. 사용자 영향
-
-- 전략 그리드 카드 11 → 10. 통계 줄 5 → 4 (짝꿍 사라짐).
-- 기존 캐릭터의 `lastUsedStrategy` / `lastUsedStrategies`에 짝꿍 잔존 시 자동 필터 → 활성 전략 0 케이스 시 축복으로 fallback.
-- 동시출현 매트릭스 데이터는 통계 탭에서 그대로 노출 (학습 자산 유지).
-- 랜덤 카테고리 3종 카드의 hover / 접근성 라벨에서 정체성 한 줄 즉답 가능.
-
-## 2.64. Sprint 043 완료 - 풀 외 추첨 차단 fix (S33, 2026-05-08)
-
-배경: Sprint 042 검증 중 발견. 시드 의존 전략(별자리 / 4원소 / 사주 / 짝꿍)에서 학설 풀 외 번호가 매우 낮은 확률로 추첨되던 잠재 버그. S18(풀 정의 = 풀 밖 0)의 의도는 "절대 차단"이었으나 `applyLuck`과 `weightedSample`의 `WEIGHT_MIN_FLOOR` floor가 풀 외 0을 0.0001로 양수화. S30.2가 풀 *표시*만 정정 후 실제 추첨 정정이 후순위로 남아있던 사안.
-
-### 2.64.1. fix
-
-- `src/core/luck.js` `applyLuck`: `Math.max(w, WEIGHT_MIN_FLOOR)` → `w > 0 ? Math.max(w, WEIGHT_MIN_FLOOR) : 0`. 원본 0(풀 외)은 0 유지.
-- `src/core/recommend.js` `weightedSample`: 동일 패턴 적용. `total <= 0` 가드는 그대로 → 모든 weight=0 케이스도 안전 break.
-
-### 2.64.2. 데이터 부재 fallback
-
-floor 제거로 풀 자체가 비어있는 케이스(zodiac 미지정 / 빈 cooccur)에서 추첨 0개가 될 수 있어 안전망 추가:
-
-- `src/core/recommend.js` `zodiacWeights`: 빈 lucky → `uniformWeights()` (균등 fallback).
-- `src/core/recommend.js` `objectivePairWeights`: 빈 cooccur → `Array(45).fill(1)` (균등 fallback).
-- `zodiacElementWeights` / `fiveElementsWeights`는 기존부터 fallback 보유 (변경 0).
-
-### 2.64.3. SSOT
-
-- `docs/01_spec.md` 5.4.1 (풀 외 번호 차단 절) 신설. SSOT: 학설 풀 안 번호로만 추첨.
-- `docs/02_data.md` 1.5.6.4 (풀 외 = 절대 안 뽑힘) 갱신 - S18 의도 + S33 실제 차단 + 데이터 부재 fallback 명시.
-
-### 2.64.4. 검증
-
-- `tests/suites/saved-sets.test.js` S33 회귀 2건 신규 - libra / aries 추첨 결과가 학설 풀 부분집합. 모두 PASS.
-- 기존 recommend.test.js `pairTracker 빈 cooccur` / `astrologer zodiac 미지정` 2건 fallback 적용으로 PASS 유지.
-- `node tests/run-node.js` → 292/292 PASS (사전 storage 4건 FAIL 무관).
-
-### 2.64.5. 사용자 영향
-
-- 캐릭터 카드의 "별자리 행운 번호" / "오행 행운 번호" 등 풀 표시 = 실제 추첨 결과 100% 일치 (이전엔 불일치 가능).
-- 사용자 직관 ("별자리 8개 행운 번호 안에서만 추첨") 보장.
-
-## 2.63. Sprint 042 완료 - 누적 추천 dedupe 강화 + 풀 한계 안내 (S32 후속, 2026-05-07)
-
-사용자 지시:
-1. "별자리 전략으로 20개 생성 시 추천 번호 중복 가능성?"에 이은 보강 요구.
-2. "최대 20세트 중복 없게."
-3. "20개 미만만 가능하면 딱 그만큼만 생성, 더는 생성되지 않게."
-4. "안내 메시지 노출."
-
-배경: 별자리(풀 8~10) / 사주(풀 9) / 원소(풀 13~14) 등 풀 좁은 전략에서 시드 변형으로 batch 추첨 시 같은 6 조합이 반복되어 dedupe로 일부만 추가되던 문제. 사용자가 "왜 5개 요청했는데 3개만?" 의심 발생.
-
-### 2.63.1. dedupe 재시도 룰
-
-- `src/data/numbers.js`: `SAVED_SETS_RETRY_MAX=50` / `SAVED_SETS_TOAST_NORMAL_MS=1500` / `SAVED_SETS_TOAST_PARTIAL_MS=2500` 신규.
-- `src/render/main.js` `addSavedSetsBatch`: 단일 batch 호출 → 재시도 루프. 누적 시도 < RETRY_MAX 동안 시드 offset을 증가시키며 추가 추첨. 누적 added 가 batchN 도달 시 종료. 재시도 한계 도달 + added < batchN + cap 미발생 = 풀 한계(`exhausted`).
-
-### 2.63.2. 결과 안내 4 케이스
-
-| 케이스 | 트리거 | 노출 | 카피 |
-|---|---|---|---|
-| A. 정상 | added=N | 토스트 1.5s | 추천 N세트를 추가했습니다 |
-| B. 부분 중복 | added<N, !exhausted, !cap | 토스트 2.5s | 추천 M세트 추가 · 같은 조합 D개는 자동 제외 |
-| C. 풀 한계 | exhausted=true | 누적 리스트 상단 배너 (지속) | 이 전략 조합으로 만들 수 있는 모든 추천을 가져왔습니다 ... |
-| D. cap 도달 | capSkip>0 또는 list=20 | 액션바 hint + 버튼 비활성 | 최대 20세트에 도달했습니다 ... |
-
-- `state.poolExhaustedRecipeId` 추가. 현재 strategyIds 정규화 키와 일치할 때만 배너 노출. strategyIds 변경 시 자동 해제.
-- `src/render/saved-sets-section.js`: `savedSetsSectionHtml(list, labelStart, poolExhausted)` / `savedSetsAddBarHtml(currentCount, cap, poolExhausted)` 신규 인자. 토스트 슬롯 `[data-role="saved-toast"]` 액션바 grid 끝 행에 추가.
-- `styles/main.css`: `.saved-sets-banner` (accent border-left 강조 / 노란 정보 톤) + `.saved-add-toast` (stats-toast 패턴 차용) + `.saved-add-hint.is-exhausted` 신규.
-
-### 2.63.3. SSOT
-
-- `docs/01_spec.md` 5.2.5.4 (Cap + 중복 차단 + 풀 한계 + 결과 안내 4 케이스) 갱신.
-- `docs/02_data.md` 1.5.8.2 (상수 표) / 1.5.8.5 (재시도 룰) / 1.5.8.6 (안내 카피 SSOT) 신설 / 1.5.8.7 (적용 위치 갱신).
-
-### 2.63.4. 검증
-
-- `tests/suites/saved-sets.test.js` S32 회귀 4건 신규 - libra(풀 8) / gemini(풀 10) 20세트 unique 보장 확인. 모두 PASS.
-- `node tests/run-node.js` → 신규 추가분 모두 PASS. 기존 storage 4건 FAIL은 본 작업 무관 (Node 환경 localStorage 부재 - 사전 존재).
-
-### 2.63.5. 별도 발견 사항 - applyLuck 풀 외 추첨 (별도 sprint 결정 사안)
-
-- `src/core/recommend.js:381` `applyLuck`이 시드 의존 전략(astrologer / zodiacElement / fiveElements / pairTracker)에서 풀 외 weight 0을 양수로 만들어 풀 외 번호도 실제 추첨에서 나올 수 있음.
-- S30.2에서 풀 표시(`mainWeights` 기준)는 정정됐으나 실제 추첨(`finalWeights`)은 미수정.
-- 사용자 의도 = "별자리 풀 한정 추첨"이면 fix 필요. Luck 효과 = 풀 확장이 의도면 spec 명시 필요.
-- 본 sprint 범위 밖. 사용자 결정 후 별도 sprint.
-
-## 2.62. Sprint 041 완료 - 추천 번호공 간격 80% 압축 (S32) (2026-05-04)
-
-사용자 지시: "추천 리스트 추천 숫자 간격을 지금의 80%로 줄여줘".
-
-변경:
-- `styles/main.css` `.saved-set-balls`: `gap: var(--space-1)` → `gap: calc(var(--space-1) * 0.8)` (4px → 3.2px). 데스크톱 + 모바일 480px↓ 미디어 쿼리 동일 적용.
-- 매직 픽셀 추가 0 (토큰 베이스 비율 표현).
-- SW v21 → v22.
-
-검증: `node tests/run-node.js` → 286/286 PASS.
-
-## 2.61. Sprint 040 완료 - 짝꿍 페어 단위 표시 + 라벨 축약 + 좌측 padding (S31) (2026-05-04)
-
-사용자 지시 (3건):
-1. "짝꿍 번호는 짝꿍끼리 묶어서 표시"
-2. "추천 리스트 배경 박스와 '추천1' 사이 왼쪽 마진 지금의 1.5배로"
-3. "전략 라벨 축약: 별자리행운→별자리, 원소행운→4원소, 사주행운→사주, 최근트렌드→최신, 많이나온수→많이, 안나온수→적게, 짝꿍번호→페어, 보너스볼→보너스, 균형조합→균형, 축복받은자→축복"
-
-### 2.61.1. 짝꿍 페어 단위 표시
-
-짝꿍 풀을 단순 번호 list에서 *페어 박스 list*로 변경. 각 페어 = 두 번호공 + 횟수 라벨.
-
-- `src/core/recommend.js`: `computePairsForPairTracker(ctx, poolSize)` 신규 export. `objectivePairWeights`와 동일 알고리즘(count 내림차순 + 합집합 size 도달까지)으로 페어 객체 list `{a, b, count}[]` 반환.
-- `src/render/main.js`: `getRecAndFortune` 반환에 `pairs` 추가. 포커스 = `pairTracker`일 때만 계산.
-- `src/render/strategy-tabs.js`: `pairs` 인자 받음. pairs 있으면 `.strategy-pool-pairs` 페어 박스 단위 렌더 (pool 대체). 라벨 = "짝꿍 페어 · N쌍".
-- `styles/main.css`: `.strategy-pool-pairs` / `.strategy-pool-pair` / `.strategy-pool-pair-count` 신규 (모두 토큰 사용. surface-soft 배경 + border + radius-md).
-
-### 2.61.2. 추천 리스트 좌측 padding 1.5배
-
-- `styles/main.css` `.saved-sets-section`: `padding-left: calc(var(--space-3) * 1.5)` (12px → 18px). 위/오/아래는 그대로 `--space-3`(12px). "추천N" 라벨이 박스 왼쪽에 너무 붙던 문제 해소.
-
-### 2.61.3. 전략 라벨 축약
-
-`src/render/strategy-picker.js` STRATEGIES 배열 label 필드만 변경. short / desc / category는 그대로(출처 태그 / 도움말 / 카테고리 그룹 영향 0).
-
-| 이전 | 변경 |
-|---|---|
-| 축복받은 자 | 축복 |
-| 최근 트렌드 | 최신 |
-| 많이 나온 수 | 많이 |
-| 짝꿍 번호 | 페어 |
-| 보너스볼 | 보너스 |
-| 안 나온 수 | 적게 |
-| 별자리 행운 | 별자리 |
-| 원소 행운 | 4원소 |
-| 사주 행운 | 사주 |
-| 균형 조합 | 균형 |
-| 직감 | (그대로) |
-
-표시 예 (1222회 시점 cooccur 시뮬):
-```
-짝꿍 페어 · 9쌍
-[17][27] 60회   [1][38] 55회   [12][34] 52회
-[9][18]  50회   [5][25] 48회   [3][33]  47회
-[14][41] 45회   [7][22] 44회   [11][19] 43회
-```
-
-cap STATS_POOL_SIZE = 18 합집합 도달까지 페어 수집. 9쌍 × 2 = 18.
-
-검증: `node tests/run-node.js` → 286/286 PASS.
+| 위치 | 액션바 인라인 → body 직속 lazy-init `.saved-toast-root` (화면 하단 fixed, bottom-tabs 위 12px) |
+| z-index | 신규 `--z-toast: 50` (overlay 10 < toast 50 < modal 100) |
+| 펄스 | `saved-set-row` 인덱스 `startIdx ~ startIdx + addedCount - 1` 1초 펄스 (accent 외곽 글로우 + 배경 fade) |
+| 펄스 시간 | `SAVED_SETS_JUST_ADDED_MS = 1000` |
+| 역할 분리 | 토스트 = "몇 세트", 펄스 = "어디에" |
+| reduced-motion | 폴백 (animation off + 정적 강조) |
+
+### 2.81.2. 변경 파일
+
+- `docs/01_spec.md` 5.2.5.4 표 갱신 + 5.2.5.4.8 / 5.2.5.4.9 신설.
+- `docs/02_data.md` 1.5.8.2 `SAVED_SETS_JUST_ADDED_MS` 추가, 1.5.8.6 표 + 1.5.8.6.6 / 1.5.8.6.7 신설.
+- `src/data/numbers.js`: `SAVED_SETS_JUST_ADDED_MS = 1000`.
+- `styles/tokens.css`: `--z-toast: 50` 신규.
+- `src/render/saved-sets-section.js`: 액션바 토스트 슬롯 폐기.
+- `src/render/main.js`: `flashSavedSetsToast` body 직속 fixed 패턴 + `markSavedSetsJustAdded` 신설.
+- `styles/main.css`: `.saved-toast-root` fixed 팝업 + `@keyframes saved-set-pulse` (S62에서 시각 정정).
+- `tests/suites/saved-sets.test.js`: `SAVED_SETS_JUST_ADDED_MS` 회귀 단언.
+- `service-worker.js` v39 → v40.
+
+### 2.81.3. 검증
+
+- `node tests/run-node.js` → 274/274 PASS (Node 25 환경에서도 풀 그린).
 
