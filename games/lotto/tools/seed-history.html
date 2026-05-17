@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lotto · History 시드 도구</title>
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --panel: #1a1a24;
+      --border: #2a2a38;
+      --text: #e6e6f0;
+      --dim: #8a8aa0;
+      --accent: #d4af37;
+      --ok: #4ade80;
+      --warn: #fbbf24;
+      --err: #f87171;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .wrap {
+      max-width: 640px;
+      margin: 24px auto;
+      padding: 0 16px 32px;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0 0 4px;
+      color: var(--accent);
+    }
+    .sub {
+      color: var(--dim);
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .card h2 {
+      font-size: 14px;
+      margin: 0 0 12px;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--dim);
+      margin-bottom: 4px;
+    }
+    .field { margin-bottom: 12px; }
+    input, select, button {
+      font-family: inherit;
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 10px;
+    }
+    input[type="number"], input[type="text"], select {
+      width: 100%;
+    }
+    .nums-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .nums-row input {
+      width: 56px;
+      text-align: center;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    button {
+      cursor: pointer;
+      background: var(--border);
+      border: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    button:hover { background: #353548; }
+    button.primary {
+      background: var(--accent);
+      color: #1a1a24;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    button.primary:hover { background: #e6c14d; }
+    button.ghost { background: transparent; }
+    .msg {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      display: none;
+    }
+    .msg.ok { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--ok); color: var(--ok); display: block; }
+    .msg.warn { background: rgba(251, 191, 36, 0.1); border: 1px solid var(--warn); color: var(--warn); display: block; }
+    .msg.err { background: rgba(248, 113, 113, 0.1); border: 1px solid var(--err); color: var(--err); display: block; }
+    .draw-info {
+      font-size: 13px;
+      color: var(--dim);
+      margin-top: 6px;
+    }
+    .draw-info strong { color: var(--text); }
+    .winning-nums {
+      display: inline-flex;
+      gap: 4px;
+      margin-left: 6px;
+    }
+    .winning-nums span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    .origin-warn {
+      background: rgba(248, 113, 113, 0.1);
+      border: 1px solid var(--err);
+      color: var(--err);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    code {
+      background: var(--bg);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>History 시드 도구</h1>
+    <p class="sub">활성 캐릭터의 <code>history</code> 배열에 회차 항목을 1건 주입합니다. 검증/시뮬레이션 전용.</p>
+
+    <div id="origin-warn" class="origin-warn">
+      <strong>잘못된 origin.</strong> 본 도구는 <code>http://127.0.0.1:8000</code> (dev 서버) 또는 같은 origin에서 열어야 lotto 본 게임과 동일한 localStorage에 접근 가능합니다.
+      <br /><br />
+      현재 origin: <code id="cur-origin"></code>
+    </div>
+
+    <div class="card">
+      <h2>1. 캐릭터 선택</h2>
+      <div class="field">
+        <label for="char-select">활성 캐릭터 자동 선택. 다른 캐릭터로 변경 가능.</label>
+        <select id="char-select"></select>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. 회차</h2>
+      <div class="field">
+        <label for="drw-input">주입할 회차 번호 (기본 1224)</label>
+        <input type="number" id="drw-input" min="1" max="9999" value="1224" />
+        <div class="draw-info" id="draw-info">캐시 확인 중...</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. 번호 6개</h2>
+      <div class="field">
+        <label>1-45 범위, 중복 불가. 비워두면 랜덤 채움.</label>
+        <div class="nums-row">
+          <input type="number" class="num-input" min="1" max="45" />
+          <input type="number" class="num-input" min="1" max="45" />
+          <input type="number" class="num-input" min="1" max="45" />
+          <input type="number" class="num-input" min="1" max="45" />
+          <input type="number" class="num-input" min="1" max="45" />
+          <input type="number" class="num-input" min="1" max="45" />
+        </div>
+        <div class="actions">
+          <button id="btn-random" class="ghost" type="button">랜덤 6개 채우기</button>
+          <button id="btn-clear" class="ghost" type="button">번호 비우기</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4. 실행</h2>
+      <div class="actions">
+        <button id="btn-inject" class="primary" type="button">주입</button>
+        <a id="btn-back" href="../index.html">기록 탭으로 이동 →</a>
+      </div>
+      <div id="msg" class="msg"></div>
+    </div>
+
+    <p class="sub">
+      주입 후 lotto 본 게임을 새로고침하면 <code>matchHistory</code>가 자동 실행되어 등수가 채워집니다.
+      회차 draws 캐시가 없으면 "미적중 / 미발표"로 노출되며, <code>scripts/fetch-lotto-draws.bat</code> 실행으로 캐시 보강 가능.
+    </p>
+  </div>
+
+  <script>
+    const PREFIX = 'lotto_';
+    const k = (n) => PREFIX + n;
+
+    const readLS = (name, fb = null) => {
+      try {
+        const raw = localStorage.getItem(k(name));
+        return raw === null ? fb : JSON.parse(raw);
+      } catch { return fb; }
+    };
+    const writeLS = (name, val) => localStorage.setItem(k(name), JSON.stringify(val));
+
+    const $ = (id) => document.getElementById(id);
+    const showMsg = (text, kind) => {
+      const m = $('msg');
+      m.className = 'msg ' + kind;
+      m.textContent = text;
+    };
+
+    // origin 체크 (localStorage origin은 dev 서버 origin이어야 lotto 본 게임 데이터에 접근)
+    if (location.protocol === 'file:') {
+      $('origin-warn').style.display = 'block';
+      $('cur-origin').textContent = location.origin || 'file://';
+    }
+
+    // 캐릭터 로드
+    const characters = readLS('characters', []);
+    const activeId = readLS('active_character', null);
+    const charSelect = $('char-select');
+
+    if (!Array.isArray(characters) || characters.length === 0) {
+      charSelect.innerHTML = '<option value="">캐릭터 없음 - 본 게임에서 먼저 캐릭터 생성</option>';
+      charSelect.disabled = true;
+    } else {
+      characters.forEach((c) => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name + (c.id === activeId ? ' (활성)' : '');
+        if (c.id === activeId) opt.selected = true;
+        charSelect.appendChild(opt);
+      });
+    }
+
+    // s090_cleared 경고
+    const cleared = readLS('s090_cleared', false);
+    if (cleared !== true && characters.length > 0) {
+      showMsg('경고: s090_cleared 플래그가 false입니다. 본 게임 1회 진입 후 도구 사용 권장 (진입 시 history 강제 초기화 발생).', 'warn');
+    }
+
+    // draws 캐시에서 회차 정보 표시
+    const draws = readLS('draws', []);
+    const drwInput = $('drw-input');
+    const drawInfoEl = $('draw-info');
+
+    const updateDrawInfo = () => {
+      const drwNo = parseInt(drwInput.value, 10);
+      if (!drwNo) {
+        drawInfoEl.textContent = '회차 번호 입력 필요.';
+        drawInfoEl.style.color = '';
+        return;
+      }
+      const match = (Array.isArray(draws) ? draws : []).find((d) => d.drwNo === drwNo);
+      if (match) {
+        const nums = Array.isArray(match.numbers) ? match.numbers : [];
+        const bonus = match.bonus ?? '';
+        const date = match.drwDate || '';
+        const numsHtml = nums.map((n) => '<span>' + n + '</span>').join('');
+        drawInfoEl.innerHTML = '<strong>' + drwNo + '회</strong> · ' + date + ' · 당첨: <span class="winning-nums">' + numsHtml + '</span>' + (bonus ? ' +' + bonus : '');
+        drawInfoEl.style.color = '';
+      } else {
+        drawInfoEl.innerHTML = '<span style="color:var(--warn)">' + drwNo + '회 draws 캐시에 없음. 주입은 가능하나 matchedRank는 null로 남음.</span>';
+      }
+    };
+    drwInput.addEventListener('input', updateDrawInfo);
+    updateDrawInfo();
+
+    // 번호 랜덤 / 비우기
+    const numInputs = document.querySelectorAll('.num-input');
+    $('btn-random').addEventListener('click', () => {
+      const pool = [];
+      for (let i = 1; i <= 45; i++) pool.push(i);
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      const picked = pool.slice(0, 6).sort((a, b) => a - b);
+      numInputs.forEach((inp, idx) => { inp.value = picked[idx]; });
+    });
+    $('btn-clear').addEventListener('click', () => {
+      numInputs.forEach((inp) => { inp.value = ''; });
+    });
+
+    // 주입
+    $('btn-inject').addEventListener('click', () => {
+      const charId = charSelect.value;
+      if (!charId) { showMsg('캐릭터를 선택하세요.', 'err'); return; }
+      const drwNo = parseInt(drwInput.value, 10);
+      if (!drwNo || drwNo < 1) { showMsg('회차 번호가 올바르지 않습니다.', 'err'); return; }
+
+      // 번호 수집 (빈 칸이면 랜덤 자동 채움)
+      let nums = Array.from(numInputs).map((inp) => parseInt(inp.value, 10)).filter((n) => Number.isInteger(n));
+      if (nums.length === 0) {
+        const pool = [];
+        for (let i = 1; i <= 45; i++) pool.push(i);
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+        nums = pool.slice(0, 6);
+      }
+      if (nums.length !== 6) { showMsg('번호 6개를 모두 입력하거나 모두 비우세요.', 'err'); return; }
+      if (nums.some((n) => n < 1 || n > 45)) { showMsg('번호는 1-45 범위여야 합니다.', 'err'); return; }
+      if (new Set(nums).size !== 6) { showMsg('번호 중복은 허용되지 않습니다.', 'err'); return; }
+      nums.sort((a, b) => a - b);
+
+      // 캐릭터 갱신
+      const chars = readLS('characters', []);
+      const idx = chars.findIndex((c) => c.id === charId);
+      if (idx < 0) { showMsg('선택한 캐릭터를 찾을 수 없습니다.', 'err'); return; }
+      const target = chars[idx];
+      if (!Array.isArray(target.history)) target.history = [];
+
+      // 중복 체크
+      const key = nums.join(',');
+      const dup = target.history.some((h) => h.drwNo === drwNo && Array.isArray(h.numbers) && h.numbers.join(',') === key);
+      if (dup) { showMsg('같은 회차 + 같은 번호 조합이 이미 등록되어 있습니다.', 'warn'); return; }
+
+      const entry = {
+        drwNo,
+        numbers: nums,
+        bonus: null,
+        reasons: ['seed-history.html 주입 (검증 전용)'],
+        strategyIds: [],
+        strategySources: [],
+        createdAt: new Date().toISOString(),
+        matchedRank: null,
+        source: 'user',
+      };
+      target.history.push(entry);
+      chars[idx] = target;
+      writeLS('characters', chars);
+
+      showMsg('주입 완료. [' + target.name + '] ' + drwNo + '회 · ' + nums.join(' ') + ' · 기록 탭으로 이동해 확인하세요.', 'ok');
+    });
+  </script>
+</body>
+</html>

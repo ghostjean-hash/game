@@ -844,7 +844,7 @@ function renderApp() {
     renderStatsPage(content);
   } else if (state.currentTab === 'history') {
     const active = getActive();
-    renderHistoryPage(content, active, state.drwNo);
+    renderHistoryPage(content, active, state.drwNo, state.draws);
   } else if (state.currentTab === 'reverse') {
     renderReversePage(content, state.draws);
   } else if (state.currentTab === 'wheeling') {

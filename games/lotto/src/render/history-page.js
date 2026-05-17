@@ -17,11 +17,15 @@ function colorNum(n, extraClass = '') {
 
 /**
  * 전적 페이지 렌더. S3-T2 강화 4섹션 구조 + S090-후속 5섹션 (현재 회차 발표 대기 섹션 추가).
+ * S092-정정 (2026-05-18): 옛 회차 이력 = 회차별 그룹핑. 그룹 헤더에 회차 + 발표일 + 당첨번호 노출,
+ *   본문에 사용자 추천 row(번호공 + 등수 라벨).
  * @param {HTMLElement} container
  * @param {object} character 활성 캐릭터
  * @param {number} [currentDrwNo] 현재 추첨 회차 (미발표). 본 회차 확정 항목은 "발표 대기" 별도 섹션에 노출.
+ * @param {Array<{drwNo:number,drwDate:string,numbers:number[],bonus:number}>} [draws] 회차 데이터 (그룹 헤더 발표번호 + 날짜 조회용).
  */
-export function renderHistoryPage(container, character, currentDrwNo = null) {
+export function renderHistoryPage(container, character, currentDrwNo = null, draws = []) {
+  const drawMap = new Map((Array.isArray(draws) ? draws : []).map((d) => [d.drwNo, d]));
   const stats = characterStats(character);
   const sortedHistory = [...character.history].sort((a, b) => b.drwNo - a.drwNo);
 
@@ -95,17 +99,31 @@ export function renderHistoryPage(container, character, currentDrwNo = null) {
   `;
 
   // S090-후속: 옛 이력 = 현재 회차 외 모든 항목 (발표 회차 + 매칭 완료).
+  // S092-정정 (2026-05-18): 회차별 그룹핑. 사용자 명시 3건 통합 - "정확한 회차와 년월일을 표시" +
+  //   "당첨번호와 등수 표시" + "같은 회차에 선택된 추천 번호를 그룹핑". 그룹 헤더 = 회차/날짜/당첨번호,
+  //   본문 = 추천 row + 등수 라벨. SSOT: docs/01_spec.md 5.8.1-A + 5.8.4.
   const pastItems = currentDrwNo
     ? sortedHistory.filter((h) => h.drwNo !== currentDrwNo)
     : sortedHistory;
+  // 회차별 그룹핑 (drwNo desc 정렬은 sortedHistory에서 이미 처리, Map insertion order 유지).
+  const groupedByDrw = new Map();
+  for (const h of pastItems) {
+    if (!groupedByDrw.has(h.drwNo)) groupedByDrw.set(h.drwNo, []);
+    groupedByDrw.get(h.drwNo).push(h);
+  }
+  // 같은 회차 안에서는 createdAt desc 정렬.
+  for (const arr of groupedByDrw.values()) {
+    arr.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+  }
+
   const historyItems = pastItems.length === 0
     ? (pendingItems.length === 0
         ? '<section class="empty-state"><p>기록이 비어있습니다.<br/>추천 탭에서 추천을 받고 <strong>"확정"</strong>을 누르면 본 회차에 등록됩니다.<br/>매주 토요일 발표 후 자동 매칭됩니다.</p></section>'
         : '')
     : `<section class="stats-section">
-        <h2 class="stats-title">옛 회차 이력 (${pastItems.length}건, 최근 회차순)</h2>
-        <div class="history-list">
-          ${pastItems.map((h) => historyItemHtml(h)).join('')}
+        <h2 class="stats-title">옛 회차 이력 (${groupedByDrw.size}개 회차 · ${pastItems.length}건)</h2>
+        <div class="history-group-list">
+          ${Array.from(groupedByDrw.entries()).map(([drwNo, items]) => historyGroupHtml(drwNo, items, drawMap.get(drwNo))).join('')}
         </div>
       </section>`;
 
@@ -118,6 +136,104 @@ export function renderHistoryPage(container, character, currentDrwNo = null) {
     ${rankChartHtml}
     ${timelineHtml}
     ${historyItems}
+  `;
+}
+
+/**
+ * S092-정정 (2026-05-18): 회차 그룹 헤더 + 본문 row들. 그룹 헤더 = 회차/날짜/당첨번호.
+ * draw 없으면 "발표 데이터 미수신" 표기 (사용자 페치 1회 권장).
+ * @param {number} drwNo
+ * @param {Array} items 해당 회차의 history 항목들 (이미 createdAt desc 정렬)
+ * @param {object} [draw] draws Map 조회 결과 ({ drwNo, drwDate, numbers, bonus })
+ */
+function historyGroupHtml(drwNo, items, draw) {
+  const hasDraw = !!(draw && Array.isArray(draw.numbers) && draw.numbers.length === 6);
+  const date = draw && draw.drwDate ? draw.drwDate : '';
+  const dateLabel = date ? ` · ${date}` : '';
+  let winHtml = '';
+  if (hasDraw) {
+    // S092-후속 7 (2026-05-18): 사용자 명시 "당첨 번호가 작은데 크기 동일하게".
+    //   .history-num-mini(22x22) 폐기, .history-num(32x32)로 통일. 추천 row와 동일 크기.
+    const winBalls = draw.numbers.map((n) => colorNum(n, 'history-num')).join('');
+    // S092-후속 (2026-05-18): 사용자 명시 "당첨 번호에 보너스 번호가 표시되지 않음".
+    //   본번호 6 + "+" 구분 + 보너스 1 ball. 보너스 ball에 is-bonus 클래스로 외곽선 강조.
+    const bonusHtml = (typeof draw.bonus === 'number')
+      ? `<span class="history-num-plus" aria-hidden="true">+</span>${colorNum(draw.bonus, 'history-num is-bonus')}`
+      : '';
+    winHtml = `<div class="history-group-winning" aria-label="${drwNo}회 당첨번호">
+      <span class="history-group-winning-label">당첨</span>
+      <div class="history-group-winning-nums">${winBalls}${bonusHtml}</div>
+    </div>`;
+  } else {
+    winHtml = `<div class="history-group-winning is-missing">
+      <span class="history-group-winning-label">발표 데이터 미수신</span>
+    </div>`;
+  }
+  // S092-후속 (2026-05-18): 사용자 명시 2건.
+  //   (1) "미적중/미발표" 모호 라벨 정정 - draws 가용 = 미적중, draws 없음 = 미발표 분기.
+  //   (2) "결과와 번호를 한줄에 표시" - row 마크업 신규 (번호공 좌측 + 라벨 우측).
+  // S092-후속 2 (2026-05-18): 사용자 명시 3건.
+  //   (1) 맞은 번호 하이라이트 - is-matched 클래스로 일치 ball 강조.
+  //   (2) 라벨 세분화 - 0개=미적중, 1개=1개 적중, 2개=2개 적중, 3+개=등수 라벨.
+  //   (3) draw 객체 전달 (hasDraw만으로는 matched count 계산 불가).
+  const rowsHtml = items.map((h) => historyGroupRowHtml(h, draw, hasDraw)).join('');
+  return `
+    <article class="history-group">
+      <header class="history-group-header">
+        <span class="history-group-drw">${drwNo}회${dateLabel}</span>
+      </header>
+      ${winHtml}
+      <div class="history-group-rows">
+        ${rowsHtml}
+      </div>
+    </article>
+  `;
+}
+
+/**
+ * S092-후속 2 (2026-05-18): 옛 회차 그룹 안 추천 row. 한 줄 layout = 번호공 좌측 + 등수 라벨 우측.
+ *   라벨 분기:
+ *   - matchedRank 1~5 → RANK_LABELS (1~5등).
+ *   - matchedRank null + !hasDraw → "미발표".
+ *   - matchedRank null + hasDraw + matched 0 → "미적중".
+ *   - matchedRank null + hasDraw + matched 1 → "1개 적중".
+ *   - matchedRank null + hasDraw + matched 2 → "2개 적중".
+ *   일치 번호는 `.is-matched` 클래스로 ball 하이라이트.
+ * @param {object} h history 항목
+ * @param {object} [draw] draws Map 조회 결과 (당첨번호 비교용)
+ * @param {boolean} hasDraw 해당 회차 draws 가용 여부
+ */
+function historyGroupRowHtml(h, draw, hasDraw) {
+  const rank = h.matchedRank;
+  const userNums = Array.isArray(h.numbers) ? h.numbers : [];
+  const drawNumSet = hasDraw && draw && Array.isArray(draw.numbers)
+    ? new Set(draw.numbers)
+    : new Set();
+  const matchedSet = new Set(userNums.filter((n) => drawNumSet.has(n)));
+  const matchedCount = matchedSet.size;
+  let rankLabel;
+  if (rank) {
+    rankLabel = RANK_LABELS[rank];
+  } else if (!hasDraw) {
+    rankLabel = '미발표';
+  } else if (matchedCount === 0) {
+    rankLabel = '미적중';
+  } else {
+    rankLabel = `${matchedCount}개 적중`;
+  }
+  const rankColor = rank ? RANK_GLOW_COLORS[rank] : 'var(--color-text-dim)';
+  const numsHtml = userNums.map((n) => {
+    const extraCls = matchedSet.has(n) ? 'history-num is-matched' : 'history-num';
+    return colorNum(n, extraCls);
+  }).join('');
+  // S092-후속 6 (2026-05-18): 사용자 지적 "색을 빼려면 미적중인것들도 모두 빼야지 규칙이 개판이구만".
+  //   .has-match 분기 폐기 - 미일치 ball은 row 종류 무관 항상 dim = 룰 일관성.
+  //   미적중 row(matched 0)는 6개 ball 전부 dim → "0개 적중" 시각 표현 자연 강화.
+  return `
+    <article class="history-group-row">
+      <div class="history-group-row-nums">${numsHtml}</div>
+      <span class="history-group-row-rank" style="color: ${rankColor}">${rankLabel}</span>
+    </article>
   `;
 }
 

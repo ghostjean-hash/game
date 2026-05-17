@@ -1048,6 +1048,138 @@ a.btn-secondary,
   background: var(--color-surface);
 }
 
+/* S092-정정 (2026-05-18): 회차별 그룹핑 - 사용자 명시 "같은 회차에 선택된 추천 번호를 그룹핑" +
+   "정확한 회차와 년월일을 표시" + "당첨번호와 등수 표시". 그룹 헤더(회차/날짜) + 발표 당첨번호 + 본문 row들. */
+.history-group-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.history-group {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+.history-group-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+.history-group-drw {
+  font-weight: bold;
+  color: var(--color-accent);
+  font-size: var(--font-size-md);
+}
+/* S092-후속 3 + 7 (2026-05-18): 사용자 명시.
+   (3) "당첨 번호도 중앙 정렬, '당첨' 스트링은 오른쪽 미적중과 같은 위치" → 추천 row와 동일 layout.
+   (7) "당첨 번호가 작은데 크기 동일하게 하고 배경 색을 살짝 다르게" → 골드 톤 배경으로 추천 row와 시각 구분. */
+.history-group-winning {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  padding: var(--space-2);
+  background: rgba(201, 160, 80, 0.08);
+  border: 1px solid rgba(201, 160, 80, 0.28);
+  border-radius: var(--radius-md);
+}
+.history-group-winning.is-missing {
+  color: var(--color-text-dim);
+  font-style: italic;
+  justify-content: center;
+}
+.history-group-winning-label {
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  color: var(--color-text-dim);
+  flex-shrink: 0;
+  min-width: 48px;
+  text-align: right;
+  order: 2;
+}
+.history-group-winning.is-missing .history-group-winning-label {
+  min-width: 0;
+  text-align: center;
+  order: unset;
+}
+.history-group-winning-nums {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+  order: 1;
+}
+/* S092-후속 7 (2026-05-18): .history-num-mini(22x22) 폐기 - 사용자 명시 "크기 동일하게".
+   당첨 ball도 .history-num(32x32) 사용. 보너스 구분은 .is-bonus 외곽선만으로 유지. */
+.history-num.is-bonus {
+  outline: 1px dashed var(--color-text-dim);
+  outline-offset: 1px;
+}
+.history-num-plus {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 4px;
+  color: var(--color-text-dim);
+  font-size: var(--font-size-md);
+  font-weight: bold;
+}
+
+/* S092-후속 (2026-05-18): 추천 row 한 줄 layout - 번호공 좌측 + 등수 라벨 우측.
+   사용자 명시 "결과와 번호를 한 줄에 표시". flex space-between + align center. */
+.history-group-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.history-group-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.history-group-row-nums {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  flex: 1;
+  justify-content: center;
+}
+.history-group-row-rank {
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  flex-shrink: 0;
+  min-width: 48px;
+  text-align: right;
+}
+/* S092-후속 2 + 4 + 5 + 6 (2026-05-18): 사용자 명시 4단계 정정.
+   (2) "맞은 번호는 하이라이트" → 외곽선 + glow.
+   (4) "잘 안 보이네" → 2층 외곽선 + 강한 glow + 역강조 결합.
+   (5) "번호 확대는 별로" → scale 폐기.
+   (6) "색을 빼려면 미적중인것들도 모두 빼야지 규칙이 개판" → .has-match 분기 폐기.
+       미일치 ball은 row 종류 무관 항상 dim (룰 일관성). 미적중 row = 6개 전부 dim. */
+.history-group-row-nums .num {
+  transition: opacity 0.2s ease, filter 0.2s ease;
+  position: relative;
+}
+.history-group-row-nums .num:not(.is-matched) {
+  opacity: 0.35;
+  filter: grayscale(0.7);
+}
+.history-group-row-nums .num.is-matched {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px var(--color-accent),
+    0 0 14px rgba(201, 160, 80, 0.85);
+  z-index: 1;
+}
+
 /* 막대 차트 */
 .bar-chart {
   display: flex;
