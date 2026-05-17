@@ -34,7 +34,23 @@ export function loadCooccur() { return read('stats_cooccur', null); }
 export function saveCooccur(cooccur) { write('stats_cooccur', cooccur); }
 
 // 캐릭터
-export function loadCharacters() { return read('characters', []); }
+// S089 (2026-05-17): Luck 자산 전면 폐기 → load 시 옛 데이터의 luck 필드 + history[].luckApplied 필드 자동 제거.
+export function loadCharacters() {
+  const raw = read('characters', []);
+  if (!Array.isArray(raw)) return [];
+  return raw.map((c) => {
+    if (!c || typeof c !== 'object') return c;
+    const { luck: _dropLuck, ...rest } = c;
+    const cleanHistory = Array.isArray(rest.history)
+      ? rest.history.map((h) => {
+          if (!h || typeof h !== 'object') return h;
+          const { luckApplied: _dropLuckApplied, ...hRest } = h;
+          return hRest;
+        })
+      : rest.history;
+    return { ...rest, history: cleanHistory };
+  });
+}
 export function saveCharacters(characters) { write('characters', characters); }
 export function loadActiveCharacterId() { return read('active_character', null); }
 export function saveActiveCharacterId(id) { write('active_character', id); }

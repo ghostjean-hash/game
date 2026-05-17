@@ -28,7 +28,7 @@ import { mixSeeds } from '../core/random.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
 import { recordRecommendation, matchHistory, backfillRecommendations } from '../core/history.js';
-import { applyLuckGrowth } from '../core/luck.js';
+// S089 (2026-05-17): import { applyLuckGrowth } from '../core/luck.js' 폐기 (Luck 자산 폐기).
 import { ensureCurrentState, performRitual, applyRitualBonus } from '../core/ritual.js';
 import {
   ensureSavedSetsForRound, addSavedSets, removeSavedSetAt, clearSavedSets, recipeIdFor,
@@ -170,7 +170,7 @@ function deleteCharacterById(id) {
 
 /**
  * T4: 행운 의식 모달 열기 + 행위 수행 콜백 wiring.
- * 행위 수행 후 만땅이면 Luck +5 보너스 적용. 모달 닫힐 때 메인 재렌더로 게이지 위젯 + 캐릭터 카드 갱신.
+ * 행위 수행 후 만땅이면 잠금만 적용 (S089 Luck +5 보너스 폐기). 모달 닫힐 때 메인 재렌더로 게이지 위젯 + 캐릭터 카드 갱신.
  */
 function openRitualModalForActive() {
   const active = getActive();
@@ -189,13 +189,11 @@ function openRitualModalForActive() {
 
     let burstNow = false;
     if (result.justFilled) {
-      // 만땅 → Luck 보너스 적용 + 캐릭터 갱신
+      // S089 (2026-05-17): 만땅 → 잠금만 (Luck 보너스 폐기). character 불변.
       const cur = state.characters.find((c) => c.id === state.ritual.charId) || active;
       const bonus = applyRitualBonus(cur, state.ritual);
       if (bonus.applied) {
         state.ritual = bonus.state;
-        state.characters = state.characters.map((c) => (c.id === cur.id ? bonus.character : c));
-        saveCharacters(state.characters);
         burstNow = true; // S4-T2: 만땅 진입 직후 추가 파티클
       }
     }
@@ -257,7 +255,6 @@ function getRecAndFortune(active) {
 
   const ctxBase = {
     seed: active.seed,
-    luck: active.luck,
     drwNo: state.drwNo,
     numberStats: state.numberStats,
     bonusStats: state.bonusStats,
@@ -353,7 +350,6 @@ function addSavedSetsBatch(batchN) {
     return {
       seed: mixSeeds(baseSeed, salt),
       drwNo: baseDrwNo,
-      luck: active.luck,
       numberStats: state.numberStats,
       bonusStats: state.bonusStats,
       cooccur: state.cooccur,
@@ -598,14 +594,14 @@ function renderHome(content) {
   const { strategyId, strategyIds, rec, sets, fortune, drawForFortune, pool, poolNote, drawDate } = getRecAndFortune(active);
 
   // 백캐스트: 캐릭터에 최근 30회 결정론적 추천이 history에 없으면 1회 백필.
-  // Luck 부트스트랩 목적. SSOT: docs/01_spec.md 7.5.
+  // S089 (2026-05-17): Luck 부트스트랩 목적 폐기 → 이력 부트스트랩 (적중률 / 최고 등수 자연 표시).
   let updated = backfillRecommendations(active, state.draws, strategyId, {
     numberStats: state.numberStats,
     bonusStats: state.bonusStats,
     cooccur: state.cooccur,
   });
 
-  // 이력 자동 기록 + 매칭 + Luck 성장
+  // 이력 자동 기록 + 매칭. (S089 applyLuckGrowth 호출 폐기.)
   updated = recordRecommendation(updated, {
     drwNo: state.drwNo,
     numbers: rec.numbers,
@@ -614,7 +610,6 @@ function renderHome(content) {
     createdAt: new Date().toISOString(),
   });
   updated = matchHistory(updated, state.draws);
-  updated = applyLuckGrowth(updated);
 
   // S26: 누적 세트 회차 보장 (drwNo 변경 시 자동 비움).
   const ensured = ensureSavedSetsForRound(updated, state.drwNo);

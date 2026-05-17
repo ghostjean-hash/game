@@ -28,14 +28,25 @@ suite('data/storage', () => {
     assertTrue(hasSeenHelp() === false);
   });
 
-  test('characters round-trip', () => {
+  test('characters round-trip + S089 luck 필드 자동 제거', () => {
     reset();
-    const c = [{ id: 'a', seed: 1234, className: 'blessed', luck: 10, createdAt: '2026-05-01', history: [] }];
+    // 옛 캐릭터 데이터에 luck 필드 + history[].luckApplied 잔존.
+    const c = [{
+      id: 'a',
+      seed: 1234,
+      className: 'blessed',
+      luck: 10,
+      createdAt: '2026-05-01',
+      history: [{ drwNo: 1100, numbers: [1,2,3,4,5,6], bonus: 7, matchedRank: null, luckApplied: false }],
+    }];
     saveCharacters(c);
     const loaded = loadCharacters();
     assertEqual(loaded.length, 1);
     assertEqual(loaded[0].id, 'a');
     assertEqual(loaded[0].seed, 1234);
+    // S089 (2026-05-17): loadCharacters에서 luck 필드 + history[].luckApplied 자동 제거.
+    assertTrue(!('luck' in loaded[0]), 'luck 필드 자동 제거');
+    assertTrue(!('luckApplied' in loaded[0].history[0]), 'history[].luckApplied 자동 제거');
   });
 
   test('options 기본값', () => {

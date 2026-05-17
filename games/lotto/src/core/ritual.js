@@ -1,13 +1,13 @@
 // 행운 의식 (T4). SSOT: docs/01_spec.md 5.6, docs/02_data.md 1.19.
 // core/는 DOM 금지. 순수 함수.
 //
-// 해석 B (콘텐츠): 추첨 확률 영향 없음. 만땅 시 Luck +5 1회 보너스만.
+// 해석 B (콘텐츠): 추첨 확률 영향 없음.
+// S089 (2026-05-17): Luck 자산 전면 폐기. 만땅 보상 = 잠금만 유지 (의식 완료 인정, 회차당 1회).
 // 회차 변경 시 게이지 + 쿨다운 모두 리셋 (회차별 격리).
 // 캐릭터별 격리 (charId).
 
 import {
-  RITUAL_GAUGE_MAX, RITUAL_GAIN_PER_ACTION, RITUAL_LIST, LUCK_BONUS_RITUAL,
-  LUCK_MIN, LUCK_MAX,
+  RITUAL_GAUGE_MAX, RITUAL_GAIN_PER_ACTION, RITUAL_LIST,
 } from '../data/numbers.js';
 
 const VALID_IDS = new Set(RITUAL_LIST.map((r) => r.id));
@@ -55,8 +55,8 @@ export function performRitual(state, ritualId) {
 }
 
 /**
- * 만땅 보너스 적용. character.luck +LUCK_BONUS_RITUAL (cap 적용). appliedBonus 잠금.
- * 이미 적용됐거나 만땅 아니면 변화 없음.
+ * 만땅 완료 잠금. S089 (2026-05-17): Luck +5 보너스 폐기.
+ * 회차당 1회 의식 완료 인정 = appliedBonus 잠금만. character 불변.
  * @param {object} character
  * @param {object} state
  * @returns {{ character: object, state: object, applied: boolean }}
@@ -64,9 +64,8 @@ export function performRitual(state, ritualId) {
 export function applyRitualBonus(character, state) {
   if (state.appliedBonus) return { character, state, applied: false };
   if (state.gauge < RITUAL_GAUGE_MAX) return { character, state, applied: false };
-  const newLuck = Math.max(LUCK_MIN, Math.min(LUCK_MAX, character.luck + LUCK_BONUS_RITUAL));
   return {
-    character: { ...character, luck: newLuck },
+    character,
     state: { ...state, appliedBonus: true },
     applied: true,
   };

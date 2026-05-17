@@ -6,7 +6,7 @@ import { done } from './core.js';
 // register suites here as core/ modules grow:
 import './suites/seed.test.js';
 import './suites/random.test.js';
-import './suites/luck.test.js';
+// S089 (2026-05-17): luck.test.js 폐기 (Luck 자산 전면 폐기).
 import './suites/stats.test.js';
 import './suites/recommend.test.js';
 import './suites/storage.test.js';

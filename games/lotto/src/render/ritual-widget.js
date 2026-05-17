@@ -2,7 +2,7 @@
 // SSOT: docs/01_spec.md 5.6, docs/02_data.md 1.19.
 // S14: 게이지 바 + % → 한 줄 바 + 8 아이콘 진척도. 라벨 "행운 의식" → "행운 쌓기".
 //      모달 상단에 한 줄 바 동일 정보 재표시(배경 가림 보완) + 빈 애니메이션 영역.
-import { RITUAL_LIST, RITUAL_GAUGE_MAX, LUCK_BONUS_RITUAL } from '../data/numbers.js';
+import { RITUAL_LIST, RITUAL_GAUGE_MAX } from '../data/numbers.js';
 import { isRitualPerformed } from '../core/ritual.js';
 import { showModal } from './modal.js';
 
@@ -29,8 +29,9 @@ export function ritualWidgetHtml(state) {
   const filledCls = filled ? ' is-filled' : '';
   const doneCount = (state.performed || []).length;
   const ariaLabel = `${RITUAL_LABEL} ${doneCount} / ${RITUAL_LIST.length}${filled ? ' 완성' : ''}`;
+  // S089 (2026-05-17): Luck 보상 폐기. 만땅 chip은 "완성" 라벨만 (시각 강조 보존).
   const bonusChip = filled
-    ? `<span class="ritual-row-bonus" aria-hidden="true">+${LUCK_BONUS_RITUAL} 적용</span>`
+    ? `<span class="ritual-row-bonus" aria-hidden="true">완성</span>`
     : '';
   const ctaLabel = filled ? '완성 ✓' : '시작';
   return `
@@ -78,8 +79,9 @@ function ritualModalHtml(state) {
   }).join('');
 
   // S14: 모달 상단에 한 줄 바와 동일한 정보 재표시 (배경 가림 보완).
+  // S089: Luck 보상 폐기. "완성" 라벨만.
   const bonusChip = filled
-    ? `<span class="ritual-row-bonus" aria-hidden="true">+${LUCK_BONUS_RITUAL} 적용</span>`
+    ? `<span class="ritual-row-bonus" aria-hidden="true">완성</span>`
     : '';
   const headerRow = `
     <div class="ritual-row ritual-row-in-modal${filled ? ' is-filled' : ''}" aria-hidden="true">
@@ -89,8 +91,9 @@ function ritualModalHtml(state) {
     </div>
   `;
 
+  // S089 (2026-05-17): Luck +5 보상 폐기 → 단순 완성 카피.
   const completionBanner = filled
-    ? `<div class="ritual-complete-banner" role="status">의식 완성. Luck +${LUCK_BONUS_RITUAL} 부여됨.</div>`
+    ? `<div class="ritual-complete-banner" role="status">의식 완성.</div>`
     : '';
 
   return `
@@ -99,7 +102,7 @@ function ritualModalHtml(state) {
       ${headerRow}
       <div class="ritual-anim-stage" data-role="ritual-anim-stage" aria-hidden="true"></div>
       ${completionBanner}
-      <p class="ritual-intro">8가지 정성 행위로 행운을 쌓습니다. 회차 1회 한정. <strong>당첨 확률에는 영향이 없으며</strong> 만땅 시 캐릭터 Luck +${LUCK_BONUS_RITUAL}이 1회 적용됩니다.</p>
+      <p class="ritual-intro">8가지 정성 행위로 행운을 쌓습니다. 회차 1회 한정. <strong>당첨 확률에는 영향이 없습니다.</strong></p>
       <div class="ritual-grid" role="group">${cards}</div>
       <p class="ritual-disclaimer">본 콘텐츠는 정성 / 캐릭터 정체성 강화 목적이며, 실제 미신 행위를 권유하지 않습니다.</p>
     </div>

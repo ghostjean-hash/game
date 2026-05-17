@@ -26,7 +26,7 @@ export function renderHistoryPage(container, character) {
 
   const hitRate = stats.settled > 0 ? Math.round((stats.hits / stats.settled) * 1000) / 10 : 0;
 
-  // 누적 요약 (강화 + 적중률 + Luck)
+  // 누적 요약 (강화 + 적중률). S089 (2026-05-17): Luck 셀 폐기 (5셀 그리드).
   const summaryHtml = `
     <section class="stats-section">
       <h2 class="stats-title">${escapeHtml(character.name)} 전적</h2>
@@ -36,7 +36,6 @@ export function renderHistoryPage(container, character) {
         <li><span class="summary-label">적중 (3-5등)</span><span class="summary-value">${stats.hits}</span></li>
         <li><span class="summary-label">적중률</span><span class="summary-value">${stats.settled > 0 ? hitRate + '%' : '-'}</span></li>
         <li><span class="summary-label">최고 등수</span><span class="summary-value">${stats.bestRank ? RANK_LABELS[stats.bestRank] : '없음'}</span></li>
-        <li><span class="summary-label">Luck</span><span class="summary-value">${character.luck} / 100</span></li>
       </ul>
     </section>
   `;

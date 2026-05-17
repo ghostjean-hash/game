@@ -6,7 +6,7 @@ import {
   characterStats,
 } from '../../src/core/history.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../../src/core/stats.js';
-import { LUCK_INITIAL, STRATEGY_DEFAULT } from '../../src/data/numbers.js';
+import { STRATEGY_DEFAULT } from '../../src/data/numbers.js';
 
 // 미니 draws 셋 (회차 5개)
 const draws = [
@@ -25,7 +25,7 @@ function fakeCharacter() {
     animalSign: 'dragon',
     zodiac: 'aries',
     dayPillar: { stem: 'gap', branch: 'rat' },
-    luck: LUCK_INITIAL,
+    // S089 (2026-05-17): Luck 자산 폐기 - luck 필드 제거.
     lastUsedStrategy: STRATEGY_DEFAULT,
     createdAt: '2024-01-01T00:00:00.000Z',
     history: [],
@@ -49,23 +49,23 @@ suite('core/history - recordRecommendation', () => {
     assertEqual(updated.history.length, 1);
     assertEqual(updated.history[0].drwNo, 1200);
     assertEqual(updated.history[0].matchedRank, null);
-    assertEqual(updated.history[0].luckApplied, false);
+    // S089 (2026-05-17): luckApplied 필드 폐기 = 단언 제거.
+    assertTrue(!('luckApplied' in updated.history[0]));
   });
 
-  test('같은 drwNo는 덮어쓰기 + matchedRank/luckApplied 보존', () => {
+  test('S089 같은 drwNo는 덮어쓰기 + matchedRank 보존 (luckApplied 필드 폐기)', () => {
     let c = fakeCharacter();
     c = recordRecommendation(c, {
       drwNo: 1200, numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], createdAt: '2024-01-01T00:00:00.000Z',
     });
     c.history[0].matchedRank = 3;
-    c.history[0].luckApplied = true;
     c = recordRecommendation(c, {
       drwNo: 1200, numbers: [10, 11, 12, 13, 14, 15], bonus: 16, reasons: [], createdAt: '2024-01-02T00:00:00.000Z',
     });
     assertEqual(c.history.length, 1);
     assertEqual(c.history[0].numbers[0], 10); // 새 추천으로 덮어쓰기
     assertEqual(c.history[0].matchedRank, 3); // 매칭 보존
-    assertEqual(c.history[0].luckApplied, true); // luck 잠금 보존
+    assertTrue(!('luckApplied' in c.history[0])); // S089 필드 폐기
   });
 });
 

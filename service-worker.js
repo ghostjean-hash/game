@@ -26,7 +26,8 @@
 // v63 (2026-05-17): lotto S87 - 프리셋 기본값 복원 confirm 텍스트 동적화. 사용자 보고 "예전 데이터로 돌아가는 거지?". 옛 하드코딩 "균형/분산파/운세파"가 Sprint 075 갱신(운세/균형/분산) 후 잔재. DEFAULT_PRESETS.map(p=>p.label) 동적 산출로 정정. 실제 reset 동작은 새 DEFAULT_PRESETS로 정상 작동, confirm 텍스트만 옛 라벨이었음. SSOT: PROGRESS.md 2.101.10.
 // v64 (2026-05-17): lotto S088 - (1) "전체 비우기" → "전체 삭제" 라벨 변경 (saved-sets 액션바 + 휠링 페이지 + docs/01_spec SSOT). (2) 크롬 모바일 하단 메뉴 슬라이딩과 .bottom-tabs 위치 정확 동기 - viewport-sync.js 신설 (visualViewport API resize/scroll → translateY 보정) + CSS will-change/translateZ로 GPU layer 분리. 사용자 명시 "항상 보임" = visual viewport visible bottom에 강제 부착. SSOT: PROGRESS.md 2.102.
 // v65 (2026-05-17): lotto S088 후속 - sourceDisplayMode에 'off' 모드 추가 (사용자 명시 "색점을 표시하지 않는 설정 옵션"). numHtml(saved-sets / draw-card 양쪽) mode === 'off' 분기 + settings-page 라디오 3번째 옵션("표시 안 함") + numbers.js SOURCE_DISPLAY_OFF 상수 + storage.test off round-trip 1건 추가. SSOT: PROGRESS.md 2.102.11.
-const CACHE_VERSION = "v65";
+// v66 (2026-05-17): lotto S089 - Luck 자산 전면 폐기 (사용자 명시 "Luck을 게임요소로 추가하고 싶은 생각 없음" + 낮은 점수 부정적 인상). core/luck.js 모듈 삭제 + recommend.js BLESSED boost 고정 +0.5(luck 비례 폐기) + history.js luckApplied 필드 제거 + ritual.js 만땅 보상 +5 폐기(잠금만 유지) + numbers.js LUCK_* 상수 6건 폐기 + storage.js 캐릭터 load 마이그레이션 + UI Luck 바/통계 셀/카피 정정 + tests/suites/luck.test.js 폐기 + runner 등록 해제. 회귀 315/315 PASS. SSOT: PROGRESS.md 2.103.
+const CACHE_VERSION = "v66";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

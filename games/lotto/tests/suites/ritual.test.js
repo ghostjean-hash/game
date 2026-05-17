@@ -4,7 +4,7 @@ import {
   emptyRitualState, ensureCurrentState, performRitual, applyRitualBonus,
   progressRatio, isRitualPerformed,
 } from '../../src/core/ritual.js';
-import { RITUAL_LIST, RITUAL_GAUGE_MAX, LUCK_BONUS_RITUAL } from '../../src/data/numbers.js';
+import { RITUAL_LIST, RITUAL_GAUGE_MAX } from '../../src/data/numbers.js';
 
 suite('core/ritual - 빈 상태 + ensureCurrentState', () => {
   test('emptyRitualState 형태', () => {
@@ -97,36 +97,29 @@ suite('core/ritual - performRitual', () => {
   });
 });
 
-suite('core/ritual - applyRitualBonus', () => {
+// S089 (2026-05-17): Luck 자산 폐기 - applyRitualBonus는 잠금만 적용 (character 불변).
+suite('core/ritual - applyRitualBonus (S089 잠금만)', () => {
   test('만땅 미달이면 적용 안 됨', () => {
     const s = { charId: 'c1', drwNo: 1222, performed: ['meditate'], gauge: 12.5, appliedBonus: false };
-    const ch = { id: 'c1', luck: 50 };
+    const ch = { id: 'c1' };
     const r = applyRitualBonus(ch, s);
     assertEqual(r.applied, false);
-    assertEqual(r.character.luck, 50);
+    assertEqual(r.state.appliedBonus, false);
   });
 
-  test('만땅이면 Luck +5 + appliedBonus 잠금', () => {
+  test('만땅이면 appliedBonus 잠금만 (Luck 보상 폐기, character 불변)', () => {
     const s = { charId: 'c1', drwNo: 1222, performed: [], gauge: RITUAL_GAUGE_MAX, appliedBonus: false };
-    const ch = { id: 'c1', luck: 50 };
+    const ch = { id: 'c1' };
     const r = applyRitualBonus(ch, s);
     assertEqual(r.applied, true);
-    assertEqual(r.character.luck, 50 + LUCK_BONUS_RITUAL);
     assertEqual(r.state.appliedBonus, true);
+    assertTrue(r.character === ch); // character 객체 동일 = 불변 보장
   });
 
   test('이미 appliedBonus면 재적용 안 됨', () => {
     const s = { charId: 'c1', drwNo: 1222, performed: [], gauge: RITUAL_GAUGE_MAX, appliedBonus: true };
-    const ch = { id: 'c1', luck: 50 };
+    const ch = { id: 'c1' };
     const r = applyRitualBonus(ch, s);
     assertEqual(r.applied, false);
-    assertEqual(r.character.luck, 50);
-  });
-
-  test('Luck cap 100', () => {
-    const s = { charId: 'c1', drwNo: 1222, performed: [], gauge: RITUAL_GAUGE_MAX, appliedBonus: false };
-    const ch = { id: 'c1', luck: 98 };
-    const r = applyRitualBonus(ch, s);
-    assertEqual(r.character.luck, 100);
   });
 });

@@ -111,12 +111,6 @@ export function characterCardHtml(character, fortune, drawOrDrwNo, drawDate) {
       </div>
       ${fortuneCopy ? `<p class="fortune-copy">${escapeHtml(fortuneCopy)}</p>` : ''}
       ${relationLabel ? `<p class="fortune-relation">${escapeHtml(relationLabel)}</p>` : ''}
-      <div class="char-luck" aria-label="Luck 스탯 ${character.luck} / 100">
-        <div class="luck-label">Luck <strong>${character.luck}</strong> / 100</div>
-        <div class="luck-bar" role="progressbar" aria-valuenow="${character.luck}" aria-valuemin="0" aria-valuemax="100">
-          <span style="width: ${character.luck}%; background: ${fortuneColor};"></span>
-        </div>
-      </div>
       ${luckyNumbersHtml(character, drawDate)}
     </section>
   `;

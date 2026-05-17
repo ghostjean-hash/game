@@ -17,7 +17,7 @@ import {
 // S74 (2026-05-16): short를 label 머리글자(label[0])로 통일. 사용자 보고 "최신→추 / 별자리→점 / 보너스→별 / 적게→안 / 랜덤→축 불일치".
 //   S21/S22의 약자 매핑("추세/별빛/안나옴/축복")이 S34/S35 label 변경 후에도 정정 누락된 결손. 매핑 = label[0] 자동 정합.
 const STRATEGIES = [
-  { id: STRATEGY_BLESSED, label: '랜덤', short: '랜', desc: '캐릭터 정체성: 키운 Luck만큼 시드 6번호에 보너스. 운세에 가장 민감', category: '랜덤' },
+  { id: STRATEGY_BLESSED, label: '랜덤', short: '랜', desc: '캐릭터 시드 기반 6번호에 +0.5 boost. 시드 차별성', category: '랜덤' },
   { id: STRATEGY_TREND_FOLLOWER, label: '최신', short: '최', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
   { id: STRATEGY_STATISTICIAN, label: '많이', short: '많', desc: '역대 회차에 가장 많이 나온 번호 위주', category: '통계' },
   { id: STRATEGY_SECOND_STAR, label: '보너스', short: '보', desc: '역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두)', category: '통계' },

@@ -128,7 +128,7 @@ export function renderSettingsPage(container, handlers) {
         <input type="checkbox" data-setting="fiveSets" ${options.fiveSets ? 'checked' : ''} />
         <span class="settings-label">
           <strong>5세트 동시 추천</strong>
-          <span class="settings-hint">한 회차에 시드 변형으로 5장 결정론 추천 표시 (메인 1장 + 컴팩트 4장). 이력 기록 / Luck 매칭은 메인만. 5장 구매 권유 아님, 당첨 확률 변화 없음.</span>
+          <span class="settings-hint">한 회차에 시드 변형으로 5장 결정론 추천 표시 (메인 1장 + 컴팩트 4장). 이력 기록은 메인만. 5장 구매 권유 아님, 당첨 확률 변화 없음. (S089 Luck 매칭 폐기.)</span>
         </span>
       </label>
     </section>

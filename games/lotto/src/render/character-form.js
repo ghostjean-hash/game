@@ -1,6 +1,6 @@
 // 캐릭터 생성 폼. 전략은 별도 (메인 화면 picker).
 // 별자리는 생년월일에서 자동 계산 (별도 입력 없음). SSOT: docs/02_data.md 2.6.
-import { LUCK_INITIAL, DEFAULT_PRESETS } from '../data/numbers.js';
+import { DEFAULT_PRESETS } from '../data/numbers.js';
 import { characterSeed } from '../core/seed.js';
 import { yearToAnimalSign, zodiacFromBirthDate } from '../core/zodiac.js';
 import { dateToDayPillar } from '../core/saju.js';
@@ -75,7 +75,7 @@ export function renderCharacterForm(container, onCreated) {
       animalSign,
       zodiac,
       dayPillar,
-      luck: LUCK_INITIAL,
+      // S089 (2026-05-17): Luck 자산 전면 폐기. luck 필드 제거.
       // S75 (2026-05-16): 신규 캐릭터 진입 시 슬롯 1(운세) 자동 활성. 사용자 명시 "프리셋 미선택 시 추천 차단".
       //   옛 [STRATEGY_DEFAULT] = [BLESSED] 단독은 어느 프리셋과도 일치 안 함 → "선택 안 됨" 상태로 추천되던 버그.
       lastUsedStrategy: DEFAULT_PRESETS[0].strategyIds[0],
@@ -89,7 +89,7 @@ export function renderCharacterForm(container, onCreated) {
 
 /**
  * S84 (2026-05-17): 캐릭터 편집 폼.
- *   편집 필드 = name + birth (생년월일). luckyWord / Luck 직접 수정 불가.
+ *   편집 필드 = name + birth (생년월일). luckyWord 직접 수정 불가. (S089 Luck 자산 폐기.)
  *   seed는 보존 (캐릭터 정체성 + 옛 history / 추천 결과 일관성).
  *   birth 변경 시 zodiac/animalSign/dayPillar 재계산 (운세/사주 자동 갱신).
  * @param {HTMLElement} container
@@ -163,7 +163,7 @@ export function renderCharacterEditForm(container, character, onUpdated, onCance
     const animalSign = Number.isInteger(birthYear) ? yearToAnimalSign(birthYear) : character.animalSign;
     const dayPillar = dateToDayPillar(birth);
 
-    // seed / id / createdAt / history / savedSets / lastUsedStrategies / luck 보존.
+    // seed / id / createdAt / history / savedSets / lastUsedStrategies 보존. (S089 luck 자산 폐기.)
     // S85: birth도 새 값으로 갱신 (다음 편집 시 prefill 보장).
     const updated = {
       ...character,

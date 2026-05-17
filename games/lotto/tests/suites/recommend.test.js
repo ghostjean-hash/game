@@ -9,10 +9,10 @@ import {
   FIVE_SETS_COUNT,
 } from '../../src/data/numbers.js';
 
+// S089 (2026-05-17): Luck 자산 폐기 - ctx에서 luck 인자 제거.
 const baseCtx = {
   seed: 0xdeadbeef,
   strategyId: STRATEGY_BLESSED,
-  luck: 50,
   drwNo: 1100,
   numberStats: [],
   bonusStats: [],
@@ -114,7 +114,9 @@ suite('core/recommend - 객관 전략 캐릭터 무관 (SSOT: 02_data.md 1.5)', 
 
   // S43.3 (2026-05-08): 객관 strategy 개념 폐기. 새 architecture는 모든 strategy가 samplingSeed = mix(seed, drwNo) 의존 → 시드 다르면 결과 다름. 단언 폐기.
 
-  test('luck 달라도 같은 결과 (Luck boost 미적용)', () => {
+  test('S089 luck 인자 무시 (Luck 자산 폐기)', () => {
+    // S089 이후 luck 인자는 destructure에서 제거되어 무시됨.
+    // 옛 호출 패턴(luck 전달)도 결과 변동 없어야 함 = 객관 전략 결정론 보장.
     for (const strategyId of objectiveStrategies) {
       const a = recommendMulti({ ...baseCtx, strategyId, luck: 0, numberStats, bonusStats });
       const b = recommendMulti({ ...baseCtx, strategyId, luck: 100, numberStats, bonusStats });
@@ -454,8 +456,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     const N_T = 1000;
     for (let i = 0; i < N_T; i++) {
       const r = recommendMulti({
-        seed: 0xCAFEBABE + i, drwNo: 1223 + i, luck: 50,
-        numberStats: [], bonusStats: [], cooccur: [],
+        seed: 0xCAFEBABE + i, drwNo: 1223 + i,         numberStats: [], bonusStats: [], cooccur: [],
         zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
         strategyIds: [STRATEGY_INTUITIVE],
       });
@@ -472,8 +473,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     const N_T = 1000;
     for (let i = 0; i < N_T; i++) {
       const r = recommendMulti({
-        seed: 0xCAFEBABE + i, drwNo: 1223 + i, luck: 50,
-        numberStats: [], bonusStats: [], cooccur: [],
+        seed: 0xCAFEBABE + i, drwNo: 1223 + i,         numberStats: [], bonusStats: [], cooccur: [],
         zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
         strategyIds: [STRATEGY_INTUITIVE],
       });
@@ -490,8 +490,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     const N_T = 1000;
     for (let i = 0; i < N_T; i++) {
       const r = recommendMulti({
-        seed: 0xCAFEBABE + i, drwNo: 1223 + i, luck: 50,
-        numberStats: [], bonusStats: [], cooccur: [],
+        seed: 0xCAFEBABE + i, drwNo: 1223 + i,         numberStats: [], bonusStats: [], cooccur: [],
         zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
         strategyIds: [STRATEGY_INTUITIVE],
       });
@@ -506,8 +505,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     const N_T = 1000;
     for (let i = 0; i < N_T; i++) {
       const r = recommendMulti({
-        seed: 0xCAFEBABE + i, drwNo: 1223 + i, luck: 50,
-        numberStats: [], bonusStats: [], cooccur: [],
+        seed: 0xCAFEBABE + i, drwNo: 1223 + i,         numberStats: [], bonusStats: [], cooccur: [],
         zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
         strategyIds: [STRATEGY_INTUITIVE],
       });
@@ -519,8 +517,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
   test('strategySources 길이 6 + 모두 strategyIds 안 ID', () => {
     const sids = [STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_INTUITIVE];
     const r = recommendMulti({
-      seed: 0xCAFEBABE, drwNo: 1223, luck: 50,
-      numberStats: [], bonusStats: [], cooccur: [],
+      seed: 0xCAFEBABE, drwNo: 1223,       numberStats: [], bonusStats: [], cooccur: [],
       zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
       strategyIds: sids,
     });
@@ -550,8 +547,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     const N = 50;
     for (let i = 0; i < N; i += 1) {
       const r = recommendMulti({
-        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
-        numberStats, bonusStats: [], cooccur: [],
+        seed: 0xC0FFEE + i, drwNo: 1225 + i,         numberStats, bonusStats: [], cooccur: [],
         zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
         strategyIds: sids,
       });
@@ -566,8 +562,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     // 페치 전 = numberStats 빈 배열. 통계 라벨은 topK 빈 set → 매칭 실패 → fall-through.
     const sids = [STRATEGY_TREND_FOLLOWER, STRATEGY_ASTROLOGER, STRATEGY_INTUITIVE];
     const r = recommendMulti({
-      seed: 0xC0FFEE, drwNo: 1225, luck: 50,
-      numberStats: [], bonusStats: [], cooccur: [],
+      seed: 0xC0FFEE, drwNo: 1225,       numberStats: [], bonusStats: [], cooccur: [],
       zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
       strategyIds: sids,
     });
@@ -595,8 +590,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     const N = 50;
     for (let i = 0; i < N; i += 1) {
       const r = recommendMulti({
-        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
-        numberStats, bonusStats: [], cooccur: [],
+        seed: 0xC0FFEE + i, drwNo: 1225 + i,         numberStats, bonusStats: [], cooccur: [],
         zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
         strategyIds: sids,
       });
@@ -616,8 +610,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     const N = 50;
     for (let i = 0; i < N; i += 1) {
       const r = recommendMulti({
-        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
-        numberStats, bonusStats: [], cooccur: [],
+        seed: 0xC0FFEE + i, drwNo: 1225 + i,         numberStats, bonusStats: [], cooccur: [],
         zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
         strategyIds: sids,
       });
@@ -633,8 +626,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     const N = 100;
     for (let i = 0; i < N; i += 1) {
       const r = recommendMulti({
-        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
-        numberStats: [], bonusStats: [], cooccur: [],
+        seed: 0xC0FFEE + i, drwNo: 1225 + i,         numberStats: [], bonusStats: [], cooccur: [],
         zodiac: 'cancer', dayPillar: { stem: 'gap', branch: 'rat' },
         strategyIds: sids,
       });
@@ -656,8 +648,7 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     const N = 50;
     for (let i = 0; i < N; i += 1) {
       const r = recommendMulti({
-        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
-        numberStats: [], bonusStats, cooccur: [],
+        seed: 0xC0FFEE + i, drwNo: 1225 + i,         numberStats: [], bonusStats, cooccur: [],
         zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
         strategyIds: sids,
       });

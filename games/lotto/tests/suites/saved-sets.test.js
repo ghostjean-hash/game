@@ -181,7 +181,6 @@ suite('S32 풀 한계 재시도 - 별자리 좁은 풀', () => {
         const ctx = {
           seed: mixSeeds(baseSeed, salt),
           drwNo,
-          luck: 50,
           numberStats: [],
           bonusStats: [],
           cooccur: [],

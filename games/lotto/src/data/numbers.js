@@ -7,12 +7,9 @@ export const NUMBER_MAX = 45;
 export const PICK_COUNT = 6;
 export const BONUS_COUNT = 1;
 
-// 1.2. Luck 스탯
-export const LUCK_MIN = 0;
-export const LUCK_MAX = 100;
-export const LUCK_INITIAL = 10;
-export const LUCK_BONUS_HIT = 5;
-export const LUCK_BONUS_DAILY = 1;
+// 1.2. ~~Luck 스탯~~ (S089, 2026-05-17 전면 폐기)
+// 사용자 명시 "Luck을 게임요소로 추가하고 싶은 생각 없음" + 낮은 점수 부정적 인상 유발.
+// 폐기 상수: LUCK_MIN / LUCK_MAX / LUCK_INITIAL / LUCK_BONUS_HIT / LUCK_BONUS_DAILY / LUCK_BONUS_RITUAL.
 
 // 1.3. 통계 윈도우
 export const RECENT_SHORT = 10;
@@ -138,11 +135,12 @@ export const WEIGHT_MIN_FLOOR = 0.0001;
 
 // 1.19. 행운 의식 (T4, 2026-05-02 신설)
 // SSOT: docs/02_data.md 1.19, docs/01_spec.md 5.6.
-// 해석 B: 정성 / 콘텐츠 게이지. 추첨 확률 영향 없음. 만땅 시 Luck +5 보너스만.
+// 해석 B: 정성 / 콘텐츠 게이지. 추첨 확률 영향 없음.
+// S089 (2026-05-17): ~~만땅 시 Luck +5 보너스~~ 폐기. 만땅 보상은 잠금만 유지 (회차당 1회 의식 완료 인정).
 // 회차 변경 시 게이지 + 행위 쿨다운 모두 리셋.
 export const RITUAL_GAUGE_MAX = 100;
 export const RITUAL_GAIN_PER_ACTION = 12.5;  // 8 행위 × 12.5 = 100
-export const LUCK_BONUS_RITUAL = 5;          // 만땅 1회 Luck 보너스
+// ~~LUCK_BONUS_RITUAL~~ S089 폐기 (Luck 자산 전면 폐기).
 
 // 행위 8종. 라벨에 "확률" / "필승" 단어 0건. 종교 / IP 회피 톤.
 export const RITUAL_LIST = Object.freeze([
@@ -164,10 +162,11 @@ export const RITUAL_PARTICLE_DURATION_MS = 900;
 export const RITUAL_PARTICLE_RADIUS_MAX = 140;  // 최대 비행 반경(px)
 export const RITUAL_PARTICLE_SIZE = 4;          // 입자 base 반지름(px)
 
-// 1.16. 백캐스트 (Luck 성장 부트스트랩)
+// 1.16. 백캐스트 (S089 후 = 이력 부트스트랩)
 // SSOT: docs/02_data.md 1.16, docs/01_spec.md 7.5.
 // 캐릭터 첫 추첨 탭 진입 시 최근 N회에 대해 결정론적 추천 + 매칭을 history에 백필.
-// 다음 추첨 회차(미래)는 발표 전이라 매칭 불가 → 과거 회차로 luck 부트스트랩.
+// 다음 추첨 회차(미래)는 발표 전이라 매칭 불가 → 과거 회차로 적중률 / 최고 등수 자연 표시.
+// S089 (2026-05-17): ~~Luck 성장 부트스트랩~~ 폐기 → 이력 부트스트랩 (Luck 자산 폐기).
 export const BACKFILL_RECENT_COUNT = 30;
 
 // 1.15. 추첨 일정 (한국 동행복권 6/45)

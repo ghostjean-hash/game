@@ -16,6 +16,7 @@
 > 12차 정리: 2026-05-17. Sprint 072(절 2.93, assignSourceForNumber 통계 카테고리 라벨 매핑 결손 정정) archive 추가 이전. Sprint 079 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 073~079 활성 잔존.
 > 13차 정리: 2026-05-17. Sprint 073(절 2.94, F1~F5 cleanup) archive 추가 이전. Sprint 084 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 074~084 활성 잔존 (단 074~083은 단일 sprint들 안 후속 정정 패턴 + 본 sprint 084).
 > 14차 정리: 2026-05-17. Sprint 074(절 2.95, strategyShort 매핑 6건 label[0] 통일) archive 추가 이전. Sprint 088 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 075~088 활성 잔존.
+> 15차 정리: 2026-05-17. Sprint 075(절 2.96, DEFAULT_PRESETS 순서/라벨/묶음 재정렬 + 프리셋 미선택 차단) archive 추가 이전. Sprint 089 신설(Luck 자산 전면 폐기)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 076~089 활성 잔존.
 >
 > 본 archive는 검색 / 회귀 디버그용. 새 세션에서 자동 적재되지 않음.
 
@@ -27,6 +28,77 @@
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.96. Sprint 075 완료 - DEFAULT_PRESETS 순서/라벨/묶음 재정렬 + 프리셋 미선택 차단 (S75, 2026-05-16)
+
+배경: 사용자 명시 2건. (1) "전략 프리셋이 선택되지 않았는데 세트 추천을 하네? 프리셋 미선택일 경우 추천 차단". (2) 기본값 순서 변경: 1.운세 / 2.균형 / 3.분산(직감 X, 균형, 사주).
+
+### 2.96.1. 사용자 답변 확정 (AskUserQuestion 좁히기)
+
+| 질문 | 답변 |
+|---|---|
+| 분산 묶음 정확 구성 | **균형 + 사주 (2전략)** = `[balancer, fiveElements]` |
+| 슬롯 라벨 | **"운세 / 균형 / 분산" 짧게** (옛 `-파` 어미 폐기) |
+| 미선택 시 차단 방식 | **버튼 disabled + 기본값 자동 선택 (슬롯 1)** |
+
+### 2.96.2. DEFAULT_PRESETS 재정렬
+
+| 슬롯 | 이전 | 이후 |
+|---|---|---|
+| 1 | 균형 (`trendFollower`/`astrologer`/`intuitive`) | **운세** (`astrologer`/`fiveElements`/`zodiacElement`) |
+| 2 | 분산파 (`regressionist`/`intuitive`/`balancer`) | **균형** (`trendFollower`/`astrologer`/`intuitive`) |
+| 3 | 운세파 (`astrologer`/`fiveElements`/`zodiacElement`) | **분산** (`balancer`/`fiveElements`) |
+
+분산 = 2전략 (다른 슬롯 3전략 대비 컴팩트). 사용자 명시 "직감(X), 균형, 사주" 그대로 해석.
+
+### 2.96.3. 프리셋 미선택 시 추천 차단 (3계층 방어)
+
+| 계층 | 위치 | 동작 |
+|---|---|---|
+| 1. 진입 차단 | `character-form.js` | 신규 캐릭터 `lastUsedStrategies = DEFAULT_PRESETS[0].strategyIds` 자동 활성 (슬롯 1 운세). 옛 `[STRATEGY_DEFAULT]=BLESSED` 단독 진입이 어느 프리셋과도 불일치 → 추천되던 버그 정정 |
+| 2. UI 차단 | `saved-sets-section.js` `savedSetsAddBarHtml(presetSelected)` 인자 | false면 + 1세트 / + 5세트 `disabled` + "아래 프리셋을 선택하세요" hint |
+| 3. 가드 | `main.js` `addSavedSetsBatch` | `isAnyPresetActive` 체크. UI 우회 click(키보드 ENTER 등) 차단 |
+
+3계층 = DOM disabled 우회 / 키보드 / future 코드 진입 모두 cover.
+
+### 2.96.4. 옛 사용자 마이그레이션 - 보수적 보존
+
+`storage.js` `loadPresets`에 자동 마이그레이션 **폐기 결정**. 사유:
+- 옛 디폴트 라벨 일치 + 묶음 편집 흔적 있는 케이스(예: subtitle 잔존)에서 사용자 편집 무시될 위험.
+- 기존 사용자가 새 디폴트를 원하면 설정 탭 "기본값 복원" 버튼으로 명시 갱신 가능 (사용자 결정 영역).
+- 신규 캐릭터는 character-form.js에서 슬롯 1 자동 활성으로 즉시 새 디폴트 적용 = 진입 경로 분리.
+
+S43.7 옛 마이그레이션(모두-직감-단독 reset)은 보존 (Sprint 053 임시 단순화 잔재 정리용).
+
+### 2.96.5. 변경 파일
+
+- `src/data/numbers.js`: `DEFAULT_PRESETS` 갱신.
+- `src/data/storage.js`: S75 자동 마이그레이션 폐기 결정 메모.
+- `src/render/character-form.js`: 신규 캐릭터 `lastUsedStrategies = DEFAULT_PRESETS[0]`.
+- `src/render/main.js`: `isAnyPresetActive` 헬퍼 + addSavedSetsBatch 가드 + presetSelected 인자 전달.
+- `src/render/saved-sets-section.js`: `savedSetsAddBarHtml(presetSelected)` 인자 + "프리셋을 선택하세요" hint.
+- `docs/02_data.md` 1.20.2: DEFAULT_PRESETS 표 갱신 + S75 변경 사유.
+- `tests/suites/storage.test.js`: line 132 단언 갱신 (옛 '균형' → 동적 originalLabel).
+- `tests/suites/strategy-picker.test.js`: DEFAULT_PRESETS 구성 회귀 1건 추가.
+- `game/service-worker.js` v49 → v50.
+
+### 2.96.6. 검증
+
+- `node tests/run-node.js` → **322 / 322 PASS** (321 → 322, S75 회귀 1건 추가).
+- 회귀 차단:
+  - `DEFAULT_PRESETS[0].label === '운세'` / `[1].label === '균형'` / `[2].label === '분산'` 단언
+  - 묶음 정확 일치 단언 (sort-join 비교)
+  - 분산 슬롯 length === 2 단언 (2전략임을 명시)
+
+### 2.96.7. 사용자 화면 기대 변동
+
+- **신규 캐릭터**: 슬롯 1 운세 자동 활성. + 1세트 / + 5세트 즉시 사용 가능.
+- **기존 캐릭터**: lastUsedStrategies가 어느 프리셋과도 일치 안 하면 + 버튼 disabled + "프리셋을 선택하세요" hint. 사용자가 슬롯 1~3 중 하나 클릭하면 즉시 활성.
+- **기존 프리셋 데이터**: 보수적 보존. 새 디폴트 원하면 설정 탭 "기본값 복원".
+
+### 2.96.8. Sprint 068 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 068(절 2.89, 모바일 풀스코프) archive 이전. 본 sprint 종료 시점 활성 = 069~075 = 7건 정합. archive 8차 정리.
 
 ## 2.95. Sprint 074 완료 - strategyShort 매핑 6건을 label[0]로 통일 (S74, 2026-05-16)
 

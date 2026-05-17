@@ -14,14 +14,14 @@ import { BACKFILL_RECENT_COUNT } from '../data/numbers.js';
  */
 export function recordRecommendation(character, recommendation) {
   const idx = character.history.findIndex((h) => h.drwNo === recommendation.drwNo);
-  const entry = { ...recommendation, matchedRank: null, luckApplied: false };
+  // S089 (2026-05-17): luckApplied 필드 폐기. 옛 데이터의 luckApplied는 storage load에서 자동 제거.
+  const entry = { ...recommendation, matchedRank: null };
   const next = [...character.history];
   if (idx >= 0) {
-    // 같은 drwNo면 매칭 결과 + luckApplied 보존 + 추천 덮어쓰기
+    // 같은 drwNo면 매칭 결과 보존 + 추천 덮어쓰기
     next[idx] = {
       ...entry,
       matchedRank: next[idx].matchedRank,
-      luckApplied: next[idx].luckApplied || false,
     };
   } else {
     next.push(entry);
@@ -41,7 +41,7 @@ export function matchHistory(character, draws) {
     const draw = drawMap.get(h.drwNo);
     if (!draw) return { ...h, matchedRank: null };
     const rank = matchRank({ numbers: h.numbers, bonus: h.bonus }, draw);
-    // matchedRank만 갱신. luckApplied는 보존 (이미 적용된 보너스 보호).
+    // S089: matchedRank만 갱신. (옛 luckApplied 잠금 로직은 Luck 자산 폐기로 제거.)
     return { ...h, matchedRank: rank };
   });
   return { ...character, history: next };
@@ -50,7 +50,7 @@ export function matchHistory(character, draws) {
 /**
  * 백캐스트: 최근 N회 draws에 대해 결정론적 추천을 history에 백필 + 매칭.
  * 이미 history에 있는 회차는 건너뜀 (idempotent).
- * Luck 부트스트랩 목적. 다음 추첨(미래)은 발표 전이라 매칭 불가하므로 과거 회차로 충당.
+ * S089 (2026-05-17): ~~Luck 부트스트랩 목적~~ → 이력 부트스트랩 (적중률 / 최고 등수 자연 표시). 다음 추첨(미래)은 발표 전이라 매칭 불가하므로 과거 회차로 충당.
  *
  * 통계 인자(numberStats / bonusStats / cooccur)는 "현재 시점" 통계를 모든 회차에 사용.
  * 결정론(같은 시점, 같은 캐릭터, 같은 회차 = 같은 결과). 회차별 시점 통계는 본 함수의 책임 아님.
@@ -75,7 +75,6 @@ export function backfillRecommendations(character, draws, strategyId, stats, las
     const rec = recommendMulti({
       seed: character.seed,
       strategyIds: [strategyId],
-      luck: character.luck,
       drwNo: draw.drwNo,
       numberStats: stats.numberStats,
       bonusStats: stats.bonusStats,
@@ -83,6 +82,7 @@ export function backfillRecommendations(character, draws, strategyId, stats, las
       zodiac: character.zodiac,
       dayPillar: character.dayPillar,
     });
+    // S089: luckApplied 필드 제거.
     newEntries.push({
       drwNo: draw.drwNo,
       numbers: rec.numbers,
@@ -90,7 +90,6 @@ export function backfillRecommendations(character, draws, strategyId, stats, las
       reasons: rec.reasons,
       createdAt: character.createdAt,
       matchedRank: matchRank({ numbers: rec.numbers, bonus: rec.bonus }, draw),
-      luckApplied: false,
     });
   }
   if (newEntries.length === 0) return character;

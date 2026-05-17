@@ -16,7 +16,7 @@ games/lotto/
 │   ├── core/            # 순수 로직 (DOM 금지)
 │   │   ├── seed.js      # FNV-1a + characterSeed
 │   │   ├── random.js    # Mulberry32 PRNG + mixSeeds
-│   │   ├── luck.js      # Luck 분산도 적용 + 성장 룰
+│   │   # luck.js S089(2026-05-17) 폐기 - Luck 자산 전면 폐기
 │   │   ├── stats.js     # 통계 캐시 계산 (본번호 / 보너스 / 동시출현)
 │   │   ├── recommend.js # 추천 엔진 (객관 5 + 시드 의존 6 분기)
 │   │   ├── fortune.js   # 운세 산출 (대길/길/평/흉) + 띠/사주 보정
@@ -26,7 +26,7 @@ games/lotto/
 │   │   ├── saju.js      # 사주 일주 + 오행 (운세 추가 보정)
 │   │   ├── schedule.js  # 다음 추첨 회차 / 카운트다운 타깃 시각
 │   │   ├── wheeling.js  # Full / Abbreviated Wheel + 4-if-4 검증
-│   │   ├── ritual.js    # 행운 의식 (정성 게이지, Luck +5 보너스, 추첨 무관) - T4
+│   │   ├── ritual.js    # 행운 의식 (정성 게이지, 만땅 잠금만, 추첨 무관) - T4 (S089 Luck +5 보너스 폐기)
 │   │   ├── reverse.js   # 역추첨 (사용자 6개 → 전 회차 최고 등수 매칭) - S2-T1
 │   │   └── saved-sets.js # 누적 추천 세트 (회차 격납 / 추가 / 삭제 / 중복 차단) - S26
 │   ├── render/          # DOM 렌더
@@ -68,7 +68,7 @@ games/lotto/
 │   └── suites/          # 테스트 파일 (core/ 모든 모듈 + storage)
 │       ├── seed.test.js
 │       ├── random.test.js
-│       ├── luck.test.js
+│       # luck.test.js S089(2026-05-17) 폐기
 │       ├── stats.test.js
 │       ├── recommend.test.js
 │       ├── storage.test.js
@@ -140,14 +140,14 @@ games/lotto/
     └─ 객관 포함: drwNo 변형 (mixSeeds(drwNo, SAVED_SETS_SALT_BASE + offset))
     └─ 그 외: seed 변형
     └─ 객관 시드: mixSeeds(mixSeeds(drwNo, OBJECTIVE_SEED_SALT), strategyHash(strategyId)) (S21)
-    └─ 시드 의존: mixSeeds(seed, drwNo) + applyLuck
+    └─ 시드 의존: mixSeeds(seed, drwNo) (S089 applyLuck 폐기, BLESSED boost 고정 +0.5)
   → core/saved-sets.js addSavedSets (중복 numbers skip, cap 차단)
   → data/storage.js saveCharacters (savedSets 영속)
   → render/saved-sets-section.js (추천 리스트 갱신)
 
-자동 백캐스트 (luck 부트스트랩)
+자동 백캐스트 (S089 후 = 이력 부트스트랩)
   → core/history.js backfillRecommendations (캐릭터 첫 진입 시 1회, 단일 strategy 결정론)
-  → core/luck.js applyLuckGrowth (출석 + 적중 보너스)
+  # core/luck.js applyLuckGrowth - S089 폐기. 적중 후 luck 갱신 없음.
   → 메인 카드 노출은 폐기 (S27)
 ```
 
@@ -157,7 +157,7 @@ games/lotto/
 draws 갱신 (boot syncDraws 또는 통계 탭 진입 syncDrawsIfNewer)
   → core/match.js (이력 vs 발표 번호 매칭, 등수 라벨)
   → core/history.js (matchHistory)
-  → core/luck.js (applyLuckGrowth, luckApplied 잠금)
+  # core/luck.js S089 폐기 - luck 갱신 단계 제거
   → data/storage.js (saveCharacters)
   → render/history-page.js (이력 페이지 갱신)
 ```
@@ -166,7 +166,7 @@ draws 갱신 (boot syncDraws 또는 통계 탭 진입 syncDrawsIfNewer)
 
 | 모듈 | 책임 | 예시 파일 |
 |---|---|---|
-| `core/` | 추첨 알고리즘, 통계 계산, 시드 해시, 가중치 계산, 매칭, 운세 / 사주, 휠링, 추첨 일정 | recommend / stats / seed / random / luck / match / fortune / zodiac / saju / schedule / history / wheeling |
+| `core/` | 추첨 알고리즘, 통계 계산, 시드 해시, 가중치 계산, 매칭, 운세 / 사주, 휠링, 추첨 일정 | recommend / stats / seed / random / match / fortune / zodiac / saju / schedule / history / wheeling (S089 luck 폐기) |
 | `render/` | DOM 갱신, 카드 / 차트 / 모달 / 탭 / SVG 아이콘 / 뷰포트 동기 | main / draw-card / next-draw-card / character-* / strategy-tabs / stats-page / history-page / wheeling-page / settings-page / bottom-tabs / viewport-sync / icons / modal / charts |
 | `input/` | 키보드 / 터치 이벤트 → core 호출 (현재 render/main.js가 흡수, M2 마무리 단계 분리 검토) | (분리 보류) |
 | `data/` | 게임 상수, 외부 API, localStorage 입출력 | colors.js / storage.js / numbers.js + draws.json (정적 JSON) |

@@ -89,7 +89,8 @@ function seedSixNumbers(seed) {
  */
 function computeUnifiedWeights(ctx, strategyIds) {
   const w = new Array(VECTOR_LEN).fill(1.0);
-  const { seed = 0, drwNo = 0, luck = 50, numberStats = [], bonusStats = [], zodiac, dayPillar } = ctx;
+  // S089 (2026-05-17): luck 인자 폐기. BLESSED boost는 고정 +0.5.
+  const { seed = 0, drwNo = 0, numberStats = [], bonusStats = [], zodiac, dayPillar } = ctx;
 
   for (const sid of strategyIds) {
     if (sid === STRATEGY_ASTROLOGER) {
@@ -118,10 +119,9 @@ function computeUnifiedWeights(ctx, strategyIds) {
       const rng = mulberry32(mixSeeds(seed >>> 0, ((drwNo || 0) + 1) >>> 0));
       for (let i = 0; i < VECTOR_LEN; i += 1) w[i] += rng() * 0.6 - 0.3;
     } else if (sid === STRATEGY_BLESSED) {
-      const ratio = Math.max(0, Math.min(1, (luck || 0) / 100));
-      const boost = ratio * 0.5;
+      // S089 (2026-05-17): luck 비례 boost 폐기. 시드 6번호에 고정 +0.5.
       const pref = seedSixNumbers(seed);
-      for (const n of pref) w[n - 1] += boost;
+      for (const n of pref) w[n - 1] += 0.5;
     }
     // STRATEGY_BALANCER: post-filter 폐기. base 1.0 균등 가중. 추가 보너스 0.
   }
@@ -200,7 +200,6 @@ function assignSourcesForNumber(n, ctx, strategyIds) {
  * @param {object} ctx
  * @param {number} ctx.seed 캐릭터 결정론 시드
  * @param {string[]} ctx.strategyIds 1개 이상 strategy ID
- * @param {number} [ctx.luck=50]
  * @param {number} [ctx.drwNo=0]
  * @param {Array} [ctx.numberStats]
  * @param {Array} [ctx.bonusStats]
