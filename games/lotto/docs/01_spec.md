@@ -117,9 +117,26 @@
 
 #### SSOT 적용 위치
 
-- `src/core/recommend.js` `computeUnifiedWeights` / `recommendMulti` / `assignSourceForNumber`.
+- `src/core/recommend.js` `computeUnifiedWeights` / `recommendMulti` / `assignSourceForNumber` / `topKForStatStrategy`.
 - `src/data/numbers.js` 1.20 `DEFAULT_PRESETS` (모두 `[STRATEGY_INTUITIVE]` 단독 묶음).
 - 옛 함수(`recommend` 단일 / `distributeCounts` / `computeStrategyContext` / `poolFromWeights` / 통계 weight 함수들 / `applyLuck`)는 `@deprecated` 마크. 다음 sprint 정리.
+
+#### 라벨 우선순위 (S72, 2026-05-16 신설 / S73, 2026-05-16 SSOT 명시)
+
+추천 번호 6개에 부여되는 출처 라벨(`strategySources[k]`)은 `assignSourceForNumber(n, ctx, strategyIds)` 결정. 시각 라벨 전용, 추첨 영향 0. 우선순위:
+
+| # | 분기 | 매칭 기준 | 데이터 부재 시 |
+|---|---|---|---|
+| 1 | 학설 매칭 | `ZODIAC_LUCKY` / `FIVE_ELEMENTS_LUCKY` / `ZODIAC_ELEMENT_LUCKY` 안 | 다음 분기로 |
+| 2 | 통계 매칭 | `topKForStatStrategy(ctx, sid, k=STAT_LABEL_TOP_K)` 안 (`recent30` / `totalCount` / `currentGap` / `bonusStats.totalCount` 내림차순 K개) | numberStats/bonusStats 비면 빈 set → fall-through |
+| 3 | BLESSED 시드 매칭 | `seedSixNumbers(seed)` 안 | 다음 분기로 |
+| 4 | INTUITIVE 폴백 | `strategyIds.includes(STRATEGY_INTUITIVE)` | 다음 분기로 |
+| 5 | BALANCER 폴백 | `strategyIds.includes(STRATEGY_BALANCER)` | 다음 분기로 |
+| 6 | 첫 strategy 폴백 | `strategyIds[0]` (normalized) | - |
+
+**S43.1 결손 (S72에서 정정)**: 2번 분기 통계 매칭이 원본 architecture 재구축 시 누락 → INTUITIVE catch가 통계 도달 전 가로채는 구조. 균형/분산파 프리셋에서 "최"/"적"/"많" 라벨이 코드 구조상 절대 등장 불가. S72에서 통계 매칭 분기 신설 + 회귀 테스트 N=50 시드 sweep으로 분포 단언.
+
+**K=10 결정 근거**: 한국 hot/cold 통상 표시 단위. 6번호 추첨이라 평균 1~2개 라벨링 = 자연. 상수는 `src/data/numbers.js` `STAT_LABEL_TOP_K`.
 
 ### 5.1.3. 추첨 전략 (캐릭터와 분리)
 
@@ -147,7 +164,7 @@
   - 데이터 모델 변경 0건. `lastUsedStrategies`가 활성화 순서를 자연 보존 (push/filter)하므로 별도 state 불필요.
 - 동작: 전략 탭이 토글(추가/제거)로 동작. 1~6개 선택 가능. 만선 시 비활성 탭 회색 표시 (분배 0 발생 차단 = "어정쩡 금지").
 - 분배: 6 / N 균등 + 나머지 첫 N에 +1 (docs/02_data.md 1.5.4).
-- 출처: **추천 리스트(5.2.5)**의 각 번호 아래 1글자 short 라벨 + 카테고리 색 배경 (통계 파랑 / 운세 분홍 / 랜덤 회색). short 매핑: 축/추/많/짝/별/안/점/원/사/직/균. (S22 dot → 1글자 라벨. S27 메인 카드 폐기 후 노출 위치 = 누적 리스트.)
+- 출처: **추천 리스트(5.2.5)**의 각 번호 아래 1글자 short 라벨 + 카테고리 색 배경 (통계 파랑 / 운세 분홍 / 랜덤 회색). short 매핑: 랜/최/많/보/적/별/4/사/직/균 (label[0] 정합. S22 dot → 1글자 라벨. S27 메인 카드 폐기 후 노출 위치 = 누적 리스트. **S74 (2026-05-16) 매핑 정정**: S21/S22 옛 약자(축/추/별/안/점/원)가 S34/S35 label 변경 후 누락되어 사용자 인상 "라벨이 전략과 다름". label[0] 정합으로 통일).
 - 의도: 사용자가 "전략 추출 신뢰 없음" 의심을 즉시 시각화로 해소. 어느 번호가 어느 전략에서 나왔는지 한눈에.
 
 #### 5.1.3.2. 5세트 동시 추천 모드 (S4-T1 신설 / S27 노출 폐기, 2026-05-03)
@@ -391,22 +408,22 @@
 - 정책 근거: CLAUDE.md 6.3 "사행성 / 도박성 표현 금지". 자비스 1탭 추천 = 사용자 보호 책임.
 - 통계 신봉 사용자는 편집 모달에서 자유 구성 (자기 책임 영역).
 
-### 5.1.6. 캐릭터 카드 아코디언 (S36, 2026-05-08)
+### 5.1.6. 캐릭터 카드 아코디언 (S36, 2026-05-08 / S76, 2026-05-17 흉일 강제 펼침 폐기)
 
-캐릭터 카드를 **펼침 / 접힘 2상태**로 운영. 한 번 접으면 학습 (다음 진입에도 접힌 채). 흉일은 강제 펼침.
+캐릭터 카드를 **펼침 / 접힘 2상태**로 운영. 한 번 접으면 학습 (다음 진입에도 접힌 채).
 
 **5.1.6.1. 한 줄 카피 (접힘)**
 
 `{이름} · {별자리} · {띠} · {일주} · {운 이모지}`
 
-운 이모지: ★대길 / ◆길 / ●평 / ▼흉. 흉일은 카드 외곽 + 텍스트 빨강(`--color-lotto-red`).
+운 이모지: ★대길 / ◆길 / ●평 / **✕흉** (S76, 2026-05-17 변경. 옛 ▼은 caret ▼/▲와 시각 충돌). 흉일은 카드 외곽 + 텍스트 빨강(`--color-lotto-red`).
 
 **5.1.6.2. 동작**
 
-- 펼침 → 접힘: 카드 우상단 "접기" 버튼. `localStorage`에 학습.
-- 접힘 → 펼침: 한 줄 카드 클릭 또는 ▼ caret.
-- **흉일 자동 펼침**: `fortune === 'bad'`이면 사용자 학습 무시하고 펼침 (사용자 보호 카피 + 방어 모드 권장 배너 강제 노출).
+- 펼침 → 접힘: 한 줄 row 클릭 (▲ caret). `localStorage`에 학습.
+- 접힘 → 펼침: 한 줄 row 클릭 (▼ caret).
 - 첫 진입 default: 펼침. 사용자가 명시적으로 접어야 학습 ON.
+- **S76 폐기**: 옛 "흉일 자동 펼침" 정책. 사용자가 ▲ 클릭으로 접으려 해도 강제 펼침 유지되어 "오류 인상". 사용자 명시 접기 의도 존중으로 폐기. 흉일에도 동일 학습 적용. 보호 카피는 첫 진입(default 펼침) 시 자연 노출 + 사용자가 접으면 본인 책임 영역.
 
 **5.1.6.3. 트레이드오프**
 

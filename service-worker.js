@@ -1,42 +1,30 @@
 // Cache version. 배포마다 bump해서 stale 캐시 무효화.
-// v9 (2026-05-03): lotto Sprint 026-032 (S17-S23) - 추천 카드 보너스 폐기 / 통계 라벨 / 출처 식별성 / 시드 분산.
-//   stale-while-revalidate라 옛 lotto 파일이 캐시되어 사용자 새로고침 후에도 옛 화면 노출되던 문제 해결.
-// v10 (2026-05-03): lotto S24 - 흉/대길 배너 제거.
-// v11 (2026-05-03): lotto S25 - 다중 전략 C+E안 (풀에서 직접 추출 + strategyIds 정규화).
-// v12 (2026-05-03): lotto S26 - 누적 추천 세트 (조립식 N장 누적 + 회차 자동 비움).
-// v13 (2026-05-03): lotto S26 hotfix - 누적 라벨 추천1 중복 정정 (추천2부터 시작).
-// v14 (2026-05-03): lotto S27 - 메인 카드 폐기 / 누적 리스트 단일 영역 / + 버튼 전략 영역 이동.
-// v15 (2026-05-04): lotto S28 - 추천 리스트를 + 버튼 직하로 이동 (조립→실행→결과 ↑→↓ 일직선).
-// v16 (2026-05-04): lotto S29 - S28 폐기 + 채팅 UX 패턴(결과 위 / 도구 아래) + 액션바 통합(전체 비우기 + 휴지통 아이콘) + 라운드 통일 / 헤더 중앙 / 액션바 grid / disclaimer 폐기 (S29.1) + 메타 텍스트 폐기 / 사용 풀 표시 (S29.2) + 모바일 폭 최적화 (S29.3) + 디자인 토큰 정리 (S29.4 / 신규 토큰 2 + 깨진 잔여 0).
-// v17 (2026-05-04): lotto S30 - 포커스 분리. 토글(선택/해제) ≠ 포커스(desc 표시 대상). 활성 list 마지막 원소가 자동 포커스, 해제 시 직전 활성으로 자동 이동. is-focused outline ring 시각. + S30.1: 사용 풀도 포커스 전략 1개 기준으로 통일 / 랜덤 카테고리 풀 미표시. + S30.2: 풀 정의를 mainWeights(applyLuck 전) 기준으로 정정. + S30.3: 짝꿍 키번호 노트 추가 (S30.4에서 폐기). + S30.4: 짝꿍 객관 승격 - 키번호 anchor 폐기, 동시출현 빈도 상위 페어 합집합 풀로 재설계 (사용자 직관 일치).
-// v18 (2026-05-04): lotto S30.4 캐시 새로고침용 SW bump.
-// v19 (2026-05-04): lotto S30.5 - **중대 버그 fix**. computePoolForStrategies 인덱스 1-based ↔ 0-based 불일치로 운세/통계 풀 표시가 정확히 -1 shift됐던 문제 정정. 추첨 결과 자체는 정확했음(weightedSample 별도 경로). 사용자 신뢰 회복.
-// v20 (2026-05-04): lotto S30.6 - 사주 행운 일진 보너스 가시화 (B안). 캐릭터 카드 사주 패널에 추첨일 오행 + 관계 라벨 + 보너스 풀 별도 줄로 표시. 카드 = 추천 풀 100% 일치.
-// v21 (2026-05-04): lotto S31 - 짝꿍 풀을 페어 박스 단위로 표시 (computePairsForPairTracker) + 전략 라벨 축약(축복/최신/많이/페어/보너스/적게/별자리/4원소/사주/균형) + 추천 리스트 좌측 padding 1.5배(12→18px).
-// v22 (2026-05-04): lotto S32 - 추천 리스트 번호공 gap 80% (var(--space-1) * 0.8 = 3.2px). 시각 컴팩트.
-// v23 (2026-05-07): lotto S32 후속 (Sprint 042) - 누적 추천 dedupe 재시도 50회 + 풀 한계 안내 4 케이스(토스트 / 배너 / hint / cap). 별자리·사주 좁은 풀에서 unique 조합 보장 + 사용자 인지.
-// v24 (2026-05-08): lotto S33 (Sprint 043) - 풀 외 추첨 차단 fix.
-// v25 (2026-05-08): lotto S34 (Sprint 044) - 짝꿍 페어 전략 폐기 (11→10전략, 통계 5→4). 페어 동행 보장 못 함 + 사용자 가치 의문. 랜덤 카테고리 3종(축복/직감/균형) desc 정체성 강화. 캐릭터 마이그레이션(잔존 ID 자동 필터). 동시출현 매트릭스는 통계 탭 학습 자산으로 유지.
-// v26 (2026-05-08): lotto S35 라벨 변경 + S36 프리셋 3슬롯 + 캐릭터 카드 아코디언 + S36.2 UX 정돈 (Sprint 045+046). 축복→랜덤 라벨. 메인 전략 picker → 프리셋 3슬롯(균형/통계파/운세파) + 편집 모달. 캐릭터 카드 한 줄 토글 row(흉일 강제 펼침). 닫기 버튼 보더 / 라운드 제거.
-// v27 (2026-05-08): lotto S37 (Sprint 047) - 통계파 프리셋 폐기 → 분산파 신설(사행성 책임). 통계 4축 묶음이 다수 사용자 동시 선택 → 1등 분할 위험. 분산파(적게+직감+균형) = 남들이 덜 고르는 조합. 균형도 statistician → trendFollower로 약화.
-// v28 (2026-05-08): lotto S38 (Sprint 048) - 통계 풀 컷팅 데이터 부재 fix. poolFromWeights가 모든 weight 동률 시 인덱스 0~9(=번호 1~10) 풀 결정론 버그. 페치 전/새 캐릭터에서 1~9 편향(균형 프리셋 41.9%) → fix 후 18.4%로 정상화. max===min 가드 추가.
-// v29 (2026-05-08): lotto S39+S40 (Sprint 049) - 1번대 무조건 노출 해소. STATS_POOL_SIZE 10→25 / SUM_RANGE 121-160→100-180. 분산파 = regr+intuitive 단순화(balancer 폐기). 시뮬 1000회: 1-9 0개 세트 24~30%로 한국 실측(24%) 일치.
-// v30 (2026-05-08): lotto S41+S42 (Sprint 050) - 운세파 4원소 폐기 + 직감 추가 / WEIGHT_MAX_BIAS 50→5. 사용자 통찰 "낮은 수 무조건". 진단: Luck=50 시 boost 25배라 시드 6번호 채택 84% 확정. 시드 작은 번호 포함 → 매 추천 반복. fix 후 boost 3배 / 채택 37%로 자연 분산.
-// v31 (2026-05-08): lotto S43 (Sprint 051) - 알고리즘 처음부터 재구축. 사용자 결정타 "근본 잘못. 부분 fix 의미 없다". 단일 추첨 architecture: 모든 strategy 가중을 1-45 base 1.0 + 보너스 +0.3~+0.5로 합성 후 weightedSample 1번. 다중 분배/풀 컷팅/Luck 25배/balancer 합 필터/풀 외 차단 모두 폐기. 시뮬 2000회: 한국 실측(20/22/22/22/13)과 정확 일치. 인접 클러스터링 0.68/세트로 자연.
-// v32 (2026-05-08): lotto S43.1 (Sprint 051 후속) - 전면 재검증 + QA + Review + 회귀 테스트 5건 추가. assignSourceForNumber 라벨 매핑 fix(학설 풀 외 → INTUITIVE/BLESSED 우선). 카이제곱 검정 통과. 보너스 충돌 0.
-// v33 (2026-05-08): lotto S43.2 (Sprint 052) - 권장 사항 일괄. backcast(history.js) + recommendFiveSets를 모두 recommendMulti로 통일. SSOT(01_spec 5.1.3.0 신설 / 02_data 1.5.6 폐기 사유). recommend 단일 + applyLuck @deprecated 마크.
-// v34 (2026-05-08): lotto S43.3 (Sprint 053) - 권장안 일괄. recommend.js 676→240줄 (옛 함수 17개 폐기). luck.js 88→33줄 (preferredNumbers/applyLuck 폐기). 옛 architecture 단언 일괄 정리. recommend/distributeCounts는 호환 wrapper 보존.
-// v35 (2026-05-08): lotto S43.4 (Sprint 054) - 권장안 후속. main.js 객관 분기 폐기. numbers.js 옛 상수 9개 폐기 (SUM_RANGE, ODD_EVEN, AC_VALUE, STATS_POOL_SIZE, OBJECTIVE_STRATEGIES, OBJECTIVE_SEED_SALT, WEIGHT_MAX_BIAS, STATS_POWER, GAP_POWER).
-// v36 (2026-05-08): lotto S43.5 (Sprint 055) - docs SSOT 정리. 02_data.md 1.4 / 1.5.1 / 1.5.4 / 1.5.7 폐기 마크. SAJU_RELATION_BOOST 보존 결정 (시각 라벨 전용).
-// v37 (2026-05-08): lotto S43.6 (Sprint 056) - 호환 wrapper 폐기. recommend / distributeCounts 통째 삭제. 테스트 28건 호출 일괄 recommendMulti로 변환. recommendMulti 진입점에 ctx.strategyId 호환 처리 추가.
-// v38 (2026-05-09): lotto S43.7 hotfix - main.js의 잔존 'recommend' import 제거 (Sprint 056에서 폐기됐는데 import만 남아 모든 페이지 빈 화면). 자비스 사전 검증 누락 사고. 전 모듈 import 검증 통과.
-// v39 (2026-05-09): lotto S43.7 hotfix2 - DEFAULT_PRESETS 차별화 복원 (균형/분산파/운세파 묶음 다름). 옛 안내 카피 갱신. loadPresets 마이그레이션(모두 직감 단독이면 자동 reset). 시뮬: 모든 프리셋 1-9 19.5-19.7%, 인접 0.66-0.68 정상.
+// v9~v39 (2026-05-03 ~ 2026-05-09): service-worker-history.md archive 이전 (S73 / F4, 2026-05-16).
 // v40 (2026-05-10): lotto S60 - 누적 추천 토스트를 액션바 인라인 → 화면 하단 fixed 팝업으로 이동 + 추가된 세트 카드 1초 펄스("어디에" 시각 연결). 누적 리스트가 길어 액션바 밀려도 메시지 인지 보장. SSOT: docs/01_spec.md 5.2.5.4 / docs/02_data.md 1.5.8.6.6~7. 신규 토큰 --z-toast / 신규 상수 SAVED_SETS_JUST_ADDED_MS.
 // v41 (2026-05-10): lotto S61 - 프리셋 편집 진입점을 추첨 탭 "편집" 텍스트 링크 → 설정 탭 "프리셋 관리" 섹션으로 이동. 추첨 탭 정리(편집은 정착 후 자주 발생 X). 설정 탭 슬롯 행 클릭 = 기존 모달 재활용. 기본값 복원 버튼 설정 탭에도 노출. dead CSS(.preset-edit-row / .preset-edit-link) 폐기.
 // v42 (2026-05-10): lotto S62 - is-just-added 펄스 시각 정정. inset 외곽선 + radius-sm → ::before pseudo + radius-md + 외부 글로우 + 좌우 8px inset. row 좌우 padding 0이라 외곽선이 "추천N" 라벨에 붙어 답답하던 사용자 보고 fix. row layout 영향 0(pseudo absolute). SSOT: docs/02_data.md 1.5.8.6.7.
 // v43 (2026-05-10): lotto S63 - 프리셋 슬롯 부제 폐기 + 묶인 전략 label list 자동 표시. 사용자 보고 "애매한 설명보다 실제 선택된 전략 표시" 반영. PRESET_SUBTITLE_MAX 상수 / DEFAULT_PRESETS subtitle 필드 / 편집 모달 부제 입력 / .preset-subtitle / .preset-manage-subtitle 모두 폐기. 추첨 탭 .preset-strategy-line + 설정 탭 .preset-manage-strategies(strategyLabel 통일) 자동 생성. SSOT: docs/01_spec.md 5.1.5 / docs/02_data.md 1.20.
 // v44 (2026-05-10): lotto S66 - is-just-added 펄스 영역 재정정 + 추천 리스트 좌측 padding 130%. 사용자 보고 "추천1,2 스트링 중간만 하이라이트". 펄스 영역을 row 전체 → .saved-set-balls(번호공 컨테이너)로 좁힘. 라벨/휴지통 영역 펄스 무관. 좌측 padding 1.5배 → 1.5*1.3배 (18px → 23.4px). SSOT: docs/02_data.md 1.5.8.6.7.
-const CACHE_VERSION = "v44";
+// v45 (2026-05-16): lotto S68 + S69 + S70 일괄 cache busting. S68 모바일 풀스코프(:hover 26룰 (hover:hover) 가드 + --touch-min 토큰 + tap-highlight transparent) / S69 하단 탭 토큰화(--bottom-tab-h / --bottom-tab-h-sm + #app padding-bottom 88px+safe) / S70 목록 행 min-height 토큰화(--list-row-min-h). S68 / S69는 CSS만 변경하고 SW bump 누락했던 결손을 본 sprint에서 일괄 회수. PWA 옛 v44 캐시(sticky hover / 옛 탭 높이) 일괄 폐기. SSOT: PROGRESS.md 2.91.
+// v46 (2026-05-16): lotto S71 - 모바일 480~361px 구간 #app padding-bottom 12+safe → 88+safe(--bottom-tab-h + --space-6 + safe). Sprint 069가 데스크톱(line 1199)과 360px↓(line 2711)만 토큰화하고 480~360 구간을 누락한 결손 정정. 사용자 보고 "모바일 페이지 하단이 아래 탭에 가려서 안 보임" 직접 대응. SSOT: PROGRESS.md 2.92.
+// v47 (2026-05-16): lotto S72 - assignSourceForNumber 통계 카테고리 라벨 매핑 결손 정정. 사용자 보고 "균형 프리셋 선택했는데 6개 중 5개가 직, 1개만 별. 최 라벨이 0개". Sprint 043 architecture 재구축 시 통계 전략(trendFollower/statistician/regressionist/secondStar)의 라벨 매칭 로직 누락 → INTUITIVE catch가 통계 도달 전 가로채는 구조. 통계 top K 분기 신설 + 우선순위 재정렬(학설 → 통계 → BLESSED → INTUITIVE → BALANCER → 첫). 회귀 테스트 305 → 307. SSOT: PROGRESS.md 2.93.
+// v48 (2026-05-16): lotto S73 - F1~F5 일괄 cleanup. F1 STAT_LABEL_TOP_K → src/data/numbers.js 이전(매직 넘버 0). F2 docs/01_spec.md 5.1.3.0에 라벨 우선순위 표 명시(SSOT). F3 statistician/regressionist/secondStar 분기별 회귀 3건(307→310). F4 v9~v39 SW 헤더 service-worker-history.md archive. F5 .next-draw-num 매직 64/56/50 → --countdown-num/-sm/-xs 토큰화. SSOT: PROGRESS.md 2.94.
+// v49 (2026-05-16): lotto S74 - strategyShort 매핑 6건을 label[0]로 통일. 사용자 보고 "균형 프리셋 캡쳐에서 최신→추 / 별자리→점 / 보너스→별 / 적게→안 / 랜덤→축 불일치 = 라벨이 전략과 다름". S21/S22 옛 약자 매핑이 S34/S35 label 변경 후 누락된 결손. STRATEGIES short 필드 6건(축→랜/추→최/별→보/안→적/점→별/원→4) 정정 + tests/suites/strategy-picker.test.js 회귀 11건 신설 + docs/01_spec.md SSOT 갱신. 회귀 310→321 PASS. SSOT: PROGRESS.md 2.95.
+// v50 (2026-05-16): lotto S75 - DEFAULT_PRESETS 순서/라벨/묶음 재정렬 + 프리셋 미선택 시 + 버튼 차단. 사용자 명시 "1.운세 / 2.균형 / 3.분산(균형+사주)" + "전략 프리셋이 선택되지 않을 경우 세트 추천 차단". 신규 캐릭터 lastUsedStrategies = DEFAULT_PRESETS[0] 자동 활성(옛 [STRATEGY_DEFAULT]=BLESSED 단독이 어느 프리셋과도 불일치 → 추천되던 버그). savedSetsAddBarHtml(presetSelected) 인자 + isAnyPresetActive 가드(UI 우회 click 차단). DEFAULT_PRESETS 회귀 1건 + 옛 사용자 마이그레이션 폐기(보수적 보존). 회귀 321 PASS. SSOT: PROGRESS.md 2.96.
+// v51 (2026-05-17): lotto S76 - 캐릭터 카드 흉일 시각/동작 결손 정정. 사용자 보고 "고스트(흉) 유저만 접기/펼치기 오류". (1) 흉 글리프 ▼ → ✕ (caret ▼/▲와 시각 충돌 정정. character-summary.js + character-card.js). (2) 흉일 강제 펼침 정책 폐기 (main.js line 562. 사용자 ▲ 클릭으로 접기 의도 존중. 보호 카피는 첫 진입 default 펼침으로 자연 노출). docs/01_spec.md 5.1.6 + docs/02_data.md 1.20.3 SSOT 갱신. SSOT: PROGRESS.md 2.97.
+// v52 (2026-05-17): lotto S77 - 추천 리스트 다중 학설 매칭 시각화. 사용자 명시 "2전략 중복=좌우반반, 3전략=1/3씩, 별자리 동일 번호도 추출 전략 머리글자 표시". 옛 assignSourceForNumber 단일 우선순위가 별자리에 다른 학설 흡수 → 운세 프리셋이 "별만 보임" 인상. assignSourcesForNumber(배열 반환) + recommendMulti.strategySources = string[][] + 번호공 background = linear-gradient 분할(학설별 색) + 라벨 = 매칭 학설 머리글자 나열. 단일 매칭 시 옛 동작 동일. 회귀 322→323 PASS. SSOT: PROGRESS.md 2.98.
+// v53 (2026-05-17): lotto S77 정정 - 색 분할 위치를 번호공(.num) → 출처 태그(.num-source-tag)로 이전. 사용자 명시 정정 "로또 볼 고유 번호 유지, 아래 별/사 색에만 적용". 번호공은 6/45 룰 numberColor 단색 복원. 출처 태그만 학설 색 분할. SSOT: PROGRESS.md 2.98.10.
+// v54 (2026-05-17): lotto S78 - 운세 3 학설 출처 태그 색 명도 극대화. 사용자 명시 "별자리/4원소/사주 더 차이나도록" + 정정 "색만 차이, 다른 거 수정 X". 옛 pink-500/700/800 (1~2단 차이) → pink-300/600/900 (3단 차이). hue 유지 + 명도 극대화. STRATEGY_TAG_COLORS 정의만 변경. SSOT: PROGRESS.md 2.99.
+// v55 (2026-05-17): lotto S79 - 출처 표시 모드 설정 추가 (dot/label) + 프리셋 색점. 사용자 명시 "추천 번호 아래 표시 방식을 설정에서 제어 / 색점만 표시하는 모드 추가 (간결) / 다중 매칭 시 점 N개 나란히 / 하단 프리셋 라벨 앞에도 색점 (설정 무관 항상)". options.sourceDisplayMode 신규 ('dot' 기본) + numHtml mode 분기(.num-source-dots vs .num-source-tag) + preset-buttons / settings-page presetRows .preset-strategy-token + dot. settings-page 라디오 토글. SSOT: PROGRESS.md 2.100.
+// v56 (2026-05-17): lotto S80 - 색점 크기 정합 강제. 사용자 보고 "원형점 크기가 들쭉날쭉. 정확히 일치해야 함". 7→8px 짝수 + line-height: 0 + box-sizing border-box + min/max 강제 (다른 셀렉터 우선순위 차단). 컨테이너 line-height: 0 + font-size: 0으로 inline baseline 영향 차단. num-source-dot + preset-strategy-dot 동일 패턴. SSOT: PROGRESS.md 2.100.7.
+// v57 (2026-05-17): lotto S81 - 번호공(.num) 크기 정합 강제. 사용자 보고 "원의 크기가 다르다". 본체 .num 룰에 box-sizing border-box + flex-shrink/grow 0 + padding 0 + line-height 1 명시. min/max는 본체 미명시 (모바일 .saved-set-row .num-cell .num 36px / 결과 페이지 .num 40px cascade 보존). SSOT: PROGRESS.md 2.100.8.
+// v58 (2026-05-17): lotto S82 - 색점 정합 재강화. 사용자 보고 "왜 세로 크기, 가로 크기가 다르냐". aspect-ratio 1/1 추가(정사각=정원 강제) + display: block (inline-block sub-pixel 차단) + 크기 8→10px (sub-pixel 영향 감소). num-source-dot + preset-strategy-dot 동일 패턴. SSOT: PROGRESS.md 2.100.9.
+// v59 (2026-05-17): lotto S83 - 사용자 명시 "색점 크기 2/3로 줄여줘". 10 → 6 (10 × 2/3 ≈ 6.67, 짝수 강제 6). aspect-ratio + display block 정합 유지. num-source-dot + preset-strategy-dot + 컨테이너 height/gap 조정. SSOT: PROGRESS.md 2.100.10.
+// v60 (2026-05-17): lotto S84 - 캐릭터 편집 기능 신설. 사용자 보고 "캐릭터 관리에서 캐릭터 정보를 수정할 수 가 없네". renderCharacterEditForm(이름 + 생년월일 편집, seed 보존, zodiac/animalSign/dayPillar 재계산) + settings-page char-row에 ✏️ 편집 버튼(.char-row-edit) + main.js openEditCharacterModal + icons.js pencil SVG. 행 클릭 = 활성 유지 / 편집 = 별도 아이콘. SSOT: PROGRESS.md 2.101.
+// v61 (2026-05-17): lotto S85 - 캐릭터 편집 모달 birth prefill. 사용자 보고 "기존 생년월일 그대로 표시되어야 함". character schema에 birth 필드 추가(신규 캐릭터 = 보존). 편집 모달 = 옛 birth 있으면 prefill + 별자리 즉시 미리보기. 옛 S85 이전 캐릭터 = birth 부재 → 빈 입력 + 안내 카피. SSOT: PROGRESS.md 2.101.8.
+// v62 (2026-05-17): lotto S86 - 활성 배지 폐기. 사용자 보고 "활성 표시는 뭐지?" + 캡쳐에 배지가 편집 아이콘 위에 겹침. .char-row.is-active 외곽선/배경과 중복 + Sprint 084 편집 버튼 신설 후 right: 56px 위치 충돌. settings-page.js의 char-row-active-badge HTML 출력 폐기 (CSS 룰은 dead 잔존, 다음 cleanup). SSOT: PROGRESS.md 2.101.9.
+// v63 (2026-05-17): lotto S87 - 프리셋 기본값 복원 confirm 텍스트 동적화. 사용자 보고 "예전 데이터로 돌아가는 거지?". 옛 하드코딩 "균형/분산파/운세파"가 Sprint 075 갱신(운세/균형/분산) 후 잔재. DEFAULT_PRESETS.map(p=>p.label) 동적 산출로 정정. 실제 reset 동작은 새 DEFAULT_PRESETS로 정상 작동, confirm 텍스트만 옛 라벨이었음. SSOT: PROGRESS.md 2.101.10.
+const CACHE_VERSION = "v63";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

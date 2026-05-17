@@ -1,7 +1,7 @@
 // 메인 wire-up. 5개 탭 라우팅 (추첨/통계/전적/휠링/설정).
 // 추첨 탭: 슬롯 → 번호(hero) → 운세 → 전략 1줄 → 캐릭터 카드(압축).
 // SSOT: docs/01_spec.md 4장.
-import { renderCharacterForm } from './character-form.js';
+import { renderCharacterForm, renderCharacterEditForm } from './character-form.js';
 import { characterCardHtml } from './character-card.js';
 import { characterToggleRowHtml } from './character-summary.js';
 import { drawCardHtml, fiveSetsExtraHtml } from './draw-card.js';
@@ -116,6 +116,22 @@ function openAddCharacterModal() {
   renderCharacterForm(host, (character) => {
     closeModal();
     addAndActivate(character);
+  });
+}
+
+// S84 (2026-05-17): 캐릭터 편집 모달.
+function openEditCharacterModal(id) {
+  const target = state.characters.find((c) => c.id === id);
+  if (!target) return;
+  const closeModal = showModal('<div id="char-edit-form-host"></div>');
+  const host = document.getElementById('char-edit-form-host');
+  renderCharacterEditForm(host, target, (updated) => {
+    state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
+    saveCharacters(state.characters);
+    closeModal();
+    renderApp();
+  }, () => {
+    closeModal();
   });
 }
 
@@ -304,6 +320,8 @@ function getRecAndFortune(active) {
 function addSavedSetsBatch(batchN) {
   const active = getActive();
   const { strategyIds } = getRecAndFortune(active);
+  // S75 (2026-05-16): 가드. 어느 프리셋과도 일치 안 하면 추천 차단 (DOM disabled 우회 / 키보드 ENTER 등 대비).
+  if (!isAnyPresetActive(state.presets, strategyIds)) return;
   const ensured = ensureSavedSetsForRound(active, state.drwNo);
   let cur = ensured.character;
   const startIdx = cur.savedSets?.list?.length || 0;
@@ -454,6 +472,17 @@ function markSavedSetsJustAdded(start, count) {
 // S34 (2026-05-08): 'pairTracker' 잔존 ID 추가 필터 (짝꿍 폐기 마이그레이션). S8 mbti 패턴 재사용.
 const DEPRECATED_STRATEGY_IDS = new Set(['mbti', 'pairTracker']);
 
+// S75 (2026-05-16): 활성 전략이 어느 프리셋과도 묶음 일치하는지 판정.
+//   순서 무관 set 비교. + 버튼 disabled / 활성 시각 / 추천 가드 공통 사용.
+function isAnyPresetActive(presets, activeIds) {
+  if (!Array.isArray(presets) || !Array.isArray(activeIds) || activeIds.length === 0) return false;
+  const a = [...activeIds].sort().join('|');
+  return presets.some((p) => {
+    if (!Array.isArray(p.strategyIds) || p.strategyIds.length !== activeIds.length) return false;
+    return [...p.strategyIds].sort().join('|') === a;
+  });
+}
+
 function activeStrategyIds(character) {
   let raw;
   if (Array.isArray(character.lastUsedStrategies) && character.lastUsedStrategies.length > 0) {
@@ -512,8 +541,13 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   const currentRecipeId = recipeIdFor(strategyIds);
   const poolExhausted = state.poolExhaustedRecipeId !== null
     && state.poolExhaustedRecipeId === currentRecipeId;
-  const savedSectionHtml = savedSetsSectionHtml(savedList, 1, poolExhausted);
-  const addBarHtml = savedSetsAddBarHtml(savedList.length, SAVED_SETS_CAP, poolExhausted);
+  // S79 (2026-05-17): 출처 표시 모드를 설정에서 가져와 saved-sets에 전달.
+  const sourceDisplayMode = state.options?.sourceDisplayMode || 'dot';
+  const savedSectionHtml = savedSetsSectionHtml(savedList, 1, poolExhausted, sourceDisplayMode);
+  // S75 (2026-05-16): 활성 strategyIds가 어느 프리셋과도 일치하면 presetSelected=true. 그 외 false → + 버튼 disabled.
+  //   사용자 명시 "프리셋이 선택되지 않을 경우 세트 추천이 안 되어야 함".
+  const presetSelected = isAnyPresetActive(state.presets, strategyIds);
+  const addBarHtml = savedSetsAddBarHtml(savedList.length, SAVED_SETS_CAP, poolExhausted, presetSelected);
 
   return `
     <header class="app-header tab-header home-header">
@@ -540,10 +574,12 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     ${/* S13(2026-05-02): 슬롯 + 카드 묶음. 시각 인접으로 "캐릭터 세트" 인지. */ ''}
     ${characterSlotsHtml(state.characters, state.activeId)}
 
-    ${/* S36(2026-05-08): 캐릭터 카드 아코디언. 흉일이면 강제 펼침 (사용자 보호 카피 노출).
-         S36.2: 한 줄 row가 카드 헤더로 흡수. 접힘=row만, 펼침=row(▲) + card. */ ''}
+    ${/* S36(2026-05-08): 캐릭터 카드 아코디언. 접힘=row만, 펼침=row(▲) + card.
+         S76(2026-05-17): 흉일 강제 펼침 정책 폐기. 사용자 보고 "흉일에 접기 안 됨 = 오류 인상".
+         사용자 명시 접기 의도 존중. 첫 진입(charCardCollapsed=false 디폴트)에는 자연 펼침 = 보호 카피 노출.
+         사용자가 접으면 학습(localStorage). 흉일에도 동일 학습 적용. */ ''}
     ${(() => {
-      const isExpanded = !state.charCardCollapsed || fortune === 'bad';
+      const isExpanded = !state.charCardCollapsed;
       const row = characterToggleRowHtml(active, fortune, isExpanded);
       if (!isExpanded) return row;
       return `<div class="char-accordion is-expanded">${row}${characterCardHtml(active, fortune, drawForFortune || state.drwNo, drawDate)}</div>`;
@@ -800,10 +836,11 @@ function renderApp() {
       onResetAll: () => {
         state.characters = [];
         state.activeId = null;
-        state.options = { applyFilters: false, advancedMode: false, fiveSets: false };
+        state.options = { applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'dot' };
         renderApp();
       },
       onAddCharacter: openAddCharacterModal,
+      onEditCharacter: openEditCharacterModal,
       onDeleteCharacter: deleteCharacterById,
       onActivateCharacter: activateCharacterById,
       onOpenWheeling: () => setTab('wheeling'),
@@ -811,6 +848,10 @@ function renderApp() {
         // S4-T1: 5세트 토글 후 state 갱신
         state.options = loadOptions();
         renderApp();
+      },
+      // S79 (2026-05-17): 출처 표시 모드 변경 후 state 갱신 + 다시 렌더 (현재 설정 탭이라 UI 즉시 변동 없음, 다음 추첨 탭 진입 시 반영).
+      onSourceDisplayModeChange: () => {
+        state.options = loadOptions();
       },
       // S61 (2026-05-10): 설정 탭 - 프리셋 관리에서 편집 / 기본값 복원 후 추첨 탭 동기화 신호.
       onPresetsChanged: () => {

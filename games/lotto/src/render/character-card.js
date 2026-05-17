@@ -46,11 +46,12 @@ const FORTUNE_LABELS = {
   [FORTUNE_BAD]: '흉',
 };
 
+// S76 (2026-05-17): 흉 아이콘 ▼ → ✕. character-summary.js FORTUNE_GLYPH와 정합 (시각 일관성).
 const FORTUNE_ICON = {
   [FORTUNE_GREAT]: '★',
   [FORTUNE_GOOD]: '◆',
   [FORTUNE_NEUTRAL]: '●',
-  [FORTUNE_BAD]: '▼',
+  [FORTUNE_BAD]: '✕',
 };
 
 // 등급별 한 줄 카피. SSOT: 본 파일 (docs/01_spec.md 5.1.2).

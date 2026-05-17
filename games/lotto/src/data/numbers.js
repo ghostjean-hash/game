@@ -19,6 +19,23 @@ export const RECENT_SHORT = 10;
 export const RECENT_MID = 30;
 export const RECENT_LONG = 100;
 
+// 1.3.1. 통계 카테고리 라벨 매핑 top K (S72/S73, 2026-05-16).
+//   assignSourceForNumber가 통계 전략(trendFollower/statistician/regressionist/secondStar)의
+//   "어떤 번호가 통계 매칭인지" 시각 라벨 부여 시 사용. 추첨 영향 0.
+//   K=10 = 한국 hot/cold 통상 표시 단위. 6번호 추첨이라 평균 1~2개 라벨링.
+export const STAT_LABEL_TOP_K = 10;
+
+// 1.3.2. 출처 표시 모드 (S79, 2026-05-17).
+//   추천 번호공 아래 출처 라벨 표시 방식. 사용자가 설정에서 선택.
+//   'dot' = 색점만 (작은 원, 한글 없음. 다중 매칭 시 점 N개 나란히). 간결.
+//   'label' = 한글 머리글자 (옛 동작. 다중 매칭 시 "별사" 같이 다글자).
+//   기본값 = 'dot' (사용자 명시 "훨씬 간결").
+//   프리셋 슬롯의 strategyLabel 앞 색점은 본 설정 무관 = 항상 표시.
+export const SOURCE_DISPLAY_DOT = 'dot';
+export const SOURCE_DISPLAY_LABEL = 'label';
+export const SOURCE_DISPLAY_MODES = Object.freeze([SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL]);
+export const SOURCE_DISPLAY_DEFAULT = SOURCE_DISPLAY_DOT;
+
 // 1.4. ~~비율 필터~~ S43.4 (2026-05-08, Sprint 054) 폐기.
 //   옛 architecture의 balancer post-filter용. 새 architecture는 풀 1-45 균등 가중 추첨이라 필터 미사용.
 //   AC_VALUE는 미구현 상태로 잔존. 폐기 검토.
@@ -287,20 +304,23 @@ export const PRESET_LABEL_MAX = 8;
 //   새 architecture(S43)는 가중 보너스 합성 + 단일 추첨이라 1번대 편향 / 인접 클러스터링 없음 (시뮬 검증).
 //   → 옛 차별화 묶음 복원 안전.
 // S63 (2026-05-10): subtitle 필드 제거.
+// S75 (2026-05-16): 사용자 명시 순서/라벨/묶음 재정렬.
+//   슬롯 1 운세 (별자리·사주·4원소) / 슬롯 2 균형 (최신·별자리·직감) / 슬롯 3 분산 (균형·사주).
+//   옛 (S43.7~S74): 슬롯 1 균형 / 2 분산파 / 3 운세파. storage.js loadPresets 마이그레이션이 옛 기본값 자동 갱신.
 export const DEFAULT_PRESETS = Object.freeze([
   Object.freeze({
     id: 'preset-1',
+    label: '운세',
+    strategyIds: Object.freeze([STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_ZODIAC_ELEMENT]),
+  }),
+  Object.freeze({
+    id: 'preset-2',
     label: '균형',
     strategyIds: Object.freeze([STRATEGY_TREND_FOLLOWER, STRATEGY_ASTROLOGER, STRATEGY_INTUITIVE]),
   }),
   Object.freeze({
-    id: 'preset-2',
-    label: '분산파',
-    strategyIds: Object.freeze([STRATEGY_REGRESSIONIST, STRATEGY_INTUITIVE, STRATEGY_BALANCER]),
-  }),
-  Object.freeze({
     id: 'preset-3',
-    label: '운세파',
-    strategyIds: Object.freeze([STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_ZODIAC_ELEMENT]),
+    label: '분산',
+    strategyIds: Object.freeze([STRATEGY_BALANCER, STRATEGY_FIVE_ELEMENTS]),
   }),
 ]);

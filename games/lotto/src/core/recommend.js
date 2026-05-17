@@ -16,6 +16,7 @@ import {
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
   FIVE_SETS_COUNT, FIVE_SETS_SALT_BASE,
   STRATEGY_ORDER,
+  STAT_LABEL_TOP_K,
 } from '../data/numbers.js';
 import { mulberry32, mixSeeds } from './random.js';
 
@@ -129,27 +130,67 @@ function computeUnifiedWeights(ctx, strategyIds) {
   return w;
 }
 
+/** 통계 전략별 top K 번호 집합 산출 (라벨 매칭용. 추첨 영향 0).
+ *  S72 (2026-05-16): 통계 카테고리 라벨 매핑 결손 정정.
+ *  S73 (2026-05-16): STAT_LABEL_TOP_K 상수를 src/data/numbers.js로 이전 (매직 넘버 0 룰).
+ *  computeUnifiedWeights의 가중 부여 metric을 그대로 사용해 상위 K개 추출.
+ *  numberStats / bonusStats가 비면 빈 배열 → 라벨 매칭 fall-through. */
+function topKForStatStrategy(ctx, sid, k = STAT_LABEL_TOP_K) {
+  const { numberStats = [], bonusStats = [] } = ctx;
+  if (sid === STRATEGY_TREND_FOLLOWER && numberStats.length > 0) {
+    return numberStats.slice().sort((a, b) => (b.recent30 || 0) - (a.recent30 || 0)).slice(0, k).map((s) => s.number);
+  }
+  if (sid === STRATEGY_STATISTICIAN && numberStats.length > 0) {
+    return numberStats.slice().sort((a, b) => (b.totalCount || 0) - (a.totalCount || 0)).slice(0, k).map((s) => s.number);
+  }
+  if (sid === STRATEGY_REGRESSIONIST && numberStats.length > 0) {
+    return numberStats.slice().sort((a, b) => (b.currentGap || 0) - (a.currentGap || 0)).slice(0, k).map((s) => s.number);
+  }
+  if (sid === STRATEGY_SECOND_STAR && bonusStats.length > 0) {
+    return bonusStats.slice().sort((a, b) => (b.totalCount || 0) - (a.totalCount || 0)).slice(0, k).map((s) => s.number);
+  }
+  return [];
+}
+
 /** 번호가 어느 strategy 풀에 속하는지 매핑 (시각 라벨용. 추첨 영향 0).
- *  학설 풀 안 매칭 → BLESSED 시드 6번호 → INTUITIVE → BALANCER → 첫 strategy. */
-function assignSourceForNumber(n, ctx, strategyIds) {
+ *  S77 (2026-05-17): 단일 → **배열 반환**. 다중 학설/통계 매칭 모두 수집.
+ *    사용자 명시 "별자리에 동일 번호 있어도 그 번호를 추출한 전략 표시 (오해 차단)".
+ *    옛 S72 단일 우선순위(학설→통계→BLESSED→INTUITIVE→BALANCER→첫)는 풀 겹친 번호의 다른 학설 기여를 가렸음.
+ *  반환: string[] - 학설/통계 매칭 학설 모두 (strategyIds 순서 보존). 매칭 0건 시 폴백 1개.
+ */
+function assignSourcesForNumber(n, ctx, strategyIds) {
   const { seed = 0, zodiac, dayPillar } = ctx;
+  const matched = [];
+  // 1. 학설 매칭 (모두 수집. strategyIds 순서 보존).
   for (const sid of strategyIds) {
-    if (sid === STRATEGY_ASTROLOGER && (ZODIAC_LUCKY[zodiac] || []).includes(n)) return sid;
+    if (sid === STRATEGY_ASTROLOGER && (ZODIAC_LUCKY[zodiac] || []).includes(n)) matched.push(sid);
     if (sid === STRATEGY_FIVE_ELEMENTS) {
       const lucky = FIVE_ELEMENTS_LUCKY[STEM_TO_ELEMENT[dayPillar?.stem]] || [];
-      if (lucky.includes(n)) return sid;
+      if (lucky.includes(n)) matched.push(sid);
     }
     if (sid === STRATEGY_ZODIAC_ELEMENT) {
       const lucky = ZODIAC_ELEMENT_LUCKY[ZODIAC_TO_ELEMENT[zodiac]] || [];
-      if (lucky.includes(n)) return sid;
+      if (lucky.includes(n)) matched.push(sid);
     }
   }
-  if (strategyIds.includes(STRATEGY_BLESSED)) {
-    if (seedSixNumbers(seed).includes(n)) return STRATEGY_BLESSED;
+  // 2. 통계 매칭 (top K). 모두 수집.
+  for (const sid of strategyIds) {
+    if (sid === STRATEGY_TREND_FOLLOWER || sid === STRATEGY_STATISTICIAN
+      || sid === STRATEGY_REGRESSIONIST || sid === STRATEGY_SECOND_STAR) {
+      if (topKForStatStrategy(ctx, sid).includes(n)) matched.push(sid);
+    }
   }
-  if (strategyIds.includes(STRATEGY_INTUITIVE)) return STRATEGY_INTUITIVE;
-  if (strategyIds.includes(STRATEGY_BALANCER)) return STRATEGY_BALANCER;
-  return strategyIds[0];
+  if (matched.length > 0) return matched;
+  // 3. BLESSED 시드 매칭 (단독 폴백).
+  if (strategyIds.includes(STRATEGY_BLESSED) && seedSixNumbers(seed).includes(n)) {
+    return [STRATEGY_BLESSED];
+  }
+  // 4. INTUITIVE 폴백.
+  if (strategyIds.includes(STRATEGY_INTUITIVE)) return [STRATEGY_INTUITIVE];
+  // 5. BALANCER 폴백.
+  if (strategyIds.includes(STRATEGY_BALANCER)) return [STRATEGY_BALANCER];
+  // 6. 첫 전략 폴백.
+  return [strategyIds[0]];
 }
 
 /**
@@ -165,7 +206,8 @@ function assignSourceForNumber(n, ctx, strategyIds) {
  * @param {Array} [ctx.bonusStats]
  * @param {string} [ctx.zodiac]
  * @param {object} [ctx.dayPillar]
- * @returns {{numbers: number[], bonus: number, reasons: string[], strategySources: string[]}}
+ * @returns {{numbers: number[], bonus: number, reasons: string[], strategySources: string[][]}}
+ *   S77 (2026-05-17): strategySources를 string[] → **string[][]** 변경. 각 번호당 다중 학설/통계 매칭 모두 반환.
  */
 export function recommendMulti(ctx) {
   // S43.6 (2026-05-08): ctx.strategyId 단일 입력 호환 (recommend wrapper 폐기 동반).
@@ -182,7 +224,8 @@ export function recommendMulti(ctx) {
   const samplingSeed = mixSeeds(seed >>> 0, ((drwNo || 0) + 0xC0FFEE) >>> 0);
   const collected = weightedSample(w, PICK_COUNT, samplingSeed);
   collected.sort((a, b) => a - b);
-  const sources = collected.map((n) => assignSourceForNumber(n, ctx, normalized));
+  // S77: 다중 학설/통계 매칭 모두 수집 (배열 of 배열).
+  const sources = collected.map((n) => assignSourcesForNumber(n, ctx, normalized));
 
   const bonusSeed = mixSeeds(samplingSeed >>> 0, 0xBABA1234);
   const bonusArr = weightedSample(uniformWeights(), BONUS_COUNT, bonusSeed, new Set(collected));

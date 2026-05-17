@@ -266,7 +266,12 @@ suite('core/recommend - 전략', () => {
     assertEqual(r.numbers.length, 6);
     assertTrue(Number.isInteger(r.bonus));
     assertEqual(r.strategySources.length, 6);
-    for (const s of r.strategySources) assertEqual(s, STRATEGY_BLESSED);
+    // S77 (2026-05-17): strategySources는 string[][]. 단일 전략이면 각 원소 = [BLESSED] 단일 배열.
+    for (const s of r.strategySources) {
+      assertTrue(Array.isArray(s), 'S77: 각 source는 배열');
+      assertEqual(s.length, 1, '단일 전략 폴백 = 1개 배열');
+      assertEqual(s[0], STRATEGY_BLESSED);
+    }
   });
 
   test('S3-T1 recommendMulti: 2전략 분배 + 출처', () => {
@@ -275,10 +280,10 @@ suite('core/recommend - 전략', () => {
       strategyIds: [STRATEGY_BLESSED, STRATEGY_INTUITIVE],
     });
     assertEqual(r.numbers.length, 6);
-    const sourceSet = new Set(r.strategySources);
-    // 2 전략 모두 등장 가능 (분배 3+3, 중복 제외 후에도 양쪽이 채워짐)
-    assertTrue(sourceSet.size >= 1, '최소 1전략은 출처에 등장');
-    assertTrue(sourceSet.size <= 2, '최대 2전략');
+    // S77: strategySources는 string[][]. 모든 원소 flatten 후 unique set.
+    const allSources = new Set(r.strategySources.flat());
+    assertTrue(allSources.size >= 1, '최소 1전략은 출처에 등장');
+    assertTrue(allSources.size <= 2, '최대 2전략');
   });
 
   test('S3-T1 recommendMulti: 6전략 모두 1개씩', () => {
@@ -520,8 +525,144 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
       strategyIds: sids,
     });
     assertEqual(r.strategySources.length, 6);
-    for (const src of r.strategySources) {
-      assertTrue(sids.includes(src), `source ${src}가 strategyIds 안에 없음`);
+    // S77: 각 source는 배열. flatten 후 모두 strategyIds 안 ID인지 단언.
+    for (const srcs of r.strategySources) {
+      assertTrue(Array.isArray(srcs), 'S77: 각 source는 배열');
+      assertTrue(srcs.length >= 1, 'S77: 최소 1개 (폴백 보장)');
+      for (const sid of srcs) {
+        assertTrue(sids.includes(sid), `source ${sid}가 strategyIds 안에 없음`);
+      }
     }
+  });
+
+  // S72 (2026-05-16): 통계 카테고리 라벨 매핑 결손 정정 회귀.
+  // 사용자 보고 "균형 프리셋 선택했는데 6개 중 5개가 직, 1개만 별. 최 라벨이 0개" 직접 대응.
+  test('S72 - 균형 프리셋(통계+학설+직감) numberStats 있으면 통계 top K 라벨 부여', () => {
+    // numberStats: recent30 top 10 = 31~40번호 (인위적 편향).
+    const numberStats = [];
+    for (let n = 1; n <= 45; n += 1) {
+      numberStats.push({ number: n, totalCount: 100, recent30: (n >= 31 && n <= 40) ? 20 : 1, currentGap: 5 });
+    }
+    const sids = [STRATEGY_TREND_FOLLOWER, STRATEGY_ASTROLOGER, STRATEGY_INTUITIVE];
+    // 다수 시드로 통계 top K 라벨이 최소 1건 등장하는지 확인 (확률 1.0 단언 위해 시드 sweep).
+    let trendCount = 0;
+    let astrologerCount = 0;
+    const N = 50;
+    for (let i = 0; i < N; i += 1) {
+      const r = recommendMulti({
+        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
+        numberStats, bonusStats: [], cooccur: [],
+        zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: sids,
+      });
+      if (r.strategySources.flat().includes(STRATEGY_TREND_FOLLOWER)) trendCount += 1;
+      if (r.strategySources.flat().includes(STRATEGY_ASTROLOGER)) astrologerCount += 1;
+    }
+    assertTrue(trendCount > 0, `통계(trendFollower) 라벨이 N=${N}회 중 한 번도 등장 안 함 (실제 ${trendCount}회) - S72 결손 회귀`);
+    assertTrue(astrologerCount > 0, `학설(astrologer) 라벨이 한 번도 등장 안 함 (실제 ${astrologerCount}회)`);
+  });
+
+  test('S72 - numberStats 비면 통계 매칭 fall-through (페치 전 상태 보호)', () => {
+    // 페치 전 = numberStats 빈 배열. 통계 라벨은 topK 빈 set → 매칭 실패 → fall-through.
+    const sids = [STRATEGY_TREND_FOLLOWER, STRATEGY_ASTROLOGER, STRATEGY_INTUITIVE];
+    const r = recommendMulti({
+      seed: 0xC0FFEE, drwNo: 1225, luck: 50,
+      numberStats: [], bonusStats: [], cooccur: [],
+      zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+      strategyIds: sids,
+    });
+    assertEqual(r.strategySources.length, 6);
+    // S77: 각 source는 배열. flatten 후 모두 strategyIds 안 ID 단언.
+    for (const srcs of r.strategySources) {
+      assertTrue(Array.isArray(srcs) && srcs.length >= 1, 'S77: 폴백 보장');
+      for (const sid of srcs) {
+        assertTrue(sids.includes(sid), `source ${sid}가 strategyIds 안에 없음`);
+      }
+    }
+  });
+
+  // S73 (2026-05-16): F3 - 통계 분기 4종 중 trendFollower만 cover됐던 결손 보강.
+  // statistician / regressionist / secondStar 각각 분기별 라벨 부여 회귀.
+
+  test('S73 - statistician 분기 totalCount top K 라벨 부여 (분산파 외 통계파 cover)', () => {
+    // totalCount 편향: 31~40번호 = 500회 (top 10), 그 외 = 50회.
+    const numberStats = [];
+    for (let n = 1; n <= 45; n += 1) {
+      numberStats.push({ number: n, totalCount: (n >= 31 && n <= 40) ? 500 : 50, recent30: 1, currentGap: 5 });
+    }
+    const sids = [STRATEGY_STATISTICIAN, STRATEGY_ASTROLOGER, STRATEGY_INTUITIVE];
+    let statCount = 0;
+    const N = 50;
+    for (let i = 0; i < N; i += 1) {
+      const r = recommendMulti({
+        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
+        numberStats, bonusStats: [], cooccur: [],
+        zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: sids,
+      });
+      if (r.strategySources.flat().includes(STRATEGY_STATISTICIAN)) statCount += 1;
+    }
+    assertTrue(statCount > 0, `statistician 라벨이 N=${N}회 중 한 번도 등장 안 함 (실제 ${statCount}회) - S73 결손 회귀`);
+  });
+
+  test('S73 - regressionist 분기 currentGap top K 라벨 부여 (분산파 cover)', () => {
+    // currentGap 편향: 31~40번호 = 50 (오래 안 나옴 top 10), 그 외 = 2.
+    const numberStats = [];
+    for (let n = 1; n <= 45; n += 1) {
+      numberStats.push({ number: n, totalCount: 100, recent30: 5, currentGap: (n >= 31 && n <= 40) ? 50 : 2 });
+    }
+    const sids = [STRATEGY_REGRESSIONIST, STRATEGY_INTUITIVE, STRATEGY_BALANCER];
+    let regrCount = 0;
+    const N = 50;
+    for (let i = 0; i < N; i += 1) {
+      const r = recommendMulti({
+        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
+        numberStats, bonusStats: [], cooccur: [],
+        zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: sids,
+      });
+      if (r.strategySources.flat().includes(STRATEGY_REGRESSIONIST)) regrCount += 1;
+    }
+    assertTrue(regrCount > 0, `regressionist 라벨이 N=${N}회 중 한 번도 등장 안 함 (실제 ${regrCount}회) - S73 결손 회귀`);
+  });
+
+  // S77 (2026-05-17): 다중 학설 매칭 = strategySources[k] 배열 length >= 2. 사용자 명시 "별자리 동일 번호도 추출 전략 표시".
+  test('S77 - 운세 프리셋 시드 sweep에서 다중 학설 매칭 발생 (배열 length >= 2)', () => {
+    const sids = [STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_ZODIAC_ELEMENT];
+    let multiMatchCount = 0;
+    const N = 100;
+    for (let i = 0; i < N; i += 1) {
+      const r = recommendMulti({
+        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
+        numberStats: [], bonusStats: [], cooccur: [],
+        zodiac: 'cancer', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: sids,
+      });
+      // 6개 중 다중 학설 매칭 번호 (배열 length >= 2)가 있으면 카운트.
+      if (r.strategySources.some((srcs) => srcs.length >= 2)) multiMatchCount += 1;
+    }
+    assertTrue(multiMatchCount > 0,
+      `운세 3학설 시드 sweep N=${N}회 중 다중 매칭 0회 (실제 ${multiMatchCount}) - S77 결손 회귀. 풀 겹침이 있는데 단일 라벨로 흡수되면 fail.`);
+  });
+
+  test('S73 - secondStar 분기 bonusStats top K 라벨 부여', () => {
+    // bonusStats 편향: 31~40번호 = 80회 (보너스 hot top 10), 그 외 = 10회.
+    const bonusStats = [];
+    for (let n = 1; n <= 45; n += 1) {
+      bonusStats.push({ number: n, totalCount: (n >= 31 && n <= 40) ? 80 : 10 });
+    }
+    const sids = [STRATEGY_SECOND_STAR, STRATEGY_INTUITIVE];
+    let bonusLabelCount = 0;
+    const N = 50;
+    for (let i = 0; i < N; i += 1) {
+      const r = recommendMulti({
+        seed: 0xC0FFEE + i, drwNo: 1225 + i, luck: 50,
+        numberStats: [], bonusStats, cooccur: [],
+        zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: sids,
+      });
+      if (r.strategySources.flat().includes(STRATEGY_SECOND_STAR)) bonusLabelCount += 1;
+    }
+    assertTrue(bonusLabelCount > 0, `secondStar 라벨이 N=${N}회 중 한 번도 등장 안 함 (실제 ${bonusLabelCount}회) - S73 결손 회귀`);
   });
 });

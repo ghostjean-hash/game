@@ -126,3 +126,70 @@ import { foo } from 'https://esm.sh/some-lib@1.0.0';
 8.5. 의미 있는 아이콘 단독 버튼은 `aria-label` 필수, 장식용 아이콘은 `aria-hidden="true"` (헬퍼가 자동 부여).
 8.6. 새 아이콘이 필요하면 `icons.js`에 export 함수로 추가 후 사용.
 8.7. 적용 대상: 회차 nav (이전 / 다음), 캐릭터 슬롯 (추가 / 삭제), 통계 갱신, 전략 caret, 본번호-보너스 분리자(+) 등.
+
+## 9. 자비스 작업 룰 (Sprint 077~087 결손 패턴 룰화, 2026-05-17)
+
+본 세션에서 12건 결손 누적 → 룰화. 같은 패턴 회귀 차단.
+
+### 9.1. 시각 정합 (점/원/도형)
+
+9.1.1. 작은 원형 요소(`.num-source-dot` / `.preset-strategy-dot` 등)는 다음 강제 룰 일괄:
+- `display: block` (inline-block sub-pixel 차단)
+- `box-sizing: border-box`
+- `aspect-ratio: 1 / 1` (정사각 → 정원 보장)
+- 짝수 px 크기 (`8px` / `10px`, 홀수 회피로 device pixel 라운딩 차단)
+- `min/max-width/height` + `flex: 0 0 N` 강제
+- 부모 컨테이너 `line-height: 0` + `font-size: 0` (inline baseline 영향 차단)
+
+9.1.2. 사용자 "크기가 다르다" 보고 시 = sub-pixel 영향 우선 의심. CSS 자체 width/height만으로는 부족.
+
+### 9.2. 데이터 상수 변경
+
+9.2.1. `STRATEGIES.label` / `DEFAULT_PRESETS.label` 등 사용자 노출 상수 변경 시 **하드코딩 사용처 전수 grep 의무**.
+- 예: confirm 텍스트 / docs / SSOT 문서 / 다른 UI 컴포넌트
+
+9.2.2. `STRATEGIES.short` 같은 시각 라벨은 `label[0]` 정합 단언 회귀 테스트 작성 (Sprint 074 패턴).
+
+### 9.3. 행/카드 우측 액션 영역
+
+9.3.1. 행에 새 버튼/아이콘 추가 시 기존 `absolute` 포지셔닝 요소 전수 grep 의무.
+- 예: `.char-row` 우측 = 휴지통(44) + 편집(44) + 활성 배지(right: 56) 충돌 → 배지 폐기
+
+9.3.2. flex 행 우측 액션 영역은 absolute 폐기, 행 자체 flex item으로 처리 권장.
+
+### 9.4. 데이터 편집 기능
+
+9.4.1. 편집 기능 신설 시 데이터 schema 점검 의무. 편집 필드가 모두 character/preset 객체에 보존되어야 prefill 가능.
+
+9.4.2. 옛 데이터 마이그레이션 경로 명시 의무:
+- 신규부터 보존 (옛 데이터는 빈값 + 안내 카피)
+- 또는 자동 마이그레이션 함수
+- 또는 사용자 1회 재입력으로 이후 정합
+
+### 9.5. 사용자 명시 해석
+
+9.5.1. 사용자 명시 해석이 두 가지 이상 가능하면 **AskUserQuestion 의무**. 자비스 단독 추정 패턴 = 결손 누적 원인 1위.
+
+9.5.2. AskUserQuestion 질문 패턴:
+- 자비스 추정 답을 첫 옵션으로 제시
+- "Other" 옵션은 자동 부여라 명시 안 함
+- 4건 이하 옵션
+
+### 9.6. 라벨/카테고리 분포 단언
+
+9.6.1. 라벨 매핑 / 카테고리 분포 관련 변경 시 회귀 테스트 = **"각 카테고리 라벨이 N회 시뮬 중 최소 1건 이상 등장" 단언 의무** (Sprint 072/073 패턴).
+
+9.6.2. 옛 패턴(`assertTrue(sids.includes(src))`) = "묶음 안 ID이기만 하면 OK" = 분포 결손 못 잡음.
+
+### 9.7. 시각 매핑 상수 변경
+
+9.7.1. `FORTUNE_GLYPH` / `STRATEGY_TAG_COLORS` 등 시각 매핑 상수 변경 시 다른 시각 요소(caret / icon / glyph)와 충돌 점검 의무.
+- 예: 흉 글리프 ▼ vs caret ▼/▲ = 같은 모양 충돌 → 흉 ✕ 변경
+
+9.7.2. 색 변경 시 카테고리 hue 보존 default. hue 변경은 사용자 명시 요청 시만.
+
+### 9.8. CSS cascade 미디어 쿼리
+
+9.8.1. `#app` / `.bottom-tabs` / `.tab-item` 등 글로벌 레이아웃 토큰 변경 시 미디어 쿼리 boundary 전수 grep + **각 구간 계산값 표 산출 의무** (Sprint 069/071 패턴).
+
+9.8.2. 단위 테스트(node tests/run-node.js)는 CSS cascade 회귀 못 잡음. CSS-only 변경은 수동 시각 점검 추가.

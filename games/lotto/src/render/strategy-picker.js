@@ -14,14 +14,16 @@ import {
 // S34 (2026-05-08): 짝꿍(pairTracker) 폐기 - 페어 동행 보장 X로 사용자 가치 의문 + 학습 부담.
 //   통계 카테고리 5종 → 4종(최신/많이/보너스/적게). 동시출현 매트릭스 자체는 통계 탭에서 유지.
 // S34 (2026-05-08): 랜덤 카테고리 3종 desc 정체성 강화 - 정체성 라벨 + 사용자 가치 차별화.
+// S74 (2026-05-16): short를 label 머리글자(label[0])로 통일. 사용자 보고 "최신→추 / 별자리→점 / 보너스→별 / 적게→안 / 랜덤→축 불일치".
+//   S21/S22의 약자 매핑("추세/별빛/안나옴/축복")이 S34/S35 label 변경 후에도 정정 누락된 결손. 매핑 = label[0] 자동 정합.
 const STRATEGIES = [
-  { id: STRATEGY_BLESSED, label: '랜덤', short: '축', desc: '캐릭터 정체성: 키운 Luck만큼 시드 6번호에 보너스. 운세에 가장 민감', category: '랜덤' },
-  { id: STRATEGY_TREND_FOLLOWER, label: '최신', short: '추', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
+  { id: STRATEGY_BLESSED, label: '랜덤', short: '랜', desc: '캐릭터 정체성: 키운 Luck만큼 시드 6번호에 보너스. 운세에 가장 민감', category: '랜덤' },
+  { id: STRATEGY_TREND_FOLLOWER, label: '최신', short: '최', desc: '최근 30회에 자주 나온 번호 위주', category: '통계' },
   { id: STRATEGY_STATISTICIAN, label: '많이', short: '많', desc: '역대 회차에 가장 많이 나온 번호 위주', category: '통계' },
-  { id: STRATEGY_SECOND_STAR, label: '보너스', short: '별', desc: '역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두)', category: '통계' },
-  { id: STRATEGY_REGRESSIONIST, label: '적게', short: '안', desc: '오랫동안 안 나온 번호 위주', category: '통계' },
-  { id: STRATEGY_ASTROLOGER, label: '별자리', short: '점', desc: '캐릭터 별자리 12종의 행운 번호 위주', category: '운세' },
-  { id: STRATEGY_ZODIAC_ELEMENT, label: '4원소', short: '원', desc: '별자리 4원소(불/땅/공기/물) 그룹 행운 번호', category: '운세' },
+  { id: STRATEGY_SECOND_STAR, label: '보너스', short: '보', desc: '역대 보너스볼로 자주 나온 번호 위주 (본번호 + 보너스 모두)', category: '통계' },
+  { id: STRATEGY_REGRESSIONIST, label: '적게', short: '적', desc: '오랫동안 안 나온 번호 위주', category: '통계' },
+  { id: STRATEGY_ASTROLOGER, label: '별자리', short: '별', desc: '캐릭터 별자리 12종의 행운 번호 위주', category: '운세' },
+  { id: STRATEGY_ZODIAC_ELEMENT, label: '4원소', short: '4', desc: '별자리 4원소(불/땅/공기/물) 그룹 행운 번호', category: '운세' },
   { id: STRATEGY_FIVE_ELEMENTS, label: '사주', short: '사', desc: '캐릭터 일주의 천간 오행(목/화/토/금/수) 행운 번호', category: '운세' },
   { id: STRATEGY_INTUITIVE, label: '직감', short: '직', desc: '회차 색깔: 매주 분포가 통째로 바뀝니다. 같은 캐릭터도 회차마다 다른 추천', category: '랜덤' },
   { id: STRATEGY_BALANCER, label: '균형', short: '균', desc: '통계 패턴: 역대 1등 번호 합·홀짝이 모이는 구간에 맞춘 조합만', category: '랜덤' },

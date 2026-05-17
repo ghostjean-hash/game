@@ -5,34 +5,60 @@
 // S3-T1 / S22(2026-05-03): 다중 전략 모드면 본번호 아래 출처 표시.
 //   S3-T1 = 카테고리 색 dot. S22 = dot 폐기, 1글자 short 라벨로 교체 (같은 카테고리 안 전략 식별 가능).
 import { numberColor, strategyTagColor } from '../data/colors.js';
-import { STRATEGY_CATEGORIES } from '../data/numbers.js';
+import { STRATEGY_CATEGORIES, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_DEFAULT } from '../data/numbers.js';
 import { strategyShort, strategyLabel } from './strategy-picker.js';
 
-// S10(2026-05-02): saju → mapping 통합. 운세 카테고리 단일 색.
-// S22(2026-05-03): tag(1글자 short) 배경색 카테고리 별로 유지.
-// S23(2026-05-03): 전략별 색 차등 (계열은 카테고리 hue 유지). 클래스 fallback 유지 +
-//   배경은 inline style로 strategyTagColor 적용. SSOT: src/data/colors.js STRATEGY_TAG_COLORS.
 const CATEGORY_TAG_CLASS = {
   stats: 'is-stats',
   mapping: 'is-mapping',
   random: 'is-random',
 };
 
-function numHtml(n, ariaLabel, source) {
-  const c = numberColor(n);
+// S77 (2026-05-17): 다중 학설 매칭 시 출처 태그만 색 분할 + 라벨 다글자.
+// S79 (2026-05-17): 모드 분기 (dot / label). 번호공(.num)은 6/45 룰 색 단색 유지.
+function numHtml(n, ariaLabel, sources, mode = SOURCE_DISPLAY_DEFAULT) {
   const label = ariaLabel || `${n}번`;
-  const sourceCat = source ? STRATEGY_CATEGORIES[source] : null;
-  const tagCls = sourceCat ? CATEGORY_TAG_CLASS[sourceCat] : '';
-  const short = source ? strategyShort(source) : null;
-  const fullLabel = source ? strategyLabel(source) : '';
-  const tagBg = source ? strategyTagColor(source) : null;
-  const tagHtml = (sourceCat && short)
-    ? `<span class="num-source-tag ${tagCls}" style="background-color:${tagBg};" data-source="${source}" aria-label="${fullLabel} 출처" title="${fullLabel}">${short}</span>`
-    : '';
+  const c = numberColor(n);
+  const list = Array.isArray(sources) ? sources : (sources ? [sources] : []);
+  const tagHtml = mode === SOURCE_DISPLAY_DOT ? dotHtmlFromSources(list) : labelHtmlFromSources(list);
   return `<span class="num-cell" role="listitem" aria-label="${label}">
     <span class="num" style="background-color:${c.bg};">${n}</span>
     ${tagHtml}
   </span>`;
+}
+
+function labelHtmlFromSources(list) {
+  if (!Array.isArray(list) || list.length === 0) return '';
+  const shorts = list.map((sid) => strategyShort(sid) || '').filter(Boolean).join('');
+  const fullLabels = list.map((sid) => strategyLabel(sid) || sid).join(' · ');
+  const firstCat = STRATEGY_CATEGORIES[list[0]] || null;
+  const tagCls = firstCat ? CATEGORY_TAG_CLASS[firstCat] : '';
+  const tagBg = tagBackgroundFromSources(list);
+  return `<span class="num-source-tag ${tagCls}" style="background:${tagBg};" data-sources="${list.join(',')}" aria-label="${fullLabels} 출처" title="${fullLabels}">${shorts}</span>`;
+}
+
+function dotHtmlFromSources(list) {
+  if (!Array.isArray(list) || list.length === 0) return '';
+  const fullLabels = list.map((sid) => strategyLabel(sid) || sid).join(' · ');
+  const dots = list.map((sid) => {
+    const color = strategyTagColor(sid);
+    return `<span class="num-source-dot" style="background-color:${color};" data-source="${sid}"></span>`;
+  }).join('');
+  return `<span class="num-source-dots" data-sources="${list.join(',')}" aria-label="${fullLabels} 출처" title="${fullLabels}">${dots}</span>`;
+}
+
+function tagBackgroundFromSources(list) {
+  const colors = list.map((sid) => strategyTagColor(sid));
+  if (colors.length === 1) return colors[0];
+  if (colors.length === 2) return `linear-gradient(90deg, ${colors[0]} 50%, ${colors[1]} 50%)`;
+  const stops = [];
+  const step = 100 / colors.length;
+  colors.forEach((c, i) => {
+    const start = (i * step).toFixed(2);
+    const end = ((i + 1) * step).toFixed(2);
+    stops.push(`${c} ${start}% ${end}%`);
+  });
+  return `linear-gradient(90deg, ${stops.join(', ')})`;
 }
 
 /**

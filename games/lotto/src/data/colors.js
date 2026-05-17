@@ -59,23 +59,23 @@ export function numberColor(n) {
 }
 
 // S23 (2026-05-03): 전략별 출처 태그 색.
-// 카테고리 hue 유지 + 명도 단계로 같은 카테고리 안 식별.
-// 사용자 결정 = "같은 운세라도 색 계열은 같지만 색은 다르게".
-//   통계 5종: 파랑 계열 (sky-500 → blue-900) 5단계.
-//   운세 3종: 분홍 계열 (pink-500 → pink-800) 3단계.
+//   통계 4종: 파랑 계열 (sky-500 → sky-900) 4단계.
+//   운세 3종: 분홍 계열 명도 단계. S78 (2026-05-17) **명도 극대화** (옛 pink-500/700/800 → pink-300/600/900).
+//     사용자 명시 "더 차이나도록" + 정정 "색만 차이 / 다른 거 수정 X" = hue 유지 + 명도 차이 극대화.
 //   랜덤 3종: 회색 계열 (gray-500 → gray-700) 3단계.
 // SSOT: docs/02_data.md 2.7.
 // S34 (2026-05-08): pairTracker 항목 제거 (짝꿍 폐기 동반). 통계 4종.
+// S78 (2026-05-17): 운세 분홍 명도 극대화.
 export const STRATEGY_TAG_COLORS = Object.freeze({
   // 통계 (파랑 계열)
   trendFollower: '#0ea5e9',   // sky-500
   statistician:  '#0284c7',   // sky-600
   secondStar:    '#075985',   // sky-800
   regressionist: '#0c4a6e',   // sky-900
-  // 운세 (분홍 계열)
-  astrologer:    '#ec4899',   // pink-500
-  zodiacElement: '#be185d',   // pink-700
-  fiveElements:  '#9d174d',   // pink-800
+  // 운세 (분홍 계열 - S78 명도 극대화. 옛 500/700/800 → 300/600/900)
+  astrologer:    '#f9a8d4',   // pink-300 - 별자리 (밝음)
+  zodiacElement: '#db2777',   // pink-600 - 4원소 (중간)
+  fiveElements:  '#831843',   // pink-900 - 사주 (어두움)
   // 랜덤 (회색 계열)
   blessed:       '#6b7280',   // gray-500
   intuitive:     '#4b5563',   // gray-600

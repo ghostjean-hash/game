@@ -6,10 +6,11 @@ import {
   loadPresets, savePresets,
   clearAll,
 } from '../data/storage.js';
-import { DEFAULT_PRESETS, PRESET_SLOT_COUNT } from '../data/numbers.js';
+import { DEFAULT_PRESETS, PRESET_SLOT_COUNT, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL } from '../data/numbers.js';
 import { strategyLabel } from './strategy-picker.js';
+import { strategyTagColor } from '../data/colors.js';
 import { openPresetEditor } from './preset-editor.js';
-import { plus, close } from './icons.js';
+import { plus, close, pencil } from './icons.js';
 
 /**
  * 설정 페이지 렌더 (탭 모델).
@@ -44,14 +45,23 @@ export function renderSettingsPage(container, handlers) {
   // SSOT: docs/01_spec.md 5.1.5.2.
   const presetRows = (presets || []).slice(0, PRESET_SLOT_COUNT).map((p, idx) => {
     const sids = Array.isArray(p?.strategyIds) ? p.strategyIds : [];
-    const strategyLine = sids.map((sid) => strategyLabel(sid)).filter(Boolean).join(' · ');
+    const strategyLineAria = sids.map((sid) => strategyLabel(sid)).filter(Boolean).join(' · ');
+    // S79 (2026-05-17): 각 학설 label 앞 색점 (설정 무관 항상 표시).
+    const strategyTokens = sids.length > 0
+      ? sids.map((sid) => {
+          const label = strategyLabel(sid);
+          if (!label) return '';
+          const color = strategyTagColor(sid);
+          return `<span class="preset-strategy-token"><span class="preset-strategy-dot" style="background-color:${color};" aria-hidden="true"></span>${escapeHtml(label)}</span>`;
+        }).filter(Boolean).join('<span class="preset-strategy-sep" aria-hidden="true"> · </span>')
+      : escapeHtml('(전략 없음)');
     return `
       <li class="preset-manage-row">
         <button type="button" class="preset-manage-main" data-preset-id="${escapeAttr(p?.id || `preset-${idx + 1}`)}"
                 data-preset-idx="${idx}"
-                aria-label="슬롯 ${idx + 1} 편집">
+                aria-label="슬롯 ${idx + 1} 편집 - ${escapeAttr(strategyLineAria)}">
           <span class="preset-manage-label">${escapeHtml(p?.label || `슬롯 ${idx + 1}`)}</span>
-          <span class="preset-manage-strategies">${escapeHtml(strategyLine || '(전략 없음)')}</span>
+          <span class="preset-manage-strategies">${strategyTokens}</span>
         </button>
       </li>
     `;
@@ -67,8 +77,10 @@ export function renderSettingsPage(container, handlers) {
                 title="${escapeAttr(c.name)}로 활성">
           <span class="char-row-name">${escapeHtml(c.name)}</span>
           <span class="char-row-meta">${escapeHtml(animalLabel(c.animalSign))} · ${escapeHtml(zodiacLabelShort(c.zodiac))}</span>
-          ${isActive ? '<span class="char-row-active-badge">활성</span>' : ''}
         </button>
+        <button type="button" class="char-row-edit" data-char-edit-id="${escapeAttr(c.id)}"
+                aria-label="${escapeAttr(c.name)} 캐릭터 편집"
+                title="편집">${pencil()}</button>
         <button type="button" class="char-row-del" data-char-del-id="${escapeAttr(c.id)}"
                 ${!canDelete ? 'disabled' : ''}
                 aria-label="${escapeAttr(c.name)} 캐릭터 삭제">${close()}</button>
@@ -122,6 +134,22 @@ export function renderSettingsPage(container, handlers) {
     </section>
 
     <section class="stats-section">
+      <h2 class="stats-title">표시</h2>
+      <fieldset class="settings-radio-group" data-setting-group="sourceDisplayMode">
+        <legend class="settings-label"><strong>추천 번호 출처 표시</strong></legend>
+        <p class="settings-hint">번호공 아래 출처 표시 방식. 색점은 한글 없이 작은 점 N개로 간결.</p>
+        <label class="settings-row">
+          <input type="radio" name="sourceDisplayMode" value="${SOURCE_DISPLAY_DOT}" ${options.sourceDisplayMode === SOURCE_DISPLAY_DOT ? 'checked' : ''} />
+          <span class="settings-label">색점</span>
+        </label>
+        <label class="settings-row">
+          <input type="radio" name="sourceDisplayMode" value="${SOURCE_DISPLAY_LABEL}" ${options.sourceDisplayMode === SOURCE_DISPLAY_LABEL ? 'checked' : ''} />
+          <span class="settings-label">한글</span>
+        </label>
+      </fieldset>
+    </section>
+
+    <section class="stats-section">
       <h2 class="stats-title">다구좌 모드 (휠링)</h2>
       <p class="stats-note">여러 장 분산 구매로 부분 당첨 보장. 1등 확률 향상 도구가 아닙니다. 라이트 사용자에겐 권장하지 않습니다.</p>
       <div class="settings-row-actions">
@@ -157,6 +185,17 @@ export function renderSettingsPage(container, handlers) {
     handlers.onFiveSetsToggle();
   });
 
+  // S79 (2026-05-17): 출처 표시 모드 라디오 (dot / label). 변경 즉시 렌더 갱신.
+  container.querySelectorAll('input[name="sourceDisplayMode"]').forEach((el) => {
+    el.addEventListener('change', (e) => {
+      if (!e.target.checked) return;
+      const opts = loadOptions();
+      opts.sourceDisplayMode = e.target.value;
+      saveOptions(opts);
+      if (typeof handlers.onSourceDisplayModeChange === 'function') handlers.onSourceDisplayModeChange();
+    });
+  });
+
   container.querySelector('[data-action="toggle-advanced"]').addEventListener('click', handlers.onAdvancedToggle);
   container.querySelector('[data-action="show-disclaimer"]').addEventListener('click', handlers.onShowDisclaimer);
   container.querySelector('[data-action="reset-all"]').addEventListener('click', () => {
@@ -187,6 +226,15 @@ export function renderSettingsPage(container, handlers) {
     });
   });
 
+  // S84 (2026-05-17): 캐릭터 편집 버튼.
+  container.querySelectorAll('[data-char-edit-id]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = el.dataset.charEditId;
+      if (typeof handlers.onEditCharacter === 'function') handlers.onEditCharacter(id);
+    });
+  });
+
   // S61 (2026-05-10): 프리셋 관리 - 슬롯 행 클릭 시 편집 모달, 기본값 복원 버튼.
   container.querySelectorAll('[data-preset-idx]').forEach((el) => {
     el.addEventListener('click', () => {
@@ -198,7 +246,10 @@ export function renderSettingsPage(container, handlers) {
     });
   });
   container.querySelector('[data-action="reset-presets"]')?.addEventListener('click', () => {
-    const ok = window.confirm('기본 3종 (균형 / 분산파 / 운세파)으로 되돌릴까요?');
+    // S87 (2026-05-17): confirm 텍스트를 DEFAULT_PRESETS 동적으로. 옛 하드코딩 "균형/분산파/운세파"는
+    //   Sprint 075 갱신(운세/균형/분산) 후 잔재. 사용자 보고 "옛 데이터로 돌아가는 거지?".
+    const labels = DEFAULT_PRESETS.map((p) => p.label).join(' / ');
+    const ok = window.confirm(`기본 3종 (${labels})으로 되돌릴까요?`);
     if (!ok) return;
     savePresets(JSON.parse(JSON.stringify(DEFAULT_PRESETS)));
     renderSettingsPage(container, handlers);

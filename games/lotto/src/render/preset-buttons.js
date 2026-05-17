@@ -4,6 +4,7 @@
 // S63 (2026-05-10): 사용자 입력 부제 → 묶인 전략 label list 자동 표시. "애매한 설명"보다 정직한 노출.
 import { PRESET_SLOT_COUNT } from '../data/numbers.js';
 import { strategyLabel } from './strategy-picker.js';
+import { strategyTagColor } from '../data/colors.js';
 
 /**
  * 프리셋 3슬롯 버튼 HTML.
@@ -25,17 +26,24 @@ export function presetButtonsHtml(presets, activeStrategyIds) {
     }
     const active = isSamePresetActive(p.strategyIds, activeStrategyIds);
     // S63 (2026-05-10): 묶인 전략 label list 자동 표시 (예: "최신 · 별자리 · 직감").
+    // S79 (2026-05-17): 각 학설 label 앞에 색점 (strategyTagColor). 설정 무관 = 항상 표시.
     const sids = Array.isArray(p.strategyIds) ? p.strategyIds : [];
-    const strategyLine = sids.map((sid) => strategyLabel(sid)).filter(Boolean).join(' · ');
+    const strategyLineAria = sids.map((sid) => strategyLabel(sid)).filter(Boolean).join(' · ');
+    const strategyTokens = sids.map((sid) => {
+      const label = strategyLabel(sid);
+      if (!label) return '';
+      const color = strategyTagColor(sid);
+      return `<span class="preset-strategy-token"><span class="preset-strategy-dot" style="background-color:${color};" aria-hidden="true"></span>${escapeHtml(label)}</span>`;
+    }).filter(Boolean).join('<span class="preset-strategy-sep" aria-hidden="true"> · </span>');
     return `
       <button type="button"
               class="preset-slot${active ? ' is-active' : ''}"
               data-preset-id="${p.id}"
               data-action="preset-pick"
               aria-pressed="${active ? 'true' : 'false'}"
-              aria-label="${escapeHtml(p.label)} - ${escapeHtml(strategyLine)}">
+              aria-label="${escapeHtml(p.label)} - ${escapeHtml(strategyLineAria)}">
         <span class="preset-label">${escapeHtml(p.label || '')}</span>
-        ${strategyLine ? `<span class="preset-strategy-line">${escapeHtml(strategyLine)}</span>` : ''}
+        ${strategyTokens ? `<span class="preset-strategy-line">${strategyTokens}</span>` : ''}
       </button>
     `;
   }).join('');

@@ -20,6 +20,8 @@ import './suites/history.test.js';
 import './suites/ritual.test.js';
 import './suites/reverse.test.js';
 import './suites/saved-sets.test.js';
+// S74 (2026-05-16): strategyShort / strategyLabel label[0] 정합 회귀.
+import './suites/strategy-picker.test.js';
 // S64.1 (2026-05-10): 비동기 storage 테스트. ESM top-level await로 모든 asyncTest 직렬 평가.
 import './suites/storage-async.test.js';
 

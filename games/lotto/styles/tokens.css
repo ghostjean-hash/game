@@ -61,4 +61,14 @@
      데스크톱 56 / 모바일 480px↓ 52. 매직값 0 원칙. */
   --bottom-tab-h: 56px;
   --bottom-tab-h-sm: 52px;
+
+  /* S070 (2026-05-16): 목록 행 최소 높이 토큰. 캐릭터 카드 행 / 프리셋 관리 행 일관 적용.
+     --bottom-tab-h(56)과 우연히 같은 값이나 의미는 별개(행 hit area + 시각 균형). */
+  --list-row-min-h: 56px;
+
+  /* S073 (2026-05-16): 카운트다운 동그라미 사이즈 토큰. 데스크톱 / 모바일 480px↓ / 매우 좁음 360px↓.
+     동행복권 결과 페이지 카운트다운 일/시/분/초 표시용. .next-draw-num 단일 셀렉터에서 사용. */
+  --countdown-num: 64px;
+  --countdown-num-sm: 56px;
+  --countdown-num-xs: 50px;
 }

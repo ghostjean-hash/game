@@ -14,11 +14,12 @@ const ZODIAC_SHORT = {
   sagittarius: '궁수', capricorn: '염소', aquarius: '물병', pisces: '물고기',
 };
 
+// S76 (2026-05-17): 흉 글리프 ▼ → ✕. caret(▼/▲)과 시각 충돌 정정. 사용자 보고 "고스트(흉) 유저만 화살표 중복".
 const FORTUNE_GLYPH = {
   [FORTUNE_GREAT]: '★',
   [FORTUNE_GOOD]: '◆',
   [FORTUNE_NEUTRAL]: '●',
-  [FORTUNE_BAD]: '▼',
+  [FORTUNE_BAD]: '✕',
 };
 
 const ANIMAL_LABELS = Object.fromEntries(ANIMAL_SIGNS.map((a) => [a.id, a.label]));

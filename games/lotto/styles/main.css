@@ -128,6 +128,15 @@ a.btn-secondary,
   flex-direction: column;
   gap: var(--space-3);
 }
+/* S84 (2026-05-17): 편집 폼 저장 / 취소 버튼 묶음. */
+.character-form .form-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+.character-form .form-actions .btn-primary,
+.character-form .form-actions .btn-secondary {
+  flex: 1;
+}
 .character-form label {
   display: flex;
   flex-direction: column;
@@ -492,8 +501,8 @@ a.btn-secondary,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: var(--countdown-num);
+  height: var(--countdown-num);
   border-radius: 50%;
   background: var(--color-surface-soft);
   font-size: 22px;
@@ -666,8 +675,14 @@ a.btn-secondary,
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* S81 (2026-05-17): 사용자 보고 "원의 크기가 다르다". 강제 정합 -
+     box-sizing/padding/line-height 정합 + flex-shrink/grow 0. width/height만 명시(min/max 본체 폐기) =
+     다른 컨텍스트(예: 모바일 .num 40px) cascade 보존. */
+  box-sizing: border-box;
   width: 44px;
   height: 44px;
+  flex-shrink: 0;
+  flex-grow: 0;
   border-radius: 50%;
   /* 결과 페이지 변종(SSOT: docs/02_data.md 2.4): 완전 평면 단색.
      배경색은 numberColor()가 인라인 style로 주입. 그라디언트 / 그림자 없음. */
@@ -680,6 +695,8 @@ a.btn-secondary,
   box-shadow: none;
   text-shadow: none;
   letter-spacing: 0;
+  padding: 0;
+  line-height: 1;
 }
 
 /* ===== SVG 아이콘 공용 (텍스트 아이콘 금지, SSOT: docs/04_conventions.md 5장) ===== */
@@ -1402,6 +1419,44 @@ a.btn-secondary,
 .num-source-tag.is-stats { background: #0369a1; }
 .num-source-tag.is-mapping { background: #be185d; }
 .num-source-tag.is-random { background: #6b7280; }
+
+/* S79 (2026-05-17): 색점 모드 출처 표시. 한글 없이 작은 원 N개 나란히. SSOT: docs/02_data.md 2.7.
+   S80 / S82 (2026-05-17): 크기 정합 강제 - 사용자 보고 "세로/가로 크기 다르다, 규격화하라".
+   원인 추정: 8px sub-pixel + flex item 안 align-items 영향 + 일부 device pixel 라운딩.
+   정정:
+   - 점 크기 8→10px (sub-pixel 영향 감소)
+   - aspect-ratio: 1/1 (정사각형 = 정원 강제. width != height 방지)
+   - display: block (inline-block sub-pixel 차단)
+   - 모든 사이즈 채널(width/height/min/max/flex-basis) 동일 강제 */
+.num-source-dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 3px;
+  height: 6px;
+  line-height: 0;
+  font-size: 0;
+  vertical-align: middle;
+}
+/* S83 (2026-05-17): 사용자 명시 "크기 2/3로". 10 → 6 (10 × 2/3 ≈ 6.67, 짝수 강제 6). aspect-ratio + display block 유지. */
+.num-source-dot {
+  display: block;
+  box-sizing: border-box;
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  min-height: 6px;
+  max-width: 6px;
+  max-height: 6px;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  line-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
 
 /* S4-T1: 5세트 동시 추천 컴팩트 카드 (#2~#5). SSOT: docs/01_spec.md 5.1.3.2. */
 .five-sets-extra {
@@ -2516,7 +2571,7 @@ a.btn-secondary,
   border: none;
   cursor: pointer;
   text-align: left;
-  min-height: 56px;
+  min-height: var(--list-row-min-h);
 }
 .char-row-name {
   font-weight: 700;
@@ -2526,6 +2581,8 @@ a.btn-secondary,
   font-size: var(--font-size-sm);
   color: var(--color-text-dim);
 }
+/* S86 (2026-05-17): .char-row-active-badge HTML 폐기 (settings-page.js). 룰은 dead 잔존 - 다음 cleanup sprint에서 폐기.
+   배지 = .char-row.is-active 외곽선/배경과 중복 + Sprint 084 편집 아이콘 신설 후 우측 위치 충돌. */
 .char-row-active-badge {
   position: absolute;
   right: 56px;
@@ -2555,6 +2612,24 @@ a.btn-secondary,
   .char-row-del:hover:not(:disabled) {
     background: rgba(239, 68, 68, 0.06);
     color: var(--color-danger);
+  }
+}
+/* S84 (2026-05-17): 캐릭터 편집 버튼 (.char-row-del와 동일 패턴, 색만 accent). */
+.char-row-edit {
+  width: 44px;
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--color-border);
+  cursor: pointer;
+  color: var(--color-text-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (hover: hover) and (pointer: fine) {
+  .char-row-edit:hover {
+    background: rgba(201, 160, 80, 0.06);
+    color: var(--color-accent);
   }
 }
 .char-add {
@@ -2647,7 +2722,8 @@ a.btn-secondary,
     padding: var(--space-3);
     padding-left: max(var(--space-3), env(safe-area-inset-left));
     padding-right: max(var(--space-3), env(safe-area-inset-right));
-    padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
+    /* S071 (2026-05-16): 하단 탭(--bottom-tab-h 56px) + 여유 + safe-area. Sprint 069에서 line 1199(데스크톱)와 360px↓만 토큰화하고 본 480~360 구간을 누락해 12+safe로 남아있던 결손 정정. */
+    padding-bottom: calc(var(--bottom-tab-h) + var(--space-6) + env(safe-area-inset-bottom));
   }
 
   .app-title { font-size: 22px; }
@@ -2656,7 +2732,7 @@ a.btn-secondary,
   /* 카운트다운 카드 모바일 */
   .next-draw-card { padding: var(--space-4) var(--space-3); }
   .next-draw-title { font-size: 24px; }
-  .next-draw-num { width: 56px; height: 56px; font-size: 20px; }
+  .next-draw-num { width: var(--countdown-num-sm); height: var(--countdown-num-sm); font-size: 20px; }
 
   .stats-header { gap: var(--space-1); }
   .stats-section { padding: var(--space-3); margin-bottom: var(--space-4); }
@@ -2696,7 +2772,7 @@ a.btn-secondary,
 
   /* 카운트다운 카드 추가 축소 */
   .next-draw-title { font-size: 22px; }
-  .next-draw-num { width: 50px; height: 50px; font-size: 18px; }
+  .next-draw-num { width: var(--countdown-num-xs); height: var(--countdown-num-xs); font-size: 18px; }
 
   .bar-row {
     grid-template-columns: minmax(40px, max-content) minmax(48px, 1fr) minmax(28px, max-content);
@@ -2763,6 +2839,41 @@ a.btn-secondary,
   font-size: var(--font-size-xs);
   color: var(--color-text-dim);
   line-height: 1.3;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  justify-content: center;
+}
+/* S79 (2026-05-17): 프리셋 슬롯 strategyLabel 앞 색점 (각 학설마다 1개). 설정 무관 항상 표시.
+   S80 / S82 (2026-05-17): 크기 정합 강제 (num-source-dot과 동일 패턴: aspect-ratio + display block + 10px). */
+.preset-strategy-token {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1;
+}
+/* S83 (2026-05-17): num-source-dot과 동일 패턴 (10 → 6). */
+.preset-strategy-dot {
+  display: block;
+  box-sizing: border-box;
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  min-height: 6px;
+  max-width: 6px;
+  max-height: 6px;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  line-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.preset-strategy-sep {
+  margin: 0 4px;
+  color: var(--color-text-dim);
 }
 
 /* S61 (2026-05-10): 편집 링크 .preset-edit-row / .preset-edit-link 룰 폐기.
@@ -2798,7 +2909,7 @@ a.btn-secondary,
   border: none;
   cursor: pointer;
   text-align: left;
-  min-height: 56px;
+  min-height: var(--list-row-min-h);
   color: var(--color-text);
 }@media (hover: hover) and (pointer: fine) {
   .preset-manage-main:hover {

@@ -42,7 +42,8 @@ export function saveActiveCharacterId(id) { write('active_character', id); }
 // 옵션
 // fiveSets: 5세트 동시 추천 모드 (S4-T1). 기본 OFF.
 // S19 (2026-05-02): multiStrategy 옵션 폐기. 항상 다중 모드. 기존 localStorage 잔존은 무시.
-const OPTIONS_DEFAULT = { applyFilters: false, advancedMode: false, fiveSets: false };
+// S79 (2026-05-17): sourceDisplayMode 옵션 추가. 'dot' (기본) / 'label'. 사용자 명시.
+const OPTIONS_DEFAULT = { applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'dot' };
 export function loadOptions() {
   const opts = read('options', OPTIONS_DEFAULT);
   // 누락 키 채우기 + S19 폐기 키 제거
@@ -72,6 +73,10 @@ export function loadPresets() {
   if (allDuplicate) {
     return JSON.parse(JSON.stringify(DEFAULT_PRESETS));
   }
+  // S75 (2026-05-16): 자동 마이그레이션 폐기 결정.
+  //   사용자가 묶음/라벨/순서 어느 하나라도 편집했을 가능성 = 보수적 보존이 정도.
+  //   기존 사용자가 새 디폴트(운세/균형/분산)를 원하면 설정 탭 "기본값 복원" 버튼으로 명시 갱신.
+  //   신규 캐릭터는 character-form.js의 lastUsedStrategies = DEFAULT_PRESETS[0]로 자동 활성.
   return raw;
 }
 export function savePresets(presets) { write('presets', presets); }

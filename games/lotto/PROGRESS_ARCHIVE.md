@@ -4,6 +4,17 @@
 >
 > 1차 분리: 2026-05-04. 직전 5 Sprint(032~036, 절 2.53~2.57) 활성 잔존.
 > 2차 정리: 2026-05-08. Sprint 037~039(절 2.58~2.60) archive 추가 이전. Sprint 040~044 활성 잔존.
+> 3차 정리: 2026-05-10. Sprint 040~059(절 2.61~2.80) archive 추가 이전. Sprint 060~064 활성 잔존.
+> 4차 정리: 2026-05-16. Sprint 060~064(절 2.81~2.85) archive 추가 이전. Sprint 065~069 활성 잔존.
+> 5차 정리: 2026-05-16. Sprint 065(절 2.86) archive 추가 이전. 길이 정책 1.6(활성 7건 한계) 룰화 후 첫 강제 이전. Sprint 066~072 활성 잔존.
+> 6차 정리: 2026-05-16. Sprint 066(절 2.87) archive 추가 이전. Sprint 073 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 067~073 활성 잔존.
+> 7차 정리: 2026-05-16. Sprint 067(절 2.88, 작위성 정량 검증) archive 추가 이전. Sprint 074 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 068~074 활성 잔존.
+> 8차 정리: 2026-05-16. Sprint 068(절 2.89, 모바일 풀스코프 최적화) archive 추가 이전. Sprint 075 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 069~075 활성 잔존.
+> 9차 정리: 2026-05-17. Sprint 069(절 2.90, 하단 탭 콘텐츠 가림 + 탭 높이 토큰화) archive 추가 이전. Sprint 076 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 070~076 활성 잔존.
+> 10차 정리: 2026-05-17. Sprint 070(절 2.91, archive 4차 분리 + SW v45 + row min-height 토큰) archive 추가 이전. Sprint 077 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 071~077 활성 잔존.
+> 11차 정리: 2026-05-17. Sprint 071(절 2.92, 모바일 480~361px #app padding-bottom 결손 정정) archive 추가 이전. Sprint 078 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 072~078 활성 잔존.
+> 12차 정리: 2026-05-17. Sprint 072(절 2.93, assignSourceForNumber 통계 카테고리 라벨 매핑 결손 정정) archive 추가 이전. Sprint 079 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 073~079 활성 잔존.
+> 13차 정리: 2026-05-17. Sprint 073(절 2.94, F1~F5 cleanup) archive 추가 이전. Sprint 084 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 074~084 활성 잔존 (단 074~083은 단일 sprint들 안 후속 정정 패턴 + 본 sprint 084).
 >
 > 본 archive는 검색 / 회귀 디버그용. 새 세션에서 자동 적재되지 않음.
 
@@ -15,6 +26,714 @@
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.94. Sprint 073 완료 - F1~F5 cleanup: 매직 넘버 토큰화 + docs SSOT + 회귀 보강 + SW 헤더 archive (S73, 2026-05-16)
+
+배경: Sprint 072 종료 후 /review 명령으로 본 세션 미커밋 7파일 리뷰. 5건 개선 영역(F1~F5) 도출. 사용자 명시 "F1~F5까지 순차적으로 진행하고, 작업한 내용 검토해서 수정". 자비스 단독 가능 cleanup sprint.
+
+### 2.94.1. F1 - STAT_LABEL_TOP_K 매직 넘버 0 룰 정합
+
+- `src/core/recommend.js` module-scope `const STAT_LABEL_TOP_K = 10` → `src/data/numbers.js` 1.3.1 export 이전.
+- `recommend.js` import 추가, 기본값으로 사용. lotto 룰 6.2 "매직 넘버 0" 위반 정정.
+
+### 2.94.2. F2 - docs/01_spec.md 라벨 우선순위 SSOT 명시
+
+- 5.1.3.0 새 architecture 절 다음에 "라벨 우선순위" 절 신설. 표 형식으로 1~6단 분기 + S43.1 결손 + S72 정정 + K=10 결정 근거 명시.
+- SSOT 적용 위치 `topKForStatStrategy` 함수도 추가.
+
+### 2.94.3. F3 - 통계 분기 4종 회귀 커버리지 4/4
+
+| 전략 | 회귀 sprint | 편향 시드 데이터 |
+|---|---|---|
+| TREND_FOLLOWER | S72 | recent30: 31~40번호=20, 그 외=1 |
+| STATISTICIAN | **S73 (F3 신규)** | totalCount: 31~40번호=500, 그 외=50 |
+| REGRESSIONIST | **S73 (F3 신규)** | currentGap: 31~40번호=50, 그 외=2 |
+| SECOND_STAR | **S73 (F3 신규)** | bonusStats.totalCount: 31~40번호=80, 그 외=10 |
+
+각 N=50 시드 sweep + 해당 라벨 ≥1건 등장 단언. 분기 4종 모두 cover.
+
+### 2.94.4. F4 - service-worker.js 헤더 archive (v9~v39 → service-worker-history.md)
+
+- `service-worker-history.md` 신설 (game/ 루트). v9~v39 = 31개 헤더 라인 이전.
+- `service-worker.js` 본체 v9~v39 헤더 → 한 줄 archive 참조 라인으로 축약.
+- 라인 수: 41 → 12줄 (헤더 28줄 감소). 가독성 향상.
+
+### 2.94.5. F5 - .next-draw-num 매직 64/56/50 → 토큰화
+
+| 토큰 | 값 | 사용처 |
+|---|---|---|
+| `--countdown-num` | 64px | `.next-draw-num` 데스크톱 |
+| `--countdown-num-sm` | 56px | `.next-draw-num` 모바일 480px↓ |
+| `--countdown-num-xs` | 50px | `.next-draw-num` 매우 좁음 360px↓ |
+
+`styles/tokens.css` 3개 신규 토큰 + `styles/main.css` 3 사용처 토큰 적용. 매직 0 잔존 점검: `.next-draw-num` 본체 + 모바일 + 좁음 모두 cover.
+
+### 2.94.6. 변경 파일
+
+- `src/data/numbers.js`: `STAT_LABEL_TOP_K = 10` export 추가.
+- `src/core/recommend.js`: import에 `STAT_LABEL_TOP_K` 추가, module-scope const 제거.
+- `docs/01_spec.md` 5.1.3.0: SSOT 적용 위치 + 라벨 우선순위 표 추가.
+- `tests/suites/recommend.test.js`: S73 회귀 3건 추가 (statistician / regressionist / secondStar).
+- `service-worker.js` v47 → v48 + v9~v39 헤더 축약.
+- `service-worker-history.md` 신설 (game/ 루트).
+- `styles/tokens.css`: `--countdown-num` / `-sm` / `-xs` 3 토큰.
+- `styles/main.css`: `.next-draw-num` width/height 토큰화 3개소.
+
+### 2.94.7. 검증
+
+- `node tests/run-node.js` → **310 / 310 PASS** (307 → 310, F3 회귀 3건 통과).
+- 통계 분기 4/4 cover 확인.
+- `STAT_LABEL_TOP_K` grep 정합: numbers.js 정의 1 / recommend.js import 1 / 사용 1.
+- `--countdown-num` grep 정합: tokens.css 정의 3 / main.css 사용 3 (1:1 매칭).
+- service-worker.js 헤더: v40~v48 = 9줄 + archive 참조 1줄 = 11줄 + CACHE_VERSION 1줄. 가독성 양호.
+
+### 2.94.8. Sprint 066 archive 강제 이전 (룰 1.6 자동 적용)
+
+본 sprint 진입 시점 활성 = 066~072 + 073 = 8건. 룰 1.6 "최대 7건" 초과 → Sprint 066(절 2.87)을 archive로 자동 이전. 본 sprint 종료 시점 활성 = 067~073 = 7건 정합. archive 6차 정리.
+
+### 2.94.9. 잔여 / 미적용
+
+- `.next-draw-num`의 `font-size: 22px / 20px / 18px`는 토큰화 미적용. 본 sprint는 width/height만 cover. 폰트 사이즈 토큰 분리는 별도 의제(자비스 추정 R: 데이터 사이즈 vs 디자인 토큰 경계).
+- service-worker.js의 v40 라인도 향후 v50 도달 시 추가 archive 이전 검토.
+
+## 2.93. Sprint 072 완료 - assignSourceForNumber 통계 카테고리 라벨 매핑 결손 정정 (S72, 2026-05-16)
+
+배경: 사용자 캡쳐 보고. 1225회 추첨 "균형" 프리셋(최신·별자리·직감) 선택 시 추천1 = 1, 8, 13, 15, 35, 42 → 라벨 표시 = "직 직 직 직 직 별". **"최" 라벨이 단 하나도 없음**. 사용자 인상 "전략과 다른 추천" 직접 대응.
+
+### 2.93.1. 원인 - `assignSourceForNumber` 우선순위 결함
+
+[src/core/recommend.js:134-153](src/core/recommend.js#L134-L153) (정정 전):
+
+```
+1. 학설 매칭 → 해당 학설
+2. BLESSED 시드 매칭 → BLESSED
+3. INTUITIVE 포함 → 무조건 INTUITIVE  ← 통계 도달 전 catch
+4. BALANCER 포함 → BALANCER
+5. 폴백 → strategyIds[0]
+```
+
+**통계 전략(trendFollower / statistician / regressionist / secondStar) 매칭 분기 부재**. Sprint 043 architecture 재구축(2026-05-08, 절 2.72 archive) 시 단일 weight 벡터로 통합되면서 통계 라벨 매핑 로직 누락. Sprint 043.1 commit log "assignSourceForNumber 라벨 매핑 fix"는 학설/BLESSED만 cover, 통계 카테고리 결손 잔존.
+
+균형 = [trendFollower, astrologer, intuitive] 정규화(STRATEGY_ORDER: 학설 → 랜덤 → 통계) → normalized = [astrologer, intuitive, trendFollower]. astrologer lucky 안 = "별", 그 외 모든 번호는 INTUITIVE catch(line 150) → 무조건 "직". **trendFollower 매칭 로직 부재로 "최" 라벨이 코드 구조상 절대 불가능**.
+
+### 2.93.2. 자비스 사전 검증 결손 사고 3건째
+
+Sprint 043.1 / Sprint 069 / Sprint 072 모두 같은 패턴:
+- 단위 테스트 통과(`assertTrue(sids.includes(src))` = "묶음 안 ID이기만 하면 OK")만 확인
+- "묶음 안 ID 분포" 단언 부재 → "최" 라벨이 단 0건이어도 테스트 통과
+
+향후 적용: 라벨 매핑 / 카테고리 분포 관련 변경 시 **"각 카테고리 라벨이 N회 시뮬 중 최소 1건 이상 등장" 단언 의무**.
+
+### 2.93.3. 수정 - 통계 매칭 분기 신설 + 우선순위 재정렬
+
+[src/core/recommend.js](src/core/recommend.js):
+
+```
+1. 학설 매칭 (별자리/사주/4원소)
+2. 통계 매칭 (trendFollower / statistician / regressionist / secondStar top K=10)  ← S72 신설
+3. BLESSED 시드 매칭
+4. INTUITIVE 폴백 (1-45 base 가중)
+5. BALANCER 폴백
+6. 첫 strategy
+```
+
+`topKForStatStrategy(ctx, sid, k=10)` 헬퍼 export:
+
+| 전략 | top K 기준 |
+|---|---|
+| TREND_FOLLOWER (최신) | `numberStats.recent30` 내림차순 |
+| STATISTICIAN (많이) | `numberStats.totalCount` 내림차순 |
+| REGRESSIONIST (적게) | `numberStats.currentGap` 내림차순 |
+| SECOND_STAR (보너스) | `bonusStats.totalCount` 내림차순 |
+
+데이터 없음(페치 전) = 빈 set → fall-through (기존 INTUITIVE 폴백 보호).
+
+### 2.93.4. 변경 파일
+
+- `src/core/recommend.js`: `topKForStatStrategy` 헬퍼 + `assignSourceForNumber` 통계 분기 + 우선순위 재정렬.
+- `tests/suites/recommend.test.js`: S72 회귀 2건 추가 (균형 프리셋 N=50 시뮬 trendFollower 라벨 ≥1건 + numberStats 빈 set fall-through).
+- `game/service-worker.js` v46 → v47.
+
+### 2.93.5. 검증
+
+- `node tests/run-node.js` → **307 / 307 PASS** (305 → 307, 회귀 0).
+- S72 신규 테스트 2건 모두 그린:
+  - 균형 프리셋 + numberStats 편향(31~40 hot) N=50 → trendCount ≥ 1 / astrologerCount ≥ 1
+  - 균형 프리셋 + numberStats 빈 set → strategySources 길이 6 + 모두 strategyIds 안 ID (fall-through 정합)
+- 라벨 카테고리 분포 단언 추가 = 향후 동일 결손 회귀 차단.
+
+### 2.93.6. 사용자 화면 기대 변동
+
+수정 후 균형 프리셋 같은 시드 추천 시 라벨 분포:
+- 별자리 lucky 안 번호 → "별"
+- trendFollower top 10(`recent30` 상위) 안 번호 → "최"
+- 위 둘 다 아님 + BLESSED 미포함 → "직" (INTUITIVE 폴백)
+
+분산파(적게·직감·균형) = [regressionist, intuitive, balancer]: 통계(currentGap top 10) → "적", 그 외 → "직" / "균" 분포.
+운세파(별자리·사주·4원소): 변동 없음 (모두 학설, 기존 정상).
+
+### 2.93.7. 길이 정책 룰화 (PROGRESS.md `1.6` 신설)
+
+본 sprint 작업 중 사용자 질문 "PROGRESS.md 파일 길이 정책 없나?" 응답으로 명시 룰 신설. 활성 sprint 절 최대 7건(직전 5 + 본 sprint 묶음). 8건 초과 시 가장 옛 sprint 1건 archive 강제 이전. 본 sprint 진입 시점에 활성 = 070, 071, 072 + 065~069 = 8건. 룰 즉시 적용 → **Sprint 065(절 2.86)를 archive로 강제 이전 완료** (archive 5차 정리). 본 sprint 종료 시점 활성 = 066~072 = 7건 정합.
+
+## 2.92. Sprint 071 완료 - 모바일 480~361px 구간 #app padding-bottom 결손 정정 (S71, 2026-05-16)
+
+배경: 사용자 보고 "모바일에서 페이지 하단이 아래 탭에 가려서 안 보여". Sprint 069가 cover했다고 주장한 의제의 시각 회귀 발견.
+
+### 2.92.1. 결손 진단
+
+| 구간 | 탭 높이 | `#app` padding-bottom | 가림 |
+|---|---|---|---|
+| 데스크톱 (481px↑) | 56 | 88+safe (line 1199) | OK |
+| **모바일 480~361px** | **56** | **12+safe (line 2650)** ← Sprint 069 누락 | **가림 확정** |
+| 매우 좁음 (360px↓) | 52 | 84+safe (line 2711) | OK |
+
+`@media (max-width: 480px)` 블록 line 2650이 `padding-bottom: max(--space-3, safe)` = 12+safe로 line 1199(88+safe)를 cascade로 덮어쓰는데, Sprint 069가 line 2711(360px↓)만 토큰화하고 본 480~360 구간 line 2650을 누락. Sprint 069 2.90.1 표의 "모바일 480px↓ → 84px+safe" 주장은 잘못된 자기 보고.
+
+### 2.92.2. 자비스 사전 검증 누락 사고 (정직 보고)
+
+Sprint 069 회귀 검증은 `node tests/run-node.js` 305/305 PASS만 확인. CSS-only 변경이라 단위 테스트로 cover 불가능한 영역(미디어 쿼리 cascade)이 결손 잔존. 시각 회귀 사전 검증 누락.
+
+향후 적용: `#app` / `.bottom-tabs` / `.tab-item` 등 글로벌 레이아웃 토큰 변경 시 미디어 쿼리 boundary 전수 grep + 각 구간 계산값 표 산출 의무.
+
+### 2.92.3. 수정
+
+| 위치 | 이전 | 이후 |
+|---|---|---|
+| `styles/main.css` line 2650 | `padding-bottom: max(var(--space-3), env(safe-area-inset-bottom))` | `padding-bottom: calc(var(--bottom-tab-h) + var(--space-6) + env(safe-area-inset-bottom))` |
+| 결과값 (모바일 480~361px) | 12+safe | **88+safe** (탭 56 + 여유 32 + safe) |
+
+탭 자체 높이는 본 구간에서 `--bottom-tab-h`(56) 그대로 유지 (line 2686 `.tab-item`은 폰트/패딩만 축소, min-height 미변경). 360px↓로 갈 때만 line 2708 `--bottom-tab-h-sm`(52) 적용.
+
+### 2.92.4. 변경 파일
+
+- `styles/main.css` line 2650 (1줄 + 주석 1줄).
+- `game/service-worker.js` v45 → v46 (CSS 변경 cache bust).
+
+### 2.92.5. 검증
+
+- `node tests/run-node.js` → **305 / 305 PASS** (CSS-only, 회귀 0).
+- `min-height: 56px` 잔존 grep 0건 (Sprint 070에서 토큰화 완료).
+- 잔존 매직: line 2659 `.next-draw-num { width: 56px; height: 56px; }`는 카운트다운 동그라미 데이터 사이즈로 본 sprint 범위 외.
+
+### 2.92.6. Sprint 069 본문 정정 (관련 절 2.90.1)
+
+2.90.1 표의 "#app padding-bottom 모바일 480px↓ → 84px+safe" 주장은 실제 360px↓ 블록만 적용. 480~360 구간은 본 sprint(071)로 정정. 정확한 이력은 본 절 + 2.90.1 합산.
+
+## 2.91. Sprint 070 완료 - archive 4차 분리 + SW v45 bump + row min-height 토큰화 (S70, 2026-05-16)
+
+배경: PROGRESS.md 자체 자비스 청소 sprint. 사용자 명시 "A1, A2, A3, A4 모두 처리". 자비스 단독 진행 가능한 4건 묶음. 회귀 위험 0.
+
+### 2.91.1. A1 - PROGRESS_ARCHIVE 4차 분리
+
+| 항목 | 이전 | 이후 |
+|---|---|---|
+| PROGRESS.md 활성 Sprint | 060~069 = 10건 | 065~069 + 본 sprint(070) = 6건 |
+| 룰 (PROGRESS.md `1.5`) | 직전 5 Sprint(060~064)만 활성 | 직전 5 Sprint(065~069) + 본 sprint(070)만 활성 |
+| Archive 이전 절 | 2.81~2.85 (Sprint 060~064) | archive line 19 직전 삽입 |
+| PROGRESS.md 줄 수 | 477줄 | 약 330줄 (계산: 477 - 150 + 신설 절) |
+
+### 2.91.2. A2 - S59.4 잔존 메모 자연 해소
+
+PROGRESS.md 2.85.4의 "PROGRESS 2.80.4의 S59.4 라인은 다음 정리에서 제거" 메모는 A1 archive 이전 시 함께 archive로 이동. archive 안에서 2.80.4는 이미 "닫힘 - Sprint 064에서 storage 테스트 16/25 → 23/25 보강" 으로 정정 완료 상태(line 57). 추가 처리 불필요. archive 이전 시 본 메모는 자연 해소.
+
+### 2.91.3. A3 - service-worker.js v44 → v45 bump
+
+배경: Sprint 068(모바일 풀스코프) / Sprint 069(하단 탭 토큰화)에서 main.css / tokens.css 변경했으나 SW cache 버전 bump 누락. PWA 사용자 폰이 옛 v44 캐시 stale-while-revalidate로 옛 sticky hover / 옛 하단 탭 높이 계속 노출 가능성. v45 bump = SW activate 트리거 → 첫 진입에서 옛 캐시 일괄 폐기.
+
+| 변경 | 위치 |
+|---|---|
+| `CACHE_VERSION = "v44"` → `"v45"` | `game/service-worker.js` line 39 |
+| 헤더 주석 추가 | v45 라인 (S68 sticky hover 가드 + S69 하단 탭 토큰화 + S70 archive/SW/row min-height) |
+
+NETWORK_FIRST_PATHS / PRECACHE / fetch 핸들러 로직은 변경 없음. lotto 외 자산(허브 / tetris / sudoku) 영향 0.
+
+### 2.91.4. A4 - 매직 56px → `--list-row-min-h` 토큰화
+
+배경: Sprint 069 2.90 정리에서 사용자 인지된 `.char-row` / `.preset-manage-main`의 매직 56px 잔존. 의미가 "목록 행 최소 높이" (하단 탭 `--bottom-tab-h: 56px`와 우연히 같은 값이지만 의미는 별개) → 별도 토큰 신설.
+
+| 변경 | 위치 |
+|---|---|
+| `--list-row-min-h: 56px` 신규 토큰 | `styles/tokens.css` |
+| `.char-row-main min-height: 56px` → `var(--list-row-min-h)` | `styles/main.css` line 2519 |
+| `.preset-manage-main min-height: 56px` → `var(--list-row-min-h)` | `styles/main.css` line 2801 |
+
+`.char-row-active-badge`의 `right: 56px`은 휴지통 width(44) + 시각 보정 12 = 의미 다른 값으로 본 sprint 범위 외 (별 가치 없는 burst). 잔존 1건.
+
+### 2.91.5. 검증
+
+- `node tests/run-node.js` → **305 / 305 PASS** (CSS / docs / SW 변경, 회귀 0).
+- `var(--list-row-min-h)` grep: tokens.css 정의 1건 + main.css 사용 2건 = 1:2 정합.
+- `min-height: 56px` 잔존 grep: 0건 (.char-row-main / .preset-manage-main 모두 토큰화).
+- SW v45 매치: game/service-worker.js line 39.
+
+### 2.91.6. PROGRESS.md 자체 구조 영향
+
+- 본 sprint 절 신설로 활성 = 5 + 1 = 6. 룰 "직전 5 Sprint"는 본 sprint 자체를 포함시키므로 다음 sprint 진입 시 자연 6 → 5로 수렴 (이때 Sprint 065 archive 이전 시점).
+- 1.5 라인 = "직전 5 Sprint(065~069) + 본 sprint(070)만 본 파일에 활성".
+
+## 2.90. Sprint 069 완료 - 하단 탭 콘텐츠 가림 수정 + 탭 높이 토큰화 (S69, 2026-05-10)
+
+배경: 사용자 보고 "아래탭 영역이 내용을 가림, 내용이 탭영역보다 더 위로 스크롤되어야 함" + "하단 탭이 크롬과 정확하게 sync 안 맞아 퀄리티 떨어져 보임".
+
+### 2.90.1. 콘텐츠 가림 수정 (즉시)
+
+| 영역 | 이전 | 이후 |
+|---|---|---|
+| `#app` padding-bottom 데스크톱 | `calc(56px + space-5 + safe-area)` = 80px+safe | `calc(--bottom-tab-h + space-6 + safe-area)` = **88px+safe** (여유 +8px) |
+| `#app` padding-bottom 모바일 480px↓ | `calc(52px + space-5 + safe-area)` = 76px+safe | `calc(--bottom-tab-h-sm + space-6 + safe-area)` = **84px+safe** (여유 +8px) |
+
+여유 공간 24 → 32px(space-5 → space-6, 한 단계 증가). 마지막 콘텐츠가 탭에 가리지 않고 호흡 공간 확보.
+
+### 2.90.2. 토큰화 (매직값 0)
+
+| 토큰 | 값 | 사용처 |
+|---|---|---|
+| `--bottom-tab-h` | 56px | 데스크톱 `.tab-item min-height` + `#app padding-bottom` |
+| `--bottom-tab-h-sm` | 52px | 모바일 480px↓ 동일 |
+
+매직 56 / 52 잔존 점검: `.char-row` / `.preset-manage-main` (양쪽 56px)은 별도 컴포넌트 데이터 사이즈로 본 sprint 범위 외.
+
+### 2.90.3. 검증
+
+- `node tests/run-node.js` → **305/305 PASS** (CSS-only, 회귀 0).
+- dev-server 응답: tokens.css에 `--bottom-tab-h` / `--bottom-tab-h-sm` 매치 / main.css에 `var(--bottom-tab-h*)` 4회 매치 (.tab-item × 2 + #app padding-bottom × 2).
+
+### 2.90.4. 후속 의제 (사용자 청취 필요 - 본 sprint 보류)
+
+사용자 보고 "크롬과 정확하게 sync 안 맞음 / 퀄리티 떨어짐"의 정확한 의미가 모호해 자비스 추정 변경 안 함.
+
+가설:
+- G1: 모바일 크롬 주소창 색(theme-color #c9a050 accent gold)과 lotto 본문/하단 탭 흰색 톤 어긋남
+- G2: 데스크톱 vs 모바일 크롬에서 lotto 자체 화면 정렬/폰트/여백 차이
+- G3: 모바일 시스템 navigation bar와 lotto 하단 탭 톤 어긋남
+- G4: 다른 의미
+
+theme-color 변경 옵션 (G1 가정):
+- A: `#ffffff` (white) - 위/본문/탭 통일, gold 정체성 약화
+- B: `#c9a050` 유지 + 하단 탭을 gold로 - 정체성 강화하나 시각 무거움
+- C: `#f7f7f9` (page bg) - 본문 톤과 자연 연결 (자비스 권장)
+
+사용자 캡쳐 또는 G1~G4 답변 후 별도 sprint 진행.
+
+## 2.89. Sprint 068 완료 - 모바일 풀스코프 최적화 (S68, 2026-05-10)
+
+배경: 사용자 보고 "핸드폰 크롬으로 테스트할 때 화면 일부가 다르게 나오던데 테스트해줘. github.io에서 테스트하는중" + "캐릭터 접기/펼치기가 모바일에서 잘 안되는것 같아". 사용자 명시 "모두 진행하길 원해, 모바일에 최적화 되어야 해".
+
+### 2.89.1. 진단 (코드 차원 풀스코프)
+
+| # | 모바일 이슈 | 점검 결과 | 영향 |
+|---|---|---|---|
+| H1 | **Sticky hover** (`:hover` 26 룰, 가드 0건) | `.char-toggle:hover` 등 모든 hover 룰이 모바일에서 sticky hover | **캐릭터 토글 시각 혼동 → 사용자 보고 핵심 원인** |
+| H2 | **touch-action 미설정** | 인터랙티브 요소 전수 누락 | 더블탭 줌 / 일부 lazy click |
+| H3 | **-webkit-tap-highlight-color 미설정** | 글로벌 누락 | 회색 박스 깜빡임 |
+| H4 | 모바일 hit area | `button` base에 `min-height: 44px` 이미 cover. .char-toggle 등 button 요소라 OK | 영향 적음 |
+| H5 | viewport / safe-area | `viewport-fit=cover` + `env(safe-area-inset-*)` 잘 적용됨 | OK |
+| H6 | font-display | Google Fonts URL `&display=swap` 이미 적용 | OK |
+| H7 | iOS 자동 zoom 방지 | `input { font-size: 16px; }` 이미 적용 | OK |
+
+H1, H2, H3가 핵심 결손 = 정도 수정 대상.
+
+### 2.89.2. 수정안 (땜방 금지 = 풀스코프)
+
+| 영역 | 변경 |
+|---|---|
+| `styles/tokens.css` | `--touch-min: 44px` 신규 토큰 (iOS HIG / Material 권장) |
+| `styles/main.css` 글로벌 base | `html, body`에 `-webkit-tap-highlight-color: transparent` / 인터랙티브 base에 `touch-action: manipulation` + `min-height: var(--touch-min)` (매직값 → 토큰) / `[data-action]`에도 `touch-action: manipulation` |
+| `styles/main.css` :hover 26 룰 | **모두 `@media (hover: hover) and (pointer: fine)` 가드 안으로** (Node 스크립트 일괄 처리, 외곽 토큰 단위 안전 변환). 모바일 sticky hover 차단. |
+| `docs/04_conventions.md` 4.8 | 모바일 표준 룰 7항목 신설. 향후 인터랙티브 요소 추가 시 룰 자동 적용 검증 |
+
+### 2.89.3. 변경 통계
+
+- :hover 룰 가드 적용: **26개 / 26개** (1:1 일치 검증)
+- 신규 토큰: 1개 (`--touch-min`)
+- 글로벌 base 추가: 3건 (tap-highlight / touch-action button base / touch-action data-action)
+- docs 신설: 4.8.1 ~ 4.8.7 (7 룰)
+- SW (`game/service-worker.js`): 본 sprint 범위 외 (게임 허브 자산. lotto 전용 아니므로 별도 의제).
+
+### 2.89.4. 검증
+
+- `node tests/run-node.js` → **305/305 PASS** (CSS-only, 회귀 0).
+- dev-server 응답: main.css 200 / tokens.css 200 / `@media (hover: hover) and (pointer: fine)` 26회 매치 / `--touch-min` 토큰 1회 매치.
+- 매직 44px 잔존: 컴포넌트별 명시 데이터 사이즈(번호공 / 라벨)만. 글로벌 base는 토큰 일원화.
+
+### 2.89.5. 사용자 인상 직접 대응
+
+캐릭터 접기/펼치기 모바일 미작동 인상의 가장 강한 후보 = **H1 (sticky hover)**. 모바일에서 첫 탭 시 `.char-toggle:hover`의 `border-color: var(--color-accent)` 적용 후 잔존 → 두 번째 탭은 시각 변화 없어 "안 눌린 듯" 인상. 본 sprint로 해당 hover 룰이 `@media (hover: hover) and (pointer: fine)` 가드 안에 들어가 모바일에서 발화하지 않음. 시각 일관성 회복.
+
+`touch-action: manipulation`로 모바일 크롬의 300ms 더블탭 zoom 지연도 제거 → 즉시 click 반응.
+
+### 2.89.6. 후속 / 미적용
+
+- SW cache busting (사용자 폰이 옛 v44 캐시 보고 있을 수 있음). `game/service-worker.js`는 게임 허브 자산이라 lotto sprint 범위 외. 별도 의제.
+- 사용자 폰에서 강력 새로고침 또는 시크릿 모드 권장 (PWA 설치 상태면 해제 후 재설치).
+
+## 2.88. Sprint 067 완료 - 추천 번호 작위성 정량 검증 (S67, 2026-05-10)
+
+배경: 사용자 보고 "아직도 번호가 작위적인 느낌이 강해. 너무 강해". "전략에 따른 추천 번호가 적정한지 제대로 검토하고 싶어. 전략 하나하나를 수백번 추출한 다음 숫자가 정말 랜덤인지, 한쪽으로 편향된건 아닌지 체크하고 싶어." 권장안 일괄(7차원 측정 / K3 판정 / N=1000 60명 다회차 mix / F3 단계적 / FM 절차)로 진행.
+
+### 2.88.1. 작업 단위 결정
+
+| 항목 | 결정 | 비고 |
+|---|---|---|
+| P1(render/ 11모듈 테스트) | **보류** | 사용자 명시. bias 검증 우선. |
+| 측정 차원 | 7개 전수 (구간 / 1~45 빈도 / 짝홀 / 합계 / 인접 / 끝자리 / 자카드) | 정도(正道) - 땜방 금지 메모리 적용 |
+| 편향 기준 | K3 = K1(±20%) + K2(카이제곱 p<0.05) | 직관 + 통계 둘 다 |
+| 표본 | 60 캐릭터(12 zodiac × 5 stem) × 1000 추출 × 11 전략 = 660,000 sets | |
+| 회차 mix | 최근 100회 (1124~1223) 균등 분포 | 직감 / 통계 전략의 회차 의존성 cover |
+| 산출물 | F3 - 1회성 보고서 우선, 영구 회귀(F2)는 임계 결정 후 별도 sprint | |
+
+### 2.88.2. docs / 인프라 영향
+
+- `docs/03_architecture.md`: scripts/ 디렉토리 추가 (lotto 내). import 규칙 표 + 절대 규칙 2.3.4 + 책임 표 한 줄. 산출물 위치 = `tests/reports/<date>_<topic>.md`.
+- `scripts/bias-report.mjs` (S67-A): 1차 분석 도구. 660,000 추출 / 7차원 / K3 판정 / 카이제곱 임계 테이블 lookup.
+- `scripts/bias-report-n5.mjs` (S67-B): 2차 분석 도구 (N1 가설). 5세트 묶음 단위 = 사용자 "+5세트" 버튼 패턴 직접 정량화. 자연 baseline은 균등 6/45 5000묶음 시뮬로 산출.
+- `tests/reports/`: 디렉토리 신설. 일회성 분석 보고서 archive.
+
+### 2.88.3. 1차 보고서 결과 (`tests/reports/bias_2026-05-10.md`)
+
+| 카테고리 | 종합 판정 |
+|---|---|
+| 랜덤 (랜덤(축복) / 직감 / 균형) | **3종 모두 정상** - 자연 기대 균등 카테고리 그린 |
+| 통계 (최신 / 많이 / 보너스 / 적게) | 의도된 편향 caution. 적게 전략의 1~45 빈도 1건 strong (12번 2.67% vs 자연 2.22%, 가장 안 나온 번호 위주의 자연 결과) |
+| 운세 (별자리 / 4원소 / 사주) | 별자리 / 4원소 caution (학설 풀 좁음 의도된 편향). 사주는 정상 (5 stem cover로 균등 수렴) |
+
+랜덤 카테고리 핵심 수치: 합 평균 138.10 vs 자연 138.00 / 자카드 0.0765~0.0769 vs 자연 0.0755 / 인접 페어 53.14~53.17% vs 자연 52.87%. **자연 기대치와 사실상 일치**.
+
+### 2.88.4. 2차 보고서 결과 (`tests/reports/bias_n5_2026-05-10.md`, N1 가설)
+
+5세트 묶음 단위 (사용자 "+5세트" 버튼 = 30번호) 7차원 측정. 자연 baseline 5000묶음 시뮬 + 12,000묶음 관측 비교.
+
+| 차원 | 자연 평균 | 사용자 직관 |
+|---|---|---|
+| 한 구간 최대 쏠림 | 29.27% | 5세트 묶음에서 한 구간이 약 30% 차지가 자연 |
+| 한 끝자리 최대 쏠림 | 19.13% | 한 끝자리가 약 19% 차지가 자연 |
+| 5세트 평균 자카드 | 0.0764 | 페어와이즈 약 7.6% 겹침이 자연 |
+| 30번호 unique | 23.03개 | 30번호 중 7개 중복이 자연 |
+| **사용자 정의 "1~10 50% 이상"** | **0.02%** | **5000묶음 중 1건 수준 (매우 드문 케이스)** |
+
+종합: 모든 전략 = 주의 (K2 z-test가 12,000 표본에서 매우 민감해 작은 편차도 잡음). **K1(±20%) 위반은 1~10 50% 차원에서만 0.02 → 0.03% 미세 편차** (절대값 차이 0.01%p, 12,000 묶음 중 추가 1~2건). **strong 0건**.
+
+### 2.88.5. 자비스 자동 결론
+
+- 알고리즘 차원 결손 없음 (1차 + 2차 양 보고서 동의).
+- 사용자 인상 "작위적"의 알고리즘 근거는 본 측정 범위(N=12,000 묶음 / 660,000 추출)에서 발견되지 않음.
+- 가능 가설:
+  - N=1~5 표본의 통계적 변동 (사용자가 본 바로 그 묶음이 우연히 쏠림)
+  - 시각 인지 (번호공 색 매핑이 "묶임" 인상 강화)
+  - 캐릭터별 특정 시드의 두드러진 패턴 (본 도구는 60명 평균 - 캐릭터별 분리 분석 미실시)
+
+### 2.88.6. 1차 결과 후 사용자 도전 - 자비스 자기점검
+
+사용자: "너는 전혀 문제없다고 판단한거야?"
+자비스 정정: **"문제없다"가 아니라 "검증된 영역에서 깨끗"**. 미검증 영역 8건 자기점검 (60명 평균 / Luck=10 고정 / 단일 전략만 / 회차 1124~1223 / 자카드 평균만 / 시드 해시 분포 / 시각 인지 / N=1~5 변동).
+
+권장안 진행 C 채택: **5.1 다중 전략 합성** + **5.2 max 자카드 / max 겹침** 도구 확장.
+
+### 2.88.7. 5.1 / 5.2 도구 확장
+
+- `scripts/bias-report.mjs` 시나리오 19개로 확장 (단일 10 + 다중 9).
+- `scripts/bias-report-n5.mjs` 9차원 + 시나리오 19개로 확장 (max 자카드 / max 겹침 추가).
+- 다중 9 시나리오: DEFAULT_PRESETS 3종 (사용자 첫 진입 기본) + 카테고리 내 mix 3종 + 카테고리 cross 페어 3종.
+
+### 2.88.8. 확장 보고서 결과
+
+| 영역 | 1차 (개별 본번호) | 2차 (5세트 묶음 9차원) |
+|---|---|---|
+| 단일 전략 10종 strong | 1건 (적게의 12번 = 의도된 편향) | 0건 |
+| 다중 전략 9종 strong | 0건 | 0건 |
+| 랜덤 카테고리 (단일 + 묶음) | 모두 정상 | 모든 차원 K1 OK |
+| max 자카드 / max 겹침 (사용자 "추천1과 2 비슷" 직접 대응) | - | strong 0건. 자연 0.2159 vs 관측 0.2167~0.2223 (편차 0.3~3%) |
+
+**자연 baseline 통찰**: 5세트 묶음에서 가장 비슷한 두 추천의 평균 자카드 = 0.2159, 평균 겹침 = 2.09개. **자연 무작위에서도 5세트 안에 2개 번호 겹치는 페어가 평균적으로 존재**. 사용자 "추천N이 비슷해" 인상의 일부는 자연 무작위 특성.
+
+### 2.88.9. 자비스 최종 결론 (정정 후)
+
+- 알고리즘 자체에 결손 없음 = 9차원 × 19 시나리오에서 K3 strong **합 1건만** (적게 단일 전략의 12번호 = 의도된 편향).
+- 사용자 인상의 출처로 가장 가능성 높은 것: **자연 무작위 자체의 특성** (5세트 안 평균 2개 겹침, 한 구간 30% 점유, 30번호 중 7개 중복은 모두 자연).
+- 또는 본 도구가 cover 못한 영역: 사용자 본인 캐릭터 시드 / 시각 인지 (번호공 색) / 시드 해시 분포 자체.
+
+### 2.88.10. 후속 (사용자 결정 영역)
+
+- N3 (캐릭터별 60명 분리 분석)
+- N4 (사용자가 "작위적"이라 느낀 구체 사례 청취 후 좁혀 검증) - **권장**
+- N5 (본 결과로 결론 → P1(render/ 테스트) 재개)
+- 5.4 (시드 해시 입력→출력 분포 검증) / 5.5 (번호공 색 매핑 시각 인지 검증) - 별도 의제
+
+### 2.88.11. 검증
+
+- `node tests/run-node.js` → **305/305 PASS** (회귀 0).
+- `node --check` 두 도구 모두 OK.
+- 실행: 1차 19.8초 / 2차 17.4초 (Node 25 환경, 표본 5배 증가에도 시간 2배 미만).
+- 재현성: 캐릭터 시드 / 자연 baseline 시드 모두 결정론 고정.
+- 산출물: `tests/reports/bias_2026-05-10.md` / `bias_n5_2026-05-10.md` (재실행으로 갱신).
+
+### 2.88.12. 사용자 1차 데이터 (11세트 스크린샷) + coverage-report 도구
+
+사용자 보고: "1세트 제외하고 모든 세트에 10번 이하 번호가 들어가지? 그 뒤로 계속해도 거의 대부분 세트에 10번 이하 뽑히던데? 이게 정상이라고??????"
+출처 태그 분석 결과: 사용자 화면 = 프리셋 1 "균형" (TREND_FOLLOWER + ASTROLOGER + INTUITIVE).
+
+11세트 즉시 측정: 1~10 출현 10/11 = 90.9% / 1~9 출현 9/11 = 81.8% / 본번호 비율 22.73%.
+
+자연 기대 (6/45 균등): 한 세트에 1~10 1개 이상 = 80.07%, 11세트 중 9세트 이상 등장 = 61.5%, 정확히 10세트 = 23.58%.
+**관측 = 자연 기대의 가장 흔한 결과 영역 (직관과 통계가 가장 크게 어긋나는 지점)**.
+
+확정 검증을 위해 신규 도구 `scripts/coverage-report.mjs` 작성. 19 시나리오 × 60 캐릭터 × 1000회 = 시나리오당 60,000세트, 5구간 × 19 = 95 셀 측정.
+
+| 시나리오 (대표) | 1~10 미출현 | 11~20 미출현 | 21~30 미출현 | 31~40 미출현 | 41~45 미출현 |
+|---|---|---|---|---|---|
+| 자연 기대 | **19.93%** | 19.93% | 19.93% | 19.93% | **47.13%** |
+| 랜덤(축복) | 19.75% | 20.08% | 20.18% | 19.83% | 47.12% |
+| 직감 | 19.74% | 20.01% | 20.25% | 19.84% | 47.10% |
+| 균형 (단일) | 19.75% | 20.05% | 20.18% | 19.82% | 47.16% |
+| **프리셋1 균형 (사용자 본 화면)** | **19.88%** | 20.64% | 19.85% | 19.30% | 47.35% |
+
+95 셀 모두 자연 기대 ±5% 안. K1 ±20% 위반 0건. **알고리즘 모든 색깔에서 자연 무작위와 사실상 일치**.
+
+사용자 인상의 통계 근거 = 1~10 출현률 자연 80.07% (= 미출현 19.93%의 보집합). 본 도구 모든 시나리오에서 1~10 출현 80% 전후 = 자연. 실행 14.7초.
+
+### 2.88.13. coverage-bundle-report 신규 도구 - 사용자 화면 11세트 단위 직접 대응
+
+사용자 명시: "균형, 분산파, 운세파로 묶여 있는것들에 대해 안 나올 확률 다시 테스트". 사용자 화면 = 11세트 단위라 11세트 묶음 안 등장 세트 수 분포 측정이 사용자 인상에 직접 대응.
+
+`scripts/coverage-bundle-report.mjs` 신규. 3 프리셋 × 60 캐릭터 × 100묶음 × 11세트 = 시나리오당 6,000묶음 (66,000세트). 한 묶음 안 등장 세트 수 k=0~11 분포 측정 + 이항 분포 자연 기대 비교.
+
+자연 기대 (1~10 기준, q=80.07%):
+- k=11 모두 등장: 8.68%
+- k=10 (사용자 관측): **23.75%** ← 11세트 묶음 약 4번 중 1번 빈도
+- k=9: 29.55%
+- k=8: 22.07%
+- k=9 이상: 61.98%
+
+3 프리셋 관측 (1~10):
+| 프리셋 | 한 세트 미출현 | k=10 비율 | 9세트+ 등장 비율 |
+|---|---|---|---|
+| 자연 기대 | 19.93% | 23.75% | 61.98% |
+| 균형 | 20.29% | 23.52% | 60.50% |
+| 분산파 | 19.78% | 24.53% | 62.27% |
+| 운세파 | 20.06% | 24.12% | 61.63% |
+
+**3 프리셋 × 5 구간 × k=0~11 = 198 셀 모두 자연 기대 ±2%p 안**. K1 ±20% 위반 0건. 알고리즘이 묶음 단위에서도 자연 무작위와 사실상 일치.
+
+실행 3.6초. 산출물 `tests/reports/coverage_bundle_2026-05-10.md`.
+
+### 2.88.14. 후속 (사용자 결정 영역, 변경 없음)
+
+- N4 사용자 본인 시드 데이터 청취 → 1000회 분포 정밀 검증 (변동 vs 시드 특이성 구분).
+- 5.5 시각 인지 가설 (번호공 색 묶음).
+- N5 본 의제 종결 후 P1(render/ 테스트) 재개.
+
+## 2.87. Sprint 066 완료 - is-just-added 펄스 영역 재정정 + 추천 리스트 좌측 들여쓰기 130% (S66, 2026-05-10)
+
+배경: 사용자 보고 2건. (1) S62의 row 전체 펄스(`.saved-set-row::before inset: 4px 8px`)가 row 좌우 padding 0 환경에서 라벨 "추천N" 글자 일부를 가로지름. "추천1,2 스트링 중간만 하이라이트에 들어감". (2) "추천1,2 스트링이 좀 더 들여쓰기 되도록 130% 마진".
+
+### 2.87.1. 펄스 영역 재정정
+
+| 측면 | 이전 (S62) | 이후 (S66) |
+|---|---|---|
+| 셀렉터 | `.saved-set-row.is-just-added::before` | `.saved-set-row.is-just-added .saved-set-balls::before` |
+| pseudo inset | `4px 8px` (좌우 8px가 라벨에 닿음) | `0` (번호공 컨테이너 정확히 덮음) |
+| 강조 의미 | row 전체 | "새로 들어온 번호 6개" |
+| 라벨 / 휴지통 | 펄스 영역에 포함되어 글자 가로지름 | 펄스 영역 외 |
+| 외부 글로우 | 외곽선 폐기, box-shadow 14px accent | 동일 (글로우는 컨테이너 바깥으로 부드럽게 새어나감) |
+
+### 2.87.2. 좌측 들여쓰기 130%
+
+- `.saved-sets-section` `padding-left`: `calc(var(--space-3) * 1.5)` → `calc(var(--space-3) * 1.5 * 1.3)` (18 → 23.4px).
+- 토큰 베이스 비율 유지(매직 픽셀 0). 사용자 명시 130%.
+
+### 2.87.3. 변경 파일
+
+- `docs/02_data.md` 1.5.8.6.7 명세 표 갱신 (펄스 컨테이너 / inset 0 / z-index 분리 명시).
+- `styles/main.css`: 펄스 룰 재장소 + reduced-motion 폴백 동시 갱신 / `.saved-sets-section` padding-left 130%.
+- `service-worker.js` v43 → v44.
+
+### 2.87.4. 검증
+
+- `node tests/run-node.js` → **305 / 305 PASS** (CSS-only, 회귀 0).
+- dev-server 응답: main.css `.saved-set-balls::before` / `1.5 * 1.3` / SW v44 모두 200 + 컨텐츠 정상.
+
+## 2.86. Sprint 065 완료 - syncDraws / syncDrawsIfNewer fetch mock 회귀 (S64.1, 2026-05-10)
+
+배경: Sprint 064 잔여 백로그 = `syncDraws` / `syncDrawsIfNewer` 2 export 미커버. 본 sprint로 닫음. test framework가 sync only이라 비동기 진입점(`asyncSuite` / `asyncTest`) 신규 도입 + 별도 suite 파일로 격리해 기존 296 테스트 회귀 위험 0.
+
+### 2.86.1. test framework 비동기 확장
+
+- `tests/core.js`: `asyncSuite(name, asyncFn)` + `asyncTest(name, asyncFn)` 신규 export. 기존 `suite` / `test`는 그대로(sync). 호출부 패턴 = `await asyncSuite('...', async () => { await asyncTest('...', async () => {}); });`. ESM top-level await로 import 평가가 모든 asyncTest 끝까지 기다림 → done() 시점 카운트 보장.
+
+### 2.86.2. tests/suites/storage-async.test.js 신설 (9건)
+
+| 분기 | 카운트 | 핵심 |
+|---|---|---|
+| `new-rounds` | 1 | 미러 latest > cached + 정적 번들 갱신 → saveDraws + updated=true |
+| `already-latest` | 1 | 미러 latest === cached → cached 보존 |
+| `mirror-unreachable` | 2 | 미러 fetch throw / ok=false 두 케이스 모두 동일 분기 |
+| `sync-failed` | 2 | 정적 draws.json 비어있음 / fetchedMax <= cachedMax (CI 지연) |
+| syncDraws 단독 | 3 | 새 fetched save / fetched 비면 cached / fetchedMax === cachedMax 등호 포함 |
+
+fetch mock 패턴: `globalThis.fetch`를 일시 교체 후 `finally`로 원복. URL 식별 = `'latest'` / `'draws.json'` includes.
+
+### 2.86.3. 검증
+
+- `node tests/run-node.js` → 296 → **305 / 305 PASS** (9건 신규 모두 통과).
+- 기존 296 sync 테스트 회귀 0 (asyncSuite/asyncTest는 별도 export로 분리).
+- Node 25 polyfill 가드 + globalThis.fetch 호환 확인.
+
+### 2.86.4. 결과
+
+- storage 25 export 중 **25 / 25 모두 커버** (전건 회귀 보장).
+- S64.1 백로그 항목 = 닫힘.
+- 잔여 후속: 2.85.4의 S59.4 라인은 본 sprint와 함께 정리 (이번 PROGRESS 갱신에서 처리).
+
+## 2.85. Sprint 064 완료 - storage 테스트 커버리지 보강 + 마이그레이션 회귀 (S64 / S59.4 백로그 1번 소화, 2026-05-10)
+
+배경: PROGRESS 2.80.4의 잔여 항목 "S59.4 storage 테스트 커버리지 16/25 보강". 옵션 B 권장안 진행 - 동기 export 14건 round-trip + 마이그레이션 + clearAll/options 보너스. sync* 2건은 fetch mock 도입 필요라 별도 sprint(미래 S64.1)로 분리.
+
+### 2.85.1. 추가 회귀 22건
+
+| 그룹 | 건수 | 핵심 |
+|---|---|---|
+| 통계 캐시 round-trip | 6건 | numberStats / bonusStats / cooccur 기본 null + round-trip |
+| 활성 캐릭터 ID | 2건 | 기본 null + round-trip |
+| 프리셋 round-trip + 마이그레이션 | 5건 | 기본값 deep clone / round-trip / S43.7 직감-단독 자동 reset / 사용자 편집 흔적 보존 / S63 subtitle 잔존 throw 없이 반환 |
+| charCardCollapsed | 4건 | 기본 false / true round-trip / false round-trip / 비-bool 정규화 |
+| ritualState | 2건 | 기본 null + round-trip |
+| options 마이그레이션 + clearAll PREFIX | 3건 | 누락 키 자동 채움 / S19 multiStrategy 폐기 키 무시 / clearAll이 lotto_ 외부 키 보존 |
+
+### 2.85.2. 변경 파일
+
+- `tests/suites/storage.test.js`: 64줄 → 약 230줄. 6 suite 신설. import에 누락된 14 export + DEFAULT_PRESETS 추가.
+
+### 2.85.3. 검증
+
+- `node tests/run-node.js` → 274 → **296 / 296 PASS** (22건 신규 모두 통과).
+- 미커버 export 잔여: `syncDraws` / `syncDrawsIfNewer` 2건. fetch mock 패턴 도입과 함께 별도 sprint(S64.1).
+- Node 25 polyfill 가드(S58 fix)에서도 정상 동작 확인.
+
+### 2.85.4. 잔여 / 후속
+
+- ~~S64.1 (대기)~~ **닫힘 - Sprint 065 (2026-05-10)에서 fetch mock 4분기 회귀 9건 추가. 305/305 PASS. storage 25/25 커버.**
+- S59.4 백로그 항목 = 본 sprint로 닫힘 (PROGRESS 2.80.4는 archive 안에서 "닫힘"으로 정정 완료, Sprint 070 archive 4차 정리 시점에 본 노트 자체도 archive 이전).
+
+## 2.84. Sprint 063 완료 - 프리셋 부제 폐기 + 묶인 전략 label list 자동 표시 (S63, 2026-05-10)
+
+배경: 사용자 보고 "전략 버튼 안 서브 문자열에 애매한 설명보다, 실제 선택된 전략을 표시해줘". 사용자 입력 부제(예 "최신·운세·직감 한 번에")가 자비스 정직성 정책과 맞지 않아 "묶인 전략"을 그대로 노출하기로 결정.
+
+### 2.84.1. 부제 필드 자체 폐기 (옵션 1 권장안 진행)
+
+| 영역 | 이전 | 이후 |
+|---|---|---|
+| 추첨 탭 슬롯 두 번째 행 | 사용자 입력 부제 | `.preset-strategy-line` - `strategyLabel` list 자동 (예: "최신 · 별자리 · 직감") |
+| 설정 탭 - 프리셋 관리 | 라벨 / 부제 / `strategyShort`(1자) 3행 | 라벨 / `strategyLabel` 2행 (label 통일) |
+| 편집 모달 | 라벨 / 부제 / 전략 체크 | 라벨 / 전략 체크 |
+| 데이터 | `subtitle: string` | 필드 제거 |
+| 상수 | `PRESET_SUBTITLE_MAX = 20` | 폐기 |
+
+### 2.84.2. 변경 파일
+
+- `docs/01_spec.md` 5.1.5.1 / 5.1.5.2 갱신.
+- `docs/02_data.md` 1.20 표 / 스키마 / 마이그레이션 노트 신설.
+- `src/data/numbers.js`: `PRESET_SUBTITLE_MAX` 폐기, `DEFAULT_PRESETS` `subtitle` 필드 제거.
+- `src/render/preset-editor.js`: 부제 입력 필드 / 핸들러 / 저장 cleaning / 빈 슬롯 채움 / `PRESET_SUBTITLE_MAX` import 모두 제거.
+- `src/render/preset-buttons.js`: `strategyLabel` import 추가, `subtitle` 표시 → 자동 list.
+- `src/render/settings-page.js`: `strategyShort` → `strategyLabel` 통일, `.preset-manage-subtitle` 행 제거.
+- `styles/main.css`: `.preset-subtitle` / `.preset-manage-subtitle` 룰 폐기, `.preset-strategy-line` 신규.
+- `service-worker.js` v42 → v43.
+
+### 2.84.3. 마이그레이션
+
+옛 storage(`lotto_presets`)에 `subtitle` 키가 있어도 `loadPresets`는 그대로 반환. 렌더 단계에서 미참조라 시각 영향 0. 다음 `savePresets` 호출 시 자연 소실.
+
+### 2.84.4. 검증
+
+- `node tests/run-node.js` → 274/274 PASS.
+- `node --check` 4파일 OK.
+- 옛 subtitle 참조 grep → 폐기 사유 주석만, 실 코드 0건.
+
+## 2.83. Sprint 062 완료 - is-just-added 펄스 시각 정정 (S62, 2026-05-10)
+
+배경: 사용자 보고 "노티 표시가 '추천1'에 너무 딱 붙어서 네모로 표시되니까 ui가 너무 허접". 초기안(inset 외곽선 + radius-sm)이 row 좌우 padding 0 환경에서 라벨에 외곽선이 닿아 답답함.
+
+### 2.83.1. 옵션 D 채택 (외곽선 폐기 + 외부 글로우 + 라운드 + inset)
+
+| 항목 | 이전 (S60) | 이후 (S62) |
+|---|---|---|
+| 렌더 방식 | row 자체에 inset border + bg | row의 `::before` pseudo (absolute) |
+| 외곽선 | inset 2px gold | **폐기** (시선은 외부 글로우만으로 충분) |
+| 라운드 | `--radius-sm` | `--radius-md` |
+| 좌우 마진 | 0 (라벨에 붙음) | inset 8px (라벨과 시각 거리) |
+| 글로우 | 없음 | 외부 box-shadow `0 0 14px` accent |
+| layout 영향 | 약간 (border-radius) | 0 (pseudo absolute) |
+
+### 2.83.2. 변경 파일
+
+- `docs/02_data.md` 1.5.8.6.7 명세 표 갱신.
+- `styles/main.css`: 펄스 룰 교체. `@keyframes saved-set-pulse` 갱신, reduced-motion 폴백 갱신.
+- `service-worker.js` v41 → v42.
+
+### 2.83.3. 검증
+
+- `node tests/run-node.js` → 274/274 PASS (CSS-only 변경, 회귀 위험 0).
+- 룰 중복 검사: `.saved-set-row` `position: relative`를 기본 룰에 통합.
+
+## 2.82. Sprint 061 완료 - 프리셋 편집 진입을 추첨 탭 → 설정 탭으로 이동 (S61, 2026-05-10)
+
+배경: 사용자 질문 "전략 편집을 설정으로 옮길 수 있을까?". 편집은 정착 후 자주 발생하지 않는 액션이라 추첨 탭에 영구 노출 가치 낮음. 권장안 (B + 모달 재활용) 진행.
+
+### 2.82.1. 진입점 이동
+
+| 항목 | 이전 | 이후 |
+|---|---|---|
+| 추첨 탭 진입 | 프리셋 슬롯 아래 "편집" 텍스트 링크 | **폐기** (시각 노이즈 1줄 회수) |
+| 설정 탭 진입 | 없음 | "프리셋 관리" 섹션 신설 (캐릭터 관리 다음) |
+| 편집 동작 | 모달 | 모달 그대로 재활용 (행 클릭 → 모달) |
+| 기본값 복원 | 모달 안만 | 설정 탭 섹션에도 노출 (모달 안과 동일 동작) |
+
+### 2.82.2. 변경 파일
+
+- `docs/01_spec.md` 4장 설정 탭 한 줄 / 5.1.5.2 진입점 갱신.
+- `docs/03_architecture.md` settings-page 의존성 주석.
+- `src/render/preset-buttons.js`: `.preset-edit-row` / `.preset-edit-link` 영역 폐기.
+- `src/render/settings-page.js`: 프리셋 관리 섹션 + 슬롯 행 + 기본값 복원 + `onPresetsChanged` 핸들러.
+- `src/render/main.js`: `openPresetEditor` import 폐기 / 추첨 탭 핸들러 폐기 / `onPresetsChanged: state.presets reload`.
+- `styles/main.css`: dead `.preset-edit-row` / `.preset-edit-link` 룰 폐기, `.preset-manage-*` 신규.
+- `service-worker.js` v40 → v41.
+
+### 2.82.3. 검증
+
+- `node tests/run-node.js` → 274/274 PASS.
+- dead 셀렉터 잔존 grep → 주석 안 변경 사유만, 실 코드 0건.
+
+## 2.81. Sprint 060 완료 - 누적 추천 토스트 위치 + 카드 펄스 도입 (S60, 2026-05-10)
+
+배경: 사용자 보고 "추가 1세트를 추가했습니다 메시지를 왜 팝업으로 안띄우고 메인창에 띄우지?". 액션바 인라인 토스트는 누적 리스트가 길어지면 함께 화면 밖으로 밀려 메시지 인지 불가. 권장안 A+C (화면 하단 fixed 팝업 + 추가된 카드 펄스) 진행.
+
+### 2.81.1. 화면 하단 fixed 팝업 + 카드 펄스
+
+| 영역 | 변경 |
+|---|---|
+| 위치 | 액션바 인라인 → body 직속 lazy-init `.saved-toast-root` (화면 하단 fixed, bottom-tabs 위 12px) |
+| z-index | 신규 `--z-toast: 50` (overlay 10 < toast 50 < modal 100) |
+| 펄스 | `saved-set-row` 인덱스 `startIdx ~ startIdx + addedCount - 1` 1초 펄스 (accent 외곽 글로우 + 배경 fade) |
+| 펄스 시간 | `SAVED_SETS_JUST_ADDED_MS = 1000` |
+| 역할 분리 | 토스트 = "몇 세트", 펄스 = "어디에" |
+| reduced-motion | 폴백 (animation off + 정적 강조) |
+
+### 2.81.2. 변경 파일
+
+- `docs/01_spec.md` 5.2.5.4 표 갱신 + 5.2.5.4.8 / 5.2.5.4.9 신설.
+- `docs/02_data.md` 1.5.8.2 `SAVED_SETS_JUST_ADDED_MS` 추가, 1.5.8.6 표 + 1.5.8.6.6 / 1.5.8.6.7 신설.
+- `src/data/numbers.js`: `SAVED_SETS_JUST_ADDED_MS = 1000`.
+- `styles/tokens.css`: `--z-toast: 50` 신규.
+- `src/render/saved-sets-section.js`: 액션바 토스트 슬롯 폐기.
+- `src/render/main.js`: `flashSavedSetsToast` body 직속 fixed 패턴 + `markSavedSetsJustAdded` 신설.
+- `styles/main.css`: `.saved-toast-root` fixed 팝업 + `@keyframes saved-set-pulse` (S62에서 시각 정정).
+- `tests/suites/saved-sets.test.js`: `SAVED_SETS_JUST_ADDED_MS` 회귀 단언.
+- `service-worker.js` v39 → v40.
+
+### 2.81.3. 검증
+
+- `node tests/run-node.js` → 274/274 PASS (Node 25 환경에서도 풀 그린).
 
 ## 2.80. Sprint 059 완료 - Node 매트릭스 + dead 토큰 + UI 흰색 토큰화 + chip 색 SSOT 정합 (S59, 2026-05-09)
 

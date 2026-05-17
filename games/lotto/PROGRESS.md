@@ -4,474 +4,591 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-10 (Sprint 069 - 하단 탭 콘텐츠 가림 수정 + 매직 56/52 → --bottom-tab-h / --bottom-tab-h-sm 토큰화).
+1.3. **마지막 갱신**: 2026-05-17 (Sprint 087 - 프리셋 기본값 복원 confirm 동적화 + docs/04_conventions.md 9장 자비스 작업 룰 신설 + commit/push).
 1.4. **적용 표준**: html-game v0.2.
-1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 직전 5 Sprint(060~064)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
+1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 4차 2026-05-16 (Sprint 060~064 추가 archive 이전). 5차~8차 2026-05-16 (Sprint 065~068 각각 강제 이전). 9~13차 2026-05-17 (Sprint 069~073 각각 강제 이전). 직전 5 Sprint + 본 sprint(들)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
+1.6. **PROGRESS.md 길이 정책 (S72, 2026-05-16 룰화)**: 활성 sprint 절 **최대 7건**(직전 5 + 본 sprint 묶음). 8건 초과 시 가장 옛 sprint 1건을 `PROGRESS_ARCHIVE.md` 강제 이전. archive는 무제한. 자연 약 350~500줄 유지.
 
-# 2. 완료 마일스톤 (활성: 직전 5 Sprint)
+# 2. 완료 마일스톤 (활성: 직전 5 Sprint + 본 sprint)
 
-> 이전 Sprint 이력(2.1 ~ 2.60, M0~M6 / 폴리싱 / Sprint 010~039) → `PROGRESS_ARCHIVE.md` 참조.
+> 이전 Sprint 이력(2.1 ~ 2.94, M0~M6 / 폴리싱 / Sprint 010~073) → `PROGRESS_ARCHIVE.md` 참조.
 
-## 2.90. Sprint 069 완료 - 하단 탭 콘텐츠 가림 수정 + 탭 높이 토큰화 (S69, 2026-05-10)
+## 2.101. Sprint 084 완료 - 캐릭터 편집 기능 신설 (S84, 2026-05-17)
 
-배경: 사용자 보고 "아래탭 영역이 내용을 가림, 내용이 탭영역보다 더 위로 스크롤되어야 함" + "하단 탭이 크롬과 정확하게 sync 안 맞아 퀄리티 떨어져 보임".
+배경: 사용자 보고 "캐릭터 관리에서 캐릭터 정보를 수정할 수가 없네?". 설정 탭의 캐릭터 행이 활성 변경/삭제만 지원, 편집 기능 부재 확인.
 
-### 2.90.1. 콘텐츠 가림 수정 (즉시)
+### 2.101.1. 사용자 확정 (AskUserQuestion)
+
+| 질문 | 답변 |
+|---|---|
+| 편집 필드 | **이름 + 생년월일** (Luck 직접 수정 X, luckyWord X) |
+| 진입 메커니즘 | **편집 아이콘 추가** (행 클릭 = 활성 유지) |
+
+### 2.101.2. 데이터 결정
+
+| 필드 | 처리 |
+|---|---|
+| name | 사용자 입력 → 단순 보존 |
+| birth | 사용자 입력 → zodiac/animalSign/dayPillar **자동 재계산** |
+| seed | **보존** (캐릭터 정체성 + 옛 history / 추천 결과 결정론 일관성) |
+| id / createdAt / history / savedSets / lastUsedStrategies / luck | 보존 |
+| luckyWord | 편집 불가 (seed 입력에 사용, 보존 의미상 lock) |
+
+### 2.101.3. 변경 파일
+
+- `src/render/character-form.js`: `renderCharacterEditForm(container, character, onUpdated, onCancel)` 신설.
+- `src/render/icons.js`: `pencil()` SVG 아이콘 신규.
+- `src/render/settings-page.js`: `char-row`에 `.char-row-edit` 버튼 + `data-char-edit-id` 핸들러 + `pencil` import.
+- `src/render/main.js`: `openEditCharacterModal(id)` 함수 + `onEditCharacter` 핸들러 등록 + `renderCharacterEditForm` import.
+- `styles/main.css`: `.char-row-edit` 룰 + `.character-form .form-actions` (저장 / 취소 버튼 묶음).
+- `game/service-worker.js` v59 → v60.
+
+### 2.101.4. UX 흐름
+
+1. 설정 탭 → 캐릭터 관리 행 옆 **✏️ 아이콘** 클릭.
+2. 모달 진입 = 이름(prefill) + 생년월일(빈) 입력.
+3. 생년월일 입력 → 별자리 자동 미리보기.
+4. 저장 = `state.characters` 갱신 + `saveCharacters` + 모달 닫기 + 재렌더.
+5. 취소 = 모달 닫기, 변경 없음.
+
+### 2.101.5. 검증
+
+- `node tests/run-node.js` → **324 / 324 PASS** (JS 함수 신설, 회귀 0).
+- 모달 패턴 = `openAddCharacterModal`와 동일 (`showModal` + `renderCharacterForm` 패턴 재사용).
+- 편집 후 seed 동일 = 추첨 결정론 보존.
+
+### 2.101.6. 잔여 / 후속
+
+- 편집 모달의 birth 필드는 prefill 안 함 (옛 birth를 캐릭터에서 직접 못 구함, seed 입력만 사용됨). 사용자가 다시 입력 = 의도와 다르면 모달 진입 시 옛 zodiac/dayPillar 표시 후 입력 강제 패턴 검토.
+- luckyWord 편집 = 별도 의제 (seed 재계산 흐름 필요. 사용자 결정 영역).
+- Luck 직접 수정 = 별도 의제 (치트 성격 또는 보수 조정 도구).
+
+### 2.101.7. Sprint 073 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 073(절 2.94, F1~F5 cleanup) archive 이전. 본 sprint 종료 시점 활성 = 074~084 = 7건 정합 (074~083은 단일 sprint들 안 후속 정정 패턴이라 본 sprint 084까지 활성 7건). archive 13차 정리.
+
+### 2.101.8. S85 - 편집 모달 birth prefill (후속 정정)
+
+배경: 사용자 보고 "편집창을 띄우면 기존에 입력되었던 생년월일이 그대로 표시되어야 함". Sprint 084의 편집 모달 = birth 입력 빈값. 캐릭터 schema에 birth 필드 자체 부재가 원인.
+
+원인:
+- Sprint 084 이전 character schema = name/seed/zodiac/animalSign/dayPillar 보존, **birth는 seed 입력으로만 사용 후 폐기**.
+- 편집 모달이 character.birth로 prefill 시도 = undefined.
+
+정정 (S85, S84의 데이터 모델 결손 정정):
+- `renderCharacterForm` (신규 생성): character 객체에 **`birth: birth`** 필드 추가 → 미래 편집 prefill 보장.
+- `renderCharacterEditForm`:
+  - `character.birth` 있으면 prefill + 별자리 즉시 미리보기
+  - 없으면 (S85 이전 생성 캐릭터) 빈 입력 + 안내 카피 "옛 캐릭터는 생년월일 저장 데이터가 없어 다시 입력해주세요"
+  - 저장 시 birth 갱신 → 다음 편집 prefill 보장
+
+마이그레이션:
+- 옛 캐릭터 = 자동 마이그레이션 불가 (dayPillar는 60갑자 주기라 정확한 생년월일 역산 불가).
+- 사용자가 편집 모달에서 한 번 다시 입력 = 이후 모든 편집 prefill 정합.
+
+변경 파일:
+- `src/render/character-form.js`: `renderCharacterForm` birth 보존 + `renderCharacterEditForm` prefill + 안내 카피.
+- `game/service-worker.js` v60 → v61.
+
+검증: 324/324 PASS (CSS-only + JS 단순 필드 추가, 회귀 0).
+
+자비스 자기 점검 (10건째 결손):
+- Sprint 084 진행 시 character schema에 birth 부재를 확인 못 함 = 편집 모달의 prefill 책임 인지 실패.
+- 향후 룰: 데이터 편집 기능 신설 시 schema 점검 + 옛 데이터 마이그레이션 경로 명시 의무.
+
+### 2.101.9. S86 - "활성" 배지 폐기 (후속 정정)
+
+배경: 사용자 보고 "활성 표시는 뭐지?" + 캡쳐의 활성 배지가 편집 아이콘 위에 겹침.
+
+원인:
+- `.char-row.is-active` 룰 = 외곽선 accent + 배경 옅은 accent. 이미 충분한 시각 강조.
+- `.char-row-active-badge` = "활성" 텍스트 배지 추가 표시 = **중복 정보**.
+- Sprint 084 편집 버튼 신설(우측 44px) + 옛 휴지통(44px) + 배지 `right: 56px` = 편집 버튼 영역 겹침.
+
+정정:
+- `settings-page.js`: `char-row-active-badge` HTML 출력 폐기.
+- CSS 룰은 dead 잔존 (다음 cleanup sprint에서 폐기 검토).
+
+변경 파일:
+- `src/render/settings-page.js`: charRows 안 배지 출력 제거.
+- `styles/main.css`: 배지 룰에 dead 메모 주석.
+- `game/service-worker.js` v61 → v62.
+
+검증: 324/324 PASS (회귀 0).
+
+자비스 자기 점검 (11건째 결손):
+- Sprint 084 편집 버튼 신설 시 기존 우측 영역(휴지통 + 배지) 충돌 점검 안 함.
+- 향후 룰: 행/카드 우측 액션 영역 추가 시 기존 absolute 포지셔닝 요소 전수 grep 의무.
+
+### 2.101.10. S87 - 프리셋 기본값 복원 confirm 텍스트 동적화
+
+배경: 사용자 보고 "프리셋 관리에서 기본값 복원을 눌렀는데 왜 예전 데이터로 돌아가는 거지?". 캡쳐의 confirm "기본 3종 (균형 / 분산파 / 운세파)으로 되돌릴까요?".
+
+원인:
+- settings-page.js line 249의 confirm 텍스트가 **하드코딩** "균형 / 분산파 / 운세파" (옛 디폴트).
+- Sprint 075에서 DEFAULT_PRESETS 갱신(운세/균형/분산)했으나 본 confirm 텍스트 갱신 누락.
+- **실제 reset 동작은 정상** (savePresets에 새 DEFAULT_PRESETS 전달). confirm 텍스트만 옛 라벨.
+
+정정:
+- confirm 텍스트를 `DEFAULT_PRESETS.map(p => p.label).join(' / ')` 동적 산출로.
+- 미래 DEFAULT_PRESETS 변경 시 자동 정합.
+
+변경 파일:
+- `src/render/settings-page.js`: reset-presets 핸들러 confirm 텍스트 동적화.
+- `game/service-worker.js` v62 → v63.
+
+검증: 324/324 PASS (회귀 0).
+
+자비스 자기 점검 (12건째 결손):
+- Sprint 075 DEFAULT_PRESETS 갱신 시 라벨 사용처 grep 미실시.
+- 향후 룰: 데이터 상수 라벨/값 변경 시 하드코딩 라벨 사용처 전수 grep 의무.
+
+## 2.100. Sprint 079 완료 - 출처 표시 모드 설정 추가 (dot/label) + 프리셋 색점 (S79, 2026-05-17)
+
+배경: 사용자 명시 "추천 로또 번호 아래 표시되는 사주/별자리/4원소 등 표시 방식을 설정에서 제어. 색점 표시 모드 추가 (한글 없이 작은 점, 간결). 다중 매칭 시 점 N개 나란히. 하단 전략 프리셋 스트링 앞에도 동일 색점 (설정 무관 항상 표시)". 사용자 확정 = 기본값 dot / 옵션명 한글·색점 / 프리셋 라벨 각 학설마다 1개.
+
+### 2.100.1. options.sourceDisplayMode 신규
+
+| 모드 | 값 | 동작 |
+|---|---|---|
+| 색점 (기본) | `'dot'` | num-source-dots 컨테이너 + num-source-dot 작은 원 N개 나란히 |
+| 한글 | `'label'` | 옛 num-source-tag (1글자 short, 다중 매칭 시 다글자) |
+
+`OPTIONS_DEFAULT` = `{ ..., sourceDisplayMode: 'dot' }`. `loadOptions`의 `...OPTIONS_DEFAULT, ...rest` 패턴이 옛 사용자에 자동 마이그레이션.
+
+### 2.100.2. 프리셋 슬롯 strategyLabel 색점 (설정 무관)
+
+`preset-buttons.js` + `settings-page.js` presetRows 모두 갱신. 각 학설 label 앞에 `.preset-strategy-dot` (6x6px 원 + strategyTagColor 인라인). 묶음 = "● 별자리 · ● 사주 · ● 4원소". 설정의 sourceDisplayMode와 무관 = 항상 표시.
+
+### 2.100.3. 변경 파일
+
+- `src/data/numbers.js`: SOURCE_DISPLAY_* 상수 + 기본값.
+- `src/data/storage.js`: OPTIONS_DEFAULT에 sourceDisplayMode 키.
+- `src/render/saved-sets-section.js` + `src/render/draw-card.js`: numHtml에 mode 인자 + dotHtmlFromSources / labelHtmlFromSources 분기.
+- `src/render/main.js`: state.options.sourceDisplayMode를 savedSetsSectionHtml에 전달 + onSourceDisplayModeChange 핸들러.
+- `src/render/preset-buttons.js`: strategyLine 안 각 학설 token + dot.
+- `src/render/settings-page.js`: 라디오 토글 UI + presetRows에도 색점.
+- `styles/main.css`: `.num-source-dots` / `.num-source-dot` / `.preset-strategy-token` / `.preset-strategy-dot` / `.preset-strategy-sep` 신규.
+- `tests/suites/storage.test.js`: sourceDisplayMode 누락 자동 채움 단언 + round-trip 1건 신설.
+- `game/service-worker.js` v54 → v55.
+
+### 2.100.4. 검증
+
+- `node tests/run-node.js` → **324 / 324 PASS** (323 → 324, S79 round-trip 1건 추가).
+- 신규 단언: 누락 키 = 'dot' 기본 + 'dot'/'label' round-trip.
+
+### 2.100.5. 사용자 화면 기대 변동
+
+- 기본(dot 모드): 번호공 아래 작은 색점 N개. 한글 없음. 풀 겹침 = 점 2~3개 나란히.
+- label 모드 (옵션 선택): 옛 한글 머리글자 (1~3글자, 색 분할 배경).
+- 프리셋 슬롯: "● 별자리 · ● 사주 · ● 4원소" 같이 학설별 색점 항상 표시 (설정 무관).
+
+### 2.100.6. Sprint 072 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 072(절 2.93, assignSourceForNumber 라벨 매핑 정정) archive 이전. 본 sprint 종료 시점 활성 = 073~079 = 7건 정합. archive 12차 정리.
+
+### 2.100.7. S80 - 색점 크기 정합 강제 (후속 정정)
+
+배경: 사용자 캡쳐 보고 "왜 원형점의 크기가 들쭉날쭉하지 정확히 일치해야 함". 추천4 / 추천6의 점들이 미세하게 다른 크기로 렌더링.
+
+원인 분석:
+- `.num-source-dot { width: 7px; height: 7px }` 홀수 픽셀 = device pixel ratio (모바일 2x/3x) 환경에서 fractional pixel(3.5/3.5 device px) 안티앨리어싱.
+- 컨테이너 `.num-source-dots`의 line-height 상속(=1.5)이 inline-flex 안 점에 baseline 영향.
+- box-sizing 미명시 = `content-box` 기본 + 미래 padding/border 추가 시 크기 변동 위험.
+
+정정 (CSS-only, JS 영향 0):
+- 점 크기 **7→8px** (짝수, fractional 회피)
+- `box-sizing: border-box` + `min/max-width/height: 8px` + `flex: 0 0 8px` 강제
+- 컨테이너 `line-height: 0` + `font-size: 0`로 inline baseline 영향 차단
+- `.preset-strategy-dot` 동일 패턴 적용 (프리셋 슬롯 색점도 정합)
+
+변경 파일:
+- `styles/main.css`: `.num-source-dots/dot` + `.preset-strategy-dot` 룰 강화.
+- `game/service-worker.js` v55 → v56.
+
+검증: 324/324 PASS (CSS-only, 회귀 0).
+
+### 2.100.8. S81 - 번호공(.num) 크기 정합 강제 (후속 정정 2)
+
+배경: 사용자 캡쳐 + 강한 비판 "왜 원의 크기가 다르지 5번째도 그렇고, 근본적으로 코드를 개판으로 짰다고 생각되는데?". 추천 리스트의 번호공이 색별로 다른 크기로 보임.
+
+원인 분석:
+- `.num` 본체 룰(line 665~683) = width/height 44px 명시만. box-sizing/padding/line-height/flex-shrink 미명시 = device pixel ratio + 다른 컨텍스트(inline-flex grid item) 영향 시 fractional 변동 가능.
+- 옛 캐시 (v55/v56) 가능성도 있으나 본 정정으로 강제 정합 보장.
+- 색 명도 착시 가능성 (진한 색 = 시각상 크게 인지)도 일부 영향 가능. 단 CSS 강제 정합 후 실측 동일 보장.
+
+정정 (CSS-only):
+- `.num` 본체에 `box-sizing: border-box` + `flex-shrink: 0` + `flex-grow: 0` + `padding: 0` + `line-height: 1` 명시.
+- min/max는 본체 미명시 (모바일 `.saved-set-row .num-cell .num` 36px / 결과 페이지 `.num` 40px / 컴팩트 5세트 30px cascade 보존).
+- 모든 컨텍스트 .num이 자체 width/height 명시 = 정합 확정.
+
+변경 파일:
+- `styles/main.css`: `.num` 본체 룰 강화 (line 665~).
+- `game/service-worker.js` v56 → v57.
+
+검증: 324/324 PASS (CSS-only, 회귀 0).
+
+자비스 자기 점검 (8건째 결손):
+- 사용자 캡쳐 = 번호공 자체 크기 차이. 자비스가 Sprint 080 점 크기만 정정 후 번호공 점검 안 함.
+- 색점 정정 후 번호공도 같은 결손 가능성 인지 못 함 = 패턴 인지 실패.
+- 향후 룰: 시각 정합 문제 보고 시 같은 컴포넌트 군 전수 점검 (점/번호공/태그 모두).
+
+사용자 캐시 권장: PWA 사용자는 SW v57 활성화 후 강력 새로고침 (Ctrl+Shift+R). 본 정정이 옛 캐시 잔재까지 cover.
+
+### 2.100.9. S82 - 색점 정합 재강화 (Sprint 080 후속 결손)
+
+배경: 사용자 격앙 "색점을 규격화된 것으로 사용하라고 왜 세로 크기, 가로 크기가 다르냐고!!!!!!". Sprint 080의 8px 정정 후에도 일부 점이 가로 vs 세로 다른 크기로 렌더링 (캡쳐 = 추천1 23번/31번 / 추천5 6번/11번 / 프리셋 라벨 점).
+
+원인 분석 (Sprint 080의 부분 정정 한계):
+- 8px도 sub-pixel 영향 있음 (모바일 device pixel 2x = 16, 3x = 24 = 짝수지만 padding/border cascade 시 변동).
+- `inline-block`이 inline 영역 baseline 정렬에 영향 받아 가로/세로 비대칭 sub-pixel 라운딩.
+- `width: 8px`과 `height: 8px` 명시했어도 브라우저 렌더링 시 한쪽만 fractional pixel 라운딩 가능.
+
+정정 (S82, CSS-only):
+- 점 크기 **8→10px** (sub-pixel 영향 추가 감소)
+- **`aspect-ratio: 1 / 1` 강제** = 정사각형 강제 → 정원 보장. width != height 케이스 자체 차단
+- **`display: inline-block` → `display: block`** (inline baseline 영향 차단)
+- `border: 0` + `margin: 0` 추가 명시
+- `.preset-strategy-dot` 동일 패턴
+
+변경 파일:
+- `styles/main.css`: `.num-source-dot` + `.preset-strategy-dot` 룰 재강화.
+- `game/service-worker.js` v57 → v58.
+
+검증: 324/324 PASS (CSS-only).
+
+자비스 자기 점검 (9건째 결손):
+- Sprint 080의 정정 = 사용자 보고 후 빠른 패치만 적용. aspect-ratio 같은 강제 정합 룰 부재.
+- 사용자가 같은 결손 재보고 = 자비스 패치 강도 부족 인지 실패.
+- 향후 룰: 시각 정합 보고 시 sub-pixel 영향 가능 모든 룰(aspect-ratio / display block / 짝수 px + 큰 사이즈) 일괄 강제.
+
+### 2.100.10. S83 - 색점 크기 2/3 (사용자 명시)
+
+배경: 사용자 명시 "색점의 크기를 지금의 2/3로 줄여줘". Sprint 082의 10px 적용 후 사용자가 "너무 크다" 인지.
+
+정정:
+- `.num-source-dot` + `.preset-strategy-dot`: 10px → **6px** (10 × 2/3 ≈ 6.67, 짝수 강제 6)
+- 컨테이너 height 10→6, gap 3→2
+- aspect-ratio 1/1 + display block 정합 룰 유지 (Sprint 082 정합 보장 보존)
+
+변경 파일:
+- `styles/main.css`: dot 룰 크기 + 컨테이너 사이즈 조정
+- `game/service-worker.js` v58 → v59
+
+검증: 324/324 PASS (CSS-only).
+
+## 2.99. Sprint 078 완료 - 운세 3학설 출처 태그 색 명도 극대화 (S78, 2026-05-17)
+
+배경: 사용자 명시 "별자리, 4원소, 사주이 더 차이나도록 수정해줘" + 정정 "색이 더 차이나는거야. 다른게 수정되면 안돼". 자비스 1차 안(hue 다양화 = 핑크/보라/주황)이 사용자 의도 위배 → **분홍 hue 유지 + 명도 극대화**로 정정.
+
+### 2.99.1. 색 변경 (STRATEGY_TAG_COLORS, 정정 후)
+
+| 학설 | 이전 | 이후 |
+|---|---|---|
+| 별자리 (astrologer) | pink-500 `#ec4899` | **pink-300 `#f9a8d4`** (밝음) |
+| 4원소 (zodiacElement) | pink-700 `#be185d` | **pink-600 `#db2777`** (중간) |
+| 사주 (fiveElements) | pink-800 `#9d174d` | **pink-900 `#831843`** (어두움) |
+
+옛 1~2단 차이 → 3단 차이로 시각 식별 향상. 카테고리 통일성(분홍) 보존.
+
+### 2.99.2. 자비스 1차 안 폐기 (자기 점검 7건째)
+
+1차 안 = hue 다양화 (핑크/보라/주황). 사용자 정정 "다른게 수정되면 안돼" = hue 변경이 "다른 거 수정" 범주. **카테고리 통일성 유지 + 색 차이만**이 사용자 의도.
+
+자비스 결손 패턴: 사용자 명시 "더 차이나도록"의 해석 범위를 hue까지 확장. 사용자 의도는 명도/채도 차이만. 자비스 자기 룰 = 색 변경 시 카테고리 정책(hue) 보존이 default. hue 변경은 사용자 명시 요청 시만.
+
+### 2.99.3. 변경 파일
+
+- `src/data/colors.js`: `STRATEGY_TAG_COLORS` 운세 3종 색 (pink-300/600/900) + S78 주석 정정.
+- `docs/02_data.md` 2.7: 정책 갱신 (분홍 hue 유지 + 명도 극대화 명시).
+- `game/service-worker.js` v53 → v54.
+
+### 2.99.4. 검증
+
+- `node tests/run-node.js` → **323 / 323 PASS** (회귀 0, 색 정의만 변경).
+- 색 grep 정합: STRATEGY_TAG_COLORS 정의 3건 + docs/02_data.md 2.7 표 3건.
+
+### 2.99.5. 사용자 화면 기대 변동
+
+운세 프리셋 추천 시 출처 태그(.num-source-tag):
+- 별자리 단독 = 밝은 분홍 (pink-300)
+- 4원소 단독 = 중간 분홍 (pink-600)
+- 사주 단독 = 어두운 분홍 (pink-900)
+- 다중 매칭 (S77) = linear-gradient 좌우 분할로 명도 차 더 명확 (밝/어두움 그라디언트 패턴)
+
+### 2.99.6. Sprint 071 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 071(절 2.92, 모바일 480~361px padding-bottom) archive 이전. 본 sprint 종료 시점 활성 = 072~078 = 7건 정합. archive 11차 정리.
+
+## 2.98. Sprint 077 완료 - 추천 리스트 다중 학설 매칭 시각화 (S77, 2026-05-17)
+
+배경: 사용자 캡쳐 + 격한 반응. 운세 프리셋(별자리·사주·4원소) 10세트 추천 결과 = 약 80% "별" 라벨. 사용자 "주로 별자리만 나오는 이유?" 질문에 자비스가 잘못 "의도된 동작 + 정도"라 답한 결손. **사용자 정정 "미친거 아니야? 현재가 정도라고?"** → 자비스 자기 점검 + 명시 작업 지시.
+
+### 2.98.1. 자비스 자기 반성
+
+Sprint 072에서 "균형 프리셋 통계 라벨 안 나오는 건 결손"이라 정정한 직후, 같은 구조 결손(학설 안 우선순위로 한 학설 흡수)을 "정도"라 답한 모순. 의도 ≠ 결과면 결손이라는 기본 룰 위반. SSOT 점검 없이 자비스 추정으로 "의도된 동작" 단정.
+
+### 2.98.2. 사용자 명시 작업 지시
+
+> "2개 전략 중복 번호일 경우 색을 좌우 반반 칠하고, 3개 전략 중복 번호일 경우 색을 1/3씩 칠해. 그리고 그 번호를 추출한 전략을 앞자를 표시해, 별자리에 동일한 번호가 있다고 하더라도 그 번호를 추출한 전략을 표시해야 오해가 없어져."
+
+| 매칭 수 | 색 | 라벨 |
+|---|---|---|
+| 1 학설 | 단색 (학설 색) | 1글자 머리글자 |
+| 2 학설 | 좌우 50/50 분할 | 2글자 나열 (예: "별사") |
+| 3 학설 | 1/3씩 분할 | 3글자 (예: "별사4") |
+| 학설 매칭 0 (통계/랜덤 폴백) | numberColor (옛 6/45 룰 색) | 통계/INTUITIVE 라벨 1글자 |
+
+### 2.98.3. 구현 - core/recommend.js
+
+| 함수 | 변경 |
+|---|---|
+| `assignSourceForNumber` (옛) | **폐기** |
+| `assignSourcesForNumber` (신설) | string → **string[]** 반환. 학설/통계 모두 수집 (strategyIds 순서 보존). 매칭 0건 시 BLESSED/INTUITIVE/BALANCER/첫 전략 폴백 1개 |
+| `recommendMulti` 반환 | `strategySources: string[]` → **`string[][]`** |
+
+### 2.98.4. 구현 - render
+
+`saved-sets-section.js` / `draw-card.js` 두 곳 동일 패턴:
+- `ballBackgroundFromSources(n, list)`: list 길이 1=단색 / 2=`linear-gradient(90deg, c1 50%, c2 50%)` / 3+=균등 stop
+- `tagHtmlFromSources(list)`: 머리글자 나열. 단일 매칭 = 학설 색 / 다중 매칭 = 회색(#6b7280) 배경 (시각 중성)
+- 호출처 호환: `numHtml`이 배열/단일/null 모두 처리 (Array.isArray 가드)
+
+### 2.98.5. 회귀 - 322 → **323 PASS**
+
+| 케이스 | 정정 |
+|---|---|
+| 옛 `r.strategySources.includes(SID)` 패턴 8건 | `r.strategySources.flat().includes(SID)`로 변경 |
+| 단일 전략 단언 (`assertEqual(s, BLESSED)`) | `assertTrue(Array.isArray(s) && s.length === 1 && s[0] === BLESSED)` |
+| **S77 신규 회귀**: 운세 3학설 시드 sweep N=100에서 다중 매칭(`srcs.length >= 2`) ≥1건 등장 단언 | 1건 추가. 풀 겹침 흡수 회귀 차단 |
+
+### 2.98.6. 변경 파일
+
+- `src/core/recommend.js`: assignSourceForNumber → assignSourcesForNumber (배열 반환) + recommendMulti.strategySources 타입 변경.
+- `src/render/saved-sets-section.js`: numHtml + 헬퍼 2개 (ballBackground + tagHtml).
+- `src/render/draw-card.js`: 동일 패턴.
+- `tests/suites/recommend.test.js`: 회귀 6건 정정 + 1건 신설.
+- `game/service-worker.js` v51 → v52.
+
+### 2.98.7. 사용자 화면 기대 변동
+
+운세 프리셋 추천 시:
+- 별자리 단독 풀 번호 = pink-500 단색 + "별"
+- 별자리 + 사주 풀 번호 = pink-500 / pink-800 좌우 50/50 + "별사"
+- 별자리 + 사주 + 4원소 풀 번호 = 3색 1/3씩 + "별사4"
+- 학설 매칭 0 (학설 풀 외 base 가중으로 추첨) = 옛 6/45 룰 색 + 폴백 라벨
+
+**별자리 흡수 해소**. 사주/4원소 기여 가시화 = 사용자 인상 "왜 별만 나오나?" 정정.
+
+### 2.98.8. 잔여 / 후속
+
+- L2 (가중치 분포 정정 = computeUnifiedWeights 학설 가중 균등화)는 본 sprint 외 의제. 라벨이 다양해도 실제 추첨 분포는 여전히 별자리 풀 위주일 수 있음. 사용자가 추가 결정 시 별도 sprint.
+- CSS `linear-gradient` 가 매우 작은 번호공(36~44px)에서 시각 명확한지 사용자 점검 필요. 너무 작아 분할 인지 어려우면 다른 시각 표현(예: outer ring 분할) 고려.
+
+### 2.98.9. Sprint 070 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 070(절 2.91, archive 4차 + SW v45 + row min-height) archive 이전. 본 sprint 종료 시점 활성 = 071~077 = 7건 정합. archive 10차 정리.
+
+### 2.98.10. 자비스 사전 검증 결손 사고 6건째 - 색 분할 위치 오해석 (즉시 정정)
+
+배경: 사용자 명시 "2개 전략 중복 번호일 경우 색을 좌우 반반 칠하고"의 "번호"를 자비스가 **번호공(.num 큰 원)**으로 해석. 사용자 의도는 **출처 태그(.num-source-tag 작은 사각형)**였음. 사용자 정정 "장난해?? 로또 볼은 고유 번호 유지하고 아래 별/사 색에 적용하라고".
+
+정정 내용:
+- `saved-sets-section.js` / `draw-card.js`: `numHtml`에서 번호공 background = `numberColor(n).bg` 단색 복원. 출처 태그 background에만 `tagBackgroundFromSources(list)` linear-gradient 분할 적용.
+- `ballBackgroundFromSources` 헬퍼 폐기 → `tagBackgroundFromSources`로 이름 변경 + 역할 분리.
+- SW v52 → v53.
+
+자비스 자기 점검:
+- 사용자 명시 "번호" = "번호공" 자체로 추정. 그러나 사용자 인상 = "6/45 룰 색은 자산이라 건드리지 마라" + "출처 라벨만 색 분할로 다중 학설 표시". 옛 화면(캡쳐 분석)에서 번호공 색이 학설 무관 6/45 룰 색이었음 = 사용자 학습 자산이라 변경 안 한다는 게 정도.
+- S43.1 / S69 / S72 / S74 / S76 / S77 = **6건 연속 사전 검증 결손**. 향후 "사용자 명시 해석이 두 가지 이상 가능하면 AskUserQuestion 의무" 룰 자비스 자체 적용.
+
+회귀 = 323/323 PASS (CSS-only 정정, 데이터 구조 동일).
+
+## 2.97. Sprint 076 완료 - 캐릭터 카드 흉일 시각/동작 결손 정정 (S76, 2026-05-17)
+
+배경: 사용자 캡쳐 2건 (고스트 흉일 + 마녀 평일). "유저 정보 접히기 펼치기가 오류남. 다른 유저는 접히는데, 고스트 유저만 이상하게 표시됨". 자비스 분석 결과 = 흉일(FORTUNE_BAD) 한정 결손 2건.
+
+### 2.97.1. 결손 진단 (흉일 한정)
+
+| # | 결손 | 원인 |
+|---|---|---|
+| 시각 | 좌측 ▼(흉 글리프) + 우측 ▲(caret) + 카드 본체 ▼(흉 아이콘) = ▼ 3개 시각 충돌 | `character-summary.js` `FORTUNE_GLYPH[FORTUNE_BAD] = '▼'` + `character-card.js` `FORTUNE_ICON[FORTUNE_BAD] = '▼'`. caret(▼/▲)과 동일 모양 |
+| 동작 | 사용자가 ▲ 클릭으로 접어도 강제 펼침 유지 | `main.js` line 562 `isExpanded = !state.charCardCollapsed \|\| fortune === 'bad'`. 흉일 보호 카피 노출 정책(S36)이 사용자 접기 의도 무시 |
+
+다른 운세는 글리프 ★(대길) / ◆(길) / ●(평)이라 caret과 시각 명확 구분 + 강제 펼침 없음 → 마녀(평) 캐릭터는 정상 동작 = 사용자 시각 차이 확인.
+
+### 2.97.2. 정정안 (자비스 단일 결정 + 사용자 승인)
 
 | 영역 | 이전 | 이후 |
 |---|---|---|
-| `#app` padding-bottom 데스크톱 | `calc(56px + space-5 + safe-area)` = 80px+safe | `calc(--bottom-tab-h + space-6 + safe-area)` = **88px+safe** (여유 +8px) |
-| `#app` padding-bottom 모바일 480px↓ | `calc(52px + space-5 + safe-area)` = 76px+safe | `calc(--bottom-tab-h-sm + space-6 + safe-area)` = **84px+safe** (여유 +8px) |
+| 흉 글리프 (toggle row) | `▼` | **`✕`** (caret과 완전 다른 모양 + "흉=나쁨" 의미 직관) |
+| 흉 아이콘 (카드 본체) | `▼` | **`✕`** (시각 일관성) |
+| 흉일 강제 펼침 정책 | `isExpanded = !collapsed \|\| fortune === 'bad'` | **`isExpanded = !collapsed`** (강제 폐기. 사용자 명시 접기 의도 존중) |
 
-여유 공간 24 → 32px(space-5 → space-6, 한 단계 증가). 마지막 콘텐츠가 탭에 가리지 않고 호흡 공간 확보.
+흉일 보호 카피는 첫 진입 default(`charCardCollapsed = false`) 시 자연 펼침으로 노출. 사용자가 접으면 본인 책임 영역 = 학습 정상 동작.
 
-### 2.90.2. 토큰화 (매직값 0)
+### 2.97.3. 변경 파일
 
-| 토큰 | 값 | 사용처 |
+- `src/render/character-summary.js`: `FORTUNE_GLYPH[FORTUNE_BAD]` ▼ → ✕ + S76 주석.
+- `src/render/character-card.js`: `FORTUNE_ICON[FORTUNE_BAD]` ▼ → ✕.
+- `src/render/main.js` line 562: 강제 펼침 폐기 + 주석 갱신.
+- `docs/01_spec.md` 5.1.6: 흉 글리프 ▼→✕ + 강제 펼침 폐기 정책 명시.
+- `docs/02_data.md` 1.20.3: 강제 펼침 폐기 메모 (`lotto_char_card_collapsed` 행).
+- `game/service-worker.js` v50 → v51.
+
+### 2.97.4. 검증
+
+- `node tests/run-node.js` → **322 / 322 PASS** (회귀 0, JS 매핑 + 정책 폐기, 단위 테스트 영향 없음).
+- ▼ 글리프 잔존 grep (character-summary.js + character-card.js): 0건.
+- 다른 운세(대길/길/평) 글리프 영향 0 = 다른 캐릭터 시각 변동 없음.
+
+### 2.97.5. 사용자 인상 직접 대응
+
+- 고스트(흉) 캐릭터 화면 = 좌측 ✕(빨강) + 우측 ▲(회색 caret). 더 이상 같은 모양 화살표 중복 없음.
+- 카드 본체 "운세 · 흉" 옆 = ✕ (▼ 폐기).
+- 사용자가 ▲ 클릭 = 정상 접힘 (강제 펼침 정책 폐기).
+- 마녀(평) 캐릭터는 변동 없음 (글리프 ● 그대로, 강제 펼침 영향 0이었음).
+
+### 2.97.6. 자비스 사전 검증 결손 사고 5건째
+
+S43.1 / S69 / S72 / S74 / S76 = 동일 패턴 (시각 / 매핑 결손). 본 결손은 사용자 캡쳐 없이 코드만 봐서는 발견 어려운 영역. 향후 시각 매핑 상수(`FORTUNE_GLYPH`, `STRATEGIES.short` 등) 변경 / 추가 시 **"caret / icon / glyph 시각 충돌 점검" 의무**. 본 sprint = 5건째 결손이지만 사용자 캡쳐 1건으로 즉시 발견 = 사용자 시각 점검의 가치.
+
+### 2.97.7. Sprint 069 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 069(절 2.90, 하단 탭 콘텐츠 가림) archive 이전. 본 sprint 종료 시점 활성 = 070~076 = 7건 정합. archive 9차 정리.
+
+## 2.96. Sprint 075 완료 - DEFAULT_PRESETS 순서/라벨/묶음 재정렬 + 프리셋 미선택 차단 (S75, 2026-05-16)
+
+배경: 사용자 명시 2건. (1) "전략 프리셋이 선택되지 않았는데 세트 추천을 하네? 프리셋 미선택일 경우 추천 차단". (2) 기본값 순서 변경: 1.운세 / 2.균형 / 3.분산(직감 X, 균형, 사주).
+
+### 2.96.1. 사용자 답변 확정 (AskUserQuestion 좁히기)
+
+| 질문 | 답변 |
+|---|---|
+| 분산 묶음 정확 구성 | **균형 + 사주 (2전략)** = `[balancer, fiveElements]` |
+| 슬롯 라벨 | **"운세 / 균형 / 분산" 짧게** (옛 `-파` 어미 폐기) |
+| 미선택 시 차단 방식 | **버튼 disabled + 기본값 자동 선택 (슬롯 1)** |
+
+### 2.96.2. DEFAULT_PRESETS 재정렬
+
+| 슬롯 | 이전 | 이후 |
 |---|---|---|
-| `--bottom-tab-h` | 56px | 데스크톱 `.tab-item min-height` + `#app padding-bottom` |
-| `--bottom-tab-h-sm` | 52px | 모바일 480px↓ 동일 |
+| 1 | 균형 (`trendFollower`/`astrologer`/`intuitive`) | **운세** (`astrologer`/`fiveElements`/`zodiacElement`) |
+| 2 | 분산파 (`regressionist`/`intuitive`/`balancer`) | **균형** (`trendFollower`/`astrologer`/`intuitive`) |
+| 3 | 운세파 (`astrologer`/`fiveElements`/`zodiacElement`) | **분산** (`balancer`/`fiveElements`) |
 
-매직 56 / 52 잔존 점검: `.char-row` / `.preset-manage-main` (양쪽 56px)은 별도 컴포넌트 데이터 사이즈로 본 sprint 범위 외.
+분산 = 2전략 (다른 슬롯 3전략 대비 컴팩트). 사용자 명시 "직감(X), 균형, 사주" 그대로 해석.
 
-### 2.90.3. 검증
+### 2.96.3. 프리셋 미선택 시 추천 차단 (3계층 방어)
 
-- `node tests/run-node.js` → **305/305 PASS** (CSS-only, 회귀 0).
-- dev-server 응답: tokens.css에 `--bottom-tab-h` / `--bottom-tab-h-sm` 매치 / main.css에 `var(--bottom-tab-h*)` 4회 매치 (.tab-item × 2 + #app padding-bottom × 2).
+| 계층 | 위치 | 동작 |
+|---|---|---|
+| 1. 진입 차단 | `character-form.js` | 신규 캐릭터 `lastUsedStrategies = DEFAULT_PRESETS[0].strategyIds` 자동 활성 (슬롯 1 운세). 옛 `[STRATEGY_DEFAULT]=BLESSED` 단독 진입이 어느 프리셋과도 불일치 → 추천되던 버그 정정 |
+| 2. UI 차단 | `saved-sets-section.js` `savedSetsAddBarHtml(presetSelected)` 인자 | false면 + 1세트 / + 5세트 `disabled` + "아래 프리셋을 선택하세요" hint |
+| 3. 가드 | `main.js` `addSavedSetsBatch` | `isAnyPresetActive` 체크. UI 우회 click(키보드 ENTER 등) 차단 |
 
-### 2.90.4. 후속 의제 (사용자 청취 필요 - 본 sprint 보류)
+3계층 = DOM disabled 우회 / 키보드 / future 코드 진입 모두 cover.
 
-사용자 보고 "크롬과 정확하게 sync 안 맞음 / 퀄리티 떨어짐"의 정확한 의미가 모호해 자비스 추정 변경 안 함.
+### 2.96.4. 옛 사용자 마이그레이션 - 보수적 보존
 
-가설:
-- G1: 모바일 크롬 주소창 색(theme-color #c9a050 accent gold)과 lotto 본문/하단 탭 흰색 톤 어긋남
-- G2: 데스크톱 vs 모바일 크롬에서 lotto 자체 화면 정렬/폰트/여백 차이
-- G3: 모바일 시스템 navigation bar와 lotto 하단 탭 톤 어긋남
-- G4: 다른 의미
+`storage.js` `loadPresets`에 자동 마이그레이션 **폐기 결정**. 사유:
+- 옛 디폴트 라벨 일치 + 묶음 편집 흔적 있는 케이스(예: subtitle 잔존)에서 사용자 편집 무시될 위험.
+- 기존 사용자가 새 디폴트를 원하면 설정 탭 "기본값 복원" 버튼으로 명시 갱신 가능 (사용자 결정 영역).
+- 신규 캐릭터는 character-form.js에서 슬롯 1 자동 활성으로 즉시 새 디폴트 적용 = 진입 경로 분리.
 
-theme-color 변경 옵션 (G1 가정):
-- A: `#ffffff` (white) - 위/본문/탭 통일, gold 정체성 약화
-- B: `#c9a050` 유지 + 하단 탭을 gold로 - 정체성 강화하나 시각 무거움
-- C: `#f7f7f9` (page bg) - 본문 톤과 자연 연결 (자비스 권장)
+S43.7 옛 마이그레이션(모두-직감-단독 reset)은 보존 (Sprint 053 임시 단순화 잔재 정리용).
 
-사용자 캡쳐 또는 G1~G4 답변 후 별도 sprint 진행.
+### 2.96.5. 변경 파일
 
-## 2.89. Sprint 068 완료 - 모바일 풀스코프 최적화 (S68, 2026-05-10)
+- `src/data/numbers.js`: `DEFAULT_PRESETS` 갱신.
+- `src/data/storage.js`: S75 자동 마이그레이션 폐기 결정 메모.
+- `src/render/character-form.js`: 신규 캐릭터 `lastUsedStrategies = DEFAULT_PRESETS[0]`.
+- `src/render/main.js`: `isAnyPresetActive` 헬퍼 + addSavedSetsBatch 가드 + presetSelected 인자 전달.
+- `src/render/saved-sets-section.js`: `savedSetsAddBarHtml(presetSelected)` 인자 + "프리셋을 선택하세요" hint.
+- `docs/02_data.md` 1.20.2: DEFAULT_PRESETS 표 갱신 + S75 변경 사유.
+- `tests/suites/storage.test.js`: line 132 단언 갱신 (옛 '균형' → 동적 originalLabel).
+- `tests/suites/strategy-picker.test.js`: DEFAULT_PRESETS 구성 회귀 1건 추가.
+- `game/service-worker.js` v49 → v50.
 
-배경: 사용자 보고 "핸드폰 크롬으로 테스트할 때 화면 일부가 다르게 나오던데 테스트해줘. github.io에서 테스트하는중" + "캐릭터 접기/펼치기가 모바일에서 잘 안되는것 같아". 사용자 명시 "모두 진행하길 원해, 모바일에 최적화 되어야 해".
+### 2.96.6. 검증
 
-### 2.89.1. 진단 (코드 차원 풀스코프)
+- `node tests/run-node.js` → **322 / 322 PASS** (321 → 322, S75 회귀 1건 추가).
+- 회귀 차단:
+  - `DEFAULT_PRESETS[0].label === '운세'` / `[1].label === '균형'` / `[2].label === '분산'` 단언
+  - 묶음 정확 일치 단언 (sort-join 비교)
+  - 분산 슬롯 length === 2 단언 (2전략임을 명시)
 
-| # | 모바일 이슈 | 점검 결과 | 영향 |
+### 2.96.7. 사용자 화면 기대 변동
+
+- **신규 캐릭터**: 슬롯 1 운세 자동 활성. + 1세트 / + 5세트 즉시 사용 가능.
+- **기존 캐릭터**: lastUsedStrategies가 어느 프리셋과도 일치 안 하면 + 버튼 disabled + "프리셋을 선택하세요" hint. 사용자가 슬롯 1~3 중 하나 클릭하면 즉시 활성.
+- **기존 프리셋 데이터**: 보수적 보존. 새 디폴트 원하면 설정 탭 "기본값 복원".
+
+### 2.96.8. Sprint 068 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 068(절 2.89, 모바일 풀스코프) archive 이전. 본 sprint 종료 시점 활성 = 069~075 = 7건 정합. archive 8차 정리.
+
+## 2.95. Sprint 074 완료 - strategyShort 매핑 6건을 label[0]로 통일 (S74, 2026-05-16)
+
+배경: 사용자 캡쳐 + 보고. 균형 프리셋(최신·별자리·직감) 5세트 추천 시 출처 라벨에 "추 / 직 / 별 / 점 / 안" 등 노출. 사용자 명시 "실제 전략의 머리글자로 모두 변경. 예시: 최신 → 추(현재)가 아니라 최(개선)".
+
+### 2.95.1. 원인 - S21/S22 옛 약자가 S34/S35 label 변경 후 정정 누락
+
+`src/render/strategy-picker.js` `STRATEGIES`의 `short` 필드가 S21(2026-05-03 통계 라벨 직관화) / S22(2026-05-03 dot → 1글자 라벨) 시점의 옛 약자("추세/별빛/안나옴/축복/원소/점성") 그대로. 이후:
+- S34 (2026-05-08): 짝꿍 폐기 + 통계 카테고리 4종.
+- S35 (2026-05-08): "축복" → "랜덤" label 변경. short는 "축" 잔존.
+
+label 변경 시 short 동반 갱신 누락 = 결손 누적. 사용자 인상 "라벨이 전략과 다름" 직접 원인.
+
+### 2.95.2. 매핑 6건 정정
+
+| id | label | 이전 short | 이후 short |
 |---|---|---|---|
-| H1 | **Sticky hover** (`:hover` 26 룰, 가드 0건) | `.char-toggle:hover` 등 모든 hover 룰이 모바일에서 sticky hover | **캐릭터 토글 시각 혼동 → 사용자 보고 핵심 원인** |
-| H2 | **touch-action 미설정** | 인터랙티브 요소 전수 누락 | 더블탭 줌 / 일부 lazy click |
-| H3 | **-webkit-tap-highlight-color 미설정** | 글로벌 누락 | 회색 박스 깜빡임 |
-| H4 | 모바일 hit area | `button` base에 `min-height: 44px` 이미 cover. .char-toggle 등 button 요소라 OK | 영향 적음 |
-| H5 | viewport / safe-area | `viewport-fit=cover` + `env(safe-area-inset-*)` 잘 적용됨 | OK |
-| H6 | font-display | Google Fonts URL `&display=swap` 이미 적용 | OK |
-| H7 | iOS 자동 zoom 방지 | `input { font-size: 16px; }` 이미 적용 | OK |
+| BLESSED | 랜덤 | 축 | **랜** |
+| TREND_FOLLOWER | 최신 | 추 | **최** |
+| SECOND_STAR | 보너스 | 별 | **보** |
+| REGRESSIONIST | 적게 | 안 | **적** |
+| ASTROLOGER | 별자리 | 점 | **별** |
+| ZODIAC_ELEMENT | 4원소 | 원 | **4** |
+| 그 외 (많이/사주/직감/균형) | - | label[0] 일치 | 변동 없음 |
 
-H1, H2, H3가 핵심 결손 = 정도 수정 대상.
+**4원소의 short = "4"** 결정: 사용자 명시 "label 머리글자" = `label[0]`. 4원소의 [0] = "4". 시각 어색할 수 있으나 사용자 명시 정합 우선. 후속 변경 가능.
 
-### 2.89.2. 수정안 (땜방 금지 = 풀스코프)
+### 2.95.3. 변경 파일
 
-| 영역 | 변경 |
-|---|---|
-| `styles/tokens.css` | `--touch-min: 44px` 신규 토큰 (iOS HIG / Material 권장) |
-| `styles/main.css` 글로벌 base | `html, body`에 `-webkit-tap-highlight-color: transparent` / 인터랙티브 base에 `touch-action: manipulation` + `min-height: var(--touch-min)` (매직값 → 토큰) / `[data-action]`에도 `touch-action: manipulation` |
-| `styles/main.css` :hover 26 룰 | **모두 `@media (hover: hover) and (pointer: fine)` 가드 안으로** (Node 스크립트 일괄 처리, 외곽 토큰 단위 안전 변환). 모바일 sticky hover 차단. |
-| `docs/04_conventions.md` 4.8 | 모바일 표준 룰 7항목 신설. 향후 인터랙티브 요소 추가 시 룰 자동 적용 검증 |
+- `src/render/strategy-picker.js`: `STRATEGIES` short 6건 갱신 + S74 주석.
+- `docs/01_spec.md` 5.1.3.1: short 매핑 "축/추/많/짝/별/안/점/원/사/직/균" → "랜/최/많/보/적/별/4/사/직/균" + S74 정정 사유 명시.
+- `tests/suites/strategy-picker.test.js` 신설: 회귀 11건 (10 매핑 직접 단언 + 1 label[0] 자동 정합 단언).
+- `tests/runner.js`: 새 suite 등록.
+- `game/service-worker.js` v48 → v49.
 
-### 2.89.3. 변경 통계
+### 2.95.4. 검증
 
-- :hover 룰 가드 적용: **26개 / 26개** (1:1 일치 검증)
-- 신규 토큰: 1개 (`--touch-min`)
-- 글로벌 base 추가: 3건 (tap-highlight / touch-action button base / touch-action data-action)
-- docs 신설: 4.8.1 ~ 4.8.7 (7 룰)
-- SW (`game/service-worker.js`): 본 sprint 범위 외 (게임 허브 자산. lotto 전용 아니므로 별도 의제).
+- `node tests/run-node.js` → **321 / 321 PASS** (310 → 321, 11건 신규 모두 통과).
+- 회귀 차단 구조: `strategyShort(id) === strategyLabel(id)[0]` 단언 모든 10전략 cover. 향후 label 변경 시 short 미갱신 = 즉시 fail.
 
-### 2.89.4. 검증
+### 2.95.5. 사용자 화면 기대 변동
 
-- `node tests/run-node.js` → **305/305 PASS** (CSS-only, 회귀 0).
-- dev-server 응답: main.css 200 / tokens.css 200 / `@media (hover: hover) and (pointer: fine)` 26회 매치 / `--touch-min` 토큰 1회 매치.
-- 매직 44px 잔존: 컴포넌트별 명시 데이터 사이즈(번호공 / 라벨)만. 글로벌 base는 토큰 일원화.
+캡쳐 케이스 (균형 = trendFollower + astrologer + intuitive) 재실행 시:
+- "추" → **"최"** (trendFollower / 최신 top K 안 번호)
+- "점" → **"별"** (astrologer / 별자리 lucky 안 번호)
+- "직" → 변동 없음 (intuitive 폴백)
 
-### 2.89.5. 사용자 인상 직접 대응
+분산파 프리셋 (regressionist + intuitive + balancer):
+- 옛 "안" → **"적"**
 
-캐릭터 접기/펼치기 모바일 미작동 인상의 가장 강한 후보 = **H1 (sticky hover)**. 모바일에서 첫 탭 시 `.char-toggle:hover`의 `border-color: var(--color-accent)` 적용 후 잔존 → 두 번째 탭은 시각 변화 없어 "안 눌린 듯" 인상. 본 sprint로 해당 hover 룰이 `@media (hover: hover) and (pointer: fine)` 가드 안에 들어가 모바일에서 발화하지 않음. 시각 일관성 회복.
+운세파 프리셋 (astrologer + fiveElements + zodiacElement):
+- 옛 "점" → **"별"**
+- 옛 "원" → **"4"**
+- "사" 변동 없음
 
-`touch-action: manipulation`로 모바일 크롬의 300ms 더블탭 zoom 지연도 제거 → 즉시 click 반응.
+### 2.95.6. Sprint 067 archive 강제 이전 (룰 1.6 자동 적용)
 
-### 2.89.6. 후속 / 미적용
+본 sprint 진입 시점 활성 = 067~073 + 074 = 8건. 룰 1.6 초과 → Sprint 067(절 2.88, 작위성 정량 검증) archive로 자동 이전. 본 sprint 종료 시점 활성 = 068~074 = 7건 정합. archive 7차 정리.
 
-- SW cache busting (사용자 폰이 옛 v44 캐시 보고 있을 수 있음). `game/service-worker.js`는 게임 허브 자산이라 lotto sprint 범위 외. 별도 의제.
-- 사용자 폰에서 강력 새로고침 또는 시크릿 모드 권장 (PWA 설치 상태면 해제 후 재설치).
+Sprint 067은 큰 sprint(절 14개)이라 archive 이전으로 PROGRESS.md 약 155줄 회수. 향후 검색 / 회귀 디버그 시 `PROGRESS_ARCHIVE.md` 2.88 참조.
 
-## 2.88. Sprint 067 완료 - 추천 번호 작위성 정량 검증 (S67, 2026-05-10)
+### 2.95.7. 자비스 사전 검증 결손 사고 4건째
 
-배경: 사용자 보고 "아직도 번호가 작위적인 느낌이 강해. 너무 강해". "전략에 따른 추천 번호가 적정한지 제대로 검토하고 싶어. 전략 하나하나를 수백번 추출한 다음 숫자가 정말 랜덤인지, 한쪽으로 편향된건 아닌지 체크하고 싶어." 권장안 일괄(7차원 측정 / K3 판정 / N=1000 60명 다회차 mix / F3 단계적 / FM 절차)로 진행.
-
-### 2.88.1. 작업 단위 결정
-
-| 항목 | 결정 | 비고 |
-|---|---|---|
-| P1(render/ 11모듈 테스트) | **보류** | 사용자 명시. bias 검증 우선. |
-| 측정 차원 | 7개 전수 (구간 / 1~45 빈도 / 짝홀 / 합계 / 인접 / 끝자리 / 자카드) | 정도(正道) - 땜방 금지 메모리 적용 |
-| 편향 기준 | K3 = K1(±20%) + K2(카이제곱 p<0.05) | 직관 + 통계 둘 다 |
-| 표본 | 60 캐릭터(12 zodiac × 5 stem) × 1000 추출 × 11 전략 = 660,000 sets | |
-| 회차 mix | 최근 100회 (1124~1223) 균등 분포 | 직감 / 통계 전략의 회차 의존성 cover |
-| 산출물 | F3 - 1회성 보고서 우선, 영구 회귀(F2)는 임계 결정 후 별도 sprint | |
-
-### 2.88.2. docs / 인프라 영향
-
-- `docs/03_architecture.md`: scripts/ 디렉토리 추가 (lotto 내). import 규칙 표 + 절대 규칙 2.3.4 + 책임 표 한 줄. 산출물 위치 = `tests/reports/<date>_<topic>.md`.
-- `scripts/bias-report.mjs` (S67-A): 1차 분석 도구. 660,000 추출 / 7차원 / K3 판정 / 카이제곱 임계 테이블 lookup.
-- `scripts/bias-report-n5.mjs` (S67-B): 2차 분석 도구 (N1 가설). 5세트 묶음 단위 = 사용자 "+5세트" 버튼 패턴 직접 정량화. 자연 baseline은 균등 6/45 5000묶음 시뮬로 산출.
-- `tests/reports/`: 디렉토리 신설. 일회성 분석 보고서 archive.
-
-### 2.88.3. 1차 보고서 결과 (`tests/reports/bias_2026-05-10.md`)
-
-| 카테고리 | 종합 판정 |
-|---|---|
-| 랜덤 (랜덤(축복) / 직감 / 균형) | **3종 모두 정상** - 자연 기대 균등 카테고리 그린 |
-| 통계 (최신 / 많이 / 보너스 / 적게) | 의도된 편향 caution. 적게 전략의 1~45 빈도 1건 strong (12번 2.67% vs 자연 2.22%, 가장 안 나온 번호 위주의 자연 결과) |
-| 운세 (별자리 / 4원소 / 사주) | 별자리 / 4원소 caution (학설 풀 좁음 의도된 편향). 사주는 정상 (5 stem cover로 균등 수렴) |
-
-랜덤 카테고리 핵심 수치: 합 평균 138.10 vs 자연 138.00 / 자카드 0.0765~0.0769 vs 자연 0.0755 / 인접 페어 53.14~53.17% vs 자연 52.87%. **자연 기대치와 사실상 일치**.
-
-### 2.88.4. 2차 보고서 결과 (`tests/reports/bias_n5_2026-05-10.md`, N1 가설)
-
-5세트 묶음 단위 (사용자 "+5세트" 버튼 = 30번호) 7차원 측정. 자연 baseline 5000묶음 시뮬 + 12,000묶음 관측 비교.
-
-| 차원 | 자연 평균 | 사용자 직관 |
-|---|---|---|
-| 한 구간 최대 쏠림 | 29.27% | 5세트 묶음에서 한 구간이 약 30% 차지가 자연 |
-| 한 끝자리 최대 쏠림 | 19.13% | 한 끝자리가 약 19% 차지가 자연 |
-| 5세트 평균 자카드 | 0.0764 | 페어와이즈 약 7.6% 겹침이 자연 |
-| 30번호 unique | 23.03개 | 30번호 중 7개 중복이 자연 |
-| **사용자 정의 "1~10 50% 이상"** | **0.02%** | **5000묶음 중 1건 수준 (매우 드문 케이스)** |
-
-종합: 모든 전략 = 주의 (K2 z-test가 12,000 표본에서 매우 민감해 작은 편차도 잡음). **K1(±20%) 위반은 1~10 50% 차원에서만 0.02 → 0.03% 미세 편차** (절대값 차이 0.01%p, 12,000 묶음 중 추가 1~2건). **strong 0건**.
-
-### 2.88.5. 자비스 자동 결론
-
-- 알고리즘 차원 결손 없음 (1차 + 2차 양 보고서 동의).
-- 사용자 인상 "작위적"의 알고리즘 근거는 본 측정 범위(N=12,000 묶음 / 660,000 추출)에서 발견되지 않음.
-- 가능 가설:
-  - N=1~5 표본의 통계적 변동 (사용자가 본 바로 그 묶음이 우연히 쏠림)
-  - 시각 인지 (번호공 색 매핑이 "묶임" 인상 강화)
-  - 캐릭터별 특정 시드의 두드러진 패턴 (본 도구는 60명 평균 - 캐릭터별 분리 분석 미실시)
-
-### 2.88.6. 1차 결과 후 사용자 도전 - 자비스 자기점검
-
-사용자: "너는 전혀 문제없다고 판단한거야?"
-자비스 정정: **"문제없다"가 아니라 "검증된 영역에서 깨끗"**. 미검증 영역 8건 자기점검 (60명 평균 / Luck=10 고정 / 단일 전략만 / 회차 1124~1223 / 자카드 평균만 / 시드 해시 분포 / 시각 인지 / N=1~5 변동).
-
-권장안 진행 C 채택: **5.1 다중 전략 합성** + **5.2 max 자카드 / max 겹침** 도구 확장.
-
-### 2.88.7. 5.1 / 5.2 도구 확장
-
-- `scripts/bias-report.mjs` 시나리오 19개로 확장 (단일 10 + 다중 9).
-- `scripts/bias-report-n5.mjs` 9차원 + 시나리오 19개로 확장 (max 자카드 / max 겹침 추가).
-- 다중 9 시나리오: DEFAULT_PRESETS 3종 (사용자 첫 진입 기본) + 카테고리 내 mix 3종 + 카테고리 cross 페어 3종.
-
-### 2.88.8. 확장 보고서 결과
-
-| 영역 | 1차 (개별 본번호) | 2차 (5세트 묶음 9차원) |
-|---|---|---|
-| 단일 전략 10종 strong | 1건 (적게의 12번 = 의도된 편향) | 0건 |
-| 다중 전략 9종 strong | 0건 | 0건 |
-| 랜덤 카테고리 (단일 + 묶음) | 모두 정상 | 모든 차원 K1 OK |
-| max 자카드 / max 겹침 (사용자 "추천1과 2 비슷" 직접 대응) | - | strong 0건. 자연 0.2159 vs 관측 0.2167~0.2223 (편차 0.3~3%) |
-
-**자연 baseline 통찰**: 5세트 묶음에서 가장 비슷한 두 추천의 평균 자카드 = 0.2159, 평균 겹침 = 2.09개. **자연 무작위에서도 5세트 안에 2개 번호 겹치는 페어가 평균적으로 존재**. 사용자 "추천N이 비슷해" 인상의 일부는 자연 무작위 특성.
-
-### 2.88.9. 자비스 최종 결론 (정정 후)
-
-- 알고리즘 자체에 결손 없음 = 9차원 × 19 시나리오에서 K3 strong **합 1건만** (적게 단일 전략의 12번호 = 의도된 편향).
-- 사용자 인상의 출처로 가장 가능성 높은 것: **자연 무작위 자체의 특성** (5세트 안 평균 2개 겹침, 한 구간 30% 점유, 30번호 중 7개 중복은 모두 자연).
-- 또는 본 도구가 cover 못한 영역: 사용자 본인 캐릭터 시드 / 시각 인지 (번호공 색) / 시드 해시 분포 자체.
-
-### 2.88.10. 후속 (사용자 결정 영역)
-
-- N3 (캐릭터별 60명 분리 분석)
-- N4 (사용자가 "작위적"이라 느낀 구체 사례 청취 후 좁혀 검증) - **권장**
-- N5 (본 결과로 결론 → P1(render/ 테스트) 재개)
-- 5.4 (시드 해시 입력→출력 분포 검증) / 5.5 (번호공 색 매핑 시각 인지 검증) - 별도 의제
-
-### 2.88.11. 검증
-
-- `node tests/run-node.js` → **305/305 PASS** (회귀 0).
-- `node --check` 두 도구 모두 OK.
-- 실행: 1차 19.8초 / 2차 17.4초 (Node 25 환경, 표본 5배 증가에도 시간 2배 미만).
-- 재현성: 캐릭터 시드 / 자연 baseline 시드 모두 결정론 고정.
-- 산출물: `tests/reports/bias_2026-05-10.md` / `bias_n5_2026-05-10.md` (재실행으로 갱신).
-
-### 2.88.12. 사용자 1차 데이터 (11세트 스크린샷) + coverage-report 도구
-
-사용자 보고: "1세트 제외하고 모든 세트에 10번 이하 번호가 들어가지? 그 뒤로 계속해도 거의 대부분 세트에 10번 이하 뽑히던데? 이게 정상이라고??????"
-출처 태그 분석 결과: 사용자 화면 = 프리셋 1 "균형" (TREND_FOLLOWER + ASTROLOGER + INTUITIVE).
-
-11세트 즉시 측정: 1~10 출현 10/11 = 90.9% / 1~9 출현 9/11 = 81.8% / 본번호 비율 22.73%.
-
-자연 기대 (6/45 균등): 한 세트에 1~10 1개 이상 = 80.07%, 11세트 중 9세트 이상 등장 = 61.5%, 정확히 10세트 = 23.58%.
-**관측 = 자연 기대의 가장 흔한 결과 영역 (직관과 통계가 가장 크게 어긋나는 지점)**.
-
-확정 검증을 위해 신규 도구 `scripts/coverage-report.mjs` 작성. 19 시나리오 × 60 캐릭터 × 1000회 = 시나리오당 60,000세트, 5구간 × 19 = 95 셀 측정.
-
-| 시나리오 (대표) | 1~10 미출현 | 11~20 미출현 | 21~30 미출현 | 31~40 미출현 | 41~45 미출현 |
-|---|---|---|---|---|---|
-| 자연 기대 | **19.93%** | 19.93% | 19.93% | 19.93% | **47.13%** |
-| 랜덤(축복) | 19.75% | 20.08% | 20.18% | 19.83% | 47.12% |
-| 직감 | 19.74% | 20.01% | 20.25% | 19.84% | 47.10% |
-| 균형 (단일) | 19.75% | 20.05% | 20.18% | 19.82% | 47.16% |
-| **프리셋1 균형 (사용자 본 화면)** | **19.88%** | 20.64% | 19.85% | 19.30% | 47.35% |
-
-95 셀 모두 자연 기대 ±5% 안. K1 ±20% 위반 0건. **알고리즘 모든 색깔에서 자연 무작위와 사실상 일치**.
-
-사용자 인상의 통계 근거 = 1~10 출현률 자연 80.07% (= 미출현 19.93%의 보집합). 본 도구 모든 시나리오에서 1~10 출현 80% 전후 = 자연. 실행 14.7초.
-
-### 2.88.13. coverage-bundle-report 신규 도구 - 사용자 화면 11세트 단위 직접 대응
-
-사용자 명시: "균형, 분산파, 운세파로 묶여 있는것들에 대해 안 나올 확률 다시 테스트". 사용자 화면 = 11세트 단위라 11세트 묶음 안 등장 세트 수 분포 측정이 사용자 인상에 직접 대응.
-
-`scripts/coverage-bundle-report.mjs` 신규. 3 프리셋 × 60 캐릭터 × 100묶음 × 11세트 = 시나리오당 6,000묶음 (66,000세트). 한 묶음 안 등장 세트 수 k=0~11 분포 측정 + 이항 분포 자연 기대 비교.
-
-자연 기대 (1~10 기준, q=80.07%):
-- k=11 모두 등장: 8.68%
-- k=10 (사용자 관측): **23.75%** ← 11세트 묶음 약 4번 중 1번 빈도
-- k=9: 29.55%
-- k=8: 22.07%
-- k=9 이상: 61.98%
-
-3 프리셋 관측 (1~10):
-| 프리셋 | 한 세트 미출현 | k=10 비율 | 9세트+ 등장 비율 |
-|---|---|---|---|
-| 자연 기대 | 19.93% | 23.75% | 61.98% |
-| 균형 | 20.29% | 23.52% | 60.50% |
-| 분산파 | 19.78% | 24.53% | 62.27% |
-| 운세파 | 20.06% | 24.12% | 61.63% |
-
-**3 프리셋 × 5 구간 × k=0~11 = 198 셀 모두 자연 기대 ±2%p 안**. K1 ±20% 위반 0건. 알고리즘이 묶음 단위에서도 자연 무작위와 사실상 일치.
-
-실행 3.6초. 산출물 `tests/reports/coverage_bundle_2026-05-10.md`.
-
-### 2.88.14. 후속 (사용자 결정 영역, 변경 없음)
-
-- N4 사용자 본인 시드 데이터 청취 → 1000회 분포 정밀 검증 (변동 vs 시드 특이성 구분).
-- 5.5 시각 인지 가설 (번호공 색 묶음).
-- N5 본 의제 종결 후 P1(render/ 테스트) 재개.
-
-## 2.87. Sprint 066 완료 - is-just-added 펄스 영역 재정정 + 추천 리스트 좌측 들여쓰기 130% (S66, 2026-05-10)
-
-배경: 사용자 보고 2건. (1) S62의 row 전체 펄스(`.saved-set-row::before inset: 4px 8px`)가 row 좌우 padding 0 환경에서 라벨 "추천N" 글자 일부를 가로지름. "추천1,2 스트링 중간만 하이라이트에 들어감". (2) "추천1,2 스트링이 좀 더 들여쓰기 되도록 130% 마진".
-
-### 2.87.1. 펄스 영역 재정정
-
-| 측면 | 이전 (S62) | 이후 (S66) |
-|---|---|---|
-| 셀렉터 | `.saved-set-row.is-just-added::before` | `.saved-set-row.is-just-added .saved-set-balls::before` |
-| pseudo inset | `4px 8px` (좌우 8px가 라벨에 닿음) | `0` (번호공 컨테이너 정확히 덮음) |
-| 강조 의미 | row 전체 | "새로 들어온 번호 6개" |
-| 라벨 / 휴지통 | 펄스 영역에 포함되어 글자 가로지름 | 펄스 영역 외 |
-| 외부 글로우 | 외곽선 폐기, box-shadow 14px accent | 동일 (글로우는 컨테이너 바깥으로 부드럽게 새어나감) |
-
-### 2.87.2. 좌측 들여쓰기 130%
-
-- `.saved-sets-section` `padding-left`: `calc(var(--space-3) * 1.5)` → `calc(var(--space-3) * 1.5 * 1.3)` (18 → 23.4px).
-- 토큰 베이스 비율 유지(매직 픽셀 0). 사용자 명시 130%.
-
-### 2.87.3. 변경 파일
-
-- `docs/02_data.md` 1.5.8.6.7 명세 표 갱신 (펄스 컨테이너 / inset 0 / z-index 분리 명시).
-- `styles/main.css`: 펄스 룰 재장소 + reduced-motion 폴백 동시 갱신 / `.saved-sets-section` padding-left 130%.
-- `service-worker.js` v43 → v44.
-
-### 2.87.4. 검증
-
-- `node tests/run-node.js` → **305 / 305 PASS** (CSS-only, 회귀 0).
-- dev-server 응답: main.css `.saved-set-balls::before` / `1.5 * 1.3` / SW v44 모두 200 + 컨텐츠 정상.
-
-## 2.86. Sprint 065 완료 - syncDraws / syncDrawsIfNewer fetch mock 회귀 (S64.1, 2026-05-10)
-
-배경: Sprint 064 잔여 백로그 = `syncDraws` / `syncDrawsIfNewer` 2 export 미커버. 본 sprint로 닫음. test framework가 sync only이라 비동기 진입점(`asyncSuite` / `asyncTest`) 신규 도입 + 별도 suite 파일로 격리해 기존 296 테스트 회귀 위험 0.
-
-### 2.86.1. test framework 비동기 확장
-
-- `tests/core.js`: `asyncSuite(name, asyncFn)` + `asyncTest(name, asyncFn)` 신규 export. 기존 `suite` / `test`는 그대로(sync). 호출부 패턴 = `await asyncSuite('...', async () => { await asyncTest('...', async () => {}); });`. ESM top-level await로 import 평가가 모든 asyncTest 끝까지 기다림 → done() 시점 카운트 보장.
-
-### 2.86.2. tests/suites/storage-async.test.js 신설 (9건)
-
-| 분기 | 카운트 | 핵심 |
-|---|---|---|
-| `new-rounds` | 1 | 미러 latest > cached + 정적 번들 갱신 → saveDraws + updated=true |
-| `already-latest` | 1 | 미러 latest === cached → cached 보존 |
-| `mirror-unreachable` | 2 | 미러 fetch throw / ok=false 두 케이스 모두 동일 분기 |
-| `sync-failed` | 2 | 정적 draws.json 비어있음 / fetchedMax <= cachedMax (CI 지연) |
-| syncDraws 단독 | 3 | 새 fetched save / fetched 비면 cached / fetchedMax === cachedMax 등호 포함 |
-
-fetch mock 패턴: `globalThis.fetch`를 일시 교체 후 `finally`로 원복. URL 식별 = `'latest'` / `'draws.json'` includes.
-
-### 2.86.3. 검증
-
-- `node tests/run-node.js` → 296 → **305 / 305 PASS** (9건 신규 모두 통과).
-- 기존 296 sync 테스트 회귀 0 (asyncSuite/asyncTest는 별도 export로 분리).
-- Node 25 polyfill 가드 + globalThis.fetch 호환 확인.
-
-### 2.86.4. 결과
-
-- storage 25 export 중 **25 / 25 모두 커버** (전건 회귀 보장).
-- S64.1 백로그 항목 = 닫힘.
-- 잔여 후속: 2.85.4의 S59.4 라인은 본 sprint와 함께 정리 (이번 PROGRESS 갱신에서 처리).
-
-## 2.85. Sprint 064 완료 - storage 테스트 커버리지 보강 + 마이그레이션 회귀 (S64 / S59.4 백로그 1번 소화, 2026-05-10)
-
-배경: PROGRESS 2.80.4의 잔여 항목 "S59.4 storage 테스트 커버리지 16/25 보강". 옵션 B 권장안 진행 - 동기 export 14건 round-trip + 마이그레이션 + clearAll/options 보너스. sync* 2건은 fetch mock 도입 필요라 별도 sprint(미래 S64.1)로 분리.
-
-### 2.85.1. 추가 회귀 22건
-
-| 그룹 | 건수 | 핵심 |
-|---|---|---|
-| 통계 캐시 round-trip | 6건 | numberStats / bonusStats / cooccur 기본 null + round-trip |
-| 활성 캐릭터 ID | 2건 | 기본 null + round-trip |
-| 프리셋 round-trip + 마이그레이션 | 5건 | 기본값 deep clone / round-trip / S43.7 직감-단독 자동 reset / 사용자 편집 흔적 보존 / S63 subtitle 잔존 throw 없이 반환 |
-| charCardCollapsed | 4건 | 기본 false / true round-trip / false round-trip / 비-bool 정규화 |
-| ritualState | 2건 | 기본 null + round-trip |
-| options 마이그레이션 + clearAll PREFIX | 3건 | 누락 키 자동 채움 / S19 multiStrategy 폐기 키 무시 / clearAll이 lotto_ 외부 키 보존 |
-
-### 2.85.2. 변경 파일
-
-- `tests/suites/storage.test.js`: 64줄 → 약 230줄. 6 suite 신설. import에 누락된 14 export + DEFAULT_PRESETS 추가.
-
-### 2.85.3. 검증
-
-- `node tests/run-node.js` → 274 → **296 / 296 PASS** (22건 신규 모두 통과).
-- 미커버 export 잔여: `syncDraws` / `syncDrawsIfNewer` 2건. fetch mock 패턴 도입과 함께 별도 sprint(S64.1).
-- Node 25 polyfill 가드(S58 fix)에서도 정상 동작 확인.
-
-### 2.85.4. 잔여 / 후속
-
-- ~~S64.1 (대기)~~ **닫힘 - Sprint 065 (2026-05-10)에서 fetch mock 4분기 회귀 9건 추가. 305/305 PASS. storage 25/25 커버.**
-- S59.4 백로그 항목 = 본 sprint로 닫힘. PROGRESS 2.80.4의 S59.4 라인은 다음 정리에서 제거.
-
-## 2.84. Sprint 063 완료 - 프리셋 부제 폐기 + 묶인 전략 label list 자동 표시 (S63, 2026-05-10)
-
-배경: 사용자 보고 "전략 버튼 안 서브 문자열에 애매한 설명보다, 실제 선택된 전략을 표시해줘". 사용자 입력 부제(예 "최신·운세·직감 한 번에")가 자비스 정직성 정책과 맞지 않아 "묶인 전략"을 그대로 노출하기로 결정.
-
-### 2.84.1. 부제 필드 자체 폐기 (옵션 1 권장안 진행)
-
-| 영역 | 이전 | 이후 |
-|---|---|---|
-| 추첨 탭 슬롯 두 번째 행 | 사용자 입력 부제 | `.preset-strategy-line` - `strategyLabel` list 자동 (예: "최신 · 별자리 · 직감") |
-| 설정 탭 - 프리셋 관리 | 라벨 / 부제 / `strategyShort`(1자) 3행 | 라벨 / `strategyLabel` 2행 (label 통일) |
-| 편집 모달 | 라벨 / 부제 / 전략 체크 | 라벨 / 전략 체크 |
-| 데이터 | `subtitle: string` | 필드 제거 |
-| 상수 | `PRESET_SUBTITLE_MAX = 20` | 폐기 |
-
-### 2.84.2. 변경 파일
-
-- `docs/01_spec.md` 5.1.5.1 / 5.1.5.2 갱신.
-- `docs/02_data.md` 1.20 표 / 스키마 / 마이그레이션 노트 신설.
-- `src/data/numbers.js`: `PRESET_SUBTITLE_MAX` 폐기, `DEFAULT_PRESETS` `subtitle` 필드 제거.
-- `src/render/preset-editor.js`: 부제 입력 필드 / 핸들러 / 저장 cleaning / 빈 슬롯 채움 / `PRESET_SUBTITLE_MAX` import 모두 제거.
-- `src/render/preset-buttons.js`: `strategyLabel` import 추가, `subtitle` 표시 → 자동 list.
-- `src/render/settings-page.js`: `strategyShort` → `strategyLabel` 통일, `.preset-manage-subtitle` 행 제거.
-- `styles/main.css`: `.preset-subtitle` / `.preset-manage-subtitle` 룰 폐기, `.preset-strategy-line` 신규.
-- `service-worker.js` v42 → v43.
-
-### 2.84.3. 마이그레이션
-
-옛 storage(`lotto_presets`)에 `subtitle` 키가 있어도 `loadPresets`는 그대로 반환. 렌더 단계에서 미참조라 시각 영향 0. 다음 `savePresets` 호출 시 자연 소실.
-
-### 2.84.4. 검증
-
-- `node tests/run-node.js` → 274/274 PASS.
-- `node --check` 4파일 OK.
-- 옛 subtitle 참조 grep → 폐기 사유 주석만, 실 코드 0건.
-
-## 2.83. Sprint 062 완료 - is-just-added 펄스 시각 정정 (S62, 2026-05-10)
-
-배경: 사용자 보고 "노티 표시가 '추천1'에 너무 딱 붙어서 네모로 표시되니까 ui가 너무 허접". 초기안(inset 외곽선 + radius-sm)이 row 좌우 padding 0 환경에서 라벨에 외곽선이 닿아 답답함.
-
-### 2.83.1. 옵션 D 채택 (외곽선 폐기 + 외부 글로우 + 라운드 + inset)
-
-| 항목 | 이전 (S60) | 이후 (S62) |
-|---|---|---|
-| 렌더 방식 | row 자체에 inset border + bg | row의 `::before` pseudo (absolute) |
-| 외곽선 | inset 2px gold | **폐기** (시선은 외부 글로우만으로 충분) |
-| 라운드 | `--radius-sm` | `--radius-md` |
-| 좌우 마진 | 0 (라벨에 붙음) | inset 8px (라벨과 시각 거리) |
-| 글로우 | 없음 | 외부 box-shadow `0 0 14px` accent |
-| layout 영향 | 약간 (border-radius) | 0 (pseudo absolute) |
-
-### 2.83.2. 변경 파일
-
-- `docs/02_data.md` 1.5.8.6.7 명세 표 갱신.
-- `styles/main.css`: 펄스 룰 교체. `@keyframes saved-set-pulse` 갱신, reduced-motion 폴백 갱신.
-- `service-worker.js` v41 → v42.
-
-### 2.83.3. 검증
-
-- `node tests/run-node.js` → 274/274 PASS (CSS-only 변경, 회귀 위험 0).
-- 룰 중복 검사: `.saved-set-row` `position: relative`를 기본 룰에 통합.
-
-## 2.82. Sprint 061 완료 - 프리셋 편집 진입을 추첨 탭 → 설정 탭으로 이동 (S61, 2026-05-10)
-
-배경: 사용자 질문 "전략 편집을 설정으로 옮길 수 있을까?". 편집은 정착 후 자주 발생하지 않는 액션이라 추첨 탭에 영구 노출 가치 낮음. 권장안 (B + 모달 재활용) 진행.
-
-### 2.82.1. 진입점 이동
-
-| 항목 | 이전 | 이후 |
-|---|---|---|
-| 추첨 탭 진입 | 프리셋 슬롯 아래 "편집" 텍스트 링크 | **폐기** (시각 노이즈 1줄 회수) |
-| 설정 탭 진입 | 없음 | "프리셋 관리" 섹션 신설 (캐릭터 관리 다음) |
-| 편집 동작 | 모달 | 모달 그대로 재활용 (행 클릭 → 모달) |
-| 기본값 복원 | 모달 안만 | 설정 탭 섹션에도 노출 (모달 안과 동일 동작) |
-
-### 2.82.2. 변경 파일
-
-- `docs/01_spec.md` 4장 설정 탭 한 줄 / 5.1.5.2 진입점 갱신.
-- `docs/03_architecture.md` settings-page 의존성 주석.
-- `src/render/preset-buttons.js`: `.preset-edit-row` / `.preset-edit-link` 영역 폐기.
-- `src/render/settings-page.js`: 프리셋 관리 섹션 + 슬롯 행 + 기본값 복원 + `onPresetsChanged` 핸들러.
-- `src/render/main.js`: `openPresetEditor` import 폐기 / 추첨 탭 핸들러 폐기 / `onPresetsChanged: state.presets reload`.
-- `styles/main.css`: dead `.preset-edit-row` / `.preset-edit-link` 룰 폐기, `.preset-manage-*` 신규.
-- `service-worker.js` v40 → v41.
-
-### 2.82.3. 검증
-
-- `node tests/run-node.js` → 274/274 PASS.
-- dead 셀렉터 잔존 grep → 주석 안 변경 사유만, 실 코드 0건.
-
-## 2.81. Sprint 060 완료 - 누적 추천 토스트 위치 + 카드 펄스 도입 (S60, 2026-05-10)
-
-배경: 사용자 보고 "추가 1세트를 추가했습니다 메시지를 왜 팝업으로 안띄우고 메인창에 띄우지?". 액션바 인라인 토스트는 누적 리스트가 길어지면 함께 화면 밖으로 밀려 메시지 인지 불가. 권장안 A+C (화면 하단 fixed 팝업 + 추가된 카드 펄스) 진행.
-
-### 2.81.1. 화면 하단 fixed 팝업 + 카드 펄스
-
-| 영역 | 변경 |
-|---|---|
-| 위치 | 액션바 인라인 → body 직속 lazy-init `.saved-toast-root` (화면 하단 fixed, bottom-tabs 위 12px) |
-| z-index | 신규 `--z-toast: 50` (overlay 10 < toast 50 < modal 100) |
-| 펄스 | `saved-set-row` 인덱스 `startIdx ~ startIdx + addedCount - 1` 1초 펄스 (accent 외곽 글로우 + 배경 fade) |
-| 펄스 시간 | `SAVED_SETS_JUST_ADDED_MS = 1000` |
-| 역할 분리 | 토스트 = "몇 세트", 펄스 = "어디에" |
-| reduced-motion | 폴백 (animation off + 정적 강조) |
-
-### 2.81.2. 변경 파일
-
-- `docs/01_spec.md` 5.2.5.4 표 갱신 + 5.2.5.4.8 / 5.2.5.4.9 신설.
-- `docs/02_data.md` 1.5.8.2 `SAVED_SETS_JUST_ADDED_MS` 추가, 1.5.8.6 표 + 1.5.8.6.6 / 1.5.8.6.7 신설.
-- `src/data/numbers.js`: `SAVED_SETS_JUST_ADDED_MS = 1000`.
-- `styles/tokens.css`: `--z-toast: 50` 신규.
-- `src/render/saved-sets-section.js`: 액션바 토스트 슬롯 폐기.
-- `src/render/main.js`: `flashSavedSetsToast` body 직속 fixed 패턴 + `markSavedSetsJustAdded` 신설.
-- `styles/main.css`: `.saved-toast-root` fixed 팝업 + `@keyframes saved-set-pulse` (S62에서 시각 정정).
-- `tests/suites/saved-sets.test.js`: `SAVED_SETS_JUST_ADDED_MS` 회귀 단언.
-- `service-worker.js` v39 → v40.
-
-### 2.81.3. 검증
-
-- `node tests/run-node.js` → 274/274 PASS (Node 25 환경에서도 풀 그린).
+S43.1 / S69 / S72 / S74 = 동일 패턴 (label / short / 라벨 매핑 결손). 향후 `STRATEGIES` 등 매핑 자산 변경 시 **"매핑 필드별 SSOT 정합 단언" 의무**. S74의 `strategyShort === strategyLabel[0]` 자동 단언이 그 모범.
 

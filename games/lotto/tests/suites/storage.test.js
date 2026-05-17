@@ -129,8 +129,10 @@ suite('data/storage - 프리셋 round-trip + 마이그레이션 (S64)', () => {
     assertEqual(p.length, DEFAULT_PRESETS.length);
     assertEqual(p[0].id, DEFAULT_PRESETS[0].id);
     // deep clone 확인 - 반환된 객체 변경이 DEFAULT_PRESETS에 영향 0.
+    // S75 (2026-05-16): 디폴트 label 변경(균형 → 운세)에 따라 원본 보존만 단언.
+    const originalLabel = DEFAULT_PRESETS[0].label;
     p[0].label = '변조';
-    assertEqual(DEFAULT_PRESETS[0].label, '균형');
+    assertEqual(DEFAULT_PRESETS[0].label, originalLabel, 'deep clone 보장 - 원본 label 보존');
   });
 
   test('presets round-trip', () => {
@@ -245,6 +247,16 @@ suite('data/storage - options 마이그레이션 + clearAll PREFIX (S64 보너�
     assertEqual(opts.applyFilters, true, '저장 값 보존');
     assertEqual(opts.advancedMode, false, '누락 키 = 기본값');
     assertEqual(opts.fiveSets, false, '누락 키 = 기본값');
+    // S79 (2026-05-17): sourceDisplayMode 신규 옵션. 누락 시 기본값 'dot' 자동 채움.
+    assertEqual(opts.sourceDisplayMode, 'dot', 'S79 누락 키 = dot 기본값');
+  });
+
+  test('S79 - sourceDisplayMode round-trip (dot / label)', () => {
+    reset();
+    saveOptions({ applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'label' });
+    assertEqual(loadOptions().sourceDisplayMode, 'label', 'label 값 보존');
+    saveOptions({ applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'dot' });
+    assertEqual(loadOptions().sourceDisplayMode, 'dot', 'dot 값 보존');
   });
 
   test('S19 마이그레이션 - multiStrategy 폐기 키 자동 무시', () => {
