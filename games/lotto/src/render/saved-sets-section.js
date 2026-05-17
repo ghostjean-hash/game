@@ -74,9 +74,9 @@ function tagBackgroundFromSources(list) {
  */
 /**
  * S090 (2026-05-17): registeredKeys = Set<string> - 각 세트 numbers.join(',')로 history 등록 여부 판정.
- * registerCount = number, registerCap = number - 회차당 등록 카운터 / cap.
+ * S090-후속 7 (2026-05-18): cap 폐기 (사용자 명시 "5개 제한 없애줘"). registerCap 인자 폐기. counter 라벨 단순화.
  */
-export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false, sourceDisplayMode = SOURCE_DISPLAY_DEFAULT, registeredKeys = null, registerCount = 0, registerCap = 5) {
+export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false, sourceDisplayMode = SOURCE_DISPLAY_DEFAULT, registeredKeys = null, registerCount = 0) {
   const isEmpty = !Array.isArray(list) || list.length === 0;
   // S32: 풀 한계 배너. 비어있어도 노출 (사용자가 0세트 상태에서 풀 한계 인지 가능).
   const bannerHtml = poolExhausted
@@ -93,37 +93,32 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
   }
 
   const regSet = registeredKeys instanceof Set ? registeredKeys : new Set();
-  const capReached = registerCount >= registerCap;
 
   const items = list.map((set, i) => {
     const label = `추천${labelStart + i}`;
     const sources = Array.isArray(set.strategySources) ? set.strategySources : [];
     const ballsHtml = set.numbers.map((n, k) => numHtml(n, sources[k] || null, sourceDisplayMode)).join('');
-    // S090: 등록 여부 / cap 도달에 따라 버튼 상태 결정.
-    // S090-후속 (2026-05-17): 라벨 "내 번호로 선택" / "선택 해제" → "확정" / "취소" 단축. 배지 폐기 (row outline + 버튼 색으로 충분).
+    // S090-후속 7 (2026-05-18): cap 폐기 = 모든 row 버튼 enabled.
     const key = set.numbers.join(',');
     const isReg = regSet.has(key);
     const regCls = isReg ? ' is-registered' : '';
-    const regBtnDisabled = !isReg && capReached;
     const regBtnLabel = isReg ? '취소' : '확정';
     const regBtnAria = isReg ? `${label} 확정 취소` : `${label} 확정`;
     const regBtnTitle = isReg ? '확정 취소' : '내 번호로 확정';
-    const regBtnDisabledAttr = regBtnDisabled ? 'disabled aria-disabled="true"' : '';
     const regBtnCls = `saved-set-register${isReg ? ' is-registered' : ''}`;
     return `
       <div class="saved-set-row${regCls}" data-saved-idx="${i}" aria-label="${label}${isReg ? ' (확정됨)' : ''}">
         <span class="saved-set-idx" aria-hidden="true">${label}</span>
         <div class="saved-set-balls" role="list">${ballsHtml}</div>
-        <button type="button" class="${regBtnCls}" data-action="toggle-register-saved" data-saved-idx="${i}" aria-label="${regBtnAria}" title="${regBtnTitle}" ${regBtnDisabledAttr}>${regBtnLabel}</button>
+        <button type="button" class="${regBtnCls}" data-action="toggle-register-saved" data-saved-idx="${i}" aria-label="${regBtnAria}" title="${regBtnTitle}">${regBtnLabel}</button>
         <button type="button" class="saved-set-remove" data-action="remove-saved-set" data-saved-idx="${i}" aria-label="${label} 삭제" title="삭제">${trash('icon icon-sm')}</button>
       </div>
     `;
   }).join('');
 
-  // S090: 헤더에 등록 카운터 노출.
-  const counterHtml = `<span class="saved-sets-register-counter" aria-label="이번 회차 등록 ${registerCount} / ${registerCap}">등록 ${registerCount}/${registerCap}</span>`;
-  const capHintHtml = capReached
-    ? `<p class="saved-sets-cap-hint" role="status" aria-live="polite">이번 회차 ${registerCap}게임 등록 완료. 추가 등록은 다음 회차부터.</p>`
+  // S090-후속 7 (2026-05-18): 카운터 = 등록 N건 단순 표기 (cap 무관). cap hint 폐기.
+  const counterHtml = registerCount > 0
+    ? `<span class="saved-sets-register-counter" aria-label="이번 회차 확정 ${registerCount}건">확정 ${registerCount}건</span>`
     : '';
 
   return `
@@ -132,7 +127,6 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
         <h2 class="saved-sets-title">추천 리스트 (${list.length})</h2>
         ${counterHtml}
       </header>
-      ${capHintHtml}
       ${bannerHtml}
       <div class="saved-sets-list">${items}</div>
     </section>

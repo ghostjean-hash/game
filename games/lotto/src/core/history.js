@@ -8,7 +8,7 @@
 //   진입: saved-sets-row "내 번호로 선택" 버튼 → registerSavedSetToHistory 호출.
 
 import { matchRank } from './match.js';
-import { HISTORY_REGISTER_CAP_PER_ROUND } from '../data/numbers.js';
+// S090-후속 7 (2026-05-18): cap 폐기. 사용자 명시 "5개 제한 없애줘".
 
 /**
  * 캐릭터 history에 추천 항목 기록 (같은 drwNo + 같은 numbers는 덮어쓰기 아닌 중복으로 간주, 본 함수는 사용자 명시 등록 진입점에서만 호출).
@@ -31,15 +31,16 @@ export function recordRecommendation(character, recommendation) {
 
 /**
  * S090 (2026-05-17): 사용자 명시 등록 - saved-set 1개를 history에 등록 또는 해제 (toggle).
- * 회차당 cap 도달 시 등록 차단. 이미 등록되어 있으면 해제.
+ * S090-후속 7 (2026-05-18): cap 폐기 (사용자 명시 "5개 제한 없애줘"). 등록 차단 분기 제거.
+ *   saved-sets cap(20)이 자연 상한 역할.
  *
  * @param {object} character
  * @param {object} savedSet - saved-set 1개 (numbers / bonus / reasons / strategyIds / strategySources)
  * @param {number} drwNo
- * @returns {{ character: object, action: 'registered' | 'unregistered' | 'cap_reached' }}
+ * @returns {{ character: object, action: 'registered' | 'unregistered' | 'noop' }}
  */
 export function toggleSavedSetRegistration(character, savedSet, drwNo) {
-  if (!savedSet || !Array.isArray(savedSet.numbers)) return { character, action: 'cap_reached' };
+  if (!savedSet || !Array.isArray(savedSet.numbers)) return { character, action: 'noop' };
   const key = savedSet.numbers.join(',');
   const existingIdx = character.history.findIndex(
     (h) => h.drwNo === drwNo && Array.isArray(h.numbers) && h.numbers.join(',') === key,
@@ -49,12 +50,7 @@ export function toggleSavedSetRegistration(character, savedSet, drwNo) {
     const next = [...character.history.slice(0, existingIdx), ...character.history.slice(existingIdx + 1)];
     return { character: { ...character, history: next }, action: 'unregistered' };
   }
-  // Cap 점검 (회차당)
-  const roundCount = character.history.filter((h) => h.drwNo === drwNo).length;
-  if (roundCount >= HISTORY_REGISTER_CAP_PER_ROUND) {
-    return { character, action: 'cap_reached' };
-  }
-  // 등록
+  // 등록 (S090-후속 7 cap 체크 폐기)
   const entry = {
     drwNo,
     numbers: [...savedSet.numbers],

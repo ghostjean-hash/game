@@ -72,25 +72,22 @@ suite('core/history - toggleSavedSetRegistration (S090)', () => {
     assertEqual(r.character.history.length, 0);
   });
 
-  test('회차당 cap 5 도달 시 등록 차단', () => {
+  test('S090-후속 7 - cap 폐기 (사용자 명시 "5개 제한 없애줘")', () => {
     let c = fakeCharacter();
-    for (let i = 0; i < HISTORY_REGISTER_CAP_PER_ROUND; i += 1) {
+    // 옛 cap 5보다 많은 7건 모두 등록 가능.
+    const targetN = 7;
+    for (let i = 0; i < targetN; i += 1) {
       const set = { numbers: [i + 1, i + 2, i + 3, i + 4, i + 5, i + 6], bonus: 45, reasons: [], strategyIds: [], strategySources: [] };
       const r = toggleSavedSetRegistration(c, set, 1200);
-      assertEqual(r.action, 'registered');
+      assertEqual(r.action, 'registered', `${i + 1}번째 등록`);
       c = r.character;
     }
-    assertEqual(countRegisteredForRound(c, 1200), HISTORY_REGISTER_CAP_PER_ROUND);
-    // 6번째 = cap 도달
-    const extra = { numbers: [40, 41, 42, 43, 44, 45], bonus: 1, reasons: [], strategyIds: [], strategySources: [] };
-    const r = toggleSavedSetRegistration(c, extra, 1200);
-    assertEqual(r.action, 'cap_reached');
-    assertEqual(r.character.history.length, HISTORY_REGISTER_CAP_PER_ROUND, '6번째 미등록');
+    assertEqual(countRegisteredForRound(c, 1200), targetN, '7건 모두 등록 (cap 폐기 확인)');
   });
 
-  test('다른 회차는 cap 무관', () => {
+  test('다른 회차도 자유롭게 등록', () => {
     let c = fakeCharacter();
-    for (let i = 0; i < HISTORY_REGISTER_CAP_PER_ROUND; i += 1) {
+    for (let i = 0; i < 3; i += 1) {
       const set = { numbers: [i + 1, i + 2, i + 3, i + 4, i + 5, i + 6], bonus: 45, reasons: [], strategyIds: [], strategySources: [] };
       c = toggleSavedSetRegistration(c, set, 1200).character;
     }

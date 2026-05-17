@@ -333,13 +333,15 @@
 **메커니즘**:
 - saved-sets-row 각 카드에 **"확정"** 버튼 (S090-후속 라벨 단축 + row layout 정정).
 - 클릭 시 `core/history.js` `toggleSavedSetRegistration(character, savedSet, drwNo)` 호출.
-- 등록 = history에 `source: 'user'` 항목 추가. 시각: row에 `is-registered` class + **좌측 4px accent 바** (S090-후속 5, 2026-05-18 outline → 좌측 바 정정) + 배경 옅은 accent tint + 버튼 라벨 "취소" + 버튼 accent 배경. row 기본 padding 좌우 `var(--space-3)`(12px)로 모든 row 균일 (S090-후속 6, 2026-05-18 정렬 일치 보장 - 옛 확정 row에만 padding-left 추가하던 결손 정정). 좌측 바는 row 내부 padding 안에서 표시 = 라벨/휴지통과 호흡. (S090-후속 "등록" 배지 폐기 - row 시각 강조 + 버튼 색으로 충분 인지)
+- 등록 = history에 `source: 'user'` 항목 추가. 시각: row에 `is-registered` class + **background tint (rgba accent 0.22)** + 버튼 라벨 "취소" + 버튼 accent 배경. row 기본 padding 좌우 `calc(var(--space-3) / 2)`(6px)로 모든 row 균일 (S090-후속 7, 2026-05-18 사용자 명시 "뒤쪽 여백 절반 + 앞/뒤 동일" + "앞쪽 세로 띠 제거" + "배경 더 강하게"). 좌측 4px accent 바 폐기. ("등록" 배지 / cap / 좌측 바 모두 폐기 - 단순 background tint + 버튼 색으로 시각 충분 인지)
 - 재클릭 = history에서 제거 (확정 취소 허용, 실수 회복).
 - row layout = grid 4열 `44px 1fr auto var(--space-6)` (라벨 / balls / 확정 버튼 / 휴지통). 옛 3열 wrap 결손 정정.
 
-**Cap**: 회차당 `HISTORY_REGISTER_CAP_PER_ROUND = 5` (한국 동행복권 1구좌 = 5게임 max 모방). 도달 시 미등록 카드의 버튼 disabled + hint "이번 회차 5게임 등록 완료. 추가 등록은 다음 회차부터." 등록된 카드는 cap 도달 후에도 해제 가능.
+**~~Cap~~** (S090-후속 7, 2026-05-18 폐기): 사용자 명시 "5개 제한 없애줘". 회차당 등록 cap 폐기. `HISTORY_REGISTER_CAP_PER_ROUND` 상수는 dead 잔존(20, 코드 참조 0). saved-sets cap(20)이 자연 상한 역할.
 
-**카운터**: 헤더 우측에 "등록 N/5" 노출.
+**카운터**: 헤더 우측에 "확정 N건" 노출 (등록 0건이면 카운터 자체 숨김).
+
+**휴지통 동작** (S090-후속 7, 2026-05-18 강화): saved-set 휴지통 클릭 시 saved-sets 삭제 + 같은 numbers가 history(현재 회차)에 등록되어 있으면 함께 제거. 사용자 명시 "확정한 채 삭제하면 확정 자체가 취소되게".
 
 **중복 차단**: 같은 drwNo + 같은 numbers 조합은 1번만 등록 가능 (`recordRecommendation` 안전망 + saved-sets dedupe 룰 답습).
 

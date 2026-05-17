@@ -1774,9 +1774,10 @@ a.btn-secondary,
   grid-template-columns: 44px 1fr auto var(--space-6);
   align-items: center;
   gap: var(--space-2);
-  /* S090-후속 6 (2026-05-18): 좌우 padding 추가. 옛 padding: var(--space-2) 0 = 좌우 0 →
-     확정 row 좌측 바가 라벨에 닿음 + 휴지통이 외곽에 붙음. 좌우 var(--space-3)(12px) 호흡. */
-  padding: var(--space-2) var(--space-3);
+  /* S090-후속 6 (2026-05-18): 좌우 padding 추가 (호흡).
+     S090-후속 7 (2026-05-18): 사용자 명시 "뒤쪽 여백을 지금의 절반으로 줄여 + 앞/뒤 동일".
+     좌우 모두 calc(var(--space-3) / 2) = 6px. 모든 row 균일 정렬. */
+  padding: var(--space-2) calc(var(--space-3) / 2);
   border-bottom: 1px dashed var(--color-border);
 }
 .saved-set-row:last-of-type { border-bottom: none; }
@@ -1901,15 +1902,10 @@ a.btn-secondary,
     color: var(--color-accent);
   }
 }
-/* S090-후속 5 (2026-05-18): 확정 row 시각 정정.
-   옛 outline + outline-offset -1px = row 안쪽 그림이 버튼과 닿음 + 4개 연속 outline 박스 분리 인상.
-   새 = 좌측 4px accent 바 + background tint. 모바일 폭 점유 0, 버튼 영역 침범 0.
-   border-radius / outline 폐기. border-bottom dashed는 모든 row 균일 유지.
-   S090-후속 6 (2026-05-18): 옛 padding-left: var(--space-2) 추가 폐기 = 확정/미확정 row 정렬 일치 보장.
-   좌측 바는 row 기본 padding(좌우 var(--space-3) = 12px) 안에서 표시 = 라벨까지 8px 호흡. */
+/* S090-후속 7 (2026-05-18): 사용자 명시 "앞쪽 세로 띠 제거 + 배경 색을 조금 더 강하게".
+   좌측 4px 바(box-shadow inset) 폐기. background tint를 0.08 → 0.22로 강화 (사용자 가시성). */
 .saved-set-row.is-registered {
-  background: rgba(212, 166, 87, 0.08);
-  box-shadow: inset 4px 0 0 0 var(--color-accent);
+  background: rgba(212, 166, 87, 0.22);
 }
 /* S090-후속 (2026-05-17): .saved-set-reg-badge 폐기 - 시각 노이즈. row outline + 버튼 색 변경으로 충분. */
 .saved-sets-register-counter {

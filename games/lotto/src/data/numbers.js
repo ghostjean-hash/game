@@ -170,12 +170,10 @@ export const RITUAL_PARTICLE_SIZE = 4;          // 입자 base 반지름(px)
 // S090 신설: HISTORY_REGISTER_CAP_PER_ROUND - 회차당 history 등록 cap (한국 로또 1구좌 = 5게임 max 모방).
 export const BACKFILL_RECENT_COUNT = 30;  // S090 폐기. 호환을 위해 잔존 (코드 호출 0건).
 
-// 1.16-A. history 등록 cap (S090, 2026-05-17 신설)
-// SSOT: docs/02_data.md 1.16-A, docs/01_spec.md 5.2.5 / 5.8.
-// 한 회차에 history에 등록 가능한 사용자 명시 추천 세트 max 개수.
-// 한국 동행복권 1구좌 = 5게임 max 모방. 진정성 + 사행성 회피 룰 정합.
-// 사용자가 saved-sets에서 "내 번호로 선택" 클릭 시 history 등록. cap 도달 시 추가 등록 차단.
-export const HISTORY_REGISTER_CAP_PER_ROUND = 5;
+// ~~1.16-A. history 등록 cap~~ (S090-후속 7, 2026-05-18 폐기)
+// 사용자 명시 "5개 제한 없애줘". saved-sets cap(20)이 자연 상한 역할.
+// 상수 자체는 호환을 위해 dead 잔존 (코드 호출 0건).
+export const HISTORY_REGISTER_CAP_PER_ROUND = 20;
 
 // 1.15. 추첨 일정 (한국 동행복권 6/45)
 // SSOT: docs/02_data.md 1.15.

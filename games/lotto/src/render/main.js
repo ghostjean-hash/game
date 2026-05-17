@@ -49,7 +49,6 @@ import {
   SAVED_SETS_JUST_ADDED_MS,
   STRATEGY_CATEGORIES,
   DRAW_TZ_OFFSET_MIN,
-  HISTORY_REGISTER_CAP_PER_ROUND,
 } from '../data/numbers.js';
 
 // S58 (2026-05-09): KST 매직 넘버 `9 * 3600 * 1000` 2회 사용 → DRAW_TZ_OFFSET_MIN 위탁.
@@ -544,7 +543,8 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     && state.poolExhaustedRecipeId === currentRecipeId;
   // S79 (2026-05-17): 출처 표시 모드를 설정에서 가져와 saved-sets에 전달.
   const sourceDisplayMode = state.options?.sourceDisplayMode || 'dot';
-  // S090 (2026-05-17): history 등록 상태 + cap 정보 saved-sets에 전달.
+  // S090 (2026-05-17): history 등록 상태 saved-sets에 전달.
+  // S090-후속 7 (2026-05-18): cap 인자 폐기.
   const registeredKeys = new Set(
     (active.history || [])
       .filter((h) => h.drwNo === state.drwNo && Array.isArray(h.numbers))
@@ -553,7 +553,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   const registerCount = countRegisteredForRound(active, state.drwNo);
   const savedSectionHtml = savedSetsSectionHtml(
     savedList, 1, poolExhausted, sourceDisplayMode,
-    registeredKeys, registerCount, HISTORY_REGISTER_CAP_PER_ROUND,
+    registeredKeys, registerCount,
   );
   // S75 (2026-05-16): 활성 strategyIds가 어느 프리셋과도 일치하면 presetSelected=true. 그 외 false → + 버튼 disabled.
   //   사용자 명시 "프리셋이 선택되지 않을 경우 세트 추천이 안 되어야 함".
@@ -679,13 +679,26 @@ function renderHome(content) {
       const idx = parseInt(el.dataset.savedIdx, 10);
       if (Number.isNaN(idx)) return;
       const cur = getActive();
-      const next = removeSavedSetAt(cur, idx);
+      // S090-후속 7 (2026-05-18): 사용자 명시 "확정한 채 삭제하면 확정 자체가 취소되게".
+      // saved-set 삭제 시 = 같은 numbers가 history(현재 회차)에 등록되어 있으면 함께 제거.
+      const targetSet = cur.savedSets?.list?.[idx];
+      let next = removeSavedSetAt(cur, idx);
+      if (targetSet && Array.isArray(targetSet.numbers)) {
+        const key = targetSet.numbers.join(',');
+        const filtered = next.history.filter(
+          (h) => !(h.drwNo === state.drwNo && Array.isArray(h.numbers) && h.numbers.join(',') === key),
+        );
+        if (filtered.length !== next.history.length) {
+          next = { ...next, history: filtered };
+        }
+      }
       state.characters = state.characters.map((c) => (c.id === next.id ? next : c));
       saveCharacters(state.characters);
       renderApp();
     });
   });
-  // S090 (2026-05-17): "내 번호로 선택" 토글 - saved-set을 history에 등록 / 해제.
+  // S090 (2026-05-17): "확정" 토글 - saved-set을 history에 등록 / 해제.
+  // S090-후속 7 (2026-05-18): cap_reached 분기 폐기.
   content.querySelectorAll('[data-action="toggle-register-saved"]').forEach((el) => {
     el.addEventListener('click', () => {
       const idx = parseInt(el.dataset.savedIdx, 10);
@@ -694,10 +707,6 @@ function renderHome(content) {
       const set = cur.savedSets?.list?.[idx];
       if (!set) return;
       const result = toggleSavedSetRegistration(cur, set, state.drwNo);
-      if (result.action === 'cap_reached') {
-        flashSavedSetsToast(`이번 회차 ${HISTORY_REGISTER_CAP_PER_ROUND}게임 등록 완료`, SAVED_SETS_TOAST_NORMAL_MS);
-        return;
-      }
       // 매칭 즉시 재계산 (등록 직후 draws 발표 회차이면 등수 자동).
       const matched = matchHistory(result.character, state.draws);
       state.characters = state.characters.map((c) => (c.id === matched.id ? matched : c));
