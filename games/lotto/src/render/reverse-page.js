@@ -21,7 +21,7 @@ export function renderReversePage(container, draws) {
 
   container.innerHTML = `
     <header class="app-header tab-header">
-      <h1 class="app-title">역추첨</h1>
+      <h1 class="app-title">게임</h1>
       <p class="app-subtitle">6개 번호를 골라 1~${draws.length || '?'}회까지 가장 높은 등수를 확인합니다.</p>
     </header>
 

@@ -18,6 +18,7 @@
 > 14차 정리: 2026-05-17. Sprint 074(절 2.95, strategyShort 매핑 6건 label[0] 통일) archive 추가 이전. Sprint 088 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 075~088 활성 잔존.
 > 15차 정리: 2026-05-17. Sprint 075(절 2.96, DEFAULT_PRESETS 순서/라벨/묶음 재정렬 + 프리셋 미선택 차단) archive 추가 이전. Sprint 089 신설(Luck 자산 전면 폐기)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 076~089 활성 잔존.
 > 16차 정리: 2026-05-17. Sprint 076(절 2.97, 캐릭터 카드 흉일 시각/동작 결손 정정) archive 추가 이전. Sprint 090 신설(백캐스트 + 자동 history 등록 폐기 + "내 번호로 선택" 진입점)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 077~090 활성 잔존.
+> 17차 정리: 2026-05-18. Sprint 077(절 2.98, 추천 리스트 다중 학설 매칭 시각화) archive 추가 이전. Sprint 091 신설(하단 탭 순서 + 라벨 정정)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 078~091 활성 잔존.
 >
 > 본 archive는 검색 / 회귀 디버그용. 새 세션에서 자동 적재되지 않음.
 
@@ -29,6 +30,90 @@
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.98. Sprint 077 완료 - 추천 리스트 다중 학설 매칭 시각화 (S77, 2026-05-17)
+
+배경: 사용자 캡쳐 + 격한 반응. 운세 프리셋(별자리·사주·4원소) 10세트 추천 결과 = 약 80% "별" 라벨. 사용자 "주로 별자리만 나오는 이유?" 질문에 자비스가 잘못 "의도된 동작 + 정도"라 답한 결손. **사용자 정정 "미친거 아니야? 현재가 정도라고?"** → 자비스 자기 점검 + 명시 작업 지시.
+
+### 2.98.1. 자비스 자기 반성
+
+Sprint 072에서 "균형 프리셋 통계 라벨 안 나오는 건 결손"이라 정정한 직후, 같은 구조 결손(학설 안 우선순위로 한 학설 흡수)을 "정도"라 답한 모순. 의도 ≠ 결과면 결손이라는 기본 룰 위반. SSOT 점검 없이 자비스 추정으로 "의도된 동작" 단정.
+
+### 2.98.2. 사용자 명시 작업 지시
+
+> "2개 전략 중복 번호일 경우 색을 좌우 반반 칠하고, 3개 전략 중복 번호일 경우 색을 1/3씩 칠해. 그리고 그 번호를 추출한 전략을 앞자를 표시해, 별자리에 동일한 번호가 있다고 하더라도 그 번호를 추출한 전략을 표시해야 오해가 없어져."
+
+| 매칭 수 | 색 | 라벨 |
+|---|---|---|
+| 1 학설 | 단색 (학설 색) | 1글자 머리글자 |
+| 2 학설 | 좌우 50/50 분할 | 2글자 나열 (예: "별사") |
+| 3 학설 | 1/3씩 분할 | 3글자 (예: "별사4") |
+| 학설 매칭 0 (통계/랜덤 폴백) | numberColor (옛 6/45 룰 색) | 통계/INTUITIVE 라벨 1글자 |
+
+### 2.98.3. 구현 - core/recommend.js
+
+| 함수 | 변경 |
+|---|---|
+| `assignSourceForNumber` (옛) | **폐기** |
+| `assignSourcesForNumber` (신설) | string → **string[]** 반환. 학설/통계 모두 수집 (strategyIds 순서 보존). 매칭 0건 시 BLESSED/INTUITIVE/BALANCER/첫 전략 폴백 1개 |
+| `recommendMulti` 반환 | `strategySources: string[]` → **`string[][]`** |
+
+### 2.98.4. 구현 - render
+
+`saved-sets-section.js` / `draw-card.js` 두 곳 동일 패턴:
+- `ballBackgroundFromSources(n, list)`: list 길이 1=단색 / 2=`linear-gradient(90deg, c1 50%, c2 50%)` / 3+=균등 stop
+- `tagHtmlFromSources(list)`: 머리글자 나열. 단일 매칭 = 학설 색 / 다중 매칭 = 회색(#6b7280) 배경 (시각 중성)
+- 호출처 호환: `numHtml`이 배열/단일/null 모두 처리 (Array.isArray 가드)
+
+### 2.98.5. 회귀 - 322 → **323 PASS**
+
+| 케이스 | 정정 |
+|---|---|
+| 옛 `r.strategySources.includes(SID)` 패턴 8건 | `r.strategySources.flat().includes(SID)`로 변경 |
+| 단일 전략 단언 (`assertEqual(s, BLESSED)`) | `assertTrue(Array.isArray(s) && s.length === 1 && s[0] === BLESSED)` |
+| **S77 신규 회귀**: 운세 3학설 시드 sweep N=100에서 다중 매칭(`srcs.length >= 2`) ≥1건 등장 단언 | 1건 추가. 풀 겹침 흡수 회귀 차단 |
+
+### 2.98.6. 변경 파일
+
+- `src/core/recommend.js`: assignSourceForNumber → assignSourcesForNumber (배열 반환) + recommendMulti.strategySources 타입 변경.
+- `src/render/saved-sets-section.js`: numHtml + 헬퍼 2개 (ballBackground + tagHtml).
+- `src/render/draw-card.js`: 동일 패턴.
+- `tests/suites/recommend.test.js`: 회귀 6건 정정 + 1건 신설.
+- `game/service-worker.js` v51 → v52.
+
+### 2.98.7. 사용자 화면 기대 변동
+
+운세 프리셋 추천 시:
+- 별자리 단독 풀 번호 = pink-500 단색 + "별"
+- 별자리 + 사주 풀 번호 = pink-500 / pink-800 좌우 50/50 + "별사"
+- 별자리 + 사주 + 4원소 풀 번호 = 3색 1/3씩 + "별사4"
+- 학설 매칭 0 (학설 풀 외 base 가중으로 추첨) = 옛 6/45 룰 색 + 폴백 라벨
+
+**별자리 흡수 해소**. 사주/4원소 기여 가시화 = 사용자 인상 "왜 별만 나오나?" 정정.
+
+### 2.98.8. 잔여 / 후속
+
+- L2 (가중치 분포 정정 = computeUnifiedWeights 학설 가중 균등화)는 본 sprint 외 의제. 라벨이 다양해도 실제 추첨 분포는 여전히 별자리 풀 위주일 수 있음. 사용자가 추가 결정 시 별도 sprint.
+- CSS `linear-gradient` 가 매우 작은 번호공(36~44px)에서 시각 명확한지 사용자 점검 필요. 너무 작아 분할 인지 어려우면 다른 시각 표현(예: outer ring 분할) 고려.
+
+### 2.98.9. Sprint 070 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 070(절 2.91, archive 4차 + SW v45 + row min-height) archive 이전. 본 sprint 종료 시점 활성 = 071~077 = 7건 정합. archive 10차 정리.
+
+### 2.98.10. 자비스 사전 검증 결손 사고 6건째 - 색 분할 위치 오해석 (즉시 정정)
+
+배경: 사용자 명시 "2개 전략 중복 번호일 경우 색을 좌우 반반 칠하고"의 "번호"를 자비스가 **번호공(.num 큰 원)**으로 해석. 사용자 의도는 **출처 태그(.num-source-tag 작은 사각형)**였음. 사용자 정정 "장난해?? 로또 볼은 고유 번호 유지하고 아래 별/사 색에 적용하라고".
+
+정정 내용:
+- `saved-sets-section.js` / `draw-card.js`: `numHtml`에서 번호공 background = `numberColor(n).bg` 단색 복원. 출처 태그 background에만 `tagBackgroundFromSources(list)` linear-gradient 분할 적용.
+- `ballBackgroundFromSources` 헬퍼 폐기 → `tagBackgroundFromSources`로 이름 변경 + 역할 분리.
+- SW v52 → v53.
+
+자비스 자기 점검:
+- 사용자 명시 "번호" = "번호공" 자체로 추정. 그러나 사용자 인상 = "6/45 룰 색은 자산이라 건드리지 마라" + "출처 라벨만 색 분할로 다중 학설 표시". 옛 화면(캡쳐 분석)에서 번호공 색이 학설 무관 6/45 룰 색이었음 = 사용자 학습 자산이라 변경 안 한다는 게 정도.
+- S43.1 / S69 / S72 / S74 / S76 / S77 = **6건 연속 사전 검증 결손**. 향후 "사용자 명시 해석이 두 가지 이상 가능하면 AskUserQuestion 의무" 룰 자비스 자체 적용.
+
+회귀 = 323/323 PASS (CSS-only 정정, 데이터 구조 동일).
 
 ## 2.97. Sprint 076 완료 - 캐릭터 카드 흉일 시각/동작 결손 정정 (S76, 2026-05-17)
 

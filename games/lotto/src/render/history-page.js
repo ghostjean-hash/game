@@ -100,7 +100,7 @@ export function renderHistoryPage(container, character, currentDrwNo = null) {
     : sortedHistory;
   const historyItems = pastItems.length === 0
     ? (pendingItems.length === 0
-        ? '<section class="empty-state"><p>전적이 비어있습니다.<br/>추첨 탭에서 추천을 받고 <strong>"확정"</strong>을 누르면 본 회차에 등록됩니다.<br/>매주 토요일 발표 후 자동 매칭됩니다.</p></section>'
+        ? '<section class="empty-state"><p>기록이 비어있습니다.<br/>추천 탭에서 추천을 받고 <strong>"확정"</strong>을 누르면 본 회차에 등록됩니다.<br/>매주 토요일 발표 후 자동 매칭됩니다.</p></section>'
         : '')
     : `<section class="stats-section">
         <h2 class="stats-title">옛 회차 이력 (${pastItems.length}건, 최근 회차순)</h2>
@@ -111,7 +111,7 @@ export function renderHistoryPage(container, character, currentDrwNo = null) {
 
   container.innerHTML = `
     <header class="app-header tab-header">
-      <h1 class="app-title">전적</h1>
+      <h1 class="app-title">기록</h1>
     </header>
     ${summaryHtml}
     ${pendingHtml}
