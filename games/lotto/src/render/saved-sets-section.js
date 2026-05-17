@@ -100,21 +100,21 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
     const sources = Array.isArray(set.strategySources) ? set.strategySources : [];
     const ballsHtml = set.numbers.map((n, k) => numHtml(n, sources[k] || null, sourceDisplayMode)).join('');
     // S090: 등록 여부 / cap 도달에 따라 버튼 상태 결정.
+    // S090-후속 (2026-05-17): 라벨 "내 번호로 선택" / "선택 해제" → "확정" / "취소" 단축. 배지 폐기 (row outline + 버튼 색으로 충분).
     const key = set.numbers.join(',');
     const isReg = regSet.has(key);
     const regCls = isReg ? ' is-registered' : '';
     const regBtnDisabled = !isReg && capReached;
-    const regBtnLabel = isReg ? '선택 해제' : '내 번호로 선택';
-    const regBtnAria = isReg ? `${label} 선택 해제` : `${label} 내 번호로 선택`;
+    const regBtnLabel = isReg ? '취소' : '확정';
+    const regBtnAria = isReg ? `${label} 확정 취소` : `${label} 확정`;
+    const regBtnTitle = isReg ? '확정 취소' : '내 번호로 확정';
     const regBtnDisabledAttr = regBtnDisabled ? 'disabled aria-disabled="true"' : '';
     const regBtnCls = `saved-set-register${isReg ? ' is-registered' : ''}`;
-    const regBadge = isReg ? '<span class="saved-set-reg-badge" aria-hidden="true">등록</span>' : '';
     return `
-      <div class="saved-set-row${regCls}" data-saved-idx="${i}" aria-label="${label}${isReg ? ' (등록됨)' : ''}">
+      <div class="saved-set-row${regCls}" data-saved-idx="${i}" aria-label="${label}${isReg ? ' (확정됨)' : ''}">
         <span class="saved-set-idx" aria-hidden="true">${label}</span>
-        ${regBadge}
         <div class="saved-set-balls" role="list">${ballsHtml}</div>
-        <button type="button" class="${regBtnCls}" data-action="toggle-register-saved" data-saved-idx="${i}" aria-label="${regBtnAria}" title="${regBtnLabel}" ${regBtnDisabledAttr}>${regBtnLabel}</button>
+        <button type="button" class="${regBtnCls}" data-action="toggle-register-saved" data-saved-idx="${i}" aria-label="${regBtnAria}" title="${regBtnTitle}" ${regBtnDisabledAttr}>${regBtnLabel}</button>
         <button type="button" class="saved-set-remove" data-action="remove-saved-set" data-saved-idx="${i}" aria-label="${label} 삭제" title="삭제">${trash('icon icon-sm')}</button>
       </div>
     `;

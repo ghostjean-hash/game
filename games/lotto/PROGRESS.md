@@ -4,7 +4,7 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-17 (Sprint 090 - 백캐스트 + 자동 history 등록 폐기 + "내 번호로 선택" 진입점 신설. 회차당 cap 5).
+1.3. **마지막 갱신**: 2026-05-17 (Sprint 090 + 후속 - 백캐스트 + 자동 등록 폐기 + "확정" 진입점 + row layout 정정).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 4차 2026-05-16 (Sprint 060~064 추가 archive 이전). 5차~8차 2026-05-16 (Sprint 065~068 각각 강제 이전). 9~16차 2026-05-17 (Sprint 069~076 각각 강제 이전). 직전 5 Sprint + 본 sprint(들)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 1.6. **PROGRESS.md 길이 정책 (S72, 2026-05-16 룰화)**: 활성 sprint 절 **최대 7건**(직전 5 + 본 sprint 묶음). 8건 초과 시 가장 옛 sprint 1건을 `PROGRESS_ARCHIVE.md` 강제 이전. archive는 무제한. 자연 약 350~500줄 유지.
@@ -100,6 +100,44 @@
 ### 2.104.10. Sprint 076 archive 강제 이전 (룰 1.6)
 
 활성 8건 → 룰 7건 초과 → Sprint 076(절 2.97, 캐릭터 카드 흉일 시각/동작 결손) archive 이전. 본 sprint 종료 시점 활성 = 077~079 + 084 + 088 + 089 + 090 = 7건 정합. archive 16차 정리.
+
+### 2.104.11. S090-후속 - 라벨 단축 + row layout 결손 정정
+
+배경: 사용자 캡쳐 2건 + 명시 "UX가 개판이네" + "내 번호로 선택 → 확정으로 스트링 변경".
+
+**결손 진단**:
+
+| # | 결손 | 원인 |
+|---|---|---|
+| 1 | 등록 후 row layout 무너짐 (번호공 잘림 + 버튼 wrap) | `.saved-set-row` grid 3열 (`44px 1fr var(--space-6)`)에 register 버튼 추가 = 4번째 자식이 grid track 부족으로 wrap |
+| 2 | "등록" 배지 폭 점유 | `.saved-set-reg-badge` span이 row 자식으로 grid 5번째 점유 + balls/버튼 영역 압축 |
+| 3 | 라벨 길어 모바일 폭 부족 | "내 번호로 선택" 9자 + "선택 해제" 5자 |
+
+**정정 3건**:
+
+| 영역 | 변경 |
+|---|---|
+| 라벨 단축 (사용자 명시) | "내 번호로 선택" → **"확정"** / "선택 해제" → **"취소"** |
+| Row grid 4열 | `44px 1fr var(--space-6)` → **`44px 1fr auto var(--space-6)`** (라벨 / balls / 확정 버튼 / 휴지통) |
+| 등록 배지 폐기 | `.saved-set-reg-badge` HTML + CSS 룰 모두 폐기. 시각 강조는 row outline + 버튼 accent 배경으로 충분 |
+
+**버튼 width 정합**: `min-width: 56px` + `padding: 6px 12px` 명시 = "확정"/"취소" 둘 다 동일 폭. row layout 안정.
+
+**변경 파일**:
+- `src/render/saved-sets-section.js`: 라벨 변경 + regBadge HTML 제거 + aria/title 정합
+- `styles/main.css`: `.saved-set-row` grid 4열 + `.saved-set-register` min-width / padding + `.saved-set-reg-badge` 룰 폐기
+- `docs/01_spec.md` 5.2.5.9 + 02_data 1.16-A: "확정" 어휘 정합
+- `service-worker.js` v68 → v69
+
+**검증**: `node tests/run-node.js` → **315 / 315 PASS** (UI/CSS만 변경, 회귀 0).
+
+**사용자 화면 기대 변동**:
+- 미등록 row: `[추천N] [번호공 6개] [확정] [🗑]` 4열 정합.
+- 등록 row: 외곽선 accent + 버튼 "취소" accent 배경. 배지 없음.
+- Cap 도달: 미등록 row 버튼 disabled.
+- 라벨 짧아 모바일 폭 여유 + row wrap 0.
+
+
 
 ## 2.103. Sprint 089 완료 - Luck 자산 전면 폐기 (S089, 2026-05-17)
 

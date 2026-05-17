@@ -29,7 +29,8 @@
 // v66 (2026-05-17): lotto S089 - Luck 자산 전면 폐기 (사용자 명시 "Luck을 게임요소로 추가하고 싶은 생각 없음" + 낮은 점수 부정적 인상). core/luck.js 모듈 삭제 + recommend.js BLESSED boost 고정 +0.5(luck 비례 폐기) + history.js luckApplied 필드 제거 + ritual.js 만땅 보상 +5 폐기(잠금만 유지) + numbers.js LUCK_* 상수 6건 폐기 + storage.js 캐릭터 load 마이그레이션 + UI Luck 바/통계 셀/카피 정정 + tests/suites/luck.test.js 폐기 + runner 등록 해제. 회귀 315/315 PASS. SSOT: PROGRESS.md 2.103.
 // v67 (2026-05-17): lotto S089-후속 - (1) ritual 라벨 "행운 쌓기" → "당첨 기원" 사용자 명시 변경. (2) "완성" chip + cta "완성 ✓" 중복 인지 회피 - bonus chip 폐기. ritual-widget.js RITUAL_LABEL + 추첨 탭 바 + 모달 헤더 row + docs 5.6 + docs 1.19 정합. 라벨 정직성 룰 정정 ("당첨" 단어는 "기원" 같은 정성 어휘와 결합 시 허용 / "확률"·"필승" 강한 카피만 절대 금지). SSOT: PROGRESS.md 2.103.12.
 // v68 (2026-05-17): lotto S090 - "진짜를 돌리고 싶다" 사용자 명시. (1) 백캐스트(backfillRecommendations) 전면 폐기. (2) + 1세트 / + 5세트 자동 history 등록 폐기 (saved-sets만 적재). (3) saved-sets-row "내 번호로 선택" 버튼 신설 = history 등록 토글 진입점. (4) 회차당 등록 cap 5 (HISTORY_REGISTER_CAP_PER_ROUND, 한국 1구좌 모방). (5) history 항목 source: 'user' 필드 신설. (6) storage load 마이그레이션 - 옛 백캐스트 추정 항목(createdAt === character.createdAt) 자동 제거. core/history.js toggleSavedSetRegistration + countRegisteredForRound + isRegistered + recordRecommendation 중복 차단 강화. docs 01_spec 5.2.5.9 + 7.5 + 02_data 1.16/1.16-A/3.7 + 03_architecture 정합. 회귀 315/315 PASS. SSOT: PROGRESS.md 2.104.
-const CACHE_VERSION = "v68";
+// v69 (2026-05-17): lotto S090-후속 - 사용자 캡쳐 "UX가 개판이네" + "내 번호로 선택 → 확정". (1) 라벨 단축: "내 번호로 선택" → "확정" / "선택 해제" → "취소". (2) row grid 3열 → 4열 (라벨/balls/확정/휴지통). 옛 3열에 버튼 추가로 wrap되며 번호공 튀어나가던 결손 정정. (3) "등록" 배지 폐기 - row outline + 버튼 색으로 시각 충분 + 폭 점유 해소. (4) 버튼 min-width 56px + padding 6/12 정합. docs 01_spec 5.2.5.9 + 02_data 1.16-A 어휘 정정. SSOT: PROGRESS.md 2.104.11.
+const CACHE_VERSION = "v69";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

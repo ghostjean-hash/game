@@ -1758,7 +1758,9 @@ a.btn-secondary,
    외 28(휴지통) → --space-6+, 13(라벨 font) → --font-size-sm, gap 4 → --space-1, 12/9/6(태그) 그대로(데이터 사이즈). */
 .saved-set-row {
   display: grid;
-  grid-template-columns: 44px 1fr var(--space-6);
+  /* S090-후속 (2026-05-17): 라벨 / balls / 확정 버튼 / 휴지통 = 4열.
+     옛 3열에 register 버튼 추가로 wrap되며 번호공이 row 밖으로 튀어나가던 결손 정정. */
+  grid-template-columns: 44px 1fr auto var(--space-6);
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) 0;
@@ -1852,14 +1854,16 @@ a.btn-secondary,
   .saved-set-remove:hover { color: var(--color-danger); }
 }
 
-/* S090 (2026-05-17): "내 번호로 선택" 버튼 + 등록 배지 + 카운터.
-   - 미등록 = 라벨 "내 번호로 선택" 회색 border.
-   - 등록 = is-registered class + 라벨 "선택 해제" accent border.
-   - cap 도달 시 disabled 회색.
-   - 등록된 saved-set-row는 accent 외곽선 강조. */
+/* S090 (2026-05-17): "확정" 버튼 (옛 "내 번호로 선택" - S090-후속에서 단축).
+   - 미등록 = "확정" 회색 border.
+   - 등록 = is-registered class + "취소" accent 배경.
+   - cap 도달 시 disabled.
+   - 등록된 row는 accent 외곽선 강조 (배지 폐기 - S090-후속 시각 노이즈 제거).
+   - width 정합으로 row layout 안정. */
 .saved-set-register {
   font-size: 0.85rem;
-  padding: 4px 10px;
+  padding: 6px 12px;
+  min-width: 56px;
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--color-text);
@@ -1867,6 +1871,7 @@ a.btn-secondary,
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
+  text-align: center;
 }
 .saved-set-register.is-registered {
   background: var(--color-accent);
@@ -1889,15 +1894,7 @@ a.btn-secondary,
   outline-offset: -1px;
   border-radius: var(--radius-sm);
 }
-.saved-set-reg-badge {
-  display: inline-block;
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  background: var(--color-accent);
-  color: white;
-  margin-left: 4px;
-}
+/* S090-후속 (2026-05-17): .saved-set-reg-badge 폐기 - 시각 노이즈. row outline + 버튼 색 변경으로 충분. */
 .saved-sets-register-counter {
   font-size: 0.85rem;
   color: var(--color-text-dim);

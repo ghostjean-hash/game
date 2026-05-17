@@ -401,7 +401,7 @@ character.savedSets = {
 1.16.1. ~~위치~~: S090 폐기. `backfillRecommendations` 함수 자체 삭제. 사용자 명시 등록만 history에 누적.
 
 **1.16-A. history 등록 메커니즘 (S090, 2026-05-17 신설)**:
-- saved-sets-row 카드의 "내 번호로 선택" 버튼 → `core/history.js` `toggleSavedSetRegistration(character, savedSet, drwNo)`.
+- saved-sets-row 카드의 "확정" 버튼 (S090-후속 단축, 옛 "내 번호로 선택") → `core/history.js` `toggleSavedSetRegistration(character, savedSet, drwNo)`.
 - 회차당 cap 5 도달 시 추가 등록 차단. 해제는 cap 무관.
 - 등록 항목 schema: `{ drwNo, numbers, bonus, reasons, strategyIds, strategySources, createdAt, matchedRank, source: 'user' }`.
 - 옛 백캐스트 데이터(`history[].createdAt === character.createdAt`)는 `storage.js` `loadCharacters`에서 자동 제거.
