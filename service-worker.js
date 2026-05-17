@@ -31,7 +31,8 @@
 // v68 (2026-05-17): lotto S090 - "진짜를 돌리고 싶다" 사용자 명시. (1) 백캐스트(backfillRecommendations) 전면 폐기. (2) + 1세트 / + 5세트 자동 history 등록 폐기 (saved-sets만 적재). (3) saved-sets-row "내 번호로 선택" 버튼 신설 = history 등록 토글 진입점. (4) 회차당 등록 cap 5 (HISTORY_REGISTER_CAP_PER_ROUND, 한국 1구좌 모방). (5) history 항목 source: 'user' 필드 신설. (6) storage load 마이그레이션 - 옛 백캐스트 추정 항목(createdAt === character.createdAt) 자동 제거. core/history.js toggleSavedSetRegistration + countRegisteredForRound + isRegistered + recordRecommendation 중복 차단 강화. docs 01_spec 5.2.5.9 + 7.5 + 02_data 1.16/1.16-A/3.7 + 03_architecture 정합. 회귀 315/315 PASS. SSOT: PROGRESS.md 2.104.
 // v69 (2026-05-17): lotto S090-후속 - 사용자 캡쳐 "UX가 개판이네" + "내 번호로 선택 → 확정". (1) 라벨 단축: "내 번호로 선택" → "확정" / "선택 해제" → "취소". (2) row grid 3열 → 4열 (라벨/balls/확정/휴지통). 옛 3열에 버튼 추가로 wrap되며 번호공 튀어나가던 결손 정정. (3) "등록" 배지 폐기 - row outline + 버튼 색으로 시각 충분 + 폭 점유 해소. (4) 버튼 min-width 56px + padding 6/12 정합. docs 01_spec 5.2.5.9 + 02_data 1.16-A 어휘 정정. SSOT: PROGRESS.md 2.104.11.
 // v70 (2026-05-17): lotto S090-후속 2 - 사용자 보고 "전적 쓰레기 아직도 있네" + "이번회차 선택된것들은 실시간으로 등록되었으면". (1) 설정 탭 "활성 캐릭터 전적 초기화" 버튼 신설 - 옛 백캐스트 잔재 강제 정리 (S090 자동 마이그레이션 한계 보완). (2) 전적 탭 상단에 "현재 회차 NNNN회 · 발표 대기 N건" 섹션 신설 - 사용자 "확정" 직후 실시간 노출. accent 외곽선 강조. (3) 옛 이력 섹션 = 현재 회차 외 항목만 (역할 분리). docs 01_spec 5.8.1-A 신설. SSOT: PROGRESS.md 2.104.12.
-const CACHE_VERSION = "v70";
+// v71 (2026-05-17): lotto S090-후속 3 - 사용자 명시 "전적에서 모든 번호에 회차를 적지말고 회차는 상단에 한번만 표시". 발표 대기 섹션 = 모든 항목이 같은 회차라 항목 헤더의 "NNNN회차" 라벨 중복. historyItemHtml에 showRound 인자 신설 = false 호출 시 회차 라벨 폐기, rank 라벨만 우측 정렬. 옛 이력 섹션은 회차 다양하므로 showRound=true 유지. CSS .history-header-no-round 룰 추가. SSOT: PROGRESS.md 2.104.13.
+const CACHE_VERSION = "v71";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

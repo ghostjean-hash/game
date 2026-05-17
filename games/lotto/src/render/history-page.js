@@ -36,7 +36,7 @@ export function renderHistoryPage(container, character, currentDrwNo = null) {
       <h2 class="stats-title">현재 회차 ${currentDrwNo}회 · 발표 대기 ${pendingItems.length}건</h2>
       <p class="stats-note">추첨 발표 후 자동 매칭됩니다. (등록 직후 본 섹션에 실시간 노출)</p>
       <div class="history-list">
-        ${pendingItems.map((h) => historyItemHtml(h)).join('')}
+        ${pendingItems.map((h) => historyItemHtml(h, false)).join('')}
       </div>
     </section>
   `;
@@ -130,18 +130,28 @@ function timelineDotHtml(h) {
   return `<span class="timeline-dot${cls}" ${style} role="listitem" title="${label}" aria-label="${label}"></span>`;
 }
 
-function historyItemHtml(h) {
+/**
+ * S090-후속 3 (2026-05-17): showRound 인자 신설. 발표 대기 섹션처럼 모든 항목이 같은 회차일 때는 false로 호출 = 회차 라벨 중복 폐기 (사용자 명시).
+ * @param {object} h history 항목
+ * @param {boolean} [showRound=true] true면 항목 헤더에 "NNNN회차" 표기. false면 폐기 (섹션 타이틀에 회차 노출 가정).
+ */
+function historyItemHtml(h, showRound = true) {
   // S20(2026-05-02): 추천에서 보너스 폐기. 이력 카드도 본번호 6개만 표시.
   const rank = h.matchedRank;
   const rankLabel = rank ? RANK_LABELS[rank] : (rank === null ? '미적중 / 미발표' : '-');
   const rankColor = rank ? RANK_GLOW_COLORS[rank] : 'var(--color-text-dim)';
   const numsHtml = h.numbers.map((n) => colorNum(n, 'history-num')).join('');
-  return `
-    <article class="history-item">
-      <header class="history-header">
+  const headerHtml = showRound
+    ? `<header class="history-header">
         <span class="history-drw">${h.drwNo}회차</span>
         <span class="history-rank" style="color: ${rankColor}">${rankLabel}</span>
-      </header>
+      </header>`
+    : `<header class="history-header history-header-no-round">
+        <span class="history-rank" style="color: ${rankColor}">${rankLabel}</span>
+      </header>`;
+  return `
+    <article class="history-item">
+      ${headerHtml}
       <div class="history-numbers">${numsHtml}</div>
     </article>
   `;

@@ -1012,6 +1012,11 @@ a.btn-secondary,
   align-items: center;
   margin-bottom: var(--space-2);
 }
+/* S090-후속 3 (2026-05-17): 회차 라벨 폐기한 헤더 (rank만 노출).
+   섹션 타이틀에 회차가 이미 명시된 경우(발표 대기 섹션)에 사용. rank를 우측 정렬. */
+.history-header-no-round {
+  justify-content: flex-end;
+}
 .history-drw {
   font-weight: bold;
   color: var(--color-accent);
