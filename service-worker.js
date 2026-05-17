@@ -34,7 +34,8 @@
 // v71 (2026-05-17): lotto S090-후속 3 - 사용자 명시 "전적에서 모든 번호에 회차를 적지말고 회차는 상단에 한번만 표시". 발표 대기 섹션 = 모든 항목이 같은 회차라 항목 헤더의 "NNNN회차" 라벨 중복. historyItemHtml에 showRound 인자 신설 = false 호출 시 회차 라벨 폐기, rank 라벨만 우측 정렬. 옛 이력 섹션은 회차 다양하므로 showRound=true 유지. CSS .history-header-no-round 룰 추가. SSOT: PROGRESS.md 2.104.13.
 // v72 (2026-05-17): lotto S090-후속 4 - 사용자 명시 3건: "UI 보기 좋게 정렬" + "과거 쓰레기 데이터 삭제 해" + "캐릭터 생성할 때마다 추가되는 옛 회차 쓰레기도 모두 삭제". (1) 발표 대기 항목 = rank 라벨도 폐기 (showRank=false 호출). showRound=false + showRank=false = 헤더 자체 폐기, 번호공만 노출. (2) `.history-numbers` justify-content: center로 가운데 정렬 + gap space-2. (3) storage.js loadCharacters 1회 강제 클린업 (lotto_s090_cleared flag) - 모든 character.history = [] 초기화, flag 저장으로 1회만 실행. 사용자 명시 일괄 정리. (4) 빈 상태 카피 갱신. 회귀 316/316 PASS (storage 단언 정정 + 신규 클린업 단언 1건). SSOT: PROGRESS.md 2.104.14.
 // v73 (2026-05-18): lotto S090-후속 5 - 사용자 캡쳐 "추천 리스트 확정 했을 때 ui가 좀 어색한데". 옛 .saved-set-row.is-registered = outline 1px + outline-offset -1px → row 안쪽 그림이 "취소" 버튼과 닿음 + 4개 연속 outline 박스 분리 인상 + 점선 border-bottom과 겹침. 새 = box-shadow inset 4px 좌측 accent 바 + padding-left + background tint 유지. outline 폐기. 모바일 폭 점유 0, 버튼 영역 침범 0. docs 01_spec 5.2.5.9 정합. SSOT: PROGRESS.md 2.104.15.
-const CACHE_VERSION = "v73";
+// v74 (2026-05-18): lotto S090-후속 6 - 사용자 캡쳐 "아웃라인이 추천 텍스트에 닿아 있는게 지저분 + 삭제 버튼도 외곽라인에 붙어 있어서 별로 + 확정/미확정 정렬 위치 틀어짐". 직전 정정(좌측 바 + padding-left 추가)이 정렬 깨뜨림 결손. (1) .saved-set-row 기본 padding 좌우 var(--space-3)(12px) 추가 = 모든 row 균일 호흡. (2) .saved-set-row.is-registered의 padding-left 추가 폐기 = 확정/미확정 row 정렬 100% 일치. 좌측 4px 바는 row 기본 padding 안에서 표시 = 라벨까지 8px 호흡, 휴지통 우측 12px 호흡. SSOT: PROGRESS.md 2.104.16.
+const CACHE_VERSION = "v74";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
