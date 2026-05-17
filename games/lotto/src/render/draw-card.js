@@ -5,7 +5,7 @@
 // S3-T1 / S22(2026-05-03): 다중 전략 모드면 본번호 아래 출처 표시.
 //   S3-T1 = 카테고리 색 dot. S22 = dot 폐기, 1글자 short 라벨로 교체 (같은 카테고리 안 전략 식별 가능).
 import { numberColor, strategyTagColor } from '../data/colors.js';
-import { STRATEGY_CATEGORIES, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_DEFAULT } from '../data/numbers.js';
+import { STRATEGY_CATEGORIES, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_OFF, SOURCE_DISPLAY_DEFAULT } from '../data/numbers.js';
 import { strategyShort, strategyLabel } from './strategy-picker.js';
 
 const CATEGORY_TAG_CLASS = {
@@ -16,11 +16,15 @@ const CATEGORY_TAG_CLASS = {
 
 // S77 (2026-05-17): 다중 학설 매칭 시 출처 태그만 색 분할 + 라벨 다글자.
 // S79 (2026-05-17): 모드 분기 (dot / label). 번호공(.num)은 6/45 룰 색 단색 유지.
+// S088 후속 (2026-05-17): 'off' 모드 추가 = 출처 표시 안 함. 번호공만 노출.
 function numHtml(n, ariaLabel, sources, mode = SOURCE_DISPLAY_DEFAULT) {
   const label = ariaLabel || `${n}번`;
   const c = numberColor(n);
   const list = Array.isArray(sources) ? sources : (sources ? [sources] : []);
-  const tagHtml = mode === SOURCE_DISPLAY_DOT ? dotHtmlFromSources(list) : labelHtmlFromSources(list);
+  let tagHtml = '';
+  if (mode === SOURCE_DISPLAY_DOT) tagHtml = dotHtmlFromSources(list);
+  else if (mode === SOURCE_DISPLAY_OFF) tagHtml = '';
+  else tagHtml = labelHtmlFromSources(list);
   return `<span class="num-cell" role="listitem" aria-label="${label}">
     <span class="num" style="background-color:${c.bg};">${n}</span>
     ${tagHtml}

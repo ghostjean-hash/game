@@ -3,7 +3,7 @@
 // 비어있으면 섹션 자체 미표시 (UI 노이즈 회피).
 
 import { numberColor, strategyTagColor } from '../data/colors.js';
-import { STRATEGY_CATEGORIES, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL, SOURCE_DISPLAY_DEFAULT } from '../data/numbers.js';
+import { STRATEGY_CATEGORIES, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL, SOURCE_DISPLAY_OFF, SOURCE_DISPLAY_DEFAULT } from '../data/numbers.js';
 import { strategyShort, strategyLabel } from './strategy-picker.js';
 import { trash } from './icons.js';
 
@@ -16,10 +16,14 @@ const CATEGORY_TAG_CLASS = {
 // S77 (2026-05-17): 다중 학설 매칭 시 출처 태그만 색 분할 + 라벨 다글자.
 // S79 (2026-05-17): 모드 분기. 'dot' = 색점 N개 나란히 (한글 없음) / 'label' = 한글 머리글자 (옛 동작).
 //   번호공(.num)은 6/45 룰 색(numberColor) 단색 유지.
+// S088 후속 (2026-05-17): 'off' 모드 추가 = 출처 표시 안 함. 번호공만 노출.
 function numHtml(n, sources, mode = SOURCE_DISPLAY_DEFAULT) {
   const list = Array.isArray(sources) ? sources : (sources ? [sources] : []);
   const c = numberColor(n);
-  const tagHtml = mode === SOURCE_DISPLAY_DOT ? dotHtmlFromSources(list) : labelHtmlFromSources(list);
+  let tagHtml = '';
+  if (mode === SOURCE_DISPLAY_DOT) tagHtml = dotHtmlFromSources(list);
+  else if (mode === SOURCE_DISPLAY_OFF) tagHtml = '';
+  else tagHtml = labelHtmlFromSources(list);
   return `<span class="num-cell" role="listitem" aria-label="${n}번">
     <span class="num" style="background-color:${c.bg};">${n}</span>
     ${tagHtml}
@@ -143,7 +147,7 @@ export function savedSetsAddBarHtml(currentCount, cap, poolExhausted = false, pr
         <button type="button" class="saved-add-btn" data-action="add-saved-5" ${fiveDisabledAttr}>+ 5세트</button>
       </div>
       <div class="saved-add-actions">
-        <button type="button" class="saved-sets-clear" data-action="clear-saved-sets" aria-label="추천 리스트 모두 삭제" title="전체 비우기" ${clearDisabledAttr}>${trash('icon icon-sm')}<span class="saved-clear-text">전체 비우기</span></button>
+        <button type="button" class="saved-sets-clear" data-action="clear-saved-sets" aria-label="추천 리스트 모두 삭제" title="전체 삭제" ${clearDisabledAttr}>${trash('icon icon-sm')}<span class="saved-clear-text">전체 삭제</span></button>
       </div>
       ${hint}
     </div>

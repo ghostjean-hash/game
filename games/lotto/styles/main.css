@@ -1157,7 +1157,11 @@ a.btn-secondary,
 }
 .modal-confirm:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; }
 
-/* ===== 하단 탭 (5개) ===== */
+/* ===== 하단 탭 (5개) =====
+   S088 (2026-05-17): 사용자 보고 "크롬 모바일 하단 크롬 메뉴와 하단 탭 싱크가 정확하지 않아 허접".
+   - will-change + translateZ로 GPU composite layer 분리 = 크롬 바 슬라이딩 프레임과 합성 lag 차단.
+   - JS 동기는 src/render/viewport-sync.js (visualViewport API resize/scroll → translateY 보정).
+   - 두 정책 동시 적용으로 항상 visual viewport visible bottom에 부착. */
 .bottom-tabs {
   position: fixed;
   bottom: 0;
@@ -1168,6 +1172,8 @@ a.btn-secondary,
   z-index: var(--z-overlay);
   padding-bottom: env(safe-area-inset-bottom);
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+  will-change: transform;
+  transform: translateZ(0);
 }
 .bottom-tabs-inner {
   max-width: 640px;

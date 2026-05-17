@@ -6,7 +6,7 @@ import {
   loadPresets, savePresets,
   clearAll,
 } from '../data/storage.js';
-import { DEFAULT_PRESETS, PRESET_SLOT_COUNT, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL } from '../data/numbers.js';
+import { DEFAULT_PRESETS, PRESET_SLOT_COUNT, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL, SOURCE_DISPLAY_OFF } from '../data/numbers.js';
 import { strategyLabel } from './strategy-picker.js';
 import { strategyTagColor } from '../data/colors.js';
 import { openPresetEditor } from './preset-editor.js';
@@ -137,7 +137,7 @@ export function renderSettingsPage(container, handlers) {
       <h2 class="stats-title">표시</h2>
       <fieldset class="settings-radio-group" data-setting-group="sourceDisplayMode">
         <legend class="settings-label"><strong>추천 번호 출처 표시</strong></legend>
-        <p class="settings-hint">번호공 아래 출처 표시 방식. 색점은 한글 없이 작은 점 N개로 간결.</p>
+        <p class="settings-hint">번호공 아래 출처 표시 방식. 색점은 한글 없이 작은 점 N개로 간결. 표시 안 함은 번호공만 노출.</p>
         <label class="settings-row">
           <input type="radio" name="sourceDisplayMode" value="${SOURCE_DISPLAY_DOT}" ${options.sourceDisplayMode === SOURCE_DISPLAY_DOT ? 'checked' : ''} />
           <span class="settings-label">색점</span>
@@ -145,6 +145,10 @@ export function renderSettingsPage(container, handlers) {
         <label class="settings-row">
           <input type="radio" name="sourceDisplayMode" value="${SOURCE_DISPLAY_LABEL}" ${options.sourceDisplayMode === SOURCE_DISPLAY_LABEL ? 'checked' : ''} />
           <span class="settings-label">한글</span>
+        </label>
+        <label class="settings-row">
+          <input type="radio" name="sourceDisplayMode" value="${SOURCE_DISPLAY_OFF}" ${options.sourceDisplayMode === SOURCE_DISPLAY_OFF ? 'checked' : ''} />
+          <span class="settings-label">표시 안 함</span>
         </label>
       </fieldset>
     </section>

@@ -51,7 +51,11 @@
 4.8.4. **`-webkit-tap-highlight-color: transparent`** - `html, body` 글로벌. 모바일 크롬 회색 깜빡임 차단.
 4.8.5. **`viewport-fit=cover` + `env(safe-area-inset-*)`** - notch / 둥근 모서리 영역 대응. `#app` / `.bottom-tabs` / 모달에 적용 (이미 적용됨).
 4.8.6. **`font-display: swap`** - Google Fonts URL에 명시 (이미 적용됨). 첫 진입 글자 변동 차단.
-4.8.7. 새 인터랙티브 요소 추가 시 본 8.x 룰 자동 적용 검증. `:hover` 룰 추가하면 반드시 `@media (hover: hover)` 가드 동반.
+4.8.7. **`position: fixed; bottom: 0` 요소는 visualViewport API 동기 + GPU layer 분리 의무** (S088, 2026-05-17). 크롬 모바일 하단 메뉴 슬라이딩과 layout viewport 갭으로 jerky / 한 박자 lag 발생. 두 정책 동시 적용:
+   - JS: `src/render/viewport-sync.js`의 visualViewport resize/scroll 후크 → `translateY` 보정.
+   - CSS: 대상 요소에 `will-change: transform; transform: translateZ(0)`.
+   - 신규 fixed bottom 요소(예: 토스트 / 액션 시트 / 휠링 푸터) 추가 시 동일 패턴 답습.
+4.8.8. 새 인터랙티브 요소 추가 시 본 8.x 룰 자동 적용 검증. `:hover` 룰 추가하면 반드시 `@media (hover: hover)` 가드 동반.
 
 ## 5. 디자인 토큰 사용 규칙
 

@@ -88,7 +88,7 @@ export function renderWheelingPage(container, currentRecommendation, onBack) {
             <input type="number" id="pool-input-num" min="${NUMBER_MIN}" max="${NUMBER_MAX}" placeholder="1~45" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
           </label>
           <button type="button" class="btn-secondary" data-action="add-num">추가</button>
-          <button type="button" class="btn-secondary" data-action="clear">전체 비우기</button>
+          <button type="button" class="btn-secondary" data-action="clear">전체 삭제</button>
         </div>
       </section>
 

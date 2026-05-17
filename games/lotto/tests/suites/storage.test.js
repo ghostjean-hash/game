@@ -259,6 +259,12 @@ suite('data/storage - options 마이그레이션 + clearAll PREFIX (S64 보너�
     assertEqual(loadOptions().sourceDisplayMode, 'dot', 'dot 값 보존');
   });
 
+  test('S088 후속 - sourceDisplayMode off round-trip (출처 표시 안 함)', () => {
+    reset();
+    saveOptions({ applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'off' });
+    assertEqual(loadOptions().sourceDisplayMode, 'off', 'off 값 보존 - 색점/한글 모두 숨김');
+  });
+
   test('S19 마이그레이션 - multiStrategy 폐기 키 자동 무시', () => {
     reset();
     // S19 이전 사용자 storage. multiStrategy 키가 잔존해도 loadOptions 결과에서 제거.

@@ -24,7 +24,9 @@
 // v61 (2026-05-17): lotto S85 - 캐릭터 편집 모달 birth prefill. 사용자 보고 "기존 생년월일 그대로 표시되어야 함". character schema에 birth 필드 추가(신규 캐릭터 = 보존). 편집 모달 = 옛 birth 있으면 prefill + 별자리 즉시 미리보기. 옛 S85 이전 캐릭터 = birth 부재 → 빈 입력 + 안내 카피. SSOT: PROGRESS.md 2.101.8.
 // v62 (2026-05-17): lotto S86 - 활성 배지 폐기. 사용자 보고 "활성 표시는 뭐지?" + 캡쳐에 배지가 편집 아이콘 위에 겹침. .char-row.is-active 외곽선/배경과 중복 + Sprint 084 편집 버튼 신설 후 right: 56px 위치 충돌. settings-page.js의 char-row-active-badge HTML 출력 폐기 (CSS 룰은 dead 잔존, 다음 cleanup). SSOT: PROGRESS.md 2.101.9.
 // v63 (2026-05-17): lotto S87 - 프리셋 기본값 복원 confirm 텍스트 동적화. 사용자 보고 "예전 데이터로 돌아가는 거지?". 옛 하드코딩 "균형/분산파/운세파"가 Sprint 075 갱신(운세/균형/분산) 후 잔재. DEFAULT_PRESETS.map(p=>p.label) 동적 산출로 정정. 실제 reset 동작은 새 DEFAULT_PRESETS로 정상 작동, confirm 텍스트만 옛 라벨이었음. SSOT: PROGRESS.md 2.101.10.
-const CACHE_VERSION = "v63";
+// v64 (2026-05-17): lotto S088 - (1) "전체 비우기" → "전체 삭제" 라벨 변경 (saved-sets 액션바 + 휠링 페이지 + docs/01_spec SSOT). (2) 크롬 모바일 하단 메뉴 슬라이딩과 .bottom-tabs 위치 정확 동기 - viewport-sync.js 신설 (visualViewport API resize/scroll → translateY 보정) + CSS will-change/translateZ로 GPU layer 분리. 사용자 명시 "항상 보임" = visual viewport visible bottom에 강제 부착. SSOT: PROGRESS.md 2.102.
+// v65 (2026-05-17): lotto S088 후속 - sourceDisplayMode에 'off' 모드 추가 (사용자 명시 "색점을 표시하지 않는 설정 옵션"). numHtml(saved-sets / draw-card 양쪽) mode === 'off' 분기 + settings-page 라디오 3번째 옵션("표시 안 함") + numbers.js SOURCE_DISPLAY_OFF 상수 + storage.test off round-trip 1건 추가. SSOT: PROGRESS.md 2.102.11.
+const CACHE_VERSION = "v65";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

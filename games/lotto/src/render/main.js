@@ -18,6 +18,7 @@ import { renderReversePage } from './reverse-page.js';
 import { renderWheelingPage, renderWheelingDisabled } from './wheeling-page.js';
 import { renderSettingsPage } from './settings-page.js';
 import { bottomTabsHtml, TABS } from './bottom-tabs.js';
+import { startBottomTabsViewportSync } from './viewport-sync.js';
 import { showModal, showDisclaimer } from './modal.js';
 import { ritualWidgetHtml, openRitualModal } from './ritual-widget.js';
 import { spawnRitualBurst } from './ritual-particles.js';
@@ -94,6 +95,9 @@ export function initRender(rootEl) {
   }
 
   renderApp();
+  // S088 (2026-05-17): 크롬 모바일 하단 메뉴 슬라이딩과 .bottom-tabs 위치 정확 동기.
+  // SSOT: src/render/viewport-sync.js + docs/04_conventions.md 4.8.6.
+  startBottomTabsViewportSync();
 }
 
 function setTab(tabId) {

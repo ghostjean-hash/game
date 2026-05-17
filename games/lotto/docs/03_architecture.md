@@ -34,6 +34,7 @@ games/lotto/
 │   │   ├── modal.js             # 모달 / 면책 안내 / 닫기 버튼
 │   │   ├── icons.js             # SVG 아이콘 헬퍼 (텍스트 글리프 대체)
 │   │   ├── bottom-tabs.js       # 하단 5탭 바 (추첨 / 통계 / 전적 / 휠링 / 설정)
+│   │   ├── viewport-sync.js     # .bottom-tabs ↔ visualViewport 동기 (S088, 크롬 모바일 하단 메뉴 슬라이딩 싱크)
 │   │   ├── character-form.js    # 캐릭터 생성 폼 (별자리 자동 계산)
 │   │   ├── character-card.js    # 캐릭터 카드 HTML
 │   │   ├── character-slots.js   # 캐릭터 슬롯 (목록 / 추가 / 삭제)
@@ -166,7 +167,7 @@ draws 갱신 (boot syncDraws 또는 통계 탭 진입 syncDrawsIfNewer)
 | 모듈 | 책임 | 예시 파일 |
 |---|---|---|
 | `core/` | 추첨 알고리즘, 통계 계산, 시드 해시, 가중치 계산, 매칭, 운세 / 사주, 휠링, 추첨 일정 | recommend / stats / seed / random / luck / match / fortune / zodiac / saju / schedule / history / wheeling |
-| `render/` | DOM 갱신, 카드 / 차트 / 모달 / 탭 / SVG 아이콘 | main / draw-card / next-draw-card / character-* / strategy-tabs / stats-page / history-page / wheeling-page / settings-page / bottom-tabs / icons / modal / charts |
+| `render/` | DOM 갱신, 카드 / 차트 / 모달 / 탭 / SVG 아이콘 / 뷰포트 동기 | main / draw-card / next-draw-card / character-* / strategy-tabs / stats-page / history-page / wheeling-page / settings-page / bottom-tabs / viewport-sync / icons / modal / charts |
 | `input/` | 키보드 / 터치 이벤트 → core 호출 (현재 render/main.js가 흡수, M2 마무리 단계 분리 검토) | (분리 보류) |
 | `data/` | 게임 상수, 외부 API, localStorage 입출력 | colors.js / storage.js / numbers.js + draws.json (정적 JSON) |
 | `scripts/` | Node CLI 분석 / 검증 도구. 일회성 보고서 또는 영구 회귀 도구 | bias-report.mjs (S67) |

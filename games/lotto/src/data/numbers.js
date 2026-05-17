@@ -29,11 +29,13 @@ export const STAT_LABEL_TOP_K = 10;
 //   추천 번호공 아래 출처 라벨 표시 방식. 사용자가 설정에서 선택.
 //   'dot' = 색점만 (작은 원, 한글 없음. 다중 매칭 시 점 N개 나란히). 간결.
 //   'label' = 한글 머리글자 (옛 동작. 다중 매칭 시 "별사" 같이 다글자).
+//   'off' = 출처 표시 안 함 (S088 후속, 2026-05-17 사용자 명시 "색점을 표시하지 않는 설정 옵션"). 번호공만 노출.
 //   기본값 = 'dot' (사용자 명시 "훨씬 간결").
 //   프리셋 슬롯의 strategyLabel 앞 색점은 본 설정 무관 = 항상 표시.
 export const SOURCE_DISPLAY_DOT = 'dot';
 export const SOURCE_DISPLAY_LABEL = 'label';
-export const SOURCE_DISPLAY_MODES = Object.freeze([SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL]);
+export const SOURCE_DISPLAY_OFF = 'off';
+export const SOURCE_DISPLAY_MODES = Object.freeze([SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL, SOURCE_DISPLAY_OFF]);
 export const SOURCE_DISPLAY_DEFAULT = SOURCE_DISPLAY_DOT;
 
 // 1.4. ~~비율 필터~~ S43.4 (2026-05-08, Sprint 054) 폐기.

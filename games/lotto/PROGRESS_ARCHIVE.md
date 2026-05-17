@@ -15,6 +15,7 @@
 > 11차 정리: 2026-05-17. Sprint 071(절 2.92, 모바일 480~361px #app padding-bottom 결손 정정) archive 추가 이전. Sprint 078 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 072~078 활성 잔존.
 > 12차 정리: 2026-05-17. Sprint 072(절 2.93, assignSourceForNumber 통계 카테고리 라벨 매핑 결손 정정) archive 추가 이전. Sprint 079 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 073~079 활성 잔존.
 > 13차 정리: 2026-05-17. Sprint 073(절 2.94, F1~F5 cleanup) archive 추가 이전. Sprint 084 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 074~084 활성 잔존 (단 074~083은 단일 sprint들 안 후속 정정 패턴 + 본 sprint 084).
+> 14차 정리: 2026-05-17. Sprint 074(절 2.95, strategyShort 매핑 6건 label[0] 통일) archive 추가 이전. Sprint 088 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 075~088 활성 잔존.
 >
 > 본 archive는 검색 / 회귀 디버그용. 새 세션에서 자동 적재되지 않음.
 
@@ -26,6 +27,70 @@
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.95. Sprint 074 완료 - strategyShort 매핑 6건을 label[0]로 통일 (S74, 2026-05-16)
+
+배경: 사용자 캡쳐 + 보고. 균형 프리셋(최신·별자리·직감) 5세트 추천 시 출처 라벨에 "추 / 직 / 별 / 점 / 안" 등 노출. 사용자 명시 "실제 전략의 머리글자로 모두 변경. 예시: 최신 → 추(현재)가 아니라 최(개선)".
+
+### 2.95.1. 원인 - S21/S22 옛 약자가 S34/S35 label 변경 후 정정 누락
+
+`src/render/strategy-picker.js` `STRATEGIES`의 `short` 필드가 S21(2026-05-03 통계 라벨 직관화) / S22(2026-05-03 dot → 1글자 라벨) 시점의 옛 약자("추세/별빛/안나옴/축복/원소/점성") 그대로. 이후:
+- S34 (2026-05-08): 짝꿍 폐기 + 통계 카테고리 4종.
+- S35 (2026-05-08): "축복" → "랜덤" label 변경. short는 "축" 잔존.
+
+label 변경 시 short 동반 갱신 누락 = 결손 누적. 사용자 인상 "라벨이 전략과 다름" 직접 원인.
+
+### 2.95.2. 매핑 6건 정정
+
+| id | label | 이전 short | 이후 short |
+|---|---|---|---|
+| BLESSED | 랜덤 | 축 | **랜** |
+| TREND_FOLLOWER | 최신 | 추 | **최** |
+| SECOND_STAR | 보너스 | 별 | **보** |
+| REGRESSIONIST | 적게 | 안 | **적** |
+| ASTROLOGER | 별자리 | 점 | **별** |
+| ZODIAC_ELEMENT | 4원소 | 원 | **4** |
+| 그 외 (많이/사주/직감/균형) | - | label[0] 일치 | 변동 없음 |
+
+**4원소의 short = "4"** 결정: 사용자 명시 "label 머리글자" = `label[0]`. 4원소의 [0] = "4". 시각 어색할 수 있으나 사용자 명시 정합 우선. 후속 변경 가능.
+
+### 2.95.3. 변경 파일
+
+- `src/render/strategy-picker.js`: `STRATEGIES` short 6건 갱신 + S74 주석.
+- `docs/01_spec.md` 5.1.3.1: short 매핑 "축/추/많/짝/별/안/점/원/사/직/균" → "랜/최/많/보/적/별/4/사/직/균" + S74 정정 사유 명시.
+- `tests/suites/strategy-picker.test.js` 신설: 회귀 11건 (10 매핑 직접 단언 + 1 label[0] 자동 정합 단언).
+- `tests/runner.js`: 새 suite 등록.
+- `game/service-worker.js` v48 → v49.
+
+### 2.95.4. 검증
+
+- `node tests/run-node.js` → **321 / 321 PASS** (310 → 321, 11건 신규 모두 통과).
+- 회귀 차단 구조: `strategyShort(id) === strategyLabel(id)[0]` 단언 모든 10전략 cover. 향후 label 변경 시 short 미갱신 = 즉시 fail.
+
+### 2.95.5. 사용자 화면 기대 변동
+
+캡쳐 케이스 (균형 = trendFollower + astrologer + intuitive) 재실행 시:
+- "추" → **"최"** (trendFollower / 최신 top K 안 번호)
+- "점" → **"별"** (astrologer / 별자리 lucky 안 번호)
+- "직" → 변동 없음 (intuitive 폴백)
+
+분산파 프리셋 (regressionist + intuitive + balancer):
+- 옛 "안" → **"적"**
+
+운세파 프리셋 (astrologer + fiveElements + zodiacElement):
+- 옛 "점" → **"별"**
+- 옛 "원" → **"4"**
+- "사" 변동 없음
+
+### 2.95.6. Sprint 067 archive 강제 이전 (룰 1.6 자동 적용)
+
+본 sprint 진입 시점 활성 = 067~073 + 074 = 8건. 룰 1.6 초과 → Sprint 067(절 2.88, 작위성 정량 검증) archive로 자동 이전. 본 sprint 종료 시점 활성 = 068~074 = 7건 정합. archive 7차 정리.
+
+Sprint 067은 큰 sprint(절 14개)이라 archive 이전으로 PROGRESS.md 약 155줄 회수. 향후 검색 / 회귀 디버그 시 `PROGRESS_ARCHIVE.md` 2.88 참조.
+
+### 2.95.7. 자비스 사전 검증 결손 사고 4건째
+
+S43.1 / S69 / S72 / S74 = 동일 패턴 (label / short / 라벨 매핑 결손). 향후 `STRATEGIES` 등 매핑 자산 변경 시 **"매핑 필드별 SSOT 정합 단언" 의무**. S74의 `strategyShort === strategyLabel[0]` 자동 단언이 그 모범.
 
 ## 2.94. Sprint 073 완료 - F1~F5 cleanup: 매직 넘버 토큰화 + docs SSOT + 회귀 보강 + SW 헤더 archive (S73, 2026-05-16)
 
