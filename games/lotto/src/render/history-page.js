@@ -16,13 +16,30 @@ function colorNum(n, extraClass = '') {
 }
 
 /**
- * 전적 페이지 렌더. S3-T2 강화 4섹션 구조.
+ * 전적 페이지 렌더. S3-T2 강화 4섹션 구조 + S090-후속 5섹션 (현재 회차 발표 대기 섹션 추가).
  * @param {HTMLElement} container
  * @param {object} character 활성 캐릭터
+ * @param {number} [currentDrwNo] 현재 추첨 회차 (미발표). 본 회차 확정 항목은 "발표 대기" 별도 섹션에 노출.
  */
-export function renderHistoryPage(container, character) {
+export function renderHistoryPage(container, character, currentDrwNo = null) {
   const stats = characterStats(character);
   const sortedHistory = [...character.history].sort((a, b) => b.drwNo - a.drwNo);
+
+  // S090-후속 (2026-05-17): 현재 회차 = 미래 회차(미발표) 확정 항목 별도 섹션.
+  //   사용자 명시 "이번회차에 선택된것들은 실시간으로 등록되었으면 좋겠는데" 직접 대응.
+  //   사용자가 "확정" 누른 직후 본 섹션에 즉시 노출 = 실시간 인지 보장. 발표 후 자동 매칭으로 옛 이력 섹션으로 이동.
+  const pendingItems = currentDrwNo
+    ? sortedHistory.filter((h) => h.drwNo === currentDrwNo && (h.matchedRank === null || h.matchedRank === undefined))
+    : [];
+  const pendingHtml = pendingItems.length === 0 ? '' : `
+    <section class="stats-section history-pending-section">
+      <h2 class="stats-title">현재 회차 ${currentDrwNo}회 · 발표 대기 ${pendingItems.length}건</h2>
+      <p class="stats-note">추첨 발표 후 자동 매칭됩니다. (등록 직후 본 섹션에 실시간 노출)</p>
+      <div class="history-list">
+        ${pendingItems.map((h) => historyItemHtml(h)).join('')}
+      </div>
+    </section>
+  `;
 
   const hitRate = stats.settled > 0 ? Math.round((stats.hits / stats.settled) * 1000) / 10 : 0;
 
@@ -77,12 +94,18 @@ export function renderHistoryPage(container, character) {
     </section>
   `;
 
-  const historyItems = sortedHistory.length === 0
-    ? '<section class="empty-state"><p>추천 이력이 없습니다. 추첨 탭에서 추천 카드를 보면 자동으로 기록됩니다.</p></section>'
+  // S090-후속: 옛 이력 = 현재 회차 외 모든 항목 (발표 회차 + 매칭 완료).
+  const pastItems = currentDrwNo
+    ? sortedHistory.filter((h) => h.drwNo !== currentDrwNo)
+    : sortedHistory;
+  const historyItems = pastItems.length === 0
+    ? (pendingItems.length === 0
+        ? '<section class="empty-state"><p>전적 이력이 없습니다. 추첨 탭에서 추천을 받고 "확정"을 누르면 본 회차에 등록됩니다. 발표 후 자동 매칭됩니다.</p></section>'
+        : '')
     : `<section class="stats-section">
-        <h2 class="stats-title">이력 (${sortedHistory.length}건, 최근 회차순)</h2>
+        <h2 class="stats-title">옛 회차 이력 (${pastItems.length}건, 최근 회차순)</h2>
         <div class="history-list">
-          ${sortedHistory.map((h) => historyItemHtml(h)).join('')}
+          ${pastItems.map((h) => historyItemHtml(h)).join('')}
         </div>
       </section>`;
 
@@ -91,6 +114,7 @@ export function renderHistoryPage(container, character) {
       <h1 class="app-title">전적</h1>
     </header>
     ${summaryHtml}
+    ${pendingHtml}
     ${rankChartHtml}
     ${timelineHtml}
     ${historyItems}

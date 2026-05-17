@@ -2706,6 +2706,18 @@ a.btn-secondary,
   flex-wrap: wrap;
 }
 
+/* S090-후속 (2026-05-17): 전적 탭 "현재 회차 발표 대기" 섹션 강조.
+   사용자 명시 "이번회차에 선택된것들은 실시간으로 등록되었으면". 별도 accent 외곽선으로 실시간 인지. */
+.history-pending-section {
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  background: rgba(212, 166, 87, 0.06);
+  padding: var(--space-3);
+}
+.history-pending-section .stats-title {
+  color: var(--color-accent);
+}
+
 /* 전략 카테고리 배지 (통계 / 운세 / 랜덤). SSOT: docs/02_data.md 1.5.2.
    S10(2026-05-02): .is-saju 룰 제거. 운세 카테고리 통합. */
 .strategy-category {

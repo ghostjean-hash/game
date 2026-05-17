@@ -137,6 +137,39 @@
 - Cap 도달: 미등록 row 버튼 disabled.
 - 라벨 짧아 모바일 폭 여유 + row wrap 0.
 
+### 2.104.12. S090-후속 2 - 전적 초기화 버튼 + 현재 회차 발표 대기 섹션
+
+배경: 사용자 보고 2건. (1) "전적 쓰레기가 아직도 있네?" - S090 자동 마이그레이션이 일부 옛 데이터 못 잡음. (2) "이번회차에 선택된것들은 실시간으로 등록되었으면 좋겠는데??" - 확정 직후 실시간 인지 보장 필요.
+
+**정정 1 - 설정 탭 "활성 캐릭터 전적 초기화" 버튼 신설**:
+
+| 영역 | 변경 |
+|---|---|
+| `src/render/settings-page.js` | "데이터 초기화" 섹션 안 2 버튼 (전적만 / 전체). hint 카피 갱신 |
+| `src/render/main.js` | `onResetActiveHistory` 핸들러 - confirm 후 `active.history = []` + saveCharacters + renderApp |
+
+S090 자동 마이그레이션(`createdAt === character.createdAt`)이 못 잡는 옛 데이터 = 사용자 명시 클릭으로 강제 정리. confirm 카피 "N건 모두 삭제됩니다. 앞으로 '확정'한 추천만 다시 누적됩니다."
+
+**정정 2 - 전적 탭 "현재 회차 발표 대기" 섹션 신설**:
+
+| 영역 | 변경 |
+|---|---|
+| `src/render/history-page.js` | `currentDrwNo` 인자 추가. pendingItems = 현재 회차 + matchedRank null. 별도 섹션으로 노출 |
+| `src/render/main.js` | `renderHistoryPage(content, active, state.drwNo)` 호출 갱신 |
+| `styles/main.css` | `.history-pending-section` 룰 - accent 외곽선 + 배경 tint + title accent 색 |
+| 옛 이력 섹션 | 라벨 "이력" → "옛 회차 이력". 본 회차 제외 |
+
+사용자 "확정" 클릭 직후 본 섹션에 즉시 등장 (renderApp 패턴) → 실시간 인지. 발표 후 matchedRank 채워지면 자연히 옛 이력 섹션으로 이동.
+
+**docs**: 01_spec 5.8.1-A 신설.
+
+**검증**: 315/315 PASS (UI 추가만, 회귀 0).
+
+**사용자 화면 기대**:
+- 설정 탭 → 데이터 초기화 → "활성 캐릭터 전적 초기화" 클릭 → confirm → 전적 빈 상태.
+- 추첨 탭 → "확정" 클릭 → 전적 탭 진입 → 상단 "현재 회차 NNNN회 · 발표 대기 N건" accent 섹션 즉시 노출.
+- 매주 토요일 발표 후 → 자동 매칭 → 옛 이력 섹션으로 자연 이동.
+
 
 
 ## 2.103. Sprint 089 완료 - Luck 자산 전면 폐기 (S089, 2026-05-17)

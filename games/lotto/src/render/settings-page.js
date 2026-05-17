@@ -171,8 +171,11 @@ export function renderSettingsPage(container, handlers) {
 
     <section class="stats-section danger-zone">
       <h2 class="stats-title">데이터 초기화</h2>
-      <p class="stats-note">캐릭터 / 옵션 / 캐시 모두 삭제. 회차 데이터는 다음 진입 시 재동기화됩니다.</p>
-      <button type="button" class="btn-secondary" data-action="reset-all">전체 초기화</button>
+      <p class="stats-note">S090-후속 (2026-05-17): 옛 자동 누적 데이터(백캐스트 잔재) 강제 정리용 + 캐릭터 전체 초기화.</p>
+      <div class="settings-row-actions">
+        <button type="button" class="btn-secondary" data-action="reset-history">활성 캐릭터 전적 초기화</button>
+        <button type="button" class="btn-secondary" data-action="reset-all">전체 초기화 (캐릭터까지)</button>
+      </div>
     </section>
   `;
 
@@ -207,6 +210,10 @@ export function renderSettingsPage(container, handlers) {
     if (!ok) return;
     clearAll();
     handlers.onResetAll();
+  });
+  // S090-후속 (2026-05-17): 활성 캐릭터 전적만 초기화 (옛 백캐스트 잔재 강제 정리).
+  container.querySelector('[data-action="reset-history"]')?.addEventListener('click', () => {
+    if (typeof handlers.onResetActiveHistory === 'function') handlers.onResetActiveHistory();
   });
   container.querySelector('[data-action="add-character"]').addEventListener('click', handlers.onAddCharacter);
 

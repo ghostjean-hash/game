@@ -835,7 +835,7 @@ function renderApp() {
     renderStatsPage(content);
   } else if (state.currentTab === 'history') {
     const active = getActive();
-    renderHistoryPage(content, active);
+    renderHistoryPage(content, active, state.drwNo);
   } else if (state.currentTab === 'reverse') {
     renderReversePage(content, state.draws);
   } else if (state.currentTab === 'wheeling') {
@@ -855,6 +855,18 @@ function renderApp() {
         state.characters = [];
         state.activeId = null;
         state.options = { applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'dot' };
+        renderApp();
+      },
+      // S090-후속 (2026-05-17): 활성 캐릭터 전적만 초기화. 옛 백캐스트 잔재 강제 정리용.
+      onResetActiveHistory: () => {
+        const active = getActive();
+        if (!active) return;
+        const count = (active.history || []).length;
+        const ok = window.confirm(`${active.name}의 전적 ${count}건이 모두 삭제됩니다. 진행할까요?\n(앞으로 "확정"한 추천만 다시 누적됩니다.)`);
+        if (!ok) return;
+        const updated = { ...active, history: [] };
+        state.characters = state.characters.map((c) => (c.id === updated.id ? updated : c));
+        saveCharacters(state.characters);
         renderApp();
       },
       onAddCharacter: openAddCharacterModal,
