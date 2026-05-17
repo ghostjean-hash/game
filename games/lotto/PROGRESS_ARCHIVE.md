@@ -17,6 +17,7 @@
 > 13차 정리: 2026-05-17. Sprint 073(절 2.94, F1~F5 cleanup) archive 추가 이전. Sprint 084 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 074~084 활성 잔존 (단 074~083은 단일 sprint들 안 후속 정정 패턴 + 본 sprint 084).
 > 14차 정리: 2026-05-17. Sprint 074(절 2.95, strategyShort 매핑 6건 label[0] 통일) archive 추가 이전. Sprint 088 신설로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 075~088 활성 잔존.
 > 15차 정리: 2026-05-17. Sprint 075(절 2.96, DEFAULT_PRESETS 순서/라벨/묶음 재정렬 + 프리셋 미선택 차단) archive 추가 이전. Sprint 089 신설(Luck 자산 전면 폐기)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 076~089 활성 잔존.
+> 16차 정리: 2026-05-17. Sprint 076(절 2.97, 캐릭터 카드 흉일 시각/동작 결손 정정) archive 추가 이전. Sprint 090 신설(백캐스트 + 자동 history 등록 폐기 + "내 번호로 선택" 진입점)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 077~090 활성 잔존.
 >
 > 본 archive는 검색 / 회귀 디버그용. 새 세션에서 자동 적재되지 않음.
 
@@ -28,6 +29,59 @@
 1.4. **적용 표준**: html-game v0.2.
 
 # 2. 완료 마일스톤
+
+## 2.97. Sprint 076 완료 - 캐릭터 카드 흉일 시각/동작 결손 정정 (S76, 2026-05-17)
+
+배경: 사용자 캡쳐 2건 (고스트 흉일 + 마녀 평일). "유저 정보 접히기 펼치기가 오류남. 다른 유저는 접히는데, 고스트 유저만 이상하게 표시됨". 자비스 분석 결과 = 흉일(FORTUNE_BAD) 한정 결손 2건.
+
+### 2.97.1. 결손 진단 (흉일 한정)
+
+| # | 결손 | 원인 |
+|---|---|---|
+| 시각 | 좌측 ▼(흉 글리프) + 우측 ▲(caret) + 카드 본체 ▼(흉 아이콘) = ▼ 3개 시각 충돌 | `character-summary.js` `FORTUNE_GLYPH[FORTUNE_BAD] = '▼'` + `character-card.js` `FORTUNE_ICON[FORTUNE_BAD] = '▼'`. caret(▼/▲)과 동일 모양 |
+| 동작 | 사용자가 ▲ 클릭으로 접어도 강제 펼침 유지 | `main.js` line 562 `isExpanded = !state.charCardCollapsed \|\| fortune === 'bad'`. 흉일 보호 카피 노출 정책(S36)이 사용자 접기 의도 무시 |
+
+다른 운세는 글리프 ★(대길) / ◆(길) / ●(평)이라 caret과 시각 명확 구분 + 강제 펼침 없음 → 마녀(평) 캐릭터는 정상 동작 = 사용자 시각 차이 확인.
+
+### 2.97.2. 정정안 (자비스 단일 결정 + 사용자 승인)
+
+| 영역 | 이전 | 이후 |
+|---|---|---|
+| 흉 글리프 (toggle row) | `▼` | **`✕`** (caret과 완전 다른 모양 + "흉=나쁨" 의미 직관) |
+| 흉 아이콘 (카드 본체) | `▼` | **`✕`** (시각 일관성) |
+| 흉일 강제 펼침 정책 | `isExpanded = !collapsed \|\| fortune === 'bad'` | **`isExpanded = !collapsed`** (강제 폐기. 사용자 명시 접기 의도 존중) |
+
+흉일 보호 카피는 첫 진입 default(`charCardCollapsed = false`) 시 자연 펼침으로 노출. 사용자가 접으면 본인 책임 영역 = 학습 정상 동작.
+
+### 2.97.3. 변경 파일
+
+- `src/render/character-summary.js`: `FORTUNE_GLYPH[FORTUNE_BAD]` ▼ → ✕ + S76 주석.
+- `src/render/character-card.js`: `FORTUNE_ICON[FORTUNE_BAD]` ▼ → ✕.
+- `src/render/main.js` line 562: 강제 펼침 폐기 + 주석 갱신.
+- `docs/01_spec.md` 5.1.6: 흉 글리프 ▼→✕ + 강제 펼침 폐기 정책 명시.
+- `docs/02_data.md` 1.20.3: 강제 펼침 폐기 메모 (`lotto_char_card_collapsed` 행).
+- `game/service-worker.js` v50 → v51.
+
+### 2.97.4. 검증
+
+- `node tests/run-node.js` → **322 / 322 PASS** (회귀 0, JS 매핑 + 정책 폐기, 단위 테스트 영향 없음).
+- ▼ 글리프 잔존 grep (character-summary.js + character-card.js): 0건.
+- 다른 운세(대길/길/평) 글리프 영향 0 = 다른 캐릭터 시각 변동 없음.
+
+### 2.97.5. 사용자 인상 직접 대응
+
+- 고스트(흉) 캐릭터 화면 = 좌측 ✕(빨강) + 우측 ▲(회색 caret). 더 이상 같은 모양 화살표 중복 없음.
+- 카드 본체 "운세 · 흉" 옆 = ✕ (▼ 폐기).
+- 사용자가 ▲ 클릭 = 정상 접힘 (강제 펼침 정책 폐기).
+- 마녀(평) 캐릭터는 변동 없음 (글리프 ● 그대로, 강제 펼침 영향 0이었음).
+
+### 2.97.6. 자비스 사전 검증 결손 사고 5건째
+
+S43.1 / S69 / S72 / S74 / S76 = 동일 패턴 (시각 / 매핑 결손). 본 결손은 사용자 캡쳐 없이 코드만 봐서는 발견 어려운 영역. 향후 시각 매핑 상수(`FORTUNE_GLYPH`, `STRATEGIES.short` 등) 변경 / 추가 시 **"caret / icon / glyph 시각 충돌 점검" 의무**. 본 sprint = 5건째 결손이지만 사용자 캡쳐 1건으로 즉시 발견 = 사용자 시각 점검의 가치.
+
+### 2.97.7. Sprint 069 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 069(절 2.90, 하단 탭 콘텐츠 가림) archive 이전. 본 sprint 종료 시점 활성 = 070~076 = 7건 정합. archive 9차 정리.
 
 ## 2.96. Sprint 075 완료 - DEFAULT_PRESETS 순서/라벨/묶음 재정렬 + 프리셋 미선택 차단 (S75, 2026-05-16)
 

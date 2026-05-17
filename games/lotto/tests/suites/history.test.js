@@ -2,11 +2,12 @@ import { suite, test, assertEqual, assertTrue } from '../core.js';
 import {
   recordRecommendation,
   matchHistory,
-  backfillRecommendations,
   characterStats,
+  toggleSavedSetRegistration,
+  countRegisteredForRound,
+  isRegistered,
 } from '../../src/core/history.js';
-import { computeNumberStats, computeBonusStats, computeCooccur } from '../../src/core/stats.js';
-import { STRATEGY_DEFAULT } from '../../src/data/numbers.js';
+import { STRATEGY_DEFAULT, HISTORY_REGISTER_CAP_PER_ROUND } from '../../src/data/numbers.js';
 
 // 미니 draws 셋 (회차 5개)
 const draws = [
@@ -25,23 +26,15 @@ function fakeCharacter() {
     animalSign: 'dragon',
     zodiac: 'aries',
     dayPillar: { stem: 'gap', branch: 'rat' },
-    // S089 (2026-05-17): Luck 자산 폐기 - luck 필드 제거.
+    // S089 (2026-05-17): luck 필드 제거.
     lastUsedStrategy: STRATEGY_DEFAULT,
     createdAt: '2024-01-01T00:00:00.000Z',
     history: [],
   };
 }
 
-function fakeStats() {
-  return {
-    numberStats: computeNumberStats(draws),
-    bonusStats: computeBonusStats(draws),
-    cooccur: computeCooccur(draws),
-  };
-}
-
-suite('core/history - recordRecommendation', () => {
-  test('새 회차 추천 추가', () => {
+suite('core/history - recordRecommendation (S090 사용자 명시 등록)', () => {
+  test('새 회차 추천 추가 + source=user', () => {
     const c = fakeCharacter();
     const updated = recordRecommendation(c, {
       drwNo: 1200, numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], createdAt: '2024-01-01T00:00:00.000Z',
@@ -49,23 +42,72 @@ suite('core/history - recordRecommendation', () => {
     assertEqual(updated.history.length, 1);
     assertEqual(updated.history[0].drwNo, 1200);
     assertEqual(updated.history[0].matchedRank, null);
-    // S089 (2026-05-17): luckApplied 필드 폐기 = 단언 제거.
-    assertTrue(!('luckApplied' in updated.history[0]));
+    assertEqual(updated.history[0].source, 'user');
   });
 
-  test('S089 같은 drwNo는 덮어쓰기 + matchedRank 보존 (luckApplied 필드 폐기)', () => {
+  test('S090 같은 drwNo + 같은 numbers는 중복 차단', () => {
     let c = fakeCharacter();
     c = recordRecommendation(c, {
       drwNo: 1200, numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], createdAt: '2024-01-01T00:00:00.000Z',
     });
-    c.history[0].matchedRank = 3;
     c = recordRecommendation(c, {
-      drwNo: 1200, numbers: [10, 11, 12, 13, 14, 15], bonus: 16, reasons: [], createdAt: '2024-01-02T00:00:00.000Z',
+      drwNo: 1200, numbers: [1, 2, 3, 4, 5, 6], bonus: 99, reasons: [], createdAt: '2024-01-02T00:00:00.000Z',
     });
-    assertEqual(c.history.length, 1);
-    assertEqual(c.history[0].numbers[0], 10); // 새 추천으로 덮어쓰기
-    assertEqual(c.history[0].matchedRank, 3); // 매칭 보존
-    assertTrue(!('luckApplied' in c.history[0])); // S089 필드 폐기
+    assertEqual(c.history.length, 1, '중복 numbers 차단');
+    assertEqual(c.history[0].bonus, 7, '첫 등록 보존');
+  });
+});
+
+suite('core/history - toggleSavedSetRegistration (S090)', () => {
+  test('등록 → unregister 토글', () => {
+    let c = fakeCharacter();
+    const set1 = { numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], strategyIds: ['blessed'], strategySources: [] };
+    let r = toggleSavedSetRegistration(c, set1, 1200);
+    assertEqual(r.action, 'registered');
+    assertEqual(r.character.history.length, 1);
+    assertEqual(r.character.history[0].source, 'user');
+    // 다시 toggle = unregister
+    r = toggleSavedSetRegistration(r.character, set1, 1200);
+    assertEqual(r.action, 'unregistered');
+    assertEqual(r.character.history.length, 0);
+  });
+
+  test('회차당 cap 5 도달 시 등록 차단', () => {
+    let c = fakeCharacter();
+    for (let i = 0; i < HISTORY_REGISTER_CAP_PER_ROUND; i += 1) {
+      const set = { numbers: [i + 1, i + 2, i + 3, i + 4, i + 5, i + 6], bonus: 45, reasons: [], strategyIds: [], strategySources: [] };
+      const r = toggleSavedSetRegistration(c, set, 1200);
+      assertEqual(r.action, 'registered');
+      c = r.character;
+    }
+    assertEqual(countRegisteredForRound(c, 1200), HISTORY_REGISTER_CAP_PER_ROUND);
+    // 6번째 = cap 도달
+    const extra = { numbers: [40, 41, 42, 43, 44, 45], bonus: 1, reasons: [], strategyIds: [], strategySources: [] };
+    const r = toggleSavedSetRegistration(c, extra, 1200);
+    assertEqual(r.action, 'cap_reached');
+    assertEqual(r.character.history.length, HISTORY_REGISTER_CAP_PER_ROUND, '6번째 미등록');
+  });
+
+  test('다른 회차는 cap 무관', () => {
+    let c = fakeCharacter();
+    for (let i = 0; i < HISTORY_REGISTER_CAP_PER_ROUND; i += 1) {
+      const set = { numbers: [i + 1, i + 2, i + 3, i + 4, i + 5, i + 6], bonus: 45, reasons: [], strategyIds: [], strategySources: [] };
+      c = toggleSavedSetRegistration(c, set, 1200).character;
+    }
+    // 다른 회차 = 등록 가능
+    const otherRound = { numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], strategyIds: [], strategySources: [] };
+    const r = toggleSavedSetRegistration(c, otherRound, 1201);
+    assertEqual(r.action, 'registered');
+    assertEqual(countRegisteredForRound(r.character, 1201), 1);
+  });
+
+  test('isRegistered helper', () => {
+    let c = fakeCharacter();
+    const set1 = { numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], strategyIds: [], strategySources: [] };
+    assertEqual(isRegistered(c, 1200, set1.numbers), false);
+    c = toggleSavedSetRegistration(c, set1, 1200).character;
+    assertEqual(isRegistered(c, 1200, set1.numbers), true);
+    assertEqual(isRegistered(c, 1201, set1.numbers), false, '다른 회차');
   });
 });
 
@@ -88,60 +130,19 @@ suite('core/history - matchHistory', () => {
   });
 });
 
-suite('core/history - backfillRecommendations', () => {
-  test('빈 history → 최근 N회 모두 백필 (lastN=3)', () => {
-    const c = fakeCharacter();
-    const updated = backfillRecommendations(c, draws, STRATEGY_DEFAULT, fakeStats(), 3);
-    assertEqual(updated.history.length, 3);
-    // 최근 3회 = 1102, 1103, 1104
-    const drwNos = updated.history.map((h) => h.drwNo).sort((a, b) => a - b);
-    assertEqual(drwNos[0], 1102);
-    assertEqual(drwNos[2], 1104);
-  });
-
-  test('각 entry에 matchedRank가 매겨짐 (null 또는 1~5)', () => {
-    const c = fakeCharacter();
-    const updated = backfillRecommendations(c, draws, STRATEGY_DEFAULT, fakeStats(), 3);
-    for (const h of updated.history) {
-      const ok = h.matchedRank === null || (h.matchedRank >= 1 && h.matchedRank <= 5);
-      assertTrue(ok);
-    }
-  });
-
-  test('idempotent: 같은 입력으로 두 번 호출해도 history 중복 없음', () => {
-    const c = fakeCharacter();
-    const once = backfillRecommendations(c, draws, STRATEGY_DEFAULT, fakeStats(), 5);
-    const twice = backfillRecommendations(once, draws, STRATEGY_DEFAULT, fakeStats(), 5);
-    assertEqual(twice.history.length, once.history.length);
-  });
-
-  test('결정론: 같은 캐릭터 + 같은 draws + 같은 통계 = 같은 추천', () => {
-    const a = backfillRecommendations(fakeCharacter(), draws, STRATEGY_DEFAULT, fakeStats(), 3);
-    const b = backfillRecommendations(fakeCharacter(), draws, STRATEGY_DEFAULT, fakeStats(), 3);
-    const aNums = a.history.map((h) => h.numbers.join(',')).sort();
-    const bNums = b.history.map((h) => h.numbers.join(',')).sort();
-    assertEqual(aNums.join('|'), bNums.join('|'));
-  });
-
-  test('빈 draws → 변화 없음', () => {
-    const c = fakeCharacter();
-    const updated = backfillRecommendations(c, [], STRATEGY_DEFAULT, fakeStats(), 5);
-    assertEqual(updated.history.length, 0);
-  });
-
-  test('lastN 기본값 사용 (BACKFILL_RECENT_COUNT)', () => {
-    const c = fakeCharacter();
-    const updated = backfillRecommendations(c, draws, STRATEGY_DEFAULT, fakeStats());
-    // draws 5개니까 lastN 30이라도 5개만
-    assertEqual(updated.history.length, 5);
-  });
-});
-
 suite('core/history - characterStats', () => {
   test('빈 history → total 0', () => {
     const stats = characterStats(fakeCharacter());
     assertEqual(stats.total, 0);
     assertEqual(stats.hits, 0);
     assertEqual(stats.bestRank, null);
+  });
+});
+
+// S090 (2026-05-17): backfillRecommendations 폐기 - import 불가 검증.
+suite('core/history - S090 backfillRecommendations 폐기', () => {
+  test('backfillRecommendations export 부재', async () => {
+    const mod = await import('../../src/core/history.js');
+    assertTrue(typeof mod.backfillRecommendations === 'undefined', 'S090 폐기');
   });
 });

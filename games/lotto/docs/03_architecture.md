@@ -145,7 +145,7 @@ games/lotto/
   → data/storage.js saveCharacters (savedSets 영속)
   → render/saved-sets-section.js (추천 리스트 갱신)
 
-자동 백캐스트 (S089 후 = 이력 부트스트랩)
+~~자동 백캐스트~~ (S090, 2026-05-17 폐기 - 사용자 명시 등록만 누적)
   → core/history.js backfillRecommendations (캐릭터 첫 진입 시 1회, 단일 strategy 결정론)
   # core/luck.js applyLuckGrowth - S089 폐기. 적중 후 luck 갱신 없음.
   → 메인 카드 노출은 폐기 (S27)

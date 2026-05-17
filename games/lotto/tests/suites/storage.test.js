@@ -28,16 +28,16 @@ suite('data/storage', () => {
     assertTrue(hasSeenHelp() === false);
   });
 
-  test('characters round-trip + S089 luck 필드 자동 제거', () => {
+  test('characters round-trip + S089 luck 필드 자동 제거 + S090 source 자동 채움', () => {
     reset();
-    // 옛 캐릭터 데이터에 luck 필드 + history[].luckApplied 잔존.
+    // 옛 캐릭터 데이터 - history createdAt이 character.createdAt과 다른 항목 = 사용자 행동 (보존).
     const c = [{
       id: 'a',
       seed: 1234,
       className: 'blessed',
       luck: 10,
       createdAt: '2026-05-01',
-      history: [{ drwNo: 1100, numbers: [1,2,3,4,5,6], bonus: 7, matchedRank: null, luckApplied: false }],
+      history: [{ drwNo: 1100, numbers: [1,2,3,4,5,6], bonus: 7, matchedRank: null, luckApplied: false, createdAt: '2026-05-10' }],
     }];
     saveCharacters(c);
     const loaded = loadCharacters();
@@ -45,8 +45,31 @@ suite('data/storage', () => {
     assertEqual(loaded[0].id, 'a');
     assertEqual(loaded[0].seed, 1234);
     // S089 (2026-05-17): loadCharacters에서 luck 필드 + history[].luckApplied 자동 제거.
-    assertTrue(!('luck' in loaded[0]), 'luck 필드 자동 제거');
-    assertTrue(!('luckApplied' in loaded[0].history[0]), 'history[].luckApplied 자동 제거');
+    assertTrue(!('luck' in loaded[0]), 'S089: luck 필드 자동 제거');
+    assertTrue(!('luckApplied' in loaded[0].history[0]), 'S089: history[].luckApplied 자동 제거');
+    // S090: source 부재 = 'user' 자동 채움 (보수적 - 사용자 행동 추정).
+    assertEqual(loaded[0].history[0].source, 'user', 'S090: source 부재 시 user 자동');
+  });
+
+  test('S090 - 백캐스트 추정 history 항목 자동 제거', () => {
+    reset();
+    // 옛 백캐스트 패턴: history[].createdAt === character.createdAt.
+    const charCreatedAt = '2026-05-01T00:00:00.000Z';
+    const c = [{
+      id: 'b',
+      seed: 1234,
+      createdAt: charCreatedAt,
+      history: [
+        { drwNo: 1100, numbers: [1,2,3,4,5,6], bonus: 7, matchedRank: 1, createdAt: charCreatedAt }, // 백캐스트
+        { drwNo: 1101, numbers: [10,11,12,13,14,15], bonus: 16, matchedRank: null, createdAt: '2026-05-10T12:00:00.000Z' }, // 사용자 행동
+      ],
+    }];
+    saveCharacters(c);
+    const loaded = loadCharacters();
+    assertEqual(loaded.length, 1);
+    assertEqual(loaded[0].history.length, 1, '백캐스트 1건 제거 + 사용자 행동 1건 보존');
+    assertEqual(loaded[0].history[0].drwNo, 1101, '사용자 행동 항목만 잔존');
+    assertEqual(loaded[0].history[0].source, 'user');
   });
 
   test('options 기본값', () => {

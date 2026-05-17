@@ -162,12 +162,20 @@ export const RITUAL_PARTICLE_DURATION_MS = 900;
 export const RITUAL_PARTICLE_RADIUS_MAX = 140;  // 최대 비행 반경(px)
 export const RITUAL_PARTICLE_SIZE = 4;          // 입자 base 반지름(px)
 
-// 1.16. 백캐스트 (S089 후 = 이력 부트스트랩)
-// SSOT: docs/02_data.md 1.16, docs/01_spec.md 7.5.
-// 캐릭터 첫 추첨 탭 진입 시 최근 N회에 대해 결정론적 추천 + 매칭을 history에 백필.
-// 다음 추첨 회차(미래)는 발표 전이라 매칭 불가 → 과거 회차로 적중률 / 최고 등수 자연 표시.
-// S089 (2026-05-17): ~~Luck 성장 부트스트랩~~ 폐기 → 이력 부트스트랩 (Luck 자산 폐기).
-export const BACKFILL_RECENT_COUNT = 30;
+// 1.16. ~~백캐스트~~ (S090, 2026-05-17 전면 폐기)
+// 사용자 명시 "진짜를 돌리고 싶다" + "추천 번호를 직접 선택해야 한다".
+// 백캐스트 = 캐릭터 첫 진입 시 가짜 30회 history 자동 채움 → 사용자 명시 선택 없는 자동 누적 = 정직성 부족.
+// S089 Luck 폐기 후 명분도 약했음(원래 Luck 부트스트랩 목적).
+// 폐기 상수: BACKFILL_RECENT_COUNT 자체는 옛 호환을 위해 잔존 (dead). 코드 호출 0건.
+// S090 신설: HISTORY_REGISTER_CAP_PER_ROUND - 회차당 history 등록 cap (한국 로또 1구좌 = 5게임 max 모방).
+export const BACKFILL_RECENT_COUNT = 30;  // S090 폐기. 호환을 위해 잔존 (코드 호출 0건).
+
+// 1.16-A. history 등록 cap (S090, 2026-05-17 신설)
+// SSOT: docs/02_data.md 1.16-A, docs/01_spec.md 5.2.5 / 5.8.
+// 한 회차에 history에 등록 가능한 사용자 명시 추천 세트 max 개수.
+// 한국 동행복권 1구좌 = 5게임 max 모방. 진정성 + 사행성 회피 룰 정합.
+// 사용자가 saved-sets에서 "내 번호로 선택" 클릭 시 history 등록. cap 도달 시 추가 등록 차단.
+export const HISTORY_REGISTER_CAP_PER_ROUND = 5;
 
 // 1.15. 추첨 일정 (한국 동행복권 6/45)
 // SSOT: docs/02_data.md 1.15.

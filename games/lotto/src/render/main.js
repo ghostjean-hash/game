@@ -27,7 +27,7 @@ import { recommendMulti, recommendFiveSets, computePoolForStrategies } from '../
 import { mixSeeds } from '../core/random.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
-import { recordRecommendation, matchHistory, backfillRecommendations } from '../core/history.js';
+import { matchHistory, toggleSavedSetRegistration, countRegisteredForRound, isRegistered } from '../core/history.js';
 // S089 (2026-05-17): import { applyLuckGrowth } from '../core/luck.js' 폐기 (Luck 자산 폐기).
 import { ensureCurrentState, performRitual, applyRitualBonus } from '../core/ritual.js';
 import {
@@ -49,6 +49,7 @@ import {
   SAVED_SETS_JUST_ADDED_MS,
   STRATEGY_CATEGORIES,
   DRAW_TZ_OFFSET_MIN,
+  HISTORY_REGISTER_CAP_PER_ROUND,
 } from '../data/numbers.js';
 
 // S58 (2026-05-09): KST 매직 넘버 `9 * 3600 * 1000` 2회 사용 → DRAW_TZ_OFFSET_MIN 위탁.
@@ -543,7 +544,17 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     && state.poolExhaustedRecipeId === currentRecipeId;
   // S79 (2026-05-17): 출처 표시 모드를 설정에서 가져와 saved-sets에 전달.
   const sourceDisplayMode = state.options?.sourceDisplayMode || 'dot';
-  const savedSectionHtml = savedSetsSectionHtml(savedList, 1, poolExhausted, sourceDisplayMode);
+  // S090 (2026-05-17): history 등록 상태 + cap 정보 saved-sets에 전달.
+  const registeredKeys = new Set(
+    (active.history || [])
+      .filter((h) => h.drwNo === state.drwNo && Array.isArray(h.numbers))
+      .map((h) => h.numbers.join(',')),
+  );
+  const registerCount = countRegisteredForRound(active, state.drwNo);
+  const savedSectionHtml = savedSetsSectionHtml(
+    savedList, 1, poolExhausted, sourceDisplayMode,
+    registeredKeys, registerCount, HISTORY_REGISTER_CAP_PER_ROUND,
+  );
   // S75 (2026-05-16): 활성 strategyIds가 어느 프리셋과도 일치하면 presetSelected=true. 그 외 false → + 버튼 disabled.
   //   사용자 명시 "프리셋이 선택되지 않을 경우 세트 추천이 안 되어야 함".
   const presetSelected = isAnyPresetActive(state.presets, strategyIds);
@@ -593,23 +604,11 @@ function renderHome(content) {
   const active = getActive();
   const { strategyId, strategyIds, rec, sets, fortune, drawForFortune, pool, poolNote, drawDate } = getRecAndFortune(active);
 
-  // 백캐스트: 캐릭터에 최근 30회 결정론적 추천이 history에 없으면 1회 백필.
-  // S089 (2026-05-17): Luck 부트스트랩 목적 폐기 → 이력 부트스트랩 (적중률 / 최고 등수 자연 표시).
-  let updated = backfillRecommendations(active, state.draws, strategyId, {
-    numberStats: state.numberStats,
-    bonusStats: state.bonusStats,
-    cooccur: state.cooccur,
-  });
-
-  // 이력 자동 기록 + 매칭. (S089 applyLuckGrowth 호출 폐기.)
-  updated = recordRecommendation(updated, {
-    drwNo: state.drwNo,
-    numbers: rec.numbers,
-    bonus: rec.bonus,
-    reasons: rec.reasons,
-    createdAt: new Date().toISOString(),
-  });
-  updated = matchHistory(updated, state.draws);
+  // S090 (2026-05-17): 백캐스트 + 자동 history 등록 모두 폐기.
+  // 사용자 명시 "진짜를 돌리고 싶다" + "추천 번호를 직접 선택해야 한다".
+  // history는 saved-sets-row "내 번호로 선택" 버튼에서만 등록.
+  // 본 단계는 매칭만 (옛 등록 history + 신규 발표 회차 정합).
+  let updated = matchHistory(active, state.draws);
 
   // S26: 누적 세트 회차 보장 (drwNo 변경 시 자동 비움).
   const ensured = ensureSavedSetsForRound(updated, state.drwNo);
@@ -682,6 +681,26 @@ function renderHome(content) {
       const cur = getActive();
       const next = removeSavedSetAt(cur, idx);
       state.characters = state.characters.map((c) => (c.id === next.id ? next : c));
+      saveCharacters(state.characters);
+      renderApp();
+    });
+  });
+  // S090 (2026-05-17): "내 번호로 선택" 토글 - saved-set을 history에 등록 / 해제.
+  content.querySelectorAll('[data-action="toggle-register-saved"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.savedIdx, 10);
+      if (Number.isNaN(idx)) return;
+      const cur = getActive();
+      const set = cur.savedSets?.list?.[idx];
+      if (!set) return;
+      const result = toggleSavedSetRegistration(cur, set, state.drwNo);
+      if (result.action === 'cap_reached') {
+        flashSavedSetsToast(`이번 회차 ${HISTORY_REGISTER_CAP_PER_ROUND}게임 등록 완료`, SAVED_SETS_TOAST_NORMAL_MS);
+        return;
+      }
+      // 매칭 즉시 재계산 (등록 직후 draws 발표 회차이면 등수 자동).
+      const matched = matchHistory(result.character, state.draws);
+      state.characters = state.characters.map((c) => (c.id === matched.id ? matched : c));
       saveCharacters(state.characters);
       renderApp();
     });

@@ -4,14 +4,102 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-17 (Sprint 089 + 후속 - Luck 자산 전면 폐기 + "행운 쌓기" → "당첨 기원" 라벨 + 완성 chip 중복 폐기).
+1.3. **마지막 갱신**: 2026-05-17 (Sprint 090 - 백캐스트 + 자동 history 등록 폐기 + "내 번호로 선택" 진입점 신설. 회차당 cap 5).
 1.4. **적용 표준**: html-game v0.2.
-1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 4차 2026-05-16 (Sprint 060~064 추가 archive 이전). 5차~8차 2026-05-16 (Sprint 065~068 각각 강제 이전). 9~15차 2026-05-17 (Sprint 069~075 각각 강제 이전). 직전 5 Sprint + 본 sprint(들)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
+1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 4차 2026-05-16 (Sprint 060~064 추가 archive 이전). 5차~8차 2026-05-16 (Sprint 065~068 각각 강제 이전). 9~16차 2026-05-17 (Sprint 069~076 각각 강제 이전). 직전 5 Sprint + 본 sprint(들)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 1.6. **PROGRESS.md 길이 정책 (S72, 2026-05-16 룰화)**: 활성 sprint 절 **최대 7건**(직전 5 + 본 sprint 묶음). 8건 초과 시 가장 옛 sprint 1건을 `PROGRESS_ARCHIVE.md` 강제 이전. archive는 무제한. 자연 약 350~500줄 유지.
 
 # 2. 완료 마일스톤 (활성: 직전 5 Sprint + 본 sprint)
 
-> 이전 Sprint 이력(2.1 ~ 2.96, M0~M6 / 폴리싱 / Sprint 010~075) → `PROGRESS_ARCHIVE.md` 참조.
+> 이전 Sprint 이력(2.1 ~ 2.97, M0~M6 / 폴리싱 / Sprint 010~076) → `PROGRESS_ARCHIVE.md` 참조.
+
+## 2.104. Sprint 090 완료 - 백캐스트 + 자동 history 등록 폐기, "내 번호로 선택" 진입점 (S090, 2026-05-17)
+
+배경: 사용자 명시 3건 연속.
+1. "전적이 테스트용이야? 실제 동작하는게 아니야?" → 백캐스트(가짜 30회 채움) 정직성 의문 제기.
+2. "진짜를 돌리고 싶어. 어떻게 해야 해?" → 진짜 사용자 행동만 누적 의향.
+3. "추천했다고 무조건 등록되면 안 되고, 내가 추천 번호를 직접 선택해야 한다" → 자동 등록 폐기 + 명시 선택 메커니즘.
+
+### 2.104.1. 핵심 결정
+
+| 결정 | 값 | 사유 |
+|---|---|---|
+| 백캐스트 | **전면 폐기** | S089 Luck 부트스트랩 목적 폐기 후 명분 약함 + 정직성 |
+| 자동 history 등록 | **폐기** | + 1세트 / + 5세트는 saved-sets만 |
+| 진입점 | **saved-sets-row "내 번호로 선택" 버튼** | 사용자 명시 선택 |
+| 회차당 cap | **5게임** | 한국 동행복권 1구좌 모방 |
+| Cap 도달 시 | **미등록 disabled + hint** | 옛 saved-sets cap 패턴 답습. 등록 해제는 cap 무관 |
+| 옛 데이터 | **자동 마이그레이션** | storage load 시 백캐스트 추정 항목(createdAt === character.createdAt) 자동 제거 |
+| 어휘 | **"내 번호로 선택" / "선택 해제"** | 사용자 의도 직접 표현 |
+
+### 2.104.2. core 변경
+
+| 파일 | 변경 |
+|---|---|
+| `src/core/history.js` | `backfillRecommendations` 함수 **전면 폐기** + `recordRecommendation` 중복 차단 강화(같은 drwNo + 같은 numbers) + **`toggleSavedSetRegistration(character, savedSet, drwNo)` 신설** (action: 'registered' / 'unregistered' / 'cap_reached') + **`countRegisteredForRound` / `isRegistered` 헬퍼 신설** + 모든 등록 항목에 `source: 'user'` 필드 |
+
+### 2.104.3. data 변경
+
+| 파일 | 변경 |
+|---|---|
+| `src/data/numbers.js` | **`HISTORY_REGISTER_CAP_PER_ROUND = 5`** 신설 + `BACKFILL_RECENT_COUNT` dead 표기 (호환 잔존) |
+| `src/data/storage.js` | `loadCharacters` S090 마이그레이션 - 백캐스트 추정 항목(`history[].createdAt === character.createdAt`) 자동 제거 + 잔존 항목 `source: 'user'` 보수적 자동 채움 |
+
+### 2.104.4. render 변경
+
+| 파일 | 변경 |
+|---|---|
+| `src/render/main.js` | import 정정 + `backfillRecommendations` / `recordRecommendation` 자동 호출 제거 → 매칭만(`matchHistory`) + savedSetsSectionHtml 호출에 `registeredKeys` / `registerCount` / cap 전달 + **"내 번호로 선택" 토글 핸들러 신설** (cap 도달 시 toast 안내) |
+| `src/render/saved-sets-section.js` | `savedSetsSectionHtml` 6번째~8번째 인자(registeredKeys / registerCount / registerCap) 추가 + 각 row에 "내 번호로 선택" 버튼 + 등록 시 시각 강조 + 헤더에 카운터 "등록 N/5" + cap 도달 시 hint |
+| `styles/main.css` | `.saved-set-register` / `.saved-set-register.is-registered` / `.saved-set-row.is-registered` / `.saved-set-reg-badge` / `.saved-sets-register-counter` / `.saved-sets-cap-hint` 신규 룰 |
+
+### 2.104.5. tests 변경
+
+| 파일 | 변경 |
+|---|---|
+| `tests/suites/history.test.js` | backfillRecommendations 단언 6건 폐기 → toggleSavedSetRegistration 4건 / 중복 차단 1건 / backfill export 부재 단언 신설 |
+| `tests/suites/storage.test.js` | S089 단언 확장(createdAt 분리 + source 자동 채움) + S090 백캐스트 추정 자동 제거 단언 신설 |
+
+### 2.104.6. docs SSOT 변경
+
+| 파일 | 변경 |
+|---|---|
+| `docs/01_spec.md` | 5.2.5.9 "내 번호로 선택" 메커니즘 신설 + 7.5 백캐스트 폐기 명시 |
+| `docs/02_data.md` | 1.16 백캐스트 폐기 + 1.16-A history 등록 cap 신설 + 3.7 Recommendation schema에 `source: 'user'` 필드 추가 |
+| `docs/03_architecture.md` | 데이터 흐름 안 백캐스트 호출 라인 폐기 표기 |
+
+### 2.104.7. 사용자 화면 기대 변동
+
+| 영역 | 동작 |
+|---|---|
+| 신규 캐릭터 진입 | 전적 탭 **빈 상태** ("추첨 카드를 + 버튼으로 등록하면 자동 기록"). 옛 가짜 30회 사라짐 |
+| 옛 캐릭터 진입 | storage load 시 백캐스트 추정 항목 자동 제거. 사용자가 실제 누른 추천만 잔존 |
+| + 1세트 / + 5세트 | saved-sets에만 추가. history 영향 0 |
+| saved-sets-row | "내 번호로 선택" 버튼 노출. 클릭 시 history 등록 + 카드 외곽선 강조 + "등록" 배지 |
+| 헤더 | "추천 리스트 (N)" + "등록 M/5" 카운터 |
+| Cap 도달 (5게임 등록) | 미등록 카드 버튼 disabled + hint "이번 회차 5게임 등록 완료" |
+| 매주 토요일 발표 후 | 등록된 5게임 자동 매칭 → 진짜 적중률 / 등수 분포 누적 |
+
+### 2.104.8. 검증
+
+`node tests/run-node.js` → **315 / 315 PASS** (회귀 0).
+
+신규 단언:
+- `recordRecommendation`: source=user 자동 + 같은 drwNo+numbers 중복 차단.
+- `toggleSavedSetRegistration`: register/unregister 토글 + cap 5 차단 + 다른 회차 cap 무관 + `isRegistered` 동작.
+- backfillRecommendations export 부재 (S090 폐기).
+- storage 마이그레이션: 백캐스트 추정 항목 자동 제거 + source 자동 채움.
+
+### 2.104.9. 잔여 / 후속
+
+- `BACKFILL_RECENT_COUNT` 상수는 dead로 잔존. 다음 cleanup sprint에서 폐기.
+- "내 번호로 선택" 버튼 모바일 반응형 폭 점검 = 사용자 캡쳐 확인 후 정정 가능 영역.
+- 한 회차 등록 후 strategyIds 변경 시 saved-sets는 휘발이지만 history 등록은 영구. 사용자 인지 명확.
+- 진짜 데이터 누적 시작점 = 본 sprint commit 이후 매주 토요일 추첨.
+
+### 2.104.10. Sprint 076 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 076(절 2.97, 캐릭터 카드 흉일 시각/동작 결손) archive 이전. 본 sprint 종료 시점 활성 = 077~079 + 084 + 088 + 089 + 090 = 7건 정합. archive 16차 정리.
 
 ## 2.103. Sprint 089 완료 - Luck 자산 전면 폐기 (S089, 2026-05-17)
 
@@ -652,57 +740,4 @@ Sprint 072에서 "균형 프리셋 통계 라벨 안 나오는 건 결손"이라
 - S43.1 / S69 / S72 / S74 / S76 / S77 = **6건 연속 사전 검증 결손**. 향후 "사용자 명시 해석이 두 가지 이상 가능하면 AskUserQuestion 의무" 룰 자비스 자체 적용.
 
 회귀 = 323/323 PASS (CSS-only 정정, 데이터 구조 동일).
-
-## 2.97. Sprint 076 완료 - 캐릭터 카드 흉일 시각/동작 결손 정정 (S76, 2026-05-17)
-
-배경: 사용자 캡쳐 2건 (고스트 흉일 + 마녀 평일). "유저 정보 접히기 펼치기가 오류남. 다른 유저는 접히는데, 고스트 유저만 이상하게 표시됨". 자비스 분석 결과 = 흉일(FORTUNE_BAD) 한정 결손 2건.
-
-### 2.97.1. 결손 진단 (흉일 한정)
-
-| # | 결손 | 원인 |
-|---|---|---|
-| 시각 | 좌측 ▼(흉 글리프) + 우측 ▲(caret) + 카드 본체 ▼(흉 아이콘) = ▼ 3개 시각 충돌 | `character-summary.js` `FORTUNE_GLYPH[FORTUNE_BAD] = '▼'` + `character-card.js` `FORTUNE_ICON[FORTUNE_BAD] = '▼'`. caret(▼/▲)과 동일 모양 |
-| 동작 | 사용자가 ▲ 클릭으로 접어도 강제 펼침 유지 | `main.js` line 562 `isExpanded = !state.charCardCollapsed \|\| fortune === 'bad'`. 흉일 보호 카피 노출 정책(S36)이 사용자 접기 의도 무시 |
-
-다른 운세는 글리프 ★(대길) / ◆(길) / ●(평)이라 caret과 시각 명확 구분 + 강제 펼침 없음 → 마녀(평) 캐릭터는 정상 동작 = 사용자 시각 차이 확인.
-
-### 2.97.2. 정정안 (자비스 단일 결정 + 사용자 승인)
-
-| 영역 | 이전 | 이후 |
-|---|---|---|
-| 흉 글리프 (toggle row) | `▼` | **`✕`** (caret과 완전 다른 모양 + "흉=나쁨" 의미 직관) |
-| 흉 아이콘 (카드 본체) | `▼` | **`✕`** (시각 일관성) |
-| 흉일 강제 펼침 정책 | `isExpanded = !collapsed \|\| fortune === 'bad'` | **`isExpanded = !collapsed`** (강제 폐기. 사용자 명시 접기 의도 존중) |
-
-흉일 보호 카피는 첫 진입 default(`charCardCollapsed = false`) 시 자연 펼침으로 노출. 사용자가 접으면 본인 책임 영역 = 학습 정상 동작.
-
-### 2.97.3. 변경 파일
-
-- `src/render/character-summary.js`: `FORTUNE_GLYPH[FORTUNE_BAD]` ▼ → ✕ + S76 주석.
-- `src/render/character-card.js`: `FORTUNE_ICON[FORTUNE_BAD]` ▼ → ✕.
-- `src/render/main.js` line 562: 강제 펼침 폐기 + 주석 갱신.
-- `docs/01_spec.md` 5.1.6: 흉 글리프 ▼→✕ + 강제 펼침 폐기 정책 명시.
-- `docs/02_data.md` 1.20.3: 강제 펼침 폐기 메모 (`lotto_char_card_collapsed` 행).
-- `game/service-worker.js` v50 → v51.
-
-### 2.97.4. 검증
-
-- `node tests/run-node.js` → **322 / 322 PASS** (회귀 0, JS 매핑 + 정책 폐기, 단위 테스트 영향 없음).
-- ▼ 글리프 잔존 grep (character-summary.js + character-card.js): 0건.
-- 다른 운세(대길/길/평) 글리프 영향 0 = 다른 캐릭터 시각 변동 없음.
-
-### 2.97.5. 사용자 인상 직접 대응
-
-- 고스트(흉) 캐릭터 화면 = 좌측 ✕(빨강) + 우측 ▲(회색 caret). 더 이상 같은 모양 화살표 중복 없음.
-- 카드 본체 "운세 · 흉" 옆 = ✕ (▼ 폐기).
-- 사용자가 ▲ 클릭 = 정상 접힘 (강제 펼침 정책 폐기).
-- 마녀(평) 캐릭터는 변동 없음 (글리프 ● 그대로, 강제 펼침 영향 0이었음).
-
-### 2.97.6. 자비스 사전 검증 결손 사고 5건째
-
-S43.1 / S69 / S72 / S74 / S76 = 동일 패턴 (시각 / 매핑 결손). 본 결손은 사용자 캡쳐 없이 코드만 봐서는 발견 어려운 영역. 향후 시각 매핑 상수(`FORTUNE_GLYPH`, `STRATEGIES.short` 등) 변경 / 추가 시 **"caret / icon / glyph 시각 충돌 점검" 의무**. 본 sprint = 5건째 결손이지만 사용자 캡쳐 1건으로 즉시 발견 = 사용자 시각 점검의 가치.
-
-### 2.97.7. Sprint 069 archive 강제 이전 (룰 1.6)
-
-활성 8건 → 룰 7건 초과 → Sprint 069(절 2.90, 하단 탭 콘텐츠 가림) archive 이전. 본 sprint 종료 시점 활성 = 070~076 = 7건 정합. archive 9차 정리.
 

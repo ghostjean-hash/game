@@ -35,18 +35,29 @@ export function saveCooccur(cooccur) { write('stats_cooccur', cooccur); }
 
 // 캐릭터
 // S089 (2026-05-17): Luck 자산 전면 폐기 → load 시 옛 데이터의 luck 필드 + history[].luckApplied 필드 자동 제거.
+// S090 (2026-05-17): 백캐스트 폐기 → 옛 백캐스트 추정 history 항목 자동 제거.
+//   판정: history[].createdAt === character.createdAt (옛 backfillRecommendations 코드 line 91 패턴).
+//   99% 식별 가능. 잔존 항목은 source: 'user'로 자동 채움 (보수적 - 진짜 사용자 행동으로 간주).
 export function loadCharacters() {
   const raw = read('characters', []);
   if (!Array.isArray(raw)) return [];
   return raw.map((c) => {
     if (!c || typeof c !== 'object') return c;
     const { luck: _dropLuck, ...rest } = c;
+    const charCreatedAt = rest.createdAt;
     const cleanHistory = Array.isArray(rest.history)
-      ? rest.history.map((h) => {
-          if (!h || typeof h !== 'object') return h;
-          const { luckApplied: _dropLuckApplied, ...hRest } = h;
-          return hRest;
-        })
+      ? rest.history
+          // S090: 옛 백캐스트 추정 항목 제거 (createdAt이 캐릭터 createdAt과 동일).
+          .filter((h) => {
+            if (!h || typeof h !== 'object') return false;
+            if (charCreatedAt && h.createdAt === charCreatedAt) return false;
+            return true;
+          })
+          .map((h) => {
+            const { luckApplied: _dropLuckApplied, source, ...hRest } = h;
+            // S090: source 부재 = 'user'로 자동 채움 (보수적).
+            return { ...hRest, source: source || 'user' };
+          })
       : rest.history;
     return { ...rest, history: cleanHistory };
   });
