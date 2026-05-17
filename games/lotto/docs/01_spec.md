@@ -333,7 +333,7 @@
 **메커니즘**:
 - saved-sets-row 각 카드에 **"확정"** 버튼 (S090-후속 라벨 단축 + row layout 정정).
 - 클릭 시 `core/history.js` `toggleSavedSetRegistration(character, savedSet, drwNo)` 호출.
-- 등록 = history에 `source: 'user'` 항목 추가. 시각: row에 `is-registered` class + accent 외곽선 + 버튼 라벨 "취소" + 버튼 accent 배경. (S090-후속 "등록" 배지 폐기 - row outline + 버튼 색으로 충분 인지)
+- 등록 = history에 `source: 'user'` 항목 추가. 시각: row에 `is-registered` class + **좌측 4px accent 바** (S090-후속 5, 2026-05-18 outline → 좌측 바 정정) + 배경 옅은 accent tint + 버튼 라벨 "취소" + 버튼 accent 배경. (S090-후속 "등록" 배지 폐기 - row 시각 강조 + 버튼 색으로 충분 인지)
 - 재클릭 = history에서 제거 (확정 취소 허용, 실수 회복).
 - row layout = grid 4열 `44px 1fr auto var(--space-6)` (라벨 / balls / 확정 버튼 / 휴지통). 옛 3열 wrap 결손 정정.
 

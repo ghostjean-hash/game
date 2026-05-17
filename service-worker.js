@@ -33,7 +33,8 @@
 // v70 (2026-05-17): lotto S090-후속 2 - 사용자 보고 "전적 쓰레기 아직도 있네" + "이번회차 선택된것들은 실시간으로 등록되었으면". (1) 설정 탭 "활성 캐릭터 전적 초기화" 버튼 신설 - 옛 백캐스트 잔재 강제 정리 (S090 자동 마이그레이션 한계 보완). (2) 전적 탭 상단에 "현재 회차 NNNN회 · 발표 대기 N건" 섹션 신설 - 사용자 "확정" 직후 실시간 노출. accent 외곽선 강조. (3) 옛 이력 섹션 = 현재 회차 외 항목만 (역할 분리). docs 01_spec 5.8.1-A 신설. SSOT: PROGRESS.md 2.104.12.
 // v71 (2026-05-17): lotto S090-후속 3 - 사용자 명시 "전적에서 모든 번호에 회차를 적지말고 회차는 상단에 한번만 표시". 발표 대기 섹션 = 모든 항목이 같은 회차라 항목 헤더의 "NNNN회차" 라벨 중복. historyItemHtml에 showRound 인자 신설 = false 호출 시 회차 라벨 폐기, rank 라벨만 우측 정렬. 옛 이력 섹션은 회차 다양하므로 showRound=true 유지. CSS .history-header-no-round 룰 추가. SSOT: PROGRESS.md 2.104.13.
 // v72 (2026-05-17): lotto S090-후속 4 - 사용자 명시 3건: "UI 보기 좋게 정렬" + "과거 쓰레기 데이터 삭제 해" + "캐릭터 생성할 때마다 추가되는 옛 회차 쓰레기도 모두 삭제". (1) 발표 대기 항목 = rank 라벨도 폐기 (showRank=false 호출). showRound=false + showRank=false = 헤더 자체 폐기, 번호공만 노출. (2) `.history-numbers` justify-content: center로 가운데 정렬 + gap space-2. (3) storage.js loadCharacters 1회 강제 클린업 (lotto_s090_cleared flag) - 모든 character.history = [] 초기화, flag 저장으로 1회만 실행. 사용자 명시 일괄 정리. (4) 빈 상태 카피 갱신. 회귀 316/316 PASS (storage 단언 정정 + 신규 클린업 단언 1건). SSOT: PROGRESS.md 2.104.14.
-const CACHE_VERSION = "v72";
+// v73 (2026-05-18): lotto S090-후속 5 - 사용자 캡쳐 "추천 리스트 확정 했을 때 ui가 좀 어색한데". 옛 .saved-set-row.is-registered = outline 1px + outline-offset -1px → row 안쪽 그림이 "취소" 버튼과 닿음 + 4개 연속 outline 박스 분리 인상 + 점선 border-bottom과 겹침. 새 = box-shadow inset 4px 좌측 accent 바 + padding-left + background tint 유지. outline 폐기. 모바일 폭 점유 0, 버튼 영역 침범 0. docs 01_spec 5.2.5.9 정합. SSOT: PROGRESS.md 2.104.15.
+const CACHE_VERSION = "v73";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
