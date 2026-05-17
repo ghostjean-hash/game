@@ -36,7 +36,7 @@ export function renderHistoryPage(container, character, currentDrwNo = null) {
       <h2 class="stats-title">현재 회차 ${currentDrwNo}회 · 발표 대기 ${pendingItems.length}건</h2>
       <p class="stats-note">추첨 발표 후 자동 매칭됩니다. (등록 직후 본 섹션에 실시간 노출)</p>
       <div class="history-list">
-        ${pendingItems.map((h) => historyItemHtml(h, false)).join('')}
+        ${pendingItems.map((h) => historyItemHtml(h, false, false)).join('')}
       </div>
     </section>
   `;
@@ -100,7 +100,7 @@ export function renderHistoryPage(container, character, currentDrwNo = null) {
     : sortedHistory;
   const historyItems = pastItems.length === 0
     ? (pendingItems.length === 0
-        ? '<section class="empty-state"><p>전적 이력이 없습니다. 추첨 탭에서 추천을 받고 "확정"을 누르면 본 회차에 등록됩니다. 발표 후 자동 매칭됩니다.</p></section>'
+        ? '<section class="empty-state"><p>전적이 비어있습니다.<br/>추첨 탭에서 추천을 받고 <strong>"확정"</strong>을 누르면 본 회차에 등록됩니다.<br/>매주 토요일 발표 후 자동 매칭됩니다.</p></section>'
         : '')
     : `<section class="stats-section">
         <h2 class="stats-title">옛 회차 이력 (${pastItems.length}건, 최근 회차순)</h2>
@@ -131,24 +131,33 @@ function timelineDotHtml(h) {
 }
 
 /**
- * S090-후속 3 (2026-05-17): showRound 인자 신설. 발표 대기 섹션처럼 모든 항목이 같은 회차일 때는 false로 호출 = 회차 라벨 중복 폐기 (사용자 명시).
+ * history 항목 카드.
  * @param {object} h history 항목
- * @param {boolean} [showRound=true] true면 항목 헤더에 "NNNN회차" 표기. false면 폐기 (섹션 타이틀에 회차 노출 가정).
+ * @param {boolean} [showRound=true] 항목 헤더에 "NNNN회차" 표기 (S090-후속 3).
+ * @param {boolean} [showRank=true] 항목 헤더에 rank 라벨 표기 (S090-후속 4, 2026-05-17). false면 헤더 자체 폐기 = 번호공만 노출.
  */
-function historyItemHtml(h, showRound = true) {
+function historyItemHtml(h, showRound = true, showRank = true) {
   // S20(2026-05-02): 추천에서 보너스 폐기. 이력 카드도 본번호 6개만 표시.
   const rank = h.matchedRank;
   const rankLabel = rank ? RANK_LABELS[rank] : (rank === null ? '미적중 / 미발표' : '-');
   const rankColor = rank ? RANK_GLOW_COLORS[rank] : 'var(--color-text-dim)';
   const numsHtml = h.numbers.map((n) => colorNum(n, 'history-num')).join('');
-  const headerHtml = showRound
-    ? `<header class="history-header">
+  let headerHtml = '';
+  if (showRound && showRank) {
+    headerHtml = `<header class="history-header">
         <span class="history-drw">${h.drwNo}회차</span>
         <span class="history-rank" style="color: ${rankColor}">${rankLabel}</span>
-      </header>`
-    : `<header class="history-header history-header-no-round">
+      </header>`;
+  } else if (showRound) {
+    headerHtml = `<header class="history-header history-header-no-rank">
+        <span class="history-drw">${h.drwNo}회차</span>
+      </header>`;
+  } else if (showRank) {
+    headerHtml = `<header class="history-header history-header-no-round">
         <span class="history-rank" style="color: ${rankColor}">${rankLabel}</span>
       </header>`;
+  }
+  // S090-후속 4: showRound=false + showRank=false = 헤더 자체 폐기. 번호공만 노출 (발표 대기 섹션).
   return `
     <article class="history-item">
       ${headerHtml}

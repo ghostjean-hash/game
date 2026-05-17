@@ -38,29 +38,44 @@ export function saveCooccur(cooccur) { write('stats_cooccur', cooccur); }
 // S090 (2026-05-17): 백캐스트 폐기 → 옛 백캐스트 추정 history 항목 자동 제거.
 //   판정: history[].createdAt === character.createdAt (옛 backfillRecommendations 코드 line 91 패턴).
 //   99% 식별 가능. 잔존 항목은 source: 'user'로 자동 채움 (보수적 - 진짜 사용자 행동으로 간주).
+// S090-후속 4 (2026-05-17): 사용자 명시 "과거 쓰레기 데이터 삭제 해" + "캐릭터 생성할 때마다 추가되는 옛 회차 쓰레기도 모두 삭제".
+//   1회 강제 클린업: 모든 캐릭터의 history = [] 초기화. flag(lotto_s090_cleared)로 1회만 실행.
+//   이후 사용자 명시 "확정" 등록만 누적. 옛 사용자 행동 데이터까지 일괄 삭제는 사용자 명시 결정 답습.
+const S090_CLEANUP_FLAG = 's090_cleared';
 export function loadCharacters() {
   const raw = read('characters', []);
   if (!Array.isArray(raw)) return [];
-  return raw.map((c) => {
-    if (!c || typeof c !== 'object') return c;
-    const { luck: _dropLuck, ...rest } = c;
-    const charCreatedAt = rest.createdAt;
-    const cleanHistory = Array.isArray(rest.history)
-      ? rest.history
-          // S090: 옛 백캐스트 추정 항목 제거 (createdAt이 캐릭터 createdAt과 동일).
-          .filter((h) => {
-            if (!h || typeof h !== 'object') return false;
-            if (charCreatedAt && h.createdAt === charCreatedAt) return false;
-            return true;
-          })
-          .map((h) => {
-            const { luckApplied: _dropLuckApplied, source, ...hRest } = h;
-            // S090: source 부재 = 'user'로 자동 채움 (보수적).
-            return { ...hRest, source: source || 'user' };
-          })
-      : rest.history;
-    return { ...rest, history: cleanHistory };
-  });
+  // S090-후속 4: 1회 강제 클린업.
+  const cleanupDone = read(S090_CLEANUP_FLAG, false) === true;
+  if (!cleanupDone && raw.length > 0) {
+    const cleared = raw.map((c) => (c && typeof c === 'object' ? { ...c, history: [] } : c));
+    write('characters', cleared);
+    write(S090_CLEANUP_FLAG, true);
+    return cleared.map(normalizeCharacter);
+  }
+  return raw.map(normalizeCharacter);
+}
+
+// S089 + S090 마이그레이션 함수 분리 (재사용성).
+function normalizeCharacter(c) {
+  if (!c || typeof c !== 'object') return c;
+  const { luck: _dropLuck, ...rest } = c;
+  const charCreatedAt = rest.createdAt;
+  const cleanHistory = Array.isArray(rest.history)
+    ? rest.history
+        // S090: 옛 백캐스트 추정 항목 제거 (createdAt이 캐릭터 createdAt과 동일).
+        .filter((h) => {
+          if (!h || typeof h !== 'object') return false;
+          if (charCreatedAt && h.createdAt === charCreatedAt) return false;
+          return true;
+        })
+        .map((h) => {
+          const { luckApplied: _dropLuckApplied, source, ...hRest } = h;
+          // S090: source 부재 = 'user'로 자동 채움 (보수적).
+          return { ...hRest, source: source || 'user' };
+        })
+    : rest.history;
+  return { ...rest, history: cleanHistory };
 }
 export function saveCharacters(characters) { write('characters', characters); }
 export function loadActiveCharacterId() { return read('active_character', null); }

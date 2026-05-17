@@ -30,6 +30,8 @@ suite('data/storage', () => {
 
   test('characters round-trip + S089 luck 필드 자동 제거 + S090 source 자동 채움', () => {
     reset();
+    // S090-후속 4 (2026-05-17): 1회 강제 클린업 flag를 미리 true로 설정 = 본 테스트는 자동 마이그레이션만 검증.
+    localStorage.setItem('lotto_s090_cleared', 'true');
     // 옛 캐릭터 데이터 - history createdAt이 character.createdAt과 다른 항목 = 사용자 행동 (보존).
     const c = [{
       id: 'a',
@@ -53,6 +55,7 @@ suite('data/storage', () => {
 
   test('S090 - 백캐스트 추정 history 항목 자동 제거', () => {
     reset();
+    localStorage.setItem('lotto_s090_cleared', 'true');
     // 옛 백캐스트 패턴: history[].createdAt === character.createdAt.
     const charCreatedAt = '2026-05-01T00:00:00.000Z';
     const c = [{
@@ -70,6 +73,30 @@ suite('data/storage', () => {
     assertEqual(loaded[0].history.length, 1, '백캐스트 1건 제거 + 사용자 행동 1건 보존');
     assertEqual(loaded[0].history[0].drwNo, 1101, '사용자 행동 항목만 잔존');
     assertEqual(loaded[0].history[0].source, 'user');
+  });
+
+  test('S090-후속 4 - 1회 강제 클린업 (사용자 명시 과거 쓰레기 일괄 삭제)', () => {
+    reset();
+    // flag 부재 상태에서 history 항목이 있는 캐릭터 load → 모든 history = [] 강제 클린업.
+    const c = [{
+      id: 'x',
+      seed: 9999,
+      createdAt: '2026-05-01',
+      history: [
+        { drwNo: 1100, numbers: [1,2,3,4,5,6], bonus: 7, matchedRank: 1, createdAt: '2026-05-10' },
+        { drwNo: 1101, numbers: [10,11,12,13,14,15], bonus: 16, matchedRank: null, createdAt: '2026-05-11' },
+      ],
+    }];
+    saveCharacters(c);
+    const loaded = loadCharacters();
+    assertEqual(loaded.length, 1);
+    assertEqual(loaded[0].history.length, 0, '1회 강제 클린업으로 history 모두 삭제');
+    // flag 저장 검증
+    assertEqual(localStorage.getItem('lotto_s090_cleared'), 'true', '클린업 flag 저장');
+    // 두 번째 load = flag 있으므로 강제 클린업 skip + 자동 마이그레이션만.
+    saveCharacters([{ id: 'y', seed: 1, createdAt: '2026-05-01', history: [{ drwNo: 1200, numbers: [1,2,3,4,5,6], bonus: 7, matchedRank: null, createdAt: '2026-05-12' }] }]);
+    const second = loadCharacters();
+    assertEqual(second[0].history.length, 1, '2번째 load는 강제 클린업 skip');
   });
 
   test('options 기본값', () => {

@@ -1017,6 +1017,10 @@ a.btn-secondary,
 .history-header-no-round {
   justify-content: flex-end;
 }
+/* S090-후속 4 (2026-05-17): rank 라벨 폐기한 헤더 (회차만 노출). */
+.history-header-no-rank {
+  justify-content: flex-start;
+}
 .history-drw {
   font-weight: bold;
   color: var(--color-accent);
@@ -1029,7 +1033,9 @@ a.btn-secondary,
 .history-numbers {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: var(--space-2);
+  /* S090-후속 4 (2026-05-17): 번호공 가운데 정렬 - 카드 폭 안 균등 분포 + 좌측 몰림 결손 정정. */
+  justify-content: center;
 }
 .history-num {
   width: 32px;
