@@ -37,7 +37,8 @@
 // v74 (2026-05-18): lotto S090-후속 6 - 사용자 캡쳐 "아웃라인이 추천 텍스트에 닿아 있는게 지저분 + 삭제 버튼도 외곽라인에 붙어 있어서 별로 + 확정/미확정 정렬 위치 틀어짐". 직전 정정(좌측 바 + padding-left 추가)이 정렬 깨뜨림 결손. (1) .saved-set-row 기본 padding 좌우 var(--space-3)(12px) 추가 = 모든 row 균일 호흡. (2) .saved-set-row.is-registered의 padding-left 추가 폐기 = 확정/미확정 row 정렬 100% 일치. 좌측 4px 바는 row 기본 padding 안에서 표시 = 라벨까지 8px 호흡, 휴지통 우측 12px 호흡. SSOT: PROGRESS.md 2.104.16.
 // v75 (2026-05-18): lotto S090-후속 7 - 사용자 명시 6건. (1) 좌측 4px accent 바 폐기 (box-shadow inset 제거). (2) row padding 좌우 var(--space-3) → calc(var(--space-3) / 2) = 6px 절반. (3) 확정 background tint 0.08 → 0.22 강화. (4) 휴지통 클릭 시 = saved-sets 제거 + 같은 numbers history(현재 회차) 결합 제거 ("확정한 채 삭제하면 확정 취소"). (5) 회차당 cap 5 폐기 - HISTORY_REGISTER_CAP_PER_ROUND dead, toggleSavedSetRegistration cap 분기 폐기, savedSetsSectionHtml capReached/hint 폐기. (6) 카운터 "등록 N/5" → "확정 N건". docs 01_spec 5.2.5.9 정합 + tests cap 5 단언 → cap 폐기 검증으로 정정. SSOT: PROGRESS.md 2.104.17.
 // v76 (2026-05-18): lotto S091 - 사용자 명시 하단 탭 순서 + 라벨 정정. 옛 = 추첨/통계/역추첨/전적/설정. 새 = **추천/기록/통계/게임/설정**. bottom-tabs.js TABS 배열 순서 + label/short 정정. id는 옛 유지(home/history/stats/reverse/settings = state 호환). history-page.js h1 "전적" → "기록" + 빈 상태 카피 "전적이 비어있습니다" → "기록이 비어있습니다" + "추첨 탭" → "추천 탭". reverse-page.js h1 "역추첨" → "게임". docs 01_spec 4장 5탭 모델 정합. SSOT: PROGRESS.md 2.105.
-const CACHE_VERSION = "v76";
+// v77 (2026-05-18): lotto S091-후속 - 사용자 명시 "확정된 배경 앞쪽 마진 절반". section padding-left(≈23.4px)이 옛 확정 배경 좌측 마진. 확정 row만 margin-left: calc(var(--space-3) * -1) + padding-left 보상으로 background이 section padding-left의 절반만큼 좌측 확장. row 콘텐츠 정렬 무영향. 미확정 row 변동 0. SSOT: PROGRESS.md 2.105.7.
+const CACHE_VERSION = "v77";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

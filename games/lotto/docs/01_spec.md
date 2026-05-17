@@ -335,7 +335,7 @@
 **메커니즘**:
 - saved-sets-row 각 카드에 **"확정"** 버튼 (S090-후속 라벨 단축 + row layout 정정).
 - 클릭 시 `core/history.js` `toggleSavedSetRegistration(character, savedSet, drwNo)` 호출.
-- 등록 = history에 `source: 'user'` 항목 추가. 시각: row에 `is-registered` class + **background tint (rgba accent 0.22)** + 버튼 라벨 "취소" + 버튼 accent 배경. row 기본 padding 좌우 `calc(var(--space-3) / 2)`(6px)로 모든 row 균일 (S090-후속 7, 2026-05-18 사용자 명시 "뒤쪽 여백 절반 + 앞/뒤 동일" + "앞쪽 세로 띠 제거" + "배경 더 강하게"). 좌측 4px accent 바 폐기. ("등록" 배지 / cap / 좌측 바 모두 폐기 - 단순 background tint + 버튼 색으로 시각 충분 인지)
+- 등록 = history에 `source: 'user'` 항목 추가. 시각: row에 `is-registered` class + **background tint (rgba accent 0.22)** + 버튼 라벨 "취소" + 버튼 accent 배경. row 기본 padding 좌우 `calc(var(--space-3) / 2)`(6px)로 모든 row 균일 (S090-후속 7, 2026-05-18). 좌측 4px accent 바 폐기. 확정 row만 `margin-left: calc(var(--space-3) * -1)` + padding-left 보상으로 background이 section padding-left의 절반만큼 좌측 확장 (S091-후속, 2026-05-18 사용자 명시 "확정 배경 앞쪽 마진 절반"). row 콘텐츠 정렬은 모든 row 일치 유지.
 - 재클릭 = history에서 제거 (확정 취소 허용, 실수 회복).
 - row layout = grid 4열 `44px 1fr auto var(--space-6)` (라벨 / balls / 확정 버튼 / 휴지통). 옛 3열 wrap 결손 정정.
 

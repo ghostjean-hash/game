@@ -1903,9 +1903,14 @@ a.btn-secondary,
   }
 }
 /* S090-후속 7 (2026-05-18): 사용자 명시 "앞쪽 세로 띠 제거 + 배경 색을 조금 더 강하게".
-   좌측 4px 바(box-shadow inset) 폐기. background tint를 0.08 → 0.22로 강화 (사용자 가시성). */
+   좌측 4px 바(box-shadow inset) 폐기. background tint를 0.08 → 0.22로 강화 (사용자 가시성).
+   S091-후속 (2026-05-18): 사용자 명시 "확정된 배경 앞쪽 마진 절반으로 줄여줘".
+   section padding-left = calc(var(--space-3) * 1.5 * 1.3) ≈ 23.4px이 옛 배경 좌측 마진.
+   확정 row만 negative margin-left + padding-left 보상으로 background 좌측 절반 확장. row 콘텐츠 정렬 무영향. */
 .saved-set-row.is-registered {
   background: rgba(212, 166, 87, 0.22);
+  margin-left: calc(var(--space-3) * -1);
+  padding-left: calc(var(--space-3) / 2 + var(--space-3));
 }
 /* S090-후속 (2026-05-17): .saved-set-reg-badge 폐기 - 시각 노이즈. row outline + 버튼 색 변경으로 충분. */
 .saved-sets-register-counter {
