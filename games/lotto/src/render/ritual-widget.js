@@ -1,12 +1,14 @@
-// 행운 쌓기 한 줄 바 + 모달 (T4 / S14, 2026-05-02 시각 단순화).
+// 당첨 기원 한 줄 바 + 모달 (T4 / S14, 2026-05-02 시각 단순화).
 // SSOT: docs/01_spec.md 5.6, docs/02_data.md 1.19.
 // S14: 게이지 바 + % → 한 줄 바 + 8 아이콘 진척도. 라벨 "행운 의식" → "행운 쌓기".
+// S089-후속 (2026-05-17): "행운 쌓기" → "당첨 기원" 사용자 명시 라벨 변경.
+//      추첨 영향 0 보호 카피는 본문 intro에서 유지 ("당첨 확률에는 영향이 없습니다").
 //      모달 상단에 한 줄 바 동일 정보 재표시(배경 가림 보완) + 빈 애니메이션 영역.
 import { RITUAL_LIST, RITUAL_GAUGE_MAX } from '../data/numbers.js';
 import { isRitualPerformed } from '../core/ritual.js';
 import { showModal } from './modal.js';
 
-const RITUAL_LABEL = '행운 쌓기';
+const RITUAL_LABEL = '당첨 기원';
 
 /**
  * 진척도 아이콘 8개 HTML. 수행분만큼 .is-done. SSOT: 01_spec 5.6.4.
@@ -29,10 +31,8 @@ export function ritualWidgetHtml(state) {
   const filledCls = filled ? ' is-filled' : '';
   const doneCount = (state.performed || []).length;
   const ariaLabel = `${RITUAL_LABEL} ${doneCount} / ${RITUAL_LIST.length}${filled ? ' 완성' : ''}`;
-  // S089 (2026-05-17): Luck 보상 폐기. 만땅 chip은 "완성" 라벨만 (시각 강조 보존).
-  const bonusChip = filled
-    ? `<span class="ritual-row-bonus" aria-hidden="true">완성</span>`
-    : '';
+  // S089-후속 (2026-05-17): 사용자 보고 "완성이 두 개 중복". bonus chip 폐기, cta "완성 ✓"만 유지.
+  // 옛 bonus chip = Luck +5 보상 노출 영역. S089 보상 폐기 후 자리만 남아 cta와 중복 인지 유발.
   const ctaLabel = filled ? '완성 ✓' : '시작';
   return `
     <button type="button"
@@ -41,7 +41,6 @@ export function ritualWidgetHtml(state) {
             aria-label="${ariaLabel}">
       <span class="ritual-row-label">${RITUAL_LABEL}</span>
       <span class="ritual-row-icons" role="list">${progressIconsHtml(state)}</span>
-      ${bonusChip}
       <span class="ritual-row-cta" aria-hidden="true">${ctaLabel}</span>
     </button>
   `;
@@ -79,15 +78,11 @@ function ritualModalHtml(state) {
   }).join('');
 
   // S14: 모달 상단에 한 줄 바와 동일한 정보 재표시 (배경 가림 보완).
-  // S089: Luck 보상 폐기. "완성" 라벨만.
-  const bonusChip = filled
-    ? `<span class="ritual-row-bonus" aria-hidden="true">완성</span>`
-    : '';
+  // S089-후속 (2026-05-17): bonus chip 폐기 (완성 중복 인지 회피). 만땅 시각 강조는 .is-filled class + completionBanner.
   const headerRow = `
     <div class="ritual-row ritual-row-in-modal${filled ? ' is-filled' : ''}" aria-hidden="true">
       <span class="ritual-row-label">${RITUAL_LABEL}</span>
       <span class="ritual-row-icons" role="list">${progressIconsHtml(state)}</span>
-      ${bonusChip}
     </div>
   `;
 
