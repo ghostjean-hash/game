@@ -162,13 +162,12 @@ export const RITUAL_PARTICLE_DURATION_MS = 900;
 export const RITUAL_PARTICLE_RADIUS_MAX = 140;  // 최대 비행 반경(px)
 export const RITUAL_PARTICLE_SIZE = 4;          // 입자 base 반지름(px)
 
-// 1.16. ~~백캐스트~~ (S090, 2026-05-17 전면 폐기)
+// 1.16. ~~백캐스트~~ (S090, 2026-05-17 전면 폐기 / S093 cleanup 2026-05-18 dead 상수 제거)
 // 사용자 명시 "진짜를 돌리고 싶다" + "추천 번호를 직접 선택해야 한다".
 // 백캐스트 = 캐릭터 첫 진입 시 가짜 30회 history 자동 채움 → 사용자 명시 선택 없는 자동 누적 = 정직성 부족.
 // S089 Luck 폐기 후 명분도 약했음(원래 Luck 부트스트랩 목적).
-// 폐기 상수: BACKFILL_RECENT_COUNT 자체는 옛 호환을 위해 잔존 (dead). 코드 호출 0건.
+// S093 (2026-05-18): BACKFILL_RECENT_COUNT 상수 자체 제거 (코드 호출 0건 확인. tests/suites/history.test.js의 export 부재 검증은 유지하여 회귀 차단).
 // S090 신설: HISTORY_REGISTER_CAP_PER_ROUND - 회차당 history 등록 cap (한국 로또 1구좌 = 5게임 max 모방).
-export const BACKFILL_RECENT_COUNT = 30;  // S090 폐기. 호환을 위해 잔존 (코드 호출 0건).
 
 // ~~1.16-A. history 등록 cap~~ (S090-후속 7, 2026-05-18 폐기)
 // 사용자 명시 "5개 제한 없애줘". saved-sets cap(20)이 자연 상한 역할.
@@ -301,7 +300,7 @@ export const ANIMAL_SIGNS = Object.freeze([
 // 1.20. 프리셋 시스템 (S36, 2026-05-08 / S63 부제 폐기, 2026-05-10). SSOT: docs/02_data.md 1.20.
 // 사용자가 자주 쓰는 전략 묶음을 1버튼으로. 메인 = 3슬롯 고정.
 // 사용자 편집 가능 (라벨 / 묶음). 슬롯 추가 / 삭제는 불가.
-// S63 (2026-05-10): 부제 필드 폐기. 추첨 탭 슬롯 두 번째 행은 묶인 전략 label list 자동 표시.
+// S63 (2026-05-10): 부제 필드 폐기. 추천 탭 슬롯 두 번째 행은 묶인 전략 label list 자동 표시.
 export const PRESET_SLOT_COUNT = 3;
 export const PRESET_LABEL_MAX = 8;
 // ~~PRESET_SUBTITLE_MAX~~ S63 (2026-05-10) 폐기. 부제 필드 자체 폐기.

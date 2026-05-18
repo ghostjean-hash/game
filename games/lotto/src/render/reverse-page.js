@@ -10,7 +10,7 @@ const RANK_LABELS = { 1: '1등', 2: '2등', 3: '3등', 4: '4등', 5: '5등' };
 let selected = []; // 사용자가 선택한 번호 (모듈 상태, 페이지 재진입 시 보존)
 
 /**
- * 역추첨 탭 렌더.
+ * 게임 탭 렌더 (옛 역추첨 탭, S091 라벨 정정).
  * @param {HTMLElement} container
  * @param {Array} draws
  */

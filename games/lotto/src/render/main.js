@@ -1,5 +1,5 @@
-// 메인 wire-up. 5개 탭 라우팅 (추첨/통계/전적/휠링/설정).
-// 추첨 탭: 슬롯 → 번호(hero) → 운세 → 전략 1줄 → 캐릭터 카드(압축).
+// 메인 wire-up. 5개 탭 라우팅 (추천/기록/통계/게임/설정 - S091 라벨 정정).
+// 추천 탭: 슬롯 → 번호(hero) → 운세 → 전략 1줄 → 캐릭터 카드(압축).
 // SSOT: docs/01_spec.md 4장.
 import { renderCharacterForm, renderCharacterEditForm } from './character-form.js';
 import { characterCardHtml } from './character-card.js';
@@ -140,7 +140,7 @@ function openEditCharacterModal(id) {
 }
 
 function deleteActive() {
-  // T1: 추첨 탭 슬롯에서 호출 안 됨. 설정 탭의 캐릭터 삭제 핸들러는 deleteCharacterById.
+  // T1: 추천 탭 슬롯에서 호출 안 됨. 설정 탭의 캐릭터 삭제 핸들러는 deleteCharacterById.
   if (state.characters.length <= 1) return;
   const active = state.characters.find((c) => c.id === state.activeId);
   const ok = window.confirm(`'${active ? active.name : '활성'}' 캐릭터를 삭제할까요?`);
@@ -528,7 +528,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   // S5-T2: 의식 만땅 시 추천 카드 #1 골드 글로우.
   const ritualFilled = !!(state.ritual && state.ritual.appliedBonus);
 
-  // S27 (2026-05-03): 메인 카드(미리보기) + 5세트 컴팩트 추첨 탭에서 노출 폐기.
+  // S27 (2026-05-03): 메인 카드(미리보기) + 5세트 컴팩트 추천 탭에서 노출 폐기.
   //   누적 리스트(추천1, 추천2, ...)만 표시. 라벨 시작 = 1 (메인이 없으니).
   // S28 (2026-05-04): 추천 리스트를 hero에서 분리. (S29에 의해 위치 재정정)
   // S29 (2026-05-04): 채팅 UX 패턴 적용. 결과(추천 리스트)는 위에 누적, 도구(+ 버튼 → 전략)는 아래.
@@ -667,7 +667,7 @@ function renderHome(content) {
     openRitualModalForActive();
   });
 
-  // S26: 누적 세트 - 추가 / 삭제 / 전체 비우기 핸들러.
+  // S26: 누적 세트 - 추가 / 삭제 / 전체 삭제 핸들러 (S088 라벨 정정).
   content.querySelector('[data-action="add-saved-1"]')?.addEventListener('click', () => {
     addSavedSetsBatch(SAVED_SETS_BATCH_SMALL);
   });
@@ -742,8 +742,8 @@ function renderHome(content) {
   });
 
   // S36(2026-05-08): 프리셋 편집 모달 진입.
-  // S61(2026-05-10): 추첨 탭 진입점 폐기. 편집은 설정 탭 - 프리셋 관리에서. 본 핸들러는 dead.
-  //   (data-action="preset-edit" 셀렉터가 추첨 탭 DOM에 없어 미동작. ?. 가드로 안전.)
+  // S61(2026-05-10): 추천 탭 진입점 폐기. 편집은 설정 탭 - 프리셋 관리에서. 본 핸들러는 dead.
+  //   (data-action="preset-edit" 셀렉터가 추천 탭 DOM에 없어 미동작. ?. 가드로 안전.)
 
   // S36(2026-05-08): 캐릭터 카드 접힘 / 펼침 토글 + localStorage 학습.
   content.querySelectorAll('[data-action="char-card-toggle"]').forEach((el) => {
@@ -888,11 +888,11 @@ function renderApp() {
         state.options = loadOptions();
         renderApp();
       },
-      // S79 (2026-05-17): 출처 표시 모드 변경 후 state 갱신 + 다시 렌더 (현재 설정 탭이라 UI 즉시 변동 없음, 다음 추첨 탭 진입 시 반영).
+      // S79 (2026-05-17): 출처 표시 모드 변경 후 state 갱신 + 다시 렌더 (현재 설정 탭이라 UI 즉시 변동 없음, 다음 추천 탭 진입 시 반영).
       onSourceDisplayModeChange: () => {
         state.options = loadOptions();
       },
-      // S61 (2026-05-10): 설정 탭 - 프리셋 관리에서 편집 / 기본값 복원 후 추첨 탭 동기화 신호.
+      // S61 (2026-05-10): 설정 탭 - 프리셋 관리에서 편집 / 기본값 복원 후 추천 탭 동기화 신호.
       onPresetsChanged: () => {
         state.presets = loadPresets();
       },

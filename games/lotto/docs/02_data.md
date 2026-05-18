@@ -115,7 +115,7 @@
 
 1.5.4.4. **출처 라벨**: 결과 객체에 `strategySources: string[]` (numbers와 동일 순서). 추천 리스트(saved-sets-section)에서 1글자 short(`strategy.short`) + 카테고리 색 배경 표시 (단일 strategy면 빈 배열 → 라벨 미표시). S22 dot → 1글자 라벨. S27 메인 카드 폐기로 노출 위치 = 누적 리스트 row 단위.
 1.5.4.5. **최소 1개 보장**: 다중 모드에서 마지막 1개 토글 제거는 무시 (전략 0개 방지).
-1.5.4.6. **백캐스트 영향 없음**: `backfillRecommendations`은 단일 전략으로 결정론 유지. 다중 모드여도 history는 첫 전략 기준.
+1.5.4.6. ~~**백캐스트 영향 없음**~~ (S090 백캐스트 전면 폐기, S093 cleanup line 의미 폐기).
 
 1.5.4.7. **S25 풀 평균 수렴 검증**: 운세 3개(별자리/원소/사주) 결과 평균이 풀 합집합 평균(22~30 케이스 의존)에 수렴. 이전 S3-T1~S24는 평균 6~9 (작은 번호 편향). 회귀 테스트 `tests/suites/recommend.test.js` "S25 recommendMulti: 운세 3개 평균 풀 평균에 수렴".
 
@@ -395,10 +395,10 @@ character.savedSets = {
 
 | 상수 | 값 | 의미 |
 |---|---|---|
-| ~~`BACKFILL_RECENT_COUNT`~~ | ~~30~~ | ~~캐릭터 첫 진입 시 history에 백필~~ (S090 폐기. 호환을 위해 상수 자체는 잔존, 호출 0건) |
+| ~~`BACKFILL_RECENT_COUNT`~~ | ~~30~~ | ~~캐릭터 첫 진입 시 history에 백필~~ (S090 폐기 / S093 cleanup 상수 자체 제거) |
 | **`HISTORY_REGISTER_CAP_PER_ROUND`** (S090) | **5** | 회차당 history 등록 max (한국 동행복권 1구좌 = 5게임 모방) |
 
-1.16.1. ~~위치~~: S090 폐기. `backfillRecommendations` 함수 자체 삭제. 사용자 명시 등록만 history에 누적.
+1.16.1. ~~위치~~: S090 폐기. `backfillRecommendations` 함수 자체 삭제. 사용자 명시 등록만 history에 누적. (S093 2026-05-18: dead 상수 `BACKFILL_RECENT_COUNT`도 제거)
 
 **1.16-A. history 등록 메커니즘 (S090, 2026-05-17 신설)**:
 - saved-sets-row 카드의 "확정" 버튼 (S090-후속 단축, 옛 "내 번호로 선택") → `core/history.js` `toggleSavedSetRegistration(character, savedSet, drwNo)`.

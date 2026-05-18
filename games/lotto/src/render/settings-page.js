@@ -40,8 +40,8 @@ export function renderSettingsPage(container, handlers) {
     ? `<strong>${lastDraw.drwNo}회</strong>까지 반영 · 최근 추첨 ${lastDraw.drwDate}`
     : '<strong>회차 데이터 없음</strong>';
 
-  // S61 (2026-05-10): 프리셋 관리 섹션. 추첨 탭의 "편집" 텍스트 링크가 본 영역으로 이동.
-  // S63 (2026-05-10): subtitle 필드 폐기. 묶인 전략 label list 자동 표시 (추첨 탭 슬롯과 일관).
+  // S61 (2026-05-10): 프리셋 관리 섹션. 추천 탭의 "편집" 텍스트 링크가 본 영역으로 이동.
+  // S63 (2026-05-10): subtitle 필드 폐기. 묶인 전략 label list 자동 표시 (추천 탭 슬롯과 일관).
   // SSOT: docs/01_spec.md 5.1.5.2.
   const presetRows = (presets || []).slice(0, PRESET_SLOT_COUNT).map((p, idx) => {
     const sids = Array.isArray(p?.strategyIds) ? p.strategyIds : [];
@@ -95,7 +95,7 @@ export function renderSettingsPage(container, handlers) {
 
     <section class="stats-section">
       <h2 class="stats-title">캐릭터 관리</h2>
-      <p class="stats-note">캐릭터 추가 / 삭제는 본 영역에서 합니다. 추첨 탭의 슬롯은 빠른 전환 전용.</p>
+      <p class="stats-note">캐릭터 추가 / 삭제는 본 영역에서 합니다. 추천 탭의 슬롯은 빠른 전환 전용.</p>
       <ul class="char-list">${charRows}</ul>
       <button type="button" class="btn-primary char-add" data-action="add-character">
         ${plus()} 새 캐릭터 추가
@@ -104,7 +104,7 @@ export function renderSettingsPage(container, handlers) {
 
     <section class="stats-section">
       <h2 class="stats-title">프리셋 관리</h2>
-      <p class="stats-note">추첨 탭의 프리셋 ${PRESET_SLOT_COUNT}슬롯을 편집합니다. 슬롯 행을 누르면 라벨 / 부제 / 묶을 전략을 바꿀 수 있어요.</p>
+      <p class="stats-note">추천 탭의 프리셋 ${PRESET_SLOT_COUNT}슬롯을 편집합니다. 슬롯 행을 누르면 라벨 / 부제 / 묶을 전략을 바꿀 수 있어요.</p>
       <ul class="preset-manage-list">${presetRows}</ul>
       <button type="button" class="btn-secondary" data-action="reset-presets">기본값 복원</button>
     </section>
@@ -250,7 +250,7 @@ export function renderSettingsPage(container, handlers) {
   container.querySelectorAll('[data-preset-idx]').forEach((el) => {
     el.addEventListener('click', () => {
       openPresetEditor(loadPresets(), () => {
-        // 모달 저장 후 설정 탭 자체 재렌더 + 추첨 탭 동기화 신호.
+        // 모달 저장 후 설정 탭 자체 재렌더 + 추천 탭 동기화 신호.
         renderSettingsPage(container, handlers);
         if (typeof handlers.onPresetsChanged === 'function') handlers.onPresetsChanged();
       });

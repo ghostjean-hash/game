@@ -1,4 +1,4 @@
-// 캐릭터 슬롯 HTML. 추첨 탭에서는 빠른 전환 전용. 추가/삭제는 설정 탭으로 이동(2.32, T1).
+// 캐릭터 슬롯 HTML. 추천 탭에서는 빠른 전환 전용. 추가/삭제는 설정 탭으로 이동(2.32, T1).
 
 export function characterSlotsHtml(characters, activeId) {
   const slots = characters.map((c) => {

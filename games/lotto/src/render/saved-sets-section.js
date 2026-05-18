@@ -1,5 +1,5 @@
 // 누적 추천 세트 섹션. SSOT: docs/01_spec.md 5.2.5 (신규).
-// 메인 카드 아래에 추천1, 추천2 ... 세로 스택. 개별 삭제 + 전체 비우기.
+// 메인 카드 아래에 추천1, 추천2 ... 세로 스택. 개별 삭제 + 전체 삭제 (S088 라벨 정정).
 // 비어있으면 섹션 자체 미표시 (UI 노이즈 회피).
 
 import { numberColor, strategyTagColor } from '../data/colors.js';
@@ -65,12 +65,12 @@ function tagBackgroundFromSources(list) {
 }
 
 /**
- * 추천 리스트 섹션. S27: 메인 카드 폐기 후 추첨 탭의 유일한 추천 표시 영역.
+ * 추천 리스트 섹션. S27: 메인 카드 폐기 후 추천 탭의 유일한 추천 표시 영역.
  * S32 (2026-05-07): poolExhausted 배너 슬롯 추가. SSOT: docs/01_spec.md 5.2.5.4 / docs/02_data.md 1.5.8.6.
  * @param {Array} list character.savedSets.list
  * @param {number} [labelStart=1] 라벨 시작 인덱스. S27 이후 메인 카드 폐기로 1부터 시작.
  * @param {boolean} [poolExhausted=false] 같은 strategyIds로 풀 한계 도달 상태. true면 배너 노출.
- * @returns {string} html. list 비면 빈 상태 안내(추첨 탭 빈 화면 회피).
+ * @returns {string} html. list 비면 빈 상태 안내(추천 탭 빈 화면 회피).
  */
 /**
  * S090 (2026-05-17): registeredKeys = Set<string> - 각 세트 numbers.join(',')로 history 등록 여부 판정.
@@ -135,13 +135,13 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
 
 /**
  * 추천 리스트 액션 바.
- * S29.1 (2026-05-04): grid 3열 (좌 spacer / 가운데 + 1세트 + 5세트 / 우측 전체 비우기). hint는 두 번째 줄 가운데.
+ * S29.1 (2026-05-04): grid 3열 (좌 spacer / 가운데 + 1세트 + 5세트 / 우측 전체 삭제). hint는 두 번째 줄 가운데. (S088 라벨 정정)
  * S32 (2026-05-07): poolExhausted 시 + 버튼 비활성. 우선순위 cap > poolExhausted > 정상.
  * S60 (2026-05-10): 액션바 인라인 토스트 슬롯 폐기. 토스트는 화면 하단 fixed 팝업으로 이동 (main.js flashSavedSetsToast).
  *   SSOT: docs/02_data.md 1.5.8.6.6.
  * S75 (2026-05-16): `presetSelected` 인자 신설. false면 + 버튼 disabled + "프리셋을 선택하세요" hint.
  *   사용자 명시 "프리셋이 선택되지 않을 경우 세트 추천이 안 되어야 함" 직접 대응. 우선순위: cap > poolExhausted > presetSelected > 정상.
- * 누적 cap 도달 시 + 버튼 disable. list 비어있으면 전체 비우기 disable.
+ * 누적 cap 도달 시 + 버튼 disable. list 비어있으면 전체 삭제 disable.
  */
 export function savedSetsAddBarHtml(currentCount, cap, poolExhausted = false, presetSelected = true) {
   const remain = cap - currentCount;

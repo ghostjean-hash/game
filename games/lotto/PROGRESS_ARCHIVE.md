@@ -19,6 +19,7 @@
 > 15차 정리: 2026-05-17. Sprint 075(절 2.96, DEFAULT_PRESETS 순서/라벨/묶음 재정렬 + 프리셋 미선택 차단) archive 추가 이전. Sprint 089 신설(Luck 자산 전면 폐기)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 076~089 활성 잔존.
 > 16차 정리: 2026-05-17. Sprint 076(절 2.97, 캐릭터 카드 흉일 시각/동작 결손 정정) archive 추가 이전. Sprint 090 신설(백캐스트 + 자동 history 등록 폐기 + "내 번호로 선택" 진입점)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 077~090 활성 잔존.
 > 17차 정리: 2026-05-18. Sprint 077(절 2.98, 추천 리스트 다중 학설 매칭 시각화) archive 추가 이전. Sprint 091 신설(하단 탭 순서 + 라벨 정정)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 078~091 활성 잔존.
+> 18차 정리: 2026-05-18. Sprint 078(절 2.99, 운세 3학설 출처 태그 색 명도 극대화) + Sprint 079(절 2.100, 출처 표시 모드 dot/label + 프리셋 색점) archive 추가 이전. Sprint 093 신설(cleanup 묶음: BACKFILL 상수 폐기 + 옛 탭명 sweep + 전체 비우기 sweep)로 활성 9건 도달 → 룰 1.6 자동 적용 (2건 동시 이전). Sprint 084~093 활성 잔존.
 >
 > 본 archive는 검색 / 회귀 디버그용. 새 세션에서 자동 적재되지 않음.
 
@@ -4580,3 +4581,182 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 | (예정) | dev 환경: SW 차단 + dev-server.mjs 정적 서버 |
 | 2026-05-02 | 2.26 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 + 보너스 버그 수정 + 폼/탭 개선 + 11전략 직관화 |
 | 2026-05-02 | 2.27 객관 전략(통계/빈도/필터) 캐릭터 무관 분리 - "통계 추첨이 사람마다 다른" 결손 정정 |
+
+---
+
+## 2.99. Sprint 078 완료 - 운세 3학설 출처 태그 색 명도 극대화 (S78, 2026-05-17, archive 18차 이전 2026-05-18)
+
+배경: 사용자 명시 "별자리, 4원소, 사주이 더 차이나도록 수정해줘" + 정정 "색이 더 차이나는거야. 다른게 수정되면 안돼". 자비스 1차 안(hue 다양화 = 핑크/보라/주황)이 사용자 의도 위배 → **분홍 hue 유지 + 명도 극대화**로 정정.
+
+### 2.99.1. 색 변경 (STRATEGY_TAG_COLORS, 정정 후)
+
+| 학설 | 이전 | 이후 |
+|---|---|---|
+| 별자리 (astrologer) | pink-500 `#ec4899` | **pink-300 `#f9a8d4`** (밝음) |
+| 4원소 (zodiacElement) | pink-700 `#be185d` | **pink-600 `#db2777`** (중간) |
+| 사주 (fiveElements) | pink-800 `#9d174d` | **pink-900 `#831843`** (어두움) |
+
+옛 1~2단 차이 → 3단 차이로 시각 식별 향상. 카테고리 통일성(분홍) 보존.
+
+### 2.99.2. 자비스 1차 안 폐기 (자기 점검 7건째)
+
+1차 안 = hue 다양화 (핑크/보라/주황). 사용자 정정 "다른게 수정되면 안돼" = hue 변경이 "다른 거 수정" 범주. **카테고리 통일성 유지 + 색 차이만**이 사용자 의도.
+
+자비스 결손 패턴: 사용자 명시 "더 차이나도록"의 해석 범위를 hue까지 확장. 사용자 의도는 명도/채도 차이만. 자비스 자기 룰 = 색 변경 시 카테고리 정책(hue) 보존이 default. hue 변경은 사용자 명시 요청 시만.
+
+### 2.99.3. 변경 파일
+
+- `src/data/colors.js`: `STRATEGY_TAG_COLORS` 운세 3종 색 (pink-300/600/900) + S78 주석 정정.
+- `docs/02_data.md` 2.7: 정책 갱신 (분홍 hue 유지 + 명도 극대화 명시).
+- `game/service-worker.js` v53 → v54.
+
+### 2.99.4. 검증
+
+- `node tests/run-node.js` → **323 / 323 PASS** (회귀 0, 색 정의만 변경).
+- 색 grep 정합: STRATEGY_TAG_COLORS 정의 3건 + docs/02_data.md 2.7 표 3건.
+
+### 2.99.5. 사용자 화면 기대 변동
+
+운세 프리셋 추천 시 출처 태그(.num-source-tag):
+- 별자리 단독 = 밝은 분홍 (pink-300)
+- 4원소 단독 = 중간 분홍 (pink-600)
+- 사주 단독 = 어두운 분홍 (pink-900)
+- 다중 매칭 (S77) = linear-gradient 좌우 분할로 명도 차 더 명확 (밝/어두움 그라디언트 패턴)
+
+### 2.99.6. Sprint 071 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 071(절 2.92, 모바일 480~361px padding-bottom) archive 이전. 본 sprint 종료 시점 활성 = 072~078 = 7건 정합. archive 11차 정리.
+
+## 2.100. Sprint 079 완료 - 출처 표시 모드 설정 추가 (dot/label) + 프리셋 색점 (S79, 2026-05-17, archive 18차 이전 2026-05-18)
+
+배경: 사용자 명시 "추천 로또 번호 아래 표시되는 사주/별자리/4원소 등 표시 방식을 설정에서 제어. 색점 표시 모드 추가 (한글 없이 작은 점, 간결). 다중 매칭 시 점 N개 나란히. 하단 전략 프리셋 스트링 앞에도 동일 색점 (설정 무관 항상 표시)". 사용자 확정 = 기본값 dot / 옵션명 한글·색점 / 프리셋 라벨 각 학설마다 1개.
+
+### 2.100.1. options.sourceDisplayMode 신규
+
+| 모드 | 값 | 동작 |
+|---|---|---|
+| 색점 (기본) | `'dot'` | num-source-dots 컨테이너 + num-source-dot 작은 원 N개 나란히 |
+| 한글 | `'label'` | 옛 num-source-tag (1글자 short, 다중 매칭 시 다글자) |
+
+`OPTIONS_DEFAULT` = `{ ..., sourceDisplayMode: 'dot' }`. `loadOptions`의 `...OPTIONS_DEFAULT, ...rest` 패턴이 옛 사용자에 자동 마이그레이션.
+
+### 2.100.2. 프리셋 슬롯 strategyLabel 색점 (설정 무관)
+
+`preset-buttons.js` + `settings-page.js` presetRows 모두 갱신. 각 학설 label 앞에 `.preset-strategy-dot` (6x6px 원 + strategyTagColor 인라인). 묶음 = "● 별자리 · ● 사주 · ● 4원소". 설정의 sourceDisplayMode와 무관 = 항상 표시.
+
+### 2.100.3. 변경 파일
+
+- `src/data/numbers.js`: SOURCE_DISPLAY_* 상수 + 기본값.
+- `src/data/storage.js`: OPTIONS_DEFAULT에 sourceDisplayMode 키.
+- `src/render/saved-sets-section.js` + `src/render/draw-card.js`: numHtml에 mode 인자 + dotHtmlFromSources / labelHtmlFromSources 분기.
+- `src/render/main.js`: state.options.sourceDisplayMode를 savedSetsSectionHtml에 전달 + onSourceDisplayModeChange 핸들러.
+- `src/render/preset-buttons.js`: strategyLine 안 각 학설 token + dot.
+- `src/render/settings-page.js`: 라디오 토글 UI + presetRows에도 색점.
+- `styles/main.css`: `.num-source-dots` / `.num-source-dot` / `.preset-strategy-token` / `.preset-strategy-dot` / `.preset-strategy-sep` 신규.
+- `tests/suites/storage.test.js`: sourceDisplayMode 누락 자동 채움 단언 + round-trip 1건 신설.
+- `game/service-worker.js` v54 → v55.
+
+### 2.100.4. 검증
+
+- `node tests/run-node.js` → **324 / 324 PASS** (323 → 324, S79 round-trip 1건 추가).
+- 신규 단언: 누락 키 = 'dot' 기본 + 'dot'/'label' round-trip.
+
+### 2.100.5. 사용자 화면 기대 변동
+
+- 기본(dot 모드): 번호공 아래 작은 색점 N개. 한글 없음. 풀 겹침 = 점 2~3개 나란히.
+- label 모드 (옵션 선택): 옛 한글 머리글자 (1~3글자, 색 분할 배경).
+- 프리셋 슬롯: "● 별자리 · ● 사주 · ● 4원소" 같이 학설별 색점 항상 표시 (설정 무관).
+
+### 2.100.6. Sprint 072 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 072(절 2.93, assignSourceForNumber 라벨 매핑 정정) archive 이전. 본 sprint 종료 시점 활성 = 073~079 = 7건 정합. archive 12차 정리.
+
+### 2.100.7. S80 - 색점 크기 정합 강제 (후속 정정)
+
+배경: 사용자 캡쳐 보고 "왜 원형점의 크기가 들쭉날쭉하지 정확히 일치해야 함". 추천4 / 추천6의 점들이 미세하게 다른 크기로 렌더링.
+
+원인 분석:
+- `.num-source-dot { width: 7px; height: 7px }` 홀수 픽셀 = device pixel ratio (모바일 2x/3x) 환경에서 fractional pixel(3.5/3.5 device px) 안티앨리어싱.
+- 컨테이너 `.num-source-dots`의 line-height 상속(=1.5)이 inline-flex 안 점에 baseline 영향.
+- box-sizing 미명시 = `content-box` 기본 + 미래 padding/border 추가 시 크기 변동 위험.
+
+정정 (CSS-only, JS 영향 0):
+- 점 크기 **7→8px** (짝수, fractional 회피)
+- `box-sizing: border-box` + `min/max-width/height: 8px` + `flex: 0 0 8px` 강제
+- 컨테이너 `line-height: 0` + `font-size: 0`로 inline baseline 영향 차단
+- `.preset-strategy-dot` 동일 패턴 적용 (프리셋 슬롯 색점도 정합)
+
+변경 파일:
+- `styles/main.css`: `.num-source-dots/dot` + `.preset-strategy-dot` 룰 강화.
+- `game/service-worker.js` v55 → v56.
+
+검증: 324/324 PASS (CSS-only, 회귀 0).
+
+### 2.100.8. S81 - 번호공(.num) 크기 정합 강제 (후속 정정 2)
+
+배경: 사용자 캡쳐 + 강한 비판 "왜 원의 크기가 다르지 5번째도 그렇고, 근본적으로 코드를 개판으로 짰다고 생각되는데?". 추천 리스트의 번호공이 색별로 다른 크기로 보임.
+
+원인 분석:
+- `.num` 본체 룰(line 665~683) = width/height 44px 명시만. box-sizing/padding/line-height/flex-shrink 미명시 = device pixel ratio + 다른 컨텍스트(inline-flex grid item) 영향 시 fractional 변동 가능.
+- 옛 캐시 (v55/v56) 가능성도 있으나 본 정정으로 강제 정합 보장.
+- 색 명도 착시 가능성 (진한 색 = 시각상 크게 인지)도 일부 영향 가능. 단 CSS 강제 정합 후 실측 동일 보장.
+
+정정 (CSS-only):
+- `.num` 본체에 `box-sizing: border-box` + `flex-shrink: 0` + `flex-grow: 0` + `padding: 0` + `line-height: 1` 명시.
+- min/max는 본체 미명시 (모바일 `.saved-set-row .num-cell .num` 36px / 결과 페이지 `.num` 40px / 컴팩트 5세트 30px cascade 보존).
+- 모든 컨텍스트 .num이 자체 width/height 명시 = 정합 확정.
+
+변경 파일:
+- `styles/main.css`: `.num` 본체 룰 강화 (line 665~).
+- `game/service-worker.js` v56 → v57.
+
+검증: 324/324 PASS (CSS-only, 회귀 0).
+
+자비스 자기 점검 (8건째 결손):
+- 사용자 캡쳐 = 번호공 자체 크기 차이. 자비스가 Sprint 080 점 크기만 정정 후 번호공 점검 안 함.
+- 색점 정정 후 번호공도 같은 결손 가능성 인지 못 함 = 패턴 인지 실패.
+- 향후 룰: 시각 정합 문제 보고 시 같은 컴포넌트 군 전수 점검 (점/번호공/태그 모두).
+
+사용자 캐시 권장: PWA 사용자는 SW v57 활성화 후 강력 새로고침 (Ctrl+Shift+R). 본 정정이 옛 캐시 잔재까지 cover.
+
+### 2.100.9. S82 - 색점 정합 재강화 (Sprint 080 후속 결손)
+
+배경: 사용자 격앙 "색점을 규격화된 것으로 사용하라고 왜 세로 크기, 가로 크기가 다르냐고!!!!!!". Sprint 080의 8px 정정 후에도 일부 점이 가로 vs 세로 다른 크기로 렌더링 (캡쳐 = 추천1 23번/31번 / 추천5 6번/11번 / 프리셋 라벨 점).
+
+원인 분석 (Sprint 080의 부분 정정 한계):
+- 8px도 sub-pixel 영향 있음 (모바일 device pixel 2x = 16, 3x = 24 = 짝수지만 padding/border cascade 시 변동).
+- `inline-block`이 inline 영역 baseline 정렬에 영향 받아 가로/세로 비대칭 sub-pixel 라운딩.
+- `width: 8px`과 `height: 8px` 명시했어도 브라우저 렌더링 시 한쪽만 fractional pixel 라운딩 가능.
+
+정정 (S82, CSS-only):
+- 점 크기 **8→10px** (sub-pixel 영향 추가 감소)
+- **`aspect-ratio: 1 / 1` 강제** = 정사각형 강제 → 정원 보장. width != height 케이스 자체 차단
+- **`display: inline-block` → `display: block`** (inline baseline 영향 차단)
+- `border: 0` + `margin: 0` 추가 명시
+- `.preset-strategy-dot` 동일 패턴
+
+변경 파일:
+- `styles/main.css`: `.num-source-dot` + `.preset-strategy-dot` 룰 재강화.
+- `game/service-worker.js` v57 → v58.
+
+검증: 324/324 PASS (CSS-only).
+
+자비스 자기 점검 (9건째 결손):
+- Sprint 080의 정정 = 사용자 보고 후 빠른 패치만 적용. aspect-ratio 같은 강제 정합 룰 부재.
+- 사용자가 같은 결손 재보고 = 자비스 패치 강도 부족 인지 실패.
+- 향후 룰: 시각 정합 보고 시 sub-pixel 영향 가능 모든 룰(aspect-ratio / display block / 짝수 px + 큰 사이즈) 일괄 강제.
+
+### 2.100.10. S83 - 색점 크기 2/3 (사용자 명시)
+
+배경: 사용자 명시 "색점의 크기를 지금의 2/3로 줄여줘". Sprint 082의 10px 적용 후 사용자가 "너무 크다" 인지.
+
+정정:
+- `.num-source-dot` + `.preset-strategy-dot`: 10px → **6px** (10 × 2/3 ≈ 6.67, 짝수 강제 6)
+- 컨테이너 height 10→6, gap 3→2
+- aspect-ratio 1/1 + display block 정합 룰 유지 (Sprint 082 정합 보장 보존)
+
+변경 파일:
+- `styles/main.css`: dot 룰 크기 + 컨테이너 사이즈 조정
+- `game/service-worker.js` v58 → v59
+
+검증: 324/324 PASS (CSS-only).

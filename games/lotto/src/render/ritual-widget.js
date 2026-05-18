@@ -23,7 +23,7 @@ function progressIconsHtml(state) {
 }
 
 /**
- * 추첨 탭 한 줄 바 HTML. 영역 전체가 button.
+ * 추천 탭 한 줄 바 HTML. 영역 전체가 button.
  * @param {object} state ritual state
  */
 export function ritualWidgetHtml(state) {
