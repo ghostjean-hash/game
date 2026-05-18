@@ -1984,7 +1984,11 @@ a.btn-secondary,
 }
 /* S29 (2026-05-04): 개별 삭제 버튼을 타원 외곽 폐기 + 휴지통 아이콘으로 변경.
    border / border-radius 제거. background transparent. 아이콘 색만 hover 시 danger.
-   S29.4: hit area를 모든 break point에서 `--space-5`(24px)로 통일. */
+   S29.4: hit area를 모든 break point에서 `--space-5`(24px)로 통일.
+   S094-후속 (2026-05-19): F+B+ 옵션 - [확정][🗑] 인접 페어 오터치 방지.
+     (1) 시각 약화: opacity 0.45 default → focus/hover 시 1.0 (의도 강조).
+     (2) gap 확장: margin-left var(--space-3) (12px) = [확정] 버튼과 거리 분리.
+     (3) hit area 24x24 보존 (접근성 유지). 시각만 약화. */
 .saved-set-remove {
   display: inline-flex;
   align-items: center;
@@ -1992,13 +1996,24 @@ a.btn-secondary,
   width: var(--space-5);
   height: var(--space-5);
   padding: 0;
+  margin-left: var(--space-3);
   color: var(--color-text-dim);
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: color 0.15s;
-}@media (hover: hover) and (pointer: fine) {
-  .saved-set-remove:hover { color: var(--color-danger); }
+  opacity: 0.45;
+  transition: color 0.15s, opacity 0.15s;
+}
+.saved-set-remove:focus,
+.saved-set-remove:focus-visible,
+.saved-set-remove:active {
+  opacity: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+  .saved-set-remove:hover {
+    color: var(--color-danger);
+    opacity: 1;
+  }
 }
 
 /* S090 (2026-05-17): "확정" 버튼 (옛 "내 번호로 선택" - S090-후속에서 단축).

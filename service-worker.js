@@ -42,8 +42,9 @@
 // v79 (2026-05-18): lotto S093 - cleanup 묶음. (1) `BACKFILL_RECENT_COUNT` dead 상수 폐기 (src/data/numbers.js 호출 0건 확인, docs SSOT 정합). (2) 코드/주석 옛 탭명 sweep ("추첨/전적/역추첨" → "추천/기록/게임"). icons.js + PROGRESS / PROGRESS_ARCHIVE는 역사 흔적 보존 예외. (3) CSS/JS 주석 "전체 비우기" → "전체 삭제" sweep (S088 라벨 정정 정합). (4) Sprint 078 + 079 archive 이전(룰 1.6 활성 9 → 7 cap 정합). SSOT: PROGRESS.md 2.107.
 // v80 (2026-05-18): lotto S093-후속 - docs SSOT 옛 탭명 sweep. docs/01_spec.md 18건("추첨 탭"/"전적 탭" → "추천 탭"/"기록 탭", line 27 id mapping 정의는 옛 이름 보존) + docs/02_data.md 4건("추첨 탭" → "추천 탭"). S091 라벨 정정 후 docs SSOT 정합 완전 회복. 사용자 노출 영역 무변동(docs 본문은 협업자 reference). SSOT: PROGRESS.md 2.107.8.
 // v81 (2026-05-18): lotto S094 - 추천 row 라벨 시각 단축 "추천N" → "N" (영역 확보 목적). aria-label은 의미 보존 "추천N" 그대로 (스크린리더 호환). row grid 라벨 영역 데스크톱 44 → 28px / 480px↓ 40 → var(--space-5)(20px) / 360px↓ var(--space-6) → var(--space-5). 부수로 모바일 break point 3열 잔재(S090-후속 1 데스크톱만 4열 갱신, 모바일 누락) 4열 정합 회복. swipe-to-delete(S095)는 별도 sprint. SSOT: PROGRESS.md 2.108.
+// v82 (2026-05-19): lotto S094-후속 F+B+ - [확정][🗑] 인접 페어 오터치 방지. 사용자 캡쳐 "삭제 버튼이 여전히 확정 버튼과 나란히". S094 영역 확보(좌측 라벨 회수)만으로는 우측 페어 위치 분리 안 됨. (1) 휴지통 opacity 0.45 default → focus/hover 시 1.0 (시각 약화). (2) margin-left var(--space-3)(12px) (gap 확장). (3) hit area 24x24 보존 (접근성). swipe-to-delete(C 옵션) 진행 여부는 본 옵션 효과 확인 후 결정. SSOT: PROGRESS.md 2.108.8.
 // v78 (2026-05-18): lotto S092 (정정 통합) - 사용자 명시 13건 진화. 핵심 결과만 기록 (상세 진화 SSOT: PROGRESS.md 2.106). 최종: 옛 회차 이력 = 회차별 그룹 카드. 그룹 헤더 = NNNN회 · YYYY-MM-DD + 당첨번호 row(번호공 32x32 가운데 + 보너스 ball + "당첨" 우측, 골드 톤 배경). 본문 = 한 줄 row(번호공 가운데 + 등수 라벨 우측). 라벨 세분화: 0=미적중, 1/2=N개 적중, 3+=등수, draws 없음=미발표. 일치 ball 강조 = 흰색 inner + 골드 outer 2층 외곽선 + 14px glow. 미일치 ball = row 종류 무관 항상 dim(opacity 0.35 + grayscale 0.7) - 룰 일관성. renderHistoryPage(container, character, currentDrwNo, draws) 시그니처 확장. docs 01_spec 5.8.1-A + 5.8.4 정합.
-const CACHE_VERSION = "v81";
+const CACHE_VERSION = "v82";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
