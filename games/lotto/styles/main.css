@@ -1172,6 +1172,12 @@ a.btn-secondary,
   opacity: 0.35;
   filter: grayscale(0.7);
 }
+/* S097-후속 (2026-05-19): 미발표 row(발표 대기 + 7일 이상 옛 회차 draws 부재)는 dim 적용 안 함.
+   사용자 명시 "미발표의 구슬은 반투명 적용 안함". 자기 번호는 또렷이 노출. */
+.history-group-row.is-unsettled .history-group-row-nums .num {
+  opacity: 1;
+  filter: none;
+}
 .history-group-row-nums .num.is-matched {
   box-shadow:
     0 0 0 2px #fff,
@@ -1181,17 +1187,23 @@ a.btn-secondary,
 }
 
 /* S097 (2026-05-19): 발표 대기 "?" ball - 본 6 + 보너스 1 모두 물음표.
-   사용자 명시 "현재 회차에도 당첨번호 영역 + 7개 구슬 모두 물음표". */
+   S097-후속 (2026-05-19): 사용자 명시 "구슬과 동일한 형태, ? 중앙에 숫자보다 살짝 크게".
+     - 클래스에 `num` 추가 = .num 본체 룰(원형 32x32 + flex 가운데) 적용. border-radius 50% 보존.
+     - 점선 외곽선 + 투명 배경 (가려졌음을 시각 명시).
+     - ? 폰트 = var(--font-size-md) (숫자는 .sm = 14, ? = md = 16 정도, 살짝 크게 + 가운데).
+     - box-sizing border-box로 border 추가해도 32x32 유지. */
 .history-num.is-pending {
-  background: var(--color-surface);
+  background: transparent;
   color: var(--color-text-dim);
-  font-weight: bold;
+  font-weight: 700;
+  font-size: var(--font-size-md);
   border: 1px dashed var(--color-text-dim);
-  font-size: var(--font-size-sm);
+  box-sizing: border-box;
+  line-height: 1;
 }
 .history-num.is-pending.is-bonus {
-  outline: 1px dashed var(--color-text-dim);
-  outline-offset: 1px;
+  /* 보너스도 동일 점선 (별도 외곽선 폐기). */
+  outline: none;
 }
 
 /* S097 (2026-05-19): 발표 후 미reveal row - 반투명 + 숫자 숨김 + 우측 체크 버튼.

@@ -20,10 +20,12 @@ function colorNum(n, extraClass = '') {
 /**
  * S097 (2026-05-19): 발표 대기 "?" ball.
  * 사용자 명시 - 본 6 + 보너스 1 = 7개 모두 물음표.
+ * S097-후속 (2026-05-19): num 클래스 추가 = 다른 구슬과 동일 원형 / 크기.
+ *   사용자 명시 "구슬과 동일한 형태, 물음표도 중앙에 숫자보다 살짝 크게".
  * @param {string} [extra] 추가 클래스 ('is-bonus' 등).
  */
 function pendingBallHtml(extra = '') {
-  const cls = extra ? `history-num is-pending ${extra}` : 'history-num is-pending';
+  const cls = extra ? `num history-num is-pending ${extra}` : 'num history-num is-pending';
   return `<span class="${cls}" aria-label="발표 대기">?</span>`;
 }
 
@@ -230,10 +232,20 @@ function historyGroupRowHtml(h, draw, hasDraw) {
   const matchedCount = matchedSet.size;
 
   // S097 (2026-05-19): revealed 분기.
-  //   - hasDraw && revealed=false → 반투명 ball + 숫자 숨김 + 우측 체크 버튼.
-  //   - hasDraw && revealed=true 또는 !hasDraw (발표 대기) → 옛 동작.
-  //   - 발표 대기 (hasDraw=false) = revealed 무관 옛 동작 (사용자가 자기 번호는 보고 있어야 함).
-  const isMasked = hasDraw && h.revealed === false;
+  //   - hasDraw && revealed=false && 추첨일 + 7일 안 → 마스킹 + 체크 버튼.
+  //   - hasDraw && revealed=true 또는 !hasDraw → 옛 동작.
+  //   - 발표 대기 (hasDraw=false) = revealed 무관 옛 동작 (자기 번호는 또렷이 노출).
+  // S097-후속 (2026-05-19): 사용자 명시 "복권 추첨 후 1주일간 가려진 채로 유지, 1주일 지나면 자동 오픈".
+  //   추첨일 + 7일이 지나면 revealed 무관 자동 노출 = 다음 회차 추첨 시점에 자연 정리.
+  let isWithinSettleWindow = false;
+  if (hasDraw && draw && draw.drwDate) {
+    const drwTimeMs = new Date(draw.drwDate).getTime();
+    if (!Number.isNaN(drwTimeMs)) {
+      const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+      isWithinSettleWindow = (Date.now() - drwTimeMs) < SEVEN_DAYS_MS;
+    }
+  }
+  const isMasked = hasDraw && h.revealed === false && isWithinSettleWindow;
 
   let rankLabel;
   if (isMasked) {
@@ -265,7 +277,11 @@ function historyGroupRowHtml(h, draw, hasDraw) {
     ? `<button type="button" class="history-row-reveal" data-action="reveal-row" data-row-drw="${h.drwNo}" data-row-key="${key}" aria-label="추첨 결과 확인">확인</button>`
     : `<span class="history-group-row-rank" style="color: ${rankColor}">${rankLabel}</span>`;
 
-  const rowCls = isMasked ? 'history-group-row is-masked' : 'history-group-row';
+  // S097-후속 (2026-05-19): 미발표 row(hasDraw=false)는 dim 적용 안 함.
+  //   사용자 명시 "미발표의 구슬은 반투명 적용 안함". 발표 대기 = 자기 번호는 또렷이 노출.
+  let rowCls = 'history-group-row';
+  if (isMasked) rowCls += ' is-masked';
+  if (!hasDraw) rowCls += ' is-unsettled';
   return `
     <article class="${rowCls}" data-row-drw="${h.drwNo}" data-row-key="${key}">
       <div class="history-group-row-nums">${numsHtml}</div>

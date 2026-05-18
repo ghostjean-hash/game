@@ -4,7 +4,7 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-19 (Sprint 097 - 기록 탭 reveal 게임화. 발표 대기 ? 7개 + 발표 후 ball 마스킹 + 체크 클릭 순차 reveal + 일치 바운스).
+1.3. **마지막 갱신**: 2026-05-19 (Sprint 097-후속 - ? ball 원형 정합 + 미발표 dim 폐기 + 7일 자동 노출 윈도우).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 4차 2026-05-16 (Sprint 060~064 추가 archive 이전). 5차~8차 2026-05-16 (Sprint 065~068 각각 강제 이전). 9~16차 2026-05-17 (Sprint 069~076 각각 강제 이전). 17차 2026-05-18 (Sprint 077 강제 이전). 18차 2026-05-18 (Sprint 078/079 2건 동시 강제 이전). 19차 2026-05-18 (Sprint 084 강제 이전). 20차 2026-05-19 (Sprint 088 강제 이전). 21차 2026-05-19 (Sprint 089 강제 이전). 22차 2026-05-19 (Sprint 090 강제 이전 = Sprint 097 추가로 활성 8 → 룰 1.6 1건 cap 정합). 직전 5 Sprint + 본 sprint(들)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 1.6. **PROGRESS.md 길이 정책 (S72, 2026-05-16 룰화)**: 활성 sprint 절 **최대 7건**(직전 5 + 본 sprint 묶음). 8건 초과 시 가장 옛 sprint 1건을 `PROGRESS_ARCHIVE.md` 강제 이전. archive는 무제한. 자연 약 350~500줄 유지.
@@ -793,4 +793,55 @@
 ### 2.111.9. 자비스 자기 점검 (17건째 결손 없음, 본 sprint = 사용자 명시 4건 정직 답습)
 
 본 sprint = 사용자 명시 흐름을 frame 변경 없이 그대로 구현. 자비스 자율 결정 영역 = 데이터 모델 (`revealed` 필드 자연 도출) + reveal step interval (0.32s) + bounce keyframe (5단 scale) + 마이그레이션 (옛 데이터 true 자동). 모두 사용자 의도 답습 + 정합 패턴. 14건째/15건째/16건째 결손 룰 답습 정합.
+
+### 2.111.10. S097-후속 - ? ball 원형 정합 + 미발표 dim 폐기 + 7일 자동 노출 윈도우 (2026-05-19)
+
+배경: 사용자 캡쳐 + 명시 3건 묶음.
+1. "가려진 당첨 번호가 구슬과 동일한 형태, 물음표도 중앙에 숫자보다 살짝 크게".
+2. "미발표의 구슬은 반투명 적용 안함".
+3. "복권 추첨하고 일주일간 가려진 채로 유지, 일주일이 지나면 현재의 옛 회차 이력과 동일하게 오픈".
+
+### 2.111.10.1. 결손 진단
+
+| # | 결손 | 원인 |
+|---|---|---|
+| 1 | ? ball이 사각형 점선 박스 | pendingBallHtml 클래스에 `num` 누락 → .num 본체 룰(원형 50% radius / flex 가운데) 미적용. .history-num만 적용되어 변태 형태 |
+| 2 | 미발표 row가 6 ball 전부 반투명 | `.history-group-row-nums .num:not(.is-matched)` dim 룰이 모든 row에 일괄 적용. 미발표 row는 매칭 데이터 자체 없으므로 dim 의미 0 |
+| 3 | 마스킹 무한 지속 | isMasked = hasDraw && !revealed만 판정. 시간 윈도우 부재 = 사용자가 reveal 안 하면 영구 가려짐 |
+
+### 2.111.10.2. 정정 묶음 3건
+
+| # | 영역 | 변경 |
+|---|---|---|
+| 1 | `src/render/history-page.js` `pendingBallHtml` | 클래스 `history-num is-pending` → **`num history-num is-pending`** (.num 본체 룰 자연 상속) |
+| 1 | `styles/main.css` `.history-num.is-pending` | background transparent / font-size var(--font-size-md) (숫자 sm보다 살짝 큼) / font-weight 700 / border 1px dashed / **box-sizing border-box** (32x32 유지). border-radius는 .num에서 50% 상속 |
+| 1 | `.is-pending.is-bonus` | 별도 outline 폐기 (가려진 상태에선 본/보너스 시각 구분 무의미) |
+| 2 | `src/render/history-page.js` `historyGroupRowHtml` | hasDraw=false row에 `.is-unsettled` 클래스 추가 |
+| 2 | `styles/main.css` | `.history-group-row.is-unsettled .num` = opacity 1 + filter none (dim 룰 override) |
+| 3 | `src/render/history-page.js` `historyGroupRowHtml` | 7일 윈도우 판정 추가. `isWithinSettleWindow = Date.now() - new Date(draw.drwDate).getTime() < 7d`. isMasked 조건에 결합 |
+
+### 2.111.10.3. 7일 윈도우 흐름
+
+```
+추첨일 (2026-05-23 토) ──── 7일 ──── 다음 추첨일 (2026-05-30 토)
+   ↑                                       ↑
+hasDraw=true 시작            윈도우 종료, 자동 노출
+revealed=false면 마스킹       isMasked = false 자동
+체크 버튼 노출                옛 동작 회귀 (등수 라벨)
+```
+
+사용자가 1주일 동안 reveal 안 해도 다음 추첨 시점에 자연 정리. 일관된 옛 회차 이력 화면으로 회귀.
+
+### 2.111.10.4. 검증
+
+`node tests/run-node.js` → **320 / 320 PASS** (회귀 0). UI/CSS/시간 판정 변경, 데이터 모델 무변동.
+
+[의견] 시간 판정 단위 테스트는 본 sprint 범위 외 - Date.now() mock 필요. 미래 cleanup 영역. 7일 윈도우는 실 사용자 시점 검증 영역 (2026-05-23 추첨 후 캡쳐).
+
+### 2.111.10.5. 사용자 화면 기대 변동
+
+- **? ball (현재 회차 발표 대기)**: 원형 32x32 + 점선 dashed + ? 가운데 (숫자 14 → ? 16, 살짝 큼). 다른 구슬과 동일 형태.
+- **미발표 row** (현재 회차 + 일주일 지난 draws 부재 옛 회차): 자기 번호 또렷이 노출 (반투명 X).
+- **2026-05-23 ~ 2026-05-30 1225회 row**: 마스킹 + 체크 버튼.
+- **2026-05-30 이후 1225회 row**: 자동 노출 (체크 트리거 무관).
 
