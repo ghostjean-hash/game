@@ -1222,6 +1222,13 @@ a.btn-secondary,
 .history-num.is-masked.is-revealed {
   animation: history-ball-reveal 0.32s ease-out;
 }
+/* S097-후속 4 (2026-05-19): 사용자 명시 "틀린 번호는 확인되는 순간 즉시 반투명, 맞은 것은 즉시 하이라이트".
+   reveal + 불일치(:not(.is-matched)) = 옛 dim 룰 적용. .is-masked의 opacity 1 override 차단.
+   reveal + 일치(.is-matched) = 옛 highlight 룰 + bounce 자연 작동. */
+.history-num.is-masked.is-revealed:not(.is-matched) {
+  opacity: 0.35;
+  filter: grayscale(0.7);
+}
 @keyframes history-ball-reveal {
   0%   { transform: scale(0.85); opacity: 0.5; }
   60%  { transform: scale(1.05); opacity: 1; }

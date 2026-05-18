@@ -4,7 +4,7 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-19 (Sprint 097-후속 3 - 마스킹 ball 자기 색 보존 + ? 가운데 + num 클래스 원형 정합).
+1.3. **마지막 갱신**: 2026-05-19 (Sprint 097-후속 4 - reveal 직후 불일치 ball 즉시 dim + 일치 ball 즉시 highlight).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 4차 2026-05-16 (Sprint 060~064 추가 archive 이전). 5차~8차 2026-05-16 (Sprint 065~068 각각 강제 이전). 9~16차 2026-05-17 (Sprint 069~076 각각 강제 이전). 17차 2026-05-18 (Sprint 077 강제 이전). 18차 2026-05-18 (Sprint 078/079 2건 동시 강제 이전). 19차 2026-05-18 (Sprint 084 강제 이전). 20차 2026-05-19 (Sprint 088 강제 이전). 21차 2026-05-19 (Sprint 089 강제 이전). 22차 2026-05-19 (Sprint 090 강제 이전 = Sprint 097 추가로 활성 8 → 룰 1.6 1건 cap 정합). 직전 5 Sprint + 본 sprint(들)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 1.6. **PROGRESS.md 길이 정책 (S72, 2026-05-16 룰화)**: 활성 sprint 절 **최대 7건**(직전 5 + 본 sprint 묶음). 8건 초과 시 가장 옛 sprint 1건을 `PROGRESS_ARCHIVE.md` 강제 이전. archive는 무제한. 자연 약 350~500줄 유지.
@@ -960,4 +960,46 @@ JS setTimeout chain (옛 S097):
 옛 S097 마스킹 룰 = "가려진 상태"를 채도/투명도로 표현 = 사용자 멘탈 모델("구슬은 구슬 그대로, 숫자 자리만 ?")과 어긋남. 사용자 캡쳐 + 명시 후 정정. 향후 룰:
 - "가려진 정보"의 시각 메타포 결정 시 = 사용자 의도 사전 확인 의무. 채도 떨어뜨리기 vs 숫자만 가리기는 다른 frame.
 - 사용자가 "ball 모양 + 자기 색"이라고 명시한 경우 = 시각 변형 금지. 정보 마스킹은 텍스트 자리에만 적용.
+
+### 2.111.13. S097-후속 4 - reveal 직후 불일치 즉시 dim + 일치 즉시 highlight (2026-05-19)
+
+배경: 사용자 명시 "번호가 틀린 것은 확인되는 순간 즉시 반투명으로 바뀌어야 하고, 맞은 것은 즉시 하이라이트가 표시되어야 해".
+
+### 2.111.13.1. 결손 진단
+
+옛 S097-후속 3 정정 후 흐름:
+- reveal 시점 = `b.classList.add('is-revealed')` + 일치면 `is-matched is-bounced` 추가.
+- CSS `.history-num.is-matched` = highlight (옛 룰) - 일치 ball 정상 작동.
+- 불일치 ball = .is-revealed만 → **dim 안 됨**.
+
+원인: 옛 `.history-group-row-nums .num:not(.is-matched)` dim 룰이 `.history-group-row.is-masked .history-num.is-masked` (opacity 1) specificity로 override 당함. reveal 후에도 자기 색 그대로 유지.
+
+### 2.111.13.2. 정정
+
+`styles/main.css` 룰 신설:
+
+```css
+.history-num.is-masked.is-revealed:not(.is-matched) {
+  opacity: 0.35;
+  filter: grayscale(0.7);
+}
+```
+
+- specificity = 클래스 3건(.history-num + .is-masked + .is-revealed) + 부정(:not) = `.is-masked` 단독보다 강함.
+- reveal 시점에 .is-revealed 클래스 추가 → CSS 분기 즉시 적용 → 불일치 ball만 dim.
+- 일치 ball = .is-matched 추가 → :not 분기 제외 → 옛 highlight + bounce 그대로.
+
+### 2.111.13.3. 사용자 화면 기대 변동
+
+reveal 흐름 (확인 클릭 후 좌측부터 0.32초 간격):
+- ball 1: ? → 숫자 + pop. 일치 = 골드 highlight + bounce. 불일치 = 즉시 반투명 + grayscale.
+- ball 2~6: 동일 패턴 순차.
+
+reveal 완료 (마지막 ball + 0.7초) 후 `revealRecommendation` 호출 → renderApp → 옛 동작 회귀:
+- 옛 .num:not(.is-matched) dim 룰이 그대로 적용 = 불일치 dim 유지.
+- 일치 ball highlight 유지.
+
+### 2.111.13.4. 검증
+
+`node tests/run-node.js` → **320 / 320 PASS** (회귀 0). CSS 룰 1건만 추가.
 
