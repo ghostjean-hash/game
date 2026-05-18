@@ -22,6 +22,7 @@
 > 18차 정리: 2026-05-18. Sprint 078(절 2.99, 운세 3학설 출처 태그 색 명도 극대화) + Sprint 079(절 2.100, 출처 표시 모드 dot/label + 프리셋 색점) archive 추가 이전. Sprint 093 신설(cleanup 묶음: BACKFILL 상수 폐기 + 옛 탭명 sweep + 전체 비우기 sweep)로 활성 9건 도달 → 룰 1.6 자동 적용 (2건 동시 이전). Sprint 084~093 활성 잔존.
 > 19차 정리: 2026-05-18. Sprint 084(절 2.101, 캐릭터 편집 기능 신설 + 후속 S85~S87) archive 추가 이전. Sprint 094 신설(추천 row 라벨 "추천N" → "N" 시각 단축 + 모바일 4열 결손 fix)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 088~094 활성 잔존.
 > 20차 정리: 2026-05-19. Sprint 088(절 2.102, 라벨 정정 "전체 비우기" → "전체 삭제" + 크롬 모바일 하단 메뉴 동기) archive 추가 이전. Sprint 095 신설(row 단위 휴지통 폐기 + "확정" 텍스트 → 토글 아이콘. 본질 frame 전환)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 089~095 활성 잔존.
+> 21차 정리: 2026-05-19. Sprint 089(절 2.103, Luck 자산 전면 폐기 + 후속 S089) archive 추가 이전. Sprint 096 신설(기록 탭 "등수별 분포" 섹션 폐기 - 6/45 확률 + summary 중복 + 사행성 회피)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 090~096 활성 잔존.
 >
 > 본 archive는 검색 / 회귀 디버그용. 새 세션에서 자동 적재되지 않음.
 
@@ -5001,3 +5002,147 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 **사용자 화면 기대**: 설정 탭 "표시 안 함" 선택 시 번호공 아래 색점/한글 모두 사라짐. 번호공 6개 + 보너스 1개 단색 외 시각 노이즈 0. 옛 'dot' / 'label' 선택은 그대로 동작.
 
 **잔여**: 기본값은 `'dot'` 유지 (사용자 명시 "훨씬 간결" 답습). 사용자가 명시 변경 시만 'off' 활성. 옛 사용자 자동 마이그레이션 = `loadOptions`의 `...OPTIONS_DEFAULT` spread 패턴으로 누락 키 자동 채움 = 변동 없음.
+
+---
+
+## 2.103. Sprint 089 완료 - Luck 자산 전면 폐기 (S089, 2026-05-17, archive 21차 이전 2026-05-19)
+
+배경: 사용자 명시 2건. (1) "Lotto 번호 추천해서 Luck을 게임요소로 추가하고 싶은 생각은 없어". (2) "Luck 바가 100점 만점에 10점대나 기분이 아주 나쁨". 본 sprint = FM 표준 절차 답습 (docs SSOT → core → data → render → tests → SW → PROGRESS).
+
+### 2.103.1. 폐기 사유
+
+| 측면 | 진단 |
+|---|---|
+| 사용자 의도 | Luck을 게임요소로 추가 안 함 (명시 발화) |
+| 사용자 경험 | 100점 만점 바 = "능력치" 인지 = 낮은 점수 부정적 감정 |
+| 사행성 회피 | CLAUDE.md 6.3 / docs/01_spec 정합 - 추첨 영향 능력치 인상 자체가 회피 대상 |
+| 메커니즘 영향 | BLESSED 전략 1개 boost + ritual 만땅 +5만 실작동. cleanup 범위 한정 |
+
+### 2.103.2. core 변경
+
+| 파일 | 변경 |
+|---|---|
+| `src/core/luck.js` | **모듈 전체 폐기** (applyLuckGrowth / rankLuckBonus / RANK_LUCK_BONUS 모두 제거) |
+| `src/core/recommend.js` | `ctx.luck` 인자 제거 + BLESSED boost = `ratio * 0.5` (luck 비례) → **고정 +0.5** |
+| `src/core/history.js` | `luckApplied` 필드 제거 + 매칭 시 잠금 로직 폐기 + backfill 호출에서 luck 인자 제거 |
+| `src/core/ritual.js` | `applyRitualBonus`에서 `character.luck += 5` 폐기 → **잠금만 유지** (character 불변) |
+
+### 2.103.3. data 변경
+
+| 파일 | 변경 |
+|---|---|
+| `src/data/numbers.js` | `LUCK_MIN` / `LUCK_MAX` / `LUCK_INITIAL` / `LUCK_BONUS_HIT` / `LUCK_BONUS_DAILY` / `LUCK_BONUS_RITUAL` 6 상수 폐기 |
+| `src/data/storage.js` | `loadCharacters` 마이그레이션 - 옛 데이터의 `character.luck` 필드 + `history[].luckApplied` 자동 제거 |
+
+### 2.103.4. render 변경
+
+| 파일 | 변경 |
+|---|---|
+| `src/render/character-card.js` | `.char-luck` progressbar 블록 제거 (char-lucky 행운 번호 영역은 유지) |
+| `src/render/character-form.js` | 신규 캐릭터 `luck: LUCK_INITIAL` 필드 제거 + LUCK_INITIAL import 제거 |
+| `src/render/history-page.js` | 누적 요약 그리드 Luck 셀 제거 (6셀 → 5셀) |
+| `src/render/main.js` | `applyLuckGrowth` import 제거 + 호출 제거 + ctx luck 인자 2건 제거 + ritual 만땅 보너스 갱신 폐기 |
+| `src/render/ritual-widget.js` | 만땅 chip "+5 적용" → "완성" / 완성 배너 카피 정정 / intro 카피 정정 |
+| `src/render/settings-page.js` | hint 카피 "Luck 매칭" 정정 |
+| `src/render/strategy-picker.js` | BLESSED desc 정정 - "키운 Luck만큼 시드 6번호 보너스" → "캐릭터 시드 기반 6번호에 +0.5 boost" |
+
+### 2.103.5. tests 변경
+
+| 파일 | 변경 |
+|---|---|
+| `tests/suites/luck.test.js` | **파일 전체 폐기** |
+| `tests/runner.js` | luck.test 등록 해제 |
+| `tests/suites/history.test.js` | LUCK_INITIAL 사용 제거 + luckApplied 단언 부재 단언으로 정정 |
+| `tests/suites/recommend.test.js` | baseCtx luck 인자 제거 + `luck: 50,` 11건 일괄 제거 + "luck 달라도 같은 결과" 테스트 카피 정정 |
+| `tests/suites/ritual.test.js` | LUCK_BONUS_RITUAL import 제거 + Luck +5 단언 폐기 → character 불변 단언으로 정정 + cap 100 테스트 폐기 |
+| `tests/suites/saved-sets.test.js` | luck: 50 인자 제거 |
+| `tests/suites/storage.test.js` | characters round-trip 단언 확장 - 옛 luck 필드 + history.luckApplied가 load 시 자동 제거되는지 검증 |
+
+### 2.103.6. docs SSOT 변경
+
+| 파일 | 변경 |
+|---|---|
+| `docs/01_spec.md` | 5.1 캐릭터 정체성 / 5.1.3.0 architecture / 5.6 ritual / 5.8.1 요약 그리드 / 6.1 성공 이벤트 / 7.2 Luck 성장 / 7.5 백캐스트 (14 절 정정) |
+| `docs/02_data.md` | 1.2 Luck 스탯 / 1.5.5.4 5세트 영향 / 1.16 백캐스트 / 1.19.5 ritual 추첨 무관 / 1.19 상수 표 / 3.6 캐릭터 schema / 3.7 Recommendation schema / 3.8 등수별 보너스 (8 절 정정) |
+| `docs/03_architecture.md` | 폴더 구조에서 `luck.js` + `luck.test.js` 제거 + 데이터 흐름 안 applyLuck/applyLuckGrowth 호출 라인 제거 + core 책임 표에서 luck 제거 |
+
+### 2.103.7. BLESSED 전략 후속 영향
+
+**옛**: `boost = (luck/100) * 0.5` → 시드 6번호에 0~0.5 가산 (luck 비례).
+**새**: `boost = 0.5 고정` → 시드 6번호에 항상 +0.5 가산.
+
+- 결과 분포 변동 = 모든 캐릭터가 BLESSED 전략에서 시드 6번호 쏠림이 동일 (옛에는 luck 낮은 캐릭터는 거의 균등, 높은 캐릭터만 쏠림).
+- 결정론 = seed가 같으면 같은 결과 (luck 인자 폐기로 결정론 더 단순).
+- 캐릭터 시드 차별성 보존 = BLESSED 전략 선택 시 캐릭터마다 다른 결과.
+
+### 2.103.8. 검증
+
+`node tests/run-node.js` → **315 / 315 PASS** (325 → 315, luck.test 10건 폐기 + history/storage 단언 정정 + ritual cap 100 테스트 폐기).
+
+### 2.103.9. 사용자 화면 기대 변동
+
+- **캐릭터 카드**: Luck 100점 만점 바 사라짐. 띠/별자리/일주/운세/행운 번호만 유지.
+- **전적 그리드**: 6셀 → 5셀 (총 추천 / 발표 완료 / 적중 / 적중률 / 최고 등수).
+- **행운 의식 모달**: 만땅 chip "+5 적용" → "완성". 완성 배너 "Luck +5 부여됨" → "의식 완성". intro 카피 "만땅 시 Luck +5 1회 적용" 폐기.
+- **추첨 결과**: 객관 전략(통계 5종) + 학설 전략(별자리/4원소/사주) + 직감/균형 = 변동 0. BLESSED(랜덤) 전략 = 시드 6번호 쏠림이 luck 무관 일정 (옛 luck 낮은 캐릭터에게는 시드 쏠림이 약했음).
+- **옛 캐릭터 데이터**: `character.luck` + `history[].luckApplied` 잔존은 storage load 시 자동 제거.
+
+### 2.103.10. 잔여 / 후속
+
+- `WEIGHT_MAX_BIAS` 옛 상수(docs/02_data.md 1.6 표) = 옛 architecture 잔재. 본 sprint에서 dead 상수로 표기. cleanup 후순위.
+- 옛 PROGRESS_ARCHIVE의 "Luck" 표기는 역사 흔적으로 보존. 일관성 sweep 필요 시 별도 cleanup sprint.
+- 사용자 옛 캐릭터의 luck=50 같은 값은 load 시 사라지지만, 새 캐릭터는 처음부터 필드 자체 부재. 모든 사용자에게 일관된 schema.
+
+### 2.103.11. Sprint 075 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 075(절 2.96, DEFAULT_PRESETS 순서/라벨/묶음 재정렬) archive 이전. 본 sprint 종료 시점 활성 = 076~079 + 084 + 088 + 089 = 7건 정합. archive 15차 정리.
+
+### 2.103.12. S089-후속 - "행운 쌓기" → "당첨 기원" 라벨 변경 + 완성 chip 중복 폐기
+
+배경: 사용자 보고 캡쳐 2건. (1) "행운 쌓기 → 당첨 기원으로 스트링 변경". (2) "완성이 두 개나 중복으로 표시되네, 하나 삭제".
+
+**변경 1 - 라벨 정정**:
+
+| 영역 | 변경 |
+|---|---|
+| `src/render/ritual-widget.js` | `RITUAL_LABEL = '행운 쌓기'` → **`'당첨 기원'`** |
+| `docs/01_spec.md` 5.6 + 5.6.1 + 본문 4건 | 표기 정정 |
+| `docs/02_data.md` 1.19 + 1.19.6 | 표기 정정 |
+
+**변경 2 - 완성 chip 폐기**:
+
+옛 구조: `[라벨] [8 아이콘] [bonus chip "완성"] [cta "완성 ✓"]` = "완성" 단어 2회 표시.
+새 구조: `[라벨] [8 아이콘] [cta "완성 ✓"]` = "완성" 단어 1회.
+
+bonus chip은 S089 이전 "+5 적용" Luck 보상 노출 영역 → S089에서 임시 "완성"으로 정정 → 본 후속에서 cta와 중복 인지 발견 후 폐기. 만땅 시각 강조는 `.is-filled` class + completion banner로 충분.
+
+| 영역 | 변경 |
+|---|---|
+| 추첨 탭 한 줄 바 | bonus chip HTML 제거 |
+| 모달 헤더 row | bonus chip HTML 제거 |
+| `docs/01_spec.md` 5.6.2 구조 명세 | "+5 적용 chip" 항목 폐기 표시 |
+
+**라벨 정직성 룰 정정** (docs/01_spec.md 5.6.1 + docs/02_data.md 1.19.6):
+
+| 카피 | 옛 룰 | 새 룰 (S089-후속) |
+|---|---|---|
+| "확률" / "필승" | 금지 | **여전히 절대 금지** |
+| "당첨" 단독 / "당첨 확률 향상" / "당첨 보장" | 금지 | 직접 어필은 **여전히 금지** |
+| "당첨 기원" / "당첨 + 정성 어휘" | 금지 | **허용** (사용자 명시) |
+
+[의견] 베테랑 진단: "당첨" 단어가 행동 자극 영역이긴 하지만 "기원"이 정성/소망/의식 메타포로 톤 완화. 사용자 명시 결정 + intro 본문 보호 카피("당첨 확률에는 영향이 없습니다") 유지로 균형. CLAUDE.md 6.3 사행성 회피 룰의 핵심("확률 향상" / "필승") 보호 유지.
+
+**변경 파일**:
+
+- `src/render/ritual-widget.js`: RITUAL_LABEL + bonus chip 2건 제거 + 주석 정정
+- `docs/01_spec.md` 5.6 / 5.6.1 / 5.6 본문 4건
+- `docs/02_data.md` 1.19 / 1.19.6 + S089-후속 변경 메모 신설
+- `service-worker.js` v66 → v67
+
+**검증**: `node tests/run-node.js` → **315 / 315 PASS** (UI 라벨 / DOM 구조만 변경, 회귀 0).
+
+**사용자 화면 기대 변동**:
+- 추첨 탭 행운 쌓기 한 줄 바 라벨: "행운 쌓기" → **"당첨 기원"**.
+- 모달 헤더 라벨: 동일 변경.
+- 만땅 시: 옛 노란 "완성" chip 사라짐. cta 흰 "완성 ✓" 버튼만 유지.
+- 만땅 모달 진입: 완성 banner "의식 완성." 유지.

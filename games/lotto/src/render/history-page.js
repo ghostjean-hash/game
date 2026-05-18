@@ -1,10 +1,12 @@
 // 캐릭터 전적 / 이력 페이지.
 // S3-T2: 등수별 막대 차트 + 누적 통계 + 최근 30회 타임라인 추가.
+// S096 (2026-05-19): 등수별 분포 차트 폐기. 사용자 결정 - 6/45 확률 + summary 중복 + 사행성 회피 룰.
 import { characterStats } from '../core/history.js';
-import { numberColor, RANK_GLOW_COLORS, RANK_MISS_COLOR } from '../data/colors.js';
-import { horizontalBarsHtml } from './charts.js';
+import { numberColor, RANK_GLOW_COLORS } from '../data/colors.js';
 // S20: 보너스 표시 폐기로 plus 아이콘 미사용.
 // S58 (2026-05-09): RANK 색상 / 미적중 hex 인라인 → colors.js SSOT 위탁.
+// S096 (2026-05-19): horizontalBarsHtml import 폐기 (등수별 분포 폐기). stats-page.js에서는 잔존 사용.
+// S096 (2026-05-19): RANK_MISS_COLOR import 폐기 (등수별 분포에서만 사용. colors.js 상수 자체는 dead 잔존).
 
 const RANK_LABELS = { 1: '1등', 2: '2등', 3: '3등', 4: '4등', 5: '5등' };
 const TIMELINE_RECENT = 30; // 최근 N회 타임라인 길이
@@ -61,23 +63,13 @@ export function renderHistoryPage(container, character, currentDrwNo = null, dra
     </section>
   `;
 
-  // 등수별 분포 차트 (S3-T2)
-  const rankItems = [1, 2, 3, 4, 5].map((r) => ({
-    label: RANK_LABELS[r],
-    value: stats.ranks[r],
-    color: RANK_GLOW_COLORS[r],
-  }));
-  const missCount = stats.settled - stats.hits;
-  if (missCount > 0) {
-    rankItems.push({ label: '미적중', value: missCount, color: RANK_MISS_COLOR });
-  }
-  const rankChartHtml = `
-    <section class="stats-section">
-      <h2 class="stats-title">등수별 분포</h2>
-      ${horizontalBarsHtml(rankItems)}
-      <p class="stats-note">참고용. 매 회차 독립 시행이므로 누적 분포가 미래 적중률을 보장하지 않습니다.</p>
-    </section>
-  `;
+  // S096 (2026-05-19): 등수별 분포 차트 폐기.
+  //   사용자 결정 + 본질 진단:
+  //     (1) 6/45 확률 = 1등 1/8.1M / 5등 1/45. 누적 N회로 의미 형성 어려움 (1년 260게임 = 5등 평균 5.8회).
+  //     (2) summary에 "적중 N건 + 최고 등수"가 이미 같은 정보 = 중복.
+  //     (3) 사행성 회피 룰 (CLAUDE.md 6.3) - 등수 분포 강조가 캐릭터 선택 사행성 자극 가능.
+  //     (4) 데이터 부족 시 시각 노이즈 (모두 0인 빈 막대).
+  //   폐기 후 잔존 정보 = summary + timeline + 옛 회차 그룹 이력 (충분).
 
   // 최근 30회 타임라인 (도트, S3-T2)
   const timelineSrc = sortedHistory.slice(0, TIMELINE_RECENT).reverse(); // 시간 순
@@ -133,7 +125,6 @@ export function renderHistoryPage(container, character, currentDrwNo = null, dra
     </header>
     ${summaryHtml}
     ${pendingHtml}
-    ${rankChartHtml}
     ${timelineHtml}
     ${historyItems}
   `;
