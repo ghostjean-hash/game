@@ -8,7 +8,7 @@
 import { numberColor, strategyTagColor } from '../data/colors.js';
 import { STRATEGY_CATEGORIES, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL, SOURCE_DISPLAY_OFF, SOURCE_DISPLAY_DEFAULT } from '../data/numbers.js';
 import { strategyShort, strategyLabel } from './strategy-picker.js';
-import { trash, circleOutline, circleCheck } from './icons.js';
+import { trash, checkboxOutline, checkboxChecked } from './icons.js';
 
 const CATEGORY_TAG_CLASS = {
   stats: 'is-stats',
@@ -112,7 +112,7 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
     const regBtnAria = isReg ? `${label} 확정 취소` : `${label} 확정`;
     const regBtnTitle = isReg ? '확정 취소' : '내 번호로 확정';
     const regBtnCls = `saved-set-register${isReg ? ' is-registered' : ''}`;
-    const regBtnIcon = isReg ? circleCheck('icon icon-toggle') : circleOutline('icon icon-toggle');
+    const regBtnIcon = isReg ? checkboxChecked('icon icon-toggle') : checkboxOutline('icon icon-toggle');
     return `
       <div class="saved-set-row${regCls}" data-saved-idx="${i}" aria-label="${label}${isReg ? ' (확정됨)' : ''}">
         <span class="saved-set-idx" aria-hidden="true">${shortLabel}</span>

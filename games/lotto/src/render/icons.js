@@ -45,14 +45,14 @@ export function pencil(cls = 'icon icon-sm') {
   return `<svg class="${cls}" ${COMMON} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z"/></svg>`;
 }
 
-/** 빈 원 (미확정 토글). S095 (2026-05-19): 추천 row "확정" 토글 아이콘 OFF 상태. */
-export function circleOutline(cls = 'icon') {
-  return `<svg class="${cls}" ${COMMON} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>`;
+/** 빈 라운딩 사각 (미확정 체크박스). S095-후속 (2026-05-19): 옛 원 → 표준 체크박스 형태. */
+export function checkboxOutline(cls = 'icon') {
+  return `<svg class="${cls}" ${COMMON} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>`;
 }
 
-/** 채워진 원 + 흰색 체크 (확정 토글). S095 (2026-05-19): 추천 row "확정" 토글 아이콘 ON 상태. */
-export function circleCheck(cls = 'icon') {
-  return `<svg class="${cls}" ${COMMON} viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="10"/><polyline points="7.5 12.5 10.5 15.5 16.5 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+/** 채워진 라운딩 사각 + 흰 체크 (확정 체크박스). S095-후속 (2026-05-19): 옛 원 + ✓ → 표준 체크박스 형태. */
+export function checkboxChecked(cls = 'icon') {
+  return `<svg class="${cls}" ${COMMON} viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="2" y="2" width="20" height="20" rx="4.5"/><polyline points="6.5 12.5 10.5 16 17.5 8.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
 // ===== 하단 탭 5개 (추첨 / 통계 / 전적 / 휠링 / 설정) =====
