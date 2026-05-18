@@ -127,11 +127,18 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
     ? `<span class="saved-sets-register-counter" aria-label="이번 회차 확정 ${registerCount}건">확정 ${registerCount}건</span>`
     : '';
 
+  // S095-후속 2 (2026-05-19): "전체 삭제"를 액션바에서 헤더 우측으로 이동.
+  // 사용자 결손 보고: 체크박스 + "전체 삭제" 페어가 멀티 셀렉트 list 멘탈 모델 = "선택 삭제" 오인.
+  // 정정: 시각 그룹 분리 (액션바 = 추가 액션만 / 헤더 = 리스트 정리 단독) + 라벨 "전체 삭제" → "모두 비우기".
+  const clearBtnHtml = list.length > 0
+    ? `<button type="button" class="saved-sets-clear" data-action="clear-saved-sets" aria-label="추천 리스트 ${list.length}개 모두 비우기" title="추천 리스트 ${list.length}개 모두 비우기">${trash('icon icon-sm')}<span class="saved-clear-text">모두 비우기</span></button>`
+    : '';
+
   return `
     <section class="saved-sets-section" aria-label="저장된 추천 세트">
       <header class="saved-sets-header">
         <h2 class="saved-sets-title">추천 리스트 (${list.length})</h2>
-        ${counterHtml}
+        <div class="saved-sets-header-right">${counterHtml}${clearBtnHtml}</div>
       </header>
       ${bannerHtml}
       <div class="saved-sets-list">${items}</div>
@@ -143,11 +150,10 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
  * 추천 리스트 액션 바.
  * S29.1 (2026-05-04): grid 3열 (좌 spacer / 가운데 + 1세트 + 5세트 / 우측 전체 삭제). hint는 두 번째 줄 가운데. (S088 라벨 정정)
  * S32 (2026-05-07): poolExhausted 시 + 버튼 비활성. 우선순위 cap > poolExhausted > 정상.
- * S60 (2026-05-10): 액션바 인라인 토스트 슬롯 폐기. 토스트는 화면 하단 fixed 팝업으로 이동 (main.js flashSavedSetsToast).
- *   SSOT: docs/02_data.md 1.5.8.6.6.
- * S75 (2026-05-16): `presetSelected` 인자 신설. false면 + 버튼 disabled + "프리셋을 선택하세요" hint.
- *   사용자 명시 "프리셋이 선택되지 않을 경우 세트 추천이 안 되어야 함" 직접 대응. 우선순위: cap > poolExhausted > presetSelected > 정상.
- * 누적 cap 도달 시 + 버튼 disable. list 비어있으면 전체 삭제 disable.
+ * S60 (2026-05-10): 액션바 인라인 토스트 슬롯 폐기.
+ * S75 (2026-05-16): `presetSelected` 인자 신설.
+ * S095-후속 2 (2026-05-19): "전체 삭제" 액션 폐기 (헤더 우측으로 이동). 액션바 = + 1세트 / + 5세트 추가 액션만.
+ *   사용자 결손 보고: 체크박스 + "전체 삭제" 페어가 "선택 삭제" 오인. 시각 그룹 분리 정정.
  */
 export function savedSetsAddBarHtml(currentCount, cap, poolExhausted = false, presetSelected = true) {
   const remain = cap - currentCount;
@@ -156,7 +162,6 @@ export function savedSetsAddBarHtml(currentCount, cap, poolExhausted = false, pr
   // S32 / S75: cap 우선 → poolExhausted → presetSelected → 정상.
   const disabledAttr = (capDisabled || poolExhausted || noPreset) ? 'disabled aria-disabled="true"' : '';
   const fiveDisabledAttr = (remain < 5 || poolExhausted || noPreset) ? 'disabled aria-disabled="true"' : '';
-  const clearDisabledAttr = currentCount <= 0 ? 'disabled aria-disabled="true"' : '';
   let hint;
   if (capDisabled) {
     hint = `<span class="saved-add-hint is-cap">최대 ${cap}세트에 도달했습니다 · 일부 삭제 후 추가 가능</span>`;
@@ -172,9 +177,6 @@ export function savedSetsAddBarHtml(currentCount, cap, poolExhausted = false, pr
       <div class="saved-add-buttons">
         <button type="button" class="saved-add-btn" data-action="add-saved-1" ${disabledAttr}>+ 1세트</button>
         <button type="button" class="saved-add-btn" data-action="add-saved-5" ${fiveDisabledAttr}>+ 5세트</button>
-      </div>
-      <div class="saved-add-actions">
-        <button type="button" class="saved-sets-clear" data-action="clear-saved-sets" aria-label="추천 리스트 모두 삭제" title="전체 삭제" ${clearDisabledAttr}>${trash('icon icon-sm')}<span class="saved-clear-text">전체 삭제</span></button>
       </div>
       ${hint}
     </div>

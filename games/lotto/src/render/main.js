@@ -699,9 +699,24 @@ function renderHome(content) {
     const cur = getActive();
     const count = cur.savedSets?.list?.length || 0;
     if (count === 0) return;
-    const ok = window.confirm(`저장된 ${count}세트가 모두 삭제됩니다. 진행할까요?`);
+    // S095-후속 2 (2026-05-19): 사용자 결손 보고 "체크 + 전체 삭제 페어가 선택 삭제 오인".
+    // confirm 카피 강화 - 확정 항목 포함 명시. 확정 N개일 때 함께 안내.
+    const drwNo = state.drwNo;
+    const registeredCount = (cur.history || []).filter((h) => h.drwNo === drwNo && h.source === 'user').length;
+    let msg;
+    if (registeredCount > 0) {
+      msg = `추천 리스트 ${count}개가 모두 비워집니다 (확정 ${registeredCount}개 포함, 전적에서도 함께 제거됩니다). 진행할까요?`;
+    } else {
+      msg = `추천 리스트 ${count}개가 모두 비워집니다. 진행할까요?`;
+    }
+    const ok = window.confirm(msg);
     if (!ok) return;
-    const next = clearSavedSets(cur);
+    let next = clearSavedSets(cur);
+    // 확정 항목이 있었으면 현재 회차 history에서도 제거 (사용자 명시 "확정 포함" 일관).
+    if (registeredCount > 0) {
+      const filtered = next.history.filter((h) => !(h.drwNo === drwNo && h.source === 'user'));
+      next = { ...next, history: filtered };
+    }
     state.characters = state.characters.map((c) => (c.id === next.id ? next : c));
     saveCharacters(state.characters);
     renderApp();
