@@ -1206,24 +1206,20 @@ a.btn-secondary,
   outline: none;
 }
 
-/* S097 (2026-05-19): 발표 후 미reveal row - 반투명 + 숫자 숨김 + 우측 체크 버튼.
-   사용자 명시 흐름:
-   (1) 발표 시 ball 반투명 + 숫자 숨김 + 체크 버튼 노출.
-   (2) 체크 클릭 = 좌측부터 ball 순차 reveal (JS setTimeout chain으로 .is-revealed + .is-bounced 추가).
-   (3) 일치 ball = 확대 바운스 + 하이라이트 (.is-matched.is-bounced). */
+/* S097 (2026-05-19) + S097-후속 3 (2026-05-19): 발표 후 미reveal row.
+   사용자 명시 정정: "모양은 구슬과 완전히 똑같고, 색도 자기 색, 숫자 영역이 ?로 표시. 확인 누르면 숫자 + 연출 효과".
+   옛 (반투명 + grayscale) 폐기 → 자기 색 그대로 + 흰 ? 글자. 다른 ball과 시각 완전 동일, 숫자 자리만 다름.
+   체크 버튼이 우측에 있어 "확인 안 됨" 인지는 그쪽에서 자연 부여. */
 .history-group-row.is-masked .history-num.is-masked {
-  opacity: 0.5;
-  color: transparent;
-  filter: grayscale(0.6);
-  transition: opacity 0.3s ease, color 0.3s ease, filter 0.3s ease, transform 0.3s ease;
-}
-.history-group-row.is-masked .history-num.is-masked::before,
-.history-group-row.is-masked .history-num.is-masked::after { content: none; }
-/* reveal 진행: 클래스 .is-revealed → 텍스트 노출 + 색 복귀 + scale pop. */
-.history-num.is-masked.is-revealed {
   opacity: 1;
   color: #fff;
-  filter: grayscale(0);
+  font-weight: 700;
+  font-size: var(--font-size-md);
+  filter: none;
+  transition: transform 0.3s ease;
+}
+/* reveal 진행: 클래스 .is-revealed → 숫자 텍스트 변환(JS) + scale pop 연출. */
+.history-num.is-masked.is-revealed {
   animation: history-ball-reveal 0.32s ease-out;
 }
 @keyframes history-ball-reveal {

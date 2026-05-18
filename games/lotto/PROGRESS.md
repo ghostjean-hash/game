@@ -4,7 +4,7 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-19 (Sprint 097-후속 2 - 1회 unreveal reset 자동 마이그레이션 (사용자 "직접 열어볼거야")).
+1.3. **마지막 갱신**: 2026-05-19 (Sprint 097-후속 3 - 마스킹 ball 자기 색 보존 + ? 가운데 + num 클래스 원형 정합).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 4차 2026-05-16 (Sprint 060~064 추가 archive 이전). 5차~8차 2026-05-16 (Sprint 065~068 각각 강제 이전). 9~16차 2026-05-17 (Sprint 069~076 각각 강제 이전). 17차 2026-05-18 (Sprint 077 강제 이전). 18차 2026-05-18 (Sprint 078/079 2건 동시 강제 이전). 19차 2026-05-18 (Sprint 084 강제 이전). 20차 2026-05-19 (Sprint 088 강제 이전). 21차 2026-05-19 (Sprint 089 강제 이전). 22차 2026-05-19 (Sprint 090 강제 이전 = Sprint 097 추가로 활성 8 → 룰 1.6 1건 cap 정합). 직전 5 Sprint + 본 sprint(들)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 1.6. **PROGRESS.md 길이 정책 (S72, 2026-05-16 룰화)**: 활성 sprint 절 **최대 7건**(직전 5 + 본 sprint 묶음). 8건 초과 시 가장 옛 sprint 1건을 `PROGRESS_ARCHIVE.md` 강제 이전. archive는 무제한. 자연 약 350~500줄 유지.
@@ -889,4 +889,75 @@ S097 본 sprint storage.js 마이그레이션 = `revealed` 부재 항목을 true
 
 - flag `s097_unreveal_reset_v1`는 영구 잔존. 다음 cleanup sprint에서 정리 가능.
 - v1 suffix = 미래 다시 reset 필요 시 새 flag(예: `_v2`) 패턴 답습.
+
+### 2.111.12. S097-후속 3 - 마스킹 ball 시각 본질 정정 (자기 색 + 원형 + ?) (2026-05-19)
+
+배경: 사용자 캡쳐 + 명시 "모양은 구슬모양과 완전히 똑같고, 색도 자기 색이어야 하며, 숫자 영역이 물음표로 표시되어야 함. 확인을 누르면 숫자가 보이면서 연출 효과가 발생함".
+
+### 2.111.12.1. 결손 진단
+
+옛 S097 마스킹 룰:
+
+```css
+.history-group-row.is-masked .history-num.is-masked {
+  opacity: 0.5;
+  color: transparent;
+  filter: grayscale(0.6);
+}
+```
+
+문제 3건:
+| # | 결손 | 원인 |
+|---|---|---|
+| 1 | ball 사각형 형태 | history-page.js 마스킹 분기 클래스에 `num` 누락 → .num 본체 원형 룰(50% radius) 미적용. 옛 pendingBallHtml 결손과 동일 패턴 |
+| 2 | 색 채도 떨어짐 (회색빛) | opacity 0.5 + grayscale 0.6 = "가려진 상태"를 흐릿함으로 표현. 사용자 의도는 "자기 색 그대로" |
+| 3 | 숫자 자리 빈칸 | color transparent = ? 글자조차 숨김. 사용자 의도는 "숫자 자리에 ?" |
+
+### 2.111.12.2. 정정
+
+| 영역 | 변경 |
+|---|---|
+| `src/render/history-page.js` 마스킹 분기 | 클래스 `history-num is-masked` → **`num history-num is-masked`** (.num 본체 원형 32x32 + box-sizing 상속). pendingBallHtml과 동일 패턴 |
+| `styles/main.css` .is-masked | opacity 1 + color #fff + font-weight 700 + font-size var(--font-size-md) + filter none. 자기 색(numberColor.bg) 그대로 + 흰 ? 가운데 |
+| reveal keyframe | 옛 `@keyframes history-ball-reveal` (scale 0.85 → 1.05 → 1) 유지 = JS가 textContent ? → 숫자 변환하는 동안 pop 연출 효과 자연 작동 |
+
+### 2.111.12.3. 시각 비교
+
+```
+옛 (S097):
+  ▢ ▢ ▢ ▢ ▢ ▢  ← 사각형 + 회색빛 (opacity 0.5 + grayscale)
+  (숫자 자리 빈칸)
+
+새 (S097-후속 3):
+  ● ● ● ● ● ●  ← 원형 + 자기 색 (다른 ball과 완전 동일)
+  ? ? ? ? ? ?  ← 흰 ? (숫자 자리)
+                ← 우측 [확인] 버튼이 "가려진 상태" 시각 단서
+```
+
+### 2.111.12.4. 연출 효과 (확인 클릭 후)
+
+JS setTimeout chain (옛 S097):
+1. `b.classList.add('is-revealed')` → `@keyframes history-ball-reveal` 발동 (scale pop).
+2. `b.textContent = n` = ? → 숫자 텍스트 변환 (pop 중간 시점).
+3. 일치 ball = `b.classList.add('is-matched', 'is-bounced')` → `@keyframes history-ball-match-bounce` 추가 (강한 확대 + 골드 외곽).
+
+옛 keyframe `opacity 0.5 → 1` 변동은 새 .is-masked가 이미 opacity 1이라 무영향. scale pop만 시각 효과.
+
+### 2.111.12.5. 검증
+
+`node tests/run-node.js` → **320 / 320 PASS** (회귀 0). HTML 클래스 + CSS 룰만 변경.
+
+### 2.111.12.6. 사용자 화면 기대 변동
+
+- 마스킹 row의 6 ball = 다른 ball과 완전 동일 외형 (numberColor 자기 색 + 원형 32x32).
+- 각 ball 가운데 = 흰색 ? (숫자 자리).
+- 우측 = "확인" 버튼.
+- 사용자가 어떤 번호를 골랐는지 = 색 패턴으로 시각 식별 가능 (자기 색 보존).
+- 클릭 시 좌측부터 ball 순차 reveal → ? 텍스트가 숫자로 변환 + scale pop. 일치 ball은 추가 bounce + 골드 외곽.
+
+### 2.111.12.7. 자비스 자기 점검 (17건째 결손)
+
+옛 S097 마스킹 룰 = "가려진 상태"를 채도/투명도로 표현 = 사용자 멘탈 모델("구슬은 구슬 그대로, 숫자 자리만 ?")과 어긋남. 사용자 캡쳐 + 명시 후 정정. 향후 룰:
+- "가려진 정보"의 시각 메타포 결정 시 = 사용자 의도 사전 확인 의무. 채도 떨어뜨리기 vs 숫자만 가리기는 다른 frame.
+- 사용자가 "ball 모양 + 자기 색"이라고 명시한 경우 = 시각 변형 금지. 정보 마스킹은 텍스트 자리에만 적용.
 

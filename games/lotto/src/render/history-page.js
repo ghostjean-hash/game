@@ -263,9 +263,10 @@ function historyGroupRowHtml(h, draw, hasDraw) {
 
   const numsHtml = userNums.map((n) => {
     if (isMasked) {
-      // 반투명 + 숫자 숨김. background 색만 numberColor에서 가져와 시각 단서 유지 (어떤 번호인지는 hide).
+      // S097-후속 3 (2026-05-19): 사용자 명시 "모양은 구슬과 완전히 똑같고, 색도 자기 색이어야 하며, 숫자 영역이 물음표로 표시".
+      //   num 본체 클래스 상속(원형 32x32) + 자기 색 배경 + 흰 ? 글자. 다른 ball과 완전 동일 형태, 숫자 자리만 ?.
       const c = numberColor(n);
-      return `<span class="history-num is-masked" style="background-color:${c.bg};" data-num="${n}" aria-label="?">?</span>`;
+      return `<span class="num history-num is-masked" style="background-color:${c.bg};" data-num="${n}" aria-label="?">?</span>`;
     }
     const extraCls = matchedSet.has(n) ? 'history-num is-matched' : 'history-num';
     return colorNum(n, extraCls);
