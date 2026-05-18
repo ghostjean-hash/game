@@ -4,7 +4,7 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-19 (Sprint 097-후속 4 - reveal 직후 불일치 ball 즉시 dim + 일치 ball 즉시 highlight).
+1.3. **마지막 갱신**: 2026-05-19 (Sprint 097-후속 5 - 전적 summary 5칸 한줄 통일).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 4차 2026-05-16 (Sprint 060~064 추가 archive 이전). 5차~8차 2026-05-16 (Sprint 065~068 각각 강제 이전). 9~16차 2026-05-17 (Sprint 069~076 각각 강제 이전). 17차 2026-05-18 (Sprint 077 강제 이전). 18차 2026-05-18 (Sprint 078/079 2건 동시 강제 이전). 19차 2026-05-18 (Sprint 084 강제 이전). 20차 2026-05-19 (Sprint 088 강제 이전). 21차 2026-05-19 (Sprint 089 강제 이전). 22차 2026-05-19 (Sprint 090 강제 이전 = Sprint 097 추가로 활성 8 → 룰 1.6 1건 cap 정합). 직전 5 Sprint + 본 sprint(들)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 1.6. **PROGRESS.md 길이 정책 (S72, 2026-05-16 룰화)**: 활성 sprint 절 **최대 7건**(직전 5 + 본 sprint 묶음). 8건 초과 시 가장 옛 sprint 1건을 `PROGRESS_ARCHIVE.md` 강제 이전. archive는 무제한. 자연 약 350~500줄 유지.
@@ -1002,4 +1002,46 @@ reveal 완료 (마지막 ball + 0.7초) 후 `revealRecommendation` 호출 → re
 ### 2.111.13.4. 검증
 
 `node tests/run-node.js` → **320 / 320 PASS** (회귀 0). CSS 룰 1건만 추가.
+
+### 2.111.14. S097-후속 5 - 전적 summary 5칸 한줄 통일 (2026-05-19)
+
+배경: 사용자 캡쳐 + 명시 "전적 5칸을 한줄로 만들 수 있나?". 옛 .summary-grid = 데스크톱 3열 + 480px↓ 2열 → 모바일에서 3+2 줄 wrap.
+
+### 2.111.14.1. 정정
+
+`styles/main.css` .summary-grid 룰 갱신:
+
+| 영역 | 옛 | 새 |
+|---|---|---|
+| grid-template-columns | desktop `repeat(3, 1fr)` / mobile `repeat(2, 1fr)` | **`repeat(5, 1fr)` 통일** |
+| gap | var(--space-2) | mobile var(--space-1) / desktop var(--space-2) |
+| li padding | var(--space-2) | mobile var(--space-2) var(--space-1) / desktop var(--space-2) |
+| 라벨 font-size | 11px | mobile **10px** / desktop 11px |
+| 값 font-size | 18px | mobile **15px** / desktop 18px |
+| 라벨 letter-spacing | 0.05em | 0.03em (압축) |
+| 라벨 line-height | (auto) | 1.25 + word-break keep-all |
+| 값 line-height | (auto) | 1.2 |
+
+`@media (min-width: 481px)` 분기로 데스크톱 = 옛 폰트/padding 복귀, 모바일만 압축 적용.
+
+### 2.111.14.2. 폭 계산
+
+- 모바일 360px (캐릭터 width 약 340 - section padding) ÷ 5 셀 - gap = 약 60-64px / 셀.
+- 라벨 "적중 (3-5등)" = 8자 + 괄호 = 자연 2줄 wrap. line-height 1.25로 자연 표시.
+- 값 = 1-3 자리 숫자 (총 추천 N / 발표 완료 N / 적중 N / 적중률 X.X% / 최고 등수 N등). 15px font + tabular-nums로 정렬.
+
+### 2.111.14.3. 검증
+
+`node tests/run-node.js` → **320 / 320 PASS** (회귀 0). CSS 룰 통합 갱신.
+
+### 2.111.14.4. 사용자 화면 기대 변동
+
+- 모바일: 전적 summary = 5칸 한 줄. 라벨 작아짐 + 일부 라벨 2줄 wrap("적중 (3-5등)").
+- 데스크톱: 5칸 한 줄 + 폰트/padding 옛 사이즈 유지.
+- 시각 압축으로 발표 대기 섹션이 더 빨리 보임 (scroll 위치 상승).
+
+### 2.111.14.5. 잔여 / 후속
+
+- 옛 잔재 .summary-grid 룰 (line 957-982 line 1569 중복) = cleanup 영역. 본 sprint는 line 1569만 정정 (cascade 우선).
+- 라벨 wrap 2줄 = 모바일 320px 이하 환경에서는 더 좁아질 가능성. 최소폭 검증은 실 디바이스 영역.
 

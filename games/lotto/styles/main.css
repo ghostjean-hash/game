@@ -1565,37 +1565,46 @@ a.btn-secondary,
   gap: var(--space-2);
 }
 
-/* Sprint 013 / S3-T2: 전적 강화 (요약 그리드 + 타임라인 도트). */
+/* Sprint 013 / S3-T2: 전적 강화 (요약 그리드 + 타임라인 도트).
+   S097-후속 5 (2026-05-19): 사용자 명시 "전적 5칸을 한줄로". 데스크톱 3열 + 480px↓ 2열 → 5열 통일.
+   모바일 폭 360px대에선 한 셀 ~64px = 라벨 wrap 자연 발생 OK. 폰트/padding 압축으로 정합. */
 .summary-grid {
   list-style: none;
   margin: 0 0 var(--space-3) 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-2);
-}
-@media (max-width: 480px) {
-  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-1);
 }
 .summary-grid li {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: var(--space-2);
+  padding: var(--space-2) var(--space-1);
   background: var(--color-surface-soft);
   border-radius: var(--radius-sm);
 }
 .summary-label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--color-text-dim);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
+  line-height: 1.25;
+  word-break: keep-all;
 }
 .summary-value {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--color-text);
   font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+@media (min-width: 481px) {
+  /* 데스크톱 = 셀 폭 여유 → 폰트 약간 키움. */
+  .summary-grid { gap: var(--space-2); }
+  .summary-grid li { padding: var(--space-2); }
+  .summary-label { font-size: 11px; }
+  .summary-value { font-size: 18px; }
 }
 .timeline-dots {
   display: flex;
