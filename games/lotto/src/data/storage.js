@@ -42,6 +42,10 @@ export function saveCooccur(cooccur) { write('stats_cooccur', cooccur); }
 //   1회 강제 클린업: 모든 캐릭터의 history = [] 초기화. flag(lotto_s090_cleared)로 1회만 실행.
 //   이후 사용자 명시 "확정" 등록만 누적. 옛 사용자 행동 데이터까지 일괄 삭제는 사용자 명시 결정 답습.
 const S090_CLEANUP_FLAG = 's090_cleared';
+// S097-후속 2 (2026-05-19): 사용자 명시 "지난주차 것 모두 확인 안한 상태로 만들어 줘. 직접 열어볼거야".
+//   1회 자동 reset: 옛 마이그레이션이 revealed=true로 채운 항목 + 옛 등록 항목 모두 revealed=false 일괄 리셋.
+//   flag(lotto_s097_unreveal_reset_v1)로 1회만 실행. 7일 윈도우는 history-page.js에서 자동 적용 = 옛 데이터 변동 0.
+const S097_UNREVEAL_RESET_FLAG = 's097_unreveal_reset_v1';
 export function loadCharacters() {
   const raw = read('characters', []);
   if (!Array.isArray(raw)) return [];
@@ -52,6 +56,21 @@ export function loadCharacters() {
     write('characters', cleared);
     write(S090_CLEANUP_FLAG, true);
     return cleared.map(normalizeCharacter);
+  }
+  // S097-후속 2: 1회 자동 unreveal reset. 사용자 명시 "직접 열어볼거야".
+  //   모든 history 항목의 revealed = false로 일괄 갱신 + flag 저장.
+  //   7일 윈도우는 history-page.js에서 적용 = 옛 추첨일은 자동 노출, 윈도우 안만 마스킹 상태로 진입.
+  const unrevealResetDone = read(S097_UNREVEAL_RESET_FLAG, false) === true;
+  if (!unrevealResetDone) {
+    const unrevealed = raw.map((c) => {
+      if (!c || typeof c !== 'object') return c;
+      if (!Array.isArray(c.history) || c.history.length === 0) return c;
+      const next = c.history.map((h) => (h && typeof h === 'object' ? { ...h, revealed: false } : h));
+      return { ...c, history: next };
+    });
+    write('characters', unrevealed);
+    write(S097_UNREVEAL_RESET_FLAG, true);
+    return unrevealed.map(normalizeCharacter);
   }
   return raw.map(normalizeCharacter);
 }
