@@ -40,8 +40,9 @@
 // v77 (2026-05-18): lotto S091-후속 - 사용자 명시 "확정된 배경 앞쪽 마진 절반". section padding-left(≈23.4px)이 옛 확정 배경 좌측 마진. 확정 row만 margin-left: calc(var(--space-3) * -1) + padding-left 보상으로 background이 section padding-left의 절반만큼 좌측 확장. row 콘텐츠 정렬 무영향. 미확정 row 변동 0. SSOT: PROGRESS.md 2.105.7.
 // v78 (2026-05-18): lotto S092 - 기록 탭 옛 회차 이력 회차별 그룹핑 (4건 진화). 그룹 헤더 (당첨번호 + 보너스 ball 점선 외곽선) / row 한 줄 layout (번호공 좌 + 등수 라벨 우, space-between) / 일치 ball 골드 외곽선 강조 + 미일치 dim 항상 적용 (룰 일관성) / 라벨 세분화(1등~5등 / 1개 적중 / 2개 적중 / 미적중 / 미발표) / 당첨 ball 크기 통일(.history-num 32px) + 골드 톤 배경. SSOT: PROGRESS.md 2.106.
 // v79 (2026-05-18): lotto S093 - cleanup 묶음. (1) `BACKFILL_RECENT_COUNT` dead 상수 폐기 (src/data/numbers.js 호출 0건 확인, docs SSOT 정합). (2) 코드/주석 옛 탭명 sweep ("추첨/전적/역추첨" → "추천/기록/게임"). icons.js + PROGRESS / PROGRESS_ARCHIVE는 역사 흔적 보존 예외. (3) CSS/JS 주석 "전체 비우기" → "전체 삭제" sweep (S088 라벨 정정 정합). (4) Sprint 078 + 079 archive 이전(룰 1.6 활성 9 → 7 cap 정합). SSOT: PROGRESS.md 2.107.
+// v80 (2026-05-18): lotto S093-후속 - docs SSOT 옛 탭명 sweep. docs/01_spec.md 18건("추첨 탭"/"전적 탭" → "추천 탭"/"기록 탭", line 27 id mapping 정의는 옛 이름 보존) + docs/02_data.md 4건("추첨 탭" → "추천 탭"). S091 라벨 정정 후 docs SSOT 정합 완전 회복. 사용자 노출 영역 무변동(docs 본문은 협업자 reference). SSOT: PROGRESS.md 2.107.8.
 // v78 (2026-05-18): lotto S092 (정정 통합) - 사용자 명시 13건 진화. 핵심 결과만 기록 (상세 진화 SSOT: PROGRESS.md 2.106). 최종: 옛 회차 이력 = 회차별 그룹 카드. 그룹 헤더 = NNNN회 · YYYY-MM-DD + 당첨번호 row(번호공 32x32 가운데 + 보너스 ball + "당첨" 우측, 골드 톤 배경). 본문 = 한 줄 row(번호공 가운데 + 등수 라벨 우측). 라벨 세분화: 0=미적중, 1/2=N개 적중, 3+=등수, draws 없음=미발표. 일치 ball 강조 = 흰색 inner + 골드 outer 2층 외곽선 + 14px glow. 미일치 ball = row 종류 무관 항상 dim(opacity 0.35 + grayscale 0.7) - 룰 일관성. renderHistoryPage(container, character, currentDrwNo, draws) 시그니처 확장. docs 01_spec 5.8.1-A + 5.8.4 정합.
-const CACHE_VERSION = "v79";
+const CACHE_VERSION = "v80";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
