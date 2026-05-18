@@ -21,6 +21,7 @@
 > 17차 정리: 2026-05-18. Sprint 077(절 2.98, 추천 리스트 다중 학설 매칭 시각화) archive 추가 이전. Sprint 091 신설(하단 탭 순서 + 라벨 정정)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 078~091 활성 잔존.
 > 18차 정리: 2026-05-18. Sprint 078(절 2.99, 운세 3학설 출처 태그 색 명도 극대화) + Sprint 079(절 2.100, 출처 표시 모드 dot/label + 프리셋 색점) archive 추가 이전. Sprint 093 신설(cleanup 묶음: BACKFILL 상수 폐기 + 옛 탭명 sweep + 전체 비우기 sweep)로 활성 9건 도달 → 룰 1.6 자동 적용 (2건 동시 이전). Sprint 084~093 활성 잔존.
 > 19차 정리: 2026-05-18. Sprint 084(절 2.101, 캐릭터 편집 기능 신설 + 후속 S85~S87) archive 추가 이전. Sprint 094 신설(추천 row 라벨 "추천N" → "N" 시각 단축 + 모바일 4열 결손 fix)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 088~094 활성 잔존.
+> 20차 정리: 2026-05-19. Sprint 088(절 2.102, 라벨 정정 "전체 비우기" → "전체 삭제" + 크롬 모바일 하단 메뉴 동기) archive 추가 이전. Sprint 095 신설(row 단위 휴지통 폐기 + "확정" 텍스트 → 토글 아이콘. 본질 frame 전환)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 089~095 활성 잔존.
 >
 > 본 archive는 검색 / 회귀 디버그용. 새 세션에서 자동 적재되지 않음.
 
@@ -4893,3 +4894,110 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 자비스 자기 점검 (12건째 결손):
 - Sprint 075 DEFAULT_PRESETS 갱신 시 라벨 사용처 grep 미실시.
 - 향후 룰: 데이터 상수 라벨/값 변경 시 하드코딩 라벨 사용처 전수 grep 의무.
+
+---
+
+## 2.102. Sprint 088 완료 - 라벨 정정 "전체 비우기"→"전체 삭제" + 크롬 모바일 하단 메뉴와 하단 탭 위치 정확 동기 (S088, 2026-05-17, archive 20차 이전 2026-05-19)
+
+배경: 사용자 보고 2건. (1) "전체 비우기 버튼 → 전체 삭제 버튼으로 이름 변경". (2) "크롬 모바일 웹에서 하단 크롬 메뉴와 하단 탭 보이기/숨기기가 정확하게 싱크가 맞지 않아서 허접해 보임".
+
+### 2.102.1. 사용자 확정 (AskUserQuestion)
+
+| 질문 | 답변 |
+|---|---|
+| 동기 방식 | **옵션 C** - CSS GPU layer 분리 + visualViewport API JS 동기 동시 |
+| 하단 탭 가시성 | **항상 보임** - 크롬 메뉴 슬라이드와 무관하게 visual viewport visible bottom에 강제 부착 |
+
+### 2.102.2. 라벨 정정 - "전체 비우기" → "전체 삭제"
+
+| 영역 | 위치 | 변경 |
+|---|---|---|
+| UI 라벨 1 | `src/render/saved-sets-section.js:146` | `title` + `<span class="saved-clear-text">` |
+| UI 라벨 2 | `src/render/wheeling-page.js:91` | 버튼 텍스트 |
+| docs SSOT | `docs/01_spec.md` 4건 (액션바 다이어그램 / 정책 / 삭제 설명 / 모달 카피) | 본문 텍스트 |
+| aria-label | `src/render/saved-sets-section.js` | "추천 리스트 모두 삭제" 유지 (옛부터 정합) |
+| 코드 / CSS 주석 안 옛 표기 | 다수 | 역사 흔적으로 보존 (cleanup sprint 영역) |
+
+### 2.102.3. 크롬 모바일 하단 메뉴 슬라이딩 동기 - 원인 분석
+
+| 항목 | 현황 |
+|---|---|
+| `.bottom-tabs` 포지셔닝 | `position: fixed; bottom: 0; padding-bottom: env(safe-area-inset-bottom)` |
+| 크롬 모바일 동작 | 스크롤 방향에 따라 상단 주소창 + 하단 메뉴 슬라이딩 = visualViewport.height + offsetTop 동적 변화 |
+| layout vs visual viewport 갭 | `bottom: 0`은 layout viewport 기준. 크롬 자체 fixed-bottom 자동 추적은 한 박자 lag |
+| GPU layer | 분리 안 됨 (`will-change` / `transform` 미적용) → 크롬 바 슬라이드 프레임과 합성 lag |
+
+### 2.102.4. 정정 - 두 정책 동시 적용
+
+**CSS GPU layer 분리** (`styles/main.css` `.bottom-tabs`):
+- `will-change: transform`
+- `transform: translateZ(0)` (GPU composite layer 강제 분리)
+
+**JS visualViewport API 동기** (`src/render/viewport-sync.js` 신설):
+- `visualViewport.resize` + `visualViewport.scroll` + `window.resize` 후크.
+- 보정량 = `window.innerHeight - (vv.offsetTop + vv.height)`.
+- `requestAnimationFrame` 1회 묶어 프레임 정합.
+- 결과: 크롬 바 슬라이드 중에도 하단 탭이 visual viewport visible bottom에 정확 부착.
+
+### 2.102.5. 변경 파일
+
+- `src/render/saved-sets-section.js`: title + span 라벨 정정.
+- `src/render/wheeling-page.js`: 휠링 페이지 풀 입력 영역 버튼 텍스트 정정.
+- `src/render/viewport-sync.js` **신설**: `startBottomTabsViewportSync()` export.
+- `src/render/main.js`: viewport-sync import + `initRender` 끝에서 1회 호출.
+- `styles/main.css`: `.bottom-tabs`에 will-change + translateZ + S088 주석.
+- `docs/01_spec.md`: "전체 비우기" → "전체 삭제" SSOT 4건 정정.
+- `docs/03_architecture.md`: 폴더 구조에 `viewport-sync.js` + `render/` 책임 표 갱신.
+- `docs/04_conventions.md`: §4.8.7 신설 ("fixed bottom 요소는 visualViewport 동기 + GPU layer 분리 의무"). 옛 §4.8.7 → §4.8.8.
+- `service-worker.js` v63 → v64.
+
+### 2.102.6. 검증
+
+- `node tests/run-node.js` → **324 / 324 PASS** (회귀 0). viewport-sync는 DOM/visualViewport API 의존 = 단위 테스트 한계, 모듈 export만 정적 확인.
+- 라벨 grep: "전체 비우기"는 PROGRESS_ARCHIVE / 코드 주석 / CSS 주석 등 역사 영역만 잔존 (의도).
+- 사용자 UX 검증은 실 디바이스(크롬 모바일 안드로이드) 영역. PWA 사용자는 SW v64 활성화 후 강력 새로고침(Ctrl+Shift+R) 또는 PWA 앱 재시작 권장.
+
+### 2.102.7. 사용자 화면 기대 변동
+
+- 추천 리스트 액션바 우측 버튼 라벨: "전체 비우기" → **"전체 삭제"**.
+- 휠링 페이지 풀 입력 영역 우측 버튼 라벨: "전체 비우기" → **"전체 삭제"**.
+- 크롬 모바일에서 스크롤 시 하단 메뉴 슬라이딩과 하단 탭이 동일 타이밍에 함께 visual viewport visible bottom에 항상 부착 (lag / jerky 해소).
+- 데스크톱 / iOS Safari / 비-크롬 모바일에서는 visual viewport 변동 거의 없어 시각 변화 0 (기존 동작 유지).
+
+### 2.102.8. 잔여 / 후속
+
+- CSS 주석 / JS 주석 / PROGRESS_ARCHIVE의 옛 "전체 비우기" 표기는 역사 흔적으로 보존. 일관성 sweep 필요 시 별도 cleanup sprint.
+- visualViewport API 미지원 브라우저(매우 옛 데스크톱)는 본 모듈 no-op. 향후 폴백 룰(window.innerHeight 변화 감지 등) 필요 시 viewport-sync.js 확장 영역.
+- 본 sprint는 시각 lag 해소 영역. 실 디바이스 테스트에서 여전히 jerky하면 추가 정정(예: pointer-events: none 잠깐 차단 / opacity transition 보강) 검토.
+
+### 2.102.9. Sprint 074 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 074(절 2.95, strategyShort 매핑 6건 label[0] 통일) archive 이전. 본 sprint 종료 시점 활성 = 075~079 + 084 + 088 = 7건 정합. archive 14차 정리.
+
+### 2.102.10. 자비스 자기 점검 (13건째 결손)
+
+자비스 자체 결손은 아닌 영역(크롬 모바일 자체 합성 동작). 단 사전 fixed-bottom 요소 도입 시 visualViewport 동기 의무가 docs/04_conventions.md에 없었음 = 룰 부재 결손. §4.8.7로 명문화. 향후 fixed bottom 요소(토스트 / 액션 시트 / 휠링 푸터 등) 추가 시 본 패턴 자동 답습.
+
+### 2.102.11. S088 후속 - sourceDisplayMode 'off' 모드 추가 (색점 미표시 설정)
+
+배경: 사용자 명시 "색점을 표시 하지 않는 설정 옵션도 추가해줘". 옛 enum = `'dot'` / `'label'` 2종(S79). 셋째 옵션 신설.
+
+| 모드 | 값 | 동작 |
+|---|---|---|
+| 색점 (기본) | `'dot'` | 작은 원 N개 나란히 (S79 옛 동작) |
+| 한글 | `'label'` | 머리글자 텍스트 태그 (S79 옛 동작) |
+| **표시 안 함 (신규)** | **`'off'`** | 번호공만 노출. 출처 영역 자체 출력 X |
+
+**변경 파일**:
+- `src/data/numbers.js`: `SOURCE_DISPLAY_OFF = 'off'` 상수 + `SOURCE_DISPLAY_MODES` 3종 freeze.
+- `src/render/draw-card.js` + `src/render/saved-sets-section.js`: `numHtml` 분기 if/else로 재구성. `mode === 'off'` → `tagHtml = ''`.
+- `src/render/settings-page.js`: 라디오 3번째 옵션("표시 안 함") + hint 카피 보강.
+- `tests/suites/storage.test.js`: 'off' round-trip 1건 추가.
+- `docs/02_data.md` 3.2.4: `lotto_options.sourceDisplayMode` enum 3종 설명 신설.
+- `service-worker.js` v64 → v65.
+
+**검증**: `node tests/run-node.js` → **325 / 325 PASS** (324 → 325). off round-trip 회귀 차단.
+
+**사용자 화면 기대**: 설정 탭 "표시 안 함" 선택 시 번호공 아래 색점/한글 모두 사라짐. 번호공 6개 + 보너스 1개 단색 외 시각 노이즈 0. 옛 'dot' / 'label' 선택은 그대로 동작.
+
+**잔여**: 기본값은 `'dot'` 유지 (사용자 명시 "훨씬 간결" 답습). 사용자가 명시 변경 시만 'off' 활성. 옛 사용자 자동 마이그레이션 = `loadOptions`의 `...OPTIONS_DEFAULT` spread 패턴으로 누락 키 자동 채움 = 변동 없음.

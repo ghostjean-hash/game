@@ -1,11 +1,14 @@
 // 누적 추천 세트 섹션. SSOT: docs/01_spec.md 5.2.5 (신규).
-// 메인 카드 아래에 추천1, 추천2 ... 세로 스택. 개별 삭제 + 전체 삭제 (S088 라벨 정정).
+// S095 (2026-05-19): row 단위 개별 삭제 폐기. "확정" 텍스트 버튼 → 토글 아이콘(빈 원/채워진 원).
+//   사용자 명시 "휴지통 삭제 + 확정을 토글 아이콘으로". 본질 = 한 row에 액션 2개 = 공간 부족.
+//   row 단위 삭제 동선은 "+1세트/+5세트 재시도" 또는 "전체 삭제"로 흡수.
+// 메인 카드 아래에 1, 2, ... 세로 스택. 액션 = 토글 아이콘 1개만.
 // 비어있으면 섹션 자체 미표시 (UI 노이즈 회피).
 
 import { numberColor, strategyTagColor } from '../data/colors.js';
 import { STRATEGY_CATEGORIES, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL, SOURCE_DISPLAY_OFF, SOURCE_DISPLAY_DEFAULT } from '../data/numbers.js';
 import { strategyShort, strategyLabel } from './strategy-picker.js';
-import { trash } from './icons.js';
+import { trash, circleOutline, circleCheck } from './icons.js';
 
 const CATEGORY_TAG_CLASS = {
   stats: 'is-stats',
@@ -104,16 +107,17 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
     const key = set.numbers.join(',');
     const isReg = regSet.has(key);
     const regCls = isReg ? ' is-registered' : '';
-    const regBtnLabel = isReg ? '취소' : '확정';
+    // S095 (2026-05-19): "확정" 텍스트 버튼 → 토글 아이콘 (빈 원 / 채워진 원 + ✓).
+    //   aria-label은 의미 보존 ("확정" / "확정 취소"). 시각만 아이콘.
     const regBtnAria = isReg ? `${label} 확정 취소` : `${label} 확정`;
     const regBtnTitle = isReg ? '확정 취소' : '내 번호로 확정';
     const regBtnCls = `saved-set-register${isReg ? ' is-registered' : ''}`;
+    const regBtnIcon = isReg ? circleCheck('icon icon-toggle') : circleOutline('icon icon-toggle');
     return `
       <div class="saved-set-row${regCls}" data-saved-idx="${i}" aria-label="${label}${isReg ? ' (확정됨)' : ''}">
         <span class="saved-set-idx" aria-hidden="true">${shortLabel}</span>
         <div class="saved-set-balls" role="list">${ballsHtml}</div>
-        <button type="button" class="${regBtnCls}" data-action="toggle-register-saved" data-saved-idx="${i}" aria-label="${regBtnAria}" title="${regBtnTitle}">${regBtnLabel}</button>
-        <button type="button" class="saved-set-remove" data-action="remove-saved-set" data-saved-idx="${i}" aria-label="${label} 삭제" title="삭제">${trash('icon icon-sm')}</button>
+        <button type="button" class="${regBtnCls}" data-action="toggle-register-saved" data-saved-idx="${i}" aria-label="${regBtnAria}" title="${regBtnTitle}" aria-pressed="${isReg ? 'true' : 'false'}">${regBtnIcon}</button>
       </div>
     `;
   }).join('');

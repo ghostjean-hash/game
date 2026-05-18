@@ -1901,10 +1901,11 @@ a.btn-secondary,
    외 28(휴지통) → --space-6+, 13(라벨 font) → --font-size-sm, gap 4 → --space-1, 12/9/6(태그) 그대로(데이터 사이즈). */
 .saved-set-row {
   display: grid;
-  /* S090-후속 (2026-05-17): 라벨 / balls / 확정 버튼 / 휴지통 = 4열.
-     옛 3열에 register 버튼 추가로 wrap되며 번호공이 row 밖으로 튀어나가던 결손 정정.
-     S094 (2026-05-18): 라벨 "추천N" → "N" 시각 단축으로 라벨 영역 44 → 28px (16px 회수). */
-  grid-template-columns: 28px 1fr auto var(--space-6);
+  /* S090-후속 (2026-05-17): 4열 (라벨/balls/확정/휴지통) 정합.
+     S094 (2026-05-18): 라벨 "추천N" → "N" 시각 단축 (44→28px).
+     S095 (2026-05-19): 휴지통 폐기 + "확정" 텍스트 → 토글 아이콘. 4열 → 3열 (라벨/balls/토글).
+     row 안 액션 1개 = 시각 정리 + 공간 회수. */
+  grid-template-columns: 28px 1fr var(--space-6);
   align-items: center;
   gap: var(--space-2);
   /* S090-후속 6 (2026-05-18): 좌우 padding 추가 (호흡).
@@ -1982,72 +1983,52 @@ a.btn-secondary,
   font-size: 9px;
   border-radius: 6px;
 }
-/* S29 (2026-05-04): 개별 삭제 버튼을 타원 외곽 폐기 + 휴지통 아이콘으로 변경.
-   border / border-radius 제거. background transparent. 아이콘 색만 hover 시 danger.
-   S29.4: hit area를 모든 break point에서 `--space-5`(24px)로 통일.
-   S094-후속 (2026-05-19): F+B+ 옵션 - [확정][🗑] 인접 페어 오터치 방지.
-     (1) 시각 약화: opacity 0.45 default → focus/hover 시 1.0 (의도 강조).
-     (2) gap 확장: margin-left var(--space-3) (12px) = [확정] 버튼과 거리 분리.
-     (3) hit area 24x24 보존 (접근성 유지). 시각만 약화. */
-.saved-set-remove {
+/* S29 (2026-05-04): 개별 삭제 버튼 (휴지통 아이콘).
+   S094-후속 (2026-05-19): opacity 0.45 + margin-left 12px 약화 시도.
+   S095 (2026-05-19): row 단위 휴지통 완전 폐기. 본 룰은 saved-sets-section row에서 미사용 (dead).
+     "전체 삭제" 영역(.saved-sets-clear)은 별도 룰 보유. 본 룰은 미래 정리 sprint에서 제거 검토. */
+
+/* S090 (2026-05-17): "확정" 버튼 (옛 "내 번호로 선택").
+   S095 (2026-05-19): 텍스트 버튼 → 토글 아이콘 (빈 원 / 채워진 원 + ✓).
+     - 미등록 = 빈 원 외곽선 (회색 border, transparent fill, currentColor stroke).
+     - 등록 = 채워진 원 (accent fill + ✓). is-registered class 분기.
+     - hit area var(--space-6)(24px) 보존 (접근성).
+     - 아이콘 sub-element는 .icon-toggle 클래스 (16x16).
+     - row 단위 휴지통 폐기 = 본 토글이 row 안 유일 액션. */
+.saved-set-register {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--space-5);
-  height: var(--space-5);
+  width: var(--space-6);
+  height: var(--space-6);
   padding: 0;
-  margin-left: var(--space-3);
-  color: var(--color-text-dim);
   background: transparent;
+  color: var(--color-text-dim);
   border: none;
   cursor: pointer;
-  opacity: 0.45;
-  transition: color 0.15s, opacity 0.15s;
+  transition: color 0.15s, transform 0.1s;
 }
-.saved-set-remove:focus,
-.saved-set-remove:focus-visible,
-.saved-set-remove:active {
-  opacity: 1;
-}
-@media (hover: hover) and (pointer: fine) {
-  .saved-set-remove:hover {
-    color: var(--color-danger);
-    opacity: 1;
-  }
-}
-
-/* S090 (2026-05-17): "확정" 버튼 (옛 "내 번호로 선택" - S090-후속에서 단축).
-   - 미등록 = "확정" 회색 border.
-   - 등록 = is-registered class + "취소" accent 배경.
-   - cap 도달 시 disabled.
-   - 등록된 row는 accent 외곽선 강조 (배지 폐기 - S090-후속 시각 노이즈 제거).
-   - width 정합으로 row layout 안정. */
-.saved-set-register {
-  font-size: 0.85rem;
-  padding: 6px 12px;
-  min-width: 56px;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-  text-align: center;
+.saved-set-register .icon-toggle {
+  width: 22px;
+  height: 22px;
 }
 .saved-set-register.is-registered {
-  background: var(--color-accent);
-  color: white;
-  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
-.saved-set-register:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+.saved-set-register:active {
+  transform: scale(0.92);
+}
+.saved-set-register:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 50%;
 }
 @media (hover: hover) and (pointer: fine) {
-  .saved-set-register:not(:disabled):not(.is-registered):hover {
-    border-color: var(--color-accent);
+  .saved-set-register:not(.is-registered):hover {
     color: var(--color-accent);
+  }
+  .saved-set-register.is-registered:hover {
+    opacity: 0.85;
   }
 }
 /* S090-후속 7 (2026-05-18): 사용자 명시 "앞쪽 세로 띠 제거 + 배경 색을 조금 더 강하게".
@@ -2075,31 +2056,27 @@ a.btn-secondary,
 /* S29.1 (2026-05-04): .saved-sets-disclaimer 룰 폐기. disclaimer 본문 자체 제거 (사용자 지시).
    사행성 회피 카피는 첫 진입 면책 모달 + 설정 탭 면책으로 일원화. SSOT: docs/01_spec.md 5.2.5.8. */
 @media (max-width: 480px) {
-  /* S29.3 (2026-05-04): section padding을 모바일에서 한 단계 축소 → 가용 폭 확보.
-     S29.4: 매직 값 → 토큰. 라벨 40px 매직은 데스크톱 44px와 별도 (디자인 외 명시 사이즈).
-     S094 (2026-05-18): (1) 라벨 영역 40 → var(--space-5)(20px) 회수 (라벨 "N" 1-2자리만 표시).
-                        (2) 옛 3열 잔재(S090-후속 1 데스크톱만 4열 갱신, 모바일 누락) 4열 정합 회복.
-                        새 4열 = 라벨 / balls / 확정 / 휴지통. */
+  /* S29.3 (2026-05-04): section padding 모바일 축소.
+     S094 (2026-05-18): 라벨 "N" 1-2자리 = var(--space-5)(20px) 영역.
+     S095 (2026-05-19): 휴지통 폐기 → 4열 → 3열 (라벨/balls/토글). */
   .saved-sets-section { padding: var(--space-2); }
-  .saved-set-row { grid-template-columns: var(--space-5) 1fr auto var(--space-5); gap: var(--space-1); }
+  .saved-set-row { grid-template-columns: var(--space-5) 1fr var(--space-6); gap: var(--space-1); }
   .saved-set-balls { gap: calc(var(--space-1) * 0.8); }
   .saved-set-row .num-cell .num {
     width: 36px; height: 36px; min-width: 36px; min-height: 36px;
     font-size: var(--font-size-sm);
   }
   .saved-set-idx { font-size: var(--font-size-sm); }
-  .saved-set-remove { width: var(--space-5); height: var(--space-5); }
 }
 @media (max-width: 360px) {
-  /* S29.3 (2026-05-04): 320~360px 화면 fit. S29.4: 매직 32/22/20/11 → 토큰 또는 표준 사이즈.
-     S094 (2026-05-18): 4열 정합 회복 (옛 3열 잔재 fix). 라벨 영역 = var(--space-5)(20px) (1-2자리). */
-  .saved-set-row { grid-template-columns: var(--space-5) 1fr auto var(--space-5); }
+  /* S29.3 (2026-05-04): 320~360px 화면 fit.
+     S095 (2026-05-19): 3열 정합 (라벨/balls/토글). */
+  .saved-set-row { grid-template-columns: var(--space-5) 1fr var(--space-6); }
   .saved-set-row .num-cell .num {
     width: var(--space-6); height: var(--space-6); min-width: var(--space-6); min-height: var(--space-6);
     font-size: var(--font-size-sm);
   }
   .saved-set-idx { font-size: var(--font-size-sm); }
-  .saved-set-remove { width: var(--space-5); height: var(--space-5); }
 }
 
 /* S5-T1: 5세트 컴팩트 카드 매칭 chip. */

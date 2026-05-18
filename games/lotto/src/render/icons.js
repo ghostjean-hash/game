@@ -45,6 +45,16 @@ export function pencil(cls = 'icon icon-sm') {
   return `<svg class="${cls}" ${COMMON} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z"/></svg>`;
 }
 
+/** 빈 원 (미확정 토글). S095 (2026-05-19): 추천 row "확정" 토글 아이콘 OFF 상태. */
+export function circleOutline(cls = 'icon') {
+  return `<svg class="${cls}" ${COMMON} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>`;
+}
+
+/** 채워진 원 + 흰색 체크 (확정 토글). S095 (2026-05-19): 추천 row "확정" 토글 아이콘 ON 상태. */
+export function circleCheck(cls = 'icon') {
+  return `<svg class="${cls}" ${COMMON} viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="10"/><polyline points="7.5 12.5 10.5 15.5 16.5 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
 // ===== 하단 탭 5개 (추첨 / 통계 / 전적 / 휠링 / 설정) =====
 
 /** 추첨 탭: 빛나는 별 (행운/추첨 시그널). */

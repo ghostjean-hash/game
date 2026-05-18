@@ -208,7 +208,7 @@
 **S27 (2026-05-03) 변경**: 메인 카드(`drawCardHtml` hero 호출) 폐기. 추천 탭의 유일한 추천 표시 영역 = 추천 리스트(5.2.5). 본 절은 **추천 리스트 각 row의 시각 규격**으로 의미 재정렬.
 
 5.2.1.1. **번호공**: 결과 페이지 변종 5색 (docs/02_data.md 2.4). **입체감 / 그림자 / 그라디언트 일체 없음**. 단색 평면 원 + 흰 글자. 데스크톱 44x44 / 480px↓ 36x36 / 360px↓ 32x32.
-5.2.1.2. **레이아웃 (S20 / S27 / S090-후속 / S094 / S094-후속)**: `[N 라벨] [본번호 6개] [확정] [🗑]` 한 줄. 그리드 = `28px 1fr auto var(--space-6)` (S094 라벨 영역 44 → 28px 회수). 보너스볼 / "+" 기호 / 영역 라벨 일체 폐기 (S20). **S094-후속 (2026-05-19) F+B+ 옵션**: [확정]-[🗑] 인접 페어 오터치 방지. (1) 휴지통 시각 약화 `opacity: 0.45` default → focus/hover 시 `1.0`. (2) 휴지통 `margin-left: var(--space-3)` (12px)로 [확정]과 거리 분리. (3) hit area 24x24 보존 (접근성). swipe-to-delete(S095) 진행 여부는 본 옵션 효과 확인 후 결정.
+5.2.1.2. **레이아웃 (S20 / S27 / S090-후속 / S094 / S095)**: `[N 라벨] [본번호 6개] [토글 아이콘]` 한 줄. 그리드 = `28px 1fr var(--space-6)` (S095 4열 → 3열 회복). 보너스볼 / "+" 기호 / 영역 라벨 일체 폐기 (S20). **S095 (2026-05-19) 본질 정정**: row 단위 휴지통 완전 폐기 + "확정" 텍스트 버튼 → 토글 아이콘. row 안 액션 1개로 단순화. 단일 row 삭제 동선 자체 폐기 (전체 삭제 또는 + 1세트/+ 5세트 재시도로 흡수). 옛 S094-후속 F+B+(opacity 0.45 + margin 12px)는 row에 액션 2개 frame 유지한 미봉책 = S095에서 폐기.
 5.2.1.3. **추천 N 라벨**: 골드 색(`--color-accent`), 700 굵기, 좌측 인접. 누적 list 인덱스 기반. S27부터 `labelStart=1`. 메인 카드 폐기로 인덱스 점유 충돌 없음. **S094 (2026-05-18) 시각 단축**: "추천N" → "N" (영역 확보 목적). aria-label은 의미 보존 "추천N" (스크린리더 호환).
 5.2.1.4. **사행성 표현 회피**: "당첨번호" 사용 금지. 추천은 "추천N" 라벨로 표기 (CLAUDE.md 6.3 일관성). **S094 후 시각 노출은 "N"만**, 의미는 aria 영역으로 보존.
 5.2.1.5. **데이터 호환**: `rec.bonus` 필드 유지 (매칭 / 테스트 호환). UI 노출 0건. 향후 데이터 차원 폐기는 별도 sprint.
@@ -240,8 +240,8 @@
 
 [추천 리스트] (라운드 사각, hero와 동일 --radius-lg)
         추천 리스트 (N)        ← 헤더 좌우 중앙 정렬
-  1  4 9 11 12 19 30   [출처]   [확정]   🗑   ← S094 시각 단축 "추천1" → "1"
-  추천2  ...                        🗑
+  1  4 9 11 12 19 30   [출처]   ○    ← S095: 토글 아이콘 (미확정 = 빈 원)
+  2  ...                         ●    ← S095: 확정 = 채워진 원 + ✓
   ...
 
 [액션바 - 한 줄 grid 3열]
@@ -333,17 +333,17 @@
 **배경**: 사용자 명시 "추천했다고 무조건 등록되면 안 되고, 내가 추천 번호를 직접 선택해야 한다". S090 이전 + 1세트 / + 5세트 클릭 시 saved-sets + history 동시 자동 등록 = 탐색용 클릭이 곧 공식 기록 = 정직성 부족.
 
 **메커니즘**:
-- saved-sets-row 각 카드에 **"확정"** 버튼 (S090-후속 라벨 단축 + row layout 정정).
+- saved-sets-row 각 카드에 **토글 아이콘** (S095, 2026-05-19): 미확정 = 빈 원(◯), 확정 = 채워진 원 + ✓(●). 옛 "확정"/"취소" 텍스트 버튼 폐기.
 - 클릭 시 `core/history.js` `toggleSavedSetRegistration(character, savedSet, drwNo)` 호출.
-- 등록 = history에 `source: 'user'` 항목 추가. 시각: row에 `is-registered` class + **background tint (rgba accent 0.22)** + 버튼 라벨 "취소" + 버튼 accent 배경. row 기본 padding 좌우 `calc(var(--space-3) / 2)`(6px)로 모든 row 균일 (S090-후속 7, 2026-05-18). 좌측 4px accent 바 폐기. 확정 row만 `margin-left: calc(var(--space-3) * -1)` + padding-left 보상으로 background이 section padding-left의 절반만큼 좌측 확장 (S091-후속, 2026-05-18 사용자 명시 "확정 배경 앞쪽 마진 절반"). row 콘텐츠 정렬은 모든 row 일치 유지.
-- 재클릭 = history에서 제거 (확정 취소 허용, 실수 회복).
-- row layout = grid 4열 `44px 1fr auto var(--space-6)` (라벨 / balls / 확정 버튼 / 휴지통). 옛 3열 wrap 결손 정정.
+- 등록 = history에 `source: 'user'` 항목 추가. 시각: row에 `is-registered` class + **background tint (rgba accent 0.22)** + 토글 아이콘 채워진 원으로 전환 + accent 색. row 기본 padding 좌우 `calc(var(--space-3) / 2)`(6px)로 모든 row 균일 (S090-후속 7, 2026-05-18). 확정 row만 `margin-left: calc(var(--space-3) * -1)` + padding-left 보상으로 background이 section padding-left의 절반만큼 좌측 확장 (S091-후속).
+- 재클릭 = history에서 제거 (확정 취소 허용, 실수 회복). aria-pressed 속성으로 토글 상태 명시.
+- row layout (S095) = grid 3열 `28px 1fr var(--space-6)` (라벨 / balls / 토글 아이콘). 옛 4열에서 휴지통 column 폐기.
 
 **~~Cap~~** (S090-후속 7, 2026-05-18 폐기): 사용자 명시 "5개 제한 없애줘". 회차당 등록 cap 폐기. `HISTORY_REGISTER_CAP_PER_ROUND` 상수는 dead 잔존(20, 코드 참조 0). saved-sets cap(20)이 자연 상한 역할.
 
 **카운터**: 헤더 우측에 "확정 N건" 노출 (등록 0건이면 카운터 자체 숨김).
 
-**휴지통 동작** (S090-후속 7, 2026-05-18 강화): saved-set 휴지통 클릭 시 saved-sets 삭제 + 같은 numbers가 history(현재 회차)에 등록되어 있으면 함께 제거. 사용자 명시 "확정한 채 삭제하면 확정 자체가 취소되게".
+**~~휴지통 동작~~** (S095, 2026-05-19 폐기): row 단위 휴지통 자체 폐기. 사용자 명시 "휴지통 삭제". 단일 삭제 동선 자체 폐기 → 전체 삭제 또는 + 1세트 / + 5세트 재시도로 흡수. 옛 "확정한 채 삭제 시 확정 함께 취소" 흐름은 무의미 (휴지통 자체 부재).
 
 **중복 차단**: 같은 drwNo + 같은 numbers 조합은 1번만 등록 가능 (`recordRecommendation` 안전망 + saved-sets dedupe 룰 답습).
 

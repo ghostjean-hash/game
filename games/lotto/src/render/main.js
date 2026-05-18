@@ -31,7 +31,7 @@ import { matchHistory, toggleSavedSetRegistration, countRegisteredForRound, isRe
 // S089 (2026-05-17): import { applyLuckGrowth } from '../core/luck.js' 폐기 (Luck 자산 폐기).
 import { ensureCurrentState, performRitual, applyRitualBonus } from '../core/ritual.js';
 import {
-  ensureSavedSetsForRound, addSavedSets, removeSavedSetAt, clearSavedSets, recipeIdFor,
+  ensureSavedSetsForRound, addSavedSets, clearSavedSets, recipeIdFor,
 } from '../core/saved-sets.js';
 import { savedSetsSectionHtml, savedSetsAddBarHtml } from './saved-sets-section.js';
 import {
@@ -674,29 +674,10 @@ function renderHome(content) {
   content.querySelector('[data-action="add-saved-5"]')?.addEventListener('click', () => {
     addSavedSetsBatch(SAVED_SETS_BATCH_LARGE);
   });
-  content.querySelectorAll('[data-action="remove-saved-set"]').forEach((el) => {
-    el.addEventListener('click', () => {
-      const idx = parseInt(el.dataset.savedIdx, 10);
-      if (Number.isNaN(idx)) return;
-      const cur = getActive();
-      // S090-후속 7 (2026-05-18): 사용자 명시 "확정한 채 삭제하면 확정 자체가 취소되게".
-      // saved-set 삭제 시 = 같은 numbers가 history(현재 회차)에 등록되어 있으면 함께 제거.
-      const targetSet = cur.savedSets?.list?.[idx];
-      let next = removeSavedSetAt(cur, idx);
-      if (targetSet && Array.isArray(targetSet.numbers)) {
-        const key = targetSet.numbers.join(',');
-        const filtered = next.history.filter(
-          (h) => !(h.drwNo === state.drwNo && Array.isArray(h.numbers) && h.numbers.join(',') === key),
-        );
-        if (filtered.length !== next.history.length) {
-          next = { ...next, history: filtered };
-        }
-      }
-      state.characters = state.characters.map((c) => (c.id === next.id ? next : c));
-      saveCharacters(state.characters);
-      renderApp();
-    });
-  });
+  // S095 (2026-05-19): row 단위 휴지통 폐기. data-action="remove-saved-set" 셀렉터가 DOM에 없으므로 본 핸들러는 dead.
+  //   removeSavedSetAt 함수 자체는 core 보존 (전체 삭제 + 미래 진입점 가능성).
+  //   사용자 명시 "휴지통 삭제 + 확정 토글" - 단일 삭제 동선 자체 폐기.
+  //   row 삭제 의도 = saved-sets-section 전체 삭제 또는 + 1세트/+ 5세트 재시도로 흡수.
   // S090 (2026-05-17): "확정" 토글 - saved-set을 history에 등록 / 해제.
   // S090-후속 7 (2026-05-18): cap_reached 분기 폐기.
   content.querySelectorAll('[data-action="toggle-register-saved"]').forEach((el) => {
