@@ -51,6 +51,7 @@ export function toggleSavedSetRegistration(character, savedSet, drwNo) {
     return { character: { ...character, history: next }, action: 'unregistered' };
   }
   // 등록 (S090-후속 7 cap 체크 폐기)
+  // S097 (2026-05-19): `revealed: false` 신규 필드 - 발표 후 사용자가 직접 reveal 트리거 전까지 ball 반투명 상태.
   const entry = {
     drwNo,
     numbers: [...savedSet.numbers],
@@ -61,8 +62,29 @@ export function toggleSavedSetRegistration(character, savedSet, drwNo) {
     createdAt: new Date().toISOString(),
     matchedRank: null,
     source: 'user',
+    revealed: false,
   };
   return { character: { ...character, history: [...character.history, entry] }, action: 'registered' };
+}
+
+/**
+ * S097 (2026-05-19): history 항목을 revealed=true로 갱신.
+ * 사용자가 체크 버튼 클릭 후 ball reveal 애니메이션 완료 시 호출.
+ * @param {object} character
+ * @param {number} drwNo
+ * @param {string} key  numbers.join(',') (history 항목 식별)
+ * @returns {object} 갱신된 character (변경 없으면 동일 객체)
+ */
+export function revealRecommendation(character, drwNo, key) {
+  if (!Array.isArray(character?.history)) return character;
+  const idx = character.history.findIndex(
+    (h) => h.drwNo === drwNo && Array.isArray(h.numbers) && h.numbers.join(',') === key,
+  );
+  if (idx < 0) return character;
+  if (character.history[idx].revealed === true) return character;
+  const next = [...character.history];
+  next[idx] = { ...next[idx], revealed: true };
+  return { ...character, history: next };
 }
 
 /**

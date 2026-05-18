@@ -18,6 +18,16 @@ function colorNum(n, extraClass = '') {
 }
 
 /**
+ * S097 (2026-05-19): 발표 대기 "?" ball.
+ * 사용자 명시 - 본 6 + 보너스 1 = 7개 모두 물음표.
+ * @param {string} [extra] 추가 클래스 ('is-bonus' 등).
+ */
+function pendingBallHtml(extra = '') {
+  const cls = extra ? `history-num is-pending ${extra}` : 'history-num is-pending';
+  return `<span class="${cls}" aria-label="발표 대기">?</span>`;
+}
+
+/**
  * 전적 페이지 렌더. S3-T2 강화 4섹션 구조 + S090-후속 5섹션 (현재 회차 발표 대기 섹션 추가).
  * S092-정정 (2026-05-18): 옛 회차 이력 = 회차별 그룹핑. 그룹 헤더에 회차 + 발표일 + 당첨번호 노출,
  *   본문에 사용자 추천 row(번호공 + 등수 라벨).
@@ -37,13 +47,29 @@ export function renderHistoryPage(container, character, currentDrwNo = null, dra
   const pendingItems = currentDrwNo
     ? sortedHistory.filter((h) => h.drwNo === currentDrwNo && (h.matchedRank === null || h.matchedRank === undefined))
     : [];
+  // S097 (2026-05-19): 발표 대기 섹션에 당첨번호 row 추가. 본 6 + 보너스 1 = "?" 7개.
+  //   사용자 명시 "현재 회차에도 당첨번호 영역 표시, 7개 구슬 모두 물음표 처리".
+  //   옛 회차 그룹과 동일 layout 유지 (그룹 헤더 = 당첨 row + 본문 = 추천 row).
+  const pendingWinHtml = pendingItems.length === 0 ? '' : `
+    <div class="history-group-winning is-pending" aria-label="${currentDrwNo}회 당첨번호 (발표 대기)">
+      <span class="history-group-winning-label">당첨</span>
+      <div class="history-group-winning-nums">
+        ${pendingBallHtml().repeat(6)}
+        <span class="history-num-plus" aria-hidden="true">+</span>
+        ${pendingBallHtml('is-bonus')}
+      </div>
+    </div>
+  `;
+  // 발표 대기 추천 row = 옛 동일 (번호 노출, 라벨 "미발표").
+  const pendingRowsHtml = pendingItems.map((h) => historyGroupRowHtml(h, null, false)).join('');
   const pendingHtml = pendingItems.length === 0 ? '' : `
     <section class="stats-section history-pending-section">
       <h2 class="stats-title">현재 회차 ${currentDrwNo}회 · 발표 대기 ${pendingItems.length}건</h2>
       <p class="stats-note">추첨 발표 후 자동 매칭됩니다. (등록 직후 본 섹션에 실시간 노출)</p>
-      <div class="history-list">
-        ${pendingItems.map((h) => historyItemHtml(h, false, false)).join('')}
-      </div>
+      <article class="history-group">
+        ${pendingWinHtml}
+        <div class="history-group-rows">${pendingRowsHtml}</div>
+      </article>
     </section>
   `;
 
@@ -202,8 +228,17 @@ function historyGroupRowHtml(h, draw, hasDraw) {
     : new Set();
   const matchedSet = new Set(userNums.filter((n) => drawNumSet.has(n)));
   const matchedCount = matchedSet.size;
+
+  // S097 (2026-05-19): revealed 분기.
+  //   - hasDraw && revealed=false → 반투명 ball + 숫자 숨김 + 우측 체크 버튼.
+  //   - hasDraw && revealed=true 또는 !hasDraw (발표 대기) → 옛 동작.
+  //   - 발표 대기 (hasDraw=false) = revealed 무관 옛 동작 (사용자가 자기 번호는 보고 있어야 함).
+  const isMasked = hasDraw && h.revealed === false;
+
   let rankLabel;
-  if (rank) {
+  if (isMasked) {
+    rankLabel = ''; // 마스킹 상태에선 라벨 숨김 (체크 버튼만)
+  } else if (rank) {
     rankLabel = RANK_LABELS[rank];
   } else if (!hasDraw) {
     rankLabel = '미발표';
@@ -213,17 +248,28 @@ function historyGroupRowHtml(h, draw, hasDraw) {
     rankLabel = `${matchedCount}개 적중`;
   }
   const rankColor = rank ? RANK_GLOW_COLORS[rank] : 'var(--color-text-dim)';
+
   const numsHtml = userNums.map((n) => {
+    if (isMasked) {
+      // 반투명 + 숫자 숨김. background 색만 numberColor에서 가져와 시각 단서 유지 (어떤 번호인지는 hide).
+      const c = numberColor(n);
+      return `<span class="history-num is-masked" style="background-color:${c.bg};" data-num="${n}" aria-label="?">?</span>`;
+    }
     const extraCls = matchedSet.has(n) ? 'history-num is-matched' : 'history-num';
     return colorNum(n, extraCls);
   }).join('');
-  // S092-후속 6 (2026-05-18): 사용자 지적 "색을 빼려면 미적중인것들도 모두 빼야지 규칙이 개판이구만".
-  //   .has-match 분기 폐기 - 미일치 ball은 row 종류 무관 항상 dim = 룰 일관성.
-  //   미적중 row(matched 0)는 6개 ball 전부 dim → "0개 적중" 시각 표현 자연 강화.
+
+  // S097: 체크 버튼 (revealed=false + hasDraw만).
+  const key = userNums.join(',');
+  const rightHtml = isMasked
+    ? `<button type="button" class="history-row-reveal" data-action="reveal-row" data-row-drw="${h.drwNo}" data-row-key="${key}" aria-label="추첨 결과 확인">확인</button>`
+    : `<span class="history-group-row-rank" style="color: ${rankColor}">${rankLabel}</span>`;
+
+  const rowCls = isMasked ? 'history-group-row is-masked' : 'history-group-row';
   return `
-    <article class="history-group-row">
+    <article class="${rowCls}" data-row-drw="${h.drwNo}" data-row-key="${key}">
       <div class="history-group-row-nums">${numsHtml}</div>
-      <span class="history-group-row-rank" style="color: ${rankColor}">${rankLabel}</span>
+      ${rightHtml}
     </article>
   `;
 }

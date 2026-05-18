@@ -6,6 +6,7 @@ import {
   toggleSavedSetRegistration,
   countRegisteredForRound,
   isRegistered,
+  revealRecommendation,
 } from '../../src/core/history.js';
 import { STRATEGY_DEFAULT, HISTORY_REGISTER_CAP_PER_ROUND } from '../../src/data/numbers.js';
 
@@ -141,5 +142,44 @@ suite('core/history - S090 backfillRecommendations 폐기', () => {
   test('backfillRecommendations export 부재', async () => {
     const mod = await import('../../src/core/history.js');
     assertTrue(typeof mod.backfillRecommendations === 'undefined', 'S090 폐기');
+  });
+});
+
+// S097 (2026-05-19): toggleSavedSetRegistration entry에 revealed: false / revealRecommendation 동작.
+suite('core/history - S097 revealed 필드', () => {
+  test('toggleSavedSetRegistration 신규 등록 entry는 revealed: false', () => {
+    const c = fakeCharacter();
+    const set = { numbers: [3, 9, 16, 28, 42, 43], bonus: 5, reasons: [], strategyIds: [STRATEGY_DEFAULT] };
+    const { character: next, action } = toggleSavedSetRegistration(c, set, 1225);
+    assertEqual(action, 'registered');
+    assertEqual(next.history.length, 1);
+    assertEqual(next.history[0].revealed, false, '신규 등록 = revealed false');
+  });
+
+  test('revealRecommendation - matching 항목 revealed=true 갱신', () => {
+    const c = fakeCharacter();
+    const set = { numbers: [3, 9, 16, 28, 42, 43], bonus: 5, reasons: [], strategyIds: [STRATEGY_DEFAULT] };
+    const { character: registered } = toggleSavedSetRegistration(c, set, 1225);
+    const revealed = revealRecommendation(registered, 1225, '3,9,16,28,42,43');
+    assertEqual(revealed.history[0].revealed, true, 'reveal 후 true');
+    // 옛 character는 immutable (참조 다름).
+    assertTrue(revealed !== registered, '새 객체 반환');
+  });
+
+  test('revealRecommendation - 이미 true면 동일 객체 반환 (idempotent)', () => {
+    const c = fakeCharacter();
+    const set = { numbers: [3, 9, 16, 28, 42, 43], bonus: 5, reasons: [], strategyIds: [STRATEGY_DEFAULT] };
+    const { character: registered } = toggleSavedSetRegistration(c, set, 1225);
+    const once = revealRecommendation(registered, 1225, '3,9,16,28,42,43');
+    const twice = revealRecommendation(once, 1225, '3,9,16,28,42,43');
+    assertTrue(once === twice, '두 번째 호출 = 동일 객체 (no-op)');
+  });
+
+  test('revealRecommendation - 매칭 없는 key는 무변동', () => {
+    const c = fakeCharacter();
+    const set = { numbers: [3, 9, 16, 28, 42, 43], bonus: 5, reasons: [], strategyIds: [STRATEGY_DEFAULT] };
+    const { character: registered } = toggleSavedSetRegistration(c, set, 1225);
+    const result = revealRecommendation(registered, 9999, '1,2,3,4,5,6');
+    assertTrue(result === registered, '미매칭 = 동일 객체');
   });
 });

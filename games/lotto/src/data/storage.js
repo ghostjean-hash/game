@@ -70,9 +70,15 @@ function normalizeCharacter(c) {
           return true;
         })
         .map((h) => {
-          const { luckApplied: _dropLuckApplied, source, ...hRest } = h;
+          const { luckApplied: _dropLuckApplied, source, revealed, ...hRest } = h;
           // S090: source 부재 = 'user'로 자동 채움 (보수적).
-          return { ...hRest, source: source || 'user' };
+          // S097 (2026-05-19): revealed 부재 = 옛 항목이므로 true 자동 (이미 매칭/노출된 상태로 간주).
+          //   신규 등록(toggleSavedSetRegistration)은 false로 시작 = 사용자가 체크 트리거.
+          return {
+            ...hRest,
+            source: source || 'user',
+            revealed: revealed === undefined ? true : !!revealed,
+          };
         })
     : rest.history;
   return { ...rest, history: cleanHistory };

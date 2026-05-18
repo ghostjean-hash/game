@@ -27,7 +27,7 @@ import { recommendMulti, recommendFiveSets, computePoolForStrategies } from '../
 import { mixSeeds } from '../core/random.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
-import { matchHistory, toggleSavedSetRegistration, countRegisteredForRound, isRegistered } from '../core/history.js';
+import { matchHistory, toggleSavedSetRegistration, countRegisteredForRound, isRegistered, revealRecommendation } from '../core/history.js';
 // S089 (2026-05-17): import { applyLuckGrowth } from '../core/luck.js' 폐기 (Luck 자산 폐기).
 import { ensureCurrentState, performRitual, applyRitualBonus } from '../core/ritual.js';
 import {
@@ -841,6 +841,48 @@ function renderApp() {
   } else if (state.currentTab === 'history') {
     const active = getActive();
     renderHistoryPage(content, active, state.drwNo, state.draws);
+    // S097 (2026-05-19): row 체크 버튼 = 좌측부터 ball 순차 reveal 애니메이션. 완료 후 revealed=true 저장.
+    content.querySelectorAll('[data-action="reveal-row"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const drwNo = parseInt(btn.dataset.rowDrw, 10);
+        const key = btn.dataset.rowKey || '';
+        if (Number.isNaN(drwNo) || !key) return;
+        const row = btn.closest('.history-group-row');
+        if (!row) return;
+        // 중복 클릭 차단.
+        if (row.classList.contains('is-revealing')) return;
+        row.classList.add('is-revealing');
+        btn.disabled = true;
+        // 좌측부터 ball 순차 reveal. 각 ball에 .is-revealed + data-num 표기.
+        const balls = row.querySelectorAll('.history-num.is-masked');
+        const drawForRow = state.draws.find((d) => d.drwNo === drwNo);
+        const drawNums = drawForRow && Array.isArray(drawForRow.numbers) ? new Set(drawForRow.numbers) : new Set();
+        const REVEAL_STEP_MS = 320; // 0.32초 간격 = 6 ball = 약 2초
+        balls.forEach((b, i) => {
+          setTimeout(() => {
+            const n = b.dataset.num;
+            b.classList.add('is-revealed');
+            b.textContent = n;
+            b.setAttribute('aria-label', n);
+            if (n && drawNums.has(parseInt(n, 10))) {
+              b.classList.add('is-matched', 'is-bounced');
+            }
+          }, i * REVEAL_STEP_MS);
+        });
+        // 마지막 ball reveal 후 state 저장 + renderApp (옛 동작 회귀).
+        const totalMs = balls.length * REVEAL_STEP_MS + 700; // bounce 여유
+        setTimeout(() => {
+          const cur = getActive();
+          const next = revealRecommendation(cur, drwNo, key);
+          if (next !== cur) {
+            state.characters = state.characters.map((c) => (c.id === next.id ? next : c));
+            saveCharacters(state.characters);
+            // renderApp 호출하면 옛 라벨 / 일관된 row 상태로 전환.
+            renderApp();
+          }
+        }, totalMs);
+      });
+    });
   } else if (state.currentTab === 'reverse') {
     renderReversePage(content, state.draws);
   } else if (state.currentTab === 'wheeling') {

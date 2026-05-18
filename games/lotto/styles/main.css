@@ -1180,6 +1180,90 @@ a.btn-secondary,
   z-index: 1;
 }
 
+/* S097 (2026-05-19): 발표 대기 "?" ball - 본 6 + 보너스 1 모두 물음표.
+   사용자 명시 "현재 회차에도 당첨번호 영역 + 7개 구슬 모두 물음표". */
+.history-num.is-pending {
+  background: var(--color-surface);
+  color: var(--color-text-dim);
+  font-weight: bold;
+  border: 1px dashed var(--color-text-dim);
+  font-size: var(--font-size-sm);
+}
+.history-num.is-pending.is-bonus {
+  outline: 1px dashed var(--color-text-dim);
+  outline-offset: 1px;
+}
+
+/* S097 (2026-05-19): 발표 후 미reveal row - 반투명 + 숫자 숨김 + 우측 체크 버튼.
+   사용자 명시 흐름:
+   (1) 발표 시 ball 반투명 + 숫자 숨김 + 체크 버튼 노출.
+   (2) 체크 클릭 = 좌측부터 ball 순차 reveal (JS setTimeout chain으로 .is-revealed + .is-bounced 추가).
+   (3) 일치 ball = 확대 바운스 + 하이라이트 (.is-matched.is-bounced). */
+.history-group-row.is-masked .history-num.is-masked {
+  opacity: 0.5;
+  color: transparent;
+  filter: grayscale(0.6);
+  transition: opacity 0.3s ease, color 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+}
+.history-group-row.is-masked .history-num.is-masked::before,
+.history-group-row.is-masked .history-num.is-masked::after { content: none; }
+/* reveal 진행: 클래스 .is-revealed → 텍스트 노출 + 색 복귀 + scale pop. */
+.history-num.is-masked.is-revealed {
+  opacity: 1;
+  color: #fff;
+  filter: grayscale(0);
+  animation: history-ball-reveal 0.32s ease-out;
+}
+@keyframes history-ball-reveal {
+  0%   { transform: scale(0.85); opacity: 0.5; }
+  60%  { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+/* 일치 ball bounce + 하이라이트 (is-matched + is-bounced 결합). */
+.history-num.is-masked.is-revealed.is-matched.is-bounced {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px var(--color-accent),
+    0 0 18px rgba(201, 160, 80, 0.9);
+  animation: history-ball-match-bounce 0.7s ease-out;
+  z-index: 1;
+}
+@keyframes history-ball-match-bounce {
+  0%   { transform: scale(0.85); }
+  30%  { transform: scale(1.35); }
+  55%  { transform: scale(0.95); }
+  75%  { transform: scale(1.15); }
+  100% { transform: scale(1.05); }
+}
+
+/* S097 (2026-05-19): 체크 버튼 - row 우측. ghost 톤. */
+.history-row-reveal {
+  flex-shrink: 0;
+  padding: var(--space-1) var(--space-3);
+  background: transparent;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+.history-row-reveal:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+@media (hover: hover) and (pointer: fine) {
+  .history-row-reveal:not(:disabled):hover {
+    background: var(--color-accent);
+    color: #fff;
+  }
+}
+.history-row-reveal:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 /* 막대 차트 */
 .bar-chart {
   display: flex;
