@@ -95,7 +95,9 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
   const regSet = registeredKeys instanceof Set ? registeredKeys : new Set();
 
   const items = list.map((set, i) => {
-    const label = `추천${labelStart + i}`;
+    // S094 (2026-05-18): 라벨 시각 단축. "추천N" → "N" (영역 확보). aria-label은 의미 보존 "추천N".
+    const label = `추천${labelStart + i}`;  // aria/스크린리더 의미 보존
+    const shortLabel = `${labelStart + i}`;  // 시각 노출만 단축
     const sources = Array.isArray(set.strategySources) ? set.strategySources : [];
     const ballsHtml = set.numbers.map((n, k) => numHtml(n, sources[k] || null, sourceDisplayMode)).join('');
     // S090-후속 7 (2026-05-18): cap 폐기 = 모든 row 버튼 enabled.
@@ -108,7 +110,7 @@ export function savedSetsSectionHtml(list, labelStart = 1, poolExhausted = false
     const regBtnCls = `saved-set-register${isReg ? ' is-registered' : ''}`;
     return `
       <div class="saved-set-row${regCls}" data-saved-idx="${i}" aria-label="${label}${isReg ? ' (확정됨)' : ''}">
-        <span class="saved-set-idx" aria-hidden="true">${label}</span>
+        <span class="saved-set-idx" aria-hidden="true">${shortLabel}</span>
         <div class="saved-set-balls" role="list">${ballsHtml}</div>
         <button type="button" class="${regBtnCls}" data-action="toggle-register-saved" data-saved-idx="${i}" aria-label="${regBtnAria}" title="${regBtnTitle}">${regBtnLabel}</button>
         <button type="button" class="saved-set-remove" data-action="remove-saved-set" data-saved-idx="${i}" aria-label="${label} 삭제" title="삭제">${trash('icon icon-sm')}</button>

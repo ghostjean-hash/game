@@ -20,6 +20,7 @@
 > 16차 정리: 2026-05-17. Sprint 076(절 2.97, 캐릭터 카드 흉일 시각/동작 결손 정정) archive 추가 이전. Sprint 090 신설(백캐스트 + 자동 history 등록 폐기 + "내 번호로 선택" 진입점)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 077~090 활성 잔존.
 > 17차 정리: 2026-05-18. Sprint 077(절 2.98, 추천 리스트 다중 학설 매칭 시각화) archive 추가 이전. Sprint 091 신설(하단 탭 순서 + 라벨 정정)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 078~091 활성 잔존.
 > 18차 정리: 2026-05-18. Sprint 078(절 2.99, 운세 3학설 출처 태그 색 명도 극대화) + Sprint 079(절 2.100, 출처 표시 모드 dot/label + 프리셋 색점) archive 추가 이전. Sprint 093 신설(cleanup 묶음: BACKFILL 상수 폐기 + 옛 탭명 sweep + 전체 비우기 sweep)로 활성 9건 도달 → 룰 1.6 자동 적용 (2건 동시 이전). Sprint 084~093 활성 잔존.
+> 19차 정리: 2026-05-18. Sprint 084(절 2.101, 캐릭터 편집 기능 신설 + 후속 S85~S87) archive 추가 이전. Sprint 094 신설(추천 row 라벨 "추천N" → "N" 시각 단축 + 모바일 4열 결손 fix)로 활성 8건 도달 → 룰 1.6 자동 적용. Sprint 088~094 활성 잔존.
 >
 > 본 archive는 검색 / 회귀 디버그용. 새 세션에서 자동 적재되지 않음.
 
@@ -4760,3 +4761,135 @@ FM 프로세스(플랜 → 세부 기획 → 구현 → QA → 리뷰 → 개선
 - `game/service-worker.js` v58 → v59
 
 검증: 324/324 PASS (CSS-only).
+
+---
+
+## 2.101. Sprint 084 완료 - 캐릭터 편집 기능 신설 (S84, 2026-05-17, archive 19차 이전 2026-05-18)
+
+배경: 사용자 보고 "캐릭터 관리에서 캐릭터 정보를 수정할 수가 없네?". 설정 탭의 캐릭터 행이 활성 변경/삭제만 지원, 편집 기능 부재 확인.
+
+### 2.101.1. 사용자 확정 (AskUserQuestion)
+
+| 질문 | 답변 |
+|---|---|
+| 편집 필드 | **이름 + 생년월일** (Luck 직접 수정 X, luckyWord X) |
+| 진입 메커니즘 | **편집 아이콘 추가** (행 클릭 = 활성 유지) |
+
+### 2.101.2. 데이터 결정
+
+| 필드 | 처리 |
+|---|---|
+| name | 사용자 입력 → 단순 보존 |
+| birth | 사용자 입력 → zodiac/animalSign/dayPillar **자동 재계산** |
+| seed | **보존** (캐릭터 정체성 + 옛 history / 추천 결과 결정론 일관성) |
+| id / createdAt / history / savedSets / lastUsedStrategies / luck | 보존 |
+| luckyWord | 편집 불가 (seed 입력에 사용, 보존 의미상 lock) |
+
+### 2.101.3. 변경 파일
+
+- `src/render/character-form.js`: `renderCharacterEditForm(container, character, onUpdated, onCancel)` 신설.
+- `src/render/icons.js`: `pencil()` SVG 아이콘 신규.
+- `src/render/settings-page.js`: `char-row`에 `.char-row-edit` 버튼 + `data-char-edit-id` 핸들러 + `pencil` import.
+- `src/render/main.js`: `openEditCharacterModal(id)` 함수 + `onEditCharacter` 핸들러 등록 + `renderCharacterEditForm` import.
+- `styles/main.css`: `.char-row-edit` 룰 + `.character-form .form-actions` (저장 / 취소 버튼 묶음).
+- `game/service-worker.js` v59 → v60.
+
+### 2.101.4. UX 흐름
+
+1. 설정 탭 → 캐릭터 관리 행 옆 **✏️ 아이콘** 클릭.
+2. 모달 진입 = 이름(prefill) + 생년월일(빈) 입력.
+3. 생년월일 입력 → 별자리 자동 미리보기.
+4. 저장 = `state.characters` 갱신 + `saveCharacters` + 모달 닫기 + 재렌더.
+5. 취소 = 모달 닫기, 변경 없음.
+
+### 2.101.5. 검증
+
+- `node tests/run-node.js` → **324 / 324 PASS** (JS 함수 신설, 회귀 0).
+- 모달 패턴 = `openAddCharacterModal`와 동일 (`showModal` + `renderCharacterForm` 패턴 재사용).
+- 편집 후 seed 동일 = 추첨 결정론 보존.
+
+### 2.101.6. 잔여 / 후속
+
+- 편집 모달의 birth 필드는 prefill 안 함 (옛 birth를 캐릭터에서 직접 못 구함, seed 입력만 사용됨). 사용자가 다시 입력 = 의도와 다르면 모달 진입 시 옛 zodiac/dayPillar 표시 후 입력 강제 패턴 검토.
+- luckyWord 편집 = 별도 의제 (seed 재계산 흐름 필요. 사용자 결정 영역).
+- Luck 직접 수정 = 별도 의제 (치트 성격 또는 보수 조정 도구).
+
+### 2.101.7. Sprint 073 archive 강제 이전 (룰 1.6)
+
+활성 8건 → 룰 7건 초과 → Sprint 073(절 2.94, F1~F5 cleanup) archive 이전. 본 sprint 종료 시점 활성 = 074~084 = 7건 정합 (074~083은 단일 sprint들 안 후속 정정 패턴이라 본 sprint 084까지 활성 7건). archive 13차 정리.
+
+### 2.101.8. S85 - 편집 모달 birth prefill (후속 정정)
+
+배경: 사용자 보고 "편집창을 띄우면 기존에 입력되었던 생년월일이 그대로 표시되어야 함". Sprint 084의 편집 모달 = birth 입력 빈값. 캐릭터 schema에 birth 필드 자체 부재가 원인.
+
+원인:
+- Sprint 084 이전 character schema = name/seed/zodiac/animalSign/dayPillar 보존, **birth는 seed 입력으로만 사용 후 폐기**.
+- 편집 모달이 character.birth로 prefill 시도 = undefined.
+
+정정 (S85, S84의 데이터 모델 결손 정정):
+- `renderCharacterForm` (신규 생성): character 객체에 **`birth: birth`** 필드 추가 → 미래 편집 prefill 보장.
+- `renderCharacterEditForm`:
+  - `character.birth` 있으면 prefill + 별자리 즉시 미리보기
+  - 없으면 (S85 이전 생성 캐릭터) 빈 입력 + 안내 카피 "옛 캐릭터는 생년월일 저장 데이터가 없어 다시 입력해주세요"
+  - 저장 시 birth 갱신 → 다음 편집 prefill 보장
+
+마이그레이션:
+- 옛 캐릭터 = 자동 마이그레이션 불가 (dayPillar는 60갑자 주기라 정확한 생년월일 역산 불가).
+- 사용자가 편집 모달에서 한 번 다시 입력 = 이후 모든 편집 prefill 정합.
+
+변경 파일:
+- `src/render/character-form.js`: `renderCharacterForm` birth 보존 + `renderCharacterEditForm` prefill + 안내 카피.
+- `game/service-worker.js` v60 → v61.
+
+검증: 324/324 PASS (CSS-only + JS 단순 필드 추가, 회귀 0).
+
+자비스 자기 점검 (10건째 결손):
+- Sprint 084 진행 시 character schema에 birth 부재를 확인 못 함 = 편집 모달의 prefill 책임 인지 실패.
+- 향후 룰: 데이터 편집 기능 신설 시 schema 점검 + 옛 데이터 마이그레이션 경로 명시 의무.
+
+### 2.101.9. S86 - "활성" 배지 폐기 (후속 정정)
+
+배경: 사용자 보고 "활성 표시는 뭐지?" + 캡쳐의 활성 배지가 편집 아이콘 위에 겹침.
+
+원인:
+- `.char-row.is-active` 룰 = 외곽선 accent + 배경 옅은 accent. 이미 충분한 시각 강조.
+- `.char-row-active-badge` = "활성" 텍스트 배지 추가 표시 = **중복 정보**.
+- Sprint 084 편집 버튼 신설(우측 44px) + 옛 휴지통(44px) + 배지 `right: 56px` = 편집 버튼 영역 겹침.
+
+정정:
+- `settings-page.js`: `char-row-active-badge` HTML 출력 폐기.
+- CSS 룰은 dead 잔존 (다음 cleanup sprint에서 폐기 검토).
+
+변경 파일:
+- `src/render/settings-page.js`: charRows 안 배지 출력 제거.
+- `styles/main.css`: 배지 룰에 dead 메모 주석.
+- `game/service-worker.js` v61 → v62.
+
+검증: 324/324 PASS (회귀 0).
+
+자비스 자기 점검 (11건째 결손):
+- Sprint 084 편집 버튼 신설 시 기존 우측 영역(휴지통 + 배지) 충돌 점검 안 함.
+- 향후 룰: 행/카드 우측 액션 영역 추가 시 기존 absolute 포지셔닝 요소 전수 grep 의무.
+
+### 2.101.10. S87 - 프리셋 기본값 복원 confirm 텍스트 동적화
+
+배경: 사용자 보고 "프리셋 관리에서 기본값 복원을 눌렀는데 왜 예전 데이터로 돌아가는 거지?". 캡쳐의 confirm "기본 3종 (균형 / 분산파 / 운세파)으로 되돌릴까요?".
+
+원인:
+- settings-page.js line 249의 confirm 텍스트가 **하드코딩** "균형 / 분산파 / 운세파" (옛 디폴트).
+- Sprint 075에서 DEFAULT_PRESETS 갱신(운세/균형/분산)했으나 본 confirm 텍스트 갱신 누락.
+- **실제 reset 동작은 정상** (savePresets에 새 DEFAULT_PRESETS 전달). confirm 텍스트만 옛 라벨.
+
+정정:
+- confirm 텍스트를 `DEFAULT_PRESETS.map(p => p.label).join(' / ')` 동적 산출로.
+- 미래 DEFAULT_PRESETS 변경 시 자동 정합.
+
+변경 파일:
+- `src/render/settings-page.js`: reset-presets 핸들러 confirm 텍스트 동적화.
+- `game/service-worker.js` v62 → v63.
+
+검증: 324/324 PASS (회귀 0).
+
+자비스 자기 점검 (12건째 결손):
+- Sprint 075 DEFAULT_PRESETS 갱신 시 라벨 사용처 grep 미실시.
+- 향후 룰: 데이터 상수 라벨/값 변경 시 하드코딩 라벨 사용처 전수 grep 의무.

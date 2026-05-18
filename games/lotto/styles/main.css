@@ -1902,8 +1902,9 @@ a.btn-secondary,
 .saved-set-row {
   display: grid;
   /* S090-후속 (2026-05-17): 라벨 / balls / 확정 버튼 / 휴지통 = 4열.
-     옛 3열에 register 버튼 추가로 wrap되며 번호공이 row 밖으로 튀어나가던 결손 정정. */
-  grid-template-columns: 44px 1fr auto var(--space-6);
+     옛 3열에 register 버튼 추가로 wrap되며 번호공이 row 밖으로 튀어나가던 결손 정정.
+     S094 (2026-05-18): 라벨 "추천N" → "N" 시각 단축으로 라벨 영역 44 → 28px (16px 회수). */
+  grid-template-columns: 28px 1fr auto var(--space-6);
   align-items: center;
   gap: var(--space-2);
   /* S090-후속 6 (2026-05-18): 좌우 padding 추가 (호흡).
@@ -2060,9 +2061,12 @@ a.btn-secondary,
    사행성 회피 카피는 첫 진입 면책 모달 + 설정 탭 면책으로 일원화. SSOT: docs/01_spec.md 5.2.5.8. */
 @media (max-width: 480px) {
   /* S29.3 (2026-05-04): section padding을 모바일에서 한 단계 축소 → 가용 폭 확보.
-     S29.4: 매직 값 → 토큰. 라벨 40px 매직은 데스크톱 44px와 별도 (디자인 외 명시 사이즈). */
+     S29.4: 매직 값 → 토큰. 라벨 40px 매직은 데스크톱 44px와 별도 (디자인 외 명시 사이즈).
+     S094 (2026-05-18): (1) 라벨 영역 40 → var(--space-5)(20px) 회수 (라벨 "N" 1-2자리만 표시).
+                        (2) 옛 3열 잔재(S090-후속 1 데스크톱만 4열 갱신, 모바일 누락) 4열 정합 회복.
+                        새 4열 = 라벨 / balls / 확정 / 휴지통. */
   .saved-sets-section { padding: var(--space-2); }
-  .saved-set-row { grid-template-columns: 40px 1fr var(--space-5); gap: var(--space-1); }
+  .saved-set-row { grid-template-columns: var(--space-5) 1fr auto var(--space-5); gap: var(--space-1); }
   .saved-set-balls { gap: calc(var(--space-1) * 0.8); }
   .saved-set-row .num-cell .num {
     width: 36px; height: 36px; min-width: 36px; min-height: 36px;
@@ -2072,8 +2076,9 @@ a.btn-secondary,
   .saved-set-remove { width: var(--space-5); height: var(--space-5); }
 }
 @media (max-width: 360px) {
-  /* S29.3 (2026-05-04): 320~360px 화면 fit. S29.4: 매직 32/22/20/11 → 토큰 또는 표준 사이즈. */
-  .saved-set-row { grid-template-columns: var(--space-6) 1fr var(--space-5); }
+  /* S29.3 (2026-05-04): 320~360px 화면 fit. S29.4: 매직 32/22/20/11 → 토큰 또는 표준 사이즈.
+     S094 (2026-05-18): 4열 정합 회복 (옛 3열 잔재 fix). 라벨 영역 = var(--space-5)(20px) (1-2자리). */
+  .saved-set-row { grid-template-columns: var(--space-5) 1fr auto var(--space-5); }
   .saved-set-row .num-cell .num {
     width: var(--space-6); height: var(--space-6); min-width: var(--space-6); min-height: var(--space-6);
     font-size: var(--font-size-sm);
