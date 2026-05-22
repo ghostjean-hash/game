@@ -84,7 +84,7 @@ export function renderHistoryPage(container, character, currentDrwNo = null, dra
       <ul class="summary-grid">
         <li><span class="summary-label">총 추천</span><span class="summary-value">${stats.total}</span></li>
         <li><span class="summary-label">발표 완료</span><span class="summary-value">${stats.settled}</span></li>
-        <li><span class="summary-label">적중 (3-5등)</span><span class="summary-value">${stats.hits}</span></li>
+        <li><span class="summary-label">적중(3-5등)</span><span class="summary-value">${stats.hits}</span></li>
         <li><span class="summary-label">적중률</span><span class="summary-value">${stats.settled > 0 ? hitRate + '%' : '-'}</span></li>
         <li><span class="summary-label">최고 등수</span><span class="summary-value">${stats.bestRank ? RANK_LABELS[stats.bestRank] : '없음'}</span></li>
       </ul>

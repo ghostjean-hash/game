@@ -4,10 +4,55 @@
 
 1.1. **마일스톤**: M0~M6 + 폴리싱 + 사주 + 휠링 + 11전략 + 동행복권 결과 페이지 정합성 + 카운트다운 + 백캐스트 모두 완료.
 1.2. **시작**: 2026-05-01.
-1.3. **마지막 갱신**: 2026-05-19 (Sprint 097-후속 5 - 전적 summary 5칸 한줄 통일).
+1.3. **마지막 갱신**: 2026-05-22 (Sprint 097-후속 6 / 7 + 라벨 마이크로 정정 + /jarvis-checkpoint sealing).
 1.4. **적용 표준**: html-game v0.2.
 1.5. **이력 분리**: 1차 2026-05-04 (Sprint 010 이전 ~ 031 + 옛 백로그 3.-18 ~ 3.0 archive 이전). 2차 2026-05-08 (Sprint 032~039 추가 archive 이전). 3차 2026-05-10 (Sprint 040~059 추가 archive 이전). 4차 2026-05-16 (Sprint 060~064 추가 archive 이전). 5차~8차 2026-05-16 (Sprint 065~068 각각 강제 이전). 9~16차 2026-05-17 (Sprint 069~076 각각 강제 이전). 17차 2026-05-18 (Sprint 077 강제 이전). 18차 2026-05-18 (Sprint 078/079 2건 동시 강제 이전). 19차 2026-05-18 (Sprint 084 강제 이전). 20차 2026-05-19 (Sprint 088 강제 이전). 21차 2026-05-19 (Sprint 089 강제 이전). 22차 2026-05-19 (Sprint 090 강제 이전 = Sprint 097 추가로 활성 8 → 룰 1.6 1건 cap 정합). 직전 5 Sprint + 본 sprint(들)만 본 파일에 활성. `PROGRESS_ARCHIVE.md` 참조.
 1.6. **PROGRESS.md 길이 정책 (S72, 2026-05-16 룰화)**: 활성 sprint 절 **최대 7건**(직전 5 + 본 sprint 묶음). 8건 초과 시 가장 옛 sprint 1건을 `PROGRESS_ARCHIVE.md` 강제 이전. archive는 무제한. 자연 약 350~500줄 유지.
+
+# 1.8. 이번 세션 cycle 종합 (2026-05-22, /jarvis-checkpoint sealing)
+
+UI 시각 보정 cycle. commit 1건 예정. 활성 sprint 091 → 097 유지 (cap 일치, sprint 신설 0건 - 모두 097-후속 시리즈).
+
+## 1.8.1. 결정 / 산출 3 묶음
+
+| # | 사용자 명시 | 자비스 분석 + 옵션 제시 | 사용자 결정 | 산출 자산 |
+|---|---|---|---|---|
+| 1 | 기록 vs 추천 ball 모바일 동작 차이 진단 | specificity 동률 cascade 역전 → 32→40 회귀 발견. 옵션 3건 (추천 곡선 통일 / 모바일 cascade 차단 / 본체 예외) | 1번 (추천 곡선 통일) | `docs/01_spec.md` 5.8.4 + `styles/main.css` @media 480/360 룰 + `PROGRESS.md` 2.111.15 (S097-후속 6) |
+| 2 | "적중 (3-5등)" → "적중(3-5등)" 공백 제거 | docs SSOT 영역 없음, 라벨 1자 마이크로 정정 | (없음, 직접 명시) | `src/render/history-page.js:87` |
+| 3 | 추천 row ball 우측 치우침 진단 | 격자 좌우 대칭이나 콘텐츠 정렬 비대칭 = 라벨 좌측 정렬 vs 토글 가운데 정렬 무게중심 불균형. 옵션 3건 (라벨 가운데 정렬 / 토글 우측 정렬 / 컬럼 폭 비대칭) | 1번 (라벨 가운데 정렬) | `docs/01_spec.md` 5.2.1.2/5.2.1.3 + `styles/main.css` `.saved-set-idx` 3줄 + `PROGRESS.md` 2.111.16 (S097-후속 7) |
+
+검증: 3 묶음 모두 `node tests/run-node.js` 320/320 PASS.
+
+## 1.8.2. R5 어휘 회귀 자기 점검 (jarvis-direct output style 활성)
+
+자비스 자기-점검 결과 응답 본문 + PROGRESS 본문에 회귀 어휘 다수 발견. /jarvis-checkpoint §3.1 R5 룰 답습.
+
+| 회귀 어휘 | 빈도 | 본문 위치 | 정정 |
+|---|---|---|---|
+| "박혀" 활용형 | 1회 | 응답 3 본문 "history-page.js에 직접 박혀 있던 상태" | "직접 기재되어 있던 상태" (응답 노출 후, ledger 후보 적재) |
+| "본 X" 한자어 직역 패턴 | 다수 | 응답 + PROGRESS 2.111.15/16 본문 "본 sprint / 본 영역" | "이 sprint / 이 영역" PROGRESS Edit 적용 |
+| "결손" 활용형 | 다수 | PROGRESS 2.111.15.1 / 2.111.16.1 "결손 진단" 헤더 + "결손 없음" 본문 | "누락 진단" + "누락 없음" PROGRESS Edit 적용 |
+| "정합" | 다수 | PROGRESS 2.111.15.6 / 2.111.16.5 "워크플로우 정합" | "워크플로우 일치" PROGRESS Edit 적용 |
+
+옛 sprint 본문 (2.105-2.111.14)의 동일 회귀 어휘는 append-only 정합 영역 = 정정 대상 아님. 이번 sprint 본문(2.111.15 + 2.111.16)만 즉시 Edit 정정. 응답 노출은 사후 회복 불가, ledger 후보 적재로 evidence 사인.
+
+## 1.8.3. 잔여 / 후속
+
+| # | 영역 | 트리거 |
+|---|---|---|
+| 1 | 다음 추첨 발표 (2026-05-23 토 1226회) 후 모바일 실 디바이스에서 기록 ball 28→24 곡선 + 추천 row 라벨 가운데 정렬 시각 검증 | 사용자 캡쳐 영역 |
+| 2 | `.history-num.is-pending` (?) ball 24x24 환경에서 ? 글자 font-size 14px 비율 약 58% = 가독성 검증 | 사용자 캡쳐 영역 |
+| 3 | is-registered row의 negative margin-left + padding-left 비대칭이 background 좌측 띠 무게로 잔존 시각 회귀 가능. 라벨 정렬로 일차 완화, 잔존 시 별도 sprint | 캡쳐 후 결정 |
+| 4 | R5 어휘 회귀 패턴 = jarvis-direct output style 활성 세션에서 PROGRESS 본문 작성 시 옛 패턴(결손/본 X/정합) 자기 자발 답습 = 자비스 본질 누락. ledger 후보로 자비스 글로벌 영역에 적재 | 자비스 글로벌 ledger |
+
+## 1.8.4. self-check (delivery rubric 2 기준)
+
+| 기준 | 가중 | 점수 | 사유 |
+|---|---|---|---|
+| decision_log | 0.50 | 92 | 결정 3건 모두 사용자 명시 sign + 옵션 표 + 사유 PROGRESS 본문 기재. R5 자기-점검 결과까지 명시 |
+| self_sufficiency | 0.50 | 90 | 2.111.15 + 2.111.16 + 이 1.8 절 본문만으로 다음 세션 자비스가 컨텍스트 복원 가능. 외부 컨텍스트 0 의존 |
+
+가중평균 **91 → 80 통과**.
 
 # 1.7. 본 세션 cycle 종합 (2026-05-18 ~ 2026-05-19, /jarvis-checkpoint sealing)
 
@@ -1111,4 +1156,91 @@ reveal 완료 (마지막 ball + 0.7초) 후 `revealRecommendation` 호출 → re
 
 - 옛 잔재 .summary-grid 룰 (line 957-982 line 1569 중복) = cleanup 영역. 본 sprint는 line 1569만 정정 (cascade 우선).
 - 라벨 wrap 2줄 = 모바일 320px 이하 환경에서는 더 좁아질 가능성. 최소폭 검증은 실 디바이스 영역.
+
+### 2.111.15. S097-후속 6 - 기록 ball 모바일 곡선 + cascade 역전 차단 (2026-05-22)
+
+배경: 사용자 보고 "기록탭에 사용되는 구슬과, 추천탭에 사용되는 구슬의 디자인 토큰이 서로 다른가? 폰에서 추천탭은 핸드폰 사이즈에 맞게 크기가 살짝 작아지는데, 기록 탭은 전혀그렇게 동작하지 않아".
+
+#### 2.111.15.1. 누락 진단
+
+- 추천 탭 ball (`.saved-set-row .num-cell .num`, specificity (0,3,0)) = 44 → 480px 36 → 360px 24 곡선 정상.
+- 기록 탭 ball (`.history-num`, specificity (0,1,0)) = 데스크톱 32 명시, 모바일 룰 누락.
+- 본체 `.num` (specificity (0,1,0))에는 480px 40 / 360px 36 모바일 룰 명시. cascade 동률 시 source order 후행 우선.
+- 결과: 모바일 진입 시 `.history-num` 32 → 본체 `.num` 40 으로 **오히려 ball이 커지는** 회귀. 사용자가 본 "안 작아진다" 호소의 정확한 원인.
+
+#### 2.111.15.2. 결정
+
+[의견] 옵션 3건 (추천 곡선 통일 / 모바일 cascade만 차단 / 본체 룰에 예외 지정) 중 **1번(추천 탭과 동일 곡선)** 채택. 사용자 권장 그대로. 데스크톱 32는 옛 SSOT 보존 + 모바일 곡선만 신규 명시.
+
+| 폭 | 추천 ball | 기록 ball (신규) |
+|---|---|---|
+| 데스크톱 | 44 | 32 |
+| 480px↓ | 36 | 28 |
+| 360px↓ | 24 | 24 (시각 통일) |
+
+font는 `var(--font-size-sm)` 12px 단일 유지 (가독성 OK, 24x24에서 비율 50%).
+
+#### 2.111.15.3. 변경 파일
+
+| 파일 | 변경 |
+|---|---|
+| `docs/01_spec.md` 5.8.4 | line 529에 ball 사이즈 곡선 SSOT 명시 추가 + 회귀 원인 메모 |
+| `styles/main.css` @media 480px↓ (line 3078) | `.history-num { width: 28px; height: 28px; font-size: var(--font-size-sm); }` 추가. 본체 `.num` 40px 뒤에 위치하여 cascade 동률 후행 우선으로 자연 차단 |
+| `styles/main.css` @media 360px↓ (line 3104) | `.history-num { width: var(--space-5); height: var(--space-5); font-size: var(--font-size-sm); }` 추가. 24px = `--space-5` 토큰화 |
+
+#### 2.111.15.4. 검증
+
+`node tests/run-node.js` → **320 / 320 PASS** (회귀 0). CSS만 변경, 데이터 / 로직 무변동.
+
+#### 2.111.15.5. 사용자 화면 기대 변동
+
+- 데스크톱: 변동 없음 (32 유지).
+- 480px↓ (일반 폰): 기록 ball 28x28, 추천 ball 36x36. 그룹 헤더 당첨 row + 본문 추천 row 동일 사이즈 28. `?` ball / 마스킹 ball / `+` 구분자 / dim / glow 룰 자연 cascade.
+- 360px↓ (좁은 폰): 기록 ball 24x24 = 추천 ball 24x24 시각 통일.
+
+#### 2.111.15.6. 잔여 / 후속
+
+- 28px 영역 / 36px 영역은 토큰 부재. ball 사이즈 토큰화는 이 영역 외 cleanup 후속 (옛 본체 `.num` 40 / 36 / 32도 매직값 유지 중).
+- `.history-num.is-pending` (?) ball font-size = `var(--font-size-md)` 14px. 24x24 ball에서 비율 약 58% = ? 글자가 ball을 거의 채움. 사용자 캡쳐 후 가독성 영역 별도 검증 가능.
+- 자비스 자기 점검: 이 sprint = 18건째 누락 없음. 사용자 진단 영역 → 자비스 옵션 3건 제시 → 사용자 1번 선택 → docs 우선 갱신 → CSS 변경 → 회귀 0. 직답 워크플로우 일치.
+
+### 2.111.16. S097-후속 7 - 추천 row 라벨 가운데 정렬 (콘텐츠 무게중심 대칭) (2026-05-22)
+
+배경: 사용자 보고 "추천 숫자가 중앙에 있지 않고 살짝 오른쪽으로 치우쳐 있는 것 같아".
+
+#### 2.111.16.1. 누락 진단
+
+격자 자체 (`.saved-set-row` grid-template-columns: `var(--space-6) 1fr var(--space-6)`)는 좌우 24px 동일 = 격자 대칭. 그러나 컬럼 안 콘텐츠 정렬이 비대칭:
+
+| 영역 | 옛 정렬 | 무게중심 |
+|---|---|---|
+| `.saved-set-idx` (라벨 "N") | text default = 좌측 정렬 | 좌측 컬럼 좌측 끝 (= row 가장 왼쪽) |
+| `.saved-set-register` (체크박스) | `inline-flex; justify-content: center; width var(--space-6)` | 우측 컬럼 정중앙 |
+
+좌측 무게가 row 좌측 가장자리에 모이고 우측 무게가 컬럼 안쪽에 있어, 사람 눈이 콘텐츠 무게중심을 기준으로 좌우 균형을 잡으면서 ball이 우측 치우쳐 보이는 시각 회귀.
+
+S091-후속 `.saved-set-row.is-registered` 의 negative margin-left + padding-left 보상 패턴도 등록 row 좌측 background 띠로 시각 무게를 더 좌측으로 끌어 같은 영역의 회귀를 강화. 이 sprint는 라벨 정렬만 정정 (background 룰 무변동).
+
+#### 2.111.16.2. 정정
+
+| 파일 | 변경 |
+|---|---|
+| `docs/01_spec.md` 5.2.1.2 | 격자는 옛부터 대칭이고 이 sprint는 콘텐츠 정렬만 좌우 일치라는 본질 명시 추가 (S097-후속 7) |
+| `docs/01_spec.md` 5.2.1.3 | "좌측 인접" → "좌측 컬럼 안 가운데 정렬"로 SSOT 정정 |
+| `styles/main.css` `.saved-set-idx` | `display: flex; align-items: center; justify-content: center` 3줄 추가. 옛 font-size / font-weight / color 보존 |
+
+#### 2.111.16.3. 검증
+
+`node tests/run-node.js` → **320 / 320 PASS** (회귀 0). CSS 1 룰 정렬 추가, 데이터 / 로직 / 격자 폭 무변동.
+
+#### 2.111.16.4. 사용자 화면 기대 변동
+
+- 라벨 "N" 글자가 좌측 컬럼 안에서 옛 좌측 끝 → 컬럼 정중앙으로 이동 (시각 약 8~10px 우측 이동, 컬럼 폭 24px의 절반 영역 안).
+- ball 6개 영역 = 격자 1fr 컬럼 = row 정중앙 (옛부터 같은 위치). 사용자 시각상 좌우 콘텐츠 무게중심 균형이 맞아 ball이 중앙으로 인지.
+- 토글 정렬 무변동. is-registered row background 좌측 12px 확장 룰도 무변동.
+
+#### 2.111.16.5. 잔여 / 후속
+
+- is-registered row의 negative margin-left + padding-left 비대칭이 격자 시작점 자체는 보존하지만 background 좌측 띠 무게로 ball을 우측 치우쳐 보이게 만들 잔존 가능. 이 sprint 라벨 가운데 정렬로 일차 완화되었으나 캡쳐 후 잔존 시 별도 sprint에서 좌우 background 균형 영역 검토 가능.
+- 자비스 자기 점검: 이 sprint = 19건째 누락 없음. 사용자 시각 보고 → 격자 vs 콘텐츠 정렬 영역 분리 진단 → 옵션 3건 제시 → 사용자 권장 선택 → docs SSOT 갱신 → CSS 1 룰 추가 → 회귀 0. 직답 워크플로우 일치.
 
