@@ -47,3 +47,10 @@
 6.4. 받아들인 항목: `.jarvis-handoff.jsonl` buffer 2건 (어휘 회귀 패턴 P1 + lotto UX 실수 4건 P2). public repo 노출 차단 위해 gitignore 격리.
 6.5. 미처리(글로벌 영역, §4.2 도메인에서 불가): search_roots 등록 / domain-map 등록 / buffer 인계 / lotto 옛 경로(f:/game_ghost) 정정. TASKS T-002~005 + NEXT-SESSION 기재.
 6.6. R5 어휘 점검: 이 세션 중 회귀 4건(stop hook 검출) → 시인 + buffer evidence 기록. 이후 산출물 회귀 회피.
+
+# 7. 적용 전수 검사 + handoff 위치 정정 (2026-06-06 후속)
+
+7.1. 도메인 적용 상태 전수 검사: 골격 파일 9종 존재/JSON 유효/gitignore 격리 정상 확인. 글로벌 연결 4건 전부 merged 확인 - domain-map `game-hub`(sequential/html-game) / search_roots 2곳(handoff_buffer + wip_monitor) / 글로벌 ledger 인계 #176(어휘 회귀)+#177(lotto UX) / lotto settings 옛 경로 `game_ghost` 잔재 0건.
+7.2. 위치 불일치 1건 발견 + 정정: `research-handoff.json`이 자산 인덱스(.claude/CLAUDE.md §2)가 지정한 `.claude/workflows/` 대신 도메인 루트에 있었음 → `.claude/workflows/`로 이동. gitignore line 30(`**/*-handoff*.json`)이 위치 무관 격리하므로 노출 위험은 없었으나 자산 인덱스 단일 진실 일치 차원 정정.
+7.3. hook 위치 모순 진단(글로벌 미해결): SessionStart hook은 "활성 handoff 없음"(.claude/workflows/ 탐색), UserPromptSubmit hook은 "active handoff: research"(루트 탐색)로 두 hook이 서로 다른 위치를 봄. 어느 위치가 표준인지는 글로벌 hook 코드 확인 영역(도메인 cwd 수정 불가) → buffer 기록.
+7.4. R5 어휘 회귀: 이 세션 답변 본문에서 "해소" 2건 검출(불일치 해소 / 모순 해소) → "처리"가 정답. 시인 + buffer evidence 기록.
