@@ -24,20 +24,20 @@ spec:
 
 | M | 명칭 | 도달 기준 | 우선순위 | ref |
 |---|------|------|------|------|
-| M-1 | 도메인 진입 + 첫 cycle | /jarvis-init 골격 생성 완료 + 첫 cycle sealing | P0 | jarvis-init-game-hub-2026-06-06 |
+| (없음 - M-1/M-2 완료. 다음 마일스톤은 사용자 명시 추가) | | | | |
 
 ## 다음 마일스톤 (pending, 우선순위 순)
 
 | M | 명칭 | 도달 기준 | 우선순위 | 본질 |
 |---|------|------|------|------|
-| M-2 | 글로벌 인계 마감 | search_roots 등록 + domain-map 등록 + buffer 인계 완료 | P1 | 도메인-글로벌 연결 단절 해소 |
 | (사용자 직접 추가) | | | | |
 
 ## 완료 마일스톤 (completed, 최신순)
 
 | M | 명칭 | 완료일 | sealing commit | ref |
 |---|------|------|------|------|
-| (cycle 완료 후 자동 채움) | | | | |
+| M-1 | 도메인 진입 + 첫 cycle | 2026-06-06 | df913a6 | jarvis-init-game-hub-2026-06-06 |
+| M-2 | 글로벌 인계 마감 (search_roots/domain-map/buffer 인계) | 2026-06-06 | 글로벌 인계 merged + 469311a | GT-1~4 buffer merged |
 
 ## 우선순위 분류 (P0/P1/P2)
 

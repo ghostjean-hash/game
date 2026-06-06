@@ -23,22 +23,23 @@ spec:
 
 | ID | 본질 | 마일스톤 ref | cycle ref | 진행률 |
 |----|------|------|------|------|
-| T-001 | 도메인 진입 + 첫 cycle | M-1 | jarvis-init-game-hub-2026-06-06 | 90% (골격 생성 완료, 글로벌 인계 대기) |
+| (없음 - M-1/M-2 봉합 완료) | | | | |
 
 ## pending (대기 중)
 
 | ID | 본질 | 마일스톤 ref | 우선순위 | 진입 trigger |
 |----|------|------|------|------|
-| T-002 | 글로벌 settings.json search_roots에 game 루트 등록 | M-2 | P1 | 글로벌 세션(~/.claude) 진입 |
-| T-003 | domain-map.json에 game-hub 정식 등록 (현재 fallback) | M-2 | P1 | 글로벌 세션 진입 |
-| T-004 | .jarvis-handoff.jsonl pending 항목 글로벌 ledger 수동 인계 | M-2 | P1 | 글로벌 세션 진입 |
-| T-005 | lotto/.claude/settings.json 옛 경로(f:/game_ghost) 정정 | M-2 | P2 | 사용자 확인 |
+| (없음 - 신규 마일스톤은 ROADMAP 사용자 명시 영역) | | | | |
 
 ## completed (최근 완료, 최신 10건만 유지)
 
 | ID | 본질 | sealing commit | 완료일 |
 |----|------|------|------|
-| (cycle 완료 후 자동 채움) | | | | |
+| T-001 | 도메인 진입 + 첫 cycle (M-1) | df913a6 | 2026-06-06 |
+| T-002 | search_roots 2곳에 game 루트 등록 (M-2) | 글로벌 인계 merged | 2026-06-06 |
+| T-003 | domain-map game-hub 정식 등록 (M-2) | 글로벌 인계 merged | 2026-06-06 |
+| T-004 | buffer 항목(어휘회귀/lotto UX) 글로벌 ledger 인계 (M-2) | 글로벌 인계 merged | 2026-06-06 |
+| T-005 | lotto settings 옛 경로(game_ghost) 정정 (M-2) | 469311a | 2026-06-06 |
 
 ## 우선순위 정책
 
