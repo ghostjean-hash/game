@@ -21,3 +21,11 @@ npm-debug.log*
 
 # Claude Code 개인 설정
 .claude/settings.local.json
+
+# 자비스 도메인→글로벌 인계 buffer (사양 §3.5.4.2, 게임 repo 추적 대상 아님)
+.jarvis-handoff.jsonl
+**/.jarvis-handoff.jsonl
+
+# 자비스 워크플로우 인스턴스 (unversioned, 사양 §3.5.7)
+**/*-handoff*.json
+**/contract.json
