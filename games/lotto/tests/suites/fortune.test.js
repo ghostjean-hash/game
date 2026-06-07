@@ -1,5 +1,6 @@
 import { suite, test, assertEqual, assertTrue } from '../core.js';
 import { fortuneFor, fortuneRelation } from '../../src/core/fortune.js';
+import { pickFortuneCopy, FORTUNE_COPY_POOL } from '../../src/data/numbers.js';
 
 suite('core/fortune', () => {
   test('결정론: 같은 입력 = 같은 출력', () => {
@@ -45,5 +46,23 @@ suite('core/fortune', () => {
       if (fortuneFor(seed, normalDrw, 'rat') === 'bad') normalBad += 1;
     }
     assertTrue(chungBad > normalBad, `chung bad ${chungBad} should exceed normal bad ${normalBad}`);
+  });
+});
+
+// S2 후속 (2026-06-07): pickFortuneCopy 회차 변형 운세 문구.
+suite('data/numbers - pickFortuneCopy (운세 문구 회차 변형)', () => {
+  test('결정론: 같은 등급+시드+회차 = 같은 문구', () => {
+    assertEqual(pickFortuneCopy('neutral', 123, 1100), pickFortuneCopy('neutral', 123, 1100));
+  });
+  test('등급별 풀 안에서 반환', () => {
+    for (const f of ['great', 'good', 'neutral', 'bad']) {
+      assertTrue(FORTUNE_COPY_POOL[f].includes(pickFortuneCopy(f, 7, 1234)), `${f} 풀 내 문구`);
+    }
+  });
+  test('회차에 따라 문구 변형 (시드 0 고정, 회차만 변경)', () => {
+    const pool = FORTUNE_COPY_POOL.neutral;
+    const seen = new Set();
+    for (let d = 0; d < pool.length; d += 1) seen.add(pickFortuneCopy('neutral', 0, d));
+    assertTrue(seen.size > 1, '회차 변화로 2개 이상 문구 등장');
   });
 });

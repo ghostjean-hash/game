@@ -130,6 +130,44 @@ export const FORTUNE_GOOD = 'good';
 export const FORTUNE_NEUTRAL = 'neutral';
 export const FORTUNE_BAD = 'bad';
 
+// S2 후속 (2026-06-07): 운세 평가 문구 풀. 등급별 여러 개 + 회차 시드로 변형(매 회차 다른 문구). 사용자 결정 "회차마다 문구 변화".
+//   사행성 표현 금지(CLAUDE.md 6.3): "당첨/대박/확률" 류 없음. "선택의 서사" 톤만.
+export const FORTUNE_COPY_POOL = {
+  [FORTUNE_GREAT]: [
+    '캐릭터 운세 최상. 시드 영향 강화.',
+    '기운이 가장 강한 회차. 마음 가는 번호로.',
+    '흐름이 활짝 열렸어요. 평소보다 과감하게.',
+  ],
+  [FORTUNE_GOOD]: [
+    '안정적인 흐름. 평소대로 진행.',
+    '잔잔하게 좋은 기운. 무리 없이.',
+    '큰 굴곡 없는 회차. 꾸준함이 어울려요.',
+  ],
+  [FORTUNE_NEUTRAL]: [
+    '특별한 가산점 없음. 무난한 회차.',
+    '평범한 흐름. 직감을 믿어도 좋아요.',
+    '잔잔한 기운. 부담 없이 골라보세요.',
+  ],
+  [FORTUNE_BAD]: [
+    '흐름 약함. 보수적 선택 권장.',
+    '기운이 가라앉은 회차. 욕심은 잠시 내려두기.',
+    '조심스러운 흐름. 가볍게 한 줄만.',
+  ],
+};
+
+/**
+ * S2 후속 (2026-06-07): 등급 + (시드 + 회차)로 운세 문구 결정론 선택. 같은 캐릭터 + 같은 회차 = 같은 문구.
+ * @param {string} fortune FORTUNE_*
+ * @param {number} seed 캐릭터 시드
+ * @param {number} drwNo 회차
+ * @returns {string}
+ */
+export function pickFortuneCopy(fortune, seed, drwNo) {
+  const pool = FORTUNE_COPY_POOL[fortune] || FORTUNE_COPY_POOL[FORTUNE_NEUTRAL];
+  const idx = Math.abs((seed || 0) + (drwNo || 0)) % pool.length;
+  return pool[idx];
+}
+
 // 1.7. 추첨 가중치 한계 + 통계 효과 증폭
 // SSOT: docs/02_data.md 1.7.
 // WEIGHT_MIN_FLOOR: weightedSample 안전망 (weight 0 합 방지). 보존.

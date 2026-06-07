@@ -574,7 +574,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
          사용자가 접으면 학습(localStorage). 흉일에도 동일 학습 적용. */ ''}
     ${(() => {
       const isExpanded = !state.charCardCollapsed;
-      const row = characterToggleRowHtml(active, fortune, isExpanded);
+      const row = characterToggleRowHtml(active, fortune, isExpanded, state.drwNo);
       if (!isExpanded) return row;
       return `<div class="char-accordion is-expanded">${row}${characterCardHtml(active, fortune, drawForFortune || state.drwNo, drawDate)}</div>`;
     })()}

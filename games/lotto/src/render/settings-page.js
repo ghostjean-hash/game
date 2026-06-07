@@ -146,7 +146,7 @@ export function renderSettingsPage(container, handlers) {
 
     <section class="stats-section">
       <h2 class="stats-title">다구좌 모드 (휠링)</h2>
-      <p class="stats-note">여러 장 분산 구매로 부분 당첨 보장. 1등 확률 향상 도구가 아닙니다. 라이트 사용자에겐 권장하지 않습니다.</p>
+      <p class="stats-note">번호 8~10개를 고르면 그 안에서 여러 조합의 로또를 자동으로 만들어 줍니다. "이 중 4개가 당첨되면 최소 4등 보장" 같은 부분 당첨 보장 도구예요. 여러 장 살 분을 위한 기능이고, 1등 확률을 올리지는 않습니다.</p>
       <div class="settings-row-actions">
         <button type="button" class="btn-primary" data-action="toggle-advanced">
           ${options.advancedMode ? '다구좌 모드 끄기' : '다구좌 모드 켜기'}

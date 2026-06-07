@@ -4,6 +4,7 @@
 //   카피: 운 이모지(좌) · 이름(강조) · 메타(별자리·띠·일주) · caret(우).
 import {
   FORTUNE_GREAT, FORTUNE_GOOD, FORTUNE_NEUTRAL, FORTUNE_BAD,
+  pickFortuneCopy,
 } from '../data/numbers.js';
 
 // S76 (2026-05-17): 흉 글리프 ▼ → ✕. caret(▼/▲)과 시각 충돌 정정.
@@ -14,14 +15,7 @@ const FORTUNE_GLYPH = {
   [FORTUNE_BAD]: '✕',
 };
 
-// S2 후속 (2026-06-07): 접힘 카피 = 운세 평가 내용(등급 라벨 아님). 사용자 명시 "제목 아니라 운세 평 내용".
-//   spec 5.1.2 character-card FORTUNE_COPY와 동일 문구.
-const FORTUNE_COPY = {
-  [FORTUNE_GREAT]: '캐릭터 운세 최상. 시드 영향 강화.',
-  [FORTUNE_GOOD]: '안정적인 흐름. 평소대로 진행.',
-  [FORTUNE_NEUTRAL]: '특별한 가산점 없음. 무난한 회차.',
-  [FORTUNE_BAD]: '흐름 약함. 보수적 선택 권장.',
-};
+// S2 후속 (2026-06-07): 운세 문구 풀 + 회차 변형은 numbers.js FORTUNE_COPY_POOL / pickFortuneCopy로 이전.
 
 /**
  * 토글 row HTML. 접힘 / 펼침 공용.
@@ -30,13 +24,13 @@ const FORTUNE_COPY = {
  * @param {boolean} isExpanded true면 ▲ caret + aria-expanded=true.
  * @returns {string} HTML (한 줄 row).
  */
-export function characterToggleRowHtml(character, fortune, isExpanded) {
+export function characterToggleRowHtml(character, fortune, isExpanded, drwNo = 0) {
   const name = character?.name || '캐릭터';
   const fortuneGlyph = FORTUNE_GLYPH[fortune] || FORTUNE_GLYPH[FORTUNE_NEUTRAL];
   const isBad = fortune === FORTUNE_BAD;
 
-  // S2 후속 (2026-06-07): 유저명 제거(캐릭터 슬롯에 이미 노출) + 운세 평가 내용(카피) 표시. 등급 라벨 아님.
-  const meta = FORTUNE_COPY[fortune] || FORTUNE_COPY[FORTUNE_NEUTRAL];
+  // S2 후속 (2026-06-07): 유저명 제거(슬롯에 노출) + 회차마다 다른 운세 문구(등급+시드+회차 결정론).
+  const meta = pickFortuneCopy(fortune, character?.seed || 0, drwNo);
 
   const caret = isExpanded ? '▲' : '▼';
   const expanded = isExpanded ? 'true' : 'false';

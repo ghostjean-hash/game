@@ -9,6 +9,7 @@ import {
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
   ZODIAC_LUCKY, ZODIAC_ELEMENTS, ZODIAC_ELEMENT_LUCKY,
   SAJU_RELATION_BOOST,
+  pickFortuneCopy,
 } from '../data/numbers.js';
 import { dayPillarLabel, dateToDayPillar, elementRelation } from '../core/saju.js';
 import { fortuneRelation } from '../core/fortune.js';
@@ -55,13 +56,7 @@ const FORTUNE_ICON = {
   [FORTUNE_BAD]: '✕',
 };
 
-// 등급별 한 줄 카피. SSOT: 본 파일 (docs/01_spec.md 5.1.2).
-const FORTUNE_COPY = {
-  [FORTUNE_GREAT]: '캐릭터 운세 최상. 시드 영향 강화.',
-  [FORTUNE_GOOD]: '안정적인 흐름. 평소대로 진행.',
-  [FORTUNE_NEUTRAL]: '특별한 가산점 없음. 무난한 회차.',
-  [FORTUNE_BAD]: '흐름 약함. 보수적 선택 권장.',
-};
+// S2 후속 (2026-06-07): 등급별 단일 카피 → numbers.js FORTUNE_COPY_POOL + pickFortuneCopy(회차 변형). SSOT 이전.
 
 // 띠 관계 라벨 (spec 5.1.1 / 02_data.md 1.10).
 const RELATION_LABEL = {
@@ -82,7 +77,9 @@ export function characterCardHtml(character, fortune, drawOrDrwNo, drawDate) {
   const fortuneLabel = FORTUNE_LABELS[fortune] || fortune;
   const fortuneColor = FORTUNE_COLORS[fortune] || FORTUNE_COLORS.neutral;
   const fortuneIcon = FORTUNE_ICON[fortune] || '●';
-  const fortuneCopy = FORTUNE_COPY[fortune] || '';
+  // S2 후속 (2026-06-07): 회차마다 다른 운세 문구 (등급 + 시드 + 회차 결정론).
+  const drwNoForCopy = typeof drawOrDrwNo === 'number' ? drawOrDrwNo : (drawOrDrwNo?.drwNo || 0);
+  const fortuneCopy = pickFortuneCopy(fortune, character.seed, drwNoForCopy);
   const animalLabel = character.animalSign ? (ANIMAL_LABELS[character.animalSign] || '') : '';
   const zodiacLabel = character.zodiac ? (ZODIAC_LABELS[character.zodiac] || '') : '';
   const pillarLabel = character.dayPillar ? dayPillarLabel(character.dayPillar) : '';
