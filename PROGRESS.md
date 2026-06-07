@@ -1,6 +1,6 @@
 # game_ghost 진행 상황
 
-프로젝트 전체 메타 로그. 게임별 세부는 각 게임 폴더의 `PROGRESS.md` 참조.
+**이 파일 = 게임 허브 전체 메타 로그 + 자비스 도메인 self-critique 겸용.** 특정 게임 하나의 진행은 각 게임 폴더의 `games/<id>/PROGRESS.md`에 따로 있다 (역할 구분). 헷갈리면 루트 `CLAUDE.md` 0장 문서 지도 참조.
 
 - 시작: 2026-04-30
 - repo: https://github.com/ghostjean-hash/game
