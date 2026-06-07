@@ -501,7 +501,7 @@ a.btn-secondary,
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
+  gap: 5px; /* 사용자 명시 (2026-06-07): 숫자 - 단위 텍스트 간격 5px */
   width: var(--countdown-num);
   height: var(--countdown-num);
   border-radius: 50%;
@@ -2086,9 +2086,11 @@ a.btn-secondary,
 /* S32 (2026-05-04): 번호공 사이 간격을 토큰 기준 80%로 압축 (사용자 명시).
    var(--space-1)(4px) * 0.8 = 3.2px. 매직 픽셀 추가 0 / 토큰 베이스 비율로 정직. */
 .saved-set-balls {
+  /* S1 후속 (2026-06-07): 1fr 균등 분배가 번호공 사이를 벌려 멀어 보임 → 공 크기(auto) + 가운데 정렬로 간격 축소. */
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: calc(var(--space-1) * 0.8);
+  grid-template-columns: repeat(6, auto);
+  gap: var(--space-2);
+  justify-content: center;
   justify-items: center;
 }
 /* S27: 누적 세트 번호공 = 메인 카드와 동일 크기 (시각 통일, 메인 카드 폐기 후). spec 5.2.1.1 명시 사이즈. */

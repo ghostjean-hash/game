@@ -39,11 +39,12 @@ const ZODIAC_LABELS = {
   sagittarius: '궁수자리', capricorn: '염소자리', aquarius: '물병자리', pisces: '물고기자리',
 };
 
+// S2 후속 (2026-06-07): 한자 등급(대길/길/평/흉)이 비-한자 사용자에게 불명확 → 일상어로 교체. 등급 시각은 glyph(★◆●✕)로 유지.
 const FORTUNE_LABELS = {
-  [FORTUNE_GREAT]: '대길',
-  [FORTUNE_GOOD]: '길',
-  [FORTUNE_NEUTRAL]: '평',
-  [FORTUNE_BAD]: '흉',
+  [FORTUNE_GREAT]: '아주 좋음',
+  [FORTUNE_GOOD]: '좋음',
+  [FORTUNE_NEUTRAL]: '보통',
+  [FORTUNE_BAD]: '주의',
 };
 
 // S76 (2026-05-17): 흉 아이콘 ▼ → ✕. character-summary.js FORTUNE_GLYPH와 정합 (시각 일관성).
