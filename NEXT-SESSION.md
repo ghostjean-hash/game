@@ -2,6 +2,10 @@
 
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
+## 직전 작업 (2026-06-07)
+
+상태판 봉합 cycle. /jarvis-next 진단 후 M-1/M-2를 완료 마일스톤으로 정정(commit 3aef26d). 첫 cycle 골격 + 글로벌 인계가 실제 완료였으나 TASKS/ROADMAP만 stale로 남아 /jarvis-next가 90%로 오안내하던 #191 패턴 처리. 이어서 lotto 현황 파악 = 기능 완성, 잔여 전부 사용자 화면 검증 대기.
+
 ## 직전 작업 (2026-06-06)
 
 자비스 정식 도메인 골격 사후 도입. 기존 게임 허브(`D:\claude_code\game`)를 자비스 도메인 `game-hub`로 등록. 범위 결정 = 사용자 명시("게임 허브 도메인 열어서 진행").
@@ -27,7 +31,8 @@
 ### 남은 행동 (글로벌 세션에서 처리)
 
 1. **hook handoff 탐색 위치 표준 확정**: SessionStart hook("활성 handoff 없음", .claude/workflows/ 탐색)과 UserPromptSubmit hook("active handoff: research", 루트 탐색)이 서로 다른 위치를 봄. 글로벌 hook 코드 확인 후 단일 위치로 통일. 도메인 cwd 수정 불가라 buffer 기록(`.jarvis-handoff.jsonl`).
+2. **R5 어휘 회귀 evidence 인계**: buffer에 "정합"/"해소" 회귀 evidence 누적. 글로벌 ledger #176(도메인 작업 회귀 지속) occurrence 반영 영역.
 
 ## 게임 작업 컨텍스트
 
-게임별 진행은 각 `games/<id>/PROGRESS.md` 참조. 현재 활성 작업은 lotto(11전략 추천, html-game v0.2 적용). sudoku/tetris는 표준 미적용 후순위.
+게임별 진행은 각 `games/<id>/PROGRESS.md` 참조. lotto(11전략 추천, html-game v0.2)는 기능적 완성 단계 - 잔여 4건(PROGRESS 1.8.3)이 전부 사용자 화면 캡쳐 검증 대기. 자비스 단독 진입 sprint 없음, 사용자 화면 피드백 또는 새 방향 제시가 다음 진입 trigger. sudoku/tetris는 표준 미적용 후순위.

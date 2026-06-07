@@ -54,3 +54,13 @@
 7.2. 위치 불일치 1건 발견 + 정정: `research-handoff.json`이 자산 인덱스(.claude/CLAUDE.md §2)가 지정한 `.claude/workflows/` 대신 도메인 루트에 있었음 → `.claude/workflows/`로 이동. gitignore line 30(`**/*-handoff*.json`)이 위치 무관 격리하므로 노출 위험은 없었으나 자산 인덱스 단일 진실 일치 차원 정정.
 7.3. hook 위치 모순 진단(글로벌 미해결): SessionStart hook은 "활성 handoff 없음"(.claude/workflows/ 탐색), UserPromptSubmit hook은 "active handoff: research"(루트 탐색)로 두 hook이 서로 다른 위치를 봄. 어느 위치가 표준인지는 글로벌 hook 코드 확인 영역(도메인 cwd 수정 불가) → buffer 기록.
 7.4. R5 어휘 회귀: 이 세션 답변 본문에서 "해소" 2건 검출(불일치 해소 / 모순 해소) → "처리"가 정답. 시인 + buffer evidence 기록.
+
+# 8. 상태판 봉합 + lotto 현황 파악 (2026-06-07, /jarvis-checkpoint sealing)
+
+8.1. /jarvis-next 진단 cycle. git clean + 활성 cycle 없음 확인 후 후보 표 + 추천 1건 제시. 도메인 cwd라 ledger 글로벌 후보는 작업 source에서 제외(#187 원칙: 도메인 작업은 ROADMAP/TASKS만, ledger는 글로벌 세션 영역).
+
+8.2. 추천 A 채택(사용자 명시 "권장 진행"): M-1/M-2 봉합 + 상태판 정정. 첫 cycle(jarvis-init-game-hub-2026-06-06) 골격 도입과 글로벌 인계가 실제로는 완료(buffer GT-1~4 merged, sealing df913a6/469311a)였으나 TASKS/ROADMAP 상태판만 in-progress/pending stale로 남아 /jarvis-next가 90%로 오안내(#191 패턴 직접 사례). TASKS T-001~005 completed 이동 + ROADMAP M-1/M-2 완료 마일스톤 이동. commit 3aef26d(사용자 명시 "commit 후").
+
+8.3. lotto 현황 파악: 기능적 완성 단계 확인. M0~M6 + 폴리싱 + 사주/휠링/11전략/결과 페이지/카운트다운/백캐스트 전부 완료(PROGRESS 1.1). 마지막 갱신(2026-05-22) 이후 잔여 4건(PROGRESS 1.8.3)이 전부 사용자 화면 캡쳐 검증 대기 또는 글로벌 인계 완료 항목. 자비스 단독 진입 작업 없음 - 사용자 화면 피드백 또는 새 방향 제시가 다음 sprint 진입 trigger. 임의 sprint 시작 회피, 사용자 결정 대기.
+
+8.4. R5 어휘 회귀 자기 점검: 이 세션 답변 본문에서 "정합" 1건 검출(lotto 현황 답변 "결과 페이지 정합", PROGRESS 1.1 원문 인용이나 인용 변환 의무상 "일치"로 변환 필요). vocab-trend hook 누적 1위 어휘 재현. 시인 + buffer evidence 기록. 사용자 명시 결정 2건("권장 진행" / "commit 후") 전수 매핑 누락 0 확인(#194).
