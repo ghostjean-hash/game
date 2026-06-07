@@ -4,6 +4,7 @@ import {
   matchHistory,
   characterStats,
   toggleSavedSetRegistration,
+  toggleHistoryLock,
   countRegisteredForRound,
   isRegistered,
   revealRecommendation,
@@ -181,5 +182,57 @@ suite('core/history - S097 revealed 필드', () => {
     const { character: registered } = toggleSavedSetRegistration(c, set, 1225);
     const result = revealRecommendation(registered, 9999, '1,2,3,4,5,6');
     assertTrue(result === registered, '미매칭 = 동일 객체');
+  });
+});
+
+// S3 기록 잠금 (2026-06-07): toggleHistoryLock + 잠긴 항목 unregister 차단.
+suite('core/history - S3 기록 잠금', () => {
+  test('toggleSavedSetRegistration 신규 등록 entry는 locked: false', () => {
+    const c = fakeCharacter();
+    const set = { numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], strategyIds: [STRATEGY_DEFAULT] };
+    const { character: next } = toggleSavedSetRegistration(c, set, 1225);
+    assertEqual(next.history[0].locked, false, '신규 등록 = 미잠금');
+  });
+
+  test('toggleHistoryLock - 잠금 토글 (false → true → false)', () => {
+    const c = fakeCharacter();
+    const set = { numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], strategyIds: [STRATEGY_DEFAULT] };
+    const { character: reg } = toggleSavedSetRegistration(c, set, 1225);
+    const r1 = toggleHistoryLock(reg, 1225, '1,2,3,4,5,6');
+    assertEqual(r1.locked, true, '첫 토글 = 잠금');
+    assertEqual(r1.character.history[0].locked, true);
+    const r2 = toggleHistoryLock(r1.character, 1225, '1,2,3,4,5,6');
+    assertEqual(r2.locked, false, '두 번째 토글 = 해제');
+    assertEqual(r2.character.history[0].locked, false);
+  });
+
+  test('잠긴 항목은 추천 체크 해제(unregister) 차단 + 기록 유지', () => {
+    const c = fakeCharacter();
+    const set = { numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], strategyIds: [STRATEGY_DEFAULT] };
+    const { character: reg } = toggleSavedSetRegistration(c, set, 1225);
+    const { character: locked } = toggleHistoryLock(reg, 1225, '1,2,3,4,5,6');
+    const r = toggleSavedSetRegistration(locked, set, 1225);
+    assertEqual(r.action, 'locked', '잠금 = unregister 차단');
+    assertEqual(r.character.history.length, 1, '기록 유지');
+  });
+
+  test('잠금 해제 후에는 정상 unregister', () => {
+    const c = fakeCharacter();
+    const set = { numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], strategyIds: [STRATEGY_DEFAULT] };
+    const { character: reg } = toggleSavedSetRegistration(c, set, 1225);
+    const { character: locked } = toggleHistoryLock(reg, 1225, '1,2,3,4,5,6');
+    const { character: unlocked } = toggleHistoryLock(locked, 1225, '1,2,3,4,5,6');
+    const r = toggleSavedSetRegistration(unlocked, set, 1225);
+    assertEqual(r.action, 'unregistered', '잠금 해제 후 정상 취소');
+    assertEqual(r.character.history.length, 0);
+  });
+
+  test('toggleHistoryLock - 매칭 없는 key는 무변동', () => {
+    const c = fakeCharacter();
+    const set = { numbers: [1, 2, 3, 4, 5, 6], bonus: 7, reasons: [], strategyIds: [STRATEGY_DEFAULT] };
+    const { character: reg } = toggleSavedSetRegistration(c, set, 1225);
+    const r = toggleHistoryLock(reg, 9999, '9,9,9,9,9,9');
+    assertEqual(r.locked, false);
+    assertEqual(r.character.history.length, 1, '무변동');
   });
 });

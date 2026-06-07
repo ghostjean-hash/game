@@ -46,6 +46,10 @@ export function toggleSavedSetRegistration(character, savedSet, drwNo) {
     (h) => h.drwNo === drwNo && Array.isArray(h.numbers) && h.numbers.join(',') === key,
   );
   if (existingIdx >= 0) {
+    // S3 기록 잠금 (2026-06-07): 잠긴 항목은 추천 체크 해제로 등록 해제 차단. 기록 탭에서 잠금 해제 후만 가능.
+    if (character.history[existingIdx].locked === true) {
+      return { character, action: 'locked' };
+    }
     // 등록 해제
     const next = [...character.history.slice(0, existingIdx), ...character.history.slice(existingIdx + 1)];
     return { character: { ...character, history: next }, action: 'unregistered' };
@@ -63,8 +67,29 @@ export function toggleSavedSetRegistration(character, savedSet, drwNo) {
     matchedRank: null,
     source: 'user',
     revealed: false,
+    locked: false, // S3 기록 잠금 (2026-06-07): 기본 미잠금. 기록 탭에서 잠그면 추천 삭제·모두 비우기로부터 보호.
   };
   return { character: { ...character, history: [...character.history, entry] }, action: 'registered' };
+}
+
+/**
+ * S3 기록 잠금 (2026-06-07): history 항목 locked 토글.
+ * 잠그면 추천 리스트 체크 해제 / 모두 비우기로부터 보호(기록 영구 보존).
+ * @param {object} character
+ * @param {number} drwNo
+ * @param {string} key numbers.join(',')
+ * @returns {{ character: object, locked: boolean }}
+ */
+export function toggleHistoryLock(character, drwNo, key) {
+  if (!Array.isArray(character?.history)) return { character, locked: false };
+  const idx = character.history.findIndex(
+    (h) => h.drwNo === drwNo && Array.isArray(h.numbers) && h.numbers.join(',') === key,
+  );
+  if (idx < 0) return { character, locked: false };
+  const next = [...character.history];
+  const nowLocked = !(next[idx].locked === true);
+  next[idx] = { ...next[idx], locked: nowLocked };
+  return { character: { ...character, history: next }, locked: nowLocked };
 }
 
 /**

@@ -64,7 +64,7 @@ export function renderHistoryPage(container, character, currentDrwNo = null, dra
     </div>
   `;
   // 발표 대기 추천 row = 옛 동일 (번호 노출, 라벨 "미발표").
-  const pendingRowsHtml = pendingItems.map((h) => historyGroupRowHtml(h, null, false)).join('');
+  const pendingRowsHtml = pendingItems.map((h) => historyGroupRowHtml(h, null, false, true)).join('');
   const pendingHtml = pendingItems.length === 0 ? '' : `
     <section class="stats-section history-pending-section">
       <h2 class="stats-title">현재 회차 ${currentDrwNo}회 · 발표 대기 ${pendingItems.length}건</h2>
@@ -233,7 +233,7 @@ function historyGroupHtml(drwNo, items, draw) {
  * @param {object} [draw] draws Map 조회 결과 (당첨번호 비교용)
  * @param {boolean} hasDraw 해당 회차 draws 가용 여부
  */
-function historyGroupRowHtml(h, draw, hasDraw) {
+function historyGroupRowHtml(h, draw, hasDraw, lockable = false) {
   const rank = h.matchedRank;
   const userNums = Array.isArray(h.numbers) ? h.numbers : [];
   const drawNumSet = hasDraw && draw && Array.isArray(draw.numbers)
@@ -284,9 +284,13 @@ function historyGroupRowHtml(h, draw, hasDraw) {
 
   // S097: 체크 버튼 (revealed=false + hasDraw만).
   const key = userNums.join(',');
+  // S3 기록 잠금 (2026-06-07): 현재 회차(발표 대기) 등록 항목에 잠금 토글. 잠그면 추천 삭제·모두 비우기로부터 보호.
+  const lockBtn = (lockable && h.source === 'user')
+    ? `<button type="button" class="history-row-lock${h.locked ? ' is-locked' : ''}" data-action="toggle-history-lock" data-row-drw="${h.drwNo}" data-row-key="${key}" aria-pressed="${h.locked ? 'true' : 'false'}" aria-label="${h.locked ? '기록 잠금 해제' : '기록 잠금'}" title="${h.locked ? '잠금 해제' : '잠금 - 추천에서 지워도 기록에 남음'}">${h.locked ? '🔒' : '🔓'}</button>`
+    : '';
   const rightHtml = isMasked
     ? `<button type="button" class="history-row-reveal" data-action="reveal-row" data-row-drw="${h.drwNo}" data-row-key="${key}" aria-label="추첨 결과 확인">확인</button>`
-    : `<span class="history-group-row-rank" style="color: ${rankColor}">${rankLabel}</span>`;
+    : `${lockBtn}<span class="history-group-row-rank" style="color: ${rankColor}">${rankLabel}</span>`;
 
   // S097-후속 (2026-05-19): 미발표 row(hasDraw=false)는 dim 적용 안 함.
   //   사용자 명시 "미발표의 구슬은 반투명 적용 안함". 발표 대기 = 자기 번호는 또렷이 노출.
