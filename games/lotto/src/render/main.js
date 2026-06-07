@@ -4,11 +4,10 @@
 import { renderCharacterForm, renderCharacterEditForm } from './character-form.js';
 import { characterCardHtml } from './character-card.js';
 import { characterToggleRowHtml } from './character-summary.js';
-import { drawCardHtml, fiveSetsExtraHtml } from './draw-card.js';
 import { reverseSearch } from '../core/reverse.js';
 import { characterSlotsHtml } from './character-slots.js';
 import { strategyTabsHtml } from './strategy-tabs.js';
-import { presetButtonsHtml } from './preset-buttons.js';
+import { presetButtonsHtml, activePresetLineHtml } from './preset-buttons.js';
 // S61 (2026-05-10): preset-editor 직접 import 폐기. 진입은 settings-page.js로 위임.
 import { nextDrawCardHtml, startCountdown } from './next-draw-card.js';
 import { nextDraw } from '../core/schedule.js';
@@ -20,10 +19,10 @@ import { renderSettingsPage } from './settings-page.js';
 import { bottomTabsHtml, TABS } from './bottom-tabs.js';
 import { startBottomTabsViewportSync } from './viewport-sync.js';
 import { showModal, showDisclaimer } from './modal.js';
-import { ritualWidgetHtml, openRitualModal } from './ritual-widget.js';
+import { openRitualModal } from './ritual-widget.js';
 import { spawnRitualBurst } from './ritual-particles.js';
 // S34 (2026-05-08): computePairsForPairTracker import 제거 (짝꿍 페어 박스 폐기 동반).
-import { recommendMulti, recommendFiveSets, computePoolForStrategies } from '../core/recommend.js';
+import { recommendMulti, computePoolForStrategies } from '../core/recommend.js';
 import { mixSeeds } from '../core/random.js';
 import { fortuneFor } from '../core/fortune.js';
 import { computeNumberStats, computeBonusStats, computeCooccur } from '../core/stats.js';
@@ -65,7 +64,7 @@ const state = {
   numberStats: [],
   bonusStats: [],
   cooccur: [],
-  options: { applyFilters: false, advancedMode: false, fiveSets: false },
+  options: { advancedMode: false },
   currentTab: 'home',
   ritual: null, // T4: 행운 의식 상태 (charId+drwNo 기준 격리, 회차 변경 시 자동 리셋)
   // S32 (2026-05-07): 풀 한계 도달 시 그 strategyIds 정규화 키 보관. 같은 키일 때 배너 노출.
@@ -281,13 +280,8 @@ function getRecAndFortune(active) {
   // S34 (2026-05-08): poolNote / pairs 폐기 - 짝꿍 페어 박스 폐기 동반.
   const poolNote = null;
 
-  // S4-T1: 5세트 모드. ON이면 메인(rec) = sets[0], 추가 sets[1..4]를 함께 반환.
   // S30.6 (2026-05-04): drawDate도 반환. character-card 사주 패널 일진 보너스 표시용.
-  if (state.options.fiveSets) {
-    const sets = recommendFiveSets({ ...ctxBase, strategyIds }, { multi: true });
-    return { strategyId, strategyIds, rec: sets[0], sets, fortune, drawForFortune, pool, poolNote, drawDate };
-  }
-
+  // S0 청소 (2026-06-07): fiveSets 분기 폐기 (메인 카드 S27 폐기 잔재). recommendMulti 단일.
   const rec = recommendMulti({ ...ctxBase, strategyIds });
   return { strategyId, strategyIds, rec, sets: null, fortune, drawForFortune, pool, poolNote, drawDate };
 }
@@ -521,12 +515,7 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   state.drwNo = nextInfo.drwNo || state.drwNo;
   const heroFortuneClass = fortune === 'bad' ? ' is-bad' : (fortune === 'great' ? ' is-great' : '');
 
-  // T4: 행운 의식 게이지 위젯 (회차/캐릭터 변경 시 자동 리셋)
-  state.ritual = ensureCurrentState(state.ritual, active.id, state.drwNo);
-  saveRitualState(state.ritual);
-
-  // S5-T2: 의식 만땅 시 추천 카드 #1 골드 글로우.
-  const ritualFilled = !!(state.ritual && state.ritual.appliedBonus);
+  // S3 당첨 기원 이동 (2026-06-07): ritual 위젯이 기록 탭으로 이전. 추천 탭에서 ritual 상태/위젯 제거.
 
   // S27 (2026-05-03): 메인 카드(미리보기) + 5세트 컴팩트 추천 탭에서 노출 폐기.
   //   누적 리스트(추천1, 추천2, ...)만 표시. 라벨 시작 = 1 (메인이 없으니).
@@ -561,10 +550,6 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
   const addBarHtml = savedSetsAddBarHtml(savedList.length, SAVED_SETS_CAP, poolExhausted, presetSelected);
 
   return `
-    <header class="app-header tab-header home-header">
-      <h1 class="app-title">Blessed Lotto</h1>
-    </header>
-
     <section class="home-hero${heroFortuneClass}" aria-label="다음 추첨">
       ${nextDrawCardHtml(nextInfo)}
     </section>
@@ -575,12 +560,10 @@ function homeTabHtml(active, strategyId, strategyIds, rec, fortune, drawForFortu
     ${/* S29(2026-05-04): + 1세트 / + 5세트 (실행) - 결과 바로 아래. 결과↔실행 인접. */ ''}
     ${addBarHtml}
 
-    ${/* S36(2026-05-08): 전략 picker → 프리셋 3슬롯 버튼.
-         사용자가 자주 쓰는 묶음을 1버튼. 편집은 설정 탭 - 프리셋 관리(S61, 2026-05-10). */ ''}
-    ${presetButtonsHtml(state.presets, strategyIds)}
+    ${/* S1 메인 비우기(2026-06-07): 프리셋 선택을 설정 탭으로 이전. 메인엔 활성 전략 묶음 이름만 작게. */ ''}
+    ${activePresetLineHtml(state.presets, strategyIds)}
 
-    ${/* S17(2026-05-02): 행운 쌓기를 전략 탭 하위로 이동 (이전 = 히어로 직하). */ ''}
-    ${ritualWidgetHtml(state.ritual)}
+    ${/* S3(2026-06-07): 당첨 기원 위젯은 기록 탭(현재 회차 발표 대기 아래)으로 이전. */ ''}
 
     ${/* S13(2026-05-02): 슬롯 + 카드 묶음. 시각 인접으로 "캐릭터 세트" 인지. */ ''}
     ${characterSlotsHtml(state.characters, state.activeId)}
@@ -662,10 +645,7 @@ function renderHome(content) {
     });
   }
 
-  // T4: 행운 의식 위젯 클릭 → 8행위 모달
-  content.querySelector('[data-action="open-ritual"]')?.addEventListener('click', () => {
-    openRitualModalForActive();
-  });
+  // S3 당첨 기원 이동 (2026-06-07): open-ritual 핸들러는 기록 탭 렌더부로 이전.
 
   // S26: 누적 세트 - 추가 / 삭제 / 전체 삭제 핸들러 (S088 라벨 정정).
   content.querySelector('[data-action="add-saved-1"]')?.addEventListener('click', () => {
@@ -722,20 +702,8 @@ function renderHome(content) {
     renderApp();
   });
 
-  // S36(2026-05-08): 프리셋 클릭 → lastUsedStrategies 갱신 + renderApp.
-  content.querySelectorAll('[data-action="preset-pick"]').forEach((el) => {
-    el.addEventListener('click', () => {
-      const presetId = el.dataset.presetId;
-      const preset = state.presets.find((p) => p.id === presetId);
-      if (!preset || !Array.isArray(preset.strategyIds) || preset.strategyIds.length === 0) return;
-      const cur = state.characters.find((c) => c.id === state.activeId);
-      if (!cur) return;
-      cur.lastUsedStrategies = [...preset.strategyIds];
-      cur.lastUsedStrategy = preset.strategyIds[0];
-      saveCharacters(state.characters);
-      renderApp();
-    });
-  });
+  // S1 메인 비우기 (2026-06-07): 메인의 프리셋 선택 버튼 폐기 → 설정 탭으로 이전 (onPresetPick).
+  //   메인엔 활성 프리셋 이름만 표시 (activePresetLineHtml). 옛 preset-pick 핸들러 제거.
 
   // S36(2026-05-08): 프리셋 편집 모달 진입.
   // S61(2026-05-10): 추천 탭 진입점 폐기. 편집은 설정 탭 - 프리셋 관리에서. 본 핸들러는 dead.
@@ -840,7 +808,13 @@ function renderApp() {
     renderStatsPage(content);
   } else if (state.currentTab === 'history') {
     const active = getActive();
-    renderHistoryPage(content, active, state.drwNo, state.draws);
+    // S3 당첨 기원 이동 (2026-06-07): ritual 상태 보장 후 기록 탭 위젯에 전달 + 클릭 핸들러 바인딩.
+    state.ritual = ensureCurrentState(state.ritual, active.id, state.drwNo);
+    saveRitualState(state.ritual);
+    renderHistoryPage(content, active, state.drwNo, state.draws, state.ritual);
+    content.querySelector('[data-action="open-ritual"]')?.addEventListener('click', () => {
+      openRitualModalForActive();
+    });
     // S097 (2026-05-19): row 체크 버튼 = 좌측부터 ball 순차 reveal 애니메이션. 완료 후 revealed=true 저장.
     content.querySelectorAll('[data-action="reveal-row"]').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -901,7 +875,7 @@ function renderApp() {
       onResetAll: () => {
         state.characters = [];
         state.activeId = null;
-        state.options = { applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'dot' };
+        state.options = { advancedMode: false, sourceDisplayMode: 'dot' };
         renderApp();
       },
       // S090-후속 (2026-05-17): 활성 캐릭터 전적만 초기화. 옛 백캐스트 잔재 강제 정리용.
@@ -921,14 +895,20 @@ function renderApp() {
       onDeleteCharacter: deleteCharacterById,
       onActivateCharacter: activateCharacterById,
       onOpenWheeling: () => setTab('wheeling'),
-      onFiveSetsToggle: () => {
-        // S4-T1: 5세트 토글 후 state 갱신
-        state.options = loadOptions();
-        renderApp();
-      },
       // S79 (2026-05-17): 출처 표시 모드 변경 후 state 갱신 + 다시 렌더 (현재 설정 탭이라 UI 즉시 변동 없음, 다음 추천 탭 진입 시 반영).
       onSourceDisplayModeChange: () => {
         state.options = loadOptions();
+      },
+      // S1 메인 비우기 (2026-06-07): 설정 탭에서 프리셋 선택 → 활성 전략 갱신 + 전체 재렌더.
+      onPresetPick: (presetId) => {
+        const preset = state.presets.find((p) => p.id === presetId);
+        if (!preset || !Array.isArray(preset.strategyIds) || preset.strategyIds.length === 0) return;
+        const cur = state.characters.find((c) => c.id === state.activeId);
+        if (!cur) return;
+        cur.lastUsedStrategies = [...preset.strategyIds];
+        cur.lastUsedStrategy = preset.strategyIds[0];
+        saveCharacters(state.characters);
+        renderApp();
       },
       // S61 (2026-05-10): 설정 탭 - 프리셋 관리에서 편집 / 기본값 복원 후 추천 탭 동기화 신호.
       onPresetsChanged: () => {

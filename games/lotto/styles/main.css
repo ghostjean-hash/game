@@ -494,17 +494,21 @@ a.btn-secondary,
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
 }
 .next-draw-num {
-  /* 동행복권: 옅은 회색 동그라미 배경 + 빨강 숫자. 완전히 평면. */
+  /* S4 (2026-06-07): 숫자 + 단위를 원 안에 세로 배치. 옛 원 밖 단위 라벨 폐기. 동행복권 톤(옅은 회색 원 + 빨강) 유지. */
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1px;
   width: var(--countdown-num);
   height: var(--countdown-num);
   border-radius: 50%;
   background: var(--color-surface-soft);
+  line-height: 1;
+}
+.next-draw-digit {
   font-size: 22px;
   font-weight: 800;
   color: var(--color-lotto-red);
@@ -513,9 +517,10 @@ a.btn-secondary,
   line-height: 1;
 }
 .next-draw-unit {
-  font-size: 13px;
+  font-size: var(--font-size-xs);
   color: var(--color-text-dim);
   font-weight: 400;
+  line-height: 1;
 }
 
 /* ===== 홈 hero: 카운트다운 + 추천을 한 박스로 묶는 wrapper =====
@@ -3070,7 +3075,8 @@ a.btn-secondary,
   /* 카운트다운 카드 모바일 */
   .next-draw-card { padding: var(--space-4) var(--space-3); }
   .next-draw-title { font-size: 24px; }
-  .next-draw-num { width: var(--countdown-num-sm); height: var(--countdown-num-sm); font-size: 20px; }
+  .next-draw-num { width: var(--countdown-num-sm); height: var(--countdown-num-sm); }
+  .next-draw-digit { font-size: 20px; }
 
   .stats-header { gap: var(--space-1); }
   .stats-section { padding: var(--space-3); margin-bottom: var(--space-4); }
@@ -3115,7 +3121,8 @@ a.btn-secondary,
 
   /* 카운트다운 카드 추가 축소 */
   .next-draw-title { font-size: 22px; }
-  .next-draw-num { width: var(--countdown-num-xs); height: var(--countdown-num-xs); font-size: 18px; }
+  .next-draw-num { width: var(--countdown-num-xs); height: var(--countdown-num-xs); }
+  .next-draw-digit { font-size: 18px; }
 
   .bar-row {
     grid-template-columns: minmax(40px, max-content) minmax(48px, 1fr) minmax(28px, max-content);
@@ -3141,6 +3148,20 @@ a.btn-secondary,
 
 /* 프리셋 영역 - 컨테이너 박스 폐기. 슬롯과 편집 링크만 단독. */
 .preset-section { margin: var(--space-3) 0; }
+
+/* S1 메인 비우기 (2026-06-07): 메인에 활성 프리셋 이름만 한 줄. 선택 버튼은 설정 탭으로 이전. */
+.active-preset-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin: var(--space-3) 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+}
+.active-preset-label { font-weight: 600; color: var(--color-accent); }
+.active-preset-hint { color: var(--color-text-dim); }
 
 .preset-list {
   display: grid;

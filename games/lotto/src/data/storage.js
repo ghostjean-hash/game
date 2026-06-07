@@ -107,14 +107,15 @@ export function loadActiveCharacterId() { return read('active_character', null);
 export function saveActiveCharacterId(id) { write('active_character', id); }
 
 // 옵션
-// fiveSets: 5세트 동시 추천 모드 (S4-T1). 기본 OFF.
+// advancedMode: 다구좌(휠링) 모드 게이트. 기본 OFF.
 // S19 (2026-05-02): multiStrategy 옵션 폐기. 항상 다중 모드. 기존 localStorage 잔존은 무시.
-// S79 (2026-05-17): sourceDisplayMode 옵션 추가. 'dot' (기본) / 'label'. 사용자 명시.
-const OPTIONS_DEFAULT = { applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'dot' };
+// S79 (2026-05-17): sourceDisplayMode 옵션 추가. 'dot' (기본) / 'label' / 'off'. 사용자 명시.
+// S0 청소 (2026-06-07): applyFilters(추첨 미반영 옛 잔재, numbers.js 1.4 비율필터 폐기 정합) + fiveSets(메인카드 폐기 S27 잔재) 옵션 제거.
+const OPTIONS_DEFAULT = { advancedMode: false, sourceDisplayMode: 'dot' };
 export function loadOptions() {
   const opts = read('options', OPTIONS_DEFAULT);
-  // 누락 키 채우기 + S19 폐기 키 제거
-  const { multiStrategy: _drop, ...rest } = opts || {};
+  // 누락 키 채우기 + 폐기 키 제거 (S19 multiStrategy / S0 applyFilters·fiveSets)
+  const { multiStrategy: _d1, applyFilters: _d2, fiveSets: _d3, ...rest } = opts || {};
   return { ...OPTIONS_DEFAULT, ...rest };
 }
 export function saveOptions(options) { write('options', options); }

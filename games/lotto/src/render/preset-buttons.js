@@ -63,6 +63,38 @@ function isSamePresetActive(presetIds, activeIds) {
   return a.every((id, i) => id === b[i]);
 }
 
+/**
+ * S1 메인 비우기 (2026-06-07): 메인에 활성 프리셋 이름만 한 줄 작게.
+ * 프리셋 선택 버튼은 설정 탭으로 이전. 메인은 "지금 무엇으로 뽑는지"만 표시 + 변경 안내.
+ * @param {Array} presets
+ * @param {Array} activeStrategyIds
+ * @returns {string} HTML.
+ */
+export function activePresetLineHtml(presets, activeStrategyIds) {
+  const list = Array.isArray(presets) ? presets : [];
+  const active = list.find((p) => isSamePresetActive(p?.strategyIds, activeStrategyIds));
+  if (!active) {
+    return `
+      <section class="active-preset-line is-none" aria-label="추천 전략 미선택">
+        <span class="active-preset-hint">설정에서 추천 전략을 선택하세요</span>
+      </section>
+    `;
+  }
+  const sids = Array.isArray(active.strategyIds) ? active.strategyIds : [];
+  const tokens = sids.map((sid) => {
+    const label = strategyLabel(sid);
+    if (!label) return '';
+    const color = strategyTagColor(sid);
+    return `<span class="preset-strategy-token"><span class="preset-strategy-dot" style="background-color:${color};" aria-hidden="true"></span>${escapeHtml(label)}</span>`;
+  }).filter(Boolean).join('<span class="preset-strategy-sep" aria-hidden="true"> · </span>');
+  return `
+    <section class="active-preset-line" aria-label="추천 전략 ${escapeHtml(active.label || '')}">
+      <span class="active-preset-label">${escapeHtml(active.label || '')}</span>
+      ${tokens ? `<span class="preset-strategy-line">${tokens}</span>` : ''}
+    </section>
+  `;
+}
+
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }

@@ -14,7 +14,6 @@ import {
   ZODIAC_LUCKY,
   ZODIAC_ELEMENT_LUCKY,
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
-  FIVE_SETS_COUNT, FIVE_SETS_SALT_BASE,
   STRATEGY_ORDER,
   STAT_LABEL_TOP_K,
 } from '../data/numbers.js';
@@ -259,25 +258,3 @@ export function computePoolForStrategies(strategyIds, ctx) {
   return [...union].sort((a, b) => a - b);
 }
 
-/**
- * 5세트 동시 추천. S43.2 (2026-05-08) 통일: 모든 호출 recommendMulti.
- * 시드 변형으로 결정론적 다른 결과. i=0이 메인.
- */
-export function recommendFiveSets(ctx, opts = {}) {
-  const { multi: _multi = false } = opts;
-  const out = [];
-  const baseSeed = (ctx.seed || 0) >>> 0;
-  const sids = ctx.strategyIds || (ctx.strategyId ? [ctx.strategyId] : []);
-  for (let i = 0; i < FIVE_SETS_COUNT; i += 1) {
-    let setCtx;
-    if (i === 0) {
-      setCtx = ctx;
-    } else {
-      const seedVariant = mixSeeds(baseSeed, FIVE_SETS_SALT_BASE + i);
-      setCtx = { ...ctx, seed: seedVariant };
-    }
-    const rec = recommendMulti({ ...setCtx, strategyIds: sids });
-    out.push(rec);
-  }
-  return out;
-}

@@ -74,3 +74,20 @@
 9.3. "권장 진행"(사용자 명시) → 0장을 "주요 문서 지도"로 확장(0.1 CLAUDE.md / 0.2 PROGRESS.md / 0.3 골격 문서) + 루트 PROGRESS.md 상단에 "허브 메타 + self-critique 겸용" 역할 1줄 명시(commit fce6bc1). 이름 겹침 혼란을 단일 참조점(0장)으로 통합.
 
 9.4. lotto 업그레이드 전수 검사(UX 약점 + 미사용 기능)는 다음 세션 위임 결정(사용자 명시 "lotto를 도메인으로 다시 세션 열게"). 자비스 판단: lotto는 docs(spec/data/architecture) 충실해 `/jarvis-init` 정식 도메인화 불필요(중복 부담 + game-hub 중첩), "lotto 작업 이어서 + 검수" 프롬프트로 바로 진입 권장. 진입 프롬프트 NEXT-SESSION 게임 컨텍스트에 기재.
+
+# 10. lotto 다음 버전 "메인 깔끔화" 4갈래 전수 검사 + S0-S4 구현 (2026-06-07, /jarvis-checkpoint sealing)
+
+10.1. lotto 4갈래 전수 검사(사용자 순차 명시 요청): (1) 기능/코드 - 작동 안 하는 옵션 applyFilters(설정 토글 O / 추첨 반영 X)·fiveSets(spec 폐기 선언 / 코드 잔존) + dead code 식별 (2) UX 디자이너 - 디자인 시스템 A-(토큰 체계 / 번호공 WCAG 대비 / safe-area 견고), 최대 약점 "확정" 멘탈 모델 불명 + 추천 탭 정보 과부하 (3) 프로그래머 - 절대규칙 100%(core 순수성 / 모듈 단방향) / XSS 안전 / 결정론 보장, 매직넘버 룰 위반 2건(TIMELINE_RECENT / SEVEN_DAYS_MS) + 통계 중복 계산 (4) PD - 최대 리스크 "정직함이 매력을 죽이는 긴장"(사행성 제거로 로또 본질 동기 제거) + 데일리 리텐션 공백. 결과 전부 `games/lotto/BACKLOG.md` 신설 기재(다음 버전 단일 진실 문서).
+
+10.2. 사용자 의견 7건 + AskUserQuestion 결정 2건(메인엔 활성 전략 이름 표시 / 정체성 정보는 펼치면 노출)으로 다음 버전 "메인 깔끔화" 설계 확정. 사용자 전권 위임("중간 관여 안 함, 다 완료 후 보고").
+
+10.3. S0-S4 전부 구현 완료(테스트 314/314 PASS 일관, 브라우저 실제 로드 JS 에러 0):
+- S0 청소: applyFilters/fiveSets 옵션 제거(storage / state / settings UI / 핸들러 / loadOptions 폐기키 drop) + 연쇄 dead(recommendFiveSets + 테스트 7개 / draw-card.js stub) + 매직넘버 numbers.js 이전. advancedMode(휠링 게이트)는 보존.
+- S1 메인 비우기: 추천 탭 제목 제거(설정 안내로) + 프리셋 선택 설정 탭 "추천 전략 선택" 섹션 이전(onPresetPick 배선) + 메인은 활성 프리셋 이름 한 줄(activePresetLineHtml).
+- S2 캐릭터 카드: 접힘 row = 이름 + 이번 회차 운세(별자리·띠·일주 카피 제거), 펼침 카드 이름 h2 제거(중복), 정체성·행운번호는 펼치면 노출.
+- S3 당첨 기원: 추천 탭 → 기록 탭 현재 회차(발표 대기) 아래 이전(ensureCurrentState + 클릭 핸들러 기록 탭 렌더부로 이동).
+- S4 카운트다운: 일/시/분/초 단위를 원 밖 라벨 → 원 안 숫자 하단(digit + unit 세로).
+
+10.4. 미커밋 + 잔여: docs SSOT 일치 미반영(spec 4장 / 5.1.3 / 5.1.5 / 5.1.6 / 5.2.2 / 5.3 / 5.2.5.7 / 5.6 / 5.8 + 02_data 매직넘버·옵션 폐기) - 화면 검토 + 수정 방향 확정 후 일괄 권장(미리 확정하면 재작업). draw-card.js rm 권한 차단으로 빈 stub(수동 삭제 권장). GitHub Pages 확인은 push 필요(사용자 직전 질문, push 대기).
+
+10.5. 자비스 자기 점검: (a) /jarvis-next 실수 1건 - 도메인 cwd에서 글로벌 한정 source(ledger·buffer)를 후보로 노출(#187 위반), 사용자 2연속 지적. buffer 기록 + 사용자 "실수 묻지 말고 buffer 자동 기록" 지시 → CLAUDE.md §2.3 글로벌 갱신(글로벌 세션 #216 merged). (b) R5 어휘 회귀 "정합" 다수 - 답변 본문 + Stop hook 재작성 1회, vocab-trend 누적 9회 1위 지속, hook 강제에도 재현. 시인 + buffer evidence. (c) 사용자 요청 전수 매핑(#194): 7의견 + 2결정 + 전권위임 + 4갈래 검사 전부 S0-S4/BACKLOG 반영 확인, 누락 0.

@@ -10,6 +10,7 @@ import { DEFAULT_PRESETS, PRESET_SLOT_COUNT, SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_
 import { strategyLabel } from './strategy-picker.js';
 import { strategyTagColor } from '../data/colors.js';
 import { openPresetEditor } from './preset-editor.js';
+import { presetButtonsHtml } from './preset-buttons.js';
 import { plus, close, pencil } from './icons.js';
 
 /**
@@ -23,8 +24,7 @@ import { plus, close, pencil } from './icons.js';
  *   onDeleteCharacter: (id: string) => void,
  *   onActivateCharacter: (id: string) => void,
  *   onOpenWheeling: () => void,
- *   onMultiStrategyToggle: () => void,
- *   onFiveSetsToggle: () => void,
+ *   onPresetPick?: (presetId: string) => void,
  *   onPresetsChanged?: () => void,
  * }} handlers
  */
@@ -34,6 +34,9 @@ export function renderSettingsPage(container, handlers) {
   const characters = loadCharacters();
   const activeId = loadActiveCharacterId();
   const presets = loadPresets();
+  // S1 메인 비우기 (2026-06-07): 활성 캐릭터의 전략 묶음 = 프리셋 선택 상태. 선택 버튼 is-active 표시용.
+  const activeChar = characters.find((c) => c.id === activeId) || null;
+  const activeStrategyIds = Array.isArray(activeChar?.lastUsedStrategies) ? activeChar.lastUsedStrategies : [];
   const lastDraw = draws.length > 0 ? draws[draws.length - 1] : null;
 
   const dataMeta = lastDraw
@@ -103,8 +106,14 @@ export function renderSettingsPage(container, handlers) {
     </section>
 
     <section class="stats-section">
-      <h2 class="stats-title">프리셋 관리</h2>
-      <p class="stats-note">추천 탭의 프리셋 ${PRESET_SLOT_COUNT}슬롯을 편집합니다. 슬롯 행을 누르면 라벨 / 부제 / 묶을 전략을 바꿀 수 있어요.</p>
+      <h2 class="stats-title">추천 전략 선택</h2>
+      <p class="stats-note">추천 탭에서 어떤 전략 묶음으로 번호를 뽑을지 고릅니다. 선택한 묶음 이름이 추천 화면에 표시됩니다.</p>
+      ${presetButtonsHtml(presets, activeStrategyIds)}
+    </section>
+
+    <section class="stats-section">
+      <h2 class="stats-title">프리셋 편집</h2>
+      <p class="stats-note">프리셋 ${PRESET_SLOT_COUNT}슬롯을 편집합니다. 슬롯 행을 누르면 라벨 / 묶을 전략을 바꿀 수 있어요.</p>
       <ul class="preset-manage-list">${presetRows}</ul>
       <button type="button" class="btn-secondary" data-action="reset-presets">기본값 복원</button>
     </section>
@@ -113,24 +122,6 @@ export function renderSettingsPage(container, handlers) {
       <h2 class="stats-title">데이터</h2>
       <p class="stats-meta">${dataMeta}</p>
       <p class="stats-note">데이터 출처: smok95/lotto GitHub Pages 미러. 매주 토 추첨 후 자동 갱신. 직접 페치는 <code>scripts/fetch-lotto-draws.bat</code>.</p>
-    </section>
-
-    <section class="stats-section">
-      <h2 class="stats-title">추첨 옵션</h2>
-      <label class="settings-row">
-        <input type="checkbox" data-setting="applyFilters" ${options.applyFilters ? 'checked' : ''} />
-        <span class="settings-label">
-          <strong>비율 필터 적용</strong>
-          <span class="settings-hint">번호 합 / 홀짝 / AC값 등 통계 필터 통과 조합만 추천 (균형 조합 외 전략에도 영향).</span>
-        </span>
-      </label>
-      <label class="settings-row">
-        <input type="checkbox" data-setting="fiveSets" ${options.fiveSets ? 'checked' : ''} />
-        <span class="settings-label">
-          <strong>5세트 동시 추천</strong>
-          <span class="settings-hint">한 회차에 시드 변형으로 5장 결정론 추천 표시 (메인 1장 + 컴팩트 4장). 이력 기록은 메인만. 5장 구매 권유 아님, 당첨 확률 변화 없음. (S089 Luck 매칭 폐기.)</span>
-        </span>
-      </label>
     </section>
 
     <section class="stats-section">
@@ -166,6 +157,7 @@ export function renderSettingsPage(container, handlers) {
 
     <section class="stats-section">
       <h2 class="stats-title">안내</h2>
+      <p class="stats-note"><strong>Blessed Lotto</strong> · 캐릭터 시드 기반 로또 번호 추천 (참고용).</p>
       <button type="button" class="btn-secondary" data-action="show-disclaimer">면책 / 책임 안내 다시 보기</button>
     </section>
 
@@ -178,19 +170,6 @@ export function renderSettingsPage(container, handlers) {
       </div>
     </section>
   `;
-
-  container.querySelector('[data-setting="applyFilters"]').addEventListener('change', (e) => {
-    const opts = loadOptions();
-    opts.applyFilters = e.target.checked;
-    saveOptions(opts);
-  });
-
-  container.querySelector('[data-setting="fiveSets"]').addEventListener('change', (e) => {
-    const opts = loadOptions();
-    opts.fiveSets = e.target.checked;
-    saveOptions(opts);
-    handlers.onFiveSetsToggle();
-  });
 
   // S79 (2026-05-17): 출처 표시 모드 라디오 (dot / label). 변경 즉시 렌더 갱신.
   container.querySelectorAll('input[name="sourceDisplayMode"]').forEach((el) => {
@@ -254,6 +233,13 @@ export function renderSettingsPage(container, handlers) {
         renderSettingsPage(container, handlers);
         if (typeof handlers.onPresetsChanged === 'function') handlers.onPresetsChanged();
       });
+    });
+  });
+  // S1 메인 비우기 (2026-06-07): 설정 탭에서 프리셋 선택(활성화). onPresetPick → renderApp 전체 재렌더.
+  container.querySelectorAll('[data-action="preset-pick"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const presetId = el.dataset.presetId;
+      if (typeof handlers.onPresetPick === 'function') handlers.onPresetPick(presetId);
     });
   });
   container.querySelector('[data-action="reset-presets"]')?.addEventListener('click', () => {

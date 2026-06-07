@@ -35,6 +35,11 @@ export const SOURCE_DISPLAY_OFF = 'off';
 export const SOURCE_DISPLAY_MODES = Object.freeze([SOURCE_DISPLAY_DOT, SOURCE_DISPLAY_LABEL, SOURCE_DISPLAY_OFF]);
 export const SOURCE_DISPLAY_DEFAULT = SOURCE_DISPLAY_DOT;
 
+// 1.3.3. 기록 탭 최근 타임라인 길이 (S0 청소 2026-06-07: history-page 매직넘버 이전). 도트 N개.
+export const TIMELINE_RECENT = 30;
+// 1.3.4. 결과 정산 윈도우 (7일, ms). 발표 후 사용자 직접 reveal 유도 기간 (history-page).
+export const SETTLE_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
 // 1.4. ~~비율 필터~~ S43.4 (2026-05-08, Sprint 054) 폐기.
 //   옛 architecture의 balancer post-filter용. 새 architecture는 풀 1-45 균등 가중 추첨이라 필터 미사용.
 //   AC_VALUE는 미구현 상태로 잔존. 폐기 검토.

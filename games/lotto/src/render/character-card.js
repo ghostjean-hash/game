@@ -104,7 +104,7 @@ export function characterCardHtml(character, fortune, drawOrDrwNo, drawDate) {
         ${zodiacLabel ? `<span class="char-zodiac">${escapeHtml(zodiacLabel)}</span>` : ''}
         ${pillarLabel ? `<span class="char-pillar" title="일주 (사주)">${escapeHtml(pillarLabel)}일</span>` : ''}
       </div>
-      <h2 class="char-name">${escapeHtml(character.name)}</h2>
+      ${/* S2 (2026-06-07): 펼침 카드 이름(h2) 제거 - 접힘 row에 이미 노출되어 중복. */ ''}
       <div class="char-fortune" style="color: ${fortuneColor}" aria-label="운세 ${escapeHtml(fortuneLabel)}">
         <span class="fortune-icon" aria-hidden="true">${fortuneIcon}</span>
         <span class="fortune-label">운세 · ${escapeHtml(fortuneLabel)}</span>

@@ -19,8 +19,10 @@ export function nextDrawCardHtml(info) {
   const dateLabel = `${formatKstDate(info.drawAtMs)} 추첨 예정`;
   const cells = PARTS.map((p) => `
     <div class="next-draw-cell">
-      <span class="next-draw-num" data-part="${p.key}">--</span>
-      <span class="next-draw-unit">${p.label}</span>
+      <span class="next-draw-num">
+        <span class="next-draw-digit" data-part="${p.key}">--</span>
+        <span class="next-draw-unit">${p.label}</span>
+      </span>
     </div>
   `).join('');
   return `

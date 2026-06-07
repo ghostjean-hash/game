@@ -3,13 +3,14 @@
 // S096 (2026-05-19): 등수별 분포 차트 폐기. 사용자 결정 - 6/45 확률 + summary 중복 + 사행성 회피 룰.
 import { characterStats } from '../core/history.js';
 import { numberColor, RANK_GLOW_COLORS } from '../data/colors.js';
+import { TIMELINE_RECENT, SETTLE_WINDOW_MS } from '../data/numbers.js';
+import { ritualWidgetHtml } from './ritual-widget.js';
 // S20: 보너스 표시 폐기로 plus 아이콘 미사용.
 // S58 (2026-05-09): RANK 색상 / 미적중 hex 인라인 → colors.js SSOT 위탁.
 // S096 (2026-05-19): horizontalBarsHtml import 폐기 (등수별 분포 폐기). stats-page.js에서는 잔존 사용.
 // S096 (2026-05-19): RANK_MISS_COLOR import 폐기 (등수별 분포에서만 사용. colors.js 상수 자체는 dead 잔존).
 
 const RANK_LABELS = { 1: '1등', 2: '2등', 3: '3등', 4: '4등', 5: '5등' };
-const TIMELINE_RECENT = 30; // 최근 N회 타임라인 길이
 
 function colorNum(n, extraClass = '') {
   const c = numberColor(n);
@@ -38,7 +39,7 @@ function pendingBallHtml(extra = '') {
  * @param {number} [currentDrwNo] 현재 추첨 회차 (미발표). 본 회차 확정 항목은 "발표 대기" 별도 섹션에 노출.
  * @param {Array<{drwNo:number,drwDate:string,numbers:number[],bonus:number}>} [draws] 회차 데이터 (그룹 헤더 발표번호 + 날짜 조회용).
  */
-export function renderHistoryPage(container, character, currentDrwNo = null, draws = []) {
+export function renderHistoryPage(container, character, currentDrwNo = null, draws = [], ritualState = null) {
   const drawMap = new Map((Array.isArray(draws) ? draws : []).map((d) => [d.drwNo, d]));
   const stats = characterStats(character);
   const sortedHistory = [...character.history].sort((a, b) => b.drwNo - a.drwNo);
@@ -147,12 +148,22 @@ export function renderHistoryPage(container, character, currentDrwNo = null, dra
         </div>
       </section>`;
 
+  // S3 당첨 기원 이동 (2026-06-07): 추천 탭 → 기록 탭 현재 회차(발표 대기) 아래. 회차 맥락으로 기원 유도.
+  const ritualSectionHtml = ritualState ? `
+    <section class="stats-section ritual-history-section">
+      <h2 class="stats-title">당첨 기원</h2>
+      <p class="stats-note">이번 회차 번호에 정성을 더해보세요. 당첨 확률에는 영향이 없는 정성 콘텐츠입니다.</p>
+      ${ritualWidgetHtml(ritualState)}
+    </section>
+  ` : '';
+
   container.innerHTML = `
     <header class="app-header tab-header">
       <h1 class="app-title">기록</h1>
     </header>
     ${summaryHtml}
     ${pendingHtml}
+    ${ritualSectionHtml}
     ${timelineHtml}
     ${historyItems}
   `;
@@ -241,8 +252,7 @@ function historyGroupRowHtml(h, draw, hasDraw) {
   if (hasDraw && draw && draw.drwDate) {
     const drwTimeMs = new Date(draw.drwDate).getTime();
     if (!Number.isNaN(drwTimeMs)) {
-      const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
-      isWithinSettleWindow = (Date.now() - drwTimeMs) < SEVEN_DAYS_MS;
+      isWithinSettleWindow = (Date.now() - drwTimeMs) < SETTLE_WINDOW_MS;
     }
   }
   const isMasked = hasDraw && h.revealed === false && isWithinSettleWindow;

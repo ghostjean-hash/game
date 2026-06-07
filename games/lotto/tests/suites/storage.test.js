@@ -21,7 +21,7 @@ function reset() { clearAll(); }
 suite('data/storage', () => {
   test('clearAll: prefix 키 모두 제거', () => {
     saveCharacters([{ id: 'x', seed: 1 }]);
-    saveOptions({ applyFilters: true });
+    saveOptions({ advancedMode: true });
     markSeenHelp();
     clearAll();
     assertEqual(loadCharacters().length, 0);
@@ -103,7 +103,8 @@ suite('data/storage', () => {
     reset();
     const opts = loadOptions();
     assertTrue(opts !== null);
-    assertEqual(opts.applyFilters, false);
+    assertEqual(opts.advancedMode, false);
+    assertEqual(opts.sourceDisplayMode, 'dot');
   });
 
   test('seen_help 기본 false → mark 후 true', () => {
@@ -302,34 +303,41 @@ suite('data/storage - ritualState round-trip (S64)', () => {
 suite('data/storage - options 마이그레이션 + clearAll PREFIX (S64 보너스)', () => {
   test('loadOptions - 누락 키 자동 채움', () => {
     reset();
-    // 옛 사용자가 applyFilters만 저장한 케이스. 나머지 키는 기본값으로 채워야 함.
-    saveOptions({ applyFilters: true });
+    // 옛 사용자가 advancedMode만 저장한 케이스. 나머지 키는 기본값으로 채워야 함.
+    saveOptions({ advancedMode: true });
     const opts = loadOptions();
-    assertEqual(opts.applyFilters, true, '저장 값 보존');
-    assertEqual(opts.advancedMode, false, '누락 키 = 기본값');
-    assertEqual(opts.fiveSets, false, '누락 키 = 기본값');
+    assertEqual(opts.advancedMode, true, '저장 값 보존');
     // S79 (2026-05-17): sourceDisplayMode 신규 옵션. 누락 시 기본값 'dot' 자동 채움.
     assertEqual(opts.sourceDisplayMode, 'dot', 'S79 누락 키 = dot 기본값');
   });
 
+  test('S0 - applyFilters / fiveSets 폐기 키 자동 제거', () => {
+    reset();
+    // S0 청소 (2026-06-07): 옛 storage에 applyFilters/fiveSets 잔존해도 loadOptions에서 제거.
+    saveOptions({ applyFilters: true, fiveSets: true, advancedMode: false });
+    const opts = loadOptions();
+    assertTrue(!('applyFilters' in opts), 'applyFilters 폐기 키 제거');
+    assertTrue(!('fiveSets' in opts), 'fiveSets 폐기 키 제거');
+  });
+
   test('S79 - sourceDisplayMode round-trip (dot / label)', () => {
     reset();
-    saveOptions({ applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'label' });
+    saveOptions({ advancedMode: false, sourceDisplayMode: 'label' });
     assertEqual(loadOptions().sourceDisplayMode, 'label', 'label 값 보존');
-    saveOptions({ applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'dot' });
+    saveOptions({ advancedMode: false, sourceDisplayMode: 'dot' });
     assertEqual(loadOptions().sourceDisplayMode, 'dot', 'dot 값 보존');
   });
 
   test('S088 후속 - sourceDisplayMode off round-trip (출처 표시 안 함)', () => {
     reset();
-    saveOptions({ applyFilters: false, advancedMode: false, fiveSets: false, sourceDisplayMode: 'off' });
+    saveOptions({ advancedMode: false, sourceDisplayMode: 'off' });
     assertEqual(loadOptions().sourceDisplayMode, 'off', 'off 값 보존 - 색점/한글 모두 숨김');
   });
 
   test('S19 마이그레이션 - multiStrategy 폐기 키 자동 무시', () => {
     reset();
     // S19 이전 사용자 storage. multiStrategy 키가 잔존해도 loadOptions 결과에서 제거.
-    saveOptions({ applyFilters: false, multiStrategy: true, advancedMode: false, fiveSets: false });
+    saveOptions({ multiStrategy: true, advancedMode: false });
     const opts = loadOptions();
     assertTrue(!('multiStrategy' in opts), 'S19 폐기 키는 결과에서 제거');
   });
