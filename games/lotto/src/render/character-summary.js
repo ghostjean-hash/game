@@ -14,12 +14,13 @@ const FORTUNE_GLYPH = {
   [FORTUNE_BAD]: '✕',
 };
 
-// S2 (2026-06-07): 접힘 카피 운세 라벨 (별자리·띠·일주 대신 노출).
-const FORTUNE_LABELS = {
-  [FORTUNE_GREAT]: '대길',
-  [FORTUNE_GOOD]: '길',
-  [FORTUNE_NEUTRAL]: '평',
-  [FORTUNE_BAD]: '흉',
+// S2 후속 (2026-06-07): 접힘 카피 = 운세 평가 내용(등급 라벨 아님). 사용자 명시 "제목 아니라 운세 평 내용".
+//   spec 5.1.2 character-card FORTUNE_COPY와 동일 문구.
+const FORTUNE_COPY = {
+  [FORTUNE_GREAT]: '캐릭터 운세 최상. 시드 영향 강화.',
+  [FORTUNE_GOOD]: '안정적인 흐름. 평소대로 진행.',
+  [FORTUNE_NEUTRAL]: '특별한 가산점 없음. 무난한 회차.',
+  [FORTUNE_BAD]: '흐름 약함. 보수적 선택 권장.',
 };
 
 /**
@@ -34,13 +35,12 @@ export function characterToggleRowHtml(character, fortune, isExpanded) {
   const fortuneGlyph = FORTUNE_GLYPH[fortune] || FORTUNE_GLYPH[FORTUNE_NEUTRAL];
   const isBad = fortune === FORTUNE_BAD;
 
-  // S2 (2026-06-07): 별자리·띠·일주(정체성) 제거 → 이번 회차 운세 노출. 정체성은 펼침 카드에서.
-  const fortuneLabel = FORTUNE_LABELS[fortune] || FORTUNE_LABELS[FORTUNE_NEUTRAL];
-  const meta = `운세 ${fortuneLabel}`;
+  // S2 후속 (2026-06-07): 유저명 제거(캐릭터 슬롯에 이미 노출) + 운세 평가 내용(카피) 표시. 등급 라벨 아님.
+  const meta = FORTUNE_COPY[fortune] || FORTUNE_COPY[FORTUNE_NEUTRAL];
 
   const caret = isExpanded ? '▲' : '▼';
   const expanded = isExpanded ? 'true' : 'false';
-  const aria = isExpanded ? '캐릭터 정보 접기' : '캐릭터 정보 펼치기';
+  const aria = isExpanded ? `${name} 운세 정보 접기` : `${name} 운세 정보 펼치기`;
 
   return `
     <button type="button"
@@ -49,8 +49,7 @@ export function characterToggleRowHtml(character, fortune, isExpanded) {
             aria-expanded="${expanded}"
             aria-label="${aria}">
       <span class="char-toggle-glyph" aria-hidden="true">${fortuneGlyph}</span>
-      <span class="char-toggle-name">${escapeHtml(name)}</span>
-      ${meta ? `<span class="char-toggle-meta">${escapeHtml(meta)}</span>` : ''}
+      <span class="char-toggle-meta char-toggle-fortune">${escapeHtml(meta)}</span>
       <span class="char-toggle-caret" aria-hidden="true">${caret}</span>
     </button>
   `;

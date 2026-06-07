@@ -3440,6 +3440,13 @@ a.btn-secondary,
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* S2 후속 (2026-06-07): 운세 평가 카피는 잘리면 의미 반감 → wrap 허용. 흉이면 빨강 강조. */
+.char-toggle-fortune {
+  white-space: normal;
+  overflow: visible;
+  line-height: 1.35;
+}
+.char-toggle.is-bad .char-toggle-fortune { color: var(--color-lotto-red); }
 
 .char-toggle-caret {
   font-size: var(--font-size-sm);
