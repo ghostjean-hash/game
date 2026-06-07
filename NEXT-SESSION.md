@@ -4,7 +4,7 @@
 
 ## 직전 작업 (2026-06-07)
 
-상태판 봉합 cycle. /jarvis-next 진단 후 M-1/M-2를 완료 마일스톤으로 정정(commit 3aef26d). 첫 cycle 골격 + 글로벌 인계가 실제 완료였으나 TASKS/ROADMAP만 stale로 남아 /jarvis-next가 90%로 오안내하던 #191 패턴 처리. 이어서 lotto 현황 파악 = 기능 완성, 잔여 전부 사용자 화면 검증 대기.
+두 cycle 진행. (1) 상태판 봉합: /jarvis-next 진단 후 M-1/M-2를 완료 마일스톤으로 정정(commit 3aef26d). 첫 cycle 골격 + 글로벌 인계가 실제 완료였으나 TASKS/ROADMAP만 stale로 남아 /jarvis-next가 90%로 오안내하던 #191 패턴 처리. (2) 문서 이름 겹침 정리: 사용자 지적("겹쳐서 헷갈려")으로 루트 CLAUDE.md 0장에 "주요 문서 지도"(CLAUDE.md 5층 + PROGRESS.md 4층 + 골격 문서) 추가(commit 86bad7c/fce6bc1). 근본 해결(도메인 표식 파일명 분리)은 buffer 후보 기록.
 
 ## 직전 작업 (2026-06-06)
 
@@ -35,4 +35,15 @@
 
 ## 게임 작업 컨텍스트
 
-게임별 진행은 각 `games/<id>/PROGRESS.md` 참조. lotto(11전략 추천, html-game v0.2)는 기능적 완성 단계 - 잔여 4건(PROGRESS 1.8.3)이 전부 사용자 화면 캡쳐 검증 대기. 자비스 단독 진입 sprint 없음, 사용자 화면 피드백 또는 새 방향 제시가 다음 진입 trigger. sudoku/tetris는 표준 미적용 후순위.
+게임별 진행은 각 `games/<id>/PROGRESS.md` 참조. lotto(11전략 추천, html-game v0.2)는 기능적 완성 단계 - 잔여 4건(PROGRESS 1.8.3)이 전부 사용자 화면 캡쳐 검증 대기. sudoku/tetris는 표준 미적용 후순위.
+
+### 예약된 다음 작업: lotto 업그레이드 전수 검사 (사용자 결정 2026-06-07)
+
+사용자가 lotto 다음 버전 업그레이드를 위한 전수 검사를 요청. lotto 폴더 기준 새 세션에서 진행하기로 결정. `/jarvis-init` 정식 도메인화는 비권장(docs 충실 + game-hub 중첩) - 아래 프롬프트로 바로 진입.
+
+진입 프롬프트:
+```
+games/lotto 작업 이어서. CLAUDE.md / PROGRESS.md / docs 읽고 현재 상태 파악.
+그 다음 UX 약점 + 안 쓰는(미사용) 기능을 전수 검사해서, 다음 버전 업그레이드
+후보를 우선순위로 정리.
+```

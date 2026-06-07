@@ -64,3 +64,13 @@
 8.3. lotto 현황 파악: 기능적 완성 단계 확인. M0~M6 + 폴리싱 + 사주/휠링/11전략/결과 페이지/카운트다운/백캐스트 전부 완료(PROGRESS 1.1). 마지막 갱신(2026-05-22) 이후 잔여 4건(PROGRESS 1.8.3)이 전부 사용자 화면 캡쳐 검증 대기 또는 글로벌 인계 완료 항목. 자비스 단독 진입 작업 없음 - 사용자 화면 피드백 또는 새 방향 제시가 다음 sprint 진입 trigger. 임의 sprint 시작 회피, 사용자 결정 대기.
 
 8.4. R5 어휘 회귀 자기 점검: 이 세션 답변 본문에서 "정합" 1건 검출(lotto 현황 답변 "결과 페이지 정합", PROGRESS 1.1 원문 인용이나 인용 변환 의무상 "일치"로 변환 필요). vocab-trend hook 누적 1위 어휘 재현. 시인 + buffer evidence 기록. 사용자 명시 결정 2건("권장 진행" / "commit 후") 전수 매핑 누락 0 확인(#194).
+
+# 9. CLAUDE.md / PROGRESS.md 이름 겹침 정리 (2026-06-07, /jarvis-checkpoint sealing)
+
+9.1. 사용자 본질 지적("규칙이 지멋대로 / 겹쳐서 헷갈려"). 한 저장소에 `CLAUDE.md`가 글로벌(home의 .claude) + 루트(게임개발) + .claude(도메인표식) + games/<id>(게임별) 4층 산재. Claude Code가 위치별 자동 로드하는 도구 표준이라 이름 겹침 자체는 못 바꿈. 1차 처리: 루트 CLAUDE.md 0장에 "CLAUDE.md 파일 지도" 표 추가(commit 86bad7c). 근본 해결(도메인 표식 파일명 분리)은 글로벌 사양 영역이라 buffer 후보 기록.
+
+9.2. "또 같은 문제 있을 수 있어 파일 전체 검수"(사용자 명시). git ls-files 파일명 분포 검사로 동일 유형 1건 발견 - `PROGRESS.md` 4층(루트 도메인 메타+self-critique 겸용 / games/<id> 게임별)이 CLAUDE.md와 판박이. index.html/game.js/main.js 등 게임별 중복은 위치로 명확해 정상, README/settings 비대칭은 혼란 낮아 방치 판정.
+
+9.3. "권장 진행"(사용자 명시) → 0장을 "주요 문서 지도"로 확장(0.1 CLAUDE.md / 0.2 PROGRESS.md / 0.3 골격 문서) + 루트 PROGRESS.md 상단에 "허브 메타 + self-critique 겸용" 역할 1줄 명시(commit fce6bc1). 이름 겹침 혼란을 단일 참조점(0장)으로 통합.
+
+9.4. lotto 업그레이드 전수 검사(UX 약점 + 미사용 기능)는 다음 세션 위임 결정(사용자 명시 "lotto를 도메인으로 다시 세션 열게"). 자비스 판단: lotto는 docs(spec/data/architecture) 충실해 `/jarvis-init` 정식 도메인화 불필요(중복 부담 + game-hub 중첩), "lotto 작업 이어서 + 검수" 프롬프트로 바로 진입 권장. 진입 프롬프트 NEXT-SESSION 게임 컨텍스트에 기재.
