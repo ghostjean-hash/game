@@ -73,13 +73,13 @@ function normalizeStrategyIds(ids) {
 /** 캐릭터 시드 6번호 추출 (Fisher-Yates shuffle). */
 function seedSixNumbers(seed) {
   const pool = [];
-  for (let n = 1; n <= 45; n += 1) pool.push(n);
+  for (let n = NUMBER_MIN; n <= NUMBER_MAX; n += 1) pool.push(n);
   const rng = mulberry32(seed >>> 0);
   for (let i = pool.length - 1; i > 0; i -= 1) {
     const j = Math.floor(rng() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  return pool.slice(0, 6);
+  return pool.slice(0, PICK_COUNT);
 }
 
 /**

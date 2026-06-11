@@ -35,7 +35,8 @@ export function openPresetEditor(currentPresets, onSaved) {
         </div>
       </div>
     `;
-    closeModal = showModal(html);
+    // 편집 중 실수 이탈 방지: backdrop / Esc 닫기 차단. 종료는 저장/취소 버튼만 (01_spec.md 5.1.5.2).
+    closeModal = showModal(html, { dismissible: false });
     bind();
   }
 

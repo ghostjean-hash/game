@@ -4,6 +4,7 @@
 // core/는 DOM 금지. 순수 함수.
 
 import { matchRank } from './match.js';
+import { NUMBER_MIN, NUMBER_MAX, PICK_COUNT } from '../data/numbers.js';
 
 /**
  * 사용자 선택 번호 6개를 전 회차와 매칭.
@@ -79,11 +80,11 @@ export function findMatchingDraws(userNumbers, draws, rank) {
  */
 export function validateUserNumbers(numbers) {
   if (!Array.isArray(numbers)) return { valid: false, reason: '배열이 아닙니다' };
-  if (numbers.length !== 6) return { valid: false, reason: '6개를 선택해야 합니다' };
+  if (numbers.length !== PICK_COUNT) return { valid: false, reason: `${PICK_COUNT}개를 선택해야 합니다` };
   const set = new Set();
   for (const n of numbers) {
-    if (!Number.isInteger(n) || n < 1 || n > 45) {
-      return { valid: false, reason: '1~45 범위 정수만 가능합니다' };
+    if (!Number.isInteger(n) || n < NUMBER_MIN || n > NUMBER_MAX) {
+      return { valid: false, reason: `${NUMBER_MIN}~${NUMBER_MAX} 범위 정수만 가능합니다` };
     }
     if (set.has(n)) return { valid: false, reason: '중복된 번호가 있습니다' };
     set.add(n);
