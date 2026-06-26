@@ -2464,12 +2464,11 @@ a.btn-secondary,
   line-height: 1.1;
 }
 .reverse-best.has-rank .reverse-best-rank {
+  /* 발열 처방(2026-06-26): background-position 무한 흐름(GPU 합성 불가, 매 프레임 repaint) → 정적 금빛 그라데이션. 은은한 효과라 시각 손실 거의 없음. */
   background: linear-gradient(90deg, #c9a050, #b88830, #c9a050);
-  background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: ritual-flame-flow 3s linear infinite;
 }
 .reverse-best-meta {
   font-size: var(--font-size-sm);
@@ -2565,9 +2564,19 @@ a.btn-secondary,
 }
 .ritual-row.is-filled {
   border-color: #f59e0b;
-  background: linear-gradient(90deg, rgba(254, 243, 199, 0.5), rgba(253, 230, 138, 0.5), rgba(254, 243, 199, 0.5));
-  background-size: 200% 100%;
-  animation: ritual-flame-flow 2.4s linear infinite;
+  /* 발열 처방(2026-06-26): background-position 무한 흐름 → 정적 베이스 + transform 기반 shimmer(::after). transform은 GPU 합성되어 repaint 0. */
+  background: linear-gradient(90deg, rgba(254, 243, 199, 0.6), rgba(253, 230, 138, 0.6));
+  position: relative;
+  overflow: hidden;
+}
+.ritual-row.is-filled::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: ritual-shimmer 2.4s linear infinite;
 }
 .ritual-row-label {
   font-weight: 700;
@@ -2638,9 +2647,12 @@ a.btn-secondary,
   .ritual-row-in-modal:hover { border-color: var(--color-border); }
 }
 
-@keyframes ritual-flame-flow {
-  0% { background-position: 0% 0%; }
-  100% { background-position: -200% 0%; }
+/* 발열 처방(2026-06-26): background-position 흐름 키프레임 폐기 → transform translateX shimmer로 GPU 합성. */
+@keyframes ritual-shimmer {
+  to { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ritual-row.is-filled::after { animation: none; display: none; }
 }
 
 /* S14: 모달 빈 애니메이션 영역. 행위 클릭 burst + 만땅 진입 burst의 anchor.
@@ -2673,9 +2685,8 @@ a.btn-secondary,
 .ritual-complete-banner {
   margin: var(--space-2) 0 var(--space-3);
   padding: var(--space-2) var(--space-3);
+  /* 발열 처방(2026-06-26): 모달 내 일시 요소라 background-position 흐름 → 정적 그라데이션으로 단순화. */
   background: linear-gradient(90deg, #fef3c7, #fde68a, #fef3c7);
-  background-size: 200% 100%;
-  animation: ritual-flame-flow 2s linear infinite;
   color: #92400e;
   font-weight: 700;
   border-radius: var(--radius-md);
