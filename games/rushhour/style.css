@@ -1,0 +1,117 @@
+/* Rush Hour 전용 레이아웃 / 차 스타일. UI 색·간격은 shared/tokens.css 토큰을 쓴다. */
+
+.rushhour .home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-1);
+  font-size: 20px;
+  color: var(--fg);
+  background: var(--bg-elev-2);
+}
+
+.rushhour .stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  font-size: 13px;
+  color: var(--fg-dim);
+}
+.rushhour .stat-value {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+/* 보드 영역: 화면에 맞춰 정사각형으로. */
+.rushhour .stage {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-4);
+  min-height: 0;
+}
+.rushhour .board-wrap {
+  /* 출구 표시를 위해 오른쪽에 약간의 여백을 둔다. */
+  padding-right: var(--sp-3);
+}
+.rushhour .board {
+  --size: 6;
+  --cell: calc(100% / var(--size));
+  position: relative;
+  width: min(92vw, 60vh, 480px);
+  aspect-ratio: 1;
+  border-radius: var(--r-2);
+  background-color: var(--bg-elev);
+  background-image:
+    repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px calc(100% / var(--size))),
+    repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px calc(100% / var(--size)));
+  box-shadow: var(--shadow-1);
+  touch-action: none;
+}
+
+/* 출구 표시: 출구 행 오른쪽 가장자리. */
+.rushhour .exit {
+  position: absolute;
+  top: calc(var(--row) * var(--cell));
+  right: calc(-1 * var(--sp-3));
+  width: var(--sp-3);
+  height: var(--cell);
+  background:
+    linear-gradient(90deg, transparent, var(--danger));
+  border-radius: 0 var(--r-1) var(--r-1) 0;
+}
+
+/* 차. 칸 좌표를 CSS 변수로 받아 배치한다. */
+.rushhour .car {
+  position: absolute;
+  left: calc(var(--col) * var(--cell));
+  top: calc(var(--row) * var(--cell));
+  padding: 3px;
+  background-clip: content-box;
+  border-radius: var(--r-2);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.22), inset 0 -3px 6px rgba(0, 0, 0, 0.3);
+  cursor: grab;
+  transition: left var(--dur-2) var(--ease), top var(--dur-2) var(--ease);
+}
+.rushhour .car.h {
+  width: calc(var(--len) * var(--cell));
+  height: var(--cell);
+}
+.rushhour .car.v {
+  width: var(--cell);
+  height: calc(var(--len) * var(--cell));
+}
+.rushhour .car.target {
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3), inset 0 -3px 6px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 255, 255, 0.18);
+  z-index: 2;
+}
+.rushhour .car.dragging {
+  transition: none;
+  cursor: grabbing;
+  z-index: 3;
+  filter: brightness(1.08);
+}
+
+/* base.css의 .modal-backdrop{display:grid}가 [hidden]을 덮어쓰므로 명시적으로 막는다. */
+.rushhour .modal-backdrop[hidden] { display: none; }
+
+.rushhour .controls {
+  display: flex;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4) calc(var(--sp-4) + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: var(--bg-elev);
+}
+.rushhour .controls .btn {
+  flex: 1;
+  font-size: 14px;
+  padding: var(--sp-3) var(--sp-2);
+}
+.rushhour .controls .btn:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}

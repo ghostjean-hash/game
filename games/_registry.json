@@ -26,6 +26,15 @@
       "status": "wip",
       "controls": ["touch", "keyboard"],
       "accent": "#d4a657"
+    },
+    {
+      "id": "rushhour",
+      "title": "Rush Hour",
+      "subtitle": "막힌 차를 빼내는 슬라이딩 퍼즐",
+      "path": "games/rushhour/",
+      "status": "playable",
+      "controls": ["touch"],
+      "accent": "#e5484d"
     }
   ]
 }
