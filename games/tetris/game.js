@@ -458,6 +458,7 @@ function lockPiece() {
     if (y >= 0) state.grid[y][x] = p.type;
     if (y < VANISH) lockedInVanish = true;
   }
+  gridVersion++; // 고정 블록 변동 → 다음 render에서 재그리기.
   // top-out: 보이지 않는 위쪽에 락이 박힌 상태. 다음 피스가 보이지 않는 잔재와 충돌해 시각상 "공중 정지"로 보이는 증상 차단.
   if (lockedInVanish) {
     state.current = null;
@@ -537,6 +538,7 @@ function applyClear() {
   const rows = state.flashRows.rows.slice().sort((a, b) => b - a);
   for (const r of rows) state.grid.splice(r, 1);
   for (let i = 0; i < rows.length; i++) state.grid.unshift(Array(COLS).fill(null));
+  gridVersion++; // 라인 제거로 고정 블록 재배치 → 다음 render에서 재그리기.
   state.flashRows = null;
   if (state.over) return; // 모드 종료 조건 충족(예: 스프린트 클리어). 다음 피스 띄우지 않는다.
   spawn();
@@ -564,6 +566,45 @@ function ghostY(p) {
 
 // === 렌더 ===
 let cellSize = 24;
+
+// 발열 개선: 매 프레임 풀 재렌더 회피.
+//  - 보드 캔버스는 "그릴 거리(피스 위치/회전/고정 블록/플래시/일시정지/오버)"가 직전 프레임과 다를 때만 다시 그린다.
+//  - gridVersion은 고정 블록 변동(락/라인 제거)마다 증가시켜 grid 전체 비교 없이 변화를 감지.
+//  - 배경색은 매 프레임 getComputedStyle을 부르지 않고 1회 읽어 캐시.
+let gridVersion = 0;
+let bgColor = "#161823";
+let lastRenderKey = "";
+
+// HUD/미니 블록 dirty 캐시(값이 바뀐 항목만 DOM/캔버스 갱신).
+const hudCache = { score: null, level: null, lines: null, best: null };
+let lastNextType;
+let lastHoldType;
+let lastHoldDim;
+
+function refreshBgColor() {
+  const v = getComputedStyle(document.documentElement).getPropertyValue("--bg-elev").trim();
+  if (v) bgColor = v;
+}
+
+// 보드 한 프레임의 렌더 상태 서명. 같으면 render를 건너뛴다.
+function renderKey() {
+  const p = state.current;
+  const piece = (p && !state.over) ? `${p.type}:${p.x}:${p.y}:${p.r}` : "none";
+  const flash = state.flashRows
+    ? `f${state.flashRows.rows.join(",")}:${state.flashRows.t.toFixed(3)}`
+    : "";
+  return `${gridVersion}|${piece}|${flash}|${state.over ? 1 : 0}|${state.paused ? 1 : 0}`;
+}
+
+// 렌더/HUD dirty 캐시 리셋(상태 교체·캔버스 크기 변경 시 강제 1회 재그리기 유도).
+function resetRenderCaches() {
+  lastRenderKey = "";
+  lastNextType = undefined;
+  lastHoldType = undefined;
+  lastHoldDim = undefined;
+  for (const k in hudCache) hudCache[k] = null;
+}
+
 function resize() {
   const stage = board.parentElement;
   const rect = stage.getBoundingClientRect();
@@ -579,6 +620,10 @@ function resize() {
   board.style.width = (COLS * cellSize) + "px";
   board.style.height = (ROWS * cellSize) + "px";
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  refreshBgColor();
+  // 캔버스 크기가 바뀌면 버퍼가 비므로 즉시 강제 재그리기.
+  resetRenderCaches();
+  if (state) render();
 }
 
 function drawCell(x, y, color, alpha = 1) {
@@ -612,7 +657,12 @@ function drawGrid() {
 }
 
 function render() {
-  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--bg-elev") || "#161823";
+  // 직전 프레임과 그릴 거리가 같으면 캔버스 재그리기를 건너뛴다(idle 발열의 본질 해결).
+  const key = renderKey();
+  if (key === lastRenderKey) return;
+  lastRenderKey = key;
+
+  ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, board.width, board.height);
   drawGrid();
   // 고정 블록
@@ -760,20 +810,27 @@ function update(dt) {
   }
 }
 
+// 값이 직전과 같으면 DOM write를 건너뛴다(불필요한 reflow 회피).
+function setHudText(el, key, val) {
+  if (hudCache[key] === val) return;
+  hudCache[key] = val;
+  el.textContent = val;
+}
+
 function updateHud() {
-  scoreEl.textContent = state.score;
+  setHudText(scoreEl, "score", String(state.score));
   const hud = MODES[state.mode].hud;
   if (hud === "level") {
-    levelEl.textContent = state.level;
-    linesEl.textContent = state.lines;
+    setHudText(levelEl, "level", String(state.level));
+    setHudText(linesEl, "lines", String(state.lines));
   } else if (hud === "zen") {
-    levelEl.textContent = "∞";
-    linesEl.textContent = state.lines;
+    setHudText(levelEl, "level", "∞");
+    setHudText(linesEl, "lines", String(state.lines));
   } else if (hud === "sprint") {
-    levelEl.textContent = formatTime(state.elapsed);
-    linesEl.textContent = Math.max(0, SPRINT_TARGET_LINES - state.lines);
+    setHudText(levelEl, "level", formatTime(state.elapsed));
+    setHudText(linesEl, "lines", String(Math.max(0, SPRINT_TARGET_LINES - state.lines)));
   }
-  bestEl.textContent = formatModeBest(state.mode);
+  setHudText(bestEl, "best", formatModeBest(state.mode));
   drawNext();
   drawHold();
 }
@@ -857,13 +914,21 @@ function drawPieceMini(canvas, c, type, dim = false) {
 
 function drawNext() {
   if (!state || !state.queue || !state.queue.length) return;
-  drawPieceMini(nextEl, nextCtx, state.queue[0]);
+  const t = state.queue[0];
+  if (t === lastNextType) return; // 다음 피스가 그대로면 재그리기 불필요.
+  lastNextType = t;
+  drawPieceMini(nextEl, nextCtx, t);
 }
 
 function drawHold() {
   if (!state) return;
   // 홀드 락(현 피스 동안 이미 사용)이면 흐리게.
-  drawPieceMini(holdEl, holdCtx, state.hold || null, !state.canHold);
+  const t = state.hold || null;
+  const dim = !state.canHold;
+  if (t === lastHoldType && dim === lastHoldDim) return;
+  lastHoldType = t;
+  lastHoldDim = dim;
+  drawPieceMini(holdEl, holdCtx, t, dim);
 }
 
 async function gameOver() {
@@ -943,6 +1008,7 @@ function restart() {
   state = newState();
   ensureBag();
   spawn();
+  resetRenderCaches(); // 새 상태 → HUD/보드 강제 1회 재그리기.
   setupHudLabels();
   updateHud();
   pauseBtn.textContent = "⏸";
