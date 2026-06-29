@@ -28,41 +28,41 @@ function kindFor(cars) {
   return map;
 }
 
-// 종류별 귀 / 머리 장식 SVG(viewBox 0~100). 흰 얼굴 위에서 보이도록 흰 바깥 + 몸색 안쪽으로 그린다.
+// 종류별 귀 / 머리 장식 SVG(viewBox 0~100, 얼굴을 가득 채운다). 흰 얼굴 위에서 보이도록 흰 바깥 + 몸색 안쪽.
 function ears(kind, body) {
   const W = '#ffffff';
   switch (kind) {
     case 'rabbit':
-      return `<ellipse cx="35" cy="13" rx="8" ry="20" fill="${W}"/><ellipse cx="65" cy="13" rx="8" ry="20" fill="${W}"/>`
-        + `<ellipse cx="35" cy="15" rx="3.5" ry="13" fill="${body}"/><ellipse cx="65" cy="15" rx="3.5" ry="13" fill="${body}"/>`;
+      return `<ellipse cx="33" cy="14" rx="10" ry="25" fill="${W}"/><ellipse cx="67" cy="14" rx="10" ry="25" fill="${W}"/>`
+        + `<ellipse cx="33" cy="16" rx="4.5" ry="17" fill="${body}"/><ellipse cx="67" cy="16" rx="4.5" ry="17" fill="${body}"/>`;
     case 'bear':
-      return `<circle cx="25" cy="25" r="13" fill="${W}"/><circle cx="75" cy="25" r="13" fill="${W}"/>`
-        + `<circle cx="25" cy="25" r="6.5" fill="${body}"/><circle cx="75" cy="25" r="6.5" fill="${body}"/>`;
+      return `<circle cx="19" cy="21" r="17" fill="${W}"/><circle cx="81" cy="21" r="17" fill="${W}"/>`
+        + `<circle cx="19" cy="21" r="9" fill="${body}"/><circle cx="81" cy="21" r="9" fill="${body}"/>`;
     case 'cat':
-      return `<polygon points="15,33 26,5 47,30" fill="${W}"/><polygon points="85,33 74,5 53,30" fill="${W}"/>`
-        + `<polygon points="22,29 28,14 39,27" fill="${body}"/><polygon points="78,29 72,14 61,27" fill="${body}"/>`;
+      return `<polygon points="8,33 22,-3 51,28" fill="${W}"/><polygon points="92,33 78,-3 49,28" fill="${W}"/>`
+        + `<polygon points="17,29 24,8 41,27" fill="${body}"/><polygon points="83,29 76,8 59,27" fill="${body}"/>`;
     case 'dog':
-      return `<ellipse cx="18" cy="30" rx="10" ry="19" fill="${body}"/><ellipse cx="82" cy="30" rx="10" ry="19" fill="${body}"/>`;
+      return `<ellipse cx="11" cy="31" rx="12" ry="24" fill="${body}"/><ellipse cx="89" cy="31" rx="12" ry="24" fill="${body}"/>`;
     case 'chick':
-      return `<path d="M42 11 Q50 -3 58 11 Q50 15 42 11 Z" fill="${body}"/>`;
+      return `<path d="M39 8 Q50 -8 61 8 Q50 16 39 8 Z" fill="${body}"/>`;
     default:
       return ''; // penguin: 귀 없음
   }
 }
 
-// 얼굴 SVG 한 장. 흰 얼굴 베이스 + 눈 / 볼 / 코, 종류별 귀와 부리(병아리).
+// 얼굴 SVG 한 장. 흰 얼굴 베이스를 viewBox 가득(r44) + 큰 눈 / 볼 / 코, 종류별 귀와 부리(병아리).
 function faceSvg(kind, body) {
-  const head = `<circle cx="50" cy="56" r="31" fill="#ffffff"/>`;
+  const head = `<circle cx="50" cy="54" r="44" fill="#ffffff"/>`;
   const beak = kind === 'chick'
-    ? `<polygon points="42,58 58,58 50,69" fill="#f6a02a"/>` : '';
+    ? `<polygon points="40,60 60,60 50,76" fill="#f6a02a"/>` : '';
   const nose = kind === 'rabbit' || kind === 'bear' || kind === 'dog' || kind === 'cat'
-    ? `<ellipse cx="50" cy="61" rx="3.5" ry="2.6" fill="#9c6b7d"/>` : '';
+    ? `<ellipse cx="50" cy="61" rx="4.5" ry="3.3" fill="#9c6b7d"/>` : '';
   return `<svg class="face" viewBox="0 0 100 100" aria-hidden="true">`
     + ears(kind, body)
     + head
-    + `<circle cx="38" cy="54" r="5.5" fill="#3a2e3a"/><circle cx="62" cy="54" r="5.5" fill="#3a2e3a"/>`
-    + `<circle cx="36" cy="52" r="1.8" fill="#ffffff"/><circle cx="60" cy="52" r="1.8" fill="#ffffff"/>`
-    + `<circle cx="28" cy="65" r="5" fill="#ff9ec4" opacity="0.7"/><circle cx="72" cy="65" r="5" fill="#ff9ec4" opacity="0.7"/>`
+    + `<circle cx="35" cy="51" r="8" fill="#3a2e3a"/><circle cx="65" cy="51" r="8" fill="#3a2e3a"/>`
+    + `<circle cx="32" cy="48" r="2.8" fill="#ffffff"/><circle cx="62" cy="48" r="2.8" fill="#ffffff"/>`
+    + `<circle cx="20" cy="65" r="7" fill="#ff9ec4" opacity="0.72"/><circle cx="80" cy="65" r="7" fill="#ff9ec4" opacity="0.72"/>`
     + nose + beak
     + `</svg>`;
 }
