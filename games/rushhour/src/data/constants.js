@@ -16,3 +16,9 @@ export const DRAG_SNAP_RATIO = 0.5;
 
 // 포인터 이동이 셀의 이 비율 미만이면 탭으로 보고 누른 쪽으로 한 칸 민다.
 export const DRAG_TAP_RATIO = 0.2;
+
+// 클리어 시 토끼가 출구 길로 빠져나가는 애니메이션 길이(ms).
+export const CLEAR_EXIT_MS = 700;
+
+// 클리어 축하 파티클(별·하트) 개수.
+export const CONFETTI_COUNT = 16;

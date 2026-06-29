@@ -64,7 +64,7 @@ state = {
 2. `board.js`의 `slideRange(cars, id)`로 그 차의 이동 가능 칸 범위를 구한다.
 3. 드래그 변위를 범위 안으로 클램프해 `render.js`가 차를 실시간으로 따라 그린다.
 4. pointerup 시 포인터 이동이 셀의 `DRAG_TAP_RATIO` 미만이면 탭으로 보고 누른 쪽으로 한 칸, 아니면 `DRAG_SNAP_RATIO`로 목표 칸을 정한다. 변화가 있으면 `board.js`의 `moveCar`로 새 `cars`를 만든다.
-5. `main.js`가 상태를 갱신(`moves`, `history`)하고 `board.js`의 `isSolved`로 클리어를 판정, `render.js`가 최종 위치를 그린다.
+5. `main.js`가 상태를 갱신(`moves`, `history`)하고 `board.js`의 `isSolved`로 클리어를 판정, `render.js`가 최종 위치를 그린다. 클리어면 `render.playClear`로 토끼를 출구 길로 미끄러뜨리고 별·하트 파티클을 터뜨린 뒤(`CLEAR_EXIT_MS`) 결과 오버레이를 띄운다.
 
 ## 5. 렌더링 방식
 

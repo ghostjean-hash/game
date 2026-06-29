@@ -2,7 +2,7 @@
 // 게임 로직은 core/에 있다(docs/03_architecture.md §2.2).
 // 차는 동물 친구로 그린다: 블록 크기 → 동물(characters.js), 색(colors.js), 표정·액세서리는 블록 위치로.
 
-import { BOARD_SIZE, EXIT_ROW, TARGET_ID } from '../data/constants.js';
+import { BOARD_SIZE, EXIT_ROW, TARGET_ID, CLEAR_EXIT_MS, CONFETTI_COUNT } from '../data/constants.js';
 import { TARGET_COLOR, KIND_COLORS } from '../data/colors.js';
 import { TARGET_KIND, KIND_BY_SHAPE, FACES, ACCESSORIES } from '../data/characters.js';
 
@@ -130,12 +130,12 @@ export function buildBoard(boardEl, cars) {
   const exit = document.createElement('div');
   exit.className = 'exit';
   exit.style.setProperty('--row', String(EXIT_ROW));
-  // 집 그림(이모지는 font-size가 --cell(%)을 글자 기준으로 재해석해 점만큼 작아지므로 SVG로 그린다).
+  // 출구 게이트: 오른쪽 화살표 + 반짝이 별("이쪽으로 나가요"). SVG라 --cell 너비에 정확히 맞춘다.
   exit.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true">'
-    + '<polygon points="50,10 92,46 8,46" fill="#f4a261"/>'
-    + '<rect x="16" y="46" width="68" height="42" rx="5" fill="#fff3e0"/>'
-    + '<rect x="40" y="60" width="20" height="28" rx="3" fill="#e9a06b"/>'
-    + '<circle cx="55" cy="74" r="1.8" fill="#7d5563"/>'
+    + '<polygon points="14,40 52,40 52,24 90,50 52,76 52,60 14,60" fill="#ffc24d"/>'
+    + '<polygon points="14,40 52,40 52,24 90,50 52,76 52,60 14,60" fill="none" stroke="#f0a92e" stroke-width="3" stroke-linejoin="round"/>'
+    + '<path d="M30 14 l2.5 5 5.5 .8 -4 4 1 5.5 -5-2.6 -5 2.6 1-5.5 -4-4 5.5-.8z" fill="#ffe08a"/>'
+    + '<path d="M78 78 l1.8 3.6 4 .6 -2.9 2.8 .7 4 -3.6-1.9 -3.6 1.9 .7-4 -2.9-2.8 4-.6z" fill="#ffe08a"/>'
     + '</svg>';
   boardEl.appendChild(exit);
 
@@ -167,5 +167,37 @@ export function syncPositions(els, cars) {
   for (const car of cars) {
     const el = els.get(car.id);
     if (el) place(el, car);
+  }
+}
+
+// 클리어 연출: 토끼를 출구 길로 미끄러뜨려 내보내고 별·하트 파티클을 터뜨린 뒤 onDone 호출.
+// 다음 퍼즐 로드 시 buildBoard가 보드를 새로 그려 잔여를 정리한다.
+export function playClear(els, boardEl, onDone) {
+  const target = els.get(TARGET_ID);
+  if (target) {
+    target.classList.add('exiting');
+    target.style.transition = `transform ${CLEAR_EXIT_MS}ms cubic-bezier(0.5, 0, 0.75, 1), opacity ${CLEAR_EXIT_MS}ms ease-in`;
+    target.style.transform = 'translateX(175%)';
+    target.style.opacity = '0';
+  }
+  spawnConfetti(boardEl);
+  setTimeout(onDone, CLEAR_EXIT_MS);
+}
+
+const CONFETTI_MARKS = ['⭐', '💖', '✨', '🌟', '🎉'];
+
+function spawnConfetti(boardEl) {
+  for (let i = 0; i < CONFETTI_COUNT; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti';
+    p.textContent = CONFETTI_MARKS[i % CONFETTI_MARKS.length];
+    p.style.left = `${15 + Math.random() * 70}%`;
+    p.style.top = `${38 + Math.random() * 16}%`;
+    p.style.setProperty('--dx', `${(Math.random() * 2 - 1) * 170}px`);
+    p.style.setProperty('--dy', `${-70 - Math.random() * 190}px`);
+    p.style.setProperty('--rot', `${(Math.random() * 2 - 1) * 120}deg`);
+    p.style.animationDelay = `${Math.floor(Math.random() * 140)}ms`;
+    boardEl.appendChild(p);
+    setTimeout(() => p.remove(), 1500);
   }
 }

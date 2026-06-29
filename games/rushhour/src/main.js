@@ -4,7 +4,7 @@ import { STORAGE_NS } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
 import { parseGrid, moveCar, isSolved, axisPos } from './core/board.js';
 import { solve } from './core/solver.js';
-import { buildBoard, syncPositions } from './render/render.js';
+import { buildBoard, syncPositions, playClear } from './render/render.js';
 import { attachDrag } from './input/drag.js';
 import { createStorage } from '../../../shared/storage.js';
 
@@ -92,8 +92,11 @@ function onSolved() {
   el.result.textContent = perfect
     ? `완벽! ${state.moves}수 (최소 ${state.optimal}수)`
     : `클리어! ${state.moves}수 · 최소 ${state.optimal}수 · 최고 ${best}수`;
-  el.overlay.hidden = false;
   render();
+  // 토끼가 출구 길로 빠져나가는 연출 + 축하 파티클 후 결과 오버레이.
+  playClear(state.els, el.board, () => {
+    el.overlay.hidden = false;
+  });
 }
 
 function undo() {

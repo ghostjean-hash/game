@@ -15,6 +15,8 @@
 | `STORAGE_NS` | `"rushhour"` | localStorage 네임스페이스(shared/storage.js) |
 | `DRAG_SNAP_RATIO` | 0.5 | 드래그 스냅 임계(셀 절반 넘으면 다음 칸) |
 | `DRAG_TAP_RATIO` | 0.2 | 탭 판정 임계(포인터 이동이 셀의 이 비율 미만이면 탭=누른 쪽 한 칸) |
+| `CLEAR_EXIT_MS` | 700 | 클리어 시 토끼가 출구 길로 빠져나가는 애니메이션 길이(ms) |
+| `CONFETTI_COUNT` | 16 | 클리어 축하 파티클(별·하트) 개수 |
 
 ## 2. 색상 / 캐릭터
 
