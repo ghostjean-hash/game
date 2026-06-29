@@ -39,3 +39,6 @@ export const GOLD_BASE = 10;
 export const GOLD_STAR3 = 20;
 export const GOLD_STAR2 = 10;
 export const GOLD_TIME_BONUS = 10;
+
+// 힌트 1회 골드 비용(다음 한 수를 보여준다).
+export const HINT_COST = 5;

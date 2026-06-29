@@ -139,6 +139,16 @@
 .rushhour .car.exiting {
   z-index: 5;
 }
+/* 힌트: 추천 차를 골드빛으로 강조하고 목표 방향으로 두 번 살짝 움찔. */
+.rushhour .car.hint {
+  z-index: 4;
+  box-shadow: 0 0 0 4px var(--rh-exit), 0 0 14px 4px rgba(255, 194, 77, 0.85);
+  animation: rh-hint 1.5s ease;
+}
+@keyframes rh-hint {
+  0%, 40%, 80%, 100% { transform: translate(0, 0); }
+  20%, 60% { transform: translate(var(--hint-dx, 0%), var(--hint-dy, 0%)); }
+}
 
 /* 클리어 축하 파티클(별·하트). 위로 튀어오르며 퍼지고 사라진다. */
 .rushhour .confetti {
@@ -181,6 +191,11 @@
   opacity: 0.4;
   pointer-events: none;
 }
+/* 힌트 버튼: 골드빛으로 살짝 강조(도움 버튼임을 알림). */
+.rushhour .controls .btn-hint {
+  border-color: var(--rh-exit);
+  font-weight: 700;
+}
 
 /* 상단바에 골드·시간·이동 3개가 들어가므로 살짝 압축. */
 .rushhour .topbar { gap: var(--sp-2); }
@@ -189,6 +204,8 @@
 .rushhour .stat-icon { font-size: 13px; }
 /* 남은 시간이 10초 이하면 빨갛게 경고. */
 .rushhour #time.low { color: var(--danger); font-weight: 800; }
+/* 골드 부족 등 거부 시 상단 골드 표시 흔들림. */
+.rushhour .stat.shake { animation: rh-shake 0.4s; }
 
 /* 결과 오버레이의 별과 골드. */
 .rushhour .result-stars { font-size: 30px; letter-spacing: 3px; margin: 2px 0 6px; }

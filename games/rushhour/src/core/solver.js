@@ -52,3 +52,48 @@ export function solve(cars) {
   }
   return null;
 }
+
+// 한 수로 도달 가능한 모든 상태와 그 수({id, pos})를 함께 반환한다.
+function neighborMoves(cars) {
+  const out = [];
+  for (const car of cars) {
+    const { min, max } = slideRange(cars, car.id);
+    const cur = axisPos(car);
+    for (let pos = min; pos <= max; pos++) {
+      if (pos === cur) continue;
+      out.push({ move: { id: car.id, pos }, state: moveCar(cars, car.id, pos) });
+    }
+  }
+  return out;
+}
+
+// 힌트용: 최적 해의 첫 한 수 { id, pos }를 반환한다(가변 축 목표 좌표).
+// 이미 풀렸거나 풀 수 없으면 null. BFS로 찾은 최단 경로의 첫 수를 복원한다.
+export function solveStep(cars) {
+  if (isSolved(cars)) return null;
+  const seen = new Set([serialize(cars)]);
+  // frontier 각 항목은 { state, first } - first는 이 경로의 첫 수.
+  let frontier = [];
+  for (const { move, state } of neighborMoves(cars)) {
+    if (isSolved(state)) return move; // 한 수로 풀리면 그 수
+    const key = serialize(state);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    frontier.push({ state, first: move });
+  }
+
+  while (frontier.length > 0) {
+    const next = [];
+    for (const { state, first } of frontier) {
+      for (const { state: nb } of neighborMoves(state)) {
+        const key = serialize(nb);
+        if (seen.has(key)) continue;
+        if (isSolved(nb)) return first;
+        seen.add(key);
+        next.push({ state: nb, first });
+      }
+    }
+    frontier = next;
+  }
+  return null;
+}

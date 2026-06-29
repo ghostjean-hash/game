@@ -4,7 +4,7 @@
 import {
   cellsOf, occupancy, slideRange, moveCar, isSolved, parseGrid, validatePuzzle, axisPos,
 } from '../src/core/board.js';
-import { solve } from '../src/core/solver.js';
+import { solve, solveStep } from '../src/core/solver.js';
 import { PUZZLES } from '../src/data/puzzles.js';
 import { ORIENT } from '../src/data/constants.js';
 
@@ -81,6 +81,42 @@ test('solve: 풀 수 없으면 null', () => {
   // 출구 행을 세로 트럭이 완전히 막고, 그 트럭이 빠질 공간이 없게.
   const cars = parseGrid(['...C..', '...C..', 'XX.C..', '...D..', '...D..', '...D..']);
   eq(solve(cars), null);
+});
+
+test('solveStep: 한 수로 푸는 퍼즐의 그 수를 반환', () => {
+  const cars = parseGrid(['......', '......', 'XX....', '......', '......', '......']);
+  const m = solveStep(cars);
+  assert(m && m.id === 'X', 'X를 움직여야 함');
+  assert(isSolved(moveCar(cars, m.id, m.pos)), '그 수로 클리어돼야 함');
+});
+
+test('solveStep: 이미 풀렸으면 null', () => {
+  const cars = parseGrid(['......', '......', '....XX', '......', '......', '......']);
+  eq(solveStep(cars), null);
+});
+
+test('solveStep: 풀 수 없으면 null', () => {
+  const cars = parseGrid(['...C..', '...C..', 'XX.C..', '...D..', '...D..', '...D..']);
+  eq(solveStep(cars), null);
+});
+
+test('solveStep: 반환한 수는 이동 가능 범위 안의 실제 이동', () => {
+  const cars = parseGrid(['......', '...A..', 'XX.A..', '......', '......', '......']);
+  const m = solveStep(cars);
+  const r = slideRange(cars, m.id);
+  assert(m.pos >= r.min && m.pos <= r.max, '이동 범위 안이어야 함');
+  assert(m.pos !== axisPos(cars.find((c) => c.id === m.id)), '제자리가 아니어야 함');
+});
+
+test('solveStep: 첫 수를 두면 최소 수가 정확히 1 줄어든다(최적 수, 앞 40개 샘플)', () => {
+  for (const p of PUZZLES.slice(0, 40)) {
+    const cars = parseGrid(p.grid);
+    const opt = solve(cars);
+    const m = solveStep(cars);
+    assert(m, `P${p.id} 첫 수 없음`);
+    const optAfter = solve(moveCar(cars, m.id, m.pos));
+    eq(optAfter, opt - 1, `P${p.id} 첫 수가 최적이 아님`);
+  }
 });
 
 // --- 내장 퍼즐 전수 검증 ---

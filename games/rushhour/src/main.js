@@ -2,12 +2,12 @@
 
 import {
   STORAGE_NS, TIME_BASE_S, TIME_PER_OPTIMAL_S, FACE_WORRIED_RATIO, FACE_CRY_RATIO,
-  STAR2_MARGIN, GOLD_BASE, GOLD_STAR3, GOLD_STAR2, GOLD_TIME_BONUS,
+  STAR2_MARGIN, GOLD_BASE, GOLD_STAR3, GOLD_STAR2, GOLD_TIME_BONUS, HINT_COST,
 } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
-import { solve } from './core/solver.js';
-import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor } from './render/render.js';
+import { solve, solveStep } from './core/solver.js';
+import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, showHint } from './render/render.js';
 import { attachDrag } from './input/drag.js';
 import { RABBIT_SKINS, DEFAULT_SKIN } from './data/shop.js';
 import { createStorage } from '../../../shared/storage.js';
@@ -24,6 +24,7 @@ const el = {
   time: document.getElementById('time'),
   undo: document.getElementById('btn-undo'),
   reset: document.getElementById('btn-reset'),
+  hint: document.getElementById('btn-hint'),
   prev: document.getElementById('btn-prev'),
   next: document.getElementById('btn-next'),
   overlay: document.getElementById('overlay'),
@@ -97,6 +98,7 @@ function render() {
   el.gold.textContent = String(progress().gold || 0);
   updateTimeUi();
   el.undo.disabled = state.history.length === 0 || state.solved;
+  el.hint.disabled = state.solved;
   el.prev.disabled = state.puzzleId <= PUZZLES[0].id;
   el.next.disabled = state.puzzleId >= PUZZLES[PUZZLES.length - 1].id;
 }
@@ -213,6 +215,31 @@ function reset() {
   loadPuzzle(state.puzzleId);
 }
 
+// 골드 부족 등 거부 피드백: 상단 골드 표시 흔들림.
+function shakeGold() {
+  const stat = el.gold.closest('.stat');
+  if (!stat) return;
+  stat.classList.remove('shake');
+  void stat.offsetWidth; // reflow로 애니 재시작
+  stat.classList.add('shake');
+}
+
+// 힌트: 골드를 써서 최적 다음 한 수를 강조한다. 자동으로 옮기지는 않는다.
+function hint() {
+  if (state.solved) return;
+  const move = solveStep(state.cars);
+  if (!move) return; // 이미 풀렸거나 풀 수 없음
+  const pr = progress();
+  if ((pr.gold || 0) < HINT_COST) {
+    shakeGold();
+    return;
+  }
+  pr.gold -= HINT_COST;
+  store.set('progress', pr);
+  render();
+  showHint(state.els, move);
+}
+
 function go(delta) {
   const idx = PUZZLES.findIndex((p) => p.id === state.puzzleId);
   const next = PUZZLES[idx + delta];
@@ -282,6 +309,7 @@ attachDrag(el.board, {
 
 el.undo.addEventListener('click', undo);
 el.reset.addEventListener('click', reset);
+el.hint.addEventListener('click', hint);
 el.prev.addEventListener('click', () => go(-1));
 el.next.addEventListener('click', () => go(1));
 el.overlayNext.addEventListener('click', () => {
@@ -296,5 +324,6 @@ el.shopItems.addEventListener('click', (e) => {
   if (btn) buyOrEquip(btn.dataset.skin);
 });
 
+el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
 setTargetColor(currentSkinColor());
 loadPuzzle(store.get('current', PUZZLES[0].id));

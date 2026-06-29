@@ -197,6 +197,25 @@ export function updateTargetFace(els, face) {
   if (t) t.innerHTML = faceSvg(TARGET_KIND, targetColor, face, 'none');
 }
 
+// 힌트: 최적 다음 한 수의 차를 잠깐 강조 + 목표 방향으로 살짝 움직여 보여준다.
+// move = { id, pos }(가변 축 목표 좌표). 자동으로 옮기지는 않는다.
+let hintTimer = null;
+export function showHint(els, move) {
+  if (!move) return;
+  const el = els.get(move.id);
+  if (!el) return;
+  const isH = el.classList.contains('h');
+  const cur = parseInt(el.style.getPropertyValue(isH ? '--col' : '--row'), 10) || 0;
+  const dir = move.pos > cur ? 1 : -1;
+  el.style.setProperty('--hint-dx', isH ? `${dir * 18}%` : '0%');
+  el.style.setProperty('--hint-dy', isH ? '0%' : `${dir * 18}%`);
+  el.classList.remove('hint');
+  void el.offsetWidth; // reflow로 애니 재시작
+  el.classList.add('hint');
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() => el.classList.remove('hint'), 1500);
+}
+
 // 클리어 연출: 토끼를 출구 길로 미끄러뜨려 내보내고 별·하트 파티클을 터뜨린 뒤 onDone 호출.
 // 다음 퍼즐 로드 시 buildBoard가 보드를 새로 그려 잔여를 정리한다.
 export function playClear(els, boardEl, onDone) {
