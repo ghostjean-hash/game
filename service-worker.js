@@ -66,7 +66,8 @@
 // v102 (2026-06-29): rushhour 진행 맵 - 상단 🗺로 난이도별 186퍼즐 별 현황 + 임의 퍼즐 점프.
 // v103 (2026-06-29): rushhour 효과음(Web Audio 합성) - 이동/클리어/힌트/구매/거부 + 🔊 음소거 토글(저장).
 // v104 (2026-06-29): rushhour 모바일 레이아웃 정비 - 보드 폭 76vw(출구 포함 화면 안) + 상단/하단바 좁은 폭 압축.
-const CACHE_VERSION = "v104";
+// v105 (2026-06-29): rushhour 상점 2차 - 보드 테마 5종(바닥/격자선/출구 색 세트) 구매·장착, --rh-* 즉시 반영.
+const CACHE_VERSION = "v105";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

@@ -10,7 +10,7 @@ import { solve, solveStep } from './core/solver.js';
 import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, showHint } from './render/render.js';
 import { attachDrag } from './input/drag.js';
 import { play, setMuted, isMuted } from './audio/sound.js';
-import { RABBIT_SKINS, DEFAULT_SKIN } from './data/shop.js';
+import { RABBIT_SKINS, DEFAULT_SKIN, BOARD_THEMES, DEFAULT_THEME } from './data/shop.js';
 import { createStorage } from '../../../shared/storage.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
@@ -18,6 +18,7 @@ const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard:
 const store = createStorage(STORAGE_NS);
 
 const el = {
+  page: document.querySelector('.rushhour'),
   board: document.getElementById('board'),
   label: document.getElementById('puzzle-label'),
   moves: document.getElementById('moves'),
@@ -37,6 +38,7 @@ const el = {
   shop: document.getElementById('shop'),
   shopGold: document.getElementById('shop-gold'),
   shopItems: document.getElementById('shop-items'),
+  shopThemes: document.getElementById('shop-themes'),
   shopClose: document.getElementById('btn-shop-close'),
   mapBtn: document.getElementById('btn-map'),
   map: document.getElementById('map'),
@@ -63,7 +65,8 @@ const state = {
 function progress() {
   return store.get('progress', {
     cleared: [], best: {}, gold: 0, stars: {},
-    ownedSkins: [DEFAULT_SKIN], equippedSkin: DEFAULT_SKIN, muted: false,
+    ownedSkins: [DEFAULT_SKIN], equippedSkin: DEFAULT_SKIN,
+    ownedThemes: [DEFAULT_THEME], equippedTheme: DEFAULT_THEME, muted: false,
   });
 }
 
@@ -72,6 +75,19 @@ function currentSkinColor() {
   const eq = progress().equippedSkin || DEFAULT_SKIN;
   const s = RABBIT_SKINS.find((x) => x.id === eq) || RABBIT_SKINS[0];
   return s.color;
+}
+
+// 장착한 보드 테마.
+function currentTheme() {
+  const eq = progress().equippedTheme || DEFAULT_THEME;
+  return BOARD_THEMES.find((t) => t.id === eq) || BOARD_THEMES[0];
+}
+
+// 보드 테마 색을 .rushhour의 --rh-* 변수에 인라인으로 덮어써 즉시 반영한다.
+function applyTheme(t) {
+  el.page.style.setProperty('--rh-board', t.board);
+  el.page.style.setProperty('--rh-line', t.line);
+  el.page.style.setProperty('--rh-exit', t.exit);
 }
 
 function puzzleById(id) {
@@ -277,45 +293,75 @@ function hideOverlay() {
   el.overlay.hidden = true;
 }
 
-// --- 상점(토끼 색 스킨) ---
+// --- 상점(토끼 색 스킨 + 보드 테마) ---
 
-function renderShop() {
+// 종류별 메타: 품목 배열 + progress 보유/장착 키 + 기본 id + 미리보기 swatch 스타일.
+const SHOP_KINDS = {
+  skin: {
+    list: RABBIT_SKINS, ownedKey: 'ownedSkins', eqKey: 'equippedSkin', def: DEFAULT_SKIN,
+    swatch: (item) => `background:${item.color}`,
+  },
+  theme: {
+    list: BOARD_THEMES, ownedKey: 'ownedThemes', eqKey: 'equippedTheme', def: DEFAULT_THEME,
+    swatch: (item) => `background:${item.board};border:2px solid ${item.exit}`,
+  },
+};
+
+function chipsHtml(kind) {
+  const cfg = SHOP_KINDS[kind];
   const pr = progress();
-  el.shopGold.textContent = String(pr.gold || 0);
-  const owned = pr.ownedSkins || [DEFAULT_SKIN];
-  const eq = pr.equippedSkin || DEFAULT_SKIN;
-  el.shopItems.innerHTML = RABBIT_SKINS.map((s) => {
-    const isOwned = s.price === 0 || owned.includes(s.id);
-    const isEq = eq === s.id;
-    const tag = isEq ? '장착 중' : isOwned ? '장착하기' : `${s.price} 🪙`;
-    return `<button class="shop-item${isEq ? ' equipped' : ''}" data-skin="${s.id}" type="button">`
-      + `<span class="shop-swatch" style="background:${s.color}"></span>`
-      + `<span class="shop-name">${s.name}</span>`
+  const owned = pr[cfg.ownedKey] || [cfg.def];
+  const eq = pr[cfg.eqKey] || cfg.def;
+  return cfg.list.map((item) => {
+    const isOwned = item.price === 0 || owned.includes(item.id);
+    const isEq = eq === item.id;
+    const tag = isEq ? '장착 중' : isOwned ? '장착하기' : `${item.price} 🪙`;
+    return `<button class="shop-item${isEq ? ' equipped' : ''}" data-kind="${kind}" data-id="${item.id}" type="button">`
+      + `<span class="shop-swatch" style="${cfg.swatch(item)}"></span>`
+      + `<span class="shop-name">${item.name}</span>`
       + `<span class="shop-state">${tag}</span></button>`;
   }).join('');
 }
 
-function buyOrEquip(skinId) {
+function renderShop() {
+  el.shopGold.textContent = String(progress().gold || 0);
+  el.shopItems.innerHTML = chipsHtml('skin');
+  el.shopThemes.innerHTML = chipsHtml('theme');
+}
+
+// 상점 골드 표시 흔들기(부족 피드백).
+function shakeShopGold() {
+  const line = el.shopGold.parentElement;
+  line.classList.remove('shake');
+  void line.offsetWidth; // reflow로 애니 재시작
+  line.classList.add('shake');
+}
+
+function buyOrEquip(kind, id) {
+  const cfg = SHOP_KINDS[kind];
+  if (!cfg) return;
+  const item = cfg.list.find((x) => x.id === id);
+  if (!item) return;
   const pr = progress();
-  const skin = RABBIT_SKINS.find((s) => s.id === skinId);
-  if (!skin) return;
-  const owned = pr.ownedSkins || [DEFAULT_SKIN];
-  if (skin.price > 0 && !owned.includes(skinId)) {
-    if ((pr.gold || 0) < skin.price) {
-      el.shopGold.parentElement.classList.remove('shake');
-      void el.shopGold.parentElement.offsetWidth; // reflow로 애니 재시작
-      el.shopGold.parentElement.classList.add('shake'); // 골드 부족 흔들기
+  const owned = pr[cfg.ownedKey] || [cfg.def];
+  if (item.price > 0 && !owned.includes(id)) {
+    if ((pr.gold || 0) < item.price) {
+      shakeShopGold();
       play('deny');
       return;
     }
-    pr.gold -= skin.price;
-    owned.push(skinId);
-    pr.ownedSkins = owned;
+    pr.gold -= item.price;
+    owned.push(id);
+    pr[cfg.ownedKey] = owned;
   }
-  pr.equippedSkin = skinId;
+  pr[cfg.eqKey] = id;
   store.set('progress', pr);
-  setTargetColor(skin.color);
-  updateTargetFace(state.els, state.face); // 토끼 즉시 색 반영
+  if (kind === 'skin') {
+    setTargetColor(item.color);
+    updateTargetFace(state.els, state.face); // 토끼 즉시 색 반영
+  } else {
+    applyTheme(item); // 보드 색 즉시 반영
+  }
   renderShop();
   render();
   play('buy');
@@ -383,10 +429,12 @@ el.overlayNext.addEventListener('click', () => {
 });
 el.shopBtn.addEventListener('click', openShop);
 el.shopClose.addEventListener('click', closeShop);
-el.shopItems.addEventListener('click', (e) => {
+function onShopClick(e) {
   const btn = e.target.closest('.shop-item');
-  if (btn) buyOrEquip(btn.dataset.skin);
-});
+  if (btn) buyOrEquip(btn.dataset.kind, btn.dataset.id);
+}
+el.shopItems.addEventListener('click', onShopClick);
+el.shopThemes.addEventListener('click', onShopClick);
 el.muteBtn.addEventListener('click', toggleMute);
 el.mapBtn.addEventListener('click', openMap);
 el.mapClose.addEventListener('click', closeMap);
@@ -402,4 +450,5 @@ el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
 setMuted(progress().muted);
 updateMuteBtn();
 setTargetColor(currentSkinColor());
+applyTheme(currentTheme());
 loadPuzzle(store.get('current', PUZZLES[0].id));

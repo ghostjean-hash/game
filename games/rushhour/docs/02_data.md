@@ -59,8 +59,10 @@
 |---|---|
 | `RABBIT_SKINS` | 주인공 토끼 색 스킨 배열(`{id, name, color, price}`). 첫 항목 price 0 = 기본 |
 | `DEFAULT_SKIN` | 기본 스킨 id(`"pink"`). 처음부터 보유·장착 |
+| `BOARD_THEMES` | 보드 테마 배열(`{id, name, price, board, line, exit}`). 바닥/격자선/출구 길 색 세트. 첫 항목 price 0 = 기본 |
+| `DEFAULT_THEME` | 기본 테마 id(`"cream"`). 처음부터 보유·장착 |
 
-골드로 구매(해금)하고 장착한다. 보유/장착은 `progress.ownedSkins` / `progress.equippedSkin`에 저장(§4).
+골드로 구매(해금)하고 장착한다. 토끼 스킨 보유/장착은 `progress.ownedSkins` / `progress.equippedSkin`, 보드 테마는 `progress.ownedThemes` / `progress.equippedTheme`에 저장(§4). 보드 테마 색은 `.rushhour` 스코프 `--rh-*` 변수(04 §3.2)를 main이 인라인으로 덮어써 적용한다.
 
 ## 3. 퍼즐 - `src/data/puzzles.js`
 
@@ -98,5 +100,5 @@
 
 | 키 | 값 | 의미 |
 |---|---|---|
-| `progress` | `{ cleared, best, gold, stars, ownedSkins: string[], equippedSkin: string, muted: boolean }` | 클리어 퍼즐 + 퍼즐별 최고 수 + 누적 골드 + 퍼즐별 최고 별 + 보유/장착 스킨 + 음소거 여부 |
+| `progress` | `{ cleared, best, gold, stars, ownedSkins: string[], equippedSkin: string, ownedThemes: string[], equippedTheme: string, muted: boolean }` | 클리어 퍼즐 + 퍼즐별 최고 수 + 누적 골드 + 퍼즐별 최고 별 + 보유/장착 스킨 + 보유/장착 보드 테마 + 음소거 여부 |
 | `current` | `number` | 마지막으로 보던 퍼즐 id |

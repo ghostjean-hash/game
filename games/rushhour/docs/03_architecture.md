@@ -86,5 +86,7 @@ state = {
 
 5.6. 진행 맵(§01 spec 7.7): `main.js`가 `PUZZLES`(번호·난이도)와 localStorage `progress`(cleared·stars)를 읽어 난이도별 칩 격자를 모달에 그린다. 별도 데이터를 저장하지 않는 읽기 전용 화면이다. 칩 클릭 시 `loadPuzzle(id)`로 그 퍼즐로 점프하고 모달을 닫는다.
 
+5.8. 상점(§01 spec 7.5): `main.js`가 `RABBIT_SKINS`(토끼 색)와 `BOARD_THEMES`(보드 색 세트)를 모달에 그린다. 구매·장착(`buyOrEquip(kind, id)`)은 골드 확인(부족 시 흔들림+거부음) 후 `progress`의 보유/장착 키를 갱신한다. 스킨 장착은 `render.setTargetColor`, 테마 장착은 `.rushhour`의 `--rh-*` 변수를 인라인으로 덮어써 즉시 반영한다. 로드 시 저장된 스킨·테마를 적용한다.
+
 5.7. 사운드(§01 spec 10): `audio/sound.js`가 `AudioContext`를 첫 재생 시점에 lazy 생성(자동재생 정책)하고 oscillator/gain으로 효과음을 합성한다. 음원 파일은 없다. `main.js`가 이동·클리어·힌트·구매·거부 시점에 `sound.play(name)`을 호출하고, 음소거 토글(🔊/🔇)은 `progress.muted`에 저장한다. 합성 파라미터(주파수·길이)는 sound.js 내부 디자인 상수다(04 §2.1 예외).
 5.3. 보드 크기는 CSS가 화면 너비에 맞춰 정사각형으로 잡고, 셀 크기는 한 곳(`--cell`)에서 파생한다.
