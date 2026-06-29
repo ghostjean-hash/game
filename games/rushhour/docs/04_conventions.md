@@ -17,9 +17,10 @@
 
 ## 3. 색상 / 스타일
 
-3.1. 차 색(게임 데이터)은 `src/data/colors.js` 상수만 사용.
-3.2. UI 색 / 간격 / 폰트는 `shared/tokens.css` CSS 변수 사용. 인라인 매직 값 금지.
+3.1. 차 색(게임 데이터)은 `src/data/colors.js`, 동물 종류는 `src/data/characters.js` 상수만 사용.
+3.2. UI 색 / 간격 / 폰트는 `shared/tokens.css` CSS 변수 사용. 인라인 매직 값 금지. 단 이 게임 고유의 파스텔 테마 색은 `style.css`의 `.rushhour` 스코프 CSS 변수(`--rh-*`)에 한 곳으로 모아 정의하고 참조한다.
 3.3. 셀 크기는 `--cell` 한 곳에서 파생. px 하드코딩 금지.
+3.4. 캐릭터 얼굴(눈 / 볼 / 귀 / 부리) SVG 좌표는 `render.js`의 마크업에 둔다. viewBox `0 0 100 100` 정규화 디자인 상수라 매직 넘버 규칙(2.1)의 예외다.
 
 ## 4. 주석
 

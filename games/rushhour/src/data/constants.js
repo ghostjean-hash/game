@@ -13,3 +13,6 @@ export const STORAGE_NS = 'rushhour';
 
 // 드래그 변위가 셀의 이 비율을 넘으면 다음 칸으로 스냅한다.
 export const DRAG_SNAP_RATIO = 0.5;
+
+// 포인터 이동이 셀의 이 비율 미만이면 탭으로 보고 누른 쪽으로 한 칸 민다.
+export const DRAG_TAP_RATIO = 0.2;

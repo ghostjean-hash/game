@@ -1,4 +1,10 @@
 /* Rush Hour 전용 레이아웃 / 차 스타일. UI 색·간격은 shared/tokens.css 토큰을 쓴다. */
+/* 게임 고유 파스텔 테마 색은 여기 한 곳에 모은다(docs/04 §3.2 예외). */
+.rushhour {
+  --rh-board: #fdf3f9;   /* 보드 바닥(연핑크) */
+  --rh-line: #f1dcec;    /* 격자선 */
+  --rh-home: #f7a8c4;    /* 집(출구) 강조 핑크 */
+}
 
 .rushhour .home {
   display: inline-flex;
@@ -35,8 +41,8 @@
   min-height: 0;
 }
 .rushhour .board-wrap {
-  /* 출구 표시를 위해 오른쪽에 약간의 여백을 둔다. */
-  padding-right: var(--sp-3);
+  /* 출구(집) 표시를 위해 오른쪽에 약간의 여백을 둔다. */
+  padding-right: var(--sp-4);
 }
 .rushhour .board {
   --size: 6;
@@ -45,37 +51,48 @@
   width: min(92vw, 60vh, 480px);
   aspect-ratio: 1;
   border-radius: var(--r-2);
-  background-color: var(--bg-elev);
+  background-color: var(--rh-board);
   background-image:
-    repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px calc(100% / var(--size))),
-    repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px calc(100% / var(--size)));
+    repeating-linear-gradient(to right, var(--rh-line) 0 1px, transparent 1px calc(100% / var(--size))),
+    repeating-linear-gradient(to bottom, var(--rh-line) 0 1px, transparent 1px calc(100% / var(--size)));
   box-shadow: var(--shadow-1);
   touch-action: none;
 }
 
-/* 출구 표시: 출구 행 오른쪽 가장자리. */
+/* 출구 표시: 출구 행 오른쪽 가장자리 = 토끼의 집. */
 .rushhour .exit {
   position: absolute;
   top: calc(var(--row) * var(--cell));
-  right: calc(-1 * var(--sp-3));
-  width: var(--sp-3);
+  right: calc(-1 * var(--sp-4));
+  width: var(--sp-4);
   height: var(--cell);
-  background:
-    linear-gradient(90deg, transparent, var(--danger));
-  border-radius: 0 var(--r-1) var(--r-1) 0;
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--cell) * 0.46);
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
 }
 
-/* 차. 칸 좌표를 CSS 변수로 받아 배치한다. */
+/* 차 = 동물 친구. 칸 좌표를 CSS 변수로 받아 배치하고, 안쪽에 얼굴 SVG를 중앙 배치한다. */
 .rushhour .car {
   position: absolute;
   left: calc(var(--col) * var(--cell));
   top: calc(var(--row) * var(--cell));
-  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
   background-clip: content-box;
-  border-radius: var(--r-2);
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.22), inset 0 -3px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 40%;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.5), inset 0 -4px 7px rgba(0, 0, 0, 0.12);
   cursor: grab;
-  transition: left var(--dur-2) var(--ease), top var(--dur-2) var(--ease);
+  transition: left var(--dur-2) var(--ease), top var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+}
+/* 얼굴은 셀 크기에 맞춘 정사각(가로·세로 차 모두 한 칸 기준). 입력은 차가 받으므로 통과. */
+.rushhour .face {
+  width: calc(var(--cell) * 0.92);
+  height: calc(var(--cell) * 0.92);
+  flex: none;
+  pointer-events: none;
 }
 .rushhour .car.h {
   width: calc(var(--len) * var(--cell));

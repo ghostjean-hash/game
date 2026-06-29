@@ -14,17 +14,31 @@
 | `ORIENT` | `{H:"h", V:"v"}` | 방향 enum |
 | `STORAGE_NS` | `"rushhour"` | localStorage 네임스페이스(shared/storage.js) |
 | `DRAG_SNAP_RATIO` | 0.5 | 드래그 스냅 임계(셀 절반 넘으면 다음 칸) |
+| `DRAG_TAP_RATIO` | 0.2 | 탭 판정 임계(포인터 이동이 셀의 이 비율 미만이면 탭=누른 쪽 한 칸) |
 
-## 2. 색상 - `src/data/colors.js`
+## 2. 색상 / 캐릭터
 
-게임 플레이의 일부인 차 색상. UI 색(배경 / 바 / 텍스트)은 `shared/tokens.css` 토큰을 쓴다.
+차의 시각 표현은 색(`src/data/colors.js`)과 동물 종류(`src/data/characters.js`)로 나뉜다. 둘을 `render.js`가 id별로 조합해 캐릭터 얼굴을 그린다. UI 색(배경 / 바 / 텍스트)은 `shared/tokens.css` 토큰을 쓴다.
+
+### 2.1. 색 - `src/data/colors.js`
 
 | 이름 | 의미 |
 |---|---|
-| `TARGET_COLOR` | 빨간 차 색(고정, 강조) |
-| `CAR_PALETTE` | 일반 차 색 배열(id 순서로 순환 배정) |
+| `TARGET_COLOR` | 주인공 토끼 색(파스텔 핑크, 고정) |
+| `CAR_PALETTE` | 친구 동물 색 배열(파스텔, target 제외 id 순서로 순환) |
 
-출구 표시 색은 게임 데이터가 아닌 UI 표시라 `shared/tokens.css`의 `--danger`를 쓴다(style.css).
+### 2.2. 캐릭터 종류 - `src/data/characters.js`
+
+차를 동물 친구로 그리기 위한 종류 정의. 색은 갖지 않고 종류(귀 모양 / 표정)만 정의한다(`data/`끼리 import하지 않는 규칙).
+
+| 이름 | 의미 |
+|---|---|
+| `TARGET_KIND` | 주인공 동물 종류(`"rabbit"`, 고정) |
+| `FRIEND_KINDS` | 친구 동물 종류 배열(`"bear"`, `"cat"`, `"dog"`, `"chick"`, `"penguin"`, id 순서로 순환) |
+
+얼굴(눈 / 볼 / 귀 / 부리) 그리기 좌표는 `render.js`의 SVG 마크업에 둔다(viewBox 0~100 정규화 디자인 상수, docs/04 §3.4).
+
+출구 표시(토끼의 집)는 게임 데이터가 아닌 UI 표시라 `shared/tokens.css` 토큰을 쓴다(style.css).
 
 ## 3. 퍼즐 - `src/data/puzzles.js`
 
