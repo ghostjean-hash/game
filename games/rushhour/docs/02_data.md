@@ -26,6 +26,8 @@
 | `GOLD_STAR3` / `GOLD_STAR2` | 20 / 10 | 별 3개 / 2개 골드 보너스 |
 | `GOLD_TIME_BONUS` | 10 | 제한시간 내 클리어 골드 보너스 |
 | `HINT_COST` | 5 | 힌트 1회 골드 비용(§7.6 힌트) |
+| `COMBO_GOLD_STEP` | 5 | 연속 콤보 보너스 1단계 골드(§6.7) |
+| `COMBO_MAX` | 5 | 콤보 보너스 상한(이 이상은 같은 보너스) |
 
 ## 2. 색상 / 캐릭터
 
@@ -102,5 +104,5 @@
 
 | 키 | 값 | 의미 |
 |---|---|---|
-| `progress` | `{ cleared, best, gold, stars, ownedSkins, equippedSkin, ownedThemes, equippedTheme, ownedAccessories, equippedAccessory, muted }` | 클리어 퍼즐 + 퍼즐별 최고 수 + 누적 골드 + 퍼즐별 최고 별 + 보유/장착 스킨 + 보유/장착 보드 테마 + 보유/장착 액세서리 + 음소거 여부 |
+| `progress` | `{ cleared, best, gold, stars, ownedSkins, equippedSkin, ownedThemes, equippedTheme, ownedAccessories, equippedAccessory, combo, bestCombo, muted }` | 클리어 퍼즐 + 퍼즐별 최고 수 + 누적 골드 + 퍼즐별 최고 별 + 보유/장착 스킨·테마·액세서리 + 현재 연속 콤보 + 최고 콤보 + 음소거 여부 |
 | `current` | `number` | 마지막으로 보던 퍼즐 id |

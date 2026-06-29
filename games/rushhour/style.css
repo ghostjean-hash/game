@@ -219,6 +219,8 @@
 
 /* 결과 오버레이의 별과 골드. */
 .rushhour .result-stars { font-size: 30px; letter-spacing: 3px; margin: 2px 0 6px; }
+.rushhour .result-combo { color: #ff7a45; font-weight: 800; font-size: 15px; margin: 4px 0 0; }
+.rushhour .result-combo[hidden] { display: none; }
 .rushhour .result-gold { color: var(--fg-dim); font-size: 13px; margin-top: 4px; }
 
 /* 상점. */

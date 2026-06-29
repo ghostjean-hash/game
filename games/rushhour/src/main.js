@@ -3,6 +3,7 @@
 import {
   STORAGE_NS, TIME_BASE_S, TIME_PER_OPTIMAL_S, FACE_WORRIED_RATIO, FACE_CRY_RATIO,
   STAR2_MARGIN, GOLD_BASE, GOLD_STAR3, GOLD_STAR2, GOLD_TIME_BONUS, HINT_COST,
+  COMBO_GOLD_STEP, COMBO_MAX,
 } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
@@ -34,6 +35,7 @@ const el = {
   overlay: document.getElementById('overlay'),
   result: document.getElementById('result-text'),
   resultStars: document.getElementById('result-stars'),
+  resultCombo: document.getElementById('result-combo'),
   resultGold: document.getElementById('result-gold'),
   overlayNext: document.getElementById('btn-overlay-next'),
   shopBtn: document.getElementById('btn-shop'),
@@ -70,7 +72,8 @@ function progress() {
     cleared: [], best: {}, gold: 0, stars: {},
     ownedSkins: [DEFAULT_SKIN], equippedSkin: DEFAULT_SKIN,
     ownedThemes: [DEFAULT_THEME], equippedTheme: DEFAULT_THEME,
-    ownedAccessories: [DEFAULT_ACCESSORY], equippedAccessory: DEFAULT_ACCESSORY, muted: false,
+    ownedAccessories: [DEFAULT_ACCESSORY], equippedAccessory: DEFAULT_ACCESSORY,
+    combo: 0, bestCombo: 0, muted: false,
   });
 }
 
@@ -215,9 +218,17 @@ function onSolved() {
   pr.stars[state.puzzleId] = Math.max(pr.stars[state.puzzleId] || 0, stars);
 
   const inTime = state.elapsed <= state.limit;
+
+  // 연속 콤보: 시간 내 클리어면 +1, 초과 클리어면 끊겨 0. 2연속부터 보너스 골드.
+  const combo = inTime ? (pr.combo || 0) + 1 : 0;
+  pr.combo = combo;
+  pr.bestCombo = Math.max(pr.bestCombo || 0, combo);
+  const comboBonus = combo >= 2 ? Math.min(combo, COMBO_MAX) * COMBO_GOLD_STEP : 0;
+
   const gold = GOLD_BASE
     + (stars === 3 ? GOLD_STAR3 : stars === 2 ? GOLD_STAR2 : 0)
-    + (inTime ? GOLD_TIME_BONUS : 0);
+    + (inTime ? GOLD_TIME_BONUS : 0)
+    + comboBonus;
   pr.gold = (pr.gold || 0) + gold;
   store.set('progress', pr);
 
@@ -229,6 +240,12 @@ function onSolved() {
     ? `완벽! ${state.moves}수 (최소 ${state.optimal}수)`
     : `클리어! ${state.moves}수 · 최소 ${state.optimal}수 · 최고 ${best}수`;
   el.result.textContent = isLast ? `모든 퍼즐 완주! 🎉 ${body}` : body;
+  if (combo >= 2) {
+    el.resultCombo.textContent = `🔥 ${combo}연속! 콤보 보너스 +${comboBonus} 골드`;
+    el.resultCombo.hidden = false;
+  } else {
+    el.resultCombo.hidden = true;
+  }
   el.resultGold.textContent = `+${gold} 골드 획득${inTime ? ' (시간 보너스 +' + GOLD_TIME_BONUS + ')' : ''} · 모은 골드 ${pr.gold}`;
   el.overlayNext.textContent = isLast ? '처음부터 다시' : '다음 퍼즐';
   render();

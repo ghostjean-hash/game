@@ -42,3 +42,7 @@ export const GOLD_TIME_BONUS = 10;
 
 // 힌트 1회 골드 비용(다음 한 수를 보여준다).
 export const HINT_COST = 5;
+
+// 연속 콤보(제한시간 내 연달아 클리어). 2연속부터 min(combo, COMBO_MAX)×STEP 보너스 골드.
+export const COMBO_GOLD_STEP = 5;
+export const COMBO_MAX = 5;
