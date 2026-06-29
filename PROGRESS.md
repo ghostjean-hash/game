@@ -18,7 +18,7 @@
 |---|---|---|
 | tetris | playable, 모바일 검증 통과 | `games/tetris/PROGRESS.md` |
 | sudoku | wip, M1+ 완료 / M2 대기 | `games/sudoku/PROGRESS.md` |
-| rushhour | playable, 초등 저학년 산리오풍 1단계 | `games/rushhour/PROGRESS.md` |
+| rushhour | playable, 산리오풍 캐릭터 + 골드/별/제한시간/상점 + 186퍼즐 난이도 재설계 | `games/rushhour/PROGRESS.md` |
 
 # 3. 공통 결정
 
