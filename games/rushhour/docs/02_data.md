@@ -17,6 +17,14 @@
 | `DRAG_TAP_RATIO` | 0.2 | 탭 판정 임계(포인터 이동이 셀의 이 비율 미만이면 탭=누른 쪽 한 칸) |
 | `CLEAR_EXIT_MS` | 700 | 클리어 시 토끼가 출구 길로 빠져나가는 애니메이션 길이(ms) |
 | `CONFETTI_COUNT` | 16 | 클리어 축하 파티클(별·하트) 개수 |
+| `TIME_BASE_S` | 60 | 제한시간 기본(초) |
+| `TIME_PER_OPTIMAL_S` | 20 | 제한시간 = 최소 수 × 이 값 + 기본(초) |
+| `FACE_WORRIED_RATIO` | 0.5 | 경과/제한 비율 이 이상이면 토끼 어두운 표정 |
+| `FACE_CRY_RATIO` | 0.85 | 경과/제한 비율 이 이상이면 토끼 울상 |
+| `STAR2_MARGIN` | 3 | 최소 수 + 이 값 이내면 별 2개 |
+| `GOLD_BASE` | 10 | 클리어 기본 골드 |
+| `GOLD_STAR3` / `GOLD_STAR2` | 20 / 10 | 별 3개 / 2개 골드 보너스 |
+| `GOLD_TIME_BONUS` | 10 | 제한시간 내 클리어 골드 보너스 |
 
 ## 2. 색상 / 캐릭터
 
@@ -80,5 +88,5 @@
 
 | 키 | 값 | 의미 |
 |---|---|---|
-| `progress` | `{ cleared: number[], best: {[puzzleId]: number} }` | 클리어한 퍼즐 id 목록 + 퍼즐별 최고(최소 사용 수) |
+| `progress` | `{ cleared: number[], best: {[puzzleId]: number}, gold: number, stars: {[puzzleId]: number} }` | 클리어 퍼즐 + 퍼즐별 최고(최소 사용 수) + 누적 골드 + 퍼즐별 최고 별 |
 | `current` | `number` | 마지막으로 보던 퍼즐 id |

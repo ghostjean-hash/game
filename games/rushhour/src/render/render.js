@@ -26,7 +26,7 @@ function colorOf(car, kind) {
 
 // 표정 / 액세서리. 주인공은 방긋 + 액세서리 없음(깔끔하게 강조).
 function faceOf(car) {
-  return car.id === TARGET_ID ? 'happy' : FACES[(seedOf(car) * 3 + 1) % FACES.length];
+  return car.id === TARGET_ID ? 'neutral' : FACES[(seedOf(car) * 3 + 1) % FACES.length];
 }
 function accOf(car) {
   return car.id === TARGET_ID ? 'none' : ACCESSORIES[(seedOf(car) * 5 + 2) % ACCESSORIES.length];
@@ -64,7 +64,14 @@ function eyesSvg(face) {
     case 'surprised':
       return `<circle cx="35" cy="51" r="9" fill="${D}"/><circle cx="65" cy="51" r="9" fill="${D}"/>`
         + `<circle cx="31.5" cy="47.5" r="3" fill="#ffffff"/><circle cx="61.5" cy="47.5" r="3" fill="#ffffff"/>`;
-    default: // normal
+    case 'worried': // 어두운 표정: 점눈 + 처진 눈썹
+      return `<circle cx="35" cy="53" r="7" fill="${D}"/><circle cx="65" cy="53" r="7" fill="${D}"/>`
+        + `<path d="M26 45 Q35 42 43 47" stroke="${D}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
+        + `<path d="M74 45 Q65 42 57 47" stroke="${D}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+    case 'cry': // 울상: 질끈 감은 눈(아래로 볼록)
+      return `<path d="M27 50 Q35 58 43 50" stroke="${D}" stroke-width="4" fill="none" stroke-linecap="round"/>`
+        + `<path d="M57 50 Q65 58 73 50" stroke="${D}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+    default: // normal / neutral (점눈)
       return `<circle cx="35" cy="51" r="8" fill="${D}"/><circle cx="65" cy="51" r="8" fill="${D}"/>`
         + `<circle cx="32" cy="48" r="2.8" fill="#ffffff"/><circle cx="62" cy="48" r="2.8" fill="#ffffff"/>`;
   }
@@ -74,8 +81,13 @@ function eyesSvg(face) {
 function mouthSvg(kind, face) {
   if (kind === 'chick') return `<polygon points="40,60 60,60 50,76" fill="#f6a02a"/>`;
   const M = '#9c6b7d';
-  if (face === 'surprised') return `<ellipse cx="50" cy="67" rx="3.5" ry="4.5" fill="${M}"/>`;
-  return `<path d="M43 64 Q50 70 57 64" stroke="${M}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  switch (face) {
+    case 'surprised': return `<ellipse cx="50" cy="67" rx="3.5" ry="4.5" fill="${M}"/>`;
+    case 'neutral': return `<path d="M44 66 L56 66" stroke="${M}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    case 'worried': return `<path d="M43 68 Q50 63 57 68" stroke="${M}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    case 'cry': return `<ellipse cx="50" cy="68" rx="5" ry="6" fill="#7d5563"/>`;
+    default: return `<path d="M43 64 Q50 70 57 64" stroke="${M}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  }
 }
 
 function noseSvg(kind) {
@@ -104,6 +116,8 @@ function accessorySvg(acc) {
 
 // 얼굴 SVG 한 장. 흰 얼굴 베이스(r44) + 귀 + 표정 + 볼 + 코/입 + 액세서리.
 function faceSvg(kind, body, face, acc) {
+  const tears = face === 'cry'
+    ? `<ellipse cx="29" cy="64" rx="3.6" ry="5.2" fill="#7ec8f0" opacity="0.9"/><ellipse cx="71" cy="64" rx="3.6" ry="5.2" fill="#7ec8f0" opacity="0.9"/>` : '';
   return `<svg class="face" viewBox="0 0 100 100" aria-hidden="true">`
     + ears(kind, body)
     + `<circle cx="50" cy="54" r="44" fill="#ffffff"/>`
@@ -111,6 +125,7 @@ function faceSvg(kind, body, face, acc) {
     + `<circle cx="20" cy="65" r="7" fill="#ff9ec4" opacity="0.72"/><circle cx="80" cy="65" r="7" fill="#ff9ec4" opacity="0.72"/>`
     + noseSvg(kind)
     + mouthSvg(kind, face)
+    + tears
     + accessorySvg(acc)
     + `</svg>`;
 }
@@ -168,6 +183,12 @@ export function syncPositions(els, cars) {
     const el = els.get(car.id);
     if (el) place(el, car);
   }
+}
+
+// 주인공 토끼의 표정만 바꿔 다시 그린다(제한시간 경과 / 클리어에 따라 main이 호출).
+export function updateTargetFace(els, face) {
+  const t = els.get(TARGET_ID);
+  if (t) t.innerHTML = faceSvg(TARGET_KIND, TARGET_COLOR, face, 'none');
 }
 
 // 클리어 연출: 토끼를 출구 길로 미끄러뜨려 내보내고 별·하트 파티클을 터뜨린 뒤 onDone 호출.

@@ -18,8 +18,9 @@
     <a href="../../" class="home" aria-label="홈으로">←</a>
     <h1 id="puzzle-label">#1</h1>
     <div class="spacer"></div>
+    <div class="stat"><span class="stat-icon">🪙</span><span class="stat-value" id="gold">0</span></div>
+    <div class="stat"><span class="stat-icon">⏱</span><span class="stat-value" id="time">0:00</span></div>
     <div class="stat"><span class="stat-label">이동</span><span class="stat-value" id="moves">0</span></div>
-    <div class="stat" id="optimal">최소 -</div>
   </div>
 
   <div class="stage">
@@ -38,7 +39,9 @@
   <div class="modal-backdrop" id="overlay" hidden>
     <div class="modal">
       <h2>클리어!</h2>
+      <div id="result-stars" class="result-stars"></div>
       <p id="result-text"></p>
+      <p id="result-gold" class="result-gold"></p>
       <div class="modal-actions">
         <button class="btn btn-primary" id="btn-overlay-next" type="button">다음 퍼즐</button>
       </div>

@@ -22,3 +22,20 @@ export const CLEAR_EXIT_MS = 700;
 
 // 클리어 축하 파티클(별·하트) 개수.
 export const CONFETTI_COUNT = 16;
+
+// 제한시간: 퍼즐별 = 최소 수 × TIME_PER_OPTIMAL_S + TIME_BASE_S(초). 넉넉하게.
+export const TIME_BASE_S = 60;
+export const TIME_PER_OPTIMAL_S = 20;
+
+// 주인공 토끼 표정 전환 임계(경과/제한시간 비율). 이 미만은 무표정.
+export const FACE_WORRIED_RATIO = 0.5;  // 어두운 표정 시작
+export const FACE_CRY_RATIO = 0.85;     // 울상 시작
+
+// 별: 최소 수 이내 3, (최소 수 + STAR2_MARGIN) 이내 2, 그 외 1.
+export const STAR2_MARGIN = 3;
+
+// 골드: 기본 + 별 보너스(3별/2별) + 시간 내 클리어 보너스.
+export const GOLD_BASE = 10;
+export const GOLD_STAR3 = 20;
+export const GOLD_STAR2 = 10;
+export const GOLD_TIME_BONUS = 10;

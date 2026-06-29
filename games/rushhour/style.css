@@ -181,3 +181,15 @@
   opacity: 0.4;
   pointer-events: none;
 }
+
+/* 상단바에 골드·시간·이동 3개가 들어가므로 살짝 압축. */
+.rushhour .topbar { gap: var(--sp-2); }
+.rushhour .stat { gap: var(--sp-1); font-size: 12px; }
+.rushhour .stat-value { font-size: 16px; }
+.rushhour .stat-icon { font-size: 13px; }
+/* 남은 시간이 10초 이하면 빨갛게 경고. */
+.rushhour #time.low { color: var(--danger); font-weight: 800; }
+
+/* 결과 오버레이의 별과 골드. */
+.rushhour .result-stars { font-size: 30px; letter-spacing: 3px; margin: 2px 0 6px; }
+.rushhour .result-gold { color: var(--fg-dim); font-size: 13px; margin-top: 4px; }

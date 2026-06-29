@@ -52,7 +52,12 @@ state = {
   history,         // 이전 cars 스냅샷 스택(undo용)
   optimal,         // 솔버가 계산한 최소 수
   solved,          // 클리어 여부
+  limit,           // 제한시간(초) = optimal × TIME_PER_OPTIMAL_S + TIME_BASE_S
+  elapsed,         // 경과 시간(초, 1초 타이머로 증가)
+  face,            // 토끼 현재 표정(neutral/worried/cry/happy)
+  timer,           // setInterval 핸들(퍼즐 전환·클리어 시 정리)
 }
+누적 골드와 퍼즐별 최고 별은 state가 아니라 localStorage `progress`에 저장한다(02_data §4).
 ```
 
 3.2. `core/board.js`의 함수는 `cars`를 입력받아 새 `cars`(또는 판정값)를 반환한다. 상태를 직접 변형하지 않는다.
@@ -70,4 +75,6 @@ state = {
 
 5.1. Canvas가 아니라 DOM. 차는 절대 위치 `<div>`이고 칸 좌표 → CSS 변수(`--cell`) 배수로 배치한다. 차 안쪽에는 동물 얼굴 인라인 SVG를 한 칸 크기 정사각으로 중앙 배치한다(색 = colors.js, 종류 = characters.js를 render.js가 조합).
 5.2. 이동 / 스냅 애니메이션은 CSS `transition`. 드래그 중에는 transition을 꺼 손가락을 1:1로 따라오고, 손을 떼면 `transform`(드래그 변위)과 `left`/`top`(칸 위치)을 함께 트랜지션해 손 뗀 자리에서 목표 칸으로 점프 없이 정착한다.
+
+5.4. 제한시간 타이머는 `main.js`가 1초 간격으로 `elapsed`를 올리며 상단바 남은 시간을 갱신하고, 경과/제한 비율로 토끼 표정(`render.updateTargetFace`)을 무표정→어두움→울상으로 바꾼다. 클리어 시 타이머를 멈추고 표정을 활짝 웃음으로 바꾼 뒤 별·골드를 계산해 저장한다.
 5.3. 보드 크기는 CSS가 화면 너비에 맞춰 정사각형으로 잡고, 셀 크기는 한 곳(`--cell`)에서 파생한다.
