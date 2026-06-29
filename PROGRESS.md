@@ -26,6 +26,7 @@
 3.2. **iOS 아이콘 PNG로**: SVG `apple-touch-icon`이 iOS에서 미표시 → `scripts/build_icons.py`로 PNG 생성.
 3.3. **Pages 활성화는 사용자 수동**: gh CLI 미설치, PAT 노출 회피.
 3.4. **작업 완료 시 커밋·푸시를 세트로 자동**(사용자 2026-06-29 지시): 매번 승인 질문 없이 자비스가 커밋 + 푸시까지 일괄 수행. 위험하거나 대규모인 변경은 사전 안내 후 진행.
+3.5. **게임 자산(js/css/html) 변경 배포 시 `service-worker.js`의 `CACHE_VERSION` bump 필수**: SW가 stale-while-revalidate라 버전을 안 올리면 사용자 기기에 옛 파일이 남아 새 파일과 섞인다(2026-06-29 rushhour 동물 미표시 사고). 커밋·푸시 세트에 SW bump를 포함한다.
 
 # 4. 공통 미해결 / 개선 여지
 

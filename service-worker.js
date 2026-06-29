@@ -54,7 +54,8 @@
 // v91 (2026-05-19): lotto S097-후속 4 - 사용자 명시 "번호가 틀린 것은 확인되는 순간 즉시 반투명, 맞은 것은 즉시 하이라이트". 옛 .is-masked opacity 1 룰이 옛 .num:not(.is-matched) dim 룰을 specificity로 override → 불일치 ball reveal 후에도 자기 색 유지. 정정: CSS `.history-num.is-masked.is-revealed:not(.is-matched)` 룰 신설 (opacity 0.35 + grayscale 0.7). reveal 시점 JS가 .is-revealed 클래스 + 일치면 .is-matched 추가 → CSS 분기 즉시 적용. 일치 ball은 옛 .is-matched highlight + .is-bounced keyframe 그대로. SSOT: PROGRESS.md 2.111.13.
 // v92 (2026-05-19): lotto S097-후속 5 - 사용자 명시 "전적 5칸을 한줄로 만들 수 있나?". .summary-grid 데스크톱 3열 / 480px↓ 2열 → 5열 통일. 모바일 폭에서 셀 폭 ~64px = 라벨 wrap 자연 발생. 폰트(라벨 11→10px / 값 18→15px) + padding(--space-2 → --space-2 var(--space-1)) + gap(--space-2 → --space-1) 압축. min-width 481px 데스크톱에서는 옛 폰트/padding 복귀(여유). SSOT: PROGRESS.md 2.111.14.
 // v78 (2026-05-18): lotto S092 (정정 통합) - 사용자 명시 13건 진화. 핵심 결과만 기록 (상세 진화 SSOT: PROGRESS.md 2.106). 최종: 옛 회차 이력 = 회차별 그룹 카드. 그룹 헤더 = NNNN회 · YYYY-MM-DD + 당첨번호 row(번호공 32x32 가운데 + 보너스 ball + "당첨" 우측, 골드 톤 배경). 본문 = 한 줄 row(번호공 가운데 + 등수 라벨 우측). 라벨 세분화: 0=미적중, 1/2=N개 적중, 3+=등수, draws 없음=미발표. 일치 ball 강조 = 흰색 inner + 골드 outer 2층 외곽선 + 14px glow. 미일치 ball = row 종류 무관 항상 dim(opacity 0.35 + grayscale 0.7) - 룰 일관성. renderHistoryPage(container, character, currentDrwNo, draws) 시그니처 확장. docs 01_spec 5.8.1-A + 5.8.4 정합.
-const CACHE_VERSION = "v92";
+// v93 (2026-06-29): rushhour 산리오풍 업그레이드 일괄 cache busting - 블록 크기별 동물(고양이/강아지/병아리/펭귄/토끼) + 표정·색·액세서리 다양화 + 출구 길·화살표 게이트 + 클리어 연출(토끼 퇴장 + 별·하트 파티클 + 오버레이 팝) + 드래그 조작감(되감기 제거 + 탭). rushhour 변경들이 v92 stale 캐시에 옛 버전으로 섞여 동물이 표시되지 않던 결손 회수. 게임 자산 변경 시 본 버전 bump 필수(미bump = stale 캐시 미갱신).
+const CACHE_VERSION = "v93";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
