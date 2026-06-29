@@ -63,7 +63,8 @@
 // v99 (2026-06-29): rushhour 난이도 멀티소스 BFS로 정확 재측정 181개(입문20/쉬움60/보통70/도전30, 최대 16수). v98 opt 오측정 정정.
 // v100 (2026-06-29): rushhour 중간 난이도(보통) 보강 - 보통 70→89, 총 186개(입문20/쉬움60/보통89/도전16).
 // v101 (2026-06-29): rushhour 힌트 버튼 - 골드 5로 솔버의 최적 다음 한 수(차+방향) 강조. solveStep 추가.
-const CACHE_VERSION = "v101";
+// v102 (2026-06-29): rushhour 진행 맵 - 상단 🗺로 난이도별 186퍼즐 별 현황 + 임의 퍼즐 점프.
+const CACHE_VERSION = "v102";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

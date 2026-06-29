@@ -37,6 +37,11 @@ const el = {
   shopGold: document.getElementById('shop-gold'),
   shopItems: document.getElementById('shop-items'),
   shopClose: document.getElementById('btn-shop-close'),
+  mapBtn: document.getElementById('btn-map'),
+  map: document.getElementById('map'),
+  mapSummary: document.getElementById('map-summary'),
+  mapGrid: document.getElementById('map-grid'),
+  mapClose: document.getElementById('btn-map-close'),
 };
 
 const state = {
@@ -300,6 +305,41 @@ function closeShop() {
   el.shop.hidden = true;
 }
 
+// --- 진행 맵(난이도별 별 현황) ---
+
+const DIFF_ORDER = ['beginner', 'easy', 'medium', 'hard'];
+
+function renderMap() {
+  const pr = progress();
+  const cleared = new Set(pr.cleared || []);
+  const stars = pr.stars || {};
+  const totalStars = Object.values(stars).reduce((a, b) => a + b, 0);
+  el.mapSummary.textContent = `클리어 ${cleared.size} / ${PUZZLES.length} · 모은 별 ${totalStars} ⭐`;
+
+  const groups = {};
+  for (const p of PUZZLES) (groups[p.difficulty] = groups[p.difficulty] || []).push(p);
+  el.mapGrid.innerHTML = DIFF_ORDER.filter((d) => groups[d]).map((d) => {
+    const chips = groups[d].map((p) => {
+      const done = cleared.has(p.id);
+      const cur = p.id === state.puzzleId;
+      const starStr = done ? '⭐'.repeat(stars[p.id] || 0) : '·';
+      return `<button class="map-chip${done ? ' done' : ''}${cur ? ' current' : ''}" data-id="${p.id}" type="button">`
+        + `<span class="map-num">${p.id}</span>`
+        + `<span class="map-stars">${starStr}</span></button>`;
+    }).join('');
+    return `<div class="map-section"><h3>${DIFF_LABEL[d]} (${groups[d].length})</h3>`
+      + `<div class="map-chips">${chips}</div></div>`;
+  }).join('');
+}
+
+function openMap() {
+  renderMap();
+  el.map.hidden = false;
+}
+function closeMap() {
+  el.map.hidden = true;
+}
+
 // 드래그는 보드에 한 번만 붙인다. 현재 상태는 getCars로 읽는다.
 attachDrag(el.board, {
   getCars: () => state.cars,
@@ -322,6 +362,15 @@ el.shopClose.addEventListener('click', closeShop);
 el.shopItems.addEventListener('click', (e) => {
   const btn = e.target.closest('.shop-item');
   if (btn) buyOrEquip(btn.dataset.skin);
+});
+el.mapBtn.addEventListener('click', openMap);
+el.mapClose.addEventListener('click', closeMap);
+el.mapGrid.addEventListener('click', (e) => {
+  const chip = e.target.closest('.map-chip');
+  if (chip) {
+    closeMap();
+    loadPuzzle(Number(chip.dataset.id));
+  }
 });
 
 el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;

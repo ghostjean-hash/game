@@ -245,6 +245,41 @@
 }
 .rushhour .shop-name { font-weight: 700; }
 .rushhour .shop-state { color: var(--fg-dim); font-size: 10px; }
+
+/* 진행 맵. */
+.rushhour #btn-map { border: none; cursor: pointer; }
+.rushhour .map-modal { max-width: 460px; width: 94vw; }
+.rushhour .map-summary { font-weight: 700; font-size: 14px; margin: 2px 0 var(--sp-3); }
+.rushhour .map-scroll { max-height: 58vh; overflow-y: auto; margin-bottom: var(--sp-3); }
+.rushhour .map-section { margin-bottom: var(--sp-3); }
+.rushhour .map-section h3 {
+  font-size: 13px; color: var(--fg-dim); margin: 0 0 var(--sp-1);
+  position: sticky; top: 0; background: var(--bg-elev); padding: 3px 0; z-index: 1;
+}
+.rushhour .map-chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+  gap: 6px;
+}
+.rushhour .map-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  aspect-ratio: 1;
+  border: 2px solid transparent;
+  border-radius: var(--r-2);
+  background: var(--bg-elev-2);
+  color: var(--fg-dim);
+  cursor: pointer;
+  padding: 2px;
+  overflow: hidden;
+}
+.rushhour .map-chip.done { background: var(--rh-exit); color: #5a3d00; }
+.rushhour .map-chip.current { border-color: var(--fg); }
+.rushhour .map-num { font-weight: 800; font-size: 14px; }
+.rushhour .map-stars { font-size: 8px; line-height: 1; letter-spacing: -1px; }
 @keyframes rh-shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-6px); }
