@@ -48,7 +48,9 @@
   --size: 6;
   --cell: calc(100% / var(--size));
   position: relative;
-  width: min(92vw, 60vh, 480px);
+  /* 출구(집)가 오른쪽 바깥으로 나가므로 board-wrap padding-right(17%)까지 더해 화면 안에 들어오게
+     보드 폭을 잡는다. 76vw × 1.17 ≈ 89vw < 화면(좁은 폭에서도 잘리지 않음). */
+  width: min(76vw, 60vh, 480px);
   aspect-ratio: 1;
   border-radius: var(--r-2);
   background-color: var(--rh-board);
@@ -197,8 +199,16 @@
   font-weight: 700;
 }
 
-/* 상단바에 골드·시간·이동 3개가 들어가므로 살짝 압축. */
+/* 상단바에 아이콘 4개 + 제목 + 스탯 3개가 들어가므로 살짝 압축. */
 .rushhour .topbar { gap: var(--sp-2); }
+/* 제목은 한 줄 유지(줄바꿈 금지). 공간이 모자라면 줄이고 …로 자른다. */
+.rushhour #puzzle-label {
+  min-width: 0;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .rushhour .stat { gap: var(--sp-1); font-size: 12px; }
 .rushhour .stat-value { font-size: 16px; }
 .rushhour .stat-icon { font-size: 13px; }
@@ -285,4 +295,21 @@
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-6px); }
   75% { transform: translateX(6px); }
+}
+
+/* 좁은 폭(폰): 상단바·하단바를 압축해 한 줄에 들어가게. */
+@media (max-width: 480px) {
+  .rushhour .topbar { gap: 4px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
+  .rushhour .home { width: 28px; height: 28px; font-size: 16px; }
+  .rushhour #puzzle-label { font-size: 13px; }
+  .rushhour .stat { font-size: 10px; gap: 2px; }
+  .rushhour .stat-value { font-size: 13px; }
+  .rushhour .stat-icon { font-size: 11px; }
+  .rushhour .controls { gap: 4px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
+  .rushhour .controls .btn {
+    font-size: 11px;
+    padding: var(--sp-2) 2px;
+    white-space: nowrap;
+    letter-spacing: -0.3px;
+  }
 }
