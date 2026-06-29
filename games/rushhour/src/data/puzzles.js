@@ -1,83 +1,207 @@
-// 내장 퍼즐 세트(docs/02_data.md §3).
+// 내장 퍼즐 세트(docs/02_data.md §3). 무작위 생성 + BFS 솔버 전수 검증으로 만든 200개.
 // 격자 표기: 6줄 x 6자. '.'=빈칸, 'X'=주인공 토끼(가로 길이2, 출구 행), 그 외 문자=친구 동물 차.
-// 같은 문자가 한 행이면 가로, 한 열이면 세로 차다.
-// 최소 이동수는 솔버(BFS)가 런타임에 계산한다(하드코딩 없음). 괄호 안 수는 설계 시 측정한 참고값.
-// 초등 저학년 대상이라 쉬움 위주로 천천히 오르는 곡선(최소 1~8수). difficulty는 최소 수 구간 분류:
-//   1-3 입문(beginner) / 4-6 쉬움(easy) / 7-8 보통(medium). 어려운 퍼즐은 넣지 않는다.
-// 1번은 길이 막는 친구가 없는 튜토리얼(토끼만 밀면 끝)이라 조작부터 익힌다.
+// 초등 저학년 대상이라 쉬움 위주(최소 1~8수)로 천천히 오르는 곡선. 끝 주석 수 = 솔버 최소 이동수(참고값).
+// difficulty: 1-3 입문 / 4-6 쉬움 / 7-8 보통. 1번은 막는 차 없는 튜토리얼.
 
 export const PUZZLES = [
-  // --- 입문 (beginner) ---
-  {
-    id: 1,
-    difficulty: 'beginner',
-    grid: ['......', '......', 'XX....', '......', '......', '......'], // 1
-  },
-  {
-    id: 2,
-    difficulty: 'beginner',
-    grid: ['BB....', '......', 'XX...A', '.....A', '.....A', '......'], // 2
-  },
-  {
-    id: 3,
-    difficulty: 'beginner',
-    grid: ['...BB.', '..A...', 'XXA...', '..A...', '...CCC', '......'], // 2
-  },
-  {
-    id: 4,
-    difficulty: 'beginner',
-    grid: ['ABB...', 'A..C..', 'AXXC..', '...C..', '......', '......'], // 2
-  },
-  {
-    id: 5,
-    difficulty: 'beginner',
-    grid: ['......', '.B..CA', '.BXXCA', '....CA', '......', '......'], // 3
-  },
-  {
-    id: 6,
-    difficulty: 'beginner',
-    grid: ['...DDD', '......', '.XXCB.', '...CB.', 'AA.C..', '......'], // 3
-  },
-  // --- 쉬움 (easy) ---
-  {
-    id: 7,
-    difficulty: 'easy',
-    grid: ['..BBB.', '...D..', 'XX.DC.', '...DC.', '......', '...AAA'], // 4
-  },
-  {
-    id: 8,
-    difficulty: 'easy',
-    grid: ['...DDD', '..EB..', 'XXEB..', '.AAA..', '....CF', '....CF'], // 4
-  },
-  {
-    id: 9,
-    difficulty: 'easy',
-    grid: ['......', '...C..', 'XX.C.A', '...C.A', 'B....A', 'B..DDD'], // 5
-  },
-  {
-    id: 10,
-    difficulty: 'easy',
-    grid: ['AA.D..', '...D..', '.XXD..', '.BBB..', '...EE.', '...CC.'], // 5
-  },
-  {
-    id: 11,
-    difficulty: 'easy',
-    grid: ['..C...', '..C...', 'XXC...', '...AAA', 'DDD..B', '.....B'], // 6
-  },
-  {
-    id: 12,
-    difficulty: 'easy',
-    grid: ['.BBB..', '..CCAF', 'XX..AF', '.E..A.', '.E.DDD', '.E....'], // 6
-  },
-  // --- 보통 (medium) ---
-  {
-    id: 13,
-    difficulty: 'medium',
-    grid: ['..D.AA', '..D...', 'XXD..C', '.....C', '.....C', 'BBB...'], // 7
-  },
-  {
-    id: 14,
-    difficulty: 'medium',
-    grid: ['.III.J', '..DD.J', 'XX..A.', 'CFFGA.', 'CE.GAH', '.EBBBH'], // 8
-  },
+  { id: 1, difficulty: 'beginner', grid: ["......","......","XX....","......","......","......"] }, // 1
+  { id: 2, difficulty: 'beginner', grid: [".CCC.E","..BB.E","..XX..","......","..A...","..A.DD"] }, // 1
+  { id: 3, difficulty: 'beginner', grid: ["......",".AA...","..XX..","......","......","...BB."] }, // 1
+  { id: 4, difficulty: 'beginner', grid: ["...CC.","B.....","BXX...","B.A...","..A...","..A..."] }, // 1
+  { id: 5, difficulty: 'beginner', grid: [".BBB..","......","XX....","F..CEA","F..CEA",".DDCE."] }, // 1
+  { id: 6, difficulty: 'beginner', grid: ["..AA..","......",".XX...","...B..","...B..","......"] }, // 1
+  { id: 7, difficulty: 'beginner', grid: ["BB.C..","...C..",".XX...","A.....","A.....","A.DDD."] }, // 1
+  { id: 8, difficulty: 'beginner', grid: ["......","B..DD.","B.XX..",".C..FA",".C..FA",".EEEF."] }, // 1
+  { id: 9, difficulty: 'beginner', grid: ["......","......","..XX..","..A...","..ABBB","..A..."] }, // 1
+  { id: 10, difficulty: 'beginner', grid: [".....A",".....A",".XX...","......","......","BBB..."] }, // 1
+  { id: 11, difficulty: 'beginner', grid: ["....AA","......","XX...B","DDC..B","..C...","..C..."] }, // 2
+  { id: 12, difficulty: 'beginner', grid: ["..E.AA","..EF..","XX.F..",".BBF.C","GGG..C","DD...C"] }, // 2
+  { id: 13, difficulty: 'beginner', grid: ["......","....CC","XX..D.",".A..D.",".A....",".A.BBB"] }, // 2
+  { id: 14, difficulty: 'beginner', grid: ["..D...","..DBBB","..XX.C",".....C","...AAC","......"] }, // 2
+  { id: 15, difficulty: 'beginner', grid: ["......","......","XXB...","..B.DD","..CCC.","...AAA"] }, // 2
+  { id: 16, difficulty: 'beginner', grid: ["BGG..A","BFDDDA",".FXX.A",".C....",".C....",".EEE.."] }, // 2
+  { id: 17, difficulty: 'beginner', grid: ["A.....","A....D","AXX..D","......","......",".CCBB."] }, // 2
+  { id: 18, difficulty: 'beginner', grid: ["..DD..","CC..F.","XX..F.",".BBBF.",".....A",".EE..A"] }, // 2
+  { id: 19, difficulty: 'beginner', grid: ["......","CCC...","..XX.B",".....B",".AA..B","......"] }, // 2
+  { id: 20, difficulty: 'beginner', grid: ["..DD..","....C.","..XXC.",".EE...",".AAAB.","....B."] }, // 2
+  { id: 21, difficulty: 'beginner', grid: ["FF....","DDD.A.",".EXXA.",".E..GG","..C..B","..C..B"] }, // 2
+  { id: 22, difficulty: 'beginner', grid: [".CC...","......","XXB...","..B.A.","....A.","DD...."] }, // 2
+  { id: 23, difficulty: 'beginner', grid: ["..AA..","......",".XX.C.","DD.EC.",".BBEC.","...E.."] }, // 2
+  { id: 24, difficulty: 'beginner', grid: [".....A",".....A","..XX.A","......",".BBB..","......"] }, // 2
+  { id: 25, difficulty: 'beginner', grid: ["......",".CAAA.","DCXX.B","DCEEFB","....FB","....F."] }, // 2
+  { id: 26, difficulty: 'beginner', grid: ["......",".....D","XX...D","...AAA","BB....",".CCC.."] }, // 2
+  { id: 27, difficulty: 'beginner', grid: [".....D","EE...D","CBXX.D","CBFFA.","CB..A.","......"] }, // 2
+  { id: 28, difficulty: 'beginner', grid: ["..DD..",".AA.EE","G.XXF.","G...FC",".BBBFC","......"] }, // 2
+  { id: 29, difficulty: 'beginner', grid: ["..A...","..A.EE","XX...C","..DDDC","BBB..C","...FF."] }, // 2
+  { id: 30, difficulty: 'beginner', grid: ["...AA.",".....B",".XX..B",".....B","......","......"] }, // 2
+  { id: 31, difficulty: 'beginner', grid: [".....B",".....B","..XX.A",".....A",".....A","......"] }, // 2
+  { id: 32, difficulty: 'beginner', grid: ["...A..","C..A..","CXXA..","..B...","..B...","..B..."] }, // 2
+  { id: 33, difficulty: 'beginner', grid: ["..AAAE","D....E","DXX..E","C.....","C..BB.","C....."] }, // 2
+  { id: 34, difficulty: 'beginner', grid: ["...A..","...A..","..XX.B",".....B","CC...B","......"] }, // 2
+  { id: 35, difficulty: 'beginner', grid: ["...BB.",".AAF..","XX.FC.","E.DFC.","E.D...","..D..."] }, // 3
+  { id: 36, difficulty: 'beginner', grid: [".D..A.",".D..A.",".XX.A.","CCC...","......","..BBB."] }, // 3
+  { id: 37, difficulty: 'beginner', grid: ["....A.","....A.","XX..A.","....BB","......","......"] }, // 3
+  { id: 38, difficulty: 'beginner', grid: ["DB....","DBG...","XXG..A","E.G..A","E..FCC","...F.."] }, // 3
+  { id: 39, difficulty: 'beginner', grid: ["......",".....C","XX.A.C",".B.A..",".B.A..","......"] }, // 3
+  { id: 40, difficulty: 'beginner', grid: [".F....",".FB.C.","XXB.C.",".DDA.E","...A.E",".....E"] }, // 3
+  { id: 41, difficulty: 'beginner', grid: [".....C","A....C","A.XX.C","A..BBB","......","......"] }, // 3
+  { id: 42, difficulty: 'beginner', grid: ["CGGB..","C..B..","XX..DE",".AAADE","......","..FFF."] }, // 3
+  { id: 43, difficulty: 'beginner', grid: ["...DDG",".EEE.G","..XX.G",".FF...","..AA..","CC.BBB"] }, // 3
+  { id: 44, difficulty: 'beginner', grid: ["....A.","...EA.","XX.EB.","D...B.","D...BC",".....C"] }, // 3
+  { id: 45, difficulty: 'beginner', grid: ["C.BB..","C..F..","XX.F.A",".GE..A",".GE.D.","..E.D."] }, // 3
+  { id: 46, difficulty: 'beginner', grid: ["...BBB","...AC.","XX.AC.","...A..","......","......"] }, // 3
+  { id: 47, difficulty: 'beginner', grid: ["......",".....A","..XXBA",".C..B.",".C....",".C...."] }, // 3
+  { id: 48, difficulty: 'beginner', grid: ["..AA..","......",".XXB..",".EEB..","..CCC.",".DD..."] }, // 3
+  { id: 49, difficulty: 'beginner', grid: ["......","....C.",".XX.C.","BBB.C.","....AA","......"] }, // 3
+  { id: 50, difficulty: 'beginner', grid: ["AAA...","......","XX.C.D","..BC.D","..BC..","..B..."] }, // 3
+  { id: 51, difficulty: 'beginner', grid: ["CCA...","..A...","XXA...","...D..","...D..","..BB.."] }, // 3
+  { id: 52, difficulty: 'beginner', grid: ["..CCB.","....B.","..XXB.","...AAA",".....D",".....D"] }, // 3
+  { id: 53, difficulty: 'beginner', grid: ["FF..GG","AA..D.",".XX.D.","CCBBB.","......","EE...."] }, // 3
+  { id: 54, difficulty: 'beginner', grid: ["..B...","..BA..","XXBA..","...A..","....CC","......"] }, // 3
+  { id: 55, difficulty: 'beginner', grid: [".....A","....BA","..XXBA","......","CCC...","......"] }, // 3
+  { id: 56, difficulty: 'beginner', grid: ["...F..","EEEF..","XX..BG",".AAABG","..CCBG","DD...."] }, // 3
+  { id: 57, difficulty: 'beginner', grid: ["DDAAA.","......","XX..C.","....C.","....BB","......"] }, // 3
+  { id: 58, difficulty: 'beginner', grid: [".EEE..","..AA..","XX..D.","BBB.D.","....D.","...CCC"] }, // 3
+  { id: 59, difficulty: 'beginner', grid: [".CC...","...B..",".XXB.D","A..B.D","A.....","A....."] }, // 3
+  { id: 60, difficulty: 'beginner', grid: ["....A.","....A.",".XX.A.","......","......","...BBB"] }, // 3
+  { id: 61, difficulty: 'beginner', grid: [".FDDBG",".F..BG",".XXEA.","CCCEA.","...EA.","......"] }, // 3
+  { id: 62, difficulty: 'beginner', grid: ["D...EE","DFFAC.",".XXAC.",".G.ACB",".G...B","......"] }, // 3
+  { id: 63, difficulty: 'beginner', grid: ["......",".....C","XX.B.C","...BAC",".DDBA.","EEE..."] }, // 3
+  { id: 64, difficulty: 'beginner', grid: ["G.CC.F","G...AF","BXX.AF","B.E.A.",".DE...",".DE..."] }, // 3
+  { id: 65, difficulty: 'beginner', grid: ["DD.A.B","...A.B","XX.AC.","....C.","....C.","......"] }, // 3
+  { id: 66, difficulty: 'beginner', grid: ["....B.",".D..BC",".DXXBC",".D...C","E.A...","E.A..."] }, // 3
+  { id: 67, difficulty: 'easy', grid: ["...DDD",".AA...","XXGF.E","..GFCE","....C.","BBB..."] }, // 4
+  { id: 68, difficulty: 'easy', grid: ["......","DDD...","..XXEB","AAA.EB","..FF.B","...CCC"] }, // 4
+  { id: 69, difficulty: 'easy', grid: ["...BBD",".....D",".XXA.D","...A..","...CF.",".EECF."] }, // 4
+  { id: 70, difficulty: 'easy', grid: ["....D.",".CCCD.","..XXD.","......","..A...","BBA.EE"] }, // 4
+  { id: 71, difficulty: 'easy', grid: ["FF...A","GG...A",".CXX.A",".C.BBB",".EEE..","...DDD"] }, // 4
+  { id: 72, difficulty: 'easy', grid: ["......","DDG...","XXGBE.","AAABEC",".....C","FF...C"] }, // 4
+  { id: 73, difficulty: 'easy', grid: ["....EB","...AEB",".XXADB",".CFFD.",".C....","......"] }, // 4
+  { id: 74, difficulty: 'easy', grid: ["......","..B...","XXBEC.","AAAEC.","FFFDC.","...D.."] }, // 4
+  { id: 75, difficulty: 'easy', grid: ["....BE","....BE",".XX.A.","CC..A.",".FF.DD","GGG..."] }, // 4
+  { id: 76, difficulty: 'easy', grid: [".....B",".....B",".XXC.B","...C..","AA.C..","..DD.."] }, // 4
+  { id: 77, difficulty: 'easy', grid: ["......","BBCC..","AXXF.E","A..F.E","A..F..","..GGDD"] }, // 4
+  { id: 78, difficulty: 'easy', grid: ["A....D","A...BD","AXXCBD","EEEC..","......","..FF.."] }, // 4
+  { id: 79, difficulty: 'easy', grid: ["CC...G","..BBBG","XX...G","FF..EE",".AAA..","....DD"] }, // 4
+  { id: 80, difficulty: 'easy', grid: [".DDD..","EEE.B.",".XXCB.","...CB.","...AAA","......"] }, // 4
+  { id: 81, difficulty: 'easy', grid: [".DD..F","...GCF","XX.GCF","E.BAC.","E.BA..","E.BA.."] }, // 4
+  { id: 82, difficulty: 'easy', grid: ["...A..","...A..",".XXA..","..BBB.","......","...CCC"] }, // 4
+  { id: 83, difficulty: 'easy', grid: ["..EEE.","....D.","BXX.D.","B...D.",".C....",".C.AAA"] }, // 4
+  { id: 84, difficulty: 'easy', grid: ["......","....B.","AAXXB.","....B.","..CCC.","...DDD"] }, // 4
+  { id: 85, difficulty: 'easy', grid: ["D..FFF","D..B..",".XXB..","..CCC.","...EEE","AAA..."] }, // 4
+  { id: 86, difficulty: 'easy', grid: ["...CF.","EE.CFD","XX..FD",".....D","A.....","A.BBB."] }, // 4
+  { id: 87, difficulty: 'easy', grid: [".FFBA.","...BAE","XX.BAE","DD...E","......","CCC..."] }, // 4
+  { id: 88, difficulty: 'easy', grid: [".....E","..DDBE",".XXAB.","...A..","...A..","..CCC."] }, // 4
+  { id: 89, difficulty: 'easy', grid: [".D.FF.",".D.C.E","XX.C.E","..A..E","..ABB.","..A..."] }, // 4
+  { id: 90, difficulty: 'easy', grid: ["......","BFFFAE","B.XXAE","B...A.","...DD.","..CC.."] }, // 4
+  { id: 91, difficulty: 'easy', grid: [".BBB..","....EC","XX..EC","A...EC","A..DD.","......"] }, // 4
+  { id: 92, difficulty: 'easy', grid: ["...B..","...B..","EXXB..","E...CC","...DD.",".AAA.."] }, // 4
+  { id: 93, difficulty: 'easy', grid: ["AA....","..C.B.","XXCDB.","..CDEE","...D..","......"] }, // 4
+  { id: 94, difficulty: 'easy', grid: ["....FF","...D..","XXED..","..E...","..ECCC",".AABBB"] }, // 4
+  { id: 95, difficulty: 'easy', grid: ["....D.",".EEEDC","..XXDC",".....C",".BFF..",".B..AA"] }, // 4
+  { id: 96, difficulty: 'easy', grid: ["AAAC..","DDDC..","XXBC..","FFB...","..B...","..EE.."] }, // 4
+  { id: 97, difficulty: 'easy', grid: [".D.F..",".D.FBB","XX.F..","....C.",".AAAC.","..EEC."] }, // 4
+  { id: 98, difficulty: 'easy', grid: [".CBAAA",".CB...","XXE.G.","..E.G.","..E...","FFDDD."] }, // 4
+  { id: 99, difficulty: 'easy', grid: ["......","FF...A",".XX..A",".EEE.A","CC..DD","....BB"] }, // 4
+  { id: 100, difficulty: 'easy', grid: ["....EB","....EB","A.XXEB","A.DDD.","A.CF..","..CF.."] }, // 4
+  { id: 101, difficulty: 'easy', grid: ["..AA..","CCC.E.","XX..EG","..D.EG","FFD...","...BBB"] }, // 4
+  { id: 102, difficulty: 'easy', grid: [".A....",".A..D.","XX..D.","....DE","..CCCE","....BB"] }, // 4
+  { id: 103, difficulty: 'easy', grid: ["..DDDG","..B..G","XXB..G","..AAA.","..FFF.","CC.EEE"] }, // 5
+  { id: 104, difficulty: 'easy', grid: ["..F.A.","..FEAG",".XXEAG","BBB...","CCC...","...DDD"] }, // 5
+  { id: 105, difficulty: 'easy', grid: ["....FF","BBBA..","XX.AE.","GG.AE.",".CCCD.","....D."] }, // 5
+  { id: 106, difficulty: 'easy', grid: ["GGG...","A..DD.","AXX..F","A..B.F","EEEB.F","...BCC"] }, // 5
+  { id: 107, difficulty: 'easy', grid: ["A..B..","A..B..","XXEB..","..ECCD",".....D",".FFF.."] }, // 5
+  { id: 108, difficulty: 'easy', grid: ["......","....CB","XX.DCB","...DCB","......","...AA."] }, // 5
+  { id: 109, difficulty: 'easy', grid: [".AA...",".CCCG.","..XXG.","EEE.G.","..DDD.",".FF.BB"] }, // 5
+  { id: 110, difficulty: 'easy', grid: ["...B..","..AB..","XXAB..","..CC.E",".....E",".DDD.E"] }, // 5
+  { id: 111, difficulty: 'easy', grid: ["..CA..","..CA.E",".XXA.E",".DDD.E","..BB..","......"] }, // 5
+  { id: 112, difficulty: 'easy', grid: ["D.A...","DFA..C","DFXX.C",".FE..C","..EBBB","......"] }, // 5
+  { id: 113, difficulty: 'easy', grid: ["..A.FD","..A.FD","GCXX.D","GCE...","GCEBBB","......"] }, // 5
+  { id: 114, difficulty: 'easy', grid: [".....E","....AE",".XXDAE",".B.D..",".B.CCC",".B...."] }, // 5
+  { id: 115, difficulty: 'easy', grid: ["......","...B..","XX.B..","...B..","DEEAA.","D..CCC"] }, // 5
+  { id: 116, difficulty: 'easy', grid: ["......","BB...E",".XX..E","A....E","A.....","ACCDDD"] }, // 5
+  { id: 117, difficulty: 'easy', grid: ["....C.","....C.",".XXDE.",".B.DE.",".B..E.","..AAFF"] }, // 5
+  { id: 118, difficulty: 'easy', grid: ["....EB","....EB","..XXEB","......",".AA...",".CCDD."] }, // 5
+  { id: 119, difficulty: 'easy', grid: ["......",".....C","AAXX.C",".....C","..BDDD","..B..."] }, // 5
+  { id: 120, difficulty: 'easy', grid: [".AAA..","E...GC","EXXFGC","E..F.C","..DB..","..DB.."] }, // 5
+  { id: 121, difficulty: 'easy', grid: ["...A..",".EEAB.","XX.AB.","..CCC.","......","...DDD"] }, // 5
+  { id: 122, difficulty: 'easy', grid: ["......","......",".XXF.D","...FAD","..E.AD","BBECCC"] }, // 5
+  { id: 123, difficulty: 'easy', grid: ["AAAC..","...C..",".XXC.D","B.EEED","B.....","....FF"] }, // 5
+  { id: 124, difficulty: 'easy', grid: [".EE.B.","....B.",".XX.B.","DFFAAG","D....G","DCC..G"] }, // 5
+  { id: 125, difficulty: 'easy', grid: ["......","GG.E..","BXXE.D","B...CD","..A.CD","..AFFF"] }, // 5
+  { id: 126, difficulty: 'easy', grid: ["..ED..","..ED..","XX.D..","...BB.","...AA.","..CCC."] }, // 5
+  { id: 127, difficulty: 'easy', grid: ["DDDAF.","..EAF.","XXEAF.","..B..C","..B..C","......"] }, // 5
+  { id: 128, difficulty: 'easy', grid: ["DD..F.","....F.","BXX.F.","B...CC","....EE","...AAA"] }, // 5
+  { id: 129, difficulty: 'easy', grid: [".F..DD",".F.B..","XXABE.","..ABE.",".CCCE.","......"] }, // 5
+  { id: 130, difficulty: 'easy', grid: ["..DDBB","....G.","XX..GE","..F.AE",".CF.A.",".C...."] }, // 5
+  { id: 131, difficulty: 'easy', grid: ["...B.D","...B.D",".XXBCD",".EE.C.","....C.","....AA"] }, // 5
+  { id: 132, difficulty: 'easy', grid: ["...F..",".CCF.D",".XXF.D","...BBB","E.....","E.AA.."] }, // 5
+  { id: 133, difficulty: 'easy', grid: ["...FB.","EE.FB.",".XXFB.","..CCC.","AAA...","..DD.."] }, // 5
+  { id: 134, difficulty: 'easy', grid: ["B.E...","B.EAA.","XXEC..","...C..",".DD...","FFF..."] }, // 5
+  { id: 135, difficulty: 'easy', grid: ["E.....","E...A.",".XX.A.","D.CFA.","D.CF..","...FBB"] }, // 5
+  { id: 136, difficulty: 'easy', grid: [".BBB..","..A..C","XXAD.C","..ED..","..E.F.","..E.F."] }, // 5
+  { id: 137, difficulty: 'easy', grid: ["......",".EE.DC","XX.ADC","F..ADC","F..GGG","..BB.."] }, // 5
+  { id: 138, difficulty: 'easy', grid: [".....E","A...DE","AXX.DE","..CBBB","..C...","......"] }, // 5
+  { id: 139, difficulty: 'easy', grid: ["......","CCCAEE",".XXAG.","F..AGB","F...GB","F..DDD"] }, // 5
+  { id: 140, difficulty: 'easy', grid: ["...AAA","...C.B",".XXCDB","...CDB","....D.","..EEE."] }, // 5
+  { id: 141, difficulty: 'easy', grid: ["....AC","....AC","XX.DAC","...DBB","E..D..","E....."] }, // 6
+  { id: 142, difficulty: 'easy', grid: ["...EGG","FF.E.C","XX.EDC","....DC","..BAA.","..B..."] }, // 6
+  { id: 143, difficulty: 'easy', grid: ["....CB","....CB","XX..CB","......",".D.AAA",".D...."] }, // 6
+  { id: 144, difficulty: 'easy', grid: [".BC...",".BC..E","XXC..E",".....E","D.....","D..AAA"] }, // 6
+  { id: 145, difficulty: 'easy', grid: [".EEEFD","....FD","XX..AD",".G..A.","CGBBB.","CG...."] }, // 6
+  { id: 146, difficulty: 'easy', grid: ["CCCA..","...AB.","XX.ABE","....BE","...DD.","..FF.."] }, // 6
+  { id: 147, difficulty: 'easy', grid: ["...B..",".FFB.C","DXXB.C","D.AA..","..GGG.","...EE."] }, // 6
+  { id: 148, difficulty: 'easy', grid: [".DDD.A","..B.EA","XXBFEA","...F..","..CF..","..C..."] }, // 6
+  { id: 149, difficulty: 'easy', grid: ["....GG","...A..",".XXA.B","..F.EB","DDF.EB","..FCCC"] }, // 6
+  { id: 150, difficulty: 'easy', grid: ["GG...B","FFFD.B",".XXD.B",".AAD..","..C...","..CEEE"] }, // 6
+  { id: 151, difficulty: 'easy', grid: ["......","...FFF","XXBC..",".DBCE.",".DGGE.","AAA..."] }, // 6
+  { id: 152, difficulty: 'easy', grid: [".F.CCC",".FB.A.","XXB.A.","..B.DD","...EEE","......"] }, // 6
+  { id: 153, difficulty: 'easy', grid: ["B....C","B...DC","B.XXDC","...AEE","G..A..","GFFF.."] }, // 6
+  { id: 154, difficulty: 'easy', grid: [".F.BBB",".FA.E.","XXA.E.","GGA...","D...CC","D....."] }, // 6
+  { id: 155, difficulty: 'easy', grid: [".DD...","..AACG","XX..CG","....CG","EE.BFF","...B.."] }, // 6
+  { id: 156, difficulty: 'easy', grid: ["...FG.","DDDFGE","XX.C.E","B..C.E","B..C..","BAAA.."] }, // 6
+  { id: 157, difficulty: 'easy', grid: ["..B..E","..BD.E","XX.D.E","...D..","..CAA.","..C..."] }, // 6
+  { id: 158, difficulty: 'easy', grid: ["...D.A","...D.A",".XXDBA","....B.","E...B.","E.CCC."] }, // 6
+  { id: 159, difficulty: 'easy', grid: ["EE..A.","....A.","XX..A.",".B....",".BCCC.",".BDDD."] }, // 6
+  { id: 160, difficulty: 'easy', grid: ["...EF.","A..EF.","AXX.F.","ADD.BB","......","..CCC."] }, // 6
+  { id: 161, difficulty: 'easy', grid: [".EE.GG","DDD...","A.XX.F","A..C.F","A..C.F","...CBB"] }, // 6
+  { id: 162, difficulty: 'easy', grid: [".FF.A.","E...A.","EBXXA.","EBCCC.",".B....","...DDD"] }, // 6
+  { id: 163, difficulty: 'easy', grid: ["......","....A.",".XX.AD",".C..AD",".C.BBB","......"] }, // 6
+  { id: 164, difficulty: 'easy', grid: ["..FAA.","..F.C.",".XX.C.","BBE...","..E.DD","..E..."] }, // 6
+  { id: 165, difficulty: 'easy', grid: ["...C..","...C..","DXXC..","D..FFF","..EEAA","..BB.."] }, // 6
+  { id: 166, difficulty: 'easy', grid: ["...GGE","....DE","..XXDE",".BA.D.","CBAFF.","C....."] }, // 6
+  { id: 167, difficulty: 'easy', grid: [".C....",".C..DG","XX..DG","..AA.G","EEEF..","...FBB"] }, // 6
+  { id: 168, difficulty: 'easy', grid: [".C....",".C.GA.","XXBGAE","..BG.E","DDD...","...FFF"] }, // 6
+  { id: 169, difficulty: 'easy', grid: ["DD.EEE","...F.G","XX.FCG","...FC.",".BBB..","...AAA"] }, // 6
+  { id: 170, difficulty: 'easy', grid: ["....B.","....BA","XX..BA",".CC.DD","..FFF.","EE...."] }, // 6
+  { id: 171, difficulty: 'easy', grid: ["E...D.","E...D.","A.XXD.","AC..FF","AC.BBB","...GGG"] }, // 6
+  { id: 172, difficulty: 'easy', grid: ["....EA",".DDFEA",".XXFEA","...F..","..CC..","...BB."] }, // 6
+  { id: 173, difficulty: 'medium', grid: ["......","...CCC","XX.A..",".DDA..",".E.A..",".E.BBB"] }, // 7
+  { id: 174, difficulty: 'medium', grid: ["......",".BBBAE","XX..AE","....AE",".DD.GG",".CC.FF"] }, // 7
+  { id: 175, difficulty: 'medium', grid: [".EEE.F",".D..BF",".DXXB.","..C.B.","..C...","..C.AA"] }, // 7
+  { id: 176, difficulty: 'medium', grid: ["....C.","....C.","..XXC.","..FEEA",".BF..A",".BDDD."] }, // 7
+  { id: 177, difficulty: 'medium', grid: ["......","..DEEE","XXDA..","..DA.B","..CCCB","......"] }, // 7
+  { id: 178, difficulty: 'medium', grid: ["...C..",".DDC..","XX.C.E","F....E","FAAA.E","F..BBB"] }, // 7
+  { id: 179, difficulty: 'medium', grid: ["FFCCCE",".....E","XXB..E","..B...","..BAA.","..DDD."] }, // 7
+  { id: 180, difficulty: 'medium', grid: ["....C.","..EEC.","XXBACF","..BA.F","G.BA..","G...DD"] }, // 7
+  { id: 181, difficulty: 'medium', grid: ["..CFA.","..CFAE","XXC..E","....DE","....D.","..BBB."] }, // 7
+  { id: 182, difficulty: 'medium', grid: ["...B..","...B..","XX.B..","...DDD","A..CCC","A.EEE."] }, // 7
+  { id: 183, difficulty: 'medium', grid: ["......","..ACCC","XXA..D","..A..D","BG...D","BGFFEE"] }, // 7
+  { id: 184, difficulty: 'medium', grid: ["FCCEEB","F....B","F.XX.B","AAA...","..G...","..GDDD"] }, // 7
+  { id: 185, difficulty: 'medium', grid: ["..F..B","..F.CB","..XXCA","....CA","..EDD.","..E..."] }, // 7
+  { id: 186, difficulty: 'medium', grid: ["C...B.","C.E.B.","XXEDB.","..EDAA","...D..","......"] }, // 7
+  { id: 187, difficulty: 'medium', grid: ["..FFFD",".....D","..XX.D",".BBBEE","...CCC",".AAGGG"] }, // 7
+  { id: 188, difficulty: 'medium', grid: ["DDDEE.","..G...","XXGB..","CCCB..","AF.B..","AF...."] }, // 7
+  { id: 189, difficulty: 'medium', grid: ["......","..CCA.",".XX.A.","E...A.","E.DBFF","E.DB.."] }, // 7
+  { id: 190, difficulty: 'medium', grid: ["...EC.","...EC.","FFXXC.",".AAA..","..D...","..D.BB"] }, // 7
+  { id: 191, difficulty: 'medium', grid: ["..BBB.",".EEE..","XXF.GD","CCF.GD","..F..D",".AAA.."] }, // 8
+  { id: 192, difficulty: 'medium', grid: ["CC.GB.","...GB.",".XX.B.","EEE...",".A.DDD",".A..FF"] }, // 8
+  { id: 193, difficulty: 'medium', grid: ["EE.C.B","..GC.B","XXG...","D.G..F","D....F","DAAA.F"] }, // 8
+  { id: 194, difficulty: 'medium', grid: ["......","D..CAF","DXXCAF","...C.F","G..BBB","G..EEE"] }, // 8
+  { id: 195, difficulty: 'medium', grid: ["AAAB..","..EB..","XXE..C","..FFFC",".....C",".GGDDD"] }, // 8
+  { id: 196, difficulty: 'medium', grid: [".....B","G...CB","GXXDCB","...D..","F..DAA","F..EEE"] }, // 8
+  { id: 197, difficulty: 'medium', grid: ["......","..C...","XXC..B","..C..B","..AAAB","......"] }, // 8
+  { id: 198, difficulty: 'medium', grid: ["...CCB",".....B","XXA..B","..A.EE","..A...","..DDD."] }, // 8
+  { id: 199, difficulty: 'medium', grid: ["....D.","....D.","..XXD.","F.....","F..ECC","FBBEAA"] }, // 8
+  { id: 200, difficulty: 'medium', grid: ["......","....CE","XX..CE","....CE","BAA.DD","B.FFF."] }, // 8
 ];
