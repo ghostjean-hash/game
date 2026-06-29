@@ -89,9 +89,13 @@ function onSolved() {
 
   const best = pr.best[state.puzzleId];
   const perfect = state.moves <= state.optimal;
-  el.result.textContent = perfect
+  const idx = PUZZLES.findIndex((p) => p.id === state.puzzleId);
+  const isLast = idx >= PUZZLES.length - 1;
+  const body = perfect
     ? `완벽! ${state.moves}수 (최소 ${state.optimal}수)`
     : `클리어! ${state.moves}수 · 최소 ${state.optimal}수 · 최고 ${best}수`;
+  el.result.textContent = isLast ? `모든 퍼즐 완주! 🎉 ${body}` : body;
+  el.overlayNext.textContent = isLast ? '처음부터 다시' : '다음 퍼즐';
   render();
   // 토끼가 출구 길로 빠져나가는 연출 + 축하 파티클 후 결과 오버레이.
   playClear(state.els, el.board, () => {
@@ -132,6 +136,10 @@ el.undo.addEventListener('click', undo);
 el.reset.addEventListener('click', reset);
 el.prev.addEventListener('click', () => go(-1));
 el.next.addEventListener('click', () => go(1));
-el.overlayNext.addEventListener('click', () => go(1));
+el.overlayNext.addEventListener('click', () => {
+  const idx = PUZZLES.findIndex((p) => p.id === state.puzzleId);
+  if (idx < PUZZLES.length - 1) go(1);
+  else loadPuzzle(PUZZLES[0].id); // 마지막 퍼즐 완주 후 처음으로
+});
 
 loadPuzzle(store.get('current', PUZZLES[0].id));
