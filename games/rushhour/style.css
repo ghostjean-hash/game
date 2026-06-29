@@ -1,9 +1,9 @@
 /* Rush Hour 전용 레이아웃 / 차 스타일. UI 색·간격은 shared/tokens.css 토큰을 쓴다. */
 /* 게임 고유 파스텔 테마 색은 여기 한 곳에 모은다(docs/04 §3.2 예외). */
 .rushhour {
-  --rh-board: #f6d3e6;   /* 보드 바닥(채도 있는 파스텔 핑크) */
-  --rh-line: #eab4d2;    /* 격자선 */
-  --rh-home: #f7a8c4;    /* 집(출구) 강조 핑크 */
+  --rh-board: #f3ead9;   /* 보드 바닥(부드러운 크림) */
+  --rh-line: #e3d6bf;    /* 격자선 */
+  --rh-exit: #ffd98a;    /* 집(출구) 길 강조(따뜻한 골드) */
 }
 
 .rushhour .home {
@@ -41,8 +41,8 @@
   min-height: 0;
 }
 .rushhour .board-wrap {
-  /* 출구(집) 표시를 위해 오른쪽에 약간의 여백을 둔다. */
-  padding-right: var(--sp-4);
+  /* 출구(집)를 오른쪽 바깥에 크게 두기 위한 여백(보드 폭 비율, 모바일에서도 화면 안). */
+  padding-right: 17%;
 }
 .rushhour .board {
   --size: 6;
@@ -59,18 +59,31 @@
   touch-action: none;
 }
 
-/* 출구 표시: 출구 행 오른쪽 가장자리 = 토끼의 집. */
+/* 출구 길: 출구 행 보드 안 오른쪽을 따뜻한 색으로 강조해 "이쪽으로 나간다"를 보여준다. */
+.rushhour .exit-lane {
+  position: absolute;
+  top: calc(var(--row) * var(--cell));
+  right: 0;
+  width: calc(var(--cell) * 1.15);
+  height: var(--cell);
+  background: linear-gradient(90deg, transparent, var(--rh-exit));
+  border-radius: 0 var(--r-2) var(--r-2) 0;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+/* 출구 표시: 출구 행 오른쪽 바깥 = 토끼의 집. SVG라 --cell(%) 너비에 정확히 맞춰 크게 보인다. */
 .rushhour .exit {
   position: absolute;
   top: calc(var(--row) * var(--cell));
-  right: calc(-1 * var(--sp-4));
-  width: var(--sp-4);
+  right: calc(-0.95 * var(--cell));
+  width: calc(var(--cell) * 0.95);
   height: var(--cell);
   display: grid;
   place-items: center;
-  font-size: calc(var(--cell) * 0.46);
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
 }
+.rushhour .exit svg { width: 88%; height: 88%; }
 
 /* 차 = 동물 친구. 칸 좌표를 CSS 변수로 받아 배치하고, 안쪽에 얼굴 SVG를 중앙 배치한다. */
 .rushhour .car {
@@ -80,8 +93,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2px;
-  background-clip: content-box;
   border-radius: 26%;
   box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.5), inset 0 -4px 7px rgba(0, 0, 0, 0.12);
   cursor: grab;

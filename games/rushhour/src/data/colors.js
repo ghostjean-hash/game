@@ -4,16 +4,10 @@
 // 주인공 토끼(target) 색. 고정 파스텔 핑크.
 export const TARGET_COLOR = '#f7a8c4';
 
-// 친구 동물 차 색 팔레트(파스텔). 차 id 순서(target 제외)로 순환 배정한다.
-export const CAR_PALETTE = [
-  '#f9d57e', // 파스텔 노랑(병아리)
-  '#a8d5f7', // 파스텔 하늘
-  '#a8e6c1', // 파스텔 민트
-  '#c9b6f0', // 파스텔 라벤더
-  '#f9b98a', // 파스텔 복숭아
-  '#f7c5dd', // 연분홍
-  '#bfe09a', // 파스텔 연두
-  '#a8dadc', // 파스텔 청록
-  '#e0c7a8', // 파스텔 베이지(곰 톤)
-  '#d7c3e8', // 파스텔 모브
-];
+// 동물 종류별 파스텔 색 후보. 같은 종류라도 블록 위치에 따라 다른 색을 고른다(render.js).
+export const KIND_COLORS = {
+  cat: ['#cfd6e6', '#a8d5f7', '#f3d9a4', '#d7c3e8'],   // 회색 / 하늘 / 크림 / 모브 고양이
+  dog: ['#f9b98a', '#e0c7a8', '#f7c59f', '#eac9a0'],   // 주황 / 베이지 강아지
+  chick: ['#f9d57e', '#fde7a0', '#f7cf6a'],            // 노랑 병아리
+  penguin: ['#a8dadc', '#9fb6d4', '#bcd4e6'],          // 청록 / 블루 펭귄
+};

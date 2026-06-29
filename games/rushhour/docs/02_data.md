@@ -18,25 +18,27 @@
 
 ## 2. 색상 / 캐릭터
 
-차의 시각 표현은 색(`src/data/colors.js`)과 동물 종류(`src/data/characters.js`)로 나뉜다. 둘을 `render.js`가 id별로 조합해 캐릭터 얼굴을 그린다. UI 색(배경 / 바 / 텍스트)은 `shared/tokens.css` 토큰을 쓴다.
+차의 시각 표현은 색(`src/data/colors.js`)과 동물 종류·표정(`src/data/characters.js`)으로 나뉜다. 둘을 `render.js`가 블록 크기·위치로 조합해 캐릭터를 그린다. UI 색(배경 / 바 / 텍스트)은 `shared/tokens.css` 토큰을 쓴다.
 
 ### 2.1. 색 - `src/data/colors.js`
 
 | 이름 | 의미 |
 |---|---|
 | `TARGET_COLOR` | 주인공 토끼 색(파스텔 핑크, 고정) |
-| `CAR_PALETTE` | 친구 동물 색 배열(파스텔, target 제외 id 순서로 순환) |
+| `KIND_COLORS` | 동물 종류별 파스텔 색 후보 배열(`{cat:[...], dog:[...], chick:[...], penguin:[...]}`). 같은 종류라도 블록 위치에 따라 다른 색을 고른다 |
 
-### 2.2. 캐릭터 종류 - `src/data/characters.js`
+### 2.2. 캐릭터 종류·표정 - `src/data/characters.js`
 
-차를 동물 친구로 그리기 위한 종류 정의. 색은 갖지 않고 종류(귀 모양 / 표정)만 정의한다(`data/`끼리 import하지 않는 규칙).
+차를 동물 친구로 그리기 위한 정의. 색은 갖지 않는다(`data/`끼리 import하지 않는 규칙).
 
 | 이름 | 의미 |
 |---|---|
 | `TARGET_KIND` | 주인공 동물 종류(`"rabbit"`, 고정) |
-| `FRIEND_KINDS` | 친구 동물 종류 배열(`"bear"`, `"cat"`, `"dog"`, `"chick"`, `"penguin"`, id 순서로 순환) |
+| `KIND_BY_SHAPE` | 블록 크기 → 동물. 키는 방향+길이(`{h2:"cat", h3:"dog", v2:"chick", v3:"penguin"}`) |
+| `FACES` | 표정 종류 배열(`"normal"`, `"happy"`, `"wink"`, `"surprised"`) |
+| `ACCESSORIES` | 액세서리 종류 배열(`"none"` 다수 + `"ribbon"`, `"bowtie"`, `"flower"`). 일부 블록만 부착 |
 
-얼굴(눈 / 볼 / 귀 / 부리) 그리기 좌표는 `render.js`의 SVG 마크업에 둔다(viewBox 0~100 정규화 디자인 상수, docs/04 §3.4).
+블록 크기 키는 `${orient}${len}`(예: 가로 길이2 = `h2`). 같은 동물이 여럿 나와도 색·표정·액세서리를 블록 위치(row·col) 기반으로 정해 다양하게 보인다. 얼굴·귀·표정·액세서리 그리기 좌표는 `render.js`의 SVG 마크업에 둔다(viewBox 0~100 정규화 디자인 상수, docs/04 §3.4).
 
 출구 표시(토끼의 집)는 게임 데이터가 아닌 UI 표시라 `shared/tokens.css` 토큰을 쓴다(style.css).
 
