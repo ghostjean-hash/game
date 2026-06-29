@@ -12,6 +12,12 @@ export function setTargetColor(c) {
   targetColor = c || TARGET_COLOR;
 }
 
+// 주인공 토끼 머리 장식(상점에서 장착한 액세서리 키). main이 setTargetAccessory로 갱신한다.
+let targetAcc = 'none';
+export function setTargetAccessory(a) {
+  targetAcc = a || 'none';
+}
+
 // 블록 위치 기반 결정값(리셋해도 같은 블록은 같은 모습). 음수 방지로 절대값.
 function seedOf(car) {
   return Math.abs(car.row * 31 + car.col * 17 + car.len * 7);
@@ -35,7 +41,8 @@ function faceOf(car) {
   return car.id === TARGET_ID ? 'neutral' : FACES[(seedOf(car) * 3 + 1) % FACES.length];
 }
 function accOf(car) {
-  return car.id === TARGET_ID ? 'none' : ACCESSORIES[(seedOf(car) * 5 + 2) % ACCESSORIES.length];
+  // 주인공은 상점에서 장착한 액세서리, 친구는 블록 위치로 정한다.
+  return car.id === TARGET_ID ? targetAcc : ACCESSORIES[(seedOf(car) * 5 + 2) % ACCESSORIES.length];
 }
 
 // 종류별 귀 / 머리 장식(viewBox 0~100). 흰 얼굴 위에서 보이도록 흰 바깥 + 몸색 안쪽.
@@ -115,6 +122,10 @@ function accessorySvg(acc) {
         + `<circle cx="6" cy="-2" r="4" fill="#ffd86b"/><circle cx="4" cy="5" r="4" fill="#ffd86b"/>`
         + `<circle cx="-4" cy="5" r="4" fill="#ffd86b"/><circle cx="-6" cy="-2" r="4" fill="#ffd86b"/>`
         + `<circle cx="0" cy="0" r="3.5" fill="#ff8fab"/></g>`;
+    case 'crown': // 머리 위 중앙 작은 왕관
+      return `<g transform="translate(50,11)">`
+        + `<polygon points="-15,8 -15,-5 -7.5,2 0,-9 7.5,2 15,-5 15,8" fill="#ffd86b" stroke="#f0b73e" stroke-width="1.5" stroke-linejoin="round"/>`
+        + `<circle cx="-15" cy="-5" r="2.4" fill="#ff8fab"/><circle cx="0" cy="-9" r="2.4" fill="#ff8fab"/><circle cx="15" cy="-5" r="2.4" fill="#ff8fab"/></g>`;
     default:
       return '';
   }
@@ -194,7 +205,7 @@ export function syncPositions(els, cars) {
 // 주인공 토끼의 표정만 바꿔 다시 그린다(제한시간 경과 / 클리어에 따라 main이 호출).
 export function updateTargetFace(els, face) {
   const t = els.get(TARGET_ID);
-  if (t) t.innerHTML = faceSvg(TARGET_KIND, targetColor, face, 'none');
+  if (t) t.innerHTML = faceSvg(TARGET_KIND, targetColor, face, targetAcc);
 }
 
 // 힌트: 최적 다음 한 수의 차를 잠깐 강조 + 목표 방향으로 살짝 움직여 보여준다.

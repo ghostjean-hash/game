@@ -255,6 +255,17 @@
 }
 .rushhour .shop-name { font-weight: 700; }
 .rushhour .shop-state { color: var(--fg-dim); font-size: 10px; }
+/* 액세서리 미리보기: 색 대신 이모지를 동그라미 안에 중앙 표시. */
+.rushhour .shop-acc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  background: var(--bg-elev);
+  box-shadow: none;
+}
+/* 상점 품목이 3섹션이라 길어질 수 있으니 모달 안에서 스크롤. */
+.rushhour .shop-modal { max-height: 88vh; overflow-y: auto; }
 
 /* 진행 맵 + 음소거. */
 .rushhour #btn-map,

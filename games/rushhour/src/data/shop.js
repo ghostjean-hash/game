@@ -25,3 +25,14 @@ export const BOARD_THEMES = [
 ];
 
 export const DEFAULT_THEME = 'cream';
+
+// 토끼 머리 장식. acc는 render가 그리는 장식 키, emoji는 상점 미리보기. none이 기본(장식 없음).
+export const ACCESSORY_ITEMS = [
+  { id: 'none', name: '없음', price: 0, acc: 'none', emoji: '🐰' },
+  { id: 'ribbon', name: '리본', price: 30, acc: 'ribbon', emoji: '🎀' },
+  { id: 'flower', name: '꽃', price: 40, acc: 'flower', emoji: '🌸' },
+  { id: 'crown', name: '왕관', price: 60, acc: 'crown', emoji: '👑' },
+  { id: 'bowtie', name: '나비넥타이', price: 40, acc: 'bowtie', emoji: '🎗' },
+];
+
+export const DEFAULT_ACCESSORY = 'none';

@@ -67,7 +67,7 @@
 
 ### 미해결 / 다음
 - 도전 16개(30 목표 미달, 6x6 13수+ 희귀). 보통+도전 둘 다 두텁게 하려면 생성 20분+ 재실행 필요.
-- BACKLOG: 상점 액세서리(토끼 머리 장식), 연속 콤보.
+- BACKLOG: 연속 콤보.
 - 기존 사용자 진행(별·기록)은 퍼즐이 새로 바뀌어 새 기준으로 재적립.
 
 ## 2026-06-29 힌트 버튼 (골드 사용처 2차)
@@ -106,3 +106,11 @@
 - 장착 시 `.rushhour`의 `--rh-board/line/exit` 변수를 main이 인라인 덮어써 보드에 즉시 반영. 로드 시 저장 테마 적용.
 - 상점 로직 일반화: `SHOP_KINDS`(skin/theme 메타) + `buyOrEquip(kind, id)` + `chipsHtml(kind)`로 스킨·테마 공통 처리(기존 스킨 전용 코드 통합).
 - 검증: playwright로 테마칩 5·구매 골드 40차감·equipped 저장·보드색 크림→하늘 즉시 변경·JS에러 0 + 스크린샷(상점 두 섹션, 적용 보드). SW v104→v105. docs 01 §7.5, 02 §2.3·§4, 03 §5.8.
+
+## 2026-06-29 상점 3차 - 토끼 머리 장식(액세서리)
+
+- `shop.js`에 `ACCESSORY_ITEMS` 5종(없음 기본 + 리본/꽃/왕관/나비넥타이). 각 항목 = render가 그리는 acc 키 + 상점 미리보기 emoji.
+- render: `targetAcc` 모듈 변수 + `setTargetAccessory`. `accOf(target)`을 'none' 고정에서 targetAcc로, `updateTargetFace`도 targetAcc 반영. 왕관(crown) SVG 신규(머리 위 중앙). 리본/꽃/나비넥타이는 기존 accessorySvg 재사용.
+- 상점 모달에 "토끼 머리 장식" 섹션. 칩 swatch = 이모지(🎀🌸👑🎗). SHOP_KINDS에 accessory 추가, swatch를 swatchHtml로 일반화(skin/theme/accessory 공통). buyOrEquip 3분기.
+- 상점 3섹션 길어져 shop-modal max-height 88vh 스크롤.
+- 검증: playwright로 액세서리칩 5·구매 골드 60차감·equipped=crown 저장·토끼 SVG 왕관 폴리곤 존재·JS에러 0 + 스크린샷(왕관 쓴 토끼, 상점 3섹션). SW v105→v106. docs 01 §7.5, 02 §2.3·§4, 03 §5.8.

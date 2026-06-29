@@ -7,10 +7,12 @@ import {
 import { PUZZLES } from './data/puzzles.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
-import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, showHint } from './render/render.js';
+import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, setTargetAccessory, showHint } from './render/render.js';
 import { attachDrag } from './input/drag.js';
 import { play, setMuted, isMuted } from './audio/sound.js';
-import { RABBIT_SKINS, DEFAULT_SKIN, BOARD_THEMES, DEFAULT_THEME } from './data/shop.js';
+import {
+  RABBIT_SKINS, DEFAULT_SKIN, BOARD_THEMES, DEFAULT_THEME, ACCESSORY_ITEMS, DEFAULT_ACCESSORY,
+} from './data/shop.js';
 import { createStorage } from '../../../shared/storage.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
@@ -39,6 +41,7 @@ const el = {
   shopGold: document.getElementById('shop-gold'),
   shopItems: document.getElementById('shop-items'),
   shopThemes: document.getElementById('shop-themes'),
+  shopAccessories: document.getElementById('shop-accessories'),
   shopClose: document.getElementById('btn-shop-close'),
   mapBtn: document.getElementById('btn-map'),
   map: document.getElementById('map'),
@@ -66,7 +69,8 @@ function progress() {
   return store.get('progress', {
     cleared: [], best: {}, gold: 0, stars: {},
     ownedSkins: [DEFAULT_SKIN], equippedSkin: DEFAULT_SKIN,
-    ownedThemes: [DEFAULT_THEME], equippedTheme: DEFAULT_THEME, muted: false,
+    ownedThemes: [DEFAULT_THEME], equippedTheme: DEFAULT_THEME,
+    ownedAccessories: [DEFAULT_ACCESSORY], equippedAccessory: DEFAULT_ACCESSORY, muted: false,
   });
 }
 
@@ -88,6 +92,12 @@ function applyTheme(t) {
   el.page.style.setProperty('--rh-board', t.board);
   el.page.style.setProperty('--rh-line', t.line);
   el.page.style.setProperty('--rh-exit', t.exit);
+}
+
+// 장착한 토끼 액세서리(render에 넘길 acc 키).
+function currentAccessory() {
+  const eq = progress().equippedAccessory || DEFAULT_ACCESSORY;
+  return ACCESSORY_ITEMS.find((a) => a.id === eq) || ACCESSORY_ITEMS[0];
 }
 
 function puzzleById(id) {
@@ -295,15 +305,19 @@ function hideOverlay() {
 
 // --- 상점(토끼 색 스킨 + 보드 테마) ---
 
-// 종류별 메타: 품목 배열 + progress 보유/장착 키 + 기본 id + 미리보기 swatch 스타일.
+// 종류별 메타: 품목 배열 + progress 보유/장착 키 + 기본 id + 미리보기 swatch HTML.
 const SHOP_KINDS = {
   skin: {
     list: RABBIT_SKINS, ownedKey: 'ownedSkins', eqKey: 'equippedSkin', def: DEFAULT_SKIN,
-    swatch: (item) => `background:${item.color}`,
+    swatchHtml: (item) => `<span class="shop-swatch" style="background:${item.color}"></span>`,
   },
   theme: {
     list: BOARD_THEMES, ownedKey: 'ownedThemes', eqKey: 'equippedTheme', def: DEFAULT_THEME,
-    swatch: (item) => `background:${item.board};border:2px solid ${item.exit}`,
+    swatchHtml: (item) => `<span class="shop-swatch" style="background:${item.board};border:2px solid ${item.exit}"></span>`,
+  },
+  accessory: {
+    list: ACCESSORY_ITEMS, ownedKey: 'ownedAccessories', eqKey: 'equippedAccessory', def: DEFAULT_ACCESSORY,
+    swatchHtml: (item) => `<span class="shop-swatch shop-acc">${item.emoji}</span>`,
   },
 };
 
@@ -317,7 +331,7 @@ function chipsHtml(kind) {
     const isEq = eq === item.id;
     const tag = isEq ? '장착 중' : isOwned ? '장착하기' : `${item.price} 🪙`;
     return `<button class="shop-item${isEq ? ' equipped' : ''}" data-kind="${kind}" data-id="${item.id}" type="button">`
-      + `<span class="shop-swatch" style="${cfg.swatch(item)}"></span>`
+      + cfg.swatchHtml(item)
       + `<span class="shop-name">${item.name}</span>`
       + `<span class="shop-state">${tag}</span></button>`;
   }).join('');
@@ -327,6 +341,7 @@ function renderShop() {
   el.shopGold.textContent = String(progress().gold || 0);
   el.shopItems.innerHTML = chipsHtml('skin');
   el.shopThemes.innerHTML = chipsHtml('theme');
+  el.shopAccessories.innerHTML = chipsHtml('accessory');
 }
 
 // 상점 골드 표시 흔들기(부족 피드백).
@@ -359,8 +374,11 @@ function buyOrEquip(kind, id) {
   if (kind === 'skin') {
     setTargetColor(item.color);
     updateTargetFace(state.els, state.face); // 토끼 즉시 색 반영
-  } else {
+  } else if (kind === 'theme') {
     applyTheme(item); // 보드 색 즉시 반영
+  } else {
+    setTargetAccessory(item.acc);
+    updateTargetFace(state.els, state.face); // 토끼 머리 장식 즉시 반영
   }
   renderShop();
   render();
@@ -435,6 +453,7 @@ function onShopClick(e) {
 }
 el.shopItems.addEventListener('click', onShopClick);
 el.shopThemes.addEventListener('click', onShopClick);
+el.shopAccessories.addEventListener('click', onShopClick);
 el.muteBtn.addEventListener('click', toggleMute);
 el.mapBtn.addEventListener('click', openMap);
 el.mapClose.addEventListener('click', closeMap);
@@ -450,5 +469,6 @@ el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
 setMuted(progress().muted);
 updateMuteBtn();
 setTargetColor(currentSkinColor());
+setTargetAccessory(currentAccessory().acc);
 applyTheme(currentTheme());
 loadPuzzle(store.get('current', PUZZLES[0].id));
