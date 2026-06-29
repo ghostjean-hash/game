@@ -6,6 +6,12 @@ import { BOARD_SIZE, EXIT_ROW, TARGET_ID, CLEAR_EXIT_MS, CONFETTI_COUNT } from '
 import { TARGET_COLOR, KIND_COLORS } from '../data/colors.js';
 import { TARGET_KIND, KIND_BY_SHAPE, FACES, ACCESSORIES } from '../data/characters.js';
 
+// 주인공 토끼 색(상점에서 장착한 스킨). main이 setTargetColor로 갱신한다.
+let targetColor = TARGET_COLOR;
+export function setTargetColor(c) {
+  targetColor = c || TARGET_COLOR;
+}
+
 // 블록 위치 기반 결정값(리셋해도 같은 블록은 같은 모습). 음수 방지로 절대값.
 function seedOf(car) {
   return Math.abs(car.row * 31 + car.col * 17 + car.len * 7);
@@ -19,7 +25,7 @@ function kindOf(car) {
 
 // 동물 색. 주인공은 고정, 친구는 종류별 후보에서 위치로 하나 고른다.
 function colorOf(car, kind) {
-  if (car.id === TARGET_ID) return TARGET_COLOR;
+  if (car.id === TARGET_ID) return targetColor;
   const pool = KIND_COLORS[kind] || KIND_COLORS.cat;
   return pool[seedOf(car) % pool.length];
 }
@@ -188,7 +194,7 @@ export function syncPositions(els, cars) {
 // 주인공 토끼의 표정만 바꿔 다시 그린다(제한시간 경과 / 클리어에 따라 main이 호출).
 export function updateTargetFace(els, face) {
   const t = els.get(TARGET_ID);
-  if (t) t.innerHTML = faceSvg(TARGET_KIND, TARGET_COLOR, face, 'none');
+  if (t) t.innerHTML = faceSvg(TARGET_KIND, targetColor, face, 'none');
 }
 
 // 클리어 연출: 토끼를 출구 길로 미끄러뜨려 내보내고 별·하트 파티클을 터뜨린 뒤 onDone 호출.

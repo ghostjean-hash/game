@@ -7,8 +7,9 @@ import {
 import { PUZZLES } from './data/puzzles.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve } from './core/solver.js';
-import { buildBoard, syncPositions, playClear, updateTargetFace } from './render/render.js';
+import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor } from './render/render.js';
 import { attachDrag } from './input/drag.js';
+import { RABBIT_SKINS, DEFAULT_SKIN } from './data/shop.js';
 import { createStorage } from '../../../shared/storage.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
@@ -30,6 +31,11 @@ const el = {
   resultStars: document.getElementById('result-stars'),
   resultGold: document.getElementById('result-gold'),
   overlayNext: document.getElementById('btn-overlay-next'),
+  shopBtn: document.getElementById('btn-shop'),
+  shop: document.getElementById('shop'),
+  shopGold: document.getElementById('shop-gold'),
+  shopItems: document.getElementById('shop-items'),
+  shopClose: document.getElementById('btn-shop-close'),
 };
 
 const state = {
@@ -47,7 +53,17 @@ const state = {
 };
 
 function progress() {
-  return store.get('progress', { cleared: [], best: {}, gold: 0, stars: {} });
+  return store.get('progress', {
+    cleared: [], best: {}, gold: 0, stars: {},
+    ownedSkins: [DEFAULT_SKIN], equippedSkin: DEFAULT_SKIN,
+  });
+}
+
+// 장착한 토끼 스킨 색.
+function currentSkinColor() {
+  const eq = progress().equippedSkin || DEFAULT_SKIN;
+  const s = RABBIT_SKINS.find((x) => x.id === eq) || RABBIT_SKINS[0];
+  return s.color;
 }
 
 function puzzleById(id) {
@@ -66,6 +82,7 @@ function loadPuzzle(id) {
   state.elapsed = 0;
   state.face = 'neutral';
   state.solved = false;
+  setTargetColor(currentSkinColor());
   state.els = buildBoard(el.board, state.cars);
   store.set('current', p.id);
   hideOverlay();
@@ -206,6 +223,56 @@ function hideOverlay() {
   el.overlay.hidden = true;
 }
 
+// --- 상점(토끼 색 스킨) ---
+
+function renderShop() {
+  const pr = progress();
+  el.shopGold.textContent = String(pr.gold || 0);
+  const owned = pr.ownedSkins || [DEFAULT_SKIN];
+  const eq = pr.equippedSkin || DEFAULT_SKIN;
+  el.shopItems.innerHTML = RABBIT_SKINS.map((s) => {
+    const isOwned = s.price === 0 || owned.includes(s.id);
+    const isEq = eq === s.id;
+    const tag = isEq ? '장착 중' : isOwned ? '장착하기' : `${s.price} 🪙`;
+    return `<button class="shop-item${isEq ? ' equipped' : ''}" data-skin="${s.id}" type="button">`
+      + `<span class="shop-swatch" style="background:${s.color}"></span>`
+      + `<span class="shop-name">${s.name}</span>`
+      + `<span class="shop-state">${tag}</span></button>`;
+  }).join('');
+}
+
+function buyOrEquip(skinId) {
+  const pr = progress();
+  const skin = RABBIT_SKINS.find((s) => s.id === skinId);
+  if (!skin) return;
+  const owned = pr.ownedSkins || [DEFAULT_SKIN];
+  if (skin.price > 0 && !owned.includes(skinId)) {
+    if ((pr.gold || 0) < skin.price) {
+      el.shopGold.parentElement.classList.remove('shake');
+      void el.shopGold.parentElement.offsetWidth; // reflow로 애니 재시작
+      el.shopGold.parentElement.classList.add('shake'); // 골드 부족 흔들기
+      return;
+    }
+    pr.gold -= skin.price;
+    owned.push(skinId);
+    pr.ownedSkins = owned;
+  }
+  pr.equippedSkin = skinId;
+  store.set('progress', pr);
+  setTargetColor(skin.color);
+  updateTargetFace(state.els, state.face); // 토끼 즉시 색 반영
+  renderShop();
+  render();
+}
+
+function openShop() {
+  renderShop();
+  el.shop.hidden = false;
+}
+function closeShop() {
+  el.shop.hidden = true;
+}
+
 // 드래그는 보드에 한 번만 붙인다. 현재 상태는 getCars로 읽는다.
 attachDrag(el.board, {
   getCars: () => state.cars,
@@ -222,5 +289,12 @@ el.overlayNext.addEventListener('click', () => {
   if (idx < PUZZLES.length - 1) go(1);
   else loadPuzzle(PUZZLES[0].id); // 마지막 퍼즐 완주 후 처음으로
 });
+el.shopBtn.addEventListener('click', openShop);
+el.shopClose.addEventListener('click', closeShop);
+el.shopItems.addEventListener('click', (e) => {
+  const btn = e.target.closest('.shop-item');
+  if (btn) buyOrEquip(btn.dataset.skin);
+});
 
+setTargetColor(currentSkinColor());
 loadPuzzle(store.get('current', PUZZLES[0].id));

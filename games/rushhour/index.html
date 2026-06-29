@@ -16,6 +16,7 @@
 <div class="page rushhour">
   <div class="topbar">
     <a href="../../" class="home" aria-label="홈으로">←</a>
+    <button class="home" id="btn-shop" type="button" aria-label="상점">🛍</button>
     <h1 id="puzzle-label">#1</h1>
     <div class="spacer"></div>
     <div class="stat"><span class="stat-icon">🪙</span><span class="stat-value" id="gold">0</span></div>
@@ -34,6 +35,18 @@
     <button class="btn" id="btn-undo" type="button">되돌리기</button>
     <button class="btn" id="btn-reset" type="button">리셋</button>
     <button class="btn" id="btn-next" type="button">다음 ›</button>
+  </div>
+
+  <div class="modal-backdrop" id="shop" hidden>
+    <div class="modal shop-modal">
+      <h2>상점 🛍</h2>
+      <p class="shop-gold-line">내 골드 <span id="shop-gold">0</span> 🪙</p>
+      <p class="shop-hint">토끼 색을 바꿔보자!</p>
+      <div class="shop-grid" id="shop-items"></div>
+      <div class="modal-actions">
+        <button class="btn" id="btn-shop-close" type="button">닫기</button>
+      </div>
+    </div>
   </div>
 
   <div class="modal-backdrop" id="overlay" hidden>

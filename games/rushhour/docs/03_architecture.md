@@ -19,6 +19,7 @@ games/rushhour/
 │       ├── constants.js   보드 수치 / enum
 │       ├── colors.js      차 색상(파스텔)
 │       ├── characters.js  동물 종류(주인공 토끼 / 친구들)
+│       ├── shop.js        상점 품목(토끼 색 스킨)
 │       └── puzzles.js     내장 퍼즐 세트
 └── tests/
     ├── test.html       브라우저 테스트 진입

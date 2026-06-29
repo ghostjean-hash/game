@@ -52,6 +52,15 @@
 
 출구 표시(토끼의 집)는 게임 데이터가 아닌 UI 표시라 `shared/tokens.css` 토큰을 쓴다(style.css).
 
+### 2.3. 상점 품목 - `src/data/shop.js`
+
+| 이름 | 의미 |
+|---|---|
+| `RABBIT_SKINS` | 주인공 토끼 색 스킨 배열(`{id, name, color, price}`). 첫 항목 price 0 = 기본 |
+| `DEFAULT_SKIN` | 기본 스킨 id(`"pink"`). 처음부터 보유·장착 |
+
+골드로 구매(해금)하고 장착한다. 보유/장착은 `progress.ownedSkins` / `progress.equippedSkin`에 저장(§4).
+
 ## 3. 퍼즐 - `src/data/puzzles.js`
 
 내장 퍼즐 200개. 무작위 생성 + BFS 솔버 검증으로 만들고, 최소 1~8수로 천천히 오르는 곡선(초등 저학년 대상, 쉬움 위주)이다. 1번은 막는 차 없는 튜토리얼.
@@ -88,5 +97,5 @@
 
 | 키 | 값 | 의미 |
 |---|---|---|
-| `progress` | `{ cleared: number[], best: {[puzzleId]: number}, gold: number, stars: {[puzzleId]: number} }` | 클리어 퍼즐 + 퍼즐별 최고(최소 사용 수) + 누적 골드 + 퍼즐별 최고 별 |
+| `progress` | `{ cleared, best, gold, stars, ownedSkins: string[], equippedSkin: string }` | 클리어 퍼즐 + 퍼즐별 최고 수 + 누적 골드 + 퍼즐별 최고 별 + 보유/장착 스킨 |
 | `current` | `number` | 마지막으로 보던 퍼즐 id |
