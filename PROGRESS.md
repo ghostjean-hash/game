@@ -18,7 +18,7 @@
 |---|---|---|
 | tetris | playable, 모바일 검증 통과 | `games/tetris/PROGRESS.md` |
 | sudoku | wip, M1+ 완료 / M2 대기 | `games/sudoku/PROGRESS.md` |
-| rushhour | playable, 산리오풍 캐릭터 + 골드/별/제한시간/상점 + 186퍼즐 난이도 재설계 | `games/rushhour/PROGRESS.md` |
+| rushhour | playable, 산리오풍 캐릭터 + 골드/별/제한시간 + 상점(토끼색·보드테마·머리장식) + 힌트·진행맵·효과음·연속콤보 + 186퍼즐 + 모바일 대응 | `games/rushhour/PROGRESS.md` |
 
 # 3. 공통 결정
 
@@ -30,7 +30,7 @@
 
 # 4. 공통 미해결 / 개선 여지
 
-4.1. 사운드/햅틱 없음(전 게임).
+4.1. 사운드: rushhour는 Web Audio 합성 효과음 + 음소거 토글 보유(2026-06-29). 나머지 게임(tetris/sudoku/lotto)·햅틱은 아직 없음.
 4.2. iOS PWA 첫 진입 "홈 화면에 추가" 안내 오버레이 없음.
 4.3. 공통 게임 종료/일시정지 패턴 추출(보일러플레이트 감소).
 
