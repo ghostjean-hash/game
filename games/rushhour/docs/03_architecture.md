@@ -13,6 +13,8 @@ games/rushhour/
 │   │   └── solver.js   BFS 최단 해 솔버(최소 이동수, 퍼즐 검증, 힌트용 다음 한 수)
 │   ├── render/
 │   │   └── render.js   보드 / 차 DOM 렌더 + 위치 갱신 + 동물 얼굴 SVG
+│   ├── audio/
+│   │   └── sound.js    Web Audio 효과음 합성(이동/클리어/힌트/구매/거부) + 음소거
 │   ├── input/
 │   │   └── drag.js     Pointer Events 드래그 → 이동 의도 산출
 │   └── data/
@@ -33,6 +35,7 @@ main.js
  ├─→ core/board.js      (DOM 금지, 순수 함수)
  ├─→ core/solver.js  ─→ core/board.js
  ├─→ render/render.js ─→ data/colors.js, data/characters.js, data/constants.js
+ ├─→ audio/sound.js     (Web Audio API, DOM 무관 / core 아님)
  ├─→ input/drag.js   ─→ core/board.js, data/constants.js
  └─→ data/*           (의존 없음, 값만 export)
 ```
@@ -82,4 +85,6 @@ state = {
 5.5. 힌트(§01 spec 7.6): `main.js`가 골드를 확인(부족하면 흔들림)하고 차감한 뒤 `solver.solveStep(cars)`로 최적의 다음 한 수(`{id, pos}` 또는 null)를 구해 `render.showHint(els, move)`로 해당 차를 잠깐 강조 + 목표 방향으로 살짝 움직여 보여준다. 자동 이동은 하지 않는다(플레이어가 직접 민다).
 
 5.6. 진행 맵(§01 spec 7.7): `main.js`가 `PUZZLES`(번호·난이도)와 localStorage `progress`(cleared·stars)를 읽어 난이도별 칩 격자를 모달에 그린다. 별도 데이터를 저장하지 않는 읽기 전용 화면이다. 칩 클릭 시 `loadPuzzle(id)`로 그 퍼즐로 점프하고 모달을 닫는다.
+
+5.7. 사운드(§01 spec 10): `audio/sound.js`가 `AudioContext`를 첫 재생 시점에 lazy 생성(자동재생 정책)하고 oscillator/gain으로 효과음을 합성한다. 음원 파일은 없다. `main.js`가 이동·클리어·힌트·구매·거부 시점에 `sound.play(name)`을 호출하고, 음소거 토글(🔊/🔇)은 `progress.muted`에 저장한다. 합성 파라미터(주파수·길이)는 sound.js 내부 디자인 상수다(04 §2.1 예외).
 5.3. 보드 크기는 CSS가 화면 너비에 맞춰 정사각형으로 잡고, 셀 크기는 한 곳(`--cell`)에서 파생한다.

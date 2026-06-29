@@ -98,5 +98,5 @@
 
 | 키 | 값 | 의미 |
 |---|---|---|
-| `progress` | `{ cleared, best, gold, stars, ownedSkins: string[], equippedSkin: string }` | 클리어 퍼즐 + 퍼즐별 최고 수 + 누적 골드 + 퍼즐별 최고 별 + 보유/장착 스킨 |
+| `progress` | `{ cleared, best, gold, stars, ownedSkins: string[], equippedSkin: string, muted: boolean }` | 클리어 퍼즐 + 퍼즐별 최고 수 + 누적 골드 + 퍼즐별 최고 별 + 보유/장착 스킨 + 음소거 여부 |
 | `current` | `number` | 마지막으로 보던 퍼즐 id |

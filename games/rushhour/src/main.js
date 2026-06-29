@@ -9,6 +9,7 @@ import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
 import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, showHint } from './render/render.js';
 import { attachDrag } from './input/drag.js';
+import { play, setMuted, isMuted } from './audio/sound.js';
 import { RABBIT_SKINS, DEFAULT_SKIN } from './data/shop.js';
 import { createStorage } from '../../../shared/storage.js';
 
@@ -42,6 +43,7 @@ const el = {
   mapSummary: document.getElementById('map-summary'),
   mapGrid: document.getElementById('map-grid'),
   mapClose: document.getElementById('btn-map-close'),
+  muteBtn: document.getElementById('btn-mute'),
 };
 
 const state = {
@@ -61,7 +63,7 @@ const state = {
 function progress() {
   return store.get('progress', {
     cleared: [], best: {}, gold: 0, stars: {},
-    ownedSkins: [DEFAULT_SKIN], equippedSkin: DEFAULT_SKIN,
+    ownedSkins: [DEFAULT_SKIN], equippedSkin: DEFAULT_SKIN, muted: false,
   });
 }
 
@@ -161,6 +163,7 @@ function onCommit(id, pos) {
   syncPositions(state.els, state.cars);
   render();
   if (isSolved(state.cars)) onSolved();
+  else play('move');
 }
 
 function starsFor(moves, optimal) {
@@ -172,6 +175,7 @@ function starsFor(moves, optimal) {
 function onSolved() {
   state.solved = true;
   stopTimer();
+  play('clear');
   state.face = 'happy';
   updateTargetFace(state.els, 'happy');
 
@@ -237,12 +241,30 @@ function hint() {
   const pr = progress();
   if ((pr.gold || 0) < HINT_COST) {
     shakeGold();
+    play('deny');
     return;
   }
   pr.gold -= HINT_COST;
   store.set('progress', pr);
   render();
   showHint(state.els, move);
+  play('hint');
+}
+
+// 음소거 토글(🔊/🔇). 설정은 progress.muted에 저장한다.
+function toggleMute() {
+  const pr = progress();
+  const next = !isMuted();
+  pr.muted = next;
+  store.set('progress', pr);
+  setMuted(next);
+  updateMuteBtn();
+  if (!next) play('move'); // 켤 때 들리는지 확인음
+}
+
+function updateMuteBtn() {
+  el.muteBtn.textContent = isMuted() ? '🔇' : '🔊';
+  el.muteBtn.setAttribute('aria-label', isMuted() ? '소리 켜기' : '소리 끄기');
 }
 
 function go(delta) {
@@ -283,6 +305,7 @@ function buyOrEquip(skinId) {
       el.shopGold.parentElement.classList.remove('shake');
       void el.shopGold.parentElement.offsetWidth; // reflow로 애니 재시작
       el.shopGold.parentElement.classList.add('shake'); // 골드 부족 흔들기
+      play('deny');
       return;
     }
     pr.gold -= skin.price;
@@ -295,6 +318,7 @@ function buyOrEquip(skinId) {
   updateTargetFace(state.els, state.face); // 토끼 즉시 색 반영
   renderShop();
   render();
+  play('buy');
 }
 
 function openShop() {
@@ -363,6 +387,7 @@ el.shopItems.addEventListener('click', (e) => {
   const btn = e.target.closest('.shop-item');
   if (btn) buyOrEquip(btn.dataset.skin);
 });
+el.muteBtn.addEventListener('click', toggleMute);
 el.mapBtn.addEventListener('click', openMap);
 el.mapClose.addEventListener('click', closeMap);
 el.mapGrid.addEventListener('click', (e) => {
@@ -374,5 +399,7 @@ el.mapGrid.addEventListener('click', (e) => {
 });
 
 el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
+setMuted(progress().muted);
+updateMuteBtn();
 setTargetColor(currentSkinColor());
 loadPuzzle(store.get('current', PUZZLES[0].id));

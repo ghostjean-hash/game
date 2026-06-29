@@ -246,8 +246,9 @@
 .rushhour .shop-name { font-weight: 700; }
 .rushhour .shop-state { color: var(--fg-dim); font-size: 10px; }
 
-/* 진행 맵. */
-.rushhour #btn-map { border: none; cursor: pointer; }
+/* 진행 맵 + 음소거. */
+.rushhour #btn-map,
+.rushhour #btn-mute { border: none; cursor: pointer; }
 .rushhour .map-modal { max-width: 460px; width: 94vw; }
 .rushhour .map-summary { font-weight: 700; font-size: 14px; margin: 2px 0 var(--sp-3); }
 .rushhour .map-scroll { max-height: 58vh; overflow-y: auto; margin-bottom: var(--sp-3); }
