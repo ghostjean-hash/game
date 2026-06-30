@@ -75,7 +75,13 @@
 // v111 (2026-06-30): rushhour 블록 이동음이 짧고 낮아 묻히던 것 보강 - 주파수 500→760·길이 0.11s·게인 0.18로 또렷하게.
 // v112 (2026-06-30): rushhour 이동음 게인 0.18→0.35·길이 0.13s로 추가 증폭(여전히 작다는 피드백).
 // v113 (2026-06-30): rushhour 순수 보드판을 화면 가로 정중앙 정렬(출구 화살표 정렬 제외, board-wrap padding-right 제거 + 보드폭 76→72vw). 타이머도 보드 중앙 위.
-const CACHE_VERSION = "v113";
+// v114 (2026-06-30): rushhour 효과음 체감 지연 감소 - 어택 0.012→0.003s 단축 + AudioContext latencyHint:interactive.
+// v115 (2026-06-30): rushhour 첫 블록 이동 무음 수정 - start(currentTime) 첫 콜백 경계 씹힘을 15ms lookahead(SCHEDULE_AHEAD)로 해소.
+// v116 (2026-06-30): rushhour 첫 이동음 누락 추가 보강 - unlock 시 무음 톤 0.1s 파이프 워밍업 + play를 resume 완료 후 실행.
+// v117 (2026-06-30): rushhour 워밍업 무음 0.1→0.4s 연장(출력 장치 절전 깨우기 강화).
+// v118 (2026-06-30): rushhour 블루투스 첫 소리 씹힘/페이드인 해결 - 무음 keep-alive 상시 재생으로 출력 장치 절전 차단.
+// v119 (2026-06-30): rushhour 퍼즐 난이도 재정렬 - 각 난이도 구간 내부를 체감점수(최소수+막는차+되돌림) 오름차순 정렬, 갑자기 쉬워지는 지점 33→1곳.
+const CACHE_VERSION = "v119";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

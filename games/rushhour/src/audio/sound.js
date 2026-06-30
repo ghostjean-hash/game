@@ -13,38 +13,45 @@ export function isMuted() { return muted; }
 function audioCtx() {
   if (!ctx) {
     const AC = window.AudioContext || window.webkitAudioContext;
-    if (AC) ctx = new AC();
+    if (AC) ctx = new AC({ latencyHint: 'interactive' }); // 입력 반응용 저지연 모드
   }
   if (ctx && ctx.state === 'suspended') ctx.resume();
   return ctx;
 }
 
-// iOS(아이폰/아이패드)는 사용자 제스처 핸들러 안에서 AudioContext를 깨우고 무음 버퍼를
-// 한 번 재생해야 이후 소리가 난다. main이 첫 pointerdown/touchend에서 1회 호출한다.
-// 이게 없으면 iOS 크롬/사파리에서 효과음이 통째로 안 들린다.
+// 첫 사용자 제스처에서 오디오를 깨우고(iOS 정책) 무음 keep-alive를 시작한다(main이 첫 제스처에서 1회 호출).
+// 블루투스 등 출력 장치는 소리가 없으면 절전에 들어가, 재생 시 깨어나는 동안 첫 소리들을 씹어먹고
+// 볼륨이 서서히 차오른다. 들리지 않는 무음(gain 0.0001)을 계속 흘려 장치를 깬 채로 유지하면
+// 첫 이동음부터 바로 난다. 페이지를 닫을 때까지 유지한다(트레이드오프: 출력 장치 배터리 소모 약간 증가).
+let keepAlive = null;
 export function unlockAudio() {
   if (unlocked) return;
   const c = audioCtx();
   if (!c) return;
+  unlocked = true;
   try {
-    const src = c.createBufferSource();
-    src.buffer = c.createBuffer(1, 1, 22050); // 1샘플 무음
-    src.connect(c.destination);
-    src.start(0);
-    unlocked = true;
+    keepAlive = c.createOscillator();
+    const g = c.createGain();
+    g.gain.value = 0.0001; // 거의 무음(들리지 않음)
+    keepAlive.connect(g).connect(c.destination);
+    keepAlive.start(); // stop 안 함 - 게임 내내 무음을 흘려 장치를 깨워 둔다
   } catch { /* 실패해도 게임 진행 무관 */ }
 }
 
+// 모든 재생을 currentTime 정각이 아니라 이만큼 뒤에 예약한다. 오디오 시계가 막 깬 첫 재생에서
+// start(currentTime)이 첫 처리 구간과 어긋나 어택이 잘리던 것(첫 이동 무음)을 막는다. 15ms는 인지 한계 이하.
+const SCHEDULE_AHEAD = 0.015;
+
 // 단음 하나: 주파수 freq(→ to로 글라이드), 길이 dur(초), 파형, 게인, 시작 지연.
 function tone(c, { freq, to, dur, type = 'sine', gain = 0.15, delay = 0 }) {
-  const t0 = c.currentTime + delay;
+  const t0 = c.currentTime + SCHEDULE_AHEAD + delay;
   const osc = c.createOscillator();
   const g = c.createGain();
   osc.type = type;
   osc.frequency.setValueAtTime(freq, t0);
   if (to) osc.frequency.exponentialRampToValueAtTime(to, t0 + dur);
   g.gain.setValueAtTime(0.0001, t0);
-  g.gain.exponentialRampToValueAtTime(gain, t0 + 0.012);
+  g.gain.exponentialRampToValueAtTime(gain, t0 + 0.003); // 빠른 어택(즉각 또렷하게, 지연 체감 제거)
   g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
   osc.connect(g).connect(c.destination);
   osc.start(t0);
@@ -76,5 +83,8 @@ export function play(name) {
   if (!c) return;
   const fn = SOUNDS[name];
   if (!fn) return;
-  try { fn(c); } catch { /* 오디오 실패는 게임에 영향 없음 */ }
+  const run = () => { try { fn(c); } catch { /* 오디오 실패는 게임에 영향 없음 */ } };
+  // 컨텍스트가 아직 안 깬 첫 재생은 깨어난 뒤 소리 낸다(첫 이동음 누락 방지).
+  if (c.state === 'running') run();
+  else c.resume().then(run).catch(() => {});
 }
