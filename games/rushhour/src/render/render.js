@@ -1,151 +1,24 @@
 // 보드 / 차 DOM 렌더. 칸 좌표 → CSS 변수로 배치하고 위치 갱신만 담당한다.
+// 차는 조랑말 PNG 이미지로 그린다(assets/ponies/). 블록 크기 → 파일명 매핑.
 // 게임 로직은 core/에 있다(docs/03_architecture.md §2.2).
-// 차는 동물 친구로 그린다: 블록 크기 → 동물(characters.js), 색(colors.js), 표정·액세서리는 블록 위치로.
 
 import { BOARD_SIZE, EXIT_ROW, TARGET_ID, CLEAR_EXIT_MS, CONFETTI_COUNT } from '../data/constants.js';
-import { TARGET_COLOR, KIND_COLORS } from '../data/colors.js';
-import { TARGET_KIND, KIND_BY_SHAPE, FACES, ACCESSORIES } from '../data/characters.js';
 
-// 주인공 토끼 색(상점에서 장착한 스킨). main이 setTargetColor로 갱신한다.
-let targetColor = TARGET_COLOR;
-export function setTargetColor(c) {
-  targetColor = c || TARGET_COLOR;
-}
+// 조랑말 이미지 폴더(index.html 기준 상대경로).
+const PONY_BASE = 'assets/ponies/';
 
-// 주인공 토끼 머리 장식(상점에서 장착한 액세서리 키). main이 setTargetAccessory로 갱신한다.
-let targetAcc = 'none';
-export function setTargetAccessory(a) {
-  targetAcc = a || 'none';
+// 블록 → 조랑말 이미지 파일. 주인공은 target, 나머지는 방향+길이(h2/h3/v2/v3).
+function ponySrc(car) {
+  const key = car.id === TARGET_ID ? 'target' : `${car.orient}${car.len}`;
+  return `${PONY_BASE}${key}.png`;
 }
 
-// 블록 위치 기반 결정값(리셋해도 같은 블록은 같은 모습). 음수 방지로 절대값.
-function seedOf(car) {
-  return Math.abs(car.row * 31 + car.col * 17 + car.len * 7);
-}
-
-// 블록 크기 → 동물 종류. 주인공은 토끼 고정.
-function kindOf(car) {
-  if (car.id === TARGET_ID) return TARGET_KIND;
-  return KIND_BY_SHAPE[`${car.orient}${car.len}`] || 'cat';
-}
-
-// 동물 색. 주인공은 고정, 친구는 종류별 후보에서 위치로 하나 고른다.
-function colorOf(car, kind) {
-  if (car.id === TARGET_ID) return targetColor;
-  const pool = KIND_COLORS[kind] || KIND_COLORS.cat;
-  return pool[seedOf(car) % pool.length];
-}
-
-// 표정 / 액세서리. 주인공은 방긋 + 액세서리 없음(깔끔하게 강조).
-function faceOf(car) {
-  return car.id === TARGET_ID ? 'neutral' : FACES[(seedOf(car) * 3 + 1) % FACES.length];
-}
-function accOf(car) {
-  // 주인공은 상점에서 장착한 액세서리, 친구는 블록 위치로 정한다.
-  return car.id === TARGET_ID ? targetAcc : ACCESSORIES[(seedOf(car) * 5 + 2) % ACCESSORIES.length];
-}
-
-// 종류별 귀 / 머리 장식(viewBox 0~100). 흰 얼굴 위에서 보이도록 흰 바깥 + 몸색 안쪽.
-function ears(kind, body) {
-  const W = '#ffffff';
-  switch (kind) {
-    case 'rabbit':
-      return `<ellipse cx="33" cy="14" rx="10" ry="25" fill="${W}"/><ellipse cx="67" cy="14" rx="10" ry="25" fill="${W}"/>`
-        + `<ellipse cx="33" cy="16" rx="4.5" ry="17" fill="${body}"/><ellipse cx="67" cy="16" rx="4.5" ry="17" fill="${body}"/>`;
-    case 'dog':
-      return `<ellipse cx="11" cy="31" rx="12" ry="24" fill="${body}"/><ellipse cx="89" cy="31" rx="12" ry="24" fill="${body}"/>`;
-    case 'cat':
-      return `<polygon points="8,33 22,-3 51,28" fill="${W}"/><polygon points="92,33 78,-3 49,28" fill="${W}"/>`
-        + `<polygon points="17,29 24,8 41,27" fill="${body}"/><polygon points="83,29 76,8 59,27" fill="${body}"/>`;
-    case 'penguin': // 머리 위 작은 깃털 둘
-      return `<path d="M44 12 Q47 2 50 12 Z" fill="${body}"/><path d="M50 12 Q53 2 56 12 Z" fill="${body}"/>`;
-    default:
-      return ''; // chick: 머리깃은 본체에서
-  }
-}
-
-// 표정별 눈.
-function eyesSvg(face) {
-  const D = '#3a2e3a';
-  switch (face) {
-    case 'happy':
-      return `<path d="M27 53 Q35 44 43 53" stroke="${D}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`
-        + `<path d="M57 53 Q65 44 73 53" stroke="${D}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
-    case 'wink':
-      return `<path d="M27 53 Q35 44 43 53" stroke="${D}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`
-        + `<circle cx="65" cy="51" r="8" fill="${D}"/><circle cx="62" cy="48" r="2.8" fill="#ffffff"/>`;
-    case 'surprised':
-      return `<circle cx="35" cy="51" r="9" fill="${D}"/><circle cx="65" cy="51" r="9" fill="${D}"/>`
-        + `<circle cx="31.5" cy="47.5" r="3" fill="#ffffff"/><circle cx="61.5" cy="47.5" r="3" fill="#ffffff"/>`;
-    case 'worried': // 어두운 표정: 점눈 + 처진 눈썹
-      return `<circle cx="35" cy="53" r="7" fill="${D}"/><circle cx="65" cy="53" r="7" fill="${D}"/>`
-        + `<path d="M26 45 Q35 42 43 47" stroke="${D}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
-        + `<path d="M74 45 Q65 42 57 47" stroke="${D}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
-    case 'cry': // 울상: 질끈 감은 눈(아래로 볼록)
-      return `<path d="M27 50 Q35 58 43 50" stroke="${D}" stroke-width="4" fill="none" stroke-linecap="round"/>`
-        + `<path d="M57 50 Q65 58 73 50" stroke="${D}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
-    default: // normal / neutral (점눈)
-      return `<circle cx="35" cy="51" r="8" fill="${D}"/><circle cx="65" cy="51" r="8" fill="${D}"/>`
-        + `<circle cx="32" cy="48" r="2.8" fill="#ffffff"/><circle cx="62" cy="48" r="2.8" fill="#ffffff"/>`;
-  }
-}
-
-// 입(병아리는 부리로 대체).
-function mouthSvg(kind, face) {
-  if (kind === 'chick') return `<polygon points="40,60 60,60 50,76" fill="#f6a02a"/>`;
-  const M = '#9c6b7d';
-  switch (face) {
-    case 'surprised': return `<ellipse cx="50" cy="67" rx="3.5" ry="4.5" fill="${M}"/>`;
-    case 'neutral': return `<path d="M44 66 L56 66" stroke="${M}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-    case 'worried': return `<path d="M43 68 Q50 63 57 68" stroke="${M}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-    case 'cry': return `<ellipse cx="50" cy="68" rx="5" ry="6" fill="#7d5563"/>`;
-    default: return `<path d="M43 64 Q50 70 57 64" stroke="${M}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-  }
-}
-
-function noseSvg(kind) {
-  return kind === 'rabbit' || kind === 'cat' || kind === 'dog'
-    ? `<ellipse cx="50" cy="59.5" rx="4" ry="3" fill="#9c6b7d"/>` : '';
-}
-
-// 액세서리(일부 블록만). 머리 오른쪽 위 또는 턱 아래.
-function accessorySvg(acc) {
-  switch (acc) {
-    case 'ribbon':
-      return `<g transform="translate(71,15)"><polygon points="0,0 -11,-7 -11,7" fill="#ff8fab"/>`
-        + `<polygon points="0,0 11,-7 11,7" fill="#ff8fab"/><circle cx="0" cy="0" r="4" fill="#ff6f95"/></g>`;
-    case 'bowtie':
-      return `<g transform="translate(50,90)"><polygon points="0,0 -10,-6 -10,6" fill="#8fb3ff"/>`
-        + `<polygon points="0,0 10,-6 10,6" fill="#8fb3ff"/><circle cx="0" cy="0" r="3.5" fill="#6f95ff"/></g>`;
-    case 'flower':
-      return `<g transform="translate(72,15)"><circle cx="0" cy="-6" r="4" fill="#ffd86b"/>`
-        + `<circle cx="6" cy="-2" r="4" fill="#ffd86b"/><circle cx="4" cy="5" r="4" fill="#ffd86b"/>`
-        + `<circle cx="-4" cy="5" r="4" fill="#ffd86b"/><circle cx="-6" cy="-2" r="4" fill="#ffd86b"/>`
-        + `<circle cx="0" cy="0" r="3.5" fill="#ff8fab"/></g>`;
-    case 'crown': // 머리 위 중앙 작은 왕관
-      return `<g transform="translate(50,11)">`
-        + `<polygon points="-15,8 -15,-5 -7.5,2 0,-9 7.5,2 15,-5 15,8" fill="#ffd86b" stroke="#f0b73e" stroke-width="1.5" stroke-linejoin="round"/>`
-        + `<circle cx="-15" cy="-5" r="2.4" fill="#ff8fab"/><circle cx="0" cy="-9" r="2.4" fill="#ff8fab"/><circle cx="15" cy="-5" r="2.4" fill="#ff8fab"/></g>`;
-    default:
-      return '';
-  }
-}
-
-// 얼굴 SVG 한 장. 흰 얼굴 베이스(r44) + 귀 + 표정 + 볼 + 코/입 + 액세서리.
-function faceSvg(kind, body, face, acc) {
-  const tears = face === 'cry'
-    ? `<ellipse cx="29" cy="64" rx="3.6" ry="5.2" fill="#7ec8f0" opacity="0.9"/><ellipse cx="71" cy="64" rx="3.6" ry="5.2" fill="#7ec8f0" opacity="0.9"/>` : '';
-  return `<svg class="face" viewBox="0 0 100 100" aria-hidden="true">`
-    + ears(kind, body)
-    + `<circle cx="50" cy="54" r="44" fill="#ffffff"/>`
-    + eyesSvg(face)
-    + `<circle cx="20" cy="65" r="7" fill="#ff9ec4" opacity="0.72"/><circle cx="80" cy="65" r="7" fill="#ff9ec4" opacity="0.72"/>`
-    + noseSvg(kind)
-    + mouthSvg(kind, face)
-    + tears
-    + accessorySvg(acc)
-    + `</svg>`;
-}
+// 아래 셋은 SVG 시절 동적 표정·스킨 색·머리 장식을 그리던 함수다. PNG 단일 이미지로
+// 전환하며 잠정 비활성화했다(main.js 호출부가 깨지지 않도록 시그니처만 유지).
+// 표정/스킨/장식 복원 시 여기에 이미지 교체 로직을 다시 넣는다.
+export function setTargetColor() {}
+export function setTargetAccessory() {}
+export function updateTargetFace() {}
 
 // 보드를 비우고 격자 배경 + 출구 길/집 표시 + 차 엘리먼트를 새로 만든다.
 // 반환: id -> 차 엘리먼트 맵.
@@ -173,14 +46,16 @@ export function buildBoard(boardEl, cars) {
 
   const els = new Map();
   for (const car of cars) {
-    const kind = kindOf(car);
-    const color = colorOf(car, kind);
     const el = document.createElement('div');
     el.className = `car ${car.orient}${car.id === TARGET_ID ? ' target' : ''}`;
     el.dataset.id = car.id;
     el.style.setProperty('--len', String(car.len));
-    el.style.background = color;
-    el.innerHTML = faceSvg(kind, color, faceOf(car), accOf(car));
+    const img = document.createElement('img');
+    img.className = 'pony';
+    img.src = ponySrc(car);
+    img.alt = '';
+    img.draggable = false; // 브라우저 기본 이미지 드래그(고스트) 차단
+    el.appendChild(img);
     place(el, car);
     boardEl.appendChild(el);
     els.set(car.id, el);
@@ -202,12 +77,6 @@ export function syncPositions(els, cars) {
   }
 }
 
-// 주인공 토끼의 표정만 바꿔 다시 그린다(제한시간 경과 / 클리어에 따라 main이 호출).
-export function updateTargetFace(els, face) {
-  const t = els.get(TARGET_ID);
-  if (t) t.innerHTML = faceSvg(TARGET_KIND, targetColor, face, targetAcc);
-}
-
 // 힌트: 최적 다음 한 수의 차를 잠깐 강조 + 목표 방향으로 살짝 움직여 보여준다.
 // move = { id, pos }(가변 축 목표 좌표). 자동으로 옮기지는 않는다.
 let hintTimer = null;
@@ -227,7 +96,7 @@ export function showHint(els, move) {
   hintTimer = setTimeout(() => el.classList.remove('hint'), 1500);
 }
 
-// 클리어 연출: 토끼를 출구 길로 미끄러뜨려 내보내고 별·하트 파티클을 터뜨린 뒤 onDone 호출.
+// 클리어 연출: 주인공을 출구 길로 미끄러뜨려 내보내고 별·하트 파티클을 터뜨린 뒤 onDone 호출.
 // 다음 퍼즐 로드 시 buildBoard가 보드를 새로 그려 잔여를 정리한다.
 export function playClear(els, boardEl, onDone) {
   const target = els.get(TARGET_ID);
