@@ -267,13 +267,12 @@ function reset() {
   loadPuzzle(state.puzzleId);
 }
 
-// 골드 부족 등 거부 피드백: 상단 골드 표시 흔들림.
-function shakeGold() {
-  const stat = el.gold.closest('.stat');
-  if (!stat) return;
-  stat.classList.remove('shake');
-  void stat.offsetWidth; // reflow로 애니 재시작
-  stat.classList.add('shake');
+// 거부 피드백: 노드에 shake 애니를 재시작한다(reflow로 강제). 골드 부족 등에 쓴다.
+function shake(node) {
+  if (!node) return;
+  node.classList.remove('shake');
+  void node.offsetWidth; // reflow로 애니 재시작
+  node.classList.add('shake');
 }
 
 // 힌트: 골드를 써서 최적 다음 한 수를 강조한다. 자동으로 옮기지는 않는다.
@@ -283,7 +282,7 @@ function hint() {
   if (!move) return; // 이미 풀렸거나 풀 수 없음
   const pr = progress();
   if ((pr.gold || 0) < HINT_COST) {
-    shakeGold();
+    shake(el.gold.closest('.stat'));
     play('deny');
     return;
   }
@@ -361,14 +360,6 @@ function renderShop() {
   el.shopAccessories.innerHTML = chipsHtml('accessory');
 }
 
-// 상점 골드 표시 흔들기(부족 피드백).
-function shakeShopGold() {
-  const line = el.shopGold.parentElement;
-  line.classList.remove('shake');
-  void line.offsetWidth; // reflow로 애니 재시작
-  line.classList.add('shake');
-}
-
 function buyOrEquip(kind, id) {
   const cfg = SHOP_KINDS[kind];
   if (!cfg) return;
@@ -378,7 +369,7 @@ function buyOrEquip(kind, id) {
   const owned = pr[cfg.ownedKey] || [cfg.def];
   if (item.price > 0 && !owned.includes(id)) {
     if ((pr.gold || 0) < item.price) {
-      shakeShopGold();
+      shake(el.shopGold.parentElement);
       play('deny');
       return;
     }
@@ -402,12 +393,13 @@ function buyOrEquip(kind, id) {
   play('buy');
 }
 
-function openShop() {
-  renderShop();
-  el.shop.hidden = false;
+// 패널(상점/맵) 열고 닫기. 열 때 해당 렌더를 먼저 돌린다.
+function openPanel(panel, renderFn) {
+  renderFn();
+  panel.hidden = false;
 }
-function closeShop() {
-  el.shop.hidden = true;
+function closePanel(panel) {
+  panel.hidden = true;
 }
 
 // --- 진행 맵(난이도별 별 현황) ---
@@ -437,14 +429,6 @@ function renderMap() {
   }).join('');
 }
 
-function openMap() {
-  renderMap();
-  el.map.hidden = false;
-}
-function closeMap() {
-  el.map.hidden = true;
-}
-
 // 드래그는 보드에 한 번만 붙인다. 현재 상태는 getCars로 읽는다.
 attachDrag(el.board, {
   getCars: () => state.cars,
@@ -462,8 +446,8 @@ el.overlayNext.addEventListener('click', () => {
   if (idx < PUZZLES.length - 1) go(1);
   else loadPuzzle(PUZZLES[0].id); // 마지막 퍼즐 완주 후 처음으로
 });
-el.shopBtn.addEventListener('click', openShop);
-el.shopClose.addEventListener('click', closeShop);
+el.shopBtn.addEventListener('click', () => openPanel(el.shop, renderShop));
+el.shopClose.addEventListener('click', () => closePanel(el.shop));
 function onShopClick(e) {
   const btn = e.target.closest('.shop-item');
   if (btn) buyOrEquip(btn.dataset.kind, btn.dataset.id);
@@ -472,12 +456,12 @@ el.shopItems.addEventListener('click', onShopClick);
 el.shopThemes.addEventListener('click', onShopClick);
 el.shopAccessories.addEventListener('click', onShopClick);
 el.muteBtn.addEventListener('click', toggleMute);
-el.mapBtn.addEventListener('click', openMap);
-el.mapClose.addEventListener('click', closeMap);
+el.mapBtn.addEventListener('click', () => openPanel(el.map, renderMap));
+el.mapClose.addEventListener('click', () => closePanel(el.map));
 el.mapGrid.addEventListener('click', (e) => {
   const chip = e.target.closest('.map-chip');
   if (chip) {
-    closeMap();
+    closePanel(el.map);
     loadPuzzle(Number(chip.dataset.id));
   }
 });
