@@ -41,16 +41,29 @@
   min-height: 0;
 }
 .rushhour .board-wrap {
-  /* 출구(집)를 오른쪽 바깥에 크게 두기 위한 여백(보드 폭 비율, 모바일에서도 화면 안). */
-  padding-right: 17%;
+  /* 순수 보드판(6x6 격자)을 화면 가로 정중앙에 정렬한다. 출구 화살표/집은 board 자식 absolute라
+     이 폭 계산에 안 잡혀 정렬에서 제외된다(보드 오른쪽 바깥 여백에 떠 있음). */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+}
+/* 보드 위 중앙 큰 타이머. 평소 기본색, 10초 이하 경고는 #time.low. */
+.rushhour .board-timer {
+  font-family: var(--font-mono);
+  font-size: clamp(28px, 9vw, 46px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 1px;
+  color: var(--fg);
 }
 .rushhour .board {
   --size: 6;
   --cell: calc(100% / var(--size));
   position: relative;
-  /* 출구(집)가 오른쪽 바깥으로 나가므로 board-wrap padding-right(17%)까지 더해 화면 안에 들어오게
-     보드 폭을 잡는다. 76vw × 1.17 ≈ 89vw < 화면(좁은 폭에서도 잘리지 않음). */
-  width: min(76vw, 60vh, 480px);
+  /* 보드는 화면 중앙. 출구(집)가 오른쪽 바깥(약 0.16×보드폭)으로 나가므로, 보드가 정중앙일 때
+     출구가 오른쪽 여백 안에 들어오도록 폭을 72vw로 잡는다(72vw 보드 + 출구 ≈ 화면 안). */
+  width: min(72vw, 60vh, 480px);
   aspect-ratio: 1;
   border-radius: var(--r-2);
   background-color: var(--rh-board);

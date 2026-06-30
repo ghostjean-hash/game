@@ -10,7 +10,7 @@ import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
 import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, setTargetAccessory, showHint } from './render/render.js';
 import { attachDrag } from './input/drag.js';
-import { play, setMuted, isMuted } from './audio/sound.js';
+import { play, setMuted, isMuted, unlockAudio } from './audio/sound.js';
 import {
   RABBIT_SKINS, DEFAULT_SKIN, BOARD_THEMES, DEFAULT_THEME, ACCESSORY_ITEMS, DEFAULT_ACCESSORY,
 } from './data/shop.js';
@@ -481,6 +481,10 @@ el.mapGrid.addEventListener('click', (e) => {
     loadPuzzle(Number(chip.dataset.id));
   }
 });
+
+// iOS 오디오 잠금 해제: 첫 사용자 제스처 한 번에 AudioContext를 깨운다(둘 다 once라 각 1회).
+window.addEventListener('pointerdown', unlockAudio, { once: true });
+window.addEventListener('touchend', unlockAudio, { once: true });
 
 el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
 setMuted(progress().muted);

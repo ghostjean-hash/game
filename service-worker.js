@@ -69,7 +69,13 @@
 // v105 (2026-06-29): rushhour 상점 2차 - 보드 테마 5종(바닥/격자선/출구 색 세트) 구매·장착, --rh-* 즉시 반영.
 // v106 (2026-06-29): rushhour 상점 3차 - 토끼 머리 장식 5종(리본/꽃/왕관/나비넥타이) 구매·장착, 토끼 얼굴 즉시 반영.
 // v107 (2026-06-29): rushhour 연속 콤보 - 시간 내 연달아 클리어 시 콤보+보너스 골드, 시간초과 시 콤보 끊김.
-const CACHE_VERSION = "v107";
+// v108 (2026-06-30): rushhour iPad 드래그 손 뗌 시 블록 좌우 흔들림 수정 - 정착을 left/top+transform 동시 트랜지션에서 transform 단일 속성(FLIP)으로 변경.
+// v109 (2026-06-30): rushhour iOS 효과음 무음 수정 - 첫 사용자 제스처(pointerdown/touchend)에서 AudioContext unlock(무음 버퍼 1회 재생) 보강.
+// v110 (2026-06-30): rushhour 남은 시간을 상단바에서 보드 위 중앙으로 이동 + 큰 글씨 표시(.board-timer).
+// v111 (2026-06-30): rushhour 블록 이동음이 짧고 낮아 묻히던 것 보강 - 주파수 500→760·길이 0.11s·게인 0.18로 또렷하게.
+// v112 (2026-06-30): rushhour 이동음 게인 0.18→0.35·길이 0.13s로 추가 증폭(여전히 작다는 피드백).
+// v113 (2026-06-30): rushhour 순수 보드판을 화면 가로 정중앙 정렬(출구 화살표 정렬 제외, board-wrap padding-right 제거 + 보드폭 76→72vw). 타이머도 보드 중앙 위.
+const CACHE_VERSION = "v113";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

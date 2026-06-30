@@ -78,7 +78,7 @@ state = {
 ## 5. 렌더링 방식
 
 5.1. Canvas가 아니라 DOM. 차는 절대 위치 `<div>`이고 칸 좌표 → CSS 변수(`--cell`) 배수로 배치한다. 차 안쪽에는 동물 얼굴 인라인 SVG를 한 칸 크기 정사각으로 중앙 배치한다(색 = colors.js, 종류 = characters.js를 render.js가 조합).
-5.2. 이동 / 스냅 애니메이션은 CSS `transition`. 드래그 중에는 transition을 꺼 손가락을 1:1로 따라오고, 손을 떼면 `transform`(드래그 변위)과 `left`/`top`(칸 위치)을 함께 트랜지션해 손 뗀 자리에서 목표 칸으로 점프 없이 정착한다.
+5.2. 이동 / 스냅 애니메이션은 CSS `transition`. 드래그 중에는 transition을 꺼 손가락을 1:1로 따라온다. 손을 떼면 칸 위치(`left`/`top`)는 transition 없이 즉시 목표 칸으로 옮기되 같은 순간 `transform`으로 손 뗀 시각 위치를 상쇄(점프 0)하고, 다음 프레임에 `transform`만 0으로 트랜지션해 목표 칸으로 정착한다(FLIP). `left`/`top`과 `transform`을 동시에 트랜지션하면 iPad 등에서 레이아웃 경로와 컴포지터 경로의 타이밍 차로 차가 좌우로 흔들리므로, 정착은 컴포지터 단일 속성(`transform`)으로만 애니메이션한다.
 
 5.4. 제한시간 타이머는 `main.js`가 1초 간격으로 `elapsed`를 올리며 상단바 남은 시간을 갱신하고, 경과/제한 비율로 토끼 표정(`render.updateTargetFace`)을 무표정→어두움→울상으로 바꾼다. 클리어 시 타이머를 멈추고 표정을 활짝 웃음으로 바꾼 뒤 별·골드를 계산해 저장한다. 시간 내 클리어면 연속 콤보(`progress.combo`)를 1 올리고 2연속부터 콤보 보너스 골드를 더한다. 시간 초과 클리어면 콤보를 0으로 끊는다(§01 spec 6.7).
 
@@ -88,5 +88,5 @@ state = {
 
 5.8. 상점(§01 spec 7.5): `main.js`가 `RABBIT_SKINS`(토끼 색)·`BOARD_THEMES`(보드 색 세트)·`ACCESSORY_ITEMS`(토끼 머리 장식)를 모달에 그린다. 구매·장착(`buyOrEquip(kind, id)`)은 골드 확인(부족 시 흔들림+거부음) 후 `progress`의 보유/장착 키를 갱신한다. 스킨 장착은 `render.setTargetColor`, 테마 장착은 `.rushhour`의 `--rh-*` 변수 인라인 덮어쓰기, 액세서리 장착은 `render.setTargetAccessory`로 즉시 반영한다. 로드 시 저장된 스킨·테마·액세서리를 적용한다.
 
-5.7. 사운드(§01 spec 10): `audio/sound.js`가 `AudioContext`를 첫 재생 시점에 lazy 생성(자동재생 정책)하고 oscillator/gain으로 효과음을 합성한다. 음원 파일은 없다. `main.js`가 이동·클리어·힌트·구매·거부 시점에 `sound.play(name)`을 호출하고, 음소거 토글(🔊/🔇)은 `progress.muted`에 저장한다. 합성 파라미터(주파수·길이)는 sound.js 내부 디자인 상수다(04 §2.1 예외).
+5.7. 사운드(§01 spec 10): `audio/sound.js`가 `AudioContext`를 첫 재생 시점에 lazy 생성(자동재생 정책)하고 oscillator/gain으로 효과음을 합성한다. 음원 파일은 없다. `main.js`가 이동·클리어·힌트·구매·거부 시점에 `sound.play(name)`을 호출하고, 음소거 토글(🔊/🔇)은 `progress.muted`에 저장한다. 합성 파라미터(주파수·길이)는 sound.js 내부 디자인 상수다(04 §2.1 예외). iOS(아이폰/아이패드)는 사용자 제스처 핸들러 안에서 컨텍스트를 깨우고 무음 버퍼를 1회 재생해야 이후 소리가 나므로, `main.js`가 첫 `pointerdown`/`touchend`에서 `sound.unlockAudio()`를 1회 호출한다(미호출 시 iOS 크롬/사파리에서 효과음 전체 무음).
 5.3. 보드 크기는 CSS가 화면 너비에 맞춰 정사각형으로 잡고, 셀 크기는 한 곳(`--cell`)에서 파생한다.

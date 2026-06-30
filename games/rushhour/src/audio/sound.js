@@ -4,6 +4,7 @@
 
 let ctx = null;
 let muted = false;
+let unlocked = false;
 
 export function setMuted(m) { muted = !!m; }
 export function isMuted() { return muted; }
@@ -16,6 +17,22 @@ function audioCtx() {
   }
   if (ctx && ctx.state === 'suspended') ctx.resume();
   return ctx;
+}
+
+// iOS(아이폰/아이패드)는 사용자 제스처 핸들러 안에서 AudioContext를 깨우고 무음 버퍼를
+// 한 번 재생해야 이후 소리가 난다. main이 첫 pointerdown/touchend에서 1회 호출한다.
+// 이게 없으면 iOS 크롬/사파리에서 효과음이 통째로 안 들린다.
+export function unlockAudio() {
+  if (unlocked) return;
+  const c = audioCtx();
+  if (!c) return;
+  try {
+    const src = c.createBufferSource();
+    src.buffer = c.createBuffer(1, 1, 22050); // 1샘플 무음
+    src.connect(c.destination);
+    src.start(0);
+    unlocked = true;
+  } catch { /* 실패해도 게임 진행 무관 */ }
 }
 
 // 단음 하나: 주파수 freq(→ to로 글라이드), 길이 dur(초), 파형, 게인, 시작 지연.
@@ -36,7 +53,7 @@ function tone(c, { freq, to, dur, type = 'sine', gain = 0.15, delay = 0 }) {
 
 // 효과음별 합성 레시피.
 const SOUNDS = {
-  move: (c) => tone(c, { freq: 320, to: 460, dur: 0.09, type: 'triangle', gain: 0.12 }),
+  move: (c) => tone(c, { freq: 500, to: 760, dur: 0.13, type: 'triangle', gain: 0.35 }),
   hint: (c) => {
     tone(c, { freq: 660, dur: 0.12, type: 'sine', gain: 0.12 });
     tone(c, { freq: 990, dur: 0.16, type: 'sine', gain: 0.1, delay: 0.08 });

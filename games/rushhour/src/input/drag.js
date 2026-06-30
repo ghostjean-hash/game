@@ -84,18 +84,33 @@ export function attachDrag(boardEl, { getCars, onCommit, isLocked }) {
 
   function onUp(e) {
     if (!drag) return;
-    const target = isTap(e) ? tapTarget(e) : snapTarget(clampedOffset(e));
-
-    // dragging 해제로 transition을 되살린 뒤 transform을 0으로, 좌표를 새 칸으로 동시에
-    // 바꾸면 둘 다 트랜지션돼 손 뗀 자리에서 목표 칸으로 점프 없이 정착한다.
-    drag.el.classList.remove('dragging');
-    drag.el.style.transform = '';
-    const { car, startPos } = drag;
+    const { el, car, isH, startPos, cellPx } = drag;
+    const off = clampedOffset(e);
+    const target = isTap(e) ? tapTarget(e) : snapTarget(off);
     drag = null;
 
-    if (target !== startPos) {
-      onCommit(car.id, target);
+    if (target === startPos) {
+      // 제자리: transition을 되살리고 transform만 0으로 부드럽게 복귀.
+      el.classList.remove('dragging');
+      el.style.transform = '';
+      return;
     }
+
+    // FLIP 정착. left/top과 transform을 함께 트랜지션하면 iPad에서 레이아웃 경로와
+    // 컴포지터 경로의 타이밍 차로 차가 좌우로 흔들린다(docs/03 §5.2). 그래서:
+    //  1) 칸 위치를 즉시 목표 칸으로 옮기고(dragging 유지 중 = transition 꺼짐, 점프),
+    //  2) 같은 순간 transform으로 손 뗀 시각 위치를 상쇄해 점프를 0으로 만든 뒤,
+    //  3) 다음 프레임에 transition을 되살리고 transform만 0으로 → 컴포지터 단일 속성만 정착 애니.
+    const settleOff = off - (target - startPos) * cellPx;
+    onCommit(car.id, target);
+    // 이 수로 클리어되면 onCommit이 출구 빠져나가기 연출(transform)을 건다. 정착으로 덮지 않는다.
+    if (isLocked && isLocked()) return;
+    el.style.transform = isH ? `translateX(${settleOff}px)` : `translateY(${settleOff}px)`;
+    requestAnimationFrame(() => {
+      if (drag && drag.el === el) return; // 같은 차로 새 드래그가 시작됨 - 건드리지 않음
+      el.classList.remove('dragging');
+      el.style.transform = '';
+    });
   }
 
   boardEl.addEventListener('pointerdown', onDown);
