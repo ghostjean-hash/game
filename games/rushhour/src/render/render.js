@@ -4,6 +4,7 @@
 
 import { BOARD_SIZE, EXIT_ROW, TARGET_ID, CLEAR_EXIT_MS, CONFETTI_COUNT } from '../data/constants.js';
 import { BLOCK_TINTS, TARGET_BORDER } from '../data/colors.js';
+import { PONY_STYLES } from '../data/styles.js';
 
 // 조랑말 이미지 폴더(index.html 기준 상대경로).
 const PONY_BASE = 'assets/ponies/';
@@ -32,6 +33,264 @@ function ponySrc(car, style) {
 // 선택한 스타일에 이 블록 이미지가 없을 때(예: B 미완성 가로 블록) 쓸 A타입 폴백 경로.
 function fallbackSrc(car) {
   return `${PONY_BASE}a_${car.orient}${car.len}.png`;
+}
+
+// 스타일 정의(styles.js). 없으면 통 블록 기본으로 본다.
+function styleDef(style) {
+  return PONY_STYLES.find((s) => s.id === style) || {};
+}
+
+// 위치 기반 결정적 해시(리셋해도 같은 블록은 같은 종류·시작 위상을 얻는다).
+function hashAt(car, i, salt) {
+  return Math.abs(car.row * 31 + car.col * 17 + car.len * 7 + i * 13 + salt * 5);
+}
+
+// 블록 el에 단일 이미지(통 블록)를 채운다. 주인공/통 스타일/조립 실패 폴백 공용.
+function fillWhole(el, car, style) {
+  const img = document.createElement('img');
+  img.className = 'pony';
+  img.alt = '';
+  img.draggable = false;
+  if (car.id !== TARGET_ID) {
+    img.addEventListener('error', function onErr() {
+      img.removeEventListener('error', onErr);
+      img.src = fallbackSrc(car); // 이 스타일에 크기별 이미지도 없으면 A타입으로
+    });
+  }
+  img.src = ponySrc(car, style);
+  el.appendChild(img);
+}
+
+// 조립 스타일의 셀 하나: 1칸 컨테이너(overflow) + 스프라이트 스트립.
+// 시트 로드 후 가로/세로 비율로 프레임 수를 자동 계산하고, 2프레임 이상이면 애니를 켠다.
+// 셀마다 시작 위상을 어긋나게 해 무리가 제각각 움찔거리게 한다.
+function appendCell(el, car, i, variants, fps, onFail) {
+  const cell = document.createElement('div');
+  cell.className = 'pony-cell';
+  const strip = document.createElement('img');
+  strip.className = 'pony-strip';
+  strip.alt = '';
+  strip.draggable = false;
+  let done = false;
+  const apply = () => {
+    if (done) return; // load 이벤트 + 캐시 즉시처리가 겹쳐도 한 번만
+    done = true;
+    const frames = Math.max(1, Math.round(strip.naturalWidth / strip.naturalHeight));
+    cell.style.setProperty('--frames', String(frames));
+    if (frames > 1) {
+      cell.style.setProperty('--anim-dur', `${(frames / fps).toFixed(2)}s`);
+      cell.style.setProperty('--anim-delay', `-${((hashAt(car, i, 3) % frames) / fps).toFixed(2)}s`);
+      cell.classList.add('anim');
+    }
+  };
+  strip.addEventListener('load', apply);
+  strip.addEventListener('error', function onErr() {
+    strip.removeEventListener('error', onErr);
+    onFail();
+  });
+  strip.src = `${PONY_BASE}${variants[hashAt(car, i, 1) % variants.length]}.png`;
+  cell.appendChild(strip);
+  el.appendChild(cell);
+  // 이미 캐시돼 load 이벤트가 안 오는 경우 즉시 적용.
+  if (strip.complete && strip.naturalWidth > 0) apply();
+}
+
+// 발밑 정렬용 시트 측정 캐시. 각 표정 칸의 발밑(최하단 불투명 픽셀) y를 셀 높이 대비 비율로 잰다.
+let feetCache = null;
+function measureFeet(def) {
+  if (feetCache && feetCache.sheet === def.faceSheet) return Promise.resolve(feetCache);
+  const scan = (suffix) => new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const N = img.naturalWidth;
+        const cv = document.createElement('canvas');
+        cv.width = N; cv.height = N;
+        const ctx = cv.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, N, N).data;
+        const g = def.faceGrid;
+        const cs = N / g;
+        const out = [];
+        for (let gr = 0; gr < g; gr++) {
+          for (let gc = 0; gc < g; gc++) {
+            let bottom = -1;
+            let minX = cs;
+            let maxX = -1;
+            for (let y = 0; y < cs; y++) {
+              for (let x = 0; x < cs; x++) {
+                if (data[((gr * cs + y) * N + (gc * cs + x)) * 4 + 3] > 30) {
+                  if (y > bottom) bottom = y;
+                  if (x < minX) minX = x;
+                  if (x > maxX) maxX = x;
+                }
+              }
+            }
+            if (bottom < 0) { bottom = cs - 1; minX = 0; maxX = cs - 1; } // 빈 칸 안전값
+            out.push({ b: bottom / cs, cx: ((minX + maxX) / 2) / cs }); // 발밑 y·좌우 중심 x 비율
+          }
+        }
+        resolve(out);
+      } catch (e) { resolve(null); } // canvas 접근 불가 등은 보정 생략(안전측)
+    };
+    img.onerror = () => resolve(null);
+    img.src = `${PONY_BASE}${def.faceSheet}_${suffix}.png`;
+  });
+  return scan('a').then((a) => {
+    if (!a) return null;
+    const target = Math.max(...a.map((f) => f.b)); // 발밑 공통 기준 = 가장 낮은 발밑
+    feetCache = { sheet: def.faceSheet, grid: def.faceGrid, a, target };
+    return feetCache;
+  });
+}
+// 발밑을 공통 기준(가장 낮은 발밑)에 맞추는 세로 보정(% of 프레임 높이).
+function footPctY(idx) {
+  if (!feetCache) return 0;
+  const f = feetCache.a[idx];
+  return f ? ((feetCache.target - f.b) / feetCache.grid) * 100 : 0;
+}
+// 좌우 폭 중심을 칸 중앙(0.5)에 맞추는 가로 보정(% of 프레임 너비).
+function footPctX(idx) {
+  if (!feetCache) return 0;
+  const f = feetCache.a[idx];
+  return f ? ((0.5 - f.cx) / feetCache.grid) * 100 : 0;
+}
+
+// 셀 화면에 표정 idx를 표시(그리드 칸 이동 + 발밑·좌우 보정). 깜빡임은 이것만 쓰고 기억은 안 바꾼다.
+function applyFaceVisual(cell, idx, grid) {
+  cell.style.setProperty('--tx', `${-((idx % grid) * 100) / grid}%`);
+  cell.style.setProperty('--ty', `${-(Math.floor(idx / grid) * 100) / grid}%`);
+  const f = cell.querySelector('.pony-frame');
+  if (f) { f.style.setProperty('--fy', `${footPctY(idx)}%`); f.style.setProperty('--fx', `${footPctX(idx)}%`); }
+}
+// 셀의 표정을 idx로 설정 + 기억(dataset). 표정 변경·초기 배치용.
+function setFace(cell, idx, grid) {
+  cell.dataset.face = String(idx);
+  applyFaceVisual(cell, idx, grid);
+}
+// 시트 측정이 끝난 뒤 이미 그려진 셀들의 발밑 보정을 다시 적용한다.
+function refreshFeet(boardEl, grid) {
+  boardEl.querySelectorAll('.pony-cell.face').forEach((cell) => {
+    setFace(cell, parseInt(cell.dataset.face, 10) || 0, grid);
+  });
+}
+
+// 표정 타이머(보드 전체에 하나). 블럭(차) 단위로 각자 독립 확률로 판정한다. 한 블럭의 셀은
+// 같은 표정으로 함께 깜빡이거나 함께 바뀌고(블럭 내 통일), 표정을 바꿀 땐 다른 블럭이 현재
+// 쓰는 표정을 피한다(블럭 간 겹침 방지). 여러 블럭이 동시에 깜빡이기도 한다. 몸은 정지.
+let faceCycleTimer = null;
+function startFaceCycle(boardEl, def) {
+  if (faceCycleTimer) { clearInterval(faceCycleTimer); faceCycleTimer = null; }
+  if (!def || !def.faceSheet || !(def.faceCount > 1)) return;
+  const grid = def.faceGrid;
+  const blink = def.blinkFace;              // 눈 감은 컷 인덱스(없으면 깜빡임 생략)
+  const tick = def.faceCycleMs || 500;      // 판정 주기
+  const blinkChance = def.blinkChance || 0.12; // 블럭이 한 tick에 깜빡일 확률
+  const faceChance = def.faceChance || 0.04;   // 블럭이 한 tick에 표정 바꿀 확률
+  const blocks = Array.from(boardEl.querySelectorAll('.car'))
+    .map((carEl) => ({ el: carEl, cells: Array.from(carEl.querySelectorAll('.pony-cell.face')) }))
+    .filter((b) => b.cells.length);
+  if (!blocks.length) return;
+  const baseFace = (block) => parseInt(block.cells[0].dataset.face, 10) || 0;
+  const applyBlock = (block, idx) => block.cells.forEach((c) => setFace(c, idx, grid));      // 표정+기억
+  const visualBlock = (block, idx) => block.cells.forEach((c) => applyFaceVisual(c, idx, grid)); // 화면만
+  faceCycleTimer = setInterval(() => {
+    const usedFaces = new Set(blocks.map(baseFace)); // 현재 블럭들이 쓰는 표정(겹침 회피용)
+    for (const block of blocks) {
+      if (block.el.dataset.blinking === '1') continue; // 깜빡 중인 블럭은 건너뜀
+      const base = baseFace(block);
+      const r = Math.random();
+      if (blink != null && base !== blink && r < blinkChance) {
+        // 눈 깜빡: 블럭 전체가 잠깐 눈감았다(기억 유지) 원래 표정으로 복귀
+        block.el.dataset.blinking = '1';
+        visualBlock(block, blink);
+        setTimeout(() => {
+          visualBlock(block, baseFace(block));
+          block.el.dataset.blinking = '';
+        }, 130);
+      } else if (r > 1 - faceChance) {
+        // 다른 블럭이 안 쓰는 표정으로 블럭 전체를 바꾼다(눈감은 컷 제외)
+        let n = Math.floor(Math.random() * def.faceCount);
+        let tries = 0;
+        while ((usedFaces.has(n) || n === blink) && tries < def.faceCount) {
+          n = (n + 1) % def.faceCount;
+          tries += 1;
+        }
+        usedFaces.delete(base);
+        usedFaces.add(n);
+        applyBlock(block, n);
+      }
+    }
+  }, tick);
+}
+
+// 블럭(차)마다 표정 하나를 유니크하게 배정한다(같은 블럭 통일 + 블럭 간 겹침 방지). 결정적.
+// 블럭 수가 (표정 수 - 깜빡 컷)보다 많으면 부득이 겹칠 수 있다(안전측 순환).
+function assignBlockFaces(cars, def) {
+  const map = {};
+  const used = new Set();
+  const blink = def.blinkFace;
+  for (const car of cars) {
+    if (car.id === TARGET_ID) continue;
+    let idx = hashAt(car, 0, 1) % def.faceCount;
+    let tries = 0;
+    while ((used.has(idx) || idx === blink) && tries < def.faceCount) {
+      idx = (idx + 1) % def.faceCount;
+      tries += 1;
+    }
+    used.add(idx);
+    map[car.id] = idx;
+  }
+  return map;
+}
+
+// 조립 스타일의 표정 그리드 셀: 표정 시트(faceGrid×faceGrid 칸에 표정 여러 개)에서 배정된
+// 표정 하나를 단일 이미지로 그린다. 몸은 정지, 표정만 타이머(startFaceCycle)로 변한다.
+function appendFaceCell(el, car, i, def, onFail, faceIdx) {
+  const cell = document.createElement('div');
+  cell.className = 'pony-cell face';
+  const grid = def.faceGrid;
+  const idx = faceIdx != null ? faceIdx : hashAt(car, i, 1) % def.faceCount; // 블럭 배정 표정(통일)
+  cell.style.setProperty('--fg', String(grid)); // 그리드 한 변(스트립 배율)
+  cell.style.setProperty('--lift', `${def.footLiftPx || 0}px`); // 발을 바닥에서 살짝 띄움
+  const img = document.createElement('img');
+  img.className = 'pony-frame';
+  img.alt = '';
+  img.draggable = false;
+  img.addEventListener('error', function onErr() {
+    img.removeEventListener('error', onErr);
+    onFail();
+  });
+  img.src = `${PONY_BASE}${def.faceSheet}_a.png`;
+  cell.appendChild(img);
+  setFace(cell, idx, grid); // 프레임을 붙인 뒤 표정 칸 이동 + 발밑·좌우 보정 적용
+  el.appendChild(cell);
+}
+
+// 블록 el에 캐릭터 이미지를 채운다(방식은 스타일 tiled + 주인공 여부로 결정).
+// - 주인공 또는 통 스타일(tiled:false): 단일 이미지(늘림).
+// - 조립 스타일(tiled:true): 1칸 셀을 길이만큼 반복. faceSheet가 있으면 표정 그리드+움찔,
+//   아니면 단일 스프라이트 순환. 시트가 없으면(로드 실패) 통 블록 이미지로 1회 폴백한다.
+function fillCar(el, car, style, faceIdx) {
+  const def = styleDef(style);
+  if (car.id === TARGET_ID || !def.tiled) {
+    fillWhole(el, car, style);
+    return;
+  }
+  let switched = false;
+  const useSingle = () => {
+    if (switched) return; // 여러 셀이 동시에 실패해도 재구성은 한 번만
+    switched = true;
+    el.innerHTML = '';
+    fillWhole(el, car, style); // 통 블록 이미지로 폴백(→ 없으면 A타입)
+  };
+  if (def.faceSheet) {
+    for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle, faceIdx); // 블럭 통일
+    return;
+  }
+  const variants = (def.cellVariants && def.cellVariants.length) ? def.cellVariants : [`${style}_cell`];
+  const fps = def.cellFps || 8;
+  for (let i = 0; i < car.len; i++) appendCell(el, car, i, variants, fps, useSingle);
 }
 
 // 아래 셋은 SVG 시절 동적 표정·스킨 색·머리 장식을 그리던 함수다. PNG 단일 이미지로
@@ -66,6 +325,10 @@ export function buildBoard(boardEl, cars, style = 'a', opts = {}) {
     + '</svg>';
   boardEl.appendChild(exit);
 
+  const sdef = styleDef(style);
+  // 표정 그리드 스타일이면 블럭마다 표정을 유니크 배정(같은 블럭 통일 + 블럭 간 겹침 방지).
+  const faceMap = sdef.faceSheet ? assignBlockFaces(cars, sdef) : null;
+
   const els = new Map();
   for (const car of cars) {
     const el = document.createElement('div');
@@ -79,23 +342,13 @@ export function buildBoard(boardEl, cars, style = 'a', opts = {}) {
     el.style.background = o.bg ? tint : 'transparent';
     const borderColor = isTarget ? TARGET_BORDER : darken(tint);
     el.style.setProperty('--tint-border', o.border ? borderColor : 'transparent');
-    const img = document.createElement('img');
-    img.className = 'pony';
-    img.src = ponySrc(car, style);
-    img.alt = '';
-    img.draggable = false; // 브라우저 기본 이미지 드래그(고스트) 차단
-    // 이 스타일에 해당 블록 이미지가 없으면(로드 실패) A타입으로 1회 대체.
-    if (car.id !== TARGET_ID) {
-      img.addEventListener('error', function onErr() {
-        img.removeEventListener('error', onErr);
-        img.src = fallbackSrc(car);
-      });
-    }
-    el.appendChild(img);
+    fillCar(el, car, style, faceMap ? faceMap[car.id] : undefined);
     place(el, car);
     boardEl.appendChild(el);
     els.set(car.id, el);
   }
+  startFaceCycle(boardEl, sdef); // 표정 그리드 스타일이면 이따금 표정 교체
+  if (sdef.faceSheet) measureFeet(sdef).then((c) => { if (c) refreshFeet(boardEl, c.grid); }); // 발밑 정렬
   return els;
 }
 

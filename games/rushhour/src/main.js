@@ -120,12 +120,14 @@ function currentBlockOpts() {
   const d = {
     a: { bg: true, border: true },
     b: { bg: true, border: true },
+    c: { bg: true, border: true },
     target: { bg: false, border: true },
   };
   const o = progress().blockOpts || {};
   return {
     a: { ...d.a, ...o.a },
     b: { ...d.b, ...o.b },
+    c: { ...d.c, ...o.c },
     target: { ...d.target, ...o.target },
   };
 }
@@ -455,7 +457,7 @@ function renderMap() {
 
 // --- 설정(블록 캐릭터 스타일) ---
 
-const OPT_ROWS = [{ key: 'a', name: '조랑말' }, { key: 'b', name: '모찌' }, { key: 'target', name: '주인공' }];
+const OPT_ROWS = [{ key: 'a', name: '조랑말' }, { key: 'b', name: '모찌' }, { key: 'c', name: '말랑이' }, { key: 'target', name: '주인공' }];
 
 function renderSettings() {
   const cur = currentStyle();

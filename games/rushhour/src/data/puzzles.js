@@ -1,5 +1,6 @@
 // 내장 퍼즐 세트(docs/02_data.md §3). 솔버(BFS)로 측정한 체감점수(최소수+막는차+되돌림)
 // 오름차순으로 각 난이도 구간 내부를 정렬했다(2026-06-30: "갑자기 쉬워지는" 지점 제거, 곡선 단조화).
+// 2026-07-01: 인접 near-duplicate(형태 유사도>=0.86) 28쌍의 뒤쪽을 솔버 검증 신규 퍼즐로 교체(다양성).
 // 곡선: 입문 1~21 / 쉬움 22~81 / 보통 82~170 / 도전 171~186. 총 186개. 1번은 튜토리얼.
 // 끝 주석 = 솔버 최소수 · 최적해에서 움직이는 서로 다른 차 수(얽힘).
 
@@ -10,10 +11,10 @@ export const PUZZLES = [
   { id: 4, difficulty: 'beginner', grid: ["......","......","XX....","......","...A..","...ABB"] }, // 1수·1대
   { id: 5, difficulty: 'beginner', grid: ["......","B.....","BC.XX.","BC...A",".C...A",".....A"] }, // 1수·1대
   { id: 6, difficulty: 'beginner', grid: ["......","......","A..XX.","A.....","......",".CCBB."] }, // 1수·1대
-  { id: 7, difficulty: 'beginner', grid: ["......","......","...XX.","A.....","A.....","CCBB.."] }, // 1수·1대
+  { id: 7, difficulty: 'beginner', grid: ["...EEE","....A.","DCXXA.","DCB...","..B...","......"] }, // 2수·2대 (신규)
   { id: 8, difficulty: 'beginner', grid: ["...DD.","......",".XX...","...BBB","....A.",".CCCA."] }, // 1수·1대
   { id: 9, difficulty: 'beginner', grid: ["BBB...","......","A..XX.","A.....","......","......"] }, // 1수·1대
-  { id: 10, difficulty: 'beginner', grid: ["BBB...","A.....","A..XX.","......","......","......"] }, // 1수·1대
+  { id: 10, difficulty: 'beginner', grid: ["......","BBB..A",".XX..A",".....A","..D...","CCD..."] }, // 2수·2대 (신규)
   { id: 11, difficulty: 'beginner', grid: ["..CDDD","..C...","...XX.","EE..B.","....B.","....AA"] }, // 1수·1대
   { id: 12, difficulty: 'beginner', grid: [".....D","CCC..D",".XX..D","....A.","BB..A.","EE..A."] }, // 2수·2대
   { id: 13, difficulty: 'beginner', grid: [".C....",".C...A",".C.XXA","B....A","B.....","B....."] }, // 2수·2대
@@ -29,51 +30,51 @@ export const PUZZLES = [
   { id: 23, difficulty: 'easy', grid: ["...GEE","...GA.","..XXA.",".....D","F...BD","FCCCB."] }, // 5수·4대
   { id: 24, difficulty: 'easy', grid: ["...GEE","F..GA.","F.XXA.","....B.","....BD",".CCC.D"] }, // 5수·4대
   { id: 25, difficulty: 'easy', grid: [".....E",".CCC.E",".XX..A","...B.A","...B.A","...BDD"] }, // 5수·4대
-  { id: 26, difficulty: 'easy', grid: [".....E",".CCC.E","XX...A","...B.A","...B.A","...BDD"] }, // 5수·4대
+  { id: 26, difficulty: 'easy', grid: ["...ECC","...EFA","XX.EFA",".BB..A",".GGG..","DD...."] }, // 5수·5대 (신규)
   { id: 27, difficulty: 'easy', grid: ["......",".....A","XX...A",".....A","..BCCC","..B.DD"] }, // 5수·5대
   { id: 28, difficulty: 'easy', grid: ["..CGG.","..C.D.","..XXD.","..BBB.",".AA.FF","..EE.."] }, // 5수·5대
-  { id: 29, difficulty: 'easy', grid: ["..CGG.","..C.D.","..XXD.","...BBB",".AAFF.","..EE.."] }, // 5수·5대
+  { id: 29, difficulty: 'easy', grid: ["......","...DFF","XXCDEB","..CDEB","..C..B","...AA."] }, // 6수·6대 (신규)
   { id: 30, difficulty: 'easy', grid: ["..DDB.","....B.",".EXXB.",".ECCC.","..AAA.","......"] }, // 5수·5대
   { id: 31, difficulty: 'easy', grid: [".....A",".....A",".XX..A","....BB","....DD","...CCC"] }, // 5수·5대
-  { id: 32, difficulty: 'easy', grid: [".....A",".....A","XX...A","....BB","....DD","...CCC"] }, // 5수·5대
+  { id: 32, difficulty: 'easy', grid: ["..DD.E","AAFF.E","XX...E","......","....BB",".CCCGG"] }, // 5수·5대 (신규)
   { id: 33, difficulty: 'easy', grid: [".CCCAE","....AE","XX..A.",".FDDD.",".FBB..","....GG"] }, // 5수·5대
   { id: 34, difficulty: 'easy', grid: ["......",".CCCAD","XX..AD","....AD","....BB","...EE."] }, // 5수·5대
   { id: 35, difficulty: 'easy', grid: ["....A.","CCC.AD","..XXAD",".....D","...BB.","...EE."] }, // 5수·5대
   { id: 36, difficulty: 'easy', grid: ["......","...B.C",".XXB.C","...B.C",".AAA..","..DD.."] }, // 5수·5대
-  { id: 37, difficulty: 'easy', grid: ["......","...B..",".XXB.C","...B.C","..AAAC","..DD.."] }, // 5수·5대
+  { id: 37, difficulty: 'easy', grid: ["..CCAD","....AD","XXF.A.","..FBBB","..GGG.","EE...."] }, // 6수·6대 (신규)
   { id: 38, difficulty: 'easy', grid: ["......","..DDEA","..XXEA",".FCCE.",".F.GG.",".F.BB."] }, // 5수·5대
   { id: 39, difficulty: 'easy', grid: ["..AAA.","DDB..C","XXB..C",".....C",".FF.GG","..EEE."] }, // 5수·5대
   { id: 40, difficulty: 'easy', grid: ["..DDD.","..A.C.","XXA.C.","..A...",".BBB..","......"] }, // 5수·5대
-  { id: 41, difficulty: 'easy', grid: ["..DDD.","..A.C.","XXA.C.","..A...","..BBB.","......"] }, // 5수·5대
+  { id: 41, difficulty: 'easy', grid: ["C....F","C..DBF","CXXDBF","...DB.","...AAA",".EE..."] }, // 5수·5대 (신규)
   { id: 42, difficulty: 'easy', grid: ["B...D.","B...DA","..XXDA","...EEE","...CC.","......"] }, // 5수·5대
   { id: 43, difficulty: 'easy', grid: ["....D.","....D.",".XX.DA","B.EEEA","B...CC","......"] }, // 5수·5대
   { id: 44, difficulty: 'easy', grid: [".DD.B.","....B.","..XXBE",".....E",".FC...",".FC.AA"] }, // 5수·5대
   { id: 45, difficulty: 'easy', grid: ["....DD","....B.",".XX.BE",".F..BE",".FC...","..C.AA"] }, // 5수·5대
   { id: 46, difficulty: 'easy', grid: ["...C..","...C..",".XXC.E",".....E","B....A","BDDD.A"] }, // 5수·5대
-  { id: 47, difficulty: 'easy', grid: ["...C.E","...C.E",".XXC.A",".....A","B.....","BDDD.."] }, // 5수·5대
+  { id: 47, difficulty: 'easy', grid: ["......",".....E","A.XX.E","A....E",".CCBBB","...DDD"] }, // 5수·5대 (신규)
   { id: 48, difficulty: 'easy', grid: ["AA.GGE","....DE","XX..DE","..C...","..CF..","...FBB"] }, // 5수·5대
   { id: 49, difficulty: 'easy', grid: ["...EE.","...AAA","XX.BF.","...BF.","....D.","CCC.D."] }, // 5수·5대
-  { id: 50, difficulty: 'easy', grid: ["....EE","...AAA","XX.BF.","...BF.","....D.",".CCCD."] }, // 5수·5대
+  { id: 50, difficulty: 'easy', grid: ["..C...","..C...","XXC.D.","AAA.D.","..EE..","....BB"] }, // 5수·5대 (신규)
   { id: 51, difficulty: 'easy', grid: ["AAA...","..F...","XXFE..","GC.E..","GCBBD.",".C..D."] }, // 5수·5대
   { id: 52, difficulty: 'easy', grid: ["...C..","...C..","XX.C.B",".....B","..AA..","...DD."] }, // 5수·5대
   { id: 53, difficulty: 'easy', grid: ["......","...C.B",".XXC.B","...C..","...AA.","...DD."] }, // 5수·5대
   { id: 54, difficulty: 'easy', grid: [".....D","....CD","XX..CD","....AA","...BBB","......"] }, // 5수·5대
-  { id: 55, difficulty: 'easy', grid: [".....D","....CD",".XX.CD","....AA","...BBB","......"] }, // 5수·5대
+  { id: 55, difficulty: 'easy', grid: ["DD.C..","...C.E","FXXAGE","F..AGE","...A..",".BBB.."] }, // 5수·5대 (신규)
   { id: 56, difficulty: 'easy', grid: ["....B.","...DB.","XXADB.","..A...","EF....","EF..CC"] }, // 5수·5대
-  { id: 57, difficulty: 'easy', grid: ["......","...DB.","XXADB.",".FA.B.","EF....","E...CC"] }, // 5수·5대
+  { id: 57, difficulty: 'easy', grid: ["...BB.","EE.D..",".XXDF.","....F.",".AAAF.","....CC"] }, // 5수·5대 (신규)
   { id: 58, difficulty: 'easy', grid: ["....AA",".....D","EXXFCD","E..FCD","....C.","...BBB"] }, // 5수·5대
   { id: 59, difficulty: 'easy', grid: ["AA..CD","....CD",".XXFCD","...F..","E.....","E..BBB"] }, // 5수·5대
   { id: 60, difficulty: 'easy', grid: ["..GGG.",".CCC.E","XX.AFE","...AF.","..BBF.","DD...."] }, // 5수·5대
   { id: 61, difficulty: 'easy', grid: ["..FGB.","DDFGBC",".XXEBC","...E.C","..AAA.","......"] }, // 5수·5대
   { id: 62, difficulty: 'easy', grid: ["G.BBB.","G...DC","GXXEDC",".F.E.C",".F....",".F.AAA"] }, // 5수·5대
-  { id: 63, difficulty: 'easy', grid: ["GBBB..","G....C","GXXEDC",".F.EDC",".F....",".F.AAA"] }, // 5수·5대
+  { id: 63, difficulty: 'easy', grid: [".FFF.A","...EBA",".XXEBA","...E..","...DD.","CCC..."] }, // 5수·5대 (신규)
   { id: 64, difficulty: 'easy', grid: ["......","..AAA.","XXEBC.","..EBC.","..EBC.","....DD"] }, // 5수·5대
   { id: 65, difficulty: 'easy', grid: ["....F.","D...F.","DBXXF.",".BCAAA",".BCG..",".EEG.."] }, // 6수·6대
   { id: 66, difficulty: 'easy', grid: [".EEE..","AAAFC.","XXBFCD","..BFCD",".....D","......"] }, // 5수·5대
-  { id: 67, difficulty: 'easy', grid: [".EEE..","AAA.CD","XXBFCD","..BFCD","...F..","......"] }, // 5수·5대
+  { id: 67, difficulty: 'easy', grid: ["...D..","FF.DC.","XXEDC.","AAE.C.",".BBB..","......"] }, // 5수·5대 (신규)
   { id: 68, difficulty: 'easy', grid: [".AAGGE","..CF.E","XXCFDE","....D.","......","BB...."] }, // 5수·5대
   { id: 69, difficulty: 'easy', grid: ["FFDDD.","...E..","XXAECB","..A.CB","..A.CB","......"] }, // 5수·5대
-  { id: 70, difficulty: 'easy', grid: [".FFDDD","...EC.","XXAECB","..A.CB","..A..B","......"] }, // 5수·5대
+  { id: 70, difficulty: 'easy', grid: ["...EC.",".FFEC.",".XXEC.","..AA.G",".BB..G","...DDD"] }, // 5수·5대 (신규)
   { id: 71, difficulty: 'easy', grid: ["...GBC","DD.GBC","XXFEBC","..FE..","AAA...","......"] }, // 5수·5대
   { id: 72, difficulty: 'easy', grid: ["....E.",".FDDEA",".FXXEA",".F.CC.","...GG.","...BB."] }, // 6수·6대
   { id: 73, difficulty: 'easy', grid: ["AAA...","...DDC","XXB..C","..B..C",".FF.GG","...EEE"] }, // 6수·6대
@@ -88,19 +89,19 @@ export const PUZZLES = [
   { id: 82, difficulty: 'medium', grid: ["..A...","FFAD..","XXAD..","....CE","....CE","..BBBE"] }, // 9수·5대
   { id: 83, difficulty: 'medium', grid: ["..FFFG","..B..G","XXB..D",".IIEHD","..AEH.","..AECC"] }, // 9수·5대
   { id: 84, difficulty: 'medium', grid: ["......","..DDDA","XXC..A","F.C..E","F.C..E","FBBB.E"] }, // 9수·5대
-  { id: 85, difficulty: 'medium', grid: ["......",".DDD.A","XXC..A","F.C..E","F.C..E","F.BBBE"] }, // 9수·5대
+  { id: 85, difficulty: 'medium', grid: ["..F...","..FEEG","XXA..G","..A..G","DDD...",".BBCCC"] }, // 9수·6대 (신규)
   { id: 86, difficulty: 'medium', grid: ["..FF..","......",".XX.BD","AAA.BD",".C..B.",".CEEE."] }, // 9수·6대
   { id: 87, difficulty: 'medium', grid: ["B.....","B.HH.I","BXX.AI","DDD.AE",".GCCAE",".GFFF."] }, // 9수·6대
-  { id: 88, difficulty: 'medium', grid: ["B....I","B.HH.I","BXX.AE","DDD.AE",".GCCA.",".GFFF."] }, // 9수·6대
+  { id: 88, difficulty: 'medium', grid: ["B.GG..","BDDDH.","XX..HF","..A.HF","..AIII",".EE.CC"] }, // 10수·9대 (신규)
   { id: 89, difficulty: 'medium', grid: [".EFFF.",".EHHHB","..XXAB","DDCGAB","..CGA.","..CGII"] }, // 9수·6대
   { id: 90, difficulty: 'medium', grid: [".EE..D",".....D","..XXCD","..FAC.","..FAC.","..FABB"] }, // 9수·6대
-  { id: 91, difficulty: 'medium', grid: ["..EE.D",".....D","..XXCD","..FAC.","..FAC.","..FABB"] }, // 9수·6대
+  { id: 91, difficulty: 'medium', grid: ["GGG...","IIA..F","XXA.EF",".D..EB",".DC.EB","..CHHB"] }, // 10수·7대 (신규)
   { id: 92, difficulty: 'medium', grid: [".DDDFB","A...FB","A.XXFB","....CC","..E.GG","..E..."] }, // 9수·7대
   { id: 93, difficulty: 'medium', grid: ["....F.","D..GF.","DXXGF.",".B.AAA",".BC...",".BCEE."] }, // 9수·7대
   { id: 94, difficulty: 'medium', grid: ["..CCD.",".BAADI",".BXXEI","...HEI","...HFF","...GGG"] }, // 9수·7대
   { id: 95, difficulty: 'medium', grid: ["...HCC","AA.HD.",".BXXDI",".B..EI","FF..EI","..GGG."] }, // 9수·7대
   { id: 96, difficulty: 'medium', grid: ["HHH.EB",".DDDEB","..XXEB","FFFG..","...GCC","...GAA"] }, // 9수·7대
-  { id: 97, difficulty: 'medium', grid: [".HHHE.",".DDDEB","..XXEB","FFFG.B","...GCC","...GAA"] }, // 9수·7대
+  { id: 97, difficulty: 'medium', grid: [".HDB..",".HDB..","G.XXAE","GIIIAE","G.C.A.","..C.FF"] }, // 9수·6대 (신규)
   { id: 98, difficulty: 'medium', grid: [".BBB..","....D.","AXXED.","A.GED.",".CGE..",".CG.FF"] }, // 9수·7대
   { id: 99, difficulty: 'medium', grid: ["...BBB","A..ED.","AXXED.","..GED.",".CG...",".CG.FF"] }, // 9수·7대
   { id: 100, difficulty: 'medium', grid: ["..HHF.","B.IIFG","B.XXFG","...AEE","DDDA.C","...A.C"] }, // 9수·7대
@@ -112,9 +113,9 @@ export const PUZZLES = [
   { id: 106, difficulty: 'medium', grid: ["FFF.B.","AA..B.","XX..BH",".G.DDH","EGCCC.","EG.III"] }, // 9수·8대
   { id: 107, difficulty: 'medium', grid: ["....F.",".BB.FI",".XX.FI","GEDDAA","GE...C",".EHH.C"] }, // 9수·8대
   { id: 108, difficulty: 'medium', grid: ["..BBC.","....CD","..XXCD","...GGD","...FAA","...FEE"] }, // 9수·8대
-  { id: 109, difficulty: 'medium', grid: ["...BB.","....CD","..XXCD","..GGCD","...FAA","...FEE"] }, // 9수·8대
+  { id: 109, difficulty: 'medium', grid: ["E..FFF","E.AAAG","XX.H.G",".I.H.G",".I.DDD","BB.CCC"] }, // 9수·8대 (신규)
   { id: 110, difficulty: 'medium', grid: ["...GG.","....AE","F.XXAE","FCCCAE","...HDD",".BBH.."] }, // 9수·8대
-  { id: 111, difficulty: 'medium', grid: ["..GG..","....AE","F.XXAE","FCCCAE","...HDD",".BBH.."] }, // 9수·8대
+  { id: 111, difficulty: 'medium', grid: ["...GGG","....HF","XXD.HF","..D.H.","EBB.AA","E..CC."] }, // 9수·8대 (신규)
   { id: 112, difficulty: 'medium', grid: ["......","....E.","XX..EB","FA..EB","FA.DDB","FACCGG"] }, // 9수·8대
   { id: 113, difficulty: 'medium', grid: ["....E.","....EB",".XX.EB","FA...B","FA..DD","FACCGG"] }, // 9수·8대
   { id: 114, difficulty: 'medium', grid: ["DDD..E","B.CCGE","B.XXGE","B..IFF","...IHH","...AAA"] }, // 9수·8대
@@ -126,7 +127,7 @@ export const PUZZLES = [
   { id: 120, difficulty: 'medium', grid: ["..GGD.","H...DF","H.XXDF","H.CCC.","...BEE","AAAB.."] }, // 9수·8대
   { id: 121, difficulty: 'medium', grid: ["GG..D.","....D.","H.XXDF","H.CCCF","H..BEE","AAAB.."] }, // 9수·8대
   { id: 122, difficulty: 'medium', grid: ["..CCC.","..EDDG","XXE..G","F.E.AG","FHH.A.","..BB.."] }, // 9수·8대
-  { id: 123, difficulty: 'medium', grid: ["..CCC.","..EDD.","XXE..G","F.E.AG","F.HHAG","..BB.."] }, // 9수·8대
+  { id: 123, difficulty: 'medium', grid: ["..EE..","AAAHHI","..XX.I",".GG..I","CCCBFF","...BDD"] }, // 9수·7대 (신규)
   { id: 124, difficulty: 'medium', grid: ["DD.IIF","E....F","EXXA.F","E..AGG","..BBCC","...HHH"] }, // 9수·8대
   { id: 125, difficulty: 'medium', grid: ["DDII.F",".....F",".XXA.F","E..AGG","E.BBCC","E..HHH"] }, // 9수·8대
   { id: 126, difficulty: 'medium', grid: [".FF.E.","BBB.EC","D.XXEC","D.IGGC","D.I...","HH.AA."] }, // 9수·8대
@@ -140,15 +141,15 @@ export const PUZZLES = [
   { id: 134, difficulty: 'medium', grid: ["...FFF","....C.","XXH.CD","AEH.GD","AEH.GD","AEBBB."] }, // 9수·6대
   { id: 135, difficulty: 'medium', grid: ["..DDD.","IFFFE.","IXXGEC",".ABGEC",".ABG.C","..B.HH"] }, // 9수·7대
   { id: 136, difficulty: 'medium', grid: ["..BACC","..BA.F",".XXDEF","...DE.",".....G",".....G"] }, // 9수·7대
-  { id: 137, difficulty: 'medium', grid: ["..BACC","..BA..",".XXDEF","...DEF",".....G",".....G"] }, // 9수·7대
+  { id: 137, difficulty: 'medium', grid: [".EEE.F","HH...F","XXD.G.","..D.G.","BBB.GA","..CCCA"] }, // 10수·6대 (신규)
   { id: 138, difficulty: 'medium', grid: ["..EHHH","IIE.GA",".XXDGA","...DBA","....B.",".FFFCC"] }, // 9수·8대
-  { id: 139, difficulty: 'medium', grid: ["..EHHH","IIE.G.",".XXDGA","...DBA","....BA",".FFFCC"] }, // 9수·8대
+  { id: 139, difficulty: 'medium', grid: [".BBF..","...FC.","XXE.C.",".HE.C.",".HAAA.","..DDGG"] }, // 9수·8대 (신규)
   { id: 140, difficulty: 'medium', grid: [".EFHHH",".EFCCC","XXF.AD","B...AD","BGG...","B....."] }, // 9수·8대
   { id: 141, difficulty: 'medium', grid: [".IIH..","AA.HFB","XX.EFB","C..EFB","C.GGG.","C..DDD"] }, // 9수·8대
   { id: 142, difficulty: 'medium', grid: [".IIH.B","AA.HFB","XX.EFB","C..EF.","C..GGG","C.DDD."] }, // 9수·8대
   { id: 143, difficulty: 'medium', grid: ["D...F.","D..GF.",".XXGF.",".BAAA.",".BC...",".BC.EE"] }, // 10수·7대
   { id: 144, difficulty: 'medium', grid: [".....E","..BBDE",".XXADE","...ACC","F..A..","F.GGG."] }, // 9수·8대
-  { id: 145, difficulty: 'medium', grid: [".....E","..BBDE",".XXADE","...ACC","F..A..","F..GGG"] }, // 9수·8대
+  { id: 145, difficulty: 'medium', grid: ["..FFFG","..A.BG","XXA.BE","CCC.BE",".DD...","......"] }, // 9수·7대 (신규)
   { id: 146, difficulty: 'medium', grid: ["...AHH","...AII",".XXAFG","B.EEFG","BDDDFC",".....C"] }, // 9수·9대
   { id: 147, difficulty: 'medium', grid: ["....F.",".EEEFA",".XXHFA","...HBB","..CCC.",".DD.GG"] }, // 9수·9대
   { id: 148, difficulty: 'medium', grid: ["...FFF","..H.C.","XXH.C.","AEH.GD","AE..GD","AEBBBD"] }, // 10수·6대
@@ -156,13 +157,13 @@ export const PUZZLES = [
   { id: 150, difficulty: 'medium', grid: ["..FFF.",".EHHH.",".EXXAB","DDCGAB","..CGAB","..CGII"] }, // 10수·7대
   { id: 151, difficulty: 'medium', grid: ["DDD.F.","....F.","AXX.FB","A.ECCB","..EGGB","......"] }, // 10수·8대
   { id: 152, difficulty: 'medium', grid: [".EDDD.",".ECBBB","XXC..G","..C..G","H.FFAG","H...A."] }, // 10수·8대
-  { id: 153, difficulty: 'medium', grid: [".ECDDD",".ECBBB","XXC..G",".....G","H.FFAG","H...A."] }, // 10수·8대
+  { id: 153, difficulty: 'medium', grid: ["...GG.","....F.",".XX.FB",".CCCFB","AAD.EE","..D..."] }, // 10수·7대 (신규)
   { id: 154, difficulty: 'medium', grid: [".EHHH.",".EFCCC","XXF..D","B.F.AD","BGG.A.","B....."] }, // 10수·8대
   { id: 155, difficulty: 'medium', grid: ["..CCCF",".AAAGF","..XXGF","...BEE","...B..","...BDD"] }, // 10수·8대
   { id: 156, difficulty: 'medium', grid: ["..EGGG","..E.II","AXXD.H","A..D.H","C..D.F","C.BBBF"] }, // 10수·9대
   { id: 157, difficulty: 'medium', grid: ["..DD.A","FE..CA","FEXXCA","F.B.C.","..BGGG","HH...."] }, // 10수·9대
   { id: 158, difficulty: 'medium', grid: [".FF.DD","..I.AG","XXIBAG","HHHBAG","...BEE","..CC.."] }, // 9수·8대
-  { id: 159, difficulty: 'medium', grid: [".FFDD.","..I.AG","XXIBAG","HHHBAG","...BEE","...CC."] }, // 9수·8대
+  { id: 159, difficulty: 'medium', grid: ["I.CCC.","I.EEAD","GXX.AD","G.F.AD","..FHH.",".BB..."] }, // 10수·8대 (신규)
   { id: 160, difficulty: 'medium', grid: ["...EEE","....GF","XX..GF","AAA..F","B.DDHH","BIICCC"] }, // 10수·10대
   { id: 161, difficulty: 'medium', grid: ["......","..AFF.","XXADC.","..ADCE",".....E",".BBB.E"] }, // 10수·6대
   { id: 162, difficulty: 'medium', grid: ["FFF..G",".....G","XXBEH.","IIBEHD","..AE.D","..A.CC"] }, // 10수·6대
@@ -175,9 +176,9 @@ export const PUZZLES = [
   { id: 169, difficulty: 'medium', grid: ["DD.CGG","B..CH.","BXXCHA","BF..HA",".F.EE.","......"] }, // 12수·7대
   { id: 170, difficulty: 'medium', grid: ["FF..EC",".BBBEC","XXI.EC","D.IGG.","D.....","DHHAA."] }, // 12수·9대
   { id: 171, difficulty: 'hard', grid: ["DFCEEE","DFC...","XXC..G","H...AG","HBBBAG","H....."] }, // 13수·7대
-  { id: 172, difficulty: 'hard', grid: ["DFEEE.","DFC...","XXC..G","H.C.AG","HBBBAG","H....."] }, // 13수·7대
+  { id: 172, difficulty: 'hard', grid: [".BB..H","....DH","XX.GDH",".FCGD.",".FCGAA","..C.EE"] }, // 14수·9대 (신규)
   { id: 173, difficulty: 'hard', grid: ["C....F","CAAA.F","XXB..F","..B...","..BGDD","EEEG.."] }, // 13수·8대
-  { id: 174, difficulty: 'hard', grid: ["C.....","C.AAAF","XXB..F","..B..F","..BGDD","EEEG.."] }, // 13수·8대
+  { id: 174, difficulty: 'hard', grid: ["...GGA","...H.A","XXCHFA","..CHF.",".D.EE.",".D.BB."] }, // 14수·8대 (신규)
   { id: 175, difficulty: 'hard', grid: ["......",".GG.A.",".XXFA.","BBBFAC","..DEEC","..DHHC"] }, // 13수·9대
   { id: 176, difficulty: 'hard', grid: ["......",".GG.AC",".XX.AC","BBBFAC","..DFEE","..DHH."] }, // 13수·9대
   { id: 177, difficulty: 'hard', grid: ["..G.CC","..G.B.","XX.FB.","EEEFB.",".D.AAA",".DHHH."] }, // 13수·9대

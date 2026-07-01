@@ -161,11 +161,64 @@
   user-select: none;
   -webkit-user-drag: none;
 }
+/* 1칸 캐릭터를 길이만큼 반복 배치. 각 셀이 정사각 한 칸을 균등하게 차지한다.
+   셀은 스프라이트 스트립을 담는 창(overflow hidden)이고, 스트립을 좌우로 밀어 프레임을 넘긴다. */
+.rushhour .pony-cell {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+  overflow: hidden;
+  position: relative;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* 표정 그리드 방식: 시트를 grid배로 키워 특정 표정 칸만 창에 보이게 이동(단일 이미지). 몸 애니 없음. */
+.rushhour .pony-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--fg, 4) * 100%);
+  height: calc(var(--fg, 4) * 100%);
+  max-width: none;
+  /* --tx/--ty: 표정 칸 선택 이동, --fx/--fy: 좌우 중심·발밑 보정, --lift: 발을 바닥에서 띄우는 양. */
+  transform: translate(calc(var(--tx, 0) + var(--fx, 0%)), calc(var(--ty, 0) + var(--fy, 0%) - var(--lift, 0px)));
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* 스프라이트 스트립: 프레임 수만큼 가로로 긴 이미지. 정지(1프레임)면 그대로 한 칸을 채운다. */
+.rushhour .pony-strip {
+  display: block;
+  height: 100%;
+  width: calc(var(--frames, 1) * 100%);
+  max-width: none; /* 리셋의 img{max-width:100%}가 스프라이트 폭을 눌러 1프레임으로 뭉치는 것 방지 */
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* 프레임이 2장 이상이면 스트립을 자기 폭만큼(=전체 프레임) 밀며 steps로 한 프레임씩 넘긴다. */
+.rushhour .pony-cell.anim .pony-strip {
+  animation: pony-idle var(--anim-dur, 0.5s) steps(var(--frames, 1)) infinite;
+  animation-delay: var(--anim-delay, 0s);
+}
+@keyframes pony-idle {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rushhour .pony-cell.anim .pony-strip { animation: none; }
+}
 .rushhour .car.h {
+  flex-direction: row;
   width: calc(var(--len) * var(--cell));
   height: var(--cell);
 }
 .rushhour .car.v {
+  flex-direction: column;
   width: var(--cell);
   height: calc(var(--len) * var(--cell));
 }
@@ -269,7 +322,8 @@
   border-color: #f2ddc8;
   color: #3a2e3a;
   text-align: center;
-  max-width: 300px;
+  max-width: 400px;
+  width: 90vw;
 }
 .rushhour .overlay-modal h2 { color: #3a2e3a; font-size: 26px; margin: 0 0 var(--sp-2); }
 .rushhour .overlay-modal .modal-actions { justify-content: center; margin-top: var(--sp-4); }
