@@ -47,6 +47,25 @@
   flex-direction: column;
   align-items: center;
   gap: var(--sp-2);
+  position: relative; /* 보드 왼쪽 위 스테이지 표시(absolute)의 기준 */
+}
+/* 스테이지: 보드 왼쪽 위에 두 줄(라벨 + 번호). */
+.rushhour .board-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.05;
+  z-index: 1;
+}
+.rushhour .stage-cap { font-size: 12px; font-weight: 700; color: var(--fg-dim); }
+.rushhour .stage-num {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--fg);
 }
 /* 보드 위 중앙 큰 타이머. 평소 기본색, 10초 이하 경고는 #time.low. */
 .rushhour .board-timer {
@@ -118,11 +137,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 26%;
-  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--r-2);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
   cursor: grab;
   transition: left var(--dur-2) var(--ease), top var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+}
+/* 같은 색 블록이 인접해도 경계가 보이도록 배경보다 진한 같은 계열 안쪽 테두리. */
+.rushhour .car::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 3px var(--tint-border, transparent);
+  pointer-events: none;
 }
 /* 조랑말 이미지: 블록을 꽉 채운다(이미지 비율이 블록과 같아 contain으로 딱 맞는다).
    입력은 차(.car)가 받으므로 이미지는 통과시키고, 브라우저 기본 드래그도 막는다. */
@@ -143,8 +170,12 @@
   height: calc(var(--len) * var(--cell));
 }
 .rushhour .car.target {
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.65), 0 2px 5px rgba(0, 0, 0, 0.18);
+  box-shadow: none;
   z-index: 2;
+}
+/* 주인공: 안쪽 테두리만, 일반보다 1.5배 두껍게(4.5px). 붉은색/투명 배경은 render 인라인. */
+.rushhour .car.target::after {
+  box-shadow: inset 0 0 0 4.5px var(--tint-border, transparent);
 }
 .rushhour .car.dragging {
   transition: none;
@@ -286,7 +317,8 @@
 
 /* 진행 맵 + 음소거. */
 .rushhour #btn-map,
-.rushhour #btn-mute { border: none; cursor: pointer; }
+.rushhour #btn-mute,
+.rushhour #btn-settings { border: none; cursor: pointer; }
 .rushhour .map-modal { max-width: 460px; width: 94vw; }
 .rushhour .map-summary { font-weight: 700; font-size: 14px; margin: 2px 0 var(--sp-3); }
 .rushhour .map-scroll { max-height: 58vh; overflow-y: auto; margin-bottom: var(--sp-3); }
@@ -323,6 +355,53 @@
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-6px); }
   75% { transform: translateX(6px); }
+}
+
+/* 설정 - 블록 캐릭터 스타일 선택. */
+.rushhour .settings-modal { max-width: 340px; width: 88vw; }
+.rushhour .settings-label { font-weight: 700; font-size: 14px; margin: 2px 0 var(--sp-3); }
+.rushhour .style-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+.rushhour .style-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--sp-3) var(--sp-2);
+  border: 2px solid transparent;
+  border-radius: var(--r-2);
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  cursor: pointer;
+  font-size: 12px;
+}
+.rushhour .style-item.selected { border-color: var(--rh-exit); }
+.rushhour .style-emoji { font-size: 30px; line-height: 1; }
+.rushhour .style-name { font-weight: 700; }
+.rushhour .style-state { color: var(--fg-dim); font-size: 11px; }
+
+/* 배경·테두리 표시 토글. */
+.rushhour .opt-grid { display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.rushhour .opt-row { display: flex; align-items: center; gap: var(--sp-2); }
+.rushhour .opt-name { flex: 1; font-size: 13px; font-weight: 700; }
+.rushhour .opt-toggle {
+  padding: 5px 12px;
+  border: 2px solid var(--line);
+  border-radius: var(--r-1);
+  background: var(--bg-elev-2);
+  color: var(--fg-dim);
+  font-size: 12px;
+  cursor: pointer;
+}
+.rushhour .opt-toggle.on {
+  border-color: var(--rh-exit);
+  color: var(--fg);
+  background: var(--bg-elev);
+  font-weight: 700;
 }
 
 /* 좁은 폭(폰): 상단바·하단바를 압축해 한 줄에 들어가게. */

@@ -3,14 +3,35 @@
 // 게임 로직은 core/에 있다(docs/03_architecture.md §2.2).
 
 import { BOARD_SIZE, EXIT_ROW, TARGET_ID, CLEAR_EXIT_MS, CONFETTI_COUNT } from '../data/constants.js';
+import { BLOCK_TINTS, TARGET_BORDER } from '../data/colors.js';
 
 // 조랑말 이미지 폴더(index.html 기준 상대경로).
 const PONY_BASE = 'assets/ponies/';
 
-// 블록 → 조랑말 이미지 파일. 주인공은 target, 나머지는 방향+길이(h2/h3/v2/v3).
-function ponySrc(car) {
-  const key = car.id === TARGET_ID ? 'target' : `${car.orient}${car.len}`;
-  return `${PONY_BASE}${key}.png`;
+// 블록 배경 색조: 위치로 파스텔 하나를 고른다(리셋해도 같은 블록은 같은 색).
+function tintOf(car) {
+  const seed = Math.abs(car.row * 31 + car.col * 17 + car.len * 7);
+  return BLOCK_TINTS[seed % BLOCK_TINTS.length];
+}
+
+// 같은 색 블록이 인접해도 경계가 보이도록, 배경보다 살짝 진한 같은 계열 색(안쪽 테두리용).
+function darken(hex, f = 0.85) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = Math.round(((n >> 16) & 255) * f);
+  const g = Math.round(((n >> 8) & 255) * f);
+  const b = Math.round((n & 255) * f);
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+}
+
+// 블록 → 조랑말 이미지 파일. 주인공은 스타일 공용 target.png, 나머지는 스타일_방향+길이(a_h2 등).
+function ponySrc(car, style) {
+  if (car.id === TARGET_ID) return `${PONY_BASE}target.png`;
+  return `${PONY_BASE}${style}_${car.orient}${car.len}.png`;
+}
+
+// 선택한 스타일에 이 블록 이미지가 없을 때(예: B 미완성 가로 블록) 쓸 A타입 폴백 경로.
+function fallbackSrc(car) {
+  return `${PONY_BASE}a_${car.orient}${car.len}.png`;
 }
 
 // 아래 셋은 SVG 시절 동적 표정·스킨 색·머리 장식을 그리던 함수다. PNG 단일 이미지로
@@ -22,7 +43,8 @@ export function updateTargetFace() {}
 
 // 보드를 비우고 격자 배경 + 출구 길/집 표시 + 차 엘리먼트를 새로 만든다.
 // 반환: id -> 차 엘리먼트 맵.
-export function buildBoard(boardEl, cars) {
+// opts: 스타일/주인공별 배경·테두리 표시 여부 { a:{bg,border}, b:{...}, target:{...} }.
+export function buildBoard(boardEl, cars, style = 'a', opts = {}) {
   boardEl.style.setProperty('--size', String(BOARD_SIZE));
   boardEl.innerHTML = '';
 
@@ -50,11 +72,25 @@ export function buildBoard(boardEl, cars) {
     el.className = `car ${car.orient}${car.id === TARGET_ID ? ' target' : ''}`;
     el.dataset.id = car.id;
     el.style.setProperty('--len', String(car.len));
+    // 배경·테두리 표시는 스타일/주인공별 옵션을 따른다(설정에서 켜고 끔).
+    const isTarget = car.id === TARGET_ID;
+    const o = opts[isTarget ? 'target' : style] || { bg: true, border: true };
+    const tint = tintOf(car);
+    el.style.background = o.bg ? tint : 'transparent';
+    const borderColor = isTarget ? TARGET_BORDER : darken(tint);
+    el.style.setProperty('--tint-border', o.border ? borderColor : 'transparent');
     const img = document.createElement('img');
     img.className = 'pony';
-    img.src = ponySrc(car);
+    img.src = ponySrc(car, style);
     img.alt = '';
     img.draggable = false; // 브라우저 기본 이미지 드래그(고스트) 차단
+    // 이 스타일에 해당 블록 이미지가 없으면(로드 실패) A타입으로 1회 대체.
+    if (car.id !== TARGET_ID) {
+      img.addEventListener('error', function onErr() {
+        img.removeEventListener('error', onErr);
+        img.src = fallbackSrc(car);
+      });
+    }
     el.appendChild(img);
     place(el, car);
     boardEl.appendChild(el);

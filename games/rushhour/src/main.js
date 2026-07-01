@@ -14,6 +14,7 @@ import { play, setMuted, isMuted, unlockAudio } from './audio/sound.js';
 import {
   RABBIT_SKINS, DEFAULT_SKIN, BOARD_THEMES, DEFAULT_THEME, ACCESSORY_ITEMS, DEFAULT_ACCESSORY,
 } from './data/shop.js';
+import { PONY_STYLES, DEFAULT_STYLE } from './data/styles.js';
 import { createStorage } from '../../../shared/storage.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
@@ -23,7 +24,7 @@ const store = createStorage(STORAGE_NS);
 const el = {
   page: document.querySelector('.rushhour'),
   board: document.getElementById('board'),
-  label: document.getElementById('puzzle-label'),
+  stageNum: document.getElementById('stage-num'),
   moves: document.getElementById('moves'),
   gold: document.getElementById('gold'),
   time: document.getElementById('time'),
@@ -51,6 +52,11 @@ const el = {
   mapGrid: document.getElementById('map-grid'),
   mapClose: document.getElementById('btn-map-close'),
   muteBtn: document.getElementById('btn-mute'),
+  settingsBtn: document.getElementById('btn-settings'),
+  settings: document.getElementById('settings'),
+  styleGrid: document.getElementById('style-grid'),
+  optGrid: document.getElementById('opt-grid'),
+  settingsClose: document.getElementById('btn-settings-close'),
 };
 
 const state = {
@@ -73,7 +79,7 @@ function progress() {
     ownedSkins: [DEFAULT_SKIN], equippedSkin: DEFAULT_SKIN,
     ownedThemes: [DEFAULT_THEME], equippedTheme: DEFAULT_THEME,
     ownedAccessories: [DEFAULT_ACCESSORY], equippedAccessory: DEFAULT_ACCESSORY,
-    combo: 0, bestCombo: 0, muted: false,
+    combo: 0, bestCombo: 0, muted: false, ponyStyle: DEFAULT_STYLE,
   });
 }
 
@@ -103,6 +109,26 @@ function currentAccessory() {
   return ACCESSORY_ITEMS.find((a) => a.id === eq) || ACCESSORY_ITEMS[0];
 }
 
+// 설정에서 고른 블록 캐릭터 스타일(a/b).
+function currentStyle() {
+  return progress().ponyStyle || DEFAULT_STYLE;
+}
+
+// 스타일/주인공별 배경·테두리 표시 옵션(기본값 + 저장값 병합).
+function currentBlockOpts() {
+  const d = {
+    a: { bg: true, border: true },
+    b: { bg: true, border: true },
+    target: { bg: false, border: true },
+  };
+  const o = progress().blockOpts || {};
+  return {
+    a: { ...d.a, ...o.a },
+    b: { ...d.b, ...o.b },
+    target: { ...d.target, ...o.target },
+  };
+}
+
 function puzzleById(id) {
   return PUZZLES.find((p) => p.id === id);
 }
@@ -120,7 +146,7 @@ function loadPuzzle(id) {
   state.face = 'neutral';
   state.solved = false;
   setTargetColor(currentSkinColor());
-  state.els = buildBoard(el.board, state.cars);
+  state.els = buildBoard(el.board, state.cars, currentStyle(), currentBlockOpts());
   store.set('current', p.id);
   hideOverlay();
   render();
@@ -128,8 +154,7 @@ function loadPuzzle(id) {
 }
 
 function render() {
-  const p = puzzleById(state.puzzleId);
-  el.label.textContent = `#${state.puzzleId} ${DIFF_LABEL[p.difficulty]}`;
+  el.stageNum.textContent = String(state.puzzleId);
   el.moves.textContent = String(state.moves);
   el.gold.textContent = String(progress().gold || 0);
   updateTimeUi();
@@ -429,6 +454,55 @@ function renderMap() {
   }).join('');
 }
 
+// --- 설정(블록 캐릭터 스타일) ---
+
+const OPT_ROWS = [{ key: 'a', name: '조랑말' }, { key: 'b', name: '모찌' }, { key: 'target', name: '주인공' }];
+
+function renderSettings() {
+  const cur = currentStyle();
+  el.styleGrid.innerHTML = PONY_STYLES.map((s) =>
+    `<button class="style-item${s.id === cur ? ' selected' : ''}" data-style="${s.id}" type="button">`
+    + `<span class="style-emoji">${s.emoji}</span>`
+    + `<span class="style-name">${s.name}</span>`
+    + `<span class="style-state">${s.id === cur ? '사용 중' : '선택'}</span></button>`,
+  ).join('');
+  const opts = currentBlockOpts();
+  el.optGrid.innerHTML = OPT_ROWS.map((r) => {
+    const o = opts[r.key];
+    return `<div class="opt-row"><span class="opt-name">${r.name}</span>`
+      + `<button class="opt-toggle${o.bg ? ' on' : ''}" data-key="${r.key}" data-opt="bg" type="button">배경</button>`
+      + `<button class="opt-toggle${o.border ? ' on' : ''}" data-key="${r.key}" data-opt="border" type="button">테두리</button></div>`;
+  }).join('');
+}
+
+// 진행 중 퍼즐 상태는 유지하고 블록만 현재 스타일/옵션으로 다시 그린다.
+function redrawBlocks() {
+  state.els = buildBoard(el.board, state.cars, currentStyle(), currentBlockOpts());
+}
+
+// 스타일 전환.
+function setStyle(id) {
+  if (!PONY_STYLES.some((s) => s.id === id)) return;
+  const pr = progress();
+  pr.ponyStyle = id;
+  store.set('progress', pr);
+  redrawBlocks();
+  renderSettings();
+  play('buy');
+}
+
+// 배경/테두리 표시 토글(스타일 또는 주인공별).
+function toggleBlockOpt(key, opt) {
+  const opts = currentBlockOpts();
+  opts[key][opt] = !opts[key][opt];
+  const pr = progress();
+  pr.blockOpts = opts;
+  store.set('progress', pr);
+  redrawBlocks();
+  renderSettings();
+  play('buy');
+}
+
 // 드래그는 보드에 한 번만 붙인다. 현재 상태는 getCars로 읽는다.
 attachDrag(el.board, {
   getCars: () => state.cars,
@@ -464,6 +538,16 @@ el.mapGrid.addEventListener('click', (e) => {
     closePanel(el.map);
     loadPuzzle(Number(chip.dataset.id));
   }
+});
+el.settingsBtn.addEventListener('click', () => openPanel(el.settings, renderSettings));
+el.settingsClose.addEventListener('click', () => closePanel(el.settings));
+el.styleGrid.addEventListener('click', (e) => {
+  const btn = e.target.closest('.style-item');
+  if (btn) setStyle(btn.dataset.style);
+});
+el.optGrid.addEventListener('click', (e) => {
+  const btn = e.target.closest('.opt-toggle');
+  if (btn) toggleBlockOpt(btn.dataset.key, btn.dataset.opt);
 });
 
 // iOS 오디오 잠금 해제: 첫 사용자 제스처 한 번에 AudioContext를 깨운다(둘 다 once라 각 1회).
