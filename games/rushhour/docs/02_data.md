@@ -66,7 +66,7 @@
 | `ACCESSORY_ITEMS` | 토끼 액세서리 배열(`{id, name, price, acc, emoji}`). `acc`는 render가 그리는 장식 키, `emoji`는 상점 미리보기. 첫 항목(`acc:"none"`) price 0 = 기본(없음) |
 | `DEFAULT_ACCESSORY` | 기본 액세서리 id(`"none"`). 처음부터 보유·장착 |
 
-골드로 구매(해금)하고 장착한다. 토끼 스킨 보유/장착은 `progress.ownedSkins` / `progress.equippedSkin`, 보드 테마는 `progress.ownedThemes` / `progress.equippedTheme`, 토끼 액세서리는 `progress.ownedAccessories` / `progress.equippedAccessory`에 저장(§4). 보드 테마 색은 `.rushhour` 스코프 `--rh-*` 변수(04 §3.2)를 main이 인라인으로 덮어써 적용하고, 액세서리는 render가 토끼 얼굴 SVG에 그린다.
+골드로 구매(해금)하고 장착한다. 토끼 스킨 보유/장착은 `progress.ownedSkins` / `progress.equippedSkin`, 보드 테마는 `progress.ownedThemes` / `progress.equippedTheme`, 토끼 액세서리는 `progress.ownedAccessories` / `progress.equippedAccessory`에 저장(§4). 주인공은 단일 PNG(`target.png`)라 반영 방식이 다음과 같이 나뉜다: 스킨 색은 `render.setTargetColor`가 기본 핑크(`TARGET_COLOR`) 대비 CSS `filter`(색조 회전 + 채도/밝기)로 이미지 자체를 물들이고(색상별 이미지 자산 없이 동작), 보드 테마 색은 `.rushhour` 스코프 `--rh-*` 변수(04 §3.2)를 main이 인라인으로 덮어써 적용하며, 액세서리는 `render.setTargetAccessory`가 주인공 블록 정수리에 `acc`→이모지 오버레이(`.pony-acc`)를 올린다. 시간 경과·클리어 표정(`render.updateTargetFace`)도 몸통 애니(`.face-worried`/`.face-cry`/`.face-happy`, 울상은 눈물 이모지 `.pony-tear`)로 표현하며 스킨 색 filter와 CSS 속성이 달라 공존한다.
 
 ### 2.4. 블록 이미지 스타일 - `src/data/styles.js`
 

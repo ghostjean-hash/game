@@ -46,3 +46,6 @@ export const HINT_COST = 5;
 // 연속 콤보(제한시간 내 연달아 클리어). 2연속부터 min(combo, COMBO_MAX)×STEP 보너스 골드.
 export const COMBO_GOLD_STEP = 5;
 export const COMBO_MAX = 5;
+
+// 클리어 결과 팝업에서 별 반짝 효과음을 별 개수만큼 낼 때의 간격(ms).
+export const STAR_SOUND_GAP_MS = 160;

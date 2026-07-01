@@ -74,6 +74,11 @@ const SOUNDS = {
     [523, 659, 784, 1047].forEach((f, i) => // 도-미-솔-도 상승
       tone(c, { freq: f, dur: 0.18, type: 'triangle', gain: 0.13, delay: i * 0.1 }));
   },
+  // 별 획득 반짝(결과 팝업에서 별 개수만큼 계단식 재생). 맑고 짧은 종소리.
+  star: (c) => {
+    tone(c, { freq: 1319, dur: 0.14, type: 'triangle', gain: 0.1 });
+    tone(c, { freq: 1976, dur: 0.16, type: 'sine', gain: 0.07, delay: 0.04 });
+  },
 };
 
 // 효과음 재생. 음소거거나 Web Audio 미지원이면 조용히 넘어간다(게임 진행 무관).

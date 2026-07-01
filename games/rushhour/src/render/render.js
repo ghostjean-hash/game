@@ -3,8 +3,9 @@
 // 게임 로직은 core/에 있다(docs/03_architecture.md §2.2).
 
 import { BOARD_SIZE, EXIT_ROW, TARGET_ID, CLEAR_EXIT_MS, CONFETTI_COUNT } from '../data/constants.js';
-import { BLOCK_TINTS, TARGET_BORDER } from '../data/colors.js';
+import { BLOCK_TINTS, TARGET_BORDER, TARGET_COLOR } from '../data/colors.js';
 import { PONY_STYLES } from '../data/styles.js';
+import { ACCESSORY_ITEMS } from '../data/shop.js';
 
 // 조랑말 이미지 폴더(index.html 기준 상대경로).
 const PONY_BASE = 'assets/ponies/';
@@ -253,12 +254,117 @@ function fillCar(el, car, style, faceIdx) {
   for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle, faceIdx); // 블럭 통일
 }
 
-// 아래 셋은 SVG 시절 동적 표정·스킨 색·머리 장식을 그리던 함수다. PNG 단일 이미지로
-// 전환하며 잠정 비활성화했다(main.js 호출부가 깨지지 않도록 시그니처만 유지).
-// 표정/스킨/장식 복원 시 여기에 이미지 교체 로직을 다시 넣는다.
-export function setTargetColor() {}
-export function setTargetAccessory() {}
-export function updateTargetFace() {}
+// --- 주인공 토끼 색 스킨 / 머리 장식 / 표정 (상점·시간 연동) ---
+// 주인공은 단일 PNG(target.png)라 색은 CSS filter(색조 회전)로, 장식은 이모지 오버레이로,
+// 표정은 몸통 애니(+ 눈물 이모지)로 표현한다. 별도 색상별 이미지 자산 없이 동작한다.
+
+// #rrggbb → HSL(h 0-360, s/l 0-100). 색 filter 계산용.
+function hexToHsl(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = ((n >> 16) & 255) / 255;
+  const g = ((n >> 8) & 255) / 255;
+  const b = (n & 255) / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  const d = max - min;
+  let h = 0;
+  let s = 0;
+  if (d) {
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60;
+  }
+  return { h, s: s * 100, l: l * 100 };
+}
+
+// 목표 스킨 색을 기본 핑크(TARGET_COLOR) 대비 filter 문자열로 바꾼다. 기본 색이면 변화 없음(항등).
+function colorFilter(color) {
+  const base = hexToHsl(TARGET_COLOR);
+  const t = hexToHsl(color);
+  const dh = Math.round(t.h - base.h);
+  const sat = base.s ? (t.s / base.s).toFixed(2) : '1';
+  const bri = base.l ? (t.l / base.l).toFixed(2) : '1';
+  return `hue-rotate(${dh}deg) saturate(${sat}) brightness(${bri})`;
+}
+
+// acc 키(ribbon/flower/crown/bowtie/none) → 머리 장식 이모지. none/미지정은 빈 문자열(장식 없음).
+function accEmoji(acc) {
+  if (!acc || acc === 'none') return '';
+  const item = ACCESSORY_ITEMS.find((a) => a.acc === acc);
+  return item && item.acc !== 'none' ? item.emoji : '';
+}
+
+let targetColorFilter = ''; // 현재 장착 스킨의 filter(빈 문자열이면 기본 색)
+let targetAccessory = 'none'; // 현재 장착 머리 장식 acc 키
+
+function targetImg() {
+  return document.querySelector('.car.target .pony');
+}
+function targetCarEl() {
+  return document.querySelector('.car.target');
+}
+
+// 스킨 색 filter를 현재 주인공 이미지에 반영. 표정 애니(transform)와 속성이 달라 공존한다.
+function applyTargetColor() {
+  const img = targetImg();
+  if (img) img.style.filter = targetColorFilter;
+}
+
+// 머리 장식 이모지 오버레이를 갱신(없으면 제거).
+function applyTargetAccessory() {
+  const car = targetCarEl();
+  if (!car) return;
+  let deco = car.querySelector('.pony-acc');
+  const emoji = accEmoji(targetAccessory);
+  if (!emoji) {
+    if (deco) deco.remove();
+    return;
+  }
+  if (!deco) {
+    deco = document.createElement('span');
+    deco.className = 'pony-acc';
+    deco.setAttribute('aria-hidden', 'true');
+    car.appendChild(deco);
+  }
+  deco.textContent = emoji;
+}
+
+// 상점에서 고른 토끼 색을 반영(color=null이면 기본). buildBoard가 주인공을 새로 그린 뒤에도 재호출된다.
+export function setTargetColor(color) {
+  targetColorFilter = color ? colorFilter(color) : '';
+  applyTargetColor();
+}
+
+// 상점에서 고른 머리 장식(acc 키)을 반영.
+export function setTargetAccessory(acc) {
+  targetAccessory = acc || 'none';
+  applyTargetAccessory();
+}
+
+// 남은 시간 비율에 따른 주인공 표정(neutral/worried/cry/happy)을 몸통 애니로 표현.
+// happy(클리어)는 통통, worried는 갸웃, cry는 떨림 + 눈물 이모지. 색 filter와 독립.
+const FACE_CLASSES = ['face-worried', 'face-cry', 'face-happy'];
+export function updateTargetFace(els, face) {
+  const car = (els && els.get && els.get(TARGET_ID)) || targetCarEl();
+  if (!car) return;
+  car.classList.remove(...FACE_CLASSES);
+  if (face && face !== 'neutral') car.classList.add(`face-${face}`);
+  let tear = car.querySelector('.pony-tear');
+  if (face === 'cry') {
+    if (!tear) {
+      tear = document.createElement('span');
+      tear.className = 'pony-tear';
+      tear.textContent = '💧';
+      tear.setAttribute('aria-hidden', 'true');
+      car.appendChild(tear);
+    }
+  } else if (tear) {
+    tear.remove();
+  }
+}
 
 // 보드를 비우고 격자 배경 + 출구 길/집 표시 + 차 엘리먼트를 새로 만든다.
 // 반환: id -> 차 엘리먼트 맵.
@@ -309,6 +415,8 @@ export function buildBoard(boardEl, cars, style = 'a', opts = {}) {
   }
   startFaceCycle(boardEl, sdef); // 표정 그리드 스타일이면 이따금 표정 교체
   if (sdef.faceSheet) measureFeet(sdef).then((c) => { if (c) refreshFeet(boardEl, c.grid); }); // 발밑 정렬
+  applyTargetColor();      // 새로 그린 주인공에 현재 스킨 색 반영
+  applyTargetAccessory();  // 새로 그린 주인공에 현재 머리 장식 반영
   return els;
 }
 

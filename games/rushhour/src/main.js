@@ -3,7 +3,7 @@
 import {
   STORAGE_NS, TIME_BASE_S, TIME_PER_OPTIMAL_S, FACE_WORRIED_RATIO, FACE_CRY_RATIO,
   STAR2_MARGIN, GOLD_BASE, GOLD_STAR3, GOLD_STAR2, GOLD_TIME_BONUS, HINT_COST,
-  COMBO_GOLD_STEP, COMBO_MAX,
+  COMBO_GOLD_STEP, COMBO_MAX, STAR_SOUND_GAP_MS,
 } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
@@ -278,6 +278,8 @@ function onSolved() {
   // 토끼가 출구 길로 빠져나가는 연출 + 축하 파티클 후 결과 오버레이.
   playClear(state.els, el.board, () => {
     el.overlay.hidden = false;
+    // 결과 팝업에서 얻은 별 개수만큼 반짝 효과음을 계단식으로 낸다.
+    for (let i = 0; i < stars; i += 1) setTimeout(() => play('star'), i * STAR_SOUND_GAP_MS);
   });
 }
 
