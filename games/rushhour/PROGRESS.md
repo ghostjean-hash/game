@@ -252,3 +252,31 @@
 - docs 03_architecture 갱신(누적), 블럭 수 > 표정 수인 큰 퍼즐의 표정 겹침 정책.
 
 검증: 퍼즐 재생성 - 정규화 인접 유사도 0.86+ 쌍 28→0 정량 확인 + tests 19/19 PASS(모든 퍼즐 풀림·유효·미클리어·id 연속). 말랑이 C - browser-shot으로 a/b 통블록·c 조립 분리, 발밑&좌우 정렬(편차 보정 후 fx/fy 전 셀 적용), 블럭 내 표정 통일(5블럭 전부)·블럭 간 표정 전부 다름, 동시 깜빡 최대 3마리 분포, opacity 0/1(중간값 0/40 = 겹침 0), 몸 정지(animationName none) 확인. render.js·main.js·style.css는 DOM 통합이라 자동 테스트 없음(browser-shot이 검증 수단). docs 02_data §2.4/§3 갱신, 03_architecture는 잔여.
+
+## 9차 봉합 (2026-07-01) - 소스 최적화
+
+사용자 지시 "소스 최적화"를 세 방향으로 진행(방향 질문에 사용자가 3개 다 선택): 미사용 자산 삭제 + 사용 이미지 압축 + 코드 리팩터링.
+
+### 이미지 최적화 (assets 1.7M → 332KB, 81% 감소)
+- 미사용 PNG 3개 삭제(715KB): c_cell.png(구 단일 시트), c_cell_16_b.png(폐기된 눌림 시트), puff_single_16lowered_sheet_feetbase.png. 코드 참조 0을 grep으로 확인 후 삭제. 직전 세션 "남은 것"의 미사용 자산 정리 후보를 이번에 해소.
+- 사용 PNG 10개 pngquant 압축(--quality=70-95 --speed 1, 983KB→332KB 66%): 가장 무거운 말랑이 표정 시트 c_cell_16_a.png 376KB→129KB, target/a/b 시트 각 66~68% 감소. 팔레트 압축이라 화질 손상 가능성을 browser-shot 실화면 + 시트 직접 확인으로 검증(밴딩 없음). 시스템에 압축 도구가 없어 npx pngquant-bin 일회성 실행.
+
+### 코드 리팩터링 (순 71줄 감소, 데드코드 제거)
+- 스프라이트 순환 방식(appendCell + fillCar 분기 + .pony-strip/@keyframes pony-idle CSS)이 도달 불가 데드코드임을 확인: tiled:true면서 faceSheet 없는 스타일에서만 불리는데 그런 스타일이 없음(a/b는 통 블록, c는 faceSheet). 사용자 "제거" 선택으로 render.js 약 40줄·style.css 23줄·styles.js 주석 제거. c는 여전히 appendFaceCell 경로라 동작 무변경.
+- docs 02_data §2.4 정정: 말랑이(c)를 실제 방식인 표정 그리드로 바로잡음(기존엔 삭제된 c_cell 스프라이트 반복으로 잘못 서술). docs가 코드보다 뒤처진 불일치 해소.
+- main.js는 이미 정돈돼(SHOP_KINDS/openPanel/chipsHtml 통합 완료) 손대지 않음. measureFeet scan('a')의 잔여 suffix 파라미터도 surgical 원칙상 유지(동작·가독성 영향 미미).
+
+### rm 프롬프트 근본 규명 (반복 격노 매듭)
+- 사용자가 rm 확인 팝업 반복에 격노("언제까지 띄울거야, 해결하라고 했을텐데"). 실측 규명: settings.local.json에 Bash(rm:*) allow가 이미 있는데도 프롬프트가 뜬 진짜 원인은 rm을 echo·kill과 &&/;로 묶은 복합 명령. rm 단독 실행(rm -f _verify.html)은 프롬프트 0으로 통과함을 실측 확인. 직전 세션 self-critique의 "복합 명령 탓" 후보가 이번에 실증됨.
+- 실행 규율 확정: rm은 항상 단독 명령으로. 임시 파일은 프로젝트 밖 scratchpad에 생성해 프로젝트 내 rm 자체를 회피. buffer에 글로벌 행동 규율 후보로 적재.
+
+### 핵심 교훈 (self-critique)
+- 직전 세션에 "임시 파일은 scratchpad로 rm 회피"라고 스스로 PROGRESS에 적어놓고, 이번에 임시 검증 페이지 _verify.html을 프로젝트 안에 만들어 같은 실수를 반복했다. 자기가 기록한 교훈을 착수 전에 확인하지 않은 것이 격노의 직접 원인. 봉합 기록은 다음 세션이 읽어야 의미가 있는데, 정작 그 기록을 남긴 세션의 다음 세션(이번)이 안 읽었다.
+- 압축 도구 부재를 미리 확인하지 않고 방향부터 정한 뒤 npx로 우회했다. 결과는 좋았으나 도구 가용성을 먼저 실측했으면 방향 제시가 더 정확했을 것.
+
+### 남은 것 (다음 세션)
+- docs 03_architecture 갱신(누적 잔여).
+- C 타입 이름·이모지 임시(말랑이 🍥), 표정 순환/깜빡 빈도 조정 여지.
+- 블럭 수 > 표정 수인 큰 퍼즐의 표정 겹침 정책.
+
+검증: core tests 19/19 PASS(browser-shot 콘솔 "[rushhour tests] PASS 19/19"). a 스타일(통 블록 조랑말)·c 스타일(말랑이 표정 그리드) browser-shot 실화면 정상 렌더 + 압축 화질 확인(퍼즐2, 5블록 + 주인공). 압축 시트 c_cell_16_a.png Read 직접 확인 밴딩 0. render.js·style.css·styles.js는 DOM 통합이라 자동 테스트 없음(browser-shot이 검증 수단). docs 02_data §2.4 갱신은 재read로 존재 확인.

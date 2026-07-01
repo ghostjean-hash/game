@@ -61,40 +61,6 @@ function fillWhole(el, car, style) {
   el.appendChild(img);
 }
 
-// 조립 스타일의 셀 하나: 1칸 컨테이너(overflow) + 스프라이트 스트립.
-// 시트 로드 후 가로/세로 비율로 프레임 수를 자동 계산하고, 2프레임 이상이면 애니를 켠다.
-// 셀마다 시작 위상을 어긋나게 해 무리가 제각각 움찔거리게 한다.
-function appendCell(el, car, i, variants, fps, onFail) {
-  const cell = document.createElement('div');
-  cell.className = 'pony-cell';
-  const strip = document.createElement('img');
-  strip.className = 'pony-strip';
-  strip.alt = '';
-  strip.draggable = false;
-  let done = false;
-  const apply = () => {
-    if (done) return; // load 이벤트 + 캐시 즉시처리가 겹쳐도 한 번만
-    done = true;
-    const frames = Math.max(1, Math.round(strip.naturalWidth / strip.naturalHeight));
-    cell.style.setProperty('--frames', String(frames));
-    if (frames > 1) {
-      cell.style.setProperty('--anim-dur', `${(frames / fps).toFixed(2)}s`);
-      cell.style.setProperty('--anim-delay', `-${((hashAt(car, i, 3) % frames) / fps).toFixed(2)}s`);
-      cell.classList.add('anim');
-    }
-  };
-  strip.addEventListener('load', apply);
-  strip.addEventListener('error', function onErr() {
-    strip.removeEventListener('error', onErr);
-    onFail();
-  });
-  strip.src = `${PONY_BASE}${variants[hashAt(car, i, 1) % variants.length]}.png`;
-  cell.appendChild(strip);
-  el.appendChild(cell);
-  // 이미 캐시돼 load 이벤트가 안 오는 경우 즉시 적용.
-  if (strip.complete && strip.naturalWidth > 0) apply();
-}
-
 // 발밑 정렬용 시트 측정 캐시. 각 표정 칸의 발밑(최하단 불투명 픽셀) y를 셀 높이 대비 비율로 잰다.
 let feetCache = null;
 function measureFeet(def) {
@@ -268,12 +234,12 @@ function appendFaceCell(el, car, i, def, onFail, faceIdx) {
 }
 
 // 블록 el에 캐릭터 이미지를 채운다(방식은 스타일 tiled + 주인공 여부로 결정).
-// - 주인공 또는 통 스타일(tiled:false): 단일 이미지(늘림).
-// - 조립 스타일(tiled:true): 1칸 셀을 길이만큼 반복. faceSheet가 있으면 표정 그리드+움찔,
-//   아니면 단일 스프라이트 순환. 시트가 없으면(로드 실패) 통 블록 이미지로 1회 폴백한다.
+// - 주인공 / 통 스타일(tiled:false) / 표정 시트 없는 스타일: 단일 이미지(늘림).
+// - 표정 그리드 스타일(tiled:true + faceSheet): 1칸 표정 셀을 길이만큼 반복.
+//   시트 로드 실패 시 통 블록 이미지로 1회 폴백한다(→ 없으면 A타입).
 function fillCar(el, car, style, faceIdx) {
   const def = styleDef(style);
-  if (car.id === TARGET_ID || !def.tiled) {
+  if (car.id === TARGET_ID || !def.tiled || !def.faceSheet) {
     fillWhole(el, car, style);
     return;
   }
@@ -284,13 +250,7 @@ function fillCar(el, car, style, faceIdx) {
     el.innerHTML = '';
     fillWhole(el, car, style); // 통 블록 이미지로 폴백(→ 없으면 A타입)
   };
-  if (def.faceSheet) {
-    for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle, faceIdx); // 블럭 통일
-    return;
-  }
-  const variants = (def.cellVariants && def.cellVariants.length) ? def.cellVariants : [`${style}_cell`];
-  const fps = def.cellFps || 8;
-  for (let i = 0; i < car.len; i++) appendCell(el, car, i, variants, fps, useSingle);
+  for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle, faceIdx); // 블럭 통일
 }
 
 // 아래 셋은 SVG 시절 동적 표정·스킨 색·머리 장식을 그리던 함수다. PNG 단일 이미지로

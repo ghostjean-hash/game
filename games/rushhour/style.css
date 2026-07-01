@@ -189,29 +189,6 @@
   user-select: none;
   -webkit-user-drag: none;
 }
-/* 스프라이트 스트립: 프레임 수만큼 가로로 긴 이미지. 정지(1프레임)면 그대로 한 칸을 채운다. */
-.rushhour .pony-strip {
-  display: block;
-  height: 100%;
-  width: calc(var(--frames, 1) * 100%);
-  max-width: none; /* 리셋의 img{max-width:100%}가 스프라이트 폭을 눌러 1프레임으로 뭉치는 것 방지 */
-  object-fit: fill;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-/* 프레임이 2장 이상이면 스트립을 자기 폭만큼(=전체 프레임) 밀며 steps로 한 프레임씩 넘긴다. */
-.rushhour .pony-cell.anim .pony-strip {
-  animation: pony-idle var(--anim-dur, 0.5s) steps(var(--frames, 1)) infinite;
-  animation-delay: var(--anim-delay, 0s);
-}
-@keyframes pony-idle {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .rushhour .pony-cell.anim .pony-strip { animation: none; }
-}
 .rushhour .car.h {
   flex-direction: row;
   width: calc(var(--len) * var(--cell));
