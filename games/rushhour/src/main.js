@@ -34,6 +34,7 @@ const el = {
   prev: document.getElementById('btn-prev'),
   next: document.getElementById('btn-next'),
   overlay: document.getElementById('overlay'),
+  resultTitle: document.getElementById('result-title'),
   result: document.getElementById('result-text'),
   resultStars: document.getElementById('result-stars'),
   resultCombo: document.getElementById('result-combo'),
@@ -257,21 +258,19 @@ function onSolved() {
   pr.gold = (pr.gold || 0) + gold;
   store.set('progress', pr);
 
-  const best = pr.best[state.puzzleId];
   const idx = PUZZLES.findIndex((p) => p.id === state.puzzleId);
   const isLast = idx >= PUZZLES.length - 1;
+  // 핵심만: 상태(제목) + 별 + 수/최소 + (콤보) + 획득 골드.
+  el.resultTitle.textContent = isLast ? '완주! 🎉' : (state.moves <= state.optimal ? '완벽!' : '클리어!');
   el.resultStars.textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
-  const body = state.moves <= state.optimal
-    ? `완벽! ${state.moves}수 (최소 ${state.optimal}수)`
-    : `클리어! ${state.moves}수 · 최소 ${state.optimal}수 · 최고 ${best}수`;
-  el.result.textContent = isLast ? `모든 퍼즐 완주! 🎉 ${body}` : body;
+  el.result.textContent = `${state.moves}수 · 최소 ${state.optimal}수`;
   if (combo >= 2) {
-    el.resultCombo.textContent = `🔥 ${combo}연속! 콤보 보너스 +${comboBonus} 골드`;
+    el.resultCombo.textContent = `🔥 ${combo}연속`;
     el.resultCombo.hidden = false;
   } else {
     el.resultCombo.hidden = true;
   }
-  el.resultGold.textContent = `+${gold} 골드 획득${inTime ? ' (시간 보너스 +' + GOLD_TIME_BONUS + ')' : ''} · 모은 골드 ${pr.gold}`;
+  el.resultGold.textContent = `+${gold} 🪙`;
   el.overlayNext.textContent = isLast ? '처음부터 다시' : '다음 퍼즐';
   render();
   // 토끼가 출구 길로 빠져나가는 연출 + 축하 파티클 후 결과 오버레이.

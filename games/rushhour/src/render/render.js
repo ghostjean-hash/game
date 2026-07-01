@@ -137,8 +137,15 @@ export function showHint(els, move) {
 export function playClear(els, boardEl, onDone) {
   const target = els.get(TARGET_ID);
   if (target) {
+    // 드래그로 밀어 클리어한 경우 드래그 잔여 transform이 남아 시작점이 어긋나면 오른쪽으로 튄다.
+    // 잔여를 지우고 현재 칸 위치(transform 0)로 리셋한 뒤, 다음 프레임에 출구 밖으로 transform을
+    // 걸어 점프 없이 보드 안에서 밖으로 부드럽게 미끄러져 나가게 한다.
+    target.classList.remove('dragging');
     target.classList.add('exiting');
-    target.style.transition = `transform ${CLEAR_EXIT_MS}ms cubic-bezier(0.5, 0, 0.75, 1), opacity ${CLEAR_EXIT_MS}ms ease-in`;
+    target.style.transition = 'none';
+    target.style.transform = 'translateX(0)';
+    void target.offsetWidth; // reflow로 시작 상태(제자리)를 확정
+    target.style.transition = `transform ${CLEAR_EXIT_MS}ms cubic-bezier(0.45, 0, 0.55, 1), opacity ${CLEAR_EXIT_MS}ms ease-in`;
     target.style.transform = 'translateX(175%)';
     target.style.opacity = '0';
   }
