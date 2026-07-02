@@ -16,4 +16,4 @@ export const PONY_STYLES = [
   { id: 'c', name: '밥풀이', emoji: '🍥', tiled: true, faceSheet: 'c_cell_16', faceGrid: 4, faceCount: 16, blinkFace: 6, faceCycleMs: 700, footLiftPx: 3, happyFaces: [0, 7, 1, 8, 2], sadFaces: [14, 10, 5, 4, 12, 9] },
 ];
 
-export const DEFAULT_STYLE = 'a';
+export const DEFAULT_STYLE = 'c'; // 기본 = 밥풀이(사용자 결정 2026-07-02). 저장된 선택은 유지.

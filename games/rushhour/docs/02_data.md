@@ -70,7 +70,7 @@
 
 ### 2.4. 블록 이미지 스타일 - `src/data/styles.js`
 
-차 블록을 어떤 그림으로 그릴지 정하는 스타일 세트(`PONY_STYLES`). 설정 화면에서 전환하고, 선택값은 `progress.ponyStyle`에 저장한다(없으면 `DEFAULT_STYLE='a'`). 이미지는 `assets/ponies/`에 둔다.
+차 블록을 어떤 그림으로 그릴지 정하는 스타일 세트(`PONY_STYLES`). 설정 화면에서 전환하고, 선택값은 `progress.ponyStyle`에 저장한다(없으면 `DEFAULT_STYLE='c'` 밥풀이, 사용자 결정 2026-07-02. 이미 저장된 선택은 그대로 유지). 이미지는 `assets/ponies/`에 둔다.
 
 스타일마다 블록을 그리는 방식이 `tiled` 값으로 나뉜다.
 
