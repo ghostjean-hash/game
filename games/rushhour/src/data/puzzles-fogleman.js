@@ -1,4 +1,4 @@
-// 보드게임 러시아워 "Fogleman" 모드 퍼즐.
+// 러시아워 "Fogleman" 모드 퍼즐.
 //
 // 출처(라이선스): Michael Fogleman, Rush Hour puzzle database.
 //   https://www.michaelfogleman.com/rush/ · https://github.com/fogleman/rush · MIT License.

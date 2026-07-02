@@ -20,8 +20,8 @@ import { createStorage } from '../../../shared/storage.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
 
-// 게임 모드: 오리지널(자체 제작 세트) / 보드게임(ThinkFun Rush Hour). 진행·별은 모드별로 각각
-// 저장하고, 골드·스킨·테마·장식·설정은 두 모드가 공유한다(사용자 결정 2026-07-02).
+// 게임 모드: 오리지널(자체 제작 186개) / Fogleman(외부 DB 400개). 진행·별은 모드별로 각각
+// 저장하고, 골드·테마·장식·설정은 모든 모드가 공유한다(사용자 결정 2026-07-02).
 const MODES = [
   { id: 'original', name: '오리지널', puzzles: PUZZLES },
   { id: 'fogleman', name: 'Fogleman', puzzles: FOGLEMAN_PUZZLES, credit: '퍼즐: Michael Fogleman · MIT (michaelfogleman.com/rush)' },
@@ -91,7 +91,7 @@ function emptyModeProg() {
   return { cleared: [], best: {}, stars: {}, current: null, combo: 0, bestCombo: 0 };
 }
 
-// 저장 데이터를 현재 스키마(공유 필드 + modes{original,boardgame})로 정규화한다.
+// 저장 데이터를 현재 스키마(공유 필드 + modes{모드별 진행})로 정규화한다.
 // 옛 단일 구조(최상위 cleared/best/stars + 별도 'current' 키)는 오리지널 모드로 이관한다(하위호환).
 function migrateProgress(p) {
   const s = p || {};
@@ -402,7 +402,7 @@ function hideOverlay() {
   el.overlay.hidden = true;
 }
 
-// --- 게임 모드(오리지널 / 보드게임): 진행 맵 안의 탭으로 고른다 ---
+// --- 게임 모드(오리지널 / Fogleman): 진행 맵 안의 탭으로 고른다 ---
 // 상단에서 바로 전환하지 않는다. 맵을 열면 현재 모드 탭이 선택돼 있고, 탭으로 다른 모드의
 // 진행을 미리 볼 수 있다. 실제 전환은 그 모드의 퍼즐을 고를 때 확정된다(mapViewMode → activeMode).
 let mapViewMode = null; // 맵에서 보고 있는 모드(아직 확정 전, activeMode와 다를 수 있음)
@@ -504,7 +504,7 @@ function renderMap() {
   const stars = mp.stars || {};
   const totalStars = Object.values(stars).reduce((a, b) => a + b, 0);
 
-  // 모드 탭(오리지널/보드게임). 보고 있는 모드가 active 표시.
+  // 모드 탭(오리지널/Fogleman). 보고 있는 모드가 active 표시.
   el.mapTabs.innerHTML = MODES.map((m) =>
     `<button class="map-tab${m.id === vm ? ' active' : ''}" data-mode="${m.id}" type="button">${m.name}</button>`,
   ).join('');
