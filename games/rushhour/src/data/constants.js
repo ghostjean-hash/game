@@ -23,6 +23,14 @@ export const CLEAR_EXIT_MS = 700;
 // 클리어 축하 파티클(별·하트) 개수.
 export const CONFETTI_COUNT = 16;
 
+// 주인공 머리 장식(상점 액세서리) 앵커: 블록 대비 위치(top/right %, 블록 밖으로 넘어가도 됨)와
+// 크기(vmin). 캐릭터(주인공 이미지)마다 정수리 위치가 다르므로 id별로 둔다. 지금 주인공은 'target'
+// 하나(오른쪽 보는 포니, 머리가 오른쪽 위)라 그 앵커만 있다. 캐릭터가 바뀌거나 늘면 여기에 추가한다.
+export const ACCESSORY_ANCHORS = {
+  target: { top: -24, right: 14, size: 3 },
+};
+export const DEFAULT_ACCESSORY_ANCHOR = { top: -24, right: 14, size: 3 };
+
 // 제한시간: 퍼즐별 = 최소 수 × TIME_PER_OPTIMAL_S + TIME_BASE_S(초). 넉넉하게.
 export const TIME_BASE_S = 60;
 export const TIME_PER_OPTIMAL_S = 20;

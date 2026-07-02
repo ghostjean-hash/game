@@ -66,7 +66,7 @@
 | `ACCESSORY_ITEMS` | 포니 머리 장식 배열(`{id, name, price, acc, emoji}`). `acc`는 render가 그리는 장식 키, `emoji`는 상점 미리보기. 첫 항목(`acc:"none"`) price 0 = 기본(없음) |
 | `DEFAULT_ACCESSORY` | 기본 장식 id(`"none"`). 처음부터 보유·장착 |
 
-골드로 구매(해금)한다. 보드 테마는 화면에 **'적용'**(`progress.ownedThemes`/`equippedTheme`), 포니 머리 장식은 주인공에 **'장착'**(`progress.ownedAccessories`/`equippedAccessory`)한다(§4). 반영 방식: 테마 색은 `.rushhour` 스코프 `--rh-*` 변수(04 §3.2)를 main이 인라인으로 덮어써 적용하고(`applyTheme`), 장식은 `render.setTargetAccessory`가 주인공 블록 정수리에 `acc`→이모지 오버레이(`.pony-acc`)를 올린다. 시간 경과·클리어 표정(`render.updateTargetFace`)은 몸통 애니(`.face-worried`/`.face-cry`/`.face-happy`, 울상은 눈물 이모지 `.pony-tear`)로 표현한다.
+골드로 구매(해금)한다. 보드 테마는 화면에 **'적용'**(`progress.ownedThemes`/`equippedTheme`), 포니 머리 장식(16종)은 주인공에 **'장착'**(`progress.ownedAccessories`/`equippedAccessory`)한다(§4). 상점에서 적용/장착된 항목만 '적용 중'/'장착 중'을 표시하고, 소유했지만 미적용인 항목은 라벨을 비운다. 반영 방식: 테마 색은 `.rushhour` 스코프 `--rh-*` 변수(04 §3.2)를 main이 인라인으로 덮어써 적용하고(`applyTheme`), 장식은 `render.setTargetAccessory`가 주인공 블록 정수리에 `acc`→이모지 오버레이(`.pony-acc`)를 올린다. **장식 위치(정수리)·크기는 캐릭터별 앵커(`ACCESSORY_ANCHORS`, constants.js)를 render가 인라인으로 준다** - 블록 영역을 넘어가 머리에 얹히며, 캐릭터가 바뀌거나 늘어도 앵커만 추가하면 된다. 시간 경과·클리어 표정(`render.updateTargetFace`)은 몸통 애니(`.face-worried`/`.face-cry`/`.face-happy`, 울상은 눈물 이모지 `.pony-tear`)로 표현하며, 장식도 같은 애니로 함께 움직인다(울 때 장식도 흔들림). 모든 팝업(상점/맵/설정/결과)은 우상단 X 버튼(`.modal-x`)으로 닫는다.
 
 ### 2.4. 블록 이미지 스타일 - `src/data/styles.js`
 

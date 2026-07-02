@@ -2,7 +2,7 @@
 // 차는 조랑말 PNG 이미지로 그린다(assets/ponies/). 블록 크기 → 파일명 매핑.
 // 게임 로직은 core/에 있다(docs/03_architecture.md §2.2).
 
-import { BOARD_SIZE, EXIT_ROW, TARGET_ID, CLEAR_EXIT_MS, CONFETTI_COUNT } from '../data/constants.js';
+import { BOARD_SIZE, EXIT_ROW, TARGET_ID, CLEAR_EXIT_MS, CONFETTI_COUNT, ACCESSORY_ANCHORS, DEFAULT_ACCESSORY_ANCHOR } from '../data/constants.js';
 import { BLOCK_TINTS, TARGET_BORDER } from '../data/colors.js';
 import { PONY_STYLES } from '../data/styles.js';
 import { ACCESSORY_ITEMS } from '../data/shop.js';
@@ -277,7 +277,13 @@ function targetCarEl() {
   return document.querySelector('.car.target');
 }
 
-// 머리 장식 이모지 오버레이를 갱신(없으면 제거).
+// 주인공 캐릭터의 장식 앵커(정수리 위치·크기). 캐릭터 종류가 늘면 여기서 갈래를 늘린다.
+function targetAnchor() {
+  return ACCESSORY_ANCHORS.target || DEFAULT_ACCESSORY_ANCHOR;
+}
+
+// 머리 장식 이모지 오버레이를 갱신(없으면 제거). 위치·크기는 캐릭터별 앵커를 인라인으로 준다
+// (블록 영역을 넘어가 정수리에 얹혀도 되도록 CSS는 위치를 고정하지 않는다).
 function applyTargetAccessory() {
   const car = targetCarEl();
   if (!car) return;
@@ -293,6 +299,10 @@ function applyTargetAccessory() {
     deco.setAttribute('aria-hidden', 'true');
     car.appendChild(deco);
   }
+  const a = targetAnchor();
+  deco.style.top = `${a.top}%`;
+  deco.style.right = `${a.right}%`;
+  deco.style.fontSize = `${a.size}vmin`;
   deco.textContent = emoji;
 }
 

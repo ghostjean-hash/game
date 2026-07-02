@@ -53,6 +53,7 @@ const el = {
   resultCombo: document.getElementById('result-combo'),
   resultGold: document.getElementById('result-gold'),
   overlayNext: document.getElementById('btn-overlay-next'),
+  overlayClose: document.getElementById('btn-overlay-close'),
   shopBtn: document.getElementById('btn-shop'),
   shop: document.getElementById('shop'),
   shopGold: document.getElementById('shop-gold'),
@@ -414,7 +415,7 @@ let mapViewMode = null; // 맵에서 보고 있는 모드(아직 확정 전, act
 const SHOP_KINDS = {
   theme: {
     list: BOARD_THEMES, ownedKey: 'ownedThemes', eqKey: 'equippedTheme', def: DEFAULT_THEME,
-    onLabel: '적용 중', offLabel: '적용하기',
+    onLabel: '적용 중', offLabel: '',
     swatchHtml: (item) => `<span class="shop-swatch" style="background:${item.board};border:2px solid ${item.exit}"></span>`,
   },
   accessory: {
@@ -605,6 +606,7 @@ el.overlayNext.addEventListener('click', () => {
   if (idx < list.length - 1) go(1);
   else loadPuzzle(list[0].id); // 마지막 퍼즐 완주 후 처음으로
 });
+el.overlayClose.addEventListener('click', hideOverlay);
 el.shopBtn.addEventListener('click', () => openPanel(el.shop, renderShop));
 el.shopClose.addEventListener('click', () => closePanel(el.shop));
 function onShopClick(e) {

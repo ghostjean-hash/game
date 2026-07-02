@@ -19,7 +19,18 @@ export const ACCESSORY_ITEMS = [
   { id: 'ribbon', name: '리본', price: 30, acc: 'ribbon', emoji: '🎀' },
   { id: 'flower', name: '꽃', price: 40, acc: 'flower', emoji: '🌸' },
   { id: 'crown', name: '왕관', price: 60, acc: 'crown', emoji: '👑' },
-  { id: 'bowtie', name: '나비넥타이', price: 40, acc: 'bowtie', emoji: '🎗' },
+  { id: 'bowtie', name: '나비넥타이', price: 40, acc: 'bowtie', emoji: '🎀' },
+  { id: 'tophat', name: '중절모', price: 50, acc: 'tophat', emoji: '🎩' },
+  { id: 'cap', name: '야구모자', price: 40, acc: 'cap', emoji: '🧢' },
+  { id: 'grad', name: '학사모', price: 60, acc: 'grad', emoji: '🎓' },
+  { id: 'sunhat', name: '밀짚모자', price: 50, acc: 'sunhat', emoji: '👒' },
+  { id: 'star', name: '별', price: 40, acc: 'star', emoji: '⭐' },
+  { id: 'gem', name: '보석', price: 70, acc: 'gem', emoji: '💎' },
+  { id: 'clover', name: '클로버', price: 40, acc: 'clover', emoji: '🍀' },
+  { id: 'heart', name: '하트', price: 50, acc: 'heart', emoji: '❤️' },
+  { id: 'snow', name: '눈송이', price: 40, acc: 'snow', emoji: '❄️' },
+  { id: 'music', name: '음표', price: 40, acc: 'music', emoji: '🎵' },
+  { id: 'party', name: '고깔', price: 50, acc: 'party', emoji: '🎉' },
 ];
 
 export const DEFAULT_ACCESSORY = 'none';
