@@ -142,9 +142,9 @@ function refreshFeet(boardEl, grid) {
   });
 }
 
-// 표정 타이머(보드 전체에 하나). 셀(밥풀이 한 칸) 단위로 각자 독립 확률로 깜빡이고 표정을
-// 바꾼다 - 같은 차의 셀들이라도 묶지 않아 제각각 깜빡인다. 몸은 정지.
-// boardMood(클리어 happy / 시간 위기 sad)가 걸리면 순환·깜빡을 멈추고 감정 컷을 또렷이 유지한다.
+// 표정 타이머(보드 전체에 하나). 표정(어떤 컷인지)은 블록(차) 단위로 통일하고, 눈 깜빡이는
+// 타이밍만 셀(밥풀이 한 칸)마다 독립이다 - 같은 차의 칸들은 늘 같은 표정이되, 눈은 제각각 깜빡인다.
+// 몸은 정지. boardMood(클리어 happy / 시간 위기 sad)가 걸리면 순환·깜빡을 멈추고 감정 컷을 유지한다.
 let faceCycleTimer = null;
 let cycleDef = null;     // setBoardMood가 참조할 현재 스타일 정의
 let boardMood = null;    // null | 'happy' | 'sad'
@@ -156,67 +156,71 @@ function startFaceCycle(boardEl, def) {
   const grid = def.faceGrid;
   const blink = def.blinkFace;              // 눈 감은 컷 인덱스(없으면 깜빡임 생략)
   const tick = def.faceCycleMs || 500;      // 판정 주기
-  const blinkChance = def.blinkChance || 0.12; // 셀이 한 tick에 깜빡일 확률
-  const faceChance = def.faceChance || 0.04;   // 셀이 한 tick에 표정 바꿀 확률
-  const cells = Array.from(boardEl.querySelectorAll('.pony-cell.face'));
-  if (!cells.length) return;
-  const baseFace = (c) => parseInt(c.dataset.face, 10) || 0;
+  const blinkChance = def.blinkChance || 0.12; // 셀이 한 tick에 깜빡일 확률(셀별 독립)
+  const faceChance = def.faceChance || 0.04;   // 블록이 한 tick에 표정 바꿀 확률(블록 통일)
+  const blocks = Array.from(boardEl.querySelectorAll('.car'))
+    .map((carEl) => Array.from(carEl.querySelectorAll('.pony-cell.face')))
+    .filter((cells) => cells.length);
+  if (!blocks.length) return;
   faceCycleTimer = setInterval(() => {
     if (boardMood) return; // 감정 고정 중엔 순환·깜빡 멈춤(표정 또렷하게)
-    for (const cell of cells) {
-      if (cell.dataset.blinking === '1') continue; // 깜빡 중인 셀은 건너뜀
-      const base = baseFace(cell);
-      const r = Math.random();
-      if (blink != null && base !== blink && r < blinkChance) {
-        // 눈 깜빡: 이 셀만 잠깐 눈감았다(기억 유지) 원래 표정으로 복귀
-        cell.dataset.blinking = '1';
-        applyFaceVisual(cell, blink, grid);
-        setTimeout(() => {
-          applyFaceVisual(cell, baseFace(cell), grid);
-          cell.dataset.blinking = '';
-        }, 130);
-      } else if (r > 1 - faceChance) {
-        // 이 셀만 다른 표정으로 바꾼다(눈감은 컷 제외)
+    for (const cells of blocks) {
+      // 표정 변경: 같은 차의 셀 전체를 같은 새 표정으로(블록 통일, 눈감은 컷 제외).
+      if (Math.random() > 1 - faceChance) {
         let n = Math.floor(Math.random() * def.faceCount);
         if (n === blink) n = (n + 1) % def.faceCount;
-        setFace(cell, n, grid);
+        cells.forEach((c) => setFace(c, n, grid));
+      }
+      // 눈 깜빡: 셀마다 독립 타이밍으로 잠깐 눈감았다(기억 유지) 제 표정으로 복귀.
+      for (const cell of cells) {
+        if (cell.dataset.blinking === '1') continue; // 깜빡 중인 셀은 건너뜀
+        const base = parseInt(cell.dataset.face, 10) || 0;
+        if (blink != null && base !== blink && Math.random() < blinkChance) {
+          cell.dataset.blinking = '1';
+          applyFaceVisual(cell, blink, grid);
+          setTimeout(() => {
+            applyFaceVisual(cell, parseInt(cell.dataset.face, 10) || 0, grid);
+            cell.dataset.blinking = '';
+          }, 130);
+        }
       }
     }
   }, tick);
 }
 
-// 클리어(happy)·시간 위기(sad)에 표정 그리드 블록 전체를 감정 컷으로 물들인다.
-// null이면 평상(셀별 결정적 표정)으로 복귀. 표정 그리드 스타일(밥풀이)에서만 동작한다.
+// 클리어(happy)·시간 위기(sad)에 표정 그리드 블록 전체를 감정 컷으로 물들인다(같은 차는 같은 컷).
+// null이면 평상(블록별 결정적 표정)으로 복귀. 표정 그리드 스타일(밥풀이)에서만 동작한다.
 export function setBoardMood(mood) {
   boardMood = (mood === 'happy' || mood === 'sad') ? mood : null;
   const def = cycleDef;
   if (!def || !def.faceSheet) return;
   const boardEl = document.querySelector('.board');
   if (!boardEl) return;
-  const cells = Array.from(boardEl.querySelectorAll('.pony-cell.face'));
-  if (!cells.length) return;
+  const blocks = Array.from(boardEl.querySelectorAll('.car'))
+    .map((carEl) => Array.from(carEl.querySelectorAll('.pony-cell.face')))
+    .filter((cells) => cells.length);
+  if (!blocks.length) return;
   const grid = def.faceGrid;
   if (boardMood) {
     const pool = boardMood === 'happy' ? (def.happyFaces || []) : (def.sadFaces || []);
     if (!pool.length) return;
-    cells.forEach((cell, i) => setFace(cell, pool[i % pool.length], grid)); // 셀마다 감정군 내 다른 컷
+    blocks.forEach((cells, i) => { const f = pool[i % pool.length]; cells.forEach((c) => setFace(c, f, grid)); }); // 블록마다 감정 컷 하나
   } else {
-    cells.forEach((cell, i) => {
-      let n = (i * 7 + 3) % def.faceCount; // 평상 복귀: 셀별 결정적 표정(눈감은 컷 제외)
+    blocks.forEach((cells, i) => {
+      let n = (i * 7 + 3) % def.faceCount; // 평상 복귀: 블록별 결정적 표정(눈감은 컷 제외)
       if (n === def.blinkFace) n = (n + 1) % def.faceCount;
-      setFace(cell, n, grid);
+      cells.forEach((c) => setFace(c, n, grid));
     });
   }
 }
 
 // 조립 스타일의 표정 그리드 셀: 표정 시트(faceGrid×faceGrid 칸에 표정 여러 개)에서 배정된
 // 표정 하나를 단일 이미지로 그린다. 몸은 정지, 표정만 타이머(startFaceCycle)로 변한다.
-function appendFaceCell(el, car, i, def, onFail) {
+function appendFaceCell(el, car, i, def, onFail, faceIdx) {
   const cell = document.createElement('div');
   cell.className = 'pony-cell face';
   const grid = def.faceGrid;
-  let idx = hashAt(car, i, 1) % def.faceCount; // 셀별 표정(같은 차라도 칸마다 제각각)
-  if (idx === def.blinkFace) idx = (idx + 1) % def.faceCount; // 눈감은 컷으로 시작하지 않게
+  const idx = faceIdx; // 블록(차) 단위로 통일된 표정
   cell.style.setProperty('--fg', String(grid)); // 그리드 한 변(스트립 배율)
   cell.style.setProperty('--lift', `${def.footLiftPx || 0}px`); // 발을 바닥에서 살짝 띄움
   const img = document.createElement('img');
@@ -250,7 +254,10 @@ function fillCar(el, car, style) {
     el.innerHTML = '';
     fillWhole(el, car, style); // 통 블록 이미지로 폴백(→ 없으면 A타입)
   };
-  for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle); // 셀마다 개별 표정
+  // 블록(차) 하나에 표정 하나(같은 차 셀은 동일). 눈 깜빡 타이밍만 이후 셀별 독립(startFaceCycle).
+  let faceIdx = hashAt(car, 0, 1) % def.faceCount;
+  if (faceIdx === def.blinkFace) faceIdx = (faceIdx + 1) % def.faceCount; // 눈감은 컷으로 시작 안 함
+  for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle, faceIdx);
 }
 
 // --- 주인공 토끼 색 스킨 / 머리 장식 / 표정 (상점·시간 연동) ---
