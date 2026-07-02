@@ -19,6 +19,16 @@
 }
 /* 상단 컨트롤 아이콘은 SVG로 통일(기기별 이모지 그림체 차이 제거). currentColor로 색 상속. */
 .rushhour .home svg { width: 20px; height: 20px; display: block; }
+/* 모드 전환 버튼: 아이콘 대신 현재 모드 이름을 짧게. 폭은 글자에 맞춘다. */
+.rushhour .mode-btn {
+  width: auto;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border: 2px solid var(--rh-exit);
+}
 /* 음소거 토글: 평소 스피커(on), muted면 X 표시(off)로 교체. */
 .rushhour #btn-mute .icon-sound-off { display: none; }
 .rushhour #btn-mute.muted .icon-sound-on { display: none; }
@@ -489,6 +499,7 @@
 @media (max-width: 480px) {
   .rushhour .topbar { gap: 4px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
   .rushhour .home { width: 28px; height: 28px; font-size: 16px; }
+  .rushhour .mode-btn { width: auto; padding: 0 7px; font-size: 11px; }
   .rushhour #puzzle-label { font-size: 13px; }
   .rushhour .stat { font-size: 10px; gap: 2px; }
   .rushhour .stat-value { font-size: 13px; }

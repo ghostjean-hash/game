@@ -6,6 +6,7 @@ import {
   COMBO_GOLD_STEP, COMBO_MAX, STAR_SOUND_GAP_MS,
 } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
+import { BOARDGAME_PUZZLES } from './data/puzzles-boardgame.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
 import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, setTargetAccessory, setBoardMood, showHint } from './render/render.js';
@@ -18,6 +19,14 @@ import { PONY_STYLES, DEFAULT_STYLE } from './data/styles.js';
 import { createStorage } from '../../../shared/storage.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
+
+// 게임 모드: 오리지널(자체 제작 세트) / 보드게임(ThinkFun Rush Hour). 진행·별은 모드별로 각각
+// 저장하고, 골드·스킨·테마·장식·설정은 두 모드가 공유한다(사용자 결정 2026-07-02).
+const MODES = [
+  { id: 'original', name: '오리지널', puzzles: PUZZLES },
+  { id: 'boardgame', name: '보드게임', puzzles: BOARDGAME_PUZZLES },
+];
+const DEFAULT_MODE = 'original';
 
 const store = createStorage(STORAGE_NS);
 
@@ -57,6 +66,7 @@ const el = {
   settings: document.getElementById('settings'),
   settingList: document.getElementById('setting-list'),
   settingsClose: document.getElementById('btn-settings-close'),
+  modeBtn: document.getElementById('btn-mode'),
 };
 
 const state = {
@@ -73,15 +83,48 @@ const state = {
   timer: null,
 };
 
-function progress() {
-  return store.get('progress', {
-    cleared: [], best: {}, gold: 0, stars: {},
-    ownedSkins: [DEFAULT_SKIN], equippedSkin: DEFAULT_SKIN,
-    ownedThemes: [DEFAULT_THEME], equippedTheme: DEFAULT_THEME,
-    ownedAccessories: [DEFAULT_ACCESSORY], equippedAccessory: DEFAULT_ACCESSORY,
-    combo: 0, bestCombo: 0, muted: false, ponyStyle: DEFAULT_STYLE,
-  });
+// 모드별 진행(퍼즐 클리어/최고 수/별/현재 퍼즐/콤보). 골드·꾸미기와 달리 모드마다 따로 둔다.
+function emptyModeProg() {
+  return { cleared: [], best: {}, stars: {}, current: null, combo: 0, bestCombo: 0 };
 }
+
+// 저장 데이터를 현재 스키마(공유 필드 + modes{original,boardgame})로 정규화한다.
+// 옛 단일 구조(최상위 cleared/best/stars + 별도 'current' 키)는 오리지널 모드로 이관한다(하위호환).
+function migrateProgress(p) {
+  const s = p || {};
+  const base = {
+    gold: s.gold || 0,
+    ownedSkins: s.ownedSkins || [DEFAULT_SKIN], equippedSkin: s.equippedSkin || DEFAULT_SKIN,
+    ownedThemes: s.ownedThemes || [DEFAULT_THEME], equippedTheme: s.equippedTheme || DEFAULT_THEME,
+    ownedAccessories: s.ownedAccessories || [DEFAULT_ACCESSORY], equippedAccessory: s.equippedAccessory || DEFAULT_ACCESSORY,
+    ponyStyle: s.ponyStyle || DEFAULT_STYLE, blockOpts: s.blockOpts, muted: !!s.muted,
+    activeMode: s.activeMode || DEFAULT_MODE,
+    modes: {},
+  };
+  if (s.modes) {
+    base.modes.original = { ...emptyModeProg(), ...s.modes.original };
+    base.modes.boardgame = { ...emptyModeProg(), ...s.modes.boardgame };
+  } else {
+    base.modes.original = {
+      ...emptyModeProg(),
+      cleared: s.cleared || [], best: s.best || {}, stars: s.stars || {},
+      combo: s.combo || 0, bestCombo: s.bestCombo || 0,
+      current: store.get('current', null),
+    };
+    base.modes.boardgame = emptyModeProg();
+  }
+  if (!MODES.some((m) => m.id === base.activeMode)) base.activeMode = DEFAULT_MODE;
+  return base;
+}
+
+function progress() {
+  return migrateProgress(store.get('progress', null));
+}
+
+// 모드 정의/퍼즐/진행 헬퍼. 인자 없으면 현재 활성 모드 기준.
+function modeDef(id) { return MODES.find((m) => m.id === id) || MODES[0]; }
+function modePuzzles(id) { return modeDef(id || progress().activeMode).puzzles; }
+function modeProg(pr) { const p = pr || progress(); return p.modes[p.activeMode] || p.modes.original; }
 
 // 장착한 토끼 스킨 색.
 function currentSkinColor() {
@@ -131,12 +174,13 @@ function currentBlockOpts() {
 }
 
 function puzzleById(id) {
-  return PUZZLES.find((p) => p.id === id);
+  return modePuzzles().find((p) => p.id === id);
 }
 
 function loadPuzzle(id) {
   stopTimer();
-  const p = puzzleById(id) || PUZZLES[0];
+  const list = modePuzzles();
+  const p = list.find((x) => x.id === id) || list[0];
   state.puzzleId = p.id;
   state.cars = parseGrid(p.grid);
   state.moves = 0;
@@ -148,21 +192,25 @@ function loadPuzzle(id) {
   state.solved = false;
   setTargetColor(currentSkinColor());
   state.els = buildBoard(el.board, state.cars, currentStyle(), currentBlockOpts());
-  store.set('current', p.id);
+  // 마지막으로 보던 퍼즐을 현재 모드 진행에 저장(모드별).
+  const pr = progress();
+  pr.modes[pr.activeMode].current = p.id;
+  store.set('progress', pr);
   hideOverlay();
   render();
   startTimer();
 }
 
 function render() {
+  const list = modePuzzles();
   el.stageNum.textContent = String(state.puzzleId);
   el.moves.textContent = String(state.moves);
   el.gold.textContent = String(progress().gold || 0);
   updateTimeUi();
   el.undo.disabled = state.history.length === 0 || state.solved;
   el.hint.disabled = state.solved;
-  el.prev.disabled = state.puzzleId <= PUZZLES[0].id;
-  el.next.disabled = state.puzzleId >= PUZZLES[PUZZLES.length - 1].id;
+  el.prev.disabled = state.puzzleId <= list[0].id;
+  el.next.disabled = state.puzzleId >= list[list.length - 1].id;
 }
 
 // --- 제한시간 + 토끼 표정 ---
@@ -237,31 +285,32 @@ function onSolved() {
   setBoardMood('happy'); // 주인공이 빠져나가면 남은 블록들도 전부 신난 표정
 
   const pr = progress();
-  if (!pr.cleared.includes(state.puzzleId)) pr.cleared.push(state.puzzleId);
-  const prevBest = pr.best[state.puzzleId];
-  if (prevBest == null || state.moves < prevBest) pr.best[state.puzzleId] = state.moves;
+  const mp = pr.modes[pr.activeMode]; // 진행·별·콤보는 현재 모드에 저장
+  if (!mp.cleared.includes(state.puzzleId)) mp.cleared.push(state.puzzleId);
+  const prevBest = mp.best[state.puzzleId];
+  if (prevBest == null || state.moves < prevBest) mp.best[state.puzzleId] = state.moves;
 
   const stars = starsFor(state.moves, state.optimal);
-  pr.stars = pr.stars || {};
-  pr.stars[state.puzzleId] = Math.max(pr.stars[state.puzzleId] || 0, stars);
+  mp.stars[state.puzzleId] = Math.max(mp.stars[state.puzzleId] || 0, stars);
 
   const inTime = state.elapsed <= state.limit;
 
   // 연속 콤보: 시간 내 클리어면 +1, 초과 클리어면 끊겨 0. 2연속부터 보너스 골드.
-  const combo = inTime ? (pr.combo || 0) + 1 : 0;
-  pr.combo = combo;
-  pr.bestCombo = Math.max(pr.bestCombo || 0, combo);
+  const combo = inTime ? (mp.combo || 0) + 1 : 0;
+  mp.combo = combo;
+  mp.bestCombo = Math.max(mp.bestCombo || 0, combo);
   const comboBonus = combo >= 2 ? Math.min(combo, COMBO_MAX) * COMBO_GOLD_STEP : 0;
 
   const gold = GOLD_BASE
     + (stars === 3 ? GOLD_STAR3 : stars === 2 ? GOLD_STAR2 : 0)
     + (inTime ? GOLD_TIME_BONUS : 0)
     + comboBonus;
-  pr.gold = (pr.gold || 0) + gold;
+  pr.gold = (pr.gold || 0) + gold; // 골드는 두 모드 공유
   store.set('progress', pr);
 
-  const idx = PUZZLES.findIndex((p) => p.id === state.puzzleId);
-  const isLast = idx >= PUZZLES.length - 1;
+  const list = modePuzzles();
+  const idx = list.findIndex((p) => p.id === state.puzzleId);
+  const isLast = idx >= list.length - 1;
   // 핵심만: 상태(제목) + 별 + 수/최소 + (콤보) + 획득 골드.
   el.resultTitle.textContent = isLast ? '완주! 🎉' : (state.moves <= state.optimal ? '완벽!' : '클리어!');
   el.resultStars.textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
@@ -338,13 +387,42 @@ function updateMuteBtn() {
 }
 
 function go(delta) {
-  const idx = PUZZLES.findIndex((p) => p.id === state.puzzleId);
-  const next = PUZZLES[idx + delta];
+  const list = modePuzzles();
+  const idx = list.findIndex((p) => p.id === state.puzzleId);
+  const next = list[idx + delta];
   if (next) loadPuzzle(next.id);
 }
 
 function hideOverlay() {
   el.overlay.hidden = true;
+}
+
+// --- 게임 모드(오리지널 / 보드게임) ---
+
+// 현재 모드 라벨을 상단 버튼에 반영.
+function updateModeBtn() {
+  const name = modeDef(progress().activeMode).name;
+  el.modeBtn.textContent = name;
+  el.modeBtn.setAttribute('aria-label', `모드: ${name} (눌러서 전환)`);
+}
+
+// 다음 모드 id(2개면 토글).
+function nextModeId() {
+  const i = MODES.findIndex((m) => m.id === progress().activeMode);
+  return MODES[(i + 1) % MODES.length].id;
+}
+
+// 모드 전환: 활성 모드를 바꾸고 그 모드가 마지막으로 보던 퍼즐(없으면 첫 퍼즐)을 연다.
+function switchMode(id) {
+  const pr = progress();
+  if (pr.activeMode === id || !MODES.some((m) => m.id === id)) return;
+  pr.activeMode = id;
+  store.set('progress', pr);
+  updateModeBtn();
+  const mp = pr.modes[id];
+  const list = modeDef(id).puzzles;
+  loadPuzzle(mp.current != null ? mp.current : list[0].id);
+  play('buy');
 }
 
 // --- 상점(토끼 색 스킨 + 보드 테마) ---
@@ -436,13 +514,15 @@ const DIFF_ORDER = ['beginner', 'easy', 'medium', 'hard'];
 
 function renderMap() {
   const pr = progress();
-  const cleared = new Set(pr.cleared || []);
-  const stars = pr.stars || {};
+  const mp = modeProg(pr);
+  const list = modePuzzles(pr.activeMode);
+  const cleared = new Set(mp.cleared || []);
+  const stars = mp.stars || {};
   const totalStars = Object.values(stars).reduce((a, b) => a + b, 0);
-  el.mapSummary.textContent = `클리어 ${cleared.size} / ${PUZZLES.length} · 모은 별 ${totalStars} ⭐`;
+  el.mapSummary.textContent = `${modeDef(pr.activeMode).name} · 클리어 ${cleared.size} / ${list.length} · 모은 별 ${totalStars} ⭐`;
 
   const groups = {};
-  for (const p of PUZZLES) (groups[p.difficulty] = groups[p.difficulty] || []).push(p);
+  for (const p of list) (groups[p.difficulty] = groups[p.difficulty] || []).push(p);
   el.mapGrid.innerHTML = DIFF_ORDER.filter((d) => groups[d]).map((d) => {
     const chips = groups[d].map((p) => {
       const done = cleared.has(p.id);
@@ -523,10 +603,12 @@ el.hint.addEventListener('click', hint);
 el.prev.addEventListener('click', () => go(-1));
 el.next.addEventListener('click', () => go(1));
 el.overlayNext.addEventListener('click', () => {
-  const idx = PUZZLES.findIndex((p) => p.id === state.puzzleId);
-  if (idx < PUZZLES.length - 1) go(1);
-  else loadPuzzle(PUZZLES[0].id); // 마지막 퍼즐 완주 후 처음으로
+  const list = modePuzzles();
+  const idx = list.findIndex((p) => p.id === state.puzzleId);
+  if (idx < list.length - 1) go(1);
+  else loadPuzzle(list[0].id); // 마지막 퍼즐 완주 후 처음으로
 });
+el.modeBtn.addEventListener('click', () => switchMode(nextModeId()));
 el.shopBtn.addEventListener('click', () => openPanel(el.shop, renderShop));
 el.shopClose.addEventListener('click', () => closePanel(el.shop));
 function onShopClick(e) {
@@ -562,7 +644,9 @@ window.addEventListener('touchend', unlockAudio, { once: true });
 el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
 setMuted(progress().muted);
 updateMuteBtn();
+updateModeBtn();
 setTargetColor(currentSkinColor());
 setTargetAccessory(currentAccessory().acc);
 applyTheme(currentTheme());
-loadPuzzle(store.get('current', PUZZLES[0].id));
+const startProg = modeProg();
+loadPuzzle(startProg.current != null ? startProg.current : modePuzzles()[0].id);

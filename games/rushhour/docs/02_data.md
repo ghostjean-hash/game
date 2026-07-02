@@ -83,7 +83,13 @@
 
 조립 스타일은 표정 그리드 방식(`faceSheet`)으로 그린다(밥풀이 `c`). `faceSheet`(`_a`) 한 장에 표정들을 `faceGrid`×`faceGrid` 칸으로 담고(총 `faceCount`개), 셀마다 표정 하나를 위치 기반으로 골라 **단일 이미지로 그린다(몸 애니 없음)**. 각 칸의 발밑(최하단 불투명 픽셀)과 좌우 폭 중심을 canvas로 측정해, 발밑은 공통 기준선에·좌우는 칸 중앙에 맞춰 캐릭터가 흔들리지 않게 정렬한다(`render.js` `measureFeet`, style.css `.pony-frame`의 `--fx`/`--fy` 보정). 표정 타이머(`render.js` `startFaceCycle`, 간격 `faceCycleMs` 기본 700ms)는 **셀(밥풀이 한 칸) 단위로 각자 독립**해서, 같은 차의 칸이라도 묶지 않고 제각각 눈을 깜빡이고(`blinkFace` 눈감은 컷을 잠깐 보였다 복귀) 이따금 다른 표정으로 바꾼다. **몸은 가만히 있고 표정만 살아 움직인다**(보드를 다시 그릴 때 이전 타이머 정리). 클리어 순간에는 `setBoardMood('happy')`로 모든 셀이 `happyFaces` 컷(웃음·윙크 등), 시간이 임박하면(주인공 울상 단계) `setBoardMood('sad')`로 `sadFaces` 컷(울음·찡그림·화남)으로 전환되고, 감정이 걸린 동안은 순환·깜빡을 멈춰 표정을 또렷이 유지한다. 렌더는 `appendFaceCell`, 표정 크롭·보정은 `.pony-frame`(시트를 `faceGrid`배로 키워 표정 칸만 창에 보이게 이동). 눌림 자세 시트(`_b`)와 움찔은 산만하다는 판단으로 제거했다.
 
-## 3. 퍼즐 - `src/data/puzzles.js`
+## 3. 퍼즐 - `src/data/puzzles.js` (+ 모드)
+
+게임은 두 모드로 나뉜다(`main.js` `MODES`). **오리지널**(`src/data/puzzles.js`, 자체 제작 186개)과 **보드게임**(`src/data/puzzles-boardgame.js`, ThinkFun Rush Hour 세트). 두 모드는 상단바 버튼(`#btn-mode`)으로 전환하며, 퍼즐 데이터 형식·유효성 규칙(§3.1~3.4)은 완전히 동일하다. 진행(클리어/최고 수/별/현재 퍼즐/콤보)은 모드별로 각각 저장하고(§4), 골드·스킨·테마·장식·설정은 두 모드가 공유한다.
+
+> 보드게임 세트는 현재 **임시 6개**다(2모드 구조 검증용, solver로 풀림 확인). 실제 ThinkFun 40개 카드 배치가 확정되면 `puzzles-boardgame.js` 배열을 교체한다(형식 동일).
+
+### 3.0. 오리지널 세트 (`puzzles.js`)
 
 내장 퍼즐 186개. 난이도를 두 축(최소 수 + 얽힘=최적해에서 움직이는 서로 다른 차 수)으로 잰다. 한 배치의 도달 가능한 모든 상태를 모으고 "풀린 상태 전부"에서 멀티소스 BFS로 각 상태의 정확한 최소 수를 구한다(풀림 = 토끼만 출구, 다른 차 위치 무관이라 풀린 상태가 여럿). 곡선: 입문 1~21(1~4수) / 쉬움 22~81(5~8) / 보통 82~170(9~12) / 도전 171~186(13~16). 보통(중간 난이도)을 두텁게 89개로 두고, 후반은 "막는 차 2대 이상 + 서로 다른 차 4대 이상 움직임"을 강제해 "차 하나만 비키면 끝"인 1차원 자명 퍼즐을 배제한다. 1번은 막는 차 없는 튜토리얼. (6x6에서 13수 이상은 희귀해 도전은 16개.) 각 난이도 구간 내부는 솔버로 측정한 체감점수(최소 수 + 막는 차 수 + 되돌림=빨강 외 이동 횟수) 오름차순으로 정렬해, 같은 난이도 안에서 직전보다 갑자기 쉬워지는 지점을 없앤다(2026-06-30 재정렬: 하락 지점 33→1곳). 진행 순서는 배열 순서 그대로라, 인접 퍼즐이 서로 너무 비슷하면 "같은 게 연달아 나온다"는 인상을 준다. 그래서 형태 유사도(각 칸을 빈칸/주인공/가로차/세로차로 정규화한 뒤 같은 위치 같은 종류 비율)가 0.86 이상인 인접 쌍은 배제한다. 초기 세트에 28쌍이 있어, 각 쌍의 뒤쪽을 솔버로 새로 생성·검증한 퍼즐(같은 난이도 구간 + 기존 어떤 퍼즐과도 유사도 0.80 미만)로 교체했다(2026-07-01, 총 186개 유지, 인접 유사 0쌍).
 
@@ -119,5 +125,8 @@
 
 | 키 | 값 | 의미 |
 |---|---|---|
-| `progress` | `{ cleared, best, gold, stars, ownedSkins, equippedSkin, ownedThemes, equippedTheme, ownedAccessories, equippedAccessory, combo, bestCombo, muted }` | 클리어 퍼즐 + 퍼즐별 최고 수 + 누적 골드 + 퍼즐별 최고 별 + 보유/장착 스킨·테마·액세서리 + 현재 연속 콤보 + 최고 콤보 + 음소거 여부 |
-| `current` | `number` | 마지막으로 보던 퍼즐 id |
+| `progress` | `{ gold, ownedSkins, equippedSkin, ownedThemes, equippedTheme, ownedAccessories, equippedAccessory, ponyStyle, blockOpts, muted, activeMode, modes }` | **공유 필드**(골드·보유/장착 스킨·테마·장식·캐릭터 스타일·배경테두리 옵션·음소거) + 활성 모드(`activeMode`) + 모드별 진행(`modes`) |
+| `progress.modes[모드]` | `{ cleared, best, stars, current, combo, bestCombo }` | 모드(`original`/`boardgame`)별 진행: 클리어 퍼즐 + 퍼즐별 최고 수 + 퍼즐별 최고 별 + 마지막 본 퍼즐 + 현재 연속 콤보 + 최고 콤보 |
+| `current` (레거시) | `number` | 옛 단일 구조의 "마지막 본 퍼즐" 키. 지금은 안 쓰고, 옛 저장 데이터를 `modes.original.current`로 이관할 때만 읽는다(`migrateProgress`). |
+
+옛 단일 구조(최상위 `cleared`/`best`/`stars`)로 저장된 데이터는 `main.js`의 `migrateProgress`가 읽는 즉시 현재 스키마로 정규화하고, 옛 진행을 `modes.original`로 이관한다(기존 사용자 진행 보존).

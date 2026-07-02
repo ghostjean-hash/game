@@ -6,6 +6,7 @@ import {
 } from '../src/core/board.js';
 import { solve, solveStep } from '../src/core/solver.js';
 import { PUZZLES } from '../src/data/puzzles.js';
+import { BOARDGAME_PUZZLES } from '../src/data/puzzles-boardgame.js';
 import { ORIENT } from '../src/data/constants.js';
 
 const tests = [];
@@ -142,6 +143,23 @@ test('PUZZLES: 모두 풀 수 있고 최소 수 ≥ 1', () => {
   for (const p of PUZZLES) {
     const opt = solve(parseGrid(p.grid));
     assert(opt !== null && opt >= 1, `P${p.id} 풀 수 없음(opt=${opt})`);
+  }
+});
+
+// --- 보드게임 모드 퍼즐 전수 검증(오리지널과 동일 규칙) ---
+
+test('BOARDGAME_PUZZLES: id가 1부터 연속', () => {
+  BOARDGAME_PUZZLES.forEach((p, i) => eq(p.id, i + 1, `index ${i}`));
+});
+
+test('BOARDGAME_PUZZLES: 유효 + 시작 미클리어 + 풀 수 있음(opt ≥ 1)', () => {
+  for (const p of BOARDGAME_PUZZLES) {
+    const cars = parseGrid(p.grid);
+    const errs = validatePuzzle(cars);
+    assert(errs.length === 0, `B${p.id}: ${errs.join('; ')}`);
+    assert(!isSolved(cars), `B${p.id} 시작부터 클리어 상태`);
+    const opt = solve(cars);
+    assert(opt !== null && opt >= 1, `B${p.id} 풀 수 없음(opt=${opt})`);
   }
 });
 

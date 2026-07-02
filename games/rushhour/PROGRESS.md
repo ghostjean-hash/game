@@ -331,3 +331,35 @@
 
 ### self-critique
 - 검증용 백그라운드 서버를 띄우고 세션 종료 시 정리하지 않아 유령 프로세스가 쌓였고, 그게 사용자 서버 체감 불안정에 일조했을 수 있다. 앞으로 백그라운드 서버는 검증 후 정리하거나 고정 포트 1개 재사용.
+
+---
+
+## 2026-07-02 (11차) - 2모드(오리지널 / 보드게임) 추가
+
+### 요구
+보드게임 러시아워와 동일한 스테이지를 별도 모드로. 두 모드 자유 선택 + 스테이지 각각 저장.
+
+### 데이터 정확성 판단 (사용자 결정)
+- "완전 동일"이 핵심이라 실제 ThinkFun 40 카드 배치가 필요. WebSearch/WebFetch로 신뢰 출처 확인했으나 공식 40 카드 배치를 확정 못함(공개 solver repo는 임의 예제/자동생성). 정직히 사용자에게 알림.
+- AskUserQuestion 결과: (1) 아키텍처 먼저 - 2모드 구조 완성하고 보드게임은 임시본으로 시작, 40카드 확정 시 교체 (2) 상단바 전환 버튼 (3) 골드·스킨·설정 공유(진행/별만 모드별).
+
+### 구현
+- puzzles-boardgame.js 신설: 임시 6개(자체 검증 배치, solver로 opt 1~6 풀림 확인, 헤더에 "임시·교체 예정" 명시).
+- MODES 정의(original/boardgame). 저장 스키마 변경: progress = 공유필드 + activeMode + modes{original,boardgame}. 진행(cleared/best/stars/current/combo/bestCombo)은 모드별, gold·꾸미기·설정은 최상위 공유.
+- migrateProgress: 옛 단일 구조(최상위 cleared + 별도 current 키)를 modes.original로 하위호환 이관. 기존 진행 보존.
+- main.js PUZZLES 직접 참조를 modePuzzles()/modeProg()로 전면 교체(puzzleById/loadPuzzle/render/onSolved/go/overlayNext/renderMap/초기화).
+- 상단바 모드 전환 버튼(#btn-mode, 텍스트 라벨 토글). switchMode가 활성 모드 저장 + 그 모드 마지막 퍼즐 복원.
+- renderMap 모드별(현재 모드명 + 해당 세트 퍼즐/진행).
+- runner.js에 보드게임 퍼즐 전수 검증(유효/미클리어/풀림) 2 테스트 추가.
+
+### 검증 (playwright)
+- 자동 테스트 21/21 PASS(기존 19 + 보드게임 2). 에러 0.
+- 마이그레이션: 옛 {cleared:[1,2,3],gold:120,current:7} → modes.original.cleared=[1,2,3]/current=7, boardgame 빈 상태, gold 120 공유, activeMode original. 정상.
+- 모드 토글: 오리지널(스테이지7)↔보드게임(스테이지1), 각 모드 마지막 퍼즐 복원. 보드게임 맵 "0/6" 별도 진행.
+- 모드 버튼 폭: 초기엔 @media .home{width:28px}가 덮어 "오리지널" 세로로 눌림 → nowrap + @media 예외로 62px 정상 표시(browser-shot 확인).
+
+### 남은 것
+- 보드게임 실제 40 카드 데이터 확정 시 puzzles-boardgame.js 교체(사용자 실물 카드 제공 또는 검증 출처 확보). 현재는 임시 6개.
+
+### self-critique
+- "완전 동일" 요구에서 데이터 정확성을 임의 추정으로 채우지 않고, 확보 실패를 정직히 알린 뒤 사용자 결정(아키텍처 먼저)을 받은 것이 옳았다. 부정확한 40개를 "동일"이라 넣었으면 요구 위반이 됐을 것.
