@@ -324,12 +324,11 @@
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.05);
   color: #9c6b7d;
-  font-size: 20px;
-  line-height: 1;
   cursor: pointer;
   z-index: 4;
   flex: none;
 }
+.rushhour .modal-x .x-ic { width: 15px; height: 15px; display: block; }
 .rushhour .modal-x:hover { background: rgba(0, 0, 0, 0.12); }
 /* 팝업 제목 아이콘: 상단바 메뉴와 같은 SVG로 통일. */
 .rushhour .modal h2 { display: flex; align-items: center; gap: 8px; }
