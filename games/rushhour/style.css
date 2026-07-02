@@ -251,12 +251,12 @@
 }
 /* 주인공 표정: 몸통(.pony 이미지) 애니로 표현. 색 filter와 속성이 달라 공존한다. */
 /* 표정 애니는 몸(.pony)과 머리 장식(.pony-acc)을 함께 움직인다(울 때 장식도 같이 흔들림). */
-.rushhour .car.face-happy .pony,
-.rushhour .car.face-happy .pony-acc { animation: rh-happy 0.5s ease-in-out infinite alternate; }
-.rushhour .car.face-worried .pony,
-.rushhour .car.face-worried .pony-acc { animation: rh-worried 2.4s ease-in-out infinite; }
-.rushhour .car.face-cry .pony,
-.rushhour .car.face-cry .pony-acc { animation: rh-cry 0.4s ease-in-out infinite; }
+/* 주인공 몸+장식을 담는 스테이지(블록 전체). 표정 애니를 여기에 걸어 몸과 장식이 정확히 같은
+   폭으로 함께 흔들리게 한다(각 요소에 걸면 크기 기준 %라 진폭이 어긋난다). */
+.rushhour .car.target .pony-stage { position: absolute; inset: 0; }
+.rushhour .car.face-happy .pony-stage { animation: rh-happy 0.5s ease-in-out infinite alternate; }
+.rushhour .car.face-worried .pony-stage { animation: rh-worried 2.4s ease-in-out infinite; }
+.rushhour .car.face-cry .pony-stage { animation: rh-cry 0.4s ease-in-out infinite; }
 @keyframes rh-happy { from { transform: translateY(0); } to { transform: translateY(-11%); } }
 @keyframes rh-worried { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-4deg); } }
 @keyframes rh-cry {
@@ -311,23 +311,29 @@
 /* 모든 팝업 우상단 닫기 X. */
 .rushhour .modal-x {
   position: absolute;
-  top: 8px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
   width: 32px;
   height: 32px;
+  padding: 0;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.05);
   color: #9c6b7d;
-  font-size: 26px;
+  font-size: 20px;
   line-height: 1;
   cursor: pointer;
   z-index: 4;
+  flex: none;
 }
-.rushhour .modal-x:hover { background: rgba(0, 0, 0, 0.06); }
+.rushhour .modal-x:hover { background: rgba(0, 0, 0, 0.12); }
+/* 팝업 제목 아이콘: 상단바 메뉴와 같은 SVG로 통일. */
+.rushhour .modal h2 { display: flex; align-items: center; gap: 8px; }
+.rushhour .title-ic { width: 22px; height: 22px; flex: none; }
 /* 모든 팝업(상점/맵/설정/결과)을 라이트 테마로 통일. 모달 스코프에서 색 토큰을 밝은 값으로
    재정의하면, 내부 요소(칩·토글·버튼 등 var(--fg)/var(--bg-elev-2)/var(--line) 사용)가
    자동으로 라이트 팔레트를 상속한다. 결과 오버레이는 통통 튀어 등장(기분 업). */

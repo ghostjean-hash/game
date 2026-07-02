@@ -85,7 +85,7 @@
 
 ## 3. 퍼즐 - `src/data/puzzles.js` (+ 모드)
 
-게임은 세 모드로 나뉜다(`main.js` `MODES`). **오리지널**(`src/data/puzzles.js`, 자체 제작 186개), **보드게임**(`src/data/puzzles-boardgame.js`, ThinkFun 세트), **Fogleman**(`src/data/puzzles-fogleman.js`, Michael Fogleman의 Rush Hour DB에서 추출한 400개). 퍼즐 데이터 형식·유효성 규칙(§3.1~3.4)은 동일하다. 진행(클리어/최고 수/별/현재 퍼즐/콤보)은 모드별로 각각 저장하고(§4), 골드·스킨·테마·장식·설정은 모든 모드가 공유한다.
+게임은 두 모드로 나뉜다(`main.js` `MODES`). **오리지널**(`src/data/puzzles.js`, 자체 제작 186개)과 **Fogleman**(`src/data/puzzles-fogleman.js`, Michael Fogleman의 Rush Hour DB에서 추출한 400개). (보드게임 모드는 2026-07-02 탭 제거 - `puzzles-boardgame.js`는 남아 있으나 `MODES` 미등록.) 퍼즐 데이터 형식·유효성 규칙(§3.1~3.4)은 동일하다. 진행(클리어/최고 수/별/현재 퍼즐/콤보)은 모드별로 각각 저장하고(§4), 골드·테마·장식·설정은 모든 모드가 공유한다.
 
 Fogleman 모드는 데이터에 **`optimal`(외부 검증된 최소 이동 수)** 필드가 있다. 고난도(최대 51수)는 실시간 BFS(`solve`)가 무거워 `loadPuzzle`이 이 값을 그대로 쓴다(런타임 계산 생략). 저난도(≤15수)는 추출 단계에서 우리 solver와 전수 대조했고(불일치 0), `tests`가 표본으로 회귀 확인한다. 힌트(`solveStep`)는 최소 수가 `HINT_MAX_OPTIMAL`(18)을 넘으면 막는다(멈춤 방지). 데이터 출처(MIT)는 소스 헤더 + `LICENSE-fogleman` + 진행 맵의 Fogleman 탭 아래(`#map-credit`)에 표기한다.
 

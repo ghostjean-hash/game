@@ -6,7 +6,6 @@ import {
   COMBO_GOLD_STEP, COMBO_MAX, STAR_SOUND_GAP_MS,
 } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
-import { BOARDGAME_PUZZLES } from './data/puzzles-boardgame.js';
 import { FOGLEMAN_PUZZLES } from './data/puzzles-fogleman.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
@@ -25,7 +24,6 @@ const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard:
 // 저장하고, 골드·스킨·테마·장식·설정은 두 모드가 공유한다(사용자 결정 2026-07-02).
 const MODES = [
   { id: 'original', name: '오리지널', puzzles: PUZZLES },
-  { id: 'boardgame', name: '보드게임', puzzles: BOARDGAME_PUZZLES },
   { id: 'fogleman', name: 'Fogleman', puzzles: FOGLEMAN_PUZZLES, credit: '퍼즐: Michael Fogleman · MIT (michaelfogleman.com/rush)' },
 ];
 const DEFAULT_MODE = 'original';
@@ -420,7 +418,7 @@ const SHOP_KINDS = {
   },
   accessory: {
     list: ACCESSORY_ITEMS, ownedKey: 'ownedAccessories', eqKey: 'equippedAccessory', def: DEFAULT_ACCESSORY,
-    onLabel: '장착 중', offLabel: '장착하기',
+    onLabel: '장착 중', offLabel: '',
     swatchHtml: (item) => `<span class="shop-swatch shop-acc">${item.emoji}</span>`,
   },
 };

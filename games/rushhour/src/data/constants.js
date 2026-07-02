@@ -27,9 +27,9 @@ export const CONFETTI_COUNT = 16;
 // 크기(vmin). 캐릭터(주인공 이미지)마다 정수리 위치가 다르므로 id별로 둔다. 지금 주인공은 'target'
 // 하나(오른쪽 보는 포니, 머리가 오른쪽 위)라 그 앵커만 있다. 캐릭터가 바뀌거나 늘면 여기에 추가한다.
 export const ACCESSORY_ANCHORS = {
-  target: { top: -24, right: 14, size: 3 },
+  target: { top: 8, right: 20, size: 2.4 }, // 포니 이마 위(뿔 아래). browser-shot로 맞춤.
 };
-export const DEFAULT_ACCESSORY_ANCHOR = { top: -24, right: 14, size: 3 };
+export const DEFAULT_ACCESSORY_ANCHOR = { top: 8, right: 20, size: 2.4 };
 
 // 제한시간: 퍼즐별 = 최소 수 × TIME_PER_OPTIMAL_S + TIME_BASE_S(초). 넉넉하게.
 export const TIME_BASE_S = 60;

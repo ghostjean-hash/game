@@ -59,7 +59,16 @@ function fillWhole(el, car, style) {
     });
   }
   img.src = ponySrc(car, style);
-  el.appendChild(img);
+  if (car.id === TARGET_ID) {
+    // 주인공: 몸 + 머리 장식을 한 스테이지로 묶는다. 표정 애니를 스테이지에 걸면 몸과 장식이
+    // 정확히 같은 폭으로 함께 흔들린다(각자 애니면 요소 크기 기준 %라 진폭이 어긋남).
+    const stage = document.createElement('div');
+    stage.className = 'pony-stage';
+    stage.appendChild(img);
+    el.appendChild(stage);
+  } else {
+    el.appendChild(img);
+  }
 }
 
 // 발밑 정렬용 시트 측정 캐시. 각 표정 칸의 발밑(최하단 불투명 픽셀) y를 셀 높이 대비 비율로 잰다.
@@ -287,7 +296,8 @@ function targetAnchor() {
 function applyTargetAccessory() {
   const car = targetCarEl();
   if (!car) return;
-  let deco = car.querySelector('.pony-acc');
+  const host = car.querySelector('.pony-stage') || car; // 몸과 같은 스테이지에 넣어 함께 흔들림
+  let deco = host.querySelector('.pony-acc');
   const emoji = accEmoji(targetAccessory);
   if (!emoji) {
     if (deco) deco.remove();
@@ -297,7 +307,7 @@ function applyTargetAccessory() {
     deco = document.createElement('span');
     deco.className = 'pony-acc';
     deco.setAttribute('aria-hidden', 'true');
-    car.appendChild(deco);
+    host.appendChild(deco);
   }
   const a = targetAnchor();
   deco.style.top = `${a.top}%`;

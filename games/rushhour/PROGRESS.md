@@ -462,3 +462,20 @@ Michael Fogleman의 Rush Hour DB(MIT)를 새 모드로 추가. 400 스테이지 
 
 ### self-critique
 - 장식 위치를 처음엔 CSS에 하드코딩했다가 "캐릭터 바뀌어도" 요구로 데이터화. 확장 가능성을 처음부터 고려했으면 한 번에 끝났을 부채. 얼굴 가림도 초기 크기(4.8vmin)·위치(-8%)가 과했던 것 - 실제 캐릭터에 얹어 보는 검증을 처음에 했어야.
+
+---
+
+## 2026-07-02 (16차) - 왕관 이마 위 + X버튼/아이콘 다듬기 + 흔들림 동기 + 보드게임 탭 삭제
+
+- 왕관이 뿔 위로 가던 것 수정: 앵커 {top:8,right:20,size:2.4}로 이마 위(뿔 아래)에 맞춤(browser-shot 4후보 clip 확대 비교).
+- '장착하기' 라벨 제거(장식 offLabel ''), 이전 '적용하기'와 함께 미적용 소유 항목은 라벨 없음.
+- 팝업 X 버튼 원형 틀어짐 수정: padding:0 + box-sizing + flex:none + 위치(top/right 12px). 정원 33x33.
+- 팝업 제목 아이콘을 상단바 메뉴와 같은 SVG로 통일(🛍/🗺/⚙️ 이모지 → 쇼핑백/지도/슬라이더 SVG, .title-ic).
+- 흔들림 동기(사용자 강조): 몸(.pony)과 장식(.pony-acc)이 각자 크기 기준 %로 애니→진폭 어긋남. 주인공을 .pony-stage로 감싸고(fillWhole) 장식도 그 안에(applyTargetAccessory) 넣어, 표정 애니를 stage에 걸어 통째 동일 이동. 정확히 같은 폭으로 흔들림.
+- 보드게임 탭 삭제: MODES에서 boardgame 제거 + import 제거. migrateProgress가 MODES 순회라 자동 제외(activeMode가 boardgame이면 original 폴백).
+
+### 검증
+- 왕관 이마 위 확대 확인. shakeStruct: 장식 stage 자식 + stage rh-cry 애니(동기). X 33x33 정원. 제목 SVG+"상점". 장식 '장착하기' 없음. 맵 탭 [오리지널, Fogleman]. 에러 0.
+
+### self-critique
+- 흔들림 진폭 어긋남은 % 기준 차이라는 CSS 기본을 놓친 것 - 처음 장식 애니 추가(15차) 때 wrapper로 묶었어야. 사용자가 "정확히!!!" 강조할 만큼 눈에 띄는 결함이었다.
