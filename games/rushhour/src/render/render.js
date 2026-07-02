@@ -310,7 +310,7 @@ function applyTargetAccessory() {
     host.appendChild(deco);
   }
   const a = targetAnchor();
-  deco.style.top = `${a.top}%`;
+  deco.style.top = typeof a.top === 'number' ? `${a.top}%` : a.top; // 숫자면 %, 문자열(calc)이면 그대로
   deco.style.right = `${a.right}%`;
   deco.style.fontSize = `${a.size}vmin`;
   deco.textContent = emoji;

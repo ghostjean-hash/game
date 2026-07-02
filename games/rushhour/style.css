@@ -455,8 +455,9 @@
   background: var(--bg-elev);
   box-shadow: none;
 }
-/* 상점 품목이 3섹션이라 길어질 수 있으니 모달 안에서 스크롤. */
-.rushhour .shop-modal { max-height: 88vh; overflow-y: auto; }
+/* 상점: 제목·X·골드는 고정하고 품목(.shop-body)만 스크롤한다(스크롤해도 X/제목이 안 밀림). */
+.rushhour .shop-modal { max-height: 88vh; display: flex; flex-direction: column; }
+.rushhour .shop-body { overflow-y: auto; min-height: 0; }
 
 /* 진행 맵 + 음소거. */
 .rushhour #btn-map,

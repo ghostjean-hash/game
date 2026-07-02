@@ -479,3 +479,13 @@ Michael Fogleman의 Rush Hour DB(MIT)를 새 모드로 추가. 400 스테이지 
 
 ### self-critique
 - 흔들림 진폭 어긋남은 % 기준 차이라는 CSS 기본을 놓친 것 - 처음 장식 애니 추가(15차) 때 wrapper로 묶었어야. 사용자가 "정확히!!!" 강조할 만큼 눈에 띄는 결함이었다.
+
+---
+
+## 2026-07-02 (17차) - 팝업 스크롤 시 X/제목 고정 + 장식 20px 위
+
+- 사용자 격노(정당): 팝업 스크롤 시 X·제목이 함께 밀려 올라갔다. 원인은 shop-modal 자체가 overflow-y auto라 헤더까지 스크롤. shop-modal을 flex column + 헤더(X/제목/골드) 고정 + 품목만 .shop-body(overflow-y auto)로 분리. 스크롤 125px 후에도 X는 모달 상단 13px 유지(browser-shot 실화면 확인).
+- 머리 장식 앵커 top을 calc(8% - 20px)로(20px 위). render가 top 숫자(%)/문자열(calc) 모두 지원.
+
+### 반성
+- X 검증을 bbox 숫자만 보고 "정원"이라 넘겨 실제 스크롤 상황을 안 봤다. 사용자가 "화면 체크 안해?"로 두 번 지적. 스크롤 컨테이너 안 absolute 요소가 함께 스크롤되는 건 CSS 기본인데 놓쳤다. 이후 UI 검증은 반드시 실제 상호작용(스크롤 등) 스샷까지 본다.
