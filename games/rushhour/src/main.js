@@ -10,11 +10,11 @@ import { BOARDGAME_PUZZLES } from './data/puzzles-boardgame.js';
 import { FOGLEMAN_PUZZLES } from './data/puzzles-fogleman.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
-import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, setTargetAccessory, setBoardMood, showHint } from './render/render.js';
+import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetAccessory, setBoardMood, showHint } from './render/render.js';
 import { attachDrag } from './input/drag.js';
 import { play, setMuted, isMuted, unlockAudio } from './audio/sound.js';
 import {
-  RABBIT_SKINS, DEFAULT_SKIN, BOARD_THEMES, DEFAULT_THEME, ACCESSORY_ITEMS, DEFAULT_ACCESSORY,
+  BOARD_THEMES, DEFAULT_THEME, ACCESSORY_ITEMS, DEFAULT_ACCESSORY,
 } from './data/shop.js';
 import { PONY_STYLES, DEFAULT_STYLE } from './data/styles.js';
 import { createStorage } from '../../../shared/storage.js';
@@ -56,7 +56,6 @@ const el = {
   shopBtn: document.getElementById('btn-shop'),
   shop: document.getElementById('shop'),
   shopGold: document.getElementById('shop-gold'),
-  shopItems: document.getElementById('shop-items'),
   shopThemes: document.getElementById('shop-themes'),
   shopAccessories: document.getElementById('shop-accessories'),
   shopClose: document.getElementById('btn-shop-close'),
@@ -99,7 +98,6 @@ function migrateProgress(p) {
   const s = p || {};
   const base = {
     gold: s.gold || 0,
-    ownedSkins: s.ownedSkins || [DEFAULT_SKIN], equippedSkin: s.equippedSkin || DEFAULT_SKIN,
     ownedThemes: s.ownedThemes || [DEFAULT_THEME], equippedTheme: s.equippedTheme || DEFAULT_THEME,
     ownedAccessories: s.ownedAccessories || [DEFAULT_ACCESSORY], equippedAccessory: s.equippedAccessory || DEFAULT_ACCESSORY,
     ponyStyle: s.ponyStyle || DEFAULT_STYLE, blockOpts: s.blockOpts, muted: !!s.muted,
@@ -131,14 +129,7 @@ function modeDef(id) { return MODES.find((m) => m.id === id) || MODES[0]; }
 function modePuzzles(id) { return modeDef(id || progress().activeMode).puzzles; }
 function modeProg(pr) { const p = pr || progress(); return p.modes[p.activeMode] || p.modes.original; }
 
-// 장착한 토끼 스킨 색.
-function currentSkinColor() {
-  const eq = progress().equippedSkin || DEFAULT_SKIN;
-  const s = RABBIT_SKINS.find((x) => x.id === eq) || RABBIT_SKINS[0];
-  return s.color;
-}
-
-// 장착한 보드 테마.
+// 적용한 보드 테마.
 function currentTheme() {
   const eq = progress().equippedTheme || DEFAULT_THEME;
   return BOARD_THEMES.find((t) => t.id === eq) || BOARD_THEMES[0];
@@ -151,7 +142,7 @@ function applyTheme(t) {
   el.page.style.setProperty('--rh-exit', t.exit);
 }
 
-// 장착한 토끼 액세서리(render에 넘길 acc 키).
+// 장착한 포니 머리 장식(render에 넘길 acc 키).
 function currentAccessory() {
   const eq = progress().equippedAccessory || DEFAULT_ACCESSORY;
   return ACCESSORY_ITEMS.find((a) => a.id === eq) || ACCESSORY_ITEMS[0];
@@ -196,7 +187,6 @@ function loadPuzzle(id) {
   state.elapsed = 0;
   state.face = 'neutral';
   state.solved = false;
-  setTargetColor(currentSkinColor());
   state.els = buildBoard(el.board, state.cars, currentStyle(), currentBlockOpts());
   // 마지막으로 보던 퍼즐을 현재 모드 진행에 저장(모드별).
   const pr = progress();
@@ -418,20 +408,18 @@ function hideOverlay() {
 // 진행을 미리 볼 수 있다. 실제 전환은 그 모드의 퍼즐을 고를 때 확정된다(mapViewMode → activeMode).
 let mapViewMode = null; // 맵에서 보고 있는 모드(아직 확정 전, activeMode와 다를 수 있음)
 
-// --- 상점(토끼 색 스킨 + 보드 테마) ---
+// --- 상점(보드 테마 적용 + 포니 머리 장식 장착) ---
 
-// 종류별 메타: 품목 배열 + progress 보유/장착 키 + 기본 id + 미리보기 swatch HTML.
+// 종류별 메타: 품목 배열 + progress 보유/선택 키 + 기본 id + 동사(적용/장착) + 미리보기 swatch HTML.
 const SHOP_KINDS = {
-  skin: {
-    list: RABBIT_SKINS, ownedKey: 'ownedSkins', eqKey: 'equippedSkin', def: DEFAULT_SKIN,
-    swatchHtml: (item) => `<span class="shop-swatch" style="background:${item.color}"></span>`,
-  },
   theme: {
     list: BOARD_THEMES, ownedKey: 'ownedThemes', eqKey: 'equippedTheme', def: DEFAULT_THEME,
+    onLabel: '적용 중', offLabel: '적용하기',
     swatchHtml: (item) => `<span class="shop-swatch" style="background:${item.board};border:2px solid ${item.exit}"></span>`,
   },
   accessory: {
     list: ACCESSORY_ITEMS, ownedKey: 'ownedAccessories', eqKey: 'equippedAccessory', def: DEFAULT_ACCESSORY,
+    onLabel: '장착 중', offLabel: '장착하기',
     swatchHtml: (item) => `<span class="shop-swatch shop-acc">${item.emoji}</span>`,
   },
 };
@@ -444,7 +432,7 @@ function chipsHtml(kind) {
   return cfg.list.map((item) => {
     const isOwned = item.price === 0 || owned.includes(item.id);
     const isEq = eq === item.id;
-    const tag = isEq ? '장착 중' : isOwned ? '장착하기' : `${item.price} 🪙`;
+    const tag = isEq ? cfg.onLabel : isOwned ? cfg.offLabel : `${item.price} 🪙`;
     return `<button class="shop-item${isEq ? ' equipped' : ''}" data-kind="${kind}" data-id="${item.id}" type="button">`
       + cfg.swatchHtml(item)
       + `<span class="shop-name">${item.name}</span>`
@@ -454,7 +442,6 @@ function chipsHtml(kind) {
 
 function renderShop() {
   el.shopGold.textContent = String(progress().gold || 0);
-  el.shopItems.innerHTML = chipsHtml('skin');
   el.shopThemes.innerHTML = chipsHtml('theme');
   el.shopAccessories.innerHTML = chipsHtml('accessory');
 }
@@ -478,14 +465,11 @@ function buyOrEquip(kind, id) {
   }
   pr[cfg.eqKey] = id;
   store.set('progress', pr);
-  if (kind === 'skin') {
-    setTargetColor(item.color);
-    updateTargetFace(state.els, state.face); // 토끼 즉시 색 반영
-  } else if (kind === 'theme') {
-    applyTheme(item); // 보드 색 즉시 반영
+  if (kind === 'theme') {
+    applyTheme(item); // 보드 색 즉시 적용
   } else {
     setTargetAccessory(item.acc);
-    updateTargetFace(state.els, state.face); // 토끼 머리 장식 즉시 반영
+    updateTargetFace(state.els, state.face); // 포니 머리 장식 즉시 반영
   }
   renderShop();
   render();
@@ -627,7 +611,6 @@ function onShopClick(e) {
   const btn = e.target.closest('.shop-item');
   if (btn) buyOrEquip(btn.dataset.kind, btn.dataset.id);
 }
-el.shopItems.addEventListener('click', onShopClick);
 el.shopThemes.addEventListener('click', onShopClick);
 el.shopAccessories.addEventListener('click', onShopClick);
 el.muteBtn.addEventListener('click', toggleMute);
@@ -666,7 +649,6 @@ window.addEventListener('touchend', unlockAudio, { once: true });
 el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
 setMuted(progress().muted);
 updateMuteBtn();
-setTargetColor(currentSkinColor());
 setTargetAccessory(currentAccessory().acc);
 applyTheme(currentTheme());
 const startProg = modeProg();

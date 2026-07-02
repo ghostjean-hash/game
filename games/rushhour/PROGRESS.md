@@ -420,3 +420,27 @@ Michael Fogleman의 Rush Hour DB(MIT)를 새 모드로 추가. 400 스테이지 
 
 ### self-critique
 - 성능 이슈(고난도 solve)를 데이터 추출 전에 예측하고 optimal 저장으로 선제 대응. 규칙 예외는 임의로 하지 않고 docs 명시 + 테스트 대조로 신뢰성 담보. migrateProgress를 2모드 때 하드코딩한 게 3모드에서 바로 버그로 드러남 - 애초에 MODES 순회로 짰어야(확장성 부채).
+
+---
+
+## 2026-07-02 (14차) - 상점 전면 개편(색 스킨 제거 + 포니 명칭 + 적용/장착 구분)
+
+### 요구
+"토끼 색이 더는 유효하지 않아 / 테마는 장착 아니라 적용 / 머리 장식도 토끼 아니야 / 상점 전면 개편." 주인공이 토끼가 아니라 포니인데 상점 카피가 전부 토끼 기준이었고, 색 스킨 filter는 무지개 갈기라 탁했다.
+
+### 결정(AskUserQuestion)
+색 스킨: 제거(품질 낮은 filter 제거, 상점은 테마+장식 중심). 명칭/표현은 확정 진행.
+
+### 개편
+- 색 스킨 완전 제거: RABBIT_SKINS/DEFAULT_SKIN(shop.js), setTargetColor·colorFilter·hexToHsl·targetColorFilter·applyTargetColor(render.js), currentSkinColor·SHOP_KINDS.skin·ownedSkins/equippedSkin(main.js), shop-items 섹션(index.html), TARGET_COLOR(colors.js) 모두 삭제.
+- 명칭: "토끼"→"포니". 장식 미리보기 기본 이모지 🐰→🐴. 상점 카피 "보드 테마를 골라 적용해요 / 포니 머리 장식을 달아요".
+- 표현 구분: 테마는 '적용 중/적용하기'(onLabel/offLabel), 장식은 '장착 중/장착하기'. SHOP_KINDS에 라벨 필드.
+- 상점 2종(테마 적용 + 장식 장착)으로 정리.
+
+### 검증 (playwright)
+- 게임 로드/상점 동작 pageerror 0. 색 스킨 섹션 없음(hasSkinGrid false). 카피 포니화 확인.
+- 테마 sky 적용 → "적용 중" + --rh-board #e3f0fa. 장식 crown 장착 → "장착 중" + 정수리 👑 오버레이.
+- 잔재 grep: setTargetColor/RABBIT_SKINS/ownedSkins 등 0건.
+
+### self-critique
+- 색 스킨은 애초 자산(색상별 이미지) 없이 filter로 억지 구현한 게 근본 한계였다(무지개 갈기 포니에 부적합). 사용자가 "유효하지 않다"고 정확히 짚음. 자산 제약을 무시한 기능은 결국 제거됐다 - 처음부터 자산 가능성을 보고 방향을 잡았어야.

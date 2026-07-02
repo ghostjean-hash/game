@@ -1,19 +1,6 @@
-// 상점 판매 품목(docs/02_data.md §5). 주인공 토끼 색 스킨 + 보드 테마(마을 길 색).
-// 골드로 구매(해금)하고 장착한다. 보유/장착 상태는 localStorage progress에 저장.
-// 첫 번째(price 0)는 기본이라 처음부터 보유·장착된다.
-
-export const RABBIT_SKINS = [
-  { id: 'pink', name: '핑크', color: '#f7a8c4', price: 0 },
-  { id: 'sky', name: '하늘', color: '#9fcdf2', price: 30 },
-  { id: 'mint', name: '민트', color: '#9fe0bf', price: 30 },
-  { id: 'lemon', name: '레몬', color: '#f7d774', price: 40 },
-  { id: 'lavender', name: '라벤더', color: '#c4aef0', price: 40 },
-  { id: 'peach', name: '복숭아', color: '#f9b48a', price: 50 },
-  { id: 'coral', name: '코랄', color: '#f78a8a', price: 50 },
-  { id: 'lime', name: '라임', color: '#bfe09a', price: 60 },
-];
-
-export const DEFAULT_SKIN = 'pink';
+// 상점 판매 품목(docs/02_data.md §5). 보드 테마(마을 길 색) 적용 + 포니 머리 장식 장착.
+// 골드로 구매(해금)하고, 테마는 화면에 '적용' / 장식은 주인공에 '장착'한다.
+// 보유/적용·장착 상태는 localStorage progress에 저장. 첫 항목(price 0)은 처음부터 보유·기본이다.
 
 // 보드 테마: 바닥(board) / 격자선(line) / 출구 길(exit) 색 세트. cream이 기본(현재 색).
 export const BOARD_THEMES = [
@@ -26,9 +13,9 @@ export const BOARD_THEMES = [
 
 export const DEFAULT_THEME = 'cream';
 
-// 토끼 머리 장식. acc는 render가 그리는 장식 키, emoji는 상점 미리보기. none이 기본(장식 없음).
+// 포니 머리 장식. acc는 render가 그리는 장식 키, emoji는 상점 미리보기. none이 기본(장식 없음).
 export const ACCESSORY_ITEMS = [
-  { id: 'none', name: '없음', price: 0, acc: 'none', emoji: '🐰' },
+  { id: 'none', name: '없음', price: 0, acc: 'none', emoji: '🐴' },
   { id: 'ribbon', name: '리본', price: 30, acc: 'ribbon', emoji: '🎀' },
   { id: 'flower', name: '꽃', price: 40, acc: 'flower', emoji: '🌸' },
   { id: 'crown', name: '왕관', price: 60, acc: 'crown', emoji: '👑' },

@@ -47,3 +47,4 @@
 - 2026-07-02: 모드 선택을 진행 맵 안 탭으로 이동(상단 즉시 전환 폐지, `mapViewMode` 미리보기 → 퍼즐 선택 시 확정) + 전체 팝업 라이트 테마(`.modal` 스코프 색 토큰 재정의)
 - 2026-07-02: 밥풀이 표정 블록 단위 통일(깜빡 타이밍만 셀별) + 모드/난이도 배지(`#stage-mode`/`#stage-diff`) 화면 표시
 - 2026-07-02: Fogleman 모드 추가(`puzzles-fogleman.js`, DB에서 400개 추출, 4단계 곡선). `optimal` 필드로 고난도 런타임 solve 생략 + 힌트 `HINT_MAX_OPTIMAL` 가드. MIT 출처: 소스 헤더 + `LICENSE-fogleman` + 맵 탭 credit. `migrateProgress` MODES 순회 동적화
+- 2026-07-02: 상점 전면 개편 - 색 스킨(filter, 무지개 포니에 부적합) 완전 제거, 명칭 토끼→포니, 테마 '적용'/장식 '장착' 표현 구분. 상점 2종(테마 적용 + 포니 머리 장식 장착)

@@ -57,16 +57,16 @@
 
 ### 2.3. 상점 품목 - `src/data/shop.js`
 
+상점은 **보드 테마 적용 + 포니 머리 장식 장착** 두 종류다(주인공이 무지개 갈기 포니라 색 스킨은 CSS filter로 탁해져 2026-07-02 제거).
+
 | 이름 | 의미 |
 |---|---|
-| `RABBIT_SKINS` | 주인공 토끼 색 스킨 배열(`{id, name, color, price}`). 첫 항목 price 0 = 기본 |
-| `DEFAULT_SKIN` | 기본 스킨 id(`"pink"`). 처음부터 보유·장착 |
 | `BOARD_THEMES` | 보드 테마 배열(`{id, name, price, board, line, exit}`). 바닥/격자선/출구 길 색 세트. 첫 항목 price 0 = 기본 |
-| `DEFAULT_THEME` | 기본 테마 id(`"cream"`). 처음부터 보유·장착 |
-| `ACCESSORY_ITEMS` | 토끼 액세서리 배열(`{id, name, price, acc, emoji}`). `acc`는 render가 그리는 장식 키, `emoji`는 상점 미리보기. 첫 항목(`acc:"none"`) price 0 = 기본(없음) |
-| `DEFAULT_ACCESSORY` | 기본 액세서리 id(`"none"`). 처음부터 보유·장착 |
+| `DEFAULT_THEME` | 기본 테마 id(`"cream"`). 처음부터 보유·적용 |
+| `ACCESSORY_ITEMS` | 포니 머리 장식 배열(`{id, name, price, acc, emoji}`). `acc`는 render가 그리는 장식 키, `emoji`는 상점 미리보기. 첫 항목(`acc:"none"`) price 0 = 기본(없음) |
+| `DEFAULT_ACCESSORY` | 기본 장식 id(`"none"`). 처음부터 보유·장착 |
 
-골드로 구매(해금)하고 장착한다. 토끼 스킨 보유/장착은 `progress.ownedSkins` / `progress.equippedSkin`, 보드 테마는 `progress.ownedThemes` / `progress.equippedTheme`, 토끼 액세서리는 `progress.ownedAccessories` / `progress.equippedAccessory`에 저장(§4). 주인공은 단일 PNG(`target.png`)라 반영 방식이 다음과 같이 나뉜다: 스킨 색은 `render.setTargetColor`가 기본 핑크(`TARGET_COLOR`) 대비 CSS `filter`(색조 회전 + 채도/밝기)로 이미지 자체를 물들이고(색상별 이미지 자산 없이 동작), 보드 테마 색은 `.rushhour` 스코프 `--rh-*` 변수(04 §3.2)를 main이 인라인으로 덮어써 적용하며, 액세서리는 `render.setTargetAccessory`가 주인공 블록 정수리에 `acc`→이모지 오버레이(`.pony-acc`)를 올린다. 시간 경과·클리어 표정(`render.updateTargetFace`)도 몸통 애니(`.face-worried`/`.face-cry`/`.face-happy`, 울상은 눈물 이모지 `.pony-tear`)로 표현하며 스킨 색 filter와 CSS 속성이 달라 공존한다.
+골드로 구매(해금)한다. 보드 테마는 화면에 **'적용'**(`progress.ownedThemes`/`equippedTheme`), 포니 머리 장식은 주인공에 **'장착'**(`progress.ownedAccessories`/`equippedAccessory`)한다(§4). 반영 방식: 테마 색은 `.rushhour` 스코프 `--rh-*` 변수(04 §3.2)를 main이 인라인으로 덮어써 적용하고(`applyTheme`), 장식은 `render.setTargetAccessory`가 주인공 블록 정수리에 `acc`→이모지 오버레이(`.pony-acc`)를 올린다. 시간 경과·클리어 표정(`render.updateTargetFace`)은 몸통 애니(`.face-worried`/`.face-cry`/`.face-happy`, 울상은 눈물 이모지 `.pony-tear`)로 표현한다.
 
 ### 2.4. 블록 이미지 스타일 - `src/data/styles.js`
 
@@ -129,7 +129,7 @@ Fogleman 모드는 데이터에 **`optimal`(외부 검증된 최소 이동 수)*
 
 | 키 | 값 | 의미 |
 |---|---|---|
-| `progress` | `{ gold, ownedSkins, equippedSkin, ownedThemes, equippedTheme, ownedAccessories, equippedAccessory, ponyStyle, blockOpts, muted, activeMode, modes }` | **공유 필드**(골드·보유/장착 스킨·테마·장식·캐릭터 스타일·배경테두리 옵션·음소거) + 활성 모드(`activeMode`) + 모드별 진행(`modes`) |
+| `progress` | `{ gold, ownedThemes, equippedTheme, ownedAccessories, equippedAccessory, ponyStyle, blockOpts, muted, activeMode, modes }` | **공유 필드**(골드·보유/적용 테마·보유/장착 포니 머리 장식·캐릭터 스타일·배경테두리 옵션·음소거) + 활성 모드(`activeMode`) + 모드별 진행(`modes`) |
 | `progress.modes[모드]` | `{ cleared, best, stars, current, combo, bestCombo }` | 모드(`original`/`boardgame`/`fogleman`)별 진행: 클리어 퍼즐 + 퍼즐별 최고 수 + 퍼즐별 최고 별 + 마지막 본 퍼즐 + 현재 연속 콤보 + 최고 콤보. `migrateProgress`가 `MODES` 전체를 순회해 채운다(신규 모드 자동 포함) |
 | `current` (레거시) | `number` | 옛 단일 구조의 "마지막 본 퍼즐" 키. 지금은 안 쓰고, 옛 저장 데이터를 `modes.original.current`로 이관할 때만 읽는다(`migrateProgress`). |
 

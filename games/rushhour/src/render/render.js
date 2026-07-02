@@ -3,7 +3,7 @@
 // 게임 로직은 core/에 있다(docs/03_architecture.md §2.2).
 
 import { BOARD_SIZE, EXIT_ROW, TARGET_ID, CLEAR_EXIT_MS, CONFETTI_COUNT } from '../data/constants.js';
-import { BLOCK_TINTS, TARGET_BORDER, TARGET_COLOR } from '../data/colors.js';
+import { BLOCK_TINTS, TARGET_BORDER } from '../data/colors.js';
 import { PONY_STYLES } from '../data/styles.js';
 import { ACCESSORY_ITEMS } from '../data/shop.js';
 
@@ -260,41 +260,9 @@ function fillCar(el, car, style) {
   for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle, faceIdx);
 }
 
-// --- 주인공 토끼 색 스킨 / 머리 장식 / 표정 (상점·시간 연동) ---
-// 주인공은 단일 PNG(target.png)라 색은 CSS filter(색조 회전)로, 장식은 이모지 오버레이로,
-// 표정은 몸통 애니(+ 눈물 이모지)로 표현한다. 별도 색상별 이미지 자산 없이 동작한다.
-
-// #rrggbb → HSL(h 0-360, s/l 0-100). 색 filter 계산용.
-function hexToHsl(hex) {
-  const n = parseInt(hex.slice(1), 16);
-  const r = ((n >> 16) & 255) / 255;
-  const g = ((n >> 8) & 255) / 255;
-  const b = (n & 255) / 255;
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const l = (max + min) / 2;
-  const d = max - min;
-  let h = 0;
-  let s = 0;
-  if (d) {
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
-    else if (max === g) h = (b - r) / d + 2;
-    else h = (r - g) / d + 4;
-    h *= 60;
-  }
-  return { h, s: s * 100, l: l * 100 };
-}
-
-// 목표 스킨 색을 기본 핑크(TARGET_COLOR) 대비 filter 문자열로 바꾼다. 기본 색이면 변화 없음(항등).
-function colorFilter(color) {
-  const base = hexToHsl(TARGET_COLOR);
-  const t = hexToHsl(color);
-  const dh = Math.round(t.h - base.h);
-  const sat = base.s ? (t.s / base.s).toFixed(2) : '1';
-  const bri = base.l ? (t.l / base.l).toFixed(2) : '1';
-  return `hue-rotate(${dh}deg) saturate(${sat}) brightness(${bri})`;
-}
+// --- 주인공 포니 머리 장식 / 표정 (상점·시간 연동) ---
+// 주인공은 단일 PNG(target.png)라 장식은 이모지 오버레이로, 표정은 몸통 애니(+ 눈물 이모지)로
+// 표현한다. 별도 이미지 자산 없이 동작한다.
 
 // acc 키(ribbon/flower/crown/bowtie/none) → 머리 장식 이모지. none/미지정은 빈 문자열(장식 없음).
 function accEmoji(acc) {
@@ -303,20 +271,10 @@ function accEmoji(acc) {
   return item && item.acc !== 'none' ? item.emoji : '';
 }
 
-let targetColorFilter = ''; // 현재 장착 스킨의 filter(빈 문자열이면 기본 색)
 let targetAccessory = 'none'; // 현재 장착 머리 장식 acc 키
 
-function targetImg() {
-  return document.querySelector('.car.target .pony');
-}
 function targetCarEl() {
   return document.querySelector('.car.target');
-}
-
-// 스킨 색 filter를 현재 주인공 이미지에 반영. 표정 애니(transform)와 속성이 달라 공존한다.
-function applyTargetColor() {
-  const img = targetImg();
-  if (img) img.style.filter = targetColorFilter;
 }
 
 // 머리 장식 이모지 오버레이를 갱신(없으면 제거).
@@ -336,12 +294,6 @@ function applyTargetAccessory() {
     car.appendChild(deco);
   }
   deco.textContent = emoji;
-}
-
-// 상점에서 고른 토끼 색을 반영(color=null이면 기본). buildBoard가 주인공을 새로 그린 뒤에도 재호출된다.
-export function setTargetColor(color) {
-  targetColorFilter = color ? colorFilter(color) : '';
-  applyTargetColor();
 }
 
 // 상점에서 고른 머리 장식(acc 키)을 반영.
@@ -419,7 +371,6 @@ export function buildBoard(boardEl, cars, style = 'a', opts = {}) {
   }
   startFaceCycle(boardEl, sdef); // 표정 그리드 스타일이면 이따금 표정 교체
   if (sdef.faceSheet) measureFeet(sdef).then((c) => { if (c) refreshFeet(boardEl, c.grid); }); // 발밑 정렬
-  applyTargetColor();      // 새로 그린 주인공에 현재 스킨 색 반영
   applyTargetAccessory();  // 새로 그린 주인공에 현재 머리 장식 반영
   return els;
 }
