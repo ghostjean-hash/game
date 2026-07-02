@@ -28,9 +28,9 @@ export const CONFETTI_COUNT = 16;
 // 하나(오른쪽 보는 포니, 머리가 오른쪽 위)라 그 앵커만 있다. 캐릭터가 바뀌거나 늘면 여기에 추가한다.
 // top은 %(숫자) 또는 calc 문자열. size는 vmin. 캐릭터 정수리에 맞춘다.
 export const ACCESSORY_ANCHORS = {
-  target: { top: 'calc(8% - 20px)', right: 20, size: 2.4 }, // 포니 이마 위(뿔 아래)에서 20px 위로.
+  target: { top: 'calc(8% - 10px)', right: 20, size: 2.4 }, // 포니 이마 위(뿔 아래).
 };
-export const DEFAULT_ACCESSORY_ANCHOR = { top: 'calc(8% - 20px)', right: 20, size: 2.4 };
+export const DEFAULT_ACCESSORY_ANCHOR = { top: 'calc(8% - 10px)', right: 20, size: 2.4 };
 
 // 제한시간: 퍼즐별 = 최소 수 × TIME_PER_OPTIMAL_S + TIME_BASE_S(초). 넉넉하게.
 export const TIME_BASE_S = 60;
