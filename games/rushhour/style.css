@@ -66,6 +66,17 @@
   line-height: 1.05;
   z-index: 1;
 }
+/* 현재 모드 배지: 스테이지 표시 위에 골드 알약으로 또렷하게. */
+.rushhour .stage-mode {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #5a3d00;
+  background: var(--rh-exit);
+  padding: 1px 8px;
+  border-radius: 999px;
+  margin-bottom: 3px;
+}
 .rushhour .stage-cap { font-size: 12px; font-weight: 700; color: var(--fg-dim); }
 .rushhour .stage-num {
   font-family: var(--font-mono);

@@ -33,6 +33,7 @@ const store = createStorage(STORAGE_NS);
 const el = {
   page: document.querySelector('.rushhour'),
   board: document.getElementById('board'),
+  stageMode: document.getElementById('stage-mode'),
   stageNum: document.getElementById('stage-num'),
   moves: document.getElementById('moves'),
   gold: document.getElementById('gold'),
@@ -203,6 +204,7 @@ function loadPuzzle(id) {
 
 function render() {
   const list = modePuzzles();
+  el.stageMode.textContent = modeDef(progress().activeMode).name;
   el.stageNum.textContent = String(state.puzzleId);
   el.moves.textContent = String(state.moves);
   el.gold.textContent = String(progress().gold || 0);
