@@ -17,6 +17,12 @@
   color: var(--fg);
   background: var(--bg-elev-2);
 }
+/* 상단 컨트롤 아이콘은 SVG로 통일(기기별 이모지 그림체 차이 제거). currentColor로 색 상속. */
+.rushhour .home svg { width: 20px; height: 20px; display: block; }
+/* 음소거 토글: 평소 스피커(on), muted면 X 표시(off)로 교체. */
+.rushhour #btn-mute .icon-sound-off { display: none; }
+.rushhour #btn-mute.muted .icon-sound-on { display: none; }
+.rushhour #btn-mute.muted .icon-sound-off { display: block; }
 
 .rushhour .stat {
   display: inline-flex;
@@ -435,37 +441,34 @@
   75% { transform: translateX(6px); }
 }
 
-/* 설정 - 블록 캐릭터 스타일 선택. */
-.rushhour .settings-modal { max-width: 340px; width: 88vw; }
+/* 설정 - 캐릭터마다 한 줄에 [선택][배경][테두리]를 묶어 간결하게. */
+.rushhour .settings-modal { max-width: 360px; width: 90vw; }
 .rushhour .settings-label { font-weight: 700; font-size: 14px; margin: 2px 0 var(--sp-3); }
-.rushhour .style-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--sp-2);
-  margin-bottom: var(--sp-3);
-}
-.rushhour .style-item {
+.rushhour .setting-list { display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.rushhour .setting-row { display: flex; align-items: center; gap: var(--sp-2); }
+/* 선택 칩(스타일): 이모지 + 이름 + 상태. 주인공(.set-label)은 선택 불가라 커서 기본. */
+.rushhour .set-pick {
+  flex: 1;
+  min-width: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: var(--sp-3) var(--sp-2);
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
   border: 2px solid transparent;
   border-radius: var(--r-2);
   background: var(--bg-elev-2);
   color: var(--fg);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  text-align: left;
 }
-.rushhour .style-item.selected { border-color: var(--rh-exit); }
-.rushhour .style-emoji { font-size: 30px; line-height: 1; }
-.rushhour .style-name { font-weight: 700; }
-.rushhour .style-state { color: var(--fg-dim); font-size: 11px; }
+.rushhour .set-pick.selected { border-color: var(--rh-exit); }
+.rushhour .set-pick.set-label { cursor: default; }
+.rushhour .set-emoji { font-size: 22px; line-height: 1; }
+.rushhour .set-name { flex: 1; font-weight: 700; }
+.rushhour .set-state { color: var(--fg-dim); font-size: 11px; }
 
-/* 배경·테두리 표시 토글. */
-.rushhour .opt-grid { display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-3); }
-.rushhour .opt-row { display: flex; align-items: center; gap: var(--sp-2); }
-.rushhour .opt-name { flex: 1; font-size: 13px; font-weight: 700; }
+/* 배경·테두리 표시 토글(설정 행에서 선택 칩 옆에 붙는다). */
 .rushhour .opt-toggle {
   padding: 5px 12px;
   border: 2px solid var(--line);

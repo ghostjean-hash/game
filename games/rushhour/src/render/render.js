@@ -142,82 +142,81 @@ function refreshFeet(boardEl, grid) {
   });
 }
 
-// 표정 타이머(보드 전체에 하나). 블럭(차) 단위로 각자 독립 확률로 판정한다. 한 블럭의 셀은
-// 같은 표정으로 함께 깜빡이거나 함께 바뀌고(블럭 내 통일), 표정을 바꿀 땐 다른 블럭이 현재
-// 쓰는 표정을 피한다(블럭 간 겹침 방지). 여러 블럭이 동시에 깜빡이기도 한다. 몸은 정지.
+// 표정 타이머(보드 전체에 하나). 셀(밥풀이 한 칸) 단위로 각자 독립 확률로 깜빡이고 표정을
+// 바꾼다 - 같은 차의 셀들이라도 묶지 않아 제각각 깜빡인다. 몸은 정지.
+// boardMood(클리어 happy / 시간 위기 sad)가 걸리면 순환·깜빡을 멈추고 감정 컷을 또렷이 유지한다.
 let faceCycleTimer = null;
+let cycleDef = null;     // setBoardMood가 참조할 현재 스타일 정의
+let boardMood = null;    // null | 'happy' | 'sad'
 function startFaceCycle(boardEl, def) {
   if (faceCycleTimer) { clearInterval(faceCycleTimer); faceCycleTimer = null; }
+  boardMood = null;      // 새 보드는 평상 상태로 시작
+  cycleDef = def || null;
   if (!def || !def.faceSheet || !(def.faceCount > 1)) return;
   const grid = def.faceGrid;
   const blink = def.blinkFace;              // 눈 감은 컷 인덱스(없으면 깜빡임 생략)
   const tick = def.faceCycleMs || 500;      // 판정 주기
-  const blinkChance = def.blinkChance || 0.12; // 블럭이 한 tick에 깜빡일 확률
-  const faceChance = def.faceChance || 0.04;   // 블럭이 한 tick에 표정 바꿀 확률
-  const blocks = Array.from(boardEl.querySelectorAll('.car'))
-    .map((carEl) => ({ el: carEl, cells: Array.from(carEl.querySelectorAll('.pony-cell.face')) }))
-    .filter((b) => b.cells.length);
-  if (!blocks.length) return;
-  const baseFace = (block) => parseInt(block.cells[0].dataset.face, 10) || 0;
-  const applyBlock = (block, idx) => block.cells.forEach((c) => setFace(c, idx, grid));      // 표정+기억
-  const visualBlock = (block, idx) => block.cells.forEach((c) => applyFaceVisual(c, idx, grid)); // 화면만
+  const blinkChance = def.blinkChance || 0.12; // 셀이 한 tick에 깜빡일 확률
+  const faceChance = def.faceChance || 0.04;   // 셀이 한 tick에 표정 바꿀 확률
+  const cells = Array.from(boardEl.querySelectorAll('.pony-cell.face'));
+  if (!cells.length) return;
+  const baseFace = (c) => parseInt(c.dataset.face, 10) || 0;
   faceCycleTimer = setInterval(() => {
-    const usedFaces = new Set(blocks.map(baseFace)); // 현재 블럭들이 쓰는 표정(겹침 회피용)
-    for (const block of blocks) {
-      if (block.el.dataset.blinking === '1') continue; // 깜빡 중인 블럭은 건너뜀
-      const base = baseFace(block);
+    if (boardMood) return; // 감정 고정 중엔 순환·깜빡 멈춤(표정 또렷하게)
+    for (const cell of cells) {
+      if (cell.dataset.blinking === '1') continue; // 깜빡 중인 셀은 건너뜀
+      const base = baseFace(cell);
       const r = Math.random();
       if (blink != null && base !== blink && r < blinkChance) {
-        // 눈 깜빡: 블럭 전체가 잠깐 눈감았다(기억 유지) 원래 표정으로 복귀
-        block.el.dataset.blinking = '1';
-        visualBlock(block, blink);
+        // 눈 깜빡: 이 셀만 잠깐 눈감았다(기억 유지) 원래 표정으로 복귀
+        cell.dataset.blinking = '1';
+        applyFaceVisual(cell, blink, grid);
         setTimeout(() => {
-          visualBlock(block, baseFace(block));
-          block.el.dataset.blinking = '';
+          applyFaceVisual(cell, baseFace(cell), grid);
+          cell.dataset.blinking = '';
         }, 130);
       } else if (r > 1 - faceChance) {
-        // 다른 블럭이 안 쓰는 표정으로 블럭 전체를 바꾼다(눈감은 컷 제외)
+        // 이 셀만 다른 표정으로 바꾼다(눈감은 컷 제외)
         let n = Math.floor(Math.random() * def.faceCount);
-        let tries = 0;
-        while ((usedFaces.has(n) || n === blink) && tries < def.faceCount) {
-          n = (n + 1) % def.faceCount;
-          tries += 1;
-        }
-        usedFaces.delete(base);
-        usedFaces.add(n);
-        applyBlock(block, n);
+        if (n === blink) n = (n + 1) % def.faceCount;
+        setFace(cell, n, grid);
       }
     }
   }, tick);
 }
 
-// 블럭(차)마다 표정 하나를 유니크하게 배정한다(같은 블럭 통일 + 블럭 간 겹침 방지). 결정적.
-// 블럭 수가 (표정 수 - 깜빡 컷)보다 많으면 부득이 겹칠 수 있다(안전측 순환).
-function assignBlockFaces(cars, def) {
-  const map = {};
-  const used = new Set();
-  const blink = def.blinkFace;
-  for (const car of cars) {
-    if (car.id === TARGET_ID) continue;
-    let idx = hashAt(car, 0, 1) % def.faceCount;
-    let tries = 0;
-    while ((used.has(idx) || idx === blink) && tries < def.faceCount) {
-      idx = (idx + 1) % def.faceCount;
-      tries += 1;
-    }
-    used.add(idx);
-    map[car.id] = idx;
+// 클리어(happy)·시간 위기(sad)에 표정 그리드 블록 전체를 감정 컷으로 물들인다.
+// null이면 평상(셀별 결정적 표정)으로 복귀. 표정 그리드 스타일(밥풀이)에서만 동작한다.
+export function setBoardMood(mood) {
+  boardMood = (mood === 'happy' || mood === 'sad') ? mood : null;
+  const def = cycleDef;
+  if (!def || !def.faceSheet) return;
+  const boardEl = document.querySelector('.board');
+  if (!boardEl) return;
+  const cells = Array.from(boardEl.querySelectorAll('.pony-cell.face'));
+  if (!cells.length) return;
+  const grid = def.faceGrid;
+  if (boardMood) {
+    const pool = boardMood === 'happy' ? (def.happyFaces || []) : (def.sadFaces || []);
+    if (!pool.length) return;
+    cells.forEach((cell, i) => setFace(cell, pool[i % pool.length], grid)); // 셀마다 감정군 내 다른 컷
+  } else {
+    cells.forEach((cell, i) => {
+      let n = (i * 7 + 3) % def.faceCount; // 평상 복귀: 셀별 결정적 표정(눈감은 컷 제외)
+      if (n === def.blinkFace) n = (n + 1) % def.faceCount;
+      setFace(cell, n, grid);
+    });
   }
-  return map;
 }
 
 // 조립 스타일의 표정 그리드 셀: 표정 시트(faceGrid×faceGrid 칸에 표정 여러 개)에서 배정된
 // 표정 하나를 단일 이미지로 그린다. 몸은 정지, 표정만 타이머(startFaceCycle)로 변한다.
-function appendFaceCell(el, car, i, def, onFail, faceIdx) {
+function appendFaceCell(el, car, i, def, onFail) {
   const cell = document.createElement('div');
   cell.className = 'pony-cell face';
   const grid = def.faceGrid;
-  const idx = faceIdx != null ? faceIdx : hashAt(car, i, 1) % def.faceCount; // 블럭 배정 표정(통일)
+  let idx = hashAt(car, i, 1) % def.faceCount; // 셀별 표정(같은 차라도 칸마다 제각각)
+  if (idx === def.blinkFace) idx = (idx + 1) % def.faceCount; // 눈감은 컷으로 시작하지 않게
   cell.style.setProperty('--fg', String(grid)); // 그리드 한 변(스트립 배율)
   cell.style.setProperty('--lift', `${def.footLiftPx || 0}px`); // 발을 바닥에서 살짝 띄움
   const img = document.createElement('img');
@@ -238,7 +237,7 @@ function appendFaceCell(el, car, i, def, onFail, faceIdx) {
 // - 주인공 / 통 스타일(tiled:false) / 표정 시트 없는 스타일: 단일 이미지(늘림).
 // - 표정 그리드 스타일(tiled:true + faceSheet): 1칸 표정 셀을 길이만큼 반복.
 //   시트 로드 실패 시 통 블록 이미지로 1회 폴백한다(→ 없으면 A타입).
-function fillCar(el, car, style, faceIdx) {
+function fillCar(el, car, style) {
   const def = styleDef(style);
   if (car.id === TARGET_ID || !def.tiled || !def.faceSheet) {
     fillWhole(el, car, style);
@@ -251,7 +250,7 @@ function fillCar(el, car, style, faceIdx) {
     el.innerHTML = '';
     fillWhole(el, car, style); // 통 블록 이미지로 폴백(→ 없으면 A타입)
   };
-  for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle, faceIdx); // 블럭 통일
+  for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle); // 셀마다 개별 표정
 }
 
 // --- 주인공 토끼 색 스킨 / 머리 장식 / 표정 (상점·시간 연동) ---
@@ -392,8 +391,6 @@ export function buildBoard(boardEl, cars, style = 'a', opts = {}) {
   boardEl.appendChild(exit);
 
   const sdef = styleDef(style);
-  // 표정 그리드 스타일이면 블럭마다 표정을 유니크 배정(같은 블럭 통일 + 블럭 간 겹침 방지).
-  const faceMap = sdef.faceSheet ? assignBlockFaces(cars, sdef) : null;
 
   const els = new Map();
   for (const car of cars) {
@@ -408,7 +405,7 @@ export function buildBoard(boardEl, cars, style = 'a', opts = {}) {
     el.style.background = o.bg ? tint : 'transparent';
     const borderColor = isTarget ? TARGET_BORDER : darken(tint);
     el.style.setProperty('--tint-border', o.border ? borderColor : 'transparent');
-    fillCar(el, car, style, faceMap ? faceMap[car.id] : undefined);
+    fillCar(el, car, style);
     place(el, car);
     boardEl.appendChild(el);
     els.set(car.id, el);

@@ -11,9 +11,9 @@
 //   - 시트가 없으면(로드 실패) 통 블록 이미지 → A타입 순으로 폴백해 깨지지 않는다.
 
 export const PONY_STYLES = [
-  { id: 'a', name: '조랑말', emoji: '🦄', tiled: false },
-  { id: 'b', name: '모찌', emoji: '🍡', tiled: false },
-  { id: 'c', name: '말랑이', emoji: '🍥', tiled: true, faceSheet: 'c_cell_16', faceGrid: 4, faceCount: 16, blinkFace: 6, faceCycleMs: 700, footLiftPx: 3 },
+  { id: 'a', name: '포니', emoji: '🦄', tiled: false },
+  // happyFaces/sadFaces: 클리어(신남)·시간 위기(울상)에 블록 전체가 지을 표정 컷 인덱스 묶음(시트 4x4).
+  { id: 'c', name: '밥풀이', emoji: '🍥', tiled: true, faceSheet: 'c_cell_16', faceGrid: 4, faceCount: 16, blinkFace: 6, faceCycleMs: 700, footLiftPx: 3, happyFaces: [0, 7, 1, 8, 2], sadFaces: [14, 10, 5, 4, 12, 9] },
 ];
 
 export const DEFAULT_STYLE = 'a';

@@ -8,7 +8,7 @@ import {
 import { PUZZLES } from './data/puzzles.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
-import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, setTargetAccessory, showHint } from './render/render.js';
+import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, setTargetAccessory, setBoardMood, showHint } from './render/render.js';
 import { attachDrag } from './input/drag.js';
 import { play, setMuted, isMuted, unlockAudio } from './audio/sound.js';
 import {
@@ -55,8 +55,7 @@ const el = {
   muteBtn: document.getElementById('btn-mute'),
   settingsBtn: document.getElementById('btn-settings'),
   settings: document.getElementById('settings'),
-  styleGrid: document.getElementById('style-grid'),
-  optGrid: document.getElementById('opt-grid'),
+  settingList: document.getElementById('setting-list'),
   settingsClose: document.getElementById('btn-settings-close'),
 };
 
@@ -110,23 +109,22 @@ function currentAccessory() {
   return ACCESSORY_ITEMS.find((a) => a.id === eq) || ACCESSORY_ITEMS[0];
 }
 
-// 설정에서 고른 블록 캐릭터 스타일(a/b).
+// 설정에서 고른 블록 캐릭터 스타일. 삭제된 스타일이 저장돼 있으면 기본으로 되돌린다.
 function currentStyle() {
-  return progress().ponyStyle || DEFAULT_STYLE;
+  const s = progress().ponyStyle || DEFAULT_STYLE;
+  return PONY_STYLES.some((x) => x.id === s) ? s : DEFAULT_STYLE;
 }
 
 // 스타일/주인공별 배경·테두리 표시 옵션(기본값 + 저장값 병합).
 function currentBlockOpts() {
   const d = {
     a: { bg: true, border: true },
-    b: { bg: true, border: true },
     c: { bg: true, border: true },
     target: { bg: false, border: true },
   };
   const o = progress().blockOpts || {};
   return {
     a: { ...d.a, ...o.a },
-    b: { ...d.b, ...o.b },
     c: { ...d.c, ...o.c },
     target: { ...d.target, ...o.target },
   };
@@ -189,6 +187,7 @@ function applyFace() {
   if (face !== state.face) {
     state.face = face;
     updateTargetFace(state.els, face);
+    setBoardMood(face === 'cry' ? 'sad' : null); // 시간 임박하면 블록 전체가 울상·찡그림
   }
 }
 
@@ -235,6 +234,7 @@ function onSolved() {
   play('clear');
   state.face = 'happy';
   updateTargetFace(state.els, 'happy');
+  setBoardMood('happy'); // 주인공이 빠져나가면 남은 블록들도 전부 신난 표정
 
   const pr = progress();
   if (!pr.cleared.includes(state.puzzleId)) pr.cleared.push(state.puzzleId);
@@ -333,7 +333,7 @@ function toggleMute() {
 }
 
 function updateMuteBtn() {
-  el.muteBtn.textContent = isMuted() ? '🔇' : '🔊';
+  el.muteBtn.classList.toggle('muted', isMuted()); // SVG 스피커 on/off 아이콘 전환(CSS)
   el.muteBtn.setAttribute('aria-label', isMuted() ? '소리 켜기' : '소리 끄기');
 }
 
@@ -457,22 +457,26 @@ function renderMap() {
   }).join('');
 }
 
-// --- 설정(블록 캐릭터 스타일) ---
+// --- 설정(블록 캐릭터 + 배경 · 테두리 통합) ---
 
-const OPT_ROWS = [{ key: 'a', name: '조랑말' }, { key: 'b', name: '모찌' }, { key: 'c', name: '말랑이' }, { key: 'target', name: '주인공' }];
-
+// 캐릭터마다 한 줄: [선택 칩(스타일만)] + [배경 토글] + [테두리 토글]. 주인공은 선택 없이 토글만.
 function renderSettings() {
   const cur = currentStyle();
-  el.styleGrid.innerHTML = PONY_STYLES.map((s) =>
-    `<button class="style-item${s.id === cur ? ' selected' : ''}" data-style="${s.id}" type="button">`
-    + `<span class="style-emoji">${s.emoji}</span>`
-    + `<span class="style-name">${s.name}</span>`
-    + `<span class="style-state">${s.id === cur ? '사용 중' : '선택'}</span></button>`,
-  ).join('');
   const opts = currentBlockOpts();
-  el.optGrid.innerHTML = OPT_ROWS.map((r) => {
-    const o = opts[r.key];
-    return `<div class="opt-row"><span class="opt-name">${r.name}</span>`
+  const rows = [
+    ...PONY_STYLES.map((s) => ({ key: s.id, emoji: s.emoji, name: s.name, selectable: true })),
+    { key: 'target', emoji: '🌟', name: '주인공', selectable: false },
+  ];
+  el.settingList.innerHTML = rows.map((r) => {
+    const o = opts[r.key] || { bg: true, border: true };
+    const sel = r.selectable && r.key === cur;
+    const pick = r.selectable
+      ? `<button class="set-pick${sel ? ' selected' : ''}" data-style="${r.key}" type="button">`
+        + `<span class="set-emoji">${r.emoji}</span><span class="set-name">${r.name}</span>`
+        + `<span class="set-state">${sel ? '사용 중' : '선택'}</span></button>`
+      : `<span class="set-pick set-label">`
+        + `<span class="set-emoji">${r.emoji}</span><span class="set-name">${r.name}</span></span>`;
+    return `<div class="setting-row">${pick}`
       + `<button class="opt-toggle${o.bg ? ' on' : ''}" data-key="${r.key}" data-opt="bg" type="button">배경</button>`
       + `<button class="opt-toggle${o.border ? ' on' : ''}" data-key="${r.key}" data-opt="border" type="button">테두리</button></div>`;
   }).join('');
@@ -544,13 +548,11 @@ el.mapGrid.addEventListener('click', (e) => {
 });
 el.settingsBtn.addEventListener('click', () => openPanel(el.settings, renderSettings));
 el.settingsClose.addEventListener('click', () => closePanel(el.settings));
-el.styleGrid.addEventListener('click', (e) => {
-  const btn = e.target.closest('.style-item');
-  if (btn) setStyle(btn.dataset.style);
-});
-el.optGrid.addEventListener('click', (e) => {
-  const btn = e.target.closest('.opt-toggle');
-  if (btn) toggleBlockOpt(btn.dataset.key, btn.dataset.opt);
+el.settingList.addEventListener('click', (e) => {
+  const pick = e.target.closest('.set-pick');
+  if (pick && pick.dataset.style) { setStyle(pick.dataset.style); return; }
+  const tog = e.target.closest('.opt-toggle');
+  if (tog) toggleBlockOpt(tog.dataset.key, tog.dataset.opt);
 });
 
 // iOS 오디오 잠금 해제: 첫 사용자 제스처 한 번에 AudioContext를 깨운다(둘 다 once라 각 1회).
