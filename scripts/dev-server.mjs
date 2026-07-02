@@ -58,6 +58,17 @@ const server = http.createServer((req, res) => {
   });
 });
 
+// 포트가 이미 쓰이는 등의 오류에 스택을 토하며 죽지 않고, 원인과 해결책을 한 줄로 안내한다.
+server.on('error', (e) => {
+  if (e.code === 'EADDRINUSE') {
+    console.error(`[dev-server] 포트 ${PORT}가 이미 사용 중입니다. 이전 서버가 떠 있을 수 있어요.`);
+    console.error(`[dev-server] 다른 포트로 띄우려면:  node scripts/dev-server.mjs ${PORT + 1}`);
+  } else {
+    console.error(`[dev-server] 서버 오류: ${e.message}`);
+  }
+  process.exit(1);
+});
+
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`Static server: http://127.0.0.1:${PORT}/`);
   console.log(`Root: ${ROOT}`);
