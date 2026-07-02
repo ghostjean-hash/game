@@ -85,7 +85,9 @@
 
 ## 3. 퍼즐 - `src/data/puzzles.js` (+ 모드)
 
-게임은 두 모드로 나뉜다(`main.js` `MODES`). **오리지널**(`src/data/puzzles.js`, 자체 제작 186개)과 **보드게임**(`src/data/puzzles-boardgame.js`, ThinkFun Rush Hour 세트). 퍼즐 데이터 형식·유효성 규칙(§3.1~3.4)은 완전히 동일하다. 진행(클리어/최고 수/별/현재 퍼즐/콤보)은 모드별로 각각 저장하고(§4), 골드·스킨·테마·장식·설정은 두 모드가 공유한다.
+게임은 세 모드로 나뉜다(`main.js` `MODES`). **오리지널**(`src/data/puzzles.js`, 자체 제작 186개), **보드게임**(`src/data/puzzles-boardgame.js`, ThinkFun 세트), **Fogleman**(`src/data/puzzles-fogleman.js`, Michael Fogleman의 Rush Hour DB에서 추출한 400개). 퍼즐 데이터 형식·유효성 규칙(§3.1~3.4)은 동일하다. 진행(클리어/최고 수/별/현재 퍼즐/콤보)은 모드별로 각각 저장하고(§4), 골드·스킨·테마·장식·설정은 모든 모드가 공유한다.
+
+Fogleman 모드는 데이터에 **`optimal`(외부 검증된 최소 이동 수)** 필드가 있다. 고난도(최대 51수)는 실시간 BFS(`solve`)가 무거워 `loadPuzzle`이 이 값을 그대로 쓴다(런타임 계산 생략). 저난도(≤15수)는 추출 단계에서 우리 solver와 전수 대조했고(불일치 0), `tests`가 표본으로 회귀 확인한다. 힌트(`solveStep`)는 최소 수가 `HINT_MAX_OPTIMAL`(18)을 넘으면 막는다(멈춤 방지). 데이터 출처(MIT)는 소스 헤더 + `LICENSE-fogleman` + 진행 맵의 Fogleman 탭 아래(`#map-credit`)에 표기한다.
 
 현재 모드(`#stage-mode`)와 퍼즐 난이도(`#stage-diff`, 단계별 색)는 보드 좌상단 배지로 화면에 늘 표시된다. 모드는 **진행 맵(🗺) 안의 탭**으로 고른다(상단바에서 즉시 전환하지 않는다). 맵을 열면 현재 모드 탭이 선택돼 있고, 다른 모드 탭을 누르면 그 모드의 진행을 미리 볼 수 있다(`mapViewMode`). 실제 전환은 그 모드의 퍼즐을 고를 때 확정된다(`mapViewMode` → `activeMode`). 모든 팝업(상점/맵/설정/결과)은 라이트 테마다(style.css `.rushhour .modal`에서 색 토큰을 밝은 값으로 재정의 → 내부 요소가 상속).
 
@@ -128,7 +130,7 @@
 | 키 | 값 | 의미 |
 |---|---|---|
 | `progress` | `{ gold, ownedSkins, equippedSkin, ownedThemes, equippedTheme, ownedAccessories, equippedAccessory, ponyStyle, blockOpts, muted, activeMode, modes }` | **공유 필드**(골드·보유/장착 스킨·테마·장식·캐릭터 스타일·배경테두리 옵션·음소거) + 활성 모드(`activeMode`) + 모드별 진행(`modes`) |
-| `progress.modes[모드]` | `{ cleared, best, stars, current, combo, bestCombo }` | 모드(`original`/`boardgame`)별 진행: 클리어 퍼즐 + 퍼즐별 최고 수 + 퍼즐별 최고 별 + 마지막 본 퍼즐 + 현재 연속 콤보 + 최고 콤보 |
+| `progress.modes[모드]` | `{ cleared, best, stars, current, combo, bestCombo }` | 모드(`original`/`boardgame`/`fogleman`)별 진행: 클리어 퍼즐 + 퍼즐별 최고 수 + 퍼즐별 최고 별 + 마지막 본 퍼즐 + 현재 연속 콤보 + 최고 콤보. `migrateProgress`가 `MODES` 전체를 순회해 채운다(신규 모드 자동 포함) |
 | `current` (레거시) | `number` | 옛 단일 구조의 "마지막 본 퍼즐" 키. 지금은 안 쓰고, 옛 저장 데이터를 `modes.original.current`로 이관할 때만 읽는다(`migrateProgress`). |
 
 옛 단일 구조(최상위 `cleared`/`best`/`stars`)로 저장된 데이터는 `main.js`의 `migrateProgress`가 읽는 즉시 현재 스키마로 정규화하고, 옛 진행을 `modes.original`로 이관한다(기존 사용자 진행 보존).

@@ -386,3 +386,37 @@
 
 ### self-critique
 - 지시의 핵심 한정어("바로 바뀌는 게 아니고")를 놓치지 않고 미리보기/확정 2단계로 분리한 것이 요구 정확 반영. 즉시 전환으로 구현했으면 재작업이었을 것.
+
+---
+
+## 2026-07-02 (13차) - Fogleman DB 모드 추가(400 스테이지 + MIT 라이선스)
+
+### 요구
+Michael Fogleman의 Rush Hour DB(MIT)를 새 모드로 추가. 400 스테이지 4단계 곡선. 라이선스 표기. 모드명 Fogleman, 화면 출처는 모드 선택 위치(맵 탭).
+
+### 데이터 파이프라인
+- DB 다운로드(rush.txt.gz 33M → 257만 라인). 형식: `이동수 board(36자) cluster`. A=주인공/o=빈칸/x=벽/B-Z=차.
+- 벽(x) 없는 476,118개만 대상(우리 board.js는 벽 미지원). A↔X 스왑 + o→'.'로 grid 변환.
+- 이동수 4구간(입문1~8/쉬움9~15/보통16~25/어려움26~) × 100 = 400개 등간격 추출(구간 내 이동수 오름차순=곡선). 유효성(parseGrid+validatePuzzle+미클리어) 전수 통과, 저난도(≤15) 우리 solver opt 대조 불일치 0.
+- puzzles-fogleman.js 생성(라이선스 헤더 + optimal 필드).
+
+### 성능(핵심 결정)
+- 오리지널 solve는 최대 16수라 런타임 계산 OK였으나 Fogleman은 최대 51수 → 실시간 BFS 수초 멈춤. Fogleman `optimal`(외부 검증값)을 데이터에 저장하고 loadPuzzle이 우선 사용(solve 생략). CLAUDE.md "opt는 solver 계산" 규칙의 예외로, docs/CLAUDE.md에 명시 + tests 저난도 표본 대조로 신뢰성 회귀.
+- 힌트(solveStep)는 여전히 BFS라 HINT_MAX_OPTIMAL(18) 초과 시 막음(deny). 오리지널 전부 + Fogleman 쉬움까지 힌트 가능.
+
+### 라이선스(MIT 준수)
+- 소스 헤더 출처 + LICENSE-fogleman(전문, Copyright 2018 Michael Fogleman, raw LICENSE에서 확인) + 진행 맵 Fogleman 탭 아래 credit 문구(#map-credit).
+
+### 버그 수정
+- migrateProgress가 original/boardgame만 하드코딩 초기화해 fogleman 모드 진행이 undefined("setting current" 에러). MODES 전체 순회로 동적화(신규 모드 자동 포함).
+
+### 검증 (playwright)
+- 자동 테스트 23/23 PASS(기존 21 + Fogleman 유효성/opt대조 2). 에러 0.
+- Fogleman 최고난도(id400 opt40) 로드 556ms 즉시(solve 생략), 제한시간 14:20(=40*20+60) 정확. 힌트 deny(골드 유지·멈춤 없음). 맵 3탭+400칩+credit "퍼즐: Michael Fogleman · MIT" 표시.
+
+### 유의/남은 것
+- 자동 테스트(test.html)가 오리지널 186 solve로 ~35초 걸림(기존부터, Fogleman 무관). 사용자가 브라우저로 열면 오래 대기. 별도 개선 후보(solver 최적화 or 테스트 분리).
+- Fogleman DB 원본 파일은 scratchpad에만(git 무관), 추출 스크립트도 scratchpad. 재추출 필요 시 extract.mjs 참조.
+
+### self-critique
+- 성능 이슈(고난도 solve)를 데이터 추출 전에 예측하고 optimal 저장으로 선제 대응. 규칙 예외는 임의로 하지 않고 docs 명시 + 테스트 대조로 신뢰성 담보. migrateProgress를 2모드 때 하드코딩한 게 3모드에서 바로 버그로 드러남 - 애초에 MODES 순회로 짰어야(확장성 부채).

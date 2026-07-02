@@ -45,3 +45,5 @@
 - 2026-07-02: 상점 스킨색/장식/표정 죽은 입력 복구 + 별 효과음 / 스타일 정리(모찌 삭제·포니·밥풀이) + 설정 통합 + 밥풀이 셀 단위 표정 + 클리어/시간위기 감정 + 상단 SVG 아이콘 / dev-server 포트 충돌 안내
 - 2026-07-02: 2모드 추가 - 오리지널(자체 186개) / 보드게임(ThinkFun, `puzzles-boardgame.js`, 임시 6개). 진행·별은 모드별 저장(`progress.modes`), 골드·꾸미기는 공유. 옛 저장 데이터는 `migrateProgress`가 오리지널 모드로 이관
 - 2026-07-02: 모드 선택을 진행 맵 안 탭으로 이동(상단 즉시 전환 폐지, `mapViewMode` 미리보기 → 퍼즐 선택 시 확정) + 전체 팝업 라이트 테마(`.modal` 스코프 색 토큰 재정의)
+- 2026-07-02: 밥풀이 표정 블록 단위 통일(깜빡 타이밍만 셀별) + 모드/난이도 배지(`#stage-mode`/`#stage-diff`) 화면 표시
+- 2026-07-02: Fogleman 모드 추가(`puzzles-fogleman.js`, DB에서 400개 추출, 4단계 곡선). `optimal` 필드로 고난도 런타임 solve 생략 + 힌트 `HINT_MAX_OPTIMAL` 가드. MIT 출처: 소스 헤더 + `LICENSE-fogleman` + 맵 탭 credit. `migrateProgress` MODES 순회 동적화

@@ -43,6 +43,10 @@ export const GOLD_TIME_BONUS = 10;
 // 힌트 1회 골드 비용(다음 한 수를 보여준다).
 export const HINT_COST = 5;
 
+// 힌트는 최적 다음 한 수를 실시간 BFS로 찾는다. 최소 수가 이 값을 넘는 고난도 퍼즐(Fogleman 모드
+// 보통·어려움)은 계산이 무거워 힌트를 제공하지 않는다(브라우저 멈춤 방지).
+export const HINT_MAX_OPTIMAL = 18;
+
 // 연속 콤보(제한시간 내 연달아 클리어). 2연속부터 min(combo, COMBO_MAX)×STEP 보너스 골드.
 export const COMBO_GOLD_STEP = 5;
 export const COMBO_MAX = 5;

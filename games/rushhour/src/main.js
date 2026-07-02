@@ -2,11 +2,12 @@
 
 import {
   STORAGE_NS, TIME_BASE_S, TIME_PER_OPTIMAL_S, FACE_WORRIED_RATIO, FACE_CRY_RATIO,
-  STAR2_MARGIN, GOLD_BASE, GOLD_STAR3, GOLD_STAR2, GOLD_TIME_BONUS, HINT_COST,
+  STAR2_MARGIN, GOLD_BASE, GOLD_STAR3, GOLD_STAR2, GOLD_TIME_BONUS, HINT_COST, HINT_MAX_OPTIMAL,
   COMBO_GOLD_STEP, COMBO_MAX, STAR_SOUND_GAP_MS,
 } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
 import { BOARDGAME_PUZZLES } from './data/puzzles-boardgame.js';
+import { FOGLEMAN_PUZZLES } from './data/puzzles-fogleman.js';
 import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
 import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetColor, setTargetAccessory, setBoardMood, showHint } from './render/render.js';
@@ -25,6 +26,7 @@ const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard:
 const MODES = [
   { id: 'original', name: '오리지널', puzzles: PUZZLES },
   { id: 'boardgame', name: '보드게임', puzzles: BOARDGAME_PUZZLES },
+  { id: 'fogleman', name: 'Fogleman', puzzles: FOGLEMAN_PUZZLES, credit: '퍼즐: Michael Fogleman · MIT (michaelfogleman.com/rush)' },
 ];
 const DEFAULT_MODE = 'original';
 
@@ -61,6 +63,7 @@ const el = {
   mapBtn: document.getElementById('btn-map'),
   map: document.getElementById('map'),
   mapTabs: document.getElementById('map-tabs'),
+  mapCredit: document.getElementById('map-credit'),
   mapSummary: document.getElementById('map-summary'),
   mapGrid: document.getElementById('map-grid'),
   mapClose: document.getElementById('btn-map-close'),
@@ -104,16 +107,16 @@ function migrateProgress(p) {
     modes: {},
   };
   if (s.modes) {
-    base.modes.original = { ...emptyModeProg(), ...s.modes.original };
-    base.modes.boardgame = { ...emptyModeProg(), ...s.modes.boardgame };
+    // 모든 모드(신규 모드 추가 시 자동 포함) 진행을 채운다.
+    for (const m of MODES) base.modes[m.id] = { ...emptyModeProg(), ...(s.modes[m.id] || {}) };
   } else {
+    for (const m of MODES) base.modes[m.id] = emptyModeProg();
     base.modes.original = {
       ...emptyModeProg(),
       cleared: s.cleared || [], best: s.best || {}, stars: s.stars || {},
       combo: s.combo || 0, bestCombo: s.bestCombo || 0,
       current: store.get('current', null),
     };
-    base.modes.boardgame = emptyModeProg();
   }
   if (!MODES.some((m) => m.id === base.activeMode)) base.activeMode = DEFAULT_MODE;
   return base;
@@ -187,7 +190,8 @@ function loadPuzzle(id) {
   state.cars = parseGrid(p.grid);
   state.moves = 0;
   state.history = [];
-  state.optimal = solve(state.cars);
+  // 데이터에 검증된 최소 수(optimal)가 있으면(Fogleman 모드) 그대로 쓴다 - 고난도 실시간 BFS 회피.
+  state.optimal = typeof p.optimal === 'number' ? p.optimal : solve(state.cars);
   state.limit = state.optimal * TIME_PER_OPTIMAL_S + TIME_BASE_S;
   state.elapsed = 0;
   state.face = 'neutral';
@@ -361,6 +365,12 @@ function shake(node) {
 // 힌트: 골드를 써서 최적 다음 한 수를 강조한다. 자동으로 옮기지는 않는다.
 function hint() {
   if (state.solved) return;
+  // 고난도(Fogleman 보통·어려움)는 실시간 BFS가 무거워 힌트를 막는다(멈춤 방지).
+  if (state.optimal > HINT_MAX_OPTIMAL) {
+    shake(el.hint);
+    play('deny');
+    return;
+  }
   const move = solveStep(state.cars);
   if (!move) return; // 이미 풀렸거나 풀 수 없음
   const pr = progress();
@@ -515,6 +525,11 @@ function renderMap() {
   el.mapTabs.innerHTML = MODES.map((m) =>
     `<button class="map-tab${m.id === vm ? ' active' : ''}" data-mode="${m.id}" type="button">${m.name}</button>`,
   ).join('');
+
+  // 데이터 출처(라이선스)가 있는 모드는 탭 아래에 표기.
+  const credit = modeDef(vm).credit;
+  el.mapCredit.textContent = credit || '';
+  el.mapCredit.hidden = !credit;
 
   el.mapSummary.textContent = `클리어 ${cleared.size} / ${list.length} · 모은 별 ${totalStars} ⭐`;
 

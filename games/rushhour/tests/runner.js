@@ -7,6 +7,7 @@ import {
 import { solve, solveStep } from '../src/core/solver.js';
 import { PUZZLES } from '../src/data/puzzles.js';
 import { BOARDGAME_PUZZLES } from '../src/data/puzzles-boardgame.js';
+import { FOGLEMAN_PUZZLES } from '../src/data/puzzles-fogleman.js';
 import { ORIENT } from '../src/data/constants.js';
 
 const tests = [];
@@ -161,6 +162,26 @@ test('BOARDGAME_PUZZLES: 유효 + 시작 미클리어 + 풀 수 있음(opt ≥ 1
     const opt = solve(cars);
     assert(opt !== null && opt >= 1, `B${p.id} 풀 수 없음(opt=${opt})`);
   }
+});
+
+// --- Fogleman 모드 퍼즐(외부 검증 optimal 포함) ---
+
+test('FOGLEMAN_PUZZLES: id 연속 + optimal 필드 + 유효 + 시작 미클리어', () => {
+  FOGLEMAN_PUZZLES.forEach((p, i) => {
+    eq(p.id, i + 1, `index ${i}`);
+    assert(typeof p.optimal === 'number' && p.optimal >= 1, `F${p.id} optimal 필드 없음`);
+    const cars = parseGrid(p.grid);
+    const errs = validatePuzzle(cars);
+    assert(errs.length === 0, `F${p.id}: ${errs.join('; ')}`);
+    assert(!isSolved(cars), `F${p.id} 시작부터 클리어 상태`);
+  });
+});
+
+test('FOGLEMAN_PUZZLES: 저난도 표본의 저장 optimal이 우리 solver와 일치(신뢰성 스팟체크)', () => {
+  // 추출 단계에서 ≤15수 전수를 이미 대조했다(SSOT). 여기선 가벼운 표본만 회귀 확인한다
+  // (브라우저 단일 스레드에서 고난도 BFS는 무거워 전수 대조는 하지 않는다).
+  const sample = FOGLEMAN_PUZZLES.filter((p) => p.optimal <= 12).filter((_, i) => i % 8 === 0);
+  for (const p of sample) eq(solve(parseGrid(p.grid)), p.optimal, `F${p.id} optimal 불일치`);
 });
 
 // --- 실행 ---

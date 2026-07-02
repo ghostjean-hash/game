@@ -448,6 +448,9 @@
   cursor: pointer;
 }
 .rushhour .map-tab.active { border-color: var(--rh-exit); color: var(--fg); background: var(--bg-elev); }
+/* 데이터 출처(라이선스) 문구: 탭 아래 작게. */
+.rushhour .map-credit { font-size: 10px; color: var(--fg-dim); margin: 0 0 var(--sp-2); }
+.rushhour .map-credit[hidden] { display: none; }
 .rushhour .map-summary { font-weight: 700; font-size: 14px; margin: 2px 0 var(--sp-3); }
 .rushhour .map-scroll { max-height: 58vh; overflow-y: auto; margin-bottom: var(--sp-3); }
 .rushhour .map-section { margin-bottom: var(--sp-3); }
