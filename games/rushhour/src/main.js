@@ -58,6 +58,7 @@ const el = {
   shopClose: document.getElementById('btn-shop-close'),
   mapBtn: document.getElementById('btn-map'),
   map: document.getElementById('map'),
+  mapTabs: document.getElementById('map-tabs'),
   mapSummary: document.getElementById('map-summary'),
   mapGrid: document.getElementById('map-grid'),
   mapClose: document.getElementById('btn-map-close'),
@@ -66,7 +67,6 @@ const el = {
   settings: document.getElementById('settings'),
   settingList: document.getElementById('setting-list'),
   settingsClose: document.getElementById('btn-settings-close'),
-  modeBtn: document.getElementById('btn-mode'),
 };
 
 const state = {
@@ -397,33 +397,10 @@ function hideOverlay() {
   el.overlay.hidden = true;
 }
 
-// --- 게임 모드(오리지널 / 보드게임) ---
-
-// 현재 모드 라벨을 상단 버튼에 반영.
-function updateModeBtn() {
-  const name = modeDef(progress().activeMode).name;
-  el.modeBtn.textContent = name;
-  el.modeBtn.setAttribute('aria-label', `모드: ${name} (눌러서 전환)`);
-}
-
-// 다음 모드 id(2개면 토글).
-function nextModeId() {
-  const i = MODES.findIndex((m) => m.id === progress().activeMode);
-  return MODES[(i + 1) % MODES.length].id;
-}
-
-// 모드 전환: 활성 모드를 바꾸고 그 모드가 마지막으로 보던 퍼즐(없으면 첫 퍼즐)을 연다.
-function switchMode(id) {
-  const pr = progress();
-  if (pr.activeMode === id || !MODES.some((m) => m.id === id)) return;
-  pr.activeMode = id;
-  store.set('progress', pr);
-  updateModeBtn();
-  const mp = pr.modes[id];
-  const list = modeDef(id).puzzles;
-  loadPuzzle(mp.current != null ? mp.current : list[0].id);
-  play('buy');
-}
+// --- 게임 모드(오리지널 / 보드게임): 진행 맵 안의 탭으로 고른다 ---
+// 상단에서 바로 전환하지 않는다. 맵을 열면 현재 모드 탭이 선택돼 있고, 탭으로 다른 모드의
+// 진행을 미리 볼 수 있다. 실제 전환은 그 모드의 퍼즐을 고를 때 확정된다(mapViewMode → activeMode).
+let mapViewMode = null; // 맵에서 보고 있는 모드(아직 확정 전, activeMode와 다를 수 있음)
 
 // --- 상점(토끼 색 스킨 + 보드 테마) ---
 
@@ -512,21 +489,36 @@ function closePanel(panel) {
 
 const DIFF_ORDER = ['beginner', 'easy', 'medium', 'hard'];
 
+// 맵 열기: 현재 활성 모드를 보기 모드로 잡고 렌더.
+function openMap() {
+  mapViewMode = progress().activeMode;
+  renderMap();
+  el.map.hidden = false;
+}
+
 function renderMap() {
   const pr = progress();
-  const mp = modeProg(pr);
-  const list = modePuzzles(pr.activeMode);
+  const vm = mapViewMode || pr.activeMode; // 보고 있는 모드(탭으로 바뀜)
+  const mp = pr.modes[vm];
+  const list = modePuzzles(vm);
   const cleared = new Set(mp.cleared || []);
   const stars = mp.stars || {};
   const totalStars = Object.values(stars).reduce((a, b) => a + b, 0);
-  el.mapSummary.textContent = `${modeDef(pr.activeMode).name} · 클리어 ${cleared.size} / ${list.length} · 모은 별 ${totalStars} ⭐`;
+
+  // 모드 탭(오리지널/보드게임). 보고 있는 모드가 active 표시.
+  el.mapTabs.innerHTML = MODES.map((m) =>
+    `<button class="map-tab${m.id === vm ? ' active' : ''}" data-mode="${m.id}" type="button">${m.name}</button>`,
+  ).join('');
+
+  el.mapSummary.textContent = `클리어 ${cleared.size} / ${list.length} · 모은 별 ${totalStars} ⭐`;
 
   const groups = {};
   for (const p of list) (groups[p.difficulty] = groups[p.difficulty] || []).push(p);
   el.mapGrid.innerHTML = DIFF_ORDER.filter((d) => groups[d]).map((d) => {
     const chips = groups[d].map((p) => {
       const done = cleared.has(p.id);
-      const cur = p.id === state.puzzleId;
+      // 현재 플레이 중 퍼즐 강조는 보고 있는 모드가 활성 모드일 때만.
+      const cur = vm === pr.activeMode && p.id === state.puzzleId;
       const starStr = done ? '⭐'.repeat(stars[p.id] || 0) : '·';
       return `<button class="map-chip${done ? ' done' : ''}${cur ? ' current' : ''}" data-id="${p.id}" type="button">`
         + `<span class="map-num">${p.id}</span>`
@@ -608,7 +600,6 @@ el.overlayNext.addEventListener('click', () => {
   if (idx < list.length - 1) go(1);
   else loadPuzzle(list[0].id); // 마지막 퍼즐 완주 후 처음으로
 });
-el.modeBtn.addEventListener('click', () => switchMode(nextModeId()));
 el.shopBtn.addEventListener('click', () => openPanel(el.shop, renderShop));
 el.shopClose.addEventListener('click', () => closePanel(el.shop));
 function onShopClick(e) {
@@ -619,14 +610,24 @@ el.shopItems.addEventListener('click', onShopClick);
 el.shopThemes.addEventListener('click', onShopClick);
 el.shopAccessories.addEventListener('click', onShopClick);
 el.muteBtn.addEventListener('click', toggleMute);
-el.mapBtn.addEventListener('click', () => openPanel(el.map, renderMap));
+el.mapBtn.addEventListener('click', openMap);
 el.mapClose.addEventListener('click', () => closePanel(el.map));
+// 모드 탭: 보고 있는 모드만 바꿔 미리 본다(아직 전환 확정 아님).
+el.mapTabs.addEventListener('click', (e) => {
+  const tab = e.target.closest('.map-tab');
+  if (tab) { mapViewMode = tab.dataset.mode; renderMap(); }
+});
 el.mapGrid.addEventListener('click', (e) => {
   const chip = e.target.closest('.map-chip');
-  if (chip) {
-    closePanel(el.map);
-    loadPuzzle(Number(chip.dataset.id));
+  if (!chip) return;
+  // 퍼즐을 고르면 보고 있던 모드로 전환을 확정하고 그 퍼즐을 연다.
+  const pr = progress();
+  if (pr.activeMode !== mapViewMode) {
+    pr.activeMode = mapViewMode;
+    store.set('progress', pr);
   }
+  closePanel(el.map);
+  loadPuzzle(Number(chip.dataset.id));
 });
 el.settingsBtn.addEventListener('click', () => openPanel(el.settings, renderSettings));
 el.settingsClose.addEventListener('click', () => closePanel(el.settings));
@@ -644,7 +645,6 @@ window.addEventListener('touchend', unlockAudio, { once: true });
 el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
 setMuted(progress().muted);
 updateMuteBtn();
-updateModeBtn();
 setTargetColor(currentSkinColor());
 setTargetAccessory(currentAccessory().acc);
 applyTheme(currentTheme());

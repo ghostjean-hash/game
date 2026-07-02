@@ -19,16 +19,6 @@
 }
 /* 상단 컨트롤 아이콘은 SVG로 통일(기기별 이모지 그림체 차이 제거). currentColor로 색 상속. */
 .rushhour .home svg { width: 20px; height: 20px; display: block; }
-/* 모드 전환 버튼: 아이콘 대신 현재 모드 이름을 짧게. 폭은 글자에 맞춘다. */
-.rushhour .mode-btn {
-  width: auto;
-  padding: 0 10px;
-  font-size: 12px;
-  font-weight: 700;
-  white-space: nowrap;
-  flex-shrink: 0;
-  border: 2px solid var(--rh-exit);
-}
 /* 음소거 토글: 평소 스피커(on), muted면 X 표시(off)로 교체. */
 .rushhour #btn-mute .icon-sound-off { display: none; }
 .rushhour #btn-mute.muted .icon-sound-on { display: none; }
@@ -299,8 +289,21 @@
 
 /* base.css의 .modal-backdrop{display:grid}가 [hidden]을 덮어쓰므로 명시적으로 막는다. */
 .rushhour .modal-backdrop[hidden] { display: none; }
-/* 결과 오버레이가 통통 튀어 등장(기분 업). */
-.rushhour .modal { animation: rh-pop 0.42s cubic-bezier(0.18, 0.9, 0.4, 1.3) both; }
+/* 모든 팝업(상점/맵/설정/결과)을 라이트 테마로 통일. 모달 스코프에서 색 토큰을 밝은 값으로
+   재정의하면, 내부 요소(칩·토글·버튼 등 var(--fg)/var(--bg-elev-2)/var(--line) 사용)가
+   자동으로 라이트 팔레트를 상속한다. 결과 오버레이는 통통 튀어 등장(기분 업). */
+.rushhour .modal {
+  animation: rh-pop 0.42s cubic-bezier(0.18, 0.9, 0.4, 1.3) both;
+  background: #fff8f0;
+  border-color: #f2ddc8;
+  color: #3a2e3a;
+  --fg: #3a2e3a;
+  --fg-dim: #9c6b7d;
+  --fg-mute: #b892a0;
+  --bg-elev: #fdeee0;
+  --bg-elev-2: #f7e4d2;
+  --line: #ecd9c3;
+}
 @keyframes rh-pop {
   0% { transform: scale(0.55); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
@@ -414,6 +417,20 @@
 .rushhour #btn-mute,
 .rushhour #btn-settings { border: none; cursor: pointer; }
 .rushhour .map-modal { max-width: 460px; width: 94vw; }
+/* 모드 탭(오리지널/보드게임): 맵 상단에서 모드를 골라 미리 본다. */
+.rushhour .map-tabs { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.rushhour .map-tab {
+  flex: 1;
+  padding: var(--sp-2);
+  border: 2px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev-2);
+  color: var(--fg-dim);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.rushhour .map-tab.active { border-color: var(--rh-exit); color: var(--fg); background: var(--bg-elev); }
 .rushhour .map-summary { font-weight: 700; font-size: 14px; margin: 2px 0 var(--sp-3); }
 .rushhour .map-scroll { max-height: 58vh; overflow-y: auto; margin-bottom: var(--sp-3); }
 .rushhour .map-section { margin-bottom: var(--sp-3); }
@@ -499,7 +516,6 @@
 @media (max-width: 480px) {
   .rushhour .topbar { gap: 4px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
   .rushhour .home { width: 28px; height: 28px; font-size: 16px; }
-  .rushhour .mode-btn { width: auto; padding: 0 7px; font-size: 11px; }
   .rushhour #puzzle-label { font-size: 13px; }
   .rushhour .stat { font-size: 10px; gap: 2px; }
   .rushhour .stat-value { font-size: 13px; }
