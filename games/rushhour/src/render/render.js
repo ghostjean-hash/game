@@ -173,6 +173,7 @@ function startFaceCycle(boardEl, def) {
   if (!blocks.length) return;
   faceCycleTimer = setInterval(() => {
     if (boardMood) return; // 감정 고정 중엔 순환·깜빡 멈춤(표정 또렷하게)
+    if (document.hidden) return; // 백그라운드 탭에서는 안 보이는 표정 갱신을 건너뛴다(절전)
     for (const cells of blocks) {
       // 표정 변경: 같은 차의 셀 전체를 같은 새 표정으로(블록 통일, 눈감은 컷 제외).
       if (Math.random() > 1 - faceChance) {

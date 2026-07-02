@@ -2,27 +2,33 @@
 // 1수 = 차 한 대를 한 방향으로 한 번 미는 것(몇 칸이든 1수, docs/01_spec.md §5).
 // core 모듈이므로 DOM 의존 없음.
 
-import { slideRange, axisPos, moveCar, isSolved } from './board.js';
+import { slideRange, axisPos, isSolved } from './board.js';
+import { ORIENT } from '../data/constants.js';
 
-// 상태를 문자열로 직렬화. id 순서를 고정해 각 차의 가변 축 좌표만 나열한다.
+// 상태를 문자열로 직렬화. BFS 안의 모든 상태는 같은 시작 배열의 map 파생이라 차 순서가
+// 고정이므로 정렬 없이 그대로 잇는다(id 1글자 + 좌표 1자리라 구분자 불필요).
 function serialize(cars) {
-  return cars
-    .slice()
-    .sort((a, b) => (a.id < b.id ? -1 : 1))
-    .map((c) => `${c.id}${axisPos(c)}`)
-    .join('|');
+  let key = '';
+  for (const c of cars) key += c.id + axisPos(c);
+  return key;
 }
 
 // 한 수로 도달 가능한 모든 { move, state }(각 차를 가능한 다른 모든 칸으로 민 결과).
 // move = { id, pos }(가변 축 목표 좌표), state = 그 수를 둔 새 cars.
+// pos는 이미 slideRange 안이므로 moveCar(내부에서 slideRange를 다시 계산)를 거치지 않고
+// 새 배열을 직접 만든다(탐색 상태당 점유 격자 재계산 1회 절약).
 function expand(cars) {
   const out = [];
   for (const car of cars) {
     const { min, max } = slideRange(cars, car.id);
     const cur = axisPos(car);
+    const isH = car.orient === ORIENT.H;
     for (let pos = min; pos <= max; pos++) {
       if (pos === cur) continue; // 제자리는 수가 아님
-      out.push({ move: { id: car.id, pos }, state: moveCar(cars, car.id, pos) });
+      const state = cars.map((c) => (c === car
+        ? (isH ? { ...c, col: pos } : { ...c, row: pos })
+        : c));
+      out.push({ move: { id: car.id, pos }, state });
     }
   }
   return out;

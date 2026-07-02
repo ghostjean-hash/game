@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0e0f13" />
+<meta name="theme-color" content="#372b3e" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <link rel="apple-touch-icon" sizes="180x180" href="../../icons/icon-180.png" />
@@ -36,15 +36,13 @@
 
   <div class="stage">
     <div class="board-wrap">
-      <div class="board-stage">
-        <div class="stage-badges">
-          <span class="stage-mode" id="stage-mode">오리지널</span>
-          <span class="stage-diff" id="stage-diff">보통</span>
+      <div class="board-head">
+        <div class="board-stage">
+          <span class="stage-line"><span class="stage-mode" id="stage-mode">오리지널</span><span class="stage-cap">스테이지</span><span class="stage-num" id="stage-num">1</span></span>
+          <span class="stage-diff" id="stage-diff"><i></i><i></i><i></i><i></i><em id="stage-diff-label"></em></span>
         </div>
-        <span class="stage-cap">스테이지</span>
-        <span class="stage-num" id="stage-num">1</span>
+        <div class="board-timer" id="time" aria-label="남은 시간">0:00</div>
       </div>
-      <div class="board-timer" id="time" aria-label="남은 시간">0:00</div>
       <div class="board" id="board" aria-label="러시아워 보드"></div>
     </div>
   </div>

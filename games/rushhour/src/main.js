@@ -11,7 +11,7 @@ import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
 import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetAccessory, setBoardMood, showHint } from './render/render.js';
 import { attachDrag } from './input/drag.js';
-import { play, setMuted, isMuted, unlockAudio } from './audio/sound.js';
+import { play, setMuted, isMuted, unlockAudio, suspendAudio, resumeAudio } from './audio/sound.js';
 import {
   BOARD_THEMES, DEFAULT_THEME, ACCESSORY_ITEMS, DEFAULT_ACCESSORY,
 } from './data/shop.js';
@@ -35,6 +35,7 @@ const el = {
   board: document.getElementById('board'),
   stageMode: document.getElementById('stage-mode'),
   stageDiff: document.getElementById('stage-diff'),
+  stageDiffLabel: document.getElementById('stage-diff-label'),
   stageNum: document.getElementById('stage-num'),
   moves: document.getElementById('moves'),
   gold: document.getElementById('gold'),
@@ -119,8 +120,16 @@ function migrateProgress(p) {
   return base;
 }
 
+// progress는 메모리에 1회 파싱해 캐시한다(매 이동·렌더마다 localStorage JSON 재파싱 방지).
+// 변형한 pr은 반드시 saveProgress()로 저장한다(캐시와 localStorage를 함께 갱신하는 유일한 문).
+let progCache = null;
 function progress() {
-  return migrateProgress(store.get('progress', null));
+  if (!progCache) progCache = migrateProgress(store.get('progress', null));
+  return progCache;
+}
+function saveProgress(pr) {
+  progCache = pr;
+  store.set('progress', pr);
 }
 
 // 모드 정의/퍼즐/진행 헬퍼. 인자 없으면 현재 활성 모드 기준.
@@ -190,7 +199,7 @@ function loadPuzzle(id) {
   // 마지막으로 보던 퍼즐을 현재 모드 진행에 저장(모드별).
   const pr = progress();
   pr.modes[pr.activeMode].current = p.id;
-  store.set('progress', pr);
+  saveProgress(pr);
   hideOverlay();
   render();
   startTimer();
@@ -200,7 +209,8 @@ function render() {
   const list = modePuzzles();
   el.stageMode.textContent = modeDef(progress().activeMode).name;
   const cur = puzzleById(state.puzzleId);
-  el.stageDiff.textContent = cur ? DIFF_LABEL[cur.difficulty] : '';
+  // 난이도는 4칸 게이지 + 라벨(§01 spec 8.2). 채움 칸 수·색은 style.css가 data-diff로 결정.
+  el.stageDiffLabel.textContent = cur ? DIFF_LABEL[cur.difficulty] : '';
   el.stageDiff.dataset.diff = cur ? cur.difficulty : '';
   el.stageNum.textContent = String(state.puzzleId);
   el.moves.textContent = String(state.moves);
@@ -221,6 +231,8 @@ function fmtTime(s) {
 function updateTimeUi() {
   const remain = Math.max(0, state.limit - state.elapsed);
   el.time.textContent = fmtTime(remain);
+  // 타이머 알약의 진행 막대(남은 비율 1→0, style.css --t 소비).
+  el.time.style.setProperty('--t', state.limit > 0 ? String(remain / state.limit) : '0');
   el.time.classList.toggle('low', !state.solved && remain <= 10);
 }
 
@@ -242,6 +254,9 @@ function tick() {
   state.elapsed += 1;
   updateTimeUi();
   applyFace();
+  // 초과 확정(제한+1초)까지만 센다. 그 뒤는 표시 0:00·표정 울상으로 고정이라 잴 것이 없다 -
+  // 방치 시 타이머가 영원히 도는 것을 막는다(시간 내 판정은 elapsed <= limit이라 영향 없음).
+  if (state.elapsed > state.limit) stopTimer();
 }
 
 function startTimer() {
@@ -305,7 +320,7 @@ function onSolved() {
     + (inTime ? GOLD_TIME_BONUS : 0)
     + comboBonus;
   pr.gold = (pr.gold || 0) + gold; // 골드는 두 모드 공유
-  store.set('progress', pr);
+  saveProgress(pr);
 
   const list = modePuzzles();
   const idx = list.findIndex((p) => p.id === state.puzzleId);
@@ -369,7 +384,7 @@ function hint() {
     return;
   }
   pr.gold -= HINT_COST;
-  store.set('progress', pr);
+  saveProgress(pr);
   render();
   showHint(state.els, move);
   play('hint');
@@ -380,7 +395,7 @@ function toggleMute() {
   const pr = progress();
   const next = !isMuted();
   pr.muted = next;
-  store.set('progress', pr);
+  saveProgress(pr);
   setMuted(next);
   updateMuteBtn();
   if (!next) play('move'); // 켤 때 들리는지 확인음
@@ -463,7 +478,7 @@ function buyOrEquip(kind, id) {
     pr[cfg.ownedKey] = owned;
   }
   pr[cfg.eqKey] = id;
-  store.set('progress', pr);
+  saveProgress(pr);
   if (kind === 'theme') {
     applyTheme(item); // 보드 색 즉시 적용
   } else {
@@ -568,7 +583,7 @@ function setStyle(id) {
   if (!PONY_STYLES.some((s) => s.id === id)) return;
   const pr = progress();
   pr.ponyStyle = id;
-  store.set('progress', pr);
+  saveProgress(pr);
   redrawBlocks();
   renderSettings();
   play('buy');
@@ -580,7 +595,7 @@ function toggleBlockOpt(key, opt) {
   opts[key][opt] = !opts[key][opt];
   const pr = progress();
   pr.blockOpts = opts;
-  store.set('progress', pr);
+  saveProgress(pr);
   redrawBlocks();
   renderSettings();
   play('buy');
@@ -628,7 +643,7 @@ el.mapGrid.addEventListener('click', (e) => {
   const pr = progress();
   if (pr.activeMode !== mapViewMode) {
     pr.activeMode = mapViewMode;
-    store.set('progress', pr);
+    saveProgress(pr);
   }
   closePanel(el.map);
   loadPuzzle(Number(chip.dataset.id));
@@ -645,6 +660,19 @@ el.settingList.addEventListener('click', (e) => {
 // iOS 오디오 잠금 해제: 첫 사용자 제스처 한 번에 AudioContext를 깨운다(둘 다 once라 각 1회).
 window.addEventListener('pointerdown', unlockAudio, { once: true });
 window.addEventListener('touchend', unlockAudio, { once: true });
+
+// 절전: 탭이 백그라운드로 가면 게임 타이머·오디오(무음 keep-alive 포함)를 재우고,
+// 돌아오면 되살린다(§01 spec 6.4·10.5). 자리 비운 시간은 경과에 넣지 않는다(페널티 없음).
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    stopTimer();
+    suspendAudio();
+  } else {
+    resumeAudio();
+    // 클리어 후·시간 초과 확정 후에는 잴 것이 없어 다시 돌리지 않는다.
+    if (!state.solved && state.elapsed <= state.limit) startTimer();
+  }
+});
 
 el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
 setMuted(progress().muted);

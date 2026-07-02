@@ -4,18 +4,55 @@
   --rh-board: #f3ead9;   /* 보드 바닥(부드러운 크림) */
   --rh-line: #e3d6bf;    /* 격자선 */
   --rh-exit: #ffd98a;    /* 집(출구) 길 강조(따뜻한 골드) */
-}
 
+  /* HUD 톤(01_spec §8.0): 배경은 차분한 저녁 플럼(아이패드 눈부심 완화), 카드류는 크림. */
+  --rh-page: #3a2d40;          /* 페이지 배경(위, 저녁 플럼) */
+  --rh-page-2: #251d2e;        /* 페이지 배경(아래, 더 깊게) */
+  --rh-card: #fffdf8;          /* 떠 있는 칩/알약 카드 */
+  --rh-candy: #ecd3b8;         /* 캔디 버튼 아래쪽 그림자(눌리는 느낌) */
+  --rh-gold-soft: #fff1cf;     /* 골드 알약 배경 */
+  --rh-gold-line: #f0d9a0;     /* 골드 알약 그림자 */
+  --rh-hint-1: #ffdf9e;        /* 힌트 버튼 그라데이션(위) */
+  --rh-hint-2: #ffcf6e;        /* 힌트 버튼 그라데이션(아래) */
+  --rh-hint-candy: #e8a83f;    /* 힌트 버튼 아래쪽 그림자 */
+  --rh-timer-fill: #8fd6a4;    /* 타이머 남은 시간 진행 막대 */
+  --rh-timer-track: #f0e3d0;   /* 타이머 진행 막대 바탕 */
+
+  /* 공용 토큰을 팝업(.modal)과 같은 라이트 팔레트로 재정의 - 상단·하단 바, 버튼,
+     스탯이 자동으로 라이트를 상속한다(docs/04 §3.2). */
+  --fg: #3a2e3a;
+  --fg-dim: #9c6b7d;
+  --fg-mute: #b892a0;
+  --bg-elev: #fdeee0;
+  --bg-elev-2: #f7e4d2;
+  --line: #ecd9c3;
+
+  background: linear-gradient(180deg, var(--rh-page), var(--rh-page-2));
+}
+/* iOS 노치 등 safe-area 뒤(body)도 같은 톤으로. 이 게임에서만 덮는다(--rh-page와 동일 값). */
+body:has(.rushhour) { background: #3a2d40; }
+
+/* 상단 바는 배경에 녹이고(§8.0) 아이콘 칩·알약만 띄운다. */
+.rushhour .topbar {
+  background: transparent;
+  border-bottom: none;
+}
 .rushhour .home {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--r-1);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
   font-size: 20px;
   color: var(--fg);
-  background: var(--bg-elev-2);
+  background: var(--rh-card);
+  box-shadow: 0 2px 0 var(--rh-candy);
+  transition: transform var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease);
+}
+.rushhour .home:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--rh-candy);
 }
 /* 상단 컨트롤 아이콘은 SVG로 통일(기기별 이모지 그림체 차이 제거). currentColor로 색 상속. */
 .rushhour .home svg { width: 20px; height: 20px; display: block; }
@@ -24,17 +61,27 @@
 .rushhour #btn-mute.muted .icon-sound-on { display: none; }
 .rushhour #btn-mute.muted .icon-sound-off { display: block; }
 
+/* 스탯(골드·이동)은 알약형 카드. 골드 알약은 따뜻한 골드빛(§8.1). */
 .rushhour .stat {
   display: inline-flex;
-  align-items: baseline;
-  gap: var(--sp-2);
-  font-size: 13px;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--rh-card);
+  box-shadow: 0 2px 0 var(--rh-candy);
+  font-size: 12px;
+  font-weight: 700;
   color: var(--fg-dim);
+}
+.rushhour .stat:has(#gold) {
+  background: var(--rh-gold-soft);
+  box-shadow: 0 2px 0 var(--rh-gold-line);
 }
 .rushhour .stat-value {
   font-family: var(--font-mono);
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 800;
   color: var(--fg);
 }
 
@@ -55,50 +102,102 @@
   gap: var(--sp-2);
   position: relative; /* 보드 왼쪽 위 스테이지 표시(absolute)의 기준 */
 }
-/* 스테이지: 보드 왼쪽 위에 두 줄(라벨 + 번호). */
+/* 보드 위 한 줄(§8.2): 왼쪽 스테이지 카드 + 오른쪽 타이머. 같은 flex 줄이라 카드가
+   넓어져도(모드명·스테이지 자릿수) 절대 겹치지 않는다. */
+.rushhour .board-head {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  width: 100%;
+}
+/* 스테이지 카드: 모드 알약 + 스테이지 번호 + 난이도 게이지를 크림 카드 하나로. */
 .rushhour .board-stage {
-  position: absolute;
-  top: 0;
-  left: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px 9px;
+  border-radius: var(--r-3);
+  background: var(--rh-card);
+  box-shadow: 0 2px 0 var(--rh-candy);
   line-height: 1.05;
-  z-index: 1;
-}
-/* 스테이지 표시 위 배지 묶음: 현재 모드 + 난이도. */
-.rushhour .stage-badges { display: flex; gap: 4px; margin-bottom: 3px; }
-.rushhour .stage-mode,
-.rushhour .stage-diff {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 800;
-  padding: 1px 8px;
-  border-radius: 999px;
 }
 /* 현재 모드: 골드 알약. */
-.rushhour .stage-mode { color: #5a3d00; background: var(--rh-exit); }
-/* 난이도: 단계별 색으로 한눈에. */
-.rushhour .stage-diff[data-diff="beginner"] { color: #12401f; background: #8fd6a4; }
-.rushhour .stage-diff[data-diff="easy"] { color: #0f3050; background: #8fc3f2; }
-.rushhour .stage-diff[data-diff="medium"] { color: #5a3600; background: #f2b45f; }
-.rushhour .stage-diff[data-diff="hard"] { color: #5a1414; background: #f08a8a; }
+.rushhour .stage-mode {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 9px;
+  border-radius: 999px;
+  color: #5a3d00;
+  background: var(--rh-exit);
+}
+.rushhour .stage-line { display: flex; align-items: center; gap: 6px; }
 .rushhour .stage-cap { font-size: 12px; font-weight: 700; color: var(--fg-dim); }
 .rushhour .stage-num {
   font-family: var(--font-mono);
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 800;
   color: var(--fg);
 }
-/* 보드 위 중앙 큰 타이머. 평소 기본색, 10초 이하 경고는 #time.low. */
+/* 난이도: 4칸 게이지(채워진 칸 수 = 입문 1 ~ 어려움 4) + 색 라벨. 글자만 있던 알약보다
+   "몇 단계 중 몇"이 한눈에 보인다. */
+.rushhour .stage-diff { display: inline-flex; align-items: center; gap: 3px; }
+.rushhour .stage-diff i {
+  width: 12px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--rh-timer-track);
+}
+.rushhour .stage-diff em {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 800;
+  margin-left: 4px;
+  color: var(--fg-dim);
+}
+.rushhour .stage-diff[data-diff="beginner"] i:nth-child(-n+1) { background: #6cc38b; }
+.rushhour .stage-diff[data-diff="beginner"] em { color: #2e7d4f; }
+.rushhour .stage-diff[data-diff="easy"] i:nth-child(-n+2) { background: #6aabe8; }
+.rushhour .stage-diff[data-diff="easy"] em { color: #2f6fae; }
+.rushhour .stage-diff[data-diff="medium"] i:nth-child(-n+3) { background: #f2a94e; }
+.rushhour .stage-diff[data-diff="medium"] em { color: #b26f14; }
+.rushhour .stage-diff[data-diff="hard"] i:nth-child(-n+4) { background: #ef8383; }
+.rushhour .stage-diff[data-diff="hard"] em { color: #c04a4a; }
+/* 보드 위 중앙 타이머 알약: 숫자 + 남은 비율 진행 막대(--t: 1→0, main.js가 갱신).
+   평소 기본색, 10초 이하 경고는 #time.low(빨강 + 두근거림). */
 .rushhour .board-timer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-mono);
-  font-size: clamp(28px, 9vw, 46px);
+  font-size: clamp(24px, 7vw, 34px);
   font-weight: 800;
   line-height: 1;
   letter-spacing: 1px;
   color: var(--fg);
+  background: var(--rh-card);
+  border-radius: 999px;
+  padding: 8px 26px 14px;
+  box-shadow: 0 2px 0 var(--rh-candy);
+  overflow: hidden;
 }
+.rushhour .board-timer::after {
+  content: '';
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: 6px;
+  height: 5px;
+  border-radius: 999px;
+  /* 왼쪽부터 남은 비율만큼 채움(나머지는 바탕색). */
+  background: linear-gradient(90deg,
+    var(--rh-timer-fill) 0 calc(var(--t, 1) * 100%),
+    var(--rh-timer-track) 0);
+}
+.rushhour #time.low::after { background: linear-gradient(90deg, var(--danger) 0 calc(var(--t, 1) * 100%), var(--rh-timer-track) 0); }
 .rushhour .board {
   --size: 6;
   --cell: calc(100% / var(--size));
@@ -354,43 +453,63 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* 하단 캔디 버튼(§8.3): 바는 배경에 녹이고, 버튼은 카드 + 아래쪽 그림자로 눌리는 느낌. */
 .rushhour .controls {
   display: flex;
+  align-items: stretch;
   gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-4) calc(var(--sp-4) + env(safe-area-inset-bottom));
-  border-top: 1px solid var(--line);
-  background: var(--bg-elev);
+  padding: var(--sp-2) var(--sp-4) calc(var(--sp-4) + env(safe-area-inset-bottom));
+  border-top: none;
+  background: transparent;
 }
 .rushhour .controls .btn {
   flex: 1;
   font-size: 14px;
+  font-weight: 800;
   padding: var(--sp-3) var(--sp-2);
+  border: none;
+  border-radius: var(--r-3);
+  background: var(--rh-card);
+  color: var(--fg);
+  box-shadow: 0 3px 0 var(--rh-candy);
+  transition: transform var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease);
 }
+.rushhour .controls .btn:hover { background: var(--rh-card); }
+.rushhour .controls .btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--rh-candy);
+}
+/* 비활성: 반투명 크림(고스트). opacity만 낮추면 저녁 배경과 섞여 탁한 회색이 된다. */
 .rushhour .controls .btn:disabled {
-  opacity: 0.4;
   pointer-events: none;
+  background: rgba(255, 253, 248, 0.14);
+  color: rgba(255, 253, 248, 0.4);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
 }
-/* 힌트 버튼: 골드빛으로 살짝 강조(도움 버튼임을 알림). */
+/* 이전/다음은 이동용 보조 버튼이라 좁게. */
+.rushhour #btn-prev,
+.rushhour #btn-next { flex: 0.65; }
+/* 힌트 버튼: 골드빛 캔디로 가장 넓고 도드라지게(도움 버튼임을 알림). */
 .rushhour .controls .btn-hint {
-  border-color: var(--rh-exit);
-  font-weight: 700;
+  flex: 1.6;
+  background: linear-gradient(180deg, var(--rh-hint-1), var(--rh-hint-2));
+  box-shadow: 0 3px 0 var(--rh-hint-candy);
+  color: #5a3d00;
 }
+.rushhour .controls .btn-hint:active { box-shadow: 0 1px 0 var(--rh-hint-candy); }
 
-/* 상단바에 아이콘 4개 + 제목 + 스탯 3개가 들어가므로 살짝 압축. */
+/* 상단바에 아이콘 5개 + 스탯 2개가 들어가므로 살짝 압축. */
 .rushhour .topbar { gap: var(--sp-2); }
-/* 제목은 한 줄 유지(줄바꿈 금지). 공간이 모자라면 줄이고 …로 자른다. */
-.rushhour #puzzle-label {
-  min-width: 0;
-  font-size: 16px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.rushhour .stat { gap: var(--sp-1); font-size: 12px; }
-.rushhour .stat-value { font-size: 16px; }
 .rushhour .stat-icon { font-size: 13px; }
-/* 남은 시간이 10초 이하면 빨갛게 경고. */
-.rushhour #time.low { color: var(--danger); font-weight: 800; }
+/* 남은 시간이 10초 이하면 빨갛게 경고 + 두근거림(마지막 10초만 - 만료 후 무한 구동 금지). */
+.rushhour #time.low {
+  color: var(--danger);
+  animation: rh-pulse 1s ease-in-out 10;
+}
+@keyframes rh-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
 /* 골드 부족 등 거부 시 상단 골드 표시 흔들림. */
 .rushhour .stat.shake { animation: rh-shake 0.4s; }
 
@@ -564,11 +683,15 @@
 /* 좁은 폭(폰): 상단바·하단바를 압축해 한 줄에 들어가게. */
 @media (max-width: 480px) {
   .rushhour .topbar { gap: 4px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
-  .rushhour .home { width: 28px; height: 28px; font-size: 16px; }
-  .rushhour #puzzle-label { font-size: 13px; }
-  .rushhour .stat { font-size: 10px; gap: 2px; }
+  .rushhour .home { width: 33px; height: 33px; font-size: 16px; }
+  .rushhour .stat { font-size: 10px; gap: 3px; padding: 3px 9px; }
   .rushhour .stat-value { font-size: 13px; }
   .rushhour .stat-icon { font-size: 11px; }
+  .rushhour .board-timer { font-size: clamp(20px, 6vw, 26px); padding: 6px 20px 12px; }
+  /* 좁은 화면: 한 줄이 모자라면 카드/타이머가 줄바꿈해 중앙 정렬로 쌓인다. */
+  .rushhour .board-head { flex-wrap: wrap; justify-content: center; }
+  .rushhour .board-stage { flex-direction: row; align-items: center; gap: 8px; padding: 6px 12px 8px; }
+  .rushhour .stage-num { font-size: 18px; }
   .rushhour .controls { gap: 4px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
   .rushhour .controls .btn {
     font-size: 11px;

@@ -6,8 +6,23 @@ let ctx = null;
 let muted = false;
 let unlocked = false;
 
-export function setMuted(m) { muted = !!m; }
+// 음소거 중에는 무음 keep-alive까지 재워(suspend) 오디오 스레드 상시 가동을 막는다(§01 spec 10.5).
+export function setMuted(m) {
+  muted = !!m;
+  if (!ctx) return;
+  if (muted) ctx.suspend();
+  else if (unlocked) ctx.resume();
+}
 export function isMuted() { return muted; }
+
+// 탭이 백그라운드로 가면 오디오 렌더링(무음 keep-alive 포함)을 재워 배터리·발열을 아낀다.
+// main.js가 visibilitychange에서 호출한다. 복귀 resume이 실패해도 다음 play()가 다시 깨운다.
+export function suspendAudio() {
+  if (ctx && ctx.state === 'running') ctx.suspend();
+}
+export function resumeAudio() {
+  if (unlocked && !muted && ctx && ctx.state === 'suspended') ctx.resume();
+}
 
 // AudioContext는 첫 재생 시점에 만든다(브라우저 자동재생 정책: 사용자 제스처 후).
 function audioCtx() {
@@ -36,6 +51,7 @@ export function unlockAudio() {
     keepAlive.connect(g).connect(c.destination);
     keepAlive.start(); // stop 안 함 - 게임 내내 무음을 흘려 장치를 깨워 둔다
   } catch { /* 실패해도 게임 진행 무관 */ }
+  if (muted) c.suspend(); // 음소거로 시작했으면 깨우기만 해 두고 바로 재운다
 }
 
 // 모든 재생을 currentTime 정각이 아니라 이만큼 뒤에 예약한다. 오디오 시계가 막 깬 첫 재생에서
