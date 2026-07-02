@@ -34,6 +34,7 @@ const el = {
   page: document.querySelector('.rushhour'),
   board: document.getElementById('board'),
   stageMode: document.getElementById('stage-mode'),
+  stageDiff: document.getElementById('stage-diff'),
   stageNum: document.getElementById('stage-num'),
   moves: document.getElementById('moves'),
   gold: document.getElementById('gold'),
@@ -205,6 +206,9 @@ function loadPuzzle(id) {
 function render() {
   const list = modePuzzles();
   el.stageMode.textContent = modeDef(progress().activeMode).name;
+  const cur = puzzleById(state.puzzleId);
+  el.stageDiff.textContent = cur ? DIFF_LABEL[cur.difficulty] : '';
+  el.stageDiff.dataset.diff = cur ? cur.difficulty : '';
   el.stageNum.textContent = String(state.puzzleId);
   el.moves.textContent = String(state.moves);
   el.gold.textContent = String(progress().gold || 0);

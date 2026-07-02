@@ -66,17 +66,23 @@
   line-height: 1.05;
   z-index: 1;
 }
-/* 현재 모드 배지: 스테이지 표시 위에 골드 알약으로 또렷하게. */
-.rushhour .stage-mode {
+/* 스테이지 표시 위 배지 묶음: 현재 모드 + 난이도. */
+.rushhour .stage-badges { display: flex; gap: 4px; margin-bottom: 3px; }
+.rushhour .stage-mode,
+.rushhour .stage-diff {
   display: inline-block;
   font-size: 11px;
   font-weight: 800;
-  color: #5a3d00;
-  background: var(--rh-exit);
   padding: 1px 8px;
   border-radius: 999px;
-  margin-bottom: 3px;
 }
+/* 현재 모드: 골드 알약. */
+.rushhour .stage-mode { color: #5a3d00; background: var(--rh-exit); }
+/* 난이도: 단계별 색으로 한눈에. */
+.rushhour .stage-diff[data-diff="beginner"] { color: #12401f; background: #8fd6a4; }
+.rushhour .stage-diff[data-diff="easy"] { color: #0f3050; background: #8fc3f2; }
+.rushhour .stage-diff[data-diff="medium"] { color: #5a3600; background: #f2b45f; }
+.rushhour .stage-diff[data-diff="hard"] { color: #5a1414; background: #f08a8a; }
 .rushhour .stage-cap { font-size: 12px; font-weight: 700; color: var(--fg-dim); }
 .rushhour .stage-num {
   font-family: var(--font-mono);
