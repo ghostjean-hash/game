@@ -22,6 +22,8 @@ nonogram/
 │   │   └── albumView.js#   도감
 │   ├── input/          # 입력 처리 (터치/마우스/키보드 → core 액션)
 │   │   └── boardInput.js
+│   ├── audio/          # Web Audio 효과음 합성 (음원 파일 0, core 아님)
+│   │   └── sound.js
 │   └── data/           # 상수 / 색상 / 퍼즐 (매직 넘버 SSOT)
 │       ├── constants.js
 │       ├── colors.js

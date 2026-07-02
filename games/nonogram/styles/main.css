@@ -109,6 +109,7 @@ button {
   font-weight: 700; font-size: var(--fs-small);
 }
 .mistake-badge b { color: var(--point); }
+.sound-btn { font-size: 20px; padding: var(--space-1) var(--space-2); line-height: 1; }
 
 /* 힌트 + 격자 2x2 레이아웃 */
 .puzzle-wrap { display: flex; justify-content: center; margin: var(--space-3) 0; }

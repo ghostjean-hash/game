@@ -11,6 +11,7 @@ import { renderMap } from './render/mapView.js';
 import { renderResult } from './render/resultView.js';
 import { renderAlbum } from './render/albumView.js';
 import { attachBoardInput } from './input/boardInput.js';
+import * as sound from './audio/sound.js';
 
 const store = createStorage('nonogram');
 
@@ -101,9 +102,13 @@ function applyAction(r, c) {
   const target = cur.dragAction === 'fill' ? CELL.FILLED
     : cur.dragAction === 'mark' ? CELL.MARKED
       : CELL.EMPTY;
-  cur.board = setCell(cur.board, r, c, target, cur.solution);
+  const before = cur.board;
+  cur.board = setCell(before, r, c, target, cur.solution);
+  if (cur.board === before) return; // 무변화 → 무렌더/무음
   applyState(boardEl, cur.board);
   updateMistake();
+  if (cur.board.mistakes > before.mistakes) sound.play('mistake');
+  else sound.play(cur.dragAction); // 'fill' | 'erase' | 'mark'
 }
 
 function onPaintStart(r, c) {
@@ -128,9 +133,11 @@ function win() {
   // 흑백 → 컬러 변신 연출 후 결과 화면.
   revealColors(boardEl, cur.puzzle.grid);
   setCursor(boardEl, -1, -1, cur.puzzle.size); // 커서 제거
+  sound.play('clear');
   setTimeout(() => {
     renderResult(el('result-pic'), el('result-title'), el('result-stars'), cur.puzzle, stars);
     showScreen('result');
+    sound.playStars(stars);
   }, 850);
 }
 
@@ -179,6 +186,17 @@ function openAlbum() {
   showScreen('album');
 }
 
+// --- 사운드 ---
+function updateMuteBtn() {
+  el('sound-toggle').textContent = sound.isMuted() ? '🔇' : '🔊';
+}
+function toggleMute() {
+  const m = !sound.isMuted();
+  sound.setMuted(m);
+  store.set('muted', m);
+  updateMuteBtn();
+}
+
 // --- 배선 ---
 function init() {
   attachBoardInput(boardEl, { onStart: onPaintStart, onMove: onPaintMove, onEnd: onPaintEnd });
@@ -189,7 +207,18 @@ function init() {
   el('album-back').addEventListener('click', openMap);
   el('result-map').addEventListener('click', openMap);
   el('result-next').addEventListener('click', nextPuzzle);
+  el('sound-toggle').addEventListener('click', toggleMute);
   document.addEventListener('keydown', onKey);
+
+  // 사운드 초기화: 저장된 음소거 상태 적용 + 첫 제스처에서 오디오 깨우기 + 백그라운드 절전.
+  sound.setMuted(store.get('muted', false));
+  updateMuteBtn();
+  document.addEventListener('pointerdown', () => sound.unlockAudio(), { once: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) sound.suspendAudio();
+    else sound.resumeAudio();
+  });
+
   openMap();
 }
 

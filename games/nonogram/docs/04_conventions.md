@@ -22,6 +22,10 @@
 - UI 색 / 간격 / 폰트: `styles/tokens.css` CSS 변수만
 - 인라인 매직 값 금지
 
+### 3.5. 사운드 합성 파라미터 (매직 넘버 규칙 예외)
+
+`src/audio/sound.js`의 효과음 합성값(주파수 / 길이 / 게인 / 파형)은 그 모듈의 디자인 상수로 본다. 음악적 튜닝값이라 `data/`로 빼지 않고 모듈 안 `SOUNDS` 레시피에 둔다(매직 넘버 규칙 예외). audio는 Web Audio API만 쓰고 core를 import하지 않는다.
+
 ## 4. 테스트
 
 - `tests/test.html` 열면 전체 자동 실행
