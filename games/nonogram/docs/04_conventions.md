@@ -4,7 +4,11 @@
 
 ## 1. 네이밍
 
-(미정 - 원칙: camelCase 함수, UPPER_SNAKE 상수)
+- 함수/변수: `camelCase`. 불리언은 `is`/`has`/`can` 접두(예: `isCleared`).
+- 상수: `UPPER_SNAKE`(단일 값) 또는 대문자 시작 객체(`SIZES`, `CELL`, `PALETTE`).
+- 파일: `camelCase.js`. 모듈 역할이 이름에 드러나게(`boardView`, `boardInput`).
+- 좌표: 행 `r`(row, 위→아래) / 열 `c`(col, 왼→오). `grid[r][c]` 순서 고정.
+- 힌트: 행 힌트 `rowClues`, 열 힌트 `colClues`. 각 원소는 숫자 배열.
 
 ## 2. 코드 규칙
 

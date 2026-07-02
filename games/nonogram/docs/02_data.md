@@ -2,18 +2,92 @@
 
 > 모든 수치 / 게임용 색상 / 퍼즐 / 저장 스키마의 SSOT. 코드의 매직 넘버는 0개여야 한다.
 
-## 1. 상수
+## 1. 상수 (`src/data/constants.js`)
 
-(미정 - `src/data/constants.js` 예정)
+| 이름 | 값 | 의미 |
+|---|---|---|
+| `SIZES` | `{ SMALL: 5, MEDIUM: 10, LARGE: 15 }` | 지원 격자 크기(정사각) |
+| `CELL` | `{ EMPTY: 0, FILLED: 1, MARKED: 2 }` | 플레이 중 셀 상태(비움/칠함/X) |
+| `STAR_THRESHOLDS` | `{ THREE: 0, TWO: 2 }` | 실수 ≤0 → 별3, ≤2 → 별2, 그 외 별1 |
+| `MAX_STARS` | `3` | 별점 상한 |
+| `TUTORIAL_COUNT` | `3` | 튜토리얼 판 수 |
+| `LARGE_UNLOCK_CLEARS` | `6` | 15×15 해금에 필요한 중급 이하 클리어 수 |
+| `MODE` | `{ FILL: 'fill', MARK: 'mark' }` | 입력 모드 |
 
-## 2. 색상
+- 별점 계산: `mistakes <= STAR_THRESHOLDS.THREE ? 3 : mistakes <= STAR_THRESHOLDS.TWO ? 2 : 1`.
+- 셀 크기(px)는 CSS 변수 `--cell` 한 곳에서 파생(styles/tokens.css). JS는 px를 알지 못한다.
 
-(미정 - `src/data/colors.js`)
+## 2. 색상 (`src/data/colors.js`)
 
-## 3. 퍼즐 데이터
+게임 데이터 색만 여기. UI 색은 tokens.css.
 
-(미정 - 포맷 / 유일해 검증 규칙 / 내장 세트)
+### 2.1. 팔레트 `PALETTE`
 
-## 4. 저장 스키마
+퍼즐 셀의 정답 색을 가리키는 인덱스 → HEX. 인덱스 0은 "빈칸"(색 없음)이라 팔레트에 없다. 픽셀 아트용 파스텔 축(민트·라벤더·크림) + 포인트 핑크.
 
-(미정 - shared/storage.js `createStorage("nonogram")`, localStorage 키 prefix `nonogram_`)
+| 인덱스 | 키 | HEX | 용도 |
+|---|---|---|---|
+| 1 | `ink` | `#4a4658` | 윤곽/검정 대용(눈·선) |
+| 2 | `cream` | `#fff3dc` | 크림/흰 |
+| 3 | `mint` | `#7fded0` | 민트(기본 축) |
+| 4 | `lavender` | `#b9a6f0` | 라벤더(기본 축) |
+| 5 | `pink` | `#ff9ec7` | 핑크(포인트 색, 절제 사용) |
+| 6 | `butter` | `#ffd97d` | 노랑/버터 |
+| 7 | `sky` | `#8fd0ff` | 하늘 |
+| 8 | `coral` | `#ff9e8a` | 산호/볼터치 |
+| 9 | `leaf` | `#94d98a` | 잎/초록 |
+| 10 | `cocoa` | `#c99a6a` | 갈색 |
+
+### 2.2. 플레이 중 단색 `FILL_MONO`
+
+플레이 중 칠한 칸은 색 인덱스와 무관하게 이 단색으로 보인다(흑백 단계). 클리어 시 각 칸이 §2.1 정답 색으로 변신. 값: `#5b5470`(라벤더 그레이). 실제 CSS 적용은 tokens.css `--fill-mono`와 값 동기.
+
+## 3. 퍼즐 데이터 (`src/data/puzzles.js`)
+
+### 3.1. 포맷
+
+각 퍼즐은 색 인덱스 2차원 격자 하나로 정의한다. 힌트는 코드가 자동 생성하므로 저장하지 않는다(SSOT는 그림 격자 하나).
+
+```js
+{
+  id: 'star',            // 고유 id (저장 키)
+  title: '별',            // 도감 표시명
+  size: 5,               // SIZES 중 하나 (grid는 size×size)
+  difficulty: 'tutorial',// 'tutorial' | 'easy' | 'medium' | 'hard'
+  tutorialStep: 1,       // 튜토리얼일 때만(1~TUTORIAL_COUNT), 아니면 생략
+  grid: [                // size개 행, 각 행 size개 색 인덱스(0=빈칸)
+    [0,0,6,0,0],
+    ...
+  ],
+}
+```
+
+- `grid[r][c]`가 0이면 빈칸(칠하지 않음), 1 이상이면 칠하는 칸이며 그 값이 클리어 시 표시할 정답 색 인덱스.
+- 플레이 판정용 "칠함 여부"는 `grid[r][c] !== 0`.
+
+### 3.2. 유일해 + 줄 논리 검증 (내장 조건)
+
+퍼즐을 세트에 넣으려면 아래를 테스트가 통과해야 한다(CLAUDE.md 절대 규칙).
+
+1. **유일해**: 힌트만으로 도출되는 칠함/빈칸 배치가 정확히 1개.
+2. **줄 논리로 풀림(추측 불필요)**: 행/열 힌트 제약의 반복 전파(line solving)만으로 전 칸이 확정. 추측/백트래킹 없이 풀려야 한다.
+3. **난이도 자동 태깅**: 솔버가 전 칸 확정까지 돈 전파 라운드 수를 난이도 지표로 산출(참고값).
+
+검증은 `src/core/solver.js`가 담당하고 `tests/`가 내장 전 퍼즐에 대해 전수 실행한다.
+
+### 3.3. 내장 세트 (1차, 20종)
+
+튜토리얼 3(5×5) + 초급 6(5×5) + 중급 6(10×10) + 고급 5(15×15). 고급은 중급까지 `LARGE_UNLOCK_CLEARS`개 클리어 시 해금. 실제 목록은 `puzzles.js` 배열이 SSOT이며, 전부 §3.2 검증 통과분만 포함한다(테스트가 전수 확인).
+
+## 4. 저장 스키마 (`shared/storage.js`, `createStorage("nonogram")`)
+
+localStorage 키는 래퍼가 `gg.nonogram.<key>`로 네임스페이스한다. 저장 값은 JSON.
+
+| key | 값 | 의미 |
+|---|---|---|
+| `progress` | `{ [puzzleId]: { cleared: true, stars: 1..3, bestMistakes: n } }` | 퍼즐별 클리어/별점 |
+| `tutorialDone` | `boolean` | 튜토리얼 3판 완료 |
+| `mode` | `'fill' \| 'mark'` | 마지막 입력 모드(편의 복원) |
+
+- 진행 중 판(중도 저장)은 1차 범위 제외(클리어 결과만 영속). 재진입 시 빈 격자부터.
+- 스키마 변경 시 이 표가 SSOT이며 마이그레이션은 이후 필요 시 추가.

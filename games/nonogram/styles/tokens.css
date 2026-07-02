@@ -1,20 +1,47 @@
-/* 디자인 토큰 골격. UI 색 / 간격 / 폰트는 전부 여기 변수에서. 값 정의는 docs/02_data.md 참조.
-   컨셉 확정 시 채운다. 허브 공용 shared/tokens.css 활용 여부도 그때 결정. */
+/* 디자인 토큰. UI 색/간격/폰트/셀크기는 전부 여기 변수에서. px 하드코딩은 이 정의 파일에만.
+   게임 데이터 색(완성 그림 팔레트)은 src/data/colors.js. 값 근거 docs/02_data.md. */
 
 :root {
-  /* 색 */
-  --bg: #0e0f13;
-  --fg: #e8ecf5;
-  --accent: #a78bfa;
+  /* 색 - 초4 타깃 밝은 파스텔(민트·라벤더·크림 축, 핑크 포인트) */
+  --bg: #fbf6ff;
+  --surface: #ffffff;
+  --fg: #4a4658;
+  --muted: #9a93ad;
+  --accent: #b9a6f0;      /* 라벤더 */
+  --accent-2: #7fded0;    /* 민트 */
+  --point: #ff9ec7;       /* 핑크 포인트(절제) */
+  --line: #e7def5;        /* 격자선 */
+  --line-strong: #c9bce8; /* 5칸 구분 굵은 선 */
+  --cell-empty: #f4eefb;  /* 빈 셀 바탕 */
+  --fill-mono: #5b5470;   /* 플레이 중 칠한 칸(colors.js FILL_MONO와 동기) */
+  --mark: #c9bce8;        /* X 표시 색 */
+  --star: #ffcf5c;        /* 별점 */
+  --shadow: 0 6px 18px rgba(120, 90, 170, 0.14);
 
   /* 간격 */
   --space-1: 4px;
   --space-2: 8px;
-  --space-3: 16px;
+  --space-3: 12px;
+  --space-4: 20px;
+  --space-5: 32px;
+
+  /* 모서리 */
+  --radius-1: 8px;
+  --radius-2: 14px;
+  --radius-pill: 999px;
 
   /* 폰트 */
   --font-body: system-ui, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --fs-title: 24px;
+  --fs-body: 15px;
+  --fs-clue: 13px;
+  --fs-small: 12px;
 
-  /* 보드 (셀 크기는 이 한 곳에서 파생) */
-  --cell: 32px;
+  /* 셀 크기 - 뷰포트 반응형(모바일 우선). 크기별 상한만 다르게. */
+  --cell: 34px;
 }
+
+/* 격자 크기별 셀 상한(반응형). 힌트와 격자가 같은 --cell을 쓰도록 .puzzle에 건다. */
+.puzzle[data-size="5"]  { --cell: clamp(40px, 14vw, 58px); }
+.puzzle[data-size="10"] { --cell: clamp(26px, 8vw, 42px); }
+.puzzle[data-size="15"] { --cell: clamp(18px, 5.6vw, 32px); }

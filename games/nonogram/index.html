@@ -2,17 +2,71 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0e0f13" />
-<title>Nonogram</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#fbf6ff" />
+<title>노노그램 - 숫자로 그리는 그림</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../../icons/icon-180.png" />
 <link rel="stylesheet" href="./styles/tokens.css" />
 <link rel="stylesheet" href="./styles/main.css" />
 </head>
 <body>
 <main id="app">
-  <h1>Nonogram</h1>
-  <p id="boot-status">준비 중…</p>
+
+  <!-- 스테이지 맵 -->
+  <section id="screen-map" class="screen active">
+    <div class="topbar">
+      <h1 class="title">노노그램</h1>
+      <span class="spacer"></span>
+      <button id="go-album" class="btn small">도감</button>
+    </div>
+    <div id="map-body"></div>
+  </section>
+
+  <!-- 플레이 -->
+  <section id="screen-play" class="screen">
+    <div class="play-head">
+      <button id="play-back" class="btn ghost">← 맵</button>
+      <span class="spacer"></span>
+      <span class="mistake-badge">실수 <b id="mistake-count">0</b></span>
+    </div>
+    <div id="coach" class="coach" hidden></div>
+    <div class="puzzle-wrap">
+      <div class="puzzle">
+        <div class="corner"></div>
+        <div id="col-clues" class="col-clues"></div>
+        <div id="row-clues" class="row-clues"></div>
+        <div id="board" class="board"></div>
+      </div>
+    </div>
+    <div class="mode-bar">
+      <button id="mode-fill" class="mode-btn active"><span class="swatch fill"></span>칠하기</button>
+      <button id="mode-mark" class="mode-btn"><span class="swatch mark">×</span>표시</button>
+    </div>
+    <p class="hint-line">숫자만큼 연속으로 칠해요. 틀린 곳은 지우면 돼요.</p>
+  </section>
+
+  <!-- 결과 -->
+  <section id="screen-result" class="screen">
+    <div class="result">
+      <div id="result-pic" class="result-pic"></div>
+      <div id="result-title" class="result-title"></div>
+      <div id="result-stars" class="result-stars"></div>
+      <div class="result-actions">
+        <button id="result-map" class="btn">맵으로</button>
+        <button id="result-next" class="btn primary">다음 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 도감 -->
+  <section id="screen-album" class="screen">
+    <div class="topbar">
+      <button id="album-back" class="btn ghost">← 맵</button>
+      <h1 class="title">도감</h1>
+    </div>
+    <div id="album-body" class="album-grid"></div>
+  </section>
+
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>

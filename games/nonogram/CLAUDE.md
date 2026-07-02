@@ -40,3 +40,4 @@
 
 ## 8. 변경 이력
 - 2026-07-02: html-game v0.2 적용 (초기 셋업, 컨셉 확정 전 골격)
+- 2026-07-02: 컨셉 확정 + 1차 구현 완료. docs 4종 확정(도감 수집형·실패 없음·터치 우선·크기 3단). core(hints/solver/board/stars) + data(constants/colors/puzzles 15종) + render 4뷰 + input + main 조립. 솔버 유일해·추측불필요 전수 검증 통과, 테스트 16/16 PASS. 실제 플레이 플로우(맵→풀이→클리어 변신→도감) browser-shot 검증 완료.
