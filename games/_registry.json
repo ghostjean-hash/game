@@ -35,6 +35,15 @@
       "status": "playable",
       "controls": ["touch"],
       "accent": "#e5484d"
+    },
+    {
+      "id": "nonogram",
+      "title": "Nonogram",
+      "subtitle": "숫자 힌트로 그리는 픽셀 퍼즐",
+      "path": "games/nonogram/",
+      "status": "wip",
+      "controls": ["touch", "keyboard"],
+      "accent": "#a78bfa"
     }
   ]
 }

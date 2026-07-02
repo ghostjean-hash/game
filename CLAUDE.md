@@ -35,6 +35,8 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 | `tetris` | playable | 라인을 지워라 |
 | `sudoku` | wip | 스마트 힌트로 배우는 스도쿠 (라이트 톤) |
 | `lotto` | wip | Blessed Lotto - 캐릭터 시드 기반 11전략 추천 |
+| `rushhour` | playable | 막힌 차를 빼내는 슬라이딩 퍼즐 |
+| `nonogram` | wip | 숫자 힌트로 그리는 픽셀 퍼즐 (노노그램) |
 
 1.1. 게임 등록부: `games/_registry.json`. 카드 클릭으로 진입.
 1.2. 새 세션이 특정 게임 작업 시 `games/<id>/CLAUDE.md` 자동 로드.

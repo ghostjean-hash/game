@@ -1,0 +1,20 @@
+/* 디자인 토큰 골격. UI 색 / 간격 / 폰트는 전부 여기 변수에서. 값 정의는 docs/02_data.md 참조.
+   컨셉 확정 시 채운다. 허브 공용 shared/tokens.css 활용 여부도 그때 결정. */
+
+:root {
+  /* 색 */
+  --bg: #0e0f13;
+  --fg: #e8ecf5;
+  --accent: #a78bfa;
+
+  /* 간격 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+
+  /* 폰트 */
+  --font-body: system-ui, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+
+  /* 보드 (셀 크기는 이 한 곳에서 파생) */
+  --cell: 32px;
+}

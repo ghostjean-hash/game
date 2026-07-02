@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nonogram 테스트</title>
+<style>
+  body { font-family: ui-monospace, Menlo, Consolas, monospace; background: #0e0f13; color: #e8ecf5; margin: 0; padding: 16px; }
+  h2 { font-size: 18px; }
+  h2.pass { color: #4ad8a3; }
+  h2.fail { color: #ff6b81; }
+  .row { padding: 2px 0; font-size: 13px; }
+  .row.pass { color: #9aa3b8; }
+  .row.fail { color: #ff6b81; }
+</style>
+</head>
+<body>
+<div id="out">실행 중…</div>
+<script type="module">
+  import { runAll } from './runner.js';
+  runAll();
+</script>
+</body>
+</html>
