@@ -513,3 +513,23 @@ Michael Fogleman의 Rush Hour DB(MIT)를 새 모드로 추가. 400 스테이지 
 ### self-critique (핵심)
 - X 버튼 검증을 bbox 숫자(33x33 정원)만 보고 "정렬 OK"로 넘겨 실제 화면(스크롤 시 밀림 / × 문자 아래 치우침)을 안 봤다. 사용자가 "화면 체크 안해??" 2회 격노. UI 검증은 숫자가 아니라 실제 상호작용(스크롤·확대) 스크린샷을 봐야 한다는 걸 값비싸게 재확인. #263 verify-real-user-path 동질 재발.
 - 요청의 핵심 한정어("깜빡임만" vs 표정까지)를 놓쳐 표정을 셀별로 만들었다가 되돌린 것도 같은 부류(지시 정밀 독해 부족).
+
+---
+
+## 2026-07-02 (19차, 세션 종료 sealing) - 보드게임 잔재 정리 + 구조표준 진단
+
+### 보드게임 모드 잔재 정리 (cc3e1ea)
+탭 제거(16차) 후 남아 있던 보드게임 자산을 정리했다. puzzles-boardgame.js 삭제, runner.js에서 BOARDGAME_PUZZLES import + 검증 테스트 2개 제거, main.js/docs의 보드게임 주석·서술을 오리지널/Fogleman 2모드 기준으로 정돈. 검증: 잔재 grep 0건, runner import OK, 게임 로드 무에러 + 맵 탭 [오리지널, Fogleman].
+
+### jarvis-init / jarvis-structure-sync 진단 (폴더 변경 0)
+사용자가 structure-sync가 "제대로 안 되는 것 같다"고 문의. 진단 결론:
+- game_ghost는 단일 프로젝트가 아니라 게임 허브(모노레포)다 - 최상위 PWA 허브 자산(index.html/manifest/service-worker/shared/icons) + games/ 하위 개별 게임.
+- 개별 게임(rushhour)은 별도 도메인이 아니고(.claude에 domain 키 없음) html-game 표준(v0.2, .standard 명시)을 따른다. rushhour 구조(docs/01_spec~04 + src/ + tests/ + assets/)는 html-game STANDARD.md §2를 이미 정확히 따르고 있다.
+- 자비스 글로벌 project-structure-standard(gdd/mockup/docs/plans/reference/feedback/dashboard/temp/_legacy)는 단일 프로젝트용이라 허브·게임 어디에도 맞지 않는다. 적용하면 html-game 표준과 충돌 + 빈 폴더 양산 + 배포 경로(icons→assets) 손상.
+- 결론: game-hub 도메인 전체(허브+게임)가 html-game 생태계라 자비스 글로벌 구조표준의 대상이 아니다. "제대로 안 되는" 원인은 잘못 쓴 게 아니라 애초에 이 도메인에 맞는 도구가 아니라는 것. 그래서 폴더 변경 0(진단만).
+
+### 남은 것 (structure-sync 방향, 사용자 결정 대기)
+사용자가 세 방향 중 미결: (1) 아무것도 안 함(rushhour는 이미 html-game 표준 부합) (2) game-hub `.claude/CLAUDE.md`에 "폴더 구조는 html-game 표준을 따르며 자비스 글로벌 구조표준 면제" 1줄 명시 (3) 글로벌 표준에 "스택 자체 폴더표준(html-game 등)을 쓰는 도메인은 글로벌 구조표준 면제" 규칙 추가(글로벌 작업이라 buffer 인계 필요). (2)나 (3)이 재발 방지에 유효.
+
+### self-critique
+- structure-sync 방향을 AskUserQuestion으로 "개별 게임 적용"까지 받은 뒤에야 개별 게임도 html-game 표준 대상이라 부적합함을 발견했다. 도메인이 어떤 스택 표준을 따르는지(.standard)를 처음부터 확인했으면 질문 전에 "이 도메인은 글로벌 구조표준 대상 아님"을 바로 짚었을 것. 사용자 결정을 받고 나서 전제를 뒤집는 순서 비효율.
