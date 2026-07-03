@@ -288,7 +288,7 @@ function win() {
   clearInProgress(id);
 
   el('finger').hidden = true;
-  revealColors(boardEl, cur.puzzle.grid, ANIM.REVEAL_STEP_MS);
+  revealColors(boardEl, cur.puzzle.grid, ANIM.REVEAL_STEP_MS, cur.puzzle.palette);
   setCursor(boardEl, -1, -1, cur.puzzle.size);
   sound.play('clear');
   const waveMs = (cur.puzzle.size * 2) * ANIM.REVEAL_STEP_MS + ANIM.RESULT_DELAY_MS;

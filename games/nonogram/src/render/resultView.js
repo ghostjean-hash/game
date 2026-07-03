@@ -4,7 +4,7 @@ import { MAX_STARS } from '../data/constants.js';
 import { fillPicture } from './pixel.js';
 
 export function renderResult(picEl, titleEl, starsEl, puzzle, stars) {
-  fillPicture(picEl, puzzle.grid, { mono: false });
+  fillPicture(picEl, puzzle.grid, { mono: false, palette: puzzle.palette });
   titleEl.textContent = `${puzzle.title} 완성!`;
   // 별이 하나씩 순서대로 튀어나오도록 delay 부여.
   starsEl.innerHTML = Array.from({ length: MAX_STARS }, (_, i) => {

@@ -23,7 +23,7 @@ export function renderAlbum(container, progress) {
 
     const pic = document.createElement('div');
     pic.className = 'album-pic';
-    fillPicture(pic, p.grid, { mono: !cleared });
+    fillPicture(pic, p.grid, { mono: !cleared, palette: p.palette });
 
     const name = document.createElement('div');
     name.className = 'album-name';

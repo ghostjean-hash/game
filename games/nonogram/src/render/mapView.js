@@ -52,7 +52,7 @@ export function renderMap(container, progress, onSelect) {
 
       const thumb = document.createElement('div');
       thumb.className = 'stage-thumb';
-      fillPicture(thumb, p.grid, { mono: !isClear });
+      fillPicture(thumb, p.grid, { mono: !isClear, palette: p.palette });
 
       const name = document.createElement('div');
       name.className = 'stage-name';

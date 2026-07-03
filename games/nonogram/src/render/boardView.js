@@ -81,7 +81,9 @@ export function sparkleLines(boardEl, board, flags) {
 }
 
 // 클리어 시 컬러 변신: 채운 칸을 정답 색으로. 왼쪽 위부터 대각선 파도(순차 지연).
-export function revealColors(boardEl, grid, stepMs) {
+// palette를 주면 그 퍼즐 전용 색표, 없으면 전역 PALETTE.
+export function revealColors(boardEl, grid, stepMs, palette) {
+  const pal = palette || PALETTE;
   const cells = boardEl.children;
   let i = 0;
   const n = grid.length;
@@ -93,7 +95,7 @@ export function revealColors(boardEl, grid, stepMs) {
       if (v !== 0) {
         el.style.transitionDelay = `${(r + c) * stepMs}ms`;
         el.classList.add('reveal');
-        el.style.setProperty('--rc', PALETTE[v]);
+        el.style.setProperty('--rc', pal[v]);
       }
     }
   }
