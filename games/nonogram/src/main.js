@@ -163,13 +163,25 @@ function setMode(mode) {
   store.set('mode', mode);
 }
 
+// 맞게 칠한 칸(정답 칠칸)은 잠긴다: 지우기 불가.
+function isCorrectFilled(r, c) {
+  return cur.board.cells[r][c] === CELL.FILLED && cur.solution[r][c] === true;
+}
+
+// 칠하기 모드에서 이미 칠한 칸은 "틀린 칸(붉은)"만 지우고, 맞은 칸은 잠금(null=무동작).
 function decideAction(r, c) {
   const st = cur.board.cells[r][c];
-  if (cur.mode === MODE.FILL) return st === CELL.FILLED ? 'erase' : 'fill';
+  if (cur.mode === MODE.FILL) {
+    if (st === CELL.FILLED) return cur.solution[r][c] === false ? 'erase' : null;
+    return 'fill';
+  }
   return st === CELL.MARKED ? 'erase' : 'mark';
 }
 
 function applyAction(r, c) {
+  if (!cur.dragAction) return; // 잠긴 맞은 칸(무동작)
+  // 지우기 드래그가 맞게 칠한 칸을 지나가도 그 칸은 건너뛴다(잠금 유지).
+  if (cur.dragAction === 'erase' && isCorrectFilled(r, c)) return;
   const target = cur.dragAction === 'fill' ? CELL.FILLED
     : cur.dragAction === 'mark' ? CELL.MARKED
       : CELL.EMPTY;
@@ -254,9 +266,10 @@ function useHelp() {
 }
 
 function onPaintStart(r, c) {
-  pushHistory();
   cur.dragAction = decideAction(r, c);
   cur.cursor = { r, c };
+  if (!cur.dragAction) return; // 잠긴 맞은 칸: 히스토리도 남기지 않음
+  pushHistory();
   applyAction(r, c);
 }
 function onPaintMove(r, c) { applyAction(r, c); }
@@ -310,13 +323,15 @@ function onKey(e) {
     case 'ArrowLeft': moveCursor(0, -1); break;
     case 'ArrowRight': moveCursor(0, 1); break;
     case ' ': case 'Enter':
-      setMode(MODE.FILL); pushHistory();
-      cur.dragAction = decideAction(r, c); applyAction(r, c);
+      setMode(MODE.FILL);
+      cur.dragAction = decideAction(r, c);
+      if (cur.dragAction) { pushHistory(); applyAction(r, c); }
       if (isSolved(cur.board, cur.solution)) win();
       break;
     case 'x': case 'X':
-      setMode(MODE.MARK); pushHistory();
-      cur.dragAction = decideAction(r, c); applyAction(r, c);
+      setMode(MODE.MARK);
+      cur.dragAction = decideAction(r, c);
+      if (cur.dragAction) { pushHistory(); applyAction(r, c); }
       break;
     case 'z': case 'Z': undo(); break;
     default: return;
