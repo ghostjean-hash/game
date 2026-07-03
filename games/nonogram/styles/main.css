@@ -252,17 +252,18 @@ button {
 /* 완성 줄 힌트 흐리게 */
 .clue-col.done, .clue-row.done { opacity: 0.28; transition: opacity 0.2s ease; }
 
-/* 틀린 칸: 붉은 배경 + 흰 느낌표(색+형태 이중 신호, 색약 배려). 옅게 남김 + 처음 한 번 물결 */
-.cell.wrong { background: var(--wrong) !important; animation: wrong-pulse 0.5s ease; }
+/* 틀린 칸: 정상 칠 색(fill-mono) 그대로 두고 그 위에 느낌표(!)만 얹어 "지워야 할 칸"임을 알림.
+   배경을 바꾸지 않아 "칠은 됐지만 틀림"이 또렷하다. 처음 한 번 붉은 테두리로 위치를 짚는다. */
+.cell.wrong { animation: wrong-pulse 0.55s ease; }
 .cell.wrong::after {
   content: '!'; color: #fff; font-weight: 900;
-  font-size: calc(var(--cell) * 0.62); line-height: 1;
-  text-shadow: 0 1px 1px rgba(180,40,60,0.5);
+  font-size: calc(var(--cell) * 0.64); line-height: 1;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.45);
 }
 @keyframes wrong-pulse {
-  0% { box-shadow: inset 0 0 0 4px rgba(255,255,255,0.9); }
-  60% { box-shadow: inset 0 0 0 4px rgba(255,255,255,0.9); }
-  100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); }
+  0% { box-shadow: inset 0 0 0 4px var(--wrong); }
+  70% { box-shadow: inset 0 0 0 4px var(--wrong); }
+  100% { box-shadow: inset 0 0 0 0 rgba(255,125,143,0); }
 }
 
 /* 누를 때 톡 */
