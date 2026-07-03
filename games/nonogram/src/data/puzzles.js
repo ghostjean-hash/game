@@ -2,6 +2,7 @@
 // 힌트는 hints.js가 자동 생성한다. 모든 퍼즐은 solver.verifyPuzzle 통과분만 포함
 // (줄 논리로 추측 없이 풀림 + 유일해). tests/가 전수 검증한다. docs/02_data.md 3장.
 // 초급/중급 다수는 랜덤 대칭 모양을 solver로 검증해 채택한 생성 퍼즐(수제 그림은 앞쪽).
+// 각 퍼즐은 도감 수집용 고유 이름을 가진다(생성 퍼즐은 이름 풀에서 배정).
 
 export const PUZZLES = [
   {
@@ -95,7 +96,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e1', title: '초급 7', size: 5, difficulty: 'easy',
+    id: 'e1', title: '장미', size: 5, difficulty: 'easy',
     grid: [
       [0, 10, 0, 10, 0],
       [0, 0, 10, 0, 0],
@@ -105,7 +106,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e2', title: '초급 8', size: 5, difficulty: 'easy',
+    id: 'e2', title: '튤립', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 8, 0, 0],
       [4, 0, 0, 0, 4],
@@ -115,7 +116,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e3', title: '초급 9', size: 5, difficulty: 'easy',
+    id: 'e3', title: '벚꽃', size: 5, difficulty: 'easy',
     grid: [
       [0, 7, 7, 7, 0],
       [5, 0, 5, 0, 5],
@@ -125,7 +126,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e4', title: '초급 10', size: 5, difficulty: 'easy',
+    id: 'e4', title: '해바라기', size: 5, difficulty: 'easy',
     grid: [
       [3, 3, 3, 3, 3],
       [0, 3, 3, 3, 0],
@@ -135,7 +136,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e5', title: '초급 11', size: 5, difficulty: 'easy',
+    id: 'e5', title: '민들레', size: 5, difficulty: 'easy',
     grid: [
       [7, 7, 7, 7, 7],
       [7, 7, 0, 7, 7],
@@ -145,7 +146,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e6', title: '초급 12', size: 5, difficulty: 'easy',
+    id: 'e6', title: '제비꽃', size: 5, difficulty: 'easy',
     grid: [
       [3, 3, 0, 3, 3],
       [0, 3, 3, 3, 0],
@@ -155,7 +156,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e7', title: '초급 13', size: 5, difficulty: 'easy',
+    id: 'e7', title: '나팔꽃', size: 5, difficulty: 'easy',
     grid: [
       [5, 0, 5, 0, 5],
       [7, 7, 0, 7, 7],
@@ -165,7 +166,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e8', title: '초급 14', size: 5, difficulty: 'easy',
+    id: 'e8', title: '코스모스', size: 5, difficulty: 'easy',
     grid: [
       [1, 1, 1, 1, 1],
       [1, 0, 0, 0, 1],
@@ -175,7 +176,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e9', title: '초급 15', size: 5, difficulty: 'easy',
+    id: 'e9', title: '수국', size: 5, difficulty: 'easy',
     grid: [
       [3, 0, 3, 0, 3],
       [0, 3, 3, 3, 0],
@@ -185,7 +186,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e10', title: '초급 16', size: 5, difficulty: 'easy',
+    id: 'e10', title: '백합', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 0, 0, 0],
       [9, 9, 9, 9, 9],
@@ -195,7 +196,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e11', title: '초급 17', size: 5, difficulty: 'easy',
+    id: 'e11', title: '데이지', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 10, 0, 0],
       [0, 0, 10, 0, 0],
@@ -205,7 +206,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e12', title: '초급 18', size: 5, difficulty: 'easy',
+    id: 'e12', title: '라벤더', size: 5, difficulty: 'easy',
     grid: [
       [7, 7, 7, 7, 7],
       [0, 7, 0, 7, 0],
@@ -215,7 +216,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e13', title: '초급 19', size: 5, difficulty: 'easy',
+    id: 'e13', title: '목련', size: 5, difficulty: 'easy',
     grid: [
       [0, 10, 10, 10, 0],
       [10, 0, 10, 0, 10],
@@ -225,7 +226,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e14', title: '초급 20', size: 5, difficulty: 'easy',
+    id: 'e14', title: '진달래', size: 5, difficulty: 'easy',
     grid: [
       [0, 10, 0, 10, 0],
       [0, 0, 0, 0, 0],
@@ -235,7 +236,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e15', title: '초급 21', size: 5, difficulty: 'easy',
+    id: 'e15', title: '동백', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 0, 0, 0],
       [4, 0, 4, 0, 4],
@@ -245,7 +246,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e16', title: '초급 22', size: 5, difficulty: 'easy',
+    id: 'e16', title: '매화', size: 5, difficulty: 'easy',
     grid: [
       [0, 1, 1, 1, 0],
       [1, 0, 0, 0, 1],
@@ -255,7 +256,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e17', title: '초급 23', size: 5, difficulty: 'easy',
+    id: 'e17', title: '국화', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 0, 0, 0],
       [0, 5, 5, 5, 0],
@@ -265,7 +266,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e18', title: '초급 24', size: 5, difficulty: 'easy',
+    id: 'e18', title: '카네이션', size: 5, difficulty: 'easy',
     grid: [
       [9, 9, 9, 9, 9],
       [9, 9, 0, 9, 9],
@@ -275,7 +276,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e19', title: '초급 25', size: 5, difficulty: 'easy',
+    id: 'e19', title: '프리지아', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 4, 0, 0],
       [0, 3, 3, 3, 0],
@@ -285,7 +286,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e20', title: '초급 26', size: 5, difficulty: 'easy',
+    id: 'e20', title: '붓꽃', size: 5, difficulty: 'easy',
     grid: [
       [7, 0, 7, 0, 7],
       [0, 1, 0, 1, 0],
@@ -295,7 +296,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e21', title: '초급 27', size: 5, difficulty: 'easy',
+    id: 'e21', title: '무궁화', size: 5, difficulty: 'easy',
     grid: [
       [5, 5, 0, 5, 5],
       [0, 0, 5, 0, 0],
@@ -305,7 +306,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e22', title: '초급 28', size: 5, difficulty: 'easy',
+    id: 'e22', title: '봉선화', size: 5, difficulty: 'easy',
     grid: [
       [0, 4, 4, 4, 0],
       [0, 0, 0, 0, 0],
@@ -315,7 +316,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e23', title: '초급 29', size: 5, difficulty: 'easy',
+    id: 'e23', title: '채송화', size: 5, difficulty: 'easy',
     grid: [
       [1, 0, 1, 0, 1],
       [0, 0, 1, 0, 0],
@@ -325,7 +326,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e24', title: '초급 30', size: 5, difficulty: 'easy',
+    id: 'e24', title: '팬지', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 3, 0, 0],
       [3, 0, 3, 0, 3],
@@ -335,7 +336,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e25', title: '초급 31', size: 5, difficulty: 'easy',
+    id: 'e25', title: '수선화', size: 5, difficulty: 'easy',
     grid: [
       [0, 5, 0, 5, 0],
       [0, 1, 1, 1, 0],
@@ -345,7 +346,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e26', title: '초급 32', size: 5, difficulty: 'easy',
+    id: 'e26', title: '작약', size: 5, difficulty: 'easy',
     grid: [
       [9, 9, 9, 9, 9],
       [0, 9, 9, 9, 0],
@@ -355,7 +356,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e27', title: '초급 33', size: 5, difficulty: 'easy',
+    id: 'e27', title: '모란', size: 5, difficulty: 'easy',
     grid: [
       [10, 0, 10, 0, 10],
       [0, 0, 6, 0, 0],
@@ -365,7 +366,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e28', title: '초급 34', size: 5, difficulty: 'easy',
+    id: 'e28', title: '개나리', size: 5, difficulty: 'easy',
     grid: [
       [6, 0, 6, 0, 6],
       [0, 7, 7, 7, 0],
@@ -375,7 +376,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e29', title: '초급 35', size: 5, difficulty: 'easy',
+    id: 'e29', title: '철쭉', size: 5, difficulty: 'easy',
     grid: [
       [10, 10, 10, 10, 10],
       [1, 0, 1, 0, 1],
@@ -385,7 +386,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e30', title: '초급 36', size: 5, difficulty: 'easy',
+    id: 'e30', title: '안개꽃', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 0, 0, 0],
       [0, 3, 3, 3, 0],
@@ -395,7 +396,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e31', title: '초급 37', size: 5, difficulty: 'easy',
+    id: 'e31', title: '사과', size: 5, difficulty: 'easy',
     grid: [
       [5, 0, 5, 0, 5],
       [5, 0, 0, 0, 5],
@@ -405,7 +406,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e32', title: '초급 38', size: 5, difficulty: 'easy',
+    id: 'e32', title: '딸기', size: 5, difficulty: 'easy',
     grid: [
       [8, 0, 8, 0, 8],
       [10, 0, 0, 0, 10],
@@ -415,7 +416,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e33', title: '초급 39', size: 5, difficulty: 'easy',
+    id: 'e33', title: '포도', size: 5, difficulty: 'easy',
     grid: [
       [5, 5, 5, 5, 5],
       [8, 8, 8, 8, 8],
@@ -425,7 +426,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e34', title: '초급 40', size: 5, difficulty: 'easy',
+    id: 'e34', title: '수박', size: 5, difficulty: 'easy',
     grid: [
       [0, 1, 0, 1, 0],
       [0, 3, 0, 3, 0],
@@ -435,7 +436,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e35', title: '초급 41', size: 5, difficulty: 'easy',
+    id: 'e35', title: '참외', size: 5, difficulty: 'easy',
     grid: [
       [8, 0, 0, 0, 8],
       [8, 0, 8, 0, 8],
@@ -445,7 +446,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e36', title: '초급 42', size: 5, difficulty: 'easy',
+    id: 'e36', title: '복숭아', size: 5, difficulty: 'easy',
     grid: [
       [0, 1, 1, 1, 0],
       [0, 1, 1, 1, 0],
@@ -455,7 +456,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e37', title: '초급 43', size: 5, difficulty: 'easy',
+    id: 'e37', title: '체리', size: 5, difficulty: 'easy',
     grid: [
       [6, 0, 6, 0, 6],
       [3, 0, 3, 0, 3],
@@ -465,7 +466,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e38', title: '초급 44', size: 5, difficulty: 'easy',
+    id: 'e38', title: '레몬', size: 5, difficulty: 'easy',
     grid: [
       [10, 0, 0, 0, 10],
       [0, 10, 0, 10, 0],
@@ -475,7 +476,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e39', title: '초급 45', size: 5, difficulty: 'easy',
+    id: 'e39', title: '오렌지', size: 5, difficulty: 'easy',
     grid: [
       [9, 9, 0, 9, 9],
       [9, 9, 0, 9, 9],
@@ -485,7 +486,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e40', title: '초급 46', size: 5, difficulty: 'easy',
+    id: 'e40', title: '바나나', size: 5, difficulty: 'easy',
     grid: [
       [10, 0, 0, 0, 10],
       [0, 10, 10, 10, 0],
@@ -495,7 +496,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e41', title: '초급 47', size: 5, difficulty: 'easy',
+    id: 'e41', title: '키위', size: 5, difficulty: 'easy',
     grid: [
       [0, 10, 10, 10, 0],
       [7, 7, 7, 7, 7],
@@ -505,7 +506,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e42', title: '초급 48', size: 5, difficulty: 'easy',
+    id: 'e42', title: '망고', size: 5, difficulty: 'easy',
     grid: [
       [7, 7, 0, 7, 7],
       [6, 6, 6, 6, 6],
@@ -515,7 +516,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e43', title: '초급 49', size: 5, difficulty: 'easy',
+    id: 'e43', title: '파인애플', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 10, 0, 0],
       [0, 10, 0, 10, 0],
@@ -525,7 +526,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e44', title: '초급 50', size: 5, difficulty: 'easy',
+    id: 'e44', title: '블루베리', size: 5, difficulty: 'easy',
     grid: [
       [4, 0, 4, 0, 4],
       [0, 4, 0, 4, 0],
@@ -535,7 +536,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e45', title: '초급 51', size: 5, difficulty: 'easy',
+    id: 'e45', title: '자두', size: 5, difficulty: 'easy',
     grid: [
       [3, 0, 3, 0, 3],
       [0, 3, 3, 3, 0],
@@ -545,7 +546,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e46', title: '초급 52', size: 5, difficulty: 'easy',
+    id: 'e46', title: '감', size: 5, difficulty: 'easy',
     grid: [
       [4, 4, 4, 4, 4],
       [4, 4, 4, 4, 4],
@@ -555,7 +556,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e47', title: '초급 53', size: 5, difficulty: 'easy',
+    id: 'e47', title: '배', size: 5, difficulty: 'easy',
     grid: [
       [3, 0, 3, 0, 3],
       [3, 0, 3, 0, 3],
@@ -565,7 +566,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e48', title: '초급 54', size: 5, difficulty: 'easy',
+    id: 'e48', title: '귤', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 10, 0, 0],
       [0, 0, 10, 0, 0],
@@ -575,7 +576,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e49', title: '초급 55', size: 5, difficulty: 'easy',
+    id: 'e49', title: '석류', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 4, 0, 0],
       [4, 0, 0, 0, 4],
@@ -585,7 +586,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e50', title: '초급 56', size: 5, difficulty: 'easy',
+    id: 'e50', title: '무화과', size: 5, difficulty: 'easy',
     grid: [
       [0, 6, 0, 6, 0],
       [6, 0, 6, 0, 6],
@@ -595,7 +596,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e51', title: '초급 57', size: 5, difficulty: 'easy',
+    id: 'e51', title: '살구', size: 5, difficulty: 'easy',
     grid: [
       [9, 9, 9, 9, 9],
       [9, 0, 9, 0, 9],
@@ -605,7 +606,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e52', title: '초급 58', size: 5, difficulty: 'easy',
+    id: 'e52', title: '앵두', size: 5, difficulty: 'easy',
     grid: [
       [0, 5, 5, 5, 0],
       [5, 0, 0, 0, 5],
@@ -615,7 +616,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e53', title: '초급 59', size: 5, difficulty: 'easy',
+    id: 'e53', title: '매실', size: 5, difficulty: 'easy',
     grid: [
       [7, 7, 7, 7, 7],
       [0, 0, 0, 0, 0],
@@ -625,7 +626,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e54', title: '초급 60', size: 5, difficulty: 'easy',
+    id: 'e54', title: '대추', size: 5, difficulty: 'easy',
     grid: [
       [7, 7, 7, 7, 7],
       [7, 0, 7, 0, 7],
@@ -635,7 +636,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e55', title: '초급 61', size: 5, difficulty: 'easy',
+    id: 'e55', title: '라임', size: 5, difficulty: 'easy',
     grid: [
       [4, 4, 4, 4, 4],
       [4, 4, 0, 4, 4],
@@ -645,7 +646,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e56', title: '초급 62', size: 5, difficulty: 'easy',
+    id: 'e56', title: '자몽', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 9, 0, 0],
       [9, 0, 9, 0, 9],
@@ -655,7 +656,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e57', title: '초급 63', size: 5, difficulty: 'easy',
+    id: 'e57', title: '멜론', size: 5, difficulty: 'easy',
     grid: [
       [9, 9, 9, 9, 9],
       [7, 0, 0, 0, 7],
@@ -665,7 +666,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e58', title: '초급 64', size: 5, difficulty: 'easy',
+    id: 'e58', title: '산딸기', size: 5, difficulty: 'easy',
     grid: [
       [3, 3, 3, 3, 3],
       [3, 3, 3, 3, 3],
@@ -675,7 +676,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e59', title: '초급 65', size: 5, difficulty: 'easy',
+    id: 'e59', title: '홍시', size: 5, difficulty: 'easy',
     grid: [
       [4, 4, 4, 4, 4],
       [9, 0, 0, 0, 9],
@@ -685,7 +686,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e60', title: '초급 66', size: 5, difficulty: 'easy',
+    id: 'e60', title: '유자', size: 5, difficulty: 'easy',
     grid: [
       [0, 5, 0, 5, 0],
       [8, 8, 8, 8, 8],
@@ -695,7 +696,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e61', title: '초급 67', size: 5, difficulty: 'easy',
+    id: 'e61', title: '토끼', size: 5, difficulty: 'easy',
     grid: [
       [7, 0, 0, 0, 7],
       [3, 3, 3, 3, 3],
@@ -705,7 +706,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e62', title: '초급 68', size: 5, difficulty: 'easy',
+    id: 'e62', title: '강아지', size: 5, difficulty: 'easy',
     grid: [
       [0, 9, 9, 9, 0],
       [0, 0, 0, 0, 0],
@@ -715,7 +716,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e63', title: '초급 69', size: 5, difficulty: 'easy',
+    id: 'e63', title: '곰돌이', size: 5, difficulty: 'easy',
     grid: [
       [0, 6, 6, 6, 0],
       [6, 0, 6, 0, 6],
@@ -725,7 +726,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e64', title: '초급 70', size: 5, difficulty: 'easy',
+    id: 'e64', title: '여우', size: 5, difficulty: 'easy',
     grid: [
       [0, 4, 0, 4, 0],
       [9, 9, 0, 9, 9],
@@ -735,7 +736,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e65', title: '초급 71', size: 5, difficulty: 'easy',
+    id: 'e65', title: '사슴', size: 5, difficulty: 'easy',
     grid: [
       [0, 6, 0, 6, 0],
       [6, 0, 6, 0, 6],
@@ -745,7 +746,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e66', title: '초급 72', size: 5, difficulty: 'easy',
+    id: 'e66', title: '다람쥐', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 8, 0, 0],
       [9, 9, 0, 9, 9],
@@ -755,7 +756,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e67', title: '초급 73', size: 5, difficulty: 'easy',
+    id: 'e67', title: '판다', size: 5, difficulty: 'easy',
     grid: [
       [0, 3, 0, 3, 0],
       [4, 0, 0, 0, 4],
@@ -765,7 +766,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e68', title: '초급 74', size: 5, difficulty: 'easy',
+    id: 'e68', title: '코끼리', size: 5, difficulty: 'easy',
     grid: [
       [4, 0, 0, 0, 4],
       [0, 10, 10, 10, 0],
@@ -775,7 +776,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e69', title: '초급 75', size: 5, difficulty: 'easy',
+    id: 'e69', title: '기린', size: 5, difficulty: 'easy',
     grid: [
       [10, 10, 0, 10, 10],
       [0, 10, 10, 10, 0],
@@ -785,7 +786,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e70', title: '초급 76', size: 5, difficulty: 'easy',
+    id: 'e70', title: '펭귄', size: 5, difficulty: 'easy',
     grid: [
       [4, 4, 0, 4, 4],
       [4, 0, 0, 0, 4],
@@ -795,7 +796,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e71', title: '초급 77', size: 5, difficulty: 'easy',
+    id: 'e71', title: '부엉이', size: 5, difficulty: 'easy',
     grid: [
       [1, 0, 0, 0, 1],
       [0, 1, 1, 1, 0],
@@ -805,7 +806,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e72', title: '초급 78', size: 5, difficulty: 'easy',
+    id: 'e72', title: '벌', size: 5, difficulty: 'easy',
     grid: [
       [0, 6, 6, 6, 0],
       [6, 0, 6, 0, 6],
@@ -815,7 +816,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e73', title: '초급 79', size: 5, difficulty: 'easy',
+    id: 'e73', title: '무당벌레', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 6, 0, 0],
       [6, 6, 6, 6, 6],
@@ -825,7 +826,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e74', title: '초급 80', size: 5, difficulty: 'easy',
+    id: 'e74', title: '달팽이', size: 5, difficulty: 'easy',
     grid: [
       [0, 5, 5, 5, 0],
       [10, 10, 10, 10, 10],
@@ -835,7 +836,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e75', title: '초급 81', size: 5, difficulty: 'easy',
+    id: 'e75', title: '금붕어', size: 5, difficulty: 'easy',
     grid: [
       [1, 0, 1, 0, 1],
       [0, 1, 1, 1, 0],
@@ -845,7 +846,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e76', title: '초급 82', size: 5, difficulty: 'easy',
+    id: 'e76', title: '돌고래', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 0, 0, 0],
       [1, 0, 1, 0, 1],
@@ -855,7 +856,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e77', title: '초급 83', size: 5, difficulty: 'easy',
+    id: 'e77', title: '거북이', size: 5, difficulty: 'easy',
     grid: [
       [6, 6, 6, 6, 6],
       [0, 1, 1, 1, 0],
@@ -865,7 +866,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e78', title: '초급 84', size: 5, difficulty: 'easy',
+    id: 'e78', title: '병아리', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 9, 0, 0],
       [0, 4, 4, 4, 0],
@@ -875,7 +876,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e79', title: '초급 85', size: 5, difficulty: 'easy',
+    id: 'e79', title: '백조', size: 5, difficulty: 'easy',
     grid: [
       [10, 0, 10, 0, 10],
       [10, 0, 0, 0, 10],
@@ -885,7 +886,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e80', title: '초급 86', size: 5, difficulty: 'easy',
+    id: 'e80', title: '사자', size: 5, difficulty: 'easy',
     grid: [
       [10, 0, 10, 0, 10],
       [0, 0, 0, 0, 0],
@@ -895,7 +896,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e81', title: '초급 87', size: 5, difficulty: 'easy',
+    id: 'e81', title: '호랑이', size: 5, difficulty: 'easy',
     grid: [
       [3, 3, 3, 3, 3],
       [3, 0, 3, 0, 3],
@@ -905,7 +906,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e82', title: '초급 88', size: 5, difficulty: 'easy',
+    id: 'e82', title: '얼룩말', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 8, 0, 0],
       [0, 9, 0, 9, 0],
@@ -915,7 +916,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e83', title: '초급 89', size: 5, difficulty: 'easy',
+    id: 'e83', title: '코알라', size: 5, difficulty: 'easy',
     grid: [
       [0, 6, 0, 6, 0],
       [6, 6, 0, 6, 6],
@@ -925,7 +926,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e84', title: '초급 90', size: 5, difficulty: 'easy',
+    id: 'e84', title: '캥거루', size: 5, difficulty: 'easy',
     grid: [
       [0, 8, 8, 8, 0],
       [0, 3, 0, 3, 0],
@@ -935,7 +936,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e85', title: '초급 91', size: 5, difficulty: 'easy',
+    id: 'e85', title: '고슴도치', size: 5, difficulty: 'easy',
     grid: [
       [1, 0, 1, 0, 1],
       [0, 1, 1, 1, 0],
@@ -945,7 +946,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e86', title: '초급 92', size: 5, difficulty: 'easy',
+    id: 'e86', title: '너구리', size: 5, difficulty: 'easy',
     grid: [
       [6, 6, 0, 6, 6],
       [0, 0, 6, 0, 0],
@@ -955,7 +956,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e87', title: '초급 93', size: 5, difficulty: 'easy',
+    id: 'e87', title: '수달', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 0, 0, 0],
       [7, 0, 0, 0, 7],
@@ -965,7 +966,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e88', title: '초급 94', size: 5, difficulty: 'easy',
+    id: 'e88', title: '햄스터', size: 5, difficulty: 'easy',
     grid: [
       [0, 0, 9, 0, 0],
       [3, 3, 0, 3, 3],
@@ -975,7 +976,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e89', title: '초급 95', size: 5, difficulty: 'easy',
+    id: 'e89', title: '개구리', size: 5, difficulty: 'easy',
     grid: [
       [1, 1, 0, 1, 1],
       [0, 7, 7, 7, 0],
@@ -985,7 +986,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e90', title: '초급 96', size: 5, difficulty: 'easy',
+    id: 'e90', title: '잠자리', size: 5, difficulty: 'easy',
     grid: [
       [0, 8, 8, 8, 0],
       [8, 0, 8, 0, 8],
@@ -995,7 +996,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e91', title: '초급 97', size: 5, difficulty: 'easy',
+    id: 'e91', title: '사탕', size: 5, difficulty: 'easy',
     grid: [
       [0, 3, 3, 3, 0],
       [8, 8, 8, 8, 8],
@@ -1005,7 +1006,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e92', title: '초급 98', size: 5, difficulty: 'easy',
+    id: 'e92', title: '초콜릿', size: 5, difficulty: 'easy',
     grid: [
       [0, 10, 0, 10, 0],
       [9, 9, 9, 9, 9],
@@ -1015,7 +1016,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e93', title: '초급 99', size: 5, difficulty: 'easy',
+    id: 'e93', title: '쿠키', size: 5, difficulty: 'easy',
     grid: [
       [9, 9, 0, 9, 9],
       [9, 0, 9, 0, 9],
@@ -1025,7 +1026,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e94', title: '초급 100', size: 5, difficulty: 'easy',
+    id: 'e94', title: '케이크', size: 5, difficulty: 'easy',
     grid: [
       [6, 6, 0, 6, 6],
       [0, 6, 6, 6, 0],
@@ -1125,7 +1126,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm1', title: '중급 7', size: 10, difficulty: 'medium',
+    id: 'm1', title: '도넛', size: 10, difficulty: 'medium',
     grid: [
       [10, 0, 0, 10, 10, 10, 10, 0, 0, 10],
       [0, 0, 10, 0, 10, 10, 0, 10, 0, 0],
@@ -1140,7 +1141,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm2', title: '중급 8', size: 10, difficulty: 'medium',
+    id: 'm2', title: '아이스크림', size: 10, difficulty: 'medium',
     grid: [
       [7, 0, 7, 7, 0, 0, 7, 7, 0, 7],
       [7, 7, 7, 7, 0, 0, 7, 7, 7, 7],
@@ -1155,7 +1156,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm3', title: '중급 9', size: 10, difficulty: 'medium',
+    id: 'm3', title: '마카롱', size: 10, difficulty: 'medium',
     grid: [
       [8, 0, 8, 0, 8, 8, 0, 8, 0, 8],
       [8, 0, 8, 0, 0, 0, 0, 8, 0, 8],
@@ -1170,7 +1171,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm4', title: '중급 10', size: 10, difficulty: 'medium',
+    id: 'm4', title: '젤리', size: 10, difficulty: 'medium',
     grid: [
       [0, 3, 3, 3, 0, 0, 3, 3, 3, 0],
       [5, 5, 0, 0, 5, 5, 0, 0, 5, 5],
@@ -1185,7 +1186,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm5', title: '중급 11', size: 10, difficulty: 'medium',
+    id: 'm5', title: '솜사탕', size: 10, difficulty: 'medium',
     grid: [
       [0, 6, 6, 6, 6, 6, 6, 6, 6, 0],
       [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
@@ -1200,7 +1201,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm6', title: '중급 12', size: 10, difficulty: 'medium',
+    id: 'm6', title: '푸딩', size: 10, difficulty: 'medium',
     grid: [
       [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
       [9, 9, 9, 0, 0, 0, 0, 9, 9, 9],
@@ -1215,7 +1216,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm7', title: '중급 13', size: 10, difficulty: 'medium',
+    id: 'm7', title: '컵케이크', size: 10, difficulty: 'medium',
     grid: [
       [3, 0, 3, 3, 3, 3, 3, 3, 0, 3],
       [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
@@ -1230,7 +1231,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm8', title: '중급 14', size: 10, difficulty: 'medium',
+    id: 'm8', title: '와플', size: 10, difficulty: 'medium',
     grid: [
       [5, 5, 5, 0, 5, 5, 0, 5, 5, 5],
       [5, 5, 5, 0, 0, 0, 0, 5, 5, 5],
@@ -1245,7 +1246,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm9', title: '중급 15', size: 10, difficulty: 'medium',
+    id: 'm9', title: '크레페', size: 10, difficulty: 'medium',
     grid: [
       [4, 4, 4, 0, 0, 0, 0, 4, 4, 4],
       [0, 6, 6, 0, 6, 6, 0, 6, 6, 0],
@@ -1260,7 +1261,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm10', title: '중급 16', size: 10, difficulty: 'medium',
+    id: 'm10', title: '롤케이크', size: 10, difficulty: 'medium',
     grid: [
       [6, 0, 6, 6, 0, 0, 6, 6, 0, 6],
       [6, 0, 6, 0, 6, 6, 0, 6, 0, 6],
@@ -1275,7 +1276,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm11', title: '중급 17', size: 10, difficulty: 'medium',
+    id: 'm11', title: '머핀', size: 10, difficulty: 'medium',
     grid: [
       [4, 4, 0, 4, 0, 0, 4, 0, 4, 4],
       [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
@@ -1290,7 +1291,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm12', title: '중급 18', size: 10, difficulty: 'medium',
+    id: 'm12', title: '비스킷', size: 10, difficulty: 'medium',
     grid: [
       [0, 7, 0, 0, 0, 0, 0, 0, 7, 0],
       [0, 7, 7, 0, 0, 0, 0, 7, 7, 0],
@@ -1305,7 +1306,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm13', title: '중급 19', size: 10, difficulty: 'medium',
+    id: 'm13', title: '슈크림', size: 10, difficulty: 'medium',
     grid: [
       [0, 0, 0, 0, 5, 5, 0, 0, 0, 0],
       [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
@@ -1320,7 +1321,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm14', title: '중급 20', size: 10, difficulty: 'medium',
+    id: 'm14', title: '타르트', size: 10, difficulty: 'medium',
     grid: [
       [9, 0, 0, 9, 0, 0, 9, 0, 0, 9],
       [9, 9, 9, 0, 0, 0, 0, 9, 9, 9],
@@ -1335,7 +1336,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm15', title: '중급 21', size: 10, difficulty: 'medium',
+    id: 'm15', title: '브라우니', size: 10, difficulty: 'medium',
     grid: [
       [0, 9, 9, 0, 0, 0, 0, 9, 9, 0],
       [3, 0, 0, 0, 0, 0, 0, 0, 0, 3],
@@ -1350,7 +1351,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm16', title: '중급 22', size: 10, difficulty: 'medium',
+    id: 'm16', title: '스콘', size: 10, difficulty: 'medium',
     grid: [
       [7, 7, 7, 0, 0, 0, 0, 7, 7, 7],
       [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
@@ -1365,7 +1366,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm17', title: '중급 23', size: 10, difficulty: 'medium',
+    id: 'm17', title: '카스텔라', size: 10, difficulty: 'medium',
     grid: [
       [0, 10, 10, 10, 10, 10, 10, 10, 10, 0],
       [10, 10, 10, 10, 0, 0, 10, 10, 10, 10],
@@ -1380,7 +1381,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm18', title: '중급 24', size: 10, difficulty: 'medium',
+    id: 'm18', title: '양갱', size: 10, difficulty: 'medium',
     grid: [
       [8, 0, 8, 8, 0, 0, 8, 8, 0, 8],
       [0, 0, 0, 6, 0, 0, 6, 0, 0, 0],
@@ -1395,7 +1396,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm19', title: '중급 25', size: 10, difficulty: 'medium',
+    id: 'm19', title: '단팥빵', size: 10, difficulty: 'medium',
     grid: [
       [8, 0, 0, 8, 8, 8, 8, 0, 0, 8],
       [0, 8, 8, 8, 8, 8, 8, 8, 8, 0],
@@ -1410,7 +1411,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm20', title: '중급 26', size: 10, difficulty: 'medium',
+    id: 'm20', title: '꿀떡', size: 10, difficulty: 'medium',
     grid: [
       [0, 5, 0, 5, 5, 5, 5, 0, 5, 0],
       [5, 0, 5, 5, 0, 0, 5, 5, 0, 5],
@@ -1425,7 +1426,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm21', title: '중급 27', size: 10, difficulty: 'medium',
+    id: 'm21', title: '경단', size: 10, difficulty: 'medium',
     grid: [
       [6, 0, 6, 6, 6, 6, 6, 6, 0, 6],
       [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
@@ -1440,7 +1441,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm22', title: '중급 28', size: 10, difficulty: 'medium',
+    id: 'm22', title: '루비', size: 10, difficulty: 'medium',
     grid: [
       [3, 0, 3, 3, 3, 3, 3, 3, 0, 3],
       [7, 7, 7, 0, 7, 7, 0, 7, 7, 7],
@@ -1455,7 +1456,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm23', title: '중급 29', size: 10, difficulty: 'medium',
+    id: 'm23', title: '사파이어', size: 10, difficulty: 'medium',
     grid: [
       [4, 0, 4, 4, 0, 0, 4, 4, 0, 4],
       [0, 4, 0, 0, 0, 0, 0, 0, 4, 0],
@@ -1470,7 +1471,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm24', title: '중급 30', size: 10, difficulty: 'medium',
+    id: 'm24', title: '에메랄드', size: 10, difficulty: 'medium',
     grid: [
       [0, 0, 0, 6, 0, 0, 6, 0, 0, 0],
       [9, 9, 0, 9, 9, 9, 9, 0, 9, 9],
@@ -1485,7 +1486,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm25', title: '중급 31', size: 10, difficulty: 'medium',
+    id: 'm25', title: '다이아', size: 10, difficulty: 'medium',
     grid: [
       [4, 0, 0, 4, 0, 0, 4, 0, 0, 4],
       [0, 7, 7, 7, 0, 0, 7, 7, 7, 0],
@@ -1500,7 +1501,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm26', title: '중급 32', size: 10, difficulty: 'medium',
+    id: 'm26', title: '진주', size: 10, difficulty: 'medium',
     grid: [
       [7, 0, 7, 7, 0, 0, 7, 7, 0, 7],
       [1, 0, 1, 1, 0, 0, 1, 1, 0, 1],
@@ -1515,7 +1516,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm27', title: '중급 33', size: 10, difficulty: 'medium',
+    id: 'm27', title: '오팔', size: 10, difficulty: 'medium',
     grid: [
       [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
       [9, 9, 0, 0, 0, 0, 0, 0, 9, 9],
@@ -1530,7 +1531,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm28', title: '중급 34', size: 10, difficulty: 'medium',
+    id: 'm28', title: '자수정', size: 10, difficulty: 'medium',
     grid: [
       [0, 1, 1, 0, 0, 0, 0, 1, 1, 0],
       [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
@@ -1545,7 +1546,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm29', title: '중급 35', size: 10, difficulty: 'medium',
+    id: 'm29', title: '토파즈', size: 10, difficulty: 'medium',
     grid: [
       [4, 0, 0, 4, 0, 0, 4, 0, 0, 4],
       [4, 0, 4, 0, 4, 4, 0, 4, 0, 4],
@@ -1560,7 +1561,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm30', title: '중급 36', size: 10, difficulty: 'medium',
+    id: 'm30', title: '가넷', size: 10, difficulty: 'medium',
     grid: [
       [0, 9, 0, 0, 0, 0, 0, 0, 9, 0],
       [0, 9, 9, 9, 9, 9, 9, 9, 9, 0],
@@ -1575,7 +1576,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm31', title: '중급 37', size: 10, difficulty: 'medium',
+    id: 'm31', title: '터키석', size: 10, difficulty: 'medium',
     grid: [
       [0, 0, 8, 0, 0, 0, 0, 8, 0, 0],
       [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
@@ -1590,7 +1591,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm32', title: '중급 38', size: 10, difficulty: 'medium',
+    id: 'm32', title: '왕관', size: 10, difficulty: 'medium',
     grid: [
       [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
       [4, 4, 0, 4, 0, 0, 4, 0, 4, 4],
@@ -1605,7 +1606,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm33', title: '중급 39', size: 10, difficulty: 'medium',
+    id: 'm33', title: '반지', size: 10, difficulty: 'medium',
     grid: [
       [0, 4, 4, 4, 4, 4, 4, 4, 4, 0],
       [7, 7, 0, 7, 7, 7, 7, 0, 7, 7],
@@ -1620,7 +1621,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm34', title: '중급 40', size: 10, difficulty: 'medium',
+    id: 'm34', title: '목걸이', size: 10, difficulty: 'medium',
     grid: [
       [3, 0, 3, 3, 0, 0, 3, 3, 0, 3],
       [0, 3, 0, 3, 3, 3, 3, 0, 3, 0],
@@ -1635,7 +1636,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm35', title: '중급 41', size: 10, difficulty: 'medium',
+    id: 'm35', title: '팔찌', size: 10, difficulty: 'medium',
     grid: [
       [10, 0, 10, 10, 10, 10, 10, 10, 0, 10],
       [10, 0, 10, 10, 10, 10, 10, 10, 0, 10],
@@ -1650,7 +1651,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm36', title: '중급 42', size: 10, difficulty: 'medium',
+    id: 'm36', title: '방울', size: 10, difficulty: 'medium',
     grid: [
       [10, 10, 0, 10, 10, 10, 10, 0, 10, 10],
       [10, 10, 0, 0, 10, 10, 0, 0, 10, 10],
@@ -1665,7 +1666,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm37', title: '중급 43', size: 10, difficulty: 'medium',
+    id: 'm37', title: '네잎클로버', size: 10, difficulty: 'medium',
     grid: [
       [0, 6, 0, 6, 0, 0, 6, 0, 6, 0],
       [0, 5, 0, 5, 0, 0, 5, 0, 5, 0],
@@ -1680,7 +1681,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm38', title: '중급 44', size: 10, difficulty: 'medium',
+    id: 'm38', title: '매듭', size: 10, difficulty: 'medium',
     grid: [
       [7, 7, 7, 0, 7, 7, 0, 7, 7, 7],
       [0, 6, 0, 0, 0, 0, 0, 0, 6, 0],
@@ -1695,7 +1696,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm39', title: '중급 45', size: 10, difficulty: 'medium',
+    id: 'm39', title: '레이스', size: 10, difficulty: 'medium',
     grid: [
       [0, 5, 0, 0, 5, 5, 0, 0, 5, 0],
       [0, 9, 9, 9, 0, 0, 9, 9, 9, 0],
@@ -1710,7 +1711,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm40', title: '중급 46', size: 10, difficulty: 'medium',
+    id: 'm40', title: '깃털', size: 10, difficulty: 'medium',
     grid: [
       [9, 0, 9, 0, 9, 9, 0, 9, 0, 9],
       [0, 0, 0, 0, 6, 6, 0, 0, 0, 0],
@@ -1725,7 +1726,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm41', title: '중급 47', size: 10, difficulty: 'medium',
+    id: 'm41', title: '보석함', size: 10, difficulty: 'medium',
     grid: [
       [9, 0, 0, 0, 0, 0, 0, 0, 0, 9],
       [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
@@ -1740,7 +1741,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm42', title: '중급 48', size: 10, difficulty: 'medium',
+    id: 'm42', title: '달', size: 10, difficulty: 'medium',
     grid: [
       [6, 6, 6, 0, 6, 6, 0, 6, 6, 6],
       [7, 0, 7, 7, 7, 7, 7, 7, 0, 7],
@@ -1755,7 +1756,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm43', title: '중급 49', size: 10, difficulty: 'medium',
+    id: 'm43', title: '해', size: 10, difficulty: 'medium',
     grid: [
       [0, 3, 3, 0, 3, 3, 0, 3, 3, 0],
       [0, 0, 3, 0, 3, 3, 0, 3, 0, 0],
@@ -1770,7 +1771,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm44', title: '중급 50', size: 10, difficulty: 'medium',
+    id: 'm44', title: '구름', size: 10, difficulty: 'medium',
     grid: [
       [3, 3, 0, 3, 3, 3, 3, 0, 3, 3],
       [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
@@ -1785,7 +1786,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm45', title: '중급 51', size: 10, difficulty: 'medium',
+    id: 'm45', title: '무지개', size: 10, difficulty: 'medium',
     grid: [
       [0, 8, 8, 8, 8, 8, 8, 8, 8, 0],
       [0, 0, 8, 8, 0, 0, 8, 8, 0, 0],
@@ -1800,7 +1801,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm46', title: '중급 52', size: 10, difficulty: 'medium',
+    id: 'm46', title: '눈송이', size: 10, difficulty: 'medium',
     grid: [
       [5, 5, 0, 0, 0, 0, 0, 0, 5, 5],
       [10, 0, 0, 10, 0, 0, 10, 0, 0, 10],
@@ -1815,7 +1816,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm47', title: '중급 53', size: 10, difficulty: 'medium',
+    id: 'm47', title: '이슬', size: 10, difficulty: 'medium',
     grid: [
       [7, 7, 0, 0, 0, 0, 0, 0, 7, 7],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -1830,7 +1831,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm48', title: '중급 54', size: 10, difficulty: 'medium',
+    id: 'm48', title: '파도', size: 10, difficulty: 'medium',
     grid: [
       [10, 10, 0, 0, 10, 10, 0, 0, 10, 10],
       [10, 10, 0, 0, 10, 10, 0, 0, 10, 10],
@@ -1845,7 +1846,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm49', title: '중급 55', size: 10, difficulty: 'medium',
+    id: 'm49', title: '새싹', size: 10, difficulty: 'medium',
     grid: [
       [6, 6, 6, 0, 6, 6, 0, 6, 6, 6],
       [6, 6, 0, 6, 0, 0, 6, 0, 6, 6],
@@ -1860,7 +1861,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm50', title: '중급 56', size: 10, difficulty: 'medium',
+    id: 'm50', title: '나뭇잎', size: 10, difficulty: 'medium',
     grid: [
       [9, 9, 9, 9, 0, 0, 9, 9, 9, 9],
       [0, 9, 0, 9, 0, 0, 9, 0, 9, 0],
@@ -1875,7 +1876,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm51', title: '중급 57', size: 10, difficulty: 'medium',
+    id: 'm51', title: '도토리', size: 10, difficulty: 'medium',
     grid: [
       [7, 7, 0, 7, 7, 7, 7, 0, 7, 7],
       [0, 5, 0, 5, 0, 0, 5, 0, 5, 0],
@@ -1890,7 +1891,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm52', title: '중급 58', size: 10, difficulty: 'medium',
+    id: 'm52', title: '솔방울', size: 10, difficulty: 'medium',
     grid: [
       [8, 0, 8, 8, 8, 8, 8, 8, 0, 8],
       [0, 8, 0, 0, 0, 0, 0, 0, 8, 0],
@@ -1905,7 +1906,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm53', title: '중급 59', size: 10, difficulty: 'medium',
+    id: 'm53', title: '조개', size: 10, difficulty: 'medium',
     grid: [
       [8, 0, 0, 0, 8, 8, 0, 0, 0, 8],
       [8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
@@ -1920,7 +1921,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm54', title: '중급 60', size: 10, difficulty: 'medium',
+    id: 'm54', title: '불가사리', size: 10, difficulty: 'medium',
     grid: [
       [3, 3, 3, 0, 0, 0, 0, 3, 3, 3],
       [7, 0, 0, 7, 7, 7, 7, 0, 0, 7],
@@ -1935,7 +1936,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm55', title: '중급 61', size: 10, difficulty: 'medium',
+    id: 'm55', title: '산호', size: 10, difficulty: 'medium',
     grid: [
       [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
       [0, 1, 1, 0, 1, 1, 0, 1, 1, 0],
@@ -1950,7 +1951,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm56', title: '중급 62', size: 10, difficulty: 'medium',
+    id: 'm56', title: '번개', size: 10, difficulty: 'medium',
     grid: [
       [1, 1, 1, 0, 1, 1, 0, 1, 1, 1],
       [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
@@ -1965,7 +1966,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm57', title: '중급 63', size: 10, difficulty: 'medium',
+    id: 'm57', title: '노을', size: 10, difficulty: 'medium',
     grid: [
       [0, 6, 6, 6, 6, 6, 6, 6, 6, 0],
       [0, 0, 0, 6, 6, 6, 6, 0, 0, 0],
@@ -1980,7 +1981,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm58', title: '중급 64', size: 10, difficulty: 'medium',
+    id: 'm58', title: '은하수', size: 10, difficulty: 'medium',
     grid: [
       [0, 3, 3, 0, 3, 3, 0, 3, 3, 0],
       [1, 1, 0, 1, 0, 0, 1, 0, 1, 1],
@@ -1995,7 +1996,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm59', title: '중급 65', size: 10, difficulty: 'medium',
+    id: 'm59', title: '유성', size: 10, difficulty: 'medium',
     grid: [
       [0, 1, 1, 0, 1, 1, 0, 1, 1, 0],
       [3, 3, 3, 3, 0, 0, 3, 3, 3, 3],
@@ -2010,7 +2011,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm60', title: '중급 66', size: 10, difficulty: 'medium',
+    id: 'm60', title: '초승달', size: 10, difficulty: 'medium',
     grid: [
       [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
       [0, 4, 0, 0, 0, 0, 0, 0, 4, 0],
@@ -2025,7 +2026,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm61', title: '중급 67', size: 10, difficulty: 'medium',
+    id: 'm61', title: '보름달', size: 10, difficulty: 'medium',
     grid: [
       [0, 1, 0, 1, 1, 1, 1, 0, 1, 0],
       [5, 5, 5, 5, 0, 0, 5, 5, 5, 5],
@@ -2040,7 +2041,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm62', title: '중급 68', size: 10, difficulty: 'medium',
+    id: 'm62', title: '눈사람', size: 10, difficulty: 'medium',
     grid: [
       [0, 5, 5, 5, 5, 5, 5, 5, 5, 0],
       [3, 3, 0, 0, 3, 3, 0, 0, 3, 3],
@@ -2055,7 +2056,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm63', title: '중급 69', size: 10, difficulty: 'medium',
+    id: 'm63', title: '고드름', size: 10, difficulty: 'medium',
     grid: [
       [3, 3, 0, 0, 0, 0, 0, 0, 3, 3],
       [0, 3, 0, 3, 3, 3, 3, 0, 3, 0],
@@ -2070,7 +2071,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm64', title: '중급 70', size: 10, difficulty: 'medium',
+    id: 'm64', title: '단풍', size: 10, difficulty: 'medium',
     grid: [
       [0, 0, 1, 0, 1, 1, 0, 1, 0, 0],
       [0, 8, 8, 8, 0, 0, 8, 8, 8, 0],
@@ -2085,7 +2086,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm65', title: '중급 71', size: 10, difficulty: 'medium',
+    id: 'm65', title: '이끼', size: 10, difficulty: 'medium',
     grid: [
       [6, 0, 6, 6, 0, 0, 6, 6, 0, 6],
       [0, 7, 7, 7, 7, 7, 7, 7, 7, 0],
@@ -2100,7 +2101,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm66', title: '중급 72', size: 10, difficulty: 'medium',
+    id: 'm66', title: '자갈', size: 10, difficulty: 'medium',
     grid: [
       [4, 4, 4, 0, 4, 4, 0, 4, 4, 4],
       [4, 4, 0, 4, 4, 4, 4, 0, 4, 4],
@@ -2115,7 +2116,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm67', title: '중급 73', size: 10, difficulty: 'medium',
+    id: 'm67', title: '모래성', size: 10, difficulty: 'medium',
     grid: [
       [0, 4, 4, 4, 0, 0, 4, 4, 4, 0],
       [3, 0, 3, 3, 0, 0, 3, 3, 0, 3],
@@ -2130,7 +2131,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm68', title: '중급 74', size: 10, difficulty: 'medium',
+    id: 'm68', title: '물보라', size: 10, difficulty: 'medium',
     grid: [
       [8, 0, 8, 8, 8, 8, 8, 8, 0, 8],
       [0, 0, 9, 0, 0, 0, 0, 9, 0, 0],
@@ -2145,7 +2146,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm69', title: '중급 75', size: 10, difficulty: 'medium',
+    id: 'm69', title: '아지랑이', size: 10, difficulty: 'medium',
     grid: [
       [10, 10, 0, 10, 10, 10, 10, 0, 10, 10],
       [4, 0, 0, 4, 0, 0, 4, 0, 0, 4],
@@ -2160,7 +2161,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm70', title: '중급 76', size: 10, difficulty: 'medium',
+    id: 'm70', title: '회오리', size: 10, difficulty: 'medium',
     grid: [
       [0, 3, 0, 3, 3, 3, 3, 0, 3, 0],
       [0, 0, 1, 0, 1, 1, 0, 1, 0, 0],
@@ -2175,7 +2176,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm71', title: '중급 77', size: 10, difficulty: 'medium',
+    id: 'm71', title: '서리', size: 10, difficulty: 'medium',
     grid: [
       [5, 0, 5, 5, 0, 0, 5, 5, 0, 5],
       [0, 0, 5, 5, 0, 0, 5, 5, 0, 0],
@@ -2190,7 +2191,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm72', title: '중급 78', size: 10, difficulty: 'medium',
+    id: 'm72', title: '풍선', size: 10, difficulty: 'medium',
     grid: [
       [9, 9, 9, 9, 0, 0, 9, 9, 9, 9],
       [0, 10, 10, 10, 0, 0, 10, 10, 10, 0],
@@ -2205,7 +2206,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm73', title: '중급 79', size: 10, difficulty: 'medium',
+    id: 'm73', title: '연필', size: 10, difficulty: 'medium',
     grid: [
       [7, 0, 7, 7, 7, 7, 7, 7, 0, 7],
       [0, 7, 7, 7, 7, 7, 7, 7, 7, 0],
@@ -2220,7 +2221,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm74', title: '중급 80', size: 10, difficulty: 'medium',
+    id: 'm74', title: '별사탕', size: 10, difficulty: 'medium',
     grid: [
       [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
       [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
@@ -2235,7 +2236,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm75', title: '중급 81', size: 10, difficulty: 'medium',
+    id: 'm75', title: '종이배', size: 10, difficulty: 'medium',
     grid: [
       [0, 0, 10, 10, 10, 10, 10, 10, 0, 0],
       [0, 0, 10, 10, 10, 10, 10, 10, 0, 0],
@@ -2250,7 +2251,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm76', title: '중급 82', size: 10, difficulty: 'medium',
+    id: 'm76', title: '바람개비', size: 10, difficulty: 'medium',
     grid: [
       [4, 4, 0, 4, 0, 0, 4, 0, 4, 4],
       [4, 0, 4, 0, 4, 4, 0, 4, 0, 4],
@@ -2265,7 +2266,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm77', title: '중급 83', size: 10, difficulty: 'medium',
+    id: 'm77', title: '팽이', size: 10, difficulty: 'medium',
     grid: [
       [10, 10, 10, 10, 0, 0, 10, 10, 10, 10],
       [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
@@ -2280,7 +2281,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm78', title: '중급 84', size: 10, difficulty: 'medium',
+    id: 'm78', title: '구슬', size: 10, difficulty: 'medium',
     grid: [
       [6, 0, 0, 0, 0, 0, 0, 0, 0, 6],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -2295,7 +2296,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm79', title: '중급 85', size: 10, difficulty: 'medium',
+    id: 'm79', title: '열쇠', size: 10, difficulty: 'medium',
     grid: [
       [10, 0, 0, 10, 10, 10, 10, 0, 0, 10],
       [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
@@ -2310,7 +2311,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm80', title: '중급 86', size: 10, difficulty: 'medium',
+    id: 'm80', title: '자물쇠', size: 10, difficulty: 'medium',
     grid: [
       [0, 8, 8, 0, 8, 8, 0, 8, 8, 0],
       [9, 0, 0, 9, 0, 0, 9, 0, 0, 9],
@@ -2325,7 +2326,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm81', title: '중급 87', size: 10, difficulty: 'medium',
+    id: 'm81', title: '등대', size: 10, difficulty: 'medium',
     grid: [
       [4, 4, 4, 0, 0, 0, 0, 4, 4, 4],
       [4, 4, 4, 0, 0, 0, 0, 4, 4, 4],
@@ -2340,7 +2341,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm82', title: '중급 88', size: 10, difficulty: 'medium',
+    id: 'm82', title: '기차', size: 10, difficulty: 'medium',
     grid: [
       [7, 7, 0, 0, 7, 7, 0, 0, 7, 7],
       [0, 7, 0, 7, 7, 7, 7, 0, 7, 0],
@@ -2355,7 +2356,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm83', title: '중급 89', size: 10, difficulty: 'medium',
+    id: 'm83', title: '자동차', size: 10, difficulty: 'medium',
     grid: [
       [9, 9, 0, 9, 0, 0, 9, 0, 9, 9],
       [9, 0, 9, 9, 0, 0, 9, 9, 0, 9],
@@ -2370,7 +2371,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm84', title: '중급 90', size: 10, difficulty: 'medium',
+    id: 'm84', title: '비행기', size: 10, difficulty: 'medium',
     grid: [
       [7, 0, 7, 0, 0, 0, 0, 7, 0, 7],
       [0, 0, 7, 0, 7, 7, 0, 7, 0, 0],
@@ -2385,7 +2386,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm85', title: '중급 91', size: 10, difficulty: 'medium',
+    id: 'm85', title: '로켓', size: 10, difficulty: 'medium',
     grid: [
       [5, 5, 5, 0, 5, 5, 0, 5, 5, 5],
       [0, 5, 5, 5, 5, 5, 5, 5, 5, 0],
@@ -2400,7 +2401,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm86', title: '중급 92', size: 10, difficulty: 'medium',
+    id: 'm86', title: '시계', size: 10, difficulty: 'medium',
     grid: [
       [0, 0, 10, 10, 10, 10, 10, 10, 0, 0],
       [0, 6, 6, 6, 6, 6, 6, 6, 6, 0],
@@ -2415,7 +2416,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm87', title: '중급 93', size: 10, difficulty: 'medium',
+    id: 'm87', title: '열기구', size: 10, difficulty: 'medium',
     grid: [
       [7, 0, 0, 7, 7, 7, 7, 0, 0, 7],
       [4, 4, 4, 0, 0, 0, 0, 4, 4, 4],
@@ -2430,7 +2431,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm88', title: '중급 94', size: 10, difficulty: 'medium',
+    id: 'm88', title: '텐트', size: 10, difficulty: 'medium',
     grid: [
       [0, 3, 3, 3, 0, 0, 3, 3, 3, 0],
       [3, 0, 0, 3, 0, 0, 3, 0, 0, 3],
@@ -2445,7 +2446,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm89', title: '중급 95', size: 10, difficulty: 'medium',
+    id: 'm89', title: '성', size: 10, difficulty: 'medium',
     grid: [
       [7, 0, 0, 0, 7, 7, 0, 0, 0, 7],
       [7, 7, 0, 0, 7, 7, 0, 0, 7, 7],
@@ -2460,7 +2461,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm90', title: '중급 96', size: 10, difficulty: 'medium',
+    id: 'm90', title: '다리', size: 10, difficulty: 'medium',
     grid: [
       [6, 6, 0, 6, 6, 6, 6, 0, 6, 6],
       [0, 8, 0, 8, 8, 8, 8, 0, 8, 0],
@@ -2475,7 +2476,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm91', title: '중급 97', size: 10, difficulty: 'medium',
+    id: 'm91', title: '창문', size: 10, difficulty: 'medium',
     grid: [
       [4, 4, 0, 4, 0, 0, 4, 0, 4, 4],
       [0, 0, 4, 0, 0, 0, 0, 4, 0, 0],
@@ -2490,7 +2491,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm92', title: '중급 98', size: 10, difficulty: 'medium',
+    id: 'm92', title: '화분', size: 10, difficulty: 'medium',
     grid: [
       [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
       [0, 1, 0, 0, 1, 1, 0, 0, 1, 0],
@@ -2505,7 +2506,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm93', title: '중급 99', size: 10, difficulty: 'medium',
+    id: 'm93', title: '우체통', size: 10, difficulty: 'medium',
     grid: [
       [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
       [0, 4, 4, 0, 0, 0, 0, 4, 4, 0],
@@ -2520,7 +2521,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'm94', title: '중급 100', size: 10, difficulty: 'medium',
+    id: 'm94', title: '가로등', size: 10, difficulty: 'medium',
     grid: [
       [0, 8, 0, 0, 0, 0, 0, 0, 8, 0],
       [8, 8, 0, 8, 8, 8, 8, 0, 8, 8],
