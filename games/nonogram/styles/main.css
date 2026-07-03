@@ -123,10 +123,10 @@ button {
 }
 .mistake-badge {
   background: var(--surface); border: 2px solid var(--line);
-  border-radius: var(--radius-pill); padding: var(--space-1) var(--space-3);
-  font-weight: 700; font-size: var(--fs-small);
+  border-radius: var(--radius-pill); padding: var(--space-2) var(--space-4);
+  font-weight: 800; font-size: var(--fs-body);
 }
-.mistake-badge b { color: var(--point); }
+.mistake-badge b { color: var(--point); font-size: 20px; margin: 0 2px; }
 .sound-btn { font-size: 20px; padding: var(--space-1) var(--space-2); line-height: 1; }
 
 /* 힌트 + 격자 2x2 레이아웃 */
@@ -204,7 +204,9 @@ button {
 }
 .mode-btn .swatch.fill { background: var(--fill-mono); }
 .mode-btn .swatch.mark { background: transparent; color: var(--mark); font-weight: 900; }
-.mode-btn.active { border-color: var(--accent); background: #f3eeff; color: var(--accent); }
+.mode-btn { color: var(--fg); }
+.mode-btn.active { border-color: var(--accent); background: #f3eeff; color: var(--fg); }
+.mode-btn:disabled { opacity: 0.4; box-shadow: none; }
 
 .hint-line { text-align: center; color: var(--muted); font-size: var(--fs-small); margin-top: var(--space-3); }
 
@@ -280,6 +282,13 @@ button {
   40% { background: var(--accent-2); }
   100% { background: var(--fill-mono); }
 }
+/* 빈칸: 희미한 민트 파도(줄 전체가 흘러가는 느낌 - 정답 1칸 줄도 자연스럽게) */
+.cell.wave-faint { animation: wave-faint 0.6s ease; z-index: 1; }
+@keyframes wave-faint {
+  0% { background: var(--cell-empty); }
+  40% { background: color-mix(in srgb, var(--accent-2) 30%, var(--cell-empty)); }
+  100% { background: var(--cell-empty); }
+}
 
 /* 완성 변신: 순차 지연은 인라인, 여기선 부드럽게 */
 .cell.reveal { background: var(--rc, var(--fill-mono)); transition: background-color 0.35s ease; }
@@ -297,7 +306,7 @@ button {
   position: absolute; transform: translate(-50%, -50%);
   min-width: 24px; height: 24px; padding: 0 4px; box-sizing: border-box;
   display: flex; align-items: center; justify-content: center;
-  background: var(--point); color: #fff; font-weight: 800; font-size: 13px;
+  background: var(--badge-bg); color: var(--badge-fg); font-weight: 800; font-size: 13px;
   border-radius: var(--radius-pill);
   pointer-events: none; z-index: 6; box-shadow: var(--shadow);
 }

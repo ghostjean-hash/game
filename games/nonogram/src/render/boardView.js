@@ -64,19 +64,21 @@ export function popCell(boardEl, r, c, n) {
 }
 
 // 방금 완성된 줄만 파도처럼 순차 반짝. lines=[{type:'row'|'col', idx}], forward=드래그 방향.
-// 각 줄의 칠한 칸을 방향 순서로 stepMs씩 지연시켜 연쇄 효과를 준다.
+// 줄 전체를 방향 순서로 stepMs씩 지연시켜 연쇄(파도) 효과를 준다. 칠한 칸은 뚜렷한 wave,
+// 빈칸은 희미한 wave-faint로 - 정답이 1칸뿐인 줄도 줄 전체가 흘러가는 느낌이 나게 한다.
 export function waveHighlight(boardEl, lines, n, forward, stepMs) {
   for (const line of lines) {
     for (let i = 0; i < n; i++) {
       const r = line.type === 'row' ? line.idx : i;
       const c = line.type === 'col' ? line.idx : i;
       const el = boardEl.children[r * n + c];
-      if (!el || !el.classList.contains('filled')) continue;
+      if (!el) continue;
       const order = forward ? i : (n - 1 - i);
-      el.classList.remove('wave');
+      const cls = el.classList.contains('filled') ? 'wave' : 'wave-faint';
+      el.classList.remove('wave', 'wave-faint');
       void el.offsetWidth; // 리플로우로 애니메이션 재시작
       el.style.animationDelay = `${order * stepMs}ms`;
-      el.classList.add('wave');
+      el.classList.add(cls);
     }
   }
 }
@@ -92,7 +94,7 @@ export function revealColors(boardEl, grid, stepMs, palette) {
     for (let c = 0; c < n; c++) {
       const v = grid[r][c];
       const el = cells[i++];
-      el.classList.remove('wrong', 'wave'); // 완성 반짝(wave) 잔재 제거 - 정답 색과 섞이지 않게
+      el.classList.remove('wrong', 'wave', 'wave-faint'); // 완성 반짝 잔재 제거 - 정답 색과 섞이지 않게
       el.style.animationDelay = '';
       if (v !== 0) {
         el.style.transitionDelay = `${(r + c) * stepMs}ms`;
@@ -129,13 +131,14 @@ export function clearDragRun() {
 export function showDragCount(boardEl, el, r, c, n, count) {
   const cell = boardEl.children[r * n + c];
   if (!el || !cell) return;
-  const b = cell.getBoundingClientRect();
-  // 배지의 좌표 기준은 offsetParent(.puzzle)이지 board가 아니다. board는 힌트만큼 안쪽에 있다.
-  const wrap = (boardEl.parentElement || boardEl).getBoundingClientRect();
   el.hidden = false;
   el.textContent = `${count}`;
-  el.style.left = `${b.right - wrap.left}px`; // 셀 우측 모서리
-  el.style.top = `${b.top - wrap.top}px`;     // 셀 상단 모서리
+  // 셀 우상단 모서리에 배지 중심을 고정한다(CSS transform: translate(-50%,-50%)).
+  // 셀과 배지는 같은 offsetParent(.puzzle)를 공유하므로 offsetLeft/Top이 곧 같은 좌표계다
+  // (board는 position:static이라 offsetParent 체인에서 건너뛴다). 레이아웃 확정값이라
+  // rect(getBoundingClientRect)의 가로 스크롤·서브픽셀 흔들림이 없어 위치가 튀지 않는다.
+  el.style.left = `${cell.offsetLeft + cell.offsetWidth}px`;
+  el.style.top = `${cell.offsetTop}px`;
 }
 export function hideDragCount(el) { if (el) el.hidden = true; }
 

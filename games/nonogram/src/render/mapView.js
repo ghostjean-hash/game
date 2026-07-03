@@ -51,10 +51,14 @@ export function renderMap(container, progress, onSelect) {
       card.className = 'stage-card' + (locked ? ' locked' : '');
 
       // 못 깬 퍼즐은 그림을 감춘다(정답 모양 스포일러 방지). 깨야 컬러로 공개.
+      // 단 튜토리얼은 배우는 단계라 가리지 않고 흑백 그림으로 미리 보여준다.
+      const isTutorial = p.difficulty === 'tutorial';
       const thumb = document.createElement('div');
       thumb.className = 'stage-thumb';
       if (isClear) {
         fillPicture(thumb, p.grid, { mono: false, palette: p.palette });
+      } else if (isTutorial) {
+        fillPicture(thumb, p.grid, { mono: true, palette: p.palette });
       } else {
         thumb.classList.add('mystery');
         fillEmptyGrid(thumb, p.size);
@@ -66,8 +70,8 @@ export function renderMap(container, progress, onSelect) {
 
       const name = document.createElement('div');
       name.className = 'stage-name';
-      // 못 깬 것은 이름도 감추고 번호만(깨면 진짜 이름 공개).
-      name.textContent = isClear ? p.title : (locked ? '' : `${i + 1}`);
+      // 못 깬 것은 이름도 감추고 번호만(깨면 진짜 이름 공개). 튜토리얼은 이름도 보여준다.
+      name.textContent = (isClear || isTutorial) ? p.title : (locked ? '' : `${i + 1}`);
 
       const stars = document.createElement('div');
       stars.className = 'stage-stars';

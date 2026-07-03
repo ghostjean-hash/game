@@ -114,9 +114,12 @@ function startPuzzle(puzzle) {
   const { idx, total } = puzzleRank(puzzle);
   el('puzzle-info').innerHTML =
     `<span class="pi-badge">${d.icon} ${d.name}</span>` +
-    (puzzle.difficulty === 'tutorial' ? '' : `<span class="pi-name">${puzzle.title}</span>`) +
+    // 플레이 중엔 이름을 감춘다(정답 그림 스포일러 방지). 클리어 결과 화면에서 공개.
+    (puzzle.difficulty === 'tutorial' ? '' : `<span class="pi-name">? ? ?</span>`) +
     `<span class="pi-prog">${idx}/${total}</span>`;
 
+  el('mode-fill').disabled = false;
+  el('mode-mark').disabled = false;
   setMode(MODE.FILL);
   cur.prevCompleted = completedCount(lineFlags(cur.board, cur.clues));
   refresh();
@@ -328,6 +331,9 @@ function win() {
   clearInProgress(id);
 
   el('finger').hidden = true;
+  // 다 맞췄으니 모드 버튼을 잠근다(완성 연출 중 조작 방지 + 완료 표현).
+  el('mode-fill').disabled = true;
+  el('mode-mark').disabled = true;
   revealColors(boardEl, cur.puzzle.grid, ANIM.REVEAL_STEP_MS, cur.puzzle.palette);
   setCursor(boardEl, -1, -1, cur.puzzle.size);
   sound.play('clear');
