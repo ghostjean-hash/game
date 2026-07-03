@@ -2,9 +2,9 @@
 
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
-## 직전 작업 (2026-07-02, nonogram 1차 구현 완료 + 사운드)
+## 직전 작업 (2026-07-03, nonogram HUD 대개편 + 이모지 방향 확정)
 
-컨셉 초안대로 노노그램을 플레이 가능한 수준까지 구현(2차 sealing, 상세 games/nonogram/PROGRESS.md). 사용자 흐름: /jn 추천 → "확정 및 구현" → "쭉 끝까지" → "사운드 적용". docs 4종 확정 + 전체 구현(core: hints/solver/board/stars, data: constants/colors/puzzles 20종, render 4뷰, input, audio: sound, main). 퍼즐 20종(튜토3·초급6·중급6·고급5 15×15)은 solver로 유일해·무추측 전수 검증한 모양만 채택, 색은 자유 배치. 사운드는 WebAudio 합성(rushhour 패턴, 음원 파일 0) + 음소거 토글 + 백그라운드 절전. registry playable 승격. 검증: 테스트 16/16 PASS + 플레이 플로우 browser-shot(맵→풀이→컬러 변신→별3→도감 + 15×15 반응형) + 사운드 pageerror 0. 커밋 65baa3e(구현) + 4ced041(사운드). **다음 행동** = (a) 사용자가 직접 플레이 후 GitHub Pages 배포(push) 여부 결정 - 현재 로컬 커밋만, 미push (b) 사운드 볼륨·종류 조정 여부 (c) 맵 썸네일 예고 방식 유지 여부(현재 미클리어도 실루엣 노출).
+긴 세션(4차 sealing, 상세 games/nonogram/PROGRESS.md). 셋: HUD 퀄리티 16항목 전체 구현(b217c29 - 퍼즐 정보 헤더·완성 줄 흐리게·틀린 칸 표시·별점 예고·손가락 튜토·되돌리기·순차 변신·칭찬·중도 저장·도움·맵 진행바 등, core lines.js 신설, 테스트 20/20), UX 개선 3건(틀린칸+드래그 직선고정 7d9f920 / 맞은 칸 잠금-틀린 칸만 지우기 20ec803 / 틀린 칸을 정상 칠색+느낌표 faea612), 퍼즐 데이터 대격변. **대격변**: "초급·중급 100개씩" 요청에 자비스가 랜덤 무늬로 개수를 채웠다가(5ed2757) 이름이 "초급7" 식이라 사용자 분노, "다 삭제 재세팅" 지시 → 실제 그림 43종 자체 재구성(63e78ae). 교훈: 개수 집착이 1차 조언(무작위=재미약함, 개수보다 품질)을 어긴 실수(buffer 기재). 이후 이미지 소스 조사 - 공개 노노그램은 저작권 재배포 금지, CC0 픽셀아트가 답. Kenney 1-bit(CC0) 실증 647/1074 solver 통과했으나 RPG풍이라, 사용자가 **귀여운 이모지** 선택. **Twemoji(CC-BY) PoC 완전 성공** - 다운로드+15×15 다운샘플+색 추출+solver 통과+컬러 인식(꽃·고양이·케이크·토끼·나비 또렷) 검증됨. **다음 행동(핵심) = 이모지 대량 통합**. 검증된 방법: Twemoji raw(raw.githubusercontent.com/jdecked/twemoji/main/assets/72x72/{codepoint}.png, CC-BY 출처표기) + pngjs 다운샘플(72→N, 블록평균 alpha>110 채움·평균RGB 색) + verifyPuzzle. 남은 3작업: (a) 귀여운 이모지 수백 개(동물·음식·꽃) 선별·다운로드·크기별 변환·solver 거르기 - 목표 5×5 50장(단 5×5는 이모지 인식 어려워 단순한 것만)/10×10·15×15 각 100장+/16×16 추가 (b) **데이터 구조 변경 필수** - grid가 10색 팔레트 인덱스라 이모지 다색을 못 담음, 퍼즐별 색표(puzzle.palette{인덱스:HEX}) + render(pixel.js·boardView revealColors)·colors.js 수정 (c) 유니코드 영문 이름→한글 매핑. 현 puzzles.js 실제그림 43종은 좋은 것만 남기고 교체 예정.
 
 ## 이전 작업 (2026-07-02, nonogram 신규 등록 + 컨셉 초안 합의)
 
