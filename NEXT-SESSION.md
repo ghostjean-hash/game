@@ -2,7 +2,11 @@
 
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
-## 직전 작업 (2026-07-03, nonogram 이모지 대량 통합 + 초급 50 확장)
+## 직전 작업 (2026-07-03, nonogram 드래그·완성 연출 다듬기)
+
+6차 sealing(상세 games/nonogram/PROGRESS.md). 5차 커밋(13ca095) 후 사용자가 실제로 플레이하며 드래그 상호작용을 여덟 차례 다듬었다. 핵심. (1) 이미 맞게 칠한 칸에서 드래그를 시작해도 이어 칠하기(decideAction이 맞은 칸에 'fill' 반환, 그 칸은 무변화 유지). (2) 드래그 칸 수 배지 - 마지막 칸 우상단 원 안 숫자(두 자리 대응), X(표시) 모드에선 숨김. (3) 드래그 중인 칸 배경을 진한 보라(tokens --drag-hi)로(외곽 테두리 아님, 연한 색이 칠칸과 이질적이라는 지적 반영). (4) 줄 완성 하이라이트 재설계 - 노란 링(sparkle) 폐기하고 칸 색이 민트로 물드는 파도(wave)로, 드래그 순서대로 순차 지연, 이미 완성된 줄 말고 새로 맞춘 줄만, 마우스를 놓을 때 발동(완성 판정이 힌트 기반이라 틀린 칸 있으면 미완성·지워서 온전해지면 완성). checkPraise→highlightNewCompletions, applyAction에서 완성 판정 제거. 내가 낸 버그 3건도 같은 세션에 수정(배지 display:flex가 [hidden] override → [hidden] 명시 / 배지 위치 기준 board→offsetParent(.puzzle) / revealColors가 옛 sparkle만 지워 클리어 색에 민트 섞임 → wave 잔재 제거). 손댄 파일: main.js·boardView.js·constants.js·index.html·main.css·tokens.css(입력 boardInput.js는 안 건드림). 검증: playwright 드래그·클리어 시뮬 + browser-shot 전 단계, 테스트 20/20. **다음 행동** = 이름 중복 정리 여부 결정(초급 손그림 14종이 중급 이모지와 동명 / 15×15 고양이2·토끼2·돼지2 - 그대로 둘지 '작은 X' 붙일지 이름 손볼지). 그 외 여지: 16×16 크기 추가, 이모지 목록 확대.
+
+## 이전 작업 (2026-07-03, nonogram 이모지 대량 통합 + 초급 50 확장)
 
 5차 sealing(상세 games/nonogram/PROGRESS.md). 4차에서 검증만 해둔 이모지 통합을 실제로 완료해 퍼즐을 43 → 344종으로 늘렸다(튜토3·초급50·중급142·고급149). 핵심 셋. (1) **데이터 구조**: 퍼즐 객체에 선택적 `palette`(인덱스→HEX)를 두고 렌더가 있으면 그것을 없으면 전역 PALETTE를 쓰게 해 기존 손그림 무영향 하위호환. 손댄 곳은 pixel.fillPicture·boardView.revealColors 두 함수 + 호출부 4곳(album/map/result/main reveal)뿐, solver는 0/비0만 봐서 무관. (2) **이모지 파이프라인**(scripts/build-emoji-puzzles.mjs): Twemoji(CC-BY 4.0) 다운로드 → node 내장 zlib로 PNG 자체 디코딩(pngjs 의존 제거, colorType 2/3/6 - Twemoji는 팔레트 PNG colorType 3이 대부분) → N×N 다운샘플 → 색 소수 양자화 → solver 거르기. 이모지 141종 → 299 통과 → 뭉개진 8개 제외 → 291 채택(중급142·고급149). gen-puzzles.mjs가 손그림+이모지 합쳐 puzzles.js 생성. (3) **초급 50**(사용자 지시): 5×5는 이모지 인식이 안 돼 손그림 44개 디자인 → solver 35 통과 → 배경 동화된 구름 빼고 34 채택 → 초급 16+34=50. 손그림 소스는 scripts/handmade-puzzles.mjs로 분리. 검증: 344종 전수 solver/중복/palette/크기 0, 테스트 20/20, browser-shot(이모지·초급 미리보기 인식 / 맵·도감 컬러 변신 / pageerror 0). **다음 행동** = 이름 중복 정리 여부 결정(초급 손그림 14종이 중급 이모지와 동명 / 15×15 고양이2·토끼2·돼지2 번호 이름 - 그대로 둘지 초급 쪽에 "작은 X" 붙일지). 그 외 여지: 16×16 크기 추가, 이모지 목록 더 확대.
 

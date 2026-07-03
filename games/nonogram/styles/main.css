@@ -271,10 +271,12 @@ button {
 @keyframes pop-cell { 0% { transform: scale(0.7); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
 
 /* 줄 완성 반짝 */
-.cell.sparkle { animation: sparkle 0.55s ease; z-index: 2; }
-@keyframes sparkle {
-  0% { box-shadow: 0 0 0 0 rgba(255,207,92,0.9); }
-  100% { box-shadow: 0 0 0 9px rgba(255,207,92,0); }
+/* 줄 완성 파도: 칸 색이 잠깐 민트로 바뀌었다 원래 색으로(노란 링 폐기). */
+.cell.wave { animation: wave-fill 0.6s ease; z-index: 2; }
+@keyframes wave-fill {
+  0% { background: var(--fill-mono); }
+  40% { background: var(--accent-2); }
+  100% { background: var(--fill-mono); }
 }
 
 /* 완성 변신: 순차 지연은 인라인, 여기선 부드럽게 */
@@ -284,6 +286,20 @@ button {
 .puzzle { position: relative; }
 .finger { position: absolute; font-size: 30px; pointer-events: none; transform: translate(-50%, 0); z-index: 5; animation: tap 1s ease-in-out infinite; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
 @keyframes tap { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 7px); } }
+
+/* 드래그 중인 칸은 색 자체를 진하게(범위: 시작~현재). 놓으면 원래 색으로. */
+.cell.filled.drag-run { background: var(--drag-hi); }
+
+/* 드래그 중 "몇 칸째"를 마지막 칸 우상단 모서리에 원 안 숫자로. */
+.drag-count {
+  position: absolute; transform: translate(-50%, -50%);
+  min-width: 24px; height: 24px; padding: 0 4px; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--point); color: #fff; font-weight: 800; font-size: 13px;
+  border-radius: var(--radius-pill);
+  pointer-events: none; z-index: 6; box-shadow: var(--shadow);
+}
+.drag-count[hidden] { display: none; } /* [hidden]이 display:flex를 이기도록 */
 
 /* 연속 칭찬 토스트 */
 .praise-toast {

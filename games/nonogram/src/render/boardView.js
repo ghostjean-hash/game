@@ -63,19 +63,20 @@ export function popCell(boardEl, r, c, n) {
   el.classList.add('pop');
 }
 
-// 완성된 줄 셀에 잠깐 반짝(칭찬). flags 기준으로 해당 행/열 셀에 sparkle.
-export function sparkleLines(boardEl, board, flags) {
-  const n = board.size;
-  for (let r = 0; r < n; r++) {
-    for (let c = 0; c < n; c++) {
-      if (flags.rows[r] || flags.cols[c]) {
-        const el = boardEl.children[r * n + c];
-        if (el && el.classList.contains('filled')) {
-          el.classList.remove('sparkle');
-          void el.offsetWidth;
-          el.classList.add('sparkle');
-        }
-      }
+// 방금 완성된 줄만 파도처럼 순차 반짝. lines=[{type:'row'|'col', idx}], forward=드래그 방향.
+// 각 줄의 칠한 칸을 방향 순서로 stepMs씩 지연시켜 연쇄 효과를 준다.
+export function waveHighlight(boardEl, lines, n, forward, stepMs) {
+  for (const line of lines) {
+    for (let i = 0; i < n; i++) {
+      const r = line.type === 'row' ? line.idx : i;
+      const c = line.type === 'col' ? line.idx : i;
+      const el = boardEl.children[r * n + c];
+      if (!el || !el.classList.contains('filled')) continue;
+      const order = forward ? i : (n - 1 - i);
+      el.classList.remove('wave');
+      void el.offsetWidth; // 리플로우로 애니메이션 재시작
+      el.style.animationDelay = `${order * stepMs}ms`;
+      el.classList.add('wave');
     }
   }
 }
@@ -91,7 +92,8 @@ export function revealColors(boardEl, grid, stepMs, palette) {
     for (let c = 0; c < n; c++) {
       const v = grid[r][c];
       const el = cells[i++];
-      el.classList.remove('wrong', 'sparkle');
+      el.classList.remove('wrong', 'wave'); // 완성 반짝(wave) 잔재 제거 - 정답 색과 섞이지 않게
+      el.style.animationDelay = '';
       if (v !== 0) {
         el.style.transitionDelay = `${(r + c) * stepMs}ms`;
         el.classList.add('reveal');
@@ -108,6 +110,34 @@ export function setCursor(boardEl, r, c, n) {
   const idx = r * n + c;
   if (cells[idx]) cells[idx].classList.add('cursor');
 }
+
+// 이번 드래그로 지나간 칸들(시작~현재 직선)에 강조 링을 둘러 범위를 보여준다.
+let dragRunCells = [];
+export function markDragRun(boardEl, coords, n) {
+  clearDragRun();
+  for (const [r, c] of coords) {
+    const el = boardEl.children[r * n + c];
+    if (el) { el.classList.add('drag-run'); dragRunCells.push(el); }
+  }
+}
+export function clearDragRun() {
+  for (const el of dragRunCells) el.classList.remove('drag-run');
+  dragRunCells = [];
+}
+
+// 드래그 중 "지금 몇 칸째"를 마지막(현재) 칸 우상단 모서리에 원 안 숫자로.
+export function showDragCount(boardEl, el, r, c, n, count) {
+  const cell = boardEl.children[r * n + c];
+  if (!el || !cell) return;
+  const b = cell.getBoundingClientRect();
+  // 배지의 좌표 기준은 offsetParent(.puzzle)이지 board가 아니다. board는 힌트만큼 안쪽에 있다.
+  const wrap = (boardEl.parentElement || boardEl).getBoundingClientRect();
+  el.hidden = false;
+  el.textContent = `${count}`;
+  el.style.left = `${b.right - wrap.left}px`; // 셀 우측 모서리
+  el.style.top = `${b.top - wrap.top}px`;     // 셀 상단 모서리
+}
+export function hideDragCount(el) { if (el) el.hidden = true; }
 
 // 튜토리얼 손가락: 특정 칸 위에 손가락 표시(시연). r<0이면 숨김.
 export function pointFinger(boardEl, fingerEl, r, c, n) {

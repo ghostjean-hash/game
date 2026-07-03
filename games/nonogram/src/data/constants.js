@@ -25,6 +25,7 @@ export const ANIM = {
   REVEAL_STEP_MS: 45,   // 완성 변신 시 칸별 순차 지연
   PRAISE_MS: 1100,      // 연속 응원 문구 노출 시간
   RESULT_DELAY_MS: 900, // 변신 후 결과 화면 전환까지
+  SPARKLE_STEP_MS: 60,  // 줄 완성 파도 반짝의 칸별 순차 지연
 };
 
 // 연속 정답 응원 문구(칭찬). 저학년 즉각 격려.

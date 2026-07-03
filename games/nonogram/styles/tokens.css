@@ -14,6 +14,7 @@
   --line-strong: #c9bce8; /* 5칸 구분 굵은 선 */
   --cell-empty: #f4eefb;  /* 빈 셀 바탕 */
   --fill-mono: #5b5470;   /* 플레이 중 칠한 칸(colors.js FILL_MONO와 동기) */
+  --drag-hi: #6a4fc0;     /* 드래그 중인 칸(진한 보라, 칠한 칸과 이질감 적게) */
   --mark: #c9bce8;        /* X 표시 색 */
   --star: #ffcf5c;        /* 별점 */
   --shadow: 0 6px 18px rgba(120, 90, 170, 0.14);

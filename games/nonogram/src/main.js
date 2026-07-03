@@ -12,7 +12,8 @@ import { lineFlags, completedCount } from './core/lines.js';
 import { starsFor } from './core/stars.js';
 import {
   renderClues, applyClueDim, renderBoard, applyState, revealColors,
-  setCursor, popCell, sparkleLines, pointFinger,
+  setCursor, popCell, waveHighlight, pointFinger, showDragCount, hideDragCount,
+  markDragRun, clearDragRun,
 } from './render/boardView.js';
 import { renderMap } from './render/mapView.js';
 import { renderResult } from './render/resultView.js';
@@ -172,7 +173,9 @@ function isCorrectFilled(r, c) {
 function decideAction(r, c) {
   const st = cur.board.cells[r][c];
   if (cur.mode === MODE.FILL) {
-    if (st === CELL.FILLED) return cur.solution[r][c] === false ? 'erase' : null;
+    // 이미 맞게 칠한 칸: 지우진 않지만(무변화) 드래그는 이어지도록 fill로.
+    // 틀린 칸(붉은)은 지우기.
+    if (st === CELL.FILLED) return cur.solution[r][c] === false ? 'erase' : 'fill';
     return 'fill';
   }
   return st === CELL.MARKED ? 'erase' : 'mark';
@@ -192,16 +195,23 @@ function applyAction(r, c) {
   popCell(boardEl, r, c, cur.puzzle.size);
   if (cur.board.mistakes > before.mistakes) sound.play('mistake');
   else sound.play(cur.dragAction);
-  checkPraise();
   updateFinger();
 }
 
-// 줄 완성이 늘면 반짝 + 연속 칭찬.
-function checkPraise() {
-  const flags = lineFlags(cur.board, cur.clues);
-  const now = completedCount(flags);
+// 이번 동작으로 "새로 완성된" 줄만 파도 반짝 + 연속 칭찬.
+// before=동작 직전 완성 flags, forward=드래그 방향. 이미 완성돼 있던 줄은 다시 반짝하지 않는다.
+function highlightNewCompletions(before, forward) {
+  const n = cur.puzzle.size;
+  const after = lineFlags(cur.board, cur.clues);
+  const newLines = [];
+  for (let r = 0; r < n; r++) if (after.rows[r] && !before.rows[r]) newLines.push({ type: 'row', idx: r });
+  for (let c = 0; c < n; c++) if (after.cols[c] && !before.cols[c]) newLines.push({ type: 'col', idx: c });
+  if (newLines.length) {
+    waveHighlight(boardEl, newLines, n, forward, ANIM.SPARKLE_STEP_MS);
+    sound.play('fill');
+  }
+  const now = completedCount(after);
   if (now > cur.prevCompleted) {
-    sparkleLines(boardEl, cur.board, flags);
     cur.streak += 1;
     if (cur.streak >= PRAISE_STREAK) showPraise();
   } else if (now < cur.prevCompleted) {
@@ -254,27 +264,55 @@ function undo() {
 // 도움: 한 줄 열기(별 하나 양보).
 function useHelp() {
   const before = cur.board;
+  const beforeFlags = lineFlags(before, cur.clues);
   const next = revealLine(before, cur.solution);
   if (next === before) return; // 이미 다 맞음
   pushHistory();
   cur.board = next;
   cur.helpUsed += 1;
   refresh();
-  checkPraise();
-  sound.play('fill');
-  if (isSolved(cur.board, cur.solution)) win();
+  if (isSolved(cur.board, cur.solution)) { win(); return; }
+  highlightNewCompletions(beforeFlags, true);
 }
 
 function onPaintStart(r, c) {
+  cur.completedBefore = lineFlags(cur.board, cur.clues); // 드래그 전 완성 줄 스냅샷
   cur.dragAction = decideAction(r, c);
   cur.cursor = { r, c };
+  cur.dragStart = { r, c };
+  cur.dragLast = { r, c };
   if (!cur.dragAction) return; // 잠긴 맞은 칸: 히스토리도 남기지 않음
   pushHistory();
   applyAction(r, c);
 }
-function onPaintMove(r, c) { applyAction(r, c); }
+function onPaintMove(r, c) {
+  applyAction(r, c);
+  cur.dragLast = { r, c };
+  // X(표시) 드래그는 칸 수 배지/색 강조를 쓰지 않는다(칠하기 전용).
+  const s = cur.dragStart;
+  if (s && cur.dragAction !== 'mark') {
+    const len = Math.abs(r - s.r) + Math.abs(c - s.c) + 1;
+    const coords = [];
+    if (r === s.r) {
+      for (let cc = Math.min(s.c, c); cc <= Math.max(s.c, c); cc++) coords.push([s.r, cc]);
+    } else {
+      for (let rr = Math.min(s.r, r); rr <= Math.max(s.r, r); rr++) coords.push([rr, s.c]);
+    }
+    markDragRun(boardEl, coords, cur.puzzle.size);
+    showDragCount(boardEl, el('drag-count'), r, c, cur.puzzle.size, len);
+  }
+}
 function onPaintEnd() {
-  if (isSolved(cur.board, cur.solution)) win();
+  clearDragRun();
+  hideDragCount(el('drag-count'));
+  // 드래그 방향(파도 순서용): 시작→마지막이 오른쪽/아래면 정방향.
+  const s = cur.dragStart, last = cur.dragLast;
+  const forward = !s || !last ? true : (last.c - s.c) + (last.r - s.r) >= 0;
+  const before = cur.completedBefore || lineFlags(cur.board, cur.clues);
+  cur.dragStart = null;
+  if (isSolved(cur.board, cur.solution)) { win(); return; }
+  // 마우스를 놓은 지금, 이번 드래그로 새로 온전히 맞춰진 줄만 하이라이트.
+  highlightNewCompletions(before, forward);
 }
 
 function win() {
