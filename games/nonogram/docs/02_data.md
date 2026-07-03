@@ -55,7 +55,7 @@
 ```js
 {
   id: 'star',            // 고유 id (저장 키)
-  title: '별',            // 도감 표시명
+  title: '별',            // 표시명(맵 썸네일·결과 화면)
   size: 5,               // SIZES 중 하나 (grid는 size×size)
   difficulty: 'tutorial',// 'tutorial' | 'easy' | 'medium' | 'hard'
   tutorialStep: 1,       // 튜토리얼일 때만(1~TUTORIAL_COUNT), 아니면 생략

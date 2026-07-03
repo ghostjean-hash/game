@@ -528,7 +528,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'e50', title: '물고기2', size: 5, difficulty: 'easy',
+    id: 'e50', title: '금붕어', size: 5, difficulty: 'easy',
     grid: [
       [0,0,0,0,1],
       [0,7,7,7,0],
@@ -1082,7 +1082,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'em1f416s10', title: '돼지2', size: 10, difficulty: 'medium',
+    id: 'em1f416s10', title: '아기돼지', size: 10, difficulty: 'medium',
     palette: { 1: '#f4abba', 2: '#ba8894' },
     grid: [
       [0,0,0,0,0,0,0,0,0,0],
@@ -2474,7 +2474,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'em1f407s10', title: '토끼2', size: 10, difficulty: 'medium',
+    id: 'em1f407s10', title: '산토끼', size: 10, difficulty: 'medium',
     palette: { 1: '#bdaab7', 2: '#dbabb8', 3: '#98a9b4', 4: '#c4cfd7' },
     grid: [
       [0,0,3,0,0,0,0,0,0,0],
@@ -2978,7 +2978,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'em1f408s15', title: '고양이2', size: 15, difficulty: 'hard',
+    id: 'em1f408s15', title: '노랑고양이', size: 15, difficulty: 'hard',
     palette: { 1: '#fec94e', 2: '#c7a552', 3: '#f49d30', 4: '#ffdb8f' },
     grid: [
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -4952,7 +4952,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'em1f412s15', title: '원숭이2', size: 15, difficulty: 'hard',
+    id: 'em1f412s15', title: '갈색원숭이', size: 15, difficulty: 'hard',
     palette: { 1: '#bf6a53', 2: '#d1967d', 3: '#62534e', 4: '#995a49' },
     grid: [
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -5477,7 +5477,7 @@ export const PUZZLES = [
     ],
   },
   {
-    id: 'em1f407s15', title: '토끼2', size: 15, difficulty: 'hard',
+    id: 'em1f407s15', title: '산토끼', size: 15, difficulty: 'hard',
     palette: { 1: '#9caab5', 2: '#e2abb9', 3: '#5a656c', 4: '#c4cfd7' },
     grid: [
       [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],

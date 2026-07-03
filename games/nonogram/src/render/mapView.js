@@ -2,7 +2,7 @@
 
 import { PUZZLES } from '../data/puzzles.js';
 import { LARGE_UNLOCK_CLEARS } from '../data/constants.js';
-import { fillPicture } from './pixel.js';
+import { fillPicture, fillEmptyGrid } from './pixel.js';
 
 const SECTIONS = [
   { title: '튜토리얼', diff: 'tutorial' },
@@ -44,19 +44,30 @@ export function renderMap(container, progress, onSelect) {
 
     const grid = document.createElement('div');
     grid.className = 'stage-grid';
-    for (const p of puzzles) {
+    puzzles.forEach((p, i) => {
       const prog = progress[p.id];
       const isClear = !!(prog && prog.cleared);
       const card = document.createElement('button');
       card.className = 'stage-card' + (locked ? ' locked' : '');
 
+      // 못 깬 퍼즐은 그림을 감춘다(정답 모양 스포일러 방지). 깨야 컬러로 공개.
       const thumb = document.createElement('div');
       thumb.className = 'stage-thumb';
-      fillPicture(thumb, p.grid, { mono: !isClear, palette: p.palette });
+      if (isClear) {
+        fillPicture(thumb, p.grid, { mono: false, palette: p.palette });
+      } else {
+        thumb.classList.add('mystery');
+        fillEmptyGrid(thumb, p.size);
+        const q = document.createElement('span');
+        q.className = 'mystery-q';
+        q.textContent = locked ? '🔒' : '?';
+        thumb.appendChild(q);
+      }
 
       const name = document.createElement('div');
       name.className = 'stage-name';
-      name.textContent = p.title;
+      // 못 깬 것은 이름도 감추고 번호만(깨면 진짜 이름 공개).
+      name.textContent = isClear ? p.title : (locked ? '' : `${i + 1}`);
 
       const stars = document.createElement('div');
       stars.className = 'stage-stars';
@@ -65,7 +76,7 @@ export function renderMap(container, progress, onSelect) {
       card.append(thumb, name, stars);
       if (!locked) card.addEventListener('click', () => onSelect(p));
       grid.appendChild(card);
-    }
+    });
     section.appendChild(grid);
 
     // 접기 토글

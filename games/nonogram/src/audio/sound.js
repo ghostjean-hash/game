@@ -53,6 +53,17 @@ export function unlockAudio() {
 // 오디오 시계가 막 깬 첫 재생에서 어택이 잘리는 것을 막는 예약 지연(인지 한계 이하).
 const SCHEDULE_AHEAD = 0.015;
 
+// 유휴 절전: 마지막 소리 후 이 시간 동안 재생이 없으면 오디오 스레드를 재운다.
+// keep-alive 무음이 상시 가동돼 발열·배터리를 먹는 것을 막는다(다음 재생 시 자동 resume).
+const IDLE_MS = 4000;
+let idleTimer = null;
+function scheduleIdleSuspend() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    if (ctx && ctx.state === 'running' && !muted) ctx.suspend();
+  }, IDLE_MS);
+}
+
 // 단음 하나: 주파수 freq(→ to로 글라이드), 길이 dur(초), 파형, 게인, 시작 지연.
 function tone(c, { freq, to, dur, type = 'sine', gain = 0.15, delay = 0 }) {
   const t0 = c.currentTime + SCHEDULE_AHEAD + delay;
@@ -101,6 +112,7 @@ export function play(name) {
   const run = () => { try { fn(c); } catch { /* 오디오 실패는 게임에 영향 없음 */ } };
   if (c.state === 'running') run();
   else c.resume().then(run).catch(() => {});
+  scheduleIdleSuspend(); // 재생 후 유휴 타이머 재설정(조용해지면 스레드 재움)
 }
 
 // 별 개수만큼 star 사운드를 계단식 재생(클리어 뒤 결과 화면).

@@ -6,7 +6,7 @@
 
 ```
 nonogram/
-├── index.html          # 앱 셸(맵/플레이/결과/도감 컨테이너)
+├── index.html          # 앱 셸(맵/플레이/결과 컨테이너)
 ├── styles/             # tokens.css(디자인 토큰) + main.css
 ├── src/
 │   ├── main.js         # 진입점: 조립 + 화면 전환 오케스트레이션
@@ -19,8 +19,7 @@ nonogram/
 │   ├── render/         # 화면 그리기 (core 결과를 DOM으로)
 │   │   ├── boardView.js#   격자 + 힌트 렌더
 │   │   ├── mapView.js  #   스테이지 맵
-│   │   ├── resultView.js#  결과(변신+별점)
-│   │   └── albumView.js#   도감
+│   │   └── resultView.js#  결과(변신+별점)
 │   ├── input/          # 입력 처리 (터치/마우스/키보드 → core 액션)
 │   │   └── boardInput.js
 │   ├── audio/          # Web Audio 효과음 합성 (음원 파일 0, core 아님)
@@ -51,6 +50,6 @@ data  ←  core  ←  render / input  ←  main
 2. `board.js`가 빈 보드 상태 생성(불변). 입력이 올 때마다 새 상태 반환.
 3. `input/boardInput.js`가 탭/드래그/키를 받아 board 액션(칠함/X/지움) 호출 → 새 상태.
 4. 상태가 바뀌면 `render/boardView.js`가 다시 그림. 승리 판정 시 `main.js`가 결과 화면으로 전환.
-5. 결과에서 `stars.js`로 별점 계산 → `storage`에 progress 저장 → 도감 갱신.
+5. 결과에서 `stars.js`로 별점 계산 → `storage`에 progress 저장 → 맵 썸네일이 컬러로 갱신.
 
 핵심 원칙: 상태는 core가 소유하고 불변으로 반환하며, render는 상태를 읽어 그리기만 한다(상태 변형 금지).

@@ -32,6 +32,16 @@ body {
   gap: var(--space-2);
   margin-bottom: var(--space-4);
 }
+.topbar .home {
+  font-size: 18px;
+  width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-1);
+  flex-shrink: 0;
+  color: var(--fg);
+  text-decoration: none;
+}
+.topbar .home:active { background: var(--surface); }
 .title {
   font-size: var(--fs-title);
   font-weight: 800;
@@ -95,6 +105,14 @@ button {
 }
 .stage-thumb i { border-radius: 1px; }
 .stage-name { font-weight: 700; font-size: var(--fs-small); }
+
+/* 못 깬/못 모은 퍼즐: 빈 노노그램 격자 위에 물음표(정답 모양은 감추되 "판"은 보이게) */
+.stage-thumb.mystery { position: relative; }
+.mystery i.empty { background: var(--cell-empty); border-radius: 1px; }
+.mystery-q {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 200%; font-weight: 800; color: var(--muted);
+}
 .stage-stars { font-size: 11px; color: var(--star); height: 14px; letter-spacing: 1px; }
 .stage-lock { font-size: 20px; }
 
@@ -206,22 +224,6 @@ button {
 @keyframes star-pop { 0% { transform: scale(0); opacity: 0; } 70% { transform: scale(1.35); } 100% { transform: scale(1); opacity: 1; } }
 .result-actions { display: flex; gap: var(--space-3); justify-content: center; margin-top: var(--space-4); }
 
-/* --- 도감 --- */
-.album-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: var(--space-3);
-}
-.album-card {
-  background: var(--surface); border: 2px solid var(--line);
-  border-radius: var(--radius-2); padding: var(--space-2);
-  box-shadow: var(--shadow); text-align: center;
-}
-.album-pic { display: grid; gap: 1px; width: 100%; aspect-ratio: 1; margin-bottom: var(--space-1); }
-.album-pic i { border-radius: 1px; }
-.album-card.locked .album-pic i { background: var(--line) !important; }
-.album-name { font-size: var(--fs-small); font-weight: 700; }
-.album-card.locked .album-name { color: var(--muted); }
-
 /* --- 튜토리얼 말풍선 --- */
 .coach {
   background: #f3eeff; border: 2px solid var(--accent);
@@ -328,10 +330,6 @@ button {
 .stage-section.collapsed .ss-caret { transform: rotate(-90deg); }
 .stage-section.collapsed .stage-grid { display: none; }
 .stage-lock-note { color: var(--muted); font-size: var(--fs-small); margin-bottom: var(--space-2); }
-
-/* 도감 요약 */
-.album-summary { text-align: center; font-size: 15px; font-weight: 700; color: var(--muted); margin-bottom: var(--space-3); }
-.album-summary b { color: var(--accent); font-size: 22px; }
 
 /* 데스크톱: 플레이 화면 넓게 + 격자 크게 */
 @media (min-width: 720px) {

@@ -524,7 +524,7 @@ export const HANDMADE = [
     ],
   },
   {
-    id: 'e50', title: '물고기2', size: 5, difficulty: 'easy',
+    id: 'e50', title: '금붕어', size: 5, difficulty: 'easy',
     grid: [
       [0,0,0,0,1],
       [0,7,7,7,0],

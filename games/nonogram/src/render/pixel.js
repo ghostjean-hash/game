@@ -1,4 +1,4 @@
-// 색 인덱스 격자를 픽셀 그림 요소로 채우는 공통 유틸(썸네일/도감/결과 공용).
+// 색 인덱스 격자를 픽셀 그림 요소로 채우는 공통 유틸(맵 썸네일/결과 공용).
 // DOM을 만지므로 render 계층. 색은 colors.js PALETTE.
 
 import { PALETTE } from '../data/colors.js';
@@ -18,4 +18,10 @@ export function fillPicture(el, grid, { mono = false, palette } = {}) {
     }
   }
   el.innerHTML = html;
+}
+
+// 못 깬 퍼즐용 빈 격자(정답 모양을 감추되 "노노그램 판"임은 보이게). 위에 물음표를 얹는다.
+export function fillEmptyGrid(el, n) {
+  el.style.gridTemplateColumns = `repeat(${n}, 1fr)`;
+  el.innerHTML = new Array(n * n).fill('<i class="empty"></i>').join('');
 }

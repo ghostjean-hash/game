@@ -16,7 +16,7 @@ export const PALETTE = {
   10: '#c99a6a', // cocoa 갈색
 };
 
-// 팔레트 이름(디버그/도감 대체 텍스트용).
+// 팔레트 이름(디버그/대체 텍스트용).
 export const PALETTE_NAMES = {
   1: 'ink', 2: 'cream', 3: 'mint', 4: 'lavender', 5: 'pink',
   6: 'butter', 7: 'sky', 8: 'coral', 9: 'leaf', 10: 'cocoa',

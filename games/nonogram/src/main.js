@@ -17,7 +17,6 @@ import {
 } from './render/boardView.js';
 import { renderMap } from './render/mapView.js';
 import { renderResult } from './render/resultView.js';
-import { renderAlbum } from './render/albumView.js';
 import { attachBoardInput } from './input/boardInput.js';
 import * as sound from './audio/sound.js';
 
@@ -33,7 +32,7 @@ let cur = null;
 const el = (id) => document.getElementById(id);
 const screens = {
   map: el('screen-map'), play: el('screen-play'),
-  result: el('screen-result'), album: el('screen-album'),
+  result: el('screen-result'),
 };
 const boardEl = el('board');
 const puzzleEl = boardEl.parentElement;
@@ -92,6 +91,9 @@ function startPuzzle(puzzle) {
     board: loadInProgress(puzzle.id, puzzle.size),
     mode: MODE.FILL,
     dragAction: null,
+    dragStart: null,       // 드래그 시작 칸(범위·방향 계산)
+    dragLast: null,        // 드래그 마지막 칸(파도 방향)
+    completedBefore: null, // 드래그 직전 완성 줄 스냅샷
     cursor: { r: 0, c: 0 },
     history: [],
     helpUsed: 0,
@@ -169,12 +171,12 @@ function isCorrectFilled(r, c) {
   return cur.board.cells[r][c] === CELL.FILLED && cur.solution[r][c] === true;
 }
 
-// 칠하기 모드에서 이미 칠한 칸은 "틀린 칸(붉은)"만 지우고, 맞은 칸은 잠금(null=무동작).
+// 이 칸을 눌렀을 때의 동작을 정한다.
+// 칠하기 모드: 빈 칸·맞은 칸은 fill(맞은 칸은 무변화라 유지되며 드래그가 이어짐), 틀린 칸(붉은)만 erase.
+// 표시 모드: X 토글(있으면 erase, 없으면 mark).
 function decideAction(r, c) {
   const st = cur.board.cells[r][c];
   if (cur.mode === MODE.FILL) {
-    // 이미 맞게 칠한 칸: 지우진 않지만(무변화) 드래그는 이어지도록 fill로.
-    // 틀린 칸(붉은)은 지우기.
     if (st === CELL.FILLED) return cur.solution[r][c] === false ? 'erase' : 'fill';
     return 'fill';
   }
@@ -377,12 +379,6 @@ function onKey(e) {
   e.preventDefault();
 }
 
-// --- 도감 ---
-function openAlbum() {
-  renderAlbum(el('album-body'), progress);
-  showScreen('album');
-}
-
 // --- 사운드 ---
 function updateMuteBtn() {
   el('sound-toggle').textContent = sound.isMuted() ? '🔇' : '🔊';
@@ -400,8 +396,6 @@ function init() {
   el('mode-fill').addEventListener('click', () => setMode(MODE.FILL));
   el('mode-mark').addEventListener('click', () => setMode(MODE.MARK));
   el('play-back').addEventListener('click', openMap);
-  el('go-album').addEventListener('click', openAlbum);
-  el('album-back').addEventListener('click', openMap);
   el('result-map').addEventListener('click', openMap);
   el('result-next').addEventListener('click', nextPuzzle);
   el('sound-toggle').addEventListener('click', toggleMute);
