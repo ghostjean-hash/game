@@ -13,7 +13,8 @@ nonogram/
 │   ├── core/           # 순수 게임 로직 (DOM/Canvas/window/document 금지)
 │   │   ├── hints.js    #   격자 → 행/열 힌트 생성
 │   │   ├── solver.js   #   줄 논리 솔버 + 유일해/추측불필요 검증 + 난이도
-│   │   ├── board.js    #   플레이 보드 상태(불변): 셀 토글, 승리 판정, 실수 카운트
+│   │   ├── board.js    #   보드 상태(불변): 셀 토글, 승리/실수, 도움(한 줄 열기), 저장 직렬화
+│   │   ├── lines.js    #   행/열 완성 판정(완성 줄 흐리게 + 칭찬)
 │   │   └── stars.js    #   실수 → 별점 계산
 │   ├── render/         # 화면 그리기 (core 결과를 DOM으로)
 │   │   ├── boardView.js#   격자 + 힌트 렌더

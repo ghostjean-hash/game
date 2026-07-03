@@ -26,9 +26,16 @@
   <section id="screen-play" class="screen">
     <div class="play-head">
       <button id="play-back" class="btn ghost">← 맵</button>
+      <div id="puzzle-info" class="puzzle-info"></div>
       <span class="spacer"></span>
-      <span class="mistake-badge">실수 <b id="mistake-count">0</b></span>
+      <div id="star-preview" class="star-preview" aria-label="지금 별점"></div>
       <button id="sound-toggle" class="btn ghost sound-btn" aria-label="소리 켜기/끄기">🔊</button>
+    </div>
+    <div class="sub-head">
+      <span class="mistake-badge">실수 <b id="mistake-count">0</b></span>
+      <span class="spacer"></span>
+      <button id="undo-btn" class="btn small" aria-label="되돌리기">↩︎ 되돌리기</button>
+      <button id="help-btn" class="btn small" aria-label="도움">💡 도움</button>
     </div>
     <div id="coach" class="coach" hidden></div>
     <div class="puzzle-wrap">
@@ -37,13 +44,15 @@
         <div id="col-clues" class="col-clues"></div>
         <div id="row-clues" class="row-clues"></div>
         <div id="board" class="board"></div>
+        <div id="finger" class="finger" hidden>👆</div>
       </div>
     </div>
     <div class="mode-bar">
       <button id="mode-fill" class="mode-btn active"><span class="swatch fill"></span>칠하기</button>
       <button id="mode-mark" class="mode-btn"><span class="swatch mark">×</span>표시</button>
     </div>
-    <p class="hint-line">숫자만큼 연속으로 칠해요. 틀린 곳은 지우면 돼요.</p>
+    <p id="hint-line" class="hint-line">숫자만큼 연속으로 칠해요. 틀린 곳은 지우면 돼요.</p>
+    <div id="praise-toast" class="praise-toast" hidden></div>
   </section>
 
   <!-- 결과 -->

@@ -153,7 +153,8 @@ button {
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   display: grid; place-items: center;
-  padding: 0;
+  padding: 0; position: relative;
+  transition: background-color 0.12s ease;
 }
 /* 5칸마다 굵은 구분선 */
 .cell.blk-r { border-right-color: var(--line-strong); }
@@ -199,8 +200,10 @@ button {
 .result-pic i { border-radius: 2px; }
 @keyframes pop { 0% { transform: scale(0.4); opacity: 0; } 70% { transform: scale(1.06); } 100% { transform: scale(1); opacity: 1; } }
 .result-title { font-size: var(--fs-title); font-weight: 800; color: var(--accent); }
-.result-stars { font-size: 40px; color: var(--star); letter-spacing: 6px; margin: var(--space-3) 0; }
+.result-stars { font-size: 40px; letter-spacing: 6px; margin: var(--space-3) 0; }
+.result-stars .on { display: inline-block; color: var(--star); animation: star-pop 0.4s both; }
 .result-stars .off { color: var(--line); }
+@keyframes star-pop { 0% { transform: scale(0); opacity: 0; } 70% { transform: scale(1.35); } 100% { transform: scale(1); opacity: 1; } }
 .result-actions { display: flex; gap: var(--space-3); justify-content: center; margin-top: var(--space-4); }
 
 /* --- 도감 --- */
@@ -227,3 +230,89 @@ button {
   line-height: 1.5;
 }
 .coach b { color: var(--accent); }
+
+/* ===== HUD 확장 (전체 퀄리티) ===== */
+
+/* 퍼즐 정보 머리말 */
+.puzzle-info { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 12px; font-weight: 700; }
+.pi-badge { background: #f0eaff; color: var(--accent); border-radius: var(--radius-pill); padding: 2px 9px; white-space: nowrap; }
+.pi-name { color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pi-prog { color: var(--muted); white-space: nowrap; }
+
+/* 별 예고 */
+.star-preview { font-size: 16px; letter-spacing: 1px; white-space: nowrap; }
+.star-preview .on { color: var(--star); }
+.star-preview .off { color: var(--line); }
+.star-preview .off, .star-preview .on { transition: color 0.2s ease; }
+
+/* 서브 헤더(실수·되돌리기·도움) */
+.sub-head { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); }
+#undo-btn, #help-btn { white-space: nowrap; }
+
+/* 완성 줄 힌트 흐리게 */
+.clue-col.done, .clue-row.done { opacity: 0.28; transition: opacity 0.2s ease; }
+
+/* 틀린 칸(옅게 남김 + 처음 한 번 물결) */
+.cell.wrong { background: var(--wrong) !important; animation: wrong-pulse 0.5s ease; }
+@keyframes wrong-pulse {
+  0% { box-shadow: inset 0 0 0 4px rgba(255,255,255,0.8); }
+  100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); }
+}
+
+/* 누를 때 톡 */
+.cell.pop { animation: pop-cell 0.18s ease; z-index: 2; }
+@keyframes pop-cell { 0% { transform: scale(0.7); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+
+/* 줄 완성 반짝 */
+.cell.sparkle { animation: sparkle 0.55s ease; z-index: 2; }
+@keyframes sparkle {
+  0% { box-shadow: 0 0 0 0 rgba(255,207,92,0.9); }
+  100% { box-shadow: 0 0 0 9px rgba(255,207,92,0); }
+}
+
+/* 완성 변신: 순차 지연은 인라인, 여기선 부드럽게 */
+.cell.reveal { background: var(--rc, var(--fill-mono)); transition: background-color 0.35s ease; }
+
+/* 튜토리얼 손가락 */
+.puzzle { position: relative; }
+.finger { position: absolute; font-size: 30px; pointer-events: none; transform: translate(-50%, 0); z-index: 5; animation: tap 1s ease-in-out infinite; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+@keyframes tap { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 7px); } }
+
+/* 연속 칭찬 토스트 */
+.praise-toast {
+  position: fixed; left: 50%; top: 28%; transform: translateX(-50%) scale(0.8);
+  background: var(--accent-2); color: #245a50; font-weight: 800; font-size: 18px;
+  padding: 10px 24px; border-radius: var(--radius-pill); box-shadow: var(--shadow);
+  opacity: 0; pointer-events: none; z-index: 30; transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.praise-toast.show { opacity: 1; transform: translateX(-50%) scale(1); }
+
+/* 격자가 화면보다 크면 가로로 밀어 보기(작은 손 배려) */
+.puzzle-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* 맵 섹션(접기 + 진행바) */
+.stage-section { margin-bottom: var(--space-2); }
+.stage-section-head {
+  width: 100%; display: flex; align-items: center; gap: var(--space-2);
+  background: transparent; padding: var(--space-3) 0 var(--space-2);
+  font-weight: 800; font-size: var(--fs-body);
+}
+.ss-title { color: var(--fg); }
+.ss-count { color: var(--muted); font-size: var(--fs-small); font-weight: 700; }
+.ss-bar { flex: 1; height: 8px; max-width: 160px; background: var(--line); border-radius: var(--radius-pill); overflow: hidden; }
+.ss-bar i { display: block; height: 100%; background: var(--accent-2); border-radius: var(--radius-pill); transition: width 0.3s ease; }
+.ss-caret { color: var(--muted); transition: transform 0.2s ease; }
+.stage-section.collapsed .ss-caret { transform: rotate(-90deg); }
+.stage-section.collapsed .stage-grid { display: none; }
+.stage-lock-note { color: var(--muted); font-size: var(--fs-small); margin-bottom: var(--space-2); }
+
+/* 도감 요약 */
+.album-summary { text-align: center; font-size: 15px; font-weight: 700; color: var(--muted); margin-bottom: var(--space-3); }
+.album-summary b { color: var(--accent); font-size: 22px; }
+
+/* 데스크톱: 플레이 화면 넓게 + 격자 크게 */
+@media (min-width: 720px) {
+  .puzzle[data-size="5"]  { --cell: clamp(48px, 9vw, 74px); }
+  .puzzle[data-size="10"] { --cell: clamp(34px, 6vw, 52px); }
+  .puzzle-wrap { margin-top: var(--space-5); }
+}

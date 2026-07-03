@@ -3,7 +3,11 @@
 
 import { lineClue, rowClues, colClues, makeClues, isFilled } from '../src/core/hints.js';
 import { solve, verifyPuzzle } from '../src/core/solver.js';
-import { createBoard, toSolution, toggleFill, toggleMark, setCell, isSolved } from '../src/core/board.js';
+import {
+  createBoard, toSolution, toggleFill, toggleMark, setCell, isSolved,
+  revealLine, serializeBoard, deserializeBoard,
+} from '../src/core/board.js';
+import { lineFlags, completedCount } from '../src/core/lines.js';
 import { starsFor } from '../src/core/stars.js';
 import { CELL, MAX_STARS } from '../src/data/constants.js';
 import { PUZZLES } from '../src/data/puzzles.js';
@@ -114,6 +118,45 @@ test('isSolved: 칠함 여부만 정답과 일치하면 승리(X 무관)', () =>
   eq(isSolved(b, sol), false);
   b = toggleFill(b, 1, 1, sol);
   eq(isSolved(b, sol), true);
+});
+
+// --- lines (완성 줄 판정) ---
+test('lineFlags: 채운 줄이 힌트와 맞으면 완성', () => {
+  const grid = [[1, 0], [1, 1]];
+  const clues = makeClues(grid);
+  const sol = toSolution(grid);
+  let b = createBoard(2);
+  eqArr(lineFlags(b, clues).rows, [false, false], '빈 보드는 완성 없음');
+  b = setCell(b, 1, 0, CELL.FILLED, sol);
+  b = setCell(b, 1, 1, CELL.FILLED, sol); // 아래 행 [1,1] 완성
+  eq(lineFlags(b, clues).rows[1], true, '아래 행 완성');
+  eq(lineFlags(b, clues).rows[0], false, '위 행 아직');
+});
+test('completedCount: 완성 줄 총합', () => {
+  const flags = { rows: [true, false], cols: [true, true] };
+  eq(completedCount(flags), 3);
+});
+
+// --- 도움 / 저장 ---
+test('revealLine: 첫 미완성 행을 정답대로 채움(실수 아님)', () => {
+  const grid = [[1, 0], [0, 1]];
+  const sol = toSolution(grid);
+  const b0 = createBoard(2);
+  const b1 = revealLine(b0, sol);
+  eq(b1.cells[0][0], CELL.FILLED, '정답 칠칸');
+  eq(b1.cells[0][1], CELL.EMPTY, '정답 빈칸');
+  eq(b1.mistakes, 0, '도움은 실수 아님');
+  eq(b0.cells[0][0], CELL.EMPTY, '원본 불변');
+});
+test('serialize/deserialize: 라운드트립 보존', () => {
+  const grid = [[1, 0], [1, 1]];
+  const sol = toSolution(grid);
+  let b = createBoard(2);
+  b = setCell(b, 0, 1, CELL.FILLED, sol); // 실수 하나
+  const round = deserializeBoard(serializeBoard(b));
+  eq(round.size, 2); eq(round.mistakes, 1);
+  eq(round.cells[0][1], CELL.FILLED);
+  eq(deserializeBoard(null), null, '깨진 데이터는 null');
 });
 
 // --- stars ---

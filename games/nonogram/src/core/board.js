@@ -66,6 +66,38 @@ export function setCell(board, r, c, target, solution) {
   return { ...board, cells };
 }
 
+// 도움: 아직 정답과 다른 첫 줄(행 우선)을 정답대로 채운다(칠할 칸 FILLED, 나머지 EMPTY).
+// 도움으로 채운 것은 실수로 세지 않는다. 이미 다 맞았으면 원본 그대로.
+export function revealLine(board, solution) {
+  const n = board.size;
+  for (let r = 0; r < n; r++) {
+    let need = false;
+    for (let c = 0; c < n; c++) {
+      if ((board.cells[r][c] === CELL.FILLED) !== solution[r][c]) { need = true; break; }
+    }
+    if (need) {
+      const cells = board.cells.map((row, ri) =>
+        (ri === r ? row.map((_, c) => (solution[r][c] ? CELL.FILLED : CELL.EMPTY)) : row));
+      return { ...board, cells };
+    }
+  }
+  return board;
+}
+
+// 저장/복원용: 보드를 최소 데이터로 직렬화 / 역직렬화.
+export function serializeBoard(board) {
+  return { size: board.size, cells: board.cells, mistakes: board.mistakes, mistakenKeys: board.mistakenKeys };
+}
+export function deserializeBoard(data) {
+  if (!data || !Array.isArray(data.cells)) return null;
+  return {
+    size: data.size,
+    cells: data.cells.map((row) => row.slice()),
+    mistakes: data.mistakes || 0,
+    mistakenKeys: Array.isArray(data.mistakenKeys) ? data.mistakenKeys.slice() : [],
+  };
+}
+
 // 승리 판정: 모든 칸에서 (칠함 여부) === (정답 채움 여부). X/EMPTY 구분은 무관.
 export function isSolved(board, solution) {
   for (let r = 0; r < board.size; r++) {
