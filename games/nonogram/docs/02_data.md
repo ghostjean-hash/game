@@ -13,9 +13,10 @@
 | `TUTORIAL_COUNT` | `3` | 튜토리얼 판 수 |
 | `LARGE_UNLOCK_CLEARS` | `6` | 15×15 해금에 필요한 중급 이하 클리어 수 |
 | `MODE` | `{ FILL: 'fill', MARK: 'mark' }` | 입력 모드 |
+| `CELL_FIT` | `{ MIN_PX: 18, GUTTER_PX: 8, MAX: {5:60,10:46,15:34}, DEFAULT_MAX: 46 }` | 격자를 화면에 맞출 때 쓰는 셀 크기(px) 한계 |
 
 - 별점 계산: `mistakes <= STAR_THRESHOLDS.THREE ? 3 : mistakes <= STAR_THRESHOLDS.TWO ? 2 : 1`.
-- 셀 크기(px)는 CSS 변수 `--cell` 한 곳에서 파생(styles/tokens.css). JS는 px를 알지 못한다.
+- 셀 크기(px)는 CSS 변수 `--cell` 한 곳에서 파생. 플레이 화면은 세로로 스크롤되지 않고 한 화면에 담기므로, `main.js`의 `fitBoard`가 남은 공간(폭·높이)을 재서 `--cell`을 정한다(폭·높이 중 작은 쪽, `CELL_FIT.MIN_PX`~크기별 `MAX` 범위). `styles/tokens.css`의 `clamp` 값은 JS 미동작 시 fallback.
 
 ## 2. 색상 (`src/data/colors.js`)
 

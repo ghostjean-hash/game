@@ -1,7 +1,7 @@
 // 진입점: 화면 전환 오케스트레이션 + 저장 연결. core를 조립하고 render/input에 위임한다.
 
 import { createStorage } from '../../../shared/storage.js';
-import { CELL, MODE, MAX_STARS, ANIM, PRAISE, PRAISE_STREAK } from './data/constants.js';
+import { CELL, MODE, MAX_STARS, ANIM, PRAISE, PRAISE_STREAK, CELL_FIT } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
 import { makeClues } from './core/hints.js';
 import {
@@ -112,10 +112,10 @@ function startPuzzle(puzzle) {
   // 헤더 정보
   const d = DIFF[puzzle.difficulty];
   const { idx, total } = puzzleRank(puzzle);
+  // 퍼즐 이름은 정답 스포일러라 HUD에 아예 표시하지 않는다(클리어 결과 화면에서만 공개).
+  // 난이도 배지(난이도별 색) + 진행 위치만 두어 깔끔하게. (배지의 d.name은 난이도명)
   el('puzzle-info').innerHTML =
-    `<span class="pi-badge">${d.icon} ${d.name}</span>` +
-    // 플레이 중엔 이름을 감춘다(정답 그림 스포일러 방지). 클리어 결과 화면에서 공개.
-    (puzzle.difficulty === 'tutorial' ? '' : `<span class="pi-name">? ? ?</span>`) +
+    `<span class="pi-badge pi-${puzzle.difficulty}">${d.icon} ${d.name}</span>` +
     `<span class="pi-prog">${idx}/${total}</span>`;
 
   el('mode-fill').disabled = false;
@@ -136,7 +136,32 @@ function startPuzzle(puzzle) {
   el('hint-line').hidden = !isTut;
 
   showScreen('play');
-  updateFinger();
+  // 화면 전환으로 레이아웃이 잡힌 다음 프레임에 격자 크기를 화면에 맞춘다.
+  requestAnimationFrame(() => { fitBoard(); updateFinger(); });
+}
+
+// 격자를 현재 화면에 꼭 맞춘다(페이지 스크롤 없이 한 화면에).
+// 머리말·모드바가 쓰고 남은 .puzzle-wrap 공간에서 힌트 영역을 뺀 뒤,
+// 폭·높이 중 작은 쪽으로 셀 크기를 정한다. 힌트 폭·높이는 글자 기반이라 셀 크기와
+// 사실상 무관하므로 한 번 측정으로 충분하다. CSS clamp는 JS 미동작 시 fallback.
+function fitBoard() {
+  if (!cur) return;
+  const n = cur.puzzle.size;
+  const wrap = puzzleEl.parentElement; // .puzzle-wrap
+  const availW = wrap.clientWidth;
+  const availH = wrap.clientHeight;
+  if (availW <= 0 || availH <= 0) return; // 아직 레이아웃 전(display:none 등)
+  const clueLeft = el('row-clues').offsetWidth;  // 좌측 행 힌트 폭
+  const clueTop = el('col-clues').offsetHeight;  // 상단 열 힌트 높이
+  const g = CELL_FIT.GUTTER_PX;
+  // 격자(board) 자체를 화면 중심에 두려면 좌측 힌트 폭만큼 우측에 여백을 준다.
+  // 그만큼 가로 여유가 줄므로 폭 계산에서도 힌트 폭을 양쪽으로 뺀다.
+  const byW = (availW - clueLeft * 2 - g) / n;
+  const byH = (availH - clueTop - g) / n;
+  const cap = CELL_FIT.MAX[n] || CELL_FIT.DEFAULT_MAX;
+  const cell = Math.max(CELL_FIT.MIN_PX, Math.floor(Math.min(byW, byH, cap)));
+  puzzleEl.style.setProperty('--cell', `${cell}px`);
+  puzzleEl.style.marginRight = `${clueLeft}px`;
 }
 
 // 화면 갱신: 셀 상태 + 완성 줄 흐리게 + 별 예고 + 실수 + 중도 저장.
@@ -239,6 +264,7 @@ function showPraise() {
 
 // 튜토리얼 손가락: 아직 첫 칸도 안 칠했으면 첫 정답 칠칸을 가리킨다.
 function updateFinger() {
+  if (!cur) return; // 맵/결과 화면에서 resize로 불릴 수 있어 가드
   const fingerEl = el('finger');
   if (cur.puzzle.difficulty !== 'tutorial') { fingerEl.hidden = true; return; }
   const anyFilled = cur.board.cells.some((row) => row.some((v) => v === CELL.FILLED));
@@ -408,6 +434,11 @@ function init() {
   el('undo-btn').addEventListener('click', undo);
   el('help-btn').addEventListener('click', useHelp);
   document.addEventListener('keydown', onKey);
+  // 창 크기·방향(가로/세로 회전)이 바뀌면 격자를 다시 화면에 맞춘다.
+  window.addEventListener('resize', () => { fitBoard(); updateFinger(); });
+  window.addEventListener('orientationchange', () => {
+    requestAnimationFrame(() => { fitBoard(); updateFinger(); });
+  });
 
   sound.setMuted(store.get('muted', false));
   updateMuteBtn();

@@ -20,6 +20,16 @@ export const LARGE_UNLOCK_CLEARS = 6;
 // 입력 모드.
 export const MODE = { FILL: 'fill', MARK: 'mark' };
 
+// 격자를 화면(가용 폭·높이)에 맞출 때 쓰는 셀 크기 값(px). docs/02_data.md 1장.
+// fitBoard가 헤더·힌트를 뺀 남은 공간에서 폭·높이 중 작은 쪽으로 셀을 정하되,
+// MAX(크기별 상한) 이하 MIN 이상으로 제한한다. 상한이 없으면 큰 화면에서 격자가 과대해진다.
+export const CELL_FIT = {
+  MIN_PX: 18,                        // 이보다 작으면 터치가 어려워 하한(그 아래로만 스크롤 안전망 작동)
+  GUTTER_PX: 8,                      // 격자 둘레 최소 여백
+  MAX: { 5: 60, 10: 46, 15: 34 },   // 크기별 셀 상한(칸이 클수록 상한을 낮춰 총폭 균형)
+  DEFAULT_MAX: 46,                   // MAX에 없는 크기의 기본 상한
+};
+
 // 연출 타이밍(ms). 값은 여기 한 곳에서.
 export const ANIM = {
   REVEAL_STEP_MS: 45,   // 완성 변신 시 칸별 순차 지연

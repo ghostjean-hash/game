@@ -25,14 +25,15 @@
   <!-- 플레이 -->
   <section id="screen-play" class="screen">
     <div class="play-head">
-      <button id="play-back" class="btn ghost">← 맵</button>
+      <button id="play-back" class="icon-btn" aria-label="맵으로">←</button>
       <div id="puzzle-info" class="puzzle-info"></div>
-      <span class="spacer"></span>
-      <div id="star-preview" class="star-preview" aria-label="지금 별점"></div>
-      <button id="sound-toggle" class="btn ghost sound-btn" aria-label="소리 켜기/끄기">🔊</button>
+      <button id="sound-toggle" class="icon-btn sound-btn" aria-label="소리 켜기/끄기">🔊</button>
     </div>
     <div class="sub-head">
-      <span class="mistake-badge">실수 <b id="mistake-count">0</b></span>
+      <span class="status-group">
+        <span class="mistake-badge">실수 <b id="mistake-count">0</b></span>
+        <span id="star-preview" class="star-preview" aria-label="지금 별점"></span>
+      </span>
       <span class="spacer"></span>
       <button id="undo-btn" class="btn small" aria-label="되돌리기">↩︎ 되돌리기</button>
       <button id="help-btn" class="btn small" aria-label="도움">💡 도움</button>

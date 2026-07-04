@@ -117,20 +117,52 @@ button {
 .stage-lock { font-size: 20px; }
 
 /* --- 플레이 화면 --- */
+/* 플레이 중에는 페이지가 스크롤되지 않고 한 화면에 모두 담긴다.
+   플레이 화면을 뷰포트 높이에 고정(flex column)하고, 격자를 감싼 .puzzle-wrap이
+   남는 세로 공간을 전부 차지하게 한다. 실제 셀 크기는 JS(fitBoard)가 그 공간에 맞춰 정한다. */
+body:has(#screen-play.active) { overflow: hidden; }
+body:has(#screen-play.active) #app {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
+  overflow: hidden;
+}
+#screen-play.active {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+/* 상단: [뒤로] · [난이도·진행(중앙)] · [소리] 3분할. 양끝 아이콘 버튼, 가운데 정보 강조. */
 .play-head {
   display: flex; align-items: center; gap: var(--space-2);
   margin-bottom: var(--space-3);
 }
+.icon-btn {
+  width: 40px; height: 40px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--surface); border: 2px solid var(--line);
+  border-radius: var(--radius-pill); box-shadow: var(--shadow);
+  font-size: 20px; line-height: 1; color: var(--fg);
+  transition: transform 0.08s ease;
+}
+.icon-btn:active { transform: scale(0.94); }
+.sound-btn { font-size: 19px; }
+
 .mistake-badge {
   background: var(--surface); border: 2px solid var(--line);
-  border-radius: var(--radius-pill); padding: var(--space-2) var(--space-4);
-  font-weight: 800; font-size: var(--fs-body);
+  border-radius: var(--radius-pill); padding: var(--space-2) var(--space-3);
+  font-weight: 800; font-size: var(--fs-body); color: var(--muted);
 }
-.mistake-badge b { color: var(--point); font-size: 20px; margin: 0 2px; }
-.sound-btn { font-size: 20px; padding: var(--space-1) var(--space-2); line-height: 1; }
+.mistake-badge b { color: var(--point); font-size: 20px; margin: 0 3px; }
 
-/* 힌트 + 격자 2x2 레이아웃 */
-.puzzle-wrap { display: flex; justify-content: center; margin: var(--space-3) 0; }
+/* 힌트 + 격자 2x2 레이아웃. 플레이 화면에서 남는 세로 공간을 전부 차지(flex:1)하고
+   그 안에서 격자를 가운데 정렬. 나머지 머리말/모드바는 고정 높이. */
+.puzzle-wrap { display: flex; justify-content: center; align-items: center; margin: var(--space-3) 0; flex: 1 1 auto; min-height: 0; }
+.play-head, .sub-head, .coach, .mode-bar, .hint-line { flex-shrink: 0; }
 .puzzle {
   display: grid;
   grid-template-columns: auto auto;
@@ -237,20 +269,28 @@ button {
 
 /* ===== HUD 확장 (전체 퀄리티) ===== */
 
-/* 퍼즐 정보 머리말 */
-.puzzle-info { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 12px; font-weight: 700; }
-.pi-badge { background: #f0eaff; color: var(--accent); border-radius: var(--radius-pill); padding: 2px 9px; white-space: nowrap; }
-.pi-name { color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pi-prog { color: var(--muted); white-space: nowrap; }
+/* 퍼즐 정보 머리말: 헤더 가운데를 차지하며 난이도 배지 + 진행 위치를 또렷하게. */
+.puzzle-info { flex: 1; display: flex; align-items: center; justify-content: center; gap: var(--space-2); min-width: 0; font-weight: 800; }
+.pi-badge {
+  background: var(--accent); color: #fff; border-radius: var(--radius-pill);
+  padding: 4px 12px; white-space: nowrap; font-size: 14px; box-shadow: var(--shadow);
+}
+/* 난이도별 배지 색(흰 글자 대비 확보한 파스텔 톤). */
+.pi-badge.pi-tutorial { background: var(--diff-tutorial); }
+.pi-badge.pi-easy     { background: var(--diff-easy); }
+.pi-badge.pi-medium   { background: var(--diff-medium); }
+.pi-badge.pi-hard     { background: var(--diff-hard); }
+.pi-prog { color: var(--fg); white-space: nowrap; font-size: 15px; }
 
 /* 별 예고 */
-.star-preview { font-size: 16px; letter-spacing: 1px; white-space: nowrap; }
+.star-preview { font-size: 17px; letter-spacing: 1px; white-space: nowrap; line-height: 1; }
 .star-preview .on { color: var(--star); }
 .star-preview .off { color: var(--line); }
 .star-preview .off, .star-preview .on { transition: color 0.2s ease; }
 
-/* 서브 헤더(실수·되돌리기·도움) */
+/* 서브 헤더: 왼쪽 상태(실수·별 예고) 그룹 / 오른쪽 액션(되돌리기·도움). */
 .sub-head { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); }
+.status-group { display: flex; align-items: center; gap: var(--space-2); }
 #undo-btn, #help-btn { white-space: nowrap; }
 
 /* 완성 줄 힌트 흐리게 */
@@ -321,8 +361,9 @@ button {
 }
 .praise-toast.show { opacity: 1; transform: translateX(-50%) scale(1); }
 
-/* 격자가 화면보다 크면 가로로 밀어 보기(작은 손 배려) */
-.puzzle-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+/* 안전망: fitBoard가 셀을 공간에 맞추므로 보통은 넘치지 않지만, 극단적으로 좁은 화면
+   (셀이 MIN에 걸릴 때)에서만 격자 안에서 스크롤(페이지 스크롤 아님). */
+.puzzle-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
 
 /* 맵 섹션(접기 + 진행바) */
 .stage-section { margin-bottom: var(--space-2); }
