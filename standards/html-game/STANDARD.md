@@ -1,6 +1,6 @@
 # HTML 게임 셋업 표준 (html-game)
 
-버전: v0.3 / 갱신: 2026-07-05 / 상태: 데이터 수집 (글로벌 미승격)
+버전: v0.3.1 / 갱신: 2026-07-05 / 상태: 데이터 수집 (글로벌 미승격)
 
 ## 0. 메타
 
@@ -91,7 +91,7 @@ PROJECT_NAME/
 
 ### 4.7. 모바일/태블릿 브라우저 플레이 규칙
 
-핸드폰·태블릿 브라우저에서 플레이하는 게임은 아래를 지킨다(노노그램에서 검증, v0.3 신설 2026-07-05). 공용 기반 `shared/base.css`가 1-4의 상당수를 제공하므로 링크해서 쓰는 것이 우선이고, 자체 디자인 시스템(파스텔 톤 등)이라 base.css 컴포넌트를 못 쓰는 게임은 아래 규칙 값을 직접 이식한다.
+핸드폰·태블릿 브라우저에서 플레이하는 게임은 아래를 지킨다(노노그램에서 검증, v0.3 신설 2026-07-05). 규칙 1-4의 무테마 골격(색·폰트 없이 뷰포트 고정·safe-area·터치·리셋만)은 공용 자산 `shared/mobile-shell.css`가 제공한다(v0.3.1 실제 분리). 다크 테마 게임은 `shared/base.css`를 링크하면 되고(base.css가 mobile-shell.css를 `@import`), 자체 디자인 게임(파스텔 톤 등)은 `shared/mobile-shell.css`를 직접 링크한 뒤 자기 색·폰트만 얹는다. 규칙 값을 복사하지 않는다.
 
 1. **viewport meta**: `width=device-width, initial-scale=1, viewport-fit=cover`. 게임판을 드래그로 조작하는 게임은 `maximum-scale=1, user-scalable=no`로 확대를 잠근다. `viewport-fit=cover`가 있어야 safe-area가 동작한다.
 2. **페이지 고정**: `html { overflow:hidden }`, `body { height:100dvh; overscroll-behavior:none; touch-action:manipulation }`. 페이지 자체가 세로 스크롤·고무줄 바운스·더블탭 확대되지 않게 뷰포트에 고정한다. `100vh`가 아니라 `100dvh`(모바일 주소창 변화 대응).

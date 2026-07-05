@@ -1,0 +1,36 @@
+/* 무테마 모바일 셸 - 웹 게임 공용 뷰포트 골격.
+   색·폰트는 담지 않는다(각 게임 tokens/CSS가 얹는다). 뷰포트 고정·safe-area·터치·리셋만.
+   규칙 근거: standards/html-game/STANDARD.md 4.7(모바일/태블릿 브라우저 플레이 규칙).
+   쓰는 법: 다크 테마 게임은 base.css를 링크(base.css가 이 파일을 @import).
+           자체 디자인 게임(파스텔 톤 등)은 이 파일을 직접 링크한 뒤 색·폰트를 얹는다. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  height: 100%;
+  overflow: hidden;                 /* 페이지 세로 스크롤 원천 차단 */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--bg);            /* safe-area 바깥(노치·홈바)까지 배경색 - 변수라 무테마 */
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  height: 100dvh;                   /* 동적 뷰포트(모바일 주소창 변화 대응) */
+  overscroll-behavior: none;        /* pull-to-refresh·고무줄 바운스 차단 */
+  touch-action: manipulation;       /* 더블탭 확대 차단 */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  /* 노치·홈바 안전 영역만큼 안쪽으로 */
+  padding:
+    env(safe-area-inset-top)
+    env(safe-area-inset-right)
+    env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+}
+
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+img, svg { display: block; max-width: 100%; }
+canvas { display: block; touch-action: none; }

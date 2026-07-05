@@ -1,44 +1,15 @@
-/* Reset + 반응형 + safe-area */
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-html {
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-  /* iOS Safari bounce 방지 + 풀스크린 PWA에서 안정적 */
-  height: 100%;
-  overflow: hidden;
-  background: var(--bg);
-}
+/* 다크 테마 레이어. 무테마 뷰포트 골격(reset·safe-area·터치·overflow 고정)은
+   shared/mobile-shell.css가 담당하고, 여기서는 색·폰트·컴포넌트를 얹는다.
+   @import는 CSS 규칙상 파일 최상단이어야 유효하다. */
+@import './mobile-shell.css';
+
 body {
-  min-height: 100%;
-  height: 100dvh;
   font-family: var(--font-sans);
   color: var(--fg);
   background: var(--bg);
   line-height: 1.4;
-  overscroll-behavior: none;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  /* safe-area */
-  padding:
-    env(safe-area-inset-top)
-    env(safe-area-inset-right)
-    env(safe-area-inset-bottom)
-    env(safe-area-inset-left);
-}
-button {
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  padding: 0;
 }
 a { color: var(--accent); text-decoration: none; }
-img, svg { display: block; max-width: 100%; }
-canvas { display: block; touch-action: none; }
 
 /* 공통 버튼 */
 .btn {

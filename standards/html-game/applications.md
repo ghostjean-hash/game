@@ -6,7 +6,7 @@
 |---|---|---|---|---|
 | lotto | v0.2 | 2026-05-01 | `games/lotto/` | 진행중 (v0.1 → v0.2 마이그레이션 완료) |
 | rushhour | v0.2 | 2026-06-26 | `games/rushhour/` | 초기 셋업 완료 (표준 기능 + 내장 퍼즐 세트) |
-| nonogram | v0.3 | 2026-07-05 | `games/nonogram/` | 모바일 플레이 규칙(4.7) 적용·검증 - 방향별 레이아웃·페이지 고정·safe-area·전체화면. playable |
+| nonogram | v0.3.1 | 2026-07-05 | `games/nonogram/` | 모바일 플레이 규칙(4.7) 적용·검증 + 무테마 골격 shared/mobile-shell.css 링크로 전환(복붙 제거). playable |
 
 # 2. 적용 절차 체크리스트 (본 표준 9.1)
 
