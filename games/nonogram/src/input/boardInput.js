@@ -1,10 +1,12 @@
 // 격자 입력 처리: 포인터(탭/드래그) → main 콜백. 좌표만 뽑고 동작 결정은 main.
 // 드래그는 "직선 고정": 시작 후 주 이동 방향(가로/세로)을 정해 그 한 줄로만 투영한다
 // (손 흔들림에 옆 줄이 칠해지는 오조작 방지, 저학년 배려). touch-action:none(CSS).
+// 빠르게 드래그해 포인터 이벤트가 띄엄띄엄 와도, 이전 칸에서 현재 칸까지 한 칸씩
+// 보간해 중간 칸을 빠짐없이 채운다.
 
 export function attachBoardInput(boardEl, cb) {
   let dragging = false;
-  let lastKey = null;
+  let last = null;    // 직전에 onMove로 넘긴 칸 { r, c }
   let start = null;   // 드래그 시작 칸
   let axis = null;    // 'row'(가로 고정) | 'col'(세로 고정) | null(미정)
 
@@ -21,7 +23,7 @@ export function attachBoardInput(boardEl, cb) {
     dragging = true;
     start = { r: pos.r, c: pos.c };
     axis = null;
-    lastKey = `${pos.r},${pos.c}`;
+    last = { r: pos.r, c: pos.c };
     try { boardEl.setPointerCapture(e.pointerId); } catch { /* noop */ }
     cb.onStart(pos.r, pos.c);
     e.preventDefault();
@@ -43,16 +45,24 @@ export function attachBoardInput(boardEl, cb) {
     // 정해진 축의 시작 줄로 투영(옆 줄 침범 무시).
     const rr = axis === 'row' ? start.r : pos.r;
     const cc = axis === 'col' ? start.c : pos.c;
-    const key = `${rr},${cc}`;
-    if (key === lastKey) return;
-    lastKey = key;
-    cb.onMove(rr, cc);
+    if (rr === last.r && cc === last.c) return;
+
+    // 이전 칸(last) → 현재 칸(rr,cc)을 한 칸씩 보간해 빠짐없이 onMove 호출.
+    // 축 고정이라 한 방향으로만 진행한다(대각선 없음).
+    const stepR = Math.sign(rr - last.r);
+    const stepC = Math.sign(cc - last.c);
+    let r = last.r, c = last.c;
+    while (r !== rr || c !== cc) {
+      r += stepR; c += stepC;
+      cb.onMove(r, c);
+    }
+    last = { r: rr, c: cc };
   });
 
   const end = () => {
     if (!dragging) return;
     dragging = false;
-    lastKey = null;
+    last = null;
     start = null;
     axis = null;
     cb.onEnd();

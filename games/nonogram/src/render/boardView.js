@@ -3,13 +3,15 @@
 import { CELL } from '../data/constants.js';
 import { PALETTE } from '../data/colors.js';
 
-// 힌트 렌더. 값 0(빈 줄)은 표시하지 않는다.
+// 힌트 렌더. 빈 줄은 lineClue가 [0]을 주므로 0도 표시하되, 칠할 게 없어 이미 맞은 줄이라
+// 처음부터 연하게(zero) 보여준다("채울 숫자"가 아니라 "비워둘 줄" 표시).
 export function renderClues(colEl, rowEl, clues) {
+  const span = (x) => `<span${x === 0 ? ' class="zero"' : ''}>${x}</span>`;
   colEl.innerHTML = clues.colClues.map((col) =>
-    `<div class="clue-col">${col.filter((x) => x !== 0).map((x) => `<span>${x}</span>`).join('')}</div>`,
+    `<div class="clue-col">${col.map(span).join('')}</div>`,
   ).join('');
   rowEl.innerHTML = clues.rowClues.map((row) =>
-    `<div class="clue-row">${row.filter((x) => x !== 0).map((x) => `<span>${x}</span>`).join('')}</div>`,
+    `<div class="clue-row">${row.map(span).join('')}</div>`,
   ).join('');
 }
 
@@ -63,6 +65,15 @@ export function popCell(boardEl, r, c, n) {
   el.classList.add('pop');
 }
 
+// X 자동 채움 연출: 칸 안쪽 테두리가 라이트 회색으로 흘러가는 반짝.
+export function markFlow(boardEl, r, c, n) {
+  const el = boardEl.children[r * n + c];
+  if (!el) return;
+  el.classList.remove('mark-flow');
+  void el.offsetWidth;
+  el.classList.add('mark-flow');
+}
+
 // 방금 완성된 줄만 파도처럼 순차 반짝. lines=[{type:'row'|'col', idx}], forward=드래그 방향.
 // 줄 전체를 방향 순서로 stepMs씩 지연시켜 연쇄(파도) 효과를 준다. 칠한 칸은 뚜렷한 wave,
 // 빈칸은 희미한 wave-faint로 - 정답이 1칸뿐인 줄도 줄 전체가 흘러가는 느낌이 나게 한다.
@@ -81,6 +92,15 @@ export function waveHighlight(boardEl, lines, n, forward, stepMs) {
       el.classList.add(cls);
     }
   }
+}
+
+// 진행 중인 줄 완성 파도를 즉시 지운다(완성 변신 직전에 겹쳐 보이는 잔상 제거용).
+export function clearWaves(boardEl) {
+  for (const el of boardEl.children) {
+    el.classList.remove('wave', 'wave-faint');
+    el.style.animationDelay = '';
+  }
+  void boardEl.offsetWidth; // 리플로우로 애니메이션 상태를 확정해 잔상을 없앤다
 }
 
 // 클리어 시 컬러 변신: 채운 칸을 정답 색으로. 왼쪽 위부터 대각선 파도(순차 지연).

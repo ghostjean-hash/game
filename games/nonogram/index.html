@@ -22,38 +22,62 @@
     <p class="credit">그림 일부는 <a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener">Twemoji</a> (CC-BY 4.0)를 사용했어요</p>
   </section>
 
-  <!-- 플레이 -->
+  <!-- 플레이: 상태(status) / 격자(center) / 조작(tools) 3그룹.
+       세로 방향에선 위·중앙·아래로, 가로 방향에선 왼쪽·중앙·오른쪽으로 CSS가 배치한다. -->
   <section id="screen-play" class="screen">
-    <div class="play-head">
-      <button id="play-back" class="icon-btn" aria-label="맵으로">←</button>
+    <!-- 4코너 배치: 보드는 중앙에서 최대 크기로, UI는 네 구석에.
+         세로 방향=상단(좌우)·보드·하단(좌우), 가로 방향=좌열·보드(세로 전체)·우열. -->
+    <div class="pc-tl">
+      <button id="play-back" class="icon-btn" aria-label="맵으로">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      </button>
       <div id="puzzle-info" class="puzzle-info"></div>
-      <button id="sound-toggle" class="icon-btn sound-btn" aria-label="소리 켜기/끄기">🔊</button>
+      <span class="mistake">실수 <b id="mistake-count">0</b></span>
     </div>
-    <div class="sub-head">
-      <span class="status-group">
-        <span class="mistake-badge">실수 <b id="mistake-count">0</b></span>
-        <span id="star-preview" class="star-preview" aria-label="지금 별점"></span>
-      </span>
-      <span class="spacer"></span>
-      <button id="undo-btn" class="btn small" aria-label="되돌리기">↩︎ 되돌리기</button>
-      <button id="help-btn" class="btn small" aria-label="도움">💡 도움</button>
-    </div>
-    <div id="coach" class="coach" hidden></div>
-    <div class="puzzle-wrap">
-      <div class="puzzle">
-        <div class="corner"></div>
-        <div id="col-clues" class="col-clues"></div>
-        <div id="row-clues" class="row-clues"></div>
-        <div id="board" class="board"></div>
-        <div id="finger" class="finger" hidden>👆</div>
-        <div id="drag-count" class="drag-count" hidden></div>
+
+    <div class="pc-tr">
+      <div class="tool-group">
+        <button id="sound-toggle" class="icon-btn" aria-label="소리 켜기/끄기"></button>
+        <button id="fs-toggle" class="icon-btn" aria-label="전체화면" hidden>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        </button>
+        <button id="undo-btn" class="icon-btn" aria-label="되돌리기">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-4"/></svg>
+        </button>
+        <button id="help-btn" class="icon-btn" aria-label="도움">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>
+        </button>
       </div>
     </div>
-    <div class="mode-bar">
-      <button id="mode-fill" class="mode-btn active"><span class="swatch fill"></span>칠하기</button>
-      <button id="mode-mark" class="mode-btn"><span class="swatch mark">×</span>표시</button>
+
+    <div class="play-center">
+      <div id="coach" class="coach" hidden></div>
+      <div class="puzzle-wrap">
+        <div class="puzzle">
+          <div class="corner"></div>
+          <div id="col-clues" class="col-clues"></div>
+          <div id="row-clues" class="row-clues"></div>
+          <div id="board" class="board"></div>
+          <div id="finger" class="finger" hidden>👆</div>
+          <div id="drag-count" class="drag-count" hidden></div>
+        </div>
+      </div>
+      <p id="hint-line" class="hint-line" hidden>숫자만큼 연속으로 칠해요. 틀린 곳은 지우면 돼요.</p>
     </div>
-    <p id="hint-line" class="hint-line">숫자만큼 연속으로 칠해요. 틀린 곳은 지우면 돼요.</p>
+
+    <div class="pc-br">
+      <div class="mode-group">
+        <button id="mode-fill" class="mode-btn active">
+          <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" fill="currentColor"/></svg>
+          <span>칠하기</span>
+        </button>
+        <button id="mode-mark" class="mode-btn">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <span>표시</span>
+        </button>
+      </div>
+    </div>
+
     <div id="praise-toast" class="praise-toast" hidden></div>
   </section>
 
@@ -65,7 +89,9 @@
       <div id="result-stars" class="result-stars"></div>
       <div class="result-actions">
         <button id="result-map" class="btn">맵으로</button>
-        <button id="result-next" class="btn primary">다음 →</button>
+        <button id="result-next" class="btn primary">다음
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
       </div>
     </div>
   </section>

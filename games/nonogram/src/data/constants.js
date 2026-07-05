@@ -26,8 +26,8 @@ export const MODE = { FILL: 'fill', MARK: 'mark' };
 export const CELL_FIT = {
   MIN_PX: 18,                        // 이보다 작으면 터치가 어려워 하한(그 아래로만 스크롤 안전망 작동)
   GUTTER_PX: 8,                      // 격자 둘레 최소 여백
-  MAX: { 5: 60, 10: 46, 15: 34 },   // 크기별 셀 상한(칸이 클수록 상한을 낮춰 총폭 균형)
-  DEFAULT_MAX: 46,                   // MAX에 없는 크기의 기본 상한
+  MAX: { 5: 92, 10: 60, 15: 44 },   // 크기별 셀 상한(넉넉히 - 태블릿 가로에서 보드를 크게)
+  DEFAULT_MAX: 60,                   // MAX에 없는 크기의 기본 상한
 };
 
 // 연출 타이밍(ms). 값은 여기 한 곳에서.
@@ -36,6 +36,7 @@ export const ANIM = {
   PRAISE_MS: 1100,      // 연속 응원 문구 노출 시간
   RESULT_DELAY_MS: 900, // 변신 후 결과 화면 전환까지
   SPARKLE_STEP_MS: 60,  // 줄 완성 파도 반짝의 칸별 순차 지연
+  MARK_STEP_MS: 40,     // 힌트 눌러 X 자동 채울 때 칸별 순차 지연(파도)
 };
 
 // 연속 정답 응원 문구(칭찬). 저학년 즉각 격려.

@@ -13,7 +13,7 @@ import { starsFor } from './core/stars.js';
 import {
   renderClues, applyClueDim, renderBoard, applyState, revealColors,
   setCursor, popCell, waveHighlight, pointFinger, showDragCount, hideDragCount,
-  markDragRun, clearDragRun,
+  markDragRun, clearDragRun, clearWaves, markFlow,
 } from './render/boardView.js';
 import { renderMap } from './render/mapView.js';
 import { renderResult } from './render/resultView.js';
@@ -115,7 +115,7 @@ function startPuzzle(puzzle) {
   // 퍼즐 이름은 정답 스포일러라 HUD에 아예 표시하지 않는다(클리어 결과 화면에서만 공개).
   // 난이도 배지(난이도별 색) + 진행 위치만 두어 깔끔하게. (배지의 d.name은 난이도명)
   el('puzzle-info').innerHTML =
-    `<span class="pi-badge pi-${puzzle.difficulty}">${d.icon} ${d.name}</span>` +
+    `<span class="pi-badge pi-${puzzle.difficulty}">${d.name}</span>` +
     `<span class="pi-prog">${idx}/${total}</span>`;
 
   el('mode-fill').disabled = false;
@@ -148,9 +148,25 @@ function fitBoard() {
   if (!cur) return;
   const n = cur.puzzle.size;
   const wrap = puzzleEl.parentElement; // .puzzle-wrap
-  const availW = wrap.clientWidth;
-  const availH = wrap.clientHeight;
-  if (availW <= 0 || availH <= 0) return; // 아직 레이아웃 전(display:none 등)
+  const center = puzzleEl.closest('.play-center');
+  if (!center) return;
+  // 격자 가용 공간 = play-center에서 형제(모드바·코치·힌트)와 그 사이 gap을 뺀 나머지.
+  // 이래야 격자가 남는 공간에 딱 맞고, 모드바가 격자 바로 아래에 붙는다.
+  const cs = getComputedStyle(center);
+  const gap = parseFloat(cs.rowGap) || 0;
+  let sibH = 0, sibCount = 0;
+  for (const ch of center.children) {
+    if (ch === wrap || ch.offsetParent === null) continue; // 자기 자신·숨김 제외
+    sibH += ch.offsetHeight; sibCount += 1;
+  }
+  // 가로(태블릿 눕힘)에선 보드 열이 보드 크기에 맞춰지므로(폭 auto) center 폭을 병목으로
+  // 쓰면 안 된다. 가로에선 높이만 병목으로 두어 보드를 세로에 꽉 맞추고, 남는 좌우 공간에
+  // UI를 보드 가장자리로 붙인다. 세로에선 폭이 병목이라 center 폭을 그대로 쓴다.
+  const isLandscape = window.innerWidth > window.innerHeight;
+  const availW = isLandscape ? Number.POSITIVE_INFINITY : center.clientWidth;
+  const availH = center.clientHeight - sibH - gap * sibCount;
+  if (availH <= 0) return;                       // 아직 레이아웃 전(display:none 등)
+  if (!isLandscape && availW <= 0) return;
   const clueLeft = el('row-clues').offsetWidth;  // 좌측 행 힌트 폭
   const clueTop = el('col-clues').offsetHeight;  // 상단 열 힌트 높이
   const g = CELL_FIT.GUTTER_PX;
@@ -158,7 +174,9 @@ function fitBoard() {
   // 그만큼 가로 여유가 줄므로 폭 계산에서도 힌트 폭을 양쪽으로 뺀다.
   const byW = (availW - clueLeft * 2 - g) / n;
   const byH = (availH - clueTop - g) / n;
-  const cap = CELL_FIT.MAX[n] || CELL_FIT.DEFAULT_MAX;
+  // 가로에선 보드가 배정 영역(높이)을 꽉 채워야 UI가 보드 모서리에 정확히 붙는다.
+  // cap을 두면 보드가 영역보다 작아져 그 여백만큼 UI가 보드 밖으로 벗어난다.
+  const cap = isLandscape ? Number.POSITIVE_INFINITY : (CELL_FIT.MAX[n] || CELL_FIT.DEFAULT_MAX);
   const cell = Math.max(CELL_FIT.MIN_PX, Math.floor(Math.min(byW, byH, cap)));
   puzzleEl.style.setProperty('--cell', `${cell}px`);
   puzzleEl.style.marginRight = `${clueLeft}px`;
@@ -182,8 +200,10 @@ function currentStars() {
   return Math.max(1, Math.min(starsFor(cur.board.mistakes), MAX_STARS - cur.helpUsed));
 }
 function updateStarPreview() {
+  const sp = el('star-preview');
+  if (!sp) return; // 플레이 중 예상 별점 표시는 제거됨(요소 없음)
   const s = currentStars();
-  el('star-preview').innerHTML = Array.from({ length: MAX_STARS }, (_, i) =>
+  sp.innerHTML = Array.from({ length: MAX_STARS }, (_, i) =>
     `<span class="${i < s ? 'on' : 'off'}">★</span>`).join('');
 }
 
@@ -232,6 +252,8 @@ function applyAction(r, c) {
 // before=동작 직전 완성 flags, forward=드래그 방향. 이미 완성돼 있던 줄은 다시 반짝하지 않는다.
 function highlightNewCompletions(before, forward) {
   const n = cur.puzzle.size;
+  // 이 동작으로 퍼즐이 완성되면 줄 파도를 그리지 않는다(전체 컬러 변신과 겹쳐 지저분해짐).
+  if (isSolved(cur.board, cur.solution)) return;
   const after = lineFlags(cur.board, cur.clues);
   const newLines = [];
   for (let r = 0; r < n; r++) if (after.rows[r] && !before.rows[r]) newLines.push({ type: 'row', idx: r });
@@ -306,6 +328,41 @@ function useHelp() {
   highlightNewCompletions(beforeFlags, true);
 }
 
+// 힌트 숫자를 누르면: 그 줄이 완성됐을 때만 남은 빈 칸을 자동으로 X로 채운다.
+// 아직 못 맞춘 줄은 아무 동작도 하지 않는다(type='row'|'col', idx=줄 번호).
+function fillLineMarks(type, idx) {
+  if (!cur) return;
+  const n = cur.puzzle.size;
+  // "맞춘 줄" 판정을 정답 기준으로: 정답 칠칸은 모두 칠했고 잘못 칠한 칸이 없어야 한다.
+  // (빈 줄=힌트 0 은 칠할 칸이 없으므로, 잘못 칠한 게 없으면 맞춘 것으로 본다.)
+  for (let i = 0; i < n; i++) {
+    const r = type === 'row' ? idx : i;
+    const c = type === 'col' ? idx : i;
+    const filled = cur.board.cells[r][c] === CELL.FILLED;
+    if (filled !== (cur.solution[r][c] === true)) return; // 아직 못 맞춘 줄이면 무동작
+  }
+  // 남은 빈 칸 목록을 줄 방향 순서로 모은다(누른 쪽=힌트에서 흘러가는 파도).
+  const empties = [];
+  for (let i = 0; i < n; i++) {
+    const r = type === 'row' ? idx : i;
+    const c = type === 'col' ? idx : i;
+    if (cur.board.cells[r][c] === CELL.EMPTY) empties.push([r, c]);
+  }
+  if (!empties.length) return; // 채울 빈 칸이 없으면 무동작
+  pushHistory();
+  sound.play('mark');
+  // 칸별로 순차 지연을 줘 X가 파도처럼 흘러가며 채워지게 한다.
+  empties.forEach(([r, c], k) => {
+    setTimeout(() => {
+      if (!cur) return;
+      cur.board = setCell(cur.board, r, c, CELL.MARKED, cur.solution);
+      applyState(boardEl, cur.board, cur.solution);
+      markFlow(boardEl, r, c, cur.puzzle.size);
+    }, k * ANIM.MARK_STEP_MS);
+  });
+  setTimeout(() => { if (cur) refresh(); }, empties.length * ANIM.MARK_STEP_MS + 20);
+}
+
 function onPaintStart(r, c) {
   cur.completedBefore = lineFlags(cur.board, cur.clues); // 드래그 전 완성 줄 스냅샷
   cur.dragAction = decideAction(r, c);
@@ -360,6 +417,7 @@ function win() {
   // 다 맞췄으니 모드 버튼을 잠근다(완성 연출 중 조작 방지 + 완료 표현).
   el('mode-fill').disabled = true;
   el('mode-mark').disabled = true;
+  clearWaves(boardEl); // 진행 중이던 줄 파도를 지우고 나서 전체 컬러 변신(겹침 방지)
   revealColors(boardEl, cur.puzzle.grid, ANIM.REVEAL_STEP_MS, cur.puzzle.palette);
   setCursor(boardEl, -1, -1, cur.puzzle.size);
   sound.play('clear');
@@ -412,14 +470,36 @@ function onKey(e) {
 }
 
 // --- 사운드 ---
+// 소리 켜짐/음소거 SVG 아이콘(버튼 안에서 상태에 따라 교체). tool-btn 규격에 맞춰 라벨 포함.
+const ICON_SOUND = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
+const ICON_MUTE = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor" stroke="none"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>';
 function updateMuteBtn() {
-  el('sound-toggle').textContent = sound.isMuted() ? '🔇' : '🔊';
+  el('sound-toggle').innerHTML = sound.isMuted() ? ICON_MUTE : ICON_SOUND;
 }
 function toggleMute() {
   const m = !sound.isMuted();
   sound.setMuted(m);
   store.set('muted', m);
   updateMuteBtn();
+}
+
+// --- 전체화면 ---
+// iOS Safari/일부 브라우저는 requestFullscreen 미지원 - 그럴 땐 버튼을 숨긴다.
+function fsSupported() {
+  const d = document.documentElement;
+  return !!(d.requestFullscreen || d.webkitRequestFullscreen);
+}
+function toggleFullscreen() {
+  const d = document;
+  const root = d.documentElement;
+  const isFs = d.fullscreenElement || d.webkitFullscreenElement;
+  if (!isFs) {
+    const req = root.requestFullscreen || root.webkitRequestFullscreen;
+    if (req) req.call(root);
+  } else {
+    const exit = d.exitFullscreen || d.webkitExitFullscreen;
+    if (exit) exit.call(d);
+  }
 }
 
 // --- 배선 ---
@@ -433,12 +513,26 @@ function init() {
   el('sound-toggle').addEventListener('click', toggleMute);
   el('undo-btn').addEventListener('click', undo);
   el('help-btn').addEventListener('click', useHelp);
+  // 힌트 숫자 누르면 완성된 줄의 빈 칸을 자동 X로.
+  el('row-clues').addEventListener('click', (e) => {
+    const line = e.target.closest('.clue-row');
+    if (line) fillLineMarks('row', [...el('row-clues').children].indexOf(line));
+  });
+  el('col-clues').addEventListener('click', (e) => {
+    const line = e.target.closest('.clue-col');
+    if (line) fillLineMarks('col', [...el('col-clues').children].indexOf(line));
+  });
+  el('fs-toggle').addEventListener('click', toggleFullscreen);
+  if (fsSupported()) el('fs-toggle').hidden = false; // 지원 기기에서만 노출
   document.addEventListener('keydown', onKey);
-  // 창 크기·방향(가로/세로 회전)이 바뀌면 격자를 다시 화면에 맞춘다.
+  // 창 크기·방향(가로/세로 회전)·전체화면 전환이 바뀌면 격자를 다시 화면에 맞춘다.
   window.addEventListener('resize', () => { fitBoard(); updateFinger(); });
   window.addEventListener('orientationchange', () => {
     requestAnimationFrame(() => { fitBoard(); updateFinger(); });
   });
+  const onFsChange = () => requestAnimationFrame(() => { fitBoard(); updateFinger(); });
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
 
   sound.setMuted(store.get('muted', false));
   updateMuteBtn();
