@@ -144,6 +144,7 @@ const levelLabelEl = document.getElementById("level-label");
 const linesLabelEl = document.getElementById("lines-label");
 const bestEl = document.getElementById("best");
 const pauseBtn = document.getElementById("btn-pause");
+const fsBtn = document.getElementById("btn-fs");
 const nextEl = document.getElementById("next");
 const nextCtx = nextEl?.getContext("2d") || null;
 const holdEl = document.getElementById("hold");
@@ -1034,6 +1035,14 @@ function init() {
   window.addEventListener("resize", resize);
   window.addEventListener("orientationchange", () => setTimeout(resize, 100));
   pauseBtn.addEventListener("click", togglePause);
+  // 전체화면 토글(STANDARD 4.7 규칙 6). 미지원 기기(iOS Safari 등)는 버튼을 숨긴다.
+  if (document.documentElement.requestFullscreen) {
+    fsBtn.hidden = false;
+    fsBtn.addEventListener("click", () => {
+      if (document.fullscreenElement) document.exitFullscreen?.();
+      else document.documentElement.requestFullscreen?.();
+    });
+  }
 
   loop = createLoop({
     update: (dt) => { update(dt); tickHud(); },

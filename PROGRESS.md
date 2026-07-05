@@ -107,3 +107,17 @@
 11.5. 미커밋 0(전부 push). docs SSOT 일치는 여전히 미반영(10.4 대상 절 + 본 cycle 변경 누적: 5.1.6 접힘 운세 / 5.1.2 운세 카피 풀 / 5.2.2 카운트다운 / 5.8 기록 잠금 / 5.5 휠링 카피) - 화면 검토 일단락 후 일괄 권장. draw-card.js stub 수동 삭제 잔존.
 
 11.6. 자비스 자기 점검: R5 어휘 "정합" 회귀 지속(누적 10회 1위). Stop hook 재작성 + 직전 sealing buffer occurrence 추가했음에도 다음 답변 재발 = hook 강제·자기-시인 반복에도 안 줄어드는 자기-규율 한계 명확. buffer occurrence 누적 + 글로벌 강제력 강화 방안 검토 후보. 사용자 요청 6건 전수 매핑 누락 0.
+
+# 12. 웹게임 공용 모바일 골격 분리 + 4.7 전 게임 적용 (2026-07-06, /jc sealing)
+
+12.1. 발단: 사용자가 "웹 게임 공용 규칙 추출"을 물었다. 모바일 규칙 7종(STANDARD 4.7)은 이미 문서화돼 있었고, 실제 코드는 shared/base.css(다크 테마 한 덩어리)에만 있어 파스텔 게임 노노그램이 뷰포트 골격을 복사해 쓰던 상태였다. 색과 무관한 골격을 재사용 가능하게 떼는 게 핵심이었다.
+
+12.2. mobile-shell 분리(커밋 ba51161): shared/mobile-shell.css 신설(색·폰트 없는 뷰포트 고정·safe-area·터치·리셋). base.css는 이 파일을 @import해 기존 링크 게임(tetris/sudoku/rushhour/허브)은 손대지 않고, 노노그램은 직접 링크로 바꿔 복붙을 없앴다. STANDARD v0.3.1. 4개 게임 browser-shot 재검증(페이지 스크롤 0·pageerror 0·배경색)으로 회귀 0 확인.
+
+12.3. 정적 스모크 신설(tests/smoke.mjs): shared 골격 회귀를 커밋 전 잡는 외부 의존 0(순수 node) 검사. 각 게임 index.html의 골격 링크·viewport·mobile-shell 핵심 규칙 보존을 확인한다. npm 설치 금지(STANDARD 4.2) 제약상 playwright 대신 정적 검사로 두고, 런타임 화면은 browser-shot(자비스 글로벌 도구)이 담당하는 역할 분리. 결과 PASS(6통과/lotto경고/0실패).
+
+12.4. 4.7 전 게임 적용: rushhour는 가로 방향 레이아웃이 없어 신설(@media landscape로 controls를 보드 왼쪽 세로열, 출구가 보드 오른쪽 바깥으로 나가는 구조라 겹침 회피) + 확대 잠금 + 전체화면 버튼 + 보드 크기 방향별(가로 60vh). v0.2 → v0.3.1. tetris/sudoku는 가로 레이아웃이 이미 있어 확대 잠금 + 전체화면 버튼만 추가. lotto는 추천기라 대상 외.
+
+12.5. 검증: rushhour 3방향(세로·아이패드 가로·폰 가로) 페이지 스크롤 0·출구 여유 + 자체 테스트 21/21. tetris/sudoku 각 세로·가로 browser-shot 스크롤 0·pageerror 0 + 가로 레이아웃 스크린샷 육안 확인. 매 단계 정적 스모크 PASS.
+
+12.6. 미해결: tetris/sudoku는 .standard 없는 표준 미적용 게임이라 4.7만 부분 적용했다(정식 표준 적용은 사용자 결정 영역). 노노그램 10x10 하트 손그림 교체(이번 세션 전반부, 통짜 형태 해소 + 두하트 색 분리)는 games/nonogram/PROGRESS.md에 별도로 기재했다.

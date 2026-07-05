@@ -39,6 +39,7 @@ const DEMO_PUZZLE = {
 const boardEl = document.getElementById("board");
 const timerEl = document.getElementById("timer");
 const pauseBtn = document.getElementById("btn-pause");
+const fsBtn = document.getElementById("btn-fs");
 const eraseBtn = document.getElementById("btn-erase");
 const undoBtn = document.getElementById("btn-undo");
 const padNumbers = document.getElementById("pad-numbers");
@@ -460,6 +461,14 @@ function restart() {
 function init() {
   buildBoard();
   pauseBtn.addEventListener("click", togglePause);
+  // 전체화면 토글(STANDARD 4.7 규칙 6). 미지원 기기(iOS Safari 등)는 버튼을 숨긴다.
+  if (document.documentElement.requestFullscreen) {
+    fsBtn.hidden = false;
+    fsBtn.addEventListener("click", () => {
+      if (document.fullscreenElement) document.exitFullscreen?.();
+      else document.documentElement.requestFullscreen?.();
+    });
+  }
   state = newState(DEMO_PUZZLE);
   // 첫 빈칸 자동 선택(편의)
   for (let i = 0; i < 81; i++) {

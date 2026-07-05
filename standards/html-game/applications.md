@@ -5,7 +5,7 @@
 | 프로젝트 | 적용 버전 | 적용일 | 위치 | 상태 |
 |---|---|---|---|---|
 | lotto | v0.2 | 2026-05-01 | `games/lotto/` | 진행중 (v0.1 → v0.2 마이그레이션 완료) |
-| rushhour | v0.2 | 2026-06-26 | `games/rushhour/` | 초기 셋업 완료 (표준 기능 + 내장 퍼즐 세트) |
+| rushhour | v0.3.1 | 2026-07-06 | `games/rushhour/` | 4.7 모바일 규칙 적용(확대 잠금·전체화면·가로 방향 레이아웃·보드 크기 산정) + 무테마 골격 base.css @import 경유. playable |
 | nonogram | v0.3.1 | 2026-07-05 | `games/nonogram/` | 모바일 플레이 규칙(4.7) 적용·검증 + 무테마 골격 shared/mobile-shell.css 링크로 전환(복붙 제거). playable |
 
 # 2. 적용 절차 체크리스트 (본 표준 9.1)

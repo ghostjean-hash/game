@@ -700,3 +700,34 @@ body:has(.rushhour) { background: #3a2d40; }
     letter-spacing: -0.3px;
   }
 }
+
+/* 가로 방향(STANDARD 4.7 규칙 5·7): 세로 스택 대신 controls를 보드 왼쪽 세로열로 옮기고
+   보드를 화면 높이에 맞춰 키운다. 출구(집)가 보드 오른쪽 바깥으로 나가므로 controls를
+   왼쪽에 둬 겹침을 피한다. 보드 크기는 가로에서 높이가 병목이라 vh 기준으로 잡는다. */
+@media (orientation: landscape) {
+  .rushhour.page {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "topbar topbar"
+      "controls stage";
+    min-height: 0;
+  }
+  .rushhour .topbar { grid-area: topbar; }
+  .rushhour .stage { grid-area: stage; min-height: 0; }
+  .rushhour .controls {
+    grid-area: controls;
+    flex-direction: column;
+    justify-content: center;
+    width: auto;
+    min-width: 92px;
+    padding: var(--sp-2) var(--sp-2) calc(var(--sp-2) + env(safe-area-inset-bottom)) var(--sp-4);
+  }
+  .rushhour .controls .btn { flex: 0 0 auto; white-space: nowrap; }
+  .rushhour #btn-prev,
+  .rushhour #btn-next { flex: 0 0 auto; }
+  /* 보드 위 스테이지 카드·타이머(board-head)와 상하 여백을 감안해 높이의 60%로 잡는다
+     (낮은 가로 화면에서 board-head까지 더해도 페이지가 넘치지 않게). */
+  .rushhour .board { width: min(60vh, 56vw, 520px); }
+}

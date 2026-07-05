@@ -71,6 +71,7 @@ const el = {
   settings: document.getElementById('settings'),
   settingList: document.getElementById('setting-list'),
   settingsClose: document.getElementById('btn-settings-close'),
+  fsBtn: document.getElementById('btn-fs'),
 };
 
 const state = {
@@ -629,6 +630,14 @@ function onShopClick(e) {
 el.shopThemes.addEventListener('click', onShopClick);
 el.shopAccessories.addEventListener('click', onShopClick);
 el.muteBtn.addEventListener('click', toggleMute);
+// 전체화면 토글(STANDARD 4.7 규칙 6). iOS Safari 등 미지원 기기는 버튼을 숨긴다.
+if (document.documentElement.requestFullscreen) {
+  el.fsBtn.hidden = false;
+  el.fsBtn.addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen?.();
+    else document.documentElement.requestFullscreen?.();
+  });
+}
 el.mapBtn.addEventListener('click', openMap);
 el.mapClose.addEventListener('click', () => closePanel(el.map));
 // 모드 탭: 보고 있는 모드만 바꿔 미리 본다(아직 전환 확정 아님).
