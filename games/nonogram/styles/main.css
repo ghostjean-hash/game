@@ -338,10 +338,10 @@ body:has(#screen-play.active) #app {
 /* 퍼즐 정보: 난이도 배지(위) + 스테이지 진행(아래) 세로 배치. */
 .puzzle-info { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; font-weight: 800; }
 .pi-badge {
-  background: var(--accent); color: #fff; border-radius: var(--radius-pill);
+  background: var(--accent); color: var(--diff-fg); border-radius: var(--radius-pill);
   padding: 4px 12px; white-space: nowrap; font-size: 14px; box-shadow: var(--shadow);
 }
-/* 난이도별 배지 색(흰 글자 대비 확보한 파스텔 톤). */
+/* 난이도별 배지 색(파스텔 톤 + 어두운 글자로 대비 확보). */
 .pi-badge.pi-tutorial { background: var(--diff-tutorial); }
 .pi-badge.pi-easy     { background: var(--diff-easy); }
 .pi-badge.pi-medium   { background: var(--diff-medium); }
