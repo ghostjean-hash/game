@@ -48,7 +48,7 @@
     {
       "id": "flightshooting",
       "title": "Sky Raider",
-      "subtitle": "손끝으로 끄는 횡스크롤 비행 슈팅",
+      "subtitle": "손끝으로 끄는 세로 스크롤 비행 슈팅",
       "path": "games/flightshooting/",
       "status": "playable",
       "controls": ["touch", "keyboard"],

@@ -1,9 +1,9 @@
-// Sky Raider - 횡스크롤(좌→우 전진) 캐주얼 비행 슈팅.
-// 조작: 화면 드래그(상대 이동) + 자동발사. 파워업 아이템으로 화력 성장.
+// Sky Raider - 세로(종) 스크롤 캐주얼 비행 슈팅.
+// 조작: 화면 드래그(상대 이동) + 자동발사. 파워업 아이템으로 화력 성장(1~20단계).
 // 진행: 3개 구역(스테이지) 각각 웨이브 후 보스. 보스 격파로 다음 구역.
 //
-// 좌표계는 CSS 픽셀(stage 영역 clientWidth/Height). 전진 방향 = +x(오른쪽).
-// 아군 탄 vx>0, 적은 오른쪽에서 등장해 vx<0로 왼쪽 이동.
+// 좌표계는 CSS 픽셀(stage 영역 clientWidth/Height). 전진 방향 = 위쪽(-y).
+// 플레이어는 화면 하단, 적은 위에서 등장해 아래로 내려온다. 아군 탄 vy<0, 적탄은 아래로.
 
 import { createLoop } from '../../shared/loop.js';
 import { createStorage } from '../../shared/storage.js';
@@ -17,19 +17,11 @@ registerServiceWorker('/service-worker.js');
 // 튜닝 상수 (밸런스 조정 지점을 한곳에)
 // ─────────────────────────────────────────────────────────────
 const CFG = {
-  player: { r: 14, speed: 320, fireEvery: 0.14, maxLives: 3, invAfterHit: 1.6 },
+  player: { r: 14, speed: 340, fireEvery: 0.14, maxLives: 3, invAfterHit: 1.6, yRatio: 0.82 },
   bullet: { speed: 620, r: 4, dmg: 1 },
   enemyBullet: { speed: 220, r: 5 },
-  // 화력 레벨별 발사 각도(도). 0 = 정면(오른쪽).
-  fireAngles: {
-    1: [0],
-    2: [-4, 4],
-    3: [-9, 0, 9],
-    4: [-15, -5, 5, 15],
-    5: [-22, -11, 0, 11, 22],
-  },
-  maxPower: 5,
-  // 적 종류별 사양
+  maxPower: 20,
+  // 적 종류별 사양 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭)
   enemy: {
     drone:  { r: 15, hp: 1, speed: 150, score: 100, color: '#ff6b81' },
     weaver: { r: 16, hp: 2, speed: 120, score: 150, color: '#ffa05c', amp: 70, freq: 2.4 },
@@ -39,6 +31,25 @@ const CFG = {
   boss: { rx: 46, ry: 40, baseHp: 90, hpPerStage: 55, score: 3000, bobAmp: 0.34, bobFreq: 0.5 },
   stageCount: 3,
 };
+
+// 화력 1~20단계 발사 오프셋 각도(도). 0 = 정면(위쪽), 부호는 좌우, 180 = 후방(아래).
+// 레벨이 오를수록 정면 부채가 넓고 촘촘해지고, 측면·후방 탄이 순차 추가된다.
+CFG.fireAngles = (function genFireAngles() {
+  const m = {};
+  for (let L = 1; L <= 20; L++) {
+    const a = [];
+    const frontN = Math.min(1 + Math.floor(L / 2), 11);   // 정면 부채 탄 수 1~11
+    const spread = Math.min((frontN - 1) * 7, 100);        // 정면 부채 총 확산각
+    for (let i = 0; i < frontN; i++) {
+      a.push(frontN === 1 ? 0 : -spread / 2 + (spread * i) / (frontN - 1));
+    }
+    if (L >= 8) a.push(-72, 72);          // 측면 2발
+    if (L >= 12) a.push(-108, 108);       // 후측면 2발
+    if (L >= 16) a.push(160, 200, 180);   // 후방 3발
+    m[L] = a;
+  }
+  return m;
+})();
 
 // ─────────────────────────────────────────────────────────────
 // DOM 참조
@@ -85,7 +96,6 @@ const game = {
   power: 1,
   stage: 1,
   fireTimer: 0,
-  // 웨이브 스포너 상태
   waves: [],
   waveIdx: 0,
   elapsed: 0,
@@ -108,23 +118,19 @@ function resize() {
 window.addEventListener('resize', resize);
 
 // ─────────────────────────────────────────────────────────────
-// 배경 별
+// 배경 별 (위→아래 스크롤)
 // ─────────────────────────────────────────────────────────────
 function initStars() {
   game.stars = [];
   const n = 70;
   for (let i = 0; i < n; i++) {
-    game.stars.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      z: 0.3 + Math.random() * 0.9, // 깊이(속도·크기)
-    });
+    game.stars.push({ x: Math.random() * W, y: Math.random() * H, z: 0.3 + Math.random() * 0.9 });
   }
 }
 function updateStars(dt) {
   for (const s of game.stars) {
-    s.x -= (40 + s.z * 140) * dt;
-    if (s.x < 0) { s.x = W; s.y = Math.random() * H; }
+    s.y += (40 + s.z * 140) * dt;
+    if (s.y > H) { s.y = 0; s.x = Math.random() * W; }
   }
 }
 function drawStars() {
@@ -139,38 +145,38 @@ function drawStars() {
 
 // ─────────────────────────────────────────────────────────────
 // 웨이브 생성 (스테이지별 스크립트)
-// 각 wave: { t: 등장시각(초), enemies: [{type, yr}] }  yr = 화면높이 비율
+// 각 wave: { t: 등장시각(초), enemies: [{type, xr}] }  xr = 화면폭 비율(가로 위치)
 // ─────────────────────────────────────────────────────────────
 function buildWaves(stage) {
-  const s = stage - 1; // 0-base 난이도 가중
-  const rows = (n) => Array.from({ length: n }, (_, i) => (i + 1) / (n + 1));
+  const s = stage - 1;
+  const cols = (n) => Array.from({ length: n }, (_, i) => (i + 1) / (n + 1));
   const w = [];
   let t = 1.0;
-  const add = (type, ys) => { w.push({ t, enemies: ys.map((yr) => ({ type, yr })) }); };
+  const add = (type, xs) => { w.push({ t, enemies: xs.map((xr) => ({ type, xr })) }); };
 
-  add('drone', rows(3 + s));
+  add('drone', cols(3 + s));
   t += 2.2;
-  add('weaver', rows(2 + s));
+  add('weaver', cols(2 + s));
   t += 2.4;
-  add('drone', rows(4 + s));
+  add('drone', cols(4 + s));
   t += 2.2;
-  add('gunner', rows(2 + Math.min(s, 2)));
+  add('gunner', cols(2 + Math.min(s, 2)));
   t += 3.0;
-  add('weaver', rows(3 + s));
+  add('weaver', cols(3 + s));
   t += 2.6;
-  add('drone', rows(4 + s));
-  if (s >= 1) { t += 2.4; add('gunner', rows(2 + s)); }
+  add('drone', cols(4 + s));
+  if (s >= 1) { t += 2.4; add('gunner', cols(2 + s)); }
   return w;
 }
 
 // ─────────────────────────────────────────────────────────────
 // 엔티티 스폰
 // ─────────────────────────────────────────────────────────────
-function spawnEnemy(type, yr) {
+function spawnEnemy(type, xr) {
   const spec = CFG.enemy[type];
-  const y = Math.max(spec.r + 6, Math.min(H - spec.r - 6, yr * H));
+  const x = Math.max(spec.r + 6, Math.min(W - spec.r - 6, xr * W));
   const e = {
-    type, x: W + spec.r + 10, y, baseY: y,
+    type, x, baseX: x, y: -spec.r - 10,
     r: spec.r, hp: spec.hp, maxHp: spec.hp,
     speed: spec.speed, score: spec.score, color: spec.color,
     t: 0, fireTimer: (spec.fireEvery || 0) * Math.random(),
@@ -181,8 +187,8 @@ function spawnEnemy(type, yr) {
 function spawnBoss() {
   const hp = CFG.boss.baseHp + (game.stage - 1) * CFG.boss.hpPerStage;
   game.boss = {
-    x: W + CFG.boss.rx + 20, targetX: W - CFG.boss.rx - 24,
-    y: H / 2, rx: CFG.boss.rx, ry: CFG.boss.ry,
+    x: W / 2, y: -CFG.boss.ry - 20, targetY: CFG.boss.ry + 34,
+    rx: CFG.boss.rx, ry: CFG.boss.ry,
     hp, maxHp: hp, t: 0, entering: true,
     fireTimer: 1.2, patternTimer: 0, pattern: 0,
   };
@@ -200,7 +206,7 @@ function dropItem(x, y) {
   if (r < powerWeight) kind = 'P';
   else if (r < powerWeight + healWeight) kind = 'H';
   else kind = 'B';
-  game.powerups.push({ x, y, r: 12, vx: -60, kind, t: 0 });
+  game.powerups.push({ x, y, r: 12, vy: 70, kind, t: 0 });
 }
 
 function burst(x, y, color, n = 12) {
@@ -223,10 +229,11 @@ function playerFire() {
   const angles = CFG.fireAngles[Math.min(game.power, CFG.maxPower)];
   for (const deg of angles) {
     const rad = (deg * Math.PI) / 180;
+    // 정면 = 위쪽(-y). deg 부호는 좌우로 벌어짐.
     game.bullets.push({
-      x: p.x + p.r, y: p.y,
-      vx: Math.cos(rad) * CFG.bullet.speed,
-      vy: Math.sin(rad) * CFG.bullet.speed,
+      x: p.x, y: p.y - p.r,
+      vx: Math.sin(rad) * CFG.bullet.speed,
+      vy: -Math.cos(rad) * CFG.bullet.speed,
       r: CFG.bullet.r,
     });
   }
@@ -308,7 +315,6 @@ function update(dt) {
   const p = game.player;
   if (p.inv > 0) p.inv -= dt;
 
-  // 자동 발사
   game.fireTimer -= dt;
   if (game.fireTimer <= 0) {
     game.fireTimer = CFG.player.fireEvery;
@@ -328,7 +334,7 @@ function update(dt) {
 
 function spawnWaves() {
   while (game.waveIdx < game.waves.length && game.elapsed >= game.waves[game.waveIdx].t) {
-    for (const e of game.waves[game.waveIdx].enemies) spawnEnemy(e.type, e.yr);
+    for (const e of game.waves[game.waveIdx].enemies) spawnEnemy(e.type, e.xr);
     game.waveIdx++;
   }
 }
@@ -337,21 +343,21 @@ function updateEnemies(dt) {
   const p = game.player;
   for (const e of game.enemies) {
     e.t += dt;
-    e.x -= e.speed * dt;
+    e.y += e.speed * dt;
     if (e.type === 'weaver') {
-      e.y = e.baseY + Math.sin(e.t * CFG.enemy.weaver.freq) * CFG.enemy.weaver.amp;
+      e.x = e.baseX + Math.sin(e.t * CFG.enemy.weaver.freq) * CFG.enemy.weaver.amp;
     } else if (e.type === 'gunner') {
-      // 플레이어 y를 느슨히 추적
-      e.y += Math.sign(p.y - e.y) * 40 * dt;
+      // 플레이어 x를 느슨히 추적
+      e.x += Math.sign(p.x - e.x) * 40 * dt;
       e.fireTimer -= dt;
-      if (e.fireTimer <= 0 && e.x < W - 20) {
+      if (e.fireTimer <= 0 && e.y > 20) {
         e.fireTimer = CFG.enemy.gunner.fireEvery;
         enemyFireAt(e, p.x, p.y);
       }
     }
   }
-  // 화면 왼쪽으로 완전히 벗어난 적 제거
-  game.enemies = game.enemies.filter((e) => e.x > -e.r - 20);
+  // 화면 아래로 완전히 벗어난 적 제거
+  game.enemies = game.enemies.filter((e) => e.y < H + e.r + 20);
 }
 
 function updateBoss(dt) {
@@ -359,25 +365,25 @@ function updateBoss(dt) {
   if (!boss) return;
   boss.t += dt;
   if (boss.entering) {
-    boss.x -= 90 * dt;
-    if (boss.x <= boss.targetX) { boss.x = boss.targetX; boss.entering = false; }
+    boss.y += 90 * dt;
+    if (boss.y >= boss.targetY) { boss.y = boss.targetY; boss.entering = false; }
     return;
   }
-  // 상하 유영
-  boss.y = H / 2 + Math.sin(boss.t * CFG.boss.bobFreq * Math.PI) * (H * CFG.boss.bobAmp);
+  // 좌우 유영
+  boss.x = W / 2 + Math.sin(boss.t * CFG.boss.bobFreq * Math.PI) * (W * CFG.boss.bobAmp * 0.5);
   // 패턴 발사
   boss.fireTimer -= dt;
   if (boss.fireTimer <= 0) {
     boss.patternTimer++;
     if (boss.pattern === 0) {
-      // 부채 산탄(왼쪽 방향 중심)
+      // 부채 산탄(아래 방향 중심)
       boss.fireTimer = 1.1;
-      const base = Math.PI; // 왼쪽(+x 기준 180도)
+      const base = Math.PI / 2; // 아래(+y)
       const spread = 0.7, n = 5 + game.stage;
       for (let i = 0; i < n; i++) {
         const a = base - spread / 2 + (spread * i) / (n - 1);
         game.eBullets.push({
-          x: boss.x - boss.rx, y: boss.y,
+          x: boss.x, y: boss.y + boss.ry,
           vx: Math.cos(a) * CFG.enemyBullet.speed,
           vy: Math.sin(a) * CFG.enemyBullet.speed, r: CFG.enemyBullet.r,
         });
@@ -388,7 +394,7 @@ function updateBoss(dt) {
       const p = game.player;
       for (let i = 0; i < 3; i++) {
         const jitter = (i - 1) * 12;
-        enemyFireAt(boss, p.x, p.y + jitter, CFG.enemyBullet.speed * 1.1);
+        enemyFireAt(boss, p.x + jitter, p.y, CFG.enemyBullet.speed * 1.1);
       }
     }
     if (boss.patternTimer % 3 === 0) boss.pattern = boss.pattern === 0 ? 1 : 0;
@@ -397,7 +403,7 @@ function updateBoss(dt) {
 
 function updateBullets(dt) {
   for (const b of game.bullets) { b.x += b.vx * dt; b.y += b.vy * dt; }
-  game.bullets = game.bullets.filter((b) => b.x < W + 20 && b.x > -20 && b.y > -20 && b.y < H + 20);
+  game.bullets = game.bullets.filter((b) => b.y > -20 && b.y < H + 20 && b.x > -20 && b.x < W + 20);
 }
 
 function updateEnemyBullets(dt) {
@@ -406,8 +412,8 @@ function updateEnemyBullets(dt) {
 }
 
 function updatePowerups(dt) {
-  for (const it of game.powerups) { it.x += it.vx * dt; it.t += dt; }
-  game.powerups = game.powerups.filter((it) => it.x > -it.r - 10);
+  for (const it of game.powerups) { it.y += it.vy * dt; it.t += dt; }
+  game.powerups = game.powerups.filter((it) => it.y < H + it.r + 10);
 }
 
 function updateParticles(dt) {
@@ -522,7 +528,6 @@ function grabItem(kind) {
 // 진행 (보스 등장 / 스테이지 클리어 / 게임오버)
 // ─────────────────────────────────────────────────────────────
 function checkProgress() {
-  // 웨이브 모두 소진 + 화면 적 없음 + 보스 미등장 → 보스 등장
   if (!game.boss && !game.bossPending &&
       game.waveIdx >= game.waves.length && game.enemies.length === 0) {
     game.bossPending = true;
@@ -593,16 +598,16 @@ function drawPlayer() {
   ctx.translate(p.x, p.y);
   ctx.shadowColor = '#22d3ee';
   ctx.shadowBlur = 14;
-  // 엔진 불꽃
+  // 엔진 불꽃(아래)
   ctx.fillStyle = 'rgba(255,180,90,0.85)';
   ctx.beginPath();
   const fl = p.r * (1.1 + Math.random() * 0.5);
-  ctx.moveTo(-p.r, -5); ctx.lineTo(-p.r - fl, 0); ctx.lineTo(-p.r, 5); ctx.closePath();
+  ctx.moveTo(-5, p.r); ctx.lineTo(0, p.r + fl); ctx.lineTo(5, p.r); ctx.closePath();
   ctx.fill();
-  // 기체(오른쪽 향한 삼각형)
+  // 기체(위쪽 향한 삼각형)
   ctx.fillStyle = '#22d3ee';
   ctx.beginPath();
-  ctx.moveTo(p.r + 4, 0); ctx.lineTo(-p.r, -p.r); ctx.lineTo(-p.r * 0.4, 0); ctx.lineTo(-p.r, p.r); ctx.closePath();
+  ctx.moveTo(0, -p.r - 4); ctx.lineTo(-p.r, p.r); ctx.lineTo(0, p.r * 0.4); ctx.lineTo(p.r, p.r); ctx.closePath();
   ctx.fill();
   ctx.fillStyle = '#e8fbff';
   ctx.beginPath(); ctx.arc(0, 0, 3.5, 0, Math.PI * 2); ctx.fill();
@@ -617,8 +622,9 @@ function drawEnemies() {
     ctx.shadowBlur = 10;
     ctx.fillStyle = e.color;
     if (e.type === 'drone') {
+      // 아래 향한 삼각형
       ctx.beginPath();
-      ctx.moveTo(-e.r, 0); ctx.lineTo(e.r * 0.6, -e.r); ctx.lineTo(e.r * 0.3, 0); ctx.lineTo(e.r * 0.6, e.r);
+      ctx.moveTo(0, e.r); ctx.lineTo(-e.r, -e.r * 0.6); ctx.lineTo(0, -e.r * 0.3); ctx.lineTo(e.r, -e.r * 0.6);
       ctx.closePath(); ctx.fill();
     } else if (e.type === 'weaver') {
       ctx.beginPath();
@@ -632,7 +638,7 @@ function drawEnemies() {
     } else {
       ctx.fillRect(-e.r, -e.r, e.r * 2, e.r * 2);
       ctx.fillStyle = '#0a0e18';
-      ctx.fillRect(-e.r * 0.9, -4, 6, 8);
+      ctx.fillRect(-4, e.r * 0.9 - 6, 8, 6);
     }
     ctx.restore();
   }
@@ -649,13 +655,13 @@ function drawBoss() {
   ctx.beginPath();
   ctx.ellipse(0, 0, boss.rx, boss.ry, 0, 0, Math.PI * 2);
   ctx.fill();
-  // 포신부
+  // 포신부(아래)
   ctx.fillStyle = '#ff6b81';
-  ctx.fillRect(-boss.rx - 8, -10, 12, 20);
+  ctx.fillRect(-10, boss.ry - 4, 20, 12);
   ctx.fillStyle = '#2a0f16';
-  ctx.beginPath(); ctx.arc(6, 0, boss.ry * 0.4, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(0, 6, boss.rx * 0.4, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = '#ffd36b';
-  ctx.beginPath(); ctx.arc(6, 0, boss.ry * 0.2, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(0, 6, boss.rx * 0.2, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
 }
 
@@ -666,7 +672,7 @@ function drawBullets() {
   ctx.fillStyle = '#c9fbff';
   for (const b of game.bullets) {
     ctx.beginPath();
-    ctx.ellipse(b.x, b.y, b.r * 2.2, b.r, 0, 0, Math.PI * 2);
+    ctx.ellipse(b.x, b.y, b.r, b.r * 2.2, 0, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.restore();
@@ -748,7 +754,7 @@ const loop = createLoop({
 });
 
 function resetGame() {
-  game.player = { x: W * 0.18, y: H * 0.5, r: CFG.player.r, inv: 0 };
+  game.player = { x: W * 0.5, y: H * CFG.player.yRatio, r: CFG.player.r, inv: 0 };
   game.bullets = []; game.enemies = []; game.eBullets = [];
   game.powerups = []; game.particles = []; game.boss = null;
   game.score = 0; game.lives = CFG.player.maxLives; game.power = 1;
@@ -848,7 +854,6 @@ btnMute.addEventListener('click', () => {
   btnMute.textContent = m ? '🔇' : '🔊';
   btnMute.setAttribute('aria-label', m ? '소리 켜기' : '소리 끄기');
 });
-// 일시정지 상태에서 캔버스 탭하면 재개
 canvas.addEventListener('click', () => { if (state === 'paused') togglePause(); });
 
 // 초기 표시
