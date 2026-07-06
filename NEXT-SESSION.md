@@ -2,7 +2,11 @@
 
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
-## 직전 작업 (2026-07-03, nonogram 드래그·완성 연출 다듬기)
+## 직전 작업 (2026-07-06, nonogram 퍼즐 전수 점검 + 창 비율 무관 전체 fit)
+
+12차 sealing(상세 games/nonogram/PROGRESS.md 12차 + 허브 PROGRESS 13장). 사용자 지시로 전 퍼즐 344종 형태 전수 점검 - 불량 4종(편지 5x5 통짜 / 태양·강아지·반짝별 10x10 다운샘플 뭉개짐)을 손그림으로 교체하고, 채움 패턴이 완전히 같아 사실상 같은 문제였던 5x5 두 쌍(유령=문어, 튜토하트=하트열매)을 분리했다(공/달 5종·곰=판다·말=얼룩말 동일 쌍은 사용자 결정으로 유지). 15x15 하트 8종은 정상 확인. 5x5 원본 SSOT(scripts/handmade-puzzles.mjs)도 동기화했고, 이모지 10x10 손그림 교체분(하트 11종 + 이번 3종)은 gen-puzzles.mjs 재생성 시 소실되므로 재생성 전 재반영 필요(docs/02_data.md 3장 명기). 레이아웃 - 가로에서 우측 UI를 보드에 밀착(우측 여백 = 좌 힌트 폭 1/3, CELL_FIT.RIGHT_MARGIN_RATIO, 세로는 정중앙 유지) + 가로 창(1077x858 사용자 재현)에서 좌우 UI 잘리던 문제를 fitBoard 가용 폭에 좌우 UI 열 폭 포함(scrollWidth 병용) + 모드 버튼 white-space:nowrap(한글 줄바꿈이 그리드 열 최소폭을 실제 렌더 폭보다 작게 만드는 함정)으로 해소. STANDARD 4.7-7을 "창 비율 무관 전체 fit"으로 강화해 v0.3.2, nonogram 적용 버전 동기. 검증 - 테스트 20/20, 3종 창 잘림 0·pageerror 0, 맵 클리어 썸네일로 교체 6종 육안 확인. **다음 행동** = (a) tetris/sudoku/rushhour의 v0.3.2(창 비율 무관 전체 fit) 마이그레이션 여부 사용자 결정 (b) 남은 동일 형태 쌍(공/달 5종 등) 차별화 여부 (c) 기존 여지: 이름 중복 정리·16x16·이모지 확대.
+
+## 이전 작업 (2026-07-03, nonogram 드래그·완성 연출 다듬기)
 
 6차 sealing(상세 games/nonogram/PROGRESS.md). 5차 커밋(13ca095) 후 사용자가 실제로 플레이하며 드래그 상호작용을 여덟 차례 다듬었다. 핵심. (1) 이미 맞게 칠한 칸에서 드래그를 시작해도 이어 칠하기(decideAction이 맞은 칸에 'fill' 반환, 그 칸은 무변화 유지). (2) 드래그 칸 수 배지 - 마지막 칸 우상단 원 안 숫자(두 자리 대응), X(표시) 모드에선 숨김. (3) 드래그 중인 칸 배경을 진한 보라(tokens --drag-hi)로(외곽 테두리 아님, 연한 색이 칠칸과 이질적이라는 지적 반영). (4) 줄 완성 하이라이트 재설계 - 노란 링(sparkle) 폐기하고 칸 색이 민트로 물드는 파도(wave)로, 드래그 순서대로 순차 지연, 이미 완성된 줄 말고 새로 맞춘 줄만, 마우스를 놓을 때 발동(완성 판정이 힌트 기반이라 틀린 칸 있으면 미완성·지워서 온전해지면 완성). checkPraise→highlightNewCompletions, applyAction에서 완성 판정 제거. 내가 낸 버그 3건도 같은 세션에 수정(배지 display:flex가 [hidden] override → [hidden] 명시 / 배지 위치 기준 board→offsetParent(.puzzle) / revealColors가 옛 sparkle만 지워 클리어 색에 민트 섞임 → wave 잔재 제거). 손댄 파일: main.js·boardView.js·constants.js·index.html·main.css·tokens.css(입력 boardInput.js는 안 건드림). 검증: playwright 드래그·클리어 시뮬 + browser-shot 전 단계, 테스트 20/20. **다음 행동** = 이름 중복 정리 여부 결정(초급 손그림 14종이 중급 이모지와 동명 / 15×15 고양이2·토끼2·돼지2 - 그대로 둘지 '작은 X' 붙일지 이름 손볼지). 그 외 여지: 16×16 크기 추가, 이모지 목록 확대.
 

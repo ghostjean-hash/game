@@ -13,10 +13,11 @@
 | `TUTORIAL_COUNT` | `3` | 튜토리얼 판 수 |
 | `LARGE_UNLOCK_CLEARS` | `6` | 15×15 해금에 필요한 중급 이하 클리어 수 |
 | `MODE` | `{ FILL: 'fill', MARK: 'mark' }` | 입력 모드 |
-| `CELL_FIT` | `{ MIN_PX: 18, GUTTER_PX: 8, MAX: {5:60,10:46,15:34}, DEFAULT_MAX: 46 }` | 격자를 화면에 맞출 때 쓰는 셀 크기(px) 한계 |
+| `CELL_FIT` | `{ MIN_PX: 18, GUTTER_PX: 8, MAX: {5:92,10:60,15:44}, DEFAULT_MAX: 60, RIGHT_MARGIN_RATIO: 1/3 }` | 격자를 화면에 맞출 때 쓰는 셀 크기(px) 한계 + 가로 방향 보드 우측 여백 비율 |
 
 - 별점 계산: `mistakes <= STAR_THRESHOLDS.THREE ? 3 : mistakes <= STAR_THRESHOLDS.TWO ? 2 : 1`.
-- 셀 크기(px)는 CSS 변수 `--cell` 한 곳에서 파생. 플레이 화면은 세로로 스크롤되지 않고 한 화면에 담기므로, `main.js`의 `fitBoard`가 남은 공간(폭·높이)을 재서 `--cell`을 정한다(폭·높이 중 작은 쪽, `CELL_FIT.MIN_PX`~크기별 `MAX` 범위). `styles/tokens.css`의 `clamp` 값은 JS 미동작 시 fallback.
+- 셀 크기(px)는 CSS 변수 `--cell` 한 곳에서 파생. 플레이 화면은 세로로 스크롤되지 않고 한 화면에 담기므로, `main.js`의 `fitBoard`가 남은 공간(폭·높이)을 재서 `--cell`을 정한다(폭·높이 중 작은 쪽, `CELL_FIT.MIN_PX`~크기별 `MAX` 범위, 가로 방향은 MAX 무시하되 화면 폭에서 좌·우 UI 열 폭을 뺀 가용 폭을 병목에 포함 - 창 비율이 어떻든 게임 전체가 화면 안에 들어온다, STANDARD 4.7-7). `styles/tokens.css`의 `clamp` 값은 JS 미동작 시 fallback.
+- 보드 우측 여백: 세로 방향은 좌측 행 힌트 폭만큼(격자 정중앙), 가로 방향은 그 `RIGHT_MARGIN_RATIO`(1/3)만 줘 우측 UI(조작·모드 버튼)를 보드에 가깝게 붙인다(2026-07-06 사용자 결정).
 
 ## 2. 색상 (`src/data/colors.js`)
 
@@ -90,6 +91,7 @@
 
 1. **튜토리얼·초급(5×5) = 자체 손그림**: 하트·별·집·고양이 등. 이름과 모양이 맞는 자체 제작이라 저작권이 깨끗하고, 전역 `PALETTE` 색 인덱스를 쓴다. 5×5는 표현력이 낮아 이모지 다운샘플로는 인식이 어려워 손그림을 유지한다.
 2. **중급·고급(10×10·15×15) = 이모지 픽셀 그림**: Twemoji(CC-BY 4.0, jdecked/twemoji)의 72×72 PNG를 N×N으로 다운샘플하고 색을 소수 팔레트로 양자화해 만든다. 각 퍼즐은 자기 `palette`(§2.3)를 가진다. 이름은 그 이모지의 한글 이름(고양이·케이크·해바라기 등). 생성·검증은 `scripts/build-emoji-puzzles.mjs`(다운로드→PNG 디코딩→다운샘플→색 양자화→solver 거르기) + `scripts/gen-puzzles.mjs`(손그림과 합쳐 puzzles.js 재생성)가 담당한다. 10×10에서 인식이 어려운 복잡한 것은 제외 목록으로 걸렀다.
+   - **손그림 예외**: 다운샘플로 형태가 뭉개진 이모지 퍼즐은 puzzles.js에서 손그림으로 직접 교체했다(원본 palette 유지, solver 재검증 필수). 대상: 10×10 하트 11종(2026-07-05), 10×10 강아지·태양·반짝별(2026-07-06). 주의 - gen-puzzles.mjs로 재생성하면 이 손그림 교체분이 사라지므로, 재생성 시 교체분을 다시 반영해야 한다.
 
 라이선스: 이모지 그림은 Twemoji(CC-BY 4.0) 유래이므로 게임 내 출처 표기를 유지한다(index 화면 하단). 랜덤 무늬나 번호 이름("초급 N")은 쓰지 않는다(2026-07-03, 사용자 지시로 랜덤 생성분 전면 폐기).
 

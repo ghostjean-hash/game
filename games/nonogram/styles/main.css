@@ -271,6 +271,9 @@ body:has(#screen-play.active) #app {
   background: var(--surface); border: 2.5px solid var(--line);
   border-radius: var(--radius-2); padding: 34px var(--space-5);   /* 상하 크게 - 높이 약 2배 */
   font-weight: 800; font-size: 18px; color: var(--fg);
+  /* nowrap이 없으면 한글이 줄바꿈 가능으로 계산돼 그리드 열의 최소폭이 실제 렌더 폭보다
+     작아지고, 좁은 창에서 버튼이 열 밖(화면 밖)으로 넘친다. */
+  white-space: nowrap;
   box-shadow: var(--shadow); transition: transform 0.08s ease, background 0.12s ease;
 }
 .mode-btn:active { transform: scale(0.97); }

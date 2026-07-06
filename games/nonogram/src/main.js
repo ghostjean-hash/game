@@ -159,27 +159,44 @@ function fitBoard() {
     if (ch === wrap || ch.offsetParent === null) continue; // 자기 자신·숨김 제외
     sibH += ch.offsetHeight; sibCount += 1;
   }
-  // 가로(태블릿 눕힘)에선 보드 열이 보드 크기에 맞춰지므로(폭 auto) center 폭을 병목으로
-  // 쓰면 안 된다. 가로에선 높이만 병목으로 두어 보드를 세로에 꽉 맞추고, 남는 좌우 공간에
-  // UI를 보드 가장자리로 붙인다. 세로에선 폭이 병목이라 center 폭을 그대로 쓴다.
+  // 가로(태블릿 눕힘)에선 보드 열 폭이 auto라 center 폭을 병목으로 쓸 수 없다.
+  // 대신 화면 전체 폭에서 좌·우 UI 열과 열 간격을 뺀 값이 실제 가용 폭이다.
+  // 폭을 병목에서 빼면(무한대) 옆으로 긴 창에서 보드+UI가 화면을 넘친다(STANDARD 4.7-7).
   const isLandscape = window.innerWidth > window.innerHeight;
-  const availW = isLandscape ? Number.POSITIVE_INFINITY : center.clientWidth;
+  let availW;
+  if (isLandscape) {
+    const screen = el('screen-play');
+    const colGap = parseFloat(getComputedStyle(screen).columnGap) || 0;
+    // offsetWidth는 좁은 창에서 이미 눌린 트랙 폭이 나와 순환 측정이 된다.
+    // scrollWidth(내용물 고유 폭)와 큰 쪽을 써야 UI 열이 실제 필요한 폭을 확보한다.
+    const contentW = (sel) => {
+      const ui = screen.querySelector(sel);
+      return ui ? Math.max(ui.offsetWidth, ui.scrollWidth) : 0;
+    };
+    const tlW = contentW('.pc-tl');
+    const sideW = Math.max(contentW('.pc-tr'), contentW('.pc-br'));
+    availW = screen.clientWidth - tlW - sideW - colGap * 2;
+  } else {
+    availW = center.clientWidth;
+  }
   const availH = center.clientHeight - sibH - gap * sibCount;
-  if (availH <= 0) return;                       // 아직 레이아웃 전(display:none 등)
-  if (!isLandscape && availW <= 0) return;
+  if (availH <= 0 || availW <= 0) return;        // 아직 레이아웃 전(display:none 등)
   const clueLeft = el('row-clues').offsetWidth;  // 좌측 행 힌트 폭
   const clueTop = el('col-clues').offsetHeight;  // 상단 열 힌트 높이
   const g = CELL_FIT.GUTTER_PX;
-  // 격자(board) 자체를 화면 중심에 두려면 좌측 힌트 폭만큼 우측에 여백을 준다.
-  // 그만큼 가로 여유가 줄므로 폭 계산에서도 힌트 폭을 양쪽으로 뺀다.
-  const byW = (availW - clueLeft * 2 - g) / n;
+  // 보드 오른쪽 여백: 세로에선 좌측 힌트 폭만큼 줘 격자(board)를 화면 정중앙에.
+  // 가로에선 그 1/3만 줘 우측 UI를 보드에 가깝게 붙인다(RIGHT_MARGIN_RATIO).
+  const marginRight = isLandscape
+    ? Math.round(clueLeft * CELL_FIT.RIGHT_MARGIN_RATIO)
+    : clueLeft;
+  const byW = (availW - clueLeft - marginRight - g) / n;
   const byH = (availH - clueTop - g) / n;
   // 가로에선 보드가 배정 영역(높이)을 꽉 채워야 UI가 보드 모서리에 정확히 붙는다.
   // cap을 두면 보드가 영역보다 작아져 그 여백만큼 UI가 보드 밖으로 벗어난다.
   const cap = isLandscape ? Number.POSITIVE_INFINITY : (CELL_FIT.MAX[n] || CELL_FIT.DEFAULT_MAX);
   const cell = Math.max(CELL_FIT.MIN_PX, Math.floor(Math.min(byW, byH, cap)));
   puzzleEl.style.setProperty('--cell', `${cell}px`);
-  puzzleEl.style.marginRight = `${clueLeft}px`;
+  puzzleEl.style.marginRight = `${marginRight}px`;
 }
 
 // 화면 갱신: 셀 상태 + 완성 줄 흐리게 + 별 예고 + 실수 + 중도 저장.
