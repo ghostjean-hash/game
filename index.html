@@ -30,6 +30,24 @@
     color: var(--fg-dim);
     font-size: 14px;
   }
+  .section { margin-bottom: var(--sp-6); }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-3);
+  }
+  .section-head h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: var(--fg);
+  }
+  .section-head .count {
+    font-size: 12px;
+    color: var(--fg-mute);
+  }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -107,9 +125,25 @@
   <main class="launcher">
     <header>
       <h1>game_ghost</h1>
-      <div class="sub">퍼즐 게임 프로토타입 모음</div>
+      <div class="sub">미니 게임 · 앱 모음</div>
     </header>
-    <div id="grid" class="grid" aria-live="polite"></div>
+
+    <section class="section" id="sec-games">
+      <div class="section-head">
+        <h2>게임</h2>
+        <span class="count" id="count-games"></span>
+      </div>
+      <div id="grid-games" class="grid" aria-live="polite"></div>
+    </section>
+
+    <section class="section" id="sec-apps">
+      <div class="section-head">
+        <h2>앱</h2>
+        <span class="count" id="count-apps"></span>
+      </div>
+      <div id="grid-apps" class="grid" aria-live="polite"></div>
+    </section>
+
     <footer id="footer"></footer>
   </main>
 </div>
@@ -117,27 +151,33 @@
 import { registerServiceWorker } from "./shared/ui.js";
 registerServiceWorker("/service-worker.js");
 
-const grid = document.getElementById("grid");
-const footer = document.getElementById("footer");
+// 게임과 앱 두 구역을 각자의 등록부에서 읽어 같은 카드 UI로 렌더한다.
+loadSection("./games/_registry.json", "games", "grid-games", "count-games", "sec-games");
+loadSection("./apps/_registry.json", "apps", "grid-apps", "count-apps", "sec-apps");
 
-fetch("./games/_registry.json", { cache: "no-cache" })
-  .then((r) => r.json())
-  .then((data) => render(data.games || []))
-  .catch(() => {
-    grid.innerHTML = '<div class="empty">게임 목록을 불러오지 못했습니다.</div>';
-  });
+function loadSection(url, key, gridId, countId, sectionId) {
+  const grid = document.getElementById(gridId);
+  fetch(url, { cache: "no-cache" })
+    .then((r) => r.json())
+    .then((data) => render(data[key] || [], grid, document.getElementById(countId)))
+    .catch(() => {
+      grid.innerHTML = '<div class="empty">목록을 불러오지 못했습니다.</div>';
+    });
+}
 
-function render(games) {
-  if (!games.length) {
-    grid.innerHTML = '<div class="empty">아직 등록된 게임이 없습니다.</div>';
+function render(items, grid, countEl) {
+  if (!items.length) {
+    grid.innerHTML = '<div class="empty">아직 등록된 항목이 없습니다.</div>';
+    if (countEl) countEl.textContent = "0";
     return;
   }
+  if (countEl) countEl.textContent = String(items.length);
   grid.innerHTML = "";
-  for (const g of games) {
+  for (const it of items) {
     const a = document.createElement("a");
     a.className = "card";
-    a.href = g.path;
-    a.style.setProperty("--accent", g.accent || "var(--accent)");
+    a.href = it.path;
+    a.style.setProperty("--accent", it.accent || "var(--accent)");
     a.innerHTML = `
       <div class="accent-bar"></div>
       <div>
@@ -148,14 +188,13 @@ function render(games) {
         <span class="badge"></span>
       </div>
     `;
-    a.querySelector("h3").textContent = g.title;
-    a.querySelector(".desc").textContent = g.subtitle || "";
+    a.querySelector("h3").textContent = it.title;
+    a.querySelector(".desc").textContent = it.subtitle || "";
     const badge = a.querySelector(".badge");
-    badge.textContent = g.status || "wip";
-    badge.classList.add(g.status || "wip");
+    badge.textContent = it.status || "wip";
+    badge.classList.add(it.status || "wip");
     grid.appendChild(a);
   }
-  footer.textContent = `${games.length} game${games.length > 1 ? "s" : ""}`;
 }
 </script>
 </body>

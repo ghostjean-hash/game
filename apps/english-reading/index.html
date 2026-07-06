@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#0e0f13" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../icons/icon-180.png" />
+<link rel="stylesheet" href="../../shared/tokens.css" />
+<link rel="stylesheet" href="../../shared/base.css" />
+<link rel="stylesheet" href="./style.css" />
+<title>영어 독해 - 청킹 훈련</title>
+</head>
+<body>
+<div class="page train-page">
+  <header class="topbar">
+    <a href="../../" class="home" aria-label="홈으로">←</a>
+    <div class="pattern-info">
+      <div class="pattern-label" id="pattern-label">불러오는 중…</div>
+      <div class="pattern-progress" id="pattern-progress"></div>
+    </div>
+  </header>
+
+  <main class="train" id="train">
+    <div class="instruction" id="instruction">문법 덫을 찾아 단어를 클릭해 보세요</div>
+    <div class="sentence" id="sentence" aria-live="polite"></div>
+    <div class="tooltip" id="tooltip" hidden></div>
+    <div class="chunks" id="chunks" hidden></div>
+  </main>
+
+  <footer class="controls">
+    <button id="btn-reveal" class="btn" type="button">해석 보기</button>
+    <button id="btn-next" class="btn btn-primary" type="button">다음 문장 →</button>
+  </footer>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

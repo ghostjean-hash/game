@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "id": "english-reading",
+      "title": "영어 독해",
+      "subtitle": "클릭으로 익히는 직독직해 청킹 훈련",
+      "path": "apps/english-reading/",
+      "status": "wip",
+      "accent": "#5aa9ff"
+    }
+  ]
+}

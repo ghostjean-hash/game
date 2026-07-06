@@ -1,0 +1,539 @@
+{
+  "patterns": [
+    {
+      "id": "it_dummy",
+      "label": "가목적어 it",
+      "desc": "동사 뒤 it이 진짜 목적어(to부정사·that절)를 대신하는 자리"
+    },
+    {
+      "id": "to_adj",
+      "label": "to부정사 형용사적 용법",
+      "desc": "명사 뒤 to부정사가 그 명사를 꾸며 '~할 명사'가 되는 자리"
+    },
+    {
+      "id": "trick_into",
+      "label": "into 동명사 (설득·유도)",
+      "desc": "trick/talk/persuade + 목적어 + into + 동명사 = '~하도록 만들다'"
+    }
+  ],
+  "sentences": [
+    {
+      "id": "it_dummy_01",
+      "text": "Many people find it hard to change their old habits.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "Many people find it hard", "kr": "많은 사람들은 그것이 어렵다고 여긴다" },
+        { "en": "to change their old habits", "kr": "자신의 오래된 습관을 바꾸는 것을" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to change...)를 대신하는 가짜 목적어예요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어인 'to change...'를 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_02",
+      "text": "She found it difficult to express her true feelings.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "She found it difficult", "kr": "그녀는 그것이 어렵다는 걸 알았다" },
+        { "en": "to express her true feelings", "kr": "자신의 진짜 감정을 표현하는 것이" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to express...)를 대신해요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어 'to express...'를 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_03",
+      "text": "The internet makes it easy to stay in touch with friends.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "The internet makes it easy", "kr": "인터넷은 그것을 쉽게 만든다" },
+        { "en": "to stay in touch with friends", "kr": "친구들과 연락하고 지내는 것을" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to stay...)를 대신해요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어 'to stay...'를 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_04",
+      "text": "I think it important to listen before you speak.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "I think it important", "kr": "나는 그것이 중요하다고 생각한다" },
+        { "en": "to listen before you speak", "kr": "말하기 전에 듣는 것이" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to listen...)를 대신해요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어 'to listen...'을 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_05",
+      "text": "We consider it necessary to review the plan again.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "We consider it necessary", "kr": "우리는 그것이 필요하다고 여긴다" },
+        { "en": "to review the plan again", "kr": "그 계획을 다시 검토하는 것이" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to review...)를 대신해요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어 'to review...'를 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_06",
+      "text": "He made it clear that he would not give up.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "He made it clear", "kr": "그는 그것을 분명히 했다" },
+        { "en": "that he would not give up", "kr": "자신이 포기하지 않을 것임을" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 that절(that he...)을 대신하는 가짜 목적어예요" },
+        { "word": "that", "nth": 1, "type": "진목적어 (that 명사절)", "hint": "진짜 목적어인 that절을 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_07",
+      "text": "Technology has made it possible to work from anywhere.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "Technology has made it possible", "kr": "기술은 그것을 가능하게 만들었다" },
+        { "en": "to work from anywhere", "kr": "어디서든 일하는 것을" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to work...)를 대신해요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어 'to work...'를 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_08",
+      "text": "They found it strange that no one had noticed the change.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "They found it strange", "kr": "그들은 그것이 이상하다고 느꼈다" },
+        { "en": "that no one had noticed the change", "kr": "아무도 그 변화를 알아채지 못한 것이" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 that절을 대신하는 가짜 목적어예요" },
+        { "word": "that", "nth": 1, "type": "진목적어 (that 명사절)", "hint": "진짜 목적어인 that절을 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_09",
+      "text": "The teacher made it obvious that effort matters most.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "The teacher made it obvious", "kr": "그 선생님은 그것을 분명히 했다" },
+        { "en": "that effort matters most", "kr": "노력이 가장 중요하다는 것을" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 that절을 대신하는 가짜 목적어예요" },
+        { "word": "that", "nth": 1, "type": "진목적어 (that 명사절)", "hint": "진짜 목적어인 that절을 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_10",
+      "text": "Most students find it useful to study in small groups.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "Most students find it useful", "kr": "대부분의 학생들은 그것이 유용하다고 여긴다" },
+        { "en": "to study in small groups", "kr": "소그룹으로 공부하는 것이" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to study...)를 대신해요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어 'to study...'를 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_11",
+      "text": "She thought it wise to save some money each month.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "She thought it wise", "kr": "그녀는 그것이 현명하다고 생각했다" },
+        { "en": "to save some money each month", "kr": "매달 돈을 조금씩 저축하는 것이" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to save...)를 대신해요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어 'to save...'를 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_12",
+      "text": "The law makes it illegal to drive without a license.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "The law makes it illegal", "kr": "법은 그것을 불법으로 만든다" },
+        { "en": "to drive without a license", "kr": "면허 없이 운전하는 것을" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to drive...)를 대신해요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어 'to drive...'를 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_13",
+      "text": "We found it surprising that the plan worked so well.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "We found it surprising", "kr": "우리는 그것이 놀랍다고 느꼈다" },
+        { "en": "that the plan worked so well", "kr": "그 계획이 그렇게 잘 된 것이" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 that절을 대신하는 가짜 목적어예요" },
+        { "word": "that", "nth": 1, "type": "진목적어 (that 명사절)", "hint": "진짜 목적어인 that절을 이끌어요" }
+      ]
+    },
+    {
+      "id": "it_dummy_14",
+      "text": "Good lighting makes it comfortable to read for hours.",
+      "category": "it_dummy",
+      "chunks": [
+        { "en": "Good lighting makes it comfortable", "kr": "좋은 조명은 그것을 편안하게 만든다" },
+        { "en": "to read for hours", "kr": "몇 시간 동안 읽는 것을" }
+      ],
+      "targetWords": [
+        { "word": "it", "nth": 1, "type": "가목적어", "hint": "뒤의 to부정사(to read...)를 대신해요" },
+        { "word": "to", "nth": 1, "type": "진목적어 (to부정사)", "hint": "진짜 목적어 'to read...'를 이끌어요" }
+      ]
+    },
+    {
+      "id": "to_adj_01",
+      "text": "I have a lot of work to do today.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "I have a lot of work", "kr": "나는 많은 일을 가지고 있다" },
+        { "en": "to do today", "kr": "오늘 해야 할" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'work'를 꾸며 '해야 할 일'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_02",
+      "text": "She needs a friend to talk to.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "She needs a friend", "kr": "그녀는 친구가 필요하다" },
+        { "en": "to talk to", "kr": "이야기 나눌" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'friend'를 꾸며요 (문장 끝 to는 전치사)" }
+      ]
+    },
+    {
+      "id": "to_adj_03",
+      "text": "He was the first person to arrive at the party.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "He was the first person", "kr": "그는 첫 번째 사람이었다" },
+        { "en": "to arrive at the party", "kr": "파티에 도착한" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'person'을 꾸며 '도착한 사람'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_04",
+      "text": "There is nothing to worry about.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "There is nothing", "kr": "아무것도 없다" },
+        { "en": "to worry about", "kr": "걱정할" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'nothing'을 꾸며 '걱정할 것'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_05",
+      "text": "Do you have anything to eat?",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "Do you have anything", "kr": "너는 뭔가 가지고 있니" },
+        { "en": "to eat", "kr": "먹을" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'anything'을 꾸며 '먹을 것'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_06",
+      "text": "This is a good book to read on a rainy day.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "This is a good book", "kr": "이것은 좋은 책이다" },
+        { "en": "to read on a rainy day", "kr": "비 오는 날 읽을" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'book'을 꾸며 '읽을 책'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_07",
+      "text": "We found a quiet place to rest.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "We found a quiet place", "kr": "우리는 조용한 장소를 찾았다" },
+        { "en": "to rest", "kr": "쉴" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'place'를 꾸며 '쉴 장소'가 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_08",
+      "text": "She has many things to buy at the market.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "She has many things", "kr": "그녀는 많은 것을 가지고 있다" },
+        { "en": "to buy at the market", "kr": "시장에서 살" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'things'를 꾸며 '살 것들'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_09",
+      "text": "It is time to make a decision.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "It is time", "kr": "시간이다" },
+        { "en": "to make a decision", "kr": "결정을 내릴" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'time'을 꾸며 '결정 내릴 시간'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_10",
+      "text": "He gave me a form to fill out.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "He gave me a form", "kr": "그는 나에게 양식을 주었다" },
+        { "en": "to fill out", "kr": "작성할" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'form'을 꾸며 '작성할 양식'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_11",
+      "text": "They need a house to live in.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "They need a house", "kr": "그들은 집이 필요하다" },
+        { "en": "to live in", "kr": "살" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'house'를 꾸며 '살 집'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_12",
+      "text": "I want something cold to drink.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "I want something cold", "kr": "나는 뭔가 차가운 것을 원한다" },
+        { "en": "to drink", "kr": "마실" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'something'을 꾸며 '마실 것'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_13",
+      "text": "She is looking for a way to improve her English.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "She is looking for a way", "kr": "그녀는 방법을 찾고 있다" },
+        { "en": "to improve her English", "kr": "자신의 영어를 향상시킬" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'way'를 꾸며 '향상시킬 방법'이 돼요" }
+      ]
+    },
+    {
+      "id": "to_adj_14",
+      "text": "There are many lessons to learn from failure.",
+      "category": "to_adj",
+      "chunks": [
+        { "en": "There are many lessons", "kr": "많은 교훈이 있다" },
+        { "en": "to learn from failure", "kr": "실패로부터 배울" }
+      ],
+      "targetWords": [
+        { "word": "to", "nth": 1, "type": "형용사적 용법", "hint": "앞 명사 'lessons'를 꾸며 '배울 교훈'이 돼요" }
+      ]
+    },
+    {
+      "id": "trick_into_01",
+      "text": "The salesman tricked her into buying the old car.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "The salesman tricked her", "kr": "그 판매원은 그녀를 속였다" },
+        { "en": "into buying the old car", "kr": "그 낡은 차를 사도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "'~하도록 (속여서) 만들다'의 into예요. 뒤엔 동명사(buying)가 와요" }
+      ]
+    },
+    {
+      "id": "trick_into_02",
+      "text": "He talked me into joining the club.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "He talked me", "kr": "그는 나를 설득했다" },
+        { "en": "into joining the club", "kr": "그 동아리에 가입하도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "talk ~ into: '설득해서 ~하게 하다'. 뒤엔 동명사(joining)" }
+      ]
+    },
+    {
+      "id": "trick_into_03",
+      "text": "They persuaded him into signing the contract.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "They persuaded him", "kr": "그들은 그를 설득했다" },
+        { "en": "into signing the contract", "kr": "계약서에 서명하도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "persuade ~ into: '설득해서 ~하게 하다'. 뒤엔 동명사(signing)" }
+      ]
+    },
+    {
+      "id": "trick_into_04",
+      "text": "She fooled everyone into believing her story.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "She fooled everyone", "kr": "그녀는 모두를 속였다" },
+        { "en": "into believing her story", "kr": "자신의 이야기를 믿도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "fool ~ into: '속여서 ~하게 하다'. 뒤엔 동명사(believing)" }
+      ]
+    },
+    {
+      "id": "trick_into_05",
+      "text": "The scammer deceived them into sending money.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "The scammer deceived them", "kr": "그 사기꾼은 그들을 속였다" },
+        { "en": "into sending money", "kr": "돈을 보내도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "deceive ~ into: '속여서 ~하게 하다'. 뒤엔 동명사(sending)" }
+      ]
+    },
+    {
+      "id": "trick_into_06",
+      "text": "My friends talked me into trying the roller coaster.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "My friends talked me", "kr": "내 친구들은 나를 꼬드겼다" },
+        { "en": "into trying the roller coaster", "kr": "롤러코스터를 타보도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "talk ~ into: '꼬드겨서 ~하게 하다'. 뒤엔 동명사(trying)" }
+      ]
+    },
+    {
+      "id": "trick_into_07",
+      "text": "He was tricked into revealing the password.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "He was tricked", "kr": "그는 속아 넘어갔다" },
+        { "en": "into revealing the password", "kr": "비밀번호를 알려주도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "수동태 be tricked into: '속아서 ~하게 되다'. 뒤엔 동명사(revealing)" }
+      ]
+    },
+    {
+      "id": "trick_into_08",
+      "text": "The ad tricked us into thinking the product was free.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "The ad tricked us", "kr": "그 광고는 우리를 속였다" },
+        { "en": "into thinking the product was free", "kr": "그 제품이 공짜라고 생각하도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "trick ~ into: '속여서 ~하게 하다'. 뒤엔 동명사(thinking)" }
+      ]
+    },
+    {
+      "id": "trick_into_09",
+      "text": "She persuaded her brother into helping with the project.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "She persuaded her brother", "kr": "그녀는 남동생을 설득했다" },
+        { "en": "into helping with the project", "kr": "그 프로젝트를 돕도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "persuade ~ into: '설득해서 ~하게 하다'. 뒤엔 동명사(helping)" }
+      ]
+    },
+    {
+      "id": "trick_into_10",
+      "text": "They manipulated the crowd into supporting the plan.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "They manipulated the crowd", "kr": "그들은 군중을 조종했다" },
+        { "en": "into supporting the plan", "kr": "그 계획을 지지하도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "manipulate ~ into: '조종해서 ~하게 하다'. 뒤엔 동명사(supporting)" }
+      ]
+    },
+    {
+      "id": "trick_into_11",
+      "text": "The coach talked the team into practicing harder.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "The coach talked the team", "kr": "그 코치는 팀을 설득했다" },
+        { "en": "into practicing harder", "kr": "더 열심히 연습하도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "talk ~ into: '설득해서 ~하게 하다'. 뒤엔 동명사(practicing)" }
+      ]
+    },
+    {
+      "id": "trick_into_12",
+      "text": "He fooled the guard into opening the gate.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "He fooled the guard", "kr": "그는 경비원을 속였다" },
+        { "en": "into opening the gate", "kr": "문을 열도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "fool ~ into: '속여서 ~하게 하다'. 뒤엔 동명사(opening)" }
+      ]
+    },
+    {
+      "id": "trick_into_13",
+      "text": "Nobody can talk me into changing my mind.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "Nobody can talk me", "kr": "아무도 나를 설득할 수 없다" },
+        { "en": "into changing my mind", "kr": "내 마음을 바꾸도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "talk ~ into: '설득해서 ~하게 하다'. 뒤엔 동명사(changing)" }
+      ]
+    },
+    {
+      "id": "trick_into_14",
+      "text": "The company tricked customers into paying extra fees.",
+      "category": "trick_into",
+      "chunks": [
+        { "en": "The company tricked customers", "kr": "그 회사는 고객들을 속였다" },
+        { "en": "into paying extra fees", "kr": "추가 요금을 내도록" }
+      ],
+      "targetWords": [
+        { "word": "into", "nth": 1, "type": "into + 동명사", "hint": "trick ~ into: '속여서 ~하게 하다'. 뒤엔 동명사(paying)" }
+      ]
+    }
+  ]
+}
