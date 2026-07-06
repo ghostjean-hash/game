@@ -30,7 +30,7 @@
 
 ## 6. 테스트
 
-- `tests/test.html`을 브라우저로 열면 `core/`의 순수 함수(fireSpec·buildWaves·hit) 테스트가 자동 실행된다.
+- `tests/test.html`을 브라우저로 열면 `core/`의 순수 함수(frontSpec·optionSlot·gain/loseLastPart·buildWaves·hit) 테스트가 자동 실행된다.
 - core 로직(발사 패턴·웨이브·충돌) 변경 시 대응 테스트를 함께 갱신한다.
 - 렌더·입력·오디오·플로우는 browser-shot 스크린샷 + 실플레이로 확인(순수 단위 테스트 대상 아님).
 

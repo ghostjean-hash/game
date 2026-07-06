@@ -5,9 +5,10 @@ import { COLORS } from '../data/colors.js';
 export function spawnEnemy(game, type, xr, W) {
   const spec = CFG.enemy[type];
   const x = Math.max(spec.r + 6, Math.min(W - spec.r - 6, xr * W));
+  const hp = Math.ceil(spec.hp * (1 + (game.stage - 1) * CFG.enemyHpScale)); // 구역↑ 체력↑
   game.enemies.push({
     type, x, baseX: x, y: -spec.r - 10,
-    r: spec.r, hp: spec.hp, maxHp: spec.hp,
+    r: spec.r, hp, maxHp: hp,
     speed: spec.speed, score: spec.score, color: COLORS.enemy[type],
     t: 0, fireTimer: (spec.fireEvery || 0) * Math.random(),
   });
@@ -50,12 +51,9 @@ export function spawnBoss(game, W, H) {
 
 export function dropItem(game, x, y) {
   if (Math.random() > CFG.drop.chance) return;
-  const r = Math.random();
-  const { powerWeight, healWeight } = CFG.drop;
-  let kind = 'P';
-  if (r < powerWeight) kind = 'P';
-  else if (r < powerWeight + healWeight) kind = 'H';
-  else kind = 'B';
+  const w = CFG.drop.weights;
+  let r = Math.random(), kind = 'B';
+  for (const k of Object.keys(w)) { if (r < w[k]) { kind = k; break; } r -= w[k]; }
   game.powerups.push({ x, y, r: 12, vy: 70, kind, t: 0 });
 }
 

@@ -216,6 +216,10 @@ const SOUNDS = {
   },
   // 게임 시작 / 보스 등장: 부드러운 상승 필터 스윕.
   start: (c) => voice(c, { type: 'sawtooth', freq: 200, to: 760, dur: 0.3, gain: 0.11, filter: 500, filterTo: 3200, detune: 12, wet: 0.35 }),
+  // 유도 미사일 발사: 짧고 조용한 상승 휙(레이저는 무음, 시각만).
+  missile: (c) => voice(c, { type: 'sawtooth', freq: 680, to: 1500, dur: 0.13, gain: 0.038, filter: 1800, filterTo: 3200, detune: 8, wet: 0.15 }),
+  // 에너지존 피해 tick: 부드러운 저역 펄스(0.5초 주기라 조용히).
+  zone: (c) => voice(c, { type: 'sine', freq: 190, to: 96, dur: 0.2, gain: 0.045, filter: 700, wet: 0.28 }),
 };
 
 export function play(name) {

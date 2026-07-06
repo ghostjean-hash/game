@@ -4,6 +4,7 @@
 import { CFG } from '../data/numbers.js';
 import { COLORS } from '../data/colors.js';
 import { playerFire, enemyFireAt } from './fire.js';
+import { stepOptions, homeMissiles, tickZone, gainFront, gainOption, gainZone, loseLastPart } from './parts.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
 import { spawnEnemy, spawnBoss, dropItem, burst } from './spawn.js';
@@ -141,7 +142,7 @@ function updateParticles(game, dt) {
 function playerHit(game) {
   const p = game.player;
   game.lives--;
-  game.power = Math.max(1, game.power - 1);
+  loseLastPart(game); // 마지막 얻은 파츠 1개 손실(역순)
   p.inv = CFG.player.invAfterHit;
   burst(game, p.x, p.y, COLORS.playerHitSpark, 18);
   game.sfx.push('playerhit');
@@ -150,8 +151,11 @@ function playerHit(game) {
 
 function grabItem(game, kind) {
   if (kind === 'P') {
-    game.power = Math.min(CFG.maxPower, game.power + 1);
-    game.sfx.push('power');
+    if (gainFront(game)) game.sfx.push('power');
+  } else if (kind === 'S') {
+    if (gainOption(game)) game.sfx.push('power');
+  } else if (kind === 'E') {
+    if (gainZone(game)) game.sfx.push('power');
   } else if (kind === 'H') {
     game.lives = Math.min(CFG.player.maxLives, game.lives + 1);
     game.sfx.push('power');
@@ -292,13 +296,18 @@ export function stepWorld(game, dt, W, H) {
     game.fireTimer = CFG.player.fireEvery;
     playerFire(game);
   }
+  stepOptions(game, dt);           // 옵션기 추종 + 레이저/미사일 발사
   spawnWaves(game, W);
   updateEnemies(game, dt, W, H);
   updateBoss(game, dt, W, H);
+  homeMissiles(game, dt);          // 미사일 유도(표적 최신 위치 기준)
   updateBullets(game, dt, W, H);
   updateEnemyBullets(game, dt, W, H);
   updatePowerups(game, dt, W, H);
   updateParticles(game, dt);
+  tickZone(game, dt);              // 에너지존 주기 피해(적 hp 선차감)
   checkCollisions(game, W, H);
+  // 존/봄 등 총알 외 피해로 보스 hp<=0 되어도 일괄 격파 판정.
+  if (game.boss && !game.boss.entering && game.boss.hp <= 0) defeatBoss(game);
   checkProgress(game, dt, W, H);
 }

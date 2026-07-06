@@ -29,10 +29,18 @@ export const COLORS = {
     coreDark: '#2a0f16',
     coreLight: '#ffd36b',
   },
-  // 파워업 아이템 색 (P 화력 / H 회복 / B 봄)
+  // 파워업 아이템 색 (P 전방화력 / S 옵션기 / E 에너지존 / H 회복 / B 봄)
   powerup: {
     P: '#f7c948',
+    S: '#5fe8ff',
+    E: '#a98bff',
     H: '#ff6b81',
     B: '#7cf3c4',
   },
+  // 옵션기·파츠 무기 색
+  option: '#5fe8ff',      // 부속 비행기 본체
+  laser: '#b6ffff',       // 레이저 빔(얇고 밝은 시안)
+  missile: '#ffd36b',     // 유도 미사일
+  missileTrail: 'rgba(255,180,90,0.7)',
+  zone: '#a98bff',        // 에너지존 오라(반투명으로 렌더 시 alpha 적용)
 };

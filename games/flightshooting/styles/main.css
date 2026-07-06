@@ -29,11 +29,15 @@
   flex: 1; text-align: left; font-family: var(--font-mono);
 }
 .score-big b { font-size: 22px; font-weight: 800; color: var(--fg); }
-.mini-hud { display: flex; align-items: center; gap: var(--sp-2); font-family: var(--font-mono); }
+.mini-hud { display: flex; align-items: center; gap: 7px; font-family: var(--font-mono); }
 .mini-hud .mh { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.1; }
 .mini-hud .mh small { font-size: 9px; color: var(--fg-mute); letter-spacing: 1px; }
 .mini-hud .mh b { font-size: 15px; font-weight: 700; }
 .mini-hud .sep { color: var(--fg-mute); align-self: center; }
+/* 파츠별 라벨 색(전방·옵션·존을 한눈에 구분) */
+.mini-hud .l-front { color: var(--sky-power); }
+.mini-hud .l-option { color: #5fe8ff; }
+.mini-hud .l-zone { color: #a98bff; }
 .lives { display: flex; gap: 2px; font-size: 15px; }
 .lives .life { color: var(--sky-enemy); text-shadow: 0 0 6px rgba(255, 107, 129, 0.6); }
 .lives .life.spent { color: var(--line); text-shadow: none; }

@@ -14,58 +14,70 @@
 <pre id="out">실행 중…</pre>
 <script type="module">
 import { test, eq, ok, report } from './runner.js';
-import { fireSpec } from '../src/core/fire.js';
+import { frontSpec } from '../src/core/fire.js';
+import { optionSlot, gainFront, gainOption, gainZone, loseLastPart } from '../src/core/parts.js';
 import { buildWaves, stageName } from '../src/core/waves.js';
+import { spawnEnemy } from '../src/core/spawn.js';
 import { hit } from '../src/core/world.js';
 
-// ── fireSpec: 매 단계 탄 수 또는 위력이 반드시 변한다 ──
-test('fireSpec L1 = 단발 dmg1', () => {
-  const s = fireSpec(1); eq(s.angles.length, 1); eq(s.dmg, 1);
+const mkGame = () => ({ front: 1, options: [], zone: { level: 0, timer: null }, partHistory: [], player: { x: 100, y: 100 } });
+
+// ── frontSpec: 전방 화력 1~8, 단계당 탄 +1 ──
+test('frontSpec L1 = 1발 dmg1', () => { const s = frontSpec(1); eq(s.angles.length, 1); eq(s.dmg, 1); });
+test('frontSpec L2 = 2발 dmg1', () => { const s = frontSpec(2); eq(s.angles.length, 2); eq(s.dmg, 1); });
+test('frontSpec L3 = 3발 dmg2', () => { const s = frontSpec(3); eq(s.angles.length, 3); eq(s.dmg, 2); });
+test('frontSpec L8 = 8발 dmg4', () => { const s = frontSpec(8); eq(s.angles.length, 8); eq(s.dmg, 4); });
+test('frontSpec 단계마다 탄 +1', () => {
+  for (let L = 2; L <= 8; L++) ok(frontSpec(L).angles.length === frontSpec(L - 1).angles.length + 1, `L${L} 탄 수 미증가`);
 });
-test('fireSpec L2 = 탄 그대로 dmg 상승(위력)', () => {
-  const s = fireSpec(2); eq(s.angles.length, 1); eq(s.dmg, 2);
+test('frontSpec 상한 8 clamp', () => { eq(frontSpec(99).angles.length, 8); });
+
+// ── optionSlot: 좌우 번갈아, 안→밖, 슬롯 0·1 레이저 / 2·3 미사일 ──
+test('optionSlot 0 = 왼쪽 slot0 레이저', () => { const s = optionSlot(0); eq(s.side, -1); eq(s.slot, 0); eq(s.type, 'laser'); });
+test('optionSlot 1 = 오른쪽 slot0 레이저', () => { const s = optionSlot(1); eq(s.side, 1); eq(s.slot, 0); eq(s.type, 'laser'); });
+test('optionSlot 4 = 왼쪽 slot2 미사일', () => { const s = optionSlot(4); eq(s.side, -1); eq(s.slot, 2); eq(s.type, 'missile'); });
+test('optionSlot 7 = 오른쪽 slot3 미사일', () => { const s = optionSlot(7); eq(s.side, 1); eq(s.slot, 3); eq(s.type, 'missile'); });
+
+// ── 파츠 획득 상한 ──
+test('gainFront 8에서 상한', () => {
+  const g = mkGame(); let n = 0; while (gainFront(g)) n++; eq(g.front, 8); eq(n, 7);
 });
-test('fireSpec L3 = 탄 증가(2발)', () => {
-  const s = fireSpec(3); eq(s.angles.length, 2); eq(s.dmg, 2);
+test('gainOption 8대에서 상한', () => {
+  const g = mkGame(); let n = 0; while (gainOption(g)) n++; eq(g.options.length, 8); eq(n, 8);
 });
-test('fireSpec 매 단계 변화(shots 또는 dmg)', () => {
-  for (let L = 2; L <= 20; L++) {
-    const a = fireSpec(L - 1), b = fireSpec(L);
-    ok(b.angles.length !== a.angles.length || b.dmg !== a.dmg, `L${L}에서 변화 없음`);
-  }
-});
-test('fireSpec L12 측면탄 추가', () => {
-  ok(fireSpec(12).angles.includes(72), 'L12 측면 없음');
-});
-test('fireSpec L17 후방탄 추가', () => {
-  ok(fireSpec(17).angles.includes(180), 'L17 후방 없음');
-});
-test('fireSpec 상한 캡(L20 정면 10발)', () => {
-  const s = fireSpec(20); eq(s.dmg, 11); ok(s.angles.length >= 12);
+test('gainZone 5레벨에서 상한 + timer 설정', () => {
+  const g = mkGame(); let n = 0; while (gainZone(g)) n++; eq(g.zone.level, 5); eq(n, 5); ok(g.zone.timer > 0);
 });
 
-// ── buildWaves: 스테이지별 웨이브 생성 ──
-test('buildWaves(1) 웨이브 존재', () => {
-  const w = buildWaves(1); ok(w.length > 0);
-  ok(w.every((x) => typeof x.t === 'number' && Array.isArray(x.enemies)));
+// ── 피격 역순 손실 ──
+test('loseLastPart 역순으로 되돌림', () => {
+  const g = mkGame();
+  gainFront(g); gainOption(g); gainZone(g); // history: front, option, zone
+  eq(loseLastPart(g), 'zone'); eq(g.zone.level, 0);
+  eq(loseLastPart(g), 'option'); eq(g.options.length, 0);
+  eq(loseLastPart(g), 'front'); eq(g.front, 1);
+  eq(loseLastPart(g), null); // 빈 스택
 });
-test('buildWaves(10) 유효', () => {
-  const w = buildWaves(10); ok(w.length > 0);
-  ok(w.every((x) => x.enemies.every((e) => e.type && typeof e.xr === 'number')));
-});
-test('stageName 1~10 채워짐', () => {
-  for (let n = 1; n <= 10; n++) ok(stageName(n).length > 0, `구역 ${n} 이름 없음`);
+test('front는 1 밑으로 안 내려감', () => {
+  const g = mkGame(); gainFront(g); loseLastPart(g); loseLastPart(g); eq(g.front, 1);
 });
 
-// ── hit: 원-원 충돌 판정 ──
-test('hit 겹침 = true', () => {
-  ok(hit({ x: 0, y: 0, r: 10 }, { x: 5, y: 0, r: 10 }));
-});
-test('hit 멀면 = false', () => {
-  ok(!hit({ x: 0, y: 0, r: 5 }, { x: 100, y: 0, r: 5 }));
-});
-test('hit 보스 rx 대체 반지름', () => {
-  ok(hit({ x: 0, y: 0, r: 4 }, { x: 0, y: 0, rx: 30 }));
+// ── buildWaves / stageName ──
+test('buildWaves(1) 존재', () => { const w = buildWaves(1); ok(w.length > 0); ok(w.every((x) => typeof x.t === 'number' && Array.isArray(x.enemies))); });
+test('buildWaves(10) 유효', () => { const w = buildWaves(10); ok(w.length > 0); ok(w.every((x) => x.enemies.every((e) => e.type && typeof e.xr === 'number'))); });
+test('stageName 1~10', () => { for (let n = 1; n <= 10; n++) ok(stageName(n).length > 0, `구역 ${n} 이름 없음`); });
+
+// ── hit: 원-원 충돌 ──
+test('hit 겹침', () => { ok(hit({ x: 0, y: 0, r: 10 }, { x: 5, y: 0, r: 10 })); });
+test('hit 멀면 false', () => { ok(!hit({ x: 0, y: 0, r: 5 }, { x: 100, y: 0, r: 5 })); });
+test('hit 보스 rx 대체 반지름', () => { ok(hit({ x: 0, y: 0, r: 4 }, { x: 0, y: 0, rx: 30 })); });
+
+// ── 적 체력 구역 스케일 ──
+test('구역1 적 체력 = base', () => { const g = { stage: 1, enemies: [] }; spawnEnemy(g, 'drone', 0.5, 400); eq(g.enemies[0].hp, 1); });
+test('구역10 적 체력 > base', () => { const g = { stage: 10, enemies: [] }; spawnEnemy(g, 'drone', 0.5, 400); ok(g.enemies[0].hp > 1); });
+test('구역↑ 체력 단조 증가', () => {
+  let prev = 0;
+  for (let s = 1; s <= 10; s++) { const g = { stage: s, enemies: [] }; spawnEnemy(g, 'gunner', 0.5, 400); ok(g.enemies[0].hp >= prev, `구역 ${s} 감소`); prev = g.enemies[0].hp; }
 });
 
 report();

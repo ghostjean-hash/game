@@ -20,7 +20,9 @@ const canvas = $('#board');
 const ctx = canvas.getContext('2d');
 const elScore = $('#score');
 const elStage = $('#stage');
-const elPower = $('#power');
+const elFront = $('#front');
+const elOption = $('#option');
+const elZone = $('#zone');
 const elLives = $('#lives');
 const elMenuBest = $('#menu-best');
 const elBossBar = $('#boss-bar');
@@ -44,7 +46,8 @@ let bannerTimer = 0;
 function createGame() {
   return {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
-    score: 0, lives: CFG.player.maxLives, power: 1, stage: 1, fireTimer: 0,
+    score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
+    front: 1, options: [], zone: { level: 0, timer: null }, partHistory: [],
     waves: [], waveIdx: 0, elapsed: 0,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
@@ -112,7 +115,9 @@ function handleEvent(ev) {
 function syncHud() {
   elScore.textContent = game.score;
   elStage.textContent = game.stage;
-  elPower.textContent = game.power;
+  elFront.textContent = game.front;
+  elOption.textContent = game.options.length;
+  elZone.textContent = game.zone.level;
   const lifeEls = elLives.querySelectorAll('.life');
   lifeEls.forEach((el, i) => el.classList.toggle('spent', i >= game.lives));
 }
@@ -128,7 +133,8 @@ function resetGame() {
   game.player = { x: W * 0.5, y: H * CFG.player.yRatio, r: CFG.player.r, inv: 0 };
   game.bullets = []; game.enemies = []; game.eBullets = [];
   game.powerups = []; game.particles = []; game.boss = null;
-  game.score = 0; game.lives = CFG.player.maxLives; game.power = 1;
+  game.score = 0; game.lives = CFG.player.maxLives;
+  game.front = 1; game.options = []; game.zone = { level: 0, timer: null }; game.partHistory = [];
   game.stage = 1; game.fireTimer = 0;
   game.bossPending = false; game.transitioning = false;
   game.pendingTimer = null; game.transitionTimer = null; game.winTimer = null;

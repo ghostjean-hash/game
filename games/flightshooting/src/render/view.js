@@ -1,16 +1,51 @@
 // 캔버스 렌더링 (game 상태를 읽어 그리기만). 로직 없음. 색은 colors.js에서만.
 import { COLORS } from '../data/colors.js';
+import { CFG } from '../data/numbers.js';
 
 export function render(ctx, game, W, H) {
   ctx.clearRect(0, 0, W, H);
   drawStars(ctx, game);
+  drawZone(ctx, game);        // 플레이어 아래에 깔리는 에너지존 오라
   drawPowerups(ctx, game);
   drawEnemies(ctx, game);
   drawBoss(ctx, game);
   drawEnemyBullets(ctx, game);
   drawBullets(ctx, game);
+  drawOptions(ctx, game);     // 좌우 부속 비행기
   drawPlayer(ctx, game);
   drawParticles(ctx, game);
+}
+
+// 에너지존: 플레이어 중심 반투명 오라(글로우 대신 radial gradient - 단일 요소라 발열 부담 적음).
+function drawZone(ctx, game) {
+  const z = game.zone, p = game.player;
+  if (!z || z.level <= 0 || !p) return;
+  const R = CFG.parts.zone.radius[z.level] * (1 + Math.sin((game.elapsed || 0) * 3) * 0.04);
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  const grad = ctx.createRadialGradient(0, 0, R * 0.35, 0, 0, R);
+  grad.addColorStop(0, 'rgba(169,139,255,0.03)');
+  grad.addColorStop(0.7, 'rgba(169,139,255,0.10)');
+  grad.addColorStop(1, 'rgba(169,139,255,0.24)');
+  ctx.fillStyle = grad;
+  ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(169,139,255,0.5)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.restore();
+}
+
+// 옵션기: 작은 삼각 기체(레이저=시안, 미사일=주황). 최대 8대라 글로우 생략(발열).
+function drawOptions(ctx, game) {
+  for (const o of game.options) {
+    ctx.save();
+    ctx.translate(o.x, o.y);
+    ctx.fillStyle = o.type === 'laser' ? COLORS.option : COLORS.missile;
+    ctx.beginPath();
+    ctx.moveTo(0, -7); ctx.lineTo(-5, 5); ctx.lineTo(0, 2); ctx.lineTo(5, 5); ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
 }
 
 function drawStars(ctx, game) {
@@ -101,11 +136,29 @@ function drawBoss(ctx, game) {
 // 밝은 색 자체로 네온 느낌을 낸다.
 function drawBullets(ctx, game) {
   ctx.save();
-  ctx.fillStyle = COLORS.bullet;
   for (const b of game.bullets) {
-    ctx.beginPath();
-    ctx.ellipse(b.x, b.y, b.r, b.r * 2.2, 0, 0, Math.PI * 2);
-    ctx.fill();
+    if (b.kind === 'laser') {
+      // 레이저: 얇고 밝은 세로 막대
+      ctx.fillStyle = COLORS.laser;
+      ctx.fillRect(b.x - b.r * 0.5, b.y - 9, b.r, 13);
+    } else if (b.kind === 'missile') {
+      // 미사일: 진행 방향으로 회전한 캡슐 + 짧은 꼬리
+      const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+      ctx.fillStyle = COLORS.missileTrail;
+      ctx.beginPath();
+      ctx.arc(b.x - Math.cos(Math.atan2(b.vy, b.vx)) * 6, b.y - Math.sin(Math.atan2(b.vy, b.vx)) * 6, b.r * 0.7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = COLORS.missile;
+      ctx.beginPath();
+      ctx.ellipse(b.x, b.y, b.r * 0.7, b.r * 1.3, ang, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // 전방 화력 기본탄
+      ctx.fillStyle = COLORS.bullet;
+      ctx.beginPath();
+      ctx.ellipse(b.x, b.y, b.r, b.r * 2.2, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
   ctx.restore();
 }
@@ -122,7 +175,7 @@ function drawEnemyBullets(ctx, game) {
 }
 
 function drawPowerups(ctx, game) {
-  const label = { P: 'P', H: '♥', B: 'B' };
+  const label = { P: 'P', S: 'S', E: 'E', H: '♥', B: 'B' };
   for (const it of game.powerups) {
     const col = COLORS.powerup[it.kind];
     ctx.save();

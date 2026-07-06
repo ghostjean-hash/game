@@ -29,7 +29,7 @@
             <polygon points="32,16 40,44 32,38 24,44" fill="var(--sky-accent)" opacity="0.85"/>
           </svg>
         </div>
-        <p class="menu-tagline">손가락으로 기체를 끌어 적을 뚫고 3개 구역의 보스를 격파하라.</p>
+        <p class="menu-tagline">손가락으로 기체를 끌어 적을 뚫고 10개 구역의 보스를 격파하라.</p>
         <div class="menu-best" aria-live="polite">
           <span class="best-label">최고 점수</span>
           <b id="menu-best">0</b>
@@ -42,8 +42,10 @@
       <ul class="menu-tips" id="menu-tips">
         <li><b>이동</b> 화면을 손가락으로 끌면 기체가 따라옵니다 (PC: 방향키/마우스)</li>
         <li><b>발사</b> 자동으로 나갑니다</li>
-        <li><b>P</b> 아이템을 먹으면 화력이 세집니다</li>
-        <li><b>♥</b> 목숨 3개. 부딪히면 하나 줄고 화력도 한 단계 떨어집니다</li>
+        <li><b>P</b> 앞쪽 화력이 세집니다 (최대 8발)</li>
+        <li><b>S</b> 좌우에 부속 비행기가 붙습니다 (안쪽 레이저·바깥 유도미사일, 최대 8대)</li>
+        <li><b>E</b> 내 주변 에너지존이 커져 닿는 적에게 계속 피해를 줍니다</li>
+        <li><b>♥</b> 목숨 3개. 부딪히면 하나 줄고 마지막에 얻은 파츠도 하나 사라집니다</li>
       </ul>
     </div>
   </div>
@@ -59,7 +61,9 @@
       <div class="mini-hud" aria-live="polite">
         <span class="mh"><small>구역</small><b id="stage">1</b></span>
         <span class="mh sep">·</span>
-        <span class="mh"><small>화력</small><b id="power">1</b></span>
+        <span class="mh"><small class="l-front">앞</small><b id="front">1</b></span>
+        <span class="mh"><small class="l-option">옵션</small><b id="option">0</b></span>
+        <span class="mh"><small class="l-zone">존</small><b id="zone">0</b></span>
       </div>
       <div class="lives" id="lives" aria-label="남은 목숨">
         <span class="life">♥</span><span class="life">♥</span><span class="life">♥</span>

@@ -20,7 +20,7 @@ games/flightshooting/
 ├── src/
 │   ├── main.js           # 엔트리: 상태·루프·플로우·HUD·이벤트 소비
 │   ├── data/             # numbers.js(CFG), colors.js(COLORS) - 순수 상수
-│   ├── core/             # fire·waves·stars·spawn·world - 순수 로직
+│   ├── core/             # fire·parts·waves·stars·spawn·world - 순수 로직
 │   ├── render/view.js    # 캔버스 그리기 전용
 │   ├── input/controls.js # 드래그·키보드
 │   └── audio/sound.js    # Web Audio 합성
@@ -34,6 +34,7 @@ games/flightshooting/
 - `docs/02_data.md` - 수치(numbers.js)·색상(colors.js) 스키마와 위치
 - `docs/03_architecture.md` - 폴더/모듈 구조, 의존성 방향, 데이터 흐름
 - `docs/04_conventions.md` - 네이밍, core 순수성, 매직넘버, 테스트 규칙
+- `docs/05_power-parts.md` - 3계통 파워 파츠(전방 화력·옵션기·에너지존) 설계
 
 # 4. 절대 규칙 (표준 4.3 + 게임 고유)
 
@@ -47,7 +48,7 @@ games/flightshooting/
 
 5.1. **전진 방향**: 위쪽(-y). 플레이어 하단(yRatio 0.82), 적 위→아래 낙하. 아군 탄 vy<0.
 5.2. **조작**: 드래그 상대 이동(손가락 가림 방지) + 키보드. 자동발사 0.14s.
-5.3. **화력 1~20**: `core/fire.js`의 fireSpec. 홀수=탄 추가, 짝수=데미지+굵기(위력 교대). L≥12 측면, L≥17 후방.
+5.3. **3계통 파워 파츠**: 전방 화력(P, `fire.js` frontSpec 1~8) + 옵션기(S, `parts.js` 좌우 각 4대, 안쪽 레이저·바깥 미사일) + 에너지존(E, `parts.js` 레벨 0~5, 0.5s tick). 전용 아이템으로 성장, 피격 시 마지막 얻은 파츠 1개 손실. 상세 → docs/05.
 5.4. **진행**: 10구역. 1~9 웨이브+중보스(호위 동반), 10 최종보스. 화력·목숨은 구역 넘어가도 유지.
 5.5. **화면 전환 타이머**: setTimeout 아닌 dt 기반(pendingTimer/transitionTimer/winTimer) - 일시정지 안전.
 
@@ -61,4 +62,5 @@ games/flightshooting/
 # 7. 변경 이력
 
 - 2026-07-06: html-game v0.3.2 적용 (game.js 단일 → src 모듈 분리 + docs + tests + 전체화면 버튼).
+- 2026-07-07: 단일 화력(1~20) → 3계통 파워 파츠(전방/옵션기/에너지존) 재구조화. `core/parts.js` 신설, docs/05.
 - 진행/완료/다음 작업은 `PROGRESS.md` 참조.
