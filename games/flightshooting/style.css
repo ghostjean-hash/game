@@ -1,0 +1,112 @@
+/* Sky Raider - 횡스크롤(세로 전진) 캐주얼 비행 슈팅 전용 스타일.
+   공유 tokens.css / base.css 위에 게임 고유 색·레이아웃만 얹는다. */
+.shooter {
+  --sky-accent: #22d3ee;   /* 기체·아군 계열 시안 네온 */
+  --sky-enemy: #ff6b81;    /* 적 계열 */
+  --sky-power: #f7c948;    /* 파워업 */
+  background:
+    radial-gradient(120% 90% at 50% 0%, #10182e 0%, #0a0e18 60%, #070a12 100%);
+}
+
+/* 의미상 보존, 시각적으로 숨김(스크린리더 전용 제목) */
+.shooter .sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* ── 상단 바 ── */
+.shooter .topbar { position: relative; z-index: 3; }
+.shooter .home {
+  font-size: 22px; line-height: 1; color: var(--fg-dim);
+  width: 32px; text-align: center; flex: none;
+}
+.shooter .menu-title {
+  font-weight: 800; letter-spacing: 3px; font-size: 17px;
+  color: var(--sky-accent);
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
+}
+.score-big {
+  flex: 1; text-align: left; font-family: var(--font-mono);
+}
+.score-big b { font-size: 22px; font-weight: 800; color: var(--fg); }
+.mini-hud { display: flex; align-items: center; gap: var(--sp-2); font-family: var(--font-mono); }
+.mini-hud .mh { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.1; }
+.mini-hud .mh small { font-size: 9px; color: var(--fg-mute); letter-spacing: 1px; }
+.mini-hud .mh b { font-size: 15px; font-weight: 700; }
+.mini-hud .sep { color: var(--fg-mute); align-self: center; }
+.lives { display: flex; gap: 2px; font-size: 15px; }
+.lives .life { color: var(--sky-enemy); text-shadow: 0 0 6px rgba(255, 107, 129, 0.6); }
+.lives .life.spent { color: var(--line); text-shadow: none; }
+.icon-btn {
+  flex: none; width: 34px; height: 34px; border-radius: var(--r-2);
+  background: var(--bg-elev-2); border: 1px solid var(--line);
+  color: var(--fg-dim); font-size: 15px; display: grid; place-items: center;
+}
+.icon-btn:active { transform: scale(0.94); }
+
+/* ── 게임 스테이지(캔버스) ── */
+.shooter .stage {
+  position: relative; flex: 1; min-height: 0; overflow: hidden;
+  display: grid; place-items: center;
+}
+#board { display: block; width: 100%; height: 100%; touch-action: none; }
+
+/* 보스 체력 바 */
+.boss-bar {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  width: min(88%, 460px); z-index: 4; text-align: center;
+}
+.boss-name {
+  display: block; font-size: 11px; letter-spacing: 2px; font-weight: 700;
+  color: var(--sky-enemy); margin-bottom: 4px;
+  text-shadow: 0 0 8px rgba(255, 107, 129, 0.6);
+}
+.boss-hp {
+  height: 8px; border-radius: 4px; background: var(--bg-elev-2);
+  border: 1px solid var(--line); overflow: hidden;
+}
+.boss-hp i {
+  display: block; height: 100%; width: 100%;
+  background: linear-gradient(90deg, var(--sky-enemy), #ff9a4d);
+  transition: width 120ms linear;
+}
+
+/* 구역 배너 */
+.banner {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 5; text-align: center; pointer-events: none;
+  font-weight: 800; letter-spacing: 2px;
+  color: var(--fg); text-shadow: 0 0 16px rgba(34, 211, 238, 0.5);
+  animation: bannerPop 320ms var(--ease);
+}
+.banner .banner-big { display: block; font-size: 30px; }
+.banner .banner-sub { display: block; font-size: 14px; color: var(--fg-dim); margin-top: 6px; letter-spacing: 1px; }
+@keyframes bannerPop { from { opacity: 0; transform: translate(-50%, -40%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+
+/* ── 메뉴 화면 ── */
+/* [hidden] 속성이 확실히 우선하도록(display 지정이 기본 [hidden]{display:none}을 덮는 #190 버그 방지) */
+.menu-screen[hidden], .game-screen[hidden] { display: none !important; }
+.menu-screen { display: flex; flex-direction: column; height: 100dvh; }
+.game-screen { display: flex; flex-direction: column; height: 100dvh; }
+.menu-stage {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: var(--sp-5); padding: var(--sp-5) var(--sp-4);
+}
+.menu-hero { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); text-align: center; }
+.hero-craft { filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.4)); animation: hover 2.4s ease-in-out infinite; }
+@keyframes hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.menu-tagline { max-width: 320px; color: var(--fg-dim); font-size: 14px; margin: 0; }
+.menu-best { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.menu-best .best-label { font-size: 11px; letter-spacing: 1px; color: var(--fg-mute); }
+.menu-best b { font-family: var(--font-mono); font-size: 26px; font-weight: 800; color: var(--sky-power); }
+.menu-actions { display: flex; flex-direction: column; gap: var(--sp-2); width: min(260px, 80%); }
+.btn-play { font-size: 18px; padding: var(--sp-4); letter-spacing: 2px; }
+.btn-how { background: transparent; border-color: var(--line); color: var(--fg-dim); }
+.menu-tips {
+  list-style: none; margin: 0; padding: var(--sp-4); max-width: 340px;
+  background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--r-3);
+  display: flex; flex-direction: column; gap: var(--sp-2);
+}
+.menu-tips li { font-size: 13px; color: var(--fg-dim); }
+.menu-tips b { color: var(--sky-accent); font-weight: 700; margin-right: 6px; }
+.menu-tips[hidden] { display: none; }

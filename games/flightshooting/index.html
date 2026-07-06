@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#0a0e18" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../icons/icon-180.png" />
+<link rel="stylesheet" href="../../shared/tokens.css" />
+<link rel="stylesheet" href="../../shared/base.css" />
+<link rel="stylesheet" href="style.css" />
+<title>Sky Raider - game_ghost</title>
+</head>
+<body>
+<div class="page shooter">
+  <!-- 메뉴 화면 -->
+  <div id="menu-screen" class="menu-screen">
+    <div class="topbar">
+      <a href="../../" class="home" aria-label="홈으로">←</a>
+      <h1 class="sr-only">Sky Raider</h1>
+      <div class="menu-title">SKY RAIDER</div>
+    </div>
+    <div class="menu-stage">
+      <div class="menu-hero">
+        <div class="hero-craft" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="88" height="88">
+            <polygon points="32,4 52,52 32,42 12,52" fill="none" stroke="var(--sky-accent)" stroke-width="3" stroke-linejoin="round"/>
+            <polygon points="32,16 40,44 32,38 24,44" fill="var(--sky-accent)" opacity="0.85"/>
+          </svg>
+        </div>
+        <p class="menu-tagline">손가락으로 기체를 끌어 적을 뚫고 3개 구역의 보스를 격파하라.</p>
+        <div class="menu-best" aria-live="polite">
+          <span class="best-label">최고 점수</span>
+          <b id="menu-best">0</b>
+        </div>
+      </div>
+      <div class="menu-actions">
+        <button id="btn-start" class="btn btn-primary btn-play" type="button">시작</button>
+        <button id="btn-how" class="btn btn-how" type="button">조작법</button>
+      </div>
+      <ul class="menu-tips" id="menu-tips">
+        <li><b>이동</b> 화면을 손가락으로 끌면 기체가 따라옵니다 (PC: 방향키/마우스)</li>
+        <li><b>발사</b> 자동으로 나갑니다</li>
+        <li><b>P</b> 아이템을 먹으면 화력이 세집니다</li>
+        <li><b>♥</b> 목숨 3개. 부딪히면 하나 줄고 화력도 한 단계 떨어집니다</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 게임 화면 -->
+  <div id="game-screen" class="game-screen" hidden>
+    <div class="topbar">
+      <a href="../../" class="home" aria-label="홈으로">←</a>
+      <h1 class="sr-only">Sky Raider</h1>
+      <div class="score-big" aria-live="polite" aria-label="점수">
+        <b id="score">0</b>
+      </div>
+      <div class="mini-hud" aria-live="polite">
+        <span class="mh"><small>구역</small><b id="stage">1</b></span>
+        <span class="mh sep">·</span>
+        <span class="mh"><small>화력</small><b id="power">1</b></span>
+      </div>
+      <div class="lives" id="lives" aria-label="남은 목숨">
+        <span class="life">♥</span><span class="life">♥</span><span class="life">♥</span>
+      </div>
+      <button id="btn-mute" class="icon-btn" type="button" aria-label="소리 끄기">🔊</button>
+      <button id="btn-pause" class="icon-btn" type="button" aria-label="일시정지">⏸</button>
+    </div>
+    <div class="stage">
+      <canvas id="board"></canvas>
+      <!-- 보스 체력 바 -->
+      <div id="boss-bar" class="boss-bar" hidden>
+        <span class="boss-name" id="boss-name">BOSS</span>
+        <div class="boss-hp"><i id="boss-hp-fill"></i></div>
+      </div>
+      <!-- 배너(구역 시작/클리어) -->
+      <div id="banner" class="banner" hidden></div>
+    </div>
+  </div>
+</div>
+<script type="module" src="game.js"></script>
+</body>
+</html>

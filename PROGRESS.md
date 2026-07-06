@@ -145,3 +145,15 @@
 14.4. 검증: browser-shot로 메뉴 카드 순서(배움 최상단)·게임 진입·수학 힌트 실제 렌더(빈칸 3 배지)·게임오버 격려 모달·음소거 버튼 가시성을 화면으로 확인하고, playwright로 게임을 전 과정 구동해 사운드 호출 포함 콘솔 에러 0을 확인했다. 소리 자체는 무음 검증 환경이라 미청취, 재생 호출 무결성만 확인 - 실제 톤은 사용자 실기 영역.
 
 14.5. 미해결: 배포 후 딸 실기 확인이 다음 진입 trigger(사용자 영역). 실기 반응에 따라 낙하 속도(현 2초/칸)·힌트 노출 조건(현 빈칸 3 이하)·사운드 톤·음량 조정 여지. 상세: games/tetris/PROGRESS.md 2.13/2.14.
+
+# 15. Sky Raider - 횡스크롤 비행 슈팅 신규 게임 (2026-07-06, /jarvis-checkpoint sealing)
+
+15.1. 발단: 사용자가 "횡스크롤 비행 슈팅 게임을 만들고 싶다"며 /jarvis-init을 호출했다. 자비스는 이 자리가 새 자비스 도메인 등록이 아니라 기존 game-hub 허브의 6번째 게임 추가임을 판단해(cwd가 games/flightshooting), jarvis-init의 도메인 골격 생성 대신 루트 CLAUDE.md §7 새 게임 추가 절차를 따랐다. 게임 뼈대 4축을 AskUserQuestion으로 확정 - 성격=캐주얼 아케이드, 진행=스테이지 클리어+보스, 조작=드래그 이동+자동발사, 성장=파워업 아이템. 사용자가 명시한 "횡스크롤"을 존중해 모바일 세로 스크롤이 아닌 좌→우 전진(그라디우스형)으로 구현했다.
+
+15.2. 구현: 바닐라 JS + Canvas 단일 game.js. 공유 자산(loop.js·storage.js·ui.js·tokens.css·base.css) 위에 얹었다. 드래그는 잡은 지점 대비 상대 이동(손가락 가림 방지)이라 기존 input.js의 누적 pan 대신 canvas에 pointer를 직접 붙였다. 적 3종(직진 drone·사인파 weaver·조준사격 gunner), 화력 1~5단계(발사 각도 배열 분기), 파워업 3종(P 화력/H 회복/B 봄), 3개 구역 웨이브 스포너 + 보스(상하 유영 + 부채산탄·조준 3연발 2패턴), 목숨 3개+무적, 점수+localStorage 베스트. 효과음은 tetris/sound.js 패턴 차용한 Web Audio 합성(음원 파일 0). 파일 신설 - index.html·game.js·style.css·sound.js·CLAUDE.md·PROGRESS.md·README.md·.nojekyll + games/_registry.json 등록(accent #22d3ee, status playable).
+
+15.3. 검증: browser-shot로 메뉴 화면·전투(기체·총알·엔진불꽃·적 접근)·파워업 획득(화력 1→2)·게임오버 모달·보스 등장(체력바)·허브 홈 6번째 카드를 화면으로 확인했다. 보스전은 자동 회피 스크립트로 보스 등장까지 도달, 격파→구역 전환은 로직만 확인(실플레이 권장).
+
+15.4. 실화면 검증 중 결손 2건 발견·수정: (1) .menu-screen/.game-screen의 display:flex가 브라우저 기본 [hidden]{display:none}을 명시도로 덮어 메뉴와 게임 화면이 동시 표시되고 canvas 세로가 420px로 축소됐다. [hidden]{display:none !important}로 정정해 canvas 761px 정상 확보(#190 유형 재발 - CSS가 hidden 덮음). (2) 공유 CSS에 sr-only 미정의로 접근성 제목이 화면에 노출돼 style.css에 직접 정의(tetris도 동일 패턴).
+
+15.5. 미해결: 보스 격파→다음 구역 전환 실플레이 확인(사용자 영역), 구역별 보스 패턴 차별화(현 HP만 증가), 모바일 실기기 터치 감도. 상세: games/flightshooting/PROGRESS.md.
