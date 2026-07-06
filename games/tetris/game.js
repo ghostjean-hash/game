@@ -220,11 +220,16 @@ function applyLevelChange(newLevel) {
 const MODE_MARATHON = "marathon";
 const MODE_ZEN = "zen";
 const MODE_SPRINT = "sprint";
-const VALID_MODES = [MODE_MARATHON, MODE_ZEN, MODE_SPRINT];
+const MODE_KIDS = "kids";
+const VALID_MODES = [MODE_MARATHON, MODE_ZEN, MODE_SPRINT, MODE_KIDS];
 
 const ZEN_GRAVITY = 1 / 0.500;        // 0.500초/라인 (기획서 4.2.1)
 const SPRINT_GRAVITY = 1 / 0.300;     // 0.300초/라인 (기획서 4.3.1)
 const SPRINT_TARGET_LINES = 40;       // 기획서 4.3.2
+const KIDS_GRAVITY = 1 / 2.000;       // 2.000초/라인. 초보(초등) 여유 학습용. 젠보다 4배 느림.
+const KIDS_HINT_MIN = 1;              // 완성까지 남은 빈칸이 이 값 이상 (수학 힌트 표시 하한)
+const KIDS_HINT_MAX = 3;              // 이하일 때만 "몇 칸 더" 힌트 노출. 임박 행만 강조해 산만함 회피.
+const KIDS_CHEERS = ["잘했어! 🎉", "멋져! ✨", "최고야! 👍", "대단해! 🌟"];
 
 const MODES = {
   [MODE_MARATHON]: {
@@ -250,6 +255,14 @@ const MODES = {
     capToast: false,
     endCondition: (st) => st.lines >= SPRINT_TARGET_LINES,
     hud: "sprint",
+  },
+  [MODE_KIDS]: {
+    label: "배움",
+    levelUp: false,          // 가속 없음. 좌절 없이 감각 익히기.
+    gravity: () => KIDS_GRAVITY,
+    capToast: false,
+    endCondition: () => false, // 시간·라인 종료 없음. 천장에 닿을 때(top-out)만 종료.
+    hud: "kids",
   },
 };
 
@@ -277,6 +290,9 @@ function setupHudLabels() {
   } else if (hud === "sprint") {
     levelLabelEl.textContent = "⏱";
     linesLabelEl.textContent = "남";
+  } else if (hud === "kids") {
+    levelLabelEl.textContent = "모드";
+    linesLabelEl.textContent = "줄";
   }
 }
 
@@ -521,6 +537,10 @@ function lockPiece() {
   if (linesCount > 0) {
     state.flashRows = { rows: cleared, t: 0 };
     state.lines += linesCount;
+    // 배움 모드: 라인 성공마다 큰 격려. (T-spin 등 특수 라벨보다 우선 노출)
+    if (state.mode === MODE_KIDS) {
+      showToast(KIDS_CHEERS[state.lines % KIDS_CHEERS.length], TOAST_TSPIN_MS);
+    }
     const mode = MODES[state.mode];
     if (mode.levelUp) {
       applyLevelChange(1 + Math.floor(state.lines / 10));
@@ -657,6 +677,41 @@ function drawGrid() {
   }
 }
 
+// 배움(초등) 모드 수학 힌트: 완성까지 조금 남은 행의 빈 칸을 강조하고 "몇 칸 더" 숫자를 표시.
+// 10칸 중 채운 칸을 세어 남은 칸(10의 보수)을 스스로 세게 하는 것이 목적. 고정 블록 기준(낙하 중 피스 제외).
+function drawKidsHints() {
+  ctx.save();
+  ctx.font = `bold ${Math.floor(cellSize * 0.62)}px sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  for (let y = VANISH; y < TOTAL_ROWS; y++) {
+    let filled = 0;
+    for (let x = 0; x < COLS; x++) if (state.grid[y][x]) filled++;
+    const remain = COLS - filled;
+    if (filled === 0 || remain < KIDS_HINT_MIN || remain > KIDS_HINT_MAX) continue;
+    const py = (y - VANISH) * cellSize;
+    // 빈 칸 노란 테두리 강조
+    ctx.strokeStyle = "rgba(255,214,0,0.9)";
+    ctx.lineWidth = 2;
+    for (let x = 0; x < COLS; x++) {
+      if (state.grid[y][x]) continue;
+      ctx.strokeRect(x * cellSize + 2, py + 2, cellSize - 4, cellSize - 4);
+    }
+    // 첫 빈 칸에 남은 칸 수 배지
+    const fx = state.grid[y].indexOf(null);
+    if (fx < 0) continue;
+    const cx = fx * cellSize + cellSize / 2;
+    const cy = py + cellSize / 2;
+    ctx.fillStyle = "rgba(0,0,0,0.55)";
+    ctx.beginPath();
+    ctx.arc(cx, cy, cellSize * 0.34, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#ffd600";
+    ctx.fillText(String(remain), cx, cy + 0.5);
+  }
+  ctx.restore();
+}
+
 function render() {
   // 직전 프레임과 그릴 거리가 같으면 캔버스 재그리기를 건너뛴다(idle 발열의 본질 해결).
   const key = renderKey();
@@ -681,6 +736,8 @@ function render() {
       }
     }
   }
+  // 배움 모드 수학 힌트(고정 블록 위, 낙하 피스 아래)
+  if (state.mode === MODE_KIDS && !state.over) drawKidsHints();
   // 고스트
   if (state.current && !state.over) {
     const p = state.current;
@@ -830,6 +887,9 @@ function updateHud() {
   } else if (hud === "sprint") {
     setHudText(levelEl, "level", formatTime(state.elapsed));
     setHudText(linesEl, "lines", String(Math.max(0, SPRINT_TARGET_LINES - state.lines)));
+  } else if (hud === "kids") {
+    setHudText(levelEl, "level", "배움");
+    setHudText(linesEl, "lines", String(state.lines));
   }
   setHudText(bestEl, "best", formatModeBest(state.mode));
   drawNext();
@@ -961,6 +1021,15 @@ async function gameOver() {
       `라인 ${state.lines} · 시간 ${formatTime(state.elapsed)}`,
       `최고 ${formatModeBest(MODE_ZEN)}`,
     ].join("\n");
+  } else if (state.mode === MODE_KIDS) {
+    isNewBest = maybeSaveModeBest(MODE_KIDS, state.score);
+    title = "잘했어! 🎉";
+    body = [
+      `지운 줄 ${state.lines}`,
+      `점수 ${state.score}${isNewBest ? "  (새 기록!)" : ""}`,
+      `최고 ${formatModeBest(MODE_KIDS)}`,
+      "다시 해볼까?",
+    ].join("\n");
   } else {
     // 마라톤 토핑아웃
     isNewBest = maybeSaveModeBest(MODE_MARATHON, state.score);
@@ -972,15 +1041,20 @@ async function gameOver() {
     ].join("\n");
   }
   updateHud();
-  const choice = await showModal({
-    title,
-    body,
-    actions: [
-      { label: "모드 선택", primary: true, value: "menu" },
-      { label: "홈으로", value: "home" },
-    ],
-  });
-  if (choice === "menu") goToMenu();
+  // 배움 모드는 좌절 없이 바로 재도전할 수 있게 "다시 하기"를 기본 버튼으로.
+  const actions = state.mode === MODE_KIDS
+    ? [
+        { label: "다시 하기", primary: true, value: "restart" },
+        { label: "모드 선택", value: "menu" },
+        { label: "홈으로", value: "home" },
+      ]
+    : [
+        { label: "모드 선택", primary: true, value: "menu" },
+        { label: "홈으로", value: "home" },
+      ];
+  const choice = await showModal({ title, body, actions });
+  if (choice === "restart") restart();
+  else if (choice === "menu") goToMenu();
   else location.href = "../../";
 }
 
