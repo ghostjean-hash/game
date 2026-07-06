@@ -2,6 +2,7 @@ import { createInput } from "../../shared/input.js";
 import { createStorage } from "../../shared/storage.js";
 import { createLoop } from "../../shared/loop.js";
 import { showModal, showToast, registerServiceWorker } from "../../shared/ui.js";
+import * as sound from "./sound.js";
 
 registerServiceWorker("/service-worker.js");
 
@@ -145,6 +146,7 @@ const linesLabelEl = document.getElementById("lines-label");
 const bestEl = document.getElementById("best");
 const pauseBtn = document.getElementById("btn-pause");
 const fsBtn = document.getElementById("btn-fs");
+const muteBtn = document.getElementById("btn-mute");
 const nextEl = document.getElementById("next");
 const nextCtx = nextEl?.getContext("2d") || null;
 const holdEl = document.getElementById("hold");
@@ -208,6 +210,7 @@ function applyLevelChange(newLevel) {
   if (newLevel === state.level) return;
   state.level = newLevel;
   state.gravity = mode.gravity(newLevel);
+  sound.play("levelup");
   if (!mode.capToast) return;
   const cap = isCoarsePointer() ? CAP_LEVEL_MOBILE : CAP_LEVEL_PC;
   if (!state.capNoticed && newLevel >= cap) {
@@ -358,6 +361,7 @@ function tryMove(dx, dy) {
       state.locking = false;
       state.lockTimer = 0;
     } else {
+      sound.play("move");
       refreshLockAfterMove();
     }
     return true;
@@ -382,6 +386,7 @@ function tryRotate(dir) {
       p.r = to;
       state.lastMoveWasRotation = true;
       state.lastKickIndex = i;
+      sound.play("rotate");
       refreshLockAfterMove();
       return true;
     }
@@ -399,6 +404,7 @@ function hardDrop() {
   }
   state.score += drop * 2;
   state.lastMoveWasRotation = false;
+  sound.play("drop");
   lockPiece();
 }
 
@@ -537,6 +543,7 @@ function lockPiece() {
   if (linesCount > 0) {
     state.flashRows = { rows: cleared, t: 0 };
     state.lines += linesCount;
+    sound.play(linesCount === 4 ? "tetris" : "line");
     // 배움 모드: 라인 성공마다 큰 격려. (T-spin 등 특수 라벨보다 우선 노출)
     if (state.mode === MODE_KIDS) {
       showToast(KIDS_CHEERS[state.lines % KIDS_CHEERS.length], TOAST_TSPIN_MS);
@@ -550,6 +557,7 @@ function lockPiece() {
       state.over = true;
     }
   } else {
+    sound.play("lock");
     spawn();
   }
 }
@@ -567,6 +575,7 @@ function applyClear() {
 
 function holdPiece() {
   if (!state.canHold || !state.current) return;
+  sound.play("hold");
   const cur = state.current.type;
   if (state.hold) {
     const swap = state.hold;
@@ -845,6 +854,21 @@ function canPlay() {
   return state && !state.over && !state.paused && !state.flashRows;
 }
 
+function updateMuteBtn() {
+  if (!muteBtn) return;
+  const m = sound.isMuted();
+  muteBtn.textContent = m ? "🔇" : "🔊";
+  muteBtn.setAttribute("aria-label", m ? "소리 켜기" : "소리 끄기");
+}
+
+function toggleMute() {
+  const next = !sound.isMuted();
+  sound.setMuted(next);
+  store.set("muted", next);
+  updateMuteBtn();
+  if (!next) sound.play("move"); // 켜는 순간 짧은 확인음
+}
+
 function update(dt) {
   if (state.paused || state.over) return;
   state.elapsed += dt; // 활성 게임 시간 누적 (스프린트 시간 / 젠 플레이 시간 표기)
@@ -993,6 +1017,7 @@ function drawHold() {
 }
 
 async function gameOver() {
+  sound.play("gameover");
   let title;
   let body;
   let isNewBest = false;
@@ -1109,6 +1134,19 @@ function init() {
   window.addEventListener("resize", resize);
   window.addEventListener("orientationchange", () => setTimeout(resize, 100));
   pauseBtn.addEventListener("click", togglePause);
+
+  // 사운드: 저장된 음소거 설정 반영 + 첫 사용자 제스처에서 오디오 잠금 해제(브라우저 자동재생 정책).
+  sound.setMuted(store.get("muted", false));
+  updateMuteBtn();
+  const unlockOnce = () => { sound.unlockAudio(); };
+  window.addEventListener("pointerdown", unlockOnce, { once: true });
+  window.addEventListener("keydown", unlockOnce, { once: true });
+  if (muteBtn) muteBtn.addEventListener("click", toggleMute);
+  // 탭이 백그라운드로 가면 오디오를 재우고 복귀 시 되살린다(발열·배터리).
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) sound.suspendAudio();
+    else sound.resumeAudio();
+  });
   // 전체화면 토글(STANDARD 4.7 규칙 6). 미지원 기기(iOS Safari 등)는 버튼을 숨긴다.
   if (document.documentElement.requestFullscreen) {
     fsBtn.hidden = false;
