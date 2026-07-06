@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>Sky Raider - core tests</title>
+<style>
+  body { font-family: ui-monospace, Menlo, Consolas, monospace; background: #0a0e18; color: #e8ecf5; padding: 20px; }
+  h1 { font-size: 16px; }
+  pre { white-space: pre-wrap; line-height: 1.5; }
+</style>
+</head>
+<body>
+<h1>Sky Raider - core 순수 함수 테스트</h1>
+<pre id="out">실행 중…</pre>
+<script type="module">
+import { test, eq, ok, report } from './runner.js';
+import { fireSpec } from '../src/core/fire.js';
+import { buildWaves, stageName } from '../src/core/waves.js';
+import { hit } from '../src/core/world.js';
+
+// ── fireSpec: 매 단계 탄 수 또는 위력이 반드시 변한다 ──
+test('fireSpec L1 = 단발 dmg1', () => {
+  const s = fireSpec(1); eq(s.angles.length, 1); eq(s.dmg, 1);
+});
+test('fireSpec L2 = 탄 그대로 dmg 상승(위력)', () => {
+  const s = fireSpec(2); eq(s.angles.length, 1); eq(s.dmg, 2);
+});
+test('fireSpec L3 = 탄 증가(2발)', () => {
+  const s = fireSpec(3); eq(s.angles.length, 2); eq(s.dmg, 2);
+});
+test('fireSpec 매 단계 변화(shots 또는 dmg)', () => {
+  for (let L = 2; L <= 20; L++) {
+    const a = fireSpec(L - 1), b = fireSpec(L);
+    ok(b.angles.length !== a.angles.length || b.dmg !== a.dmg, `L${L}에서 변화 없음`);
+  }
+});
+test('fireSpec L12 측면탄 추가', () => {
+  ok(fireSpec(12).angles.includes(72), 'L12 측면 없음');
+});
+test('fireSpec L17 후방탄 추가', () => {
+  ok(fireSpec(17).angles.includes(180), 'L17 후방 없음');
+});
+test('fireSpec 상한 캡(L20 정면 10발)', () => {
+  const s = fireSpec(20); eq(s.dmg, 11); ok(s.angles.length >= 12);
+});
+
+// ── buildWaves: 스테이지별 웨이브 생성 ──
+test('buildWaves(1) 웨이브 존재', () => {
+  const w = buildWaves(1); ok(w.length > 0);
+  ok(w.every((x) => typeof x.t === 'number' && Array.isArray(x.enemies)));
+});
+test('buildWaves(10) 유효', () => {
+  const w = buildWaves(10); ok(w.length > 0);
+  ok(w.every((x) => x.enemies.every((e) => e.type && typeof e.xr === 'number')));
+});
+test('stageName 1~10 채워짐', () => {
+  for (let n = 1; n <= 10; n++) ok(stageName(n).length > 0, `구역 ${n} 이름 없음`);
+});
+
+// ── hit: 원-원 충돌 판정 ──
+test('hit 겹침 = true', () => {
+  ok(hit({ x: 0, y: 0, r: 10 }, { x: 5, y: 0, r: 10 }));
+});
+test('hit 멀면 = false', () => {
+  ok(!hit({ x: 0, y: 0, r: 5 }, { x: 100, y: 0, r: 5 }));
+});
+test('hit 보스 rx 대체 반지름', () => {
+  ok(hit({ x: 0, y: 0, r: 4 }, { x: 0, y: 0, rx: 30 }));
+});
+
+report();
+</script>
+</body>
+</html>
