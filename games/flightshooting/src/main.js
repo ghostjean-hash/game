@@ -8,6 +8,7 @@ import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard } from './core/world.js';
 import { autopilotStep } from './core/autopilot.js';
+import { gainFront, gainOption, gainZone } from './core/parts.js';
 import { render } from './render/view.js';
 import { createControls } from './input/controls.js';
 
@@ -160,11 +161,29 @@ function startGame() {
   gameScreen.hidden = false;
   resize();
   resetGame();
+  applyDevHook(); // 검증용: localhost에서 URL 파라미터로 시작 구역·파츠 지정
   setAutopilot(false); // 시작 시 기본은 수동(자동 시작 버튼이 이후 다시 켬)
   state = 'playing';
   syncHud();
   sound.play('start');
   loop.start();
+}
+
+// 검증 전용 dev 훅(localhost 한정): ?dev=1 + stage/front/option/zone/lives로 특정 상태 시작.
+// 운영 배포(github.io)에선 hostname 게이트로 완전 무효 - 일반 플레이 영향 0.
+function applyDevHook() {
+  const host = location.hostname;
+  if (host !== 'localhost' && host !== '127.0.0.1') return;
+  const q = new URLSearchParams(location.search);
+  if (q.get('dev') == null) return;
+  const num = (k) => { const v = q.get(k); return v == null ? null : Number(v); };
+  const stage = num('stage');
+  if (stage != null) game.stage = Math.max(1, Math.min(stage, CFG.stageCount));
+  const front = num('front'); if (front != null) for (let i = 1; i < front; i++) gainFront(game);
+  const option = num('option'); if (option != null) for (let i = 0; i < option; i++) gainOption(game);
+  const zone = num('zone'); if (zone != null) for (let i = 0; i < zone; i++) gainZone(game);
+  const lives = num('lives'); if (lives != null) game.lives = Math.max(1, lives);
+  if (stage != null) startStage(game); // 지정 구역 웨이브 재생성 + 배너
 }
 
 function togglePause() {

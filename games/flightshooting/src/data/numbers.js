@@ -54,7 +54,7 @@ export const CFG = {
   // hp는 3계통 화력 성장에 맞춰 상향(중보스 baseHp 55→90·구역당 22→32, 최종 420→980).
   miniBoss: { rx: 30, ry: 26, baseHp: 66, hpPerStage: 34, score: 900, escortEvery: 3.2, escortInit: 3 },
   // 최종보스는 이제 20구역. 20구역까지 화력이 최대로 성장하므로 hp를 크게 상향.
-  finalBoss: { rx: 50, ry: 44, hp: 2400, score: 12000 },
+  finalBoss: { rx: 50, ry: 44, hp: 1500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
   boss: { bobAmp: 0.32, bobFreq: 0.5, spawnTop: 62 },
   // 11구역부터는 신규 적(splitter/shielder/rusher) 위주로 난이도가 오른다. 20구역이 최종.
