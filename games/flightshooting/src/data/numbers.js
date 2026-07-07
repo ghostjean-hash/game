@@ -62,6 +62,7 @@ export const CFG = {
   // 11구역 이후 추가 체력 배수(신규 적 구간 난이도 가속). 최종 hp = 기존 스케일 × (구역>=11이면 이 배수).
   hardStage: { from: 11, hpMul: 1.35 },
   stageIntro: 2.2, // 구역 시작 배너 표시 동안 적 스폰 정지(초)
+  maxedBonus: 300, // 파츠·목숨이 이미 최대일 때 파워업 획득 시 대신 주는 점수
   starCount: 70,
   // 발열/성능: 화면에 쌓이는 오브젝트 상한(초과분은 오래된 것부터 제거).
   limits: { bullets: 160, eBullets: 140, particles: 240 },

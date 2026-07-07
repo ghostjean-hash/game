@@ -185,15 +185,16 @@ function playerHit(game) {
 }
 
 function grabItem(game, kind) {
+  // 이미 최대치라 강화가 무의미하면 점수 보너스로 전환(수집 보람 유지).
+  const maxed = () => { game.score += CFG.maxedBonus; game.sfx.push('power'); };
   if (kind === 'P') {
-    if (gainFront(game)) game.sfx.push('power');
+    if (gainFront(game)) game.sfx.push('power'); else maxed();
   } else if (kind === 'S') {
-    if (gainOption(game)) game.sfx.push('power');
+    if (gainOption(game)) game.sfx.push('power'); else maxed();
   } else if (kind === 'E') {
-    if (gainZone(game)) game.sfx.push('power');
+    if (gainZone(game)) game.sfx.push('power'); else maxed();
   } else if (kind === 'H') {
-    game.lives = Math.min(CFG.player.maxLives, game.lives + 1);
-    game.sfx.push('power');
+    if (game.lives < CFG.player.maxLives) { game.lives++; game.sfx.push('power'); } else maxed();
   } else if (kind === 'B') {
     for (const e of game.enemies) { burst(game, e.x, e.y, e.color, 12); game.score += e.score; }
     game.enemies = [];
