@@ -13,13 +13,13 @@ export function createControls(canvas, game, opts) {
     return { x: ev.clientX - rect.left, y: ev.clientY - rect.top };
   }
   function onDown(ev) {
-    if (!opts.isPlaying()) return;
+    if (!opts.isPlaying() || game.autopilot) return; // 자동 플레이 중엔 수동 조작 무시
     canvas.setPointerCapture?.(ev.pointerId);
     dragging = true;
     lastPtr = canvasPos(ev);
   }
   function onMove(ev) {
-    if (!dragging || !opts.isPlaying() || !game.player) return;
+    if (!dragging || !opts.isPlaying() || !game.player || game.autopilot) return;
     const p = canvasPos(ev);
     game.player.x += p.x - lastPtr.x;
     game.player.y += p.y - lastPtr.y;

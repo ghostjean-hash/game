@@ -20,7 +20,7 @@ games/flightshooting/
 ├── src/
 │   ├── main.js           # 엔트리: 상태·루프·플로우·HUD·이벤트 소비
 │   ├── data/             # numbers.js(CFG), colors.js(COLORS) - 순수 상수
-│   ├── core/             # fire·parts·waves·stars·spawn·world - 순수 로직
+│   ├── core/             # fire·parts·waves·stars·spawn·world·autopilot - 순수 로직
 │   ├── render/view.js    # 캔버스 그리기 전용
 │   ├── input/controls.js # 드래그·키보드
 │   └── audio/sound.js    # Web Audio 합성

@@ -47,6 +47,8 @@
   color: var(--fg-dim); font-size: 15px; display: grid; place-items: center;
 }
 .icon-btn:active { transform: scale(0.94); }
+/* 자동 플레이 ON: 시안 강조로 켜짐 표시 */
+.icon-btn.on { background: var(--sky-accent); border-color: var(--sky-accent); color: #06121a; box-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
 
 /* ── 게임 스테이지(캔버스) ── */
 .shooter .stage {

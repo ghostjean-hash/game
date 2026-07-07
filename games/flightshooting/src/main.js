@@ -7,6 +7,7 @@ import { CFG } from './data/numbers.js';
 import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard } from './core/world.js';
+import { autopilotStep } from './core/autopilot.js';
 import { render } from './render/view.js';
 import { createControls } from './input/controls.js';
 
@@ -33,6 +34,7 @@ const btnStart = $('#btn-start');
 const btnHow = $('#btn-how');
 const btnMute = $('#btn-mute');
 const btnPause = $('#btn-pause');
+const btnAuto = $('#btn-auto');
 const btnFs = $('#btn-fs');
 
 const store = createStorage('flightshooting');
@@ -48,7 +50,7 @@ function createGame() {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
     score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
     front: 1, options: [], zone: { level: 0, timer: null }, partHistory: [],
-    waves: [], waveIdx: 0, elapsed: 0, introTimer: 0,
+    waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
   };
@@ -78,7 +80,8 @@ const controls = createControls(canvas, game, {
 const loop = createLoop({
   update: (dt) => {
     if (state !== 'playing') return;
-    applyKeyboard(game, controls.keys, dt, W, H);
+    if (game.autopilot) autopilotStep(game, dt, W, H);
+    else applyKeyboard(game, controls.keys, dt, W, H);
     stepWorld(game, dt, W, H);
     // core가 남긴 사운드 신호 재생
     for (const s of game.sfx) sound.play(s);
@@ -241,6 +244,12 @@ btnMute.addEventListener('click', () => {
   sound.setMuted(m);
   btnMute.textContent = m ? '🔇' : '🔊';
   btnMute.setAttribute('aria-label', m ? '소리 켜기' : '소리 끄기');
+});
+btnAuto.addEventListener('click', () => {
+  game.autopilot = !game.autopilot;
+  btnAuto.classList.toggle('on', game.autopilot);
+  btnAuto.setAttribute('aria-pressed', String(game.autopilot));
+  btnAuto.setAttribute('aria-label', game.autopilot ? '자동 플레이 끄기' : '자동 플레이 켜기');
 });
 canvas.addEventListener('click', () => { if (state === 'paused') togglePause(); });
 
