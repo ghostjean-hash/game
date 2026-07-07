@@ -98,6 +98,199 @@
         ],
         "answer": 1
       }
+    },
+    {
+      "id": "ants",
+      "title": "개미는 어떻게 길을 찾을까",
+      "level": 1,
+      "sentences": [
+        {
+          "text": "Ants are tiny, but they are amazing at finding their way home.",
+          "chunks": [
+            { "en": "Ants are tiny", "kr": "개미는 아주 작다" },
+            { "en": "but they are amazing", "kr": "하지만 그들은 놀랍다" },
+            { "en": "at finding their way home", "kr": "집으로 가는 길을 찾는 데" }
+          ],
+          "guessWords": [
+            { "word": "tiny", "options": ["게으른", "아주 작은", "시끄러운"], "answer": 1, "hint": "but 뒤의 '놀랍다'와 대비되는, 크기에 대한 말이에요" }
+          ]
+        },
+        {
+          "text": "When an ant finds food, it leaves a special smell on the ground.",
+          "chunks": [
+            { "en": "When an ant finds food", "kr": "개미가 먹이를 찾으면" },
+            { "en": "it leaves a special smell", "kr": "특별한 냄새를 남긴다" },
+            { "en": "on the ground", "kr": "땅 위에" }
+          ],
+          "guessWords": [
+            { "word": "leaves", "options": ["나뭇잎들", "남긴다", "떠난다"], "answer": 1, "hint": "냄새를 땅 위에 ~한다. 여기서는 동사예요" }
+          ],
+          "structureQ": {
+            "prompt": "이 문장에서 'it'이 가리키는 것은 무엇인가요?",
+            "options": ["개미 (an ant)", "먹이 (food)", "땅 (the ground)"],
+            "answer": 0,
+            "label": "대명사 지시"
+          }
+        },
+        {
+          "text": "Other ants smell it and follow the same path to the food.",
+          "chunks": [
+            { "en": "Other ants smell it", "kr": "다른 개미들이 그 냄새를 맡고" },
+            { "en": "and follow the same path", "kr": "같은 길을 따라간다" },
+            { "en": "to the food", "kr": "먹이가 있는 곳까지" }
+          ],
+          "guessWords": [
+            { "word": "path", "options": ["파티", "벽", "길"], "answer": 2, "hint": "따라가는(follow) 것이니, 지나다니는 ~이에요" }
+          ]
+        },
+        {
+          "text": "As more ants walk on it, the smell becomes stronger and stronger.",
+          "chunks": [
+            { "en": "As more ants walk on it", "kr": "더 많은 개미가 그 위를 걸을수록" },
+            { "en": "the smell becomes", "kr": "냄새는 ~해진다" },
+            { "en": "stronger and stronger", "kr": "점점 더 강하게" }
+          ],
+          "guessWords": [
+            { "word": "stronger", "options": ["더 강한", "더 이상한", "더 조용한"], "answer": 0, "hint": "개미가 많이 지나갈수록 냄새가 어떻게 될까요" }
+          ],
+          "structureQ": {
+            "prompt": "'stronger and stronger'는 어떤 느낌을 주나요?",
+            "options": ["점점 더 강해진다", "가장 강하다", "전혀 강하지 않다"],
+            "answer": 0,
+            "label": "시제·수동태·비교"
+          }
+        },
+        {
+          "text": "That is why you sometimes see a long line of ants in summer.",
+          "chunks": [
+            { "en": "That is why", "kr": "그것이 ~한 이유다" },
+            { "en": "you sometimes see", "kr": "네가 가끔 보는" },
+            { "en": "a long line of ants", "kr": "개미들의 긴 줄을" },
+            { "en": "in summer", "kr": "여름에" }
+          ],
+          "guessWords": [
+            { "word": "line", "options": ["노래", "줄", "선물"], "answer": 1, "hint": "개미들이 길게 늘어서 만드는 것이에요" }
+          ]
+        },
+        {
+          "text": "Tiny ants show us that small signs can move a whole team.",
+          "chunks": [
+            { "en": "Tiny ants show us", "kr": "작은 개미들은 우리에게 보여준다" },
+            { "en": "that small signs", "kr": "작은 신호들이" },
+            { "en": "can move a whole team", "kr": "팀 전체를 움직일 수 있다는 것을" }
+          ],
+          "guessWords": [
+            { "word": "whole", "options": ["구멍 난", "무거운", "전체의"], "answer": 2, "hint": "팀 하나를 통째로, 라는 맥락이에요" }
+          ]
+        }
+      ],
+      "gistQ": {
+        "prompt": "이 글은 무슨 내용인가요?",
+        "options": [
+          "개미는 여름에만 밖으로 나온다",
+          "개미는 냄새를 남기고 따라가며 함께 길을 찾는다",
+          "집에 들어온 개미를 없애는 방법"
+        ],
+        "answer": 1
+      }
+    },
+    {
+      "id": "salty-sea",
+      "title": "바다는 왜 짤까",
+      "level": 1,
+      "sentences": [
+        {
+          "text": "Have you ever wondered why the sea is salty?",
+          "chunks": [
+            { "en": "Have you ever wondered", "kr": "너는 궁금해한 적 있니" },
+            { "en": "why the sea is salty", "kr": "바다가 왜 짠지" }
+          ],
+          "guessWords": [
+            { "word": "wondered", "options": ["궁금해했다", "걸어갔다", "이겼다"], "answer": 0, "hint": "'왜일까?' 하고 머릿속으로 물어보는 거예요" }
+          ]
+        },
+        {
+          "text": "When rain falls on rocks, it picks up tiny bits of salt.",
+          "chunks": [
+            { "en": "When rain falls on rocks", "kr": "비가 바위 위에 내리면" },
+            { "en": "it picks up", "kr": "빗물은 집어 올린다" },
+            { "en": "tiny bits of salt", "kr": "아주 작은 소금 조각들을" }
+          ],
+          "guessWords": [
+            { "word": "bits", "options": ["벌레들", "조각들", "소리들"], "answer": 1, "hint": "소금의 아주 작은 ~들을 집어 올려요" }
+          ],
+          "structureQ": {
+            "prompt": "'When rain falls on rocks' 부분은 무슨 역할을 하나요?",
+            "options": ["언제 일어나는 일인지 알려준다", "문장의 주어다", "명령을 내린다"],
+            "answer": 0,
+            "label": "접속사로 이어진 절"
+          }
+        },
+        {
+          "text": "Rivers then carry this salt all the way to the sea.",
+          "chunks": [
+            { "en": "Rivers then carry this salt", "kr": "그다음 강이 이 소금을 나른다" },
+            { "en": "all the way to the sea", "kr": "바다까지 쭉" }
+          ],
+          "guessWords": [
+            { "word": "carry", "options": ["나른다", "자른다", "센다"], "answer": 0, "hint": "강물이 소금을 바다까지 데려가는 거예요" }
+          ],
+          "structureQ": {
+            "prompt": "'this salt'가 가리키는 것은 무엇인가요?",
+            "options": ["빗물이 바위에서 얻은 소금", "바다에 원래 있던 소금", "요리에 쓰는 소금"],
+            "answer": 0,
+            "label": "대명사 지시"
+          }
+        },
+        {
+          "text": "When sea water dries under the hot sun, the salt stays behind.",
+          "chunks": [
+            { "en": "When sea water dries", "kr": "바닷물이 마르면" },
+            { "en": "under the hot sun", "kr": "뜨거운 해 아래에서" },
+            { "en": "the salt stays behind", "kr": "소금은 뒤에 남는다" }
+          ],
+          "guessWords": [
+            { "word": "dries", "options": ["언다", "자란다", "마른다"], "answer": 2, "hint": "뜨거운 해 아래에서 물이 어떻게 될까요" }
+          ]
+        },
+        {
+          "text": "This has happened for millions of years, so the sea keeps getting saltier.",
+          "chunks": [
+            { "en": "This has happened", "kr": "이 일은 계속 일어나 왔다" },
+            { "en": "for millions of years", "kr": "수백만 년 동안" },
+            { "en": "so the sea keeps getting saltier", "kr": "그래서 바다는 점점 더 짜진다" }
+          ],
+          "guessWords": [
+            { "word": "saltier", "options": ["더 짠", "더 깊은", "더 차가운"], "answer": 0, "hint": "소금이 계속 쌓이면 바닷물 맛이 어떻게 될까요" }
+          ],
+          "structureQ": {
+            "prompt": "'has happened'는 어떤 느낌을 주나요?",
+            "options": ["옛날부터 지금까지 계속 일어나 왔다", "내일 일어날 것이다", "한 번도 일어나지 않았다"],
+            "answer": 0,
+            "label": "시제·수동태·비교"
+          }
+        },
+        {
+          "text": "So every drop of sea water holds a very long story of rain and rocks.",
+          "chunks": [
+            { "en": "So every drop of sea water", "kr": "그래서 바닷물 한 방울 한 방울은" },
+            { "en": "holds a very long story", "kr": "아주 긴 이야기를 담고 있다" },
+            { "en": "of rain and rocks", "kr": "비와 바위의" }
+          ],
+          "guessWords": [
+            { "word": "holds", "options": ["던진다", "담고 있다", "판다"], "answer": 1, "hint": "이야기를 안에 ~하고 있다" }
+          ]
+        }
+      ],
+      "gistQ": {
+        "prompt": "이 글은 무슨 내용인가요?",
+        "options": [
+          "바닷물이 짠 것은 비와 강이 바위의 소금을 바다로 옮겨 쌓였기 때문이다",
+          "바닷물을 마시면 건강에 좋다",
+          "비가 만들어지는 과정"
+        ],
+        "answer": 0
+      }
     }
   ]
 }

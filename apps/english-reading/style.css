@@ -62,6 +62,58 @@ body {
 .lesson-title { font-size: 15px; font-weight: 700; color: var(--er-accent); }
 .lesson-progress { font-size: 12px; color: var(--fg-mute); font-variant-numeric: tabular-nums; }
 
+/* 진행 바 - 문장 진행에 따라 좌→우로 찬다 */
+.bar { height: 4px; background: var(--bg-elev-2); flex-shrink: 0; }
+.bar-fill {
+  height: 100%;
+  width: 0;
+  background: var(--er-accent);
+  border-radius: 0 999px 999px 0;
+  transition: width 0.35s var(--ease);
+}
+
+/* 지문 고르기 */
+.passage-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+.passage-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--sp-4);
+  text-align: left;
+  background: var(--bg-elev);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--dur-1) var(--ease), transform var(--dur-1) var(--ease);
+}
+.passage-card:active { transform: scale(0.98); }
+@media (hover: hover) {
+  .passage-card:hover { border-color: var(--er-accent); }
+}
+.p-head { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.p-title { font-size: 17px; font-weight: 800; color: var(--fg); }
+.p-meta { font-size: 13px; color: var(--fg-mute); }
+.badge-done {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ok);
+  background: var(--ok-bg);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+/* 내 단어장 (지문 고르기 화면 하단) */
+.wordbook {
+  margin-top: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+}
+.wb-chip { border: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
 /* 본문 */
 .stage {
   flex: 1;

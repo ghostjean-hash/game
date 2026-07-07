@@ -41,6 +41,7 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 
 1.1. 게임 등록부: `games/_registry.json`. 카드 클릭으로 진입.
 1.2. 새 세션이 특정 게임 작업 시 `games/<id>/CLAUDE.md` 자동 로드.
+1.3. 앱 등록부: `apps/_registry.json` (게임 아닌 학습·도구류). 현재 `english-reading`(영어 독해 사다리, wip) 1종. 세부는 `apps/<id>/CLAUDE.md`.
 
 # 2. 표준 (html-game)
 
