@@ -1,7 +1,25 @@
 /* 영어 청킹 훈련 앱 전용 스타일. 색·간격·폰트는 shared/tokens.css 변수 사용. */
 
+/* 라이트 테마 - 이 앱만 밝은 학습 화면. 허브 공용 다크 토큰을 앱 범위(body)에서 재정의한다.
+   base.css의 body/.btn/.modal 등이 이 변수들을 참조하므로 값만 바꾸면 라이트로 전환된다. */
+body {
+  --bg: #f6f8fc;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #eef2f9;
+  --fg: #1a1e28;
+  --fg-dim: #56607a;
+  --fg-mute: #8a93a8;
+  --line: #dde3ee;
+  --accent: #3b82f6;
+  --accent-strong: #2563eb;
+  --shadow-1: 0 1px 2px rgba(30,40,70,0.06), 0 2px 8px rgba(30,40,70,0.05);
+  --shadow-2: 0 6px 20px rgba(30,40,70,0.12);
+  background: var(--bg);
+  color: var(--fg);
+}
+
 .train-page {
-  --er-accent: #5aa9ff;
+  --er-accent: #3b82f6;
   display: flex;
   flex-direction: column;
   height: 100dvh;
@@ -92,7 +110,7 @@
 }
 .word.found {
   background: var(--er-accent);
-  color: #0a0c10;
+  color: #ffffff;
   font-weight: 800;
   cursor: default;
 }
@@ -182,9 +200,9 @@
 /* 이 앱은 파랑 정체성 - primary 버튼을 허브 기본 민트에서 앱 색으로 맞춘다 */
 .train-page .btn-primary {
   background: var(--er-accent);
-  color: #0a0c10;
+  color: #ffffff;
 }
-.train-page .btn-primary:hover { background: #7bbcff; }
+.train-page .btn-primary:hover { background: #2563eb; }
 .btn.pulse {
   animation: er-pulse 1.1s var(--ease) infinite;
 }
