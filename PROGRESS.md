@@ -287,3 +287,11 @@
 25.3. 검증 - 2회 + 맹점 자기 교정: 1차 playwright 재생은 항상 정답(첫 보기)만 고르는 한 경로라, 검증 중 요지 보기 가로 넘침 버그를 잡아 세로(options-col)로 수정했으나 오답·힌트·청킹 분기는 안 밟혔다. 사용자 "검증했어?" 지적에 그 부족을 인정하고 2차로 전 분기를 밟았다 - 단어 오답(빨강+정답 병기, 앰버 밑줄, 단어장행), 힌트 표시, 끊어읽기 청킹, 구조 문항 오답, 요지 정답, 정리 화면(맞힌 5/새로 알게 됨 1/요지 맞힘)까지 pageerror 0 확인. verify-real-user-path(#263/#277) - "한 경로만 밟고 전체 검증이라 부르지 않기"를 사용자 지적으로 재확인.
 
 25.4. 미해결: (a) 구 파일(src/data/sentences.json·src/core/session.js) 삭제 - 이번 재구성으로 dead, 사용자 승인 후 삭제 대기(delete-batch-approval) (b) 중학 지문 2~3편 추가 제작 후 루프 체감 (c) 복습·단어장 localStorage 저장·약점 리포트 미구현(기획 8.2 나중 범위) (d) core/lesson·tokenize 유닛 테스트. flightshooting 미커밋분(타 세션 작업)은 이 커밋에서 제외.
+
+# 26. web-deploy 파이프라인 도입 + SW 등록 경로 사이트 전역 결함 수정 (2026-07-08)
+
+26.1. 배포 자동화: 글로벌 web-deploy 스킬(#368, 이 도메인이 인계·첫 적용)을 허브에 연결. `.claude/deploy.json` 신설 - 테스트(english-reading+lotto) → 변경 이미지 sharp 최적화(icons·rushhour ponies) → SW 캐시 bump 점검 → git push → 실사이트 smoke(HTTP 200·콘솔 에러 0·핵심 셀렉터 가시성 기계 판정). 토큰 0 무개입 완주, deploy-state.json은 gitignore(머신 로컬).
+
+26.2. smoke가 최초 검출한 사이트 전역 결함: shared/ui.js가 SW를 페이지 기준 상대 경로로 등록해 GitHub Pages 하위 페이지(games/·apps/ 전부)에서 404 - 홈에서만 우연히 동작하고 게임 페이지들은 SW 등록이 전부 조용히 실패해 온 상태였다. ui.js 모듈 위치 기준 루트 해석으로 교정(fix d84dcec, 캐시 v141). 정적 검증·로컬 검증으로는 못 잡는 부류(dev 환경은 SW 차단)라 실배포 기계 smoke의 가치가 첫 실행에서 입증됨.
+
+26.3. 미해결: (a) 이미지 최적화 실적 0건(기존 PNG가 이미 충분히 작음 - 파이프라인은 신규 이미지부터 유효) (b) smoke가 Pages CDN 전파보다 빨리 돌면 옛 파일을 검사할 수 있음 - 전파 감지(mustContain 또는 커밋 해시 마커) 보강 후보.
