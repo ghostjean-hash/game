@@ -101,6 +101,35 @@ function drawEnemies(ctx, game) {
         ctx[fn](Math.cos(a) * rr, Math.sin(a) * rr);
       }
       ctx.closePath(); ctx.fill();
+    } else if (e.type === 'bonus') {
+      // 보너스 기체: 눈에 띄게 반짝이는 마름모 + 밝은 코어(글로우 - 화면에 하나뿐이라 성능 여유).
+      ctx.shadowColor = e.color; ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.moveTo(0, -e.r); ctx.lineTo(e.r, 0); ctx.lineTo(0, e.r); ctx.lineTo(-e.r, 0);
+      ctx.closePath(); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = COLORS.playerCore;
+      ctx.beginPath(); ctx.arc(0, 0, e.r * 0.35, 0, Math.PI * 2); ctx.fill();
+    } else if (e.type === 'splitter') {
+      // 분열체: 마름모 + 중앙 균열(곧 쪼개질 것을 암시).
+      ctx.beginPath();
+      ctx.moveTo(0, -e.r); ctx.lineTo(e.r, 0); ctx.lineTo(0, e.r); ctx.lineTo(-e.r, 0);
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = COLORS.enemy.gunnerEye; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(0, -e.r); ctx.lineTo(0, e.r); ctx.stroke();
+    } else if (e.type === 'shard') {
+      ctx.beginPath(); ctx.arc(0, 0, e.r, 0, Math.PI * 2); ctx.fill();
+    } else if (e.type === 'shielder') {
+      // 방패병: 본체 원 + 아래쪽(정면) 방패 호.
+      ctx.beginPath(); ctx.arc(0, 0, e.r * 0.78, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = COLORS.enemy.shielderShield; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.arc(0, 0, e.r + 3, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+    } else if (e.type === 'rusher') {
+      // 돌격기: 날카로운 화살촉(돌진 중이면 진행 방향으로 회전).
+      if (e.phase === 1) ctx.rotate(Math.atan2(e.vy, e.vx) - Math.PI / 2);
+      ctx.beginPath();
+      ctx.moveTo(0, e.r * 1.3); ctx.lineTo(-e.r * 0.7, -e.r); ctx.lineTo(0, -e.r * 0.5); ctx.lineTo(e.r * 0.7, -e.r);
+      ctx.closePath(); ctx.fill();
     } else {
       ctx.fillRect(-e.r, -e.r, e.r * 2, e.r * 2);
       ctx.fillStyle = COLORS.enemy.gunnerEye;
@@ -153,10 +182,11 @@ function drawBullets(ctx, game) {
       ctx.ellipse(b.x, b.y, b.r * 0.7, b.r * 1.3, ang, 0, Math.PI * 2);
       ctx.fill();
     } else {
-      // 전방 화력 기본탄
+      // 전방 화력 기본탄: 진행 방향으로 길쭉하게(사선 발사 시 타원 장축을 날아가는 쪽으로 정렬)
+      const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
       ctx.fillStyle = COLORS.bullet;
       ctx.beginPath();
-      ctx.ellipse(b.x, b.y, b.r, b.r * 2.2, 0, 0, Math.PI * 2);
+      ctx.ellipse(b.x, b.y, b.r, b.r * 2.2, ang, 0, Math.PI * 2);
       ctx.fill();
     }
   }

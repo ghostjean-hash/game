@@ -7,7 +7,7 @@ import { playerFire, enemyFireAt } from './fire.js';
 import { stepOptions, homeMissiles, tickZone, gainFront, gainOption, gainZone, loseLastPart } from './parts.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
-import { spawnEnemy, spawnBoss, dropItem, burst } from './spawn.js';
+import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, burst } from './spawn.js';
 
 export function hit(a, b) {
   const dx = a.x - b.x, dy = a.y - b.y;
@@ -42,19 +42,54 @@ function updateEnemies(game, dt, W, H) {
   const p = game.player;
   for (const e of game.enemies) {
     e.t += dt;
+    if (e.type === 'bonus') {
+      e.x += e.vx * dt; // 보너스 기체는 가로로만 지나간다(세로 고정)
+      continue;
+    }
+    if (e.type === 'shard') {
+      e.x += e.vx * dt; e.y += e.speed * dt; // 분열 조각: 좌우로 퍼지며 하강
+      continue;
+    }
+    if (e.type === 'rusher') {
+      if (e.phase === 0) {
+        e.y += e.vy * dt; // 조준하며 천천히 하강
+        if (e.t >= CFG.enemy.rusher.charge) { // 돌진 방향 확정
+          const dx = p.x - e.x, dy = p.y - e.y, d = Math.hypot(dx, dy) || 1;
+          e.vx = (dx / d) * CFG.enemy.rusher.rush;
+          e.vy = (dy / d) * CFG.enemy.rusher.rush;
+          e.phase = 1;
+        }
+      } else {
+        e.x += e.vx * dt; e.y += e.vy * dt; // 급강하 돌진
+      }
+      continue;
+    }
     e.y += e.speed * dt;
     if (e.type === 'weaver') {
       e.x = e.baseX + Math.sin(e.t * CFG.enemy.weaver.freq) * CFG.enemy.weaver.amp;
+      e.fireTimer -= dt;
+      if (e.fireTimer <= 0 && e.y > 20) {
+        e.fireTimer = CFG.enemy.weaver.fireEvery;
+        enemyFireAt(game, e, p.x, p.y); // weaver 단발 조준
+      }
     } else if (e.type === 'gunner') {
       e.x += Math.sign(p.x - e.x) * 40 * dt;
       e.fireTimer -= dt;
       if (e.fireTimer <= 0 && e.y > 20) {
         e.fireTimer = CFG.enemy.gunner.fireEvery;
-        enemyFireAt(game, e, p.x, p.y);
+        const g = CFG.enemy.gunner; // 3발 확산 조준
+        for (let i = 0; i < g.shots; i++) enemyFireAt(game, e, p.x + (i - (g.shots - 1) / 2) * g.spread, p.y);
+      }
+    } else if (e.type === 'shielder') {
+      e.fireTimer -= dt;
+      if (e.fireTimer <= 0 && e.y > 20) {
+        e.fireTimer = CFG.enemy.shielder.fireEvery;
+        enemyFireAt(game, e, p.x, p.y); // 방패병 단발 조준
       }
     }
   }
-  game.enemies = game.enemies.filter((e) => e.y < H + e.r + 20);
+  // 세로로 지나간 것 + 보너스 기체가 가로로 화면을 벗어난 것 제거.
+  game.enemies = game.enemies.filter((e) => e.y < H + e.r + 20 && e.x > -e.r - 40 && e.x < W + e.r + 40);
 }
 
 function updateBoss(game, dt, W, H) {
@@ -180,6 +215,12 @@ function checkCollisions(game, W, H) {
     for (const e of game.enemies) {
       if (e.dead) continue;
       if (hit(b, e)) {
+        // 방패병: 정면(아래에서 위로 오는) 기본탄·레이저는 막힌다. 유도 미사일만 관통한다.
+        if (e.type === 'shielder' && e.shielded && b.kind !== 'missile' && b.y > e.y) {
+          b.dead = true;
+          burst(game, b.x, b.y, COLORS.enemy.shielderShield, 3);
+          break;
+        }
         b.dead = true;
         e.hp -= b.dmg;
         burst(game, b.x, b.y, e.color, 4);
@@ -187,7 +228,8 @@ function checkCollisions(game, W, H) {
           e.dead = true;
           game.score += e.score;
           burst(game, e.x, e.y, e.color, 14);
-          dropItem(game, e.x, e.y);
+          if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체만 드롭
+          if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐
           game.sfx.push('explode');
         } else {
           game.sfx.push('hit');
@@ -229,6 +271,7 @@ function defeatBoss(game) {
   burst(game, boss.x, boss.y, COLORS.hitSpark, 40);
   burst(game, boss.x - 20, boss.y - 10, COLORS.clearSpark, 30);
   const wasFinal = boss.kind === 'final';
+  dropItems(game, boss.x, boss.y, wasFinal ? CFG.bossDrop.final : CFG.bossDrop.mini); // 보스 격파 확정 드롭
   game.boss = null;
   game.bossPending = false;
   game.transitioning = true; // 전환 대기(다음 구역 준비 전 재소환 차단)
@@ -294,7 +337,7 @@ export function stepWorld(game, dt, W, H) {
     game.introTimer -= dt;
     if (game.player.inv > 0) game.player.inv -= dt;
     updateStars(game, dt, W, H);
-    stepOptions(game, dt);
+    stepOptions(game, dt, false); // 인트로 중 옵션기는 위치만 따라가고 발사는 쉼
     homeMissiles(game, dt);
     updateBullets(game, dt, W, H);
     updateParticles(game, dt);
@@ -308,8 +351,10 @@ export function stepWorld(game, dt, W, H) {
     game.fireTimer = CFG.player.fireEvery;
     playerFire(game);
   }
-  stepOptions(game, dt);           // 옵션기 추종 + 레이저/미사일 발사
+  stepOptions(game, dt, !game.transitioning); // 옵션기 추종 + 발사(보스 클리어 후 전환 대기 중엔 발사 쉼)
   spawnWaves(game, W);
+  game.bonusTimer -= dt;           // 보너스 기체 주기 등장(파워업 공급원)
+  if (game.bonusTimer <= 0) { game.bonusTimer = CFG.bonusShip.every; spawnBonus(game, W, H); }
   updateEnemies(game, dt, W, H);
   updateBoss(game, dt, W, H);
   homeMissiles(game, dt);          // 미사일 유도(표적 최신 위치 기준)

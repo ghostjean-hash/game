@@ -51,7 +51,7 @@ function createGame() {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
     score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
     front: 1, options: [], zone: { level: 0, timer: null }, partHistory: [],
-    waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false,
+    waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
   };

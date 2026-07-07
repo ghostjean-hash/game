@@ -19,6 +19,13 @@ export const COLORS = {
     weaver: '#ffa05c',
     gunner: '#b48cff',
     gunnerEye: '#0a0e18',
+    bonus: '#a6ff4d',   // 보너스 기체(눈에 띄는 라임 + 글로우)
+    // 11~20 구역 신규 적
+    splitter: '#ff7ac0', // 분열체(핑크 마젠타)
+    shard: '#ffa9d8',    // 분열 조각(연한 핑크)
+    shielder: '#6fd0ff', // 방패병(시안)
+    shielderShield: 'rgba(111,208,255,0.35)', // 방패막(반투명)
+    rusher: '#ff5470',   // 돌격기(강렬한 레드)
   },
   // 보스 색 (중보스 mini / 최종 final)
   boss: {

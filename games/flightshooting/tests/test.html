@@ -17,7 +17,7 @@ import { test, eq, ok, report } from './runner.js';
 import { frontSpec } from '../src/core/fire.js';
 import { optionSlot, gainFront, gainOption, gainZone, loseLastPart } from '../src/core/parts.js';
 import { buildWaves, stageName } from '../src/core/waves.js';
-import { spawnEnemy } from '../src/core/spawn.js';
+import { spawnEnemy, spawnBonus, spawnShards, dropItems } from '../src/core/spawn.js';
 import { autopilotStep } from '../src/core/autopilot.js';
 import { hit } from '../src/core/world.js';
 
@@ -86,11 +86,35 @@ test('구역↑ 체력 단조 증가', () => {
   for (let s = 1; s <= 10; s++) { const g = { stage: s, enemies: [] }; spawnEnemy(g, 'gunner', 0.5, 400); ok(g.enemies[0].hp >= prev, `구역 ${s} 감소`); prev = g.enemies[0].hp; }
 });
 
-// ── 자동 플레이 회피/추적 ──
+// ── 보너스 기체 + 확정 드롭 ──
+test('spawnBonus 가로 이동 기체', () => { const g = { enemies: [], sfx: [] }; spawnBonus(g, 400, 800); eq(g.enemies[0].type, 'bonus'); ok(g.enemies[0].vx !== 0, '가로 속도 있어야'); });
+test('dropItems n개 확정 드롭', () => { const g = { powerups: [] }; dropItems(g, 100, 100, 2); eq(g.powerups.length, 2); });
+test('dropItems 1개', () => { const g = { powerups: [] }; dropItems(g, 100, 100, 1); eq(g.powerups.length, 1); });
+
+// ── 11~20 구역 신규 적 ──
+test('spawnEnemy rusher 조준 단계 시작', () => { const g = { stage: 11, enemies: [] }; spawnEnemy(g, 'rusher', 0.5, 400); eq(g.enemies[0].phase, 0); ok(g.enemies[0].vy > 0, '천천히 하강'); });
+test('spawnEnemy shielder 방패 활성', () => { const g = { stage: 11, enemies: [] }; spawnEnemy(g, 'shielder', 0.5, 400); ok(g.enemies[0].shielded === true); });
+test('spawnShards 조각 둘로 분열', () => { const g = { stage: 11, enemies: [] }; spawnShards(g, 200, 100); eq(g.enemies.length, 2); eq(g.enemies[0].type, 'shard'); });
+test('11구역 체력 추가 배수', () => {
+  const a = { stage: 10, enemies: [] }, b = { stage: 11, enemies: [] };
+  spawnEnemy(a, 'drone', 0.5, 400); spawnEnemy(b, 'drone', 0.5, 400);
+  ok(b.enemies[0].hp > a.enemies[0].hp, '11구역이 더 단단');
+});
+test('buildWaves 15구역 유효', () => { ok(buildWaves(15).length > 0); });
+test('stageName 20구역 존재', () => { ok(stageName(20).length > 0); });
+
+// ── 자동 플레이: 미래 시뮬레이션 회피/조준/획득 ──
 const apGame = (over) => ({ player: { x: 200, y: 800, r: 14 }, eBullets: [], enemies: [], powerups: [], boss: null, ...over });
-test('autopilot 왼쪽 위협 → 오른쪽 회피', () => { const g = apGame({ eBullets: [{ x: 170, y: 600 }] }); autopilotStep(g, 0.1, 500, 1000); ok(g.player.x > 200); });
-test('autopilot 오른쪽 위협 → 왼쪽 회피', () => { const g = apGame({ eBullets: [{ x: 230, y: 600 }] }); autopilotStep(g, 0.1, 500, 1000); ok(g.player.x < 200); });
-test('autopilot 위협 없으면 파워업 추적', () => { const g = apGame({ powerups: [{ x: 350, y: 700 }] }); autopilotStep(g, 0.1, 500, 1000); ok(g.player.x > 200); });
+// 정면으로 떨어져 나를 맞힐 코스의 탄은 크게 비켜선다(좌우 아무 쪽이든).
+test('autopilot 정면 충돌 코스 탄 → 회피', () => { const g = apGame({ eBullets: [{ x: 200, y: 600, vx: 0, vy: 220, r: 5 }] }); autopilotStep(g, 0.1, 500, 1000); ok(Math.abs(g.player.x - 200) > 20); });
+// 위로 멀어지는(절대 안 맞을) 탄에는 반응하지 않는다 - 시뮬레이션이 충돌 없음을 확인.
+test('autopilot 멀어지는 탄은 무시', () => { const g = apGame({ eBullets: [{ x: 200, y: 600, vx: 0, vy: -220, r: 5 }] }); autopilotStep(g, 0.1, 500, 1000); ok(Math.abs(g.player.x - 200) < 1); });
+test('autopilot 위협 없으면 파워업으로', () => { const g = apGame({ powerups: [{ x: 350, y: 700, kind: 'P' }] }); autopilotStep(g, 0.1, 500, 1000); ok(g.player.x > 200); });
+test('autopilot 안전하면 위쪽 적 조준', () => { const g = apGame({ enemies: [{ x: 360, y: 500, r: 15, speed: 150 }] }); autopilotStep(g, 0.1, 500, 1000); ok(g.player.x > 200); });
+// 위쪽 드랍을 세로로 마중 나간다(가로 전용 아님).
+test('autopilot 위쪽 드랍 → 세로 상승', () => { const g = apGame({ powerups: [{ x: 200, y: 550, kind: 'P' }] }); autopilotStep(g, 0.1, 500, 1000); ok(g.player.y < 800); });
+// 목숨이 최대면 회복 하트는 주우러 가지 않는다.
+test('autopilot 목숨 풀이면 하트 무시', () => { const g = apGame({ lives: 3, powerups: [{ x: 350, y: 700, kind: 'H' }] }); autopilotStep(g, 0.1, 500, 1000); ok(Math.abs(g.player.x - 200) < 1); });
 
 report();
 </script>

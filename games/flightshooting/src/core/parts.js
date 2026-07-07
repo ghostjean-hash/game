@@ -2,7 +2,7 @@
 // 전방 화력(front)은 fire.js가, 옵션기·에너지존·파츠 손실은 이 모듈이 담당한다.
 import { CFG } from '../data/numbers.js';
 import { COLORS } from '../data/colors.js';
-import { burst, dropItem } from './spawn.js';
+import { burst, dropItems, spawnShards } from './spawn.js';
 
 const OPT = CFG.parts.option;
 const ZONE = CFG.parts.zone;
@@ -61,7 +61,7 @@ export function loseLastPart(game) {
 }
 
 // 옵션 위치 추종 + 발사(레이저: 빠른 직진탄 / 미사일: 유도탄). 아군 탄은 game.bullets에 kind로 구분.
-export function stepOptions(game, dt) {
+export function stepOptions(game, dt, canFire = true) {
   const p = game.player;
   if (!p) return;
   const k = Math.min(1, OPT.follow * dt);
@@ -70,6 +70,7 @@ export function stepOptions(game, dt) {
     const t = optionTarget(o, p);
     o.x += (t.x - o.x) * k;
     o.y += (t.y - o.y) * k;
+    if (!canFire) continue; // 전환·인트로 중엔 위치만 따라가고 발사는 쉰다
     o.fireTimer -= dt;
     if (o.fireTimer > 0) continue;
     if (o.type === 'laser') {
@@ -147,7 +148,8 @@ export function tickZone(game, dt) {
       e.dead = true;
       game.score += e.score;
       burst(game, e.x, e.y, e.color, 14);
-      dropItem(game, e.x, e.y);
+      if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체만 드롭
+      if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐
       game.sfx.push('explode');
     }
   }
