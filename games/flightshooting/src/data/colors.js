@@ -8,8 +8,11 @@ export const COLORS = {
   bullet: '#c9fbff',
   bulletGlow: '#22d3ee',
   // 전방 화력(P) 단계별 탄 색: 1단계 청록 → 8단계 붉은색(강해질수록 뜨겁게).
-  bulletByLevel: ['#c9fbff', '#a8f0e0', '#c0f58a', '#f5e85f', '#ffc94a', '#ff9a4d', '#ff6b4d', '#ff3b3b'],
-  enemyBullet: '#ffb0bd',
+  // 아군 기본탄: 화력이 올라도 '차가운 시안~흰'으로만 밝아진다(적탄과 색이 겹치지 않게). 성장은 밝기로.
+  bulletByLevel: ['#cffaff', '#b3f2ff', '#93e9ff', '#79dfff', '#8ef0dd', '#b0ffe6', '#d8fff2', '#ffffff'],
+  // 적탄: 선명한 빨강 몸 + 노란 코어(view에서). 아군(시안/흰)과 뚜렷이 대비되는 '뜨거운' 경고색.
+  enemyBullet: '#ff2d3a',
+  enemyBulletCore: '#ffd24a',
   enemyBulletGlow: '#ff6b81',
   star: '#9fd8ff',
   hitSpark: '#ff9a4d',   // 아군 탄 명중 스파크 / 보스 피격

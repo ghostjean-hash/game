@@ -95,58 +95,72 @@ function drawPlayer(ctx, game) {
   ctx.restore();
 }
 
+// 정령 눈(검은 점, 필요 시 흰 눈알 위에). 모든 적을 요정·정령 느낌으로 통일하는 공통 요소.
+function spriteEyes(ctx, r, spread = 0.34, ey = -0.12, sz = 0.15, white = false) {
+  if (white) {
+    ctx.fillStyle = '#f4f4fa';
+    ctx.beginPath(); ctx.arc(-r * spread, r * ey, r * sz * 1.7, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(r * spread, r * ey, r * sz * 1.7, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.fillStyle = '#191420';
+  ctx.beginPath(); ctx.arc(-r * spread, r * ey, r * sz, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(r * spread, r * ey, r * sz, 0, Math.PI * 2); ctx.fill();
+}
+
+// 적 = 요정·정령: 공통으로 둥근 몸 + 눈, 종류별 특징(꼬리불·날개·방패·균열·화살)을 얹는다.
 function drawEnemies(ctx, game) {
   for (const e of game.enemies) {
-    // 적은 화면에 다수 존재 → 글로우 생략(발열/성능). 색 채움으로 형태 표현.
     ctx.save();
     ctx.translate(e.x, e.y);
     ctx.fillStyle = e.color;
+    const r = e.r;
     if (e.type === 'drone') {
-      ctx.beginPath();
-      ctx.moveTo(0, e.r); ctx.lineTo(-e.r, -e.r * 0.6); ctx.lineTo(0, -e.r * 0.3); ctx.lineTo(e.r, -e.r * 0.6);
-      ctx.closePath(); ctx.fill();
+      // 도깨비불 정령: 아래 흔들리는 꼬리불 + 둥근 몸 + 눈
+      ctx.beginPath(); ctx.moveTo(-r * 0.5, r * 0.5); ctx.quadraticCurveTo(0, r * 1.5, r * 0.5, r * 0.5); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.arc(0, -r * 0.15, r * 0.85, 0, Math.PI * 2); ctx.fill();
+      spriteEyes(ctx, r);
     } else if (e.type === 'weaver') {
-      ctx.beginPath();
-      for (let i = 0; i < 6; i++) {
-        const a = (i / 6) * Math.PI * 2;
-        const rr = i % 2 === 0 ? e.r : e.r * 0.5;
-        const fn = i === 0 ? 'moveTo' : 'lineTo';
-        ctx[fn](Math.cos(a) * rr, Math.sin(a) * rr);
-      }
-      ctx.closePath(); ctx.fill();
+      // 나비 요정: 좌우 반투명 날개 + 둥근 몸 + 눈
+      ctx.save(); ctx.globalAlpha = 0.65;
+      ctx.beginPath(); ctx.ellipse(-r * 0.85, 0, r * 0.6, r * 1.05, 0.5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(r * 0.85, 0, r * 0.6, r * 1.05, -0.5, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.6, 0, Math.PI * 2); ctx.fill();
+      spriteEyes(ctx, r, 0.22, -0.1, 0.13);
+    } else if (e.type === 'gunner') {
+      // 먼지 정령(스스와타리): 둥근 몸 + 흰 큰 눈
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2); ctx.fill();
+      spriteEyes(ctx, r, 0.3, -0.05, 0.14, true);
     } else if (e.type === 'bonus') {
-      // 보너스 기체: 눈에 띄게 반짝이는 마름모 + 밝은 코어(글로우 - 화면에 하나뿐이라 성능 여유).
+      // 빛 정령(코다마): 발광하는 둥근 몸 + 큰 눈
       ctx.shadowColor = e.color; ctx.shadowBlur = 12;
-      ctx.beginPath();
-      ctx.moveTo(0, -e.r); ctx.lineTo(e.r, 0); ctx.lineTo(0, e.r); ctx.lineTo(-e.r, 0);
-      ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.9, 0, Math.PI * 2); ctx.fill();
       ctx.shadowBlur = 0;
-      ctx.fillStyle = COLORS.playerCore;
-      ctx.beginPath(); ctx.arc(0, 0, e.r * 0.35, 0, Math.PI * 2); ctx.fill();
+      spriteEyes(ctx, r, 0.32, -0.05, 0.16, true);
     } else if (e.type === 'splitter') {
-      // 분열체: 마름모 + 중앙 균열(곧 쪼개질 것을 암시).
-      ctx.beginPath();
-      ctx.moveTo(0, -e.r); ctx.lineTo(e.r, 0); ctx.lineTo(0, e.r); ctx.lineTo(-e.r, 0);
-      ctx.closePath(); ctx.fill();
+      // 분열 정령: 둥근 몸 + 중앙 균열(곧 쪼개질 암시) + 눈
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = COLORS.enemy.gunnerEye; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(0, -e.r); ctx.lineTo(0, e.r); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, -r * 0.8); ctx.lineTo(0, r * 0.8); ctx.stroke();
+      spriteEyes(ctx, r, 0.36, -0.18, 0.12);
     } else if (e.type === 'shard') {
-      ctx.beginPath(); ctx.arc(0, 0, e.r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      spriteEyes(ctx, r, 0.35, 0, 0.2);
     } else if (e.type === 'shielder') {
-      // 방패병: 본체 원 + 아래쪽(정면) 방패 호.
-      ctx.beginPath(); ctx.arc(0, 0, e.r * 0.78, 0, Math.PI * 2); ctx.fill();
+      // 방패 정령: 둥근 몸 + 눈 + 아래(정면) 방패 호
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.72, 0, Math.PI * 2); ctx.fill();
+      spriteEyes(ctx, r, 0.3, -0.18, 0.12);
       ctx.strokeStyle = COLORS.enemy.shielderShield; ctx.lineWidth = 4;
-      ctx.beginPath(); ctx.arc(0, 0, e.r + 3, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+      ctx.beginPath(); ctx.arc(0, 0, r + 3, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
     } else if (e.type === 'rusher') {
-      // 돌격기: 날카로운 화살촉(돌진 중이면 진행 방향으로 회전).
+      // 돌진 정령: 뾰족한 몸(돌진 중이면 진행 방향 회전) + 눈
       if (e.phase === 1) ctx.rotate(Math.atan2(e.vy, e.vx) - Math.PI / 2);
       ctx.beginPath();
-      ctx.moveTo(0, e.r * 1.3); ctx.lineTo(-e.r * 0.7, -e.r); ctx.lineTo(0, -e.r * 0.5); ctx.lineTo(e.r * 0.7, -e.r);
-      ctx.closePath(); ctx.fill();
+      ctx.moveTo(0, r * 1.3); ctx.lineTo(-r * 0.7, -r * 0.7); ctx.quadraticCurveTo(0, -r * 0.2, r * 0.7, -r * 0.7); ctx.closePath(); ctx.fill();
+      spriteEyes(ctx, r, 0.26, -0.32, 0.11);
     } else {
-      ctx.fillRect(-e.r, -e.r, e.r * 2, e.r * 2);
-      ctx.fillStyle = COLORS.enemy.gunnerEye;
-      ctx.fillRect(-4, e.r * 0.9 - 6, 8, 6);
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2); ctx.fill();
+      spriteEyes(ctx, r);
     }
     ctx.restore();
   }
@@ -164,13 +178,16 @@ function drawBoss(ctx, game) {
   ctx.beginPath();
   ctx.ellipse(0, 0, boss.rx, boss.ry, 0, 0, Math.PI * 2);
   ctx.fill();
-  // 포신부(아래)
+  // 포신부(아래, 발사구)
   ctx.fillStyle = isFinal ? COLORS.boss.gunFinal : COLORS.boss.gunMini;
   ctx.fillRect(-10, boss.ry - 4, 20, 12);
+  // 정령 얼굴(가오나시류): 흰 눈알 2개 + 검은 동공
+  ctx.fillStyle = '#f0eef6';
+  ctx.beginPath(); ctx.arc(-boss.rx * 0.34, -2, boss.rx * 0.22, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(boss.rx * 0.34, -2, boss.rx * 0.22, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = COLORS.boss.coreDark;
-  ctx.beginPath(); ctx.arc(0, 6, boss.rx * 0.4, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = COLORS.boss.coreLight;
-  ctx.beginPath(); ctx.arc(0, 6, boss.rx * 0.2, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(-boss.rx * 0.34, 0, boss.rx * 0.1, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(boss.rx * 0.34, 0, boss.rx * 0.1, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
 }
 
@@ -207,12 +224,17 @@ function drawBullets(ctx, game) {
   ctx.restore();
 }
 
+// 적탄: 빨강 몸 + 노란 코어로 아군 시안탄과 확실히 구분한다(사용자 "헷갈림" 대응).
 function drawEnemyBullets(ctx, game) {
   ctx.save();
-  ctx.fillStyle = COLORS.enemyBullet;
   for (const b of game.eBullets) {
+    ctx.fillStyle = COLORS.enemyBullet;
     ctx.beginPath();
-    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    ctx.arc(b.x, b.y, b.r + 0.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = COLORS.enemyBulletCore;
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r * 0.45, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.restore();
