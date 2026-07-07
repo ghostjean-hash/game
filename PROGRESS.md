@@ -227,3 +227,15 @@
 20.4. 검증: core 순수함수 26/26 PASS(웨이브 후반 확장 2건 추가). browser-shot로 게임 시작 시 '구역 1 / 소행성 지대' 배너 표시 중 적·총알 0(전환 유예 동작)과 pageerror 0 확인. 커밋 e029d79 push 완료.
 
 20.5. 미해결: 5종 전부 실플레이 체감 조정 대상(P 희소성·적 밀도·구간 길이·보스 hp·인트로 길이). apps/english-reading 미커밋 변경은 타 세션 작업이라 이 봉합과 무관. 상세: games/flightshooting/PROGRESS.md.
+
+# 21. english-reading - 앱 전용 lite 골격 신설 (2026-07-07, /jarvis-checkpoint sealing)
+
+21.1. 발단: 사용자가 apps/english-reading 폴더에서 `/jarvis-init`을 인자 없이 호출했다. 이 명령은 원래 독립된 새 자비스 도메인을 등록하는 절차인데, 현재 위치는 이미 존재하는 game-hub 도메인 안의 하위 앱이라 그대로 태우면 안 되는 상황이었다. 19.7(c)에 "apps/english-reading 전용 PROGRESS/CLAUDE 골격 미작성"이 미해결로 남아 있던 항목이기도 하다.
+
+21.2. 방향 결정: 세 갈래(허브 하위 앱 경량 골격 / 아무것도 안 만들고 앱 작업만 / 독립 도메인 등록)를 트레이드오프와 함께 제시하고, 독립 도메인 등록(별도 git repo·ROADMAP/TASKS 4종 신설)은 하나의 저장소·하나의 배포로 묶인 모노레포 허브에 과하고 구조를 깨뜨린다는 근거로 비추천했다. 사용자가 "전용 만들어"로 허브 하위 앱 경량 골격(CLAUDE.md + PROGRESS.md)을 채택했다. 이는 허브 구조 표준 설계안(#275, docs/plans/design-2026-07-06-hub-structure-standard.md §4 children_profile:lite)의 하위 앱 lite 규약과 정합한다.
+
+21.3. 산출물: apps/english-reading/CLAUDE.md를 기존 게임 하위 CLAUDE.md(sudoku, 46줄 lite 형태) 형태로 작성했다 - 앱 정의·파일 구조·핵심 결정 6항·데이터 규약(sentences.json)·작업 주의·비스코프. 실제 코드(main.js/session.js/tokenize.js)와 sentences.json을 읽고 무빌드 바닐라·타이핑0 클릭·라이트 테마 단독·"문장 수만큼" 세션·nth 문법 덫 위치 지정·core 순수 격리를 규칙으로 반영했다. apps/english-reading/PROGRESS.md는 19장 이력을 이 앱 관점으로 이관(기획 전환·라이트 테마·골격 신설 3묶음) + 다음 작업 후보 5건.
+
+21.4. 검증: 두 파일 모두 순수 문서(즉시 동작 없음)라 동작 검증은 불가하다. Write 성공 확인 + CLAUDE.md의 파일 구조·데이터 규약이 실제 코드·데이터 구조와 어긋나지 않는지 상호 참조 일치만 확인했다(#230 순수 문서 검증 규약).
+
+21.5. 미해결(다음 작업 후보): (a) 문장 콘텐츠 보강(사용자 주도) (b) 루트 CLAUDE.md §1 등록표에 app 카테고리·english-reading 반영 (c) service-worker.js PRECACHE에 apps 자산 등재 + 캐시 버전 bump (d) core/session·tokenize 유닛 테스트 (e) 실기기 터치 감도. 상세: apps/english-reading/PROGRESS.md.
