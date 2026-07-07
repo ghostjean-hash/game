@@ -44,9 +44,10 @@ export const CFG = {
   enemyHpScale: 0.28,
   // 파워업은 일반 잡몹에선 나오지 않는다. 보스·보너스 기체 격파 시에만 확정 드롭한다.
   // weights = 드롭 종류 확률(합 1): P 전방화력 / S 옵션기 / E 에너지존 / H 회복 / B 봄.
-  drop: { weights: { P: 0.17, S: 0.38, E: 0.23, H: 0.12, B: 0.10 } },
+  // chance = 일반 잡몹 처치 시 드롭 확률(초반 화력 성장 숨통). 보스·보너스는 확정 드롭(별도).
+  drop: { chance: 0.09, weights: { P: 0.24, S: 0.34, E: 0.20, H: 0.12, B: 0.10 } },
   // 보너스 기체 등장: every초마다 화면 좌/우에서 등장, yRatio 높이로 가로질러 감. 잡으면 dropCount개 드롭.
-  bonusShip: { every: 13, dropCount: 1, yRatio: 0.22 },
+  bonusShip: { every: 10, dropCount: 1, yRatio: 0.22 },
   // 보스 격파 시 확정 드롭 수(중보스 / 최종보스).
   bossDrop: { mini: 2, final: 4 },
   // 중보스(1~9구역): 작고 hp 낮음 + 호위 비행체 주기 소환. 최종보스(10구역): 크고 단단한 2패턴.

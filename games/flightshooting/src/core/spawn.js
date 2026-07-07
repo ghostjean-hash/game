@@ -90,15 +90,25 @@ export function spawnBonus(game, W, H) {
   game.sfx.push('start');
 }
 
-// 파워업 n개 확정 드롭(보스·보너스 기체 전용). 종류는 CFG.drop.weights 확률로 뽑고, 여러 개면 좌우로 흩뿌린다.
-export function dropItems(game, x, y, n) {
+function rollKind() {
   const w = CFG.drop.weights;
+  let r = Math.random();
+  for (const k of Object.keys(w)) { if (r < w[k]) return k; r -= w[k]; }
+  return 'B';
+}
+
+// 파워업 n개 확정 드롭(보스·보너스 기체 전용). 여러 개면 좌우로 흩뿌린다.
+export function dropItems(game, x, y, n) {
   for (let i = 0; i < n; i++) {
-    let r = Math.random(), kind = 'B';
-    for (const k of Object.keys(w)) { if (r < w[k]) { kind = k; break; } r -= w[k]; }
     const ox = n === 1 ? 0 : (i - (n - 1) / 2) * 26;
-    game.powerups.push({ x: x + ox, y, r: 12, vy: 70, kind, t: 0 });
+    game.powerups.push({ x: x + ox, y, r: 12, vy: 70, kind: rollKind(), t: 0 });
   }
+}
+
+// 일반 잡몹 처치 시 낮은 확률(CFG.drop.chance)로 1개 드롭 - 초반 화력 성장 숨통.
+export function dropMaybe(game, x, y) {
+  if (Math.random() >= CFG.drop.chance) return;
+  game.powerups.push({ x, y, r: 12, vy: 70, kind: rollKind(), t: 0 });
 }
 
 export function burst(game, x, y, color, n = 12) {

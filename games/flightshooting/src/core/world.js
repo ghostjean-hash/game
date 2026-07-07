@@ -7,7 +7,7 @@ import { playerFire, enemyFireAt } from './fire.js';
 import { stepOptions, homeMissiles, tickZone, gainFront, gainOption, gainZone, loseLastPart } from './parts.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
-import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, burst } from './spawn.js';
+import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, dropMaybe, burst } from './spawn.js';
 
 export function hit(a, b) {
   const dx = a.x - b.x, dy = a.y - b.y;
@@ -228,7 +228,8 @@ function checkCollisions(game, W, H) {
           e.dead = true;
           game.score += e.score;
           burst(game, e.x, e.y, e.color, 14);
-          if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체만 드롭
+          if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체 확정 드롭
+          else dropMaybe(game, e.x, e.y); // 잡몹은 저확률 드롭(초반 성장 숨통)
           if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐
           game.sfx.push('explode');
         } else {
