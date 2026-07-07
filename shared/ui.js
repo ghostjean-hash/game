@@ -95,7 +95,11 @@ export function registerServiceWorker(swPath = "/service-worker.js") {
 
   // 프로덕션: 등록 + 새 SW activate 시 1회 자동 reload.
   window.addEventListener("load", () => {
-    const path = swPath.startsWith("/") ? "." + swPath : swPath;
+    // swPath("/...")는 허브 루트 기준. 페이지 깊이와 무관하게 ui.js 위치(shared/)의
+    // 부모를 루트로 삼아 해석한다 - GitHub Pages처럼 사이트가 하위 경로에 배포돼도 동작.
+    const path = swPath.startsWith("/")
+      ? new URL(swPath.slice(1), new URL("../", import.meta.url)).pathname
+      : swPath;
     navigator.serviceWorker
       .register(path)
       .then((reg) => {

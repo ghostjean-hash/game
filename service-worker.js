@@ -85,7 +85,8 @@
 // v121 (2026-07-02): rushhour 설정 블록 기본 스타일 포니→밥풀이(저장된 선택은 유지).
 // v135 (2026-07-07): english-reading 독해 사다리 전면 개선(지문 3편·지문 고르기·단어장 저장·보기 셔플) + apps 레지스트리/지문 데이터 network-first 등재.
 // v140 (2026-07-08): web-deploy 파이프라인 도입 - 아이콘·rushhour 포니 PNG 최적화 반영.
-const CACHE_VERSION = "v140";
+// v141 (2026-07-08): SW 등록 경로 결함 수정(shared/ui.js) - 하위 페이지(games/·apps/)에서 페이지 기준 상대 경로로 등록해 404, 루트 기준 해석으로 교정.
+const CACHE_VERSION = "v141";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
