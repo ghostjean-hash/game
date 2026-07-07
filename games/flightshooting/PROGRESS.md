@@ -271,3 +271,15 @@
 
 ### 종합
 피아·아이템 구분(정령/육각 아이템/색 대비)과 분위기(성운 배경) 향상. 각 라운드 browser-shot 재캡처로 확인, pageerror 0. core 41/41 PASS.
+
+## 2026-07-08 - 와라와라 손발 + HUD 아이콘 SVG 교체 (직전 세션 봉합)
+
+직전 세션에서 커밋·push는 됐으나 진행 로그 봉합이 누락됐던 2건을 이번 /jc에서 기재.
+
+### 와라와라 작은 손발 추가 (e045d64)
+- 플레이어 실루엣(와라와라)에 작은 손발을 그려 캐릭터성 강화. view.js drawPlayer + index.html 메뉴 hero 반영, service-worker 캐시 버전 갱신.
+
+### HUD 이모지 → 고퀄 SVG 아이콘 전면 교체 (a33e8d3)
+- HUD 버튼 이모지(봇·스피커·일시정지/재생)를 Lucide 스타일 라인 SVG로 교체(토글 상태도 SVG). 목숨 하트 3개 + 조작법 안내 하트도 SVG로, 메뉴 '자동 플레이로 시작' 버튼에 봇 SVG + 텍스트, 파워업 회복(H)의 하트는 캔버스 도형으로 렌더.
+- 기존 SVG였던 전체화면 버튼과 톤 통일. index.html·main.js·view.js·styles/main.css 반영.
+- browser-shot로 메뉴·게임 HUD 모두 이모지 없이 아이콘 렌더 확인, pageerror 0.
