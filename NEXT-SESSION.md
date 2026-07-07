@@ -2,9 +2,9 @@
 
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
-## 직전 작업 (2026-07-07, english-reading 앱 전용 lite 골격 신설)
+## 직전 작업 (2026-07-07, english-reading 앱 골격 신설 + "독해 사다리" 재기획)
 
-허브 PROGRESS 21장 sealing. 사용자가 apps/english-reading 폴더에서 `/jarvis-init`을 인자 없이 호출했다 - 원래 독립 도메인 등록 절차지만 이 위치는 이미 game-hub 도메인 안의 하위 앱이라 그대로 태울 수 없는 상황(19.7(c) 미해결 항목이기도 함). 세 갈래(하위 앱 경량 골격 / 무작업 / 독립 도메인 등록)를 제시하고, 독립 도메인(별도 repo·FM 4종)은 모노레포 허브에 과하다는 근거로 비추천했다. 사용자 "전용 만들어"로 허브 하위 앱 lite 골격(CLAUDE.md + PROGRESS.md)을 채택 - 허브 구조 표준 설계안(#275 §4 children_profile:lite)과 정합. CLAUDE.md는 기존 게임 하위 CLAUDE(sudoku) 형태로 앱 정의·파일구조·핵심결정 6항·데이터규약(sentences.json)·주의·비스코프를 담되, 실제 코드(main/session/tokenize)를 읽고 무빌드 바닐라·라이트 테마 단독·"문장 수만큼" 세션·nth 문법덫·core 순수격리를 규칙화했다. PROGRESS.md는 19장 이력을 앱 관점으로 이관. 검증 - 순수 문서라 동작 검증 불가, 실제 코드·데이터와 상호 참조 일치만 확인. **다음 행동** = (a) 문장 콘텐츠 보강(사용자) (b) 루트 CLAUDE.md §1 등록표 app 카테고리·english-reading 반영 (c) service-worker.js PRECACHE apps 등재 + 캐시 bump (d) core/session·tokenize 유닛 테스트 (e) 실기기 터치 감도. 상세: apps/english-reading/PROGRESS.md.
+허브 PROGRESS 21·22장 sealing. 두 갈래 작업이다. (1) 골격 신설(21장): `/jarvis-init`을 허브 하위 앱 폴더에서 인자 없이 호출한 상황을 진단해, 독립 도메인 등록 대신 허브 하위 앱 lite 골격(CLAUDE.md + PROGRESS.md, #275 §4 children_profile:lite)을 채택·생성했다. (2) 재기획(22장): 사용자가 앱 타깃을 "공부를 정말 못하는 사람(중학 수준)"으로, 목표를 "독해 수준을 제대로 끌어올리기"로 명시하면서 기존 청킹 훈련 앱을 "영어 독해 사다리"로 재정의했다. AskUserQuestion으로 영어 독해 + 세 곳(단어·긴 문장·글 요지) 다 막힘을 확정 → 독해력 3층(어휘·끊어읽기·의미통합)을 순서로 밟는 설계. 핵심 학습법은 사용자 요청("단어를 뒤로, 문맥 유추 후 확인")을 GitHub·어휘습득 연구(문맥 유추는 중학생 대상 효과, 단 확인·인출 결합 필요 - LingQ/Readlang/WordPecker 참고)로 검증해 "유추 → 확인 → 복습" 3단계 루프로 확정. 기획서는 §1.3(사람이 보는 기획서=HTML)을 세 번 어기며(MD 작성 → PLAN 금지어·docs/ 오위치 → 최종) 매번 사용자 지적으로 시정, 최종 `apps/english-reading/spec/index.html`로 planning-deliverable 표준 전면 준수(음슴체·괄호제거·목차 사이드바·디자인 토큰·개발정보 부록 분리). 재발 방지 hook 후보를 buffer 기록. browser-shot 렌더 2회 검증(console 0). **다음 행동** = (a) 약점 진단 리포트 기획서 추가 여부 결정(문법 이름표 + 자주 틀리는 단어 + 추이 리포트 제안함, 문법 6종 초안) (b) 기획서 본문 확정 + MVP 착수 전 개발 세부 결정 (c) 앱 코드를 기획(3단계 루프)에 맞춰 재구성 (d) **21장 amend(e737537) force push 미완 - 원격 분기(ahead1/behind1) 해소 필요**. 상세: PROGRESS 21·22장 + apps/english-reading/PROGRESS.md.
 
 ## 이전 작업 (2026-07-07, Sky Raider 밸런스 조정 5종)
 
