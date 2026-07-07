@@ -1,5 +1,5 @@
-// 영어 독해 사다리를 단일 HTML 한 장으로 합친다 (더블클릭 실행용, 오프라인 동작).
-// 손 사본 없이 항상 원본(style·core·main·passages.json)에서 재조립 - 소스가 단일 진실.
+// 영어 문법 스캔 앱을 단일 HTML 한 장으로 합친다 (더블클릭 실행용, 오프라인 동작).
+// 손 사본 없이 항상 원본(style·core·main·grammar-bank.json)에서 재조립 - 소스가 단일 진실.
 // 사용: node apps/english-reading/tools/build-standalone.mjs  → dist/standalone.html 생성
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -26,43 +26,31 @@ const css = [
   read(join(app, "style.css")),
 ].join("\n");
 
-// 2. 데이터: passages.json을 스크립트에 내장 (fetch 제거용)
-const dataRaw = read(join(app, "src", "data", "passages.json"));
+// 2. 데이터: grammar-bank.json을 스크립트에 내장 (fetch 제거용)
+const dataRaw = read(join(app, "src", "data", "grammar-bank.json"));
 JSON.parse(dataRaw); // 유효성 검사
 const dataSafe = dataRaw.replace(/<\//g, "<\\/"); // </script> 조기 종료 방지
 
 // 3. JS: 모듈들을 한 스크립트로 (import/export 제거 + 단일 파일에 안 맞는 부분 치환)
-const storage = stripExports(read(join(hub, "shared", "storage.js")));
 const tokenize = stripExports(read(join(app, "src", "core", "tokenize.js")));
-const lesson = stripExports(read(join(app, "src", "core", "lesson.js")));
+const session = stripExports(read(join(app, "src", "core", "session.js")));
 let main = stripImports(read(join(app, "src", "main.js")));
 
 main = mustReplace(main, 'registerServiceWorker("/service-worker.js");', "", "SW 등록 제거");
 main = mustReplace(
   main,
-  `fetch("./src/data/passages.json", { cache: "no-cache" })
+  `fetch("./src/data/grammar-bank.json", { cache: "no-cache" })
   .then((r) => r.json())
   .then((data) => {
-    passages = data.passages;
-    renderPicker();
+    session = createSession(data.categories, { maxCount: MAX_SESSION_COUNT });
+    renderSentence();
   })
   .catch(() => {
     el.title.textContent = "오류";
-    el.stage.textContent = "지문을 불러오지 못했습니다.";
+    el.stage.textContent = "문장을 불러오지 못했습니다.";
   });`,
-  "passages = EMBEDDED_PASSAGES.passages;\nrenderPicker();",
+  "session = createSession(EMBEDDED_PASSAGES.categories, { maxCount: MAX_SESSION_COUNT });\nrenderSentence();",
   "데이터 인라인"
-);
-main = mustReplace(
-  main,
-  `  const homeBtn = document.createElement("a");
-  homeBtn.className = "btn btn-primary";
-  homeBtn.href = "../../";
-  homeBtn.textContent = "홈으로";
-  el.controls.append(againBtn, homeBtn);`,
-  `  againBtn.classList.add("btn-primary");
-  el.controls.append(againBtn);`,
-  "홈 버튼 제거(단일 파일엔 허브 홈 없음)"
 );
 
 const html = `<!doctype html>
@@ -71,7 +59,7 @@ const html = `<!doctype html>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
 <meta name="theme-color" content="#f6f8fc" />
-<title>영어 독해 사다리</title>
+<title>영어 문법 스캔 독해</title>
 <style>
 ${css}
 </style>
@@ -93,9 +81,8 @@ ${css}
 </div>
 <script>
 const EMBEDDED_PASSAGES = ${dataSafe};
-${storage}
 ${tokenize}
-${lesson}
+${session}
 ${main}
 </script>
 </body>

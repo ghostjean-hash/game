@@ -1,0 +1,107 @@
+{
+  "_schema": {
+    "note": "세션 기반 문법 스캔 데이터 - 카테고리별 문장 은행. 한 카테고리를 MAX_SESSION_COUNT 문제만큼 순환 훈련 후 다음 카테고리로 전환.",
+    "category": "{ id, title, sentences[] }",
+    "sentence": "{ text, chunks[{en,kr}], traps[{word, nth?, type, message}] }",
+    "rules": "traps.word는 text에 실재해야 하고(nth로 몇 번째인지 지정, 기본 1), type은 소속 category id와 일치, chunks.en을 이어 붙이면 원문과 일치"
+  },
+  "categories": [
+    {
+      "id": "it_dummy",
+      "title": "가목적어 it 패턴 공략",
+      "sentences": [
+        {
+          "text": "Many people find it natural to worry about how others perceive them.",
+          "chunks": [
+            { "en": "Many people find it natural", "kr": "많은 사람들은 자연스럽다는 것을 안다" },
+            { "en": "to worry about how others perceive them", "kr": "다른 사람들이 자신들을 어떻게 인지하는지 걱정하는 것이" }
+          ],
+          "traps": [
+            { "word": "it", "type": "it_dummy", "message": "정답! 가목적어 it입니다. 진짜 목적어는 뒤의 to부정사 덩어리입니다." }
+          ]
+        },
+        {
+          "text": "The internet makes it possible to access information from anywhere in the world.",
+          "chunks": [
+            { "en": "The internet makes it possible", "kr": "인터넷은 가능하게 만든다" },
+            { "en": "to access information", "kr": "정보에 접근하는 것을" },
+            { "en": "from anywhere in the world", "kr": "세계 어디에서든" }
+          ],
+          "traps": [
+            { "word": "it", "type": "it_dummy", "message": "정답! makes의 가목적어 it입니다. 진짜 목적어는 to access 이하 덩어리입니다." }
+          ]
+        },
+        {
+          "text": "She considered it rude to interrupt someone during a serious conversation.",
+          "chunks": [
+            { "en": "She considered it rude", "kr": "그녀는 무례하다고 여겼다" },
+            { "en": "to interrupt someone", "kr": "누군가에게 끼어드는 것을" },
+            { "en": "during a serious conversation", "kr": "진지한 대화 중에" }
+          ],
+          "traps": [
+            { "word": "it", "type": "it_dummy", "message": "정답! considered의 가목적어 it입니다. it은 자리만 지키고, 실제 내용은 to interrupt 이하입니다." }
+          ]
+        },
+        {
+          "text": "Smartphones have made it easy to compare ourselves with strangers online.",
+          "chunks": [
+            { "en": "Smartphones have made it easy", "kr": "스마트폰은 쉽게 만들었다" },
+            { "en": "to compare ourselves", "kr": "우리 자신을 비교하는 것을" },
+            { "en": "with strangers online", "kr": "온라인의 낯선 사람들과" }
+          ],
+          "traps": [
+            { "word": "it", "type": "it_dummy", "message": "정답! made의 가목적어 it입니다. 진짜 목적어는 to compare 이하입니다." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "to_adj",
+      "title": "To부정사 형용사적 용법 공략",
+      "sentences": [
+        {
+          "text": "Realizing this psychological bias is a powerful way to regain your confidence.",
+          "chunks": [
+            { "en": "Realizing this psychological bias", "kr": "이러한 심리적 편향을 깨닫는 것은" },
+            { "en": "is a powerful way to regain your confidence", "kr": "당신의 자신감을 되찾을 강력한 방법이다" }
+          ],
+          "traps": [
+            { "word": "to", "type": "to_adj", "message": "정답! 앞의 명사 way를 수식하는 To부정사 형용사적 용법입니다." }
+          ]
+        },
+        {
+          "text": "Everyone deserves a chance to prove their own worth.",
+          "chunks": [
+            { "en": "Everyone deserves a chance", "kr": "모든 사람은 기회를 가질 자격이 있다" },
+            { "en": "to prove their own worth", "kr": "자신의 가치를 증명할" }
+          ],
+          "traps": [
+            { "word": "to", "type": "to_adj", "message": "정답! 명사 chance를 꾸미는 형용사적 용법입니다. '증명할 기회'로 읽습니다." }
+          ]
+        },
+        {
+          "text": "We still have many problems to solve before the deadline.",
+          "chunks": [
+            { "en": "We still have many problems", "kr": "우리에게는 아직 많은 문제가 있다" },
+            { "en": "to solve", "kr": "해결해야 할" },
+            { "en": "before the deadline", "kr": "마감 전에" }
+          ],
+          "traps": [
+            { "word": "to", "type": "to_adj", "message": "정답! 명사 problems를 꾸미는 형용사적 용법입니다. '해결해야 할 문제들'로 읽습니다." }
+          ]
+        },
+        {
+          "text": "She finally found the courage to speak in front of the crowd.",
+          "chunks": [
+            { "en": "She finally found the courage", "kr": "그녀는 마침내 용기를 냈다" },
+            { "en": "to speak", "kr": "말할" },
+            { "en": "in front of the crowd", "kr": "군중 앞에서" }
+          ],
+          "traps": [
+            { "word": "to", "type": "to_adj", "message": "정답! 명사 courage를 꾸미는 형용사적 용법입니다. '말할 용기'로 읽습니다." }
+          ]
+        }
+      ]
+    }
+  ]
+}
