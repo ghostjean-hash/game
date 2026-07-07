@@ -30,7 +30,7 @@ export const CFG = {
     // weaver도 이제 가끔 조준 사격(fireEvery). gunner는 3발 확산(shots·spread)으로 탄막을 조밀하게.
     weaver: { r: 16, hp: 2, speed: 120, score: 150, amp: 70, freq: 2.4, fireEvery: 2.6 },
     gunner: { r: 18, hp: 3, speed: 70,  score: 250, fireEvery: 1.1, shots: 3, spread: 46 },
-    bonus:  { r: 17, hp: 5, speed: 210, score: 500 },
+    bonus:  { r: 17, hp: 5, speed: 130, score: 500 },
     // ── 11~20 구역 전용 신규 적 (docs/01_spec.md 5.6) ──
     // splitter: 죽으면 shard 조각으로 분열. shard: 그 조각(작고 빠름, 재분열 없음).
     splitter: { r: 19, hp: 4, speed: 105, score: 300, shardCount: 2, shardSpread: 150 },
