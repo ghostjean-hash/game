@@ -4,6 +4,7 @@ import { CFG } from '../data/numbers.js';
 
 export function render(ctx, game, W, H) {
   ctx.clearRect(0, 0, W, H);
+  drawBackground(ctx, game, W, H); // 구역별 색조 성운(깊이감)
   drawStars(ctx, game);
   drawZone(ctx, game);        // 플레이어 아래에 깔리는 에너지존 오라
   drawPowerups(ctx, game);
@@ -14,6 +15,20 @@ export function render(ctx, game, W, H) {
   drawOptions(ctx, game);     // 좌우 부속 비행기
   drawPlayer(ctx, game);
   drawParticles(ctx, game);
+}
+
+// 구역별 색조의 은은한 성운 2개(radial gradient). 깊이감 + 구역마다 다른 분위기.
+function drawBackground(ctx, game, W, H) {
+  const arr = COLORS.stageNebula;
+  const s = (game.stage || 1) - 1;
+  const c1 = arr[s % arr.length];
+  const c2 = arr[(s + 3) % arr.length];
+  let g = ctx.createRadialGradient(W * 0.28, H * 0.22, 0, W * 0.28, H * 0.22, W * 0.75);
+  g.addColorStop(0, c1); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  g = ctx.createRadialGradient(W * 0.74, H * 0.72, 0, W * 0.74, H * 0.72, W * 0.65);
+  g.addColorStop(0, c2); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 }
 
 // 에너지존: 플레이어 중심 반투명 오라(글로우 대신 radial gradient - 단일 요소라 발열 부담 적음).
