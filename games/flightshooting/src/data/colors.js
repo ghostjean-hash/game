@@ -54,4 +54,7 @@ export const COLORS = {
   zone: '#a98bff',        // 에너지존 오라(반투명으로 렌더 시 alpha 적용)
   // 에너지존(E) 레벨별 색(1~5, rgb 문자열 - drawZone이 alpha를 붙여 gradient 생성). 보라 → 라임으로 성장.
   zoneRgbByLevel: ['169,139,255', '139,180,255', '110,220,235', '110,240,180', '150,255,120'],
+  // 캐릭터: 플레이어 = 와라와라(하얀 둥근 정령), 옵션기 = 토토로(회색). 작은 실루엣으로 표현.
+  warawara: '#f6f8ff', warawaraGlow: '#dfe7ff', warawaraEye: '#33343d',
+  totoro: { laser: '#9aa0ab', missile: '#6b7280', belly: '#e6e8ec', eye: '#2b2b30' },
 };

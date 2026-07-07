@@ -37,14 +37,26 @@ function drawZone(ctx, game) {
 }
 
 // 옵션기: 작은 삼각 기체(레이저=시안, 미사일=주황). 최대 8대라 글로우 생략(발열).
+// 옵션기 = 토토로: 회색 통통한 몸 + 뾰족 귀 2개 + 흰 배 + 눈 2개. 레이저=밝은 회색, 미사일=진회색.
 function drawOptions(ctx, game) {
   for (const o of game.options) {
+    const body = o.type === 'laser' ? COLORS.totoro.laser : COLORS.totoro.missile;
+    const s = 6;
     ctx.save();
     ctx.translate(o.x, o.y);
-    ctx.fillStyle = o.type === 'laser' ? COLORS.option : COLORS.missile;
-    ctx.beginPath();
-    ctx.moveTo(0, -7); ctx.lineTo(-5, 5); ctx.lineTo(0, 2); ctx.lineTo(5, 5); ctx.closePath();
-    ctx.fill();
+    ctx.fillStyle = body;
+    // 귀 2개(위 뾰족)
+    ctx.beginPath(); ctx.moveTo(-s * 0.5, -s * 0.7); ctx.lineTo(-s * 0.8, -s * 1.5); ctx.lineTo(-s * 0.12, -s * 0.9); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(s * 0.5, -s * 0.7); ctx.lineTo(s * 0.8, -s * 1.5); ctx.lineTo(s * 0.12, -s * 0.9); ctx.closePath(); ctx.fill();
+    // 몸통(회색 타원)
+    ctx.beginPath(); ctx.ellipse(0, 0, s, s * 1.15, 0, 0, Math.PI * 2); ctx.fill();
+    // 흰 배
+    ctx.fillStyle = COLORS.totoro.belly;
+    ctx.beginPath(); ctx.ellipse(0, s * 0.25, s * 0.55, s * 0.72, 0, 0, Math.PI * 2); ctx.fill();
+    // 눈 2개
+    ctx.fillStyle = COLORS.totoro.eye;
+    ctx.beginPath(); ctx.arc(-s * 0.35, -s * 0.2, 1.1, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(s * 0.35, -s * 0.2, 1.1, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
   }
 }
@@ -59,27 +71,27 @@ function drawStars(ctx, game) {
   ctx.globalAlpha = 1;
 }
 
+// 플레이어 = 와라와라: 위가 좁고 아래가 통통한 하얀 물방울 몸통 + 검은 점 눈 2개 + 부드러운 발광.
 function drawPlayer(ctx, game) {
   const p = game.player;
   if (!p) return;
   if (p.inv > 0 && Math.floor(p.inv * 12) % 2 === 0) return; // 무적 깜빡
+  const r = p.r;
   ctx.save();
   ctx.translate(p.x, p.y);
-  ctx.shadowColor = COLORS.player;
-  ctx.shadowBlur = 14;
-  // 엔진 불꽃(아래)
-  ctx.fillStyle = COLORS.engine;
+  ctx.shadowColor = COLORS.warawaraGlow;
+  ctx.shadowBlur = 12;
+  ctx.fillStyle = COLORS.warawara;
   ctx.beginPath();
-  const fl = p.r * (1.1 + Math.random() * 0.5);
-  ctx.moveTo(-5, p.r); ctx.lineTo(0, p.r + fl); ctx.lineTo(5, p.r); ctx.closePath();
+  ctx.moveTo(0, -r - 2);
+  ctx.bezierCurveTo(-r * 1.05, -r * 0.5, -r * 0.95, r, 0, r + 1);
+  ctx.bezierCurveTo(r * 0.95, r, r * 1.05, -r * 0.5, 0, -r - 2);
+  ctx.closePath();
   ctx.fill();
-  // 기체(위쪽 향한 삼각형)
-  ctx.fillStyle = COLORS.player;
-  ctx.beginPath();
-  ctx.moveTo(0, -p.r - 4); ctx.lineTo(-p.r, p.r); ctx.lineTo(0, p.r * 0.4); ctx.lineTo(p.r, p.r); ctx.closePath();
-  ctx.fill();
-  ctx.fillStyle = COLORS.playerCore;
-  ctx.beginPath(); ctx.arc(0, 0, 3.5, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = COLORS.warawaraEye;
+  ctx.beginPath(); ctx.arc(-r * 0.32, -r * 0.08, 2, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(r * 0.32, -r * 0.08, 2, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
 }
 
