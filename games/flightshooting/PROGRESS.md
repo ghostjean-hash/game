@@ -283,3 +283,22 @@
 - HUD 버튼 이모지(봇·스피커·일시정지/재생)를 Lucide 스타일 라인 SVG로 교체(토글 상태도 SVG). 목숨 하트 3개 + 조작법 안내 하트도 SVG로, 메뉴 '자동 플레이로 시작' 버튼에 봇 SVG + 텍스트, 파워업 회복(H)의 하트는 캔버스 도형으로 렌더.
 - 기존 SVG였던 전체화면 버튼과 톤 통일. index.html·main.js·view.js·styles/main.css 반영.
 - browser-shot로 메뉴·게임 HUD 모두 이모지 없이 아이콘 렌더 확인, pageerror 0.
+
+## 2026-07-08 - 전방화력 만렙 후 탄 모양 진화 (사용자 지시)
+
+전방화력(P)이 8(만렙)에 닿은 뒤 P를 더 먹으면 점수로만 처리돼 성장감이 끊기던 공백을, 탄 모양 4단계 진화로 메웠다(사용자 발의 + 확정).
+
+### 기능
+- 만렙 후 P 획득 시 탄 수(8발)·히트박스는 P8 기준으로 두고 탄 모양만 4단계 진화: 원(굵은 구슬) → 타원(럭비공) → 긴형(레이저빔) → 링(발광 고리). 갈수록 존재감이 커지고 링만 형태 축을 바꿔 최종·최강을 표시.
+- 첫 단계를 '원'으로 시작해도 지금 기본 타원보다 굵고 크게 잡아 퇴화로 안 보이게(사용자 정정: "원은 더 큰 모양이라 퇴화 아님").
+- 모양이 한 단계 오를 때 데미지도 shapeDmg(1)씩 상승(원 +1 … 링 +4). 4단계 다 채운 뒤 P는 기존 maxedBonus 점수. 피격 시엔 'shape'가 partHistory 역순 상 front보다 먼저 손실.
+- HUD 전방화력 칸: 만렙 ★, 진화 시 ★1~★4로 티어 표시. 매직넘버는 numbers.js bullet.shapes(렌더 배율) / parts.front.shapeDmg(데미지)에 정의.
+- 바뀐 파일: fire.js(frontSpec에 shapeTier 인자·탄 shape 실음), parts.js(gainFront 만렙 후 shape 진화·loseLastPart shape 손실), numbers.js, view.js(drawBullets 모양별 렌더·링 stroke), main.js(shapeTier 상태·HUD·dev훅 shape/auto), docs 01·02·05.
+
+### 검증
+- core 테스트 44/44 PASS(기존 41 + 신규 3: 모양 티어 데미지 상승·티어 올라도 탄 수 8 고정·모양 역순 손실). browser-shot로 test.html 44 PASS 캡처 확인.
+- dev 훅 확장(?dev=1&auto=1&shape=1~4)으로 4단계 모양을 실제 게임 화면에서 캡처, 원→타원→긴형→링 형태 변화 + HUD ★1~★4 육안 확인, pageerror 0.
+
+### 사고: 다른 세션 deploy 자동 커밋에 변경분 섞임
+- 위 flightshooting 변경 전부(docs 3 + fire/parts/numbers/main/view + tests)가 작업 중 다른 세션의 배포 자동화 커밋 `559c0a0 deploy: game-hub 갱신 (2026-07-07T16:40:33.697Z)`에 통째로 담겨 이미 커밋·push(배포)됐다. 코드는 최신 완성본 그대로 무손실이나, 의도한 기능 커밋 메시지(feat) 대신 무관한 deploy 메시지로 기록된 이력 추적성 손상.
+- 이미 push된 공유 이력이라 rebase reword는 파괴적·위험 판단, 되돌리지 않고 본 봉합 문서에 경위를 남겨 추적성을 보완. 근본(배포 자동화가 무관 working tree까지 add하는 결함)은 글로벌 web-deploy 영역이라 도메인에서 못 고침 → buffer 인계 대상.

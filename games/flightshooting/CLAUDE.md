@@ -63,4 +63,5 @@ games/flightshooting/
 
 - 2026-07-06: html-game v0.3.2 적용 (game.js 단일 → src 모듈 분리 + docs + tests + 전체화면 버튼).
 - 2026-07-07: 단일 화력(1~20) → 3계통 파워 파츠(전방/옵션기/에너지존) 재구조화. `core/parts.js` 신설, docs/05.
+- 2026-07-08: 전방화력 만렙(P8) 후 탄 모양 4단계 진화(원→타원→긴형→링) + 단계당 데미지 상승. `bullet.shapes`/`front.shapeDmg`, docs/05 1.1.1.
 - 진행/완료/다음 작업은 `PROGRESS.md` 참조.
