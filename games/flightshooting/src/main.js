@@ -31,6 +31,7 @@ const elBossName = $('#boss-name');
 const elBossFill = $('#boss-hp-fill');
 const elBanner = $('#banner');
 const btnStart = $('#btn-start');
+const btnAutoStart = $('#btn-auto-start');
 const btnHow = $('#btn-how');
 const btnMute = $('#btn-mute');
 const btnPause = $('#btn-pause');
@@ -153,6 +154,7 @@ function startGame() {
   gameScreen.hidden = false;
   resize();
   resetGame();
+  setAutopilot(false); // 시작 시 기본은 수동(자동 시작 버튼이 이후 다시 켬)
   state = 'playing';
   syncHud();
   sound.play('start');
@@ -245,12 +247,14 @@ btnMute.addEventListener('click', () => {
   btnMute.textContent = m ? '🔇' : '🔊';
   btnMute.setAttribute('aria-label', m ? '소리 켜기' : '소리 끄기');
 });
-btnAuto.addEventListener('click', () => {
-  game.autopilot = !game.autopilot;
-  btnAuto.classList.toggle('on', game.autopilot);
-  btnAuto.setAttribute('aria-pressed', String(game.autopilot));
-  btnAuto.setAttribute('aria-label', game.autopilot ? '자동 플레이 끄기' : '자동 플레이 켜기');
-});
+function setAutopilot(on) {
+  game.autopilot = on;
+  btnAuto.classList.toggle('on', on);
+  btnAuto.setAttribute('aria-pressed', String(on));
+  btnAuto.setAttribute('aria-label', on ? '자동 플레이 끄기' : '자동 플레이 켜기');
+}
+btnAuto.addEventListener('click', () => setAutopilot(!game.autopilot));
+btnAutoStart.addEventListener('click', () => { startGame(); setAutopilot(true); });
 canvas.addEventListener('click', () => { if (state === 'paused') togglePause(); });
 
 elMenuBest.textContent = best;
