@@ -66,6 +66,11 @@ test('front는 1 밑으로 안 내려감', () => {
 test('buildWaves(1) 존재', () => { const w = buildWaves(1); ok(w.length > 0); ok(w.every((x) => typeof x.t === 'number' && Array.isArray(x.enemies))); });
 test('buildWaves(10) 유효', () => { const w = buildWaves(10); ok(w.length > 0); ok(w.every((x) => x.enemies.every((e) => e.type && typeof e.xr === 'number'))); });
 test('stageName 1~10', () => { for (let n = 1; n <= 10; n++) ok(stageName(n).length > 0, `구역 ${n} 이름 없음`); });
+test('buildWaves 후반이 초반보다 웨이브 많음', () => { ok(buildWaves(10).length > buildWaves(1).length); });
+test('buildWaves 후반 적 총수 더 많음', () => {
+  const cnt = (st) => buildWaves(st).reduce((a, w) => a + w.enemies.length, 0);
+  ok(cnt(10) > cnt(1));
+});
 
 // ── hit: 원-원 충돌 ──
 test('hit 겹침', () => { ok(hit({ x: 0, y: 0, r: 10 }, { x: 5, y: 0, r: 10 })); });

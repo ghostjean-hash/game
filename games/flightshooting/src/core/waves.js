@@ -9,13 +9,17 @@ export function buildWaves(stage) {
   let t = 1.0;
   const add = (type, xs) => { w.push({ t, enemies: xs.map((xr) => ({ type, xr })) }); };
 
-  add('drone', cols(3 + Math.min(s, 4)));
-  t += 2.2; add('weaver', cols(2 + Math.min(s, 3)));
-  t += 2.4; add('drone', cols(4 + Math.min(s, 4)));
-  t += 2.2; add('gunner', cols(2 + Math.min(s, 2)));
-  t += 3.0; add('weaver', cols(3 + Math.min(s, 3)));
-  t += 2.6; add('drone', cols(4 + Math.min(s, 4)));
-  if (s >= 1) { t += 2.4; add('gunner', cols(2 + Math.min(s, 3))); }
+  // 웨이브 수·마리 수를 늘려 일반 구간을 더 길고 빽빽하게(적 더 많이).
+  add('drone', cols(4 + Math.min(s, 5)));
+  t += 2.0; add('weaver', cols(3 + Math.min(s, 4)));
+  t += 2.2; add('drone', cols(5 + Math.min(s, 5)));
+  t += 2.0; add('gunner', cols(2 + Math.min(s, 3)));
+  t += 2.4; add('weaver', cols(4 + Math.min(s, 4)));
+  t += 2.2; add('drone', cols(5 + Math.min(s, 5)));
+  t += 2.4; add('gunner', cols(3 + Math.min(s, 3)));
+  t += 2.2; add('weaver', cols(4 + Math.min(s, 4)));
+  if (s >= 1) { t += 2.4; add('drone', cols(6 + Math.min(s, 4))); }
+  if (s >= 2) { t += 2.2; add('gunner', cols(3 + Math.min(s, 3))); }
   return w;
 }
 

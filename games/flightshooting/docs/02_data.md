@@ -13,7 +13,7 @@
 - `miniBoss`: rx,ry / baseHp / hpPerStage / score / escortEvery(호위 소환 간격) / escortInit(등장 시 호위 수).
 - `finalBoss`: rx,ry / hp / score.
 - `boss`: bobAmp / bobFreq(좌우 유영 폭·속도).
-- `stageCount`: 10. `starCount`: 배경 별 수.
+- `stageCount`: 10. `stageIntro`: 구역 시작 배너 표시 + 적 스폰 정지 시간(초). `starCount`: 배경 별 수.
 - `STAGE_NAMES`: 구역 1~10 이름 배열.
 
 ## 2. 전방 화력 (`src/core/fire.js` → `frontSpec(L)`)

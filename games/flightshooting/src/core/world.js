@@ -253,7 +253,8 @@ export function startStage(game) {
   game.bossPending = false;
   game.transitioning = false; // 새 구역 웨이브 준비 완료 → 진행 판정 재개
   game.pendingTimer = null;
-  game.events.push({ type: 'banner', big: `구역 ${game.stage}`, sub: stageName(game.stage), dur: 1.8 });
+  game.introTimer = CFG.stageIntro; // 구역 시작 배너 표시 동안 적 스폰 정지
+  game.events.push({ type: 'banner', big: `구역 ${game.stage}`, sub: stageName(game.stage), dur: CFG.stageIntro });
 }
 
 function nextStage(game) {
@@ -288,6 +289,17 @@ function checkProgress(game, dt, W, H) {
 }
 
 export function stepWorld(game, dt, W, H) {
+  // 구역 시작 인트로(다음 구역 배너 표시) 중: 적 스폰·웨이브 진행 정지, 화면 요소만 갱신.
+  if (game.introTimer > 0) {
+    game.introTimer -= dt;
+    if (game.player.inv > 0) game.player.inv -= dt;
+    updateStars(game, dt, W, H);
+    stepOptions(game, dt);
+    homeMissiles(game, dt);
+    updateBullets(game, dt, W, H);
+    updateParticles(game, dt);
+    return;
+  }
   game.elapsed += dt;
   if (game.player.inv > 0) game.player.inv -= dt;
   updateStars(game, dt, W, H);

@@ -30,12 +30,15 @@ export const CFG = {
   // 구역이 오를수록 적 체력 상승: hp = ceil(base * (1 + (stage-1)*scale)). 10구역 ≈ 3.5배.
   enemyHpScale: 0.28,
   // 드롭 5종 가중치(합 1): P 전방화력 / S 옵션기 / E 에너지존 / H 회복 / B 봄.
-  drop: { chance: 0.3, weights: { P: 0.34, S: 0.28, E: 0.16, H: 0.12, B: 0.10 } },
+  // P는 이전(0.34)의 절반(0.17)로 낮추고 줄인 몫을 다른 파츠(S·E)에 배분.
+  drop: { chance: 0.3, weights: { P: 0.17, S: 0.38, E: 0.23, H: 0.12, B: 0.10 } },
   // 중보스(1~9구역): 작고 hp 낮음 + 호위 비행체 주기 소환. 최종보스(10구역): 크고 단단한 2패턴.
-  miniBoss: { rx: 30, ry: 26, baseHp: 55, hpPerStage: 22, score: 900, escortEvery: 3.2, escortInit: 3 },
-  finalBoss: { rx: 50, ry: 44, hp: 420, score: 6000 },
+  // hp는 3계통 화력 성장에 맞춰 상향(중보스 baseHp 55→90·구역당 22→32, 최종 420→980).
+  miniBoss: { rx: 30, ry: 26, baseHp: 90, hpPerStage: 32, score: 900, escortEvery: 3.2, escortInit: 3 },
+  finalBoss: { rx: 50, ry: 44, hp: 980, score: 6000 },
   boss: { bobAmp: 0.32, bobFreq: 0.5 },
   stageCount: 10,
+  stageIntro: 2.2, // 구역 시작 배너 표시 동안 적 스폰 정지(초)
   starCount: 70,
   // 발열/성능: 화면에 쌓이는 오브젝트 상한(초과분은 오래된 것부터 제거).
   limits: { bullets: 160, eBullets: 140, particles: 240 },
