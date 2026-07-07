@@ -1,0 +1,1394 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#f6f8fc" />
+<title>영어 독해 사다리</title>
+<style>
+/* 디자인 토큰. 모든 게임이 공유하여 통일감 확보. */
+:root {
+  /* Color */
+  --bg: #0e0f13;
+  --bg-elev: #161823;
+  --bg-elev-2: #1f2233;
+  --fg: #e8ecf5;
+  --fg-dim: #9aa3b8;
+  --fg-mute: #6b7388;
+  --accent: #7cf3c4;
+  --accent-strong: #4ad8a3;
+  --warn: #f7c948;
+  --danger: #ff6b81;
+  --line: #2a2e44;
+
+  /* 게임 블록 팔레트(테트리스/스도쿠 등 공유) */
+  --c1: #7cf3c4; /* I */
+  --c2: #f7c948; /* O */
+  --c3: #b48cff; /* T */
+  --c4: #4ad8a3; /* S */
+  --c5: #ff6b81; /* Z */
+  --c6: #5aa9ff; /* J */
+  --c7: #ffa05c; /* L */
+
+  /* Type */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* Radius */
+  --r-1: 6px;
+  --r-2: 10px;
+  --r-3: 14px;
+  --r-4: 20px;
+
+  /* Shadow */
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-2: 0 4px 16px rgba(0,0,0,0.4);
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-1: 120ms;
+  --dur-2: 220ms;
+}
+
+/* 다크 테마 레이어. 무테마 뷰포트 골격(reset·safe-area·터치·overflow 고정)은
+   shared/mobile-shell.css가 담당하고, 여기서는 색·폰트·컴포넌트를 얹는다.
+   @import는 CSS 규칙상 파일 최상단이어야 유효하다. */
+@import './mobile-shell.css';
+
+body {
+  font-family: var(--font-sans);
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.4;
+}
+a { color: var(--accent); text-decoration: none; }
+
+/* 공통 버튼 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  color: var(--fg);
+  font-weight: 600;
+  font-size: 15px;
+  transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+  border: 1px solid var(--line);
+}
+.btn:hover { background: var(--bg-elev-2); }
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+  background: var(--accent);
+  color: #0a0c10;
+  border-color: transparent;
+}
+.btn-primary:hover { background: var(--accent-strong); }
+
+/* 공통 HUD */
+.hud {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+}
+.hud-label { color: var(--fg-mute); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+.hud-value { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--fg); }
+
+/* 공통 모달 */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(8, 9, 14, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: grid; place-items: center;
+  z-index: 100;
+  animation: fadeIn var(--dur-2) var(--ease);
+}
+.modal {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--sp-5);
+  max-width: min(420px, 92vw);
+  box-shadow: var(--shadow-2);
+}
+.modal h2 { margin: 0 0 var(--sp-3); font-size: 20px; }
+.modal p { margin: 0 0 var(--sp-4); color: var(--fg-dim); white-space: pre-line; }
+.modal-actions { display: flex; gap: var(--sp-2); justify-content: flex-end; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* 페이지 공통 레이아웃 */
+.page {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-elev);
+}
+.topbar h1 { margin: 0; font-size: 16px; font-weight: 700; }
+.topbar .spacer { flex: 1; }
+
+/* 영어 독해 사다리 앱 전용 스타일. 색·간격·폰트는 shared/tokens.css 변수 사용. */
+
+/* 라이트 테마 - 이 앱만 밝은 학습 화면. 허브 공용 다크 토큰을 앱 범위(body)에서 재정의한다.
+   base.css의 body/.btn/.modal 등이 이 변수들을 참조하므로 값만 바꾸면 라이트로 전환된다. */
+body {
+  --bg: #f6f8fc;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #eef2f9;
+  --fg: #1a1e28;
+  --fg-dim: #56607a;
+  --fg-mute: #8a93a8;
+  --line: #dde3ee;
+  --accent: #3b82f6;
+  --accent-strong: #2563eb;
+  --shadow-1: 0 1px 2px rgba(30,40,70,0.06), 0 2px 8px rgba(30,40,70,0.05);
+  --shadow-2: 0 6px 20px rgba(30,40,70,0.12);
+  background: var(--bg);
+  color: var(--fg);
+
+  /* 학습 피드백 색 */
+  --er-accent: #3b82f6;
+  --ok: #16a34a;
+  --ok-bg: #dcfce7;
+  --learn: #d97706;
+  --learn-bg: #fef3c7;
+  --wrong: #dc2626;
+  --wrong-bg: #fee2e2;
+}
+
+.lesson-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* 상단바 */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+}
+.topbar .home {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--fg);
+  text-decoration: none;
+  border-radius: var(--r-2);
+  border: 1px solid var(--line);
+  background: var(--bg-elev);
+}
+.topbar .home:active { transform: scale(0.95); }
+.lesson-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.lesson-title { font-size: 15px; font-weight: 700; color: var(--er-accent); }
+.lesson-progress { font-size: 12px; color: var(--fg-mute); font-variant-numeric: tabular-nums; }
+
+/* 진행 바 - 문장 진행에 따라 좌→우로 찬다 */
+.bar { height: 4px; background: var(--bg-elev-2); flex-shrink: 0; }
+.bar-fill {
+  height: 100%;
+  width: 0;
+  background: var(--er-accent);
+  border-radius: 0 999px 999px 0;
+  transition: width 0.35s var(--ease);
+}
+
+/* 지문 고르기 */
+.passage-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+.passage-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--sp-4);
+  text-align: left;
+  background: var(--bg-elev);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--dur-1) var(--ease), transform var(--dur-1) var(--ease);
+}
+.passage-card:active { transform: scale(0.98); }
+@media (hover: hover) {
+  .passage-card:hover { border-color: var(--er-accent); }
+}
+.p-head { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.p-title { font-size: 17px; font-weight: 800; color: var(--fg); }
+.p-meta { font-size: 13px; color: var(--fg-mute); }
+.badge-done {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ok);
+  background: var(--ok-bg);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+/* 내 단어장 (지문 고르기 화면 하단) */
+.wordbook {
+  margin-top: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+}
+.wb-chip { border: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+/* 본문 */
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-4) var(--sp-6);
+  overflow-y: auto;
+}
+.instruction { font-size: 13px; color: var(--fg-dim); text-align: center; }
+
+/* 문장 */
+.sentence {
+  font-size: 23px;
+  line-height: 1.7;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  word-break: keep-all;
+  text-align: center;
+}
+.word {
+  display: inline-block;
+  padding: 1px 2px;
+  border-radius: var(--r-1);
+  -webkit-tap-highlight-color: transparent;
+}
+.word.plain { color: var(--fg); }
+.word.guess {
+  cursor: pointer;
+  color: var(--er-accent);
+  border-bottom: 2px dotted var(--er-accent);
+  transition: background var(--dur-1) var(--ease);
+}
+@media (hover: hover) {
+  .word.guess:hover { background: var(--bg-elev-2); }
+}
+.word.solved-correct {
+  color: var(--ok);
+  border-bottom: 2px solid var(--ok);
+  cursor: default;
+}
+.word.solved-learned {
+  color: var(--learn);
+  border-bottom: 2px solid var(--learn);
+  cursor: default;
+}
+
+/* 보기 패널 (추측·구조·요지 공통) */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-radius: var(--r-3);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1);
+  animation: er-pop 0.22s var(--ease);
+}
+.panel.structure { border-color: var(--er-accent); }
+@keyframes er-pop {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.panel-q {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.label-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--er-accent);
+  background: #eaf1ff;
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+/* 보기 버튼 */
+.options { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.options-col { flex-direction: column; }
+.option {
+  flex: 1 1 auto;
+  min-width: 96px;
+  padding: 13px 14px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+}
+.options-col .option { width: 100%; flex: 0 0 auto; text-align: left; }
+@media (hover: hover) {
+  .option:not(:disabled):hover { border-color: var(--er-accent); background: var(--bg-elev-2); }
+}
+.option:disabled { cursor: default; }
+.option.correct {
+  color: var(--ok);
+  background: var(--ok-bg);
+  border-color: var(--ok);
+}
+.option.wrong {
+  color: var(--wrong);
+  background: var(--wrong-bg);
+  border-color: var(--wrong);
+}
+
+/* 피드백 */
+.feedback {
+  font-size: 14px;
+  font-weight: 700;
+  animation: er-pop 0.2s var(--ease);
+}
+.feedback.ok { color: var(--ok); }
+.feedback.learn { color: var(--learn); }
+
+/* 힌트 / 끊어읽기 버튼 */
+.hint {
+  font-size: 13.5px;
+  color: var(--fg-dim);
+  line-height: 1.5;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-elev-2);
+  border-radius: var(--r-2);
+}
+.hint-btn, .chunk-btn {
+  align-self: flex-start;
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+/* 끊어읽기 청킹 */
+.chunks { display: flex; flex-direction: column; gap: var(--sp-2); }
+.chunk {
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  opacity: 0;
+  animation: er-slide 0.35s var(--ease) forwards;
+}
+@keyframes er-slide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.chunk-en { font-size: 15px; font-weight: 700; color: var(--fg); }
+.chunk-kr { font-size: 13.5px; color: var(--er-accent); margin-top: 3px; }
+
+/* 요지 단계 전문 */
+.full-text {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--fg);
+  padding: var(--sp-4);
+  border-radius: var(--r-3);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+}
+
+/* 정리 단계 */
+.summary-title { font-size: 22px; font-weight: 800; text-align: center; color: var(--fg); }
+.summary-stat { font-size: 15px; text-align: center; color: var(--fg-dim); }
+.summary-line { font-size: 14px; text-align: center; color: var(--fg-mute); }
+.word-group { display: flex; flex-direction: column; gap: var(--sp-2); }
+.word-group-label { font-size: 13px; font-weight: 700; color: var(--fg-dim); }
+.chips { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.chip {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.chip-correct { color: var(--ok); background: var(--ok-bg); }
+.chip-learned { color: var(--learn); background: var(--learn-bg); }
+
+/* 하단 조작 */
+.controls {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-top: 1px solid var(--line);
+}
+.controls:empty { display: none; }
+.controls .btn { flex: 1; padding: 14px; font-size: 15px; text-align: center; }
+.lesson-page .btn-primary { background: var(--er-accent); color: #ffffff; }
+.lesson-page .btn-primary:hover { background: var(--accent-strong); }
+.lesson-page .btn-primary:disabled { opacity: 0.45; }
+
+</style>
+</head>
+<body>
+<div class="page lesson-page">
+  <header class="topbar">
+    <div class="lesson-info">
+      <div class="lesson-title" id="lesson-title">불러오는 중…</div>
+      <div class="lesson-progress" id="lesson-progress"></div>
+    </div>
+  </header>
+
+  <div class="bar" aria-hidden="true"><div class="bar-fill" id="bar-fill"></div></div>
+
+  <main class="stage" id="stage" aria-live="polite"></main>
+
+  <footer class="controls" id="controls"></footer>
+</div>
+<script>
+const EMBEDDED_PASSAGES = {
+  "_schema": {
+    "note": "독해 사다리 데이터 (기획서 v0.2). 지문 단위. 문장마다 청킹 + 추측 단어(뜻 후보 3개) + 어려운 문장엔 구조 확인 문항. 지문 끝에 요지 문항.",
+    "passage": "{ id, title, level, sentences[], gistQ }",
+    "sentence": "{ text, chunks[{en,kr}], guessWords[{word, options[3], answer, hint}], structureQ?{prompt, options[3], answer, label} }",
+    "gistQ": "{ prompt, options[3], answer }",
+    "labels": ["주어·동사 찾기", "관계대명사절", "대명사 지시", "to부정사·동명사", "접속사로 이어진 절", "시제·수동태·비교"]
+  },
+  "passages": [
+    {
+      "id": "yawn",
+      "title": "하품은 왜 전염될까",
+      "level": 1,
+      "sentences": [
+        {
+          "text": "Have you ever noticed that yawning is contagious?",
+          "chunks": [
+            { "en": "Have you ever noticed", "kr": "너는 알아챈 적 있니" },
+            { "en": "that yawning is contagious", "kr": "하품이 전염된다는 것을" }
+          ],
+          "guessWords": [
+            { "word": "contagious", "options": ["전염되는", "위험한", "지루한"], "answer": 0, "hint": "감기처럼 남에게 옮는다는 맥락이에요" }
+          ]
+        },
+        {
+          "text": "When you see someone yawn, you often feel the urge to yawn too.",
+          "chunks": [
+            { "en": "When you see someone yawn", "kr": "누군가 하품하는 걸 보면" },
+            { "en": "you often feel the urge", "kr": "너는 종종 충동을 느낀다" },
+            { "en": "to yawn too", "kr": "너도 하품하고 싶은" }
+          ],
+          "guessWords": [
+            { "word": "urge", "options": ["충동", "약속", "실수"], "answer": 0, "hint": "하품하고 싶은 ~을 느낀다" }
+          ],
+          "structureQ": {
+            "prompt": "'to yawn too'는 문장에서 무엇을 꾸미나요?",
+            "options": ["the urge (충동)", "you (너)", "see (보다)"],
+            "answer": 0,
+            "label": "to부정사·동명사"
+          }
+        },
+        {
+          "text": "Scientists believe this happens because humans are deeply social.",
+          "chunks": [
+            { "en": "Scientists believe", "kr": "과학자들은 믿는다" },
+            { "en": "this happens", "kr": "이것이 일어난다고" },
+            { "en": "because humans are deeply social", "kr": "인간이 깊이 사회적이기 때문에" }
+          ],
+          "guessWords": [
+            { "word": "deeply", "options": ["깊이", "거의", "드물게"], "answer": 0, "hint": "'매우, 깊이'라는 정도를 나타내요" }
+          ],
+          "structureQ": {
+            "prompt": "여기서 'this'가 가리키는 것은 무엇인가요?",
+            "options": ["하품이 전염되는 것", "과학자들", "사회생활"],
+            "answer": 0,
+            "label": "대명사 지시"
+          }
+        },
+        {
+          "text": "Our brains are wired to copy the people around us.",
+          "chunks": [
+            { "en": "Our brains are wired", "kr": "우리 뇌는 ~하도록 되어 있다" },
+            { "en": "to copy the people around us", "kr": "우리 주변 사람들을 따라 하도록" }
+          ],
+          "guessWords": [
+            { "word": "wired", "options": ["~하도록 되어 있는", "피곤한", "젖은"], "answer": 0, "hint": "뇌가 그렇게 하도록 설계됐다는 맥락이에요" }
+          ]
+        },
+        {
+          "text": "This copying helped early humans stay connected and work together.",
+          "chunks": [
+            { "en": "This copying helped early humans", "kr": "이 따라 하기는 초기 인간이 ~하도록 도왔다" },
+            { "en": "stay connected and work together", "kr": "연결되고 함께 일하도록" }
+          ],
+          "guessWords": [
+            { "word": "connected", "options": ["연결된", "혼란스러운", "사라진"], "answer": 0, "hint": "함께 일하는 것과 나란히 놓인 맥락이에요" }
+          ]
+        },
+        {
+          "text": "So the next time you yawn after someone else, remember it is a sign of your social brain at work.",
+          "chunks": [
+            { "en": "So the next time you yawn", "kr": "그러니 다음번에 네가 하품할 때" },
+            { "en": "after someone else", "kr": "다른 누군가의 뒤를 이어" },
+            { "en": "remember it is a sign", "kr": "그것이 신호임을 기억해라" },
+            { "en": "of your social brain at work", "kr": "작동 중인 너의 사회적 뇌의" }
+          ],
+          "guessWords": [
+            { "word": "sign", "options": ["신호", "죄", "서명"], "answer": 0, "hint": "무언가를 나타내는 표시예요" }
+          ]
+        }
+      ],
+      "gistQ": {
+        "prompt": "이 글은 무슨 내용인가요?",
+        "options": [
+          "하품은 몸이 피곤할 때 나오는 신호다",
+          "하품이 전염되는 것은 인간이 사회적인 존재이기 때문이다",
+          "하품을 참는 여러 가지 방법"
+        ],
+        "answer": 1
+      }
+    },
+    {
+      "id": "ants",
+      "title": "개미는 어떻게 길을 찾을까",
+      "level": 1,
+      "sentences": [
+        {
+          "text": "Ants are tiny, but they are amazing at finding their way home.",
+          "chunks": [
+            { "en": "Ants are tiny", "kr": "개미는 아주 작다" },
+            { "en": "but they are amazing", "kr": "하지만 그들은 놀랍다" },
+            { "en": "at finding their way home", "kr": "집으로 가는 길을 찾는 데" }
+          ],
+          "guessWords": [
+            { "word": "tiny", "options": ["게으른", "아주 작은", "시끄러운"], "answer": 1, "hint": "but 뒤의 '놀랍다'와 대비되는, 크기에 대한 말이에요" }
+          ]
+        },
+        {
+          "text": "When an ant finds food, it leaves a special smell on the ground.",
+          "chunks": [
+            { "en": "When an ant finds food", "kr": "개미가 먹이를 찾으면" },
+            { "en": "it leaves a special smell", "kr": "특별한 냄새를 남긴다" },
+            { "en": "on the ground", "kr": "땅 위에" }
+          ],
+          "guessWords": [
+            { "word": "leaves", "options": ["나뭇잎들", "남긴다", "떠난다"], "answer": 1, "hint": "냄새를 땅 위에 ~한다. 여기서는 동사예요" }
+          ],
+          "structureQ": {
+            "prompt": "이 문장에서 'it'이 가리키는 것은 무엇인가요?",
+            "options": ["개미 (an ant)", "먹이 (food)", "땅 (the ground)"],
+            "answer": 0,
+            "label": "대명사 지시"
+          }
+        },
+        {
+          "text": "Other ants smell it and follow the same path to the food.",
+          "chunks": [
+            { "en": "Other ants smell it", "kr": "다른 개미들이 그 냄새를 맡고" },
+            { "en": "and follow the same path", "kr": "같은 길을 따라간다" },
+            { "en": "to the food", "kr": "먹이가 있는 곳까지" }
+          ],
+          "guessWords": [
+            { "word": "path", "options": ["파티", "벽", "길"], "answer": 2, "hint": "따라가는(follow) 것이니, 지나다니는 ~이에요" }
+          ]
+        },
+        {
+          "text": "As more ants walk on it, the smell becomes stronger and stronger.",
+          "chunks": [
+            { "en": "As more ants walk on it", "kr": "더 많은 개미가 그 위를 걸을수록" },
+            { "en": "the smell becomes", "kr": "냄새는 ~해진다" },
+            { "en": "stronger and stronger", "kr": "점점 더 강하게" }
+          ],
+          "guessWords": [
+            { "word": "stronger", "options": ["더 강한", "더 이상한", "더 조용한"], "answer": 0, "hint": "개미가 많이 지나갈수록 냄새가 어떻게 될까요" }
+          ],
+          "structureQ": {
+            "prompt": "'stronger and stronger'는 어떤 느낌을 주나요?",
+            "options": ["점점 더 강해진다", "가장 강하다", "전혀 강하지 않다"],
+            "answer": 0,
+            "label": "시제·수동태·비교"
+          }
+        },
+        {
+          "text": "That is why you sometimes see a long line of ants in summer.",
+          "chunks": [
+            { "en": "That is why", "kr": "그것이 ~한 이유다" },
+            { "en": "you sometimes see", "kr": "네가 가끔 보는" },
+            { "en": "a long line of ants", "kr": "개미들의 긴 줄을" },
+            { "en": "in summer", "kr": "여름에" }
+          ],
+          "guessWords": [
+            { "word": "line", "options": ["노래", "줄", "선물"], "answer": 1, "hint": "개미들이 길게 늘어서 만드는 것이에요" }
+          ]
+        },
+        {
+          "text": "Tiny ants show us that small signs can move a whole team.",
+          "chunks": [
+            { "en": "Tiny ants show us", "kr": "작은 개미들은 우리에게 보여준다" },
+            { "en": "that small signs", "kr": "작은 신호들이" },
+            { "en": "can move a whole team", "kr": "팀 전체를 움직일 수 있다는 것을" }
+          ],
+          "guessWords": [
+            { "word": "whole", "options": ["구멍 난", "무거운", "전체의"], "answer": 2, "hint": "팀 하나를 통째로, 라는 맥락이에요" }
+          ]
+        }
+      ],
+      "gistQ": {
+        "prompt": "이 글은 무슨 내용인가요?",
+        "options": [
+          "개미는 여름에만 밖으로 나온다",
+          "개미는 냄새를 남기고 따라가며 함께 길을 찾는다",
+          "집에 들어온 개미를 없애는 방법"
+        ],
+        "answer": 1
+      }
+    },
+    {
+      "id": "salty-sea",
+      "title": "바다는 왜 짤까",
+      "level": 1,
+      "sentences": [
+        {
+          "text": "Have you ever wondered why the sea is salty?",
+          "chunks": [
+            { "en": "Have you ever wondered", "kr": "너는 궁금해한 적 있니" },
+            { "en": "why the sea is salty", "kr": "바다가 왜 짠지" }
+          ],
+          "guessWords": [
+            { "word": "wondered", "options": ["궁금해했다", "걸어갔다", "이겼다"], "answer": 0, "hint": "'왜일까?' 하고 머릿속으로 물어보는 거예요" }
+          ]
+        },
+        {
+          "text": "When rain falls on rocks, it picks up tiny bits of salt.",
+          "chunks": [
+            { "en": "When rain falls on rocks", "kr": "비가 바위 위에 내리면" },
+            { "en": "it picks up", "kr": "빗물은 집어 올린다" },
+            { "en": "tiny bits of salt", "kr": "아주 작은 소금 조각들을" }
+          ],
+          "guessWords": [
+            { "word": "bits", "options": ["벌레들", "조각들", "소리들"], "answer": 1, "hint": "소금의 아주 작은 ~들을 집어 올려요" }
+          ],
+          "structureQ": {
+            "prompt": "'When rain falls on rocks' 부분은 무슨 역할을 하나요?",
+            "options": ["언제 일어나는 일인지 알려준다", "문장의 주어다", "명령을 내린다"],
+            "answer": 0,
+            "label": "접속사로 이어진 절"
+          }
+        },
+        {
+          "text": "Rivers then carry this salt all the way to the sea.",
+          "chunks": [
+            { "en": "Rivers then carry this salt", "kr": "그다음 강이 이 소금을 나른다" },
+            { "en": "all the way to the sea", "kr": "바다까지 쭉" }
+          ],
+          "guessWords": [
+            { "word": "carry", "options": ["나른다", "자른다", "센다"], "answer": 0, "hint": "강물이 소금을 바다까지 데려가는 거예요" }
+          ],
+          "structureQ": {
+            "prompt": "'this salt'가 가리키는 것은 무엇인가요?",
+            "options": ["빗물이 바위에서 얻은 소금", "바다에 원래 있던 소금", "요리에 쓰는 소금"],
+            "answer": 0,
+            "label": "대명사 지시"
+          }
+        },
+        {
+          "text": "When sea water dries under the hot sun, the salt stays behind.",
+          "chunks": [
+            { "en": "When sea water dries", "kr": "바닷물이 마르면" },
+            { "en": "under the hot sun", "kr": "뜨거운 해 아래에서" },
+            { "en": "the salt stays behind", "kr": "소금은 뒤에 남는다" }
+          ],
+          "guessWords": [
+            { "word": "dries", "options": ["언다", "자란다", "마른다"], "answer": 2, "hint": "뜨거운 해 아래에서 물이 어떻게 될까요" }
+          ]
+        },
+        {
+          "text": "This has happened for millions of years, so the sea keeps getting saltier.",
+          "chunks": [
+            { "en": "This has happened", "kr": "이 일은 계속 일어나 왔다" },
+            { "en": "for millions of years", "kr": "수백만 년 동안" },
+            { "en": "so the sea keeps getting saltier", "kr": "그래서 바다는 점점 더 짜진다" }
+          ],
+          "guessWords": [
+            { "word": "saltier", "options": ["더 짠", "더 깊은", "더 차가운"], "answer": 0, "hint": "소금이 계속 쌓이면 바닷물 맛이 어떻게 될까요" }
+          ],
+          "structureQ": {
+            "prompt": "'has happened'는 어떤 느낌을 주나요?",
+            "options": ["옛날부터 지금까지 계속 일어나 왔다", "내일 일어날 것이다", "한 번도 일어나지 않았다"],
+            "answer": 0,
+            "label": "시제·수동태·비교"
+          }
+        },
+        {
+          "text": "So every drop of sea water holds a very long story of rain and rocks.",
+          "chunks": [
+            { "en": "So every drop of sea water", "kr": "그래서 바닷물 한 방울 한 방울은" },
+            { "en": "holds a very long story", "kr": "아주 긴 이야기를 담고 있다" },
+            { "en": "of rain and rocks", "kr": "비와 바위의" }
+          ],
+          "guessWords": [
+            { "word": "holds", "options": ["던진다", "담고 있다", "판다"], "answer": 1, "hint": "이야기를 안에 ~하고 있다" }
+          ]
+        }
+      ],
+      "gistQ": {
+        "prompt": "이 글은 무슨 내용인가요?",
+        "options": [
+          "바닷물이 짠 것은 비와 강이 바위의 소금을 바다로 옮겨 쌓였기 때문이다",
+          "바닷물을 마시면 건강에 좋다",
+          "비가 만들어지는 과정"
+        ],
+        "answer": 0
+      }
+    }
+  ]
+}
+;
+// 게임별 네임스페이스를 자동 부여하는 localStorage 래퍼.
+// 사용 예:
+//   const store = createStorage("tetris");
+//   store.set("highscore", 12000);
+//   store.get("highscore", 0);
+
+function createStorage(namespace) {
+  if (!namespace || typeof namespace !== "string") {
+    throw new Error("createStorage: namespace required");
+  }
+  const prefix = `gg.${namespace}.`;
+
+  function key(k) { return prefix + k; }
+
+  return {
+    get(k, fallback = null) {
+      try {
+        const raw = localStorage.getItem(key(k));
+        if (raw === null) return fallback;
+        return JSON.parse(raw);
+      } catch {
+        return fallback;
+      }
+    },
+    set(k, v) {
+      try {
+        localStorage.setItem(key(k), JSON.stringify(v));
+      } catch {
+        // quota exceeded 등은 조용히 무시(프로토타입)
+      }
+    },
+    remove(k) {
+      try { localStorage.removeItem(key(k)); } catch {}
+    },
+    clearAll() {
+      try {
+        const toRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith(prefix)) toRemove.push(k);
+        }
+        toRemove.forEach((k) => localStorage.removeItem(k));
+      } catch {}
+    },
+  };
+}
+
+// 문장을 클릭 가능한 단어 토큰으로 쪼갠다. DOM 미의존 순수 함수.
+//
+// 각 토큰:
+//   { index, raw, clean }
+//   - raw:   화면 표시용 원본 (구두점 포함, 예: "it,")
+//   - clean: 타겟 매칭용 정제형 (소문자 + 알파벳·아포스트로피만, 예: "it")
+
+function tokenize(text) {
+  return String(text)
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((raw, index) => ({
+      index,
+      raw,
+      clean: raw.toLowerCase().replace(/[^a-z']/g, ""),
+    }));
+}
+
+// targetWords(데이터의 { word, nth, ... })를 실제 토큰 인덱스로 해석한다.
+// 같은 단어가 여러 번 나올 때 nth(1-based)로 몇 번째를 가리키는지 정한다.
+// 해석 실패 시 index: -1 (데이터 오류 방어).
+function resolveTargets(tokens, targetWords = []) {
+  return targetWords.map((t) => {
+    const want = String(t.word).toLowerCase();
+    const nth = t.nth || 1;
+    let seen = 0;
+    let index = -1;
+    for (const tok of tokens) {
+      if (tok.clean === want) {
+        seen += 1;
+        if (seen === nth) {
+          index = tok.index;
+          break;
+        }
+      }
+    }
+    return { ...t, index };
+  });
+}
+
+// 한 지문의 학습 진행 상태. DOM 미의존 순수 로직.
+//
+// 단계(stage): 'read' → 'gist' → 'summary'
+//  - read: 문장을 하나씩 넘기며 추측 단어·구조 문항을 푼다.
+//  - gist: 지문 전문을 보고 요지 문항을 푼다.
+//  - summary: 오늘 만난 단어를 맞힘/새로 알게 됨으로 나눠 정리한다.
+
+// 보기 순서를 섞고 정답 위치를 다시 계산한다. rand 주입으로 테스트 결정성 확보.
+// 데이터의 answer 위치가 어디든, 화면에 나갈 때마다 순서가 달라져 위치 암기·찍기를 막는다.
+function shuffleOptions(options, answer, rand = Math.random) {
+  const order = options.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return {
+    options: order.map((i) => options[i]),
+    answer: order.indexOf(answer),
+  };
+}
+
+function createLesson(passage) {
+  if (!passage || !Array.isArray(passage.sentences) || passage.sentences.length === 0) {
+    throw new Error("createLesson: 유효한 지문이 필요합니다");
+  }
+
+  const results = { guesses: [], structures: [], gist: null };
+  let si = 0;
+  let stage = "read";
+
+  return {
+    passage,
+    stage: () => stage,
+    sentenceIndex: () => si,
+    currentSentence: () => passage.sentences[si],
+    totalSentences: () => passage.sentences.length,
+    position: () => si + 1,
+
+    // 추측 단어 결과 기록. correct = 고른 답이 정답이었는지.
+    recordGuess(word, chosen, correct) {
+      results.guesses.push({ word, chosen, correct });
+    },
+    // 구조 확인 문항 결과 기록.
+    recordStructure(label, correct) {
+      results.structures.push({ label, correct });
+    },
+
+    // 다음 문장으로. 마지막 문장이었으면 stage를 'gist'로 넘긴다.
+    nextSentence() {
+      si += 1;
+      if (si >= passage.sentences.length) {
+        stage = "gist";
+        return { done: true };
+      }
+      return { done: false };
+    },
+
+    // 요지 문항 결과 기록 후 정리 단계로.
+    recordGist(chosen, correct) {
+      results.gist = { chosen, correct };
+      stage = "summary";
+    },
+
+    // 정리 화면용 요약. 맞힌 단어와 새로 알게 된 단어(틀렸거나 애매)를 나눈다.
+    summary() {
+      return {
+        totalWords: results.guesses.length,
+        correctWords: results.guesses.filter((g) => g.correct).map((g) => g.word),
+        learnedWords: results.guesses.filter((g) => !g.correct).map((g) => g.word),
+        structures: results.structures.slice(),
+        gist: results.gist,
+      };
+    },
+
+    results: () => results,
+  };
+}
+
+// 영어 독해 사다리 - 지문 고르기 → 3단계 흐름(읽으며 추측 → 요지 확인 → 오늘의 정리) 조립.
+// 순수 로직은 core/(tokenize·lesson)에 위임하고, 여기서 DOM만 만진다.
+
+
+
+const store = createStorage("english-reading");
+
+const el = {
+  title: document.getElementById("lesson-title"),
+  progress: document.getElementById("lesson-progress"),
+  barFill: document.getElementById("bar-fill"),
+  stage: document.getElementById("stage"),
+  controls: document.getElementById("controls"),
+};
+
+let passages = [];
+let lesson = null;
+
+passages = EMBEDDED_PASSAGES.passages;
+renderPicker();
+
+function setBar(ratio) {
+  el.barFill.style.width = `${Math.round(ratio * 100)}%`;
+}
+
+// ── 지문 고르기 ──────────────────────────────
+function renderPicker() {
+  lesson = null;
+  el.title.textContent = "영어 독해 사다리";
+  el.progress.textContent = "오늘 읽을 지문 고르기";
+  setBar(0);
+  el.stage.innerHTML = "";
+  el.controls.innerHTML = "";
+
+  const instruction = document.createElement("div");
+  instruction.className = "instruction";
+  instruction.textContent = "하루 한 편, 문맥으로 추측하며 읽어 보세요";
+  el.stage.appendChild(instruction);
+
+  const completed = store.get("completed", {});
+  const list = document.createElement("div");
+  list.className = "passage-list";
+  passages.forEach((p) => {
+    const wordCount = p.sentences.reduce((n, s) => n + s.guessWords.length, 0);
+    const card = document.createElement("button");
+    card.className = "passage-card";
+    card.type = "button";
+
+    const head = document.createElement("div");
+    head.className = "p-head";
+    const t = document.createElement("div");
+    t.className = "p-title";
+    t.textContent = p.title;
+    head.appendChild(t);
+    const done = completed[p.id];
+    if (done) {
+      const badge = document.createElement("span");
+      badge.className = "badge-done";
+      badge.textContent = `읽음 ✓ 단어 ${done.correctWords}/${done.totalWords}`;
+      head.appendChild(badge);
+    }
+    card.appendChild(head);
+
+    const meta = document.createElement("div");
+    meta.className = "p-meta";
+    meta.textContent = `문장 ${p.sentences.length}개 · 추측 단어 ${wordCount}개`;
+    card.appendChild(meta);
+
+    card.addEventListener("click", () => startLesson(p));
+    list.appendChild(card);
+  });
+  el.stage.appendChild(list);
+
+  renderWordbook();
+}
+
+// 지문 고르기 화면 아래의 "내 단어장" - 새로 알게 된 단어들이 쌓인다.
+// 칩을 누르면 뜻을 보여줘 복습 도구로 쓰인다.
+function renderWordbook() {
+  const wordbook = store.get("wordbook", []);
+  if (!wordbook.length) return;
+
+  const g = document.createElement("div");
+  g.className = "word-group wordbook";
+  const h = document.createElement("div");
+  h.className = "word-group-label";
+  h.textContent = `내 단어장 ${wordbook.length}개 · 눌러서 뜻 확인`;
+  g.appendChild(h);
+
+  const chips = document.createElement("div");
+  chips.className = "chips";
+  wordbook.forEach((w) => {
+    const c = document.createElement("button");
+    c.className = "chip chip-learned wb-chip";
+    c.type = "button";
+    c.textContent = w.word;
+    let shown = false;
+    c.addEventListener("click", () => {
+      shown = !shown;
+      c.textContent = shown ? `${w.word} - ${w.meaning}` : w.word;
+    });
+    chips.appendChild(c);
+  });
+  g.appendChild(chips);
+  el.stage.appendChild(g);
+}
+
+function startLesson(passage) {
+  lesson = createLesson(passage);
+  el.title.textContent = passage.title;
+  renderStage();
+}
+
+function renderStage() {
+  const stage = lesson.stage();
+  if (stage === "read") renderRead();
+  else if (stage === "gist") renderGist();
+  else renderSummary();
+}
+
+// 공통: 보기 버튼 묶음. 보기 순서는 매번 셔플해 위치 암기·찍기를 막는다.
+// 고르면 정답/오답을 잠가 표시하고, 색 외 보조 신호(✓/✗)를 함께 붙인다.
+// onChoose에는 원본 데이터 기준 인덱스(chosenOriginal)와 정오를 넘긴다.
+// column=true면 보기를 세로로 쌓는다(요지처럼 보기가 긴 경우).
+function buildOptions(optionTexts, answerIndex, onChoose, column) {
+  const shuffled = shuffleOptions(optionTexts, answerIndex);
+  const opts = document.createElement("div");
+  opts.className = "options" + (column ? " options-col" : "");
+  shuffled.options.forEach((text, i) => {
+    const b = document.createElement("button");
+    b.className = "option";
+    b.type = "button";
+    b.textContent = text;
+    b.addEventListener("click", () => {
+      const correct = i === shuffled.answer;
+      [...opts.children].forEach((bb, j) => {
+        bb.disabled = true;
+        if (j === shuffled.answer) {
+          bb.classList.add("correct");
+          bb.textContent += " ✓";
+        } else if (j === i) {
+          bb.classList.add("wrong");
+          bb.textContent += " ✗";
+        }
+      });
+      onChoose(optionTexts.indexOf(shuffled.options[i]), correct);
+    });
+    opts.appendChild(b);
+  });
+  return opts;
+}
+
+// ── 1단계: 읽으며 추측 ──────────────────────────────
+function renderRead() {
+  const s = lesson.currentSentence();
+  const last = lesson.position() >= lesson.totalSentences();
+  el.progress.textContent = `문장 ${lesson.position()} / ${lesson.totalSentences()}`;
+  setBar((lesson.position() - 1) / (lesson.totalSentences() + 1));
+  el.stage.innerHTML = "";
+  el.controls.innerHTML = "";
+
+  const guessByWord = new Map();
+  s.guessWords.forEach((g) => guessByWord.set(g.word.toLowerCase(), g));
+  const pending = new Set(guessByWord.keys());
+  const spansByWord = new Map(); // 같은 단어가 여러 번 나와도 전부 함께 풀림 처리
+  let structureDone = !s.structureQ;
+
+  const instruction = document.createElement("div");
+  instruction.className = "instruction";
+  instruction.textContent = s.guessWords.length
+    ? "밑줄 친 단어의 뜻을 문맥으로 추측해 눌러 보세요"
+    : "문장을 읽어 보세요";
+  el.stage.appendChild(instruction);
+
+  const sentEl = document.createElement("div");
+  sentEl.className = "sentence";
+  tokenize(s.text).forEach((tok) => {
+    const span = document.createElement("span");
+    span.textContent = tok.raw;
+    if (guessByWord.has(tok.clean)) {
+      span.className = "word guess";
+      span.setAttribute("role", "button");
+      span.addEventListener("click", () => onGuessWord(tok.clean));
+      if (!spansByWord.has(tok.clean)) spansByWord.set(tok.clean, []);
+      spansByWord.get(tok.clean).push(span);
+    } else {
+      span.className = "word plain";
+    }
+    sentEl.appendChild(span);
+    sentEl.appendChild(document.createTextNode(" "));
+  });
+  el.stage.appendChild(sentEl);
+
+  const panel = document.createElement("div");
+  panel.className = "panel";
+  panel.hidden = true;
+  el.stage.appendChild(panel);
+
+  const structureHost = document.createElement("div");
+  structureHost.className = "structure-host";
+  el.stage.appendChild(structureHost);
+
+  // 끊어읽기 해석 보기
+  const chunkBtn = document.createElement("button");
+  chunkBtn.className = "btn chunk-btn";
+  chunkBtn.type = "button";
+  chunkBtn.textContent = "끊어읽기 해석 보기";
+  const chunkHost = document.createElement("div");
+  chunkHost.className = "chunks";
+  chunkHost.hidden = true;
+  chunkBtn.addEventListener("click", () => {
+    chunkBtn.hidden = true;
+    chunkHost.hidden = false;
+    s.chunks.forEach((c, i) => {
+      const row = document.createElement("div");
+      row.className = "chunk";
+      row.style.animationDelay = `${i * 0.12}s`;
+      const en = document.createElement("div");
+      en.className = "chunk-en";
+      en.textContent = c.en;
+      const kr = document.createElement("div");
+      kr.className = "chunk-kr";
+      kr.textContent = c.kr;
+      row.append(en, kr);
+      chunkHost.appendChild(row);
+    });
+  });
+  el.stage.append(chunkBtn, chunkHost);
+
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "btn btn-primary";
+  nextBtn.type = "button";
+  nextBtn.textContent = last ? "요지 확인 →" : "다음 문장 →";
+  nextBtn.addEventListener("click", () => {
+    lesson.nextSentence();
+    renderStage();
+  });
+  el.controls.appendChild(nextBtn);
+  maybeStructure(); // 추측 단어가 없는 문장도 구조 문항이 바로 뜨도록
+  updateNextState();
+
+  function updateNextState() {
+    nextBtn.disabled = !(pending.size === 0 && structureDone);
+  }
+
+  function onGuessWord(clean) {
+    if (!pending.has(clean)) return;
+    const g = guessByWord.get(clean);
+    panel.hidden = false;
+    panel.innerHTML = "";
+
+    const q = document.createElement("div");
+    q.className = "panel-q";
+    q.textContent = `"${g.word}" 의 뜻은?`;
+    panel.appendChild(q);
+
+    panel.appendChild(
+      buildOptions(g.options, g.answer, (chosen, correct) => {
+        lesson.recordGuess(g.word, chosen, correct);
+        (spansByWord.get(clean) || []).forEach((sp) =>
+          sp.classList.add(correct ? "solved-correct" : "solved-learned")
+        );
+        pending.delete(clean);
+        const fb = document.createElement("div");
+        fb.className = "feedback " + (correct ? "ok" : "learn");
+        fb.textContent = correct ? "맞았어요!" : `이 뜻이에요 - ${g.options[g.answer]}`;
+        panel.appendChild(fb);
+        maybeStructure();
+        updateNextState();
+      })
+    );
+
+    const hintBtn = document.createElement("button");
+    hintBtn.className = "btn hint-btn";
+    hintBtn.type = "button";
+    hintBtn.textContent = "힌트";
+    hintBtn.addEventListener("click", () => {
+      const h = document.createElement("div");
+      h.className = "hint";
+      h.textContent = g.hint;
+      panel.appendChild(h);
+      hintBtn.hidden = true;
+    });
+    panel.appendChild(hintBtn);
+  }
+
+  function maybeStructure() {
+    if (pending.size > 0 || structureDone || !s.structureQ) return;
+    const sq = s.structureQ;
+    const box = document.createElement("div");
+    box.className = "panel structure";
+
+    const q = document.createElement("div");
+    q.className = "panel-q";
+    q.textContent = sq.prompt;
+    const tag = document.createElement("span");
+    tag.className = "label-tag";
+    tag.textContent = sq.label;
+    q.appendChild(tag);
+    box.appendChild(q);
+
+    box.appendChild(
+      buildOptions(sq.options, sq.answer, (chosen, correct) => {
+        lesson.recordStructure(sq.label, correct);
+        const fb = document.createElement("div");
+        fb.className = "feedback " + (correct ? "ok" : "learn");
+        fb.textContent = correct ? "맞았어요!" : `정답은 '${sq.options[sq.answer]}' 이에요`;
+        box.appendChild(fb);
+        structureDone = true;
+        updateNextState();
+      })
+    );
+    structureHost.appendChild(box);
+  }
+}
+
+// ── 2단계: 요지 확인 ──────────────────────────────
+function renderGist() {
+  const p = lesson.passage;
+  el.progress.textContent = "요지 확인";
+  setBar(lesson.totalSentences() / (lesson.totalSentences() + 1));
+  el.stage.innerHTML = "";
+  el.controls.innerHTML = "";
+
+  const instruction = document.createElement("div");
+  instruction.className = "instruction";
+  instruction.textContent = "지문 전체를 읽고 무슨 내용인지 골라 보세요";
+  el.stage.appendChild(instruction);
+
+  const full = document.createElement("div");
+  full.className = "full-text";
+  full.textContent = p.sentences.map((s) => s.text).join(" ");
+  el.stage.appendChild(full);
+
+  const box = document.createElement("div");
+  box.className = "panel";
+  const q = document.createElement("div");
+  q.className = "panel-q";
+  q.textContent = p.gistQ.prompt;
+  box.appendChild(q);
+
+  box.appendChild(
+    buildOptions(p.gistQ.options, p.gistQ.answer, (chosen, correct) => {
+      lesson.recordGist(chosen, correct);
+      const fb = document.createElement("div");
+      fb.className = "feedback " + (correct ? "ok" : "learn");
+      fb.textContent = correct ? "맞았어요!" : "요지는 초록색 ✓ 보기예요. 한 번 더 읽어 보세요";
+      box.appendChild(fb);
+      const nextBtn = document.createElement("button");
+      nextBtn.className = "btn btn-primary";
+      nextBtn.type = "button";
+      nextBtn.textContent = "오늘의 정리 →";
+      nextBtn.addEventListener("click", renderStage);
+      el.controls.appendChild(nextBtn);
+    }, true)
+  );
+  el.stage.appendChild(box);
+}
+
+// ── 3단계: 오늘의 정리 ──────────────────────────────
+function renderSummary() {
+  const sum = lesson.summary();
+  saveResults(sum);
+  el.progress.textContent = "오늘의 정리";
+  setBar(1);
+  el.stage.innerHTML = "";
+  el.controls.innerHTML = "";
+
+  const title = document.createElement("div");
+  title.className = "summary-title";
+  title.textContent = "한 편을 다 읽었어요!";
+  el.stage.appendChild(title);
+
+  const stat = document.createElement("div");
+  stat.className = "summary-stat";
+  stat.textContent = `단어 ${sum.totalWords}개 중 ${sum.correctWords.length}개를 스스로 맞혔어요`;
+  el.stage.appendChild(stat);
+
+  if (sum.correctWords.length) {
+    el.stage.appendChild(wordGroup("스스로 맞힌 단어", sum.correctWords, "correct"));
+  }
+  if (sum.learnedWords.length) {
+    el.stage.appendChild(wordGroup("새로 알게 된 단어 · 단어장에 담겼어요", sum.learnedWords, "learned"));
+  }
+
+  const gist = document.createElement("div");
+  gist.className = "summary-line";
+  gist.textContent = sum.gist && sum.gist.correct ? "글의 요지도 맞혔어요" : "요지는 다음에 다시 도전해요";
+  el.stage.appendChild(gist);
+
+  const againBtn = document.createElement("button");
+  againBtn.className = "btn";
+  againBtn.type = "button";
+  againBtn.textContent = "다른 지문 읽기";
+  againBtn.addEventListener("click", renderPicker);
+  againBtn.classList.add("btn-primary");
+  el.controls.append(againBtn);
+}
+
+// 정리 화면 진입 시 결과를 저장한다.
+// - 단어장: 새로 알게 된(틀린) 단어를 뜻과 함께 누적, 단어 기준 중복 없음.
+// - 완료 기록: 지문별 마지막 결과(지문 고르기 화면의 "읽음 ✓" 근거).
+function saveResults(sum) {
+  const p = lesson.passage;
+  const meaningOf = new Map();
+  p.sentences.forEach((s) =>
+    s.guessWords.forEach((g) => meaningOf.set(g.word, g.options[g.answer]))
+  );
+
+  const wordbook = store.get("wordbook", []);
+  const known = new Set(wordbook.map((w) => w.word));
+  sum.learnedWords.forEach((word) => {
+    if (known.has(word)) return;
+    known.add(word);
+    wordbook.push({ word, meaning: meaningOf.get(word) || "", passage: p.id });
+  });
+  store.set("wordbook", wordbook);
+
+  const completed = store.get("completed", {});
+  completed[p.id] = {
+    correctWords: sum.correctWords.length,
+    totalWords: sum.totalWords,
+    gistCorrect: !!(sum.gist && sum.gist.correct),
+  };
+  store.set("completed", completed);
+}
+
+function wordGroup(label, words, kind) {
+  const g = document.createElement("div");
+  g.className = "word-group";
+  const h = document.createElement("div");
+  h.className = "word-group-label";
+  h.textContent = label;
+  g.appendChild(h);
+  const chips = document.createElement("div");
+  chips.className = "chips";
+  words.forEach((w) => {
+    const c = document.createElement("span");
+    c.className = `chip chip-${kind}`;
+    c.textContent = w;
+    chips.appendChild(c);
+  });
+  g.appendChild(chips);
+  return g;
+}
+
+</script>
+</body>
+</html>

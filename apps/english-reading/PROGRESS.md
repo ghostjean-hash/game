@@ -68,6 +68,12 @@
 - 테스트·검증: tests/run-node.mjs 신설(core 유닛 + 데이터 무결성 - 죽은 입력 0·청킹 원문 재구성·보기 3개·정답 범위·문법 이름표 유효성) 83건 통과. playwright 전 분기 클릭 재생 45건 통과(오답·힌트·청킹·구조 오답·중복 단어·요지·정리 통계·localStorage 저장·재진입 배지·단어장 토글). browser-shot 스크린샷 시각 확인, favicon 외 콘솔 에러 0.
 - 문서: CLAUDE.md(상태·파일 구조·핵심 결정·데이터 규약을 passages.json 기준으로 전면 갱신), 루트 CLAUDE.md 앱 등록부 반영.
 
+## 2.9. 단일 파일 버전 (2026-07-08, 사용자 "html 파일 하나로 합쳐줘")
+
+- tools/build-standalone.mjs 신설 - CSS(공용 토큰·베이스+앱)·JS(storage·tokenize·lesson·main)·지문 데이터를 standalone.html 한 장으로 재조립. 손 사본이 아니라 원본에서 매번 재생성(소스 단일 진실), 원본 리팩토링으로 치환 패턴이 사라지면 조용히 깨진 파일 대신 즉시 실패.
+- 단일 파일 전용 치환: SW 등록 제거, fetch → 데이터 내장, 허브 홈 버튼 제거. 42KB, file:// 더블클릭 실행·오프라인 동작.
+- 검증: file:// 재생(카드 3·추측 정답·청킹·다음 버튼·localStorage 동작) 통과, 콘솔 에러 0. 허브 배포 구조(다중 파일)는 유지 - 단일 파일은 부가 산출물.
+
 # 3. 다음 작업 후보
 
 3.1. ~~구 파일(src/data/sentences.json · src/core/session.js) 삭제~~ - 2026-07-08 사용자 승인으로 삭제 완료.
