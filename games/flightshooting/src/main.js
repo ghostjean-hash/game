@@ -39,6 +39,15 @@ const btnPause = $('#btn-pause');
 const btnAuto = $('#btn-auto');
 const btnFs = $('#btn-fs');
 
+// HUD 토글 아이콘(이모지 대신 인라인 SVG - 고퀄 라인 아이콘).
+const SVG_A = 'width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+const ICON = {
+  play: `<svg ${SVG_A}><polygon points="6 3 20 12 6 21 6 3"/></svg>`,
+  pause: `<svg ${SVG_A}><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg>`,
+  volumeOn: `<svg ${SVG_A}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`,
+  volumeOff: `<svg ${SVG_A}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>`,
+};
+
 const store = createStorage('flightshooting');
 
 // ── 상태 ──
@@ -191,12 +200,12 @@ function togglePause() {
     state = 'paused';
     loop.pause();
     showBanner('일시정지', '탭하여 계속', 999);
-    btnPause.textContent = '▶';
+    btnPause.innerHTML = ICON.play;
   } else if (state === 'paused') {
     state = 'playing';
     elBanner.hidden = true;
     bannerTimer = 0;
-    btnPause.textContent = '⏸';
+    btnPause.innerHTML = ICON.pause;
     loop.resume();
   }
 }
@@ -269,7 +278,7 @@ btnPause.addEventListener('click', togglePause);
 btnMute.addEventListener('click', () => {
   const m = !sound.isMuted();
   sound.setMuted(m);
-  btnMute.textContent = m ? '🔇' : '🔊';
+  btnMute.innerHTML = m ? ICON.volumeOff : ICON.volumeOn;
   btnMute.setAttribute('aria-label', m ? '소리 켜기' : '소리 끄기');
 });
 function setAutopilot(on) {

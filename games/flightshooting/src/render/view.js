@@ -283,10 +283,20 @@ function drawPowerups(ctx, game) {
     ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.shadowBlur = 0;
     ctx.fillStyle = '#101420';
-    ctx.font = 'bold 12px ui-monospace, monospace';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(label[it.kind], 0, 1);
+    if (it.kind === 'H') {
+      // 하트 도형(이모지 대신 캔버스 path)
+      const hs = it.r * 0.44;
+      ctx.beginPath();
+      ctx.moveTo(0, hs * 0.75);
+      ctx.bezierCurveTo(hs * 1.2, -hs * 0.3, hs * 0.55, -hs * 1.15, 0, -hs * 0.35);
+      ctx.bezierCurveTo(-hs * 0.55, -hs * 1.15, -hs * 1.2, -hs * 0.3, 0, hs * 0.75);
+      ctx.fill();
+    } else {
+      ctx.font = 'bold 12px ui-monospace, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label[it.kind], 0, 1);
+    }
     ctx.restore();
   }
 }
