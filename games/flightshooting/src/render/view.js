@@ -103,6 +103,11 @@ function drawPlayer(ctx, game) {
   ctx.bezierCurveTo(r * 0.95, r, r * 1.05, -r * 0.5, 0, -r - 2);
   ctx.closePath();
   ctx.fill();
+  // 아주 작은 손(좌우 하단) + 발(아래) - 몸통과 같은 흰색, 살짝 튀어나오게
+  ctx.beginPath(); ctx.ellipse(-r * 0.82, r * 0.42, r * 0.17, r * 0.26, 0.5, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(r * 0.82, r * 0.42, r * 0.17, r * 0.26, -0.5, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(-r * 0.3, r * 1.02, r * 0.2, r * 0.15, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(r * 0.3, r * 1.02, r * 0.2, r * 0.15, 0, 0, Math.PI * 2); ctx.fill();
   ctx.shadowBlur = 0;
   ctx.fillStyle = COLORS.warawaraEye;
   ctx.beginPath(); ctx.arc(-r * 0.32, -r * 0.08, 2, 0, Math.PI * 2); ctx.fill();
