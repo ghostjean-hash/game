@@ -21,15 +21,16 @@ function drawZone(ctx, game) {
   const z = game.zone, p = game.player;
   if (!z || z.level <= 0 || !p) return;
   const R = CFG.parts.zone.radius[z.level] * (1 + Math.sin((game.elapsed || 0) * 3) * 0.04);
+  const c = COLORS.zoneRgbByLevel[z.level - 1] || COLORS.zoneRgbByLevel[COLORS.zoneRgbByLevel.length - 1];
   ctx.save();
   ctx.translate(p.x, p.y);
   const grad = ctx.createRadialGradient(0, 0, R * 0.35, 0, 0, R);
-  grad.addColorStop(0, 'rgba(169,139,255,0.03)');
-  grad.addColorStop(0.7, 'rgba(169,139,255,0.10)');
-  grad.addColorStop(1, 'rgba(169,139,255,0.24)');
+  grad.addColorStop(0, `rgba(${c},0.03)`);
+  grad.addColorStop(0.7, `rgba(${c},0.10)`);
+  grad.addColorStop(1, `rgba(${c},0.24)`);
   ctx.fillStyle = grad;
   ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = 'rgba(169,139,255,0.5)';
+  ctx.strokeStyle = `rgba(${c},0.5)`;
   ctx.lineWidth = 1.5;
   ctx.stroke();
   ctx.restore();
@@ -182,9 +183,10 @@ function drawBullets(ctx, game) {
       ctx.ellipse(b.x, b.y, b.r * 0.7, b.r * 1.3, ang, 0, Math.PI * 2);
       ctx.fill();
     } else {
-      // 전방 화력 기본탄: 진행 방향으로 길쭉하게(사선 발사 시 타원 장축을 날아가는 쪽으로 정렬)
+      // 전방 화력 기본탄: 진행 방향으로 길쭉하게 + 화력 단계별 색(강할수록 붉게).
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
-      ctx.fillStyle = COLORS.bullet;
+      const lvl = Math.max(1, Math.min(game.front || 1, COLORS.bulletByLevel.length));
+      ctx.fillStyle = COLORS.bulletByLevel[lvl - 1];
       ctx.beginPath();
       ctx.ellipse(b.x, b.y, b.r, b.r * 2.2, ang, 0, Math.PI * 2);
       ctx.fill();

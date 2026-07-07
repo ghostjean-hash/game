@@ -7,6 +7,8 @@ export const COLORS = {
   engine: 'rgba(255,180,90,0.85)',
   bullet: '#c9fbff',
   bulletGlow: '#22d3ee',
+  // 전방 화력(P) 단계별 탄 색: 1단계 청록 → 8단계 붉은색(강해질수록 뜨겁게).
+  bulletByLevel: ['#c9fbff', '#a8f0e0', '#c0f58a', '#f5e85f', '#ffc94a', '#ff9a4d', '#ff6b4d', '#ff3b3b'],
   enemyBullet: '#ffb0bd',
   enemyBulletGlow: '#ff6b81',
   star: '#9fd8ff',
@@ -50,4 +52,6 @@ export const COLORS = {
   missile: '#ffd36b',     // 유도 미사일
   missileTrail: 'rgba(255,180,90,0.7)',
   zone: '#a98bff',        // 에너지존 오라(반투명으로 렌더 시 alpha 적용)
+  // 에너지존(E) 레벨별 색(1~5, rgb 문자열 - drawZone이 alpha를 붙여 gradient 생성). 보라 → 라임으로 성장.
+  zoneRgbByLevel: ['169,139,255', '139,180,255', '110,220,235', '110,240,180', '150,255,120'],
 };

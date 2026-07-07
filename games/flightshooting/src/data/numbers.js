@@ -7,18 +7,22 @@ export const CFG = {
   enemyBullet: { speed: 250, r: 5 },
   // 3계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 좌우 옵션기 / 에너지존.
   parts: {
-    front: { max: 8 },
+    // 전방 화력: 8단계로 분화(탄 수↑). 개별 탄 굵기는 완만하게 = rBase + dmg × rGrow.
+    front: { max: 8, rBase: 2.8, rGrow: 0.42 },
     option: {
       maxPerSide: 4,          // 좌우 각 4대 → 총 8대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격
       baseY: 4, stepY: 14,    // 슬롯 뒤로 갈수록 약간 아래
       follow: 9,              // 플레이어 추종 속도(초당 비율)
-      laserEvery: 0.16, laserDmg: 1, laserSpeed: 880,
-      missileEvery: 1.4, missileDmg: 3, missileSpeed: 300, missileTurn: 3.2, missileAccel: 520,
+      // 발사체 크기(r)는 옵션기가 늘수록 커진다: r = base + 옵션수 × grow. 화력 성장이 눈에 보이게.
+      laserEvery: 0.16, laserDmg: 1, laserSpeed: 880, laserR: 2.2, laserRGrow: 0.28,
+      missileEvery: 1.4, missileDmg: 3, missileSpeed: 300, missileTurn: 3.2, missileAccel: 520, missileR: 4, missileRGrow: 0.45,
     },
     zone: {
       radius: [0, 34, 52, 70, 88, 106], // 레벨 0~5 반경
       tick: 0.5,                        // 데미지 주기(초)
+      // 적탄 밀어내기: 존 안의 적탄을 바깥으로 민다. 세기 = pushBase + 레벨 × pushPerLevel (px/초).
+      pushBase: 40, pushPerLevel: 48,
     },
   },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.

@@ -38,6 +38,8 @@
 .mini-hud .l-front { color: var(--sky-power); }
 .mini-hud .l-option { color: #5fe8ff; }
 .mini-hud .l-zone { color: #a98bff; }
+/* 마스터(최대 강화 단계): 숫자 대신 ★ 금색 + 글로우로 최고 도달을 표현 */
+.mini-hud .mh b.mastered { color: #ffd54a; text-shadow: 0 0 8px rgba(255, 213, 74, 0.85); }
 .lives { display: flex; gap: 2px; font-size: 15px; }
 .lives .life { color: var(--sky-enemy); text-shadow: 0 0 6px rgba(255, 107, 129, 0.6); }
 .lives .life.spent { color: var(--line); text-shadow: none; }

@@ -65,6 +65,9 @@ export function stepOptions(game, dt, canFire = true) {
   const p = game.player;
   if (!p) return;
   const k = Math.min(1, OPT.follow * dt);
+  const n = game.options.length; // 옵션기가 많을수록 발사체가 굵어진다
+  const laserR = OPT.laserR + n * OPT.laserRGrow;
+  const missileR = OPT.missileR + n * OPT.missileRGrow;
   let firedMissile = false;
   for (const o of game.options) {
     const t = optionTarget(o, p);
@@ -75,17 +78,34 @@ export function stepOptions(game, dt, canFire = true) {
     if (o.fireTimer > 0) continue;
     if (o.type === 'laser') {
       o.fireTimer = OPT.laserEvery;
-      game.bullets.push({ x: o.x, y: o.y - 6, vx: 0, vy: -OPT.laserSpeed, r: 2.2, dmg: OPT.laserDmg, kind: 'laser' });
+      game.bullets.push({ x: o.x, y: o.y - 6, vx: 0, vy: -OPT.laserSpeed, r: laserR, dmg: OPT.laserDmg, kind: 'laser' });
     } else {
       o.fireTimer = OPT.missileEvery;
       game.bullets.push({
         x: o.x, y: o.y - 6, vx: o.side * 60, vy: -OPT.missileSpeed * 0.4,
-        r: 4, dmg: OPT.missileDmg, kind: 'missile',
+        r: missileR, dmg: OPT.missileDmg, kind: 'missile',
       });
       firedMissile = true;
     }
   }
   if (firedMissile) game.sfx.push('missile');
+}
+
+// 에너지존 적탄 밀어내기(매 프레임): 존 반경 안의 적탄을 플레이어 바깥으로 민다. 안쪽일수록·레벨 높을수록 강하게.
+export function repelEnemyBullets(game, dt) {
+  const z = game.zone, p = game.player;
+  if (!z || z.level <= 0 || !p) return;
+  const R = ZONE.radius[z.level];
+  const push = (ZONE.pushBase + z.level * ZONE.pushPerLevel) * dt;
+  for (const b of game.eBullets) {
+    const dx = b.x - p.x, dy = b.y - p.y;
+    const d = Math.hypot(dx, dy) || 1;
+    if (d < R) {
+      const f = (1 - d / R) * push;
+      b.x += (dx / d) * f;
+      b.y += (dy / d) * f;
+    }
+  }
 }
 
 function nearestTarget(game, x, y) {

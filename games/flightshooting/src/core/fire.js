@@ -7,7 +7,7 @@ export function frontSpec(L) {
   L = Math.max(1, Math.min(L, CFG.parts.front.max));
   const shots = L;                          // 정면 갈래 수 1~8
   const dmg = 1 + Math.floor((L - 1) / 2);  // 1,1,2,2,3,3,4,4
-  const r = 3 + dmg * 0.8;                  // 위력 오를수록 탄이 굵어짐
+  const r = CFG.parts.front.rBase + dmg * CFG.parts.front.rGrow; // 위력 오를수록 완만히 굵어짐
   const spread = shots === 1 ? 0 : Math.min((shots - 1) * 7, 84);
   const angles = [];
   for (let i = 0; i < shots; i++) {

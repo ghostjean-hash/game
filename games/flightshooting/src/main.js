@@ -116,12 +116,18 @@ function handleEvent(ev) {
 }
 
 // ── HUD / 배너 ──
+// 계통이 최대치면 '마스터'(★ 금색)로 표시, 아니면 현재 값.
+function setPartHud(el, val, max) {
+  const mastered = val >= max;
+  el.textContent = mastered ? '★' : val;
+  el.classList.toggle('mastered', mastered);
+}
 function syncHud() {
   elScore.textContent = game.score;
   elStage.textContent = game.stage;
-  elFront.textContent = game.front;
-  elOption.textContent = game.options.length;
-  elZone.textContent = game.zone.level;
+  setPartHud(elFront, game.front, CFG.parts.front.max);
+  setPartHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2);
+  setPartHud(elZone, game.zone.level, CFG.parts.zone.radius.length - 1);
   const lifeEls = elLives.querySelectorAll('.life');
   lifeEls.forEach((el, i) => el.classList.toggle('spent', i >= game.lives));
 }
