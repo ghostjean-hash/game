@@ -91,23 +91,6 @@ export function stepOptions(game, dt, canFire = true) {
   if (firedMissile) game.sfx.push('missile');
 }
 
-// 에너지존 적탄 밀어내기(매 프레임): 존 반경 안의 적탄을 플레이어 바깥으로 민다. 안쪽일수록·레벨 높을수록 강하게.
-export function repelEnemyBullets(game, dt) {
-  const z = game.zone, p = game.player;
-  if (!z || z.level <= 0 || !p) return;
-  const R = ZONE.radius[z.level];
-  const push = (ZONE.pushBase + z.level * ZONE.pushPerLevel) * dt;
-  for (const b of game.eBullets) {
-    const dx = b.x - p.x, dy = b.y - p.y;
-    const d = Math.hypot(dx, dy) || 1;
-    if (d < R) {
-      const f = (1 - d / R) * push;
-      b.x += (dx / d) * f;
-      b.y += (dy / d) * f;
-    }
-  }
-}
-
 function nearestTarget(game, x, y) {
   let best = null, bd = Infinity;
   for (const e of game.enemies) {

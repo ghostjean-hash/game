@@ -4,7 +4,7 @@
 import { CFG } from '../data/numbers.js';
 import { COLORS } from '../data/colors.js';
 import { playerFire, enemyFireAt } from './fire.js';
-import { stepOptions, homeMissiles, tickZone, repelEnemyBullets, gainFront, gainOption, gainZone, loseLastPart } from './parts.js';
+import { stepOptions, homeMissiles, tickZone, gainFront, gainOption, gainZone, loseLastPart } from './parts.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
 import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, burst } from './spawn.js';
@@ -360,7 +360,6 @@ export function stepWorld(game, dt, W, H) {
   homeMissiles(game, dt);          // 미사일 유도(표적 최신 위치 기준)
   updateBullets(game, dt, W, H);
   updateEnemyBullets(game, dt, W, H);
-  repelEnemyBullets(game, dt);     // 에너지존이 적탄을 바깥으로 밀어냄
   updatePowerups(game, dt, W, H);
   updateParticles(game, dt);
   tickZone(game, dt);              // 에너지존 주기 피해(적 hp 선차감)

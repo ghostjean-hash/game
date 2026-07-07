@@ -15,7 +15,7 @@
 <script type="module">
 import { test, eq, ok, report } from './runner.js';
 import { frontSpec } from '../src/core/fire.js';
-import { optionSlot, gainFront, gainOption, gainZone, loseLastPart, repelEnemyBullets } from '../src/core/parts.js';
+import { optionSlot, gainFront, gainOption, gainZone, loseLastPart } from '../src/core/parts.js';
 import { buildWaves, stageName } from '../src/core/waves.js';
 import { spawnEnemy, spawnBonus, spawnShards, dropItems } from '../src/core/spawn.js';
 import { autopilotStep } from '../src/core/autopilot.js';
@@ -102,11 +102,6 @@ test('11구역 체력 추가 배수', () => {
 });
 test('buildWaves 15구역 유효', () => { ok(buildWaves(15).length > 0); });
 test('stageName 20구역 존재', () => { ok(stageName(20).length > 0); });
-
-// ── 에너지존 적탄 밀어내기 ──
-test('존 안 적탄을 바깥으로 민다', () => { const g = { zone: { level: 3 }, player: { x: 200, y: 200 }, eBullets: [{ x: 210, y: 200 }] }; repelEnemyBullets(g, 0.1); ok(g.eBullets[0].x > 210); });
-test('존 레벨0이면 안 민다', () => { const g = { zone: { level: 0 }, player: { x: 200, y: 200 }, eBullets: [{ x: 210, y: 200 }] }; repelEnemyBullets(g, 0.1); eq(g.eBullets[0].x, 210); });
-test('존 반경 밖 적탄은 안 민다', () => { const g = { zone: { level: 1 }, player: { x: 200, y: 200 }, eBullets: [{ x: 500, y: 200 }] }; repelEnemyBullets(g, 0.1); eq(g.eBullets[0].x, 500); });
 
 // ── 자동 플레이: 미래 시뮬레이션 회피/조준/획득 ──
 const apGame = (over) => ({ player: { x: 200, y: 800, r: 14 }, eBullets: [], enemies: [], powerups: [], boss: null, ...over });

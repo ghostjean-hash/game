@@ -21,8 +21,6 @@ export const CFG = {
     zone: {
       radius: [0, 34, 52, 70, 88, 106], // 레벨 0~5 반경
       tick: 0.5,                        // 데미지 주기(초)
-      // 적탄 밀어내기: 존 안의 적탄을 바깥으로 민다. 세기 = pushBase + 레벨 × pushPerLevel (px/초).
-      pushBase: 40, pushPerLevel: 48,
     },
   },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.
