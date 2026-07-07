@@ -240,6 +240,7 @@ function drawEnemyBullets(ctx, game) {
   ctx.restore();
 }
 
+// 파워업 = 각진 육각형 아이템(둥근 적 정령과 형태로 구분) + 밝은 색 채움 + 흰 테두리 + 글자.
 function drawPowerups(ctx, game) {
   const label = { P: 'P', S: 'S', E: 'E', H: '♥', B: 'B' };
   for (const it of game.powerups) {
@@ -249,13 +250,20 @@ function drawPowerups(ctx, game) {
     const pulse = 1 + Math.sin(it.t * 6) * 0.08;
     ctx.scale(pulse, pulse);
     ctx.shadowColor = col;
-    ctx.shadowBlur = 12;
-    ctx.fillStyle = 'rgba(10,14,24,0.9)';
-    ctx.strokeStyle = col;
-    ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.arc(0, 0, it.r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.shadowBlur = 14;
     ctx.fillStyle = col;
-    ctx.font = 'bold 13px ui-monospace, monospace';
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+      const fn = i === 0 ? 'moveTo' : 'lineTo';
+      ctx[fn](Math.cos(a) * it.r, Math.sin(a) * it.r);
+    }
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#101420';
+    ctx.font = 'bold 12px ui-monospace, monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(label[it.kind], 0, 1);
