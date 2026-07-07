@@ -45,14 +45,14 @@ export const CFG = {
   // 파워업은 일반 잡몹에선 나오지 않는다. 보스·보너스 기체 격파 시에만 확정 드롭한다.
   // weights = 드롭 종류 확률(합 1): P 전방화력 / S 옵션기 / E 에너지존 / H 회복 / B 봄.
   // chance = 일반 잡몹 처치 시 드롭 확률(초반 화력 성장 숨통). 보스·보너스는 확정 드롭(별도).
-  drop: { chance: 0.09, weights: { P: 0.24, S: 0.34, E: 0.20, H: 0.12, B: 0.10 } },
+  drop: { chance: 0.09, weights: { P: 0.30, S: 0.30, E: 0.18, H: 0.12, B: 0.10 } },
   // 보너스 기체 등장: every초마다 화면 좌/우에서 등장, yRatio 높이로 가로질러 감. 잡으면 dropCount개 드롭.
   bonusShip: { every: 10, dropCount: 1, yRatio: 0.22 },
   // 보스 격파 시 확정 드롭 수(중보스 / 최종보스).
   bossDrop: { mini: 2, final: 4 },
   // 중보스(1~9구역): 작고 hp 낮음 + 호위 비행체 주기 소환. 최종보스(10구역): 크고 단단한 2패턴.
   // hp는 3계통 화력 성장에 맞춰 상향(중보스 baseHp 55→90·구역당 22→32, 최종 420→980).
-  miniBoss: { rx: 30, ry: 26, baseHp: 90, hpPerStage: 32, score: 900, escortEvery: 3.2, escortInit: 3 },
+  miniBoss: { rx: 30, ry: 26, baseHp: 66, hpPerStage: 34, score: 900, escortEvery: 3.2, escortInit: 3 },
   // 최종보스는 이제 20구역. 20구역까지 화력이 최대로 성장하므로 hp를 크게 상향.
   finalBoss: { rx: 50, ry: 44, hp: 2400, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
