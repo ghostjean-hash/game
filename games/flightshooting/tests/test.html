@@ -21,7 +21,7 @@ import { spawnEnemy, spawnBonus, spawnShards, dropItems } from '../src/core/spaw
 import { autopilotStep } from '../src/core/autopilot.js';
 import { hit } from '../src/core/world.js';
 
-const mkGame = () => ({ front: 1, options: [], zone: { level: 0, timer: null }, partHistory: [], player: { x: 100, y: 100 } });
+const mkGame = () => ({ front: 1, shapeTier: 0, options: [], zone: { level: 0, timer: null }, partHistory: [], player: { x: 100, y: 100 } });
 
 // ── frontSpec: 전방 화력 1~8, 단계당 탄 +1 ──
 test('frontSpec L1 = 1발 dmg1', () => { const s = frontSpec(1); eq(s.angles.length, 1); eq(s.dmg, 1); });
@@ -32,6 +32,13 @@ test('frontSpec 단계마다 탄 +1', () => {
   for (let L = 2; L <= 8; L++) ok(frontSpec(L).angles.length === frontSpec(L - 1).angles.length + 1, `L${L} 탄 수 미증가`);
 });
 test('frontSpec 상한 8 clamp', () => { eq(frontSpec(99).angles.length, 8); });
+// ── 만렙 후 모양 티어: 탄 수는 8 유지, 데미지만 티어당 상승 ──
+test('frontSpec 모양 티어 데미지 상승', () => {
+  eq(frontSpec(8, 0).dmg, 4); eq(frontSpec(8, 1).dmg, 5); eq(frontSpec(8, 4).dmg, 8);
+});
+test('frontSpec 모양 티어 올라도 탄 수 8 고정', () => {
+  for (let t = 0; t <= 4; t++) eq(frontSpec(8, t).angles.length, 8);
+});
 
 // ── optionSlot: 좌우 번갈아, 안→밖, 슬롯 0·1 레이저 / 2·3 미사일 ──
 test('optionSlot 0 = 왼쪽 slot0 레이저', () => { const s = optionSlot(0); eq(s.side, -1); eq(s.slot, 0); eq(s.type, 'laser'); });
@@ -40,8 +47,9 @@ test('optionSlot 4 = 왼쪽 slot2 미사일', () => { const s = optionSlot(4); e
 test('optionSlot 7 = 오른쪽 slot3 미사일', () => { const s = optionSlot(7); eq(s.side, 1); eq(s.slot, 3); eq(s.type, 'missile'); });
 
 // ── 파츠 획득 상한 ──
-test('gainFront 8에서 상한', () => {
-  const g = mkGame(); let n = 0; while (gainFront(g)) n++; eq(g.front, 8); eq(n, 7);
+test('gainFront 8에서 front 상한 후 모양 4단계 진화', () => {
+  const g = mkGame(); let n = 0; while (gainFront(g)) n++;
+  eq(g.front, 8); eq(g.shapeTier, 4); eq(n, 11); // front +7, shape +4
 });
 test('gainOption 8대에서 상한', () => {
   const g = mkGame(); let n = 0; while (gainOption(g)) n++; eq(g.options.length, 8); eq(n, 8);
@@ -61,6 +69,11 @@ test('loseLastPart 역순으로 되돌림', () => {
 });
 test('front는 1 밑으로 안 내려감', () => {
   const g = mkGame(); gainFront(g); loseLastPart(g); loseLastPart(g); eq(g.front, 1);
+});
+test('모양 진화는 front보다 먼저 역순 손실', () => {
+  const g = mkGame(); while (gainFront(g)) {} // front 8 + shapeTier 4
+  eq(loseLastPart(g), 'shape'); eq(g.shapeTier, 3); // 모양이 먼저 후퇴
+  eq(loseLastPart(g), 'shape'); eq(g.shapeTier, 2);
 });
 
 // ── buildWaves / stageName ──

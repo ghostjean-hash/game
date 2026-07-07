@@ -232,13 +232,28 @@ function drawBullets(ctx, game) {
       ctx.ellipse(b.x, b.y, b.r * 0.7, b.r * 1.3, ang, 0, Math.PI * 2);
       ctx.fill();
     } else {
-      // 전방 화력 기본탄: 진행 방향으로 길쭉하게 + 화력 단계별 색(강할수록 붉게).
+      // 전방 화력 기본탄: 진행 방향으로 길쭉하게 + 화력 단계별 색.
+      // b.shape(0~4): 만렙 후 모양 진화(원→타원→긴형→링). 배율은 CFG.bullet.shapes, 진화탄은 발광.
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
       const lvl = Math.max(1, Math.min(game.front || 1, COLORS.bulletByLevel.length));
-      ctx.fillStyle = COLORS.bulletByLevel[lvl - 1];
-      ctx.beginPath();
-      ctx.ellipse(b.x, b.y, b.r, b.r * 2.2, ang, 0, Math.PI * 2);
-      ctx.fill();
+      const sh = CFG.bullet.shapes[b.shape || 0];
+      const col = COLORS.bulletByLevel[lvl - 1];
+      const rx = b.r * sh.rx, ry = b.r * sh.ry;
+      ctx.fillStyle = col;
+      ctx.strokeStyle = col;
+      if (b.shape) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = 3 + b.shape * 2; }
+      if (sh.ring) {
+        // 링(최종): 가운데가 뚫린 발광 고리 - 두꺼운 stroke 타원(바깥 rx, 안쪽 rx*ring).
+        ctx.lineWidth = rx * (1 - sh.ring);
+        ctx.beginPath();
+        ctx.ellipse(b.x, b.y, rx * (1 + sh.ring) / 2, ry * (1 + sh.ring) / 2, ang, 0, Math.PI * 2);
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.ellipse(b.x, b.y, rx, ry, ang, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
     }
   }
   ctx.restore();

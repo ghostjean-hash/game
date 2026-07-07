@@ -60,7 +60,7 @@ function createGame() {
   return {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
     score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
-    front: 1, options: [], zone: { level: 0, timer: null }, partHistory: [],
+    front: 1, shapeTier: 0, options: [], zone: { level: 0, timer: null }, partHistory: [],
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
@@ -127,15 +127,16 @@ function handleEvent(ev) {
 
 // ── HUD / 배너 ──
 // 계통이 최대치면 '마스터'(★ 금색)로 표시, 아니면 현재 값.
-function setPartHud(el, val, max) {
+// extra > 0 이면 별 뒤에 단계를 붙인다(전방화력 만렙 후 모양 진화 티어: ★1~★4).
+function setPartHud(el, val, max, extra = 0) {
   const mastered = val >= max;
-  el.textContent = mastered ? '★' : val;
+  el.textContent = mastered ? (extra ? '★' + extra : '★') : val;
   el.classList.toggle('mastered', mastered);
 }
 function syncHud() {
   elScore.textContent = game.score;
   elStage.textContent = game.stage;
-  setPartHud(elFront, game.front, CFG.parts.front.max);
+  setPartHud(elFront, game.front, CFG.parts.front.max, game.shapeTier || 0);
   setPartHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2);
   setPartHud(elZone, game.zone.level, CFG.parts.zone.radius.length - 1);
   const lifeEls = elLives.querySelectorAll('.life');
@@ -154,7 +155,7 @@ function resetGame() {
   game.bullets = []; game.enemies = []; game.eBullets = [];
   game.powerups = []; game.particles = []; game.boss = null;
   game.score = 0; game.lives = CFG.player.maxLives;
-  game.front = 1; game.options = []; game.zone = { level: 0, timer: null }; game.partHistory = [];
+  game.front = 1; game.shapeTier = 0; game.options = []; game.zone = { level: 0, timer: null }; game.partHistory = [];
   game.stage = 1; game.fireTimer = 0;
   game.bossPending = false; game.transitioning = false;
   game.pendingTimer = null; game.transitionTimer = null; game.winTimer = null;
@@ -189,6 +190,9 @@ function applyDevHook() {
   const stage = num('stage');
   if (stage != null) game.stage = Math.max(1, Math.min(stage, CFG.stageCount));
   const front = num('front'); if (front != null) for (let i = 1; i < front; i++) gainFront(game);
+  // shape: 전방화력을 만렙으로 올린 뒤 모양 진화 티어(1~4)까지 세팅해 탄 모양을 바로 확인.
+  const shape = num('shape');
+  if (shape != null) { game.front = CFG.parts.front.max; for (let i = 0; i < shape; i++) gainFront(game); }
   const option = num('option'); if (option != null) for (let i = 0; i < option; i++) gainOption(game);
   const zone = num('zone'); if (zone != null) for (let i = 0; i < zone; i++) gainZone(game);
   const lives = num('lives'); if (lives != null) game.lives = Math.max(1, lives);
@@ -295,3 +299,12 @@ elMenuBest.textContent = best;
 $('#menu-tips').hidden = true;
 setupFullscreen();
 resize();
+
+// 검증 전용(localhost 한정): ?dev=1&auto=1 이면 로드 즉시 자동 플레이 시작.
+// 운영 배포(github.io)에선 hostname 게이트로 완전 무효 - 일반 플레이 영향 0.
+(function autoStartHook() {
+  const host = location.hostname;
+  if (host !== 'localhost' && host !== '127.0.0.1') return;
+  const q = new URLSearchParams(location.search);
+  if (q.get('dev') != null && q.get('auto') != null) { startGame(); setAutopilot(true); }
+})();

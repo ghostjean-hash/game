@@ -5,8 +5,8 @@
 ## 1. 수치 (`src/data/numbers.js` → `CFG`)
 
 - `player`: r(반지름) / speed(키보드 이동 px/s) / fireEvery(발사 간격 s) / maxLives / invAfterHit(피격 무적 s) / yRatio(시작 세로 위치 비율).
-- `bullet.speed`, `enemyBullet`(speed, r).
-- `parts.front.max`: 8. `parts.option`: maxPerSide 4 / baseX,stepX,baseY,stepY(배치) / follow(추종) / laserEvery,laserDmg,laserSpeed / missileEvery,missileDmg,missileSpeed,missileTurn,missileAccel. `parts.zone`: radius[0~5] / tick(0.5s).
+- `bullet.speed`, `bullet.shapes[]`(만렙 후 모양 진화 렌더 배율: 각 원소 `{rx, ry}` = 기본 반경 대비 가로/세로 배율, ring 원소는 `ring`=안쪽 반경 비율로 고리 렌더). `enemyBullet`(speed, r).
+- `parts.front.max`: 8, `parts.front.shapeDmg`(만렙 후 모양 1단계당 데미지 증가, 기본 1). `parts.option`: maxPerSide 4 / baseX,stepX,baseY,stepY(배치) / follow(추종) / laserEvery,laserDmg,laserSpeed / missileEvery,missileDmg,missileSpeed,missileTurn,missileAccel. `parts.zone`: radius[0~5] / tick(0.5s).
 - `enemy.{drone,weaver,gunner}`: r / hp(구역1 기준) / speed(낙하 px/s) / score / (weaver amp,freq) / (gunner fireEvery).
 - `enemyHpScale`: 0.28. 실제 hp = `ceil(base × (1 + (stage-1)×scale))` (spawn.js에서 구역별 적용).
 - `drop`: chance(드롭 확률) / weights{P,S,E,H,B}(5종 배분, 합 1).
@@ -16,12 +16,13 @@
 - `stageCount`: 10. `stageIntro`: 구역 시작 배너 표시 + 적 스폰 정지 시간(초). `starCount`: 배경 별 수.
 - `STAGE_NAMES`: 구역 1~10 이름 배열.
 
-## 2. 전방 화력 (`src/core/fire.js` → `frontSpec(L)`)
+## 2. 전방 화력 (`src/core/fire.js` → `frontSpec(L, shapeTier)`)
 
-레벨 L(1~8) → `{ angles: 발사 각도(도) 배열, dmg, r }`. 정면 부채만(측면·후방은 옵션기가 담당).
+레벨 L(1~8) + 모양 티어(0~4) → `{ angles: 발사 각도(도) 배열, dmg, r }`. 정면 부채만(측면·후방은 옵션기가 담당).
 - shots(정면 갈래) = L(1~8).
-- dmg = `1 + floor((L-1)/2)` → 1,1,2,2,3,3,4,4.
-- r = `3 + dmg*0.8`, 부채폭 = `min((L-1)*7, 84)`.
+- baseDmg = `1 + floor((L-1)/2)` → 1,1,2,2,3,3,4,4. dmg = `baseDmg + shapeTier * shapeDmg`(만렙 후 모양 진화 시 티어당 데미지 상승).
+- r = `rBase + baseDmg*rGrow`(히트박스는 shapeTier와 무관, P8 기준 유지). 부채폭 = `min((L-1)*7, 84)`.
+- 만렙(L8) 이후 모양 진화 상세 → 05_power-parts.md 1.1.1.
 - 옵션기(레이저/미사일)·에너지존 로직은 `src/core/parts.js` → 05_power-parts.md.
 
 ## 3. 색상 (`src/data/colors.js` → `COLORS`)

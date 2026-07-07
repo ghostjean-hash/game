@@ -3,12 +3,25 @@
 
 export const CFG = {
   player: { r: 14, speed: 340, fireEvery: 0.14, maxLives: 3, invAfterHit: 1.6, yRatio: 0.82 },
-  bullet: { speed: 620 },
+  // bullet.shapes: 전방화력 만렙(P8) 후 P를 더 먹을 때 탄 모양 진화 단계별 렌더 배율(docs/05 1.1.1).
+  //   인덱스 0 = 진화 전(기본 세로 타원), 1~4 = 원→타원→긴형→링. rx/ry = 기본 반경 대비 가로/세로 배율.
+  //   ring 값이 있으면 도넛(고리)으로 렌더 - ring = 뚫린 안쪽 반경 비율(0~1).
+  bullet: {
+    speed: 620,
+    shapes: [
+      { rx: 1.0, ry: 2.2 },             // 0 기본(P8 도달, 세로 타원)
+      { rx: 1.7, ry: 1.7 },             // 1 원 (굵고 큰 구슬)
+      { rx: 1.5, ry: 2.9 },             // 2 타원 (원을 늘인 럭비공)
+      { rx: 1.2, ry: 3.8 },             // 3 긴형 (레이저빔)
+      { rx: 1.9, ry: 1.9, ring: 0.5 },  // 4 링 (발광 고리, 최종)
+    ],
+  },
   enemyBullet: { speed: 250, r: 5 },
   // 3계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 좌우 옵션기 / 에너지존.
   parts: {
     // 전방 화력: 8단계로 분화(탄 수↑). 개별 탄 굵기는 완만하게 = rBase + dmg × rGrow.
-    front: { max: 8, rBase: 2.8, rGrow: 0.42 },
+    // shapeDmg: 만렙 후 모양이 1단계 진화할 때마다 더해지는 데미지(원→타원→긴형→링, 총 +4까지).
+    front: { max: 8, rBase: 2.8, rGrow: 0.42, shapeDmg: 1 },
     option: {
       maxPerSide: 4,          // 좌우 각 4대 → 총 8대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격

@@ -32,11 +32,21 @@ export function addOption(game) {
 }
 
 // ── 파츠 획득(P/S/E). 만렙이면 false(소리·history 없음) ──
+// 전방화력은 8까지 오른 뒤 P를 더 먹으면 탄 모양이 4단계 진화한다(원→타원→긴형→링, docs/05 1.1.1).
 export function gainFront(game) {
-  if (game.front >= CFG.parts.front.max) return false;
-  game.front++;
-  game.partHistory.push('front');
-  return true;
+  if (game.front < CFG.parts.front.max) {
+    game.front++;
+    game.partHistory.push('front');
+    return true;
+  }
+  // 만렙 후: 모양 진화(shapeTier 1~4). 데미지도 티어당 상승.
+  const shapeMax = CFG.bullet.shapes.length - 1;
+  if ((game.shapeTier || 0) < shapeMax) {
+    game.shapeTier = (game.shapeTier || 0) + 1;
+    game.partHistory.push('shape');
+    return true;
+  }
+  return false; // 모양까지 만렙 → 점수 보너스로 처리(world.grabItem)
 }
 export function gainOption(game) {
   if (!addOption(game)) return false;
@@ -55,6 +65,7 @@ export function gainZone(game) {
 export function loseLastPart(game) {
   const part = game.partHistory.pop();
   if (part === 'front') game.front = Math.max(1, game.front - 1);
+  else if (part === 'shape') game.shapeTier = Math.max(0, (game.shapeTier || 0) - 1);
   else if (part === 'option') game.options.pop();
   else if (part === 'zone') game.zone.level = Math.max(0, game.zone.level - 1);
   return part || null;
