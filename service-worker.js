@@ -84,7 +84,8 @@
 // v120 (2026-07-02): rushhour 발열 절전(백그라운드 타이머·오디오·표정 정지) + HUD 전면 개편(저녁 플럼·스테이지 카드·난이도 게이지·캔디 버튼).
 // v121 (2026-07-02): rushhour 설정 블록 기본 스타일 포니→밥풀이(저장된 선택은 유지).
 // v135 (2026-07-07): english-reading 독해 사다리 전면 개선(지문 3편·지문 고르기·단어장 저장·보기 셔플) + apps 레지스트리/지문 데이터 network-first 등재.
-const CACHE_VERSION = "v139";
+// v140 (2026-07-08): web-deploy 파이프라인 도입 - 아이콘·rushhour 포니 PNG 최적화 반영.
+const CACHE_VERSION = "v140";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

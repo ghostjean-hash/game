@@ -1,0 +1,30 @@
+{
+  "_comment": "web-deploy 파이프라인 설정 (글로벌 skills/web-deploy). 테스트 → 이미지 최적화 → PWA 점검 → push → smoke.",
+  "test": {
+    "command": "node apps/english-reading/tests/run-node.mjs && cd games/lotto && node tests/run-node.js",
+    "timeoutSec": 300
+  },
+  "images": {
+    "dirs": ["icons", "games/rushhour/assets"],
+    "quality": 80,
+    "maxWidth": null
+  },
+  "pwa": {
+    "serviceWorker": "service-worker.js"
+  },
+  "deploy": {
+    "type": "git-push",
+    "remote": "origin",
+    "branch": "main",
+    "commitMessage": "deploy: game-hub 갱신"
+  },
+  "smoke": {
+    "urls": [
+      { "url": "https://ghostjean-hash.github.io/game/", "selector": "#grid-games .card", "mustContain": null },
+      { "url": "https://ghostjean-hash.github.io/game/apps/english-reading/", "selector": ".passage-card", "mustContain": null }
+    ],
+    "timeoutSec": 180,
+    "intervalSec": 15,
+    "consoleErrorBudget": 0
+  }
+}

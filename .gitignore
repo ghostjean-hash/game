@@ -29,3 +29,6 @@ npm-debug.log*
 # 자비스 워크플로우 인스턴스 (unversioned, 사양 §3.5.7)
 **/*-handoff*.json
 **/contract.json
+
+# web-deploy 이미지 해시 상태 (머신 로컬, 사양 unversioned)
+.claude/deploy-state.json
