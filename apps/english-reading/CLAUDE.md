@@ -17,7 +17,8 @@ apps/english-reading/
 ├── CLAUDE.md          # 이 파일
 ├── PROGRESS.md        # 진행 로그
 ├── index.html         # 진입점
-├── standalone.html    # 단일 파일 버전 (생성물 - 직접 수정 금지, tools/build-standalone.mjs로 재생성)
+├── dist/
+│   └── standalone.html  # 단일 파일 버전 (생성물 - 직접 수정 금지, tools/build-standalone.mjs로 재생성)
 ├── style.css          # 앱 스코프 스타일 (라이트 테마 오버라이드 포함)
 ├── tools/
 │   └── build-standalone.mjs  # 원본에서 단일 HTML 재조립 (지문·코드 변경 시 재실행)

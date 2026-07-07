@@ -1,7 +1,7 @@
 // 영어 독해 사다리를 단일 HTML 한 장으로 합친다 (더블클릭 실행용, 오프라인 동작).
 // 손 사본 없이 항상 원본(style·core·main·passages.json)에서 재조립 - 소스가 단일 진실.
-// 사용: node apps/english-reading/tools/build-standalone.mjs  → standalone.html 생성
-import { readFileSync, writeFileSync } from "node:fs";
+// 사용: node apps/english-reading/tools/build-standalone.mjs  → dist/standalone.html 생성
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -102,6 +102,7 @@ ${main}
 </html>
 `;
 
-const out = join(app, "standalone.html");
+mkdirSync(join(app, "dist"), { recursive: true });
+const out = join(app, "dist", "standalone.html");
 writeFileSync(out, html, "utf8");
-console.log(`standalone.html 생성 완료 (${Math.round(html.length / 1024)}KB)`);
+console.log(`dist/standalone.html 생성 완료 (${Math.round(html.length / 1024)}KB)`);
