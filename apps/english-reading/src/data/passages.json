@@ -1,0 +1,103 @@
+{
+  "_schema": {
+    "note": "독해 사다리 데이터 (기획서 v0.2). 지문 단위. 문장마다 청킹 + 추측 단어(뜻 후보 3개) + 어려운 문장엔 구조 확인 문항. 지문 끝에 요지 문항.",
+    "passage": "{ id, title, level, sentences[], gistQ }",
+    "sentence": "{ text, chunks[{en,kr}], guessWords[{word, options[3], answer, hint}], structureQ?{prompt, options[3], answer, label} }",
+    "gistQ": "{ prompt, options[3], answer }",
+    "labels": ["주어·동사 찾기", "관계대명사절", "대명사 지시", "to부정사·동명사", "접속사로 이어진 절", "시제·수동태·비교"]
+  },
+  "passages": [
+    {
+      "id": "yawn",
+      "title": "하품은 왜 전염될까",
+      "level": 1,
+      "sentences": [
+        {
+          "text": "Have you ever noticed that yawning is contagious?",
+          "chunks": [
+            { "en": "Have you ever noticed", "kr": "너는 알아챈 적 있니" },
+            { "en": "that yawning is contagious", "kr": "하품이 전염된다는 것을" }
+          ],
+          "guessWords": [
+            { "word": "contagious", "options": ["전염되는", "위험한", "지루한"], "answer": 0, "hint": "감기처럼 남에게 옮는다는 맥락이에요" }
+          ]
+        },
+        {
+          "text": "When you see someone yawn, you often feel the urge to yawn too.",
+          "chunks": [
+            { "en": "When you see someone yawn", "kr": "누군가 하품하는 걸 보면" },
+            { "en": "you often feel the urge", "kr": "너는 종종 충동을 느낀다" },
+            { "en": "to yawn too", "kr": "너도 하품하고 싶은" }
+          ],
+          "guessWords": [
+            { "word": "urge", "options": ["충동", "약속", "실수"], "answer": 0, "hint": "하품하고 싶은 ~을 느낀다" }
+          ],
+          "structureQ": {
+            "prompt": "'to yawn too'는 문장에서 무엇을 꾸미나요?",
+            "options": ["the urge (충동)", "you (너)", "see (보다)"],
+            "answer": 0,
+            "label": "to부정사·동명사"
+          }
+        },
+        {
+          "text": "Scientists believe this happens because humans are deeply social.",
+          "chunks": [
+            { "en": "Scientists believe", "kr": "과학자들은 믿는다" },
+            { "en": "this happens", "kr": "이것이 일어난다고" },
+            { "en": "because humans are deeply social", "kr": "인간이 깊이 사회적이기 때문에" }
+          ],
+          "guessWords": [
+            { "word": "deeply", "options": ["깊이", "거의", "드물게"], "answer": 0, "hint": "'매우, 깊이'라는 정도를 나타내요" }
+          ],
+          "structureQ": {
+            "prompt": "여기서 'this'가 가리키는 것은 무엇인가요?",
+            "options": ["하품이 전염되는 것", "과학자들", "사회생활"],
+            "answer": 0,
+            "label": "대명사 지시"
+          }
+        },
+        {
+          "text": "Our brains are wired to copy the people around us.",
+          "chunks": [
+            { "en": "Our brains are wired", "kr": "우리 뇌는 ~하도록 되어 있다" },
+            { "en": "to copy the people around us", "kr": "우리 주변 사람들을 따라 하도록" }
+          ],
+          "guessWords": [
+            { "word": "wired", "options": ["~하도록 되어 있는", "피곤한", "젖은"], "answer": 0, "hint": "뇌가 그렇게 하도록 설계됐다는 맥락이에요" }
+          ]
+        },
+        {
+          "text": "This copying helped early humans stay connected and work together.",
+          "chunks": [
+            { "en": "This copying helped early humans", "kr": "이 따라 하기는 초기 인간이 ~하도록 도왔다" },
+            { "en": "stay connected and work together", "kr": "연결되고 함께 일하도록" }
+          ],
+          "guessWords": [
+            { "word": "connected", "options": ["연결된", "혼란스러운", "사라진"], "answer": 0, "hint": "함께 일하는 것과 나란히 놓인 맥락이에요" }
+          ]
+        },
+        {
+          "text": "So the next time you yawn after someone else, remember it is a sign of your social brain at work.",
+          "chunks": [
+            { "en": "So the next time you yawn", "kr": "그러니 다음번에 네가 하품할 때" },
+            { "en": "after someone else", "kr": "다른 누군가의 뒤를 이어" },
+            { "en": "remember it is a sign", "kr": "그것이 신호임을 기억해라" },
+            { "en": "of your social brain at work", "kr": "작동 중인 너의 사회적 뇌의" }
+          ],
+          "guessWords": [
+            { "word": "sign", "options": ["신호", "죄", "서명"], "answer": 0, "hint": "무언가를 나타내는 표시예요" }
+          ]
+        }
+      ],
+      "gistQ": {
+        "prompt": "이 글은 무슨 내용인가요?",
+        "options": [
+          "하품은 몸이 피곤할 때 나오는 신호다",
+          "하품이 전염되는 것은 인간이 사회적인 존재이기 때문이다",
+          "하품을 참는 여러 가지 방법"
+        ],
+        "answer": 1
+      }
+    }
+  ]
+}
