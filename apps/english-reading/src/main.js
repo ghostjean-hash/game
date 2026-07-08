@@ -128,7 +128,7 @@ function renderReading(p) {
     const hint = document.createElement("div");
     hint.className = "first-hint";
     hint.id = "first-hint";
-    hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [/ 검토]로 채점해 보세요. 모르는 단어는 단어를 누르면 뜻이 열립니다.";
+    hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [해석]으로 채점해 보세요. 모르는 단어는 단어를 누르면 뜻이 열립니다.";
     stage.appendChild(hint);
     store.set("seenIntro", true);
   }
@@ -214,7 +214,7 @@ function renderSentence(s, passage, settings, known) {
     const reviewBtn = document.createElement("button");
     reviewBtn.type = "button";
     reviewBtn.className = "review-btn";
-    reviewBtn.textContent = "/ 검토";
+    reviewBtn.textContent = "해석";
     let detail = null;
     reviewBtn.onclick = (e) => {
       e.stopPropagation();
@@ -415,7 +415,7 @@ function openSettings() {
   modal.append(title, desc);
 
   const opts = [
-    ["chunks", "끊어 읽기 긋기 · / 검토"],
+    ["chunks", "끊어 읽기 긋기 · 해석 채점"],
     ["words", "단어 뜻 보기 · 수집"],
     ["scope", "검토 후 구조 심화 해설"],
   ];
