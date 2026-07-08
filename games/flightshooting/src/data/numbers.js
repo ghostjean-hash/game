@@ -29,8 +29,9 @@ export const CFG = {
       baseY: 4, stepY: 14,    // 슬롯 뒤로 갈수록 약간 아래
       follow: 9,              // 플레이어 추종 속도(초당 비율)
       // 8대 전부 레이저(= 사이드 총알, 사이드 비행기가 쏜다). 옵션 수↑ → 굵기(laserR)·데미지(laserDmg) 상승.
-      //   사이드 총알은 양쪽 대각선으로 퍼진다: 왼쪽 비행기는 왼쪽 위, 오른쪽 비행기는 오른쪽 위로 laserDiagDeg만큼 기운다.
-      laserEvery: 0.16, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 880, laserR: 2.2, laserRGrow: 0.3, laserDiagDeg: 22,
+      //   사이드 총알은 부채로 퍼진다: 각 비행기의 대각선 각 = laserDiagBase + slot×laserDiagStep.
+      //   안쪽(slot 0) 비행기는 살짝, 바깥(slot 3)으로 갈수록 더 크게 벌어져 부채를 펼친다. side로 좌/우 방향.
+      laserEvery: 0.16, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 880, laserR: 2.2, laserRGrow: 0.3, laserDiagBase: 12, laserDiagStep: 11,
     },
     zone: {
       radius: [0, 34, 52, 70, 88, 106], // 레벨 0~5 반경

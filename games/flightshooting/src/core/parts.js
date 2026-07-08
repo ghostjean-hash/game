@@ -117,8 +117,9 @@ export function stepOptions(game, dt, canFire = true) {
     o.fireTimer -= dt;
     if (o.fireTimer > 0) continue;
     o.fireTimer = OPT.laserEvery;
-    // 사이드 총알은 양쪽 대각선으로 퍼진다: 왼쪽(side -1)은 왼위, 오른쪽(side +1)은 오른위로 기운다.
-    const rad = (o.side * OPT.laserDiagDeg * Math.PI) / 180;
+    // 사이드 총알은 부채로 퍼진다: 안쪽(slot 0) 살짝, 바깥으로 갈수록 크게. side로 좌/우.
+    const deg = OPT.laserDiagBase + o.slot * OPT.laserDiagStep;
+    const rad = (o.side * deg * Math.PI) / 180;
     game.bullets.push({ x: o.x, y: o.y - 6, vx: Math.sin(rad) * OPT.laserSpeed, vy: -Math.cos(rad) * OPT.laserSpeed, r: laserR, dmg: laserDmg, kind: 'laser' });
   }
 }
