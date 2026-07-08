@@ -145,6 +145,9 @@ test('autopilot 안전하면 위쪽 적 조준', () => { const g = apGame({ enem
 test('autopilot 위쪽 드랍 → 세로 상승', () => { const g = apGame({ powerups: [{ x: 200, y: 550, kind: 'P' }] }); autopilotStep(g, 0.1, 500, 1000); ok(g.player.y < 800); });
 // 목숨이 최대면 회복 하트는 주우러 가지 않는다.
 test('autopilot 목숨 풀이면 하트 무시', () => { const g = apGame({ lives: 3, powerups: [{ x: 350, y: 700, kind: 'H' }] }); autopilotStep(g, 0.1, 500, 1000); ok(Math.abs(g.player.x - 200) < 1); });
+// 안전 상황에서 조준 표적이 불감대(12px) 이내로 옆에 있으면 x를 미세 이동하지 않는다(떨림 방지).
+test('autopilot 안전 시 근접 표적엔 떨지 않음', () => { const g = apGame({ enemies: [{ x: 208, y: 500, r: 15, speed: 150 }] }); autopilotStep(g, 0.1, 500, 1000); eq(g.player.x, 200); });
+// 반대로 위협 회피 중엔 불감대 없이 정밀 이동해야 한다(위 '정면 충돌 코스 회피' 테스트가 이를 보장).
 
 report();
 </script>
