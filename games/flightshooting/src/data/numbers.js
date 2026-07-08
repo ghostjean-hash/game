@@ -35,11 +35,12 @@ export const CFG = {
       tick: 0.5,                        // 데미지 주기(초)
     },
     // 꼬리 비행기(T): 플레이어 뒤 유도탄 발사기. 4대 먼저 채운 뒤 1~4번 순서로 무기 진화(무기 4단계).
-    //   배치는 뒤 좌우 부채(아래 여백 안). 무기 단계↑ → 유도탄 크기(missileR)·데미지 상승(작은→큰).
+    //   배치: 세로 일렬 체인 - 1번은 플레이어를, 2번은 1번을, …각자 앞 개체를 개별 추종(뱀 꼬리처럼 출렁).
+    //   gap = 앞 개체와의 간격. 무기 단계↑ → 유도탄 크기(missileR)·데미지 상승(작은→큰).
     tail: {
       maxCount: 4, weaponMax: 4,
-      stepX: 20, baseY: 24, stepY: 9,
-      follow: 8,
+      gap: 10, r: 5.5,          // 앞 개체 뒤 간격(px) + 꼬리기 반경(체인 간격 계산·렌더 공용)
+      follow: 10,               // 앞 개체 추종 속도(초당 비율) - 클수록 덜 늘어진다
       missileEvery: 0.9, missileSpeed: 300, missileTurn: 3.2, missileAccel: 520,
       missileR: 3.5, missileRGrow: 1.1,
       missileDmgBase: 3, missileDmgGrow: 1.5,

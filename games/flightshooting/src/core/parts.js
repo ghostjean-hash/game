@@ -29,17 +29,21 @@ export function addOption(game) {
   return true;
 }
 
-// 꼬리 비행기 n번째(0-based) 목표 위치: 플레이어 뒤(아래) 좌우 부채. count에 따라 매 프레임 재배치.
-function tailTarget(idx, count, p) {
-  const off = idx - (count - 1) / 2;                 // 중앙 기준 좌우 부호
-  return { x: p.x + off * TAIL.stepX, y: p.y + TAIL.baseY + Math.abs(off) * TAIL.stepY };
+// 꼬리 비행기 idx의 추종 목표: 앞 개체(0번은 플레이어, 그 외는 idx-1번 꼬리기) 바로 뒤(아래).
+// 앞 개체를 각자 개별 추종하므로 세로 일렬 체인이 뱀 꼬리처럼 출렁인다.
+function tailTarget(idx, game, p) {
+  const lead = idx === 0 ? p : game.tail[idx - 1];
+  const leadR = idx === 0 ? (p.r || 14) : TAIL.r;
+  return { x: lead.x, y: lead.y + leadR + TAIL.gap };
 }
 
 // 꼬리 비행기 성장 1스텝. 4대 먼저 채우고('count'), 그 뒤 1~4번 순서로 무기 진화('weapon'). 만렙이면 null.
 export function addTail(game) {
   if (game.tail.length < TAIL.maxCount) {
     const p = game.player;
-    const t = p ? tailTarget(game.tail.length, game.tail.length + 1, p) : { x: 0, y: 0 };
+    // 새 꼬리기는 맨 뒤(마지막 꼬리기 또는 플레이어 뒤)에서 시작.
+    const lead = game.tail.length ? game.tail[game.tail.length - 1] : p;
+    const t = lead ? { x: lead.x, y: lead.y + (game.tail.length ? TAIL.r : (p.r || 14)) + TAIL.gap } : { x: 0, y: 0 };
     game.tail.push({ x: t.x, y: t.y, fireTimer: TAIL.missileEvery * Math.random(), weapon: 1 });
     return 'count';
   }
@@ -117,20 +121,21 @@ export function stepOptions(game, dt, canFire = true) {
   }
 }
 
-// 꼬리 비행기 위치 추종 + 유도탄 발사. 무기 단계↑ → 유도탄 크기·데미지 상승. 유도는 homeMissiles가 담당.
+// 꼬리 비행기 체인 추종 + 유도탄 발사. 각자 앞 개체를 개별 추종(세로 일렬, 뱀 꼬리처럼 출렁).
+// 뒤 개체부터 갱신해 앞 개체의 '이전 프레임' 위치를 따르게 한다(즉시 전파 대신 지연 체인). 유도는 homeMissiles가 담당.
 export function stepTail(game, dt, canFire = true) {
   const p = game.player;
   if (!p || !game.tail) return;
   const k = Math.min(1, TAIL.follow * dt);
-  const n = game.tail.length;
   let fired = false;
-  game.tail.forEach((o, idx) => {
-    const t = tailTarget(idx, n, p);
+  for (let idx = game.tail.length - 1; idx >= 0; idx--) {
+    const o = game.tail[idx];
+    const t = tailTarget(idx, game, p);
     o.x += (t.x - o.x) * k;
     o.y += (t.y - o.y) * k;
-    if (!canFire) return;
+    if (!canFire) continue;
     o.fireTimer -= dt;
-    if (o.fireTimer > 0) return;
+    if (o.fireTimer > 0) continue;
     o.fireTimer = TAIL.missileEvery;
     const w = o.weapon;
     game.bullets.push({
@@ -140,7 +145,7 @@ export function stepTail(game, dt, canFire = true) {
       kind: 'missile', weapon: w,
     });
     fired = true;
-  });
+  }
   if (fired) game.sfx.push('missile');
 }
 
