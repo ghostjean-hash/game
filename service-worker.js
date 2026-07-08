@@ -92,7 +92,8 @@
 // v145 (2026-07-08): english-reading 끊어 읽기 직접 긋기·/ 검토 채점 전환 + 문장별 문법 목록.
 // v146 (2026-07-08): flightshooting 진화 탄 형태 확대 - 색만 바뀌고 모양 체감 안 되던 문제로 tier별 크기·형태를 확 키움(원→타원→긴형→링) + 레이저 흰-보라 빔 + 자동이동 떨림 제거. PWA 옛 캐시(형태 미반영) 무효화.
 // v147 (2026-07-09): flightshooting 무기 역할 교체 - 메인 총알(내 비행기)은 직진, 사이드 총알(사이드 비행기)은 양쪽 대각선 확산. 명칭 정리(메인/사이드/유도탄). PWA 옛 캐시 무효화.
-const CACHE_VERSION = "v147";
+// v148 (2026-07-09): flightshooting 회복(H) 파워업을 육각형 안 하트 → 하트 모양 자체로 변경. PWA 옛 캐시 무효화.
+const CACHE_VERSION = "v148";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

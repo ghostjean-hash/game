@@ -309,8 +309,9 @@ function drawEnemyBullets(ctx, game) {
 }
 
 // 파워업 = 각진 육각형 아이템(둥근 적 정령과 형태로 구분) + 밝은 색 채움 + 흰 테두리 + 글자.
+// 예외: 회복(H)은 육각형 없이 하트 모양 자체로 그린다(사용자 지시 2026-07-09).
 function drawPowerups(ctx, game) {
-  const label = { P: 'P', S: 'S', E: 'E', T: 'T', H: '♥', B: 'B' };
+  const label = { P: 'P', S: 'S', E: 'E', T: 'T', B: 'B' };
   for (const it of game.powerups) {
     const col = COLORS.powerup[it.kind];
     ctx.save();
@@ -322,6 +323,17 @@ function drawPowerups(ctx, game) {
     ctx.fillStyle = col;
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 1.5;
+    if (it.kind === 'H') {
+      // 회복 = 하트 모양 그 자체(빨간 채움 + 흰 테두리 + 글로우).
+      const hs = it.r * 0.92;
+      ctx.beginPath();
+      ctx.moveTo(0, hs * 0.75);
+      ctx.bezierCurveTo(hs * 1.2, -hs * 0.3, hs * 0.55, -hs * 1.15, 0, -hs * 0.35);
+      ctx.bezierCurveTo(-hs * 0.55, -hs * 1.15, -hs * 1.2, -hs * 0.3, 0, hs * 0.75);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.restore();
+      continue;
+    }
     ctx.beginPath();
     for (let i = 0; i < 6; i++) {
       const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
@@ -331,20 +343,10 @@ function drawPowerups(ctx, game) {
     ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.shadowBlur = 0;
     ctx.fillStyle = '#101420';
-    if (it.kind === 'H') {
-      // 하트 도형(이모지 대신 캔버스 path)
-      const hs = it.r * 0.44;
-      ctx.beginPath();
-      ctx.moveTo(0, hs * 0.75);
-      ctx.bezierCurveTo(hs * 1.2, -hs * 0.3, hs * 0.55, -hs * 1.15, 0, -hs * 0.35);
-      ctx.bezierCurveTo(-hs * 0.55, -hs * 1.15, -hs * 1.2, -hs * 0.3, 0, hs * 0.75);
-      ctx.fill();
-    } else {
-      ctx.font = 'bold 12px ui-monospace, monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(label[it.kind], 0, 1);
-    }
+    ctx.font = 'bold 12px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label[it.kind], 0, 1);
     ctx.restore();
   }
 }
