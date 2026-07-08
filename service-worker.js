@@ -99,7 +99,8 @@
 // v152 (2026-07-09): flightshooting 사이드 총알을 부채로 확산(안쪽 살짝~바깥 크게, slot별 각도). PWA 옛 캐시 무효화.
 // v153 (2026-07-09): english-reading 틀린 문장 예문의 취소선 제거(가독성).
 // v154 (2026-07-09): english-reading 끊는 기준 카드 + 덩어리별 끊는 이유 자동 태그.
-const CACHE_VERSION = "v154";
+// v155 (2026-07-09): flightshooting 강화 형태 교환 - 메인 총알은 레이저식(길고 굵어짐), 사이드 총알은 부채 확산 + 진화(원→타원→빔→링) 이관. PWA 옛 캐시 무효화.
+const CACHE_VERSION = "v155";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

@@ -25,7 +25,8 @@ export function addOption(game) {
   const s = optionSlot(game.options.length);
   const p = game.player;
   const t = p ? optionTarget({ ...s }, p) : { x: 0, y: 0 };
-  game.options.push({ ...s, x: t.x, y: t.y, fireTimer: OPT.laserEvery });
+  // rank = 추가 순서(0~7) = 사이드 총알 진화 순번(안쪽부터). 진화 tier 계산에 쓴다.
+  game.options.push({ ...s, rank: game.options.length, x: t.x, y: t.y, fireTimer: OPT.laserEvery });
   return true;
 }
 
@@ -65,9 +66,16 @@ export function gainFront(game) {
   return false; // front 만렙 → 점수 보너스로 처리(world.grabItem)
 }
 export function gainOption(game) {
-  if (!addOption(game)) return false;
-  game.partHistory.push('option');
-  return true;
+  if (addOption(game)) { game.partHistory.push('option'); return true; }
+  // 사이드 8대를 다 채운 뒤 S를 더 먹으면 사이드 총알이 진화(원→타원→빔→링).
+  // 발별 순차: 안쪽(rank 0)부터 한 발씩, 8대×4티어 = 32단계(메인의 옛 발별 진화 구조를 사이드로 이관).
+  const evoMax = (CFG.bullet.shapes.length - 1) * OPT.maxPerSide * 2;
+  if ((game.optionEvo || 0) < evoMax) {
+    game.optionEvo = (game.optionEvo || 0) + 1;
+    game.partHistory.push('optionEvo');
+    return true;
+  }
+  return false;
 }
 export function gainZone(game) {
   if (game.zone.level >= ZONE.radius.length - 1) return false;
@@ -89,6 +97,7 @@ export function loseLastPart(game) {
   const part = game.partHistory.pop();
   if (part === 'front') game.front = Math.max(1, game.front - 1);
   else if (part === 'option') game.options.pop();
+  else if (part === 'optionEvo') game.optionEvo = Math.max(0, (game.optionEvo || 0) - 1);
   else if (part === 'zone') game.zone.level = Math.max(0, game.zone.level - 1);
   else if (part === 'tail') game.tail.pop();
   else if (part === 'tailWeapon') {
@@ -120,7 +129,10 @@ export function stepOptions(game, dt, canFire = true) {
     // 사이드 총알은 부채로 퍼진다: 안쪽(slot 0) 살짝, 바깥으로 갈수록 크게. side로 좌/우.
     const deg = OPT.laserDiagBase + o.slot * OPT.laserDiagStep;
     const rad = (o.side * deg * Math.PI) / 180;
-    game.bullets.push({ x: o.x, y: o.y - 6, vx: Math.sin(rad) * OPT.laserSpeed, vy: -Math.cos(rad) * OPT.laserSpeed, r: laserR, dmg: laserDmg, kind: 'laser' });
+    // 진화 tier: 8대 채운 뒤 optionEvo로 안쪽(rank 0)부터 원→타원→빔→링. tier↑이면 데미지 +tier.
+    const evo = game.optionEvo || 0;
+    const tier = evo >= o.rank + 1 ? Math.min(Math.floor((evo - (o.rank + 1)) / 8) + 1, CFG.bullet.shapes.length - 1) : 0;
+    game.bullets.push({ x: o.x, y: o.y - 6, vx: Math.sin(rad) * OPT.laserSpeed, vy: -Math.cos(rad) * OPT.laserSpeed, r: laserR, dmg: laserDmg + tier, kind: 'laser', tier });
   }
 }
 

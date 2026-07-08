@@ -242,16 +242,37 @@ function drawBullets(ctx, game) {
   ctx.save();
   for (const b of game.bullets) {
     if (b.kind === 'laser') {
-      // 사이드 총알(레이저): 가늘고 긴 흰-보라 빔. 대각선으로 나가므로 진행 방향으로 막대를 회전시킨다.
+      // 사이드 총알. tier 0 = 기본 흰-보라 빔, tier 1~4 = 진화 원→타원→빔→링(시안). 진행 방향으로 회전.
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
-      ctx.save();
-      ctx.translate(b.x, b.y);
-      ctx.rotate(ang);
-      ctx.fillStyle = COLORS.laser;
-      ctx.fillRect(-b.r * 0.5, -12, b.r, 20);         // 라벤더 외곽(길게)
-      ctx.fillStyle = COLORS.laserCore;
-      ctx.fillRect(-b.r * 0.24, -10, b.r * 0.48, 16); // 흰 코어(가늘게)
-      ctx.restore();
+      const tier = b.tier || 0;
+      if (tier === 0) {
+        ctx.save();
+        ctx.translate(b.x, b.y);
+        ctx.rotate(ang);
+        ctx.fillStyle = COLORS.laser;
+        ctx.fillRect(-b.r * 0.5, -12, b.r, 20);         // 라벤더 외곽(길게)
+        ctx.fillStyle = COLORS.laserCore;
+        ctx.fillRect(-b.r * 0.24, -10, b.r * 0.48, 16); // 흰 코어(가늘게)
+        ctx.restore();
+      } else {
+        const sh = CFG.bullet.shapes[tier];
+        const col = COLORS.bulletShapeTier[tier];
+        const rx = b.r * sh.rx, ry = b.r * sh.ry;
+        ctx.fillStyle = col;
+        ctx.strokeStyle = col;
+        if (sh.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = sh.glow; }
+        if (sh.ring) {
+          ctx.lineWidth = rx * (1 - sh.ring);
+          ctx.beginPath();
+          ctx.ellipse(b.x, b.y, rx * (1 + sh.ring) / 2, ry * (1 + sh.ring) / 2, ang, 0, Math.PI * 2);
+          ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.ellipse(b.x, b.y, rx, ry, ang, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+      }
     } else if (b.kind === 'missile') {
       // 꼬리 비행기 유도탄: 진행 방향 캡슐 + 짧은 꼬리. 무기 단계(weapon 1~4)별 색·크기.
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
@@ -266,26 +287,17 @@ function drawBullets(ctx, game) {
       ctx.ellipse(b.x, b.y, b.r * 0.7, b.r * 1.3, ang, 0, Math.PI * 2);
       ctx.fill();
     } else {
-      // 전방 화력탄: b.tier(0~4)별로 모양이 원→타원→긴형→링으로 바뀐다(색·글로우는 보조). ring이면 도넛 stroke.
+      // 메인 총알: beam(레이저 강화 레벨)만큼 길고 굵어진다(관통 없음). 시안 고정 + beam↑이면 발광 강화.
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
-      const tier = b.tier || 0;
-      const sh = CFG.bullet.shapes[tier];
-      const col = COLORS.bulletShapeTier[tier];
-      const rx = b.r * sh.rx, ry = b.r * sh.ry;
-      ctx.fillStyle = col;
-      ctx.strokeStyle = col;
-      if (sh.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = sh.glow; }
-      if (sh.ring) {
-        // 링(최종): 가운데가 뚫린 고리 - 두꺼운 stroke 타원(바깥 rx, 안쪽 rx*ring).
-        ctx.lineWidth = rx * (1 - sh.ring);
-        ctx.beginPath();
-        ctx.ellipse(b.x, b.y, rx * (1 + sh.ring) / 2, ry * (1 + sh.ring) / 2, ang, 0, Math.PI * 2);
-        ctx.stroke();
-      } else {
-        ctx.beginPath();
-        ctx.ellipse(b.x, b.y, rx, ry, ang, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      const F = CFG.parts.front;
+      const beam = b.beam || 0;
+      const rx = b.r * (1 + beam * F.beamWidGrow);        // 굵기
+      const ry = b.r * 2.2 * (1 + beam * F.beamLenGrow);  // 길이(기본 세로 타원 2.2배에서 더 늘어남)
+      ctx.fillStyle = COLORS.bullet;
+      if (beam > 0) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = Math.min(3 + beam * 0.4, 16); }
+      ctx.beginPath();
+      ctx.ellipse(b.x, b.y, rx, ry, ang, 0, Math.PI * 2);
+      ctx.fill();
       ctx.shadowBlur = 0;
     }
   }

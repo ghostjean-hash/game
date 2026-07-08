@@ -19,10 +19,11 @@ export const CFG = {
   enemyBullet: { speed: 250, r: 5 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
   parts: {
-    // 전방 화력(= 메인 총알, 내 비행기가 쏜다): front 1~40. 1~8=탄 수, 9~40=발별 진화(8발×4티어).
+    // 전방 화력(= 메인 총알, 내 비행기가 쏜다): front 1~40. 1~8=탄 수, 9~40=레이저식 강화.
     //   메인 총알은 직진으로 나간다(부채 없음). 여러 발이면 laneGap 간격으로 가로로 나란히 평행 발사.
-    // max = 8 + tierMax×8. shapeDmg = 진화 티어 1당 그 탄의 데미지 증가.
-    front: { max: 40, tierMax: 4, rBase: 3.2, rGrow: 0, shapeDmg: 1, laneGap: 11 },
+    //   9단계부터는 beam = front-8 만큼 탄이 '레이저처럼' 길고 굵어진다(관통 없음, 진화 모양은 사이드 총알로 이관).
+    //   beamLenGrow/beamWidGrow = beam 1당 세로 길이·가로 굵기 증가율, beamDmg = beam 1당 데미지 증가.
+    front: { max: 40, rBase: 3.2, rGrow: 0, laneGap: 11, beamDmg: 0.25, beamLenGrow: 0.09, beamWidGrow: 0.045 },
     option: {
       maxPerSide: 4,          // 좌우 각 4대 → 총 8대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격
