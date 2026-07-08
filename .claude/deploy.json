@@ -21,7 +21,7 @@
   "smoke": {
     "urls": [
       { "url": "https://ghostjean-hash.github.io/game/", "selector": "#grid-games .card", "mustContain": null },
-      { "url": "https://ghostjean-hash.github.io/game/apps/english-reading/", "selector": ".sentence .word", "mustContain": null }
+      { "url": "https://ghostjean-hash.github.io/game/apps/english-reading/", "selector": ".intro-card", "mustContain": null }
     ],
     "timeoutSec": 180,
     "intervalSec": 15,
