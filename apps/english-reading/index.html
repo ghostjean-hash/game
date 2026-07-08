@@ -11,23 +11,17 @@
 <link rel="stylesheet" href="../../shared/tokens.css" />
 <link rel="stylesheet" href="../../shared/base.css" />
 <link rel="stylesheet" href="./style.css" />
-<title>영어 문법 스캔 독해</title>
+<title>영어 하이브리드 독해</title>
 </head>
 <body>
-<div class="page lesson-page">
+<div class="page reader-page">
   <header class="topbar">
-    <a href="../../" class="home" aria-label="홈으로">←</a>
-    <div class="lesson-info">
-      <div class="lesson-title" id="lesson-title">불러오는 중…</div>
-      <div class="lesson-progress" id="lesson-progress"></div>
-    </div>
+    <button class="nav-btn nav-back" id="nav-back" type="button" aria-label="뒤로">←</button>
+    <div class="topbar-title" id="topbar-title">불러오는 중…</div>
+    <button class="nav-btn nav-vocab" id="nav-vocab" type="button">단어장</button>
   </header>
-
   <div class="bar" aria-hidden="true"><div class="bar-fill" id="bar-fill"></div></div>
-
   <main class="stage" id="stage" aria-live="polite"></main>
-
-  <footer class="controls" id="controls"></footer>
 </div>
 <script type="module" src="./src/main.js"></script>
 </body>

@@ -3,7 +3,7 @@
     {
       "id": "english-reading",
       "title": "영어 독해",
-      "subtitle": "문법 핵심 단어 스캔 + 청킹 직독직해 세션 훈련",
+      "subtitle": "다독의 흐름과 정독의 깊이를 합친 하이브리드 독해",
       "path": "apps/english-reading/",
       "status": "wip",
       "accent": "#5aa9ff"

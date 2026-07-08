@@ -1,7 +1,6 @@
-/* 영어 문법 스캔 앱 전용 스타일. 색·간격·폰트는 shared/tokens.css 변수 사용. */
+/* 영어 하이브리드 독해 앱 전용 스타일. 색·간격은 shared/tokens.css 변수 사용. */
 
-/* 라이트 테마 - 이 앱만 밝은 학습 화면. 허브 공용 다크 토큰을 앱 범위(body)에서 재정의한다.
-   base.css의 body/.btn/.modal 등이 이 변수들을 참조하므로 값만 바꾸면 라이트로 전환된다. */
+/* 라이트 테마 - 이 앱만 밝은 독서 화면. 허브 공용 다크 토큰을 body 범위에서 재정의한다. */
 body {
   --bg: #f6f8fc;
   --bg-elev: #ffffff;
@@ -17,17 +16,17 @@ body {
   background: var(--bg);
   color: var(--fg);
 
-  /* 학습 피드백 색 */
   --er-accent: #3b82f6;
   --ok: #16a34a;
   --ok-bg: #dcfce7;
+  --known: #fef3c7;
 }
 
-.lesson-page {
+.reader-page {
   display: flex;
   flex-direction: column;
   height: 100dvh;
-  max-width: 640px;
+  max-width: 680px;
   margin: 0 auto;
 }
 
@@ -39,26 +38,37 @@ body {
   padding: var(--sp-3) var(--sp-4);
   border-bottom: 1px solid var(--line);
 }
-.topbar .home {
+.nav-btn {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  display: flex;
+  height: 38px;
+  min-width: 38px;
+  padding: 0 12px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--fg);
-  text-decoration: none;
-  border-radius: var(--r-2);
-  border: 1px solid var(--line);
   background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  cursor: pointer;
 }
-.topbar .home:active { transform: scale(0.95); }
-.lesson-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.lesson-title { font-size: 15px; font-weight: 700; color: var(--er-accent); }
-.lesson-progress { font-size: 12px; color: var(--fg-mute); font-variant-numeric: tabular-nums; }
+.nav-back { font-size: 20px; }
+.nav-btn:active { transform: scale(0.95); }
+.topbar-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--fg);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-/* 진행 바 - 세션 카운트에 따라 좌→우로 찬다 */
+/* 진행 바 - 코스 진행률(완독한 지문 비율) */
 .bar { height: 4px; background: var(--bg-elev-2); flex-shrink: 0; }
 .bar-fill {
   height: 100%;
@@ -68,85 +78,199 @@ body {
   transition: width 0.35s var(--ease);
 }
 
-/* 본문 */
+/* 본문 영역 */
 .stage {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-4);
-  padding: var(--sp-5) var(--sp-4) var(--sp-6);
   overflow-y: auto;
+  padding: var(--sp-5) var(--sp-4) var(--sp-6);
 }
-.instruction { font-size: 13px; color: var(--fg-dim); text-align: center; }
+.empty {
+  color: var(--fg-mute);
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.7;
+  margin-top: 30%;
+}
 
-/* 정답 메시지 배너 (상단) */
-.msg-banner {
-  padding: var(--sp-3) var(--sp-4);
-  border-radius: var(--r-2);
+/* ── 지문 목록 ── */
+.list-summary {
+  font-size: 14px;
+  color: var(--fg-dim);
+  padding: var(--sp-2) var(--sp-1) var(--sp-4);
+}
+.list-summary b { color: var(--er-accent); font-weight: 800; }
+
+.clear-banner {
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-3);
   background: var(--ok-bg);
   border: 1.5px solid var(--ok);
-  color: var(--ok);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.5;
+  margin-bottom: var(--sp-4);
+  animation: er-pop 0.3s var(--ease);
 }
-.msg-banner.pop { animation: er-pop 0.25s var(--ease); }
-@keyframes er-pop {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
+.clear-title { font-size: 17px; font-weight: 800; color: var(--ok); }
+.clear-sub { font-size: 13.5px; color: var(--fg-dim); margin-top: 4px; }
+
+.passage-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+.passage-card {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-4);
+  text-align: left;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+}
+.passage-card:active { transform: scale(0.99); }
+.passage-card .lv {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--er-accent);
+  background: var(--accent-weak, #eef2ff);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+.pc-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.pc-title { font-size: 15.5px; font-weight: 700; color: var(--fg); }
+.pc-en { font-size: 12.5px; color: var(--fg-mute); }
+.pc-status { flex-shrink: 0; font-size: 12px; color: var(--fg-mute); font-weight: 600; }
+.pc-status.done { color: var(--ok); }
+
+.text-btn {
+  display: block;
+  margin: var(--sp-5) auto 0;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-dim);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  cursor: pointer;
 }
 
-/* 문장 - 화면 중앙에 크게 */
-.sentence {
-  font-size: 24px;
-  line-height: 1.75;
-  font-weight: 600;
-  letter-spacing: -0.2px;
-  word-break: keep-all;
-  text-align: center;
-  margin: auto 0;
+/* ── 읽기 화면 ── */
+.first-hint {
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-2);
+  background: var(--accent-weak, #eef2ff);
+  border: 1px dashed var(--er-accent);
+  color: var(--accent-strong);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: var(--sp-4);
+  animation: er-pop 0.25s var(--ease);
 }
-.word {
-  display: inline-block;
-  padding: 1px 3px;
-  border-radius: var(--r-1);
-  cursor: pointer;
+
+.article { display: flex; flex-direction: column; gap: var(--sp-3); }
+.sentence-block { }
+.sentence-line {
+  font-size: 19px;
+  line-height: 1.9;
+  font-weight: 500;
+  color: var(--fg);
+  word-break: keep-all;
+}
+.sentence-line.clickable { cursor: pointer; }
+.sentence-line.clickable:hover { background: rgba(59,130,246,0.04); border-radius: var(--r-1); }
+
+.w {
+  position: relative;
   -webkit-tap-highlight-color: transparent;
 }
+/* 주요 단어 - 아주 옅은 점선 밑줄로만 구분(몰입 유지 + 발견 가능) */
+.w.key {
+  cursor: pointer;
+  border-bottom: 1.5px dotted var(--er-accent);
+  padding-bottom: 1px;
+}
 @media (hover: hover) {
-  .word:not(.found):hover { background: var(--bg-elev-2); }
+  .w.key:hover { background: var(--accent-weak, #eef2ff); border-radius: var(--r-1); }
 }
-.word.found {
-  color: var(--ok);
-  background: var(--ok-bg);
-  border-bottom: 2px solid var(--ok);
-  cursor: default;
+/* 재독 시 이미 수집한 단어를 옅게 강조 */
+.w.known { background: var(--known); border-radius: var(--r-1); }
+
+/* 단어 뜻 말풍선 */
+.word-pop {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  padding: 7px 11px;
+  background: var(--fg);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  border-radius: var(--r-2);
+  white-space: normal;
+  width: max-content;
+  max-width: 240px;
+  box-shadow: var(--shadow-2);
+  z-index: 20;
+  animation: er-pop 0.15s var(--ease);
+  pointer-events: none;
 }
-.word.shake { animation: er-shake 0.3s var(--ease); }
-@keyframes er-shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  50% { transform: translateX(4px); }
-  75% { transform: translateX(-3px); }
+.word-pop::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--fg);
 }
 
-/* 인트로 카드(패턴 이해) / 구조 해부 카드 - 공통 블록 */
-.intro-card, .insight-card {
+/* 문장 끝 현미경 버튼 */
+.scope-btn {
+  margin-left: 4px;
+  padding: 0 4px;
+  font-size: 15px;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  vertical-align: middle;
+}
+.scope-btn:hover { opacity: 1; }
+
+/* 끊어 읽기 청킹 */
+.chunks { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-2); }
+.chunk {
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  opacity: 0;
+  animation: er-slide 0.3s var(--ease) forwards;
+}
+.chunk-en { font-size: 15px; font-weight: 700; color: var(--fg); }
+.chunk-kr { font-size: 13.5px; color: var(--er-accent); margin-top: 3px; }
+
+/* 구조 해설 카드 */
+.scope-card {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-4);
-  padding: var(--sp-5);
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  margin: var(--sp-3) 0;
   border-radius: var(--r-3);
   background: var(--bg-elev);
   border: 1px solid var(--line);
   box-shadow: var(--shadow-1);
   animation: er-pop 0.25s var(--ease);
 }
-.intro-card { margin: auto 0; }
-.intro-head { font-size: 19px; font-weight: 800; color: var(--fg); }
 .block { display: flex; flex-direction: column; gap: 4px; }
 .block-label { font-size: 12px; font-weight: 700; color: var(--er-accent); }
-.block-body { font-size: 14.5px; line-height: 1.65; color: var(--fg); }
+.block-body { font-size: 14px; line-height: 1.65; color: var(--fg); }
 .block-body.formula {
   font-weight: 700;
   padding: var(--sp-3);
@@ -162,29 +286,56 @@ body {
   text-decoration-color: rgba(185, 28, 28, 0.4);
 }
 
-/* 해석 보기 버튼 / 끊어읽기 청킹 */
-.chunk-btn {
-  align-self: center;
-  padding: 8px 16px;
-  font-size: 13px;
+.read-done {
+  display: block;
+  width: 100%;
+  margin-top: var(--sp-6);
+  padding: 15px;
+  font-size: 15px;
 }
-.chunks { display: flex; flex-direction: column; gap: var(--sp-2); }
-.chunk {
-  padding: var(--sp-3) var(--sp-4);
+
+/* ── 단어장 ── */
+.vocab-list { display: flex; flex-direction: column; gap: var(--sp-2); }
+.vocab-item {
+  border: 1px solid var(--line);
   border-radius: var(--r-2);
   background: var(--bg-elev);
-  border: 1px solid var(--line);
-  opacity: 0;
-  animation: er-slide 0.35s var(--ease) forwards;
+  overflow: hidden;
 }
-@keyframes er-slide {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+.vocab-row { display: flex; align-items: center; }
+.vocab-word {
+  flex: 1;
+  text-align: left;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg);
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
-.chunk-en { font-size: 15px; font-weight: 700; color: var(--fg); }
-.chunk-kr { font-size: 13.5px; color: var(--er-accent); margin-top: 3px; }
+.vocab-del {
+  flex-shrink: 0;
+  width: 44px;
+  align-self: stretch;
+  color: var(--fg-mute);
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--line);
+  cursor: pointer;
+  font-size: 13px;
+}
+.vocab-del:hover { color: #b91c1c; background: #fef2f2; }
+.vocab-detail {
+  padding: var(--sp-3) var(--sp-4);
+  border-top: 1px solid var(--line);
+  background: var(--bg-elev-2);
+}
+.vd-mean { font-size: 14px; font-weight: 700; color: var(--er-accent); }
+.vd-ex { font-size: 13.5px; color: var(--fg); margin-top: 6px; line-height: 1.5; }
+.vd-src { font-size: 12px; color: var(--fg-mute); margin-top: 6px; }
 
-/* 카테고리 전환 모달 */
+/* ── 모달(코스 클리어 / 설정) ── */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -195,10 +346,11 @@ body {
   padding: var(--sp-5);
   z-index: 100;
 }
-.switch-modal {
+.app-modal {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-4);
+  gap: var(--sp-3);
+  width: 100%;
   max-width: 420px;
   padding: var(--sp-5);
   border-radius: var(--r-3);
@@ -206,19 +358,41 @@ body {
   box-shadow: var(--shadow-2);
   animation: er-pop 0.25s var(--ease);
 }
-.modal-msg { font-size: 16px; font-weight: 700; line-height: 1.6; color: var(--fg); }
-.modal-next { font-size: 14px; color: var(--er-accent); font-weight: 700; }
-
-/* 하단 조작 */
-.controls {
+.modal-badge { font-size: 40px; text-align: center; }
+.modal-msg { font-size: 18px; font-weight: 800; color: var(--fg); }
+.modal-sub { font-size: 14px; color: var(--fg-dim); line-height: 1.6; }
+.toggle-row {
   display: flex;
-  gap: var(--sp-3);
-  padding: var(--sp-4);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-3) 0;
   border-top: 1px solid var(--line);
+  font-size: 15px;
+  color: var(--fg);
+  cursor: pointer;
 }
-.controls:empty { display: none; }
-.controls .btn { flex: 1; padding: 14px; font-size: 15px; text-align: center; }
-.lesson-page .btn-primary,
-.switch-modal .btn-primary { background: var(--er-accent); color: #ffffff; }
-.lesson-page .btn-primary:hover,
-.switch-modal .btn-primary:hover { background: var(--accent-strong); }
+.toggle-row input { width: 20px; height: 20px; accent-color: var(--er-accent); }
+.app-modal .btn-primary { margin-top: var(--sp-2); }
+
+/* 공용 버튼 - 라이트 강조색 */
+.reader-page .btn-primary,
+.app-modal .btn-primary {
+  background: var(--er-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--r-2);
+  font-weight: 700;
+  cursor: pointer;
+}
+.reader-page .btn-primary:hover,
+.app-modal .btn-primary:hover { background: var(--accent-strong); }
+
+/* 애니메이션 */
+@keyframes er-pop {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes er-slide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

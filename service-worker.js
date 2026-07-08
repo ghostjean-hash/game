@@ -88,7 +88,8 @@
 // v141 (2026-07-08): SW 등록 경로 결함 수정(shared/ui.js) - 하위 페이지(games/·apps/)에서 페이지 기준 상대 경로로 등록해 404, 루트 기준 해석으로 교정.
 // v142 (2026-07-08): english-reading 전면 전환 - 독해 사다리 폐기, 세션 기반 문법 스캔+청킹 앱으로 재작성(사용자 지시).
 // v143 (2026-07-08): english-reading 해석·작문 업그레이드 - 카테고리 인트로 + 구조 해부 카드 + 직독직해 청킹 재작업.
-const CACHE_VERSION = "v143";
+// v144 (2026-07-08): english-reading v0.6 하이브리드 독해 전면 재구성 - 몰입 리딩 + 문장 끊어읽기 + 단어 수집 + 🔬 구조해설 + 완만한 난이도 코스/전체 클리어 + 노출 설정.
+const CACHE_VERSION = "v144";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

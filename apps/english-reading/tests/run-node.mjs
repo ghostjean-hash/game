@@ -1,10 +1,10 @@
-// english-reading(문법 스캔) 유닛 + 데이터 검증 테스트 (node apps/english-reading/tests/run-node.mjs)
-// 1) core 순수 로직(tokenize·session) 2) grammar-bank.json 무결성(죽은 트랩 0).
+// english-reading(하이브리드 독해) 유닛 + 데이터 검증 (node apps/english-reading/tests/run-node.mjs)
+// 1) core 순수 로직(tokenize·course) 2) passages.json 무결성(죽은 단어 0·청킹 재구성·insight 4필드).
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { tokenize, resolveTargets } from "../src/core/tokenize.js";
-import { createSession } from "../src/core/session.js";
+import { createCourse, courseProgress, passageText } from "../src/core/course.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 let failures = 0;
@@ -20,9 +20,9 @@ function check(name, cond, detail = "") {
 
 // ── tokenize ──────────────────────────────
 {
-  const toks = tokenize("Many people find it natural to worry.");
+  const toks = tokenize("You spilled some coffee on your shirt.");
   check("tokenize: 공백 분리 개수", toks.length === 7);
-  check("tokenize: clean이 구두점 제거", toks[6].clean === "worry" && toks[6].raw === "worry.");
+  check("tokenize: clean이 구두점 제거", toks[6].clean === "shirt" && toks[6].raw === "shirt.");
 
   const dup = tokenize("to learn is to grow.");
   const t2 = resolveTargets(dup, [{ word: "to", nth: 2 }]);
@@ -31,62 +31,84 @@ function check(name, cond, detail = "") {
   check("resolveTargets: 미존재 단어 index -1", miss[0].index === -1);
 }
 
-// ── createSession 세션 제어 ──────────────────────────────
+// ── createCourse / courseProgress ──────────────────────────────
 {
-  const cats = [
-    { id: "a", title: "A", sentences: [{ text: "s1" }, { text: "s2" }] },
-    { id: "b", title: "B", sentences: [{ text: "t1" }] },
-  ];
-  const s = createSession(cats, { maxCount: 3 });
-  check("session: 시작 상태", s.category().id === "a" && s.count() === 0 && s.sentence().text === "s1");
+  const data = {
+    id: "c",
+    title: "C",
+    passages: [
+      { id: "p3", level: 3, title: "T3", titleKr: "가", sentences: [{ text: "x" }] },
+      { id: "p1", level: 1, title: "T1", titleKr: "나", sentences: [{ text: "y" }] },
+      { id: "p2", level: 2, title: "T2", titleKr: "다", sentences: [{ text: "z" }] },
+    ],
+  };
+  const course = createCourse(data);
+  check("course: level 오름차순 정렬", course.passages.map((p) => p.id).join(",") === "p1,p2,p3");
+  check("course: passageById", course.passageById("p2").level === 2);
+  check("course: 없는 id는 null", course.passageById("zzz") === null);
 
-  let r = s.solve();
-  check("session: 문장 순환(뺑뺑이)", !r.switched && s.sentence().text === "s2" && s.count() === 1);
-  r = s.solve();
-  check("session: 순환 되감기", !r.switched && s.sentence().text === "s1" && s.count() === 2);
-  r = s.solve();
-  check("session: maxCount 도달 시 전환", r.switched === true && r.category.id === "b");
-  check("session: 전환 후 카운트 리셋 + 첫 문장", s.count() === 0 && s.category().id === "b" && s.sentence().text === "t1");
+  const p0 = courseProgress(course, []);
+  check("progress: 시작 0%", p0.done === 0 && p0.ratio === 0 && p0.cleared === false);
+  const p1 = courseProgress(course, ["p1"]);
+  check("progress: 1/3", p1.done === 1 && Math.abs(p1.ratio - 1 / 3) < 1e-9 && !p1.cleared);
+  const pAll = courseProgress(course, ["p1", "p2", "p3"]);
+  check("progress: 전체 완독 시 cleared", pAll.done === 3 && pAll.ratio === 1 && pAll.cleared === true);
+  const pDup = courseProgress(course, ["p1", "p1", "zzz"]);
+  check("progress: 중복·미존재 id 무시", pDup.done === 1);
 
-  s.solve(); s.solve(); const wrap = s.solve();
-  check("session: 마지막 카테고리 뒤 처음으로 순환", wrap.switched === true && wrap.category.id === "a");
-
-  const def = createSession(cats);
-  check("session: 기본 maxCount 40", def.maxCount === 40);
+  check("passageText: 문장 이어붙임", passageText({ sentences: [{ text: "A B." }, { text: "C D." }] }) === "A B. C D.");
 }
 
-// ── grammar-bank.json 데이터 무결성 ──────────────────────────────
+// ── passages.json 데이터 무결성 ──────────────────────────────
 {
-  const data = JSON.parse(readFileSync(join(here, "../src/data/grammar-bank.json"), "utf8"));
+  const data = JSON.parse(readFileSync(join(here, "../src/data/passages.json"), "utf8"));
   const norm = (t) => t.toLowerCase().replace(/[^a-z]/g, "");
-  const ids = new Set();
 
-  check("data: 카테고리 2개 이상", data.categories.length >= 2);
-  for (const cat of data.categories) {
-    check(`data(${cat.id}): id 중복 없음`, !ids.has(cat.id));
-    ids.add(cat.id);
-    check(`data(${cat.id}): 제목 존재`, !!cat.title);
-    check(`data(${cat.id}): 인트로(왜·공식·작문 팁) 완비`,
-      !!(cat.intro && cat.intro.why && cat.intro.formula && cat.intro.tip));
-    check(`data(${cat.id}): 문장 3개 이상`, cat.sentences.length >= 3, `${cat.sentences.length}개`);
+  check("data: 코스 1개 이상", Array.isArray(data.courses) && data.courses.length >= 1);
 
-    cat.sentences.forEach((s, si) => {
-      const tokens = tokenize(s.text);
-      check(`data(${cat.id} s${si + 1}): 청킹이 원문 재구성`,
-        norm(s.chunks.map((c) => c.en).join(" ")) === norm(s.text),
-        `"${s.chunks.map((c) => c.en).join(" ")}" vs "${s.text}"`);
-      check(`data(${cat.id} s${si + 1}): 청킹 한글 해석 전부 존재`, s.chunks.every((c) => !!c.kr));
-      check(`data(${cat.id} s${si + 1}): 트랩 1개 이상`, Array.isArray(s.traps) && s.traps.length >= 1);
-      check(`data(${cat.id} s${si + 1}): 구조 해부(공식·왜·비문·자연 해석) 완비`,
-        !!(s.insight && s.insight.formula && s.insight.why && s.insight.wrong && s.insight.natural));
+  for (const course of data.courses) {
+    check(`data(${course.id}): 코스 제목`, !!course.title);
+    check(`data(${course.id}): 지문 3편 이상`, course.passages.length >= 3, `${course.passages.length}편`);
 
-      const resolved = resolveTargets(tokens, s.traps);
-      resolved.forEach((t) => {
-        check(`data(${cat.id} s${si + 1} '${t.word}'): 트랩 단어가 문장에 실재`, t.index >= 0);
-        check(`data(${cat.id} s${si + 1} '${t.word}'): type이 카테고리와 일치 + 메시지 존재`,
-          t.type === cat.id && !!t.message);
+    const pids = new Set();
+    let prevLevel = 0;
+    for (const p of course.passages) {
+      check(`data(${course.id}/${p.id}): id 중복 없음`, !pids.has(p.id));
+      pids.add(p.id);
+      check(`data(${course.id}/${p.id}): level 숫자`, typeof p.level === "number");
+      check(`data(${course.id}/${p.id}): 제목(en/kr) 존재`, !!p.title && !!p.titleKr);
+      check(`data(${course.id}/${p.id}): 문장 3개 이상`, p.sentences.length >= 3, `${p.sentences.length}개`);
+
+      p.sentences.forEach((s, si) => {
+        const label = `${course.id}/${p.id} s${si + 1}`;
+        const tokens = tokenize(s.text);
+        // 청킹 재구성: en을 이어 붙이면 원문과 일치(구두점·대소문자 무관)
+        check(`data(${label}): 청킹이 원문 재구성`,
+          norm(s.chunks.map((c) => c.en).join(" ")) === norm(s.text),
+          `"${s.chunks.map((c) => c.en).join(" ")}" vs "${s.text}"`);
+        check(`data(${label}): 청킹 한글 해석 전부 존재`, s.chunks.every((c) => !!c.kr));
+
+        // 주요 단어: 0~3개, 각 단어는 원문에 실재(nth 해석), 뜻 존재
+        check(`data(${label}): 주요 단어 0~3개`, Array.isArray(s.words) && s.words.length <= 3);
+        const resolved = resolveTargets(tokens, s.words || []);
+        resolved.forEach((w) => {
+          check(`data(${label} '${w.word}'): 단어가 문장에 실재(죽은 입력 0)`, w.index >= 0);
+          check(`data(${label} '${w.word}'): 뜻 존재`, !!w.meaning);
+        });
+
+        // insight는 선택이지만 있으면 4필드 모두
+        if (s.insight) {
+          check(`data(${label}): insight 4필드(공식·왜·비문·자연) 완비`,
+            !!(s.insight.formula && s.insight.why && s.insight.wrong && s.insight.natural));
+        }
       });
-    });
+
+      // 지문당 insight 1~3개(구조 어려운 문장에만)
+      const insightCount = p.sentences.filter((s) => s.insight).length;
+      check(`data(${course.id}/${p.id}): insight 1~3개`, insightCount >= 1 && insightCount <= 3, `${insightCount}개`);
+
+      prevLevel = p.level;
+    }
   }
 }
 

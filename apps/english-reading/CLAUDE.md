@@ -4,63 +4,59 @@
 
 # 1. 앱 정의
 
-1.1. **한 줄**: 세션 기반 문법 스캔 + 청킹 직독직해 훈련 앱. 한 문법 카테고리(가목적어 it, To부정사 형용사적 용법 등)를 40문제 단위로 뺑뺑이 집중 훈련하고, 문장 속 문법 핵심 단어를 클릭으로 찾아내면 설명 메시지로 즉시 확인한다.
-1.2. **상태**: 코드는 v0.3 문법 스캔, 기획은 v0.4 하이브리드 독해로 뒤집힘(2026-07-08 spec/index.html 전면 재작성, 사용자 확정 대기). v0.4 확정 시 이 파일 3~6장도 하이브리드 기준으로 갱신 예정. 이전 방향들(v0.2 독해 사다리·v0.3 문법 스캔)은 커밋 이력과 PROGRESS에만 존재.
-1.3. **학습 흐름**: 카테고리 인트로(왜 이 패턴을 쓰나·공식·작문 팁) → 화면 중앙 큰 문장 → 문법 핵심 단어 클릭(정답=초록 하이라이트+상단 설명 배너+**구조 해부 카드**(공식·왜·비문 대비·자연 해석), 오답=흔들림) → 화면 터치 또는 '해석 보기'로 청킹 슬라이드 공개 → 다음 문장. 40문제 도달 시 축하 모달 → 다음 카테고리 인트로부터(마지막 뒤엔 처음으로 순환). 찾기는 진입점일 뿐, 학습의 몸통은 "왜 이 구조로 쓰는가"(2026-07-08 사용자 지적 반영).
-1.4. **위치**: game-hub 허브의 첫 "app"(게임 아님). `apps/_registry.json` 등록, 홈 앱 구역에서 진입.
-1.5. **현행 스펙의 단일 진실 source**: 이 파일 + `src/data/grammar-bank.json` 규약(4장). spec/index.html은 이전 방향(v0.2)의 기록.
+1.1. **한 줄**: 다독의 흐름과 정독의 깊이를 한 화면에 합친 하이브리드 리딩 도구. 평소엔 지문을 시원하게 몰입해 읽고, 막히는 문장·단어·구조에서만 손끝으로 끊어 읽기·뜻·구조 해설을 꺼내 쓴다. 타이핑과 강제 문제 풀이는 없다.
+1.2. **상태**: v0.6 하이브리드 독해 코드 구현 완료(2026-07-08). 기획서 `spec/index.html` v0.6과 정합. 이전 방향(v0.2 독해 사다리·v0.3 문법 스캔)은 커밋 이력·PROGRESS에만 존재.
+1.3. **학습 흐름**: 코스(난이도 완만 순으로 정렬된 지문 묶음) → 지문 목록에서 고름 → 몰입 리딩(문장 클릭=끊어 읽기, 주요 단어 클릭=뜻 말풍선+단어장 자동 수집, 문장 끝 🔬=구조 해설) → 읽기 완료(코스 진행률 +1, 개별은 조용히) → 코스 전체 완주 시에만 클리어 연출. 노출 설정으로 도움 3종을 학습자가 직접 토글. 재독 시 이미 수집한 단어를 본문에 옅게 표시.
+1.4. **위치**: game-hub 허브의 첫 "app". `apps/_registry.json` 등록.
+1.5. **현행 스펙 SSOT**: 이 파일 + `spec/index.html`(v0.6) + `src/data/passages.json` 규약(4장).
 
 # 2. 파일 구조
 
 ```
 apps/english-reading/
-├── CLAUDE.md          # 이 파일
-├── PROGRESS.md        # 진행 로그
-├── index.html         # 진입점
-├── dist/
-│   └── standalone.html  # 단일 파일 버전 (생성물 - 직접 수정 금지, tools/build-standalone.mjs로 재생성)
-├── style.css          # 앱 스코프 스타일 (라이트 테마 오버라이드 포함)
-├── spec/
-│   └── index.html     # 기획서 (v0.2 독해 사다리 기록 + v0.3 방향 전환 공지)
-├── tests/
-│   └── run-node.mjs   # core 유닛 + grammar-bank.json 무결성 테스트 (node로 실행)
-├── tools/
-│   └── build-standalone.mjs  # 원본에서 단일 HTML 재조립 (문장·코드 변경 시 재실행)
+├── CLAUDE.md / PROGRESS.md
+├── index.html            # 진입점 (reader-page: topbar / bar / stage)
+├── style.css             # 라이트 테마 + 화면별 스타일
+├── dist/standalone.html  # 생성물 (직접 수정 금지, tools/build-standalone.mjs로 재생성)
+├── spec/index.html       # 기획서 v0.6 하이브리드 독해
+├── tests/run-node.mjs    # core 유닛 + passages.json 무결성 (node로 실행)
+├── tools/build-standalone.mjs
 └── src/
-    ├── main.js        # 화면 조립 + 클릭/이벤트 (DOM 의존). 상단 MAX_SESSION_COUNT=40
+    ├── main.js           # 화면 조립 + 클릭/이벤트 (DOM). 목록·읽기·단어장·설정
     ├── core/
-    │   ├── tokenize.js  # 문장 토큰화 + 트랩 nth 해석 (순수, DOM 미의존)
-    │   └── session.js   # 카테고리 순환·카운트·전환 상태 전이 (순수, maxCount 주입 가능)
+    │   ├── tokenize.js   # 문장 토큰화 + nth 해석 (순수, DOM 미의존, 재사용)
+    │   └── course.js     # 코스·지문·진행 순수 로직 (createCourse / courseProgress)
     └── data/
-        └── grammar-bank.json  # 카테고리별 문장 은행 (콘텐츠 소스, 단일 진실)
+        └── passages.json # 코스별 지문 (콘텐츠 단일 진실)
 ```
 
 # 3. 핵심 결정 (작업 시 반드시 준수)
 
-3.1. **무빌드 정적 바닐라**. 허브 방침(서버리스 단독) 따라 React/Tailwind 미사용. `<script type="module">` 직접 로드. shared/(tokens·base·ui)를 상대 경로로 공유.
-3.2. **타이핑 0, 100% 클릭**. 입력 필드 없음. 단어 클릭으로 문법 스캔 판정, 화면 터치/버튼으로 해석 공개. 객관식 3지선다 없음(v0.2 잔재 금지).
-3.3. **라이트 테마 단독**. 홈·게임은 다크 유지. 이 앱만 body 스코프에서 글로벌 다크 토큰을 라이트 값으로 재정의. 테마 토글 없음.
-3.4. **세션 = 카테고리당 MAX_SESSION_COUNT(40)문제**. 상수는 main.js 상단(테스트 시 이 값만 조절). 카테고리 내 문장은 순환 반복, 도달 시 카운트 리셋 + 다음 카테고리 강제 전환 + 축하 모달. 저장 없음(새로고침 시 처음부터).
-3.5. **순수 로직은 core/에 격리**. tokenize·session은 DOM에 의존하지 않는다. main.js만 DOM을 만진다. session은 maxCount 주입으로 테스트 결정성 확보.
-3.6. **트랩 위치는 nth로 지정**. 같은 단어(to 등)가 여러 번 나오면 `traps.nth`(1-based)로 몇 번째인지 데이터가 정한다. 해석 실패 시 index -1로 방어(죽은 트랩 무시).
-3.7. **standalone.html은 생성물**. 직접 수정 금지, 원본 수정 후 tools/build-standalone.mjs 재실행. 빌드 스크립트는 치환 패턴 미발견 시 즉시 실패한다 - main.js의 fetch 블록·SW 등록 줄을 바꾸면 빌드 스크립트도 함께 갱신.
+3.1. **무빌드 정적 바닐라**. React/Tailwind 미사용. `<script type="module">` 직접 로드, shared/를 상대 경로로 공유.
+3.2. **타이핑 0, 100% 클릭·터치**. 입력 필드·강제 문제 풀이·정답 판정 없음(흐름 우선 철학).
+3.3. **라이트 테마 단독**. body 스코프에서 글로벌 다크 토큰을 라이트로 재정의. 테마 토글 없음.
+3.4. **난이도 = 지문 자체(완만한 사다리)**. 지문에 level을 매겨 오름차순 정렬(한 편에 길이·구문·어휘 중 하나만 상승). 도움 노출량은 난이도가 아니라 학습자 설정. **클리어 = 코스 전체 완주**이고, 개별 지문 완독은 진행률만 채우며 연출을 두지 않는다.
+3.5. **순수 로직은 core/에 격리**. tokenize·course는 DOM 미의존. main.js만 DOM을 만진다. courseProgress는 done 배열 주입으로 테스트 결정성 확보.
+3.6. **상태는 기기 저장**(localStorage, `createStorage("english-reading")`): `done`(완독 지문 id), `reads`(지문별 회독수), `vocab`(단어+뜻+원문+출처), `settings`(노출 토글), `seenIntro`(첫 안내 1회).
+3.7. **노출 설정 3종**(`chunks`/`words`/`scope`) 기본 전부 켜짐. OFF면 해당 상호작용·시각 요소를 비활성한다.
+3.8. **standalone.html은 생성물**. 직접 수정 금지, 원본 수정 후 `tools/build-standalone.mjs` 재실행. 빌드는 치환 패턴(fetch 블록·SW 등록 줄) 미발견 시 즉시 실패 - 그 줄을 바꾸면 빌드 스크립트도 함께 갱신.
 
-# 4. 데이터 규약 (grammar-bank.json)
+# 4. 데이터 규약 (passages.json)
 
-4.1. `categories`: `[{ id, title, intro, sentences }]`. **배열 순서 = 카테고리 전환 순서**. id는 유일.
-   - `intro`: `{ why, formula, tip }` - 세션 시작 시 보여줄 패턴 이해 카드(왜 이렇게 쓰나 / 공식 / 작문 팁). 3필드 필수.
-4.2. `sentences`: `[{ text, chunks, traps, insight }]`. 카테고리당 최소 3문장.
-   - `chunks`: `[{ en, kr }]` - 끊어읽기 해석. **en을 이어 붙이면 원문과 일치해야 한다**(구두점·대소문자 제외). kr은 구조가 드러나는 직독직해로 쓴다(예: "it(→뒤의 그것)을 자연스럽다고 여긴다") - 단순 의역 금지.
-   - `traps`: `[{ word, nth?, type, message }]` - 찾아야 할 문법 핵심 단어. word는 실제 text에 존재(죽은 트랩 0), type은 소속 category id와 일치, message는 정답 시 상단 배너에 그대로 노출되는 문법 설명.
-   - `insight`: `{ formula, why, wrong, natural }` - 정답 후 구조 해부 카드(공식 / 왜 이 구조인가 / it·to 없이 쓰면 왜 비문인가 / 자연스러운 완역). 4필드 필수 - "찾기"가 아니라 "왜 이렇게 쓰는가"를 가르치는 몸통.
-4.3. 문장은 자비스가 제작하고 사용자가 추후 보강한다. 보강 후 `node apps/english-reading/tests/run-node.mjs`로 무결성(4.1~4.2 전부) 자동 검증.
+4.1. `courses`: `[{ id, title, passages }]`. passages는 level 오름차순(createCourse가 정렬을 보장하므로 데이터 순서는 무관하나 가급적 정렬해 둔다).
+4.2. `passage`: `{ id, level, title, titleKr, sentences }`. id 유일. 전체 텍스트는 sentences.text를 이어 조합(따로 저장 안 함).
+4.3. `sentence`: `{ text, chunks[{en,kr}], words[{word,nth?,meaning}], insight?{formula,why,wrong,natural} }`.
+   - `chunks`: en을 공백으로 이어 붙이면 원문과 일치(구두점·대소문자 제외). kr은 어순·구조가 드러나는 직독직해로 쓰고 단순 의역 금지.
+   - `words`: 걸림돌 단어만 0~3개. word는 text에 실재(같은 단어 여러 번이면 nth 1-based). meaning은 한국어 뜻. 단어를 누르면 뜻 말풍선 + 단어장 자동 수집.
+   - `insight`: 구조적으로 어려운 문장에만(지문당 1~3개). 4필드 필수 - 문장 끝 🔬로 연다.
+4.4. 콘텐츠 보강 후 `node apps/english-reading/tests/run-node.mjs`로 무결성 자동 검증(죽은 입력 0·청킹 재구성·insight 4필드·words 실재).
 
 # 5. 작업 시 주의
 
-5.1. 색만으로 정보 전달 금지(접근성). 정답 초록 하이라이트에 밑줄 병행, 오답은 흔들림 애니메이션.
-5.2. 검증은 정적 확인만으로 "됐다" 금지. browser-shot + playwright 클릭 재생으로 오답 흔들림·정답 배너·터치 해석·40문제 완주·전환 모달까지 실경로 전수 확인.
+5.1. 색만으로 정보 전달 금지(접근성). 주요 단어는 점선, 수집 단어는 배경 등 병행.
+5.2. 검증은 정적 확인만으로 "됐다" 금지. browser-shot + playwright로 전 분기 실경로 재생 - 끊어 읽기 펼침/접힘·단어 뜻·자동 수집·🔬 해설·말풍선 닫힘 충돌 해소(기획 5.2)·읽기 완료 진행률·코스 전체 클리어 모달·단어장 펼침/삭제·노출 설정 OFF·재독 known 표시까지.
 5.3. 유닛 테스트: `tests/run-node.mjs` (core 순수 로직 + 데이터 무결성). 로직·데이터 변경 시 실행이 기본.
-5.4. 배포는 `/web-deploy` (도메인 루트 `.claude/deploy.json`, smoke 셀렉터 `.sentence .word`). SW 캐시 버전 bump는 루트 service-worker.js 소관.
+5.4. 배포는 `/web-deploy` (도메인 루트 `.claude/deploy.json`, smoke 셀렉터 `.passage-card`). SW 캐시 버전 bump는 루트 service-worker.js 소관.
 5.5. 진행/완료/다음 작업은 `PROGRESS.md` 참조.
 
 # 6. 비스코프
@@ -68,5 +64,5 @@ apps/english-reading/
 6.1. 타이핑 입력 / 서술형 답안.
 6.2. 서버·백엔드·계정(서버리스 단독).
 6.3. 다크 테마 토글.
-6.4. 객관식 문항(단어 뜻 3지선다 포함 - v0.2 독해 사다리와 함께 폐기).
-6.5. 진행 저장·단어장(localStorage) - v0.2에서 폐기. 필요해지면 사용자 결정으로 재도입.
+6.4. 강제 객관식·문제 풀이·정답 판정(v0.2/v0.3과 함께 폐기).
+6.5. 자동 복습 일정 알고리즘 - 회독은 사용자가 버튼으로 직접 돌리는 수동 루프까지만.
