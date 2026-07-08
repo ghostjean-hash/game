@@ -215,8 +215,8 @@ function applyDevHook() {
   // tail: 1~16. 4까지 대수, 그 뒤 1~4번 순차 무기 진화(16=전원 무기4).
   const tail = num('tail'); if (tail != null) for (let i = 0; i < tail; i++) gainTail(game);
   const lives = num('lives'); if (lives != null) game.lives = Math.max(1, lives);
-  // pow=P|S|E|T|H|B: 해당 파워업 하나를 화면 중앙에 정지 스폰(렌더 확인용).
-  const pow = q.get('pow'); if (pow) game.powerups.push({ x: W * 0.5, y: H * 0.4, r: 12, vy: 0, kind: pow, t: 0 });
+  // pow=P|S|E|T|H|B: 해당 파워업 하나를 화면 위쪽에 스폰(내려오며 획득 확인용).
+  const pow = q.get('pow'); if (pow) game.powerups.push({ x: W * 0.5, y: H * 0.3, r: 12, vy: 70, kind: pow, t: 0 });
   if (stage != null) startStage(game); // 지정 구역 웨이브 재생성 + 배너
   if (q.get('nointro') != null) game.introTimer = 0; // 검증 편의: 인트로 배너 건너뛰고 즉시 발사
   // warm=N: 시작 시 N프레임 미리 굴려 탄·상태를 진행시킨 화면을 바로 캡처(검증 편의).

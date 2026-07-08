@@ -209,7 +209,7 @@ function grabItem(game, kind) {
   }
 }
 
-function checkCollisions(game, W, H) {
+export function checkCollisions(game, W, H) {
   const p = game.player;
 
   // 아군 탄 vs 적
@@ -251,7 +251,14 @@ function checkCollisions(game, W, H) {
   game.bullets = game.bullets.filter((b) => !b.dead);
   game.enemies = game.enemies.filter((e) => !e.dead);
 
-  if (p.inv > 0) return; // 무적 중 피격 판정 생략
+  // 파워업 획득은 피격 무적(깜박) 중에도 된다 - 피격 판정보다 먼저 처리한다.
+  for (const it of game.powerups) {
+    if (it.dead) continue;
+    if (hit(p, it)) { it.dead = true; grabItem(game, it.kind); }
+  }
+  game.powerups = game.powerups.filter((it) => !it.dead);
+
+  if (p.inv > 0) return; // 무적 중엔 피격 판정만 생략(아이템 획득은 위에서 이미 처리)
 
   for (const e of game.enemies) {
     if (hit(p, e)) { playerHit(game); return; }
@@ -261,12 +268,6 @@ function checkCollisions(game, W, H) {
     if (hit(p, b)) { b.dead = true; playerHit(game); break; }
   }
   game.eBullets = game.eBullets.filter((b) => !b.dead);
-
-  for (const it of game.powerups) {
-    if (it.dead) continue;
-    if (hit(p, it)) { it.dead = true; grabItem(game, it.kind); }
-  }
-  game.powerups = game.powerups.filter((it) => !it.dead);
 }
 
 function defeatBoss(game) {
@@ -336,19 +337,10 @@ function checkProgress(game, dt, W, H) {
 }
 
 export function stepWorld(game, dt, W, H) {
-  // 구역 시작 인트로(다음 구역 배너 표시) 중: 적 스폰·웨이브 진행 정지, 화면 요소만 갱신.
-  if (game.introTimer > 0) {
-    game.introTimer -= dt;
-    if (game.player.inv > 0) game.player.inv -= dt;
-    updateStars(game, dt, W, H);
-    stepOptions(game, dt, false); // 인트로 중 옵션기·꼬리기는 위치만 따라가고 발사는 쉼
-    stepTail(game, dt, false);
-    homeMissiles(game, dt);
-    updateBullets(game, dt, W, H);
-    updateParticles(game, dt);
-    return;
-  }
-  game.elapsed += dt;
+  // 구역 시작 인트로(다음 구역 배너 표시) 중에는 '적 스폰'과 '진행 판정'만 멈추고,
+  // 나머지(발사·아이템 이동·획득·탄·존·충돌)는 평소처럼 진행한다(사용자 지시 2026-07-09).
+  const intro = game.introTimer > 0;
+  if (intro) game.introTimer -= dt; else game.elapsed += dt;
   if (game.player.inv > 0) game.player.inv -= dt;
   updateStars(game, dt, W, H);
   game.fireTimer -= dt;
@@ -358,19 +350,21 @@ export function stepWorld(game, dt, W, H) {
   }
   stepOptions(game, dt, !game.transitioning); // 옵션기 추종 + 발사(보스 클리어 후 전환 대기 중엔 발사 쉼)
   stepTail(game, dt, !game.transitioning);    // 꼬리 비행기 추종 + 유도탄 발사
-  spawnWaves(game, W);
-  game.bonusTimer -= dt;           // 보너스 기체 주기 등장(파워업 공급원)
-  if (game.bonusTimer <= 0) { game.bonusTimer = CFG.bonusShip.every; spawnBonus(game, W, H); }
+  if (!intro) {
+    spawnWaves(game, W);
+    game.bonusTimer -= dt;           // 보너스 기체 주기 등장(파워업 공급원)
+    if (game.bonusTimer <= 0) { game.bonusTimer = CFG.bonusShip.every; spawnBonus(game, W, H); }
+  }
   updateEnemies(game, dt, W, H);
   updateBoss(game, dt, W, H);
   homeMissiles(game, dt);          // 미사일 유도(표적 최신 위치 기준)
   updateBullets(game, dt, W, H);
   updateEnemyBullets(game, dt, W, H);
-  updatePowerups(game, dt, W, H);
+  updatePowerups(game, dt, W, H);  // 아이템 이동 - 인트로 중에도 진행
   updateParticles(game, dt);
   tickZone(game, dt);              // 에너지존 주기 피해(적 hp 선차감)
-  checkCollisions(game, W, H);
+  checkCollisions(game, W, H);     // 아이템 획득 + 피격 - 인트로 중에도 진행
   // 존/봄 등 총알 외 피해로 보스 hp<=0 되어도 일괄 격파 판정.
   if (game.boss && !game.boss.entering && game.boss.hp <= 0) defeatBoss(game);
-  checkProgress(game, dt, W, H);
+  if (!intro) checkProgress(game, dt, W, H); // 인트로 중엔 다음 단계로 안 넘어감
 }

@@ -19,7 +19,7 @@ import { optionSlot, gainFront, gainOption, gainZone, gainTail, loseLastPart } f
 import { buildWaves, stageName } from '../src/core/waves.js';
 import { spawnEnemy, spawnBonus, spawnShards, dropItems } from '../src/core/spawn.js';
 import { autopilotStep } from '../src/core/autopilot.js';
-import { hit } from '../src/core/world.js';
+import { hit, checkCollisions } from '../src/core/world.js';
 
 const mkGame = () => ({ front: 1, options: [], zone: { level: 0, timer: null }, tail: [], partHistory: [], player: { x: 100, y: 100 } });
 const tierCount = (front, t) => frontSpec(front).bullets.filter((b) => b.tier === t).length;
@@ -148,6 +148,12 @@ test('autopilot 목숨 풀이면 하트 무시', () => { const g = apGame({ live
 // 안전 상황에서 조준 표적이 불감대(12px) 이내로 옆에 있으면 x를 미세 이동하지 않는다(떨림 방지).
 test('autopilot 안전 시 근접 표적엔 떨지 않음', () => { const g = apGame({ enemies: [{ x: 208, y: 500, r: 15, speed: 150 }] }); autopilotStep(g, 0.1, 500, 1000); eq(g.player.x, 200); });
 // 반대로 위협 회피 중엔 불감대 없이 정밀 이동해야 한다(위 '정면 충돌 코스 회피' 테스트가 이를 보장).
+
+// ── 파워업 획득은 피격 무적(깜박) 중에도 된다 ──
+const puGame = (inv) => ({ player: { x: 100, y: 100, r: 14, inv }, front: 1, partHistory: [],
+  bullets: [], enemies: [], eBullets: [], boss: null, powerups: [{ x: 100, y: 100, r: 12, kind: 'P' }], sfx: [], score: 0 });
+test('무적(깜박) 중에도 파워업 획득', () => { const g = puGame(1); checkCollisions(g, 500, 1000); eq(g.front, 2); eq(g.powerups.length, 0); });
+test('무적 아닐 때도 파워업 정상 획득', () => { const g = puGame(0); checkCollisions(g, 500, 1000); eq(g.front, 2); eq(g.powerups.length, 0); });
 
 report();
 </script>
