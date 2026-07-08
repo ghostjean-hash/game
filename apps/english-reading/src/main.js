@@ -23,7 +23,7 @@ fetch("./src/data/grammar-bank.json", { cache: "no-cache" })
   .then((r) => r.json())
   .then((data) => {
     session = createSession(data.categories, { maxCount: MAX_SESSION_COUNT });
-    renderSentence();
+    renderIntro();
   })
   .catch(() => {
     el.title.textContent = "오류";
@@ -32,6 +32,52 @@ fetch("./src/data/grammar-bank.json", { cache: "no-cache" })
 
 function setBar(ratio) {
   el.barFill.style.width = `${Math.round(ratio * 100)}%`;
+}
+
+// 카테고리 인트로 - 훈련 시작 전에 "이 패턴을 왜 쓰는가"(작문 관점)를 먼저 보여준다.
+function renderIntro() {
+  const cat = session.category();
+  el.title.textContent = cat.title;
+  el.progress.textContent = "패턴 이해";
+  setBar(0);
+  el.stage.innerHTML = "";
+  el.controls.innerHTML = "";
+
+  const card = document.createElement("div");
+  card.className = "intro-card";
+
+  const head = document.createElement("div");
+  head.className = "intro-head";
+  head.textContent = cat.title;
+  card.appendChild(head);
+
+  card.appendChild(labeledBlock("왜 이렇게 쓰나", cat.intro.why));
+  const formula = labeledBlock("공식", cat.intro.formula);
+  formula.querySelector(".block-body").classList.add("formula");
+  card.appendChild(formula);
+  card.appendChild(labeledBlock("작문 팁", cat.intro.tip));
+
+  el.stage.appendChild(card);
+
+  const startBtn = document.createElement("button");
+  startBtn.className = "btn btn-primary";
+  startBtn.type = "button";
+  startBtn.textContent = "훈련 시작 →";
+  startBtn.addEventListener("click", renderSentence);
+  el.controls.appendChild(startBtn);
+}
+
+function labeledBlock(label, text) {
+  const wrap = document.createElement("div");
+  wrap.className = "block";
+  const l = document.createElement("div");
+  l.className = "block-label";
+  l.textContent = label;
+  const b = document.createElement("div");
+  b.className = "block-body";
+  b.textContent = text;
+  wrap.append(l, b);
+  return wrap;
 }
 
 function renderSentence() {
@@ -120,13 +166,32 @@ function renderSentence() {
       banner.classList.remove("pop");
       void banner.offsetWidth; // 애니메이션 재발동
       banner.classList.add("pop");
-      if (pending.size === 0) showNextButton();
+      if (pending.size === 0) {
+        showInsight();
+        showNextButton();
+      }
     } else if (!span.classList.contains("found")) {
       // 오답 - 흔들림 (색 외 보조 신호)
       span.classList.remove("shake");
       void span.offsetWidth;
       span.classList.add("shake");
     }
+  }
+
+  // 구조 해부 카드 - 찾기가 끝나면 "왜 이 구조인가"를 작문 관점까지 해부해 보여준다.
+  function showInsight() {
+    if (!s.insight) return;
+    const card = document.createElement("div");
+    card.className = "insight-card";
+    const f = labeledBlock("공식", s.insight.formula);
+    f.querySelector(".block-body").classList.add("formula");
+    card.appendChild(f);
+    card.appendChild(labeledBlock("왜 이 구조인가", s.insight.why));
+    const w = labeledBlock("이렇게 쓰면 비문", s.insight.wrong);
+    w.querySelector(".block-body").classList.add("wrong-example");
+    card.appendChild(w);
+    card.appendChild(labeledBlock("자연스러운 해석", s.insight.natural));
+    sentEl.insertAdjacentElement("afterend", card);
   }
 
   function showNextButton() {
@@ -164,7 +229,7 @@ function showSwitchModal(nextCat) {
   ok.textContent = "계속하기";
   ok.addEventListener("click", () => {
     backdrop.remove();
-    renderSentence();
+    renderIntro(); // 새 카테고리도 패턴 이해부터
   });
 
   modal.append(msg, next, ok);

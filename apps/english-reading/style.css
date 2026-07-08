@@ -130,6 +130,38 @@ body {
   75% { transform: translateX(-3px); }
 }
 
+/* 인트로 카드(패턴 이해) / 구조 해부 카드 - 공통 블록 */
+.intro-card, .insight-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--r-3);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1);
+  animation: er-pop 0.25s var(--ease);
+}
+.intro-card { margin: auto 0; }
+.intro-head { font-size: 19px; font-weight: 800; color: var(--fg); }
+.block { display: flex; flex-direction: column; gap: 4px; }
+.block-label { font-size: 12px; font-weight: 700; color: var(--er-accent); }
+.block-body { font-size: 14.5px; line-height: 1.65; color: var(--fg); }
+.block-body.formula {
+  font-weight: 700;
+  padding: var(--sp-3);
+  background: var(--bg-elev-2);
+  border-radius: var(--r-2);
+}
+.block-body.wrong-example {
+  color: #b91c1c;
+  background: #fef2f2;
+  padding: var(--sp-3);
+  border-radius: var(--r-2);
+  text-decoration-line: line-through;
+  text-decoration-color: rgba(185, 28, 28, 0.4);
+}
+
 /* 해석 보기 버튼 / 끊어읽기 청킹 */
 .chunk-btn {
   align-self: center;

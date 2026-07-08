@@ -1,105 +1,163 @@
 {
   "_schema": {
     "note": "세션 기반 문법 스캔 데이터 - 카테고리별 문장 은행. 한 카테고리를 MAX_SESSION_COUNT 문제만큼 순환 훈련 후 다음 카테고리로 전환.",
-    "category": "{ id, title, sentences[] }",
-    "sentence": "{ text, chunks[{en,kr}], traps[{word, nth?, type, message}] }",
-    "rules": "traps.word는 text에 실재해야 하고(nth로 몇 번째인지 지정, 기본 1), type은 소속 category id와 일치, chunks.en을 이어 붙이면 원문과 일치"
+    "category": "{ id, title, intro{why,formula,tip}, sentences[] }",
+    "sentence": "{ text, chunks[{en,kr}], traps[{word, nth?, type, message}], insight{formula,why,wrong,natural} }",
+    "rules": "traps.word는 text에 실재(nth로 몇 번째인지, 기본 1), type은 소속 category id와 일치, chunks.en을 이어 붙이면 원문과 일치, insight 4필드는 정답 후 구조 해부 카드에 그대로 노출"
   },
   "categories": [
     {
       "id": "it_dummy",
       "title": "가목적어 it 패턴 공략",
+      "intro": {
+        "why": "영어는 목적어가 긴 것을 싫어합니다. 'find + [긴 to부정사 덩어리] + natural'로 쓰면 무엇이 자연스럽다는 건지 끝까지 읽어야 알 수 있어서, 가짜 목적어 it을 먼저 앉혀 두고 진짜 내용은 뒤로 보냅니다. it은 '뒤에 나올 그것'이라는 예고편입니다.",
+        "formula": "동사(find·make·consider) + it + 형용사 + to V  =  \"to V 하는 것을 (형용사)하다고 여기다/만들다\"",
+        "tip": "작문할 때: ① 동사 + it + 형용사를 먼저 쓰고 ② 진짜 내용(to V)을 뒤에 붙입니다. it을 빼고 to부정사를 목적어 자리에 바로 넣으면 비문이 됩니다."
+      },
       "sentences": [
         {
           "text": "Many people find it natural to worry about how others perceive them.",
           "chunks": [
-            { "en": "Many people find it natural", "kr": "많은 사람들은 자연스럽다는 것을 안다" },
-            { "en": "to worry about how others perceive them", "kr": "다른 사람들이 자신들을 어떻게 인지하는지 걱정하는 것이" }
+            { "en": "Many people find it natural", "kr": "많은 사람들은 it(→뒤의 그것)을 자연스럽다고 여긴다" },
+            { "en": "to worry about how others perceive them", "kr": "(그것 =) 남들이 자신을 어떻게 보는지 걱정하는 것" }
           ],
           "traps": [
             { "word": "it", "type": "it_dummy", "message": "정답! 가목적어 it입니다. 진짜 목적어는 뒤의 to부정사 덩어리입니다." }
-          ]
+          ],
+          "insight": {
+            "formula": "find + it + natural + to V  =  to V 하는 것을 자연스럽다고 여기다",
+            "why": "목적어(to worry ~ them)가 너무 길어서 it이 먼저 자리를 지키고, 진짜 목적어는 뒤로 갔습니다.",
+            "wrong": "Many people find to worry about how others perceive them natural (X) - 목적어 자리에 긴 to부정사를 바로 놓으면 비문",
+            "natural": "남들이 자신을 어떻게 보는지 걱정하는 것을, 많은 사람들은 자연스럽게 여긴다."
+          }
         },
         {
           "text": "The internet makes it possible to access information from anywhere in the world.",
           "chunks": [
-            { "en": "The internet makes it possible", "kr": "인터넷은 가능하게 만든다" },
-            { "en": "to access information", "kr": "정보에 접근하는 것을" },
+            { "en": "The internet makes it possible", "kr": "인터넷은 it(→뒤의 그것)을 가능하게 만든다" },
+            { "en": "to access information", "kr": "(그것 =) 정보에 접근하는 것" },
             { "en": "from anywhere in the world", "kr": "세계 어디에서든" }
           ],
           "traps": [
             { "word": "it", "type": "it_dummy", "message": "정답! makes의 가목적어 it입니다. 진짜 목적어는 to access 이하 덩어리입니다." }
-          ]
+          ],
+          "insight": {
+            "formula": "make + it + possible + to V  =  to V 하는 것을 가능하게 만들다",
+            "why": "'정보에 접근하는 것'이라는 긴 내용 대신 it이 목적어 자리를 지키고, 진짜 내용은 뒤에 왔습니다.",
+            "wrong": "The internet makes to access information possible (X) - it 없이 쓰면 비문",
+            "natural": "인터넷은 세계 어디에서든 정보에 접근하는 것을 가능하게 만든다."
+          }
         },
         {
           "text": "She considered it rude to interrupt someone during a serious conversation.",
           "chunks": [
-            { "en": "She considered it rude", "kr": "그녀는 무례하다고 여겼다" },
-            { "en": "to interrupt someone", "kr": "누군가에게 끼어드는 것을" },
+            { "en": "She considered it rude", "kr": "그녀는 it(→뒤의 그것)을 무례하다고 여겼다" },
+            { "en": "to interrupt someone", "kr": "(그것 =) 누군가의 말에 끼어드는 것" },
             { "en": "during a serious conversation", "kr": "진지한 대화 중에" }
           ],
           "traps": [
             { "word": "it", "type": "it_dummy", "message": "정답! considered의 가목적어 it입니다. it은 자리만 지키고, 실제 내용은 to interrupt 이하입니다." }
-          ]
+          ],
+          "insight": {
+            "formula": "consider + it + rude + to V  =  to V 하는 것을 무례하다고 여기다",
+            "why": "consider의 목적어가 'to interrupt ~ conversation'만큼 길어서, it을 앉히고 내용을 뒤로 보냈습니다.",
+            "wrong": "She considered to interrupt someone rude (X) - to부정사를 considered 바로 뒤에 놓으면 비문",
+            "natural": "진지한 대화 중에 누군가의 말에 끼어드는 것을 그녀는 무례하다고 여겼다."
+          }
         },
         {
           "text": "Smartphones have made it easy to compare ourselves with strangers online.",
           "chunks": [
-            { "en": "Smartphones have made it easy", "kr": "스마트폰은 쉽게 만들었다" },
-            { "en": "to compare ourselves", "kr": "우리 자신을 비교하는 것을" },
+            { "en": "Smartphones have made it easy", "kr": "스마트폰은 it(→뒤의 그것)을 쉽게 만들어 놓았다" },
+            { "en": "to compare ourselves", "kr": "(그것 =) 우리 자신을 비교하는 것" },
             { "en": "with strangers online", "kr": "온라인의 낯선 사람들과" }
           ],
           "traps": [
             { "word": "it", "type": "it_dummy", "message": "정답! made의 가목적어 it입니다. 진짜 목적어는 to compare 이하입니다." }
-          ]
+          ],
+          "insight": {
+            "formula": "make + it + easy + to V  =  to V 하는 것을 쉽게 만들다",
+            "why": "'우리 자신을 낯선 이들과 비교하는 것'이라는 긴 목적어 대신 it이 자리를 지켰습니다.",
+            "wrong": "Smartphones have made to compare ourselves with strangers easy (X) - it 없이 쓰면 비문",
+            "natural": "스마트폰은 온라인의 낯선 사람들과 우리 자신을 비교하는 것을 쉽게 만들어 놓았다."
+          }
         }
       ]
     },
     {
       "id": "to_adj",
       "title": "To부정사 형용사적 용법 공략",
+      "intro": {
+        "why": "우리말은 '증명할 기회'처럼 꾸미는 말이 명사 앞에 오지만, 영어는 to부정사 수식을 명사 뒤에 붙입니다. 명사 바로 뒤의 to V를 만나면 '~할 (명사)'로 앞 명사를 꾸미는 것부터 의심해야 합니다.",
+        "formula": "명사 + to V  =  \"~할 명사\" (to V가 뒤에서 앞 명사를 수식)",
+        "tip": "작문할 때: '~할 N'을 쓰고 싶으면 N을 먼저 쓰고 to V를 바로 뒤에 붙입니다. 우리말 어순대로 to V를 명사 앞에 놓으면 비문이 됩니다."
+      },
       "sentences": [
         {
           "text": "Realizing this psychological bias is a powerful way to regain your confidence.",
           "chunks": [
-            { "en": "Realizing this psychological bias", "kr": "이러한 심리적 편향을 깨닫는 것은" },
-            { "en": "is a powerful way to regain your confidence", "kr": "당신의 자신감을 되찾을 강력한 방법이다" }
+            { "en": "Realizing this psychological bias", "kr": "이런 심리적 편향을 깨닫는 것은" },
+            { "en": "is a powerful way to regain your confidence", "kr": "강력한 방법이다 - (어떤 방법?) 자신감을 되찾을" }
           ],
           "traps": [
             { "word": "to", "type": "to_adj", "message": "정답! 앞의 명사 way를 수식하는 To부정사 형용사적 용법입니다." }
-          ]
+          ],
+          "insight": {
+            "formula": "a way + to V  =  ~할 방법",
+            "why": "to regain ~ 덩어리가 명사 way를 뒤에서 꾸밉니다. 우리말('되찾을 방법')과 어순이 반대입니다.",
+            "wrong": "a powerful to regain your confidence way (X) - 수식 덩어리를 명사 앞에 놓으면 비문",
+            "natural": "이런 심리적 편향을 깨닫는 것이 자신감을 되찾는 강력한 방법이다."
+          }
         },
         {
           "text": "Everyone deserves a chance to prove their own worth.",
           "chunks": [
             { "en": "Everyone deserves a chance", "kr": "모든 사람은 기회를 가질 자격이 있다" },
-            { "en": "to prove their own worth", "kr": "자신의 가치를 증명할" }
+            { "en": "to prove their own worth", "kr": "(어떤 기회?) 자신의 가치를 증명할" }
           ],
           "traps": [
             { "word": "to", "type": "to_adj", "message": "정답! 명사 chance를 꾸미는 형용사적 용법입니다. '증명할 기회'로 읽습니다." }
-          ]
+          ],
+          "insight": {
+            "formula": "a chance + to V  =  ~할 기회",
+            "why": "to prove ~ 덩어리가 명사 chance를 뒤에서 꾸밉니다. 명사 뒤에 붙은 to V는 '~할'로 번역해 앞으로 끌어올립니다.",
+            "wrong": "a to prove their own worth chance (X) - 우리말 어순대로 앞에 놓으면 비문",
+            "natural": "모든 사람은 자신의 가치를 증명할 기회를 가질 자격이 있다."
+          }
         },
         {
           "text": "We still have many problems to solve before the deadline.",
           "chunks": [
-            { "en": "We still have many problems", "kr": "우리에게는 아직 많은 문제가 있다" },
-            { "en": "to solve", "kr": "해결해야 할" },
+            { "en": "We still have many problems", "kr": "우리에겐 아직 많은 문제가 있다" },
+            { "en": "to solve", "kr": "(어떤 문제?) 해결해야 할" },
             { "en": "before the deadline", "kr": "마감 전에" }
           ],
           "traps": [
             { "word": "to", "type": "to_adj", "message": "정답! 명사 problems를 꾸미는 형용사적 용법입니다. '해결해야 할 문제들'로 읽습니다." }
-          ]
+          ],
+          "insight": {
+            "formula": "problems + to V  =  ~해야 할 문제들",
+            "why": "to solve가 problems를 뒤에서 꾸밉니다. '풀기 위해'(부사적)가 아니라 '풀어야 할 문제'(형용사적)로 읽어야 자연스럽습니다.",
+            "wrong": "many to solve problems (X) - to V를 명사 앞에 놓으면 비문",
+            "natural": "마감 전에 해결해야 할 문제가 우리에겐 아직 많다."
+          }
         },
         {
           "text": "She finally found the courage to speak in front of the crowd.",
           "chunks": [
             { "en": "She finally found the courage", "kr": "그녀는 마침내 용기를 냈다" },
-            { "en": "to speak", "kr": "말할" },
+            { "en": "to speak", "kr": "(어떤 용기?) 입을 열" },
             { "en": "in front of the crowd", "kr": "군중 앞에서" }
           ],
           "traps": [
             { "word": "to", "type": "to_adj", "message": "정답! 명사 courage를 꾸미는 형용사적 용법입니다. '말할 용기'로 읽습니다." }
-          ]
+          ],
+          "insight": {
+            "formula": "the courage + to V  =  ~할 용기",
+            "why": "to speak이 courage를 뒤에서 꾸밉니다. '말하기 위해 용기를 찾았다'가 아니라 '말할 용기를 냈다'입니다.",
+            "wrong": "the to speak courage (X) - 수식 to V를 명사 앞에 놓으면 비문",
+            "natural": "그녀는 마침내 군중 앞에서 입을 열 용기를 냈다."
+          }
         }
       ]
     }

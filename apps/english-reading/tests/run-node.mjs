@@ -66,6 +66,8 @@ function check(name, cond, detail = "") {
     check(`data(${cat.id}): id 중복 없음`, !ids.has(cat.id));
     ids.add(cat.id);
     check(`data(${cat.id}): 제목 존재`, !!cat.title);
+    check(`data(${cat.id}): 인트로(왜·공식·작문 팁) 완비`,
+      !!(cat.intro && cat.intro.why && cat.intro.formula && cat.intro.tip));
     check(`data(${cat.id}): 문장 3개 이상`, cat.sentences.length >= 3, `${cat.sentences.length}개`);
 
     cat.sentences.forEach((s, si) => {
@@ -75,6 +77,8 @@ function check(name, cond, detail = "") {
         `"${s.chunks.map((c) => c.en).join(" ")}" vs "${s.text}"`);
       check(`data(${cat.id} s${si + 1}): 청킹 한글 해석 전부 존재`, s.chunks.every((c) => !!c.kr));
       check(`data(${cat.id} s${si + 1}): 트랩 1개 이상`, Array.isArray(s.traps) && s.traps.length >= 1);
+      check(`data(${cat.id} s${si + 1}): 구조 해부(공식·왜·비문·자연 해석) 완비`,
+        !!(s.insight && s.insight.formula && s.insight.why && s.insight.wrong && s.insight.natural));
 
       const resolved = resolveTargets(tokens, s.traps);
       resolved.forEach((t) => {

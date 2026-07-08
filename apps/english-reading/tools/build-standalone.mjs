@@ -43,13 +43,13 @@ main = mustReplace(
   .then((r) => r.json())
   .then((data) => {
     session = createSession(data.categories, { maxCount: MAX_SESSION_COUNT });
-    renderSentence();
+    renderIntro();
   })
   .catch(() => {
     el.title.textContent = "오류";
     el.stage.textContent = "문장을 불러오지 못했습니다.";
   });`,
-  "session = createSession(EMBEDDED_PASSAGES.categories, { maxCount: MAX_SESSION_COUNT });\nrenderSentence();",
+  "session = createSession(EMBEDDED_PASSAGES.categories, { maxCount: MAX_SESSION_COUNT });\nrenderIntro();",
   "데이터 인라인"
 );
 
