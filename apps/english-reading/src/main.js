@@ -20,6 +20,8 @@ const el = {
 
 let course = null;
 let popover = null; // 현재 열린 단어 뜻 말풍선(한 번에 하나)
+let popoverTimer = null; // 말풍선 자동 닫힘 타이머
+const POPOVER_MS = 2000; // 말풍선이 스스로 닫히기까지
 
 // ── 상태 저장(기기 저장소) ──
 const getDone = () => store.get("done", []); // 완독한 지문 id 배열
@@ -39,7 +41,10 @@ fetch("./src/data/passages.json", { cache: "no-cache" })
   });
 
 function setBar(ratio) { el.bar.style.width = `${Math.round(ratio * 100)}%`; }
-function closePopover() { if (popover) { popover.remove(); popover = null; } }
+function closePopover() {
+  if (popoverTimer) { clearTimeout(popoverTimer); popoverTimer = null; }
+  if (popover) { popover.remove(); popover = null; }
+}
 function removeHint() { const h = document.getElementById("first-hint"); if (h) h.remove(); }
 
 function setTop({ title, onBack, showVocab }) {
@@ -252,6 +257,7 @@ function openWordPopover(span, target, s, passage) {
   pop.textContent = target.meaning;
   span.appendChild(pop);
   popover = pop;
+  popoverTimer = setTimeout(closePopover, POPOVER_MS); // 잠시 후 스스로 닫힘
   collectWord(target, s, passage);
 }
 

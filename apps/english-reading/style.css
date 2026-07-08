@@ -281,8 +281,13 @@ body {
   max-width: 240px;
   box-shadow: var(--shadow-2);
   z-index: 20;
-  animation: er-pop 0.15s var(--ease);
+  /* er-pop은 transform을 덮어써 좌우 중앙 이동값이 풀린다 - 중앙 고정 전용 키프레임 사용 */
+  animation: pop-center 0.15s var(--ease);
   pointer-events: none;
+}
+@keyframes pop-center {
+  from { opacity: 0; transform: translate(-50%, 4px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
 }
 .word-pop::after {
   content: "";
