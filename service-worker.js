@@ -98,7 +98,8 @@
 // v151 (2026-07-09): english-reading 채점 색 체계 변경(검정/회색 점선/빨강) + 단어 배경 하이라이트 제거.
 // v152 (2026-07-09): flightshooting 사이드 총알을 부채로 확산(안쪽 살짝~바깥 크게, slot별 각도). PWA 옛 캐시 무효화.
 // v153 (2026-07-09): english-reading 틀린 문장 예문의 취소선 제거(가독성).
-const CACHE_VERSION = "v153";
+// v154 (2026-07-09): english-reading 끊는 기준 카드 + 덩어리별 끊는 이유 자동 태그.
+const CACHE_VERSION = "v154";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

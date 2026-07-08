@@ -2,7 +2,7 @@
 // 순수 로직은 core(tokenize·course·chunking)에 위임하고, 여기서 DOM만 만진다.
 import { tokenize, resolveTargets } from "./core/tokenize.js";
 import { createCourse, courseProgress } from "./core/course.js";
-import { chunkBoundaries, gradeSlashes } from "./core/chunking.js";
+import { chunkBoundaries, gradeSlashes, chunkReasons } from "./core/chunking.js";
 import { createStorage } from "../../../shared/storage.js";
 import { registerServiceWorker } from "../../../shared/ui.js";
 
@@ -134,6 +134,22 @@ function renderReading(p) {
     hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [해석]으로 채점해 보세요. 모르는 단어는 단어를 누르면 뜻이 열립니다.";
     stage.appendChild(hint);
     store.set("seenIntro", true);
+  }
+
+  // 끊는 기준 커닝페이퍼 - 언제든 열어 보는 다섯 자리 원칙
+  if (settings.chunks) {
+    const guideBtn = document.createElement("button");
+    guideBtn.type = "button";
+    guideBtn.className = "text-btn guide-open";
+    guideBtn.textContent = "끊는 기준 보기";
+    const guide = buildGuideCard();
+    guide.hidden = true;
+    guideBtn.onclick = (e) => {
+      e.stopPropagation();
+      removeHint();
+      guide.hidden = !guide.hidden;
+    };
+    stage.append(guideBtn, guide);
   }
 
   const article = document.createElement("div");
@@ -270,20 +286,58 @@ function collectWord(target, s, passage) {
   store.set("vocab", vocab);
 }
 
-// 검토 후 공개되는 끊어 읽기 해석 (영-한 쌍, 위→아래 슬라이드)
+// 검토 후 공개되는 끊어 읽기 해석 (영-한 쌍, 위→아래 슬라이드).
+// 둘째 덩어리부터 "왜 이 앞에서 끊는가" 이유 태그를 붙인다(경계 학습의 핵심).
 function buildChunks(s) {
   const host = document.createElement("div");
   host.className = "chunks";
+  const reasons = chunkReasons(tokenize(s.text), s.chunks);
   s.chunks.forEach((c, i) => {
     const row = document.createElement("div");
     row.className = "chunk";
     row.style.animationDelay = `${i * 0.08}s`;
     const en = document.createElement("div"); en.className = "chunk-en"; en.textContent = c.en;
+    if (i > 0 && reasons[i]) {
+      const why = document.createElement("span");
+      why.className = "chunk-why";
+      why.textContent = reasons[i];
+      en.appendChild(why);
+    }
     const kr = document.createElement("div"); kr.className = "chunk-kr"; kr.textContent = c.kr;
     row.append(en, kr);
     host.appendChild(row);
   });
   return host;
+}
+
+// 끊는 기준 카드 - 다섯 자리 원칙 + 미니 예문
+function buildGuideCard() {
+  const card = document.createElement("div");
+  card.className = "guide-card";
+  const head = document.createElement("div");
+  head.className = "guide-head";
+  head.textContent = "어디서 끊나 - 새 의미 덩어리가 시작되는 곳 앞";
+  card.appendChild(head);
+  const rules = [
+    ["접속사 앞", "that·because·when·once가 나오면 새 절 시작", "you feel / that everyone is staring"],
+    ["관계대명사 앞", "명사 뒤의 who·that은 꾸밈절 시작", "facts / that support it"],
+    ["긴 전치사구 앞", "at·on·from 덩어리가 길면 그 앞", "you feel ~ / at the stain"],
+    ["긴 주어 뒤", "주어가 길면 동사 앞에서 한 번", "Knowing this trap / will not switch it off"],
+    ["콤마 뒤", "글쓴이가 이미 끊어 준 자리", "All day long, / you feel ~"],
+  ];
+  rules.forEach(([label, desc, ex]) => {
+    const row = document.createElement("div");
+    row.className = "guide-row";
+    const tag = document.createElement("span"); tag.className = "grammar-tag"; tag.textContent = label;
+    const body = document.createElement("span"); body.className = "guide-desc";
+    body.textContent = desc;
+    const exEl = document.createElement("div"); exEl.className = "guide-ex"; exEl.textContent = ex;
+    const right = document.createElement("span"); right.className = "guide-body";
+    right.append(body, exEl);
+    row.append(tag, right);
+    card.appendChild(row);
+  });
+  return card;
 }
 
 // 검토 후 공개되는 문법 목록 - 이 문장에 포함된 모든 문법 요소(이름표 + 한 줄 설명)

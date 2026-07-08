@@ -373,6 +373,37 @@ body {
 }
 .review-btn:hover { color: var(--er-accent); border-color: var(--er-accent); }
 
+/* 덩어리별 "왜 여기서 끊는가" 이유 태그 */
+.chunk-why {
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--fg-mute);
+  background: var(--bg-elev-2);
+  border-radius: 999px;
+  padding: 1px 8px;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+/* 끊는 기준 카드 (커닝페이퍼) */
+.guide-open { align-self: flex-end; }
+.guide-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--sp-4);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
+}
+.guide-head { font-size: 14px; font-weight: 800; color: var(--fg); }
+.guide-row { display: flex; align-items: baseline; gap: 8px; }
+.guide-body { display: flex; flex-direction: column; gap: 1px; }
+.guide-desc { font-size: 13px; color: var(--fg-dim); line-height: 1.5; }
+.guide-ex { font-size: 12.5px; color: var(--fg-mute); font-style: italic; }
+
 /* 검토 후 문법 목록 - 이 문장에 든 모든 문법 요소 */
 .grammar-list {
   display: flex;
@@ -2276,6 +2307,50 @@ function chunkBoundaries(tokens, chunks) {
   return bounds;
 }
 
+// 경계 이유 자동 판별 - "왜 여기서 끊는가"를 다음 덩어리의 시작 단어로 분류한다.
+// 데이터에 이유를 손으로 심지 않고 파생시키며, 판별이 애매하면 "의미 덩어리"로 둔다.
+const CONJ = new Set(["because", "when", "once", "after", "before", "if", "although", "though", "while", "unless", "and", "but", "or", "so", "as"]);
+const PREP = new Set(["on", "at", "in", "from", "with", "by", "about", "of", "for", "under", "during", "without", "into", "onto", "over", "near", "between", "through", "against", "toward", "towards"]);
+const REL = new Set(["who", "whose", "whom", "which"]);
+const WH = new Set(["how", "what", "why", "where", "whether"]);
+const VERB_HEAD = new Set(["is", "are", "was", "were", "will", "would", "can", "could", "may", "might", "must"]);
+
+function boundaryReason(prevEn, nextEn) {
+  const prev = String(prevEn).trim();
+  const words = String(nextEn).toLowerCase().replace(/[^a-z' ]/g, " ").split(/\s+/).filter(Boolean);
+  const w0 = words[0] || "";
+  const w1 = words[1] || "";
+  if (prev.endsWith(",")) return "콤마 뒤";
+  if (w0 === "even" && w1 === "though") return "접속사 앞";
+  if (w0 === "that") return "that절 앞";
+  if (REL.has(w0)) return "관계대명사 앞";
+  if (WH.has(w0)) return "의문사·whether절 앞";
+  if (w0 === "to") return "to부정사 앞";
+  if (w0 === "than") return "비교 than 앞";
+  if (CONJ.has(w0)) return "접속사 앞";
+  if (PREP.has(w0)) return "전치사구 앞";
+  if (VERB_HEAD.has(w0)) return "동사 앞(긴 주어 뒤)";
+  if (w0.endsWith("ed") && w1 === "by") return "분사구 앞";
+  return "의미 덩어리";
+}
+
+// 덩어리별 끊는 이유 목록 - 첫 덩어리는 null, 이후는 경계 이유.
+// 콤마는 덩어리 문자열이 아니라 원문 토큰에서 판별한다(데이터가 콤마를 생략해도 정확).
+function chunkReasons(tokens, chunks) {
+  const reasons = [null];
+  let acc = 0;
+  for (let i = 1; i < chunks.length; i++) {
+    acc += String(chunks[i - 1].en).split(/\s+/).filter(Boolean).length;
+    const prevTok = tokens[acc - 1];
+    reasons.push(
+      prevTok && /,$/.test(prevTok.raw)
+        ? "콤마 뒤"
+        : boundaryReason(chunks[i - 1].en, chunks[i].en)
+    );
+  }
+  return reasons;
+}
+
 // slashes: 사용자가 그은 틈 번호 목록. 정답 경계와 대조해 세 갈래로 나눈다.
 // correct = 그었고 정답 / wrong = 그었지만 정답 아님 / missed = 정답인데 안 그음.
 function gradeSlashes(boundaries, slashes) {
@@ -2413,6 +2488,22 @@ function renderReading(p) {
     store.set("seenIntro", true);
   }
 
+  // 끊는 기준 커닝페이퍼 - 언제든 열어 보는 다섯 자리 원칙
+  if (settings.chunks) {
+    const guideBtn = document.createElement("button");
+    guideBtn.type = "button";
+    guideBtn.className = "text-btn guide-open";
+    guideBtn.textContent = "끊는 기준 보기";
+    const guide = buildGuideCard();
+    guide.hidden = true;
+    guideBtn.onclick = (e) => {
+      e.stopPropagation();
+      removeHint();
+      guide.hidden = !guide.hidden;
+    };
+    stage.append(guideBtn, guide);
+  }
+
   const article = document.createElement("div");
   article.className = "article";
   p.sentences.forEach((s) => article.appendChild(renderSentence(s, p, settings)));
@@ -2547,20 +2638,58 @@ function collectWord(target, s, passage) {
   store.set("vocab", vocab);
 }
 
-// 검토 후 공개되는 끊어 읽기 해석 (영-한 쌍, 위→아래 슬라이드)
+// 검토 후 공개되는 끊어 읽기 해석 (영-한 쌍, 위→아래 슬라이드).
+// 둘째 덩어리부터 "왜 이 앞에서 끊는가" 이유 태그를 붙인다(경계 학습의 핵심).
 function buildChunks(s) {
   const host = document.createElement("div");
   host.className = "chunks";
+  const reasons = chunkReasons(tokenize(s.text), s.chunks);
   s.chunks.forEach((c, i) => {
     const row = document.createElement("div");
     row.className = "chunk";
     row.style.animationDelay = `${i * 0.08}s`;
     const en = document.createElement("div"); en.className = "chunk-en"; en.textContent = c.en;
+    if (i > 0 && reasons[i]) {
+      const why = document.createElement("span");
+      why.className = "chunk-why";
+      why.textContent = reasons[i];
+      en.appendChild(why);
+    }
     const kr = document.createElement("div"); kr.className = "chunk-kr"; kr.textContent = c.kr;
     row.append(en, kr);
     host.appendChild(row);
   });
   return host;
+}
+
+// 끊는 기준 카드 - 다섯 자리 원칙 + 미니 예문
+function buildGuideCard() {
+  const card = document.createElement("div");
+  card.className = "guide-card";
+  const head = document.createElement("div");
+  head.className = "guide-head";
+  head.textContent = "어디서 끊나 - 새 의미 덩어리가 시작되는 곳 앞";
+  card.appendChild(head);
+  const rules = [
+    ["접속사 앞", "that·because·when·once가 나오면 새 절 시작", "you feel / that everyone is staring"],
+    ["관계대명사 앞", "명사 뒤의 who·that은 꾸밈절 시작", "facts / that support it"],
+    ["긴 전치사구 앞", "at·on·from 덩어리가 길면 그 앞", "you feel ~ / at the stain"],
+    ["긴 주어 뒤", "주어가 길면 동사 앞에서 한 번", "Knowing this trap / will not switch it off"],
+    ["콤마 뒤", "글쓴이가 이미 끊어 준 자리", "All day long, / you feel ~"],
+  ];
+  rules.forEach(([label, desc, ex]) => {
+    const row = document.createElement("div");
+    row.className = "guide-row";
+    const tag = document.createElement("span"); tag.className = "grammar-tag"; tag.textContent = label;
+    const body = document.createElement("span"); body.className = "guide-desc";
+    body.textContent = desc;
+    const exEl = document.createElement("div"); exEl.className = "guide-ex"; exEl.textContent = ex;
+    const right = document.createElement("span"); right.className = "guide-body";
+    right.append(body, exEl);
+    row.append(tag, right);
+    card.appendChild(row);
+  });
+  return card;
 }
 
 // 검토 후 공개되는 문법 목록 - 이 문장에 포함된 모든 문법 요소(이름표 + 한 줄 설명)

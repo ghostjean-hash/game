@@ -221,6 +221,37 @@ body {
 }
 .review-btn:hover { color: var(--er-accent); border-color: var(--er-accent); }
 
+/* 덩어리별 "왜 여기서 끊는가" 이유 태그 */
+.chunk-why {
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--fg-mute);
+  background: var(--bg-elev-2);
+  border-radius: 999px;
+  padding: 1px 8px;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+/* 끊는 기준 카드 (커닝페이퍼) */
+.guide-open { align-self: flex-end; }
+.guide-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--sp-4);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
+}
+.guide-head { font-size: 14px; font-weight: 800; color: var(--fg); }
+.guide-row { display: flex; align-items: baseline; gap: 8px; }
+.guide-body { display: flex; flex-direction: column; gap: 1px; }
+.guide-desc { font-size: 13px; color: var(--fg-dim); line-height: 1.5; }
+.guide-ex { font-size: 12.5px; color: var(--fg-mute); font-style: italic; }
+
 /* 검토 후 문법 목록 - 이 문장에 든 모든 문법 요소 */
 .grammar-list {
   display: flex;

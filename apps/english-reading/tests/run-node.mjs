@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { tokenize, resolveTargets } from "../src/core/tokenize.js";
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
-import { chunkBoundaries, gradeSlashes } from "../src/core/chunking.js";
+import { chunkBoundaries, gradeSlashes, boundaryReason, chunkReasons } from "../src/core/chunking.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 let failures = 0;
@@ -81,6 +81,28 @@ function check(name, cond, detail = "") {
 
   const single = chunkBoundaries(tokenize("Hello world."), [{ en: "Hello world." }]);
   check("chunking: 청킹 1개면 경계 0개", single.size === 0);
+}
+
+// ── boundaryReason (끊는 이유 자동 판별) ──────────────────────────────
+{
+  check("reason: 콤마 뒤", boundaryReason("All day long,", "you feel that") === "콤마 뒤");
+  check("reason: that절 앞", boundaryReason("you feel", "that everyone is staring") === "that절 앞");
+  check("reason: 관계대명사 앞", boundaryReason("the people", "who are watching") === "관계대명사 앞");
+  check("reason: 전치사구 앞", boundaryReason("is staring", "at the stain.") === "전치사구 앞");
+  check("reason: to부정사 앞", boundaryReason("a chance", "to prove their worth") === "to부정사 앞");
+  check("reason: 접속사 앞(even though)", boundaryReason("saw ten", "even though the wheel") === "접속사 앞");
+  check("reason: 비교 than 앞", boundaryReason("larger figures", "than those who saw ten") === "비교 than 앞");
+  check("reason: 동사 앞(긴 주어 뒤)", boundaryReason("The people who know the least", "are often") === "동사 앞(긴 주어 뒤)");
+  check("reason: 분사구 앞(ed+by)", boundaryReason("on a crowded street", "surrounded by strangers") === "분사구 앞");
+  check("reason: 애매하면 의미 덩어리", boundaryReason("guessed", "far larger figures") === "의미 덩어리");
+
+  // 원문 토큰의 콤마로 판별(덩어리 문자열이 콤마를 생략해도 정확)
+  const toks = tokenize("All day long, you feel that everyone is staring at the stain.");
+  const rs = chunkReasons(toks, [
+    { en: "All day long" }, { en: "you feel that everyone is staring" }, { en: "at the stain." },
+  ]);
+  check("chunkReasons: 첫 덩어리 null + 원문 콤마 판별 + 전치사구",
+    rs[0] === null && rs[1] === "콤마 뒤" && rs[2] === "전치사구 앞", rs.join("|"));
 }
 
 // ── passages.json 데이터 무결성 ──────────────────────────────
