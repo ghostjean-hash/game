@@ -235,7 +235,7 @@ body {
 }
 
 /* 끊는 기준 카드 (커닝페이퍼) */
-.guide-open { align-self: flex-end; }
+.guide-modal .guide-card { border: none; background: transparent; padding: 0; animation: none; }
 .guide-card {
   display: flex;
   flex-direction: column;

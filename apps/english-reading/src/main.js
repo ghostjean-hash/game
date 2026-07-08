@@ -13,6 +13,7 @@ const store = createStorage("english-reading");
 const el = {
   back: document.getElementById("nav-back"),
   title: document.getElementById("topbar-title"),
+  guide: document.getElementById("nav-guide"),
   vocab: document.getElementById("nav-vocab"),
   bar: document.getElementById("bar-fill"),
   stage: document.getElementById("stage"),
@@ -47,11 +48,13 @@ function closePopover() {
 }
 function removeHint() { const h = document.getElementById("first-hint"); if (h) h.remove(); }
 
-function setTop({ title, onBack, showVocab }) {
+function setTop({ title, onBack, showVocab, showGuide }) {
   el.title.textContent = title;
   el.back.onclick = onBack;
   el.vocab.style.display = showVocab ? "" : "none";
   el.vocab.onclick = renderVocab;
+  el.guide.style.display = showGuide ? "" : "none";
+  el.guide.onclick = openGuide;
 }
 
 function labeledBlock(label, text, mod) {
@@ -120,7 +123,7 @@ function renderReading(p) {
   closePopover();
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
-  setTop({ title: p.titleKr, onBack: renderList, showVocab: true });
+  setTop({ title: p.titleKr, onBack: renderList, showVocab: true, showGuide: settings.chunks });
 
   const stage = el.stage;
   stage.className = "stage reading-stage";
@@ -134,22 +137,6 @@ function renderReading(p) {
     hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [해석]으로 채점해 보세요. 모르는 단어는 단어를 누르면 뜻이 열립니다.";
     stage.appendChild(hint);
     store.set("seenIntro", true);
-  }
-
-  // 끊는 기준 커닝페이퍼 - 언제든 열어 보는 다섯 자리 원칙
-  if (settings.chunks) {
-    const guideBtn = document.createElement("button");
-    guideBtn.type = "button";
-    guideBtn.className = "text-btn guide-open";
-    guideBtn.textContent = "끊는 기준 보기";
-    const guide = buildGuideCard();
-    guide.hidden = true;
-    guideBtn.onclick = (e) => {
-      e.stopPropagation();
-      removeHint();
-      guide.hidden = !guide.hidden;
-    };
-    stage.append(guideBtn, guide);
   }
 
   const article = document.createElement("div");
@@ -308,6 +295,22 @@ function buildChunks(s) {
     host.appendChild(row);
   });
   return host;
+}
+
+// 끊는 기준 커닝페이퍼 - 상단바 버튼으로 언제든 오버레이로 열어 보는 공용 참고 카드
+function openGuide() {
+  const backdrop = document.createElement("div");
+  backdrop.className = "modal-backdrop";
+  const modal = document.createElement("div");
+  modal.className = "app-modal guide-modal";
+  modal.appendChild(buildGuideCard());
+  const ok = document.createElement("button");
+  ok.type = "button"; ok.className = "btn btn-primary"; ok.textContent = "닫기";
+  ok.onclick = () => backdrop.remove();
+  modal.appendChild(ok);
+  backdrop.appendChild(modal);
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) backdrop.remove(); });
+  document.body.appendChild(backdrop);
 }
 
 // 끊는 기준 카드 - 다섯 자리 원칙 + 미니 예문
