@@ -19,16 +19,18 @@ export const CFG = {
   enemyBullet: { speed: 250, r: 5 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
   parts: {
-    // 전방 화력: front 1~40. 1~8=탄 수(개별 탄 크기·색 균일, rGrow=0), 9~40=발별 진화(8발×4티어).
+    // 전방 화력(= 메인 총알, 내 비행기가 쏜다): front 1~40. 1~8=탄 수, 9~40=발별 진화(8발×4티어).
+    //   메인 총알은 직진으로 나간다(부채 없음). 여러 발이면 laneGap 간격으로 가로로 나란히 평행 발사.
     // max = 8 + tierMax×8. shapeDmg = 진화 티어 1당 그 탄의 데미지 증가.
-    front: { max: 40, tierMax: 4, rBase: 3.2, rGrow: 0, shapeDmg: 1 },
+    front: { max: 40, tierMax: 4, rBase: 3.2, rGrow: 0, shapeDmg: 1, laneGap: 11 },
     option: {
       maxPerSide: 4,          // 좌우 각 4대 → 총 8대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격
       baseY: 4, stepY: 14,    // 슬롯 뒤로 갈수록 약간 아래
       follow: 9,              // 플레이어 추종 속도(초당 비율)
-      // 8대 전부 레이저(미사일 제거, 유도탄은 꼬리 비행기로 이관). 옵션 수↑ → 굵기(laserR)·데미지(laserDmg) 상승.
-      laserEvery: 0.16, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 880, laserR: 2.2, laserRGrow: 0.3,
+      // 8대 전부 레이저(= 사이드 총알, 사이드 비행기가 쏜다). 옵션 수↑ → 굵기(laserR)·데미지(laserDmg) 상승.
+      //   사이드 총알은 양쪽 대각선으로 퍼진다: 왼쪽 비행기는 왼쪽 위, 오른쪽 비행기는 오른쪽 위로 laserDiagDeg만큼 기운다.
+      laserEvery: 0.16, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 880, laserR: 2.2, laserRGrow: 0.3, laserDiagDeg: 22,
     },
     zone: {
       radius: [0, 34, 52, 70, 88, 106], // 레벨 0~5 반경

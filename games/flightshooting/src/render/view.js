@@ -242,11 +242,16 @@ function drawBullets(ctx, game) {
   ctx.save();
   for (const b of game.bullets) {
     if (b.kind === 'laser') {
-      // 레이저: 가늘고 긴 흰-보라 빔(라벤더 외곽 + 흰 코어). 메인탄(시안 덩어리)과 색·형태 모두 구분.
+      // 사이드 총알(레이저): 가늘고 긴 흰-보라 빔. 대각선으로 나가므로 진행 방향으로 막대를 회전시킨다.
+      const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(ang);
       ctx.fillStyle = COLORS.laser;
-      ctx.fillRect(b.x - b.r * 0.5, b.y - 12, b.r, 20);         // 라벤더 외곽(길게)
+      ctx.fillRect(-b.r * 0.5, -12, b.r, 20);         // 라벤더 외곽(길게)
       ctx.fillStyle = COLORS.laserCore;
-      ctx.fillRect(b.x - b.r * 0.24, b.y - 10, b.r * 0.48, 16); // 흰 코어(가늘게)
+      ctx.fillRect(-b.r * 0.24, -10, b.r * 0.48, 16); // 흰 코어(가늘게)
+      ctx.restore();
     } else if (b.kind === 'missile') {
       // 꼬리 비행기 유도탄: 진행 방향 캡슐 + 짧은 꼬리. 무기 단계(weapon 1~4)별 색·크기.
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
