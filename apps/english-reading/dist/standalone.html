@@ -348,14 +348,14 @@ body {
 }
 .gap::after { content: "/"; font-weight: 700; }
 @media (hover: hover) {
-  .gap:not(.slashed):hover { color: rgba(59,130,246,0.35); }
+  .gap:not(.slashed):hover { color: rgba(26,30,40,0.3); }
 }
-.gap.slashed { color: var(--er-accent); }
-/* 검토 결과 - 색 + 모양 이중 신호 */
-.gap.g-correct { color: var(--er-accent); }
-.gap.g-wrong { color: #dc2626; text-decoration: line-through; text-decoration-thickness: 2px; }
-.gap.g-missed { color: #16a34a; }
-.gap.g-missed::after { content: "/"; border: 1.5px dashed #16a34a; border-radius: 4px; padding: 0 1px; }
+.gap.slashed { color: var(--fg); } /* 긋기 기본 = 본문과 같은 검정 */
+/* 검토 결과 - 맞음은 그대로(검정), 잘못 그음은 회색 점선, 빼먹음은 빨강 */
+.gap.g-correct { color: var(--fg); }
+.gap.g-wrong { color: var(--fg-mute); }
+.gap.g-wrong::after { content: "/"; border: 1.5px dashed var(--fg-mute); border-radius: 4px; padding: 0 1px; opacity: 0.9; }
+.gap.g-missed { color: #dc2626; }
 
 /* 문장 끝 "/ 검토" 버튼 */
 .review-btn {
@@ -408,11 +408,6 @@ body {
   border-bottom: 1.5px dotted var(--er-accent);
   padding-bottom: 1px;
 }
-@media (hover: hover) {
-  .w.key:hover { background: var(--accent-weak, #eef2ff); border-radius: var(--r-1); }
-}
-/* 재독 시 이미 수집한 단어를 옅게 강조 */
-.w.known { background: var(--known); border-radius: var(--r-1); }
 
 /* 단어 뜻 말풍선 */
 .word-pop {
@@ -2400,8 +2395,6 @@ function renderList() {
 // ── 읽기 화면 ──
 function renderReading(p) {
   closePopover();
-  const reads = getReads();
-  const isRevisit = (reads[p.id] || 0) >= 1;
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
   setTop({ title: p.titleKr, onBack: renderList, showVocab: true });
@@ -2420,12 +2413,9 @@ function renderReading(p) {
     store.set("seenIntro", true);
   }
 
-  // 재독이면 이미 수집한 단어를 본문에 옅게 표시(지난번 막혔던 단어 알아보기)
-  const known = isRevisit ? new Set(getVocab().map((v) => v.wordKey)) : null;
-
   const article = document.createElement("div");
   article.className = "article";
-  p.sentences.forEach((s) => article.appendChild(renderSentence(s, p, settings, known)));
+  p.sentences.forEach((s) => article.appendChild(renderSentence(s, p, settings)));
   stage.appendChild(article);
   // 본문 빈 곳 클릭 → 열린 뜻 말풍선 닫기(단어·틈 클릭은 전파를 끊는다)
   stage.addEventListener("click", closePopover);
@@ -2438,7 +2428,7 @@ function renderReading(p) {
   stage.appendChild(doneBtn);
 }
 
-function renderSentence(s, passage, settings, known) {
+function renderSentence(s, passage, settings) {
   const block = document.createElement("div");
   block.className = "sentence-block";
 
@@ -2468,8 +2458,6 @@ function renderSentence(s, passage, settings, known) {
     } else {
       span.className = "w";
     }
-    // 재독 시 이미 수집한 단어는 옅게 표시(지난번 막혔던 단어 알아보기)
-    if (known && known.has(tok.clean)) span.classList.add("known");
     line.appendChild(span);
 
     // 단어 사이 틈 - 누르면 / 선 토글(마지막 단어 뒤는 제외)

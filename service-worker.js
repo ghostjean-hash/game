@@ -95,7 +95,8 @@
 // v148 (2026-07-09): flightshooting 회복(H) 파워업을 육각형 안 하트 → 하트 모양 자체로 변경. PWA 옛 캐시 무효화.
 // v149 (2026-07-09): english-reading 단어 말풍선 중앙 고정 등장 + 2초 자동 닫힘.
 // v150 (2026-07-09): flightshooting 버그 2건 - 구역 인트로 중 적 스폰만 멈추고 아이템 이동·획득·발사는 진행 / 피격 무적(깜박) 중에도 아이템 획득 허용. PWA 옛 캐시 무효화.
-const CACHE_VERSION = "v150";
+// v151 (2026-07-09): english-reading 채점 색 체계 변경(검정/회색 점선/빨강) + 단어 배경 하이라이트 제거.
+const CACHE_VERSION = "v151";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

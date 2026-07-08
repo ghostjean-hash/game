@@ -118,8 +118,6 @@ function renderList() {
 // ── 읽기 화면 ──
 function renderReading(p) {
   closePopover();
-  const reads = getReads();
-  const isRevisit = (reads[p.id] || 0) >= 1;
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
   setTop({ title: p.titleKr, onBack: renderList, showVocab: true });
@@ -138,12 +136,9 @@ function renderReading(p) {
     store.set("seenIntro", true);
   }
 
-  // 재독이면 이미 수집한 단어를 본문에 옅게 표시(지난번 막혔던 단어 알아보기)
-  const known = isRevisit ? new Set(getVocab().map((v) => v.wordKey)) : null;
-
   const article = document.createElement("div");
   article.className = "article";
-  p.sentences.forEach((s) => article.appendChild(renderSentence(s, p, settings, known)));
+  p.sentences.forEach((s) => article.appendChild(renderSentence(s, p, settings)));
   stage.appendChild(article);
   // 본문 빈 곳 클릭 → 열린 뜻 말풍선 닫기(단어·틈 클릭은 전파를 끊는다)
   stage.addEventListener("click", closePopover);
@@ -156,7 +151,7 @@ function renderReading(p) {
   stage.appendChild(doneBtn);
 }
 
-function renderSentence(s, passage, settings, known) {
+function renderSentence(s, passage, settings) {
   const block = document.createElement("div");
   block.className = "sentence-block";
 
@@ -186,8 +181,6 @@ function renderSentence(s, passage, settings, known) {
     } else {
       span.className = "w";
     }
-    // 재독 시 이미 수집한 단어는 옅게 표시(지난번 막혔던 단어 알아보기)
-    if (known && known.has(tok.clean)) span.classList.add("known");
     line.appendChild(span);
 
     // 단어 사이 틈 - 누르면 / 선 토글(마지막 단어 뒤는 제외)
