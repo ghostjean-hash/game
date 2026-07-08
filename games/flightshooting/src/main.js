@@ -8,7 +8,7 @@ import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard } from './core/world.js';
 import { autopilotStep } from './core/autopilot.js';
-import { gainFront, gainOption, gainZone } from './core/parts.js';
+import { gainFront, gainOption, gainZone, gainTail } from './core/parts.js';
 import { render } from './render/view.js';
 import { createControls } from './input/controls.js';
 
@@ -25,6 +25,7 @@ const elStage = $('#stage');
 const elFront = $('#front');
 const elOption = $('#option');
 const elZone = $('#zone');
+const elTail = $('#tail');
 const elLives = $('#lives');
 const elMenuBest = $('#menu-best');
 const elBossBar = $('#boss-bar');
@@ -60,7 +61,7 @@ function createGame() {
   return {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
     score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
-    front: 1, shapeTier: 0, options: [], zone: { level: 0, timer: null }, partHistory: [],
+    front: 1, options: [], zone: { level: 0, timer: null }, tail: [], partHistory: [],
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
@@ -127,18 +128,36 @@ function handleEvent(ev) {
 
 // ── HUD / 배너 ──
 // 계통이 최대치면 '마스터'(★ 금색)로 표시, 아니면 현재 값.
-// extra > 0 이면 별 뒤에 단계를 붙인다(전방화력 만렙 후 모양 진화 티어: ★1~★4).
+// extra > 0 이면 별 뒤에 단계를 붙인다(진화/무기 티어: ★1~★4).
 function setPartHud(el, val, max, extra = 0) {
   const mastered = val >= max;
   el.textContent = mastered ? (extra ? '★' + extra : '★') : val;
   el.classList.toggle('mastered', mastered);
 }
+// 전방화력: 8발 도달이 1차 만렙(★), 그 뒤 발별 진화 최고 티어(★1~★4)를 붙인다.
+function setFrontHud() {
+  const F = CFG.parts.front;
+  const evo = Math.max(0, game.front - 8);
+  const tier = evo >= 1 ? Math.min(Math.floor((evo - 1) / 8) + 1, F.tierMax) : 0;
+  if (game.front < 8) { elFront.textContent = game.front; elFront.classList.remove('mastered'); }
+  else { elFront.textContent = tier ? '★' + tier : '★'; elFront.classList.add('mastered'); }
+}
+// 꼬리기: 4대 미만이면 대수, 4대 도달 후엔 ★ + 전체 최저 무기 단계(모든 꼬리기가 오른 단계).
+function setTailHud() {
+  const T = CFG.parts.tail;
+  const n = game.tail.length;
+  if (n < T.maxCount) { elTail.textContent = n; elTail.classList.remove('mastered'); return; }
+  const minW = Math.min(...game.tail.map((t) => t.weapon));
+  elTail.textContent = minW > 1 ? '★' + minW : '★';
+  elTail.classList.add('mastered');
+}
 function syncHud() {
   elScore.textContent = game.score;
   elStage.textContent = game.stage;
-  setPartHud(elFront, game.front, CFG.parts.front.max, game.shapeTier || 0);
+  setFrontHud();
   setPartHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2);
   setPartHud(elZone, game.zone.level, CFG.parts.zone.radius.length - 1);
+  setTailHud();
   const lifeEls = elLives.querySelectorAll('.life');
   lifeEls.forEach((el, i) => el.classList.toggle('spent', i >= game.lives));
 }
@@ -155,7 +174,7 @@ function resetGame() {
   game.bullets = []; game.enemies = []; game.eBullets = [];
   game.powerups = []; game.particles = []; game.boss = null;
   game.score = 0; game.lives = CFG.player.maxLives;
-  game.front = 1; game.shapeTier = 0; game.options = []; game.zone = { level: 0, timer: null }; game.partHistory = [];
+  game.front = 1; game.options = []; game.zone = { level: 0, timer: null }; game.tail = []; game.partHistory = [];
   game.stage = 1; game.fireTimer = 0;
   game.bossPending = false; game.transitioning = false;
   game.pendingTimer = null; game.transitionTimer = null; game.winTimer = null;
@@ -189,14 +208,18 @@ function applyDevHook() {
   const num = (k) => { const v = q.get(k); return v == null ? null : Number(v); };
   const stage = num('stage');
   if (stage != null) game.stage = Math.max(1, Math.min(stage, CFG.stageCount));
+  // front: 1~40. 9 이상이면 발별 진화가 보인다(16=티어1 완성, 24=티어2 완성 …).
   const front = num('front'); if (front != null) for (let i = 1; i < front; i++) gainFront(game);
-  // shape: 전방화력을 만렙으로 올린 뒤 모양 진화 티어(1~4)까지 세팅해 탄 모양을 바로 확인.
-  const shape = num('shape');
-  if (shape != null) { game.front = CFG.parts.front.max; for (let i = 0; i < shape; i++) gainFront(game); }
   const option = num('option'); if (option != null) for (let i = 0; i < option; i++) gainOption(game);
   const zone = num('zone'); if (zone != null) for (let i = 0; i < zone; i++) gainZone(game);
+  // tail: 1~16. 4까지 대수, 그 뒤 1~4번 순차 무기 진화(16=전원 무기4).
+  const tail = num('tail'); if (tail != null) for (let i = 0; i < tail; i++) gainTail(game);
   const lives = num('lives'); if (lives != null) game.lives = Math.max(1, lives);
   if (stage != null) startStage(game); // 지정 구역 웨이브 재생성 + 배너
+  if (q.get('nointro') != null) game.introTimer = 0; // 검증 편의: 인트로 배너 건너뛰고 즉시 발사
+  // warm=N: 시작 시 N프레임 미리 굴려 탄·상태를 진행시킨 화면을 바로 캡처(검증 편의).
+  const warm = num('warm');
+  if (warm != null) { game.introTimer = 0; for (let i = 0; i < warm; i++) stepWorld(game, 0.016, W, H); }
 }
 
 function togglePause() {
@@ -238,7 +261,7 @@ async function gameWon() {
   const isBest = commitBest();
   const choice = await showModal({
     title: '전 구역 격파!',
-    body: `10개 구역의 모든 보스를 쓰러뜨렸다.\n최종 점수 ${game.score}${isBest ? '\n★ 최고 기록 갱신!' : ''}`,
+    body: `20개 구역의 모든 보스를 쓰러뜨렸다.\n최종 점수 ${game.score}${isBest ? '\n★ 최고 기록 갱신!' : ''}`,
     actions: [
       { label: '다시하기', primary: true, value: 'retry' },
       { label: '홈', value: 'home' },

@@ -302,3 +302,31 @@
 ### 사고: 다른 세션 deploy 자동 커밋에 변경분 섞임
 - 위 flightshooting 변경 전부(docs 3 + fire/parts/numbers/main/view + tests)가 작업 중 다른 세션의 배포 자동화 커밋 `559c0a0 deploy: game-hub 갱신 (2026-07-07T16:40:33.697Z)`에 통째로 담겨 이미 커밋·push(배포)됐다. 코드는 최신 완성본 그대로 무손실이나, 의도한 기능 커밋 메시지(feat) 대신 무관한 deploy 메시지로 기록된 이력 추적성 손상.
 - 이미 push된 공유 이력이라 rebase reword는 파괴적·위험 판단, 되돌리지 않고 본 봉합 문서에 경위를 남겨 추적성을 보완. 근본(배포 자동화가 무관 working tree까지 add하는 결함)은 글로벌 web-deploy 영역이라 도메인에서 못 고침 → buffer 인계 대상.
+
+## 2026-07-08 - 파워 파츠 3계통 → 4계통 재설계 (기획 + 구현)
+
+사용자 지시로 전방화력(P) 탄 진화 방식을 바꾸고, 옵션기(S)를 통일하고, 꼬리 비행기(T) 계통을 신설했다. "먼저 기획서 정리" → 기획 개선 루프 3회 → 구현 → 검증 순서로 진행. 지난 세션의 만렙 후 4모양 동시 진화(원→타원→긴형→링)는 폐기됐다.
+
+### 기획 확정 (docs 01·02·05 개정)
+- P 전방화력(front 1~40): 1~8단계는 탄 수만 1→8발, 개별 탄 크기·모양·색 완전 균일화(기존 크기 성장 rGrow·단계별 색 변화 폐기). 9~40단계는 8발 고정, 가운데 탄부터 한 발씩 진화, 8발 완성 시 다음 티어(4티어). 진화 표지는 아군 차가운색 4티어(시안→흰→하늘→민트) + 글로우·크기 미세 계단, 데미지 티어당 +1. 사용자 정정: "흰/노랑은 예시, 적탄과 헷갈리지 않게 확실히 구분" → 노랑·주황·빨강 배제하고 차가운색으로 확정.
+- S 옵션기: 8대 전부 레이저 통일(5~8번째 미사일 제거), 옵션 수 비례 굵기·데미지 상승.
+- T 꼬리 비행기 신설: 플레이어 뒤 V자 최대 4대, 처음부터 유도탄. 4대 먼저 채운 뒤 1번→2번→3번→4번 순서로 무기 한 단계씩 진화(무기 4단계, P 발별 진화와 동형). 유도탄 크기·데미지 상승.
+- 아이템 6종(P/S/E/T/H/B), 모든 발사체 데미지=크기·티어 비례(에너지존만 예외).
+
+### 기획 개선 루프 3회
+- 루프1(성장 곡선): P40 도달은 20구역 게임서 비현실 → 실 도달 티어1~2 인지 + 4계통 동시 성장 DPS 폭증 경계로 보스 hp 재산정 지시(docs 5.1).
+- 루프2(피아·가독성·배치): 밝은 노랑 진화탄이 적탄 노란 코어와 혼동 → 차가운색 확정. HUD 5칸 아이콘/짧은 라벨. 꼬리기 배치를 아래 일렬 대신 좌우 V자(플레이어 하단 82% 여백 내).
+- 루프3(엣지·구현): 발별 티어 산출 공식 + 4검산점 명문화(테스트 케이스로), 피격 강등 시 진화 자동 정합, P·T 만렙 후 maxedBonus.
+
+### 구현
+- fire.js: frontSpec 재설계 - 단일 shapeTier 폐기, front 정수로 발별 진화 티어 배열 `{angle,tier,dmg}` 반환. 중앙 근접 순번(centerRanks) 헬퍼.
+- parts.js: 옵션 전부 레이저(laserDmgGrow), stepTail·addTail·gainTail(꼬리기 무기 순차 진화), loseLastPart에 tail/tailWeapon 추가·shape 제거, homeMissiles가 TAIL 파라미터 참조.
+- numbers.js(front.max 40·tierMax·rGrow0·shapes 티어 배율, option laserDmgGrow, tail 신설, drop 6종), colors.js(bulletShapeTier 차가운색·powerup.T·tail 색), view.js(drawTail·티어 색/글로우 렌더·미사일 무기색), world.js(grabItem T·stepTail 2곳), main.js(game.tail·setFrontHud/setTailHud·dev훅 warm/nointro·shapeTier 제거), index.html(HUD 꼬리 칸·tips), styles(l-tail).
+
+### 검증
+- core 테스트 51/51 PASS: 발별 진화 검산점 4개(front 9=가운데1발·16=전부티어1·17=티어2 1발·40=전부티어4) + 꼬리기 4대 후 순차 무기 + 역순 손실(tailWeapon 먼저) 포함. browser-shot로 test.html 캡처 확인.
+- browser-shot 게임 3종: 진화 섞임(front20 가운데 하늘색·바깥 시안)·만렙+피아 대비(front40 밝은 시안 아군탄 vs 적 빨강)·HUD 5칸 값 정확(앞★2/★4·옵션·존·꼬리★). pageerror 0(오디오 경고·favicon 404만).
+
+### 남은 것 / 정하실 것
+- 실플레이 밸런스 미확인: 후반 DPS·보스 hp 재산정(docs 5.1)은 사용자 실플레이 후 조정 대상(자동 관찰 한계).
+- 이번 봉합은 코드 commit·push만. 실제 배포(GitHub Pages 전파 + SW 캐시 버전)는 web-deploy 별도 실행 시.

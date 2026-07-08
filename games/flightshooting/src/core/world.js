@@ -4,7 +4,7 @@
 import { CFG } from '../data/numbers.js';
 import { COLORS } from '../data/colors.js';
 import { playerFire, enemyFireAt } from './fire.js';
-import { stepOptions, homeMissiles, tickZone, gainFront, gainOption, gainZone, loseLastPart } from './parts.js';
+import { stepOptions, stepTail, homeMissiles, tickZone, gainFront, gainOption, gainZone, gainTail, loseLastPart } from './parts.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
 import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, dropMaybe, burst } from './spawn.js';
@@ -193,6 +193,8 @@ function grabItem(game, kind) {
     if (gainOption(game)) game.sfx.push('power'); else maxed();
   } else if (kind === 'E') {
     if (gainZone(game)) game.sfx.push('power'); else maxed();
+  } else if (kind === 'T') {
+    if (gainTail(game)) game.sfx.push('power'); else maxed();
   } else if (kind === 'H') {
     if (game.lives < CFG.player.maxLives) { game.lives++; game.sfx.push('power'); } else maxed();
   } else if (kind === 'B') {
@@ -339,7 +341,8 @@ export function stepWorld(game, dt, W, H) {
     game.introTimer -= dt;
     if (game.player.inv > 0) game.player.inv -= dt;
     updateStars(game, dt, W, H);
-    stepOptions(game, dt, false); // 인트로 중 옵션기는 위치만 따라가고 발사는 쉼
+    stepOptions(game, dt, false); // 인트로 중 옵션기·꼬리기는 위치만 따라가고 발사는 쉼
+    stepTail(game, dt, false);
     homeMissiles(game, dt);
     updateBullets(game, dt, W, H);
     updateParticles(game, dt);
@@ -354,6 +357,7 @@ export function stepWorld(game, dt, W, H) {
     playerFire(game);
   }
   stepOptions(game, dt, !game.transitioning); // 옵션기 추종 + 발사(보스 클리어 후 전환 대기 중엔 발사 쉼)
+  stepTail(game, dt, !game.transitioning);    // 꼬리 비행기 추종 + 유도탄 발사
   spawnWaves(game, W);
   game.bonusTimer -= dt;           // 보너스 기체 주기 등장(파워업 공급원)
   if (game.bonusTimer <= 0) { game.bonusTimer = CFG.bonusShip.every; spawnBonus(game, W, H); }

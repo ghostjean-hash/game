@@ -12,6 +12,7 @@ export function render(ctx, game, W, H) {
   drawBoss(ctx, game);
   drawEnemyBullets(ctx, game);
   drawBullets(ctx, game);
+  drawTail(ctx, game);        // 뒤쪽 꼬리 비행기(플레이어보다 먼저 = 뒤에 깔림)
   drawOptions(ctx, game);     // 좌우 부속 비행기
   drawPlayer(ctx, game);
   drawParticles(ctx, game);
@@ -72,6 +73,30 @@ function drawOptions(ctx, game) {
     ctx.fillStyle = COLORS.totoro.eye;
     ctx.beginPath(); ctx.arc(-s * 0.35, -s * 0.2, 1.1, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.arc(s * 0.35, -s * 0.2, 1.1, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+}
+
+// 꼬리 비행기: 작은 둥근 유도탄 발사기(옵션기 토토로와 구분되는 매끈한 캡슐 + 아래 노즐 불빛 + 눈).
+// 무기 단계(weapon 1~4)가 높을수록 노즐 불빛이 밝고 커진다(성장 가시화).
+function drawTail(ctx, game) {
+  if (!game.tail) return;
+  const col = COLORS.tail;
+  for (const o of game.tail) {
+    const s = 5.5;
+    const w = o.weapon || 1;
+    ctx.save();
+    ctx.translate(o.x, o.y);
+    // 아래 노즐 불빛(무기 단계별 밝기·크기)
+    ctx.fillStyle = COLORS.missileTrail;
+    ctx.beginPath(); ctx.ellipse(0, s * 0.9, s * 0.4, s * (0.5 + w * 0.18), 0, 0, Math.PI * 2); ctx.fill();
+    // 몸통(둥근 캡슐)
+    ctx.fillStyle = col;
+    ctx.beginPath(); ctx.ellipse(0, 0, s * 0.85, s, 0, 0, Math.PI * 2); ctx.fill();
+    // 눈 2개
+    ctx.fillStyle = '#173a2a';
+    ctx.beginPath(); ctx.arc(-s * 0.32, -s * 0.15, 1, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(s * 0.32, -s * 0.15, 1, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
   }
 }
@@ -221,38 +246,30 @@ function drawBullets(ctx, game) {
       ctx.fillStyle = COLORS.laser;
       ctx.fillRect(b.x - b.r * 0.5, b.y - 9, b.r, 13);
     } else if (b.kind === 'missile') {
-      // 미사일: 진행 방향으로 회전한 캡슐 + 짧은 꼬리
+      // 꼬리 비행기 유도탄: 진행 방향 캡슐 + 짧은 꼬리. 무기 단계(weapon 1~4)별 색·크기.
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+      const stage = COLORS.tailMissileByStage;
+      const col = stage[Math.max(0, Math.min((b.weapon || 1) - 1, stage.length - 1))];
       ctx.fillStyle = COLORS.missileTrail;
       ctx.beginPath();
       ctx.arc(b.x - Math.cos(Math.atan2(b.vy, b.vx)) * 6, b.y - Math.sin(Math.atan2(b.vy, b.vx)) * 6, b.r * 0.7, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = COLORS.missile;
+      ctx.fillStyle = col;
       ctx.beginPath();
       ctx.ellipse(b.x, b.y, b.r * 0.7, b.r * 1.3, ang, 0, Math.PI * 2);
       ctx.fill();
     } else {
-      // 전방 화력 기본탄: 진행 방향으로 길쭉하게 + 화력 단계별 색.
-      // b.shape(0~4): 만렙 후 모양 진화(원→타원→긴형→링). 배율은 CFG.bullet.shapes, 진화탄은 발광.
+      // 전방 화력탄: 진행 방향 세로 타원. b.tier(0~4): 발별 진화 티어 - 색(차가운 계단)·글로우·크기로 구분.
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
-      const lvl = Math.max(1, Math.min(game.front || 1, COLORS.bulletByLevel.length));
-      const sh = CFG.bullet.shapes[b.shape || 0];
-      const col = COLORS.bulletByLevel[lvl - 1];
+      const tier = b.tier || 0;
+      const sh = CFG.bullet.shapes[tier];
+      const col = COLORS.bulletShapeTier[tier];
       const rx = b.r * sh.rx, ry = b.r * sh.ry;
       ctx.fillStyle = col;
-      ctx.strokeStyle = col;
-      if (b.shape) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = 3 + b.shape * 2; }
-      if (sh.ring) {
-        // 링(최종): 가운데가 뚫린 발광 고리 - 두꺼운 stroke 타원(바깥 rx, 안쪽 rx*ring).
-        ctx.lineWidth = rx * (1 - sh.ring);
-        ctx.beginPath();
-        ctx.ellipse(b.x, b.y, rx * (1 + sh.ring) / 2, ry * (1 + sh.ring) / 2, ang, 0, Math.PI * 2);
-        ctx.stroke();
-      } else {
-        ctx.beginPath();
-        ctx.ellipse(b.x, b.y, rx, ry, ang, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      if (sh.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = sh.glow; }
+      ctx.beginPath();
+      ctx.ellipse(b.x, b.y, rx, ry, ang, 0, Math.PI * 2);
+      ctx.fill();
       ctx.shadowBlur = 0;
     }
   }
@@ -277,7 +294,7 @@ function drawEnemyBullets(ctx, game) {
 
 // 파워업 = 각진 육각형 아이템(둥근 적 정령과 형태로 구분) + 밝은 색 채움 + 흰 테두리 + 글자.
 function drawPowerups(ctx, game) {
-  const label = { P: 'P', S: 'S', E: 'E', H: '♥', B: 'B' };
+  const label = { P: 'P', S: 'S', E: 'E', T: 'T', H: '♥', B: 'B' };
   for (const it of game.powerups) {
     const col = COLORS.powerup[it.kind];
     ctx.save();

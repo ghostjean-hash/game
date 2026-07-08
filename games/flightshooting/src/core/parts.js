@@ -6,12 +6,13 @@ import { burst, dropItems, spawnShards } from './spawn.js';
 
 const OPT = CFG.parts.option;
 const ZONE = CFG.parts.zone;
+const TAIL = CFG.parts.tail;
 
-// n번째(0-based) 옵션 슬롯 정의: 좌우 번갈아, 안(0)→밖(3). 슬롯 0·1 레이저, 2·3 미사일.
+// n번째(0-based) 옵션 슬롯 정의: 좌우 번갈아, 안(0)→밖(3). 8대 전부 레이저(미사일은 꼬리 비행기로 이관).
 export function optionSlot(n) {
   const side = n % 2 === 0 ? -1 : 1;
   const slot = Math.floor(n / 2);
-  return { side, slot, type: slot < 2 ? 'laser' : 'missile' };
+  return { side, slot, type: 'laser' };
 }
 
 function optionTarget(o, p) {
@@ -24,29 +25,40 @@ export function addOption(game) {
   const s = optionSlot(game.options.length);
   const p = game.player;
   const t = p ? optionTarget({ ...s }, p) : { x: 0, y: 0 };
-  game.options.push({
-    ...s, x: t.x, y: t.y,
-    fireTimer: s.type === 'laser' ? OPT.laserEvery : OPT.missileEvery * Math.random(),
-  });
+  game.options.push({ ...s, x: t.x, y: t.y, fireTimer: OPT.laserEvery });
   return true;
 }
 
-// ── 파츠 획득(P/S/E). 만렙이면 false(소리·history 없음) ──
-// 전방화력은 8까지 오른 뒤 P를 더 먹으면 탄 모양이 4단계 진화한다(원→타원→긴형→링, docs/05 1.1.1).
+// 꼬리 비행기 n번째(0-based) 목표 위치: 플레이어 뒤(아래) 좌우 부채. count에 따라 매 프레임 재배치.
+function tailTarget(idx, count, p) {
+  const off = idx - (count - 1) / 2;                 // 중앙 기준 좌우 부호
+  return { x: p.x + off * TAIL.stepX, y: p.y + TAIL.baseY + Math.abs(off) * TAIL.stepY };
+}
+
+// 꼬리 비행기 성장 1스텝. 4대 먼저 채우고('count'), 그 뒤 1~4번 순서로 무기 진화('weapon'). 만렙이면 null.
+export function addTail(game) {
+  if (game.tail.length < TAIL.maxCount) {
+    const p = game.player;
+    const t = p ? tailTarget(game.tail.length, game.tail.length + 1, p) : { x: 0, y: 0 };
+    game.tail.push({ x: t.x, y: t.y, fireTimer: TAIL.missileEvery * Math.random(), weapon: 1 });
+    return 'count';
+  }
+  const min = Math.min(...game.tail.map((t) => t.weapon));
+  if (min >= TAIL.weaponMax) return null;      // 무기까지 만렙
+  const tgt = game.tail.find((t) => t.weapon === min); // 앞(1번)에서부터 순차
+  tgt.weapon++;
+  return 'weapon';
+}
+
+// ── 파츠 획득(P/S/E/T). 만렙이면 false(소리·history 없음) ──
+// 전방화력은 front 정수 하나(1~40)로 탄 수(1~8)와 발별 진화(9~40)를 모두 표현한다(docs/05 1.1.1).
 export function gainFront(game) {
   if (game.front < CFG.parts.front.max) {
     game.front++;
     game.partHistory.push('front');
     return true;
   }
-  // 만렙 후: 모양 진화(shapeTier 1~4). 데미지도 티어당 상승.
-  const shapeMax = CFG.bullet.shapes.length - 1;
-  if ((game.shapeTier || 0) < shapeMax) {
-    game.shapeTier = (game.shapeTier || 0) + 1;
-    game.partHistory.push('shape');
-    return true;
-  }
-  return false; // 모양까지 만렙 → 점수 보너스로 처리(world.grabItem)
+  return false; // front 만렙 → 점수 보너스로 처리(world.grabItem)
 }
 export function gainOption(game) {
   if (!addOption(game)) return false;
@@ -60,26 +72,39 @@ export function gainZone(game) {
   game.partHistory.push('zone');
   return true;
 }
+export function gainTail(game) {
+  const r = addTail(game);
+  if (r === 'count') game.partHistory.push('tail');
+  else if (r === 'weapon') game.partHistory.push('tailWeapon');
+  else return false;
+  return true;
+}
 
 // 피격 시 마지막 얻은 파츠 1개 되돌림(역순 손실). 되돌린 계통 이름 반환.
 export function loseLastPart(game) {
   const part = game.partHistory.pop();
   if (part === 'front') game.front = Math.max(1, game.front - 1);
-  else if (part === 'shape') game.shapeTier = Math.max(0, (game.shapeTier || 0) - 1);
   else if (part === 'option') game.options.pop();
   else if (part === 'zone') game.zone.level = Math.max(0, game.zone.level - 1);
+  else if (part === 'tail') game.tail.pop();
+  else if (part === 'tailWeapon') {
+    // 가장 최근 오른 꼬리기 무기 후퇴 = 최대 weapon 중 가장 뒤(높은 index)를 -1.
+    const max = Math.max(...game.tail.map((t) => t.weapon));
+    for (let i = game.tail.length - 1; i >= 0; i--) {
+      if (game.tail[i].weapon === max) { game.tail[i].weapon = Math.max(1, max - 1); break; }
+    }
+  }
   return part || null;
 }
 
-// 옵션 위치 추종 + 발사(레이저: 빠른 직진탄 / 미사일: 유도탄). 아군 탄은 game.bullets에 kind로 구분.
+// 옵션 위치 추종 + 발사(8대 전부 레이저). 옵션 수↑ → 굵기·데미지 상승. 아군 탄은 game.bullets에 kind로 구분.
 export function stepOptions(game, dt, canFire = true) {
   const p = game.player;
   if (!p) return;
   const k = Math.min(1, OPT.follow * dt);
-  const n = game.options.length; // 옵션기가 많을수록 발사체가 굵어진다
+  const n = game.options.length; // 옵션기가 많을수록 레이저가 굵고 세진다
   const laserR = OPT.laserR + n * OPT.laserRGrow;
-  const missileR = OPT.missileR + n * OPT.missileRGrow;
-  let firedMissile = false;
+  const laserDmg = OPT.laserDmg + Math.max(0, n - 1) * OPT.laserDmgGrow;
   for (const o of game.options) {
     const t = optionTarget(o, p);
     o.x += (t.x - o.x) * k;
@@ -87,19 +112,36 @@ export function stepOptions(game, dt, canFire = true) {
     if (!canFire) continue; // 전환·인트로 중엔 위치만 따라가고 발사는 쉰다
     o.fireTimer -= dt;
     if (o.fireTimer > 0) continue;
-    if (o.type === 'laser') {
-      o.fireTimer = OPT.laserEvery;
-      game.bullets.push({ x: o.x, y: o.y - 6, vx: 0, vy: -OPT.laserSpeed, r: laserR, dmg: OPT.laserDmg, kind: 'laser' });
-    } else {
-      o.fireTimer = OPT.missileEvery;
-      game.bullets.push({
-        x: o.x, y: o.y - 6, vx: o.side * 60, vy: -OPT.missileSpeed * 0.4,
-        r: missileR, dmg: OPT.missileDmg, kind: 'missile',
-      });
-      firedMissile = true;
-    }
+    o.fireTimer = OPT.laserEvery;
+    game.bullets.push({ x: o.x, y: o.y - 6, vx: 0, vy: -OPT.laserSpeed, r: laserR, dmg: laserDmg, kind: 'laser' });
   }
-  if (firedMissile) game.sfx.push('missile');
+}
+
+// 꼬리 비행기 위치 추종 + 유도탄 발사. 무기 단계↑ → 유도탄 크기·데미지 상승. 유도는 homeMissiles가 담당.
+export function stepTail(game, dt, canFire = true) {
+  const p = game.player;
+  if (!p || !game.tail) return;
+  const k = Math.min(1, TAIL.follow * dt);
+  const n = game.tail.length;
+  let fired = false;
+  game.tail.forEach((o, idx) => {
+    const t = tailTarget(idx, n, p);
+    o.x += (t.x - o.x) * k;
+    o.y += (t.y - o.y) * k;
+    if (!canFire) return;
+    o.fireTimer -= dt;
+    if (o.fireTimer > 0) return;
+    o.fireTimer = TAIL.missileEvery;
+    const w = o.weapon;
+    game.bullets.push({
+      x: o.x, y: o.y + 4, vx: (idx % 2 === 0 ? -1 : 1) * 50, vy: -TAIL.missileSpeed * 0.4,
+      r: TAIL.missileR + (w - 1) * TAIL.missileRGrow,
+      dmg: TAIL.missileDmgBase + (w - 1) * TAIL.missileDmgGrow,
+      kind: 'missile', weapon: w,
+    });
+    fired = true;
+  });
+  if (fired) game.sfx.push('missile');
 }
 
 function nearestTarget(game, x, y) {
@@ -115,7 +157,7 @@ function nearestTarget(game, x, y) {
   return best;
 }
 
-// 미사일 유도: 가장 가까운 적/보스로 선회하며 가속. 표적 없으면 위로 가속.
+// 미사일 유도(꼬리 비행기 유도탄): 가장 가까운 적/보스로 선회하며 가속. 표적 없으면 위로 가속.
 export function homeMissiles(game, dt) {
   for (const b of game.bullets) {
     if (b.kind !== 'missile') continue;
@@ -125,14 +167,14 @@ export function homeMissiles(game, dt) {
     if (tgt) {
       const dx = tgt.x - b.x, dy = tgt.y - b.y;
       const d = Math.hypot(dx, dy) || 1;
-      const turn = Math.min(1, OPT.missileTurn * dt);
+      const turn = Math.min(1, TAIL.missileTurn * dt);
       dvx += (dx / d - dvx) * turn;
       dvy += (dy / d - dvy) * turn;
     } else {
-      dvy += (-1 - dvy) * Math.min(1, OPT.missileTurn * dt); // 표적 없으면 위로
+      dvy += (-1 - dvy) * Math.min(1, TAIL.missileTurn * dt); // 표적 없으면 위로
     }
     const nl = Math.hypot(dvx, dvy) || 1;
-    const sp = Math.min(OPT.missileSpeed, cur + OPT.missileAccel * dt);
+    const sp = Math.min(TAIL.missileSpeed, cur + TAIL.missileAccel * dt);
     b.vx = (dvx / nl) * sp;
     b.vy = (dvy / nl) * sp;
   }

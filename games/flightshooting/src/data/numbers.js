@@ -3,37 +3,46 @@
 
 export const CFG = {
   player: { r: 14, speed: 340, fireEvery: 0.14, maxLives: 3, invAfterHit: 1.6, yRatio: 0.82 },
-  // bullet.shapes: 전방화력 만렙(P8) 후 P를 더 먹을 때 탄 모양 진화 단계별 렌더 배율(docs/05 1.1.1).
-  //   인덱스 0 = 진화 전(기본 세로 타원), 1~4 = 원→타원→긴형→링. rx/ry = 기본 반경 대비 가로/세로 배율.
-  //   ring 값이 있으면 도넛(고리)으로 렌더 - ring = 뚫린 안쪽 반경 비율(0~1).
+  // bullet.shapes: 전방화력 발별 진화 티어별 탄 렌더(docs/05 1.1.1). 인덱스 0=진화 전 기본, 1~4=진화 티어.
+  //   rx/ry = 기본 반경 대비 가로/세로 배율(세로만 미세 증가, 크기 급증 금지), glow = 발광 강도.
+  //   구분의 핵심 표지는 색(colors.bulletShapeTier)이고 크기·글로우는 보조. 노랑·빨강(적탄색)은 배제.
   bullet: {
     speed: 620,
     shapes: [
-      { rx: 1.0, ry: 2.2 },             // 0 기본(P8 도달, 세로 타원)
-      { rx: 1.7, ry: 1.7 },             // 1 원 (굵고 큰 구슬)
-      { rx: 1.5, ry: 2.9 },             // 2 타원 (원을 늘인 럭비공)
-      { rx: 1.2, ry: 3.8 },             // 3 긴형 (레이저빔)
-      { rx: 1.9, ry: 1.9, ring: 0.5 },  // 4 링 (발광 고리, 최종)
+      { rx: 1.0,  ry: 2.2, glow: 0 },   // 0 기본(진화 전, 시안)
+      { rx: 1.0,  ry: 2.3, glow: 5 },   // 1 티어1
+      { rx: 1.05, ry: 2.5, glow: 8 },   // 2 티어2
+      { rx: 1.1,  ry: 2.7, glow: 11 },  // 3 티어3
+      { rx: 1.15, ry: 2.9, glow: 14 },  // 4 티어4(최종)
     ],
   },
   enemyBullet: { speed: 250, r: 5 },
-  // 3계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 좌우 옵션기 / 에너지존.
+  // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
   parts: {
-    // 전방 화력: 8단계로 분화(탄 수↑). 개별 탄 굵기는 완만하게 = rBase + dmg × rGrow.
-    // shapeDmg: 만렙 후 모양이 1단계 진화할 때마다 더해지는 데미지(원→타원→긴형→링, 총 +4까지).
-    front: { max: 8, rBase: 2.8, rGrow: 0.42, shapeDmg: 1 },
+    // 전방 화력: front 1~40. 1~8=탄 수(개별 탄 크기·색 균일, rGrow=0), 9~40=발별 진화(8발×4티어).
+    // max = 8 + tierMax×8. shapeDmg = 진화 티어 1당 그 탄의 데미지 증가.
+    front: { max: 40, tierMax: 4, rBase: 3.2, rGrow: 0, shapeDmg: 1 },
     option: {
       maxPerSide: 4,          // 좌우 각 4대 → 총 8대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격
       baseY: 4, stepY: 14,    // 슬롯 뒤로 갈수록 약간 아래
       follow: 9,              // 플레이어 추종 속도(초당 비율)
-      // 발사체 크기(r)는 옵션기가 늘수록 커진다: r = base + 옵션수 × grow. 화력 성장이 눈에 보이게.
-      laserEvery: 0.16, laserDmg: 1, laserSpeed: 880, laserR: 2.2, laserRGrow: 0.28,
-      missileEvery: 1.4, missileDmg: 3, missileSpeed: 300, missileTurn: 3.2, missileAccel: 520, missileR: 4, missileRGrow: 0.45,
+      // 8대 전부 레이저(미사일 제거, 유도탄은 꼬리 비행기로 이관). 옵션 수↑ → 굵기(laserR)·데미지(laserDmg) 상승.
+      laserEvery: 0.16, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 880, laserR: 2.2, laserRGrow: 0.3,
     },
     zone: {
       radius: [0, 34, 52, 70, 88, 106], // 레벨 0~5 반경
       tick: 0.5,                        // 데미지 주기(초)
+    },
+    // 꼬리 비행기(T): 플레이어 뒤 유도탄 발사기. 4대 먼저 채운 뒤 1~4번 순서로 무기 진화(무기 4단계).
+    //   배치는 뒤 좌우 부채(아래 여백 안). 무기 단계↑ → 유도탄 크기(missileR)·데미지 상승(작은→큰).
+    tail: {
+      maxCount: 4, weaponMax: 4,
+      stepX: 20, baseY: 24, stepY: 9,
+      follow: 8,
+      missileEvery: 0.9, missileSpeed: 300, missileTurn: 3.2, missileAccel: 520,
+      missileR: 3.5, missileRGrow: 1.1,
+      missileDmgBase: 3, missileDmgGrow: 1.5,
     },
   },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.
@@ -56,9 +65,9 @@ export const CFG = {
   // 구역이 오를수록 적 체력 상승: hp = ceil(base * (1 + (stage-1)*scale)). 10구역 ≈ 3.5배.
   enemyHpScale: 0.28,
   // 파워업은 일반 잡몹에선 나오지 않는다. 보스·보너스 기체 격파 시에만 확정 드롭한다.
-  // weights = 드롭 종류 확률(합 1): P 전방화력 / S 옵션기 / E 에너지존 / H 회복 / B 봄.
+  // weights = 드롭 종류 확률(합 1): P 전방화력 / S 옵션기 / E 에너지존 / T 꼬리기 / H 회복 / B 봄.
   // chance = 일반 잡몹 처치 시 드롭 확률(초반 화력 성장 숨통). 보스·보너스는 확정 드롭(별도).
-  drop: { chance: 0.11, weights: { P: 0.30, S: 0.30, E: 0.18, H: 0.12, B: 0.10 } },
+  drop: { chance: 0.11, weights: { P: 0.24, S: 0.22, E: 0.16, T: 0.16, H: 0.12, B: 0.10 } },
   // 보너스 기체 등장: every초마다 화면 좌/우에서 등장, yRatio 높이로 가로질러 감. 잡으면 dropCount개 드롭.
   bonusShip: { every: 10, dropCount: 1, yRatio: 0.22 },
   // 보스 격파 시 확정 드롭 수(중보스 / 최종보스).

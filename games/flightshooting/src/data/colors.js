@@ -7,9 +7,9 @@ export const COLORS = {
   engine: 'rgba(255,180,90,0.85)',
   bullet: '#c9fbff',
   bulletGlow: '#22d3ee',
-  // 전방 화력(P) 단계별 탄 색: 1단계 청록 → 8단계 붉은색(강해질수록 뜨겁게).
-  // 아군 기본탄: 화력이 올라도 '차가운 시안~흰'으로만 밝아진다(적탄과 색이 겹치지 않게). 성장은 밝기로.
-  bulletByLevel: ['#cffaff', '#b3f2ff', '#93e9ff', '#79dfff', '#8ef0dd', '#b0ffe6', '#d8fff2', '#ffffff'],
+  // 전방 화력(P) 진화 티어별 탄 색(docs/05 1.1.1). 인덱스 0=진화 전(기본 시안), 1~4=진화 티어.
+  // 전부 아군 차가운색(적탄 빨강·노란 코어와 절대 안 겹치게). 티어↑ 밝기·글로우도 계단식 상승.
+  bulletShapeTier: ['#22d3ee', '#ffffff', '#7dd3fc', '#5effd0', '#c7f9ff'],
   // 적탄: 선명한 빨강 몸 + 노란 코어(view에서). 아군(시안/흰)과 뚜렷이 대비되는 '뜨거운' 경고색.
   enemyBullet: '#ff2d3a',
   enemyBulletCore: '#ffd24a',
@@ -41,19 +41,22 @@ export const COLORS = {
     coreDark: '#2a0f16',
     coreLight: '#ffd36b',
   },
-  // 파워업 아이템 색 (P 전방화력 / S 옵션기 / E 에너지존 / H 회복 / B 봄)
+  // 파워업 아이템 색 (P 전방화력 / S 옵션기 / E 에너지존 / T 꼬리기 / H 회복 / B 봄)
   powerup: {
     P: '#f7c948',
     S: '#5fe8ff',
     E: '#a98bff',
+    T: '#6ee7a8',
     H: '#ff6b81',
     B: '#7cf3c4',
   },
   // 옵션기·파츠 무기 색
   option: '#5fe8ff',      // 부속 비행기 본체
   laser: '#b6ffff',       // 레이저 빔(얇고 밝은 시안)
-  missile: '#ffd36b',     // 유도 미사일
-  missileTrail: 'rgba(255,180,90,0.7)',
+  // 꼬리 비행기(T)·유도탄. 유도탄 무기 단계(1~4)별 색 - 아군 차가운 녹/청(적탄과 안 겹침).
+  tail: '#9ae6b4',        // 꼬리기 본체
+  tailMissileByStage: ['#b6ffd0', '#7cf3c4', '#5fe8d0', '#c7fff0'],
+  missileTrail: 'rgba(150,255,220,0.6)',
   zone: '#a98bff',        // 에너지존 오라(반투명으로 렌더 시 alpha 적용)
   // 에너지존(E) 레벨별 색(1~5, rgb 문자열 - drawZone이 alpha를 붙여 gradient 생성). 보라 → 라임으로 성장.
   zoneRgbByLevel: ['169,139,255', '139,180,255', '110,220,235', '110,240,180', '150,255,120'],
