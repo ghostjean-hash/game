@@ -16,12 +16,13 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "deploy: game-hub 갱신"
+    "commitMessage": "feat(english-reading): v0.6 하이브리드 독해 전면 구현 + 배포",
+    "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {
     "urls": [
       { "url": "https://ghostjean-hash.github.io/game/", "selector": "#grid-games .card", "mustContain": null },
-      { "url": "https://ghostjean-hash.github.io/game/apps/english-reading/", "selector": ".intro-card", "mustContain": null }
+      { "url": "https://ghostjean-hash.github.io/game/apps/english-reading/", "selector": ".passage-card", "mustContain": null }
     ],
     "timeoutSec": 180,
     "intervalSec": 15,
