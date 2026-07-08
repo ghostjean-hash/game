@@ -177,8 +177,74 @@ body {
   color: var(--fg);
   word-break: keep-all;
 }
-.sentence-line.clickable { cursor: pointer; }
-.sentence-line.clickable:hover { background: rgba(59,130,246,0.04); border-radius: var(--r-1); }
+/* 단어 사이 틈 - 누르면 / 선을 긋는다. 넉넉한 터치 폭 + 시각적으론 공백처럼 보임 */
+.gap {
+  display: inline-block;
+  width: 0.72em;
+  min-width: 12px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  line-height: inherit;
+  color: transparent;
+  text-align: center;
+  vertical-align: baseline;
+  -webkit-tap-highlight-color: transparent;
+}
+.gap::after { content: "/"; font-weight: 700; }
+@media (hover: hover) {
+  .gap:not(.slashed):hover { color: rgba(59,130,246,0.35); }
+}
+.gap.slashed { color: var(--er-accent); }
+/* 검토 결과 - 색 + 모양 이중 신호 */
+.gap.g-correct { color: var(--er-accent); }
+.gap.g-wrong { color: #dc2626; text-decoration: line-through; text-decoration-thickness: 2px; }
+.gap.g-missed { color: #16a34a; }
+.gap.g-missed::after { content: "/"; border: 1.5px dashed #16a34a; border-radius: 4px; padding: 0 1px; }
+
+/* 문장 끝 "/ 검토" 버튼 */
+.review-btn {
+  margin-left: 8px;
+  padding: 2px 9px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--fg-dim);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+.review-btn:hover { color: var(--er-accent); border-color: var(--er-accent); }
+
+/* 검토 후 문법 목록 - 이 문장에 든 모든 문법 요소 */
+.grammar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
+}
+.grammar-row { display: flex; align-items: baseline; gap: 8px; font-size: 13.5px; line-height: 1.55; }
+.grammar-tag {
+  flex-shrink: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--er-accent);
+  background: var(--accent-weak, #eef2ff);
+  border-radius: 999px;
+  padding: 1px 9px;
+  white-space: nowrap;
+}
+.grammar-note { color: var(--fg-dim); }
 
 .w {
   position: relative;
@@ -227,20 +293,6 @@ body {
   border: 5px solid transparent;
   border-top-color: var(--fg);
 }
-
-/* 문장 끝 현미경 버튼 */
-.scope-btn {
-  margin-left: 4px;
-  padding: 0 4px;
-  font-size: 15px;
-  line-height: 1;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  opacity: 0.7;
-  vertical-align: middle;
-}
-.scope-btn:hover { opacity: 1; }
 
 /* 끊어 읽기 청킹 */
 .chunks { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-2); }

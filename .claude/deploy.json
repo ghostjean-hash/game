@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(english-reading): v0.6 하이브리드 독해 전면 구현 + 배포",
+    "commitMessage": "deploy: game-hub 갱신",
     "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

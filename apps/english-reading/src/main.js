@@ -1,7 +1,8 @@
-// 하이브리드 독해 - 몰입 리딩 + 선택적 끊어읽기/뜻/구조해설 + 코스 진행·전체 클리어.
-// 순수 로직은 core(tokenize·course)에 위임하고, 여기서 DOM만 만진다.
+// 하이브리드 독해 - 몰입 리딩 + 끊어 읽기 직접 긋기·채점 + 코스 진행·전체 클리어.
+// 순수 로직은 core(tokenize·course·chunking)에 위임하고, 여기서 DOM만 만진다.
 import { tokenize, resolveTargets } from "./core/tokenize.js";
 import { createCourse, courseProgress } from "./core/course.js";
+import { chunkBoundaries, gradeSlashes } from "./core/chunking.js";
 import { createStorage } from "../../../shared/storage.js";
 import { registerServiceWorker } from "../../../shared/ui.js";
 
@@ -127,7 +128,7 @@ function renderReading(p) {
     const hint = document.createElement("div");
     hint.className = "first-hint";
     hint.id = "first-hint";
-    hint.textContent = "막히는 문장이나 단어를 눌러 보세요. 끊어 읽기·뜻·구조 해설이 열립니다.";
+    hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [/ 검토]로 채점해 보세요. 모르는 단어는 단어를 누르면 뜻이 열립니다.";
     stage.appendChild(hint);
     store.set("seenIntro", true);
   }
@@ -139,6 +140,8 @@ function renderReading(p) {
   article.className = "article";
   p.sentences.forEach((s) => article.appendChild(renderSentence(s, p, settings, known)));
   stage.appendChild(article);
+  // 본문 빈 곳 클릭 → 열린 뜻 말풍선 닫기(단어·틈 클릭은 전파를 끊는다)
+  stage.addEventListener("click", closePopover);
 
   const doneBtn = document.createElement("button");
   doneBtn.type = "button";
@@ -159,54 +162,79 @@ function renderSentence(s, passage, settings, known) {
   const targets = resolveTargets(tokens, settings.words ? (s.words || []) : []);
   const targetByIndex = new Map(targets.filter((t) => t.index >= 0).map((t) => [t.index, t]));
 
-  tokens.forEach((tok) => {
+  // 끊어 읽기 긋기 상태 - 검토 전까지 자유 토글, 검토 후 잠금
+  const slashes = new Set();
+  let reviewed = false;
+  const gapEls = new Map(); // 틈 번호 → 요소
+
+  tokens.forEach((tok, i) => {
     const span = document.createElement("span");
     span.textContent = tok.raw;
     if (targetByIndex.has(tok.index)) {
       span.className = "w key";
       const target = targetByIndex.get(tok.index);
       span.onclick = (e) => {
-        e.stopPropagation(); // 단어 클릭이 문장(끊어읽기)으로 번지지 않게
+        e.stopPropagation(); // 단어 클릭이 다른 동작으로 번지지 않게
         removeHint();
         openWordPopover(span, target, s, passage);
       };
     } else {
       span.className = "w";
     }
-    // 재독 시 이미 수집한 단어는 점선 단어든 일반 단어든 옅게 표시(지난번 막혔던 단어 알아보기)
+    // 재독 시 이미 수집한 단어는 옅게 표시(지난번 막혔던 단어 알아보기)
     if (known && known.has(tok.clean)) span.classList.add("known");
     line.appendChild(span);
-    line.appendChild(document.createTextNode(" "));
+
+    // 단어 사이 틈 - 누르면 / 선 토글(마지막 단어 뒤는 제외)
+    if (i < tokens.length - 1) {
+      if (settings.chunks) {
+        const gap = document.createElement("button");
+        gap.type = "button";
+        gap.className = "gap";
+        gap.setAttribute("aria-label", "끊어 읽기 선 긋기");
+        gap.onclick = (e) => {
+          e.stopPropagation();
+          if (reviewed) return;
+          removeHint();
+          closePopover();
+          if (slashes.has(i)) { slashes.delete(i); gap.classList.remove("slashed"); }
+          else { slashes.add(i); gap.classList.add("slashed"); }
+        };
+        gapEls.set(i, gap);
+        line.appendChild(gap);
+      } else {
+        line.appendChild(document.createTextNode(" "));
+      }
+    }
   });
 
-  // 문장 끝 🔬 - 구조 해설(어려운 문장 + 설정 ON일 때만)
-  if (s.insight && settings.scope) {
-    const scope = document.createElement("button");
-    scope.type = "button";
-    scope.className = "scope-btn";
-    scope.textContent = "🔬";
-    scope.setAttribute("aria-label", "구조 해설 보기");
-    scope.onclick = (e) => {
+  // 문장 끝 "/ 검토" - 내가 그은 선을 정답 경계와 대조해 채점하고, 그때서야 해설을 연다
+  if (settings.chunks) {
+    const reviewBtn = document.createElement("button");
+    reviewBtn.type = "button";
+    reviewBtn.className = "review-btn";
+    reviewBtn.textContent = "/ 검토";
+    reviewBtn.onclick = (e) => {
       e.stopPropagation();
+      if (reviewed) return;
+      reviewed = true;
       removeHint();
-      toggleScope(block, s);
+      closePopover();
+
+      const grade = gradeSlashes(chunkBoundaries(tokens, s.chunks), slashes);
+      grade.correct.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-correct"));
+      grade.wrong.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-wrong"));
+      grade.missed.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("slashed", "g-missed"));
+      reviewBtn.remove();
+
+      block.appendChild(buildChunks(s));
+      if (s.grammar && s.grammar.length) block.appendChild(buildGrammar(s));
+      if (s.insight && settings.scope) block.appendChild(buildScopeCard(s));
     };
-    line.appendChild(scope);
+    line.appendChild(reviewBtn);
   }
 
   block.appendChild(line);
-
-  // 문장(단어 외 영역) 클릭 → 끊어 읽기 토글(설정 ON일 때만)
-  if (settings.chunks) {
-    line.classList.add("clickable");
-    line.addEventListener("click", () => {
-      // 뜻 말풍선이 떠 있으면 이 클릭은 닫기에만 쓰고 끊어읽기는 열지 않는다(기획 5.2 충돌 해소)
-      if (popover) { closePopover(); return; }
-      removeHint();
-      toggleChunks(block, s);
-    });
-  }
-
   return block;
 }
 
@@ -236,9 +264,8 @@ function collectWord(target, s, passage) {
   store.set("vocab", vocab);
 }
 
-function toggleChunks(block, s) {
-  const exist = block.querySelector(".chunks");
-  if (exist) { exist.remove(); return; }
+// 검토 후 공개되는 끊어 읽기 해석 (영-한 쌍, 위→아래 슬라이드)
+function buildChunks(s) {
   const host = document.createElement("div");
   host.className = "chunks";
   s.chunks.forEach((c, i) => {
@@ -250,19 +277,33 @@ function toggleChunks(block, s) {
     row.append(en, kr);
     host.appendChild(row);
   });
-  block.appendChild(host);
+  return host;
 }
 
-function toggleScope(block, s) {
-  const exist = block.querySelector(".scope-card");
-  if (exist) { exist.remove(); return; }
+// 검토 후 공개되는 문법 목록 - 이 문장에 포함된 모든 문법 요소(이름표 + 한 줄 설명)
+function buildGrammar(s) {
+  const host = document.createElement("div");
+  host.className = "grammar-list";
+  s.grammar.forEach((g) => {
+    const row = document.createElement("div");
+    row.className = "grammar-row";
+    const tag = document.createElement("span"); tag.className = "grammar-tag"; tag.textContent = g.label;
+    const note = document.createElement("span"); note.className = "grammar-note"; note.textContent = g.note;
+    row.append(tag, note);
+    host.appendChild(row);
+  });
+  return host;
+}
+
+// 구조가 특히 어려운 문장의 심화 해설 카드(설정 ON일 때 검토 후 함께 공개)
+function buildScopeCard(s) {
   const card = document.createElement("div");
   card.className = "scope-card";
   card.appendChild(labeledBlock("공식", s.insight.formula, "formula"));
   card.appendChild(labeledBlock("왜 이 구조인가", s.insight.why));
   card.appendChild(labeledBlock("이렇게 쓰면 비문", s.insight.wrong, "wrong-example"));
   card.appendChild(labeledBlock("자연스러운 해석", s.insight.natural));
-  block.appendChild(card);
+  return card;
 }
 
 // 읽기 완료 - 개별 완독은 조용히 진행률만 채우고, 코스 전체 완주에서만 클리어 연출
@@ -367,9 +408,9 @@ function openSettings() {
   modal.append(title, desc);
 
   const opts = [
-    ["chunks", "문장 클릭 끊어 읽기"],
+    ["chunks", "끊어 읽기 긋기 · / 검토"],
     ["words", "단어 뜻 보기 · 수집"],
-    ["scope", "🔬 구조 해설"],
+    ["scope", "검토 후 구조 심화 해설"],
   ];
   const toggles = {};
   opts.forEach(([key, label]) => {

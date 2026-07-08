@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { tokenize, resolveTargets } from "../src/core/tokenize.js";
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
+import { chunkBoundaries, gradeSlashes } from "../src/core/chunking.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 let failures = 0;
@@ -59,6 +60,29 @@ function check(name, cond, detail = "") {
   check("passageText: 문장 이어붙임", passageText({ sentences: [{ text: "A B." }, { text: "C D." }] }) === "A B. C D.");
 }
 
+// ── chunkBoundaries / gradeSlashes (끊어 읽기 채점) ──────────────────────────────
+{
+  // "All day long, you feel that everyone is staring at the stain." = 12토큰
+  // 청킹 3+6+3 → 정답 틈 = 2, 8
+  const toks = tokenize("All day long, you feel that everyone is staring at the stain.");
+  const chunks = [
+    { en: "All day long," }, { en: "you feel that everyone is staring" }, { en: "at the stain." },
+  ];
+  const b = chunkBoundaries(toks, chunks);
+  check("chunking: 경계 = 청킹 단어 수 누적", b.size === 2 && b.has(2) && b.has(8));
+
+  const g1 = gradeSlashes(b, [2, 5]);
+  check("chunking: 채점 - 맞음/틀림/빼먹음 분리",
+    g1.correct.join() === "2" && g1.wrong.join() === "5" && g1.missed.join() === "8");
+  const g2 = gradeSlashes(b, []);
+  check("chunking: 아무것도 안 긋면 전부 빼먹음", g2.correct.length === 0 && g2.wrong.length === 0 && g2.missed.length === 2);
+  const g3 = gradeSlashes(b, [2, 8]);
+  check("chunking: 전부 맞으면 wrong·missed 0", g3.correct.length === 2 && g3.wrong.length === 0 && g3.missed.length === 0);
+
+  const single = chunkBoundaries(tokenize("Hello world."), [{ en: "Hello world." }]);
+  check("chunking: 청킹 1개면 경계 0개", single.size === 0);
+}
+
 // ── passages.json 데이터 무결성 ──────────────────────────────
 {
   const data = JSON.parse(readFileSync(join(here, "../src/data/passages.json"), "utf8"));
@@ -94,6 +118,12 @@ function check(name, cond, detail = "") {
         resolved.forEach((w) => {
           check(`data(${label} '${w.word}'): 단어가 문장에 실재(죽은 입력 0)`, w.index >= 0);
           check(`data(${label} '${w.word}'): 뜻 존재`, !!w.meaning);
+        });
+
+        // 문법 목록: 문장마다 1개 이상, 각 항목은 이름표+설명 필수 (/ 검토 후 전부 표시)
+        check(`data(${label}): grammar 1개 이상`, Array.isArray(s.grammar) && s.grammar.length >= 1);
+        (s.grammar || []).forEach((g, gi) => {
+          check(`data(${label} g${gi + 1}): 이름표·설명 존재`, !!g.label && !!g.note);
         });
 
         // insight는 선택이지만 있으면 4필드 모두

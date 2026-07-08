@@ -34,6 +34,7 @@ const dataSafe = dataRaw.replace(/<\//g, "<\\/"); // </script> 조기 종료 방
 // 3. JS: 모듈들을 한 스크립트로 (import/export 제거 + 단일 파일에 안 맞는 부분 치환)
 const tokenize = stripExports(read(join(app, "src", "core", "tokenize.js")));
 const course = stripExports(read(join(app, "src", "core", "course.js")));
+const chunking = stripExports(read(join(app, "src", "core", "chunking.js")));
 const storage = stripExports(read(join(hub, "shared", "storage.js")));
 let main = stripImports(read(join(app, "src", "main.js")));
 
@@ -80,6 +81,7 @@ const EMBEDDED_PASSAGES = ${dataSafe};
 ${storage}
 ${tokenize}
 ${course}
+${chunking}
 ${main}
 </script>
 </body>
