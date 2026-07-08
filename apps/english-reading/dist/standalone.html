@@ -2485,28 +2485,35 @@ function renderSentence(s, passage, settings, known) {
     }
   });
 
-  // 문장 끝 "/ 검토" - 내가 그은 선을 정답 경계와 대조해 채점하고, 그때서야 해설을 연다
+  // 문장 끝 "/ 검토" - 첫 클릭은 채점 + 해설 공개, 이후 클릭마다 해설 접힘/펼침 토글.
+  // 채점 결과(선 색)와 잠금은 유지된다 - 접어도 채점이 무르지 않는다.
   if (settings.chunks) {
     const reviewBtn = document.createElement("button");
     reviewBtn.type = "button";
     reviewBtn.className = "review-btn";
     reviewBtn.textContent = "/ 검토";
+    let detail = null;
     reviewBtn.onclick = (e) => {
       e.stopPropagation();
-      if (reviewed) return;
-      reviewed = true;
       removeHint();
       closePopover();
+      if (reviewed) {
+        if (detail) detail.hidden = !detail.hidden;
+        return;
+      }
+      reviewed = true;
 
       const grade = gradeSlashes(chunkBoundaries(tokens, s.chunks), slashes);
       grade.correct.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-correct"));
       grade.wrong.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-wrong"));
       grade.missed.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("slashed", "g-missed"));
-      reviewBtn.remove();
 
-      block.appendChild(buildChunks(s));
-      if (s.grammar && s.grammar.length) block.appendChild(buildGrammar(s));
-      if (s.insight && settings.scope) block.appendChild(buildScopeCard(s));
+      detail = document.createElement("div");
+      detail.className = "review-detail";
+      detail.appendChild(buildChunks(s));
+      if (s.grammar && s.grammar.length) detail.appendChild(buildGrammar(s));
+      if (s.insight && settings.scope) detail.appendChild(buildScopeCard(s));
+      block.appendChild(detail);
     };
     line.appendChild(reviewBtn);
   }
