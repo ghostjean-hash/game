@@ -90,7 +90,8 @@
 // v143 (2026-07-08): english-reading 해석·작문 업그레이드 - 카테고리 인트로 + 구조 해부 카드 + 직독직해 청킹 재작업.
 // v144 (2026-07-08): english-reading v0.6 하이브리드 독해 전면 재구성 - 몰입 리딩 + 문장 끊어읽기 + 단어 수집 + 🔬 구조해설 + 완만한 난이도 코스/전체 클리어 + 노출 설정.
 // v145 (2026-07-08): english-reading 끊어 읽기 직접 긋기·/ 검토 채점 전환 + 문장별 문법 목록.
-const CACHE_VERSION = "v145";
+// v146 (2026-07-08): flightshooting 진화 탄 형태 확대 - 색만 바뀌고 모양 체감 안 되던 문제로 tier별 크기·형태를 확 키움(원→타원→긴형→링) + 레이저 흰-보라 빔 + 자동이동 떨림 제거. PWA 옛 캐시(형태 미반영) 무효화.
+const CACHE_VERSION = "v146";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
