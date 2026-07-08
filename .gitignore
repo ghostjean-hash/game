@@ -30,5 +30,3 @@ npm-debug.log*
 **/*-handoff*.json
 **/contract.json
 
-# web-deploy 이미지 해시 상태 (머신 로컬, 사양 unversioned)
-.claude/deploy-state.json
