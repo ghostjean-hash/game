@@ -175,3 +175,11 @@
 - 뜻 소스는 사용자 선택('단어만 담고 뜻 비움', AskUserQuestion): 미등록 단어는 collected-words·단어장에 "뜻 미등록 - 직접 채워 보세요" placeholder(회색 이탤릭 .cw-empty/.vd-empty).
 - CSS: .w.key(점선 밑줄) 폐기, .w.word는 밑줄 없이 cursor만, .w.word.flagged는 오렌지 배경만(밑줄 제거). main.js resolveTargets import 제거.
 - 검증: 유닛/데이터 통과, browser-shot로 밑줄 0(borderBottomStyle=none) + 아무 단어(데이터 없던 coffee 포함) 2개 임시수집 + 해석 시 뜻 있는 것/미등록 구분 표시 + 단어장 2개 + 콘솔 0. 실서비스 smoke 통과. 커밋 9836024, SW v158→v159.
+
+## 2.23. 읽기 진행 저장·복원 (2026-07-09, 사용자 "단어장 백버튼이 목록으로 튕겨 공부가 날아간다 + 진행 저장 방법 없나")
+
+- 근본 원인: 읽기 진행(문장별 그은 선·임시 수집 단어·검토 상태)이 renderSentence 클로저(메모리)에만 있어 화면 전환 시 소실. 단어장 백버튼이 목록(renderList)으로 가 읽던 지문이 초기화되고, 해석 전 임시 단어도 소멸("단어 눌렀는데 안 쌓임"의 실제 원인).
+- localStorage 'progress'에 지문별·문장별 상태({slashes, flags, reviewed}) 저장. renderSentence를 상태 복원·저장 기반으로 재작성 - loadSentenceState로 복원 렌더(flag/slash 클래스·reviewed면 채점 색·해설 펼침 재구성), 클릭 변경마다 persist. renderSentence 시그니처에 sIndex 추가.
+- 단어장 백버튼: currentPassage 있으면 그 지문 renderReading(복귀), 목록에서 왔으면 renderList. finishRound는 clearPassageProgress로 회독 완료 시 clean slate.
+- 부수: lastPassage 저장(이어읽기용), 목록 카드에 저장된 진행 있으면 첫 회독 중이어도 '읽는 중' 표시.
+- 검증: browser-shot 18항목 - 단어장 왕복·목록 왕복·reload(앱 재시작)에도 flag 2·slash 1 유지, 검토상태(해설·채점 색) 복원, 회독 후 진행 리셋·영구 단어장 유지, 콘솔 0. 실서비스 smoke 통과. 커밋 4995f8d, SW v159→v160.
