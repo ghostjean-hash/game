@@ -188,3 +188,12 @@
 
 - 맞은 끊기 표시가 채워진 붉은 점(●)이던 것을 안이 빈 붉은 원(테두리만)으로 변경. .gap.g-correct::before를 유니코드 ● 대신 CSS border 원(width/height 0.4em + border 1.6px solid #dc2626 + border-radius:50% + 배경 없음)으로 그려 또렷하게. 잘못(x)·빼먹음(빨간 /)은 유지.
 - 검증: browser-shot로 빈 원(border solid rgb(220,38,38)·radius 50%·배경 없음) 확인 + 콘솔 0, 실서비스 smoke 통과. 커밋 58487a2, SW v160→v161.
+
+## 2.25. 문제 출제 화면 - LLM 출제 + 붙여넣기 자동 검증 + 내 문제 추가/배포 (2026-07-09, 사용자 "LLM으로 문제 만들어 주입, 출제 관리화면 필요")
+
+- 사용자 워크플로우: LLM에 규칙 주고 지문 생성 → 앱에 주입. 저장 범위는 사용자 선택 '내 기기에 바로 추가 + 나중에 배포 선택'(AskUserQuestion).
+- core/validate.js 신설: validatePassage(양식 필드·chunks 원문 재구성·chunkViolations 끊는 기준 위반·죽은 단어·grammar 1개+·insight 4필드 통합 검증, {ok, errors:[{where,msg}]}). 출제 화면·tests 공용(tests 유닛 7건 추가).
+- renderAuthor 화면: (1) LLM 출제 규칙 AUTHORING_PROMPT(양식+끊는 기준 4금지/허용+예시 1편) 복사 버튼, (2) 결과 JSON 붙여넣기 textarea + '검증하기'(통과 초록 / 위반은 몇 번째 문장 어디가 왜 틀렸는지 목록), (3) 통과 시 '내 문제로 추가'→customPassages, (4) 내 문제 목록 + 배포용 복사(자비스가 passages.json 커밋용) + 삭제.
+- 데이터: baseData(passages.json) + customPassages(localStorage)를 rebuildCourse로 합쳐 코스 구성. 목록 '내 문제' 뱃지, 커스텀 지문도 읽기·해석·회독·진행저장 그대로 동작. build-standalone에 validate.js 인라인 + fetch 치환을 rebuildCourse 형태로 갱신.
+- 부수 버그: .author-btn display:block이 hidden 속성을 덮어 잘못된 문제에도 '추가' 버튼 노출되던 가시성 버그(#190 유형) → .author-btn[hidden]{display:none}로 교정(E2E가 검출).
+- 검증: validate 유닛 7건 + 출제 흐름 E2E 12건(규칙 표시·잘못된 문제 위반 지적·추가버튼 숨김·올바른 문제 추가·목록 뱃지·커스텀 지문 읽기·삭제) + 콘솔 0. 실서비스 smoke 통과. 커밋 8facf03, SW v161→v162.
