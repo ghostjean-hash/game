@@ -2394,6 +2394,7 @@ const el = {
 };
 
 let course = null;
+let currentPassage = null; // 지금 읽는 지문 - 단어장 등에서 돌아올 대상
 let toastTimer = null; // 토스트 자동 닫힘 타이머
 const TOAST_MS = 1600; // 토스트가 스스로 사라지기까지
 
@@ -2402,6 +2403,24 @@ const getDone = () => store.get("done", []); // 완독한 지문 id 배열
 const getReads = () => store.get("reads", {}); // { passageId: 회독수 }
 const getVocab = () => store.get("vocab", []); // [{ wordKey, word, meaning, sentence, passageId, passageTitle }]
 const getSettings = () => ({ chunks: true, words: true, scope: true, ...(store.get("settings", {}) || {}) });
+
+// ── 읽기 진행 저장(기기 저장소) ── 지문별 문장 상태(그은 선·임시 단어·검토 여부)를 담아,
+// 단어장을 갔다 오거나 앱을 껐다 켜도 읽던 자리와 표시가 그대로 복원되게 한다.
+const getProgress = () => store.get("progress", {});
+function saveSentenceState(pid, si, st) {
+  const prog = getProgress();
+  if (!prog[pid]) prog[pid] = { sentences: [] };
+  prog[pid].sentences[si] = st;
+  store.set("progress", prog);
+}
+function loadSentenceState(pid, si) {
+  const prog = getProgress();
+  return (prog[pid] && prog[pid].sentences && prog[pid].sentences[si]) || null;
+}
+function clearPassageProgress(pid) {
+  const prog = getProgress();
+  if (prog[pid]) { delete prog[pid]; store.set("progress", prog); }
+}
 
 course = createCourse(EMBEDDED_PASSAGES.courses[0]);
 renderList();
@@ -2438,6 +2457,7 @@ function labeledBlock(label, text, mod) {
 
 // ── 지문 목록 ──
 function renderList() {
+  currentPassage = null; // 목록으로 나오면 '읽던 지문' 해제(단어장 백은 목록으로)
   const done = getDone();
   const reads = getReads();
   const prog = courseProgress(course, done);
@@ -2461,6 +2481,7 @@ function renderList() {
   summary.innerHTML = `<b>${prog.done} / ${prog.total}편</b> 완독 · 수집 단어 ${getVocab().length}개`;
   stage.appendChild(summary);
 
+  const progress = getProgress();
   const list = document.createElement("div");
   list.className = "passage-list";
   course.passages.forEach((p) => {
@@ -2469,7 +2490,8 @@ function renderList() {
     card.className = "passage-card";
     const r = reads[p.id] || 0;
     const isDone = done.includes(p.id);
-    const status = isDone ? `완독 ✓${r > 1 ? ` · ${r}회독` : ""}` : (r > 0 ? "읽는 중" : "아직 안 읽음");
+    const inProgress = !!progress[p.id]; // 저장된 진행이 있으면 첫 회독 중이어도 '읽는 중'
+    const status = isDone ? `완독 ✓${r > 1 ? ` · ${r}회독` : ""}` : ((r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음");
     card.innerHTML =
       `<span class="lv">Lv ${p.level}</span>` +
       `<span class="pc-body"><span class="pc-title">${p.titleKr}</span><span class="pc-en">${p.title}</span></span>` +
@@ -2489,6 +2511,8 @@ function renderList() {
 
 // ── 읽기 화면 ──
 function renderReading(p) {
+  currentPassage = p; // 단어장에서 이 지문으로 돌아온다
+  store.set("lastPassage", p.id); // 앱 재시작 시 '이어읽기' 대상
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
   setTop({ title: p.titleKr, onBack: renderList, showVocab: true, showGuide: settings.chunks });
@@ -2509,7 +2533,7 @@ function renderReading(p) {
 
   const article = document.createElement("div");
   article.className = "article";
-  p.sentences.forEach((s) => article.appendChild(renderSentence(s, p, settings)));
+  p.sentences.forEach((s, i) => article.appendChild(renderSentence(s, i, p, settings)));
   stage.appendChild(article);
 
   // 다회독 루프 - 회독을 마칠 때마다 같은 지문을 새 마음으로 다시 읽도록 유도
@@ -2522,7 +2546,7 @@ function renderReading(p) {
   stage.appendChild(doneBtn);
 }
 
-function renderSentence(s, passage, settings) {
+function renderSentence(s, sIndex, passage, settings) {
   const block = document.createElement("div");
   block.className = "sentence-block";
 
@@ -2538,11 +2562,35 @@ function renderSentence(s, passage, settings) {
     if (k && !meaningByClean.has(k)) meaningByClean.set(k, w.meaning);
   });
 
-  // 끊어 읽기 긋기 상태 - 검토 전까지 자유 토글, 검토 후 잠금
-  const slashes = new Set();
-  let reviewed = false;
+  // 저장된 진행 복원 - 그은 선·임시 단어·검토 여부를 기기 저장소에서 되살린다.
+  const saved = loadSentenceState(passage.id, sIndex) || {};
+  const slashes = new Set(saved.slashes || []);
+  const flagged = new Map((saved.flags || []).map(([i, word, meaning]) => [i, { word, meaning }]));
+  let reviewed = !!saved.reviewed;
   const gapEls = new Map(); // 틈 번호 → 요소
-  const flagged = new Map(); // 임시 수집한 단어: 토큰 위치 i → { word, meaning }(뜻은 아직 감춤)
+
+  const persist = () => saveSentenceState(passage.id, sIndex, {
+    slashes: [...slashes],
+    flags: [...flagged].map(([i, v]) => [i, v.word, v.meaning]),
+    reviewed,
+  });
+
+  const applyGrade = () => {
+    const grade = gradeSlashes(chunkBoundaries(tokens, s.chunks), slashes);
+    grade.correct.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-correct"));
+    grade.wrong.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-wrong"));
+    grade.missed.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("slashed", "g-missed"));
+  };
+  const buildDetail = () => {
+    const d = document.createElement("div");
+    d.className = "review-detail";
+    d.appendChild(buildChunks(s)); // 번역(끊어 읽기 해석)
+    // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 번역 바로 아래에 공개 + 영구 저장(중복은 무시)
+    if (flagged.size) d.appendChild(buildCollectedWords([...flagged.values()], s, passage));
+    if (s.grammar && s.grammar.length) d.appendChild(buildGrammar(s));
+    if (s.insight && settings.scope) d.appendChild(buildScopeCard(s));
+    return d;
+  };
 
   tokens.forEach((tok, i) => {
     const span = document.createElement("span");
@@ -2551,6 +2599,7 @@ function renderSentence(s, passage, settings) {
     // 실제 단어(구두점 아님)면 어느 것이든 클릭해 임시 수집 - 밑줄 등 표시 없이 깨끗한 본문 유지
     if (settings.words && tok.clean) {
       span.classList.add("word");
+      if (flagged.has(i)) span.classList.add("flagged"); // 복원
       const displayWord = tok.raw.replace(/^[^A-Za-z'-]+|[^A-Za-z'-]+$/g, "") || tok.clean;
       // 선(先) 유추: 터치해도 뜻을 바로 열지 않고 '임시 수집'으로만 표시한다.
       span.onclick = (e) => {
@@ -2565,6 +2614,7 @@ function renderSentence(s, passage, settings) {
           span.classList.add("flagged");
           showToast("단어장에 임시 저장되었습니다.");
         }
+        persist();
       };
     }
     line.appendChild(span);
@@ -2576,12 +2626,14 @@ function renderSentence(s, passage, settings) {
         gap.type = "button";
         gap.className = "gap";
         gap.setAttribute("aria-label", "끊어 읽기 선 긋기");
+        if (slashes.has(i)) gap.classList.add("slashed"); // 복원
         gap.onclick = (e) => {
           e.stopPropagation();
           if (reviewed) return;
           removeHint();
           if (slashes.has(i)) { slashes.delete(i); gap.classList.remove("slashed"); }
           else { slashes.add(i); gap.classList.add("slashed"); }
+          persist();
         };
         gapEls.set(i, gap);
         line.appendChild(gap);
@@ -2593,12 +2645,12 @@ function renderSentence(s, passage, settings) {
 
   // 문장 끝 "/ 검토" - 첫 클릭은 채점 + 해설 공개, 이후 클릭마다 해설 접힘/펼침 토글.
   // 채점 결과(선 색)와 잠금은 유지된다 - 접어도 채점이 무르지 않는다.
+  let detail = null;
   if (settings.chunks) {
     const reviewBtn = document.createElement("button");
     reviewBtn.type = "button";
     reviewBtn.className = "review-btn";
     reviewBtn.textContent = "해석";
-    let detail = null;
     reviewBtn.onclick = (e) => {
       e.stopPropagation();
       removeHint();
@@ -2607,25 +2659,23 @@ function renderSentence(s, passage, settings) {
         return;
       }
       reviewed = true;
-
-      const grade = gradeSlashes(chunkBoundaries(tokens, s.chunks), slashes);
-      grade.correct.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-correct"));
-      grade.wrong.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-wrong"));
-      grade.missed.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("slashed", "g-missed"));
-
-      detail = document.createElement("div");
-      detail.className = "review-detail";
-      detail.appendChild(buildChunks(s)); // 번역(끊어 읽기 해석)
-      // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 번역 바로 아래에 한꺼번에 공개 + 영구 저장
-      if (flagged.size) detail.appendChild(buildCollectedWords([...flagged.values()], s, passage));
-      if (s.grammar && s.grammar.length) detail.appendChild(buildGrammar(s));
-      if (s.insight && settings.scope) detail.appendChild(buildScopeCard(s));
+      applyGrade();
+      detail = buildDetail();
       block.appendChild(detail);
+      persist();
     };
     line.appendChild(reviewBtn);
   }
 
   block.appendChild(line);
+
+  // 이미 검토를 마친 문장이면(복원) 채점 색과 해설을 펼친 상태로 되살린다.
+  if (reviewed && settings.chunks) {
+    applyGrade();
+    detail = buildDetail();
+    block.appendChild(detail);
+  }
+
   return block;
 }
 
@@ -2773,10 +2823,11 @@ function finishRound(p) {
   reads[p.id] = round;
   store.set("reads", reads);
   if (!done.includes(p.id)) { done.push(p.id); store.set("done", done); }
+  clearPassageProgress(p.id); // 회독을 마쳤으니 이 지문의 그은 선·임시 단어를 비워 clean slate로(영구 단어장은 유지)
   const prog = courseProgress(course, done);
   if (prog.cleared && !wasCleared) { showClearModal(); return; }
   showToast(`${round}회독 완료! 새 마음으로 다시 읽어 보세요.`);
-  renderReading(p); // 새 클로저로 다시 그려 임시 수집 하이라이트를 리셋(영구 단어장은 유지)
+  renderReading(p); // 깨끗한 상태로 다시 그린다
 }
 
 function showClearModal() {
@@ -2799,7 +2850,9 @@ function showClearModal() {
 
 // ── 내 단어장 ──
 function renderVocab() {
-  setTop({ title: "내 단어장", onBack: renderList, showVocab: false });
+  // 읽던 지문에서 왔으면 그 지문으로 복귀(진행 유지), 목록에서 왔으면 목록으로
+  const back = currentPassage ? () => renderReading(currentPassage) : renderList;
+  setTop({ title: "내 단어장", onBack: back, showVocab: false });
   const stage = el.stage;
   stage.className = "stage vocab-stage";
   stage.innerHTML = "";

@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(english-reading): 본문 모든 단어 클릭·수집 + 단어 밑줄 전면 제거 (특정 단어 제한 폐지)",
+    "commitMessage": "feat(english-reading): 읽기 진행 저장·복원 - 단어장/목록 왕복·앱 재시작에도 진행 유지",
     "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {
