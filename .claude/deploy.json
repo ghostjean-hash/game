@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(flightshooting): 문서 20→30 정정 + 어린이 조준 단발화 + 적 출현 고정폭 + 신규 적 coil·serpent",
+    "commitMessage": "feat(flightshooting): 보스 부위 파괴형 전면 개편(스타일 4종) + 적 출현 폭 2배",
     "paths": ["games/flightshooting", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

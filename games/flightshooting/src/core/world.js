@@ -7,7 +7,7 @@ import { playerFire, enemyFireAt } from './fire.js';
 import { stepOptions, stepTail, homeMissiles, tickZone, gainFront, gainOption, gainZone, gainTail, loseLastPart } from './parts.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
-import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, dropMaybe, burst, fieldBounds } from './spawn.js';
+import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, dropMaybe, burst, fieldBounds, syncBossParts } from './spawn.js';
 
 export function hit(a, b) {
   const dx = a.x - b.x, dy = a.y - b.y;
@@ -172,77 +172,93 @@ export function updateEnemies(game, dt, W, H) {
   game.enemies = game.enemies.filter((e) => e.y < H + e.r + 20 && e.x > -e.r - 40 && e.x < W + e.r + 40);
 }
 
-function updateBoss(game, dt, W, H) {
+// 부위/코어 위치(src {x,y})에서 패턴 발사. shotsCap = 어린이 모드 조준 연발 상한.
+function bossFire(game, src, pattern, shotsCap, speedMul = 1) {
+  const p = game.player;
+  const speed = CFG.enemyBullet.speed * speedMul;
+  if (pattern === 'fan') {                       // 아래 방향 부채 산탄
+    const base = Math.PI / 2, spread = 1.0, n = 6;
+    for (let i = 0; i < n; i++) {
+      const a = base - spread / 2 + (spread * i) / (n - 1);
+      game.eBullets.push({ x: src.x, y: src.y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, r: CFG.enemyBullet.r });
+    }
+  } else if (pattern === 'aim3') {               // 조준 3연발(어린이 모드는 정중앙 단발)
+    const n = Math.min(3, shotsCap);
+    for (let i = 0; i < n; i++) enemyFireAt(game, src, p.x + (i - (n - 1) / 2) * 18, p.y, speed);
+  } else if (pattern === 'ring') {               // 사방 원형 방사
+    const n = 12;
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2;
+      game.eBullets.push({ x: src.x, y: src.y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, r: CFG.enemyBullet.r });
+    }
+  }
+}
+
+// 코어 피해(부위 뒤 본체). 0이면 격파.
+function damageCore(game, dmg) {
+  game.boss.core.hp -= dmg;
+  if (game.boss.core.hp <= 0) defeatBoss(game);
+}
+
+// 부위 파괴: 점수 + 잔해, shield가 다 없어지면 코어 노출.
+function destroyPart(game, part) {
+  const boss = game.boss;
+  const st = CFG.bossStyles[boss.style];
+  part.dead = true;
+  game.score += st.partScore;
+  burst(game, part.x, part.y, COLORS.boss.partDebris, 16);
+  game.sfx.push('explode');
+  if (!boss.core.exposed && boss.parts.every((p) => p.role !== 'shield' || p.dead)) {
+    boss.core.exposed = true; // 방어구 전멸 → 코어 노출
+    game.sfx.push('bossdown');
+  }
+}
+
+export function updateBoss(game, dt, W, H) {
   const boss = game.boss;
   if (!boss) return;
-  const mul = game.enemyFireMul || 1; // 난이도: 어린이 모드면 보스도 발사 간격을 늘려 덜 쏘게
-  const shotsCap = game.enemyShotsMax || 99; // 난이도: 어린이 모드면 보스 조준 연발도 정중앙 단발로
+  const st = CFG.bossStyles[boss.style];
+  const mul = game.enemyFireMul || 1;          // 어린이 모드 발사 간격 배수
+  const shotsCap = game.enemyShotsMax || 99;   // 어린이 모드 조준 연발 상한
   boss.t += dt;
   if (boss.entering) {
     boss.y += 90 * dt;
     if (boss.y >= boss.targetY) { boss.y = boss.targetY; boss.entering = false; }
+    syncBossParts(boss);
     return;
   }
   boss.x = W / 2 + Math.sin(boss.t * CFG.boss.bobFreq * Math.PI) * (W * CFG.boss.bobAmp * 0.5);
+  if (st.orbitR) boss.orbitAngle += st.orbitSpeed * dt; // 위성형 실드 회전
+  syncBossParts(boss);
 
-  if (boss.kind === 'mini') {
-    boss.fireTimer -= dt;
-    if (boss.fireTimer <= 0) {
-      const p = game.player;
-      if (boss.style === 'machine') {
-        // 기계 중보스(21~29): 아래 부채 방사 ↔ 조준 3연발 번갈아(정령 중보스보다 탄막이 조밀).
-        boss.pattern = (boss.pattern + 1) % 2;
-        if (boss.pattern === 0) {
-          boss.fireTimer = 1.1 * mul;
-          const base = Math.PI / 2, spread = 1.1, n = 6;
-          for (let i = 0; i < n; i++) {
-            const a = base - spread / 2 + (spread * i) / (n - 1);
-            game.eBullets.push({ x: boss.x, y: boss.y + boss.ry, vx: Math.cos(a) * CFG.enemyBullet.speed, vy: Math.sin(a) * CFG.enemyBullet.speed, r: CFG.enemyBullet.r });
-          }
-        } else {
-          boss.fireTimer = 1.2 * mul;
-          const n = Math.min(3, shotsCap); // 조준 3연발(어린이 모드는 정중앙 단발)
-          for (let i = 0; i < n; i++) enemyFireAt(game, boss, p.x + (i - (n - 1) / 2) * 20, p.y);
-        }
-      } else {
-        boss.fireTimer = 1.3 * mul;
-        const n = Math.min(2, shotsCap); // 조준 2연발(어린이 모드는 정중앙 단발)
-        for (let i = 0; i < n; i++) enemyFireAt(game, boss, p.x + (i - (n - 1) / 2) * 30, p.y);
-      }
+  // 광폭화(sentinel): 부순 weapon 수만큼 남은 weapon 발사 주기를 단축한다.
+  const enrageMul = st.enrage ? Math.pow(st.enrage, boss.parts.filter((p) => p.dead && p.role === 'weapon').length) : 1;
+
+  // 살아있는 weapon 부위가 각자 패턴 발사.
+  for (const part of boss.parts) {
+    if (part.dead || part.role !== 'weapon') continue;
+    part.fireTimer -= dt;
+    if (part.fireTimer <= 0) {
+      part.fireTimer = part.fireEvery * mul * enrageMul;
+      bossFire(game, part, part.pattern, shotsCap);
     }
+  }
+  // 코어 자체 공격(노출 + corePattern 있을 때).
+  if (boss.core.exposed && st.corePattern) {
+    boss.coreTimer -= dt;
+    if (boss.coreTimer <= 0) {
+      boss.coreTimer = st.coreEvery * mul;
+      bossFire(game, boss, st.corePattern, shotsCap);
+    }
+  }
+  // 호위 소환(중보스만).
+  if (boss.kind === 'mini') {
     boss.escortTimer -= dt;
     if (boss.escortTimer <= 0) {
       boss.escortTimer = CFG.miniBoss.escortEvery;
-      // 21~29 기계 보스는 기계 잡몹(turret/prism)을, 그 외엔 정령(drone/weaver)을 호위로 부른다.
-      const pool = boss.style === 'machine' ? ['turret', 'prism'] : ['drone', 'weaver'];
+      const pool = boss.style === 'orbiter' ? ['turret', 'prism'] : ['drone', 'weaver'];
       spawnEnemy(game, pool[Math.floor(Math.random() * pool.length)], 0.15 + Math.random() * 0.7, W);
     }
-    return;
-  }
-
-  // 최종 보스: 2패턴 번갈아
-  boss.fireTimer -= dt;
-  if (boss.fireTimer <= 0) {
-    boss.patternTimer++;
-    if (boss.pattern === 0) {
-      boss.fireTimer = 1.0 * mul;
-      const base = Math.PI / 2; // 아래(+y)
-      const spread = 0.8, n = 9;
-      for (let i = 0; i < n; i++) {
-        const a = base - spread / 2 + (spread * i) / (n - 1);
-        game.eBullets.push({
-          x: boss.x, y: boss.y + boss.ry,
-          vx: Math.cos(a) * CFG.enemyBullet.speed,
-          vy: Math.sin(a) * CFG.enemyBullet.speed, r: CFG.enemyBullet.r,
-        });
-      }
-    } else {
-      boss.fireTimer = 1.3 * mul;
-      const p = game.player;
-      const n = Math.min(3, shotsCap); // 조준 3연발(어린이 모드는 정중앙 단발)
-      for (let i = 0; i < n; i++) enemyFireAt(game, boss, p.x + (i - (n - 1) / 2) * 14, p.y, CFG.enemyBullet.speed * 1.1);
-    }
-    if (boss.patternTimer % 3 === 0) boss.pattern = boss.pattern === 0 ? 1 : 0;
   }
 }
 
@@ -305,8 +321,7 @@ function grabItem(game, kind) {
     game.enemies = [];
     game.eBullets = [];
     if (game.boss && !game.boss.entering) {
-      game.boss.hp -= Math.ceil(game.boss.maxHp * 0.15);
-      if (game.boss.hp <= 0) defeatBoss(game);
+      damageCore(game, Math.ceil(game.boss.core.maxHp * 0.15)); // 봄은 코어 직격(가림 무시)
     }
     game.sfx.push('bomb');
   }
@@ -352,11 +367,24 @@ export function checkCollisions(game, W, H) {
         break;
       }
     }
-    if (!b.dead && game.boss && !game.boss.entering && hit(b, game.boss)) {
-      b.dead = true;
-      game.boss.hp -= b.dmg;
-      burst(game, b.x, b.y, COLORS.hitSpark, 4);
-      if (game.boss.hp <= 0) defeatBoss(game);
+    if (!b.dead && game.boss && !game.boss.entering) {
+      const boss = game.boss;
+      if (b.kind === 'missile') {
+        // 유도탄: 부위 무시하고 코어 직격(가림 관통 - shielder 공략과 일관).
+        if (hit(b, boss)) { b.dead = true; damageCore(game, b.dmg); burst(game, b.x, b.y, COLORS.hitSpark, 4); }
+      } else {
+        // 정면 화력(메인·사이드): 살아있는 부위 우선 → (노출된) 코어. 겹친 1개만 때린다.
+        let hp = null;
+        for (const part of boss.parts) { if (!part.dead && hit(b, part)) { hp = part; break; } }
+        if (hp) {
+          b.dead = true;
+          hp.hp -= b.dmg;
+          burst(game, b.x, b.y, boss.color, 4);
+          if (hp.hp <= 0) destroyPart(game, hp);
+        } else if (boss.core.exposed && hit(b, boss)) {
+          b.dead = true; damageCore(game, b.dmg); burst(game, b.x, b.y, COLORS.hitSpark, 4);
+        }
+      }
     }
   }
   game.bullets = game.bullets.filter((b) => !b.dead);
@@ -481,7 +509,7 @@ export function stepWorld(game, dt, W, H) {
   updateParticles(game, dt);
   tickZone(game, dt);              // 에너지존 주기 피해(적 hp 선차감)
   checkCollisions(game, W, H);     // 아이템 획득 + 피격 - 인트로 중에도 진행
-  // 존/봄 등 총알 외 피해로 보스 hp<=0 되어도 일괄 격파 판정.
-  if (game.boss && !game.boss.entering && game.boss.hp <= 0) defeatBoss(game);
+  // 존 등 총알 외 피해로 코어 hp<=0 되어도 일괄 격파 판정.
+  if (game.boss && !game.boss.entering && game.boss.core.hp <= 0) defeatBoss(game);
   if (!intro) checkProgress(game, dt, W, H); // 인트로 중엔 다음 단계로 안 넘어감
 }

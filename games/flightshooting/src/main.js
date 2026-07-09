@@ -7,7 +7,7 @@ import { CFG } from './data/numbers.js';
 import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard } from './core/world.js';
-import { spawnEnemy } from './core/spawn.js';
+import { spawnEnemy, spawnBoss } from './core/spawn.js';
 import { autopilotStep } from './core/autopilot.js';
 import { gainFront, gainOption, gainZone, gainTail } from './core/parts.js';
 import { render } from './render/view.js';
@@ -119,9 +119,11 @@ const loop = createLoop({
     game.events.length = 0;
     // 배너 표시 시간(main 소관)
     if (bannerTimer > 0) { bannerTimer -= dt; if (bannerTimer <= 0) elBanner.hidden = true; }
-    // 보스 체력바 실시간 반영
+    // 보스 체력바 실시간 반영(코어 hp). 방어구가 남아 코어가 안 열렸으면 '보호 중'으로 흐리게 표시.
     if (game.boss && !game.boss.entering) {
-      elBossFill.style.width = `${Math.max(0, (game.boss.hp / game.boss.maxHp) * 100)}%`;
+      const bc = game.boss.core;
+      elBossFill.style.width = `${Math.max(0, (bc.hp / bc.maxHp) * 100)}%`;
+      elBossBar.classList.toggle('protected', !bc.exposed);
     }
     syncHud();
   },
@@ -263,6 +265,8 @@ function applyDevHook() {
   // spawn=<적종류>: 해당 적을 화면 상단에 즉시 스폰(신규 적 외형·행동 관찰용).
   const spawnType = q.get('spawn');
   if (spawnType) { game.introTimer = 0; for (const xr of [0.35, 0.65]) spawnEnemy(game, spawnType, xr, W); }
+  // boss=1: 웨이브 건너뛰고 현재 구역 보스를 즉시 등장(부위 파괴형 스타일 관찰용).
+  if (q.get('boss') != null) { game.introTimer = 0; game.waves = []; game.waveIdx = 0; spawnBoss(game, W, H); }
   if (stage != null) startStage(game); // 지정 구역 웨이브 재생성 + 배너
   if (q.get('nointro') != null) game.introTimer = 0; // 검증 편의: 인트로 배너 건너뛰고 즉시 발사
   // warm=N: 시작 시 N프레임 미리 굴려 탄·상태를 진행시킨 화면을 바로 캡처(검증 편의).

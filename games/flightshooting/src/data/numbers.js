@@ -6,7 +6,7 @@ export const CFG = {
   // 적 출현 가로 영역: 화면(캔버스)이 넓어도 적 스폰 x를 중앙 고정폭 안으로 제한한다(사용자 지시 2026-07-10).
   //   width = 플레이필드 최대 가로폭(px). 화면이 이보다 좁으면 화면폭을 그대로 쓴다(min). 좌우 여백은 균등 분할.
   //   보너스 기체(화면 가로지르기)·보스(중앙 유영)는 예외 - 이 제한을 받지 않는다.
-  field: { width: 480 },
+  field: { width: 960 },
   // 난이도 모드(시작 화면에서 선택). 어린이 모드는 적·보스 발사 주기를 배수로 늘려 총알을 덜 쏘게 하고,
   //   시작 화력도 조금 얹어 더 쉽게 출발한다.
   //   enemyFireMul = 적 발사 간격 배수(1 = 일반, 2.2 = 발사 간격 2.2배 → 총알 절반 이하). 탄 수·패턴은 그대로.
@@ -136,6 +136,38 @@ export const CFG = {
   finalBoss: { rx: 50, ry: 44, hp: 1500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
   boss: { bobAmp: 0.32, bobFreq: 0.3, spawnTop: 62 },
+  // 부위 파괴형 보스(docs/06). 스타일 = 코어 + 부위(weapon 포탑 / shield 방어구).
+  //   총 hp(miniBoss/finalBoss 공식)를 coreRatio(코어) + 각 부위 hpRatio 합으로 나눈다(합 = 1).
+  //   role weapon = 자기 발사 패턴 보유(부수면 그 패턴 영구 정지). role shield = 코어를 가림(다 부수면 코어 노출).
+  //   pattern: fan(아래 부채) / aim3(조준 3연발) / ring(원형 방사). ox/oy = 코어 기준 위치(px).
+  //   orbit=true면 코어 주위 회전(초기각 angle + 공통 orbitR/orbitSpeed). shape = 렌더 형태. fireEvery = 발사 주기.
+  //   corePattern/coreEvery = 코어 자체 공격(노출 시). enrage = sentinel 광폭화(부위 하나 깰 때마다 남은 weapon 주기 배수).
+  //   partScore = 부위 하나 파괴 점수.
+  bossStyles: {
+    battleship: { coreRatio: 0.5, partScore: 200, parts: [
+      { id: 'gunL', role: 'weapon', pattern: 'fan',  ox: -42, oy: 8, r: 14, hpRatio: 0.25, fireEvery: 1.5, shape: 'turret' },
+      { id: 'gunR', role: 'weapon', pattern: 'aim3', ox:  42, oy: 8, r: 14, hpRatio: 0.25, fireEvery: 1.4, shape: 'turret' },
+    ] },
+    bio: { coreRatio: 0.34, partScore: 180, corePattern: 'aim3', coreEvery: 1.6, parts: [
+      { id: 'armL', role: 'shield', ox: -38, oy: 4,   r: 13, hpRatio: 0.22, shape: 'tentacle' },
+      { id: 'armR', role: 'shield', ox:  38, oy: 4,   r: 13, hpRatio: 0.22, shape: 'tentacle' },
+      { id: 'armT', role: 'shield', ox:   0, oy: -34, r: 12, hpRatio: 0.22, shape: 'tentacle' },
+    ] },
+    orbiter: { coreRatio: 0.4, partScore: 160, corePattern: 'ring', coreEvery: 2.0, orbitR: 48, orbitSpeed: 1.3, parts: [
+      { id: 'sh0', role: 'shield', orbit: true, angle: 0,      r: 12, hpRatio: 0.15, shape: 'shard' },
+      { id: 'sh1', role: 'shield', orbit: true, angle: 1.5708, r: 12, hpRatio: 0.15, shape: 'shard' },
+      { id: 'sh2', role: 'shield', orbit: true, angle: 3.1416, r: 12, hpRatio: 0.15, shape: 'shard' },
+      { id: 'sh3', role: 'shield', orbit: true, angle: 4.7124, r: 12, hpRatio: 0.15, shape: 'shard' },
+    ] },
+    sentinel: { coreRatio: 0.3, partScore: 400, enrage: 0.72, parts: [
+      { id: 'head',  role: 'weapon', pattern: 'ring', ox:   0, oy: -44, r: 16, hpRatio: 0.18, fireEvery: 2.2, shape: 'turret' },
+      { id: 'armL',  role: 'weapon', pattern: 'fan',  ox: -54, oy: 2,   r: 15, hpRatio: 0.16, fireEvery: 1.5, shape: 'turret' },
+      { id: 'armR',  role: 'weapon', pattern: 'aim3', ox:  54, oy: 2,   r: 15, hpRatio: 0.16, fireEvery: 1.4, shape: 'turret' },
+      { id: 'chest', role: 'shield', ox:   0, oy: 16,  r: 20, hpRatio: 0.20, shape: 'plate' },
+    ] },
+  },
+  // 구역 → 보스 스타일 매핑 경계(docs/06 §4). 이 구역부터 해당 스타일. 30(최종)은 sentinel 고정.
+  bossStyleFrom: { bio: 11, orbiter: 21 },
   // 11구역~ 신규 적(splitter/shielder/rusher), 21구역~ 이질 기계 적(turret/prism/mine/warper). 30구역이 최종.
   stageCount: 30,
   // 11구역 이후 추가 체력 배수(신규 적 구간 난이도 가속). 최종 hp = 기존 스케일 × (구역>=11이면 이 배수).

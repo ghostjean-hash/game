@@ -244,7 +244,7 @@ export function tickZone(game, dt) {
     if (game.boss && !game.boss.entering && !pulse.hit.includes(game.boss)) {
       const b = game.boss;
       const d = Math.hypot(b.x - p.x, b.y - p.y);
-      if (Math.abs(d - pulse.r) <= half + (b.rx || b.r)) { b.hp -= dmg; pulse.hit.push(b); hitAny = true; }
+      if (Math.abs(d - pulse.r) <= half + (b.rx || b.r)) { b.core.hp -= dmg; pulse.hit.push(b); hitAny = true; } // 존은 부위 관통, 코어 직격
     }
   }
   z.pulses = z.pulses.filter((pulse) => pulse.r <= maxR); // 최대 반경 넘은 파동 소멸

@@ -58,6 +58,14 @@ export const COLORS = {
     gunFinal: '#ff6b81',
     coreDark: '#2a0f16',
     coreLight: '#ffd36b',
+    // 부위 파괴형 스타일 색(docs/06). core=본체 코어, weapon=포탑, shield=방어구, part=부위 기본 몸체.
+    styles: {
+      battleship: { core: '#ffb15c', weapon: '#ffd08a', shield: '#d98a45', part: '#d98a45' },
+      bio:        { core: '#ff7ac0', weapon: '#ff9ad0', shield: 'rgba(200,100,164,0.9)', part: '#c85a9a' },
+      orbiter:    { core: '#8797b8', weapon: '#9fb4d8', shield: '#9fb4d8', part: '#6f86ad' },
+      sentinel:   { core: '#c0455c', weapon: '#ff6b81', shield: 'rgba(170,72,94,0.9)', part: '#8a2f42' },
+    },
+    partDebris: '#ffd36b', // 부위 파괴 잔해 스파크
   },
   // 파워업 아이템 색 (P 전방화력 / S 옵션기 / E 에너지존 / T 꼬리기 / H 회복 / B 봄)
   powerup: {

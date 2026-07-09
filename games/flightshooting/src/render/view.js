@@ -289,43 +289,60 @@ function drawEnemies(ctx, game) {
   }
 }
 
+// 부위 파괴형 보스(docs/06): 코어(본체) + 살아있는 부위(포탑/촉수/조각/방어판) + 부위 hp 게이지.
 function drawBoss(ctx, game) {
   const boss = game.boss;
   if (!boss) return;
-  const isFinal = boss.kind === 'final';
+  const sc = boss.colors;
+  // 코어(본체). 방어구로 가려져 있으면 어둡게, 노출되면 발광 코어.
   ctx.save();
   ctx.translate(boss.x, boss.y);
-  ctx.shadowColor = boss.color;
-  ctx.shadowBlur = isFinal ? 20 : 14;
-  ctx.fillStyle = boss.color;
-  if (boss.style === 'machine') {
-    // 기계 중보스(21~29): 각진 팔각 강철 몸체 + 포신 2문 + 붉은 발광 코어(눈 없음).
-    ctx.beginPath();
-    for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2 + Math.PI / 8; ctx[i ? 'lineTo' : 'moveTo'](Math.cos(a) * boss.rx, Math.sin(a) * boss.ry); }
-    ctx.closePath(); ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = COLORS.boss.machineCore;
-    ctx.fillRect(-boss.rx * 0.55, boss.ry - 6, 8, 14);
-    ctx.fillRect(boss.rx * 0.55 - 8, boss.ry - 6, 8, 14);
-    ctx.beginPath(); ctx.arc(0, 0, boss.rx * 0.32, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowColor = sc.core;
+  ctx.shadowBlur = boss.kind === 'final' ? 20 : 14;
+  ctx.fillStyle = boss.core.exposed ? sc.core : COLORS.boss.coreDark;
+  ctx.beginPath(); ctx.ellipse(0, 0, boss.rx, boss.ry, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowBlur = 0;
+  if (boss.core.exposed) {
+    ctx.fillStyle = COLORS.boss.coreLight; // 노출 코어 = 약점 발광
+    ctx.beginPath(); ctx.arc(0, 0, boss.rx * 0.28, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#ffffff';
-    ctx.beginPath(); ctx.arc(0, 0, boss.rx * 0.14, 0, Math.PI * 2); ctx.fill();
-    ctx.restore();
-    return;
+    ctx.beginPath(); ctx.arc(0, 0, boss.rx * 0.13, 0, Math.PI * 2); ctx.fill();
+  } else {
+    ctx.fillStyle = 'rgba(255,255,255,0.14)'; // 가려진 코어(흐린 실루엣)
+    ctx.beginPath(); ctx.arc(0, 0, boss.rx * 0.2, 0, Math.PI * 2); ctx.fill();
   }
-  ctx.beginPath();
-  ctx.ellipse(0, 0, boss.rx, boss.ry, 0, 0, Math.PI * 2);
-  ctx.fill();
-  // 포신부(아래, 발사구)
-  ctx.fillStyle = isFinal ? COLORS.boss.gunFinal : COLORS.boss.gunMini;
-  ctx.fillRect(-10, boss.ry - 4, 20, 12);
-  // 정령 얼굴(가오나시류): 흰 눈알 2개 + 검은 동공
-  ctx.fillStyle = '#f0eef6';
-  ctx.beginPath(); ctx.arc(-boss.rx * 0.34, -2, boss.rx * 0.22, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(boss.rx * 0.34, -2, boss.rx * 0.22, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = COLORS.boss.coreDark;
-  ctx.beginPath(); ctx.arc(-boss.rx * 0.34, 0, boss.rx * 0.1, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(boss.rx * 0.34, 0, boss.rx * 0.1, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+  // 살아있는 부위
+  for (const part of boss.parts) { if (!part.dead) drawBossPart(ctx, part, sc); }
+}
+
+// 부위 하나 렌더 + 부위 위 작은 hp 게이지. shape = turret(포탑)/tentacle(촉수)/shard(조각)/plate(방어판).
+function drawBossPart(ctx, part, sc) {
+  const r = part.r, isShield = part.role === 'shield';
+  ctx.save();
+  ctx.translate(part.x, part.y);
+  ctx.fillStyle = isShield ? sc.shield : sc.weapon;
+  if (part.shape === 'turret') {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; ctx[i ? 'lineTo' : 'moveTo'](Math.cos(a) * r, Math.sin(a) * r); }
+    ctx.closePath(); ctx.fill();
+    ctx.fillRect(-r * 0.2, r * 0.5, r * 0.4, r * 0.85); // 아래 포신
+  } else if (part.shape === 'tentacle') {
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.6, 0, Math.PI * 2); ctx.stroke();
+  } else if (part.shape === 'shard') {
+    ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r * 0.7, 0); ctx.lineTo(0, r); ctx.lineTo(-r * 0.7, 0); ctx.closePath(); ctx.fill();
+  } else if (part.shape === 'plate') {
+    ctx.beginPath(); ctx.ellipse(0, 0, r, r * 0.7, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 2; ctx.stroke();
+  }
+  if (part.hp < part.maxHp) { // 손상된 부위만 게이지 노출
+    const bw = r * 1.7, bh = 3, by = -r - 7;
+    ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(-bw / 2, by, bw, bh);
+    ctx.fillStyle = isShield ? '#9fd8ff' : '#ffd36b';
+    ctx.fillRect(-bw / 2, by, bw * Math.max(0, part.hp / part.maxHp), bh);
+  }
   ctx.restore();
 }
 

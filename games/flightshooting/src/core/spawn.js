@@ -107,33 +107,57 @@ export function spawnEscort(game, n, W) {
   }
 }
 
-// 보스 등장. 1~29구역 = 중보스(호위 동반), 30구역 = 최종보스. game.events로 등장 알림.
+// 구역 → 보스 스타일(docs/06 §4). 30 = sentinel(최종), 21~29 = orbiter, 11~20 = bio, 1~10 = battleship.
+export function bossStyleFor(stage) {
+  if (stage >= CFG.stageCount) return 'sentinel';
+  if (stage >= CFG.bossStyleFrom.orbiter) return 'orbiter';
+  if (stage >= CFG.bossStyleFrom.bio) return 'bio';
+  return 'battleship';
+}
+
+// 보스 등장(부위 파괴형). 1~29 = 중보스(호위 동반), 30 = 최종보스. 스타일별 코어 + 부위를 조립한다.
 export function spawnBoss(game, W, H) {
   const isFinal = game.stage >= CFG.stageCount;
-  if (isFinal) {
-    const c = CFG.finalBoss;
-    game.boss = {
-      kind: 'final', x: W / 2, y: -c.ry - 20, targetY: CFG.boss.spawnTop + c.ry,
-      rx: c.rx, ry: c.ry, color: COLORS.boss.final,
-      hp: c.hp, maxHp: c.hp, score: c.score, t: 0, entering: true,
-      fireTimer: 1.2, patternTimer: 0, pattern: 0,
-    };
-    game.events.push({ type: 'boss-appear', name: '최종 보스' });
-  } else {
-    const c = CFG.miniBoss;
-    const hp = c.baseHp + (game.stage - 1) * c.hpPerStage;
-    const machine = game.stage >= CFG.voidStage.from; // 21~29 = 이질 기계 중보스(신규 외형·패턴)
-    game.boss = {
-      kind: 'mini', style: machine ? 'machine' : 'spirit',
-      x: W / 2, y: -c.ry - 20, targetY: CFG.boss.spawnTop + c.ry,
-      rx: c.rx, ry: c.ry, color: machine ? COLORS.boss.machine : COLORS.boss.mini,
-      hp, maxHp: hp, score: c.score, t: 0, entering: true,
-      fireTimer: 1.4, escortTimer: c.escortEvery, patternTimer: 0, pattern: 0,
-    };
-    game.events.push({ type: 'boss-appear', name: `구역 ${game.stage} 중보스` });
-    spawnEscort(game, c.escortInit, W);
-  }
+  const style = bossStyleFor(game.stage);
+  const st = CFG.bossStyles[style];
+  const sc = COLORS.boss.styles[style];
+  const base = isFinal ? CFG.finalBoss : CFG.miniBoss;
+  const totalHp = isFinal ? base.hp : base.baseHp + (game.stage - 1) * base.hpPerStage;
+  const coreHp = Math.max(1, Math.ceil(totalHp * st.coreRatio));
+  const parts = st.parts.map((pp) => {
+    const php = Math.max(1, Math.ceil(totalHp * pp.hpRatio));
+    return { ...pp, hp: php, maxHp: php, dead: false, fireTimer: (pp.fireEvery || 0) * Math.random(), x: 0, y: 0 };
+  });
+  const hasShield = parts.some((p) => p.role === 'shield');
+  game.boss = {
+    kind: isFinal ? 'final' : 'mini', style,
+    x: W / 2, y: -base.ry - 20, targetY: CFG.boss.spawnTop + base.ry,
+    rx: base.rx, ry: base.ry, color: sc.core, colors: sc,
+    core: { hp: coreHp, maxHp: coreHp, exposed: !hasShield }, // 방어구 없으면 처음부터 노출
+    parts, orbitAngle: 0, coreTimer: (st.coreEvery || 1.4) * Math.random(),
+    score: base.score, t: 0, entering: true,
+    escortTimer: isFinal ? Infinity : CFG.miniBoss.escortEvery,
+  };
+  syncBossParts(game.boss); // 등장 이동 중에도 부위가 코어에 붙어 보이게 초기 위치 계산
+  game.events.push({ type: 'boss-appear', name: isFinal ? '최종 보스' : `구역 ${game.stage} 보스` });
+  if (!isFinal) spawnEscort(game, CFG.miniBoss.escortInit, W);
   game.sfx.push('start');
+}
+
+// 부위 절대 위치 갱신: orbit 부위는 코어 주위 회전, 그 외는 코어 기준 고정 오프셋(ox/oy).
+export function syncBossParts(boss) {
+  const st = CFG.bossStyles[boss.style];
+  for (const p of boss.parts) {
+    if (p.dead) continue;
+    if (p.orbit) {
+      const a = p.angle + boss.orbitAngle;
+      p.x = boss.x + Math.cos(a) * st.orbitR;
+      p.y = boss.y + Math.sin(a) * st.orbitR;
+    } else {
+      p.x = boss.x + p.ox;
+      p.y = boss.y + p.oy;
+    }
+  }
 }
 
 // 화면을 가로지르는 보너스 기체 등장(좌/우 랜덤). 잡으면 파워업을 확정 드롭한다.

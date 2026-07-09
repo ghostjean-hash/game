@@ -88,6 +88,12 @@
   background: linear-gradient(90deg, var(--sky-enemy), #ff9a4d);
   transition: width 120ms linear;
 }
+/* 방어구가 남아 코어를 못 때리는 동안: 체력 바를 흐리게 + 빗금으로 '보호 중' 표시 */
+.boss-bar.protected .boss-hp i { opacity: 0.4; }
+.boss-bar.protected .boss-hp {
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.12) 0 6px, transparent 6px 12px);
+}
+.boss-bar.protected .boss-name::after { content: ' 🛡 보호 중'; font-weight: 600; opacity: 0.8; }
 
 /* 구역 배너 */
 .banner {

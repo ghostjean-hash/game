@@ -17,9 +17,9 @@ import { test, eq, ok, report } from './runner.js';
 import { frontSpec } from '../src/core/fire.js';
 import { optionSlot, gainFront, gainOption, gainZone, gainTail, loseLastPart, tickZone } from '../src/core/parts.js';
 import { buildWaves, stageName } from '../src/core/waves.js';
-import { spawnEnemy, spawnBonus, spawnShards, dropItems, fieldBounds } from '../src/core/spawn.js';
+import { spawnEnemy, spawnBonus, spawnShards, dropItems, fieldBounds, spawnBoss, bossStyleFor, syncBossParts } from '../src/core/spawn.js';
 import { autopilotStep } from '../src/core/autopilot.js';
-import { hit, checkCollisions, updateEnemies, distToSegment } from '../src/core/world.js';
+import { hit, checkCollisions, updateEnemies, distToSegment, updateBoss } from '../src/core/world.js';
 import { CFG } from '../src/data/numbers.js';
 
 const mkGame = () => ({ front: 1, options: [], zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [], player: { x: 100, y: 100 } });
@@ -243,6 +243,67 @@ test('어린이 모드 turret은 정중앙 단발', () => { const g = shotGame('
 test('어린이 단발은 플레이어 정중앙 조준(가로 편차 0)', () => {
   const g = shotGame('gunner', 1); updateEnemies(g, 0.016, 400, 800);
   ok(Math.abs(g.eBullets[0].vx) < 0.001, '가로 속도 0 = 정면 조준');
+});
+
+// ── 부위 파괴형 보스(docs/06): 코어 + 부위(weapon/shield) ──
+const bossGame = (stage) => ({ stage, enemies: [], eBullets: [], bullets: [], particles: [], powerups: [], events: [], sfx: [], score: 0, boss: null, bossPending: false, transitioning: false, player: { x: 250, y: 700, r: 14, inv: 1 } });
+const placeBoss = (g) => { g.boss.entering = false; g.boss.x = 250; g.boss.y = 120; syncBossParts(g.boss); };
+test('bossStyleFor 구역별 스타일', () => {
+  eq(bossStyleFor(1), 'battleship'); eq(bossStyleFor(10), 'battleship');
+  eq(bossStyleFor(11), 'bio'); eq(bossStyleFor(21), 'orbiter'); eq(bossStyleFor(30), 'sentinel');
+});
+test('battleship = 포탑 2 + 코어 처음부터 노출(방어구 없음)', () => {
+  const g = bossGame(3); spawnBoss(g, 500, 800);
+  eq(g.boss.style, 'battleship'); eq(g.boss.parts.length, 2);
+  ok(g.boss.parts.every((p) => p.role === 'weapon')); ok(g.boss.core.exposed);
+});
+test('bio = 방어구가 코어를 가림(비노출)', () => {
+  const g = bossGame(13); spawnBoss(g, 500, 800);
+  eq(g.boss.style, 'bio'); ok(!g.boss.core.exposed, '방어구로 가려짐');
+});
+test('보스 hp = 코어 + 부위 합이 총 hp 근처(예산 분배)', () => {
+  const g = bossGame(13); spawnBoss(g, 500, 800);
+  const total = CFG.miniBoss.baseHp + 12 * CFG.miniBoss.hpPerStage;
+  const sum = g.boss.core.maxHp + g.boss.parts.reduce((a, p) => a + p.maxHp, 0);
+  ok(Math.abs(sum - total) <= g.boss.parts.length + 1, 'ceil 오차 내');
+});
+test('방어구 살아있으면 코어 hp 불변(부위 우선 타격)', () => {
+  const g = bossGame(13); spawnBoss(g, 500, 800); placeBoss(g);
+  const shield = g.boss.parts.find((p) => p.role === 'shield');
+  const core0 = g.boss.core.hp;
+  g.bullets.push({ x: shield.x, y: shield.y, r: 5, dmg: 3, kind: 'main' });
+  checkCollisions(g, 500, 800);
+  eq(g.boss.core.hp, core0, '코어 무피해'); ok(shield.hp < shield.maxHp, '방어구만 피해');
+});
+test('방어구 전멸 시 코어 노출', () => {
+  const g = bossGame(13); spawnBoss(g, 500, 800); placeBoss(g);
+  for (const p of g.boss.parts) { if (p.role === 'shield') { p.hp = 1; g.bullets.push({ x: p.x, y: p.y, r: 5, dmg: 5, kind: 'main' }); } }
+  checkCollisions(g, 500, 800);
+  ok(g.boss.core.exposed, '방어구 다 부수면 코어 노출');
+});
+test('유도탄은 방어구 무시하고 코어 직격', () => {
+  const g = bossGame(13); spawnBoss(g, 500, 800); placeBoss(g);
+  const core0 = g.boss.core.hp;
+  g.bullets.push({ x: 250, y: 120, r: 5, dmg: 4, kind: 'missile' });
+  checkCollisions(g, 500, 800);
+  ok(g.boss.core.hp < core0, '가려져도 유도탄은 코어 타격');
+});
+test('코어 hp 0 = 보스 격파', () => {
+  const g = bossGame(3); spawnBoss(g, 500, 800); placeBoss(g);
+  g.boss.core.hp = 1;
+  g.bullets.push({ x: 250, y: 120, r: 5, dmg: 5, kind: 'main' }); // 중앙 = 코어(포탑은 좌우)
+  checkCollisions(g, 500, 800);
+  eq(g.boss, null, '격파로 boss 제거');
+});
+test('살아있는 weapon 부위는 발사, 죽은 부위는 정지', () => {
+  const g = bossGame(3); spawnBoss(g, 500, 800); g.boss.entering = false; g.boss.x = 250; g.boss.y = 120;
+  g.enemyFireMul = 1; g.enemyShotsMax = 99;
+  for (const p of g.boss.parts) p.fireTimer = -1;
+  updateBoss(g, 0.016, 500, 800);
+  ok(g.eBullets.length > 0, '살아있는 포탑 발사');
+  g.eBullets = []; for (const p of g.boss.parts) { p.dead = true; p.fireTimer = -1; }
+  updateBoss(g, 0.016, 500, 800);
+  eq(g.eBullets.length, 0, '죽은 포탑은 발사 안 함');
 });
 
 // ── 파워업 획득은 피격 무적(깜박) 중에도 된다 ──
