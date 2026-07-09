@@ -370,7 +370,15 @@ body {
   line-height: 1;
   pointer-events: none;
 }
-.gap.g-correct::before { content: "●"; font-size: 0.44em; }
+/* 맞은 끊기 - 안이 빈 붉은 원(테두리만) */
+.gap.g-correct::before {
+  content: "";
+  width: 0.4em;
+  height: 0.4em;
+  border: 1.6px solid #dc2626;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
 .gap.g-wrong::before { content: "✕"; font-size: 0.58em; font-weight: 900; }
 
 /* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다 */

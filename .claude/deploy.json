@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(english-reading): 읽기 진행 저장·복원 - 단어장/목록 왕복·앱 재시작에도 진행 유지",
+    "commitMessage": "feat(english-reading): 맞은 끊기 표시를 채워진 점 → 안이 빈 붉은 원으로 변경",
     "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {
