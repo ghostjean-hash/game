@@ -48,8 +48,10 @@ function buildHardWaves(stage) {
 }
 
 // 21~30 구역: 이질 기계 적(turret 포대·prism 결정·mine 기뢰·warper 왜곡체) 위주. 완전 다른 형태 구간.
+//   26구역~ 전격 코일(coil 쌍), 28구역~ 기계 뱀(serpent)이 합류해 후반 압박을 키운다(docs/08).
 function buildVoidWaves(stage) {
   const s = Math.min(stage - CFG.voidStage.from, 6);
+  const V = CFG.voidStage;
   const w = [];
   let t = 1.0;
   const add = (type, xs) => { w.push({ t, enemies: xs.map((xr) => ({ type, xr })) }); };
@@ -57,11 +59,14 @@ function buildVoidWaves(stage) {
   add('turret', cols(2 + Math.min(s, 2)));
   t += 2.4; add('prism', cols(2 + Math.min(s, 3)));
   t += 2.2; add('mine', cols(2 + Math.min(s, 2)));
+  if (stage >= V.coilFrom) { t += 2.2; add('coil', [0.3, 0.7]); } // 전격 코일 쌍 2조
   t += 2.4; add('warper', cols(2 + Math.min(s, 3)));
   t += 2.2; add('prism', cols(3 + Math.min(s, 3)));
+  if (stage >= V.serpentFrom) { t += 2.6; add('serpent', [0.5]); } // 기계 뱀 1마리(길어서 하나)
   t += 2.4; add('turret', cols(2 + Math.min(s, 2)));
   t += 2.2; add('mine', cols(3 + Math.min(s, 2)));
   t += 2.4; add('warper', cols(3 + Math.min(s, 3)));
+  if (stage >= V.coilFrom) { t += 2.2; add('coil', [0.25, 0.62]); }
   if (s >= 1) { t += 2.2; add('prism', cols(3 + Math.min(s, 3))); }
   if (s >= 2) { t += 2.4; add('turret', cols(3 + Math.min(s, 2))); }
   return w;

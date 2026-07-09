@@ -42,6 +42,11 @@ export const COLORS = {
     mine: '#d0824c',        // 기뢰(녹슨 구리 - 경고톤)
     mineCore: '#ff5470',    // 기뢰 코어(자폭 경고 적)
     warper: '#3fbfa2',      // 공간 왜곡체(불안정 청록)
+    // 2차 이질 적(연결선·체인)
+    coil: '#4bb8ff',        // 전격 코일 노드(전기 하늘)
+    coilArc: '#d6f0ff',     // 노드 사이 아크 번개(밝은 흰-하늘)
+    serpent: '#7f93ba',     // 기계 뱀 몸통 마디(강철 - 무적 방어)
+    serpentHead: '#ff7a48', // 기계 뱀 머리(약점 경고 주황)
   },
   // 보스 색 (중보스 mini 1~19 / 기계 중보스 machine 21~29 / 최종 final 30)
   boss: {

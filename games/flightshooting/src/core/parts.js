@@ -227,6 +227,7 @@ export function tickZone(game, dt) {
     pulse.r += ZONE.speed * dt;
     for (const e of game.enemies) {
       if (e.dead || pulse.hit.includes(e)) continue;
+      if (e.type === 'serpent' && e.seg === 'body') continue; // 뱀 몸통은 무적(존도 못 뚫는다 - 머리만)
       const d = Math.hypot(e.x - p.x, e.y - p.y);
       if (Math.abs(d - pulse.r) > half + e.r) continue;
       e.hp -= dmg; pulse.hit.push(e); hitAny = true;
@@ -236,6 +237,7 @@ export function tickZone(game, dt) {
         burst(game, e.x, e.y, e.color, 14);
         if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체만 드롭
         if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐
+        if (e.type === 'serpent') for (const s of e.body) s.dead = true; // 머리 격파 = 몸통 전멸
         game.sfx.push('explode');
       }
     }

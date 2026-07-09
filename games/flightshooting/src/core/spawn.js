@@ -10,9 +10,20 @@ function scaledHp(base, stage) {
   return hp;
 }
 
+// 적 출현 가로 영역(플레이필드): 화면폭 W가 넓어도 중앙 고정폭(CFG.field.width) 안으로 제한한다.
+//   화면이 더 좁으면 화면폭을 그대로 쓴다. left = 왼쪽 여백, width = 실제 필드 폭. warper 이동 clamp도 공용.
+export function fieldBounds(W) {
+  const width = Math.min(W, CFG.field.width);
+  const left = (W - width) / 2;
+  return { left, width, right: left + width };
+}
+
 export function spawnEnemy(game, type, xr, W) {
+  if (type === 'coil') return spawnCoil(game, xr, W);       // 노드 2개 쌍(아크 연결)
+  if (type === 'serpent') return spawnSerpent(game, xr, W); // 머리 + 몸통 마디 체인
   const spec = CFG.enemy[type];
-  const x = Math.max(spec.r + 6, Math.min(W - spec.r - 6, xr * W));
+  const fb = fieldBounds(W); // 화면폭과 무관하게 중앙 고정폭 안에서만 출현
+  const x = Math.max(fb.left + spec.r + 6, Math.min(fb.right - spec.r - 6, fb.left + xr * fb.width));
   const hp = scaledHp(spec.hp, game.stage);
   const e = {
     type, x, baseX: x, y: -spec.r - 10,
@@ -25,6 +36,51 @@ export function spawnEnemy(game, type, xr, W) {
   if (type === 'warper') { e.warpTimer = spec.warpEvery; e.vuln = 0; }              // 순간이동 타이머 + 취약 타이머
   game.enemies.push(e);
   return e;
+}
+
+// 전격 코일: 노드 2개를 nodeGap 간격으로 나란히 스폰한다. 서로 mate로 연결(둘 다 살아야 아크 유지).
+//   노드는 각자 독립 hp를 가진 개별 적이라 기존 충돌·드롭 로직을 그대로 탄다.
+function spawnCoil(game, xr, W) {
+  const spec = CFG.enemy.coil;
+  const fb = fieldBounds(W);
+  const half = spec.nodeGap / 2;
+  const cx = Math.max(fb.left + half + spec.r, Math.min(fb.right - half - spec.r, fb.left + xr * fb.width));
+  const hp = scaledHp(spec.hp, game.stage);
+  const mk = (dx) => ({
+    type: 'coil', x: cx + dx, baseX: cx + dx, y: -spec.r - 10,
+    r: spec.r, hp, maxHp: hp, speed: spec.speed, score: spec.score,
+    color: COLORS.enemy.coil, t: 0, fireTimer: 0,
+  });
+  const a = mk(-half), b = mk(half);
+  a.mate = b; b.mate = a; // 상대가 살아있는 동안만 아크 선이 유지된다(world가 판정)
+  game.enemies.push(a, b);
+  return a;
+}
+
+// 기계 뱀: 머리 1 + 몸통 마디(segCount)를 세로로 이어 스폰한다. 머리만 약점(hp), 몸통은 무적(hp 큼).
+//   몸통은 head 참조 + order로 앞 마디를 지연 추종한다(world.updateEnemies). 머리 격파 시 world가 전체 제거.
+function spawnSerpent(game, xr, W) {
+  const spec = CFG.enemy.serpent;
+  const fb = fieldBounds(W);
+  const cx = Math.max(fb.left + spec.r + 6, Math.min(fb.right - spec.r - 6, fb.left + xr * fb.width));
+  const hp = scaledHp(spec.hp, game.stage);
+  const head = {
+    type: 'serpent', seg: 'head', x: cx, baseX: cx, y: -spec.r - 10,
+    r: spec.r, hp, maxHp: hp, speed: spec.speed, score: spec.score,
+    color: COLORS.enemy.serpentHead, t: 0, fireTimer: 0, body: [],
+  };
+  game.enemies.push(head);
+  for (let i = 1; i <= spec.segCount; i++) {
+    const s = {
+      type: 'serpent', seg: 'body', head, order: i,
+      x: cx, baseX: cx, y: -spec.r - 10 - i * spec.segGap,
+      r: spec.r * 0.82, hp: Infinity, maxHp: Infinity, speed: spec.speed, score: 0,
+      color: COLORS.enemy.serpent, t: 0, fireTimer: 0,
+    };
+    head.body.push(s);
+    game.enemies.push(s);
+  }
+  return head;
 }
 
 // 분열체 격파 시 조각(shard) 여러 개를 좌우로 흩뿌린다. 조각은 재분열하지 않는다.
@@ -51,7 +107,7 @@ export function spawnEscort(game, n, W) {
   }
 }
 
-// 보스 등장. 1~9구역 = 중보스(호위 동반), 10구역 = 최종보스. game.events로 등장 알림.
+// 보스 등장. 1~29구역 = 중보스(호위 동반), 30구역 = 최종보스. game.events로 등장 알림.
 export function spawnBoss(game, W, H) {
   const isFinal = game.stage >= CFG.stageCount;
   if (isFinal) {

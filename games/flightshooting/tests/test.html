@@ -17,9 +17,10 @@ import { test, eq, ok, report } from './runner.js';
 import { frontSpec } from '../src/core/fire.js';
 import { optionSlot, gainFront, gainOption, gainZone, gainTail, loseLastPart, tickZone } from '../src/core/parts.js';
 import { buildWaves, stageName } from '../src/core/waves.js';
-import { spawnEnemy, spawnBonus, spawnShards, dropItems } from '../src/core/spawn.js';
+import { spawnEnemy, spawnBonus, spawnShards, dropItems, fieldBounds } from '../src/core/spawn.js';
 import { autopilotStep } from '../src/core/autopilot.js';
-import { hit, checkCollisions } from '../src/core/world.js';
+import { hit, checkCollisions, updateEnemies, distToSegment } from '../src/core/world.js';
+import { CFG } from '../src/data/numbers.js';
 
 const mkGame = () => ({ front: 1, options: [], zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [], player: { x: 100, y: 100 } });
 // ── frontSpec: 메인 총알 1~8, 단계마다 탄 +1(개별 탄 균일, tier 0) ──
@@ -129,6 +130,19 @@ test('구역↑ 체력 단조 증가', () => {
   for (let s = 1; s <= 10; s++) { const g = { stage: s, enemies: [] }; spawnEnemy(g, 'gunner', 0.5, 400); ok(g.enemies[0].hp >= prev, `구역 ${s} 감소`); prev = g.enemies[0].hp; }
 });
 
+// ── 적 출현 가로 영역 고정폭(플레이필드) ──
+test('fieldBounds 넓은 화면은 고정폭·중앙 정렬', () => {
+  const b = fieldBounds(1200); eq(b.width, CFG.field.width); ok(b.left > 0); eq(b.left, (1200 - CFG.field.width) / 2);
+});
+test('fieldBounds 좁은 화면은 화면폭 그대로', () => { const b = fieldBounds(360); eq(b.width, 360); eq(b.left, 0); });
+test('spawnEnemy 넓은 화면서 중앙 고정폭 안에 출현', () => {
+  const b = fieldBounds(1200);
+  const g0 = { stage: 1, enemies: [] }, g1 = { stage: 1, enemies: [] }, gm = { stage: 1, enemies: [] };
+  spawnEnemy(g0, 'drone', 0, 1200); spawnEnemy(g1, 'drone', 1, 1200); spawnEnemy(gm, 'drone', 0.5, 1200);
+  ok(g0.enemies[0].x >= b.left && g1.enemies[0].x <= b.right, '좌우 끝도 필드 안');
+  ok(Math.abs(gm.enemies[0].x - 600) < 1, 'xr=0.5는 화면 중앙');
+});
+
 // ── 보너스 기체 + 확정 드롭 ──
 test('spawnBonus 가로 이동 기체', () => { const g = { enemies: [], sfx: [] }; spawnBonus(g, 400, 800); eq(g.enemies[0].type, 'bonus'); ok(g.enemies[0].vx !== 0, '가로 속도 있어야'); });
 test('dropItems n개 확정 드롭', () => { const g = { powerups: [] }; dropItems(g, 100, 100, 2); eq(g.powerups.length, 2); });
@@ -163,6 +177,44 @@ test('warper spawnEnemy 순간이동 타이머 초기화', () => {
   ok(g.enemies[0].warpTimer > 0 && g.enemies[0].vuln === 0);
 });
 
+// ── 2차 이질 적: coil(노드 쌍·아크) / serpent(머리+몸통 체인, 머리만 약점) ──
+test('spawnEnemy coil = 노드 2개 쌍(서로 mate)', () => {
+  const g = { stage: 26, enemies: [] }; spawnEnemy(g, 'coil', 0.5, 500);
+  eq(g.enemies.length, 2);
+  ok(g.enemies[0].mate === g.enemies[1] && g.enemies[1].mate === g.enemies[0], '서로 mate 연결');
+  ok(Math.abs(g.enemies[0].x - g.enemies[1].x) > 0, '좌우로 벌어짐');
+});
+test('spawnEnemy serpent = 머리 1 + 몸통 segCount', () => {
+  const g = { stage: 28, enemies: [] }; spawnEnemy(g, 'serpent', 0.5, 500);
+  eq(g.enemies.length, 1 + CFG.enemy.serpent.segCount);
+  eq(g.enemies[0].seg, 'head'); ok(g.enemies.slice(1).every((s) => s.seg === 'body'), '나머지 전부 몸통');
+});
+test('distToSegment: 선분 위 점 = 0', () => { eq(distToSegment({ x: 5, y: 0 }, { x: 0, y: 0 }, { x: 10, y: 0 }), 0); });
+test('distToSegment: 선분에서 3만큼 떨어진 점', () => { eq(distToSegment({ x: 5, y: 3 }, { x: 0, y: 0 }, { x: 10, y: 0 }), 3); });
+const serpentGame = () => {
+  const g = { stage: 28, enemies: [], bullets: [], boss: null, powerups: [], particles: [], sfx: [], score: 0, player: { x: -999, y: -999, r: 1, inv: 1 } };
+  spawnEnemy(g, 'serpent', 0.5, 500); return g;
+};
+test('serpent 머리 격파 = 몸통까지 전멸', () => {
+  const g = serpentGame(); const head = g.enemies[0]; head.hp = 1;
+  g.bullets.push({ x: head.x, y: head.y, r: 5, dmg: 5, kind: 'main' });
+  checkCollisions(g, 500, 800);
+  eq(g.enemies.length, 0, '머리+몸통 전부 제거');
+});
+test('serpent 몸통은 무적(아군탄 막고 소멸)', () => {
+  const g = serpentGame(); const body = g.enemies[1];
+  g.bullets.push({ x: body.x, y: body.y, r: 5, dmg: 999, kind: 'main' });
+  checkCollisions(g, 500, 800);
+  eq(g.enemies.length, 1 + CFG.enemy.serpent.segCount, '몸통 안 죽음');
+  eq(g.bullets.length, 0, '탄은 막혀 소멸');
+});
+test('buildWaves 26구역 coil 합류', () => { ok(new Set(buildWaves(26).flatMap((x) => x.enemies.map((e) => e.type))).has('coil')); });
+test('buildWaves 28구역 serpent 합류', () => { ok(new Set(buildWaves(28).flatMap((x) => x.enemies.map((e) => e.type))).has('serpent')); });
+test('buildWaves 22구역엔 coil·serpent 없음', () => {
+  const types = new Set(buildWaves(22).flatMap((x) => x.enemies.map((e) => e.type)));
+  ok(!types.has('coil') && !types.has('serpent'));
+});
+
 // ── 자동 플레이: 미래 시뮬레이션 회피/조준/획득 ──
 const apGame = (over) => ({ player: { x: 200, y: 800, r: 14 }, eBullets: [], enemies: [], powerups: [], boss: null, ...over });
 // 정면으로 떨어져 나를 맞힐 코스의 탄은 크게 비켜선다(좌우 아무 쪽이든).
@@ -178,6 +230,20 @@ test('autopilot 목숨 풀이면 하트 무시', () => { const g = apGame({ live
 // 안전 상황에서 조준 표적이 불감대(12px) 이내로 옆에 있으면 x를 미세 이동하지 않는다(떨림 방지).
 test('autopilot 안전 시 근접 표적엔 떨지 않음', () => { const g = apGame({ enemies: [{ x: 208, y: 500, r: 15, speed: 150 }] }); autopilotStep(g, 0.1, 500, 1000); eq(g.player.x, 200); });
 // 반대로 위협 회피 중엔 불감대 없이 정밀 이동해야 한다(위 '정면 충돌 코스 회피' 테스트가 이를 보장).
+
+// ── 어린이 모드: 조준 연발(gunner·turret 3발) → 정중앙 단발(enemyShotsMax) ──
+const shotGame = (type, cap) => ({
+  enemyShotsMax: cap, enemyFireMul: 1, player: { x: 100, y: 200, r: 14 },
+  enemies: [{ type, x: 100, y: 100, t: 0, fireTimer: 0, r: 18, speed: 40 }], eBullets: [], sfx: [],
+});
+test('일반 모드 gunner는 3발 확산', () => { const g = shotGame('gunner', 99); updateEnemies(g, 0.016, 400, 800); eq(g.eBullets.length, 3); });
+test('어린이 모드 gunner는 정중앙 단발', () => { const g = shotGame('gunner', 1); updateEnemies(g, 0.016, 400, 800); eq(g.eBullets.length, 1); });
+test('일반 모드 turret은 3방향 연사', () => { const g = shotGame('turret', 99); updateEnemies(g, 0.016, 400, 800); eq(g.eBullets.length, 3); });
+test('어린이 모드 turret은 정중앙 단발', () => { const g = shotGame('turret', 1); updateEnemies(g, 0.016, 400, 800); eq(g.eBullets.length, 1); });
+test('어린이 단발은 플레이어 정중앙 조준(가로 편차 0)', () => {
+  const g = shotGame('gunner', 1); updateEnemies(g, 0.016, 400, 800);
+  ok(Math.abs(g.eBullets[0].vx) < 0.001, '가로 속도 0 = 정면 조준');
+});
 
 // ── 파워업 획득은 피격 무적(깜박) 중에도 된다 ──
 const puGame = (inv) => ({ player: { x: 100, y: 100, r: 14, inv }, front: 1, partHistory: [],

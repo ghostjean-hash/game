@@ -152,8 +152,33 @@ function spriteEyes(ctx, r, spread = 0.34, ey = -0.12, sz = 0.15, white = false)
   ctx.beginPath(); ctx.arc(r * spread, r * ey, r * sz, 0, Math.PI * 2); ctx.fill();
 }
 
+// 전격 코일 아크: 살아있는 두 노드 사이를 지그재그 번개로 잇는다(노드 몸체보다 먼저 = 아래에 깔림).
+function drawCoilArcs(ctx, game) {
+  ctx.save();
+  ctx.strokeStyle = COLORS.enemy.coilArc;
+  ctx.lineWidth = 2.4;
+  ctx.shadowColor = COLORS.enemy.coilArc;
+  ctx.shadowBlur = 8;
+  for (const e of game.enemies) {
+    if (e.type !== 'coil' || !e.mate || e.mate.dead || e.x > e.mate.x) continue;
+    const a = e, b = e.mate, segs = 7;
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    for (let i = 1; i < segs; i++) {
+      const t = i / segs;
+      const x = a.x + (b.x - a.x) * t;
+      const y = a.y + (b.y - a.y) * t + (i % 2 ? -1 : 1) * (5 + Math.sin((a.t || 0) * 20 + i) * 3);
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
 // 적 = 요정·정령: 공통으로 둥근 몸 + 눈, 종류별 특징(꼬리불·날개·방패·균열·화살)을 얹는다.
 function drawEnemies(ctx, game) {
+  drawCoilArcs(ctx, game); // 코일 아크는 노드 몸체 아래에 먼저
   for (const e of game.enemies) {
     ctx.save();
     ctx.translate(e.x, e.y);
@@ -232,6 +257,30 @@ function drawEnemies(ctx, game) {
       ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r * 0.65, 0); ctx.lineTo(0, r); ctx.lineTo(-r * 0.65, 0); ctx.closePath(); ctx.fill();
       ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(-r * 0.32, 0); ctx.lineTo(r * 0.32, 0); ctx.moveTo(0, -r * 0.32); ctx.lineTo(0, r * 0.32); ctx.stroke();
+    } else if (e.type === 'coil') {
+      // 전격 코일 노드: 마름모 강철 몸체 + 밝은 전기 코어(눈 없음, 기계).
+      ctx.beginPath(); ctx.moveTo(0, -r * 0.9); ctx.lineTo(r * 0.75, 0); ctx.lineTo(0, r * 0.9); ctx.lineTo(-r * 0.75, 0); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = COLORS.enemy.coilArc;
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.34, 0, Math.PI * 2); ctx.fill();
+    } else if (e.type === 'serpent') {
+      if (e.seg === 'head') {
+        // 머리(약점): 큰 마름모 + 흰 눈 강조 + 발광.
+        ctx.shadowColor = e.color; ctx.shadowBlur = 8;
+        ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r * 0.8, 0); ctx.lineTo(0, r); ctx.lineTo(-r * 0.8, 0); ctx.closePath(); ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#fff4ee';
+        ctx.beginPath(); ctx.arc(-r * 0.28, -r * 0.08, r * 0.17, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(r * 0.28, -r * 0.08, r * 0.17, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#3a0f0f';
+        ctx.beginPath(); ctx.arc(-r * 0.28, -r * 0.08, r * 0.08, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(r * 0.28, -r * 0.08, r * 0.08, 0, Math.PI * 2); ctx.fill();
+      } else {
+        // 몸통 마디(무적): 강철 육각 + 흰 테두리(단단함 표시).
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2 + Math.PI / 6; ctx[i ? 'lineTo' : 'moveTo'](Math.cos(a) * r * 0.85, Math.sin(a) * r * 0.85); }
+        ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.32)'; ctx.lineWidth = 1.5; ctx.stroke();
+      }
     } else {
       ctx.beginPath(); ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2); ctx.fill();
       spriteEyes(ctx, r);

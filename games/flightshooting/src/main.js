@@ -7,6 +7,7 @@ import { CFG } from './data/numbers.js';
 import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard } from './core/world.js';
+import { spawnEnemy } from './core/spawn.js';
 import { autopilotStep } from './core/autopilot.js';
 import { gainFront, gainOption, gainZone, gainTail } from './core/parts.js';
 import { render } from './render/view.js';
@@ -74,7 +75,7 @@ function createGame() {
     score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
     front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, apSkill: CFG.autopilot.default, cheat: null,
-    difficulty: 'normal', enemyFireMul: 1, // 난이도(startGame에서 세팅). 어린이 모드면 적 발사 간격 배수>1
+    difficulty: 'normal', enemyFireMul: 1, enemyShotsMax: 99, // 난이도(startGame에서 세팅). 어린이 모드는 발사 간격↑·조준 연발 단발화
     bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
@@ -227,6 +228,7 @@ function startGame(diff) {
   game.difficulty = difficulty;                 // 난이도 모드
   const diffCfg = CFG.difficulty[difficulty] || CFG.difficulty.normal;
   game.enemyFireMul = diffCfg.enemyFireMul;
+  game.enemyShotsMax = diffCfg.enemyShotsMax || 99;
   // 난이도 시작 보너스: 어린이 모드는 메인 총알·꼬리 비행기를 조금 갖춘 채 출발(더 쉽게)
   for (let i = 1; i < diffCfg.startFront; i++) gainFront(game);
   for (let i = 0; i < diffCfg.startTail; i++) gainTail(game);
@@ -258,6 +260,9 @@ function applyDevHook() {
   if (q.get('cheat') != null) { cheatEnabled = true; setCheat.checked = true; } // 검증 편의: 치트 박스 자동 표시
   // pow=P|S|E|T|H|B: 해당 파워업 하나를 화면 위쪽에 스폰(내려오며 획득 확인용).
   const pow = q.get('pow'); if (pow) game.powerups.push({ x: W * 0.5, y: H * 0.3, r: 12, vy: 70, kind: pow, t: 0 });
+  // spawn=<적종류>: 해당 적을 화면 상단에 즉시 스폰(신규 적 외형·행동 관찰용).
+  const spawnType = q.get('spawn');
+  if (spawnType) { game.introTimer = 0; for (const xr of [0.35, 0.65]) spawnEnemy(game, spawnType, xr, W); }
   if (stage != null) startStage(game); // 지정 구역 웨이브 재생성 + 배너
   if (q.get('nointro') != null) game.introTimer = 0; // 검증 편의: 인트로 배너 건너뛰고 즉시 발사
   // warm=N: 시작 시 N프레임 미리 굴려 탄·상태를 진행시킨 화면을 바로 캡처(검증 편의).
@@ -304,7 +309,7 @@ async function gameWon() {
   const isBest = commitBest();
   const choice = await showModal({
     title: '전 구역 격파!',
-    body: `20개 구역의 모든 보스를 쓰러뜨렸다.\n최종 점수 ${game.score}${isBest ? '\n★ 최고 기록 갱신!' : ''}`,
+    body: `${CFG.stageCount}개 구역의 모든 보스를 쓰러뜨렸다.\n최종 점수 ${game.score}${isBest ? '\n★ 최고 기록 갱신!' : ''}`,
     actions: [
       { label: '다시하기', primary: true, value: 'retry' },
       { label: '홈', value: 'home' },

@@ -7,12 +7,22 @@ import { playerFire, enemyFireAt } from './fire.js';
 import { stepOptions, stepTail, homeMissiles, tickZone, gainFront, gainOption, gainZone, gainTail, loseLastPart } from './parts.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
-import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, dropMaybe, burst } from './spawn.js';
+import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, dropMaybe, burst, fieldBounds } from './spawn.js';
 
 export function hit(a, b) {
   const dx = a.x - b.x, dy = a.y - b.y;
   const rr = (a.r || a.rx) + (b.r || b.rx);
   return dx * dx + dy * dy <= rr * rr;
+}
+
+// 점 p와 선분 a-b 사이 최단 거리(코일 아크 선 피격 판정용).
+export function distToSegment(p, a, b) {
+  const abx = b.x - a.x, aby = b.y - a.y;
+  const len2 = abx * abx + aby * aby || 1;
+  let t = ((p.x - a.x) * abx + (p.y - a.y) * aby) / len2;
+  t = Math.max(0, Math.min(1, t));
+  const cx = a.x + abx * t, cy = a.y + aby * t;
+  return Math.hypot(p.x - cx, p.y - cy);
 }
 
 export function clampPlayer(game, W, H) {
@@ -59,9 +69,10 @@ function reflectPrism(game, e) {
   game.sfx.push('hit');
 }
 
-function updateEnemies(game, dt, W, H) {
+export function updateEnemies(game, dt, W, H) {
   const p = game.player;
   const mul = game.enemyFireMul || 1; // 난이도: 어린이 모드면 발사 간격을 늘려 덜 쏘게
+  const shotsCap = game.enemyShotsMax || 99; // 난이도: 어린이 모드면 조준 연발을 정중앙 단발로 줄임
   for (const e of game.enemies) {
     e.t += dt;
     if (e.type === 'bonus') {
@@ -99,9 +110,28 @@ function updateEnemies(game, dt, W, H) {
         const wp = CFG.enemy.warper;
         e.warpTimer = wp.warpEvery;
         e.y += wp.warpDown; // 아래로 순간이동
-        e.x = Math.max(e.r + 6, Math.min(W - e.r - 6, e.x + (Math.random() - 0.5) * 2 * wp.warpJitter));
+        const fb = fieldBounds(W); // 순간이동도 출현 영역(플레이필드) 안에 가둔다
+        e.x = Math.max(fb.left + e.r + 6, Math.min(fb.right - e.r - 6, e.x + (Math.random() - 0.5) * 2 * wp.warpJitter));
         e.vuln = wp.vulnerable;
         burst(game, e.x, e.y, COLORS.enemy.warper, 5);
+      }
+      continue;
+    }
+    if (e.type === 'coil') {
+      e.y += e.speed * dt; // 노드 쌍은 x 고정으로 나란히 하강(아크 선은 view/충돌이 판정)
+      continue;
+    }
+    if (e.type === 'serpent') {
+      const sp = CFG.enemy.serpent;
+      if (e.seg === 'head') {
+        e.y += e.speed * dt;
+        e.x = e.baseX + Math.sin(e.t * sp.freq) * sp.amp; // 머리가 사인파로 구불거리며 하강
+      } else {
+        // 몸통 마디: 앞 개체(order 1=머리, 그 외=order-1 마디)를 지연 추종해 뱀처럼 이어진다.
+        const lead = e.order === 1 ? e.head : e.head.body[e.order - 2];
+        const k = Math.min(1, sp.segFollow * dt);
+        e.x += (lead.x - e.x) * k;
+        e.y += (lead.y + sp.segGap - e.y) * k;
       }
       continue;
     }
@@ -118,8 +148,9 @@ function updateEnemies(game, dt, W, H) {
       e.fireTimer -= dt;
       if (e.fireTimer <= 0 && e.y > 20) {
         e.fireTimer = CFG.enemy.gunner.fireEvery * mul;
-        const g = CFG.enemy.gunner; // 3발 확산 조준
-        for (let i = 0; i < g.shots; i++) enemyFireAt(game, e, p.x + (i - (g.shots - 1) / 2) * g.spread, p.y);
+        const g = CFG.enemy.gunner; // 3발 확산 조준(어린이 모드는 정중앙 단발)
+        const n = Math.min(g.shots, shotsCap);
+        for (let i = 0; i < n; i++) enemyFireAt(game, e, p.x + (i - (n - 1) / 2) * g.spread, p.y);
       }
     } else if (e.type === 'shielder') {
       e.fireTimer -= dt;
@@ -131,8 +162,9 @@ function updateEnemies(game, dt, W, H) {
       e.fireTimer -= dt;
       if (e.fireTimer <= 0 && e.y > 20) {
         e.fireTimer = CFG.enemy.turret.fireEvery * mul;
-        const tr = CFG.enemy.turret; // 포대 3방향 조준 연사
-        for (let i = 0; i < tr.shots; i++) enemyFireAt(game, e, p.x + (i - (tr.shots - 1) / 2) * tr.spread, p.y);
+        const tr = CFG.enemy.turret; // 포대 3방향 조준 연사(어린이 모드는 정중앙 단발)
+        const n = Math.min(tr.shots, shotsCap);
+        for (let i = 0; i < n; i++) enemyFireAt(game, e, p.x + (i - (n - 1) / 2) * tr.spread, p.y);
       }
     }
   }
@@ -144,6 +176,7 @@ function updateBoss(game, dt, W, H) {
   const boss = game.boss;
   if (!boss) return;
   const mul = game.enemyFireMul || 1; // 난이도: 어린이 모드면 보스도 발사 간격을 늘려 덜 쏘게
+  const shotsCap = game.enemyShotsMax || 99; // 난이도: 어린이 모드면 보스 조준 연발도 정중앙 단발로
   boss.t += dt;
   if (boss.entering) {
     boss.y += 90 * dt;
@@ -168,11 +201,13 @@ function updateBoss(game, dt, W, H) {
           }
         } else {
           boss.fireTimer = 1.2 * mul;
-          for (let i = 0; i < 3; i++) enemyFireAt(game, boss, p.x + (i - 1) * 20, p.y);
+          const n = Math.min(3, shotsCap); // 조준 3연발(어린이 모드는 정중앙 단발)
+          for (let i = 0; i < n; i++) enemyFireAt(game, boss, p.x + (i - (n - 1) / 2) * 20, p.y);
         }
       } else {
         boss.fireTimer = 1.3 * mul;
-        for (let i = 0; i < 2; i++) enemyFireAt(game, boss, p.x + (i - 0.5) * 30, p.y);
+        const n = Math.min(2, shotsCap); // 조준 2연발(어린이 모드는 정중앙 단발)
+        for (let i = 0; i < n; i++) enemyFireAt(game, boss, p.x + (i - (n - 1) / 2) * 30, p.y);
       }
     }
     boss.escortTimer -= dt;
@@ -204,7 +239,8 @@ function updateBoss(game, dt, W, H) {
     } else {
       boss.fireTimer = 1.3 * mul;
       const p = game.player;
-      for (let i = 0; i < 3; i++) enemyFireAt(game, boss, p.x + (i - 1) * 14, p.y, CFG.enemyBullet.speed * 1.1);
+      const n = Math.min(3, shotsCap); // 조준 3연발(어린이 모드는 정중앙 단발)
+      for (let i = 0; i < n; i++) enemyFireAt(game, boss, p.x + (i - (n - 1) / 2) * 14, p.y, CFG.enemyBullet.speed * 1.1);
     }
     if (boss.patternTimer % 3 === 0) boss.pattern = boss.pattern === 0 ? 1 : 0;
   }
@@ -291,6 +327,12 @@ export function checkCollisions(game, W, H) {
           burst(game, b.x, b.y, COLORS.enemy.shielderShield, 3);
           break;
         }
+        // 기계 뱀 몸통은 무적: 아군탄을 막고 튕긴다(머리만 약점).
+        if (e.type === 'serpent' && e.seg === 'body') {
+          b.dead = true;
+          burst(game, b.x, b.y, e.color, 3);
+          break;
+        }
         b.dead = true;
         e.hp -= b.dmg;
         burst(game, b.x, b.y, e.color, 4);
@@ -301,6 +343,7 @@ export function checkCollisions(game, W, H) {
           if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체 확정 드롭
           else dropMaybe(game, e.x, e.y); // 잡몹은 저확률 드롭(초반 성장 숨통)
           if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐
+          if (e.type === 'serpent') for (const s of e.body) s.dead = true; // 머리 격파 = 몸통 전멸
           game.sfx.push('explode');
         } else {
           if (e.type === 'prism') reflectPrism(game, e); // 결정체는 피격마다 반사탄
@@ -329,6 +372,11 @@ export function checkCollisions(game, W, H) {
   // 무적 중(피격 깜박) 또는 치트 무적이면 피격 판정 생략(아이템 획득은 위에서 이미 처리).
   if (p.inv > 0 || (game.cheat && game.cheat.invincible)) return;
 
+  // 전격 코일 아크: 두 노드가 다 살아있으면 그 사이 선분에 닿을 때 피해(쌍당 1회, 왼쪽 노드 기준).
+  for (const e of game.enemies) {
+    if (e.type !== 'coil' || !e.mate || e.mate.dead || e.x > e.mate.x) continue;
+    if (distToSegment(p, e, e.mate) <= CFG.enemy.coil.arcThick + p.r) { playerHit(game); return; }
+  }
   for (const e of game.enemies) {
     if (hit(p, e)) { playerHit(game); return; }
   }

@@ -16,8 +16,8 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(english-reading): 끊기/단어 상단바 독립 토글(SVG) + 끊는 기준 홈 하단 이관",
-    "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
+    "commitMessage": "feat(flightshooting): 문서 20→30 정정 + 어린이 조준 단발화 + 적 출현 고정폭 + 신규 적 coil·serpent",
+    "paths": ["games/flightshooting", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {
     "urls": [

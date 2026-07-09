@@ -3,13 +3,19 @@
 
 export const CFG = {
   player: { r: 14, speed: 340, fireEvery: 0.154, maxLives: 3, invAfterHit: 1.6, yRatio: 0.82 },
+  // 적 출현 가로 영역: 화면(캔버스)이 넓어도 적 스폰 x를 중앙 고정폭 안으로 제한한다(사용자 지시 2026-07-10).
+  //   width = 플레이필드 최대 가로폭(px). 화면이 이보다 좁으면 화면폭을 그대로 쓴다(min). 좌우 여백은 균등 분할.
+  //   보너스 기체(화면 가로지르기)·보스(중앙 유영)는 예외 - 이 제한을 받지 않는다.
+  field: { width: 480 },
   // 난이도 모드(시작 화면에서 선택). 어린이 모드는 적·보스 발사 주기를 배수로 늘려 총알을 덜 쏘게 하고,
   //   시작 화력도 조금 얹어 더 쉽게 출발한다.
   //   enemyFireMul = 적 발사 간격 배수(1 = 일반, 2.2 = 발사 간격 2.2배 → 총알 절반 이하). 탄 수·패턴은 그대로.
   //   startFront = 시작 메인 총알 수(front 값, 1 = 기본 1발), startTail = 시작 꼬리 비행기 대수(0 = 없음).
+  //   enemyShotsMax = 적·보스의 조준 연발(gunner·turret·보스 3연발 등) 한 발 묶음의 탄 수 상한.
+  //     어린이 모드는 1 = 여러 발 확산 조준을 정중앙 단발로 줄인다(사용자 지시 2026-07-10). 부채 방사 패턴은 제외.
   difficulty: {
-    normal: { enemyFireMul: 1,   startFront: 1, startTail: 0 },
-    kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1 },
+    normal: { enemyFireMul: 1,   startFront: 1, startTail: 0, enemyShotsMax: 99 },
+    kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1, enemyShotsMax: 1 },
   },
   // bullet.shapes: 전방화력 발별 진화 티어별 탄 렌더(docs/05 1.1.1). 인덱스 0=진화 전 기본, 1~4=진화 티어.
   //   모양이 원→타원→긴형→링으로 뚜렷이 바뀐다(색만이 아니라 형태로 성장을 보인다, 사용자 지시 2026-07-08).
@@ -105,6 +111,13 @@ export const CFG = {
     mine:     { r: 15, hp: 2, speed: 45,  score: 300, trigger: 84, shards: 10, shardSpeed: 230 },
     // warper: 공간 왜곡체 - warpEvery마다 아래(warpDown)+가로 랜덤으로 순간이동. 이동 직후 vulnerable초 취약(정지).
     warper:   { r: 15, hp: 3, speed: 0,   score: 380, warpEvery: 1.15, warpDown: 96, warpJitter: 120, vulnerable: 0.45 },
+    // ── 2차 이질 적(docs/08 3.3·3.4). 연결선·체인 - 위치 잡기를 압박한다 ──
+    // coil: 노드 2개가 전기 아크로 연결된 쌍. nodeGap 간격으로 나란히 하강, 두 노드 사이 아크 선(arcThick 두께)에
+    //   플레이어가 닿으면 피해. 노드 하나를 부수면 아크가 사라진다(노드별 hp 낮음). 26구역부터.
+    coil:     { r: 13, hp: 2, speed: 100, score: 250, nodeGap: 128, arcThick: 9 },
+    // serpent: 머리 + 몸통 마디(segCount) 체인. 머리만 약점(몸통은 무적 - 아군탄을 막는다). 머리가 사인파
+    //   (amp/freq)로 하강하고 몸통이 지연 추종해 구불거린다. 머리를 잡아야 전체가 격파된다. 28구역부터.
+    serpent:  { r: 15, hp: 6, speed: 90,  score: 500, segCount: 5, segGap: 21, segFollow: 11, amp: 96, freq: 1.5 },
   },
   // 구역이 오를수록 적 체력 상승: hp = ceil(base * (1 + (stage-1)*scale)). 10구역 ≈ 3.5배.
   enemyHpScale: 0.28,
@@ -116,10 +129,10 @@ export const CFG = {
   bonusShip: { every: 10, dropCount: 1, yRatio: 0.22 },
   // 보스 격파 시 확정 드롭 수(중보스 / 최종보스).
   bossDrop: { mini: 2, final: 4 },
-  // 중보스(1~9구역): 작고 hp 낮음 + 호위 비행체 주기 소환. 최종보스(10구역): 크고 단단한 2패턴.
+  // 중보스(1~29구역): 작고 hp 낮음 + 호위 비행체 주기 소환. 최종보스(30구역): 크고 단단한 2패턴.
   // hp는 3계통 화력 성장에 맞춰 상향(중보스 baseHp 55→90·구역당 22→32, 최종 420→980).
   miniBoss: { rx: 30, ry: 26, baseHp: 66, hpPerStage: 34, score: 900, escortEvery: 4.5, escortInit: 2 },
-  // 최종보스는 이제 20구역. 20구역까지 화력이 최대로 성장하므로 hp를 크게 상향.
+  // 최종보스는 30구역. 그때까지 화력이 최대로 성장하므로 hp를 크게 상향.
   finalBoss: { rx: 50, ry: 44, hp: 1500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
   boss: { bobAmp: 0.32, bobFreq: 0.3, spawnTop: 62 },
@@ -128,7 +141,8 @@ export const CFG = {
   // 11구역 이후 추가 체력 배수(신규 적 구간 난이도 가속). 최종 hp = 기존 스케일 × (구역>=11이면 이 배수).
   hardStage: { from: 11, hpMul: 1.35 },
   // 21구역 이후 추가 체력 배수(4계통 만렙 근접 구간 - 순삭 방지). hardStage 위에 곱해진다. dev 훅 실측 후 조정.
-  voidStage: { from: 21, hpMul: 1.7 },
+  //   coilFrom / serpentFrom = 2차 이질 적(연결선·체인)이 웨이브에 합류하는 구역(docs/08 - 후반 압박 가중).
+  voidStage: { from: 21, hpMul: 1.7, coilFrom: 26, serpentFrom: 28 },
   stageIntro: 2.2, // 구역 시작 배너 표시 동안 적 스폰 정지(초)
   maxedBonus: 300, // 파츠·목숨이 이미 최대일 때 파워업 획득 시 대신 주는 점수
   starCount: 70,
