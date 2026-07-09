@@ -61,6 +61,7 @@ function reflectPrism(game, e) {
 
 function updateEnemies(game, dt, W, H) {
   const p = game.player;
+  const mul = game.enemyFireMul || 1; // 난이도: 어린이 모드면 발사 간격을 늘려 덜 쏘게
   for (const e of game.enemies) {
     e.t += dt;
     if (e.type === 'bonus') {
@@ -109,27 +110,27 @@ function updateEnemies(game, dt, W, H) {
       e.x = e.baseX + Math.sin(e.t * CFG.enemy.weaver.freq) * CFG.enemy.weaver.amp;
       e.fireTimer -= dt;
       if (e.fireTimer <= 0 && e.y > 20) {
-        e.fireTimer = CFG.enemy.weaver.fireEvery;
+        e.fireTimer = CFG.enemy.weaver.fireEvery * mul;
         enemyFireAt(game, e, p.x, p.y); // weaver 단발 조준
       }
     } else if (e.type === 'gunner') {
       e.x += Math.sign(p.x - e.x) * 40 * dt;
       e.fireTimer -= dt;
       if (e.fireTimer <= 0 && e.y > 20) {
-        e.fireTimer = CFG.enemy.gunner.fireEvery;
+        e.fireTimer = CFG.enemy.gunner.fireEvery * mul;
         const g = CFG.enemy.gunner; // 3발 확산 조준
         for (let i = 0; i < g.shots; i++) enemyFireAt(game, e, p.x + (i - (g.shots - 1) / 2) * g.spread, p.y);
       }
     } else if (e.type === 'shielder') {
       e.fireTimer -= dt;
       if (e.fireTimer <= 0 && e.y > 20) {
-        e.fireTimer = CFG.enemy.shielder.fireEvery;
+        e.fireTimer = CFG.enemy.shielder.fireEvery * mul;
         enemyFireAt(game, e, p.x, p.y); // 방패병 단발 조준
       }
     } else if (e.type === 'turret') {
       e.fireTimer -= dt;
       if (e.fireTimer <= 0 && e.y > 20) {
-        e.fireTimer = CFG.enemy.turret.fireEvery;
+        e.fireTimer = CFG.enemy.turret.fireEvery * mul;
         const tr = CFG.enemy.turret; // 포대 3방향 조준 연사
         for (let i = 0; i < tr.shots; i++) enemyFireAt(game, e, p.x + (i - (tr.shots - 1) / 2) * tr.spread, p.y);
       }
@@ -142,6 +143,7 @@ function updateEnemies(game, dt, W, H) {
 function updateBoss(game, dt, W, H) {
   const boss = game.boss;
   if (!boss) return;
+  const mul = game.enemyFireMul || 1; // 난이도: 어린이 모드면 보스도 발사 간격을 늘려 덜 쏘게
   boss.t += dt;
   if (boss.entering) {
     boss.y += 90 * dt;
@@ -158,18 +160,18 @@ function updateBoss(game, dt, W, H) {
         // 기계 중보스(21~29): 아래 부채 방사 ↔ 조준 3연발 번갈아(정령 중보스보다 탄막이 조밀).
         boss.pattern = (boss.pattern + 1) % 2;
         if (boss.pattern === 0) {
-          boss.fireTimer = 1.1;
+          boss.fireTimer = 1.1 * mul;
           const base = Math.PI / 2, spread = 1.1, n = 6;
           for (let i = 0; i < n; i++) {
             const a = base - spread / 2 + (spread * i) / (n - 1);
             game.eBullets.push({ x: boss.x, y: boss.y + boss.ry, vx: Math.cos(a) * CFG.enemyBullet.speed, vy: Math.sin(a) * CFG.enemyBullet.speed, r: CFG.enemyBullet.r });
           }
         } else {
-          boss.fireTimer = 1.2;
+          boss.fireTimer = 1.2 * mul;
           for (let i = 0; i < 3; i++) enemyFireAt(game, boss, p.x + (i - 1) * 20, p.y);
         }
       } else {
-        boss.fireTimer = 1.3;
+        boss.fireTimer = 1.3 * mul;
         for (let i = 0; i < 2; i++) enemyFireAt(game, boss, p.x + (i - 0.5) * 30, p.y);
       }
     }
@@ -188,7 +190,7 @@ function updateBoss(game, dt, W, H) {
   if (boss.fireTimer <= 0) {
     boss.patternTimer++;
     if (boss.pattern === 0) {
-      boss.fireTimer = 1.0;
+      boss.fireTimer = 1.0 * mul;
       const base = Math.PI / 2; // 아래(+y)
       const spread = 0.8, n = 9;
       for (let i = 0; i < n; i++) {
@@ -200,7 +202,7 @@ function updateBoss(game, dt, W, H) {
         });
       }
     } else {
-      boss.fireTimer = 1.3;
+      boss.fireTimer = 1.3 * mul;
       const p = game.player;
       for (let i = 0; i < 3; i++) enemyFireAt(game, boss, p.x + (i - 1) * 14, p.y, CFG.enemyBullet.speed * 1.1);
     }

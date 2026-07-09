@@ -33,6 +33,7 @@ const elBossName = $('#boss-name');
 const elBossFill = $('#boss-hp-fill');
 const elBanner = $('#banner');
 const btnStart = $('#btn-start');
+const btnStartKid = $('#btn-start-kid');
 const btnAutoStart = $('#btn-auto-start');
 const btnHow = $('#btn-how');
 const btnMute = $('#btn-mute');
@@ -58,6 +59,7 @@ let best = store.get('best', 0);
 let bannerTimer = 0;
 // 환경설정(localStorage 저장) + 치트 상태(세션).
 let apSkill = store.get('apSkill', CFG.autopilot.default);
+let difficulty = store.get('difficulty', 'normal'); // 'normal' | 'kid'(어린이 모드 = 적이 덜 쏨)
 let cheatEnabled = store.get('cheat', false);
 let cheatSpeed = 1;
 const cheatState = { invincible: false, dropChance: null, dropKinds: { P: true, S: true, E: true, T: true, H: true, B: true } };
@@ -68,6 +70,7 @@ function createGame() {
     score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
     front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, apSkill: CFG.autopilot.default, cheat: null,
+    difficulty: 'normal', enemyFireMul: 1, // 난이도(startGame에서 세팅). 어린이 모드면 적 발사 간격 배수>1
     bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
@@ -193,7 +196,8 @@ function resetGame() {
   startStage(game); // '구역 1' 배너 이벤트는 첫 프레임에 소비됨
 }
 
-function startGame() {
+function startGame(diff) {
+  if (diff) { difficulty = diff; store.set('difficulty', diff); } // 모드 버튼으로 시작하면 선택 기억
   sound.unlockAudio();
   menuScreen.hidden = true;
   gameScreen.hidden = false;
@@ -202,6 +206,8 @@ function startGame() {
   applyDevHook(); // 검증용: localhost에서 URL 파라미터로 시작 구역·파츠 지정
   setAutopilot(false); // 시작 시 기본은 수동(자동 시작 버튼이 이후 다시 켬)
   game.apSkill = apSkill;                       // 자동 플레이 실력 티어 반영
+  game.difficulty = difficulty;                 // 난이도 모드
+  game.enemyFireMul = (CFG.difficulty[difficulty] || CFG.difficulty.normal).enemyFireMul;
   game.cheat = cheatEnabled ? cheatState : null; // 치트 켜짐 시에만 core가 참조
   state = 'playing';
   updateCheatVisible();
@@ -317,7 +323,8 @@ function setupFullscreen() {
 }
 
 // ── 버튼 / 초기화 ──
-btnStart.addEventListener('click', startGame);
+btnStart.addEventListener('click', () => startGame('normal'));
+btnStartKid.addEventListener('click', () => startGame('kid'));
 btnHow.addEventListener('click', () => {
   const tips = $('#menu-tips');
   tips.hidden = !tips.hidden;

@@ -280,29 +280,37 @@ function drawBoss(ctx, game) {
   ctx.restore();
 }
 
-// 메인 총알 진화 외형(각진 계열). 원점 기준, 위쪽이 -y. rotate는 호출부에서 적용.
-//  capsule=기본 세로 캡슐 / diamond=마름모 / arrow=화살촉(다트) / cross=세로 십자 / star=4각 별.
-function drawMainShape(ctx, kind, rx, ry) {
+// 유도탄 로켓 실루엣. 원점 중심, 진행 방향 = 위(-y). rotate는 호출부에서 적용.
+//   뾰족한 노즈콘 + 원통 몸통 + 뒤 핀(양날개). tier(0~3, = 무기단계-1)↑일수록 뒷핀이 커져 강화를 보인다.
+//   fillStyle(몸체색)은 호출부가 지정. 노즈 흰 하이라이트만 여기서 잠깐 흰색으로 칠하고 복원한다.
+function drawRocket(ctx, r, tier) {
+  const half = r * 1.7;          // 몸통 세로 반길이
+  const w = r * 0.85;            // 몸통 반폭
+  const fin = w * (0.9 + tier * 0.35); // 뒤 핀 크기(강화될수록 큼)
+  // 뒤 핀(양쪽 삼각) - 몸통보다 먼저 그려 몸통이 위에 겹치게
   ctx.beginPath();
-  if (kind === 'diamond') {
-    ctx.moveTo(0, -ry); ctx.lineTo(rx, 0); ctx.lineTo(0, ry); ctx.lineTo(-rx, 0);
+  ctx.moveTo(-w, half * 0.15); ctx.lineTo(-w - fin, half * 1.05); ctx.lineTo(-w, half * 0.8); ctx.closePath(); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(w, half * 0.15); ctx.lineTo(w + fin, half * 1.05); ctx.lineTo(w, half * 0.8); ctx.closePath(); ctx.fill();
+  // 몸통(뾰족 노즈 + 원통) - 위가 뾰족한 총알형
+  ctx.beginPath();
+  ctx.moveTo(0, -half * 1.35);                     // 노즈 끝
+  ctx.quadraticCurveTo(w, -half * 0.5, w, 0);      // 오른 어깨 곡선
+  ctx.lineTo(w, half);                             // 오른 몸통 아래
+  ctx.lineTo(-w, half);                            // 왼 몸통 아래
+  ctx.lineTo(-w, 0);
+  ctx.quadraticCurveTo(-w, -half * 0.5, 0, -half * 1.35);
+  ctx.closePath(); ctx.fill();
+  // 노즈 흰 하이라이트(강화 표시, tier↑ 뚜렷)
+  if (tier >= 1) {
+    const prev = ctx.fillStyle;
+    ctx.fillStyle = `rgba(255,255,255,${0.4 + tier * 0.16})`;
+    ctx.beginPath();
+    ctx.moveTo(0, -half * 1.3);
+    ctx.quadraticCurveTo(w * 0.5, -half * 0.6, 0, -half * 0.35);
+    ctx.quadraticCurveTo(-w * 0.5, -half * 0.6, 0, -half * 1.3);
     ctx.closePath(); ctx.fill();
-  } else if (kind === 'arrow') {
-    ctx.moveTo(0, -ry * 1.5); ctx.lineTo(rx, ry); ctx.lineTo(0, ry * 0.35); ctx.lineTo(-rx, ry);
-    ctx.closePath(); ctx.fill();
-  } else if (kind === 'cross') {
-    ctx.fillRect(-rx * 0.34, -ry, rx * 0.68, ry * 2); // 세로 막대
-    ctx.fillRect(-rx, -ry * 0.34, rx * 2, ry * 0.68); // 가로 막대
-  } else if (kind === 'star') {
-    for (let i = 0; i < 8; i++) {
-      const a = i * Math.PI / 4 - Math.PI / 2;
-      const rr = i % 2 === 0 ? rx : rx * 0.42;
-      const fn = i === 0 ? 'moveTo' : 'lineTo';
-      ctx[fn](Math.cos(a) * rr, Math.sin(a) * rr);
-    }
-    ctx.closePath(); ctx.fill();
-  } else { // capsule
-    ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = prev;
   }
 }
 
@@ -344,39 +352,48 @@ function drawBullets(ctx, game) {
         ctx.shadowBlur = 0;
       }
     } else if (b.kind === 'missile') {
-      // 꼬리 유도탄: 메인 총알과 외형·색·단계 통일(무기 weapon 1~4 → mainShapes tier 0~3). 뒤 꼬리불은 유지.
+      // 꼬리 유도탄 = 로켓 실루엣(뾰족 노즈 + 몸통 + 뒤 핀). 무기 단계(1~4)로 핀·발광·색이 강해진다. 뒤 꼬리불 유지.
       const mv = Math.atan2(b.vy, b.vx);
       const ang = mv + Math.PI / 2;
-      const tier = Math.max(0, Math.min((b.weapon || 1) - 1, CFG.bullet.mainShapes.length - 1));
-      const sh = CFG.bullet.mainShapes[tier];
-      const col = COLORS.mainTier[tier];
+      const tier = Math.max(0, Math.min((b.weapon || 1) - 1, COLORS.tailMissileByStage.length - 1));
+      const col = COLORS.tailMissileByStage[tier];
+      // 뒤 꼬리불(진행 반대쪽)
       ctx.fillStyle = COLORS.missileTrail;
       ctx.beginPath();
-      ctx.arc(b.x - Math.cos(mv) * 6, b.y - Math.sin(mv) * 6, b.r * 0.7, 0, Math.PI * 2);
+      ctx.arc(b.x - Math.cos(mv) * b.r * 1.7, b.y - Math.sin(mv) * b.r * 1.7, b.r * 0.8, 0, Math.PI * 2);
       ctx.fill();
       ctx.save();
       ctx.translate(b.x, b.y);
       ctx.rotate(ang);
+      if (tier >= 2) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = 4 + tier * 3; }
       ctx.fillStyle = col;
-      if (sh.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = sh.glow; }
-      drawMainShape(ctx, sh.kind, b.r * sh.rx, b.r * sh.ry);
+      drawRocket(ctx, b.r, tier);
       ctx.restore();
       ctx.shadowBlur = 0;
     } else {
-      // 메인 총알: tier 0 = 기본 세로 캡슐, tier 1~4 = 각진 진화 외형(다이아→화살→십자→별). 진행 방향 회전.
+      // 메인 총알 = 레이저 빔(빛줄기). 발별 진화 tier↑이면 빔이 길고 굵고 밝아지며 흰 코어가 강해진다. 진행 방향 회전.
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
       const tier = b.tier || 0;
-      const sh = CFG.bullet.mainShapes[tier];
+      const bm = CFG.bullet.mainBeams[tier];
       const col = COLORS.mainTier[tier];
-      const rx = b.r * sh.rx, ry = b.r * sh.ry;
+      const w = b.r * bm.w;
       ctx.save();
       ctx.translate(b.x, b.y);
       ctx.rotate(ang);
+      if (bm.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = bm.glow; }
       ctx.fillStyle = col;
-      if (sh.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = sh.glow; }
-      drawMainShape(ctx, sh.kind, rx, ry);
-      ctx.restore();
+      ctx.fillRect(-w, -bm.len / 2, w * 2, bm.len);                          // 빔 외곽(색)
       ctx.shadowBlur = 0;
+      ctx.fillStyle = COLORS.laserCore;
+      const cw = w * bm.core, coreLen = bm.len * 0.84, coreTop = -bm.len * 0.42;
+      if (bm.seg > 0) {
+        // 마디진 흰 코어(에너지 빔 무늬): 마디와 간격을 같은 길이로 번갈아.
+        const unit = coreLen / (bm.seg * 2 - 1);
+        for (let i = 0; i < bm.seg; i++) ctx.fillRect(-cw, coreTop + i * unit * 2, cw * 2, unit);
+      } else {
+        ctx.fillRect(-cw, coreTop, cw * 2, coreLen);                         // 실선 흰 코어
+      }
+      ctx.restore();
     }
   }
   ctx.restore();

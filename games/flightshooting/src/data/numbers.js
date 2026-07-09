@@ -3,6 +3,12 @@
 
 export const CFG = {
   player: { r: 14, speed: 340, fireEvery: 0.154, maxLives: 3, invAfterHit: 1.6, yRatio: 0.82 },
+  // 난이도 모드(시작 화면에서 선택). 어린이 모드는 적·보스 발사 주기를 배수로 늘려 총알을 덜 쏘게 한다.
+  //   enemyFireMul = 적 발사 간격 배수(1 = 일반, 2.2 = 발사 간격 2.2배 → 총알 절반 이하). 탄 수·패턴은 그대로.
+  difficulty: {
+    normal: { enemyFireMul: 1 },
+    kid:    { enemyFireMul: 2.2 },
+  },
   // bullet.shapes: 전방화력 발별 진화 티어별 탄 렌더(docs/05 1.1.1). 인덱스 0=진화 전 기본, 1~4=진화 티어.
   //   모양이 원→타원→긴형→링으로 뚜렷이 바뀐다(색만이 아니라 형태로 성장을 보인다, 사용자 지시 2026-07-08).
   //   rx/ry = 기본 반경 대비 가로/세로 배율, glow = 발광 강도, ring = 도넛(고리)이면 뚫린 안쪽 반경 비율.
@@ -16,15 +22,17 @@ export const CFG = {
       { rx: 1.5, ry: 4.8, glow: 12 },             // 3 긴형(길고 뚜렷한 빔)
       { rx: 2.8, ry: 2.8, glow: 15, ring: 0.5 },  // 4 링(큰 발광 고리, 최종)
     ],
-    // 메인 총알(전방화력) 진화 외형: 각진 계열(다이아→화살→십자→별)로 사이드(둥근 계열)와 한눈에 구분.
-    //   kind = view가 그릴 형태. rx/ry = 기본 반경 대비 가로/세로 배율, glow = 발광 강도.
-    //   tier 2(화살)는 사용자 지시로 다른 티어의 절반 크기(작고 날카로운 관통 느낌).
-    mainShapes: [
-      { kind: 'capsule', rx: 1.0, ry: 2.0, glow: 0 },   // 0 무강화(기본, 세로 캡슐)
-      { kind: 'diamond', rx: 1.3, ry: 1.5, glow: 6 },   // 1 강화1단계 다이아몬드(절반 크기 - 사용자 지시 축소)
-      { kind: 'arrow',   rx: 2.2, ry: 3.0, glow: 9 },   // 2 강화2단계 화살촉(정상 크기)
-      { kind: 'cross',   rx: 2.8, ry: 3.4, glow: 11 },  // 3 강화3단계 세로 십자
-      { kind: 'star',    rx: 3.2, ry: 3.2, glow: 15 },  // 4 강화4단계 4각 별(최종)
+    // 메인 총알(전방화력) 진화 외형: 레이저 빔(빛줄기)을 유지한 채 강화(사용자 지시 2026-07-09).
+    //   각진 도형이 아니라 '광선' 형태 그대로, 발별 진화 티어↑일수록 빔이 길고 굵고 밝아지며 흰 코어가 강해진다.
+    //   w = 빔 반폭 배율(기본 반경 대비), len = 빔 길이(px), core = 흰 코어 폭 비율(0~1), glow = 발광 강도.
+    //   seg = 흰 코어를 몇 마디로 끊어 그릴지(0=실선). 고티어일수록 마디가 늘어 '에너지 빔' 무늬가 생긴다
+    //         (여러 발이 나란히 나가도 벽처럼 완전히 뭉치지 않고 패턴으로 보이게, 사용자 지시 2026-07-09).
+    mainBeams: [
+      { w: 0.42, len: 18, core: 0.42, glow: 0,  seg: 0 },  // 0 무강화(가는 실선 빔)
+      { w: 0.50, len: 23, core: 0.44, glow: 6,  seg: 0 },  // 1 강화1(조금 굵고 김, 실선)
+      { w: 0.60, len: 28, core: 0.44, glow: 9,  seg: 2 },  // 2 강화2(마디 2 - 무늬 시작)
+      { w: 0.70, len: 33, core: 0.46, glow: 12, seg: 3 },  // 3 강화3(마디 3)
+      { w: 0.82, len: 39, core: 0.48, glow: 16, seg: 4 },  // 4 강화4(최종, 길고 밝은 광선 + 촘촘한 마디 4)
     ],
   },
   enemyBullet: { speed: 250, r: 5 },
@@ -32,9 +40,11 @@ export const CFG = {
   parts: {
     // 전방 화력(= 메인 총알, 내 비행기가 쏜다): front 1~40. 1~8=탄 수, 9~40=발별 진화(사이드와 같은 구조).
     //   메인 총알은 직진으로 나간다(부채 없음). 여러 발이면 laneGap 간격으로 가로로 나란히 평행 발사.
-    //   9단계부터 8발 고정, 가운데 탄부터 한 발씩 mainShapes 티어로 진화(원래 메인 구조 복원, 외형만 각진 세트).
+    //   9단계부터 8발 고정, 가운데 탄부터 한 발씩 mainBeams 티어로 진화(레이저 빔이 굵고 길고 밝아진다).
     //   tierMax = 진화 티어 수, shapeDmg = 티어 1당 탄 데미지 증가.
-    front: { max: 40, rBase: 3.2, rGrow: 0, laneGap: 11, tierMax: 4, shapeDmg: 1 },
+    // vStagger = 여러 발일 때 바깥 탄일수록 살짝 뒤(아래)에서 출발시키는 V자 대형 오프셋(px/가로거리).
+    //   8발이 같은 높이에 일렬로 뭉쳐 격자처럼 보이던 것을 은은한 화살촉 대형으로 풀어준다(사용자 지시 2026-07-09).
+    front: { max: 40, rBase: 3.2, rGrow: 0, laneGap: 11, tierMax: 4, shapeDmg: 1, vStagger: 0.42 },
     option: {
       maxPerSide: 4,          // 좌우 각 4대 → 총 8대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격
@@ -63,7 +73,7 @@ export const CFG = {
       gap: 10, r: 5.5,          // 앞 개체 뒤 간격(px) + 꼬리기 반경(체인 간격 계산·렌더 공용)
       follow: 10,               // 앞 개체 추종 속도(초당 비율) - 클수록 덜 늘어진다
       missileEvery: 2.7, missileSpeed: 300, missileTurn: 3.2, missileAccel: 520,
-      missileR: 3.5, missileRGrow: 1.1,
+      missileR: 2.4, missileRGrow: 0.6,
       missileDmgBase: 3, missileDmgGrow: 1.5,
     },
   },

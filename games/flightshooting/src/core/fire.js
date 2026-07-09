@@ -40,9 +40,10 @@ export function frontSpec(front) {
 export function playerFire(game) {
   const p = game.player;
   const spec = frontSpec(game.front);
+  const vStag = CFG.parts.front.vStagger || 0;
   for (const b of spec.bullets) {
     game.bullets.push({
-      x: p.x + b.xOff, y: p.y - p.r,
+      x: p.x + b.xOff, y: p.y - p.r + Math.abs(b.xOff) * vStag, // 바깥 탄일수록 살짝 뒤(아래) = V자 대형
       vx: 0, vy: -CFG.bullet.speed,
       r: spec.r, dmg: b.dmg, kind: 'main', tier: b.tier, // tier로 view가 외형·색 분기
     });

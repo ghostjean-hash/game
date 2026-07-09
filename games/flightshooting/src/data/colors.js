@@ -10,8 +10,9 @@ export const COLORS = {
   // 사이드 총알(옵션기 S) 진화 티어별 색(둥근 계열 shapes용). 인덱스 0=진화 전(기본 시안), 1~4=진화 티어.
   // 전부 아군 차가운색(적탄 빨강·노란 코어와 절대 안 겹치게). 티어↑ 밝기·글로우도 계단식 상승.
   bulletShapeTier: ['#22d3ee', '#ffffff', '#7dd3fc', '#5effd0', '#c7f9ff'],
-  // 메인 총알(전방화력 P) 진화 티어별 색(각진 계열 mainShapes용). 사이드와 외형+색조로 구분(메인=흰-파랑).
-  mainTier: ['#c9fbff', '#9fe8ff', '#ffffff', '#6fc6ff', '#e6f7ff'],
+  // 메인 총알(전방화력 P) = 레이저 빔의 외곽색(mainBeams용). 티어↑ 밝아진다. 흰 코어(laserCore)와 겹쳐 광선감.
+  //   사이드 레이저(라벤더)와 색조로 구분: 메인 = 시안-하늘 계열. 적탄 빨강과 절대 안 겹치는 아군 차가운색.
+  mainTier: ['#4fc8ff', '#5fd4ff', '#7ee4ff', '#a6f0ff', '#d4faff'],
   // 적탄: 선명한 빨강 몸 + 노란 코어(view에서). 아군(시안/흰)과 뚜렷이 대비되는 '뜨거운' 경고색.
   enemyBullet: '#ff2d3a',
   enemyBulletCore: '#ffd24a',
