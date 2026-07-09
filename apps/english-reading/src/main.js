@@ -14,7 +14,8 @@ const store = createStorage("english-reading");
 const el = {
   back: document.getElementById("nav-back"),
   title: document.getElementById("topbar-title"),
-  guide: document.getElementById("nav-guide"),
+  chunk: document.getElementById("nav-chunk"),
+  word: document.getElementById("nav-word"),
   vocab: document.getElementById("nav-vocab"),
   bar: document.getElementById("bar-fill"),
   stage: document.getElementById("stage"),
@@ -23,7 +24,26 @@ const el = {
 let course = null;
 let baseData = null; // passages.json 원본(기본 지문)
 let currentPassage = null; // 지금 읽는 지문 - 단어장 등에서 돌아올 대상
-let readMode = "chunk"; // 읽기 모드: "chunk"(끊기만 반응) / "word"(단어만 반응) - 터치 충돌 차단
+// 끊기/단어 터치 토글(각각 독립 on/off) - 둘이 본문에서 붙어 생기던 오터치를 사용자가 직접 조절.
+let touchChunk = true;   // 켜짐: 단어 사이 틈을 눌러 끊기 / 꺼짐: 틈 터치 무시
+let touchWord = false;   // 켜짐: 주요 단어를 눌러 수집 / 꺼짐: 단어 터치 무시
+{ const t = store.get("touch", {}) || {}; touchChunk = t.chunk !== false; touchWord = !!t.word; }
+const saveTouch = () => store.set("touch", { chunk: touchChunk, word: touchWord });
+// 토글 클릭 = 해당 터치 on/off 반전. 상단바 버튼은 앱 내내 하나라 여기서 1회 바인딩.
+el.chunk.onclick = () => { touchChunk = !touchChunk; saveTouch(); applyTouch(); };
+el.word.onclick = () => { touchWord = !touchWord; saveTouch(); applyTouch(); };
+// 토글 상태를 버튼(active/aria) + 본문(no-chunk/no-word로 pointer-events 제어)에 반영.
+function applyTouch() {
+  el.chunk.classList.toggle("active", touchChunk);
+  el.chunk.setAttribute("aria-pressed", touchChunk ? "true" : "false");
+  el.word.classList.toggle("active", touchWord);
+  el.word.setAttribute("aria-pressed", touchWord ? "true" : "false");
+  const art = el.stage.querySelector(".article");
+  if (art) {
+    art.classList.toggle("no-chunk", !touchChunk);
+    art.classList.toggle("no-word", !touchWord);
+  }
+}
 let toastTimer = null; // 토스트 자동 닫힘 타이머
 const TOAST_MS = 1600; // 토스트가 스스로 사라지기까지
 
@@ -83,15 +103,6 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove("show"), TOAST_MS);
 }
 function removeHint() { const h = document.getElementById("first-hint"); if (h) h.remove(); }
-// 읽기 모드 적용 - 본문에 mode 클래스를 걸어 한 모드에서 한 종류(끊기 or 단어)만 터치 반응하게 한다.
-function applyMode() {
-  const art = el.stage.querySelector(".article");
-  if (art) {
-    art.classList.toggle("mode-chunk", readMode === "chunk");
-    art.classList.toggle("mode-word", readMode === "word");
-  }
-  el.stage.querySelectorAll(".mode-btn").forEach((b) => b.classList.toggle("active", b.dataset.mode === readMode));
-}
 // 텍스트를 클립보드로 복사(안 되는 환경이면 안내만)
 function copyText(text, okMsg) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -101,13 +112,14 @@ function copyText(text, okMsg) {
   }
 }
 
-function setTop({ title, onBack, showVocab, showGuide }) {
+function setTop({ title, onBack, showVocab }) {
   el.title.textContent = title;
   el.back.onclick = onBack;
   el.vocab.style.display = showVocab ? "" : "none";
   el.vocab.onclick = renderVocab;
-  el.guide.style.display = showGuide ? "" : "none";
-  el.guide.onclick = openGuide;
+  // 끊기/단어 토글은 기본 숨김 - 읽기 화면에서만 개별 노출(renderReading)
+  el.chunk.style.display = "none";
+  el.word.style.display = "none";
 }
 
 function labeledBlock(label, text, mod) {
@@ -178,7 +190,12 @@ function renderList() {
   authorBtn.className = "text-btn";
   authorBtn.textContent = "문제 출제";
   authorBtn.onclick = renderAuthor;
-  actions.append(setBtn, authorBtn);
+  const guideBtn = document.createElement("button");
+  guideBtn.type = "button";
+  guideBtn.className = "text-btn";
+  guideBtn.textContent = "끊는 기준";
+  guideBtn.onclick = openGuide;
+  actions.append(guideBtn, setBtn, authorBtn);
   stage.appendChild(actions);
 }
 
@@ -188,7 +205,10 @@ function renderReading(p) {
   store.set("lastPassage", p.id); // 앱 재시작 시 '이어읽기' 대상
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
-  setTop({ title: p.titleKr, onBack: renderList, showVocab: true, showGuide: settings.chunks });
+  setTop({ title: p.titleKr, onBack: renderList, showVocab: true });
+  // 상단바 끊기/단어 토글 - 해당 노출 설정이 켜졌을 때만 표시(읽기 화면 전용)
+  el.chunk.style.display = settings.chunks ? "" : "none";
+  el.word.style.display = settings.words ? "" : "none";
 
   const stage = el.stage;
   stage.className = "stage reading-stage";
@@ -199,33 +219,16 @@ function renderReading(p) {
     const hint = document.createElement("div");
     hint.className = "first-hint";
     hint.id = "first-hint";
-    hint.textContent = "위 '끊기/단어' 스위치로 지금 무엇을 누를지 정하세요. 끊기 모드에선 단어 사이 틈을 눌러 선(/)을 긋고, 단어 모드에선 모르는 단어를 눌러 담습니다. 문장 끝 [해석]으로 채점합니다.";
+    hint.textContent = "상단의 끊기·단어 버튼으로 지금 무엇을 누를지 켜고 끄세요. 끊기를 켜면 단어 사이 틈을 눌러 선(/)을 긋고, 단어를 켜면 모르는 단어를 눌러 담습니다. 문장 끝 [해석]으로 채점합니다.";
     stage.appendChild(hint);
     store.set("seenIntro", true);
   }
 
-  // 끊기/단어 모드 스위치 - 둘 다 켜졌을 때만. 한 모드에서 한 종류만 반응해 손끝 오터치를 원천 차단.
-  const dualMode = settings.chunks && settings.words;
-  if (dualMode) {
-    const modeBar = document.createElement("div");
-    modeBar.className = "mode-bar";
-    [["chunk", "✂️ 끊기"], ["word", "📖 단어"]].forEach(([mode, label]) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "mode-btn" + (readMode === mode ? " active" : "");
-      b.dataset.mode = mode;
-      b.textContent = label;
-      b.onclick = () => { readMode = mode; applyMode(); };
-      modeBar.appendChild(b);
-    });
-    stage.appendChild(modeBar);
-  }
-
   const article = document.createElement("div");
   article.className = "article";
-  if (dualMode) article.classList.add(readMode === "chunk" ? "mode-chunk" : "mode-word");
   p.sentences.forEach((s, i) => article.appendChild(renderSentence(s, i, p, settings)));
   stage.appendChild(article);
+  applyTouch(); // 토글 상태를 버튼·본문(no-chunk/no-word)에 반영
 
   // 다회독 루프 - 회독을 마칠 때마다 같은 지문을 새 마음으로 다시 읽도록 유도
   const nextRound = (getReads()[p.id] || 0) + 1;
