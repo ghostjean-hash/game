@@ -32,23 +32,23 @@ function drawBackground(ctx, game, W, H) {
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 }
 
-// 에너지존: 플레이어 중심 반투명 오라(글로우 대신 radial gradient - 단일 요소라 발열 부담 적음).
+// 에너지존 = 펄스파: 플레이어 중심에서 퍼지는 링을 그린다. 커질수록 옅어져 파동이 나가는 게 보인다.
+//   링 두께(lineWidth) = 피해 판정 폭과 같아 "여기 맞으면 아프다"가 직관적으로 읽힌다.
 function drawZone(ctx, game) {
   const z = game.zone, p = game.player;
-  if (!z || z.level <= 0 || !p) return;
-  const R = CFG.parts.zone.radius[z.level] * (1 + Math.sin((game.elapsed || 0) * 3) * 0.04);
+  if (!z || z.level <= 0 || !p || !z.pulses || !z.pulses.length) return;
+  const Z = CFG.parts.zone;
+  const maxR = Z.maxRadius[z.level];
+  const thick = Z.thick[z.level];
   const c = COLORS.zoneRgbByLevel[z.level - 1] || COLORS.zoneRgbByLevel[COLORS.zoneRgbByLevel.length - 1];
   ctx.save();
-  ctx.translate(p.x, p.y);
-  const grad = ctx.createRadialGradient(0, 0, R * 0.35, 0, 0, R);
-  grad.addColorStop(0, `rgba(${c},0.03)`);
-  grad.addColorStop(0.7, `rgba(${c},0.10)`);
-  grad.addColorStop(1, `rgba(${c},0.24)`);
-  ctx.fillStyle = grad;
-  ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = `rgba(${c},0.5)`;
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
+  for (const pulse of z.pulses) {
+    if (pulse.r <= 0) continue;
+    const fade = Math.max(0, 1 - pulse.r / maxR); // 멀리 갈수록 옅게
+    ctx.strokeStyle = `rgba(${c},${0.14 + fade * 0.5})`;
+    ctx.lineWidth = thick;
+    ctx.beginPath(); ctx.arc(p.x, p.y, pulse.r, 0, Math.PI * 2); ctx.stroke();
+  }
   ctx.restore();
 }
 
@@ -236,6 +236,32 @@ function drawBoss(ctx, game) {
   ctx.restore();
 }
 
+// 메인 총알 진화 외형(각진 계열). 원점 기준, 위쪽이 -y. rotate는 호출부에서 적용.
+//  capsule=기본 세로 캡슐 / diamond=마름모 / arrow=화살촉(다트) / cross=세로 십자 / star=4각 별.
+function drawMainShape(ctx, kind, rx, ry) {
+  ctx.beginPath();
+  if (kind === 'diamond') {
+    ctx.moveTo(0, -ry); ctx.lineTo(rx, 0); ctx.lineTo(0, ry); ctx.lineTo(-rx, 0);
+    ctx.closePath(); ctx.fill();
+  } else if (kind === 'arrow') {
+    ctx.moveTo(0, -ry * 1.5); ctx.lineTo(rx, ry); ctx.lineTo(0, ry * 0.35); ctx.lineTo(-rx, ry);
+    ctx.closePath(); ctx.fill();
+  } else if (kind === 'cross') {
+    ctx.fillRect(-rx * 0.34, -ry, rx * 0.68, ry * 2); // 세로 막대
+    ctx.fillRect(-rx, -ry * 0.34, rx * 2, ry * 0.68); // 가로 막대
+  } else if (kind === 'star') {
+    for (let i = 0; i < 8; i++) {
+      const a = i * Math.PI / 4 - Math.PI / 2;
+      const rr = i % 2 === 0 ? rx : rx * 0.42;
+      const fn = i === 0 ? 'moveTo' : 'lineTo';
+      ctx[fn](Math.cos(a) * rr, Math.sin(a) * rr);
+    }
+    ctx.closePath(); ctx.fill();
+  } else { // capsule
+    ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
+  }
+}
+
 // 총알/적탄은 수십 개가 매 프레임 그려지므로 글로우를 걸지 않는다(발열 핵심 요인).
 // 밝은 색 자체로 네온 느낌을 낸다.
 function drawBullets(ctx, game) {
@@ -274,30 +300,38 @@ function drawBullets(ctx, game) {
         ctx.shadowBlur = 0;
       }
     } else if (b.kind === 'missile') {
-      // 꼬리 비행기 유도탄: 진행 방향 캡슐 + 짧은 꼬리. 무기 단계(weapon 1~4)별 색·크기.
-      const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
-      const stage = COLORS.tailMissileByStage;
-      const col = stage[Math.max(0, Math.min((b.weapon || 1) - 1, stage.length - 1))];
+      // 꼬리 유도탄: 메인 총알과 외형·색·단계 통일(무기 weapon 1~4 → mainShapes tier 0~3). 뒤 꼬리불은 유지.
+      const mv = Math.atan2(b.vy, b.vx);
+      const ang = mv + Math.PI / 2;
+      const tier = Math.max(0, Math.min((b.weapon || 1) - 1, CFG.bullet.mainShapes.length - 1));
+      const sh = CFG.bullet.mainShapes[tier];
+      const col = COLORS.mainTier[tier];
       ctx.fillStyle = COLORS.missileTrail;
       ctx.beginPath();
-      ctx.arc(b.x - Math.cos(Math.atan2(b.vy, b.vx)) * 6, b.y - Math.sin(Math.atan2(b.vy, b.vx)) * 6, b.r * 0.7, 0, Math.PI * 2);
+      ctx.arc(b.x - Math.cos(mv) * 6, b.y - Math.sin(mv) * 6, b.r * 0.7, 0, Math.PI * 2);
       ctx.fill();
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(ang);
       ctx.fillStyle = col;
-      ctx.beginPath();
-      ctx.ellipse(b.x, b.y, b.r * 0.7, b.r * 1.3, ang, 0, Math.PI * 2);
-      ctx.fill();
+      if (sh.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = sh.glow; }
+      drawMainShape(ctx, sh.kind, b.r * sh.rx, b.r * sh.ry);
+      ctx.restore();
+      ctx.shadowBlur = 0;
     } else {
-      // 메인 총알: beam(레이저 강화 레벨)만큼 길고 굵어진다(관통 없음). 시안 고정 + beam↑이면 발광 강화.
+      // 메인 총알: tier 0 = 기본 세로 캡슐, tier 1~4 = 각진 진화 외형(다이아→화살→십자→별). 진행 방향 회전.
       const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
-      const F = CFG.parts.front;
-      const beam = b.beam || 0;
-      const rx = b.r * (1 + beam * F.beamWidGrow);        // 굵기
-      const ry = b.r * 2.2 * (1 + beam * F.beamLenGrow);  // 길이(기본 세로 타원 2.2배에서 더 늘어남)
-      ctx.fillStyle = COLORS.bullet;
-      if (beam > 0) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = Math.min(3 + beam * 0.4, 16); }
-      ctx.beginPath();
-      ctx.ellipse(b.x, b.y, rx, ry, ang, 0, Math.PI * 2);
-      ctx.fill();
+      const tier = b.tier || 0;
+      const sh = CFG.bullet.mainShapes[tier];
+      const col = COLORS.mainTier[tier];
+      const rx = b.r * sh.rx, ry = b.r * sh.ry;
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(ang);
+      ctx.fillStyle = col;
+      if (sh.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = sh.glow; }
+      drawMainShape(ctx, sh.kind, rx, ry);
+      ctx.restore();
       ctx.shadowBlur = 0;
     }
   }
@@ -336,12 +370,14 @@ function drawPowerups(ctx, game) {
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 1.5;
     if (it.kind === 'H') {
-      // 회복 = 하트 모양 그 자체(빨간 채움 + 흰 테두리 + 글로우).
-      const hs = it.r * 0.92;
+      // 회복 = 하트 모양 그 자체(빨간 채움 + 흰 테두리 + 글로우). 좌우 대칭 정석 하트 곡선.
+      const hs = it.r;
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = 1.8;
       ctx.beginPath();
-      ctx.moveTo(0, hs * 0.75);
-      ctx.bezierCurveTo(hs * 1.2, -hs * 0.3, hs * 0.55, -hs * 1.15, 0, -hs * 0.35);
-      ctx.bezierCurveTo(-hs * 0.55, -hs * 1.15, -hs * 1.2, -hs * 0.3, 0, hs * 0.75);
+      ctx.moveTo(0, hs * 0.9);                                        // 아래 뾰족점
+      ctx.bezierCurveTo(-hs * 1.15, -hs * 0.1, -hs * 0.65, -hs * 1.05, 0, -hs * 0.32); // 왼쪽 잎 → 중앙 홈
+      ctx.bezierCurveTo(hs * 0.65, -hs * 1.05, hs * 1.15, -hs * 0.1, 0, hs * 0.9);     // 오른쪽 잎 → 아래 점
       ctx.closePath(); ctx.fill(); ctx.stroke();
       ctx.restore();
       continue;

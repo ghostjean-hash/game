@@ -8,6 +8,7 @@ export const CFG = {
   //   rx/ry = 기본 반경 대비 가로/세로 배율, glow = 발광 강도, ring = 도넛(고리)이면 뚫린 안쪽 반경 비율.
   bullet: {
     speed: 496,
+    // 사이드 총알(옵션기) 진화 외형: 둥근 계열(원→타원→긴형→링). 인덱스 0=진화 전 기본.
     shapes: [
       { rx: 1.0, ry: 2.0, glow: 0 },              // 0 기본(진화 전, 작은 세로 타원)
       { rx: 2.6, ry: 2.6, glow: 6 },              // 1 원(확 큰 동그란 구슬 - 타원과 뚜렷이 대비)
@@ -15,15 +16,25 @@ export const CFG = {
       { rx: 1.5, ry: 4.8, glow: 12 },             // 3 긴형(길고 뚜렷한 빔)
       { rx: 2.8, ry: 2.8, glow: 15, ring: 0.5 },  // 4 링(큰 발광 고리, 최종)
     ],
+    // 메인 총알(전방화력) 진화 외형: 각진 계열(다이아→화살→십자→별)로 사이드(둥근 계열)와 한눈에 구분.
+    //   kind = view가 그릴 형태. rx/ry = 기본 반경 대비 가로/세로 배율, glow = 발광 강도.
+    //   tier 2(화살)는 사용자 지시로 다른 티어의 절반 크기(작고 날카로운 관통 느낌).
+    mainShapes: [
+      { kind: 'capsule', rx: 1.0, ry: 2.0, glow: 0 },   // 0 무강화(기본, 세로 캡슐)
+      { kind: 'diamond', rx: 1.3, ry: 1.5, glow: 6 },   // 1 강화1단계 다이아몬드(절반 크기 - 사용자 지시 축소)
+      { kind: 'arrow',   rx: 2.2, ry: 3.0, glow: 9 },   // 2 강화2단계 화살촉(정상 크기)
+      { kind: 'cross',   rx: 2.8, ry: 3.4, glow: 11 },  // 3 강화3단계 세로 십자
+      { kind: 'star',    rx: 3.2, ry: 3.2, glow: 15 },  // 4 강화4단계 4각 별(최종)
+    ],
   },
   enemyBullet: { speed: 250, r: 5 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
   parts: {
-    // 전방 화력(= 메인 총알, 내 비행기가 쏜다): front 1~40. 1~8=탄 수, 9~40=레이저식 강화.
+    // 전방 화력(= 메인 총알, 내 비행기가 쏜다): front 1~40. 1~8=탄 수, 9~40=발별 진화(사이드와 같은 구조).
     //   메인 총알은 직진으로 나간다(부채 없음). 여러 발이면 laneGap 간격으로 가로로 나란히 평행 발사.
-    //   9단계부터는 beam = front-8 만큼 탄이 '레이저처럼' 길고 굵어진다(관통 없음, 진화 모양은 사이드 총알로 이관).
-    //   beamLenGrow/beamWidGrow = beam 1당 세로 길이·가로 굵기 증가율, beamDmg = beam 1당 데미지 증가.
-    front: { max: 40, rBase: 3.2, rGrow: 0, laneGap: 11, beamDmg: 0.25, beamLenGrow: 0.09, beamWidGrow: 0.045 },
+    //   9단계부터 8발 고정, 가운데 탄부터 한 발씩 mainShapes 티어로 진화(원래 메인 구조 복원, 외형만 각진 세트).
+    //   tierMax = 진화 티어 수, shapeDmg = 티어 1당 탄 데미지 증가.
+    front: { max: 40, rBase: 3.2, rGrow: 0, laneGap: 11, tierMax: 4, shapeDmg: 1 },
     option: {
       maxPerSide: 4,          // 좌우 각 4대 → 총 8대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격
@@ -34,9 +45,15 @@ export const CFG = {
       //   안쪽(slot 0) 비행기는 살짝, 바깥(slot 3)으로 갈수록 더 크게 벌어져 부채를 펼친다. side로 좌/우 방향.
       laserEvery: 0.176, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 880, laserR: 1.1, laserRGrow: 0.15, laserDiagBase: 6, laserDiagStep: 5.5,
     },
+    // 에너지존(E) = 펄스파: 플레이어 중심에서 링이 주기적으로 바깥으로 퍼지고, 링이 지나가는 순간
+    //   링 위(두께 판정 내)에 있는 적·보스에게만 dmg = level 피해(상시 장판 아님, 사용자 지시 2026-07-09).
+    //   강화(레벨 1~5)할수록: 파동 주기↓(자주) · 최대 반경↑(멀리) · 링 두께↑(맞추기 쉬움) · 데미지↑(=level).
     zone: {
-      radius: [0, 34, 52, 70, 88, 106], // 레벨 0~5 반경
-      tick: 0.5,                        // 데미지 주기(초)
+      levelMax: 5,
+      period:    [0, 1.4, 1.15, 0.9, 0.7, 0.55], // 레벨별 파동 발생 주기(초). L↑ 자주
+      maxRadius: [0, 62, 82, 104, 126, 150],     // 레벨별 파동 최대 도달 반경
+      thick:     [0, 12, 15, 19, 23, 28],        // 레벨별 링 두께(= 피해 판정 폭 + 시각 굵기)
+      speed: 200,                                // 파동 확장 속도(px/s, 공통)
     },
     // 꼬리 비행기(T): 플레이어 뒤 유도탄 발사기. 4대 먼저 채운 뒤 1~4번 순서로 무기 진화(무기 4단계).
     //   배치: 세로 일렬 체인 - 1번은 플레이어를, 2번은 1번을, …각자 앞 개체를 개별 추종(뱀 꼬리처럼 출렁).
@@ -45,7 +62,7 @@ export const CFG = {
       maxCount: 4, weaponMax: 4,
       gap: 10, r: 5.5,          // 앞 개체 뒤 간격(px) + 꼬리기 반경(체인 간격 계산·렌더 공용)
       follow: 10,               // 앞 개체 추종 속도(초당 비율) - 클수록 덜 늘어진다
-      missileEvery: 0.9, missileSpeed: 300, missileTurn: 3.2, missileAccel: 520,
+      missileEvery: 2.7, missileSpeed: 300, missileTurn: 3.2, missileAccel: 520,
       missileR: 3.5, missileRGrow: 1.1,
       missileDmgBase: 3, missileDmgGrow: 1.5,
     },

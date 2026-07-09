@@ -15,29 +15,30 @@
 <script type="module">
 import { test, eq, ok, report } from './runner.js';
 import { frontSpec } from '../src/core/fire.js';
-import { optionSlot, gainFront, gainOption, gainZone, gainTail, loseLastPart } from '../src/core/parts.js';
+import { optionSlot, gainFront, gainOption, gainZone, gainTail, loseLastPart, tickZone } from '../src/core/parts.js';
 import { buildWaves, stageName } from '../src/core/waves.js';
 import { spawnEnemy, spawnBonus, spawnShards, dropItems } from '../src/core/spawn.js';
 import { autopilotStep } from '../src/core/autopilot.js';
 import { hit, checkCollisions } from '../src/core/world.js';
 
-const mkGame = () => ({ front: 1, options: [], zone: { level: 0, timer: null }, tail: [], partHistory: [], player: { x: 100, y: 100 } });
-// ── frontSpec: 메인 총알 1~8, 단계마다 탄 +1(개별 탄 균일, beam 0) ──
-test('frontSpec 1 = 1발 dmg1 beam0', () => { const s = frontSpec(1); eq(s.bullets.length, 1); eq(s.bullets[0].dmg, 1); eq(s.bullets[0].beam, 0); });
+const mkGame = () => ({ front: 1, options: [], zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [], player: { x: 100, y: 100 } });
+// ── frontSpec: 메인 총알 1~8, 단계마다 탄 +1(개별 탄 균일, tier 0) ──
+test('frontSpec 1 = 1발 dmg1 tier0', () => { const s = frontSpec(1); eq(s.bullets.length, 1); eq(s.bullets[0].dmg, 1); eq(s.bullets[0].tier, 0); });
 test('frontSpec 2 = 2발 dmg1', () => { const s = frontSpec(2); eq(s.bullets.length, 2); eq(s.bullets[0].dmg, 1); });
 test('frontSpec 3 = 3발 dmg2', () => { const s = frontSpec(3); eq(s.bullets.length, 3); eq(s.bullets[0].dmg, 2); });
-test('frontSpec 8 = 8발 dmg4 전부 beam0', () => { const s = frontSpec(8); eq(s.bullets.length, 8); ok(s.bullets.every((b) => b.dmg === 4 && b.beam === 0)); });
+test('frontSpec 8 = 8발 dmg4 전부 tier0', () => { const s = frontSpec(8); eq(s.bullets.length, 8); ok(s.bullets.every((b) => b.dmg === 4 && b.tier === 0)); });
 test('frontSpec 1~8 단계마다 탄 +1', () => {
   for (let L = 2; L <= 8; L++) ok(frontSpec(L).bullets.length === frontSpec(L - 1).bullets.length + 1, `L${L} 탄 수 미증가`);
 });
 test('frontSpec 9단계 이상 탄 수 8 고정', () => { for (let f = 9; f <= 40; f++) eq(frontSpec(f).bullets.length, 8); });
 test('frontSpec 상한 40 clamp', () => { eq(frontSpec(99).bullets.length, 8); });
-// ── 레이저식 강화: 8발 채운 뒤 beam = front-8 만큼 길고 굵어진다 ──
-test('frontSpec 8 = beam0(강화 전)', () => { ok(frontSpec(8).bullets.every((b) => b.beam === 0)); });
-test('frontSpec 9 = beam1', () => { ok(frontSpec(9).bullets.every((b) => b.beam === 1)); });
-test('frontSpec 40 = beam32(최대)', () => { ok(frontSpec(40).bullets.every((b) => b.beam === 32)); });
-test('frontSpec 빔 데미지 = 4 + floor(beam*0.25)', () => {
-  const s = frontSpec(40); for (const b of s.bullets) eq(b.dmg, 4 + Math.floor(32 * 0.25));
+// ── 발별 진화: 8발 채운 뒤 가운데 탄부터 한 발씩 티어 상승(사이드와 같은 공식, docs/05 1.1.1 검산점) ──
+test('frontSpec 9 = 가운데 1발만 tier1', () => { const t = frontSpec(9).bullets.map((b) => b.tier); eq(t.filter((x) => x === 1).length, 1); eq(t.filter((x) => x === 0).length, 7); });
+test('frontSpec 16 = 전원 tier1', () => { ok(frontSpec(16).bullets.every((b) => b.tier === 1)); });
+test('frontSpec 17 = 가운데 tier2 + 나머지 tier1', () => { const t = frontSpec(17).bullets.map((b) => b.tier); eq(t.filter((x) => x === 2).length, 1); eq(t.filter((x) => x === 1).length, 7); });
+test('frontSpec 40 = 전원 tier4(최대)', () => { ok(frontSpec(40).bullets.every((b) => b.tier === 4)); });
+test('frontSpec 진화 탄 데미지 = 4 + tier', () => {
+  const s = frontSpec(17); for (const b of s.bullets) eq(b.dmg, 4 + b.tier);
 });
 
 // ── optionSlot: 좌우 번갈아, 안→밖, 8대 전부 레이저(미사일 없음) ──
@@ -60,8 +61,17 @@ test('사이드 진화는 옵션 대수보다 먼저 역순 손실', () => {
   eq(loseLastPart(g), 'optionEvo'); eq(g.optionEvo, 31);
   eq(loseLastPart(g), 'optionEvo'); eq(g.optionEvo, 30);
 });
-test('gainZone 5레벨에서 상한 + timer 설정', () => {
-  const g = mkGame(); let n = 0; while (gainZone(g)) n++; eq(g.zone.level, 5); eq(n, 5); ok(g.zone.timer > 0);
+test('gainZone 5레벨에서 상한 + pulses 준비', () => {
+  const g = mkGame(); let n = 0; while (gainZone(g)) n++; eq(g.zone.level, 5); eq(n, 5); ok(Array.isArray(g.zone.pulses));
+});
+test('존 펄스파: 링이 도달해야만 피해(상시 아님)', () => {
+  const g = mkGame(); g.sfx = []; g.particles = []; g.powerups = [];
+  g.enemies = [{ x: 100, y: 40, r: 10, hp: 5, dead: false, type: 'drone', color: '#fff', score: 0 }]; // 플레이어(100,100) 위 60px
+  gainZone(g); // level 1
+  tickZone(g, 0.016);                       // 파동 생성 직후엔 아직 미도달
+  eq(g.enemies[0].hp, 5, '파동 생성 순간엔 무피해');
+  for (let i = 0; i < 40; i++) tickZone(g, 0.016); // 파동이 적까지 확장
+  ok(g.enemies[0].hp < 5, '파동이 지나간 뒤 피해');
 });
 
 // ── 꼬리 비행기(T): 4대 먼저 → 1~4번 순차 무기 진화(무기 4단계) ──

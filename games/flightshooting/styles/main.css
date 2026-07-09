@@ -35,10 +35,18 @@
 .mini-hud .mh b { font-size: 15px; font-weight: 700; }
 .mini-hud .sep { color: var(--fg-mute); align-self: center; }
 /* 파츠별 라벨 색(전방·옵션·존을 한눈에 구분) */
-.mini-hud .l-front { color: var(--sky-power); }
-.mini-hud .l-option { color: #5fe8ff; }
-.mini-hud .l-zone { color: #a98bff; }
-.mini-hud .l-tail { color: #6ee7a8; }
+/* 파츠 HUD를 획득 아이템과 동일한 느낌으로: 아이템 색 배지 + 글자(P/S/E/T) + 값 */
+.mini-hud .mh.row { flex-direction: row; gap: 4px; }
+.mini-hud .pbadge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 17px; height: 17px; border-radius: 5px;
+  font-size: 11px; font-weight: 800; font-style: normal;
+  color: #101420; border: 1.5px solid rgba(255, 255, 255, 0.9);
+}
+.mini-hud .pbadge.b-P { background: #f7c948; box-shadow: 0 0 6px rgba(247, 201, 72, 0.8); }
+.mini-hud .pbadge.b-S { background: #5fe8ff; box-shadow: 0 0 6px rgba(95, 232, 255, 0.8); }
+.mini-hud .pbadge.b-E { background: #a98bff; box-shadow: 0 0 6px rgba(169, 139, 255, 0.8); }
+.mini-hud .pbadge.b-T { background: #6ee7a8; box-shadow: 0 0 6px rgba(110, 231, 168, 0.8); }
 /* 마스터(최대 강화 단계): 숫자 대신 ★ 금색 + 글로우로 최고 도달을 표현 */
 .mini-hud .mh b.mastered { color: #ffd54a; text-shadow: 0 0 8px rgba(255, 213, 74, 0.85); }
 .lives { display: flex; gap: 3px; align-items: center; }

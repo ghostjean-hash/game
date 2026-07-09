@@ -61,7 +61,7 @@ function createGame() {
   return {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
     score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
-    front: 1, options: [], optionEvo: 0, zone: { level: 0, timer: null }, tail: [], partHistory: [],
+    front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
@@ -134,10 +134,13 @@ function setPartHud(el, val, max, extra = 0) {
   el.textContent = mastered ? (extra ? '★' + extra : '★') : val;
   el.classList.toggle('mastered', mastered);
 }
-// 메인 총알: 8발 도달이 1차 만렙(★), 그 뒤 레이저 강화 레벨(beam = front-8)을 ★N으로 붙인다.
+// 메인 총알: 8발 도달이 1차 만렙(★), 그 뒤 발별 진화 최고 티어(front-8 기준)를 ★N으로 붙인다.
 function setFrontHud() {
-  if (game.front < 8) { elFront.textContent = game.front; elFront.classList.remove('mastered'); }
-  else { const beam = game.front - 8; elFront.textContent = beam > 0 ? '★' + beam : '★'; elFront.classList.add('mastered'); }
+  if (game.front < 8) { elFront.textContent = game.front; elFront.classList.remove('mastered'); return; }
+  const evo = game.front - 8;
+  const tier = evo > 0 ? Math.min(Math.floor((evo - 1) / 8) + 1, CFG.parts.front.tierMax) : 0;
+  elFront.textContent = tier > 0 ? '★' + tier : '★';
+  elFront.classList.add('mastered');
 }
 // 꼬리기: 4대 미만이면 대수, 4대 도달 후엔 ★ + 전체 최저 무기 단계(모든 꼬리기가 오른 단계).
 function setTailHud() {
@@ -154,7 +157,7 @@ function syncHud() {
   setFrontHud();
   const sideEvo = game.optionEvo ? Math.min(Math.floor((game.optionEvo - 1) / 8) + 1, CFG.bullet.shapes.length - 1) : 0;
   setPartHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2, sideEvo);
-  setPartHud(elZone, game.zone.level, CFG.parts.zone.radius.length - 1);
+  setPartHud(elZone, game.zone.level, CFG.parts.zone.levelMax);
   setTailHud();
   const lifeEls = elLives.querySelectorAll('.life');
   lifeEls.forEach((el, i) => el.classList.toggle('spent', i >= game.lives));

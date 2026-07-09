@@ -78,9 +78,9 @@ export function gainOption(game) {
   return false;
 }
 export function gainZone(game) {
-  if (game.zone.level >= ZONE.radius.length - 1) return false;
+  if (game.zone.level >= ZONE.levelMax) return false;
   game.zone.level++;
-  if (game.zone.timer == null) game.zone.timer = ZONE.tick;
+  if (!game.zone.pulses) game.zone.pulses = [];
   game.partHistory.push('zone');
   return true;
 }
@@ -201,38 +201,50 @@ export function homeMissiles(game, dt) {
 }
 
 export function zoneRadius(game) {
-  return game.zone && game.zone.level > 0 ? ZONE.radius[game.zone.level] : 0;
+  return game.zone && game.zone.level > 0 ? ZONE.maxRadius[game.zone.level] : 0;
 }
 
-// 에너지존: tick마다 존 반경 내 적·보스에 레벨만큼 피해. 죽은 적은 여기서 처리(보스는 hp만, world가 격파 판정).
+// 에너지존 = 펄스파: 주기(period)마다 플레이어 중심에서 링이 발생해 speed로 바깥 확장.
+//   링이 적·보스를 '지나가는 순간'(반경 ±두께/2 안에 걸칠 때) 한 번만 dmg = level 피해.
+//   한 파동이 같은 대상을 두 번 때리지 않게 pulse.hit에 맞은 대상을 기록한다. 죽은 적 처리는 여기서.
 export function tickZone(game, dt) {
-  if (!game.zone || game.zone.level <= 0 || !game.player) return;
-  game.zone.timer -= dt;
-  if (game.zone.timer > 0) return;
-  game.zone.timer += ZONE.tick;
-  const R = ZONE.radius[game.zone.level];
-  const dmg = game.zone.level;
+  const z = game.zone;
+  if (!z || z.level <= 0 || !game.player) return;
   const p = game.player;
+  const dmg = z.level;
+  const maxR = ZONE.maxRadius[z.level];
+  const half = ZONE.thick[z.level] / 2;
+  if (!z.pulses) z.pulses = [];
+  // 새 파동 발생(주기마다). 주기는 레벨↑이면 짧아진다.
+  z.spawnTimer = (z.spawnTimer || 0) - dt;
+  if (z.spawnTimer <= 0) {
+    z.spawnTimer += ZONE.period[z.level];
+    z.pulses.push({ r: 0, hit: [] });
+    game.sfx.push('zone');
+  }
   let hitAny = false;
-  for (const e of game.enemies) {
-    if (e.dead) continue;
-    const rr = R + e.r;
-    if ((e.x - p.x) ** 2 + (e.y - p.y) ** 2 > rr * rr) continue;
-    e.hp -= dmg;
-    hitAny = true;
-    if (e.hp <= 0) {
-      e.dead = true;
-      game.score += e.score;
-      burst(game, e.x, e.y, e.color, 14);
-      if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체만 드롭
-      if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐
-      game.sfx.push('explode');
+  for (const pulse of z.pulses) {
+    pulse.r += ZONE.speed * dt;
+    for (const e of game.enemies) {
+      if (e.dead || pulse.hit.includes(e)) continue;
+      const d = Math.hypot(e.x - p.x, e.y - p.y);
+      if (Math.abs(d - pulse.r) > half + e.r) continue;
+      e.hp -= dmg; pulse.hit.push(e); hitAny = true;
+      if (e.hp <= 0) {
+        e.dead = true;
+        game.score += e.score;
+        burst(game, e.x, e.y, e.color, 14);
+        if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체만 드롭
+        if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐
+        game.sfx.push('explode');
+      }
+    }
+    if (game.boss && !game.boss.entering && !pulse.hit.includes(game.boss)) {
+      const b = game.boss;
+      const d = Math.hypot(b.x - p.x, b.y - p.y);
+      if (Math.abs(d - pulse.r) <= half + (b.rx || b.r)) { b.hp -= dmg; pulse.hit.push(b); hitAny = true; }
     }
   }
-  if (game.boss && !game.boss.entering) {
-    const b = game.boss;
-    const rr = R + (b.rx || b.r);
-    if ((b.x - p.x) ** 2 + (b.y - p.y) ** 2 <= rr * rr) { b.hp -= dmg; hitAny = true; }
-  }
-  if (hitAny) { burst(game, p.x, p.y, COLORS.zone, 3); game.sfx.push('zone'); }
+  z.pulses = z.pulses.filter((pulse) => pulse.r <= maxR); // 최대 반경 넘은 파동 소멸
+  if (hitAny) burst(game, p.x, p.y, COLORS.zone, 2);
 }
