@@ -227,3 +227,10 @@
 - 수정: renderSentence 단어 조건에 meaningByClean.has(tok.clean) 추가 - 뜻이 등록된 주요 단어만 .w.word(터치·수집), 일반 단어는 무반응. 터치 대상이 소수로 줄어 틈과의 충돌 대폭 감소. (2.22 '모든 단어 클릭'을 부분 되돌림, 사용자 재지시.)
 - 채점 표시 조정: 틀린 끊기 / 색을 더 연한 회색(#ccd2dc)으로(뒤로 물러남) + 빼먹은 끊기 / 위에 작은 붉은 삼각형(▾) 마크 추가(.gap.g-missed::before). 맞음(빈 원)/틀림(x)/빼먹음(삼각형) 3표시 모양 구분 완성.
 - 검증: 유닛 통과, browser-shot로 주요단어(spilled)만 .w.word·일반단어(coffee) 터치불가 + 틀림 연회색+x·빼먹음 빨간/+삼각형 실측 + 콘솔 0. 실서비스 smoke 통과. CLAUDE.md 1.3/4.3/5.1/5.2·기획서 3.3 정합. 커밋 ec34e74, SW v166→v167.
+
+## 2.30. 끊기/단어 모드 스위치 - 터치 충돌 원천 차단 (2026-07-09, 사용자 "끊기와 단어 터치는 스트레스 폭발 포인트, 근본 방법?")
+
+- 진단: 끊기(단어 사이 좁은 틈)와 단어가 본문에서 물리적으로 붙어 손끝 구분 불가 → 표적 축소(2.29)로는 완화만 되지 근본 해결 안 됨. 3안 제시 후 사용자 선택 '모드 스위치'(AskUserQuestion).
+- 구현: readMode 전역("chunk"/"word", 기본 chunk) + 읽기 화면 상단 '끊기 ✂️ / 단어 📖' 세그먼트 스위치(둘 다 켜졌을 때만 노출) + article에 mode-chunk/mode-word 클래스. CSS로 .mode-chunk .w.word{pointer-events:none} / .mode-word .gap{pointer-events:none} - 한 모드에서 한 종류만 터치 반응. applyMode가 클래스·버튼 active 갱신. 그은 선 표시는 pointer-events 무관이라 모드 전환에도 유지.
+- 첫 안내 문구를 모드 사용법으로 갱신. 노출 설정으로 한쪽만 켜면 스위치 없이 그 하나만 동작.
+- 검증: 유닛 통과, browser-shot 9항목(스위치 표시·기본 끊기 active·끊기모드 단어 pointer-events none·틈 auto·긋기 동작·단어 전환·틈 none·단어 auto·수집 동작) + 콘솔 0. 실서비스 smoke 통과. CLAUDE.md 1.3·기획서 손끝규칙 정합. 커밋 ac99c6a, SW v167→v168.
