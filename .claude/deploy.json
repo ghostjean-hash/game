@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(flightshooting): 보스 부위 파괴형 전면 개편(스타일 4종) + 적 출현 폭 2배",
+    "commitMessage": "fix(flightshooting): 봄으로 죽은 보너스 기체도 파워업 확정 드롭",
     "paths": ["games/flightshooting", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

@@ -306,6 +306,16 @@ test('살아있는 weapon 부위는 발사, 죽은 부위는 정지', () => {
   eq(g.eBullets.length, 0, '죽은 포탑은 발사 안 함');
 });
 
+// ── 봄(B): 전멸시키되 보너스 기체만 확정 드롭(잡몹은 드롭 없음) ──
+test('봄으로 죽은 보너스는 드롭, 잡몹은 드롭 없음', () => {
+  const g = { player: { x: 100, y: 100, r: 14, inv: 1 }, bullets: [], particles: [], boss: null, score: 0, sfx: [],
+    enemies: [{ type: 'bonus', x: 300, y: 50, score: 500, color: '#fff' }, { type: 'drone', x: 340, y: 50, score: 100, color: '#fff' }],
+    eBullets: [], powerups: [{ x: 100, y: 100, r: 12, kind: 'B' }] };
+  checkCollisions(g, 500, 800);
+  eq(g.enemies.length, 0, '봄으로 전멸');
+  eq(g.powerups.length, CFG.bonusShip.dropCount, '보너스에서만 확정 드롭(잡몹 0)');
+});
+
 // ── 파워업 획득은 피격 무적(깜박) 중에도 된다 ──
 const puGame = (inv) => ({ player: { x: 100, y: 100, r: 14, inv }, front: 1, partHistory: [],
   bullets: [], enemies: [], eBullets: [], boss: null, powerups: [{ x: 100, y: 100, r: 12, kind: 'P' }], sfx: [], score: 0 });

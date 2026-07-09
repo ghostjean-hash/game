@@ -317,7 +317,12 @@ function grabItem(game, kind) {
   } else if (kind === 'H') {
     if (game.lives < CFG.player.maxLives) { game.lives++; game.sfx.push('power'); } else maxed();
   } else if (kind === 'B') {
-    for (const e of game.enemies) { burst(game, e.x, e.y, e.color, 12); game.score += e.score; }
+    for (const e of game.enemies) {
+      burst(game, e.x, e.y, e.color, 12);
+      game.score += e.score;
+      // 봄으로 죽어도 보너스 기체는 파워업 확정 드롭(잡몹은 드롭 없음 - 봄이 과해지지 않게).
+      if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount);
+    }
     game.enemies = [];
     game.eBullets = [];
     if (game.boss && !game.boss.entering) {
