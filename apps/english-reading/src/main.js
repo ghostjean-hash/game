@@ -3,6 +3,7 @@
 import { tokenize } from "./core/tokenize.js";
 import { createCourse, courseProgress } from "./core/course.js";
 import { chunkBoundaries, gradeSlashes, chunkReasons } from "./core/chunking.js";
+import { validatePassage } from "./core/validate.js";
 import { createStorage } from "../../../shared/storage.js";
 import { registerServiceWorker } from "../../../shared/ui.js";
 
@@ -20,6 +21,7 @@ const el = {
 };
 
 let course = null;
+let baseData = null; // passages.json 원본(기본 지문)
 let currentPassage = null; // 지금 읽는 지문 - 단어장 등에서 돌아올 대상
 let toastTimer = null; // 토스트 자동 닫힘 타이머
 const TOAST_MS = 1600; // 토스트가 스스로 사라지기까지
@@ -29,6 +31,15 @@ const getDone = () => store.get("done", []); // 완독한 지문 id 배열
 const getReads = () => store.get("reads", {}); // { passageId: 회독수 }
 const getVocab = () => store.get("vocab", []); // [{ wordKey, word, meaning, sentence, passageId, passageTitle }]
 const getSettings = () => ({ chunks: true, words: true, scope: true, ...(store.get("settings", {}) || {}) });
+
+// ── 내가 만든 문제(기기 저장) ── LLM으로 만든 지문을 검증 후 이 목록에 담아 기본 지문과 합쳐 읽는다.
+const getCustomPassages = () => store.get("customPassages", []);
+function isCustom(pid) { return getCustomPassages().some((p) => p.id === pid); }
+// 기본 지문 + 내가 만든 문제를 합쳐 코스를 다시 만든다(추가·삭제 후 호출).
+function rebuildCourse() {
+  const base = baseData.courses[0];
+  course = createCourse({ ...base, passages: [...base.passages, ...getCustomPassages()] });
+}
 
 // ── 읽기 진행 저장(기기 저장소) ── 지문별 문장 상태(그은 선·임시 단어·검토 여부)를 담아,
 // 단어장을 갔다 오거나 앱을 껐다 켜도 읽던 자리와 표시가 그대로 복원되게 한다.
@@ -51,7 +62,8 @@ function clearPassageProgress(pid) {
 fetch("./src/data/passages.json", { cache: "no-cache" })
   .then((r) => r.json())
   .then((data) => {
-    course = createCourse(data.courses[0]);
+    baseData = data;
+    rebuildCourse();
     renderList();
   })
   .catch(() => {
@@ -70,6 +82,14 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove("show"), TOAST_MS);
 }
 function removeHint() { const h = document.getElementById("first-hint"); if (h) h.remove(); }
+// 텍스트를 클립보드로 복사(안 되는 환경이면 안내만)
+function copyText(text, okMsg) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast(okMsg)).catch(() => showToast("복사가 안 됩니다. 칸을 눌러 직접 선택·복사하세요."));
+  } else {
+    showToast("복사가 안 됩니다. 칸을 눌러 직접 선택·복사하세요.");
+  }
+}
 
 function setTop({ title, onBack, showVocab, showGuide }) {
   el.title.textContent = title;
@@ -116,6 +136,7 @@ function renderList() {
   stage.appendChild(summary);
 
   const progress = getProgress();
+  const customIds = new Set(getCustomPassages().map((p) => p.id));
   const list = document.createElement("div");
   list.className = "passage-list";
   course.passages.forEach((p) => {
@@ -128,19 +149,27 @@ function renderList() {
     const status = isDone ? `완독 ✓${r > 1 ? ` · ${r}회독` : ""}` : ((r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음");
     card.innerHTML =
       `<span class="lv">Lv ${p.level}</span>` +
-      `<span class="pc-body"><span class="pc-title">${p.titleKr}</span><span class="pc-en">${p.title}</span></span>` +
+      `<span class="pc-body"><span class="pc-title">${p.titleKr}${customIds.has(p.id) ? ' <span class="mine-badge">내 문제</span>' : ""}</span><span class="pc-en">${p.title}</span></span>` +
       `<span class="pc-status${isDone ? " done" : ""}">${status}</span>`;
     card.onclick = () => renderReading(p);
     list.appendChild(card);
   });
   stage.appendChild(list);
 
+  const actions = document.createElement("div");
+  actions.className = "list-actions";
   const setBtn = document.createElement("button");
   setBtn.type = "button";
   setBtn.className = "text-btn settings-open";
   setBtn.textContent = "노출 설정";
   setBtn.onclick = openSettings;
-  stage.appendChild(setBtn);
+  const authorBtn = document.createElement("button");
+  authorBtn.type = "button";
+  authorBtn.className = "text-btn";
+  authorBtn.textContent = "문제 출제";
+  authorBtn.onclick = renderAuthor;
+  actions.append(setBtn, authorBtn);
+  stage.appendChild(actions);
 }
 
 // ── 읽기 화면 ──
@@ -480,6 +509,170 @@ function showClearModal() {
   backdrop.appendChild(modal);
   backdrop.addEventListener("click", (e) => { if (e.target === backdrop) { backdrop.remove(); renderList(); } });
   document.body.appendChild(backdrop);
+}
+
+// ── 문제 출제 (LLM으로 만든 지문을 검증해 내 문제로 추가) ──
+// LLM에 그대로 붙여넣을 출제 규칙 - 양식·끊는 기준·예시를 담아 규칙 준수를 유도한다.
+const AUTHORING_PROMPT = `너는 영어 독해 학습 앱의 문제 출제자다. 아래 [양식]과 [규칙]을 정확히 지켜, 지문 한 편을 JSON 하나로만 출력해라(설명·코드블록 없이 JSON만).
+
+[양식]
+{
+  "id": "고유한-영문소문자-하이픈-이름",
+  "level": 1,
+  "title": "영어 제목",
+  "titleKr": "한글 제목",
+  "sentences": [
+    {
+      "text": "영어 원문 문장.",
+      "chunks": [
+        { "en": "끊어읽기 덩어리(영어)", "kr": "그 덩어리의 직독직해(한글)" }
+      ],
+      "grammar": [ { "label": "문법 이름표", "note": "한 줄 설명" } ],
+      "words": [ { "word": "어려운 단어", "meaning": "한글 뜻" } ]
+    }
+  ]
+}
+
+[규칙]
+1. chunks의 en을 공백으로 이어 붙이면 원문 text와 정확히 같아야 한다(구두점·대소문자만 예외).
+2. 끊어읽기(chunks)는 잘게 쪼개지 말고 '의미 덩어리'로 크게 묶어라. 다음 자리는 절대 끊지 마라:
+   - be동사·조동사 뒤 (예: "is the habit"은 한 덩어리. 단 뒤가 that절·to부정사면 끊어도 됨)
+   - 짧은 주어(2단어 이하) 뒤에서 동사 앞
+   - 짧은 전치사구(2단어 이하) 앞 (of noticing, at all 등)
+   - 전치사와 그 목적어 사이 ("searches for | facts"처럼 끊지 마라)
+   끊어도 되는 자리: 접속사·관계사·that·to 앞 / 콤마 뒤 / 긴 주어(3단어 이상) 뒤 동사 앞 / 긴 전치사구 앞.
+3. kr은 의역이 아니라 어순·구조가 드러나는 직독직해로 써라.
+4. grammar는 그 문장에 든 문법 요소를 1개 이상, 이름표(label)+한 줄 설명(note)으로.
+5. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 실제로 있는 단어여야 한다.
+6. insight는 구조가 특히 어려운 문장에만 넣어라(빼도 됨). 넣으면 formula·why·wrong·natural 4필드를 모두 채워라.
+7. level은 난이도 숫자(1이 가장 쉬움). id는 다른 지문과 겹치지 않는 영문 이름.
+
+[규칙을 지킨 올바른 예시]
+{
+  "id": "example-mind",
+  "level": 1,
+  "title": "A Small Example",
+  "titleKr": "작은 예시",
+  "sentences": [
+    {
+      "text": "Confirmation bias is the habit of noticing only what we already believe.",
+      "chunks": [
+        { "en": "Confirmation bias is the habit", "kr": "확증 편향은 습관이다" },
+        { "en": "of noticing only what we already believe.", "kr": "우리가 이미 믿는 것만 알아채는" }
+      ],
+      "grammar": [
+        { "label": "of + 동명사", "note": "the habit of noticing - '알아채는 습관'. of 뒤 동사는 -ing." }
+      ],
+      "words": [ { "word": "bias", "meaning": "편향, 치우침" } ]
+    }
+  ]
+}
+
+이제 주제를 "(원하는 주제를 여기에)"로 정해, 위 규칙을 지킨 지문 한 편을 JSON으로만 출력해라.`;
+
+function renderAuthor() {
+  currentPassage = null;
+  setTop({ title: "문제 출제", onBack: renderList, showVocab: false });
+  const stage = el.stage;
+  stage.className = "stage author-stage";
+  stage.innerHTML = "";
+
+  const intro = document.createElement("p");
+  intro.className = "author-intro";
+  intro.textContent = "챗봇(LLM)에 아래 '출제 규칙'을 붙여넣어 문제를 만든 뒤, 그 결과(JSON)를 붙여넣고 검증하세요. 규칙을 어기면 어디가 틀렸는지 알려 드립니다.";
+  stage.appendChild(intro);
+
+  // 1. 출제 규칙 (복사해서 챗봇에)
+  const rl = document.createElement("div"); rl.className = "author-label"; rl.textContent = "1. 출제 규칙 - 챗봇에 붙여넣기";
+  const ruleTa = document.createElement("textarea");
+  ruleTa.className = "author-rule"; ruleTa.readOnly = true; ruleTa.rows = 5; ruleTa.value = AUTHORING_PROMPT;
+  const ruleCopy = document.createElement("button");
+  ruleCopy.type = "button"; ruleCopy.className = "btn btn-primary author-btn";
+  ruleCopy.textContent = "출제 규칙 복사";
+  ruleCopy.onclick = () => copyText(AUTHORING_PROMPT, "출제 규칙을 복사했습니다. 챗봇에 붙여넣으세요.");
+  stage.append(rl, ruleTa, ruleCopy);
+
+  // 2. 결과 붙여넣기 + 검증
+  const pl = document.createElement("div"); pl.className = "author-label"; pl.textContent = "2. 만들어진 문제(JSON) 붙여넣기";
+  const input = document.createElement("textarea");
+  input.className = "author-input"; input.rows = 8; input.placeholder = '{ "id": "...", "level": 1, "title": "...", ... }';
+  const result = document.createElement("div"); result.className = "author-result"; result.hidden = true;
+  const checkBtn = document.createElement("button");
+  checkBtn.type = "button"; checkBtn.className = "btn author-btn author-check"; checkBtn.textContent = "검증하기";
+  const addBtn = document.createElement("button");
+  addBtn.type = "button"; addBtn.className = "btn btn-primary author-btn"; addBtn.textContent = "내 문제로 추가"; addBtn.hidden = true;
+  let validObj = null;
+
+  checkBtn.onclick = () => {
+    addBtn.hidden = true; validObj = null;
+    let obj;
+    try { obj = JSON.parse(input.value); }
+    catch (e) { showAuthorResult(result, false, [{ where: "형식", msg: "JSON 형식이 아닙니다. 챗봇이 JSON만 출력했는지 확인하세요." }]); return; }
+    const res = validatePassage(obj);
+    if (res.ok) {
+      const dupBase = baseData.courses[0].passages.some((p) => p.id === obj.id);
+      const dupMine = getCustomPassages().some((p) => p.id === obj.id);
+      if (dupBase || dupMine) { showAuthorResult(result, false, [{ where: "id", msg: `"${obj.id}"와 같은 id의 지문이 이미 있습니다. id를 바꾸세요.` }]); return; }
+      validObj = obj; addBtn.hidden = false;
+    }
+    showAuthorResult(result, res.ok, res.errors);
+  };
+  addBtn.onclick = () => {
+    if (!validObj) return;
+    const list = getCustomPassages();
+    list.push(validObj);
+    store.set("customPassages", list);
+    rebuildCourse();
+    showToast(`"${validObj.titleKr}"를 내 문제로 추가했습니다.`);
+    renderAuthor();
+  };
+  stage.append(pl, input, checkBtn, result, addBtn);
+
+  // 3. 이미 만든 내 문제 목록
+  const mine = getCustomPassages();
+  if (mine.length) {
+    const ml = document.createElement("div"); ml.className = "author-label"; ml.textContent = `내가 만든 문제 (${mine.length}편)`;
+    stage.appendChild(ml);
+    const mlist = document.createElement("div"); mlist.className = "author-mine-list";
+    mine.forEach((p) => {
+      const row = document.createElement("div"); row.className = "author-mine-row";
+      const t = document.createElement("span"); t.className = "amr-title"; t.textContent = `${p.titleKr} · Lv ${p.level}`;
+      const exp = document.createElement("button");
+      exp.type = "button"; exp.className = "amr-btn"; exp.textContent = "배포용 복사";
+      exp.onclick = () => copyText(JSON.stringify(p, null, 2), "배포용 JSON을 복사했습니다. 자비스에게 주면 모두에게 배포합니다.");
+      const del = document.createElement("button");
+      del.type = "button"; del.className = "amr-btn amr-del"; del.textContent = "삭제";
+      del.onclick = () => {
+        store.set("customPassages", getCustomPassages().filter((x) => x.id !== p.id));
+        clearPassageProgress(p.id);
+        rebuildCourse();
+        renderAuthor();
+      };
+      row.append(t, exp, del);
+      mlist.appendChild(row);
+    });
+    stage.appendChild(mlist);
+  }
+}
+
+// 검증 결과 표시 - 통과면 초록 한 줄, 위반이면 어디가 왜 틀렸는지 목록
+function showAuthorResult(host, ok, errors) {
+  host.hidden = false;
+  host.className = `author-result ${ok ? "ok" : "bad"}`;
+  host.innerHTML = "";
+  if (ok) {
+    host.textContent = "✓ 규칙을 모두 지켰습니다. '내 문제로 추가'를 누르세요.";
+    return;
+  }
+  const h = document.createElement("div"); h.className = "ar-head"; h.textContent = `고칠 곳 ${errors.length}가지:`;
+  host.appendChild(h);
+  errors.forEach((e) => {
+    const row = document.createElement("div"); row.className = "ar-row";
+    const wh = document.createElement("span"); wh.className = "ar-where"; wh.textContent = e.where;
+    const ms = document.createElement("span"); ms.className = "ar-msg"; ms.textContent = e.msg;
+    row.append(wh, ms);
+    host.appendChild(row);
+  });
 }
 
 // ── 내 단어장 ──

@@ -35,6 +35,7 @@ const dataSafe = dataRaw.replace(/<\//g, "<\\/"); // </script> 조기 종료 방
 const tokenize = stripExports(read(join(app, "src", "core", "tokenize.js")));
 const course = stripExports(read(join(app, "src", "core", "course.js")));
 const chunking = stripExports(read(join(app, "src", "core", "chunking.js")));
+const validate = stripImports(stripExports(read(join(app, "src", "core", "validate.js"))));
 const storage = stripExports(read(join(hub, "shared", "storage.js")));
 let main = stripImports(read(join(app, "src", "main.js")));
 
@@ -44,14 +45,15 @@ main = mustReplace(
   `fetch("./src/data/passages.json", { cache: "no-cache" })
   .then((r) => r.json())
   .then((data) => {
-    course = createCourse(data.courses[0]);
+    baseData = data;
+    rebuildCourse();
     renderList();
   })
   .catch(() => {
     el.title.textContent = "오류";
     el.stage.innerHTML = '<p class="empty">지문을 불러오지 못했습니다.</p>';
   });`,
-  "course = createCourse(EMBEDDED_PASSAGES.courses[0]);\nrenderList();",
+  "baseData = EMBEDDED_PASSAGES;\nrebuildCourse();\nrenderList();",
   "데이터 인라인"
 );
 
@@ -83,6 +85,7 @@ ${storage}
 ${tokenize}
 ${course}
 ${chunking}
+${validate}
 ${main}
 </script>
 </body>

@@ -6,6 +6,7 @@ import { dirname, join } from "node:path";
 import { tokenize, resolveTargets } from "../src/core/tokenize.js";
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
 import { chunkBoundaries, gradeSlashes, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
+import { validatePassage } from "../src/core/validate.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 let failures = 0;
@@ -131,6 +132,42 @@ function check(name, cond, detail = "") {
   // D. 전치사가 앞 덩어리 끝에 남아 목적어와 갈리면 위반
   check("violation: 전치사 꼬리 분리",
     V("our mind searches for facts.", ["our mind searches for", "facts."]).some((v) => v.kind === "prep-tail"));
+}
+
+// ── validatePassage (출제 화면 검증) ──────────────────────────────
+{
+  const good = {
+    id: "test-good", level: 1, title: "T", titleKr: "가",
+    sentences: [{
+      text: "Confirmation bias is the habit of noticing only what we already believe.",
+      chunks: [
+        { en: "Confirmation bias is the habit", kr: "확증 편향은 습관이다" },
+        { en: "of noticing only what we already believe.", kr: "우리가 이미 믿는 것만 알아채는" },
+      ],
+      grammar: [{ label: "of+동명사", note: "설명" }],
+      words: [{ word: "bias", meaning: "편향" }],
+    }],
+  };
+  check("validate: 규칙 지킨 지문 통과", validatePassage(good).ok);
+
+  const badId = { ...good, id: "Bad ID!" };
+  check("validate: 잘못된 id 검출", !validatePassage(badId).ok);
+
+  const badChunk = { ...good, sentences: [{ ...good.sentences[0],
+    chunks: [{ en: "Confirmation bias is", kr: "확증 편향은" }, { en: "the habit of noticing only what we already believe.", kr: "습관" }] }] };
+  check("validate: 끊는 기준 위반(be동사 뒤) 검출", !validatePassage(badChunk).ok);
+
+  const badRecon = { ...good, sentences: [{ ...good.sentences[0],
+    chunks: [{ en: "Totally different text", kr: "다름" }] }] };
+  check("validate: 청킹이 원문과 어긋나면 검출", !validatePassage(badRecon).ok);
+
+  const badWord = { ...good, sentences: [{ ...good.sentences[0], words: [{ word: "absent", meaning: "없음" }] }] };
+  check("validate: 원문에 없는 단어 검출", !validatePassage(badWord).ok);
+
+  const noGrammar = { ...good, sentences: [{ ...good.sentences[0], grammar: [] }] };
+  check("validate: grammar 없으면 검출", !validatePassage(noGrammar).ok);
+
+  check("validate: 문장 없으면 검출", !validatePassage({ id: "x", level: 1, title: "T", titleKr: "가", sentences: [] }).ok);
 }
 
 // ── passages.json 데이터 무결성 ──────────────────────────────

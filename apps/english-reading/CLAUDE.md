@@ -22,12 +22,14 @@ apps/english-reading/
 ├── tests/run-node.mjs    # core 유닛 + passages.json 무결성 (node로 실행)
 ├── tools/build-standalone.mjs
 └── src/
-    ├── main.js           # 화면 조립 + 클릭/이벤트 (DOM). 목록·읽기·단어장·설정
+    ├── main.js           # 화면 조립 + 클릭/이벤트 (DOM). 목록·읽기·단어장·설정·문제 출제
     ├── core/
     │   ├── tokenize.js   # 문장 토큰화 + nth 해석 (순수, DOM 미의존, 재사용)
-    │   └── course.js     # 코스·지문·진행 순수 로직 (createCourse / courseProgress)
+    │   ├── course.js     # 코스·지문·진행 순수 로직 (createCourse / courseProgress)
+    │   ├── chunking.js   # 끊어읽기 채점 + 끊는 기준 위반 검사(chunkViolations) + 이유 태그
+    │   └── validate.js   # 지문 무결성·끊는 기준 통합 검증(validatePassage) - 출제 화면·테스트 공용
     └── data/
-        └── passages.json # 코스별 지문 (콘텐츠 단일 진실)
+        └── passages.json # 코스별 지문 (기본 콘텐츠 단일 진실. 사용자 출제분은 localStorage)
 ```
 
 # 3. 핵심 결정 (작업 시 반드시 준수)
@@ -37,7 +39,8 @@ apps/english-reading/
 3.3. **라이트 테마 단독**. body 스코프에서 글로벌 다크 토큰을 라이트로 재정의. 테마 토글 없음.
 3.4. **난이도 = 지문 자체(완만한 사다리)**. 지문에 level을 매겨 오름차순 정렬(한 편에 길이·구문·어휘 중 하나만 상승). 도움 노출량은 난이도가 아니라 학습자 설정. **클리어 = 코스 전체 완주**이고, 개별 지문 완독은 진행률만 채우며 연출을 두지 않는다.
 3.5. **순수 로직은 core/에 격리**. tokenize·course는 DOM 미의존. main.js만 DOM을 만진다. courseProgress는 done 배열 주입으로 테스트 결정성 확보.
-3.6. **상태는 기기 저장**(localStorage, `createStorage("english-reading")`): `done`(완독 지문 id), `reads`(지문별 회독수), `vocab`(단어+뜻+원문+출처), `settings`(노출 토글), `seenIntro`(첫 안내 1회), `progress`(지문별 읽기 진행 - 문장마다 그은 선·임시 단어·검토 여부. 단어장·목록을 오가거나 앱을 껐다 켜도 복원, 회독 완료 시 해당 지문분 리셋), `lastPassage`(마지막 읽던 지문 id). 단어장 백버튼은 읽던 지문이 있으면 그 지문으로 복귀(목록에서 왔으면 목록으로).
+3.6. **상태는 기기 저장**(localStorage, `createStorage("english-reading")`): `done`(완독 지문 id), `reads`(지문별 회독수), `vocab`(단어+뜻+원문+출처), `settings`(노출 토글), `seenIntro`(첫 안내 1회), `progress`(지문별 읽기 진행 - 문장마다 그은 선·임시 단어·검토 여부. 단어장·목록을 오가거나 앱을 껐다 켜도 복원, 회독 완료 시 해당 지문분 리셋), `lastPassage`(마지막 읽던 지문 id), `customPassages`(사용자가 '문제 출제' 화면에서 검증 통과시켜 추가한 지문 배열 - 기본 지문과 합쳐 코스를 만든다). 단어장 백버튼은 읽던 지문이 있으면 그 지문으로 복귀(목록에서 왔으면 목록으로).
+3.9. **문제 출제(크리에이터)**. 목록 '문제 출제' 화면에서 LLM용 출제 규칙(AUTHORING_PROMPT) 복사 → LLM이 만든 지문 JSON을 붙여넣으면 `validatePassage`로 즉시 검증(끊는 기준 위반·죽은 단어·양식) → 통과분만 `customPassages`에 추가해 목록 반영(내 문제 뱃지). '배포용 복사'로 JSON을 얻어 자비스가 passages.json에 커밋하면 전체 배포. 서버·계정 없이 로컬 저장(6.2 서버리스 유지).
 3.7. **노출 설정 3종**(`chunks`/`words`/`scope`) 기본 전부 켜짐. OFF면 해당 상호작용·시각 요소를 비활성한다.
 3.8. **standalone.html은 생성물**. 직접 수정 금지, 원본 수정 후 `tools/build-standalone.mjs` 재실행. 빌드는 치환 패턴(fetch 블록·SW 등록 줄) 미발견 시 즉시 실패 - 그 줄을 바꾸면 빌드 스크립트도 함께 갱신.
 
