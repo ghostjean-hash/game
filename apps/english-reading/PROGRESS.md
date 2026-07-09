@@ -212,3 +212,11 @@
 - 자체 검증(스스로 데이터 추출): 샘플 14종을 직접 만들어 점검 - 정상 8(문장끝 부사구 3종·that절·관계절·콤마·긴 전치사구·긴 주어) 통과 + 위반 4(be동사 뒤·짧은 주어·절 중간 전치사구·전치사 꼬리) 차단 + saving 지문 통과 + 기존 30문장 회귀 0. 유닛에 문장끝 부사구 케이스 상설화(앞으로 규칙 변경 시 오탐 자동 감지).
 - 검증: 유닛 전체 통과, 로컬 standalone에서 saving 지문 "규칙 모두 지킴" 통과. chunking.js 원본 전파 확인(Monitor), 실서비스 브라우저 반영은 CDN 캐시 만료 후. 커밋 4978b0a, SW v163→v164.
 - 추가 감사(사용자 "자체 검증했어?" 재확인): 규칙을 의식하지 않고 자연스럽게 끊은 완결 지문 6편(동명사 주어·주격/목적격 관계대명사·관계부사 생략·조건/이유 접속사·사역/준사역동사·instead of·문장 끝 부사구 다수)을 직접 작성해 validatePassage 전수 - 6편 전부 통과, 오탐 0. 검사기가 자연스러운 영어를 막지 않음을 실측 확인.
+
+## 2.28. 앱 JS network-first 전환 - 배포한 검사기가 브라우저 캐시로 미반영되던 근본 수정 (2026-07-09, 사용자 "여전히 안돼" 명상 지문)
+
+- 증상: 검사기 규칙을 고쳐 배포해도(over time 수정 등) 사용자 브라우저가 옛 검사기로 계속 검증. 명상 지문도 규칙상 정상인데 실서비스에서 걸림.
+- 원인 진단: english-reading src/**/*.js가 SW cache-first라 옛 JS를 캐시에서 서빙. NETWORK_FIRST_PATHS엔 passages.json만 있고 검사기 JS(chunking/validate)는 cache-first였다. 실서비스 CDN 파일·로컬 검증은 새 로직이나 브라우저 SW 캐시가 옛것을 고집.
+- 확인: 명상 지문 로컬 validatePassage ok + SW 차단(playwright serviceWorkers:block) 순수 network 실서비스에서 "규칙 모두 지킴" 통과 → 코드·CDN 정상, SW 캐시만 문제로 확정.
+- 수정: service-worker.js fetch 핸들러에 /apps/english-reading/src/**/*.js network-first 정규식 매칭 추가. 이후 검사기·로직 변경은 새로고침 즉시 반영(오프라인은 캐시 fallback). 커밋 95a5294, SW v166(v165 flightshooting 별개).
+- 사용자 조치: 앱을 완전히 닫고 재방문(skipWaiting+clients.claim이라 새 SW 즉시 활성)하면 새 검사기 반영, 명상 지문 통과. 이후 이런 캐시 지연 재발 없음.
