@@ -183,3 +183,8 @@
 - 단어장 백버튼: currentPassage 있으면 그 지문 renderReading(복귀), 목록에서 왔으면 renderList. finishRound는 clearPassageProgress로 회독 완료 시 clean slate.
 - 부수: lastPassage 저장(이어읽기용), 목록 카드에 저장된 진행 있으면 첫 회독 중이어도 '읽는 중' 표시.
 - 검증: browser-shot 18항목 - 단어장 왕복·목록 왕복·reload(앱 재시작)에도 flag 2·slash 1 유지, 검토상태(해설·채점 색) 복원, 회독 후 진행 리셋·영구 단어장 유지, 콘솔 0. 실서비스 smoke 통과. 커밋 4995f8d, SW v159→v160.
+
+## 2.24. 맞은 끊기 표시를 안이 빈 붉은 원으로 (2026-07-09, 사용자 지시)
+
+- 맞은 끊기 표시가 채워진 붉은 점(●)이던 것을 안이 빈 붉은 원(테두리만)으로 변경. .gap.g-correct::before를 유니코드 ● 대신 CSS border 원(width/height 0.4em + border 1.6px solid #dc2626 + border-radius:50% + 배경 없음)으로 그려 또렷하게. 잘못(x)·빼먹음(빨간 /)은 유지.
+- 검증: browser-shot로 빈 원(border solid rgb(220,38,38)·radius 50%·배경 없음) 확인 + 콘솔 0, 실서비스 smoke 통과. 커밋 58487a2, SW v160→v161.
