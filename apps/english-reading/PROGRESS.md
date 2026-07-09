@@ -203,3 +203,11 @@
 - 사례: 사용자가 제미나이로 만든 지문에서 원문 "triggers"의 뜻 단어를 원형 "trigger"로 넣어 '죽은 단어' 검증에 걸림(검사기는 정상 작동 - meaningByClean이 원문 형태로 뜻을 연결하므로 원형은 뜻이 죽음). 고친 JSON(trigger→triggers) 제공해 즉시 해소.
 - 재발 방지: AUTHORING_PROMPT 5번 규칙 강화(word는 원문 활용형 그대로, -s·-ed·-ing 원형 변환 금지, meaning엔 원형 뜻 허용) + validate.js 죽은 단어 에러에 "원문 형태 그대로" 힌트 추가.
 - 검증: 고친 JSON validatePassage ok, 빌드·테스트 통과, 실서비스 smoke 통과. 커밋 ea4cebd, SW v162→v163.
+
+## 2.27. 끊는 기준 검사기 오탐 수정 - 문장 끝 부사구 + 자체 샘플 검증 상설화 (2026-07-09, 사용자 "over time 오류 + 스스로 데이터 추출 후 검증 안 하냐")
+
+- 사례: 사용자가 제미나이로 만든 정상 지문 "...a big fortune | over time."이 short-prep 위반으로 걸림. over time은 문장 끝 독립 부사구라 끊어 읽는 게 정상인데 절 중간 전치사구(of noticing)와 동일 취급한 오탐.
+- 지적의 본질(수용): 검사기를 만들 때 실제 LLM 출력 샘플로 스스로 돌려보지 않아 오탐을 못 걸렀다.
+- 수정: chunkViolations short-prep을 마지막 덩어리(i < chunks.length-1)엔 미적용 - 문장 끝 짧은 부사구(over time·at all·for now)는 정당. 절 중간 짧은 전치사구·전치사 꼬리·be동사 뒤·짧은 주어 뒤 분리는 계속 차단.
+- 자체 검증(스스로 데이터 추출): 샘플 14종을 직접 만들어 점검 - 정상 8(문장끝 부사구 3종·that절·관계절·콤마·긴 전치사구·긴 주어) 통과 + 위반 4(be동사 뒤·짧은 주어·절 중간 전치사구·전치사 꼬리) 차단 + saving 지문 통과 + 기존 30문장 회귀 0. 유닛에 문장끝 부사구 케이스 상설화(앞으로 규칙 변경 시 오탐 자동 감지).
+- 검증: 유닛 전체 통과, 로컬 standalone에서 saving 지문 "규칙 모두 지킴" 통과. chunking.js 원본 전파 확인(Monitor), 실서비스 브라우저 반영은 CDN 캐시 만료 후. 커밋 4978b0a, SW v163→v164.
