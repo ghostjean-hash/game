@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(english-reading): 주요 단어만 터치(오터치 방지) + 틀린 끊기 연회색 + 빼먹은 끊기 삼각형 표시",
+    "commitMessage": "feat(english-reading): 끊기/단어 모드 스위치 - 터치 충돌 원천 차단",
     "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

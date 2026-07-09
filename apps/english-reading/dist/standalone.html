@@ -320,6 +320,19 @@ body {
   animation: er-pop 0.25s var(--ease);
 }
 
+/* 끊기/단어 모드 스위치 - 한 모드에서 한 종류만 터치 반응(오터치 원천 차단) */
+.mode-bar { display: flex; gap: var(--sp-2); justify-content: center; margin-bottom: var(--sp-4); }
+.mode-btn {
+  padding: 9px 22px; font-size: 14px; font-weight: 700;
+  color: var(--fg-dim); background: var(--bg-elev);
+  border: 1px solid var(--line); border-radius: 999px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mode-btn.active { color: #fff; background: var(--er-accent); border-color: var(--er-accent); }
+/* 끊기 모드 = 단어 터치 무시, 단어 모드 = 틈 터치 무시 */
+.article.mode-chunk .w.word { pointer-events: none; }
+.article.mode-word .gap { pointer-events: none; }
+
 .article { display: flex; flex-direction: column; gap: var(--sp-3); }
 .sentence-block { }
 .sentence-line {
@@ -2513,6 +2526,7 @@ const el = {
 let course = null;
 let baseData = null; // passages.json 원본(기본 지문)
 let currentPassage = null; // 지금 읽는 지문 - 단어장 등에서 돌아올 대상
+let readMode = "chunk"; // 읽기 모드: "chunk"(끊기만 반응) / "word"(단어만 반응) - 터치 충돌 차단
 let toastTimer = null; // 토스트 자동 닫힘 타이머
 const TOAST_MS = 1600; // 토스트가 스스로 사라지기까지
 
@@ -2564,6 +2578,15 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove("show"), TOAST_MS);
 }
 function removeHint() { const h = document.getElementById("first-hint"); if (h) h.remove(); }
+// 읽기 모드 적용 - 본문에 mode 클래스를 걸어 한 모드에서 한 종류(끊기 or 단어)만 터치 반응하게 한다.
+function applyMode() {
+  const art = el.stage.querySelector(".article");
+  if (art) {
+    art.classList.toggle("mode-chunk", readMode === "chunk");
+    art.classList.toggle("mode-word", readMode === "word");
+  }
+  el.stage.querySelectorAll(".mode-btn").forEach((b) => b.classList.toggle("active", b.dataset.mode === readMode));
+}
 // 텍스트를 클립보드로 복사(안 되는 환경이면 안내만)
 function copyText(text, okMsg) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -2671,13 +2694,31 @@ function renderReading(p) {
     const hint = document.createElement("div");
     hint.className = "first-hint";
     hint.id = "first-hint";
-    hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [해석]으로 채점해 보세요. 모르는 단어는 눌러 표시만 해 두면, 해석할 때 뜻을 한꺼번에 확인합니다.";
+    hint.textContent = "위 '끊기/단어' 스위치로 지금 무엇을 누를지 정하세요. 끊기 모드에선 단어 사이 틈을 눌러 선(/)을 긋고, 단어 모드에선 모르는 단어를 눌러 담습니다. 문장 끝 [해석]으로 채점합니다.";
     stage.appendChild(hint);
     store.set("seenIntro", true);
   }
 
+  // 끊기/단어 모드 스위치 - 둘 다 켜졌을 때만. 한 모드에서 한 종류만 반응해 손끝 오터치를 원천 차단.
+  const dualMode = settings.chunks && settings.words;
+  if (dualMode) {
+    const modeBar = document.createElement("div");
+    modeBar.className = "mode-bar";
+    [["chunk", "✂️ 끊기"], ["word", "📖 단어"]].forEach(([mode, label]) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "mode-btn" + (readMode === mode ? " active" : "");
+      b.dataset.mode = mode;
+      b.textContent = label;
+      b.onclick = () => { readMode = mode; applyMode(); };
+      modeBar.appendChild(b);
+    });
+    stage.appendChild(modeBar);
+  }
+
   const article = document.createElement("div");
   article.className = "article";
+  if (dualMode) article.classList.add(readMode === "chunk" ? "mode-chunk" : "mode-word");
   p.sentences.forEach((s, i) => article.appendChild(renderSentence(s, i, p, settings)));
   stage.appendChild(article);
 
