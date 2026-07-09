@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "fix(english-reading): 출제 규칙·검증 안내 개선 - 단어는 원문 활용형 그대로(원형 변환 금지)",
+    "commitMessage": "fix(english-reading): 끊는 기준 검사기 오탐 수정 - 문장 끝 짧은 부사구(over time 등) 허용",
     "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

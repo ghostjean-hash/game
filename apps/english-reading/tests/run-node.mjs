@@ -121,11 +121,16 @@ function check(name, cond, detail = "") {
   // 긴 주어(3단어 이상) 뒤 동사 앞은 정당(가이드 규칙4)
   check("violation: 긴 주어 뒤 동사 앞은 정당",
     V("Knowing this trap will not help.", ["Knowing this trap", "will not help."]).length === 0);
-  // C. 짧은 전치사구(2단어 이하) 앞은 위반, 긴 전치사구는 정당
-  check("violation: 짧은 전치사구 앞 분리",
-    V("the habit of noticing.", ["the habit", "of noticing."]).some((v) => v.kind === "short-prep"));
+  // C. 절 중간의 짧은 전치사구(2단어 이하) 앞은 위반, 긴 전치사구는 정당
+  check("violation: 절 중간 짧은 전치사구 앞 분리",
+    V("the habit of noticing only what we believe.", ["the habit", "of noticing", "only what we believe."]).some((v) => v.kind === "short-prep"));
   check("violation: 긴 전치사구 앞은 정당",
     V("you feel at the stain now.", ["you feel", "at the stain now."]).length === 0);
+  // 문장 맨 끝의 짧은 부사구는 정당(over time·at all 등 - 독립적으로 끊어 읽음)
+  check("violation: 문장 끝 짧은 부사구는 정당",
+    V("a big fortune over time.", ["a big fortune", "over time."]).length === 0);
+  check("violation: 문장 끝 at all 정당",
+    V("no real medicine at all.", ["no real medicine", "at all."]).length === 0);
   // 콤마 뒤는 짧은 전치사구라도 정당(글쓴이가 끊은 자리)
   check("violation: 콤마 뒤는 정당",
     V("Above all, of course it helps.", ["Above all,", "of course it helps."]).length === 0);

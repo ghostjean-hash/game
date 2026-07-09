@@ -108,7 +108,8 @@
 // v161 (2026-07-09): english-reading 맞은 끊기 표시를 채워진 붉은 점 → 안이 빈 붉은 원(테두리만)으로 변경(사용자 지시). PWA 옛 캐시 무효화.
 // v162 (2026-07-09): english-reading 문제 출제 화면 - LLM 출제 규칙 제공 + 붙여넣은 지문 JSON을 validatePassage로 즉시 검증(끊는 기준 위반·죽은 단어·양식) + 통과분 localStorage customPassages로 추가·목록 반영·배포용 복사. PWA 옛 캐시 무효화.
 // v163 (2026-07-09): english-reading 출제 규칙·검증 안내 개선 - words의 word는 원문 활용형 그대로(원형 변환 금지) 프롬프트 명시 + 죽은 단어 에러에 형태 힌트 추가(제미나이가 trigger로 원형 넣어 걸린 사례). PWA 옛 캐시 무효화.
-const CACHE_VERSION = "v163";
+// v164 (2026-07-09): english-reading 끊는 기준 검사기 오탐 수정 - 문장 맨 끝 짧은 부사구(over time·at all 등)는 독립적으로 끊어 읽는 게 정상이므로 short-prep 예외(마지막 덩어리). 절 중간 짧은 전치사구 분리는 계속 차단. 샘플 14종 자체 점검 + 유닛 상설화. PWA 옛 캐시 무효화.
+const CACHE_VERSION = "v164";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
