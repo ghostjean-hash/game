@@ -56,13 +56,19 @@ let W = 0, H = 0, dpr = 1;
 let state = 'menu'; // menu | playing | paused | over | won
 let best = store.get('best', 0);
 let bannerTimer = 0;
+// 환경설정(localStorage 저장) + 치트 상태(세션).
+let apSkill = store.get('apSkill', CFG.autopilot.default);
+let cheatEnabled = store.get('cheat', false);
+let cheatSpeed = 1;
+const cheatState = { invincible: false, dropChance: null, dropKinds: { P: true, S: true, E: true, T: true, H: true, B: true } };
 
 function createGame() {
   return {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
     score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
     front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
-    waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, bonusTimer: CFG.bonusShip.every,
+    waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, apSkill: CFG.autopilot.default, cheat: null,
+    bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
   };
@@ -92,9 +98,11 @@ const controls = createControls(canvas, game, {
 const loop = createLoop({
   update: (dt) => {
     if (state !== 'playing') return;
-    if (game.autopilot) autopilotStep(game, dt, W, H);
-    else applyKeyboard(game, controls.keys, dt, W, H);
-    stepWorld(game, dt, W, H);
+    // 치트 플레이 속도: mul회 물리 서브스텝(dt 단위)으로 탄 관통 없이 배속(x1/2/4/8).
+    const mul = cheatEnabled ? cheatSpeed : 1;
+    if (game.autopilot) autopilotStep(game, dt * mul, W, H);
+    else applyKeyboard(game, controls.keys, dt * mul, W, H);
+    for (let i = 0; i < mul; i++) stepWorld(game, dt, W, H);
     // core가 남긴 사운드 신호 재생
     for (const s of game.sfx) sound.play(s);
     game.sfx.length = 0;
@@ -193,7 +201,10 @@ function startGame() {
   resetGame();
   applyDevHook(); // 검증용: localhost에서 URL 파라미터로 시작 구역·파츠 지정
   setAutopilot(false); // 시작 시 기본은 수동(자동 시작 버튼이 이후 다시 켬)
+  game.apSkill = apSkill;                       // 자동 플레이 실력 티어 반영
+  game.cheat = cheatEnabled ? cheatState : null; // 치트 켜짐 시에만 core가 참조
   state = 'playing';
+  updateCheatVisible();
   syncHud();
   sound.play('start');
   loop.start();
@@ -216,6 +227,7 @@ function applyDevHook() {
   // tail: 1~16. 4까지 대수, 그 뒤 1~4번 순차 무기 진화(16=전원 무기4).
   const tail = num('tail'); if (tail != null) for (let i = 0; i < tail; i++) gainTail(game);
   const lives = num('lives'); if (lives != null) game.lives = Math.max(1, lives);
+  if (q.get('cheat') != null) { cheatEnabled = true; setCheat.checked = true; } // 검증 편의: 치트 박스 자동 표시
   // pow=P|S|E|T|H|B: 해당 파워업 하나를 화면 위쪽에 스폰(내려오며 획득 확인용).
   const pow = q.get('pow'); if (pow) game.powerups.push({ x: W * 0.5, y: H * 0.3, r: 12, vy: 70, kind: pow, t: 0 });
   if (stage != null) startStage(game); // 지정 구역 웨이브 재생성 + 배너
@@ -285,6 +297,12 @@ function backToMenu() {
   gameScreen.hidden = true;
   menuScreen.hidden = false;
   elMenuBest.textContent = best;
+  updateCheatVisible();
+}
+
+// 치트 박스 표시: 치트 켜짐 + 게임 진행/일시정지 중일 때만.
+function updateCheatVisible() {
+  $('#cheat-box').hidden = !(cheatEnabled && (state === 'playing' || state === 'paused'));
 }
 
 // ── 전체화면 (4.7-6: 지원 기기만 버튼 노출) ──
@@ -320,6 +338,59 @@ function setAutopilot(on) {
 btnAuto.addEventListener('click', () => setAutopilot(!game.autopilot));
 btnAutoStart.addEventListener('click', () => { startGame(); setAutopilot(true); });
 canvas.addEventListener('click', () => { if (state === 'paused') togglePause(); });
+
+// ── 환경설정 모달 ──
+const settingsModal = $('#settings-modal');
+const setSkill = $('#set-skill');
+const setCheat = $('#set-cheat');
+setSkill.value = apSkill;
+setCheat.checked = cheatEnabled;
+$('#btn-settings').addEventListener('click', () => { settingsModal.hidden = false; });
+$('#set-close').addEventListener('click', () => { settingsModal.hidden = true; });
+setSkill.addEventListener('change', () => { apSkill = setSkill.value; store.set('apSkill', apSkill); game.apSkill = apSkill; });
+setCheat.addEventListener('change', () => {
+  cheatEnabled = setCheat.checked; store.set('cheat', cheatEnabled);
+  game.cheat = cheatEnabled ? cheatState : null;
+  updateCheatVisible();
+});
+
+// ── 치트 박스 ──
+const cheatBox = $('#cheat-box');
+$('#cheat-speed').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-mul]'); if (!b) return;
+  cheatSpeed = Number(b.dataset.mul);
+  $('#cheat-speed').querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+});
+$('#cheat-inv').addEventListener('change', (e) => { cheatState.invincible = e.target.checked; });
+$('#cheat-drop').addEventListener('input', (e) => {
+  const v = Number(e.target.value);
+  $('#cheat-drop-val').textContent = v + '%';
+  cheatState.dropChance = v / 100;
+});
+$('#cheat-kinds').addEventListener('change', (e) => {
+  const c = e.target.closest('input[data-kind]'); if (!c) return;
+  cheatState.dropKinds[c.dataset.kind] = c.checked;
+});
+$('#cheat-fold').addEventListener('click', () => {
+  const body = $('#cheat-body');
+  body.hidden = !body.hidden;
+  $('#cheat-fold').textContent = body.hidden ? '+' : '−';
+});
+// 헤더를 잡고 드래그해 치트 박스를 옮긴다(fixed 좌표라 화면 어디든).
+let cheatDrag = null;
+const cheatHead = $('#cheat-head');
+cheatHead.addEventListener('pointerdown', (e) => {
+  if (e.target.closest('.cheat-fold')) return;
+  const r = cheatBox.getBoundingClientRect();
+  cheatDrag = { x: e.clientX - r.left, y: e.clientY - r.top };
+  cheatHead.setPointerCapture(e.pointerId);
+});
+cheatHead.addEventListener('pointermove', (e) => {
+  if (!cheatDrag) return;
+  cheatBox.style.left = Math.max(0, e.clientX - cheatDrag.x) + 'px';
+  cheatBox.style.top = Math.max(0, e.clientY - cheatDrag.y) + 'px';
+});
+cheatHead.addEventListener('pointerup', () => { cheatDrag = null; });
 
 elMenuBest.textContent = best;
 $('#menu-tips').hidden = true;

@@ -109,7 +109,8 @@
 // v162 (2026-07-09): english-reading 문제 출제 화면 - LLM 출제 규칙 제공 + 붙여넣은 지문 JSON을 validatePassage로 즉시 검증(끊는 기준 위반·죽은 단어·양식) + 통과분 localStorage customPassages로 추가·목록 반영·배포용 복사. PWA 옛 캐시 무효화.
 // v163 (2026-07-09): english-reading 출제 규칙·검증 안내 개선 - words의 word는 원문 활용형 그대로(원형 변환 금지) 프롬프트 명시 + 죽은 단어 에러에 형태 힌트 추가(제미나이가 trigger로 원형 넣어 걸린 사례). PWA 옛 캐시 무효화.
 // v164 (2026-07-09): english-reading 끊는 기준 검사기 오탐 수정 - 문장 맨 끝 짧은 부사구(over time·at all 등)는 독립적으로 끊어 읽는 게 정상이므로 short-prep 예외(마지막 덩어리). 절 중간 짧은 전치사구 분리는 계속 차단. 샘플 14종 자체 점검 + 유닛 상설화. PWA 옛 캐시 무효화.
-const CACHE_VERSION = "v164";
+// v165 (2026-07-09): flightshooting 대규모 - 30 스테이지 확장 + 이질 기계 적 4종(turret/prism/mine/warper) + 기계 중보스, autopilot 사람화(조작 주기 제한 + 인간 실측 기반 실력 4티어), 환경설정 화면 + 치트 박스(속도/무적/드랍). PWA 옛 캐시 무효화.
+const CACHE_VERSION = "v165";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

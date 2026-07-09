@@ -83,6 +83,15 @@ export const CFG = {
     shielder: { r: 18, hp: 3, speed: 85,  score: 350, fireEvery: 2.0 },
     // rusher: charge초 동안 조준하며 천천히 내려오다, 저장한 방향으로 rush 속도로 급강하 돌진.
     rusher:   { r: 14, hp: 2, score: 320, drift: 45, charge: 0.9, rush: 540 },
+    // ── 21~30 구역 전용 신규 적 (docs/08). 기존 둥근 정령류와 반대인 각진 기계·결정·에너지 계열 ──
+    // turret: 부유 포대 - 거의 정지(느린 하강)하며 포신이 플레이어를 3방향(spread) 연사. 단단.
+    turret:   { r: 18, hp: 6, speed: 40,  score: 400, fireEvery: 1.5, shots: 3, spread: 42 },
+    // prism: 결정체 - 직하하되 피격당할 때마다 사방으로 반사탄 몇 발(reflect) 튕겨 함부로 못 쏘게.
+    prism:    { r: 16, hp: 4, speed: 110, score: 350, reflect: 3, reflectSpeed: 240 },
+    // mine: 부유 기뢰 - 느리게 표류하다 플레이어가 trigger 거리 내로 오면 자폭(shards 방향 파편탄).
+    mine:     { r: 15, hp: 2, speed: 45,  score: 300, trigger: 84, shards: 10, shardSpeed: 230 },
+    // warper: 공간 왜곡체 - warpEvery마다 아래(warpDown)+가로 랜덤으로 순간이동. 이동 직후 vulnerable초 취약(정지).
+    warper:   { r: 15, hp: 3, speed: 0,   score: 380, warpEvery: 1.15, warpDown: 96, warpJitter: 120, vulnerable: 0.45 },
   },
   // 구역이 오를수록 적 체력 상승: hp = ceil(base * (1 + (stage-1)*scale)). 10구역 ≈ 3.5배.
   enemyHpScale: 0.28,
@@ -101,21 +110,39 @@ export const CFG = {
   finalBoss: { rx: 50, ry: 44, hp: 1500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
   boss: { bobAmp: 0.32, bobFreq: 0.5, spawnTop: 62 },
-  // 11구역부터는 신규 적(splitter/shielder/rusher) 위주로 난이도가 오른다. 20구역이 최종.
-  stageCount: 20,
+  // 11구역~ 신규 적(splitter/shielder/rusher), 21구역~ 이질 기계 적(turret/prism/mine/warper). 30구역이 최종.
+  stageCount: 30,
   // 11구역 이후 추가 체력 배수(신규 적 구간 난이도 가속). 최종 hp = 기존 스케일 × (구역>=11이면 이 배수).
   hardStage: { from: 11, hpMul: 1.35 },
+  // 21구역 이후 추가 체력 배수(4계통 만렙 근접 구간 - 순삭 방지). hardStage 위에 곱해진다. dev 훅 실측 후 조정.
+  voidStage: { from: 21, hpMul: 1.7 },
   stageIntro: 2.2, // 구역 시작 배너 표시 동안 적 스폰 정지(초)
   maxedBonus: 300, // 파츠·목숨이 이미 최대일 때 파워업 획득 시 대신 주는 점수
   starCount: 70,
   // 발열/성능: 화면에 쌓이는 오브젝트 상한(초과분은 오래된 것부터 제거).
   limits: { bullets: 160, eBullets: 140, particles: 240 },
+  // 자동 플레이(autopilot) 실력 티어. 인간 실측 근거 → docs/plans/research-2026-07-09-human-like-game-ai.md.
+  //   react = 조작 갱신 주기(초, 반응 지연). 사람은 초당 대여섯 번만 방향을 바꾼다(문헌 반응 250~410ms).
+  //   aimDeg = 조준 각오차 표준편차(도). 사람은 프로도 완벽 조준 못 함(FPS 히트율 77~87%).
+  //   sim = 회피·조준 예측 지평(초). 얼마나 앞을 내다보나(고수일수록 멀리).
+  //   threats = 동시에 고려하는 위협 수(가까운 것부터). 사람 MOT 한계 약 4~5개(고수·프로는 상향).
+  autopilot: {
+    default: 'beginner',
+    tiers: {
+      beginner:     { react: 0.38, aimDeg: 12, sim: 0.5, threats: 4 },
+      intermediate: { react: 0.30, aimDeg: 6,  sim: 0.9, threats: 6 },
+      advanced:     { react: 0.25, aimDeg: 3,  sim: 1.3, threats: 9 },
+      pro:          { react: 0.21, aimDeg: 1.2, sim: 1.7, threats: 999 },
+    },
+  },
 };
 
-// 구역 이름 (1~20). 11구역부터는 미지의 심우주 - 전혀 다른 적들이 출현한다.
+// 구역 이름 (1~30). 11구역부터 미지의 심우주, 21구역부터 이질 기계 문명 - 완전 다른 적들이 출현한다.
 export const STAGE_NAMES = [
   '소행성 지대', '적 함대 전선', '폐허 정거장', '운석 회랑', '적 보급선',
   '전자 폭풍', '궤도 방어선', '침묵의 성역', '모함 외곽', '모함 최심부',
   '차원의 경계', '분열체 군집', '수호벽 지대', '혜성 폭류', '암흑 성운',
-  '반란 함대', '플라스마 지옥', '파멸의 궤도', '최후 방어선', '최종 결전',
+  '반란 함대', '플라스마 지옥', '파멸의 궤도', '최후 방어선', '심연의 관문',
+  '기계 성역', '결정 동굴', '방전 회로', '기뢰 지대', '왜곡 성운',
+  '강철 함대', '침묵의 기계신', '무한 회랑', '종말 관측소', '최종 결전',
 ];

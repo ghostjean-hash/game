@@ -38,6 +38,27 @@ function spawnWaves(game, W) {
   }
 }
 
+// 기뢰 자폭: 중심에서 사방으로 파편 탄막을 방사한다(정면 돌파를 벌한다).
+function detonateMine(game, e) {
+  const m = CFG.enemy.mine;
+  burst(game, e.x, e.y, COLORS.enemy.mineCore, 16);
+  for (let i = 0; i < m.shards; i++) {
+    const a = (i / m.shards) * Math.PI * 2;
+    game.eBullets.push({ x: e.x, y: e.y, vx: Math.cos(a) * m.shardSpeed, vy: Math.sin(a) * m.shardSpeed, r: CFG.enemyBullet.r });
+  }
+  game.sfx.push('explode');
+}
+
+// 결정체 반사: 피격당할 때마다 사방으로 반사탄 몇 발을 튕긴다(함부로 못 쏘게).
+function reflectPrism(game, e) {
+  const pr = CFG.enemy.prism;
+  for (let i = 0; i < pr.reflect; i++) {
+    const a = Math.random() * Math.PI * 2;
+    game.eBullets.push({ x: e.x, y: e.y, vx: Math.cos(a) * pr.reflectSpeed, vy: Math.sin(a) * pr.reflectSpeed, r: CFG.enemyBullet.r });
+  }
+  game.sfx.push('hit');
+}
+
 function updateEnemies(game, dt, W, H) {
   const p = game.player;
   for (const e of game.enemies) {
@@ -64,6 +85,25 @@ function updateEnemies(game, dt, W, H) {
       }
       continue;
     }
+    if (e.type === 'mine') {
+      e.y += e.speed * dt; // 느리게 표류
+      const dx = p.x - e.x, dy = p.y - e.y, tr = CFG.enemy.mine.trigger;
+      if (e.y > 0 && dx * dx + dy * dy <= tr * tr) { detonateMine(game, e); e.dead = true; } // 근접 자폭
+      continue;
+    }
+    if (e.type === 'warper') {
+      e.vuln = Math.max(0, e.vuln - dt); // 이동 직후 취약 시간 감소(시각 표시용)
+      e.warpTimer -= dt;
+      if (e.warpTimer <= 0) {
+        const wp = CFG.enemy.warper;
+        e.warpTimer = wp.warpEvery;
+        e.y += wp.warpDown; // 아래로 순간이동
+        e.x = Math.max(e.r + 6, Math.min(W - e.r - 6, e.x + (Math.random() - 0.5) * 2 * wp.warpJitter));
+        e.vuln = wp.vulnerable;
+        burst(game, e.x, e.y, COLORS.enemy.warper, 5);
+      }
+      continue;
+    }
     e.y += e.speed * dt;
     if (e.type === 'weaver') {
       e.x = e.baseX + Math.sin(e.t * CFG.enemy.weaver.freq) * CFG.enemy.weaver.amp;
@@ -86,6 +126,13 @@ function updateEnemies(game, dt, W, H) {
         e.fireTimer = CFG.enemy.shielder.fireEvery;
         enemyFireAt(game, e, p.x, p.y); // 방패병 단발 조준
       }
+    } else if (e.type === 'turret') {
+      e.fireTimer -= dt;
+      if (e.fireTimer <= 0 && e.y > 20) {
+        e.fireTimer = CFG.enemy.turret.fireEvery;
+        const tr = CFG.enemy.turret; // 포대 3방향 조준 연사
+        for (let i = 0; i < tr.shots; i++) enemyFireAt(game, e, p.x + (i - (tr.shots - 1) / 2) * tr.spread, p.y);
+      }
     }
   }
   // 세로로 지나간 것 + 보너스 기체가 가로로 화면을 벗어난 것 제거.
@@ -106,14 +153,32 @@ function updateBoss(game, dt, W, H) {
   if (boss.kind === 'mini') {
     boss.fireTimer -= dt;
     if (boss.fireTimer <= 0) {
-      boss.fireTimer = 1.3;
       const p = game.player;
-      for (let i = 0; i < 2; i++) enemyFireAt(game, boss, p.x + (i - 0.5) * 30, p.y);
+      if (boss.style === 'machine') {
+        // 기계 중보스(21~29): 아래 부채 방사 ↔ 조준 3연발 번갈아(정령 중보스보다 탄막이 조밀).
+        boss.pattern = (boss.pattern + 1) % 2;
+        if (boss.pattern === 0) {
+          boss.fireTimer = 1.1;
+          const base = Math.PI / 2, spread = 1.1, n = 6;
+          for (let i = 0; i < n; i++) {
+            const a = base - spread / 2 + (spread * i) / (n - 1);
+            game.eBullets.push({ x: boss.x, y: boss.y + boss.ry, vx: Math.cos(a) * CFG.enemyBullet.speed, vy: Math.sin(a) * CFG.enemyBullet.speed, r: CFG.enemyBullet.r });
+          }
+        } else {
+          boss.fireTimer = 1.2;
+          for (let i = 0; i < 3; i++) enemyFireAt(game, boss, p.x + (i - 1) * 20, p.y);
+        }
+      } else {
+        boss.fireTimer = 1.3;
+        for (let i = 0; i < 2; i++) enemyFireAt(game, boss, p.x + (i - 0.5) * 30, p.y);
+      }
     }
     boss.escortTimer -= dt;
     if (boss.escortTimer <= 0) {
       boss.escortTimer = CFG.miniBoss.escortEvery;
-      spawnEnemy(game, Math.random() < 0.5 ? 'drone' : 'weaver', 0.15 + Math.random() * 0.7, W);
+      // 21~29 기계 보스는 기계 잡몹(turret/prism)을, 그 외엔 정령(drone/weaver)을 호위로 부른다.
+      const pool = boss.style === 'machine' ? ['turret', 'prism'] : ['drone', 'weaver'];
+      spawnEnemy(game, pool[Math.floor(Math.random() * pool.length)], 0.15 + Math.random() * 0.7, W);
     }
     return;
   }
@@ -236,7 +301,8 @@ export function checkCollisions(game, W, H) {
           if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐
           game.sfx.push('explode');
         } else {
-          game.sfx.push('hit');
+          if (e.type === 'prism') reflectPrism(game, e); // 결정체는 피격마다 반사탄
+          else game.sfx.push('hit');
         }
         break;
       }
@@ -258,7 +324,8 @@ export function checkCollisions(game, W, H) {
   }
   game.powerups = game.powerups.filter((it) => !it.dead);
 
-  if (p.inv > 0) return; // 무적 중엔 피격 판정만 생략(아이템 획득은 위에서 이미 처리)
+  // 무적 중(피격 깜박) 또는 치트 무적이면 피격 판정 생략(아이템 획득은 위에서 이미 처리).
+  if (p.inv > 0 || (game.cheat && game.cheat.invincible)) return;
 
   for (const e of game.enemies) {
     if (hit(p, e)) { playerHit(game); return; }

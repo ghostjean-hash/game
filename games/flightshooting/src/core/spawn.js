@@ -6,6 +6,7 @@ import { COLORS } from '../data/colors.js';
 function scaledHp(base, stage) {
   let hp = Math.ceil((base || 1) * (1 + (stage - 1) * CFG.enemyHpScale));
   if (stage >= CFG.hardStage.from) hp = Math.ceil(hp * CFG.hardStage.hpMul);
+  if (stage >= CFG.voidStage.from) hp = Math.ceil(hp * CFG.voidStage.hpMul); // 21~30 이질 적 구간 가속
   return hp;
 }
 
@@ -21,6 +22,7 @@ export function spawnEnemy(game, type, xr, W) {
   };
   if (type === 'rusher') { e.phase = 0; e.vx = 0; e.vy = spec.drift; e.speed = 0; } // 0=조준하며 천천히 하강
   if (type === 'shielder') e.shielded = true;
+  if (type === 'warper') { e.warpTimer = spec.warpEvery; e.vuln = 0; }              // 순간이동 타이머 + 취약 타이머
   game.enemies.push(e);
   return e;
 }
@@ -64,11 +66,13 @@ export function spawnBoss(game, W, H) {
   } else {
     const c = CFG.miniBoss;
     const hp = c.baseHp + (game.stage - 1) * c.hpPerStage;
+    const machine = game.stage >= CFG.voidStage.from; // 21~29 = 이질 기계 중보스(신규 외형·패턴)
     game.boss = {
-      kind: 'mini', x: W / 2, y: -c.ry - 20, targetY: CFG.boss.spawnTop + c.ry,
-      rx: c.rx, ry: c.ry, color: COLORS.boss.mini,
+      kind: 'mini', style: machine ? 'machine' : 'spirit',
+      x: W / 2, y: -c.ry - 20, targetY: CFG.boss.spawnTop + c.ry,
+      rx: c.rx, ry: c.ry, color: machine ? COLORS.boss.machine : COLORS.boss.mini,
       hp, maxHp: hp, score: c.score, t: 0, entering: true,
-      fireTimer: 1.4, escortTimer: c.escortEvery,
+      fireTimer: 1.4, escortTimer: c.escortEvery, patternTimer: 0, pattern: 0,
     };
     game.events.push({ type: 'boss-appear', name: `구역 ${game.stage} 중보스` });
     spawnEscort(game, c.escortInit, W);
@@ -90,25 +94,36 @@ export function spawnBonus(game, W, H) {
   game.sfx.push('start');
 }
 
-function rollKind() {
+// 드롭 종류 추첨. 치트로 특정 종류만 켜면(game.cheat.dropKinds) 켜진 것 중에서만 가중 추첨한다.
+// 전부 꺼지면 null(드롭 없음).
+function rollKind(game) {
   const w = CFG.drop.weights;
-  let r = Math.random();
-  for (const k of Object.keys(w)) { if (r < w[k]) return k; r -= w[k]; }
-  return 'B';
+  const on = game && game.cheat && game.cheat.dropKinds;
+  const keys = Object.keys(w).filter((k) => !on || on[k]);
+  if (!keys.length) return null;
+  let total = 0; for (const k of keys) total += w[k];
+  let r = Math.random() * total;
+  for (const k of keys) { if (r < w[k]) return k; r -= w[k]; }
+  return keys[keys.length - 1];
 }
 
 // 파워업 n개 확정 드롭(보스·보너스 기체 전용). 여러 개면 좌우로 흩뿌린다.
 export function dropItems(game, x, y, n) {
   for (let i = 0; i < n; i++) {
+    const kind = rollKind(game);
+    if (!kind) continue;
     const ox = n === 1 ? 0 : (i - (n - 1) / 2) * 26;
-    game.powerups.push({ x: x + ox, y, r: 12, vy: 70, kind: rollKind(), t: 0 });
+    game.powerups.push({ x: x + ox, y, r: 12, vy: 70, kind, t: 0 });
   }
 }
 
-// 일반 잡몹 처치 시 낮은 확률(CFG.drop.chance)로 1개 드롭 - 초반 화력 성장 숨통.
+// 일반 잡몹 처치 시 낮은 확률로 1개 드롭. 치트(game.cheat.dropChance 0~1)가 있으면 그 확률을 쓴다.
 export function dropMaybe(game, x, y) {
-  if (Math.random() >= CFG.drop.chance) return;
-  game.powerups.push({ x, y, r: 12, vy: 70, kind: rollKind(), t: 0 });
+  const chance = game && game.cheat && game.cheat.dropChance != null ? game.cheat.dropChance : CFG.drop.chance;
+  if (Math.random() >= chance) return;
+  const kind = rollKind(game);
+  if (!kind) return;
+  game.powerups.push({ x, y, r: 12, vy: 70, kind, t: 0 });
 }
 
 export function burst(game, x, y, color, n = 12) {

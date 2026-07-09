@@ -33,10 +33,19 @@ export const COLORS = {
     shielder: '#6fd0ff', // 방패병(시안)
     shielderShield: 'rgba(111,208,255,0.35)', // 방패막(반투명)
     rusher: '#ff5470',   // 돌격기(강렬한 레드)
+    // 21~30 이질 기계·결정·에너지 계열 - 각진 형태 + 기계색으로 유기체 정령과 대비.
+    turret: '#7d97bd',      // 부유 포대(강철 청)
+    turretCore: '#ffd36b',  // 포대 코어(경고 발광)
+    prism: '#b78bff',       // 결정체(형광 보라)
+    mine: '#d0824c',        // 기뢰(녹슨 구리 - 경고톤)
+    mineCore: '#ff5470',    // 기뢰 코어(자폭 경고 적)
+    warper: '#3fbfa2',      // 공간 왜곡체(불안정 청록)
   },
-  // 보스 색 (중보스 mini / 최종 final)
+  // 보스 색 (중보스 mini 1~19 / 기계 중보스 machine 21~29 / 최종 final 30)
   boss: {
     mini: '#ffa05c',
+    machine: '#8797b8',     // 기계 중보스(강철)
+    machineCore: '#ff6b81', // 기계 보스 코어(붉은 발광)
     final: '#c0455c',
     gunMini: '#ffd08a',
     gunFinal: '#ff6b81',

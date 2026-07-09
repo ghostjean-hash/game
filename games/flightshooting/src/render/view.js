@@ -203,6 +203,35 @@ function drawEnemies(ctx, game) {
       ctx.beginPath();
       ctx.moveTo(0, r * 1.3); ctx.lineTo(-r * 0.7, -r * 0.7); ctx.quadraticCurveTo(0, -r * 0.2, r * 0.7, -r * 0.7); ctx.closePath(); ctx.fill();
       spriteEyes(ctx, r, 0.26, -0.32, 0.11);
+    } else if (e.type === 'turret') {
+      // 부유 포대: 육각 강철 몸체 + 아래 포신 + 발광 코어(눈 없음, 기계).
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; ctx[i ? 'lineTo' : 'moveTo'](Math.cos(a) * r * 0.9, Math.sin(a) * r * 0.9); }
+      ctx.closePath(); ctx.fill();
+      ctx.fillRect(-r * 0.18, r * 0.5, r * 0.36, r * 0.85); // 포신(아래)
+      ctx.fillStyle = COLORS.enemy.turretCore;
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.3, 0, Math.PI * 2); ctx.fill();
+    } else if (e.type === 'prism') {
+      // 결정체: 마름모 + 안쪽 흰 하이라이트(투명감).
+      ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r * 0.7, 0); ctx.lineTo(0, r); ctx.lineTo(-r * 0.7, 0); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 0.5; ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.moveTo(0, -r * 0.5); ctx.lineTo(r * 0.35, 0); ctx.lineTo(0, r * 0.5); ctx.lineTo(-r * 0.35, 0); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1;
+    } else if (e.type === 'mine') {
+      // 기뢰: 팔각 몸체 + 스파이크 4개 + 붉은 코어(자폭 경고).
+      ctx.beginPath();
+      for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; ctx[i ? 'lineTo' : 'moveTo'](Math.cos(a) * r * 0.68, Math.sin(a) * r * 0.68); }
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = e.color; ctx.lineWidth = 3;
+      for (let i = 0; i < 4; i++) { const a = (i / 4) * Math.PI * 2 + Math.PI / 4; ctx.beginPath(); ctx.moveTo(Math.cos(a) * r * 0.6, Math.sin(a) * r * 0.6); ctx.lineTo(Math.cos(a) * r * 1.15, Math.sin(a) * r * 1.15); ctx.stroke(); }
+      ctx.fillStyle = COLORS.enemy.mineCore;
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.3, 0, Math.PI * 2); ctx.fill();
+    } else if (e.type === 'warper') {
+      // 공간 왜곡체: 마름모 + 이동 직후(vuln) 잔상 반짝 + 흰 코어 십자.
+      if (e.vuln > 0) { ctx.globalAlpha = 0.35; ctx.beginPath(); ctx.moveTo(0, -r * 1.35); ctx.lineTo(r * 0.9, 0); ctx.lineTo(0, r * 1.35); ctx.lineTo(-r * 0.9, 0); ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1; }
+      ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r * 0.65, 0); ctx.lineTo(0, r); ctx.lineTo(-r * 0.65, 0); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(-r * 0.32, 0); ctx.lineTo(r * 0.32, 0); ctx.moveTo(0, -r * 0.32); ctx.lineTo(0, r * 0.32); ctx.stroke();
     } else {
       ctx.beginPath(); ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2); ctx.fill();
       spriteEyes(ctx, r);
@@ -220,6 +249,21 @@ function drawBoss(ctx, game) {
   ctx.shadowColor = boss.color;
   ctx.shadowBlur = isFinal ? 20 : 14;
   ctx.fillStyle = boss.color;
+  if (boss.style === 'machine') {
+    // 기계 중보스(21~29): 각진 팔각 강철 몸체 + 포신 2문 + 붉은 발광 코어(눈 없음).
+    ctx.beginPath();
+    for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2 + Math.PI / 8; ctx[i ? 'lineTo' : 'moveTo'](Math.cos(a) * boss.rx, Math.sin(a) * boss.ry); }
+    ctx.closePath(); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = COLORS.boss.machineCore;
+    ctx.fillRect(-boss.rx * 0.55, boss.ry - 6, 8, 14);
+    ctx.fillRect(boss.rx * 0.55 - 8, boss.ry - 6, 8, 14);
+    ctx.beginPath(); ctx.arc(0, 0, boss.rx * 0.32, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath(); ctx.arc(0, 0, boss.rx * 0.14, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    return;
+  }
   ctx.beginPath();
   ctx.ellipse(0, 0, boss.rx, boss.ry, 0, 0, Math.PI * 2);
   ctx.fill();

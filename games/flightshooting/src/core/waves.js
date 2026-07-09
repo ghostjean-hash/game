@@ -6,6 +6,7 @@ import { CFG, STAGE_NAMES } from '../data/numbers.js';
 const cols = (n) => Array.from({ length: n }, (_, i) => (i + 1) / (n + 1));
 
 export function buildWaves(stage) {
+  if (stage >= CFG.voidStage.from) return buildVoidWaves(stage); // 21구역~: 이질 기계 적 구간
   if (stage >= CFG.hardStage.from) return buildHardWaves(stage); // 11구역~: 신규 적 구간
   const s = Math.min(stage - 1, 6); // 난이도 가중(상한으로 후반 과밀 방지)
   const w = [];
@@ -43,6 +44,26 @@ function buildHardWaves(stage) {
   t += 2.2; add('shielder', cols(2 + Math.min(s, 2)));
   if (s >= 1) { t += 2.4; add('rusher', cols(3 + Math.min(s, 3))); }
   if (s >= 2) { t += 2.2; add('splitter', cols(3 + Math.min(s, 2))); }
+  return w;
+}
+
+// 21~30 구역: 이질 기계 적(turret 포대·prism 결정·mine 기뢰·warper 왜곡체) 위주. 완전 다른 형태 구간.
+function buildVoidWaves(stage) {
+  const s = Math.min(stage - CFG.voidStage.from, 6);
+  const w = [];
+  let t = 1.0;
+  const add = (type, xs) => { w.push({ t, enemies: xs.map((xr) => ({ type, xr })) }); };
+
+  add('turret', cols(2 + Math.min(s, 2)));
+  t += 2.4; add('prism', cols(2 + Math.min(s, 3)));
+  t += 2.2; add('mine', cols(2 + Math.min(s, 2)));
+  t += 2.4; add('warper', cols(2 + Math.min(s, 3)));
+  t += 2.2; add('prism', cols(3 + Math.min(s, 3)));
+  t += 2.4; add('turret', cols(2 + Math.min(s, 2)));
+  t += 2.2; add('mine', cols(3 + Math.min(s, 2)));
+  t += 2.4; add('warper', cols(3 + Math.min(s, 3)));
+  if (s >= 1) { t += 2.2; add('prism', cols(3 + Math.min(s, 3))); }
+  if (s >= 2) { t += 2.4; add('turret', cols(3 + Math.min(s, 2))); }
   return w;
 }
 
