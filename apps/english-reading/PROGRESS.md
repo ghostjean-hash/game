@@ -234,3 +234,10 @@
 - 구현: readMode 전역("chunk"/"word", 기본 chunk) + 읽기 화면 상단 '끊기 ✂️ / 단어 📖' 세그먼트 스위치(둘 다 켜졌을 때만 노출) + article에 mode-chunk/mode-word 클래스. CSS로 .mode-chunk .w.word{pointer-events:none} / .mode-word .gap{pointer-events:none} - 한 모드에서 한 종류만 터치 반응. applyMode가 클래스·버튼 active 갱신. 그은 선 표시는 pointer-events 무관이라 모드 전환에도 유지.
 - 첫 안내 문구를 모드 사용법으로 갱신. 노출 설정으로 한쪽만 켜면 스위치 없이 그 하나만 동작.
 - 검증: 유닛 통과, browser-shot 9항목(스위치 표시·기본 끊기 active·끊기모드 단어 pointer-events none·틈 auto·긋기 동작·단어 전환·틈 none·단어 auto·수집 동작) + 콘솔 0. 실서비스 smoke 통과. CLAUDE.md 1.3·기획서 손끝규칙 정합. 커밋 ac99c6a, SW v167→v168.
+
+## 2.31. 끊기/단어를 상단바 독립 토글(SVG)로 + 끊는 기준 홈 하단 이관 (2026-07-10, 사용자 지시)
+
+- 모드 스위치(2.30, 한 번에 하나 라디오)를 폐기하고 **각각 독립 on/off 토글 2개**로 전환. 상단바 '단어장' 왼쪽에 끊기(가위)·단어(T) 아이콘 버튼 나란히. 켜진 토글만 본문 터치 반응(no-chunk/no-word로 pointer-events), 상태 localStorage('touch') 저장. 기본 끊기 on·단어 off.
+- 이모지(✂️📖) 금지 지시 → Feather 계열 인라인 SVG 아이콘(가위=끊기, type/T=단어)만 사용. index.html + build-standalone 템플릿 동시 수정.
+- '끊는 기준' 버튼을 읽기 상단바(nav-guide)에서 제거하고 홈 목록 하단 list-actions로 이관(openGuide 재사용). readMode/applyMode/mode-bar 전면 제거, el.guide→el.chunk/el.word.
+- 검증: core 테스트 통과, browser-shot 18항목(목록 토글 숨김·끊는기준 하단버튼·읽기 토글 표시·SVG 아이콘·이모지 없음·단어장 왼쪽 배치·기본 끊기active/단어off·독립 on/off 본문 반응·끊는기준 모달) + 콘솔 0. 실서비스 smoke 통과. 커밋 7656bab, SW v170→v171(flightshooting v170과 별개).
