@@ -61,8 +61,12 @@ let bannerTimer = 0;
 let apSkill = store.get('apSkill', CFG.autopilot.default);
 let difficulty = store.get('difficulty', 'normal'); // 'normal' | 'kid'(어린이 모드 = 적이 덜 쏨)
 let cheatEnabled = store.get('cheat', false);
-let cheatSpeed = 1;
-const cheatState = { invincible: false, dropChance: null, dropKinds: { P: true, S: true, E: true, T: true, H: true, B: true } };
+// 치트 세부 설정도 localStorage 저장/복원(사용자 지시 2026-07-10). 켜기 여부(cheat)와 별도 키(cheatCfg).
+const CHEAT_DEFAULT = { speed: 1, invincible: false, dropChance: null, dropKinds: { P: true, S: true, E: true, T: true, H: true, B: true } };
+const cheatSaved = { ...CHEAT_DEFAULT, ...store.get('cheatCfg', {}) };
+let cheatSpeed = cheatSaved.speed;
+const cheatState = { invincible: cheatSaved.invincible, dropChance: cheatSaved.dropChance, dropKinds: { ...CHEAT_DEFAULT.dropKinds, ...cheatSaved.dropKinds } };
+function saveCheat() { store.set('cheatCfg', { speed: cheatSpeed, invincible: cheatState.invincible, dropChance: cheatState.dropChance, dropKinds: cheatState.dropKinds }); }
 
 function createGame() {
   return {
@@ -138,36 +142,50 @@ function handleEvent(ev) {
 }
 
 // ── HUD / 배너 ──
-// 계통이 최대치면 '마스터'(★ 금색)로 표시, 아니면 현재 값.
-// extra > 0 이면 별 뒤에 단계를 붙인다(진화/무기 티어: ★1~★4).
-function setPartHud(el, val, max, extra = 0) {
+// 강화 단계 표기(사용자 지시 2026-07-10): 진화/무기 '티어'는 로마숫자(I~V), 그 티어 안의 세부 진행(서브스텝)은 숫자.
+//   예) 발별 진화 2티어를 3발째 진행 중 = "★II·3". 서브스텝 0이면 로마숫자만.
+const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V'];
+const roman = (n) => ROMAN[n] || String(n);
+// 만렙(★) + 티어 로마 + 서브스텝 숫자를 조립. tier 0 = 진화 전(★만).
+function starTierText(tier, sub) {
+  if (tier <= 0) return '★';
+  return '★' + roman(tier) + (sub > 0 ? '·' + sub : '');
+}
+// 계통이 최대치면 '마스터'(★ 금색), 아니면 현재 값(카운트형: 에너지존 레벨 등).
+function setPartHud(el, val, max) {
   const mastered = val >= max;
-  el.textContent = mastered ? (extra ? '★' + extra : '★') : val;
+  el.textContent = mastered ? '★' : val;
   el.classList.toggle('mastered', mastered);
 }
-// 메인 총알: 8발 도달이 1차 만렙(★), 그 뒤 발별 진화 최고 티어(front-8 기준)를 ★N으로 붙인다.
-function setFrontHud() {
-  if (game.front < 8) { elFront.textContent = game.front; elFront.classList.remove('mastered'); return; }
-  const evo = game.front - 8;
-  const tier = evo > 0 ? Math.min(Math.floor((evo - 1) / 8) + 1, CFG.parts.front.tierMax) : 0;
-  elFront.textContent = tier > 0 ? '★' + tier : '★';
-  elFront.classList.add('mastered');
+// 발별 진화 계통(메인·사이드) 공용: 카운트 만렙 전이면 카운트 숫자, 만렙 후 진화도(evo)를 티어(로마)+서브스텝(숫자)으로.
+//   evo 8스텝마다 티어 +1, 티어 안 서브스텝은 1~8(가운데부터 몇 발 진화했나).
+function setEvoHud(el, count, countMax, evo, tierMax) {
+  if (count < countMax) { el.textContent = count; el.classList.remove('mastered'); return; }
+  el.classList.add('mastered');
+  if (!evo) { el.textContent = '★'; return; }
+  const tier = Math.min(Math.floor((evo - 1) / 8) + 1, tierMax);
+  const sub = ((evo - 1) % 8) + 1; // 1~8
+  el.textContent = starTierText(tier, sub);
 }
-// 꼬리기: 4대 미만이면 대수, 4대 도달 후엔 ★ + 전체 최저 무기 단계(모든 꼬리기가 오른 단계).
+function setFrontHud() {
+  // 메인 총알: front 1~7 = 탄 수, 8 = ★, 9~40 = 발별 진화(evo = front-8).
+  setEvoHud(elFront, game.front, 8, Math.max(0, game.front - 8), CFG.parts.front.tierMax);
+}
+// 꼬리기: 4대 미만이면 대수, 4대 후엔 무기 티어(최저 무기 단계 = 로마) + 서브스텝(다음 단계로 오른 대수 1~3).
 function setTailHud() {
   const T = CFG.parts.tail;
   const n = game.tail.length;
   if (n < T.maxCount) { elTail.textContent = n; elTail.classList.remove('mastered'); return; }
-  const minW = Math.min(...game.tail.map((t) => t.weapon));
-  elTail.textContent = minW > 1 ? '★' + minW : '★';
   elTail.classList.add('mastered');
+  const minW = Math.min(...game.tail.map((t) => t.weapon)); // 전체가 도달한 무기 단계 = 티어(로마 I~IV)
+  const raised = game.tail.filter((t) => t.weapon > minW).length; // 다음 단계로 오른 대수 = 서브스텝
+  elTail.textContent = starTierText(minW, raised);
 }
 function syncHud() {
   elScore.textContent = game.score;
   elStage.textContent = game.stage;
   setFrontHud();
-  const sideEvo = game.optionEvo ? Math.min(Math.floor((game.optionEvo - 1) / 8) + 1, CFG.bullet.shapes.length - 1) : 0;
-  setPartHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2, sideEvo);
+  setEvoHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2, game.optionEvo || 0, CFG.bullet.shapes.length - 1);
   setPartHud(elZone, game.zone.level, CFG.parts.zone.levelMax);
   setTailHud();
   const lifeEls = elLives.querySelectorAll('.life');
@@ -207,7 +225,11 @@ function startGame(diff) {
   setAutopilot(false); // 시작 시 기본은 수동(자동 시작 버튼이 이후 다시 켬)
   game.apSkill = apSkill;                       // 자동 플레이 실력 티어 반영
   game.difficulty = difficulty;                 // 난이도 모드
-  game.enemyFireMul = (CFG.difficulty[difficulty] || CFG.difficulty.normal).enemyFireMul;
+  const diffCfg = CFG.difficulty[difficulty] || CFG.difficulty.normal;
+  game.enemyFireMul = diffCfg.enemyFireMul;
+  // 난이도 시작 보너스: 어린이 모드는 메인 총알·꼬리 비행기를 조금 갖춘 채 출발(더 쉽게)
+  for (let i = 1; i < diffCfg.startFront; i++) gainFront(game);
+  for (let i = 0; i < diffCfg.startTail; i++) gainTail(game);
   game.cheat = cheatEnabled ? cheatState : null; // 치트 켜짐 시에만 core가 참조
   state = 'playing';
   updateCheatVisible();
@@ -308,7 +330,19 @@ function backToMenu() {
 
 // 치트 박스 표시: 치트 켜짐 + 게임 진행/일시정지 중일 때만.
 function updateCheatVisible() {
-  $('#cheat-box').hidden = !(cheatEnabled && (state === 'playing' || state === 'paused'));
+  const show = cheatEnabled && (state === 'playing' || state === 'paused');
+  $('#cheat-box').hidden = !show;
+  if (show) syncCheatUI(); // 저장된 치트 설정을 UI에 반영
+}
+
+// 저장/복원된 치트 값(속도·무적·드랍 확률·종류)을 치트 박스 UI에 그대로 반영.
+function syncCheatUI() {
+  $('#cheat-speed').querySelectorAll('button[data-mul]').forEach((x) => x.classList.toggle('on', Number(x.dataset.mul) === cheatSpeed));
+  $('#cheat-inv').checked = cheatState.invincible;
+  const pct = Math.round((cheatState.dropChance == null ? CFG.drop.chance : cheatState.dropChance) * 100);
+  $('#cheat-drop').value = pct;
+  $('#cheat-drop-val').textContent = pct + '%';
+  $('#cheat-kinds').querySelectorAll('input[data-kind]').forEach((c) => { c.checked = cheatState.dropKinds[c.dataset.kind] !== false; });
 }
 
 // ── 전체화면 (4.7-6: 지원 기기만 버튼 노출) ──
@@ -367,16 +401,19 @@ $('#cheat-speed').addEventListener('click', (e) => {
   const b = e.target.closest('button[data-mul]'); if (!b) return;
   cheatSpeed = Number(b.dataset.mul);
   $('#cheat-speed').querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+  saveCheat();
 });
-$('#cheat-inv').addEventListener('change', (e) => { cheatState.invincible = e.target.checked; });
+$('#cheat-inv').addEventListener('change', (e) => { cheatState.invincible = e.target.checked; saveCheat(); });
 $('#cheat-drop').addEventListener('input', (e) => {
   const v = Number(e.target.value);
   $('#cheat-drop-val').textContent = v + '%';
   cheatState.dropChance = v / 100;
+  saveCheat();
 });
 $('#cheat-kinds').addEventListener('change', (e) => {
   const c = e.target.closest('input[data-kind]'); if (!c) return;
   cheatState.dropKinds[c.dataset.kind] = c.checked;
+  saveCheat();
 });
 $('#cheat-fold').addEventListener('click', () => {
   const body = $('#cheat-body');

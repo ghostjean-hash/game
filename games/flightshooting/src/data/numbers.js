@@ -3,11 +3,13 @@
 
 export const CFG = {
   player: { r: 14, speed: 340, fireEvery: 0.154, maxLives: 3, invAfterHit: 1.6, yRatio: 0.82 },
-  // 난이도 모드(시작 화면에서 선택). 어린이 모드는 적·보스 발사 주기를 배수로 늘려 총알을 덜 쏘게 한다.
+  // 난이도 모드(시작 화면에서 선택). 어린이 모드는 적·보스 발사 주기를 배수로 늘려 총알을 덜 쏘게 하고,
+  //   시작 화력도 조금 얹어 더 쉽게 출발한다.
   //   enemyFireMul = 적 발사 간격 배수(1 = 일반, 2.2 = 발사 간격 2.2배 → 총알 절반 이하). 탄 수·패턴은 그대로.
+  //   startFront = 시작 메인 총알 수(front 값, 1 = 기본 1발), startTail = 시작 꼬리 비행기 대수(0 = 없음).
   difficulty: {
-    normal: { enemyFireMul: 1 },
-    kid:    { enemyFireMul: 2.2 },
+    normal: { enemyFireMul: 1,   startFront: 1, startTail: 0 },
+    kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1 },
   },
   // bullet.shapes: 전방화력 발별 진화 티어별 탄 렌더(docs/05 1.1.1). 인덱스 0=진화 전 기본, 1~4=진화 티어.
   //   모양이 원→타원→긴형→링으로 뚜렷이 바뀐다(색만이 아니라 형태로 성장을 보인다, 사용자 지시 2026-07-08).
@@ -25,14 +27,15 @@ export const CFG = {
     // 메인 총알(전방화력) 진화 외형: 레이저 빔(빛줄기)을 유지한 채 강화(사용자 지시 2026-07-09).
     //   각진 도형이 아니라 '광선' 형태 그대로, 발별 진화 티어↑일수록 빔이 길고 굵고 밝아지며 흰 코어가 강해진다.
     //   w = 빔 반폭 배율(기본 반경 대비), len = 빔 길이(px), core = 흰 코어 폭 비율(0~1), glow = 발광 강도.
-    //   seg = 흰 코어를 몇 마디로 끊어 그릴지(0=실선). 고티어일수록 마디가 늘어 '에너지 빔' 무늬가 생긴다
-    //         (여러 발이 나란히 나가도 벽처럼 완전히 뭉치지 않고 패턴으로 보이게, 사용자 지시 2026-07-09).
+    //   seg = 코어 무늬의 반복 개수(pattern이 seg면 마디 수, o/x/diamond면 도형 반복 수. beam은 무시).
+    //   pattern = 티어별 코어 무늬 종류로 '다른 종류의 레이저'처럼 구분(사용자 지시 2026-07-10):
+    //     beam=실선 / seg=마디 / o=원 반복 / x=엑스 반복 / diamond=마름모 반복. view.drawMainCore가 그린다.
     mainBeams: [
-      { w: 0.42, len: 18, core: 0.42, glow: 0,  seg: 0 },  // 0 무강화(가는 실선 빔)
-      { w: 0.50, len: 23, core: 0.44, glow: 6,  seg: 0 },  // 1 강화1(조금 굵고 김, 실선)
-      { w: 0.60, len: 28, core: 0.44, glow: 9,  seg: 2 },  // 2 강화2(마디 2 - 무늬 시작)
-      { w: 0.70, len: 33, core: 0.46, glow: 12, seg: 3 },  // 3 강화3(마디 3)
-      { w: 0.82, len: 39, core: 0.48, glow: 16, seg: 4 },  // 4 강화4(최종, 길고 밝은 광선 + 촘촘한 마디 4)
+      { w: 0.42, len: 18, core: 0.42, glow: 0,  seg: 0, pattern: 'beam' },    // 0 무강화(가는 실선 빔)
+      { w: 0.50, len: 24, core: 0.44, glow: 6,  seg: 2, pattern: 'seg' },     // 1 강화1(마디 빔)
+      { w: 0.62, len: 30, core: 0.46, glow: 9,  seg: 3, pattern: 'o' },       // 2 강화2(○ 반복 레이저)
+      { w: 0.72, len: 36, core: 0.48, glow: 12, seg: 3, pattern: 'x' },       // 3 강화3(✕ 반복 레이저)
+      { w: 0.84, len: 42, core: 0.50, glow: 16, seg: 4, pattern: 'diamond' }, // 4 강화4(◆ 반복 레이저, 최종)
     ],
   },
   enemyBullet: { speed: 250, r: 5 },
@@ -119,7 +122,7 @@ export const CFG = {
   // 최종보스는 이제 20구역. 20구역까지 화력이 최대로 성장하므로 hp를 크게 상향.
   finalBoss: { rx: 50, ry: 44, hp: 1500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
-  boss: { bobAmp: 0.32, bobFreq: 0.5, spawnTop: 62 },
+  boss: { bobAmp: 0.32, bobFreq: 0.3, spawnTop: 62 },
   // 11구역~ 신규 적(splitter/shielder/rusher), 21구역~ 이질 기계 적(turret/prism/mine/warper). 30구역이 최종.
   stageCount: 30,
   // 11구역 이후 추가 체력 배수(신규 적 구간 난이도 가속). 최종 hp = 기존 스케일 × (구역>=11이면 이 배수).

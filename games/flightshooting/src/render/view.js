@@ -314,6 +314,40 @@ function drawRocket(ctx, r, tier) {
   }
 }
 
+// 메인 총알 흰 코어 무늬 - 티어별로 다른 패턴을 빔을 따라(로컬 세로축) 반복해 '다른 종류의 레이저'로 구분한다.
+// 호출 전에 translate+rotate로 진행 방향 좌표계가 잡혀 있어, 로컬 y축(위=진행방향)으로만 반복 배치하면 된다.
+function drawMainCore(ctx, bm, w) {
+  const cw = w * bm.core, coreLen = bm.len * 0.84, top = -bm.len * 0.42;
+  ctx.fillStyle = COLORS.laserCore;
+  ctx.strokeStyle = COLORS.laserCore;
+  const pat = bm.pattern || 'beam';
+  if (pat === 'beam') { ctx.fillRect(-cw, top, cw * 2, coreLen); return; }           // 실선 빔
+  if (pat === 'seg') {                                                                // 마디진 빔
+    const unit = coreLen / (bm.seg * 2 - 1);
+    for (let i = 0; i < bm.seg; i++) ctx.fillRect(-cw, top + i * unit * 2, cw * 2, unit);
+    return;
+  }
+  const n = bm.seg || 3, gap = coreLen / n, r = w * 0.85; // 빔 반폭 기준 - 무늬가 빔을 살짝 넘어 또렷하게 보인다
+  ctx.lineWidth = Math.max(1.5, w * 0.55);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  for (let i = 0; i < n; i++) {
+    const y = top + gap * (i + 0.5);
+    if (pat === 'o') {                                                                // ○ 반복
+      ctx.beginPath(); ctx.arc(0, y, r, 0, Math.PI * 2); ctx.stroke();
+    } else if (pat === 'x') {                                                         // ✕ 반복
+      ctx.beginPath();
+      ctx.moveTo(-r, y - r); ctx.lineTo(r, y + r);
+      ctx.moveTo(r, y - r); ctx.lineTo(-r, y + r);
+      ctx.stroke();
+    } else if (pat === 'diamond') {                                                   // ◆ 반복
+      ctx.beginPath();
+      ctx.moveTo(0, y - r); ctx.lineTo(r, y); ctx.lineTo(0, y + r); ctx.lineTo(-r, y);
+      ctx.closePath(); ctx.fill();
+    }
+  }
+}
+
 // 총알/적탄은 수십 개가 매 프레임 그려지므로 글로우를 걸지 않는다(발열 핵심 요인).
 // 밝은 색 자체로 네온 느낌을 낸다.
 function drawBullets(ctx, game) {
@@ -384,15 +418,7 @@ function drawBullets(ctx, game) {
       ctx.fillStyle = col;
       ctx.fillRect(-w, -bm.len / 2, w * 2, bm.len);                          // 빔 외곽(색)
       ctx.shadowBlur = 0;
-      ctx.fillStyle = COLORS.laserCore;
-      const cw = w * bm.core, coreLen = bm.len * 0.84, coreTop = -bm.len * 0.42;
-      if (bm.seg > 0) {
-        // 마디진 흰 코어(에너지 빔 무늬): 마디와 간격을 같은 길이로 번갈아.
-        const unit = coreLen / (bm.seg * 2 - 1);
-        for (let i = 0; i < bm.seg; i++) ctx.fillRect(-cw, coreTop + i * unit * 2, cw * 2, unit);
-      } else {
-        ctx.fillRect(-cw, coreTop, cw * 2, coreLen);                         // 실선 흰 코어
-      }
+      drawMainCore(ctx, bm, w);   // 티어별 코어 무늬(실선/마디/원/엑스/마름모) - '다른 종류의 레이저'로 구분
       ctx.restore();
     }
   }
