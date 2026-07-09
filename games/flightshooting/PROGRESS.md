@@ -502,3 +502,28 @@
 - 어린이 모드 배수 2.2, 빔 마디/V자 강도는 실플레이 체감 후 조정 가능.
 - tagline·docs 화면흐름의 "20개 구역"이 실제 30과 불일치(이전 30스테이지 확장 때 누락, 이번 작업 무관) - 별도 정정 필요.
 - 보스 부위 파괴형(docs/06) 구현. coil·serpent 2차 적.
+
+## 2026-07-10 (후속2) - 6건 묶음: 문서 정정 + 어린이 단발화 + 출현 폭 + 신규 적 2종 + 보스 부위 파괴형
+
+`/jn` 추천 후 사용자 "모두 진행" + 진행 중 추가 지시 3건(어린이 3발→1발 / 적 출현 폭 고정·2배 / 보스 전면 개편 선택)을 받아 6건을 처리했다. 두 번에 나눠 배포(v172·v173).
+
+### 배포 1 (v172, 0253ac5) - 문서·난이도·출현영역·신규 적
+- **문서 "20→30" 정정**: 실제 stageCount 30인데 index tagline·main 승리 메시지·docs/01·05가 "20"으로 stale. 전수 정정 + main 승리 문구를 `CFG.stageCount` 참조로(재-stale 방지).
+- **어린이 모드 적 조준 연발 → 정중앙 단발**(사용자 지시): gunner·turret(3발 확산)·보스 조준 연발(2·3발)을 어린이 모드에서 1발 정중앙으로. `difficulty.kid.enemyShotsMax` 1 신설, world가 `Math.min(shots, cap)` + 중앙대칭 조준식으로 통일. 부채 방사 패턴은 제외.
+- **적 출현 가로 영역 고정폭**(사용자 지시): 화면폭 W가 넓어도 적 스폰 x를 중앙 고정폭 안으로. `CFG.field.width` 신설, `fieldBounds(W)` 헬퍼(spawn), spawnEnemy·warper 이동에 적용. 보너스·보스는 예외. 이후 사용자 "폭 2배" 지시로 480→960(배포 2).
+- **2차 이질 적 coil·serpent**(docs/08 2차): coil = 노드 2개가 전기 아크 선으로 연결된 쌍(선분-점 거리로 아크 피격, 노드 부수면 아크 소멸, 26구역~). serpent = 머리 약점 + 몸통 무적 마디 체인(사인파 하강·지연 추종, 머리 격파 시 전체 제거, 28구역~). numbers/colors/spawn/world/view/waves + tests.
+
+### 배포 2 (v173, 28aca86) - 보스 부위 파괴형 전면 개편 + 출현 폭 2배
+- 사용자 "전면 개편" 선택(AskUserQuestion). docs/06 미확정 5건을 확정(스타일 4종 유지 / 구역 배정 1~10·11~20·21~29·30 / sentinel 광폭화 / 부위 hp 게이지 노출 / 부위 파괴 점수·드롭 없음)하고 구현.
+- **구조**: 단일 hp → **코어 + 부위(weapon 포탑 / shield 방어구)**. `CFG.bossStyles` 테이블(스타일별 부위 오프셋·hp 비율·패턴), 총 hp를 coreRatio + 부위 hpRatio(합 1)로 분배. 정면 화력은 살아있는 부위 우선 → 노출 코어, 유도탄·존은 부위 무시 코어 직격. shield 전멸 시 코어 노출, weapon 파괴 시 그 패턴 정지.
+- **스타일 4종**: battleship(1~10 포탑 2·코어 노출) / bio(11~20 촉수 3 방어구) / orbiter(21~29 회전 실드 4) / sentinel(30 머리·어깨 포탑 + 가슴 방어판 + 광폭화).
+- spawn(spawnBoss 재작성·syncBossParts) / world(updateBoss·bossFire·damageCore·destroyPart·충돌 부위 우선) / view(drawBoss·drawBossPart 스타일별 + 부위 hp 게이지) / main(코어 hp 바 + "보호 중") / styles(.protected 빗금) / colors(boss.styles) / docs 01·06.
+
+### 검증 종합
+- core 테스트 60 → **86 PASS**(fieldBounds 3 + 어린이 단발 5 + coil·serpent 9 + 보스 부위 9 신규). browser-shot: 필드 고정폭(넓은 화면 중앙 집중)·coil 아크쌍·serpent 머리 약점 체인·보스 4스타일(함선 노출/생체·위성 "보호 중"/파수꾼 방어판 파괴로 코어 노출) 전부 확인, pageerror 0.
+- dev 훅 확장(localhost 게이트): `spawn=<적>`·`boss=1`(웨이브 건너뛰고 보스 즉시 등장) - 신규 적·보스 스타일 관찰용.
+- web-deploy 2회 완주(테스트 → SW bump → push → smoke 200·콘솔 0·가시성 통과).
+
+### 남은 것
+- 부위 파괴형 보스 hp 예산(코어/부위 분배)·광폭화 강도는 실플레이 체감 후 조정 가능(자동 관찰 한계).
+- 어린이 모드 배수 2.2·빔 강도는 여전히 실플레이 조정 여지.
