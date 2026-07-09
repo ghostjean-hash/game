@@ -197,3 +197,9 @@
 - 데이터: baseData(passages.json) + customPassages(localStorage)를 rebuildCourse로 합쳐 코스 구성. 목록 '내 문제' 뱃지, 커스텀 지문도 읽기·해석·회독·진행저장 그대로 동작. build-standalone에 validate.js 인라인 + fetch 치환을 rebuildCourse 형태로 갱신.
 - 부수 버그: .author-btn display:block이 hidden 속성을 덮어 잘못된 문제에도 '추가' 버튼 노출되던 가시성 버그(#190 유형) → .author-btn[hidden]{display:none}로 교정(E2E가 검출).
 - 검증: validate 유닛 7건 + 출제 흐름 E2E 12건(규칙 표시·잘못된 문제 위반 지적·추가버튼 숨김·올바른 문제 추가·목록 뱃지·커스텀 지문 읽기·삭제) + 콘솔 0. 실서비스 smoke 통과. 커밋 8facf03, SW v161→v162.
+
+## 2.26. 출제 규칙·검증 안내 개선 - 단어 활용형 (2026-07-09, 사용자 제미나이 출제 결과 검증 에러)
+
+- 사례: 사용자가 제미나이로 만든 지문에서 원문 "triggers"의 뜻 단어를 원형 "trigger"로 넣어 '죽은 단어' 검증에 걸림(검사기는 정상 작동 - meaningByClean이 원문 형태로 뜻을 연결하므로 원형은 뜻이 죽음). 고친 JSON(trigger→triggers) 제공해 즉시 해소.
+- 재발 방지: AUTHORING_PROMPT 5번 규칙 강화(word는 원문 활용형 그대로, -s·-ed·-ing 원형 변환 금지, meaning엔 원형 뜻 허용) + validate.js 죽은 단어 에러에 "원문 형태 그대로" 힌트 추가.
+- 검증: 고친 JSON validatePassage ok, 빌드·테스트 통과, 실서비스 smoke 통과. 커밋 ea4cebd, SW v162→v163.
