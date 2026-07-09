@@ -297,17 +297,13 @@ body {
   position: relative;
   -webkit-tap-highlight-color: transparent;
 }
-/* 주요 단어 - 아주 옅은 점선 밑줄로만 구분(몰입 유지 + 발견 가능) */
-.w.key {
-  cursor: pointer;
-  border-bottom: 1.5px dotted var(--er-accent);
-  padding-bottom: 1px;
-}
-/* 임시 수집(Flagged) - 뜻은 아직 감추고 표시만. 오렌지 배경 + 실선 밑줄(색만으로 구분하지 않음) */
-.w.key.flagged {
+/* 본문 단어는 모두 클릭 가능하되 밑줄 등 표시 없이 깨끗하게 둔다(어떤 단어가 걸림돌인지는 학습자가 정함) */
+.w.word { cursor: pointer; }
+/* 임시 수집(Flagged) - 누른 단어를 오렌지 배경으로만 표시(밑줄 없음), 뜻은 해석 때 공개 */
+.w.word.flagged {
   background: #ffedd5;
-  border-bottom: 1.5px solid #f97316;
-  border-radius: 4px 4px 0 0;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px #ffedd5;
 }
 
 /* 화면 하단 토스트 - 임시 수집·회독 완료 안내 */
@@ -346,6 +342,7 @@ body {
 .cw-row { display: flex; align-items: baseline; gap: 10px; font-size: 14px; line-height: 1.5; }
 .cw-word { flex-shrink: 0; min-width: 92px; font-weight: 700; color: var(--fg); }
 .cw-mean { color: var(--fg-dim); }
+.cw-mean.cw-empty { color: var(--fg-mute); font-style: italic; }
 
 /* 끊어 읽기 청킹 */
 .chunks { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-2); }
@@ -437,6 +434,7 @@ body {
   background: var(--bg-elev-2);
 }
 .vd-mean { font-size: 14px; font-weight: 700; color: var(--er-accent); }
+.vd-mean.vd-empty { color: var(--fg-mute); font-weight: 500; font-style: italic; }
 .vd-ex { font-size: 13.5px; color: var(--fg); margin-top: 6px; line-height: 1.5; }
 .vd-src { font-size: 12px; color: var(--fg-mute); margin-top: 6px; }
 

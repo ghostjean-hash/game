@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(english-reading): 선유추 단어수집·다회독 루프 + 끊는 기준 검사기 + 채점 표시 개선",
+    "commitMessage": "feat(english-reading): 본문 모든 단어 클릭·수집 + 단어 밑줄 전면 제거 (특정 단어 제한 폐지)",
     "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

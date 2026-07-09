@@ -1,6 +1,6 @@
 // 하이브리드 독해 - 몰입 리딩 + 끊어 읽기 직접 긋기·채점 + 코스 진행·전체 클리어.
 // 순수 로직은 core(tokenize·course·chunking)에 위임하고, 여기서 DOM만 만진다.
-import { tokenize, resolveTargets } from "./core/tokenize.js";
+import { tokenize } from "./core/tokenize.js";
 import { createCourse, courseProgress } from "./core/course.js";
 import { chunkBoundaries, gradeSlashes, chunkReasons } from "./core/chunking.js";
 import { createStorage } from "../../../shared/storage.js";
@@ -164,37 +164,42 @@ function renderSentence(s, passage, settings) {
   line.className = "sentence-line";
 
   const tokens = tokenize(s.text);
-  const targets = resolveTargets(tokens, settings.words ? (s.words || []) : []);
-  const targetByIndex = new Map(targets.filter((t) => t.index >= 0).map((t) => [t.index, t]));
+  // 뜻 힌트 맵 - 데이터에 뜻을 넣어둔 단어는 해석 시 뜻까지 보여준다(없으면 뜻은 비운 채 단어만 담는다).
+  // 어떤 단어를 모르는지는 학습자가 정하므로, 특정 단어만 클릭 가능하게 제한하지 않는다.
+  const meaningByClean = new Map();
+  if (settings.words) (s.words || []).forEach((w) => {
+    const k = String(w.word).toLowerCase().replace(/[^a-z']/g, "");
+    if (k && !meaningByClean.has(k)) meaningByClean.set(k, w.meaning);
+  });
 
   // 끊어 읽기 긋기 상태 - 검토 전까지 자유 토글, 검토 후 잠금
   const slashes = new Set();
   let reviewed = false;
   const gapEls = new Map(); // 틈 번호 → 요소
-  const flagged = new Map(); // 임시 수집한 단어: 토큰 index → target(뜻은 아직 감춤)
+  const flagged = new Map(); // 임시 수집한 단어: 토큰 위치 i → { word, meaning }(뜻은 아직 감춤)
 
   tokens.forEach((tok, i) => {
     const span = document.createElement("span");
     span.textContent = tok.raw;
-    if (targetByIndex.has(tok.index)) {
-      span.className = "w key";
-      const target = targetByIndex.get(tok.index);
+    span.className = "w";
+    // 실제 단어(구두점 아님)면 어느 것이든 클릭해 임시 수집 - 밑줄 등 표시 없이 깨끗한 본문 유지
+    if (settings.words && tok.clean) {
+      span.classList.add("word");
+      const displayWord = tok.raw.replace(/^[^A-Za-z'-]+|[^A-Za-z'-]+$/g, "") || tok.clean;
       // 선(先) 유추: 터치해도 뜻을 바로 열지 않고 '임시 수집'으로만 표시한다.
       span.onclick = (e) => {
         e.stopPropagation();
         removeHint();
         if (reviewed) return; // 해석 후엔 뜻이 이미 공개돼 표시가 의미 없다
-        if (flagged.has(tok.index)) {
-          flagged.delete(tok.index);
+        if (flagged.has(i)) {
+          flagged.delete(i);
           span.classList.remove("flagged");
         } else {
-          flagged.set(tok.index, target);
+          flagged.set(i, { word: displayWord, meaning: meaningByClean.get(tok.clean) || "" });
           span.classList.add("flagged");
           showToast("단어장에 임시 저장되었습니다.");
         }
       };
-    } else {
-      span.className = "w";
     }
     line.appendChild(span);
 
@@ -271,7 +276,9 @@ function buildCollectedWords(targets, s, passage) {
     const row = document.createElement("div");
     row.className = "cw-row";
     const w = document.createElement("span"); w.className = "cw-word"; w.textContent = t.word;
-    const m = document.createElement("span"); m.className = "cw-mean"; m.textContent = t.meaning;
+    const m = document.createElement("span"); m.className = "cw-mean";
+    if (t.meaning) { m.textContent = t.meaning; }
+    else { m.textContent = "뜻 미등록 - 직접 채워 보세요"; m.classList.add("cw-empty"); }
     row.append(w, m);
     host.appendChild(row);
   });
@@ -462,7 +469,7 @@ function renderVocab() {
     const detail = document.createElement("div");
     detail.className = "vocab-detail"; detail.hidden = true;
     detail.innerHTML =
-      `<div class="vd-mean">${v.meaning}</div>` +
+      `<div class="vd-mean${v.meaning ? "" : " vd-empty"}">${v.meaning || "뜻 미등록 - 직접 채워 보세요"}</div>` +
       `<div class="vd-ex">${v.sentence}</div>` +
       `<div class="vd-src">${v.passageTitle}</div>`;
 
