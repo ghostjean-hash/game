@@ -2,12 +2,12 @@
 // 색상은 colors.js, 발사 패턴 계산은 core/fire.js가 담당한다.
 
 export const CFG = {
-  player: { r: 14, speed: 340, fireEvery: 0.14, maxLives: 3, invAfterHit: 1.6, yRatio: 0.82 },
+  player: { r: 14, speed: 340, fireEvery: 0.154, maxLives: 3, invAfterHit: 1.6, yRatio: 0.82 },
   // bullet.shapes: 전방화력 발별 진화 티어별 탄 렌더(docs/05 1.1.1). 인덱스 0=진화 전 기본, 1~4=진화 티어.
   //   모양이 원→타원→긴형→링으로 뚜렷이 바뀐다(색만이 아니라 형태로 성장을 보인다, 사용자 지시 2026-07-08).
   //   rx/ry = 기본 반경 대비 가로/세로 배율, glow = 발광 강도, ring = 도넛(고리)이면 뚫린 안쪽 반경 비율.
   bullet: {
-    speed: 620,
+    speed: 496,
     shapes: [
       { rx: 1.0, ry: 2.0, glow: 0 },              // 0 기본(진화 전, 작은 세로 타원)
       { rx: 2.6, ry: 2.6, glow: 6 },              // 1 원(확 큰 동그란 구슬 - 타원과 뚜렷이 대비)
@@ -32,7 +32,7 @@ export const CFG = {
       // 8대 전부 레이저(= 사이드 총알, 사이드 비행기가 쏜다). 옵션 수↑ → 굵기(laserR)·데미지(laserDmg) 상승.
       //   사이드 총알은 부채로 퍼진다: 각 비행기의 대각선 각 = laserDiagBase + slot×laserDiagStep.
       //   안쪽(slot 0) 비행기는 살짝, 바깥(slot 3)으로 갈수록 더 크게 벌어져 부채를 펼친다. side로 좌/우 방향.
-      laserEvery: 0.16, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 880, laserR: 2.2, laserRGrow: 0.3, laserDiagBase: 12, laserDiagStep: 11,
+      laserEvery: 0.176, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 880, laserR: 1.1, laserRGrow: 0.15, laserDiagBase: 6, laserDiagStep: 5.5,
     },
     zone: {
       radius: [0, 34, 52, 70, 88, 106], // 레벨 0~5 반경
