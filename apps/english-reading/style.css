@@ -205,11 +205,12 @@ body {
 /* 검토 결과 3색·모양 - 맞음: 검정 / 위에 빨간 작은 원, 잘못 그음: 회색 / 위에 빨간 작은 x,
    빼먹음(그었어야 하나 놓친 곳): 빨간 / */
 .gap.g-correct { color: var(--fg); }
-.gap.g-wrong { color: var(--fg-mute); }
+.gap.g-wrong { color: #ccd2dc; } /* 틀린 끊기 - 더 연한 회색(뒤로 물러남) */
 .gap.g-missed { color: #dc2626; }
-/* 정오 마크 - 끊기 표시(/) 바로 위에 작게 얹는다 */
+/* 정오 마크 - 끊기 표시(/) 바로 위에 작게 얹는다 (맞음=빈 원, 틀림=x, 빼먹음=작은 삼각형) */
 .gap.g-correct::before,
-.gap.g-wrong::before {
+.gap.g-wrong::before,
+.gap.g-missed::before {
   position: absolute;
   left: 50%;
   top: -0.05em;
@@ -228,6 +229,8 @@ body {
   box-sizing: border-box;
 }
 .gap.g-wrong::before { content: "✕"; font-size: 0.58em; font-weight: 900; }
+/* 빼먹은 끊기 - / 위에 작은 삼각형으로 '여기 놓침' 표시 */
+.gap.g-missed::before { content: "▾"; font-size: 0.62em; font-weight: 900; top: -0.15em; }
 
 /* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다 */
 .review-btn {

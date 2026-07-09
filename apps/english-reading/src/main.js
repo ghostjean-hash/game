@@ -259,8 +259,8 @@ function renderSentence(s, sIndex, passage, settings) {
     const span = document.createElement("span");
     span.textContent = tok.raw;
     span.className = "w";
-    // 실제 단어(구두점 아님)면 어느 것이든 클릭해 임시 수집 - 밑줄 등 표시 없이 깨끗한 본문 유지
-    if (settings.words && tok.clean) {
+    // 뜻이 등록된 주요 단어만 터치 대상 - 일반 단어까지 터치되면 끊기 틈과 오터치가 잦아 제한(사용자 지시).
+    if (settings.words && tok.clean && meaningByClean.has(tok.clean)) {
       span.classList.add("word");
       if (flagged.has(i)) span.classList.add("flagged"); // 복원
       const displayWord = tok.raw.replace(/^[^A-Za-z'-]+|[^A-Za-z'-]+$/g, "") || tok.clean;
