@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "fix(english-reading): 끊는 기준 검사기 오탐 수정 - 문장 끝 짧은 부사구(over time 등) 허용",
+    "commitMessage": "fix(english-reading): 앱 JS network-first 전환 - 배포한 검사기가 브라우저 캐시로 미반영되던 근본 수정",
     "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

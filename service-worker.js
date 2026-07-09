@@ -110,7 +110,8 @@
 // v163 (2026-07-09): english-reading 출제 규칙·검증 안내 개선 - words의 word는 원문 활용형 그대로(원형 변환 금지) 프롬프트 명시 + 죽은 단어 에러에 형태 힌트 추가(제미나이가 trigger로 원형 넣어 걸린 사례). PWA 옛 캐시 무효화.
 // v164 (2026-07-09): english-reading 끊는 기준 검사기 오탐 수정 - 문장 맨 끝 짧은 부사구(over time·at all 등)는 독립적으로 끊어 읽는 게 정상이므로 short-prep 예외(마지막 덩어리). 절 중간 짧은 전치사구 분리는 계속 차단. 샘플 14종 자체 점검 + 유닛 상설화. PWA 옛 캐시 무효화.
 // v165 (2026-07-09): flightshooting 대규모 - 30 스테이지 확장 + 이질 기계 적 4종(turret/prism/mine/warper) + 기계 중보스, autopilot 사람화(조작 주기 제한 + 인간 실측 기반 실력 4티어), 환경설정 화면 + 치트 박스(속도/무적/드랍). PWA 옛 캐시 무효화.
-const CACHE_VERSION = "v165";
+// v166 (2026-07-09): english-reading 앱 소스(src/**/*.js)를 network-first로 전환 - 검사기 등 로직이 자주 바뀌는데 cache-first라 배포해도 옛 검사기가 브라우저 캐시로 남아 '고친 규칙이 실서비스에 반영 안 됨'이 반복되던 근본 원인 제거(사용자 명상 지문이 옛 검사기로 계속 걸린 사례). 이후 배포는 새로고침 즉시 반영. PWA 옛 캐시 무효화.
+const CACHE_VERSION = "v166";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
@@ -182,8 +183,10 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // _registry.json 등은 항상 network-first. 게임 추가 / 변경 즉시 반영.
-  if (NETWORK_FIRST_PATHS.some((p) => url.pathname.endsWith(p))) {
+  // _registry.json 등 + english-reading 앱 소스(JS)는 항상 network-first.
+  // english-reading은 출제 검사기 등 로직이 자주 바뀌므로 JS를 cache-first로 두면 배포해도 옛 로직이 캐시로 남는다 → 항상 최신 fetch.
+  const ER_JS = /\/apps\/english-reading\/src\/.*\.js$/.test(url.pathname);
+  if (ER_JS || NETWORK_FIRST_PATHS.some((p) => url.pathname.endsWith(p))) {
     event.respondWith(
       fetch(req)
         .then((res) => {
