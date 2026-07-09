@@ -220,3 +220,10 @@
 - 확인: 명상 지문 로컬 validatePassage ok + SW 차단(playwright serviceWorkers:block) 순수 network 실서비스에서 "규칙 모두 지킴" 통과 → 코드·CDN 정상, SW 캐시만 문제로 확정.
 - 수정: service-worker.js fetch 핸들러에 /apps/english-reading/src/**/*.js network-first 정규식 매칭 추가. 이후 검사기·로직 변경은 새로고침 즉시 반영(오프라인은 캐시 fallback). 커밋 95a5294, SW v166(v165 flightshooting 별개).
 - 사용자 조치: 앱을 완전히 닫고 재방문(skipWaiting+clients.claim이라 새 SW 즉시 활성)하면 새 검사기 반영, 명상 지문 통과. 이후 이런 캐시 지연 재발 없음.
+
+## 2.29. 주요 단어만 터치(오터치 방지) + 채점 표시 조정 (2026-07-09, 사용자 "단어와 끊기 터치실수 많다")
+
+- 오터치 원인: 모든 단어(2.22)가 터치 대상이라 인접한 끊기 틈(.gap)과 터치 충돌이 잦음. 사용자 "기본단어는 터치 안되게".
+- 수정: renderSentence 단어 조건에 meaningByClean.has(tok.clean) 추가 - 뜻이 등록된 주요 단어만 .w.word(터치·수집), 일반 단어는 무반응. 터치 대상이 소수로 줄어 틈과의 충돌 대폭 감소. (2.22 '모든 단어 클릭'을 부분 되돌림, 사용자 재지시.)
+- 채점 표시 조정: 틀린 끊기 / 색을 더 연한 회색(#ccd2dc)으로(뒤로 물러남) + 빼먹은 끊기 / 위에 작은 붉은 삼각형(▾) 마크 추가(.gap.g-missed::before). 맞음(빈 원)/틀림(x)/빼먹음(삼각형) 3표시 모양 구분 완성.
+- 검증: 유닛 통과, browser-shot로 주요단어(spilled)만 .w.word·일반단어(coffee) 터치불가 + 틀림 연회색+x·빼먹음 빨간/+삼각형 실측 + 콘솔 0. 실서비스 smoke 통과. CLAUDE.md 1.3/4.3/5.1/5.2·기획서 3.3 정합. 커밋 ec34e74, SW v166→v167.
