@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { tokenize, resolveTargets } from "../src/core/tokenize.js";
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
-import { chunkBoundaries, gradeSlashes, boundaryReason, chunkReasons } from "../src/core/chunking.js";
+import { chunkBoundaries, gradeSlashes, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 let failures = 0;
@@ -105,6 +105,34 @@ function check(name, cond, detail = "") {
     rs[0] === null && rs[1] === "콤마 뒤" && rs[2] === "전치사구 앞", rs.join("|"));
 }
 
+// ── chunkViolations (가이드 규칙 위반 검사) ──────────────────────────────
+{
+  const V = (text, ens) => chunkViolations(tokenize(text), ens.map((en) => ({ en })));
+  // A. be/조동사 뒤 명사보어를 떼면 위반
+  check("violation: be동사 뒤 명사보어 분리",
+    V("Confirmation bias is the habit.", ["Confirmation bias is", "the habit."]).some((v) => v.kind === "aux-tail"));
+  // be동사 뒤라도 that절 보어는 정당(예외)
+  check("violation: be동사 뒤 that절은 정당",
+    V("The truth is that no one notices.", ["The truth is", "that no one notices."]).length === 0);
+  // B. 짧은 주어(2단어 이하) 뒤 조동사 앞은 위반
+  check("violation: 짧은 주어 뒤 조동사 앞 분리",
+    V("A placebo is a fake pill.", ["A placebo", "is a fake pill."]).some((v) => v.kind === "aux-head"));
+  // 긴 주어(3단어 이상) 뒤 동사 앞은 정당(가이드 규칙4)
+  check("violation: 긴 주어 뒤 동사 앞은 정당",
+    V("Knowing this trap will not help.", ["Knowing this trap", "will not help."]).length === 0);
+  // C. 짧은 전치사구(2단어 이하) 앞은 위반, 긴 전치사구는 정당
+  check("violation: 짧은 전치사구 앞 분리",
+    V("the habit of noticing.", ["the habit", "of noticing."]).some((v) => v.kind === "short-prep"));
+  check("violation: 긴 전치사구 앞은 정당",
+    V("you feel at the stain now.", ["you feel", "at the stain now."]).length === 0);
+  // 콤마 뒤는 짧은 전치사구라도 정당(글쓴이가 끊은 자리)
+  check("violation: 콤마 뒤는 정당",
+    V("Above all, of course it helps.", ["Above all,", "of course it helps."]).length === 0);
+  // D. 전치사가 앞 덩어리 끝에 남아 목적어와 갈리면 위반
+  check("violation: 전치사 꼬리 분리",
+    V("our mind searches for facts.", ["our mind searches for", "facts."]).some((v) => v.kind === "prep-tail"));
+}
+
 // ── passages.json 데이터 무결성 ──────────────────────────────
 {
   const data = JSON.parse(readFileSync(join(here, "../src/data/passages.json"), "utf8"));
@@ -133,6 +161,9 @@ function check(name, cond, detail = "") {
           norm(s.chunks.map((c) => c.en).join(" ")) === norm(s.text),
           `"${s.chunks.map((c) => c.en).join(" ")}" vs "${s.text}"`);
         check(`data(${label}): 청킹 한글 해석 전부 존재`, s.chunks.every((c) => !!c.kr));
+        // 끊는 기준 팝업 규칙 위반 0 (be/조동사 뒤·짧은 주어 뒤 동사 앞·짧은 전치사구 앞 분리 금지)
+        const viol = chunkViolations(tokens, s.chunks);
+        check(`data(${label}): 끊는 기준 위반 0`, viol.length === 0, viol.map((v) => v.detail).join(" / "));
 
         // 주요 단어: 0~3개, 각 단어는 원문에 실재(nth 해석), 뜻 존재
         check(`data(${label}): 주요 단어 0~3개`, Array.isArray(s.words) && s.words.length <= 3);

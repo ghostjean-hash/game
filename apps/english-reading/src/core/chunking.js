@@ -59,6 +59,51 @@ export function chunkReasons(tokens, chunks) {
   return reasons;
 }
 
+// 가이드 규칙 위반 검사 - chunks 데이터가 "끊는 기준" 팝업 규칙을 지키는지 자동 판정한다.
+// 데이터가 곧 정답지이므로, 잘못 쪼갠 경계를 테스트가 잡아내 가이드-데이터 100% 일치를 강제한다.
+//
+// 규칙(위반 = 끊으면 안 되는 자리에서 끊음):
+//  A. be동사·조동사 뒤는 못 끊는다 - "is / staring"처럼 보어·본동사를 떼면 위반(긴 주어 뒤 규칙은 '동사 앞'만 허용).
+//  B. 짧은 주어(3단어 이하) 뒤 be·조동사 앞은 못 끊는다 - "A placebo / is a fake pill"은 위반. 동사 앞 끊기는 긴 주어일 때만.
+//  C. 짧은 전치사구(전치사+목적어 2단어 이하) 앞은 못 끊는다 - "of noticing", "for facts"는 앞 덩어리에 붙인다.
+//     콤마가 이미 끊어 준 자리는 예외(글쓴이 의도 우선).
+//  D. 전치사가 앞 덩어리 끝에 남으면 못 끊는다 - "searches for / facts"처럼 전치사와 목적어를 갈라놓으면 위반.
+const AUX_TAIL = new Set([
+  "is", "are", "was", "were", "am", "be", "been", "being",
+  "will", "would", "shall", "should", "can", "could", "may", "might", "must",
+  "do", "does", "did", "have", "has", "had",
+]);
+// 절·부정사를 여는 낱말 - be동사 뒤라도 이 앞에서는 끊어 읽는 게 정당(that절 보어, be+to 용법 등).
+const CLAUSE_LEAD = new Set([
+  "that", "who", "whom", "whose", "which", "when", "where", "why", "how", "whether", "to",
+]);
+
+export function chunkViolations(tokens, chunks) {
+  const out = [];
+  let acc = 0;
+  const clean = (w) => String(w).toLowerCase().replace(/[^a-z']/g, "");
+  for (let i = 1; i < chunks.length; i++) {
+    acc += String(chunks[i - 1].en).split(/\s+/).filter(Boolean).length;
+    const prevTok = tokens[acc - 1];
+    const afterComma = prevTok && /,$/.test(prevTok.raw); // 콤마 뒤는 정당한 끊기
+    const prevWords = String(chunks[i - 1].en).split(/\s+/).filter(Boolean);
+    const nextWords = String(chunks[i].en).split(/\s+/).filter(Boolean);
+    const prevEnd = clean(prevWords[prevWords.length - 1]);
+    const nextStart = clean(nextWords[0]);
+
+    if (PREP.has(prevEnd)) {
+      out.push({ index: i, kind: "prep-tail", detail: `전치사 "${prevEnd}"가 목적어와 갈림 - "${chunks[i - 1].en}" / "${chunks[i].en}"` });
+    } else if (AUX_TAIL.has(prevEnd) && !CLAUSE_LEAD.has(nextStart)) {
+      out.push({ index: i, kind: "aux-tail", detail: `"${chunks[i - 1].en}" 끝 be/조동사 뒤에서 끊음` });
+    } else if (!afterComma && AUX_TAIL.has(nextStart) && prevWords.length <= 2) {
+      out.push({ index: i, kind: "aux-head", detail: `짧은 주어 "${chunks[i - 1].en}" 뒤 be/조동사 "${nextStart}" 앞에서 끊음` });
+    } else if (!afterComma && PREP.has(nextStart) && nextWords.length <= 2) {
+      out.push({ index: i, kind: "short-prep", detail: `짧은 전치사구 "${chunks[i].en}" 앞에서 끊음` });
+    }
+  }
+  return out;
+}
+
 // slashes: 사용자가 그은 틈 번호 목록. 정답 경계와 대조해 세 갈래로 나눈다.
 // correct = 그었고 정답 / wrong = 그었지만 정답 아님 / missed = 정답인데 안 그음.
 export function gradeSlashes(boundaries, slashes) {

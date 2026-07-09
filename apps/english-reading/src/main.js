@@ -20,9 +20,8 @@ const el = {
 };
 
 let course = null;
-let popover = null; // 현재 열린 단어 뜻 말풍선(한 번에 하나)
-let popoverTimer = null; // 말풍선 자동 닫힘 타이머
-const POPOVER_MS = 2000; // 말풍선이 스스로 닫히기까지
+let toastTimer = null; // 토스트 자동 닫힘 타이머
+const TOAST_MS = 1600; // 토스트가 스스로 사라지기까지
 
 // ── 상태 저장(기기 저장소) ──
 const getDone = () => store.get("done", []); // 완독한 지문 id 배열
@@ -42,9 +41,14 @@ fetch("./src/data/passages.json", { cache: "no-cache" })
   });
 
 function setBar(ratio) { el.bar.style.width = `${Math.round(ratio * 100)}%`; }
-function closePopover() {
-  if (popoverTimer) { clearTimeout(popoverTimer); popoverTimer = null; }
-  if (popover) { popover.remove(); popover = null; }
+// 화면 하단에 잠깐 뜨는 안내 메시지(임시 수집·회독 완료 등)
+function showToast(msg) {
+  let t = document.getElementById("app-toast");
+  if (!t) { t = document.createElement("div"); t.id = "app-toast"; t.className = "app-toast"; document.body.appendChild(t); }
+  t.textContent = msg;
+  requestAnimationFrame(() => t.classList.add("show"));
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), TOAST_MS);
 }
 function removeHint() { const h = document.getElementById("first-hint"); if (h) h.remove(); }
 
@@ -68,7 +72,6 @@ function labeledBlock(label, text, mod) {
 
 // ── 지문 목록 ──
 function renderList() {
-  closePopover();
   const done = getDone();
   const reads = getReads();
   const prog = courseProgress(course, done);
@@ -120,7 +123,6 @@ function renderList() {
 
 // ── 읽기 화면 ──
 function renderReading(p) {
-  closePopover();
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
   setTop({ title: p.titleKr, onBack: renderList, showVocab: true, showGuide: settings.chunks });
@@ -134,7 +136,7 @@ function renderReading(p) {
     const hint = document.createElement("div");
     hint.className = "first-hint";
     hint.id = "first-hint";
-    hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [해석]으로 채점해 보세요. 모르는 단어는 단어를 누르면 뜻이 열립니다.";
+    hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [해석]으로 채점해 보세요. 모르는 단어는 눌러 표시만 해 두면, 해석할 때 뜻을 한꺼번에 확인합니다.";
     stage.appendChild(hint);
     store.set("seenIntro", true);
   }
@@ -143,14 +145,14 @@ function renderReading(p) {
   article.className = "article";
   p.sentences.forEach((s) => article.appendChild(renderSentence(s, p, settings)));
   stage.appendChild(article);
-  // 본문 빈 곳 클릭 → 열린 뜻 말풍선 닫기(단어·틈 클릭은 전파를 끊는다)
-  stage.addEventListener("click", closePopover);
 
+  // 다회독 루프 - 회독을 마칠 때마다 같은 지문을 새 마음으로 다시 읽도록 유도
+  const nextRound = (getReads()[p.id] || 0) + 1;
   const doneBtn = document.createElement("button");
   doneBtn.type = "button";
   doneBtn.className = "btn btn-primary read-done";
-  doneBtn.textContent = "읽기 완료";
-  doneBtn.onclick = () => markRead(p);
+  doneBtn.textContent = `${nextRound}회독 완료`;
+  doneBtn.onclick = () => finishRound(p);
   stage.appendChild(doneBtn);
 }
 
@@ -169,6 +171,7 @@ function renderSentence(s, passage, settings) {
   const slashes = new Set();
   let reviewed = false;
   const gapEls = new Map(); // 틈 번호 → 요소
+  const flagged = new Map(); // 임시 수집한 단어: 토큰 index → target(뜻은 아직 감춤)
 
   tokens.forEach((tok, i) => {
     const span = document.createElement("span");
@@ -176,10 +179,19 @@ function renderSentence(s, passage, settings) {
     if (targetByIndex.has(tok.index)) {
       span.className = "w key";
       const target = targetByIndex.get(tok.index);
+      // 선(先) 유추: 터치해도 뜻을 바로 열지 않고 '임시 수집'으로만 표시한다.
       span.onclick = (e) => {
-        e.stopPropagation(); // 단어 클릭이 다른 동작으로 번지지 않게
+        e.stopPropagation();
         removeHint();
-        openWordPopover(span, target, s, passage);
+        if (reviewed) return; // 해석 후엔 뜻이 이미 공개돼 표시가 의미 없다
+        if (flagged.has(tok.index)) {
+          flagged.delete(tok.index);
+          span.classList.remove("flagged");
+        } else {
+          flagged.set(tok.index, target);
+          span.classList.add("flagged");
+          showToast("단어장에 임시 저장되었습니다.");
+        }
       };
     } else {
       span.className = "w";
@@ -197,7 +209,6 @@ function renderSentence(s, passage, settings) {
           e.stopPropagation();
           if (reviewed) return;
           removeHint();
-          closePopover();
           if (slashes.has(i)) { slashes.delete(i); gap.classList.remove("slashed"); }
           else { slashes.add(i); gap.classList.add("slashed"); }
         };
@@ -220,7 +231,6 @@ function renderSentence(s, passage, settings) {
     reviewBtn.onclick = (e) => {
       e.stopPropagation();
       removeHint();
-      closePopover();
       if (reviewed) {
         if (detail) detail.hidden = !detail.hidden;
         return;
@@ -234,7 +244,9 @@ function renderSentence(s, passage, settings) {
 
       detail = document.createElement("div");
       detail.className = "review-detail";
-      detail.appendChild(buildChunks(s));
+      detail.appendChild(buildChunks(s)); // 번역(끊어 읽기 해석)
+      // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 번역 바로 아래에 한꺼번에 공개 + 영구 저장
+      if (flagged.size) detail.appendChild(buildCollectedWords([...flagged.values()], s, passage));
       if (s.grammar && s.grammar.length) detail.appendChild(buildGrammar(s));
       if (s.insight && settings.scope) detail.appendChild(buildScopeCard(s));
       block.appendChild(detail);
@@ -246,15 +258,24 @@ function renderSentence(s, passage, settings) {
   return block;
 }
 
-function openWordPopover(span, target, s, passage) {
-  closePopover();
-  const pop = document.createElement("span");
-  pop.className = "word-pop";
-  pop.textContent = target.meaning;
-  span.appendChild(pop);
-  popover = pop;
-  popoverTimer = setTimeout(closePopover, POPOVER_MS); // 잠시 후 스스로 닫힘
-  collectWord(target, s, passage);
+// 해석 시점에 열리는 "이 문장에서 담은 단어" 리스트 - 뜻을 한꺼번에 공개하고 영구 단어장에 누적한다.
+function buildCollectedWords(targets, s, passage) {
+  const host = document.createElement("div");
+  host.className = "collected-words";
+  const head = document.createElement("div");
+  head.className = "cw-head";
+  head.textContent = "이 문장에서 담은 단어";
+  host.appendChild(head);
+  targets.forEach((t) => {
+    collectWord(t, s, passage); // 이 시점에 '내 단어장'으로 영구 저장
+    const row = document.createElement("div");
+    row.className = "cw-row";
+    const w = document.createElement("span"); w.className = "cw-word"; w.textContent = t.word;
+    const m = document.createElement("span"); m.className = "cw-mean"; m.textContent = t.meaning;
+    row.append(w, m);
+    host.appendChild(row);
+  });
+  return host;
 }
 
 // 단어 + 뜻 + 방금 읽던 원문 문장 + 출처를 묶어 단어장에 자동 저장(중복은 쌓지 않음)
@@ -369,17 +390,20 @@ function buildScopeCard(s) {
   return card;
 }
 
-// 읽기 완료 - 개별 완독은 조용히 진행률만 채우고, 코스 전체 완주에서만 클리어 연출
-function markRead(p) {
+// 회독 완료 - 회독수를 올리고 같은 지문을 clean slate(임시 하이라이트 리셋)로 다시 열어 반복 읽기를 유도.
+// 개별 완독은 조용히 진행률만 채우고, 코스 전체 완주를 처음 달성할 때만 클리어 연출.
+function finishRound(p) {
+  const reads = getReads();
+  const round = (reads[p.id] || 0) + 1;
   const done = getDone();
   const wasCleared = courseProgress(course, done).cleared;
-  const reads = getReads();
-  reads[p.id] = (reads[p.id] || 0) + 1;
+  reads[p.id] = round;
   store.set("reads", reads);
   if (!done.includes(p.id)) { done.push(p.id); store.set("done", done); }
   const prog = courseProgress(course, done);
-  if (prog.cleared && !wasCleared) showClearModal();
-  else renderList();
+  if (prog.cleared && !wasCleared) { showClearModal(); return; }
+  showToast(`${round}회독 완료! 새 마음으로 다시 읽어 보세요.`);
+  renderReading(p); // 새 클로저로 다시 그려 임시 수집 하이라이트를 리셋(영구 단어장은 유지)
 }
 
 function showClearModal() {
@@ -402,7 +426,6 @@ function showClearModal() {
 
 // ── 내 단어장 ──
 function renderVocab() {
-  closePopover();
   setTop({ title: "내 단어장", onBack: renderList, showVocab: false });
   const stage = el.stage;
   stage.className = "stage vocab-stage";

@@ -177,8 +177,11 @@ body {
   color: var(--fg);
   word-break: keep-all;
 }
+/* 해석 버튼이 우측에 뜨므로 그 높이만큼 줄을 감싸 다음 문장과 겹치지 않게 */
+.sentence-line::after { content: ""; display: block; clear: both; }
 /* 단어 사이 틈 - 누르면 / 선을 긋는다. 넉넉한 터치 폭 + 시각적으론 공백처럼 보임 */
 .gap {
+  position: relative;
   display: inline-block;
   width: 0.72em;
   min-width: 12px;
@@ -199,16 +202,30 @@ body {
   .gap:not(.slashed):hover { color: rgba(26,30,40,0.3); }
 }
 .gap.slashed { color: var(--fg); } /* 긋기 기본 = 본문과 같은 검정 */
-/* 검토 결과 - 맞음은 그대로(검정), 잘못 그음은 회색 점선, 빼먹음은 빨강 */
+/* 검토 결과 3색·모양 - 맞음: 검정 / 위에 빨간 작은 원, 잘못 그음: 회색 / 위에 빨간 작은 x,
+   빼먹음(그었어야 하나 놓친 곳): 빨간 / */
 .gap.g-correct { color: var(--fg); }
 .gap.g-wrong { color: var(--fg-mute); }
-.gap.g-wrong::after { content: "/"; border: 1.5px dashed var(--fg-mute); border-radius: 4px; padding: 0 1px; opacity: 0.9; }
 .gap.g-missed { color: #dc2626; }
+/* 정오 마크 - 끊기 표시(/) 바로 위에 작게 얹는다 */
+.gap.g-correct::before,
+.gap.g-wrong::before {
+  position: absolute;
+  left: 50%;
+  top: -0.05em;
+  transform: translateX(-50%);
+  color: #dc2626;
+  line-height: 1;
+  pointer-events: none;
+}
+.gap.g-correct::before { content: "●"; font-size: 0.44em; }
+.gap.g-wrong::before { content: "✕"; font-size: 0.58em; font-weight: 900; }
 
-/* 문장 끝 "/ 검토" 버튼 */
+/* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다 */
 .review-btn {
-  margin-left: 8px;
-  padding: 2px 9px;
+  float: right;
+  margin: 2px 0 2px 10px;
+  padding: 3px 12px;
   font-size: 12.5px;
   font-weight: 700;
   color: var(--fg-dim);
@@ -216,7 +233,6 @@ body {
   border: 1px solid var(--line);
   border-radius: 999px;
   cursor: pointer;
-  vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
 }
 .review-btn:hover { color: var(--er-accent); border-color: var(--er-accent); }
@@ -287,43 +303,49 @@ body {
   border-bottom: 1.5px dotted var(--er-accent);
   padding-bottom: 1px;
 }
+/* 임시 수집(Flagged) - 뜻은 아직 감추고 표시만. 오렌지 배경 + 실선 밑줄(색만으로 구분하지 않음) */
+.w.key.flagged {
+  background: #ffedd5;
+  border-bottom: 1.5px solid #f97316;
+  border-radius: 4px 4px 0 0;
+}
 
-/* 단어 뜻 말풍선 */
-.word-pop {
-  position: absolute;
-  bottom: 100%;
+/* 화면 하단 토스트 - 임시 수집·회독 완료 안내 */
+.app-toast {
+  position: fixed;
   left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 8px;
-  padding: 7px 11px;
+  bottom: 40px;
+  transform: translateX(-50%) translateY(10px);
+  padding: 10px 18px;
   background: var(--fg);
   color: #fff;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 600;
-  line-height: 1.4;
-  border-radius: var(--r-2);
-  white-space: normal;
-  width: max-content;
-  max-width: 240px;
+  border-radius: 999px;
   box-shadow: var(--shadow-2);
-  z-index: 20;
-  /* er-pop은 transform을 덮어써 좌우 중앙 이동값이 풀린다 - 중앙 고정 전용 키프레임 사용 */
-  animation: pop-center 0.15s var(--ease);
+  opacity: 0;
   pointer-events: none;
+  z-index: 200;
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
 }
-@keyframes pop-center {
-  from { opacity: 0; transform: translate(-50%, 4px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+.app-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* 해석 시 공개되는 "이 문장에서 담은 단어" 리스트 - 임시 수집색(오렌지)과 짝을 맞춘다 */
+.collected-words {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
 }
-.word-pop::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 5px solid transparent;
-  border-top-color: var(--fg);
-}
+.cw-head { font-size: 12.5px; font-weight: 800; color: #c2410c; }
+.cw-row { display: flex; align-items: baseline; gap: 10px; font-size: 14px; line-height: 1.5; }
+.cw-word { flex-shrink: 0; min-width: 92px; font-weight: 700; color: var(--fg); }
+.cw-mean { color: var(--fg-dim); }
 
 /* 끊어 읽기 청킹 */
 .chunks { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-2); }

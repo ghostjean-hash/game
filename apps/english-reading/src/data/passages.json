@@ -206,20 +206,12 @@
               "text": "Confirmation bias is the habit of noticing only what we already believe.",
               "chunks": [
                 {
-                  "en": "Confirmation bias is",
-                  "kr": "확증 편향은 ~이다"
+                  "en": "Confirmation bias is the habit",
+                  "kr": "확증 편향은 습관이다"
                 },
                 {
-                  "en": "the habit",
-                  "kr": "그 습관"
-                },
-                {
-                  "en": "of noticing",
-                  "kr": "알아채는 (~의)"
-                },
-                {
-                  "en": "only what we already believe.",
-                  "kr": "우리가 이미 믿는 것만"
+                  "en": "of noticing only what we already believe.",
+                  "kr": "우리가 이미 믿는 것만 알아채는"
                 }
               ],
               "words": [
@@ -251,16 +243,8 @@
                   "kr": "일단 우리가 어떤 생각을 받아들이면,"
                 },
                 {
-                  "en": "our mind",
-                  "kr": "우리의 마음은"
-                },
-                {
-                  "en": "quietly searches for",
-                  "kr": "조용히 ~을 찾아 나선다"
-                },
-                {
-                  "en": "facts",
-                  "kr": "사실들을"
+                  "en": "our mind quietly searches for facts",
+                  "kr": "우리의 마음은 조용히 사실들을 찾아 나선다"
                 },
                 {
                   "en": "that support it.",
@@ -355,16 +339,12 @@
                   "kr": "이것이 ~한 이유다"
                 },
                 {
-                  "en": "two people",
-                  "kr": "두 사람이"
-                },
-                {
-                  "en": "can read the same story",
-                  "kr": "같은 이야기를 읽고도"
+                  "en": "two people can read the same story",
+                  "kr": "두 사람이 같은 이야기를 읽고도"
                 },
                 {
                   "en": "and both feel sure",
-                  "kr": "그리고 둘 다 확신할 (수 있는)"
+                  "kr": "그리고 둘 다 확신하는"
                 },
                 {
                   "en": "that they were right.",
@@ -551,12 +531,8 @@
               "text": "But psychologists have discovered a strange and unsettling truth.",
               "chunks": [
                 {
-                  "en": "But psychologists",
-                  "kr": "그러나 심리학자들은"
-                },
-                {
-                  "en": "have discovered",
-                  "kr": "발견해 왔다"
+                  "en": "But psychologists have discovered",
+                  "kr": "그러나 심리학자들은 발견해 왔다"
                 },
                 {
                   "en": "a strange and unsettling truth.",
@@ -643,20 +619,12 @@
                   "kr": "이런 일이 벌어진다"
                 },
                 {
-                  "en": "because each person",
-                  "kr": "왜냐하면 각 사람이"
+                  "en": "because each person quietly assumes",
+                  "kr": "왜냐하면 각 사람이 조용히 넘겨짚기 때문이다"
                 },
                 {
-                  "en": "quietly assumes that",
-                  "kr": "조용히 ~라고 넘겨짚기 때문이다"
-                },
-                {
-                  "en": "someone else",
-                  "kr": "다른 누군가가"
-                },
-                {
-                  "en": "will take action.",
-                  "kr": "행동에 나설 거라고"
+                  "en": "that someone else will take action.",
+                  "kr": "다른 누군가가 행동에 나설 거라고"
                 }
               ],
               "words": [
@@ -698,24 +666,12 @@
               "text": "A placebo is a fake pill that contains no real medicine at all.",
               "chunks": [
                 {
-                  "en": "A placebo",
-                  "kr": "플라시보(위약)라는 것은"
+                  "en": "A placebo is a fake pill",
+                  "kr": "플라시보(위약)라는 것은 가짜 알약이다"
                 },
                 {
-                  "en": "is a fake pill",
-                  "kr": "가짜 알약이다"
-                },
-                {
-                  "en": "that contains",
-                  "kr": "(그런데 그것은) 담고 있는"
-                },
-                {
-                  "en": "no real medicine",
-                  "kr": "진짜 약을 하나도 (담고 있지 않은)"
-                },
-                {
-                  "en": "at all.",
-                  "kr": "전혀."
+                  "en": "that contains no real medicine at all.",
+                  "kr": "진짜 약을 전혀 담고 있지 않은"
                 }
               ],
               "words": [
@@ -857,20 +813,12 @@
               "text": "This expectation can push the body to release its own natural painkillers.",
               "chunks": [
                 {
-                  "en": "This expectation",
-                  "kr": "이 기대가"
+                  "en": "This expectation can push the body",
+                  "kr": "이 기대가 몸을 밀어붙일 수 있다"
                 },
                 {
-                  "en": "can push the body",
-                  "kr": "몸을 밀어붙일 수 있다"
-                },
-                {
-                  "en": "to release",
-                  "kr": "방출하도록"
-                },
-                {
-                  "en": "its own natural painkillers.",
-                  "kr": "몸 자신의 천연 진통제를."
+                  "en": "to release its own natural painkillers.",
+                  "kr": "몸 자신의 천연 진통제를 방출하도록"
                 }
               ],
               "words": [

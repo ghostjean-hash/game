@@ -101,7 +101,8 @@
 // v154 (2026-07-09): english-reading 끊는 기준 카드 + 덩어리별 끊는 이유 자동 태그.
 // v155 (2026-07-09): flightshooting 강화 형태 교환 - 메인 총알은 레이저식(길고 굵어짐), 사이드 총알은 부채 확산 + 진화(원→타원→빔→링) 이관. PWA 옛 캐시 무효화.
 // v156 (2026-07-09): english-reading 끊는 기준 카드를 매 지문 본문 상단 반복 버튼에서 상단바 상시 버튼(오버레이)으로 이관 - 본문 반복 노출 제거.
-const CACHE_VERSION = "v156";
+// v157 (2026-07-09): english-reading 대개편 - 해석 버튼 우측 이관 + 채점 표시(맞음 빨간 원/틀림 빨간 x/빼먹음 빨간 /) + 끊는 기준 위반 검사기 4규칙 + 데이터 재청킹 + 선유추 후확인 단어 수집(임시 flag→해석 시 공개+영구저장) + 다회독 clean slate 루프. PWA 옛 캐시 무효화.
+const CACHE_VERSION = "v157";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

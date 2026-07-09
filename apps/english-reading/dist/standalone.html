@@ -329,8 +329,11 @@ body {
   color: var(--fg);
   word-break: keep-all;
 }
+/* 해석 버튼이 우측에 뜨므로 그 높이만큼 줄을 감싸 다음 문장과 겹치지 않게 */
+.sentence-line::after { content: ""; display: block; clear: both; }
 /* 단어 사이 틈 - 누르면 / 선을 긋는다. 넉넉한 터치 폭 + 시각적으론 공백처럼 보임 */
 .gap {
+  position: relative;
   display: inline-block;
   width: 0.72em;
   min-width: 12px;
@@ -351,16 +354,30 @@ body {
   .gap:not(.slashed):hover { color: rgba(26,30,40,0.3); }
 }
 .gap.slashed { color: var(--fg); } /* 긋기 기본 = 본문과 같은 검정 */
-/* 검토 결과 - 맞음은 그대로(검정), 잘못 그음은 회색 점선, 빼먹음은 빨강 */
+/* 검토 결과 3색·모양 - 맞음: 검정 / 위에 빨간 작은 원, 잘못 그음: 회색 / 위에 빨간 작은 x,
+   빼먹음(그었어야 하나 놓친 곳): 빨간 / */
 .gap.g-correct { color: var(--fg); }
 .gap.g-wrong { color: var(--fg-mute); }
-.gap.g-wrong::after { content: "/"; border: 1.5px dashed var(--fg-mute); border-radius: 4px; padding: 0 1px; opacity: 0.9; }
 .gap.g-missed { color: #dc2626; }
+/* 정오 마크 - 끊기 표시(/) 바로 위에 작게 얹는다 */
+.gap.g-correct::before,
+.gap.g-wrong::before {
+  position: absolute;
+  left: 50%;
+  top: -0.05em;
+  transform: translateX(-50%);
+  color: #dc2626;
+  line-height: 1;
+  pointer-events: none;
+}
+.gap.g-correct::before { content: "●"; font-size: 0.44em; }
+.gap.g-wrong::before { content: "✕"; font-size: 0.58em; font-weight: 900; }
 
-/* 문장 끝 "/ 검토" 버튼 */
+/* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다 */
 .review-btn {
-  margin-left: 8px;
-  padding: 2px 9px;
+  float: right;
+  margin: 2px 0 2px 10px;
+  padding: 3px 12px;
   font-size: 12.5px;
   font-weight: 700;
   color: var(--fg-dim);
@@ -368,7 +385,6 @@ body {
   border: 1px solid var(--line);
   border-radius: 999px;
   cursor: pointer;
-  vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
 }
 .review-btn:hover { color: var(--er-accent); border-color: var(--er-accent); }
@@ -439,43 +455,49 @@ body {
   border-bottom: 1.5px dotted var(--er-accent);
   padding-bottom: 1px;
 }
+/* 임시 수집(Flagged) - 뜻은 아직 감추고 표시만. 오렌지 배경 + 실선 밑줄(색만으로 구분하지 않음) */
+.w.key.flagged {
+  background: #ffedd5;
+  border-bottom: 1.5px solid #f97316;
+  border-radius: 4px 4px 0 0;
+}
 
-/* 단어 뜻 말풍선 */
-.word-pop {
-  position: absolute;
-  bottom: 100%;
+/* 화면 하단 토스트 - 임시 수집·회독 완료 안내 */
+.app-toast {
+  position: fixed;
   left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 8px;
-  padding: 7px 11px;
+  bottom: 40px;
+  transform: translateX(-50%) translateY(10px);
+  padding: 10px 18px;
   background: var(--fg);
   color: #fff;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 600;
-  line-height: 1.4;
-  border-radius: var(--r-2);
-  white-space: normal;
-  width: max-content;
-  max-width: 240px;
+  border-radius: 999px;
   box-shadow: var(--shadow-2);
-  z-index: 20;
-  /* er-pop은 transform을 덮어써 좌우 중앙 이동값이 풀린다 - 중앙 고정 전용 키프레임 사용 */
-  animation: pop-center 0.15s var(--ease);
+  opacity: 0;
   pointer-events: none;
+  z-index: 200;
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
 }
-@keyframes pop-center {
-  from { opacity: 0; transform: translate(-50%, 4px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+.app-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* 해석 시 공개되는 "이 문장에서 담은 단어" 리스트 - 임시 수집색(오렌지)과 짝을 맞춘다 */
+.collected-words {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
 }
-.word-pop::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 5px solid transparent;
-  border-top-color: var(--fg);
-}
+.cw-head { font-size: 12.5px; font-weight: 800; color: #c2410c; }
+.cw-row { display: flex; align-items: baseline; gap: 10px; font-size: 14px; line-height: 1.5; }
+.cw-word { flex-shrink: 0; min-width: 92px; font-weight: 700; color: var(--fg); }
+.cw-mean { color: var(--fg-dim); }
 
 /* 끊어 읽기 청킹 */
 .chunks { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-2); }
@@ -639,6 +661,7 @@ body {
   <header class="topbar">
     <button class="nav-btn nav-back" id="nav-back" type="button" aria-label="뒤로">←</button>
     <div class="topbar-title" id="topbar-title">불러오는 중…</div>
+    <button class="nav-btn nav-guide" id="nav-guide" type="button">끊는 기준</button>
     <button class="nav-btn nav-vocab" id="nav-vocab" type="button">단어장</button>
   </header>
   <div class="bar" aria-hidden="true"><div class="bar-fill" id="bar-fill"></div></div>
@@ -853,20 +876,12 @@ const EMBEDDED_PASSAGES = {
               "text": "Confirmation bias is the habit of noticing only what we already believe.",
               "chunks": [
                 {
-                  "en": "Confirmation bias is",
-                  "kr": "확증 편향은 ~이다"
+                  "en": "Confirmation bias is the habit",
+                  "kr": "확증 편향은 습관이다"
                 },
                 {
-                  "en": "the habit",
-                  "kr": "그 습관"
-                },
-                {
-                  "en": "of noticing",
-                  "kr": "알아채는 (~의)"
-                },
-                {
-                  "en": "only what we already believe.",
-                  "kr": "우리가 이미 믿는 것만"
+                  "en": "of noticing only what we already believe.",
+                  "kr": "우리가 이미 믿는 것만 알아채는"
                 }
               ],
               "words": [
@@ -898,16 +913,8 @@ const EMBEDDED_PASSAGES = {
                   "kr": "일단 우리가 어떤 생각을 받아들이면,"
                 },
                 {
-                  "en": "our mind",
-                  "kr": "우리의 마음은"
-                },
-                {
-                  "en": "quietly searches for",
-                  "kr": "조용히 ~을 찾아 나선다"
-                },
-                {
-                  "en": "facts",
-                  "kr": "사실들을"
+                  "en": "our mind quietly searches for facts",
+                  "kr": "우리의 마음은 조용히 사실들을 찾아 나선다"
                 },
                 {
                   "en": "that support it.",
@@ -1002,16 +1009,12 @@ const EMBEDDED_PASSAGES = {
                   "kr": "이것이 ~한 이유다"
                 },
                 {
-                  "en": "two people",
-                  "kr": "두 사람이"
-                },
-                {
-                  "en": "can read the same story",
-                  "kr": "같은 이야기를 읽고도"
+                  "en": "two people can read the same story",
+                  "kr": "두 사람이 같은 이야기를 읽고도"
                 },
                 {
                   "en": "and both feel sure",
-                  "kr": "그리고 둘 다 확신할 (수 있는)"
+                  "kr": "그리고 둘 다 확신하는"
                 },
                 {
                   "en": "that they were right.",
@@ -1198,12 +1201,8 @@ const EMBEDDED_PASSAGES = {
               "text": "But psychologists have discovered a strange and unsettling truth.",
               "chunks": [
                 {
-                  "en": "But psychologists",
-                  "kr": "그러나 심리학자들은"
-                },
-                {
-                  "en": "have discovered",
-                  "kr": "발견해 왔다"
+                  "en": "But psychologists have discovered",
+                  "kr": "그러나 심리학자들은 발견해 왔다"
                 },
                 {
                   "en": "a strange and unsettling truth.",
@@ -1290,20 +1289,12 @@ const EMBEDDED_PASSAGES = {
                   "kr": "이런 일이 벌어진다"
                 },
                 {
-                  "en": "because each person",
-                  "kr": "왜냐하면 각 사람이"
+                  "en": "because each person quietly assumes",
+                  "kr": "왜냐하면 각 사람이 조용히 넘겨짚기 때문이다"
                 },
                 {
-                  "en": "quietly assumes that",
-                  "kr": "조용히 ~라고 넘겨짚기 때문이다"
-                },
-                {
-                  "en": "someone else",
-                  "kr": "다른 누군가가"
-                },
-                {
-                  "en": "will take action.",
-                  "kr": "행동에 나설 거라고"
+                  "en": "that someone else will take action.",
+                  "kr": "다른 누군가가 행동에 나설 거라고"
                 }
               ],
               "words": [
@@ -1345,24 +1336,12 @@ const EMBEDDED_PASSAGES = {
               "text": "A placebo is a fake pill that contains no real medicine at all.",
               "chunks": [
                 {
-                  "en": "A placebo",
-                  "kr": "플라시보(위약)라는 것은"
+                  "en": "A placebo is a fake pill",
+                  "kr": "플라시보(위약)라는 것은 가짜 알약이다"
                 },
                 {
-                  "en": "is a fake pill",
-                  "kr": "가짜 알약이다"
-                },
-                {
-                  "en": "that contains",
-                  "kr": "(그런데 그것은) 담고 있는"
-                },
-                {
-                  "en": "no real medicine",
-                  "kr": "진짜 약을 하나도 (담고 있지 않은)"
-                },
-                {
-                  "en": "at all.",
-                  "kr": "전혀."
+                  "en": "that contains no real medicine at all.",
+                  "kr": "진짜 약을 전혀 담고 있지 않은"
                 }
               ],
               "words": [
@@ -1504,20 +1483,12 @@ const EMBEDDED_PASSAGES = {
               "text": "This expectation can push the body to release its own natural painkillers.",
               "chunks": [
                 {
-                  "en": "This expectation",
-                  "kr": "이 기대가"
+                  "en": "This expectation can push the body",
+                  "kr": "이 기대가 몸을 밀어붙일 수 있다"
                 },
                 {
-                  "en": "can push the body",
-                  "kr": "몸을 밀어붙일 수 있다"
-                },
-                {
-                  "en": "to release",
-                  "kr": "방출하도록"
-                },
-                {
-                  "en": "its own natural painkillers.",
-                  "kr": "몸 자신의 천연 진통제를."
+                  "en": "to release its own natural painkillers.",
+                  "kr": "몸 자신의 천연 진통제를 방출하도록"
                 }
               ],
               "words": [
@@ -2351,6 +2322,51 @@ function chunkReasons(tokens, chunks) {
   return reasons;
 }
 
+// 가이드 규칙 위반 검사 - chunks 데이터가 "끊는 기준" 팝업 규칙을 지키는지 자동 판정한다.
+// 데이터가 곧 정답지이므로, 잘못 쪼갠 경계를 테스트가 잡아내 가이드-데이터 100% 일치를 강제한다.
+//
+// 규칙(위반 = 끊으면 안 되는 자리에서 끊음):
+//  A. be동사·조동사 뒤는 못 끊는다 - "is / staring"처럼 보어·본동사를 떼면 위반(긴 주어 뒤 규칙은 '동사 앞'만 허용).
+//  B. 짧은 주어(3단어 이하) 뒤 be·조동사 앞은 못 끊는다 - "A placebo / is a fake pill"은 위반. 동사 앞 끊기는 긴 주어일 때만.
+//  C. 짧은 전치사구(전치사+목적어 2단어 이하) 앞은 못 끊는다 - "of noticing", "for facts"는 앞 덩어리에 붙인다.
+//     콤마가 이미 끊어 준 자리는 예외(글쓴이 의도 우선).
+//  D. 전치사가 앞 덩어리 끝에 남으면 못 끊는다 - "searches for / facts"처럼 전치사와 목적어를 갈라놓으면 위반.
+const AUX_TAIL = new Set([
+  "is", "are", "was", "were", "am", "be", "been", "being",
+  "will", "would", "shall", "should", "can", "could", "may", "might", "must",
+  "do", "does", "did", "have", "has", "had",
+]);
+// 절·부정사를 여는 낱말 - be동사 뒤라도 이 앞에서는 끊어 읽는 게 정당(that절 보어, be+to 용법 등).
+const CLAUSE_LEAD = new Set([
+  "that", "who", "whom", "whose", "which", "when", "where", "why", "how", "whether", "to",
+]);
+
+function chunkViolations(tokens, chunks) {
+  const out = [];
+  let acc = 0;
+  const clean = (w) => String(w).toLowerCase().replace(/[^a-z']/g, "");
+  for (let i = 1; i < chunks.length; i++) {
+    acc += String(chunks[i - 1].en).split(/\s+/).filter(Boolean).length;
+    const prevTok = tokens[acc - 1];
+    const afterComma = prevTok && /,$/.test(prevTok.raw); // 콤마 뒤는 정당한 끊기
+    const prevWords = String(chunks[i - 1].en).split(/\s+/).filter(Boolean);
+    const nextWords = String(chunks[i].en).split(/\s+/).filter(Boolean);
+    const prevEnd = clean(prevWords[prevWords.length - 1]);
+    const nextStart = clean(nextWords[0]);
+
+    if (PREP.has(prevEnd)) {
+      out.push({ index: i, kind: "prep-tail", detail: `전치사 "${prevEnd}"가 목적어와 갈림 - "${chunks[i - 1].en}" / "${chunks[i].en}"` });
+    } else if (AUX_TAIL.has(prevEnd) && !CLAUSE_LEAD.has(nextStart)) {
+      out.push({ index: i, kind: "aux-tail", detail: `"${chunks[i - 1].en}" 끝 be/조동사 뒤에서 끊음` });
+    } else if (!afterComma && AUX_TAIL.has(nextStart) && prevWords.length <= 2) {
+      out.push({ index: i, kind: "aux-head", detail: `짧은 주어 "${chunks[i - 1].en}" 뒤 be/조동사 "${nextStart}" 앞에서 끊음` });
+    } else if (!afterComma && PREP.has(nextStart) && nextWords.length <= 2) {
+      out.push({ index: i, kind: "short-prep", detail: `짧은 전치사구 "${chunks[i].en}" 앞에서 끊음` });
+    }
+  }
+  return out;
+}
+
 // slashes: 사용자가 그은 틈 번호 목록. 정답 경계와 대조해 세 갈래로 나눈다.
 // correct = 그었고 정답 / wrong = 그었지만 정답 아님 / missed = 정답인데 안 그음.
 function gradeSlashes(boundaries, slashes) {
@@ -2380,9 +2396,8 @@ const el = {
 };
 
 let course = null;
-let popover = null; // 현재 열린 단어 뜻 말풍선(한 번에 하나)
-let popoverTimer = null; // 말풍선 자동 닫힘 타이머
-const POPOVER_MS = 2000; // 말풍선이 스스로 닫히기까지
+let toastTimer = null; // 토스트 자동 닫힘 타이머
+const TOAST_MS = 1600; // 토스트가 스스로 사라지기까지
 
 // ── 상태 저장(기기 저장소) ──
 const getDone = () => store.get("done", []); // 완독한 지문 id 배열
@@ -2394,9 +2409,14 @@ course = createCourse(EMBEDDED_PASSAGES.courses[0]);
 renderList();
 
 function setBar(ratio) { el.bar.style.width = `${Math.round(ratio * 100)}%`; }
-function closePopover() {
-  if (popoverTimer) { clearTimeout(popoverTimer); popoverTimer = null; }
-  if (popover) { popover.remove(); popover = null; }
+// 화면 하단에 잠깐 뜨는 안내 메시지(임시 수집·회독 완료 등)
+function showToast(msg) {
+  let t = document.getElementById("app-toast");
+  if (!t) { t = document.createElement("div"); t.id = "app-toast"; t.className = "app-toast"; document.body.appendChild(t); }
+  t.textContent = msg;
+  requestAnimationFrame(() => t.classList.add("show"));
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), TOAST_MS);
 }
 function removeHint() { const h = document.getElementById("first-hint"); if (h) h.remove(); }
 
@@ -2420,7 +2440,6 @@ function labeledBlock(label, text, mod) {
 
 // ── 지문 목록 ──
 function renderList() {
-  closePopover();
   const done = getDone();
   const reads = getReads();
   const prog = courseProgress(course, done);
@@ -2472,7 +2491,6 @@ function renderList() {
 
 // ── 읽기 화면 ──
 function renderReading(p) {
-  closePopover();
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
   setTop({ title: p.titleKr, onBack: renderList, showVocab: true, showGuide: settings.chunks });
@@ -2486,7 +2504,7 @@ function renderReading(p) {
     const hint = document.createElement("div");
     hint.className = "first-hint";
     hint.id = "first-hint";
-    hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [해석]으로 채점해 보세요. 모르는 단어는 단어를 누르면 뜻이 열립니다.";
+    hint.textContent = "단어 사이 틈을 눌러 끊어 읽기 선(/)을 긋고, 문장 끝 [해석]으로 채점해 보세요. 모르는 단어는 눌러 표시만 해 두면, 해석할 때 뜻을 한꺼번에 확인합니다.";
     stage.appendChild(hint);
     store.set("seenIntro", true);
   }
@@ -2495,14 +2513,14 @@ function renderReading(p) {
   article.className = "article";
   p.sentences.forEach((s) => article.appendChild(renderSentence(s, p, settings)));
   stage.appendChild(article);
-  // 본문 빈 곳 클릭 → 열린 뜻 말풍선 닫기(단어·틈 클릭은 전파를 끊는다)
-  stage.addEventListener("click", closePopover);
 
+  // 다회독 루프 - 회독을 마칠 때마다 같은 지문을 새 마음으로 다시 읽도록 유도
+  const nextRound = (getReads()[p.id] || 0) + 1;
   const doneBtn = document.createElement("button");
   doneBtn.type = "button";
   doneBtn.className = "btn btn-primary read-done";
-  doneBtn.textContent = "읽기 완료";
-  doneBtn.onclick = () => markRead(p);
+  doneBtn.textContent = `${nextRound}회독 완료`;
+  doneBtn.onclick = () => finishRound(p);
   stage.appendChild(doneBtn);
 }
 
@@ -2521,6 +2539,7 @@ function renderSentence(s, passage, settings) {
   const slashes = new Set();
   let reviewed = false;
   const gapEls = new Map(); // 틈 번호 → 요소
+  const flagged = new Map(); // 임시 수집한 단어: 토큰 index → target(뜻은 아직 감춤)
 
   tokens.forEach((tok, i) => {
     const span = document.createElement("span");
@@ -2528,10 +2547,19 @@ function renderSentence(s, passage, settings) {
     if (targetByIndex.has(tok.index)) {
       span.className = "w key";
       const target = targetByIndex.get(tok.index);
+      // 선(先) 유추: 터치해도 뜻을 바로 열지 않고 '임시 수집'으로만 표시한다.
       span.onclick = (e) => {
-        e.stopPropagation(); // 단어 클릭이 다른 동작으로 번지지 않게
+        e.stopPropagation();
         removeHint();
-        openWordPopover(span, target, s, passage);
+        if (reviewed) return; // 해석 후엔 뜻이 이미 공개돼 표시가 의미 없다
+        if (flagged.has(tok.index)) {
+          flagged.delete(tok.index);
+          span.classList.remove("flagged");
+        } else {
+          flagged.set(tok.index, target);
+          span.classList.add("flagged");
+          showToast("단어장에 임시 저장되었습니다.");
+        }
       };
     } else {
       span.className = "w";
@@ -2549,7 +2577,6 @@ function renderSentence(s, passage, settings) {
           e.stopPropagation();
           if (reviewed) return;
           removeHint();
-          closePopover();
           if (slashes.has(i)) { slashes.delete(i); gap.classList.remove("slashed"); }
           else { slashes.add(i); gap.classList.add("slashed"); }
         };
@@ -2572,7 +2599,6 @@ function renderSentence(s, passage, settings) {
     reviewBtn.onclick = (e) => {
       e.stopPropagation();
       removeHint();
-      closePopover();
       if (reviewed) {
         if (detail) detail.hidden = !detail.hidden;
         return;
@@ -2586,7 +2612,9 @@ function renderSentence(s, passage, settings) {
 
       detail = document.createElement("div");
       detail.className = "review-detail";
-      detail.appendChild(buildChunks(s));
+      detail.appendChild(buildChunks(s)); // 번역(끊어 읽기 해석)
+      // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 번역 바로 아래에 한꺼번에 공개 + 영구 저장
+      if (flagged.size) detail.appendChild(buildCollectedWords([...flagged.values()], s, passage));
       if (s.grammar && s.grammar.length) detail.appendChild(buildGrammar(s));
       if (s.insight && settings.scope) detail.appendChild(buildScopeCard(s));
       block.appendChild(detail);
@@ -2598,15 +2626,24 @@ function renderSentence(s, passage, settings) {
   return block;
 }
 
-function openWordPopover(span, target, s, passage) {
-  closePopover();
-  const pop = document.createElement("span");
-  pop.className = "word-pop";
-  pop.textContent = target.meaning;
-  span.appendChild(pop);
-  popover = pop;
-  popoverTimer = setTimeout(closePopover, POPOVER_MS); // 잠시 후 스스로 닫힘
-  collectWord(target, s, passage);
+// 해석 시점에 열리는 "이 문장에서 담은 단어" 리스트 - 뜻을 한꺼번에 공개하고 영구 단어장에 누적한다.
+function buildCollectedWords(targets, s, passage) {
+  const host = document.createElement("div");
+  host.className = "collected-words";
+  const head = document.createElement("div");
+  head.className = "cw-head";
+  head.textContent = "이 문장에서 담은 단어";
+  host.appendChild(head);
+  targets.forEach((t) => {
+    collectWord(t, s, passage); // 이 시점에 '내 단어장'으로 영구 저장
+    const row = document.createElement("div");
+    row.className = "cw-row";
+    const w = document.createElement("span"); w.className = "cw-word"; w.textContent = t.word;
+    const m = document.createElement("span"); m.className = "cw-mean"; m.textContent = t.meaning;
+    row.append(w, m);
+    host.appendChild(row);
+  });
+  return host;
 }
 
 // 단어 + 뜻 + 방금 읽던 원문 문장 + 출처를 묶어 단어장에 자동 저장(중복은 쌓지 않음)
@@ -2721,17 +2758,20 @@ function buildScopeCard(s) {
   return card;
 }
 
-// 읽기 완료 - 개별 완독은 조용히 진행률만 채우고, 코스 전체 완주에서만 클리어 연출
-function markRead(p) {
+// 회독 완료 - 회독수를 올리고 같은 지문을 clean slate(임시 하이라이트 리셋)로 다시 열어 반복 읽기를 유도.
+// 개별 완독은 조용히 진행률만 채우고, 코스 전체 완주를 처음 달성할 때만 클리어 연출.
+function finishRound(p) {
+  const reads = getReads();
+  const round = (reads[p.id] || 0) + 1;
   const done = getDone();
   const wasCleared = courseProgress(course, done).cleared;
-  const reads = getReads();
-  reads[p.id] = (reads[p.id] || 0) + 1;
+  reads[p.id] = round;
   store.set("reads", reads);
   if (!done.includes(p.id)) { done.push(p.id); store.set("done", done); }
   const prog = courseProgress(course, done);
-  if (prog.cleared && !wasCleared) showClearModal();
-  else renderList();
+  if (prog.cleared && !wasCleared) { showClearModal(); return; }
+  showToast(`${round}회독 완료! 새 마음으로 다시 읽어 보세요.`);
+  renderReading(p); // 새 클로저로 다시 그려 임시 수집 하이라이트를 리셋(영구 단어장은 유지)
 }
 
 function showClearModal() {
@@ -2754,7 +2794,6 @@ function showClearModal() {
 
 // ── 내 단어장 ──
 function renderVocab() {
-  closePopover();
   setTop({ title: "내 단어장", onBack: renderList, showVocab: false });
   const stage = el.stage;
   stage.className = "stage vocab-stage";

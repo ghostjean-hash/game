@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "deploy: game-hub 갱신",
+    "commitMessage": "feat(english-reading): 선유추 단어수집·다회독 루프 + 끊는 기준 검사기 + 채점 표시 개선",
     "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {
