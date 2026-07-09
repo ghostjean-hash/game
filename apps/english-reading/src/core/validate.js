@@ -43,7 +43,7 @@ export function validatePassage(p) {
 
     (s.words || []).forEach((wd) => {
       const r = resolveTargets(tokens, [wd])[0];
-      if (!r || r.index < 0) push(w, `단어 "${wd && wd.word}"가 원문에 실제로 없습니다.`);
+      if (!r || r.index < 0) push(w, `단어 "${wd && wd.word}"가 원문에 없습니다 - 원문에 나온 형태 그대로 적으세요(활용형이면 -s·-ed·-ing 등을 원형으로 바꾸지 말 것).`);
       if (!wd || !wd.meaning) push(w, `단어 "${wd && wd.word}"의 뜻(meaning)이 필요합니다.`);
     });
 

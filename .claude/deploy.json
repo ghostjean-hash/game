@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(english-reading): 문제 출제 화면 - LLM 출제 규칙 + 붙여넣기 자동 검증 + 내 문제 추가/배포",
+    "commitMessage": "fix(english-reading): 출제 규칙·검증 안내 개선 - 단어는 원문 활용형 그대로(원형 변환 금지)",
     "paths": ["apps/english-reading", "apps/_registry.json", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

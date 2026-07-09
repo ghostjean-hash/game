@@ -543,7 +543,7 @@ const AUTHORING_PROMPT = `너는 영어 독해 학습 앱의 문제 출제자다
    끊어도 되는 자리: 접속사·관계사·that·to 앞 / 콤마 뒤 / 긴 주어(3단어 이상) 뒤 동사 앞 / 긴 전치사구 앞.
 3. kr은 의역이 아니라 어순·구조가 드러나는 직독직해로 써라.
 4. grammar는 그 문장에 든 문법 요소를 1개 이상, 이름표(label)+한 줄 설명(note)으로.
-5. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 실제로 있는 단어여야 한다.
+5. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 나온 형태 그대로 적어라 - 활용형(-s·-ed·-ing 등)을 원형으로 바꾸지 마라(원문이 "triggers"면 "trigger"가 아니라 "triggers", 원문이 "noticing"이면 "notice"가 아니라 "noticing"). meaning(뜻)에는 원형 뜻을 써도 된다.
 6. insight는 구조가 특히 어려운 문장에만 넣어라(빼도 됨). 넣으면 formula·why·wrong·natural 4필드를 모두 채워라.
 7. level은 난이도 숫자(1이 가장 쉬움). id는 다른 지문과 겹치지 않는 영문 이름.
 

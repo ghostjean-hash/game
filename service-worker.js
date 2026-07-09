@@ -107,7 +107,8 @@
 // v160 (2026-07-09): english-reading 읽기 진행 저장·복원 - 그은 선·임시 단어·검토 여부를 지문별 기기 저장, 단어장/목록 왕복·앱 재시작에도 복원(단어장 백버튼은 읽던 지문으로 복귀), 회독 완료 시 해당 지문분 리셋. PWA 옛 캐시 무효화.
 // v161 (2026-07-09): english-reading 맞은 끊기 표시를 채워진 붉은 점 → 안이 빈 붉은 원(테두리만)으로 변경(사용자 지시). PWA 옛 캐시 무효화.
 // v162 (2026-07-09): english-reading 문제 출제 화면 - LLM 출제 규칙 제공 + 붙여넣은 지문 JSON을 validatePassage로 즉시 검증(끊는 기준 위반·죽은 단어·양식) + 통과분 localStorage customPassages로 추가·목록 반영·배포용 복사. PWA 옛 캐시 무효화.
-const CACHE_VERSION = "v162";
+// v163 (2026-07-09): english-reading 출제 규칙·검증 안내 개선 - words의 word는 원문 활용형 그대로(원형 변환 금지) 프롬프트 명시 + 죽은 단어 에러에 형태 힌트 추가(제미나이가 trigger로 원형 넣어 걸린 사례). PWA 옛 캐시 무효화.
+const CACHE_VERSION = "v163";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
