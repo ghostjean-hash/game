@@ -167,3 +167,11 @@
 - 문서 정합: 앱 CLAUDE.md(학습 흐름 1.3·데이터 규약 4.3/4.4·검증 목록 5.1/5.2) + 기획서 spec/index.html(3.3 선유추 후확인·3.5 다회독·사용 흐름·손끝 규칙) 갱신.
 - 배포: 커밋 d5a3260, SW v156→v157. 실서비스 종합 검증(신규 사용자 상태 전 흐름 22항목 PASS + 콘솔 0 + 스크린샷 시각 확인), 배포 smoke 2 URL 200·셀렉터 가시·콘솔 0.
 - 잔여: cross-domain-guard가 web-deploy/browser-shot 정식 호출(홈 스킬 스크립트 node 실행)을 'cd + 글로벌 진입'으로 오판·차단 → 파이프라인 5단계를 수동 재현해 배포 완수. 글로벌 공통 문제라 .jarvis-handoff.jsonl에 인계(글로벌 세션에서 whitelist 처리 대기).
+
+## 2.22. 단어 수집을 '지정 단어'에서 '본문 모든 단어'로 전환 + 단어 밑줄 전면 제거 (2026-07-09, 사용자 "왜 특정 단어만 등록되냐 + 밑줄 긋지 마" 강한 지적)
+
+- 근본 지적: 걸림돌 단어를 데이터 words[]가 미리 0~3개로 정하고 그 단어만 클릭·수집 가능하던 구조가 틀림 - 무엇을 모르는지는 학습자마다 다르다. 단어 아래 점선 밑줄(발견성 표시)도 함께 폐기 요구.
+- renderSentence: 특정 단어(targetByIndex/resolveTargets) 제한 폐지, 구두점 아닌 모든 토큰(tok.clean 있음)을 .w.word로 클릭·임시수집 가능하게. words[]는 뜻 힌트로 역할 전환(clean 단어→meaning 맵) - 뜻 있으면 해석 시 표시, 없으면 뜻 빈 채 단어만 저장. flagged key를 tok.index→토큰 위치 i로.
+- 뜻 소스는 사용자 선택('단어만 담고 뜻 비움', AskUserQuestion): 미등록 단어는 collected-words·단어장에 "뜻 미등록 - 직접 채워 보세요" placeholder(회색 이탤릭 .cw-empty/.vd-empty).
+- CSS: .w.key(점선 밑줄) 폐기, .w.word는 밑줄 없이 cursor만, .w.word.flagged는 오렌지 배경만(밑줄 제거). main.js resolveTargets import 제거.
+- 검증: 유닛/데이터 통과, browser-shot로 밑줄 0(borderBottomStyle=none) + 아무 단어(데이터 없던 coffee 포함) 2개 임시수집 + 해석 시 뜻 있는 것/미등록 구분 표시 + 단어장 2개 + 콘솔 0. 실서비스 smoke 통과. 커밋 9836024, SW v158→v159.
