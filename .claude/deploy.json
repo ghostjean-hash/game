@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(flightshooting): 무기 강화 8발 일괄 진화 10단계 재설계 + 속도 3단계 증가",
+    "commitMessage": "fix(flightshooting): 무기 강화를 발별 순차 진화로 복원(총알 하나씩) - 일괄 되돌림",
     "paths": ["games/flightshooting", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

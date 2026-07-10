@@ -29,20 +29,21 @@ export const CFG = {
   enemyBullet: { speed: 250, r: 5 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
   parts: {
-    // 전방 화력(= 메인 총알): front 1~18. 1~8 = 탄 수, 9~18 = 진화 단계 1~10(8발 전부 일괄, 사용자 확정 2026-07-10).
-    //   메인은 직진, 여러 발이면 laneGap 간격 나란히. 진화 단계는 8발 전부 동일 tier(빔 형태가 단계마다 패턴).
-    //   tierMax = 진화 단계 수(10), tierDmg = 단계당 데미지 증가. vStagger = V자 대형 오프셋(px/가로거리).
-    front: { max: 18, rBase: 3.0, laneGap: 12, tierMax: 10, tierDmg: 1, vStagger: 0.42 },
+    // 전방 화력(= 메인 총알): front 1~88 = 강화 단계. 사용자 확정 2026-07-10(발별 순차 - 총알 하나씩):
+    //   1~8단계 = 발 1개씩 추가(1→8발). 9단계~ = 8발 고정, 가운데 탄부터 한 발씩 모양 진화(8스텝마다 그 탄 tier +1).
+    //   tierMax = 모양 티어 최대(10), shapeDmg = 티어당 데미지 증가. rGrow=0(탄 크기 고정). vStagger = V자 대형.
+    //   88 = 8(탄수) + 80(8발×10티어). 빔 형태 패턴은 view가 각 탄 tier로 그린다.
+    front: { max: 88, rBase: 3.0, rGrow: 0, laneGap: 12, tierMax: 10, shapeDmg: 1, vStagger: 0.42 },
     option: {
       maxPerSide: 4,          // 좌우 각 4대 → 총 8대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격
       baseY: 4, stepY: 14,    // 슬롯 뒤로 갈수록 약간 아래
       follow: 9,              // 플레이어 추종 속도(초당 비율)
-      // 8대 전부 레이저(= 사이드 총알). 8대 채운 뒤 optionEvo 1~10 진화(8발 일괄, 둥근 형태 패턴, evoMax = 단계 수).
-      //   옵션 수↑ → 굵기(laserR)·데미지 상승. 진화 tier↑ → 굵기(laserRTier)·데미지(laserTierDmg) 추가 상승.
-      //   부채: 각 비행기 대각선 각 = laserDiagBase + slot×laserDiagStep(안쪽 살짝~바깥 크게). laserSpeed는 tier로 3단계마다↑.
-      laserEvery: 0.176, laserDmg: 1, laserDmgGrow: 0.5, laserTierDmg: 1, laserSpeed: 640,
-      laserR: 1.1, laserRGrow: 0.15, laserRTier: 0.18, laserDiagBase: 6, laserDiagStep: 5.5, evoMax: 10,
+      // 8대 전부 레이저(= 사이드 총알). 8대 채운 뒤 안쪽(rank 0)부터 한 발씩 모양 진화(발별 순차, 8스텝마다 티어↑).
+      //   옵션 수↑ → 굵기(laserR)·데미지 상승. 진화 tier↑ → 데미지·형태·속도 상승. 부채: laserDiagBase + slot×laserDiagStep.
+      //   laserSpeed는 각 탄 tier로 3단계마다↑(fire.speedMul). 진화 최대 단계는 색 배열 길이로 산출(parts).
+      laserEvery: 0.176, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 640,
+      laserR: 1.1, laserRGrow: 0.15, laserDiagBase: 6, laserDiagStep: 5.5,
     },
     // 에너지존(E) = 펄스파: 플레이어 중심에서 링이 주기적으로 바깥으로 퍼지고, 링이 지나가는 순간
     //   링 위(두께 판정 내)에 있는 적·보스에게만 dmg = level 피해(상시 장판 아님, 사용자 지시 2026-07-09).
@@ -54,14 +55,14 @@ export const CFG = {
       thick:     [0, 12, 15, 19, 23, 28],        // 레벨별 링 두께(= 피해 판정 폭 + 시각 굵기)
       speed: 200,                                // 파동 확장 속도(px/s, 공통)
     },
-    // 꼬리 비행기(T): 플레이어 뒤 유도탄 발사기. 4대 먼저 채운 뒤 무기 일괄 진화 10단계(사용자 확정 2026-07-10).
-    //   weapon 1(무강화)~11(10단계), 4대 후 4대 전부 동시에 한 단계씩. tier = weapon-1(0~10). 형태가 점→삼각→화살→미사일로 진화.
-    //   배치: 세로 일렬 체인 - 각자 앞 개체를 개별 추종(뱀 꼬리처럼 출렁). 무기 단계↑ → 유도탄 크기·데미지 상승.
+    // 꼬리 비행기(T): 플레이어 뒤 유도탄 발사기. 4대 먼저 채운 뒤 1번→2번→…→4번 순서로 무기 진화(발별 순차, 사용자 확정).
+    //   weapon 1(무강화)~11(10단계). 4대 후 가장 낮은 무기부터 한 단계씩. tier = weapon-1(0~10). 형태가 점→삼각→화살→미사일.
+    //   배치: 세로 일렬 체인 - 각자 앞 개체를 개별 추종(뱀 꼬리처럼 출렁). 단계↑ → 유도탄 크기·데미지·속도 상승.
     tail: {
       maxCount: 4, weaponMax: 11,   // weapon 1~11 = 무강화 + 10단계
       gap: 10, r: 5.5, follow: 10,
       missileEvery: 2.7, missileSpeed: 240, missileTurn: 3.2, missileAccel: 520,
-      missileR: 2.4, missileRPer: 0.5, missileDmgBase: 3, missileDmgPer: 1.4,
+      missileR: 2.4, missileRGrow: 0.6, missileDmgBase: 3, missileDmgGrow: 1.5,
     },
   },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.

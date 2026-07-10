@@ -4,6 +4,7 @@ import { createLoop } from '../../../shared/loop.js';
 import { createStorage } from '../../../shared/storage.js';
 import { showModal, registerServiceWorker } from '../../../shared/ui.js';
 import { CFG } from './data/numbers.js';
+import { COLORS } from './data/colors.js';
 import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard } from './core/world.js';
@@ -145,40 +146,50 @@ function handleEvent(ev) {
 }
 
 // ── HUD / 배너 ──
-// 강화 단계 표기(일괄 진화 체계): 각 계통은 "무강화 카운트(숫자) → 만렙(★) → 진화단계(★+숫자 1~10)".
-//   일괄 진화라 서브스텝 없음. 진화단계는 8발/8대/4대를 다 채운 뒤 전부가 함께 오르는 단일 값.
+// 강화 단계 표기(사용자 지시 2026-07-10): 진화/무기 '티어'는 로마숫자(I~X), 그 티어 안의 세부 진행(서브스텝)은 숫자.
+//   예) 발별 진화 2티어를 3발째 진행 중 = "★II·3". 서브스텝 0이면 로마숫자만.
+const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+const roman = (n) => ROMAN[n] || String(n);
+// 만렙(★) + 티어 로마 + 서브스텝 숫자를 조립. tier 0 = 진화 전(★만).
+function starTierText(tier, sub) {
+  if (tier <= 0) return '★';
+  return '★' + roman(tier) + (sub > 0 ? '·' + sub : '');
+}
 // 계통이 최대치면 '마스터'(★ 금색), 아니면 현재 값(카운트형: 에너지존 레벨 등).
 function setPartHud(el, val, max) {
   const mastered = val >= max;
   el.textContent = mastered ? '★' : val;
   el.classList.toggle('mastered', mastered);
 }
-// 일괄 진화 계통(메인·사이드) 공용: 카운트 만렙 전이면 카운트 숫자, 만렙 후 진화단계(evo 0~10)를 ★(+숫자)로.
-//   evo 0 = 만렙 직후(★만), 1~10 = 진화단계(★1~★10).
-function setEvoHud(el, count, countMax, evo) {
+// 발별 진화 계통(메인·사이드) 공용: 카운트 만렙 전이면 카운트 숫자, 만렙 후 진화도(evo)를 티어(로마)+서브스텝(숫자)으로.
+//   evo 8스텝마다 티어 +1, 티어 안 서브스텝은 1~8(가운데부터 몇 발 진화했나).
+function setEvoHud(el, count, countMax, evo, tierMax) {
   if (count < countMax) { el.textContent = count; el.classList.remove('mastered'); return; }
   el.classList.add('mastered');
-  el.textContent = evo > 0 ? '★' + evo : '★';
+  if (!evo) { el.textContent = '★'; return; }
+  const tier = Math.min(Math.floor((evo - 1) / 8) + 1, tierMax);
+  const sub = ((evo - 1) % 8) + 1; // 1~8
+  el.textContent = starTierText(tier, sub);
 }
 function setFrontHud() {
-  // 메인 총알: front 1~7 = 탄 수, 8 = ★(탄 수 만렙), 9~18 = 진화단계(evo = front-8 = 1~10).
-  setEvoHud(elFront, game.front, 8, Math.max(0, game.front - 8));
+  // 메인 총알: front 1~7 = 탄 수, 8 = ★, 9~88 = 발별 진화(evo = front-8).
+  setEvoHud(elFront, game.front, 8, Math.max(0, game.front - 8), CFG.parts.front.tierMax);
 }
-// 꼬리기: 4대 미만이면 대수, 4대 후엔 무기 진화단계(weapon 1~11 → evo 0~10, 전부 동일값).
+// 꼬리기: 4대 미만이면 대수, 4대 후엔 무기 티어(최저 무기 단계 = 로마) + 서브스텝(다음 단계로 오른 대수 1~3).
 function setTailHud() {
   const T = CFG.parts.tail;
   const n = game.tail.length;
   if (n < T.maxCount) { elTail.textContent = n; elTail.classList.remove('mastered'); return; }
   elTail.classList.add('mastered');
-  const minW = Math.min(...game.tail.map((t) => t.weapon)); // 전부 동일하지만 안전하게 최저값
-  const evo = minW - 1; // weapon 1~11 → 진화단계 0~10
-  elTail.textContent = evo > 0 ? '★' + evo : '★';
+  const minW = Math.min(...game.tail.map((t) => t.weapon)); // 전체가 도달한 무기 단계 = 티어(로마)
+  const raised = game.tail.filter((t) => t.weapon > minW).length; // 다음 단계로 오른 대수 = 서브스텝
+  elTail.textContent = starTierText(minW, raised);
 }
 function syncHud() {
   elScore.textContent = game.score;
   elStage.textContent = game.stage;
   setFrontHud();
-  setEvoHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2, game.optionEvo || 0);
+  setEvoHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2, game.optionEvo || 0, COLORS.bulletShapeTier.length - 1);
   setPartHud(elZone, game.zone.level, CFG.parts.zone.levelMax);
   setTailHud();
   const lifeEls = elLives.querySelectorAll('.life');
@@ -242,11 +253,11 @@ function applyDevHook() {
   const num = (k) => { const v = q.get(k); return v == null ? null : Number(v); };
   const stage = num('stage');
   if (stage != null) game.stage = Math.max(1, Math.min(stage, CFG.stageCount));
-  // front: 1~18. 8=탄 수 만렙, 9~18=일괄 진화단계 1~10(18=진화 만렙).
+  // front: 1~88. 9 이상이면 발별 진화가 보인다(가운데 탄부터 8발마다 티어 +1).
   const front = num('front'); if (front != null) for (let i = 1; i < front; i++) gainFront(game);
   const option = num('option'); if (option != null) for (let i = 0; i < option; i++) gainOption(game);
   const zone = num('zone'); if (zone != null) for (let i = 0; i < zone; i++) gainZone(game);
-  // tail: 1~14. 4까지 대수, 그 뒤 4대 동시 무기 진화 10단계(14=전원 무기11).
+  // tail: 1~44. 4까지 대수, 그 뒤 낮은 무기부터 발별 순차 진화(44=전원 무기11).
   const tail = num('tail'); if (tail != null) for (let i = 0; i < tail; i++) gainTail(game);
   const lives = num('lives'); if (lives != null) game.lives = Math.max(1, lives);
   if (q.get('cheat') != null) { cheatEnabled = true; setCheat.checked = true; } // 검증 편의: 치트 박스 자동 표시

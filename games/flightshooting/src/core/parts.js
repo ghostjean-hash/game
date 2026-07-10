@@ -39,7 +39,7 @@ function tailTarget(idx, game, p) {
   return { x: lead.x, y: lead.y + leadR + TAIL.gap };
 }
 
-// 꼬리 비행기 성장 1스텝. 4대 먼저 채우고('count'), 그 뒤 4대 전부 동시에 무기 한 단계씩 진화('weapon', 일괄). 만렙이면 null.
+// 꼬리 비행기 성장 1스텝. 4대 먼저 채우고('count'), 그 뒤 1번→2번→…→4번 순서로 무기 한 단계씩 진화('weapon', 발별 순차). 만렙이면 null.
 export function addTail(game) {
   if (game.tail.length < TAIL.maxCount) {
     const p = game.player;
@@ -49,8 +49,10 @@ export function addTail(game) {
     game.tail.push({ x: t.x, y: t.y, fireTimer: TAIL.missileEvery * Math.random(), weapon: 1 });
     return 'count';
   }
-  if (game.tail[0].weapon >= TAIL.weaponMax) return null; // 무기까지 만렙
-  for (const t of game.tail) t.weapon++;                  // 4대 전부 동시 한 단계
+  const min = Math.min(...game.tail.map((t) => t.weapon));
+  if (min >= TAIL.weaponMax) return null;              // 무기까지 만렙
+  const tgt = game.tail.find((t) => t.weapon === min); // 가장 낮은(앞) 꼬리기부터 순차
+  tgt.weapon++;
   return 'weapon';
 }
 
@@ -66,8 +68,9 @@ export function gainFront(game) {
 }
 export function gainOption(game) {
   if (addOption(game)) { game.partHistory.push('option'); return true; }
-  // 사이드 8대를 다 채운 뒤 S를 더 먹으면 사이드 총알이 진화(둥근 형태 패턴 1~10단계, 8발 일괄).
-  if ((game.optionEvo || 0) < OPT.evoMax) {
+  // 사이드 8대를 다 채운 뒤 S를 더 먹으면 안쪽(rank 0)부터 한 발씩 진화(발별 순차). 8대×10티어 = 80단계.
+  const evoMax = (COLORS.bulletShapeTier.length - 1) * OPT.maxPerSide * 2;
+  if ((game.optionEvo || 0) < evoMax) {
     game.optionEvo = (game.optionEvo || 0) + 1;
     game.partHistory.push('optionEvo');
     return true;
@@ -98,7 +101,11 @@ export function loseLastPart(game) {
   else if (part === 'zone') game.zone.level = Math.max(0, game.zone.level - 1);
   else if (part === 'tail') game.tail.pop();
   else if (part === 'tailWeapon') {
-    for (const t of game.tail) t.weapon = Math.max(1, t.weapon - 1); // 4대 전부 한 단계 후퇴(일괄)
+    // 가장 최근 오른 꼬리기 무기 후퇴 = 최대 weapon 중 가장 뒤(높은 index)를 -1.
+    const max = Math.max(...game.tail.map((t) => t.weapon));
+    for (let i = game.tail.length - 1; i >= 0; i--) {
+      if (game.tail[i].weapon === max) { game.tail[i].weapon = Math.max(1, max - 1); break; }
+    }
   }
   return part || null;
 }
@@ -109,10 +116,10 @@ export function stepOptions(game, dt, canFire = true) {
   if (!p) return;
   const k = Math.min(1, OPT.follow * dt);
   const n = game.options.length; // 옵션기가 많을수록 레이저가 굵고 세진다
-  const evo = game.optionEvo || 0; // 사이드 총알 진화 단계(0~10, 8발 일괄)
-  const laserR = OPT.laserR + n * OPT.laserRGrow + evo * OPT.laserRTier;
-  const laserDmg = OPT.laserDmg + Math.max(0, n - 1) * OPT.laserDmgGrow + evo * OPT.laserTierDmg;
-  const speed = OPT.laserSpeed * speedMul(evo); // 3단계마다 빨라짐
+  const laserR = OPT.laserR + n * OPT.laserRGrow;
+  const laserDmg = OPT.laserDmg + Math.max(0, n - 1) * OPT.laserDmgGrow;
+  const evo = game.optionEvo || 0;                       // 진화에 투입된 S 수
+  const maxTier = COLORS.bulletShapeTier.length - 1;     // 티어 최대(10)
   for (const o of game.options) {
     const t = optionTarget(o, p);
     o.x += (t.x - o.x) * k;
@@ -124,7 +131,10 @@ export function stepOptions(game, dt, canFire = true) {
     // 사이드 총알은 부채로 퍼진다: 안쪽(slot 0) 살짝, 바깥으로 갈수록 크게. side로 좌/우.
     const deg = OPT.laserDiagBase + o.slot * OPT.laserDiagStep;
     const rad = (o.side * deg * Math.PI) / 180;
-    game.bullets.push({ x: o.x, y: o.y - 6, vx: Math.sin(rad) * speed, vy: -Math.cos(rad) * speed, r: laserR, dmg: laserDmg, kind: 'laser', tier: evo });
+    // 진화 tier: 8대 채운 뒤 안쪽(rank 0)부터 한 발씩 진화(발별 순차). 8스텝마다 티어 +1.
+    const tier = evo >= o.rank + 1 ? Math.min(Math.floor((evo - (o.rank + 1)) / 8) + 1, maxTier) : 0;
+    const speed = OPT.laserSpeed * speedMul(tier);       // 진화한 탄일수록 속도↑
+    game.bullets.push({ x: o.x, y: o.y - 6, vx: Math.sin(rad) * speed, vy: -Math.cos(rad) * speed, r: laserR, dmg: laserDmg + tier, kind: 'laser', tier });
   }
 }
 
@@ -144,12 +154,12 @@ export function stepTail(game, dt, canFire = true) {
     o.fireTimer -= dt;
     if (o.fireTimer > 0) continue;
     o.fireTimer = TAIL.missileEvery;
-    const w = o.weapon, tier = w - 1; // tier 0~10(형태 진화 + 3색 순환)
+    const w = o.weapon, tier = w - 1; // tier 0~10(형태 진화 + 3색 순환). 각 꼬리기 무기 단계는 개별(발별 순차).
     const sp0 = TAIL.missileSpeed * speedMul(tier);
     game.bullets.push({
       x: o.x, y: o.y + 4, vx: (idx % 2 === 0 ? -1 : 1) * 50, vy: -sp0 * 0.4,
-      r: TAIL.missileR + tier * TAIL.missileRPer,
-      dmg: TAIL.missileDmgBase + tier * TAIL.missileDmgPer,
+      r: TAIL.missileR + (w - 1) * TAIL.missileRGrow,
+      dmg: TAIL.missileDmgBase + (w - 1) * TAIL.missileDmgGrow,
       kind: 'missile', weapon: w,
     });
     fired = true;
