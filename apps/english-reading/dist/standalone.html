@@ -339,9 +339,11 @@ body {
 }
 /* 해석 버튼이 우측에 뜨므로 그 높이만큼 줄을 감싸 다음 문장과 겹치지 않게 */
 .sentence-line::after { content: ""; display: block; clear: both; }
-/* 단어 사이 틈 - 누르면 / 선을 긋는다. 넉넉한 터치 폭 + 시각적으론 공백처럼 보임 */
+/* 단어 사이 틈 - 누르면 / 선을 긋는다. 넉넉한 터치 폭 + 시각적으론 공백처럼 보임.
+   z-index로 이 틈을 좌우 단어 위 레이어에 둔다(터치 확장 오버레이가 단어보다 위여야 함). */
 .gap {
   position: relative;
+  z-index: 2;
   display: inline-block;
   width: 0.72em;
   min-width: 12px;
@@ -358,6 +360,16 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .gap::after { content: "/"; font-weight: 700; }
+/* 투명 터치 확장 - 레이아웃에서 빠진 absolute 박스라 단어를 밀지 않고(공백 유지) 좌우 인접
+   단어의 한 글자 위까지만 덮어 그 부분 터치를 끊기로 가져간다(오터치 차단, 2026-07-10 사용자 지시).
+   → 단어 등록은 자연히 앞뒤 글자를 뺀 '가운데 글자'에서만 반응한다. */
+.gap-hit {
+  position: absolute;
+  top: -0.2em;
+  bottom: -0.2em;
+  left: -0.42em;
+  right: -0.42em;
+}
 @media (hover: hover) {
   .gap:not(.slashed):hover { color: rgba(26,30,40,0.3); }
 }
@@ -470,6 +482,21 @@ body {
 }
 /* 본문 단어는 모두 클릭 가능하되 밑줄 등 표시 없이 깨끗하게 둔다(어떤 단어가 걸림돌인지는 학습자가 정함) */
 .w.word { cursor: pointer; }
+/* 단어장(영구)에 이미 담긴 단어 - 중앙 하단에 연한 점으로 '수집됨'을 은은히 표시(밑줄 없이 본문은 깨끗) */
+.w.saved::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0.02em;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--fg-mute);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
 /* 임시 수집(Flagged) - 누른 단어를 오렌지 배경으로만 표시(밑줄 없음), 뜻은 해석 때 공개 */
 .w.word.flagged {
   background: #ffedd5;
@@ -2746,6 +2773,8 @@ function renderSentence(s, sIndex, passage, settings) {
     const k = String(w.word).toLowerCase().replace(/[^a-z']/g, "");
     if (k && !meaningByClean.has(k)) meaningByClean.set(k, w.meaning);
   });
+  // 단어장(영구)에 이미 담긴 단어 - 회독 때 '이미 아는 단어'로 은은히 표시(중앙 하단 점).
+  const vocabKeys = settings.words ? new Set(getVocab().map((v) => v.wordKey)) : new Set();
 
   // 저장된 진행 복원 - 그은 선·임시 단어·검토 여부를 기기 저장소에서 되살린다.
   const saved = loadSentenceState(passage.id, sIndex) || {};
@@ -2781,6 +2810,7 @@ function renderSentence(s, sIndex, passage, settings) {
     const span = document.createElement("span");
     span.textContent = tok.raw;
     span.className = "w";
+    if (tok.clean && vocabKeys.has(tok.clean)) span.classList.add("saved");
     // 뜻이 등록된 주요 단어만 터치 대상 - 일반 단어까지 터치되면 끊기 틈과 오터치가 잦아 제한(사용자 지시).
     if (settings.words && tok.clean && meaningByClean.has(tok.clean)) {
       span.classList.add("word");
@@ -2811,6 +2841,11 @@ function renderSentence(s, sIndex, passage, settings) {
         gap.type = "button";
         gap.className = "gap";
         gap.setAttribute("aria-label", "끊어 읽기 선 긋기");
+        // 좌우 인접 단어의 한 글자 위까지 덮는 투명 터치 확장(레이아웃 밖 absolute라 공백은 그대로)
+        const hit = document.createElement("span");
+        hit.className = "gap-hit";
+        hit.setAttribute("aria-hidden", "true");
+        gap.appendChild(hit);
         if (slashes.has(i)) gap.classList.add("slashed"); // 복원
         gap.onclick = (e) => {
           e.stopPropagation();

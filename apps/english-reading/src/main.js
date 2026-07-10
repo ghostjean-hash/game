@@ -255,6 +255,8 @@ function renderSentence(s, sIndex, passage, settings) {
     const k = String(w.word).toLowerCase().replace(/[^a-z']/g, "");
     if (k && !meaningByClean.has(k)) meaningByClean.set(k, w.meaning);
   });
+  // 단어장(영구)에 이미 담긴 단어 - 회독 때 '이미 아는 단어'로 은은히 표시(중앙 하단 점).
+  const vocabKeys = settings.words ? new Set(getVocab().map((v) => v.wordKey)) : new Set();
 
   // 저장된 진행 복원 - 그은 선·임시 단어·검토 여부를 기기 저장소에서 되살린다.
   const saved = loadSentenceState(passage.id, sIndex) || {};
@@ -290,6 +292,7 @@ function renderSentence(s, sIndex, passage, settings) {
     const span = document.createElement("span");
     span.textContent = tok.raw;
     span.className = "w";
+    if (tok.clean && vocabKeys.has(tok.clean)) span.classList.add("saved");
     // 뜻이 등록된 주요 단어만 터치 대상 - 일반 단어까지 터치되면 끊기 틈과 오터치가 잦아 제한(사용자 지시).
     if (settings.words && tok.clean && meaningByClean.has(tok.clean)) {
       span.classList.add("word");
@@ -320,6 +323,11 @@ function renderSentence(s, sIndex, passage, settings) {
         gap.type = "button";
         gap.className = "gap";
         gap.setAttribute("aria-label", "끊어 읽기 선 긋기");
+        // 좌우 인접 단어의 한 글자 위까지 덮는 투명 터치 확장(레이아웃 밖 absolute라 공백은 그대로)
+        const hit = document.createElement("span");
+        hit.className = "gap-hit";
+        hit.setAttribute("aria-hidden", "true");
+        gap.appendChild(hit);
         if (slashes.has(i)) gap.classList.add("slashed"); // 복원
         gap.onclick = (e) => {
           e.stopPropagation();
