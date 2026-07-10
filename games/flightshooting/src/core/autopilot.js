@@ -7,15 +7,17 @@
 // 발사는 원래 자동이라 건드리지 않고, 조준은 표적과 같은 x로 정렬해 총알이 맞게 유도한다.
 import { CFG } from '../data/numbers.js';
 
-const SIM_T = 1.2;       // 미래를 이 시간(초)까지 시뮬레이션해 생존을 평가
+const SIM_T = 1.5;       // 미래를 이 시간(초)까지 시뮬레이션해 생존을 평가(회피 지평 확대)
 const SIM_DT = 0.04;     // 시뮬 시간 간격(초) - 작을수록 정밀, 클수록 빠름
 const HIT_PAD = 9;       // 시뮬 충돌 반경에 더하는 여유(성긴 스텝의 빗나감 방어 + 안전 마진)
 const AIM_BONUS = 0.30;  // 조준 정렬 목표의 이득(생존 동점 목표끼리 우선순위 가름)
 const PICK_BONUS = 0.42; // 파워업 획득 목표의 이득(성장 우선이라 조준보다 약간 높다)
 const AIM_MARGIN = 24;   // 표적이 이만큼 위에 있어야 조준 대상으로 삼는다
 const PICK_RANGE = 340;  // 이 거리 안의 파워업만 획득을 시도한다
-const TOP_LIM = 0.4;     // 세로 이동 상한(화면 높이 비율). 이 위(적 스폰 구역)로는 올라가지 않는다
+const TOP_LIM = 0.28;    // 세로 이동 상한(화면 높이 비율). 위쪽 빈 공간까지 활용하되 적 스폰 최상단은 피한다
 const DEADZONE = 12;     // 위협이 없을 때 이 픽셀 이내의 목표 편차는 무시(조준 표적 미세 이동에 따른 떨림 방지)
+const RAND_N = 12;       // 몬테카를로: 매 결정마다 무작위 도피처를 이만큼 더 뿌려 시뮬(고정 후보로 못 찾는 틈새 발견)
+const CLEAR_BONUS = 0.9; // 여유 공간 보너스 가중: 목표 주변에 위협이 없을수록(빈 공간·위쪽) 선호. 위협 많을 때만 강하게 작동
 // 조작 갱신 주기(초). 사람은 초당 대여섯 번 정도만 방향을 바꾼다. '생각(목표 선택)'은 이 주기마다
 // 정확히 하되 그 사이에는 정한 방향을 유지해, 매 프레임(초당 60번) 미세 조정하는 기계적 움직임을 없앤다.
 // 이동 속도·관성은 그대로 두고 '방향을 바꾸는 빈도'만 사람 수준으로 낮춘다(사용자 지시 2026-07-09).
@@ -24,8 +26,11 @@ const DECIDE_EVERY = 0.15;
 // 좌우가 주 회피 축이라 촘촘히, 세로·대각선도 넣어 틈새 회피·드랍 마중·적기 흘리기를 가능케 한다.
 const OFFS = [
   [0, 0], [60, 0], [-60, 0], [130, 0], [-130, 0], [220, 0], [-220, 0], [320, 0], [-320, 0],
-  [0, -120], [0, -60], [0, 90],
-  [110, -90], [-110, -90], [110, 80], [-110, 80],
+  [0, -60], [0, 90],
+  // 위쪽 빈 공간 활용: 세로·대각 상승 후보를 여러 높이로(아래에서만 싸우지 않게)
+  [0, -140], [0, -240], [0, -340], [0, -440],
+  [120, -90], [-120, -90], [120, 80], [-120, 80],
+  [160, -220], [-160, -220], [200, -360], [-200, -360],
 ];
 
 // 시뮬레이션에 넣을 위협 목록. 각 위협의 미래 위치를 posAt로 정확히 재현할 수 있게 형태를 담는다.
@@ -72,6 +77,19 @@ function simulate(threats, tg, sx, sy, step, W, H, pr, simT) {
   return simT; // 완전 생존
 }
 
+// 목표 지점 주변 '여유 공간': 가장 가까운 위협까지의 거리(현재 위치 기준). 넓을수록 위협 없는 빈 공간이다.
+//   위협이 대부분 아래에 몰려 있으면 위쪽 지점의 여유가 커져, AI가 자연히 위쪽 빈 공간으로 올라간다.
+function clearanceAt(threats, tx, ty) {
+  let mind = Infinity;
+  for (const th of threats) {
+    const ox = th.k === 1 ? th.baseX : th.x;
+    const dx = tx - ox, dy = ty - th.y;
+    const d = dx * dx + dy * dy;
+    if (d < mind) mind = d;
+  }
+  return mind === Infinity ? 1e6 : Math.sqrt(mind);
+}
+
 // 표준정규 난수(Box-Muller) - 조준 각오차 노이즈용. 사람은 프로도 완벽 조준 못 한다.
 function gauss() {
   const u = Math.random() || 1e-9, v = Math.random();
@@ -99,6 +117,9 @@ function decideTarget(game, W, H, pr, homeY, tier) {
   const targets = [];
   for (const [dx, dy] of OFFS)
     targets.push({ x: clamp(p.x + dx, pr, W - pr), y: clamp(homeY + dy, topY, botY), bonus: 0 });
+  // 몬테카를로: 무작위 도피처를 화면 전체(위쪽 포함)에 뿌려, 고정 후보로 못 찾는 틈새·빈 공간을 발견한다.
+  for (let i = 0; i < RAND_N; i++)
+    targets.push({ x: clamp(pr + Math.random() * (W - 2 * pr), pr, W - pr), y: clamp(topY + Math.random() * (botY - topY), topY, botY), bonus: 0 });
 
   // 조준 표적 선정: 보너스 기체(파워업 원천, 놓치면 성장 불가)를 최우선, 없으면 가장 가까운 위쪽 적.
   let bonus = null;
@@ -128,13 +149,21 @@ function decideTarget(game, W, H, pr, homeY, tier) {
   }
   if (pu && pd < PICK_RANGE) targets.push({ x: clamp(pu.x, pr, W - pr), y: clamp(pu.y, topY, botY), bonus: PICK_BONUS });
 
-  // 각 목표를 시뮬레이션해 (생존 시간 + 안전 시 이득)이 가장 큰 목표를 고른다.
+  // 각 목표를 시뮬레이션해 (생존 시간 + 안전 시 이득 + 여유 공간)이 가장 큰 목표를 고른다.
+  // 여유 공간 보너스는 위협이 많을수록 강해진다: 위험하면 넓은 빈 공간(위쪽)으로 도피, 안전하면 조준/획득 우선.
   const step = CFG.player.speed * SIM_DT;
+  const threatFactor = Math.min(1, threats.length / 6);
+  // 제자리가 위험할 때만 여유 공간(빈 곳·위쪽) 도피 보너스를 켠다. 제자리가 안전하면 불필요한 이동을 막는다
+  //   (안 맞을 탄에 괜히 움직이지 않게). 위험하면 넓은 빈 공간으로 도피 = 위쪽이 비면 위로 올라간다.
+  const inDanger = simulate(threats, { x: p.x, y: p.y }, p.x, p.y, step, W, H, pr, simT) < simT;
   let best = -Infinity, bx = p.x, by = homeY;
   for (const tg of targets) {
     const surv = simulate(threats, tg, p.x, p.y, step, W, H, pr, simT);
     let s = surv;
-    if (surv >= simT) s += tg.bonus; // 완전 생존한 목표에만 조준/획득 이득을 얹는다(자살 유도 방지)
+    if (surv >= simT) { // 완전 생존한 목표에만 이득을 얹는다(자살 유도 방지)
+      s += tg.bonus;
+      if (inDanger) s += (clearanceAt(threats, tg.x, tg.y) / H) * CLEAR_BONUS * threatFactor;
+    }
     if (s > best) { best = s; bx = tg.x; by = tg.y; }
   }
   return { x: bx, y: by, safe: best >= simT };

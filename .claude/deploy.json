@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "perf(flightshooting): 발열 최적화(총알 글로우 제거) + 무기 문서 전면 정합(발별 순차 사양)",
+    "commitMessage": "feat(flightshooting): 자동 플레이 AI 몬테카를로 강화(회피 지평·도피처·빈공간 도피) + 세션 봉합",
     "paths": ["games/flightshooting", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {
