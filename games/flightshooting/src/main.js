@@ -146,44 +146,44 @@ function handleEvent(ev) {
 }
 
 // ── HUD / 배너 ──
-// 강화 단계 표기(사용자 지시 2026-07-10): 진화/무기 '티어'는 로마숫자(I~X), 그 티어 안의 세부 진행(서브스텝)은 숫자.
-//   예) 발별 진화 2티어를 3발째 진행 중 = "★II·3". 서브스텝 0이면 로마숫자만.
+// 강화 단계 표기(사용자 지시 2026-07-10): 별(★) 없이 로마숫자(메인 강화=티어) + 아라비아 숫자(서브 강화=티어 안 진행)만.
+//   예) 3티어를 3발째 진행 중 = "III·3". 마스터(최대 강화) 도달 시 주황색(.mastered)으로 표시.
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 const roman = (n) => ROMAN[n] || String(n);
-// 만렙(★) + 티어 로마 + 서브스텝 숫자를 조립. tier 0 = 진화 전(★만).
-function starTierText(tier, sub) {
-  if (tier <= 0) return '★';
-  return '★' + roman(tier) + (sub > 0 ? '·' + sub : '');
+// 티어(로마) + 서브스텝(아라비아). 별 없음. tier 0이면 빈 문자열.
+function tierText(tier, sub) {
+  if (tier <= 0) return '';
+  return roman(tier) + (sub > 0 ? '·' + sub : '');
 }
-// 계통이 최대치면 '마스터'(★ 금색), 아니면 현재 값(카운트형: 에너지존 레벨 등).
+// 카운트형(에너지존 레벨 등): 값 표시, 최대(마스터)면 주황.
 function setPartHud(el, val, max) {
-  const mastered = val >= max;
-  el.textContent = mastered ? '★' : val;
-  el.classList.toggle('mastered', mastered);
+  el.textContent = val;
+  el.classList.toggle('mastered', val >= max);
 }
-// 발별 진화 계통(메인·사이드) 공용: 카운트 만렙 전이면 카운트 숫자, 만렙 후 진화도(evo)를 티어(로마)+서브스텝(숫자)으로.
-//   evo 8스텝마다 티어 +1, 티어 안 서브스텝은 1~8(가운데부터 몇 발 진화했나).
+// 발별 진화 계통(메인·사이드): 카운트 채우는 중이거나 진화 전이면 카운트 숫자, 진화 시작하면 로마·아라비아.
+//   완전 마스터(8발 전부 최고 티어 = evo가 tierMax*8)면 주황.
 function setEvoHud(el, count, countMax, evo, tierMax) {
-  if (count < countMax) { el.textContent = count; el.classList.remove('mastered'); return; }
-  el.classList.add('mastered');
-  if (!evo) { el.textContent = '★'; return; }
+  if (count < countMax || !evo) { el.textContent = count; el.classList.remove('mastered'); return; }
   const tier = Math.min(Math.floor((evo - 1) / 8) + 1, tierMax);
   const sub = ((evo - 1) % 8) + 1; // 1~8
-  el.textContent = starTierText(tier, sub);
+  el.textContent = tierText(tier, sub);
+  el.classList.toggle('mastered', evo >= tierMax * 8);
 }
 function setFrontHud() {
-  // 메인 총알: front 1~7 = 탄 수, 8 = ★, 9~88 = 발별 진화(evo = front-8).
+  // 메인 총알: front 1~7 = 탄 수, 8 = 탄수 만렙, 9~88 = 발별 진화(evo = front-8).
   setEvoHud(elFront, game.front, 8, Math.max(0, game.front - 8), CFG.parts.front.tierMax);
 }
-// 꼬리기: 4대 미만이면 대수, 4대 후엔 무기 티어(최저 무기 단계 = 로마) + 서브스텝(다음 단계로 오른 대수 1~3).
+// 꼬리기: 4대 미만이면 대수, 4대 후엔 무기 티어(최저 무기 단계 = 로마) + 서브스텝(다음 단계로 오른 대수). 완전 마스터면 주황.
 function setTailHud() {
   const T = CFG.parts.tail;
   const n = game.tail.length;
   if (n < T.maxCount) { elTail.textContent = n; elTail.classList.remove('mastered'); return; }
-  elTail.classList.add('mastered');
-  const minW = Math.min(...game.tail.map((t) => t.weapon)); // 전체가 도달한 무기 단계 = 티어(로마)
+  const minW = Math.min(...game.tail.map((t) => t.weapon)); // 최저 무기 단계(weapon 1=무강화)
+  const tier = minW - 1;                                     // 티어(로마) = weapon-1 (0~10)
   const raised = game.tail.filter((t) => t.weapon > minW).length; // 다음 단계로 오른 대수 = 서브스텝
-  elTail.textContent = starTierText(minW, raised);
+  if (tier <= 0) { elTail.textContent = n; elTail.classList.remove('mastered'); return; }
+  elTail.textContent = tierText(tier, raised);
+  elTail.classList.toggle('mastered', minW >= T.weaponMax);
 }
 function syncHud() {
   elScore.textContent = game.score;

@@ -24,7 +24,8 @@ export const CFG = {
     //   초기값(base)을 낮춰 저단계는 느리게, 후반일수록 빨라진다.
     speed: 360, speedPer3: 0.15,
     // 메인 빔 크기: 단계(tier 0~10)로 길이·굵기 증가. 빔 형태 패턴은 view.drawMainBeam이 tier로 그린다.
-    mainLenBase: 26, mainLenPer: 2.4, mainWBase: 2.6, mainWPer: 0.22,
+    //   0강화·중간 단계 모두 절반으로 축소(사용자 지시 2026-07-10).
+    mainLenBase: 13, mainLenPer: 1.2, mainWBase: 1.3, mainWPer: 0.11,
   },
   enemyBullet: { speed: 250, r: 5 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
@@ -62,7 +63,7 @@ export const CFG = {
       maxCount: 4, weaponMax: 11,   // weapon 1~11 = 무강화 + 10단계
       gap: 10, r: 5.5, follow: 10,
       missileEvery: 2.7, missileSpeed: 240, missileTurn: 3.2, missileAccel: 520,
-      missileR: 2.4, missileRGrow: 0.6, missileDmgBase: 3, missileDmgGrow: 1.5,
+      missileR: 1.2, missileRGrow: 0.3, missileDmgBase: 3, missileDmgGrow: 1.5, // 크기 절반(사용자 지시 2026-07-10)
     },
   },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.

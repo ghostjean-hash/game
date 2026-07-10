@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "fix(flightshooting): 무기 강화를 발별 순차 진화로 복원(총알 하나씩) - 일괄 되돌림",
+    "commitMessage": "feat(flightshooting): 유도탄·메인 빔 크기 절반 + HUD 별 제거(로마·아라비아, 마스터 주황) + 세션 봉합",
     "paths": ["games/flightshooting", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

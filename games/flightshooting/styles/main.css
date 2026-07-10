@@ -47,8 +47,8 @@
 .mini-hud .pbadge.b-S { background: #5fe8ff; box-shadow: 0 0 6px rgba(95, 232, 255, 0.8); }
 .mini-hud .pbadge.b-E { background: #a98bff; box-shadow: 0 0 6px rgba(169, 139, 255, 0.8); }
 .mini-hud .pbadge.b-T { background: #6ee7a8; box-shadow: 0 0 6px rgba(110, 231, 168, 0.8); }
-/* 마스터(최대 강화 단계): 숫자 대신 ★ 금색 + 글로우로 최고 도달을 표현 */
-.mini-hud .mh b.mastered { color: #ffd54a; text-shadow: 0 0 8px rgba(255, 213, 74, 0.85); }
+/* 마스터(최대 강화 단계): 단계 숫자를 주황색 + 글로우로 최고 도달을 표현(사용자 지시 2026-07-10) */
+.mini-hud .mh b.mastered { color: #ff8a3d; text-shadow: 0 0 8px rgba(255, 138, 61, 0.9); }
 .lives { display: flex; gap: 3px; align-items: center; }
 .lives .life { color: var(--sky-enemy); display: block; filter: drop-shadow(0 0 5px rgba(255, 107, 129, 0.55)); }
 .lives .life svg { width: 16px; height: 16px; display: block; }
