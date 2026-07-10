@@ -531,3 +531,33 @@
 ### 후속 - 봄(B) 드롭 수정 (v174, 39b5751)
 - 사용자 지적("봄으로 죽은 애들은 왜 드랍 안 하지?"). 원인: 봄 로직이 `game.enemies = []`로 적을 통째로 비우며 드롭 경로(dropMaybe/dropItems)를 건너뛰어 점수만 줬다. 특히 파워업 주 공급원인 보너스 기체를 봄으로 없애면 아이템을 통째로 놓쳤다.
 - 처리(사용자 A안 선택): 봄으로 죽은 **보너스 기체만 확정 드롭**(`dropItems`), 잡몹은 드롭 없음 유지(봄이 과해지지 않게). world.grabItem B + docs/01 7장. core 87 PASS(봄 드롭 테스트 신규), 배포 smoke 통과.
+
+## 2026-07-10 (후속3) - 무기 강화 8발 일괄 진화 10단계 재설계
+
+무기 강화 체계를 기획서(HTML)로 먼저 확정한 뒤 발별 순차 → 8발 일괄 10단계로 전면 재설계했다. 배포 v175(0091032).
+
+### 기획서 반복 확정 (scratchpad HTML, browser-shot 렌더 검증)
+- 각 무기(메인·사이드·유도탄) 강화 단계별 모양을 실제 canvas 렌더로 그린 기획서를 만들고 사용자 피드백으로 여러 번 다듬었다: 풀세팅(메인 8발 V자·사이드 8발 부채·유도탄 4발) 기준 표시 / 0단계(무강화) 포함 / 메인은 "길이·색·두께 순환"으로 오해했다가 사용자 지적("레이저 자체를 패턴으로")으로 빔 몸통 형태 자체가 패턴이 되게 복원 / 유도탄 형태 진화(점→삼각→화살→미사일)+몸체 3색 순환 / 속도 3단계 증가 / 메인 길이 짧게 시작·7·8단계(이중/나선) 구분·사이드 3단계 확대. 최종 확정.
+- 자기-실수: 사용자의 "길이/색/두께로 차이를 집중" 지시를 "패턴 제거"로 과잉 해석해 레이저 무늬를 통째로 없앴다가 강한 지적을 받고 복원. 지시의 한정어를 넘겨 임의 삭제한 #244 계열 결손.
+
+### 진화 방식 확정 (AskUserQuestion)
+- 발별 순차(현재)와 8발 일괄 중 사용자가 **일괄** 선택(강화 N번 = N단계, 8발 전부 같은 단계). 과거 발별 확정 이력이 있어 착수 전 명시 확인 후 진행.
+
+### 구현
+- numbers.js: front max 18·tierMax 10·tierDmg / bullet mainLen·mainW·speed 360·speedPer3 0.15 / option evoMax 10·laserTierDmg·laserRTier·laserSpeed 640 / tail weaponMax 11·missileSpeed 240·missileRPer·missileDmgPer. bullet.shapes/mainBeams 배열 제거.
+- colors.js: mainTier·bulletShapeTier 11색, tailMissile3 3색 순환.
+- fire.js: frontSpec 일괄(8발 동일 tier) + speedMul(tier) export. centerRanks(발별) 제거.
+- parts.js: gainOption/gainTail/addTail 일괄, stepOptions·stepTail·homeMissiles 속도·tier 반영, loseLastPart tailWeapon 4대 일괄.
+- view.js: drawMainBeam(빔 형태 패턴)·drawSideShape(둥근 진화)·drawMissile(형태 진화+3색) 신설, drawRocket·drawMainCore 제거.
+- main.js: HUD 일괄(★+단계숫자), dev 훅 범위(front 18·tail 14).
+
+### 병렬 처리 (사용자 지적 "왜 병렬로 안 하지")
+- 순차 편집을 지적받아 남은 view·main·tests를 3갈래 에이전트로 동시 위임. 서로 다른 파일이라 충돌 0. 이후 큰 다파일 독립 작업은 병렬 위임 우선(delegation-standard 재확인).
+
+### 검증·배포
+- core 테스트 89 PASS(발별 테스트 → 일괄로 교체, speedMul 신규). browser-shot 최대강화(P★10·S★10·T★10) 캡처로 메인 플라즈마 빔·사이드 태양·유도탄 렌더 확인, pageerror 0. web-deploy smoke 통과.
+- docs 정합: docs/01 §4·§7 일괄 10단계로 정정, docs/05 상단 전환 노트(하단 발별 서술 폐기 명시). docs/05 본문 전면 재작성은 후속.
+
+### 남은 것
+- docs/05 본문(발별 진화 전제) 전면 재작성 - 현재는 상단 전환 노트로 덮음.
+- 실플레이 밸런스: 메인 10단계 플라즈마 빔이 8발 겹치면 흰 덩어리로 과하게 보임(크기 조정 여지). 진화 속도·아이템 획득량(일괄이라 10회면 만렙)도 실측 후 조정.
