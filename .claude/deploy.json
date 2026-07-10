@@ -16,7 +16,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(flightshooting): 유도탄·메인 빔 크기 절반 + HUD 별 제거(로마·아라비아, 마스터 주황) + 세션 봉합",
+    "commitMessage": "perf(flightshooting): 발열 최적화(총알 글로우 제거) + 무기 문서 전면 정합(발별 순차 사양)",
     "paths": ["games/flightshooting", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {

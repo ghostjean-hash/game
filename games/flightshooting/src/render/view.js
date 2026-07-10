@@ -358,7 +358,7 @@ function drawMainBeam(ctx, b) {
   ctx.save();
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
-  ctx.shadowColor = col; ctx.shadowBlur = 6 + t * 0.9; ctx.fillStyle = col; ctx.strokeStyle = col;
+  ctx.fillStyle = col; ctx.strokeStyle = col; // 발열: 총알은 글로우 없이 밝은 색 자체로(단일 요소만 글로우)
   if (t === 0) { ctx.fillRect(-1.5, top, 3, h); }
   else if (t === 1) { ctx.fillRect(-bw, top, bw * 2, h); }
   else if (t === 2) { const n = 5, u = h / (n * 2 - 1); for (let i = 0; i < n; i++) ctx.fillRect(-bw, top + i * u * 2, bw * 2, u); }
@@ -392,7 +392,7 @@ function drawSideShape(ctx, b) {
   ctx.save();
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
-  ctx.shadowColor = col; ctx.shadowBlur = 4 + t * 1.0; ctx.fillStyle = col; ctx.strokeStyle = col;
+  ctx.fillStyle = col; ctx.strokeStyle = col; // 발열: 총알 글로우 제거
   if (t === 0) { ctx.beginPath(); ctx.arc(0, 0, R * 0.5, 0, Math.PI * 2); ctx.fill(); }
   else if (t === 1) { ctx.beginPath(); ctx.arc(0, 0, R * 0.78, 0, Math.PI * 2); ctx.fill(); }
   else if (t === 2) { ctx.beginPath(); ctx.arc(0, 0, R * 0.7, 0, Math.PI * 2); ctx.fill(); }
@@ -422,7 +422,7 @@ function drawMissile(ctx, b) {
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
   if (t >= 6) { ctx.fillStyle = 'rgba(150,255,220,0.5)'; ctx.beginPath(); ctx.ellipse(0, half * 0.98, r * 0.5, r * (0.8 + t * 0.12), 0, 0, Math.PI * 2); ctx.fill(); } // 로켓부터 꼬리불
-  ctx.shadowColor = col; ctx.shadowBlur = t >= 6 ? 4 + t * 0.5 : 2; ctx.fillStyle = col;
+  ctx.fillStyle = col; // 발열: 유도탄 글로우 제거
   if (t <= 1) {                                   // 점 → 작은 원
     ctx.beginPath(); ctx.arc(0, 0, r * (0.6 + t * 0.25), 0, Math.PI * 2); ctx.fill();
   } else if (t <= 4) {                            // 삼각 → 화살촉

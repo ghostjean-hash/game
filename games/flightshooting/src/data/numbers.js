@@ -17,8 +17,8 @@ export const CFG = {
     normal: { enemyFireMul: 1,   startFront: 1, startTail: 0, enemyShotsMax: 99 },
     kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1, enemyShotsMax: 1 },
   },
-  // 무기 강화 = 8발 일괄 진화 10단계(사용자 확정 2026-07-10). 강화 아이템 N번 = N단계, 8발 전부 같은 단계.
-  //   메인·사이드·유도탄 모두 tier 0(무강화)~10. 형태는 단계마다 뚜렷이 다른 패턴(view가 tier로 그린다).
+  // 무기 강화 = 발별 순차 진화 10단계(사용자 확정 2026-07-10). 강화 아이템마다 총알 하나씩 순차로 진화.
+  //   메인·사이드는 가운데(안쪽)부터, 유도탄은 낮은 것부터. 각 탄 tier 0(무강화)~10. 형태는 단계마다 다른 패턴(view가 tier로 그린다).
   bullet: {
     // 모든 총알 속도는 강화 3단계마다 한 계단 빨라진다(사용자 지시). 실제 = base * (1 + floor(tier/3) * speedPer3).
     //   초기값(base)을 낮춰 저단계는 느리게, 후반일수록 빨라진다.
