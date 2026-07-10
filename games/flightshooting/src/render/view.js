@@ -346,149 +346,111 @@ function drawBossPart(ctx, part, sc) {
   ctx.restore();
 }
 
-// 유도탄 로켓 실루엣. 원점 중심, 진행 방향 = 위(-y). rotate는 호출부에서 적용.
-//   뾰족한 노즈콘 + 원통 몸통 + 뒤 핀(양날개). tier(0~3, = 무기단계-1)↑일수록 뒷핀이 커져 강화를 보인다.
-//   fillStyle(몸체색)은 호출부가 지정. 노즈 흰 하이라이트만 여기서 잠깐 흰색으로 칠하고 복원한다.
-function drawRocket(ctx, r, tier) {
-  const half = r * 1.7;          // 몸통 세로 반길이
-  const w = r * 0.85;            // 몸통 반폭
-  const fin = w * (0.9 + tier * 0.35); // 뒤 핀 크기(강화될수록 큼)
-  // 뒤 핀(양쪽 삼각) - 몸통보다 먼저 그려 몸통이 위에 겹치게
-  ctx.beginPath();
-  ctx.moveTo(-w, half * 0.15); ctx.lineTo(-w - fin, half * 1.05); ctx.lineTo(-w, half * 0.8); ctx.closePath(); ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(w, half * 0.15); ctx.lineTo(w + fin, half * 1.05); ctx.lineTo(w, half * 0.8); ctx.closePath(); ctx.fill();
-  // 몸통(뾰족 노즈 + 원통) - 위가 뾰족한 총알형
-  ctx.beginPath();
-  ctx.moveTo(0, -half * 1.35);                     // 노즈 끝
-  ctx.quadraticCurveTo(w, -half * 0.5, w, 0);      // 오른 어깨 곡선
-  ctx.lineTo(w, half);                             // 오른 몸통 아래
-  ctx.lineTo(-w, half);                            // 왼 몸통 아래
-  ctx.lineTo(-w, 0);
-  ctx.quadraticCurveTo(-w, -half * 0.5, 0, -half * 1.35);
-  ctx.closePath(); ctx.fill();
-  // 노즈 흰 하이라이트(강화 표시, tier↑ 뚜렷)
-  if (tier >= 1) {
-    const prev = ctx.fillStyle;
-    ctx.fillStyle = `rgba(255,255,255,${0.4 + tier * 0.16})`;
-    ctx.beginPath();
-    ctx.moveTo(0, -half * 1.3);
-    ctx.quadraticCurveTo(w * 0.5, -half * 0.6, 0, -half * 0.35);
-    ctx.quadraticCurveTo(-w * 0.5, -half * 0.6, 0, -half * 1.3);
-    ctx.closePath(); ctx.fill();
-    ctx.fillStyle = prev;
-  }
-}
-
-// 메인 총알 흰 코어 무늬 - 티어별로 다른 패턴을 빔을 따라(로컬 세로축) 반복해 '다른 종류의 레이저'로 구분한다.
-// 호출 전에 translate+rotate로 진행 방향 좌표계가 잡혀 있어, 로컬 y축(위=진행방향)으로만 반복 배치하면 된다.
-function drawMainCore(ctx, bm, w) {
-  const cw = w * bm.core, coreLen = bm.len * 0.84, top = -bm.len * 0.42;
-  ctx.fillStyle = COLORS.laserCore;
-  ctx.strokeStyle = COLORS.laserCore;
-  const pat = bm.pattern || 'beam';
-  if (pat === 'beam') { ctx.fillRect(-cw, top, cw * 2, coreLen); return; }           // 실선 빔
-  if (pat === 'seg') {                                                                // 마디진 빔
-    const unit = coreLen / (bm.seg * 2 - 1);
-    for (let i = 0; i < bm.seg; i++) ctx.fillRect(-cw, top + i * unit * 2, cw * 2, unit);
-    return;
-  }
-  const n = bm.seg || 3, gap = coreLen / n, r = w * 0.85; // 빔 반폭 기준 - 무늬가 빔을 살짝 넘어 또렷하게 보인다
-  ctx.lineWidth = Math.max(1.5, w * 0.55);
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  for (let i = 0; i < n; i++) {
-    const y = top + gap * (i + 0.5);
-    if (pat === 'o') {                                                                // ○ 반복
-      ctx.beginPath(); ctx.arc(0, y, r, 0, Math.PI * 2); ctx.stroke();
-    } else if (pat === 'x') {                                                         // ✕ 반복
-      ctx.beginPath();
-      ctx.moveTo(-r, y - r); ctx.lineTo(r, y + r);
-      ctx.moveTo(r, y - r); ctx.lineTo(-r, y + r);
-      ctx.stroke();
-    } else if (pat === 'diamond') {                                                   // ◆ 반복
-      ctx.beginPath();
-      ctx.moveTo(0, y - r); ctx.lineTo(r, y); ctx.lineTo(0, y + r); ctx.lineTo(-r, y);
-      ctx.closePath(); ctx.fill();
-    }
-  }
-}
-
-// 총알/적탄은 수십 개가 매 프레임 그려지므로 글로우를 걸지 않는다(발열 핵심 요인).
-// 밝은 색 자체로 네온 느낌을 낸다.
-function drawBullets(ctx, game) {
+// 메인 총알 = 레이저 빔. 빔 몸통 형태 자체가 강화 단계(tier 0~10)의 패턴이다.
+//   실선→마디→구슬→마름모→물결→톱니→이중→나선→화살→플라즈마. 진행 방향으로 회전.
+function drawMainBeam(ctx, b) {
+  const t = b.tier || 0;
+  const col = COLORS.mainTier[Math.min(t, COLORS.mainTier.length - 1)];
+  const len = CFG.bullet.mainLenBase + t * CFG.bullet.mainLenPer;
+  const bw = CFG.bullet.mainWBase + t * CFG.bullet.mainWPer;
+  const top = -len / 2, h = len;
+  const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
   ctx.save();
-  for (const b of game.bullets) {
-    if (b.kind === 'laser') {
-      // 사이드 총알. tier 0 = 기본 흰-보라 빔, tier 1~4 = 진화 원→타원→빔→링(시안). 진행 방향으로 회전.
-      const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
-      const tier = b.tier || 0;
-      if (tier === 0) {
-        ctx.save();
-        ctx.translate(b.x, b.y);
-        ctx.rotate(ang);
-        ctx.fillStyle = COLORS.laser;
-        ctx.fillRect(-b.r * 0.5, -12, b.r, 20);         // 라벤더 외곽(길게)
-        ctx.fillStyle = COLORS.laserCore;
-        ctx.fillRect(-b.r * 0.24, -10, b.r * 0.48, 16); // 흰 코어(가늘게)
-        ctx.restore();
-      } else {
-        const sh = CFG.bullet.shapes[tier];
-        const col = COLORS.bulletShapeTier[tier];
-        const rx = b.r * sh.rx, ry = b.r * sh.ry;
-        ctx.fillStyle = col;
-        ctx.strokeStyle = col;
-        if (sh.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = sh.glow; }
-        if (sh.ring) {
-          ctx.lineWidth = rx * (1 - sh.ring);
-          ctx.beginPath();
-          ctx.ellipse(b.x, b.y, rx * (1 + sh.ring) / 2, ry * (1 + sh.ring) / 2, ang, 0, Math.PI * 2);
-          ctx.stroke();
-        } else {
-          ctx.beginPath();
-          ctx.ellipse(b.x, b.y, rx, ry, ang, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.shadowBlur = 0;
-      }
-    } else if (b.kind === 'missile') {
-      // 꼬리 유도탄 = 로켓 실루엣(뾰족 노즈 + 몸통 + 뒤 핀). 무기 단계(1~4)로 핀·발광·색이 강해진다. 뒤 꼬리불 유지.
-      const mv = Math.atan2(b.vy, b.vx);
-      const ang = mv + Math.PI / 2;
-      const tier = Math.max(0, Math.min((b.weapon || 1) - 1, COLORS.tailMissileByStage.length - 1));
-      const col = COLORS.tailMissileByStage[tier];
-      // 뒤 꼬리불(진행 반대쪽)
-      ctx.fillStyle = COLORS.missileTrail;
-      ctx.beginPath();
-      ctx.arc(b.x - Math.cos(mv) * b.r * 1.7, b.y - Math.sin(mv) * b.r * 1.7, b.r * 0.8, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.save();
-      ctx.translate(b.x, b.y);
-      ctx.rotate(ang);
-      if (tier >= 2) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = 4 + tier * 3; }
-      ctx.fillStyle = col;
-      drawRocket(ctx, b.r, tier);
-      ctx.restore();
-      ctx.shadowBlur = 0;
-    } else {
-      // 메인 총알 = 레이저 빔(빛줄기). 발별 진화 tier↑이면 빔이 길고 굵고 밝아지며 흰 코어가 강해진다. 진행 방향 회전.
-      const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
-      const tier = b.tier || 0;
-      const bm = CFG.bullet.mainBeams[tier];
-      const col = COLORS.mainTier[tier];
-      const w = b.r * bm.w;
-      ctx.save();
-      ctx.translate(b.x, b.y);
-      ctx.rotate(ang);
-      if (bm.glow) { ctx.shadowColor = COLORS.bulletGlow; ctx.shadowBlur = bm.glow; }
-      ctx.fillStyle = col;
-      ctx.fillRect(-w, -bm.len / 2, w * 2, bm.len);                          // 빔 외곽(색)
-      ctx.shadowBlur = 0;
-      drawMainCore(ctx, bm, w);   // 티어별 코어 무늬(실선/마디/원/엑스/마름모) - '다른 종류의 레이저'로 구분
-      ctx.restore();
-    }
+  ctx.translate(b.x, b.y);
+  ctx.rotate(ang);
+  ctx.shadowColor = col; ctx.shadowBlur = 6 + t * 0.9; ctx.fillStyle = col; ctx.strokeStyle = col;
+  if (t === 0) { ctx.fillRect(-1.5, top, 3, h); }
+  else if (t === 1) { ctx.fillRect(-bw, top, bw * 2, h); }
+  else if (t === 2) { const n = 5, u = h / (n * 2 - 1); for (let i = 0; i < n; i++) ctx.fillRect(-bw, top + i * u * 2, bw * 2, u); }
+  else if (t === 3) { const n = 6; for (let i = 0; i < n; i++) { const yy = top + h * (i + 0.5) / n; ctx.beginPath(); ctx.arc(0, yy, bw * 1.5, 0, Math.PI * 2); ctx.fill(); } }
+  else if (t === 4) { const n = 5; for (let i = 0; i < n; i++) { const yy = top + h * (i + 0.5) / n, r = bw * 1.8; ctx.beginPath(); ctx.moveTo(0, yy - r); ctx.lineTo(bw * 1.3, yy); ctx.lineTo(0, yy + r); ctx.lineTo(-bw * 1.3, yy); ctx.closePath(); ctx.fill(); } }
+  else if (t === 5) { ctx.lineWidth = bw * 1.7; ctx.lineCap = 'round'; ctx.beginPath(); for (let i = 0; i <= 12; i++) { const yy = top + h * i / 12, xx = Math.sin(i / 12 * Math.PI * 3) * bw * 1.5; i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke(); }
+  else if (t === 6) { ctx.beginPath(); const n = 8; ctx.moveTo(-bw * 0.4, top); for (let i = 0; i <= n; i++) { const yy = top + h * i / n; ctx.lineTo((i % 2 ? bw * 1.9 : -bw * 0.4), yy); } for (let i = n; i >= 0; i--) { const yy = top + h * i / n; ctx.lineTo((i % 2 ? bw * 0.4 : -bw * 1.9), yy); } ctx.closePath(); ctx.fill(); }
+  else if (t === 7) { ctx.fillRect(-bw * 2.3, top, bw * 1.4, h); ctx.fillRect(bw * 0.9, top, bw * 1.4, h); }
+  else if (t === 8) { ctx.lineWidth = bw * 1.15; ctx.lineCap = 'round'; for (const ph of [0, Math.PI]) { ctx.beginPath(); for (let i = 0; i <= 16; i++) { const yy = top + h * i / 16, xx = Math.sin(i / 16 * Math.PI * 4 + ph) * bw * 1.9; i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke(); } } // 나선(두 가닥 꼬임)
+  else if (t === 9) { const n = 5; for (let i = 0; i < n; i++) { const yy = top + h * (i + 0.5) / n, r = bw * 1.9; ctx.beginPath(); ctx.moveTo(0, yy - r); ctx.lineTo(bw * 1.6, yy + r * 0.35); ctx.lineTo(0, yy + r * 0.05); ctx.lineTo(-bw * 1.6, yy + r * 0.35); ctx.closePath(); ctx.fill(); } }
+  else { // 플라즈마: 오라 + 굵은 빔 + 흰 코어
+    ctx.save(); ctx.globalAlpha = 0.24; ctx.beginPath(); ctx.ellipse(0, 0, bw * 3.6, h * 0.55, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    ctx.fillRect(-bw * 1.7, top, bw * 3.4, h); ctx.fillStyle = '#ffffff'; ctx.fillRect(-bw * 0.6, top, bw * 1.2, h * 0.92);
   }
   ctx.restore();
+}
+
+// 별/스파클 헬퍼(사이드 총알 7~9단계용). 원점 기준, 위=진행방향.
+function star(ctx, pts, outer, inner) {
+  ctx.beginPath();
+  for (let i = 0; i < pts * 2; i++) { const a = Math.PI / pts * i - Math.PI / 2, r = i % 2 ? inner : outer; ctx[i ? 'lineTo' : 'moveTo'](Math.cos(a) * r, Math.sin(a) * r); }
+  ctx.closePath(); ctx.fill();
+}
+
+// 사이드 총알. 둥근 형태(이슬→구슬→방울→섬광)에서 고리→별→태양으로 진화(tier 0~10). 진행 방향으로 회전.
+function drawSideShape(ctx, b) {
+  const t = b.tier || 0;
+  const col = COLORS.bulletShapeTier[Math.min(t, COLORS.bulletShapeTier.length - 1)];
+  const R = b.r * 3.2 + t * 0.7;
+  const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+  ctx.save();
+  ctx.translate(b.x, b.y);
+  ctx.rotate(ang);
+  ctx.shadowColor = col; ctx.shadowBlur = 4 + t * 1.0; ctx.fillStyle = col; ctx.strokeStyle = col;
+  if (t === 0) { ctx.beginPath(); ctx.arc(0, 0, R * 0.5, 0, Math.PI * 2); ctx.fill(); }
+  else if (t === 1) { ctx.beginPath(); ctx.arc(0, 0, R * 0.78, 0, Math.PI * 2); ctx.fill(); }
+  else if (t === 2) { ctx.beginPath(); ctx.arc(0, 0, R * 0.7, 0, Math.PI * 2); ctx.fill(); }
+  else if (t === 3) { ctx.beginPath(); ctx.ellipse(0, 0, R * 0.82, R * 1.42, 0, 0, Math.PI * 2); ctx.fill(); }
+  else if (t === 4) { ctx.beginPath(); ctx.ellipse(0, 0, R * 0.42, R * 1.6, 0, 0, Math.PI * 2); ctx.fill(); }
+  else if (t === 5) { ctx.lineWidth = R * 0.4; ctx.beginPath(); ctx.arc(0, 0, R * 0.9, 0, Math.PI * 2); ctx.stroke(); }
+  else if (t === 6) { ctx.lineWidth = R * 0.28; ctx.beginPath(); ctx.arc(0, 0, R * 1.05, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, R * 0.55, 0, Math.PI * 2); ctx.stroke(); }
+  else if (t === 7) { star(ctx, 4, R * 1.35, R * 0.5); }
+  else if (t === 8) { star(ctx, 6, R * 1.4, R * 0.55); }
+  else if (t === 9) { ctx.lineWidth = R * 0.26; ctx.lineCap = 'round'; for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * R * 1.45, Math.sin(a) * R * 1.45); ctx.stroke(); } ctx.beginPath(); ctx.arc(0, 0, R * 0.4, 0, Math.PI * 2); ctx.fill(); }
+  else { // 태양: 12방향 광선 + 흰 코어
+    for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(Math.cos(a) * R * 0.7, Math.sin(a) * R * 0.7); ctx.lineTo(Math.cos(a) * R * 1.6, Math.sin(a) * R * 1.6); ctx.stroke(); }
+    ctx.beginPath(); ctx.arc(0, 0, R * 0.7, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(0, 0, R * 0.3, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// 유도탄. 형태가 진화(점→원→삼각→화살→로켓→미사일→다탄두)하고 몸체 색은 3색 순환(tier%3).
+//   tier = 무기단계(weapon 1~11) - 1. 진행 방향으로 회전.
+function drawMissile(ctx, b) {
+  const t = Math.max(0, (b.weapon || 1) - 1);
+  const col = COLORS.tailMissile3[t % 3];
+  const r = b.r * 1.7, half = r * 1.85, bw = r * 0.82;
+  const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+  ctx.save();
+  ctx.translate(b.x, b.y);
+  ctx.rotate(ang);
+  if (t >= 6) { ctx.fillStyle = 'rgba(150,255,220,0.5)'; ctx.beginPath(); ctx.ellipse(0, half * 0.98, r * 0.5, r * (0.8 + t * 0.12), 0, 0, Math.PI * 2); ctx.fill(); } // 로켓부터 꼬리불
+  ctx.shadowColor = col; ctx.shadowBlur = t >= 6 ? 4 + t * 0.5 : 2; ctx.fillStyle = col;
+  if (t <= 1) {                                   // 점 → 작은 원
+    ctx.beginPath(); ctx.arc(0, 0, r * (0.6 + t * 0.25), 0, Math.PI * 2); ctx.fill();
+  } else if (t <= 4) {                            // 삼각 → 화살촉
+    const s = t === 2 ? 0.85 : (t === 3 ? 1.1 : 1.35);
+    if (t <= 3) { ctx.beginPath(); ctx.moveTo(0, -half * s); ctx.lineTo(bw * 1.4 * s, half * 0.7 * s); ctx.lineTo(-bw * 1.4 * s, half * 0.7 * s); ctx.closePath(); ctx.fill(); }
+    else { ctx.beginPath(); ctx.moveTo(0, -half * 1.25); ctx.lineTo(bw * 1.7, half * 0.55); ctx.lineTo(bw * 0.5, half * 0.3); ctx.lineTo(bw * 0.85, half * 1.1); ctx.lineTo(0, half * 0.55); ctx.lineTo(-bw * 0.85, half * 1.1); ctx.lineTo(-bw * 0.5, half * 0.3); ctx.lineTo(-bw * 1.7, half * 0.55); ctx.closePath(); ctx.fill(); }
+  } else {                                        // 삼각로켓 → 로켓 → 미사일(몸통 + 핀)
+    const fin = bw * (0.6 + (t - 5) * 0.12);
+    ctx.beginPath(); ctx.moveTo(-bw, half * 0.2); ctx.lineTo(-bw - fin, half * 1.0); ctx.lineTo(-bw, half * 0.8); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(bw, half * 0.2); ctx.lineTo(bw + fin, half * 1.0); ctx.lineTo(bw, half * 0.8); ctx.closePath(); ctx.fill();
+    if (t >= 7) { ctx.beginPath(); ctx.moveTo(-bw * 0.4, half * 0.6); ctx.lineTo(0, half * 1.2); ctx.lineTo(bw * 0.4, half * 0.6); ctx.closePath(); ctx.fill(); } // 중앙핀
+    // 몸통(삼각로켓 t=5는 뾰족, t>=6은 원통형)
+    if (t === 5) { ctx.beginPath(); ctx.moveTo(0, -half * 1.3); ctx.lineTo(bw, half * 0.9); ctx.lineTo(-bw, half * 0.9); ctx.closePath(); ctx.fill(); }
+    else { ctx.beginPath(); ctx.moveTo(0, -half * 1.3); ctx.quadraticCurveTo(bw, -half * 0.5, bw, 0); ctx.lineTo(bw, half); ctx.lineTo(-bw, half); ctx.lineTo(-bw, 0); ctx.quadraticCurveTo(-bw, -half * 0.5, 0, -half * 1.3); ctx.closePath(); ctx.fill(); }
+    if (t >= 9) { for (const ox of [-bw * 1.7, bw * 1.7]) { ctx.beginPath(); ctx.moveTo(ox, -half * 0.1); ctx.quadraticCurveTo(ox + bw * 0.5, -half * 0.4, ox + bw * 0.5, half * 0.25); ctx.lineTo(ox - bw * 0.5, half * 0.25); ctx.quadraticCurveTo(ox - bw * 0.5, -half * 0.4, ox, -half * 0.1); ctx.closePath(); ctx.fill(); } } // 다탄두
+  }
+  ctx.shadowBlur = 0;
+  if (t >= 6) { ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(0, -half * 1.05, bw * 0.4, 0, Math.PI * 2); ctx.fill(); } // 노즈 발광
+  ctx.restore();
+}
+
+// 총알/적탄은 수십 개가 매 프레임 그려지므로 최소 글로우로 유지한다(발열).
+function drawBullets(ctx, game) {
+  for (const b of game.bullets) {
+    if (b.kind === 'laser') drawSideShape(ctx, b);
+    else if (b.kind === 'missile') drawMissile(ctx, b);
+    else drawMainBeam(ctx, b);
+  }
 }
 
 // 적탄: 빨강 몸 + 노란 코어로 아군 시안탄과 확실히 구분한다(사용자 "헷갈림" 대응).

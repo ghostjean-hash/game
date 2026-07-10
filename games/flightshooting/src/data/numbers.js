@@ -17,52 +17,32 @@ export const CFG = {
     normal: { enemyFireMul: 1,   startFront: 1, startTail: 0, enemyShotsMax: 99 },
     kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1, enemyShotsMax: 1 },
   },
-  // bullet.shapes: 전방화력 발별 진화 티어별 탄 렌더(docs/05 1.1.1). 인덱스 0=진화 전 기본, 1~4=진화 티어.
-  //   모양이 원→타원→긴형→링으로 뚜렷이 바뀐다(색만이 아니라 형태로 성장을 보인다, 사용자 지시 2026-07-08).
-  //   rx/ry = 기본 반경 대비 가로/세로 배율, glow = 발광 강도, ring = 도넛(고리)이면 뚫린 안쪽 반경 비율.
+  // 무기 강화 = 8발 일괄 진화 10단계(사용자 확정 2026-07-10). 강화 아이템 N번 = N단계, 8발 전부 같은 단계.
+  //   메인·사이드·유도탄 모두 tier 0(무강화)~10. 형태는 단계마다 뚜렷이 다른 패턴(view가 tier로 그린다).
   bullet: {
-    speed: 496,
-    // 사이드 총알(옵션기) 진화 외형: 둥근 계열(원→타원→긴형→링). 인덱스 0=진화 전 기본.
-    shapes: [
-      { rx: 1.0, ry: 2.0, glow: 0 },              // 0 기본(진화 전, 작은 세로 타원)
-      { rx: 2.6, ry: 2.6, glow: 6 },              // 1 원(확 큰 동그란 구슬 - 타원과 뚜렷이 대비)
-      { rx: 2.2, ry: 3.6, glow: 9 },              // 2 타원(큰 럭비공)
-      { rx: 1.5, ry: 4.8, glow: 12 },             // 3 긴형(길고 뚜렷한 빔)
-      { rx: 2.8, ry: 2.8, glow: 15, ring: 0.5 },  // 4 링(큰 발광 고리, 최종)
-    ],
-    // 메인 총알(전방화력) 진화 외형: 레이저 빔(빛줄기)을 유지한 채 강화(사용자 지시 2026-07-09).
-    //   각진 도형이 아니라 '광선' 형태 그대로, 발별 진화 티어↑일수록 빔이 길고 굵고 밝아지며 흰 코어가 강해진다.
-    //   w = 빔 반폭 배율(기본 반경 대비), len = 빔 길이(px), core = 흰 코어 폭 비율(0~1), glow = 발광 강도.
-    //   seg = 코어 무늬의 반복 개수(pattern이 seg면 마디 수, o/x/diamond면 도형 반복 수. beam은 무시).
-    //   pattern = 티어별 코어 무늬 종류로 '다른 종류의 레이저'처럼 구분(사용자 지시 2026-07-10):
-    //     beam=실선 / seg=마디 / o=원 반복 / x=엑스 반복 / diamond=마름모 반복. view.drawMainCore가 그린다.
-    mainBeams: [
-      { w: 0.42, len: 18, core: 0.42, glow: 0,  seg: 0, pattern: 'beam' },    // 0 무강화(가는 실선 빔)
-      { w: 0.50, len: 24, core: 0.44, glow: 6,  seg: 2, pattern: 'seg' },     // 1 강화1(마디 빔)
-      { w: 0.62, len: 30, core: 0.46, glow: 9,  seg: 3, pattern: 'o' },       // 2 강화2(○ 반복 레이저)
-      { w: 0.72, len: 36, core: 0.48, glow: 12, seg: 3, pattern: 'x' },       // 3 강화3(✕ 반복 레이저)
-      { w: 0.84, len: 42, core: 0.50, glow: 16, seg: 4, pattern: 'diamond' }, // 4 강화4(◆ 반복 레이저, 최종)
-    ],
+    // 모든 총알 속도는 강화 3단계마다 한 계단 빨라진다(사용자 지시). 실제 = base * (1 + floor(tier/3) * speedPer3).
+    //   초기값(base)을 낮춰 저단계는 느리게, 후반일수록 빨라진다.
+    speed: 360, speedPer3: 0.15,
+    // 메인 빔 크기: 단계(tier 0~10)로 길이·굵기 증가. 빔 형태 패턴은 view.drawMainBeam이 tier로 그린다.
+    mainLenBase: 26, mainLenPer: 2.4, mainWBase: 2.6, mainWPer: 0.22,
   },
   enemyBullet: { speed: 250, r: 5 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
   parts: {
-    // 전방 화력(= 메인 총알, 내 비행기가 쏜다): front 1~40. 1~8=탄 수, 9~40=발별 진화(사이드와 같은 구조).
-    //   메인 총알은 직진으로 나간다(부채 없음). 여러 발이면 laneGap 간격으로 가로로 나란히 평행 발사.
-    //   9단계부터 8발 고정, 가운데 탄부터 한 발씩 mainBeams 티어로 진화(레이저 빔이 굵고 길고 밝아진다).
-    //   tierMax = 진화 티어 수, shapeDmg = 티어 1당 탄 데미지 증가.
-    // vStagger = 여러 발일 때 바깥 탄일수록 살짝 뒤(아래)에서 출발시키는 V자 대형 오프셋(px/가로거리).
-    //   8발이 같은 높이에 일렬로 뭉쳐 격자처럼 보이던 것을 은은한 화살촉 대형으로 풀어준다(사용자 지시 2026-07-09).
-    front: { max: 40, rBase: 3.2, rGrow: 0, laneGap: 11, tierMax: 4, shapeDmg: 1, vStagger: 0.42 },
+    // 전방 화력(= 메인 총알): front 1~18. 1~8 = 탄 수, 9~18 = 진화 단계 1~10(8발 전부 일괄, 사용자 확정 2026-07-10).
+    //   메인은 직진, 여러 발이면 laneGap 간격 나란히. 진화 단계는 8발 전부 동일 tier(빔 형태가 단계마다 패턴).
+    //   tierMax = 진화 단계 수(10), tierDmg = 단계당 데미지 증가. vStagger = V자 대형 오프셋(px/가로거리).
+    front: { max: 18, rBase: 3.0, laneGap: 12, tierMax: 10, tierDmg: 1, vStagger: 0.42 },
     option: {
       maxPerSide: 4,          // 좌우 각 4대 → 총 8대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격
       baseY: 4, stepY: 14,    // 슬롯 뒤로 갈수록 약간 아래
       follow: 9,              // 플레이어 추종 속도(초당 비율)
-      // 8대 전부 레이저(= 사이드 총알, 사이드 비행기가 쏜다). 옵션 수↑ → 굵기(laserR)·데미지(laserDmg) 상승.
-      //   사이드 총알은 부채로 퍼진다: 각 비행기의 대각선 각 = laserDiagBase + slot×laserDiagStep.
-      //   안쪽(slot 0) 비행기는 살짝, 바깥(slot 3)으로 갈수록 더 크게 벌어져 부채를 펼친다. side로 좌/우 방향.
-      laserEvery: 0.176, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 880, laserR: 1.1, laserRGrow: 0.15, laserDiagBase: 6, laserDiagStep: 5.5,
+      // 8대 전부 레이저(= 사이드 총알). 8대 채운 뒤 optionEvo 1~10 진화(8발 일괄, 둥근 형태 패턴, evoMax = 단계 수).
+      //   옵션 수↑ → 굵기(laserR)·데미지 상승. 진화 tier↑ → 굵기(laserRTier)·데미지(laserTierDmg) 추가 상승.
+      //   부채: 각 비행기 대각선 각 = laserDiagBase + slot×laserDiagStep(안쪽 살짝~바깥 크게). laserSpeed는 tier로 3단계마다↑.
+      laserEvery: 0.176, laserDmg: 1, laserDmgGrow: 0.5, laserTierDmg: 1, laserSpeed: 640,
+      laserR: 1.1, laserRGrow: 0.15, laserRTier: 0.18, laserDiagBase: 6, laserDiagStep: 5.5, evoMax: 10,
     },
     // 에너지존(E) = 펄스파: 플레이어 중심에서 링이 주기적으로 바깥으로 퍼지고, 링이 지나가는 순간
     //   링 위(두께 판정 내)에 있는 적·보스에게만 dmg = level 피해(상시 장판 아님, 사용자 지시 2026-07-09).
@@ -74,16 +54,14 @@ export const CFG = {
       thick:     [0, 12, 15, 19, 23, 28],        // 레벨별 링 두께(= 피해 판정 폭 + 시각 굵기)
       speed: 200,                                // 파동 확장 속도(px/s, 공통)
     },
-    // 꼬리 비행기(T): 플레이어 뒤 유도탄 발사기. 4대 먼저 채운 뒤 1~4번 순서로 무기 진화(무기 4단계).
-    //   배치: 세로 일렬 체인 - 1번은 플레이어를, 2번은 1번을, …각자 앞 개체를 개별 추종(뱀 꼬리처럼 출렁).
-    //   gap = 앞 개체와의 간격. 무기 단계↑ → 유도탄 크기(missileR)·데미지 상승(작은→큰).
+    // 꼬리 비행기(T): 플레이어 뒤 유도탄 발사기. 4대 먼저 채운 뒤 무기 일괄 진화 10단계(사용자 확정 2026-07-10).
+    //   weapon 1(무강화)~11(10단계), 4대 후 4대 전부 동시에 한 단계씩. tier = weapon-1(0~10). 형태가 점→삼각→화살→미사일로 진화.
+    //   배치: 세로 일렬 체인 - 각자 앞 개체를 개별 추종(뱀 꼬리처럼 출렁). 무기 단계↑ → 유도탄 크기·데미지 상승.
     tail: {
-      maxCount: 4, weaponMax: 4,
-      gap: 10, r: 5.5,          // 앞 개체 뒤 간격(px) + 꼬리기 반경(체인 간격 계산·렌더 공용)
-      follow: 10,               // 앞 개체 추종 속도(초당 비율) - 클수록 덜 늘어진다
-      missileEvery: 2.7, missileSpeed: 300, missileTurn: 3.2, missileAccel: 520,
-      missileR: 2.4, missileRGrow: 0.6,
-      missileDmgBase: 3, missileDmgGrow: 1.5,
+      maxCount: 4, weaponMax: 11,   // weapon 1~11 = 무강화 + 10단계
+      gap: 10, r: 5.5, follow: 10,
+      missileEvery: 2.7, missileSpeed: 240, missileTurn: 3.2, missileAccel: 520,
+      missileR: 2.4, missileRPer: 0.5, missileDmgBase: 3, missileDmgPer: 1.4,
     },
   },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.

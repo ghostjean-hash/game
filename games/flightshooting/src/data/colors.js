@@ -7,13 +7,11 @@ export const COLORS = {
   engine: 'rgba(255,180,90,0.85)',
   bullet: '#c9fbff',
   bulletGlow: '#22d3ee',
-  // 사이드 총알(옵션기 S) 진화 티어별 색(둥근 계열 shapes용). 인덱스 0=진화 전(기본 시안), 1~4=진화 티어.
-  // 전부 아군 차가운색(적탄 빨강·노란 코어와 절대 안 겹치게). 티어↑ 밝기·글로우도 계단식 상승.
-  bulletShapeTier: ['#22d3ee', '#ffffff', '#7dd3fc', '#5effd0', '#c7f9ff'],
-  // 메인 총알(전방화력 P) = 레이저 빔의 외곽색(mainBeams용). 티어별로 색을 확 다르게 해 '다른 종류의 레이저'로
-  //   구분한다(무늬 pattern과 함께, 사용자 지시 2026-07-10 "디자인 더 다양하게"). 차가운색 스펙트럼
-  //   시안→민트→파랑→보라→자홍으로 올라가며 적탄 빨강·노란 코어와는 절대 안 겹친다(아군 냉색 유지).
-  mainTier: ['#3fe0ff', '#4affc4', '#5b9bff', '#b17bff', '#e59bff'],
+  // 사이드 총알(옵션기 S) 진화 단계별 색(둥근 계열, tier 0~10). 인덱스 0=무강화. 전부 아군 차가운색.
+  bulletShapeTier: ['#5fe8ff', '#22d3ee', '#8ff0ff', '#7dd3fc', '#5effd0', '#c7f9ff', '#9ecbff', '#b17bff', '#e59bff', '#dff0ff', '#ffffff'],
+  // 메인 총알(전방화력 P) = 레이저 빔 외곽색(tier 0~10). 단계마다 색을 달리해 진화를 보인다(빔 형태 패턴과 함께).
+  //   시안→민트→하늘→파랑→보라→분홍→백금으로 올라가며 적탄 빨강·노란 코어와는 절대 안 겹친다(아군 냉색 유지).
+  mainTier: ['#3fe0ff', '#4affc4', '#5effd0', '#7dd3fc', '#5b9bff', '#8f7bff', '#b17bff', '#e59bff', '#ff9bf0', '#e0f4ff', '#ffffff'],
   // 적탄: 선명한 빨강 몸 + 노란 코어(view에서). 아군(시안/흰)과 뚜렷이 대비되는 '뜨거운' 경고색.
   enemyBullet: '#ff2d3a',
   enemyBulletCore: '#ffd24a',
@@ -81,9 +79,9 @@ export const COLORS = {
   // 레이저 빔: 라벤더 외곽 + 흰 코어의 '가는 빛줄기'. 메인탄(시안 덩어리)과 색(보라 vs 시안)·형태(빔 vs 덩어리)로 구분.
   laser: '#a78bfa',       // 레이저 외곽(라벤더)
   laserCore: '#ffffff',   // 레이저 흰 코어
-  // 꼬리 비행기(T)·유도탄. 유도탄 무기 단계(1~4)별 색 - 아군 차가운 녹/청(적탄과 안 겹침).
+  // 꼬리 비행기(T)·유도탄. 유도탄 몸체 색은 3색만 순환(tier%3, 인접 3단계 구분·반복, 사용자 지시 2026-07-10).
   tail: '#9ae6b4',        // 꼬리기 본체
-  tailMissileByStage: ['#b6ffd0', '#7cf3c4', '#5fe8d0', '#c7fff0'],
+  tailMissile3: ['#7cf3c4', '#5fd0e8', '#9ecbff'],
   missileTrail: 'rgba(150,255,220,0.6)',
   zone: '#a98bff',        // 에너지존 오라(반투명으로 렌더 시 alpha 적용)
   // 에너지존(E) 레벨별 색(1~5, rgb 문자열 - drawZone이 alpha를 붙여 gradient 생성). 보라 → 라임으로 성장.
