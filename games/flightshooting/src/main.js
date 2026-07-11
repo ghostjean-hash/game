@@ -76,7 +76,7 @@ function createGame() {
     score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
     front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, apSkill: CFG.autopilot.default, cheat: null,
-    difficulty: 'normal', enemyFireMul: 1, enemyShotsMax: 99, // 난이도(startGame에서 세팅). 어린이 모드는 발사 간격↑·조준 연발 단발화
+    difficulty: 'normal', enemyFireMul: 1, enemyShotsMax: 99, radialMul: 1, // 난이도(startGame에서 세팅). 어린이 모드는 발사 간격↑·조준 연발 단발화·방사 탄 감축
     bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
@@ -232,6 +232,7 @@ function startGame(diff) {
   const diffCfg = CFG.difficulty[difficulty] || CFG.difficulty.normal;
   game.enemyFireMul = diffCfg.enemyFireMul;
   game.enemyShotsMax = diffCfg.enemyShotsMax || 99;
+  game.radialMul = diffCfg.radialMul != null ? diffCfg.radialMul : 1; // 방사·자폭 탄 개수 배수(어린이 모드 감축)
   // 난이도 시작 보너스: 어린이 모드는 메인 총알·꼬리 비행기를 조금 갖춘 채 출발(더 쉽게)
   for (let i = 1; i < diffCfg.startFront; i++) gainFront(game);
   for (let i = 0; i < diffCfg.startTail; i++) gainTail(game);

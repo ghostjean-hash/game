@@ -52,8 +52,9 @@ function spawnWaves(game, W) {
 function detonateMine(game, e) {
   const m = CFG.enemy.mine;
   burst(game, e.x, e.y, COLORS.enemy.mineCore, 16);
-  for (let i = 0; i < m.shards; i++) {
-    const a = (i / m.shards) * Math.PI * 2;
+  const shards = Math.max(3, Math.round(m.shards * (game.radialMul || 1))); // 어린이 모드는 파편 수 감축(최소 3)
+  for (let i = 0; i < shards; i++) {
+    const a = (i / shards) * Math.PI * 2;
     game.eBullets.push({ x: e.x, y: e.y, vx: Math.cos(a) * m.shardSpeed, vy: Math.sin(a) * m.shardSpeed, r: CFG.enemyBullet.r });
   }
   game.sfx.push('explode');
@@ -62,7 +63,8 @@ function detonateMine(game, e) {
 // 결정체 반사: 피격당할 때마다 사방으로 반사탄 몇 발을 튕긴다(함부로 못 쏘게).
 function reflectPrism(game, e) {
   const pr = CFG.enemy.prism;
-  for (let i = 0; i < pr.reflect; i++) {
+  const reflect = Math.max(1, Math.round(pr.reflect * (game.radialMul || 1))); // 어린이 모드는 반사탄 수 감축(최소 1)
+  for (let i = 0; i < reflect; i++) {
     const a = Math.random() * Math.PI * 2;
     game.eBullets.push({ x: e.x, y: e.y, vx: Math.cos(a) * pr.reflectSpeed, vy: Math.sin(a) * pr.reflectSpeed, r: CFG.enemyBullet.r });
   }
@@ -223,7 +225,10 @@ export function updateBoss(game, dt, W, H) {
   boss.t += dt;
   if (boss.entering) {
     boss.y += 90 * dt;
-    if (boss.y >= boss.targetY) { boss.y = boss.targetY; boss.entering = false; }
+    // 등장 중엔 좌우 유영을 멈추고 중앙(W/2)에 고정한다. 등장 완료 순간 bob 시각을 0으로 리셋해야
+    //   sin(0)=0 → 중앙에서 부드럽게 유영을 시작한다(리셋 없으면 x가 중앙에서 갑자기 튄다).
+    boss.x = W / 2;
+    if (boss.y >= boss.targetY) { boss.y = boss.targetY; boss.entering = false; boss.t = 0; }
     syncBossParts(boss);
     return;
   }

@@ -13,9 +13,11 @@ export const CFG = {
   //   startFront = 시작 메인 총알 수(front 값, 1 = 기본 1발), startTail = 시작 꼬리 비행기 대수(0 = 없음).
   //   enemyShotsMax = 적·보스의 조준 연발(gunner·turret·보스 3연발 등) 한 발 묶음의 탄 수 상한.
   //     어린이 모드는 1 = 여러 발 확산 조준을 정중앙 단발로 줄인다(사용자 지시 2026-07-10). 부채 방사 패턴은 제외.
+  //   radialMul = 방사·자폭 탄(기뢰 자폭 파편·결정체 반사탄) 개수 배수. 조준 연발(enemyShotsMax)로 안 줄던
+  //     21~30 이질 적의 방사 탄막을 어린이 모드에서 함께 감축한다(사용자 지시 2026-07-12). 1 = 감축 없음.
   difficulty: {
-    normal: { enemyFireMul: 1,   startFront: 1, startTail: 0, enemyShotsMax: 99 },
-    kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1, enemyShotsMax: 1 },
+    normal: { enemyFireMul: 1,   startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1 },
+    kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1, enemyShotsMax: 1,  radialMul: 0.4 },
   },
   // 무기 강화 = 발별 순차 진화 10단계(사용자 확정 2026-07-10). 강화 아이템마다 총알 하나씩 순차로 진화.
   //   메인·사이드는 가운데(안쪽)부터, 유도탄은 낮은 것부터. 각 탄 tier 0(무강화)~10. 형태는 단계마다 다른 패턴(view가 tier로 그린다).
@@ -63,7 +65,7 @@ export const CFG = {
       maxCount: 4, weaponMax: 11,   // weapon 1~11 = 무강화 + 10단계
       gap: 10, r: 5.5, follow: 10,
       missileEvery: 2.7, missileSpeed: 240, missileTurn: 3.2, missileAccel: 520,
-      missileR: 1.2, missileRGrow: 0.3, missileDmgBase: 3, missileDmgGrow: 1.5, // 크기 절반(사용자 지시 2026-07-10)
+      missileR: 2.6, missileRGrow: 0.16, missileDmgBase: 3, missileDmgGrow: 1.5, // base↑(0강화 가시성)·grow↓로 만렙 크기는 유지
     },
   },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.
