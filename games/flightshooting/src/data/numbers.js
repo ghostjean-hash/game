@@ -28,8 +28,9 @@ export const CFG = {
     speed: 360, speedPer3: 0.15,
     // 메인 빔 크기: 단계(tier 0~10)로 길이·굵기 증가. 빔 형태 패턴은 view.drawMainBeam이 tier로 그린다.
     //   0강화·중간 단계 모두 절반으로 축소(사용자 지시 2026-07-10).
-    // 반폭 W = mainWBase + tier*mainWPer. 전체 폭 2W는 laneGap(12) 안에 들어와 옆칸 총알을 침범하지 않는다(최대 tier10 ≈ 6.6).
-    mainLenBase: 13, mainLenPer: 1.2, mainWBase: 1.3, mainWPer: 0.2,
+    // 반폭 W = mainWBase + tier*mainWPer. 가로 폭은 view가 cap(laneGap/2)로 잘라 옆칸 침범을 막는다.
+    //   mainLenPer 1.5 = 단계가 오를수록 빔이 더 길어진다(물결 굽이 등 세로 무늬 여유, 뒤쪽 단계도 모두 그만큼 길게).
+    mainLenBase: 13, mainLenPer: 1.5, mainWBase: 1.3, mainWPer: 0.2,
   },
   enemyBullet: { speed: 250, r: 5 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.

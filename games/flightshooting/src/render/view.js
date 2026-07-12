@@ -346,57 +346,69 @@ function drawBossPart(ctx, part, sc) {
   ctx.restore();
 }
 
-// 메인 총알 = 레이저 빔. 강화 단계(tier 0~10)마다 '형태 요소'가 하나씩 더해져 색만 바뀌는 단계가 없다(사용자 지시 2026-07-12).
-//   중요: 빔의 가로 폭은 항상 2×bw로 자기 레인(laneGap) 안에 고정한다 - 가닥을 옆으로 벌리지 않아 옆칸 총알을 침범하지 않는다.
-//   대신 폭 안에서 세로 줄무늬 홈 / 흰 코어 / 가로 마디 / 위·아래 화살촉으로 단계를 구분한다.
-//   0 각진 실선 / 1 둥근 굵은 빔 / 2 흰 코어 / 3 세로 3줄무늬 / 4 가로 마디 / 5 세로 4줄무늬 /
-//   6 위쪽 화살촉 / 7 코어 강조 / 8 촘촘한 마디 / 9 아래쪽도 화살촉(양날) / 10 플라즈마 오라.
+// 메인 총알 = 레이저 빔. 강화 단계(tier 0~10)마다 '서로 다른 무늬 패턴'이 나온다(사용자 지시 2026-07-12 - 다양한 패턴 유지).
+//   0 가는 실선 / 1 마디 / 2 톱니 / 3 구슬 체인 / 4 마름모 체인 / 5 물결 / 6 이중 빔 / 7 나선 / 8 화살촉 체인 / 9 링 체인 / 10 플라즈마.
+//   (사용자 지정: 새 0·1·2 = 예전 0·2·6 무늬 = 실선·마디·톱니. 3~10은 서로 다른 패턴.)
+//   침범 방지: 모든 무늬의 가로 반경은 cap(HALF = laneGap/2)로 잘라 옆칸에 맞닿을 수는 있어도 넘어가지 않는다.
 function drawMainBeam(ctx, b) {
   const t = b.tier || 0;
   const col = COLORS.mainTier[Math.min(t, COLORS.mainTier.length - 1)];
   const len = CFG.bullet.mainLenBase + t * CFG.bullet.mainLenPer;
-  const W = CFG.bullet.mainWBase + t * CFG.bullet.mainWPer; // 반폭(2W = 레인 침범 없는 전체 폭)
+  const bw = CFG.bullet.mainWBase + t * CFG.bullet.mainWPer;
   const top = -len / 2, h = len;
+  const HALF = CFG.parts.front.laneGap / 2;      // 레인 반폭(가로 반경이 이걸 넘으면 옆칸 침범)
+  const cap = (x) => Math.min(x, HALF);
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
   ctx.save();
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
-  ctx.fillStyle = col; // 발열: 총알은 글로우 없이 밝은 색 자체로(단일 요소만 글로우)
+  ctx.fillStyle = col; ctx.strokeStyle = col;
 
-  const arrowUp = t >= 6, arrowDown = t >= 9;             // 빔 끝 화살촉(6 위 / 9 아래도)
-  const lines = t <= 2 ? 1 : (t <= 4 ? 3 : 4);            // 세로 줄무늬 수(폭 안에서 나눔)
-  const nodes = t >= 8 ? 6 : (t >= 4 ? 3 : 0);            // 가로 마디(4+ 성글게, 8+ 촘촘)
-  const strongCore = t >= 7;                              // 7+: 코어 굵고 밝게
-
-  if (t >= 10) { ctx.save(); ctx.globalAlpha = 0.2; ctx.beginPath(); ctx.ellipse(0, 0, W * 2.6, h * 0.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); ctx.fillStyle = col; } // 10: 플라즈마 오라
-
-  // 빔 몸통(폭 2W 하나 - 레인 안 고정)
-  ctx.beginPath();
-  if (arrowUp || arrowDown) {
-    const tU = arrowUp ? W * 1.5 : 0, tD = arrowDown ? W * 1.5 : 0;
-    ctx.moveTo(0, top - tU);
-    ctx.lineTo(W, top); ctx.lineTo(W, top + h);
-    ctx.lineTo(0, top + h + tD);
-    ctx.lineTo(-W, top + h); ctx.lineTo(-W, top);
-    ctx.closePath();
-  } else if (t >= 1) { ctx.roundRect(-W, top, W * 2, h, W); } // 둥근 빔
-  else { ctx.rect(-W, top, W * 2, h); }                        // 0강화: 각진 실선
-  ctx.fill();
-
-  if (lines >= 2) { // 세로 줄무늬 홈(가닥 느낌, 폭 불변)
-    ctx.save(); ctx.globalAlpha = 0.4; ctx.fillStyle = '#0a0e18';
-    for (let i = 1; i < lines; i++) { const x = -W + (W * 2) * i / lines; ctx.fillRect(x - 0.45, top + 1.5, 0.9, h - 3); }
-    ctx.restore();
-  }
-  if (nodes) { // 가로 마디(응축 레이저)
-    ctx.save(); ctx.globalAlpha = 0.5; ctx.fillStyle = '#ffffff';
-    for (let i = 0; i < nodes; i++) { const yy = top + h * (i + 0.5) / nodes; ctx.fillRect(-W, yy - 0.7, W * 2, 1.4); }
-    ctx.restore();
-  }
-  if (t >= 2) { // 흰 코어(중앙 세로 줄)
-    ctx.fillStyle = '#ffffff';
-    const cw = W * (strongCore ? 0.5 : 0.3);
-    ctx.beginPath(); ctx.roundRect(-cw, top + h * 0.05, cw * 2, h * 0.9, cw); ctx.fill();
+  if (t === 0) {                         // 0: 마디(점점점, 사용자 지시로 1과 스왑)
+    const n = 5, u = h / (n * 2 - 1), w = cap(bw);
+    for (let i = 0; i < n; i++) ctx.fillRect(-w, top + i * u * 2, w * 2, u);
+  } else if (t === 1) {                  // 1: 가는 실선
+    ctx.fillRect(-1.5, top, 3, h);
+  } else if (t === 2) {                  // 2: 톱니(좌우 지그재그, 예전 6)
+    const n = 8, w1 = cap(bw * 1.9), w0 = -bw * 0.4;
+    ctx.beginPath(); ctx.moveTo(w0, top);
+    for (let i = 0; i <= n; i++) { const yy = top + h * i / n; ctx.lineTo(i % 2 ? w1 : w0, yy); }
+    for (let i = n; i >= 0; i--) { const yy = top + h * i / n; ctx.lineTo(i % 2 ? -w0 : -w1, yy); }
+    ctx.closePath(); ctx.fill();
+  } else if (t === 3) {                  // 3: 구슬 체인(원을 세로로 꿴 줄)
+    const n = 6, r = cap(bw * 1.5);
+    for (let i = 0; i < n; i++) { const yy = top + h * (i + 0.5) / n; ctx.beginPath(); ctx.arc(0, yy, r, 0, Math.PI * 2); ctx.fill(); }
+  } else if (t === 4) {                  // 4: 마름모 체인(더 크고 또렷하게 - 개수 줄여 간격 벌림)
+    const n = 4, rx = cap(bw * 1.9), ry = bw * 2.7;
+    for (let i = 0; i < n; i++) { const yy = top + h * (i + 0.5) / n; ctx.beginPath(); ctx.moveTo(0, yy - ry); ctx.lineTo(rx, yy); ctx.lineTo(0, yy + ry); ctx.lineTo(-rx, yy); ctx.closePath(); ctx.fill(); }
+  } else if (t === 5) {                  // 5: 물결(굽이 하나 더 - 사용자 지시. 길이는 mainLenPer로 전체 증가)
+    ctx.lineWidth = Math.min(bw * 1.5, HALF); ctx.lineCap = 'round';
+    const amp = Math.max(0, cap(bw * 1.5) - ctx.lineWidth / 2);
+    ctx.beginPath(); for (let i = 0; i <= 18; i++) { const yy = top + h * i / 18, xx = Math.sin(i / 18 * Math.PI * 4.5) * amp; i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke();
+  } else if (t === 6) {                  // 6: 이중 빔(좌우 완전 대칭 - 폭·길이 정확히 동일)
+    const bar = bw * 0.9, g = Math.max(bw * 0.3, Math.min(cap(bw * 1.5) - bar, HALF - bar));
+    ctx.fillRect(-g - bar, top, bar, h); // 좌
+    ctx.fillRect(g, top, bar, h);         // 우
+  } else if (t === 7) {                  // 7: 나선(두 가닥 꼬임 - 가닥이 또렷하게 보이도록 얇게)
+    ctx.lineWidth = bw * 0.8; ctx.lineCap = 'round';
+    const amp = cap(bw * 1.7) - ctx.lineWidth / 2;
+    for (const ph of [0, Math.PI]) { ctx.beginPath(); for (let i = 0; i <= 16; i++) { const yy = top + h * i / 16, xx = Math.sin(i / 16 * Math.PI * 4 + ph) * Math.max(0, amp); i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke(); }
+  } else if (t === 8) {                  // 8: 화살촉 체인
+    const n = 5, rx = cap(bw * 1.6), ry = bw * 1.9;
+    for (let i = 0; i < n; i++) { const yy = top + h * (i + 0.5) / n; ctx.beginPath(); ctx.moveTo(0, yy - ry); ctx.lineTo(rx, yy + ry * 0.35); ctx.lineTo(0, yy + ry * 0.05); ctx.lineTo(-rx, yy + ry * 0.35); ctx.closePath(); ctx.fill(); }
+  } else if (t === 9) {                  // 9: 링 체인(굵은 고리 + 안쪽 코어 점 - 볼륨을 줘 7·8보다 강해 보이게)
+    const n = 4; ctx.lineWidth = Math.max(1.8, bw * 0.72);
+    const r = Math.max(1.8, Math.min(cap(bw * 1.6), (h / n) * 0.44) - ctx.lineWidth / 2);
+    for (let i = 0; i < n; i++) {
+      const yy = top + h * (i + 0.5) / n;
+      ctx.beginPath(); ctx.arc(0, yy, r, 0, Math.PI * 2); ctx.stroke();      // 굵은 고리
+      ctx.beginPath(); ctx.arc(0, yy, r * 0.42, 0, Math.PI * 2); ctx.fill(); // 안쪽 코어 점
+    }
+  } else {                               // 10: 플라즈마(오라 + 굵은 빔 + 흰 코어, 위아래 라운드)
+    ctx.save(); ctx.globalAlpha = 0.24; ctx.beginPath(); ctx.ellipse(0, 0, cap(bw * 2.4), h * 0.55, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    const w = cap(bw * 1.6);
+    ctx.beginPath(); ctx.roundRect(-w, top, w * 2, h, w); ctx.fill();
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.roundRect(-w * 0.35, top + h * 0.04, w * 0.7, h * 0.92, w * 0.35); ctx.fill();
   }
   ctx.restore();
 }
@@ -412,7 +424,8 @@ function star(ctx, pts, outer, inner) {
 function drawSideShape(ctx, b) {
   const t = b.tier || 0;
   const col = COLORS.bulletShapeTier[Math.min(t, COLORS.bulletShapeTier.length - 1)];
-  const R = b.r * 3.2 + t * 0.7;
+  // 크기: b.r*3.2 = tier0 기본(유지), t*계수 = 단계 증가분. 계수 0.7→0.22로 낮춰 tier10을 이전의 약 2/3로 축소(사용자 지시 2026-07-12).
+  const R = b.r * 3.2 + t * 0.22;
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
   ctx.save();
   ctx.translate(b.x, b.y);
@@ -436,11 +449,11 @@ function drawSideShape(ctx, b) {
   ctx.restore();
 }
 
-// 유도탄. 형태가 진화(점→원→삼각→화살→로켓→미사일→다탄두)하고 몸체 색은 3색 순환(tier%3).
-//   tier = 무기단계(weapon 1~11) - 1. 진행 방향으로 회전.
+// 유도탄. 형태가 진화하고 몸체 색은 단계마다 다르게(tailMissile 11색). tier = 무기단계(weapon 1~11) - 1. 진행 방향으로 회전.
+//   0 작은 삼각형 / 1 큰 삼각형 / 2 화살표(삼각+꼬리) / 3 화살표+뒤 꼬리깃 / 4~5 삼각로켓 / 6~10 로켓·미사일(다탄두).
 function drawMissile(ctx, b) {
   const t = Math.max(0, (b.weapon || 1) - 1);
-  const col = COLORS.tailMissile3[t % 3];
+  const col = COLORS.tailMissile[Math.min(t, COLORS.tailMissile.length - 1)];
   const r = b.r * 1.7, half = r * 1.85, bw = r * 0.82;
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
   ctx.save();
@@ -448,19 +461,21 @@ function drawMissile(ctx, b) {
   ctx.rotate(ang);
   if (t >= 6) { ctx.fillStyle = 'rgba(150,255,220,0.5)'; ctx.beginPath(); ctx.ellipse(0, half * 0.98, r * 0.5, r * (0.8 + t * 0.12), 0, 0, Math.PI * 2); ctx.fill(); } // 로켓부터 꼬리불
   ctx.fillStyle = col; // 발열: 유도탄 글로우 제거
-  if (t <= 1) {                                   // 점 → 작은 원
-    ctx.beginPath(); ctx.arc(0, 0, r * (0.6 + t * 0.25), 0, Math.PI * 2); ctx.fill();
-  } else if (t <= 4) {                            // 삼각 → 화살촉
-    const s = t === 2 ? 0.85 : (t === 3 ? 1.1 : 1.35);
-    if (t <= 3) { ctx.beginPath(); ctx.moveTo(0, -half * s); ctx.lineTo(bw * 1.4 * s, half * 0.7 * s); ctx.lineTo(-bw * 1.4 * s, half * 0.7 * s); ctx.closePath(); ctx.fill(); }
-    else { ctx.beginPath(); ctx.moveTo(0, -half * 1.25); ctx.lineTo(bw * 1.7, half * 0.55); ctx.lineTo(bw * 0.5, half * 0.3); ctx.lineTo(bw * 0.85, half * 1.1); ctx.lineTo(0, half * 0.55); ctx.lineTo(-bw * 0.85, half * 1.1); ctx.lineTo(-bw * 0.5, half * 0.3); ctx.lineTo(-bw * 1.7, half * 0.55); ctx.closePath(); ctx.fill(); }
+  if (t <= 3) {                                   // 삼각형 → 큰 삼각형 → 화살표 → 화살표+꼬리깃
+    const s = t === 0 ? 0.8 : 1.2;                 // 0 작게 / 1~3 크게
+    // 삼각 머리
+    ctx.beginPath(); ctx.moveTo(0, -half * s); ctx.lineTo(bw * 1.45 * s, half * 0.6 * s); ctx.lineTo(-bw * 1.45 * s, half * 0.6 * s); ctx.closePath(); ctx.fill();
+    if (t >= 2) { ctx.fillRect(-bw * 0.32, half * 0.4, bw * 0.64, half * 0.95); } // 2+: 꼬리 막대(→ 화살표)
+    if (t >= 3) { // 3: 뒤 꼬리깃(양쪽 V)
+      ctx.beginPath(); ctx.moveTo(-bw * 0.32, half * 0.9); ctx.lineTo(-bw * 1.15, half * 1.5); ctx.lineTo(-bw * 0.32, half * 1.25); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(bw * 0.32, half * 0.9); ctx.lineTo(bw * 1.15, half * 1.5); ctx.lineTo(bw * 0.32, half * 1.25); ctx.closePath(); ctx.fill();
+    }
   } else {                                        // 삼각로켓 → 로켓 → 미사일(몸통 + 핀)
     const fin = bw * (0.6 + (t - 5) * 0.12);
     ctx.beginPath(); ctx.moveTo(-bw, half * 0.2); ctx.lineTo(-bw - fin, half * 1.0); ctx.lineTo(-bw, half * 0.8); ctx.closePath(); ctx.fill();
     ctx.beginPath(); ctx.moveTo(bw, half * 0.2); ctx.lineTo(bw + fin, half * 1.0); ctx.lineTo(bw, half * 0.8); ctx.closePath(); ctx.fill();
     if (t >= 7) { ctx.beginPath(); ctx.moveTo(-bw * 0.4, half * 0.6); ctx.lineTo(0, half * 1.2); ctx.lineTo(bw * 0.4, half * 0.6); ctx.closePath(); ctx.fill(); } // 중앙핀
-    // 몸통(삼각로켓 t=5는 뾰족, t>=6은 원통형)
-    if (t === 5) { ctx.beginPath(); ctx.moveTo(0, -half * 1.3); ctx.lineTo(bw, half * 0.9); ctx.lineTo(-bw, half * 0.9); ctx.closePath(); ctx.fill(); }
+    if (t <= 5) { ctx.beginPath(); ctx.moveTo(0, -half * 1.3); ctx.lineTo(bw, half * 0.9); ctx.lineTo(-bw, half * 0.9); ctx.closePath(); ctx.fill(); } // 삼각로켓
     else { ctx.beginPath(); ctx.moveTo(0, -half * 1.3); ctx.quadraticCurveTo(bw, -half * 0.5, bw, 0); ctx.lineTo(bw, half); ctx.lineTo(-bw, half); ctx.lineTo(-bw, 0); ctx.quadraticCurveTo(-bw, -half * 0.5, 0, -half * 1.3); ctx.closePath(); ctx.fill(); }
     if (t >= 9) { for (const ox of [-bw * 1.7, bw * 1.7]) { ctx.beginPath(); ctx.moveTo(ox, -half * 0.1); ctx.quadraticCurveTo(ox + bw * 0.5, -half * 0.4, ox + bw * 0.5, half * 0.25); ctx.lineTo(ox - bw * 0.5, half * 0.25); ctx.quadraticCurveTo(ox - bw * 0.5, -half * 0.4, ox, -half * 0.1); ctx.closePath(); ctx.fill(); } } // 다탄두
   }
