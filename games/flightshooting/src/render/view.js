@@ -364,9 +364,9 @@ function drawMainBeam(ctx, b) {
   ctx.rotate(ang);
   ctx.fillStyle = col; ctx.strokeStyle = col;
 
-  if (t === 0) {                         // 0: 마디(점점점, 사용자 지시로 1과 스왑)
-    const n = 5, u = h / (n * 2 - 1), w = cap(bw);
-    for (let i = 0; i < n; i++) ctx.fillRect(-w, top + i * u * 2, w * 2, u);
+  if (t === 0) {                         // 0: 마디(점 4개, 간격 넓게 - 사용자 지시)
+    const n = 4, pd = h * 0.13, w = cap(bw);
+    for (let i = 0; i < n; i++) { const yy = top + (h - pd) * i / (n - 1); ctx.fillRect(-w, yy, w * 2, pd); }
   } else if (t === 1) {                  // 1: 가는 실선
     ctx.fillRect(-1.5, top, 3, h);
   } else if (t === 2) {                  // 2: 톱니(좌우 지그재그, 예전 6)

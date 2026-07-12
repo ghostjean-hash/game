@@ -228,11 +228,15 @@ export function updateBoss(game, dt, W, H) {
     // 등장 중엔 좌우 유영을 멈추고 중앙(W/2)에 고정한다. 등장 완료 순간 bob 시각을 0으로 리셋해야
     //   sin(0)=0 → 중앙에서 부드럽게 유영을 시작한다(리셋 없으면 x가 중앙에서 갑자기 튄다).
     boss.x = W / 2;
-    if (boss.y >= boss.targetY) { boss.y = boss.targetY; boss.entering = false; boss.t = 0; }
+    if (boss.y >= boss.targetY) { boss.y = boss.targetY; boss.entering = false; boss.t = 0; boss.bobPhase = 0; }
     syncBossParts(boss);
     return;
   }
-  boss.x = W / 2 + Math.sin(boss.t * CFG.boss.bobFreq * Math.PI) * (W * CFG.boss.bobAmp * 0.5);
+  // 좌우 유영: 등장 직후엔 매우 느리고 bobRamp초에 걸쳐 최대 속도(bobFreq)까지 빨라진다(사용자 지시).
+  //   위상을 직접 누적해(속도를 시간에 따라 키워도) 매끄럽게 흔들리게 한다. 진폭(이동 폭)은 그대로.
+  const rampK = Math.min(1, boss.t / CFG.boss.bobRamp);
+  boss.bobPhase = (boss.bobPhase || 0) + CFG.boss.bobFreq * Math.PI * rampK * dt;
+  boss.x = W / 2 + Math.sin(boss.bobPhase) * (W * CFG.boss.bobAmp * 0.5);
   if (st.orbitR) boss.orbitAngle += st.orbitSpeed * dt; // 위성형 실드 회전
   syncBossParts(boss);
 

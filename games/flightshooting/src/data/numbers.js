@@ -120,7 +120,8 @@ export const CFG = {
   // 최종보스는 30구역. 그때까지 화력이 최대로 성장하므로 hp를 크게 상향.
   finalBoss: { rx: 50, ry: 44, hp: 1500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
-  boss: { bobAmp: 0.32, bobFreq: 0.3, spawnTop: 62 },
+  // bobRamp = 등장 완료 후 좌우 유영이 0에서 최대 속도(bobFreq)까지 서서히 빨라지는 시간(초, 사용자 지시 2026-07-12).
+  boss: { bobAmp: 0.32, bobFreq: 0.3, bobRamp: 7, spawnTop: 62 },
   // 부위 파괴형 보스(docs/06). 스타일 = 코어 + 부위(weapon 포탑 / shield 방어구).
   //   총 hp(miniBoss/finalBoss 공식)를 coreRatio(코어) + 각 부위 hpRatio 합으로 나눈다(합 = 1).
   //   role weapon = 자기 발사 패턴 보유(부수면 그 패턴 영구 정지). role shield = 코어를 가림(다 부수면 코어 노출).
