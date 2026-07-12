@@ -41,13 +41,14 @@ export function frontSpec(front) {
   return { bullets, r };
 }
 
-// 메인 총알 자동 발사. 정면 = 위쪽(-y). 부채 없이 나란히 곧게 직진(vx=0). 진화한 탄일수록 속도↑(발별 tier).
+// 메인 총알 자동 발사. 정면 = 위쪽(-y). 부채 없이 나란히 곧게 직진(vx=0).
+//   속도는 강화 단계와 무관하게 항상 동일(사용자 지시 2026-07-12). 사이드·유도탄만 tier로 가속.
 export function playerFire(game) {
   const p = game.player;
   const spec = frontSpec(game.front);
   const vStag = CFG.parts.front.vStagger || 0;
   for (const b of spec.bullets) {
-    const speed = CFG.bullet.speed * speedMul(b.tier);
+    const speed = CFG.bullet.speed; // 강화 무관 고정
     game.bullets.push({
       x: p.x + b.xOff, y: p.y - p.r + Math.abs(b.xOff) * vStag, // 바깥 탄일수록 살짝 뒤(아래) = V자 대형
       vx: 0, vy: -speed,

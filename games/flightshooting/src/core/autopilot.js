@@ -140,7 +140,7 @@ function decideTarget(game, W, H, pr, homeY, tier) {
   // 파워업: 목숨이 이미 최대면 회복 하트(H)는 무시(먹으러 갈 이유가 없다). 이미 아래로 지나친 것도 제외.
   // 남은 것 중 가장 가까운 하나를 실제 위치(세로 포함)로 향해 마중 나간다.
   let pu = null, pd = Infinity;
-  const full = game.lives >= CFG.player.maxLives;
+  const full = game.lives >= (game.maxLives || CFG.player.maxLives);
   for (const it of game.powerups) {
     if (it.kind === 'H' && full) continue;
     if (it.y > p.y + 40) continue;

@@ -346,32 +346,57 @@ function drawBossPart(ctx, part, sc) {
   ctx.restore();
 }
 
-// 메인 총알 = 레이저 빔. 빔 몸통 형태 자체가 강화 단계(tier 0~10)의 패턴이다.
-//   실선→마디→구슬→마름모→물결→톱니→이중→나선→화살→플라즈마. 진행 방향으로 회전.
+// 메인 총알 = 레이저 빔. 강화 단계(tier 0~10)마다 '형태 요소'가 하나씩 더해져 색만 바뀌는 단계가 없다(사용자 지시 2026-07-12).
+//   중요: 빔의 가로 폭은 항상 2×bw로 자기 레인(laneGap) 안에 고정한다 - 가닥을 옆으로 벌리지 않아 옆칸 총알을 침범하지 않는다.
+//   대신 폭 안에서 세로 줄무늬 홈 / 흰 코어 / 가로 마디 / 위·아래 화살촉으로 단계를 구분한다.
+//   0 각진 실선 / 1 둥근 굵은 빔 / 2 흰 코어 / 3 세로 3줄무늬 / 4 가로 마디 / 5 세로 4줄무늬 /
+//   6 위쪽 화살촉 / 7 코어 강조 / 8 촘촘한 마디 / 9 아래쪽도 화살촉(양날) / 10 플라즈마 오라.
 function drawMainBeam(ctx, b) {
   const t = b.tier || 0;
   const col = COLORS.mainTier[Math.min(t, COLORS.mainTier.length - 1)];
   const len = CFG.bullet.mainLenBase + t * CFG.bullet.mainLenPer;
-  const bw = CFG.bullet.mainWBase + t * CFG.bullet.mainWPer;
+  const W = CFG.bullet.mainWBase + t * CFG.bullet.mainWPer; // 반폭(2W = 레인 침범 없는 전체 폭)
   const top = -len / 2, h = len;
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
   ctx.save();
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
-  ctx.fillStyle = col; ctx.strokeStyle = col; // 발열: 총알은 글로우 없이 밝은 색 자체로(단일 요소만 글로우)
-  if (t === 0) { ctx.fillRect(-1.5, top, 3, h); }
-  else if (t === 1) { ctx.fillRect(-bw, top, bw * 2, h); }
-  else if (t === 2) { const n = 5, u = h / (n * 2 - 1); for (let i = 0; i < n; i++) ctx.fillRect(-bw, top + i * u * 2, bw * 2, u); }
-  else if (t === 3) { const n = 6; for (let i = 0; i < n; i++) { const yy = top + h * (i + 0.5) / n; ctx.beginPath(); ctx.arc(0, yy, bw * 1.5, 0, Math.PI * 2); ctx.fill(); } }
-  else if (t === 4) { const n = 5; for (let i = 0; i < n; i++) { const yy = top + h * (i + 0.5) / n, r = bw * 1.8; ctx.beginPath(); ctx.moveTo(0, yy - r); ctx.lineTo(bw * 1.3, yy); ctx.lineTo(0, yy + r); ctx.lineTo(-bw * 1.3, yy); ctx.closePath(); ctx.fill(); } }
-  else if (t === 5) { ctx.lineWidth = bw * 1.7; ctx.lineCap = 'round'; ctx.beginPath(); for (let i = 0; i <= 12; i++) { const yy = top + h * i / 12, xx = Math.sin(i / 12 * Math.PI * 3) * bw * 1.5; i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke(); }
-  else if (t === 6) { ctx.beginPath(); const n = 8; ctx.moveTo(-bw * 0.4, top); for (let i = 0; i <= n; i++) { const yy = top + h * i / n; ctx.lineTo((i % 2 ? bw * 1.9 : -bw * 0.4), yy); } for (let i = n; i >= 0; i--) { const yy = top + h * i / n; ctx.lineTo((i % 2 ? bw * 0.4 : -bw * 1.9), yy); } ctx.closePath(); ctx.fill(); }
-  else if (t === 7) { ctx.fillRect(-bw * 2.3, top, bw * 1.4, h); ctx.fillRect(bw * 0.9, top, bw * 1.4, h); }
-  else if (t === 8) { ctx.lineWidth = bw * 1.15; ctx.lineCap = 'round'; for (const ph of [0, Math.PI]) { ctx.beginPath(); for (let i = 0; i <= 16; i++) { const yy = top + h * i / 16, xx = Math.sin(i / 16 * Math.PI * 4 + ph) * bw * 1.9; i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke(); } } // 나선(두 가닥 꼬임)
-  else if (t === 9) { const n = 5; for (let i = 0; i < n; i++) { const yy = top + h * (i + 0.5) / n, r = bw * 1.9; ctx.beginPath(); ctx.moveTo(0, yy - r); ctx.lineTo(bw * 1.6, yy + r * 0.35); ctx.lineTo(0, yy + r * 0.05); ctx.lineTo(-bw * 1.6, yy + r * 0.35); ctx.closePath(); ctx.fill(); } }
-  else { // 플라즈마: 오라 + 굵은 빔 + 흰 코어
-    ctx.save(); ctx.globalAlpha = 0.24; ctx.beginPath(); ctx.ellipse(0, 0, bw * 3.6, h * 0.55, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-    ctx.fillRect(-bw * 1.7, top, bw * 3.4, h); ctx.fillStyle = '#ffffff'; ctx.fillRect(-bw * 0.6, top, bw * 1.2, h * 0.92);
+  ctx.fillStyle = col; // 발열: 총알은 글로우 없이 밝은 색 자체로(단일 요소만 글로우)
+
+  const arrowUp = t >= 6, arrowDown = t >= 9;             // 빔 끝 화살촉(6 위 / 9 아래도)
+  const lines = t <= 2 ? 1 : (t <= 4 ? 3 : 4);            // 세로 줄무늬 수(폭 안에서 나눔)
+  const nodes = t >= 8 ? 6 : (t >= 4 ? 3 : 0);            // 가로 마디(4+ 성글게, 8+ 촘촘)
+  const strongCore = t >= 7;                              // 7+: 코어 굵고 밝게
+
+  if (t >= 10) { ctx.save(); ctx.globalAlpha = 0.2; ctx.beginPath(); ctx.ellipse(0, 0, W * 2.6, h * 0.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore(); ctx.fillStyle = col; } // 10: 플라즈마 오라
+
+  // 빔 몸통(폭 2W 하나 - 레인 안 고정)
+  ctx.beginPath();
+  if (arrowUp || arrowDown) {
+    const tU = arrowUp ? W * 1.5 : 0, tD = arrowDown ? W * 1.5 : 0;
+    ctx.moveTo(0, top - tU);
+    ctx.lineTo(W, top); ctx.lineTo(W, top + h);
+    ctx.lineTo(0, top + h + tD);
+    ctx.lineTo(-W, top + h); ctx.lineTo(-W, top);
+    ctx.closePath();
+  } else if (t >= 1) { ctx.roundRect(-W, top, W * 2, h, W); } // 둥근 빔
+  else { ctx.rect(-W, top, W * 2, h); }                        // 0강화: 각진 실선
+  ctx.fill();
+
+  if (lines >= 2) { // 세로 줄무늬 홈(가닥 느낌, 폭 불변)
+    ctx.save(); ctx.globalAlpha = 0.4; ctx.fillStyle = '#0a0e18';
+    for (let i = 1; i < lines; i++) { const x = -W + (W * 2) * i / lines; ctx.fillRect(x - 0.45, top + 1.5, 0.9, h - 3); }
+    ctx.restore();
+  }
+  if (nodes) { // 가로 마디(응축 레이저)
+    ctx.save(); ctx.globalAlpha = 0.5; ctx.fillStyle = '#ffffff';
+    for (let i = 0; i < nodes; i++) { const yy = top + h * (i + 0.5) / nodes; ctx.fillRect(-W, yy - 0.7, W * 2, 1.4); }
+    ctx.restore();
+  }
+  if (t >= 2) { // 흰 코어(중앙 세로 줄)
+    ctx.fillStyle = '#ffffff';
+    const cw = W * (strongCore ? 0.5 : 0.3);
+    ctx.beginPath(); ctx.roundRect(-cw, top + h * 0.05, cw * 2, h * 0.9, cw); ctx.fill();
   }
   ctx.restore();
 }

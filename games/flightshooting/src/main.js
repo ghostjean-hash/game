@@ -73,7 +73,7 @@ function saveCheat() { store.set('cheatCfg', { speed: cheatSpeed, invincible: ch
 function createGame() {
   return {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
-    score: 0, lives: CFG.player.maxLives, stage: 1, fireTimer: 0,
+    score: 0, lives: CFG.player.maxLives, maxLives: CFG.player.maxLives, stage: 1, fireTimer: 0, // maxLives는 난이도로 재설정
     front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, apSkill: CFG.autopilot.default, cheat: null,
     difficulty: 'normal', enemyFireMul: 1, enemyShotsMax: 99, radialMul: 1, // 난이도(startGame에서 세팅). 어린이 모드는 발사 간격↑·조준 연발 단발화·방사 탄 감축
@@ -193,7 +193,11 @@ function syncHud() {
   setPartHud(elZone, game.zone.level, CFG.parts.zone.levelMax);
   setTailHud();
   const lifeEls = elLives.querySelectorAll('.life');
-  lifeEls.forEach((el, i) => el.classList.toggle('spent', i >= game.lives));
+  const cap = game.maxLives || CFG.player.maxLives;
+  lifeEls.forEach((el, i) => {
+    el.hidden = i >= cap;                          // 난이도 최대값 초과 하트는 숨김(일반3 / 어린이5)
+    el.classList.toggle('spent', i >= game.lives); // 소진된 목숨은 흐리게
+  });
 }
 
 function showBanner(big, sub, dur = 1.6) {
@@ -207,7 +211,7 @@ function resetGame() {
   game.player = { x: W * 0.5, y: H * CFG.player.yRatio, r: CFG.player.r, inv: 0 };
   game.bullets = []; game.enemies = []; game.eBullets = [];
   game.powerups = []; game.particles = []; game.boss = null;
-  game.score = 0; game.lives = CFG.player.maxLives;
+  game.score = 0; game.maxLives = CFG.player.maxLives; game.lives = game.maxLives; // 난이도별 maxLives는 startGame에서 재설정
   game.front = 1; game.options = []; game.optionEvo = 0; game.zone = { level: 0, timer: null }; game.tail = []; game.partHistory = [];
   game.stage = 1; game.fireTimer = 0;
   game.bossPending = false; game.transitioning = false;
@@ -233,6 +237,8 @@ function startGame(diff) {
   game.enemyFireMul = diffCfg.enemyFireMul;
   game.enemyShotsMax = diffCfg.enemyShotsMax || 99;
   game.radialMul = diffCfg.radialMul != null ? diffCfg.radialMul : 1; // 방사·자폭 탄 개수 배수(어린이 모드 감축)
+  game.maxLives = diffCfg.maxLives || CFG.player.maxLives; // 난이도별 목숨 최대값(어린이 5)
+  game.lives = game.maxLives;                             // 시작 목숨 = 최대값(resetGame 기본3 위로 재설정)
   // 난이도 시작 보너스: 어린이 모드는 메인 총알·꼬리 비행기를 조금 갖춘 채 출발(더 쉽게)
   for (let i = 1; i < diffCfg.startFront; i++) gainFront(game);
   for (let i = 0; i < diffCfg.startTail; i++) gainTail(game);

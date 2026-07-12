@@ -320,7 +320,7 @@ function grabItem(game, kind) {
   } else if (kind === 'T') {
     if (gainTail(game)) game.sfx.push('power'); else maxed();
   } else if (kind === 'H') {
-    if (game.lives < CFG.player.maxLives) { game.lives++; game.sfx.push('power'); } else maxed();
+    if (game.lives < (game.maxLives || CFG.player.maxLives)) { game.lives++; game.sfx.push('power'); } else maxed();
   } else if (kind === 'B') {
     for (const e of game.enemies) {
       burst(game, e.x, e.y, e.color, 12);

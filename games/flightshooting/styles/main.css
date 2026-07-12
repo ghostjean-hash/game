@@ -51,6 +51,7 @@
 .mini-hud .mh b.mastered { color: #ff8a3d; text-shadow: 0 0 8px rgba(255, 138, 61, 0.9); }
 .lives { display: flex; gap: 3px; align-items: center; }
 .lives .life { color: var(--sky-enemy); display: block; filter: drop-shadow(0 0 5px rgba(255, 107, 129, 0.55)); }
+.lives .life[hidden] { display: none; } /* 난이도 최대값 초과 하트 숨김(.life display:block이 [hidden]을 덮어서 명시도 상향) */
 .lives .life svg { width: 16px; height: 16px; display: block; }
 .lives .life.spent { color: var(--line); filter: none; }
 .icon-btn {

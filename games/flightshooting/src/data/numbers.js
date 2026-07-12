@@ -15,19 +15,21 @@ export const CFG = {
   //     어린이 모드는 1 = 여러 발 확산 조준을 정중앙 단발로 줄인다(사용자 지시 2026-07-10). 부채 방사 패턴은 제외.
   //   radialMul = 방사·자폭 탄(기뢰 자폭 파편·결정체 반사탄) 개수 배수. 조준 연발(enemyShotsMax)로 안 줄던
   //     21~30 이질 적의 방사 탄막을 어린이 모드에서 함께 감축한다(사용자 지시 2026-07-12). 1 = 감축 없음.
+  //   maxLives = 목숨 최대값(= 시작 목숨 + 회복 상한). 어린이 모드는 5로 늘려 더 여유롭게(사용자 지시 2026-07-12).
   difficulty: {
-    normal: { enemyFireMul: 1,   startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1 },
-    kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1, enemyShotsMax: 1,  radialMul: 0.4 },
+    normal: { enemyFireMul: 1,   startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
+    kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1, enemyShotsMax: 1,  radialMul: 0.4, maxLives: 5 },
   },
   // 무기 강화 = 발별 순차 진화 10단계(사용자 확정 2026-07-10). 강화 아이템마다 총알 하나씩 순차로 진화.
   //   메인·사이드는 가운데(안쪽)부터, 유도탄은 낮은 것부터. 각 탄 tier 0(무강화)~10. 형태는 단계마다 다른 패턴(view가 tier로 그린다).
   bullet: {
-    // 모든 총알 속도는 강화 3단계마다 한 계단 빨라진다(사용자 지시). 실제 = base * (1 + floor(tier/3) * speedPer3).
-    //   초기값(base)을 낮춰 저단계는 느리게, 후반일수록 빨라진다.
+    // 사이드 총알·유도탄 속도는 강화 3단계마다 한 계단 빨라진다. 실제 = base * (1 + floor(tier/3) * speedPer3).
+    //   메인 총알(전방화력)만 예외: 강화 단계와 무관하게 항상 speed 고정으로 발사한다(사용자 지시 2026-07-12).
     speed: 360, speedPer3: 0.15,
     // 메인 빔 크기: 단계(tier 0~10)로 길이·굵기 증가. 빔 형태 패턴은 view.drawMainBeam이 tier로 그린다.
     //   0강화·중간 단계 모두 절반으로 축소(사용자 지시 2026-07-10).
-    mainLenBase: 13, mainLenPer: 1.2, mainWBase: 1.3, mainWPer: 0.11,
+    // 반폭 W = mainWBase + tier*mainWPer. 전체 폭 2W는 laneGap(12) 안에 들어와 옆칸 총알을 침범하지 않는다(최대 tier10 ≈ 6.6).
+    mainLenBase: 13, mainLenPer: 1.2, mainWBase: 1.3, mainWPer: 0.2,
   },
   enemyBullet: { speed: 250, r: 5 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
