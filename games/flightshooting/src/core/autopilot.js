@@ -1,14 +1,18 @@
 // 자동 플레이 조작 (순수). DOM/입력 미의존 - game.player 위치를 스스로 조정한다.
 //
-// 전략: '짧은 미래 시뮬레이션'. 갈 수 있는 여러 목표 지점마다, 그쪽으로 실제로 이동하면서
-// 모든 적탄·적기·보스를 실제 궤적대로 SIM_T초 앞까지 굴려보고 '언제 죽는가(생존 시간)'를 잰다.
-// 가장 오래 사는 목표를 고르되, 안 죽는 목표가 여럿이면 그중 적을 조준하거나 드랍을 줍는 쪽을
-// 택한다. 회피·조준·획득이 하나의 점수로 통합돼, 눈앞 위험만 보던 방식보다 훨씬 사람처럼 논다.
+// 전략: '여러 수 앞 계획'(2단계 빔서치). 예전엔 한 목표로 가서 sim초 사는지만 보고(한 걸음 앞) 골라,
+// 지금은 안전하지만 곧 갇히는 막다른 구석으로 들어가는 게 근본 약점이었다. 이제는 각 후보로 가서
+// 절반 지평(seg=sim/2)을 굴려 '도착 지점'을 구한 뒤, 그 도착 지점에서 다시 최선의 다음 수를 뒀을 때의
+// 생존까지 이어 평가한다(총 sim초 = 두 수). 첫 수만 생존하고 두 번째에 갇히는 목표는 낮게 매겨져
+// 스스로 피하게 된다. 연산을 아끼려 첫 수 상위 BEAM개만 두 번째 수까지 확장한다(빔서치).
+// 실제 이동은 계획의 '첫 수'만 따른다(receding horizon). 조준·획득·여유공간 이득은 예전처럼 얹는다.
 // 발사는 원래 자동이라 건드리지 않고, 조준은 표적과 같은 x로 정렬해 총알이 맞게 유도한다.
 import { CFG } from '../data/numbers.js';
 
-const SIM_T = 1.5;       // 미래를 이 시간(초)까지 시뮬레이션해 생존을 평가(회피 지평 확대)
+const SIM_T = 1.5;       // 미래를 이 시간(초)까지 시뮬레이션해 생존을 평가(tier 없을 때 fallback 지평)
 const SIM_DT = 0.04;     // 시뮬 시간 간격(초) - 작을수록 정밀, 클수록 빠름
+const DEPTH = 2;         // 몇 수 앞까지 계획하는가. 각 수는 seg=지평/DEPTH초를 굴린다(막다른 곳 회피의 핵심)
+const BEAM = 10;         // 빔서치 폭: 첫 수에서 완전 생존한 상위 후보 이만큼 두 번째 수까지 확장(연산 절감 vs 시야)
 const HIT_PAD = 9;       // 시뮬 충돌 반경에 더하는 여유(성긴 스텝의 빗나감 방어 + 안전 마진)
 const AIM_BONUS = 0.30;  // 조준 정렬 목표의 이득(생존 동점 목표끼리 우선순위 가름)
 const PICK_BONUS = 0.42; // 파워업 획득 목표의 이득(성장 우선이라 조준보다 약간 높다)
@@ -55,26 +59,28 @@ function collectThreats(game) {
   return out;
 }
 
-// 목표 tg로 최대 속도로 이동한다고 가정하고, simT초 안에 처음 충돌하는 시각을 돌려준다.
-// 충돌이 없으면 simT(완전 생존). 값이 클수록 안전한 목표다. simT = 실력 티어의 예측 지평.
-function simulate(threats, tg, sx, sy, step, W, H, pr, simT) {
+// 목표 tg로 최대 속도로 이동한다고 가정하고, 한 수(segT초) 동안 굴린다. tOff = 이 수가 시작되는
+// 절대 시각(두 번째 수는 tOff=seg로 넘겨 위협의 미래 위치를 이어서 계산). 반환:
+//   { t: 이 수 안에서 산 시간(충돌 시 그 시각, 무사하면 segT), x·y: 수 끝(또는 충돌) 지점 }.
+// t가 클수록 안전하고, 끝 지점(x,y)은 다음 수의 출발점이 된다.
+function simulate(threats, tg, sx, sy, step, W, H, pr, segT, tOff) {
   let x = sx, y = sy;
-  const steps = Math.round(simT / SIM_DT);
+  const steps = Math.round(segT / SIM_DT);
   for (let k = 1; k <= steps; k++) {
-    const t = k * SIM_DT;
+    const t = k * SIM_DT, at = tOff + t; // t=이 수 안 경과, at=게임 절대 시각(위협 궤적용)
     const dx = tg.x - x, dy = tg.y - y, d = Math.hypot(dx, dy);
     if (d > 1e-3) { const m = Math.min(step, d); x += (dx / d) * m; y += (dy / d) * m; }
     if (x < pr) x = pr; else if (x > W - pr) x = W - pr;
     if (y < pr) y = pr; else if (y > H - pr) y = H - pr;
     for (const th of threats) {
       let ox, oy;
-      if (th.k === 1) { ox = th.baseX + th.amp * Math.sin((th.t0 + t) * th.freq); oy = th.y + th.vy * t; }
-      else { ox = th.x + th.vx * t; oy = th.y + th.vy * t; }
+      if (th.k === 1) { ox = th.baseX + th.amp * Math.sin((th.t0 + at) * th.freq); oy = th.y + th.vy * at; }
+      else { ox = th.x + th.vx * at; oy = th.y + th.vy * at; }
       const rr = pr + th.r, ex = x - ox, ey = y - oy;
-      if (ex * ex + ey * ey < rr * rr) return t; // 이 시각에 죽는다
+      if (ex * ex + ey * ey < rr * rr) return { t, x, y }; // 이 시각에 죽는다(충돌 지점 반환)
     }
   }
-  return simT; // 완전 생존
+  return { t: segT, x, y }; // 이 수는 완전 생존, 끝 지점 반환
 }
 
 // 목표 지점 주변 '여유 공간': 가장 가까운 위협까지의 거리(현재 위치 기준). 넓을수록 위협 없는 빈 공간이다.
@@ -149,20 +155,51 @@ function decideTarget(game, W, H, pr, homeY, tier) {
   }
   if (pu && pd < PICK_RANGE) targets.push({ x: clamp(pu.x, pr, W - pr), y: clamp(pu.y, topY, botY), bonus: PICK_BONUS });
 
-  // 각 목표를 시뮬레이션해 (생존 시간 + 안전 시 이득 + 여유 공간)이 가장 큰 목표를 고른다.
-  // 여유 공간 보너스는 위협이 많을수록 강해진다: 위험하면 넓은 빈 공간(위쪽)으로 도피, 안전하면 조준/획득 우선.
+  // 여러 수 앞 계획(2단계 빔서치). 각 목표를 한 수(seg=simT/DEPTH초)만 굴려 '도착 지점'과 첫 수 생존을
+  // 구하고, 첫 수를 완전히 산 상위 BEAM개만 그 도착 지점에서 두 번째 수까지 이어 굴려 미래 생존을 더한다.
+  // 점수 = 두 수 총 생존 + 안전 시 이득(조준/획득) + 위험 시 여유 공간. 실제 이동은 계획의 첫 수만 따른다.
   const step = CFG.player.speed * SIM_DT;
+  const seg = simT / DEPTH;
   const threatFactor = Math.min(1, threats.length / 6);
   // 제자리가 위험할 때만 여유 공간(빈 곳·위쪽) 도피 보너스를 켠다. 제자리가 안전하면 불필요한 이동을 막는다
   //   (안 맞을 탄에 괜히 움직이지 않게). 위험하면 넓은 빈 공간으로 도피 = 위쪽이 비면 위로 올라간다.
-  const inDanger = simulate(threats, { x: p.x, y: p.y }, p.x, p.y, step, W, H, pr, simT) < simT;
+  const inDanger = simulate(threats, { x: p.x, y: p.y }, p.x, p.y, step, W, H, pr, simT, 0).t < simT;
+
+  // 1수: 각 후보로 seg초 이동해 생존 시간(_s1)과 도착 지점(_ex,_ey)을 구한다.
+  for (const tg of targets) {
+    const r1 = simulate(threats, tg, p.x, p.y, step, W, H, pr, seg, 0);
+    tg._s1 = r1.t; tg._ex = r1.x; tg._ey = r1.y; tg._s2 = null;
+  }
+  // 2수: 첫 수를 완전히 산 후보를 '순수 생존(_s1)' 순으로 정렬해 상위 BEAM개만 확장한다(이득을 섞으면
+  //   조준·획득 목표만 미래 평가를 받아 적 근처로만 가는 편향이 생긴다 - 그 버그를 제거). 각 도착 지점에서
+  //   다시 모든 후보로 seg초(tOff=seg) 굴려, 두 번째 수 최선 생존을 그 후보의 미래 점수로 둔다.
+  const alive = targets.filter((t) => t._s1 >= seg).sort((a, b) => b._s1 - a._s1);
+  for (const tg of alive.slice(0, BEAM)) {
+    let best2 = 0;
+    for (const t2 of targets) {
+      const r2 = simulate(threats, t2, tg._ex, tg._ey, step, W, H, pr, seg, seg);
+      if (r2.t > best2) best2 = r2.t;
+    }
+    tg._s2 = best2;
+  }
+
+  // 점수 합산: 첫 수에서 죽는 목표는 그 짧은 생존만(회피 실패). 첫 수를 산 목표는 두 수 총 생존 + 이득.
+  //   확장 안 된(BEAM 밖) 안전 후보는 미래를 seg로 낙관한다(첫 수를 완전히 살았으니 최소한 그 자리 유지는
+  //   가능 - 0으로 깎으면 순수 회피 목표가 부당히 저평가돼 조준 목표에 밀린다). 위험할 땐 조준·획득 이득을
+  //   억제하고 빈 공간을 더해, 적(=탄 발생원) 근처 대신 넓은 곳으로 도피한다.
   let best = -Infinity, bx = p.x, by = homeY;
   for (const tg of targets) {
-    const surv = simulate(threats, tg, p.x, p.y, step, W, H, pr, simT);
-    let s = surv;
-    if (surv >= simT) { // 완전 생존한 목표에만 이득을 얹는다(자살 유도 방지)
-      s += tg.bonus;
-      if (inDanger) s += (clearanceAt(threats, tg.x, tg.y) / H) * CLEAR_BONUS * threatFactor;
+    let s;
+    if (tg._s1 < seg) {
+      s = tg._s1; // 첫 수 도중 사망 = 낮은 점수(막다른 진입 억제)
+    } else {
+      s = seg + (tg._s2 != null ? tg._s2 : seg); // 두 수 총 생존(미확장 안전 후보는 낙관)
+      s += tg.bonus * (inDanger ? 0.25 : 1);      // 위험 시 조준·획득 억제(회피 우선), 안전 시 정상(진행)
+      // 빈 공간 선호: 적·탄이 몰린 곳으로 조준하러 붙는 습성을 줄이고 넓은 공간에서 싸우게 한다. 위험할 땐
+      //   강하게(도피 우선). 안전할 땐 약하게(×0.35) 반영하되 '위협이 여럿일 때만' - 탄 하나가 멀리
+      //   있는 상황에서까지 미세 이동해 떨리지 않게 게이트를 둔다.
+      const clr = (clearanceAt(threats, tg.x, tg.y) / H) * CLEAR_BONUS * threatFactor;
+      if (inDanger) s += clr; else if (threats.length >= 3) s += clr * 0.35;
     }
     if (s > best) { best = s; bx = tg.x; by = tg.y; }
   }

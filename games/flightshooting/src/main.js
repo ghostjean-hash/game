@@ -225,6 +225,9 @@ function resetGame() {
 function startGame(diff) {
   if (diff) { difficulty = diff; store.set('difficulty', diff); } // 모드 버튼으로 시작하면 선택 기억
   sound.unlockAudio();
+  // 뒤로가기(화면 ← / 폰 백버튼)로 게임 밖 이탈 대신 모드 선택으로 돌아가게 히스토리 지점을 하나 쌓는다.
+  //   재시작(retry) 경로는 이미 game 지점이라 중복 push하지 않는다.
+  if (!history.state || history.state.screen !== 'game') history.pushState({ screen: 'game' }, '');
   menuScreen.hidden = true;
   gameScreen.hidden = false;
   resize();
@@ -267,6 +270,7 @@ function applyDevHook() {
   // tail: 1~44. 4까지 대수, 그 뒤 낮은 무기부터 발별 순차 진화(44=전원 무기11).
   const tail = num('tail'); if (tail != null) for (let i = 0; i < tail; i++) gainTail(game);
   const lives = num('lives'); if (lives != null) game.lives = Math.max(1, lives);
+  const ap = q.get('ap'); if (ap && CFG.autopilot.tiers[ap]) apSkill = ap; // 검증용: 자동 플레이 실력 티어 지정(이후 game.apSkill에 반영)
   if (q.get('cheat') != null) { cheatEnabled = true; setCheat.checked = true; } // 검증 편의: 치트 박스 자동 표시
   // pow=P|S|E|T|H|B: 해당 파워업 하나를 화면 위쪽에 스폰(내려오며 획득 확인용).
   const pow = q.get('pow'); if (pow) game.powerups.push({ x: W * 0.5, y: H * 0.3, r: 12, vy: 70, kind: pow, t: 0 });
@@ -336,13 +340,16 @@ function commitBest() {
   return false;
 }
 
-function backToMenu() {
+// fromPop = popstate(폰 백버튼/화면 ← 경유)로 불린 경우. 그 외(게임오버 모달 '홈' 등) 직접 호출 시엔
+//   startGame에서 쌓은 game 히스토리 지점을 소비해, 다음 시작 때 push가 정상 동작하도록 정리한다.
+function backToMenu(fromPop) {
   state = 'menu';
   loop.stop();
   gameScreen.hidden = true;
   menuScreen.hidden = false;
   elMenuBest.textContent = best;
   updateCheatVisible();
+  if (!fromPop && history.state && history.state.screen === 'game') history.back();
 }
 
 // 치트 박스 표시: 치트 켜짐 + 게임 진행/일시정지 중일 때만.
@@ -376,6 +383,10 @@ function setupFullscreen() {
 // ── 버튼 / 초기화 ──
 btnStart.addEventListener('click', () => startGame('normal'));
 btnStartKid.addEventListener('click', () => startGame('kid'));
+// 게임 화면 ← : 허브로 직행하지 않고 뒤로가기(→ popstate → backToMenu)로 모드 선택 화면에 돌아간다.
+$('#game-home').addEventListener('click', (e) => { e.preventDefault(); history.back(); });
+// 폰/브라우저 자체 뒤로가기: 플레이/일시정지 중이면 게임 밖 이탈 대신 모드 선택으로. 메뉴에선 그대로 허브로 나간다.
+window.addEventListener('popstate', () => { if (state === 'playing' || state === 'paused') backToMenu(true); });
 btnHow.addEventListener('click', () => {
   const tips = $('#menu-tips');
   tips.hidden = !tips.hidden;
