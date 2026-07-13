@@ -20,7 +20,7 @@
     },
     {
       "id": "lotto",
-      "title": "Blessed Lotto",
+      "title": "lotto 추천번호",
       "subtitle": "축복받은 캐릭터의 번호 카드",
       "path": "games/lotto/",
       "status": "wip",

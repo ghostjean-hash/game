@@ -16,6 +16,7 @@ import {
   FIVE_ELEMENTS_LUCKY, STEM_TO_ELEMENT,
   STRATEGY_ORDER,
   STAT_LABEL_TOP_K,
+  STRATEGY_CATEGORIES,
 } from '../data/numbers.js';
 import { mulberry32, mixSeeds } from './random.js';
 
@@ -68,6 +69,14 @@ function normalizeStrategyIds(ids) {
   }));
   indexed.sort((a, b) => a.order - b.order);
   return indexed.map((x) => x.id);
+}
+
+/** 순수 운세(학설) 프리셋 판정 (2026-07-14, B안).
+ *  활성 전략이 전부 mapping 카테고리(별자리/사주/4원소)면 true.
+ *  true일 때만 recommendMulti가 행운 번호 union 안에서만 추첨. SSOT: docs/01_spec.md 5.1.3.0. */
+function isPureMappingPreset(strategyIds) {
+  return strategyIds.length > 0
+    && strategyIds.every((sid) => STRATEGY_CATEGORIES[sid] === 'mapping');
 }
 
 /** 캐릭터 시드 6번호 추출 (Fisher-Yates shuffle). */
@@ -218,9 +227,27 @@ export function recommendMulti(ctx) {
     throw new Error('strategyIds가 비어있음');
   }
   const normalized = normalizeStrategyIds(strategyIds);
-  const w = computeUnifiedWeights(ctx, normalized);
+  let w = computeUnifiedWeights(ctx, normalized);
+  // B안 (2026-07-14): 순수 운세(학설) 프리셋은 행운 번호 union 안에서만 추첨.
+  //   union 밖 번호를 weightedSample exclude로 전부 제외. union < PICK_COUNT면 안전하게 전 범위 유지.
+  //   SSOT: docs/01_spec.md 5.1.3.0 "순수 운세(학설) 프리셋 풀 제한".
+  let exclude = null;
+  if (isPureMappingPreset(normalized)) {
+    const poolArr = computePoolForStrategies(normalized, ctx);
+    if (poolArr.length >= PICK_COUNT) {
+      const poolSet = new Set(poolArr);
+      exclude = new Set();
+      for (let n = NUMBER_MIN; n <= NUMBER_MAX; n += 1) {
+        if (!poolSet.has(n)) exclude.add(n);
+      }
+      // 사용자 결정 (2026-07-14): 풀 안에서는 가중치 없이 순수 무작위 (실제 로또처럼 각 번호 동일 확률).
+      //   다중 학설 매칭 boost가 특정 작은 수(1/3 등)를 과대표집시켜 "앞번호 반복"을 유발 →
+      //   풀 안 균등 weight로 교체해 인위적 밀어주기 제거. 학설 매칭 라벨(색점)은 표시용이라 무관.
+      w = uniformWeights();
+    }
+  }
   const samplingSeed = mixSeeds(seed >>> 0, ((drwNo || 0) + 0xC0FFEE) >>> 0);
-  const collected = weightedSample(w, PICK_COUNT, samplingSeed);
+  const collected = weightedSample(w, PICK_COUNT, samplingSeed, exclude);
   collected.sort((a, b) => a - b);
   // S77: 다중 학설/통계 매칭 모두 수집 (배열 of 배열).
   const sources = collected.map((n) => assignSourcesForNumber(n, ctx, normalized));

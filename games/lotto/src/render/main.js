@@ -100,7 +100,8 @@ export function initRender(rootEl) {
 }
 
 function setTab(tabId) {
-  if (!TABS.find((t) => t.id === tabId)) return;
+  // 휠링은 하단 탭 목록(TABS)에는 없지만 설정 탭에서 진입하는 정식 화면이라 예외 허용.
+  if (tabId !== 'wheeling' && !TABS.find((t) => t.id === tabId)) return;
   state.currentTab = tabId;
   renderApp();
 }

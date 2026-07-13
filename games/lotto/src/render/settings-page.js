@@ -157,13 +157,15 @@ export function renderSettingsPage(container, handlers) {
 
     <section class="stats-section">
       <h2 class="stats-title">안내</h2>
-      <p class="stats-note"><strong>Blessed Lotto</strong> · 캐릭터 시드 기반 로또 번호 추천 (참고용).</p>
+      <p class="stats-note"><strong>lotto 추천번호</strong> · 캐릭터 시드 기반 로또 번호 추천 (참고용).</p>
       <button type="button" class="btn-secondary" data-action="show-disclaimer">면책 / 책임 안내 다시 보기</button>
     </section>
 
     <section class="stats-section danger-zone">
       <h2 class="stats-title">데이터 초기화</h2>
-      <p class="stats-note">S090-후속 (2026-05-17): 옛 자동 누적 데이터(백캐스트 잔재) 강제 정리용 + 캐릭터 전체 초기화.</p>
+      <p class="stats-note">쌓인 데이터를 정리하거나 처음부터 다시 시작할 때 씁니다. 한 번 지우면 되돌릴 수 없습니다.</p>
+      <p class="stats-note"><strong>활성 캐릭터 전적 초기화</strong> · 지금 선택한 캐릭터로 "확정"해 둔 추천 번호(기록 탭 내용)만 지웁니다. 캐릭터 자체와 다른 캐릭터는 그대로 남습니다.</p>
+      <p class="stats-note"><strong>전체 초기화 (캐릭터까지)</strong> · 앱을 처음 연 상태로 되돌립니다. 만든 캐릭터 전부, 모든 기록, 설정(다구좌 모드 · 표시 방식 등)이 함께 지워집니다.</p>
       <div class="settings-row-actions">
         <button type="button" class="btn-secondary" data-action="reset-history">활성 캐릭터 전적 초기화</button>
         <button type="button" class="btn-secondary" data-action="reset-all">전체 초기화 (캐릭터까지)</button>

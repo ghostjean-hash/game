@@ -3,7 +3,7 @@ setlocal
 
 echo.
 echo ====================================
-echo Blessed Lotto - Fetch lottery draws
+echo lotto 추천번호 - Fetch lottery draws
 echo ====================================
 echo.
 echo This will finish in under a few seconds.

@@ -1,5 +1,5 @@
 import { suite, test, assertEqual, assertTrue, assertDeepEqual } from '../core.js';
-import { recommendMulti } from '../../src/core/recommend.js';
+import { recommendMulti, computePoolForStrategies } from '../../src/core/recommend.js';
 // S34 (2026-05-08): STRATEGY_PAIR_TRACKER 폐기 - import / 사용처 모두 제거.
 import {
   STRATEGY_BLESSED, STRATEGY_STATISTICIAN, STRATEGY_SECOND_STAR,
@@ -559,6 +559,56 @@ suite('S43 단일 추첨 architecture - 분포 정상성', () => {
     }
     assertTrue(multiMatchCount > 0,
       `운세 3학설 시드 sweep N=${N}회 중 다중 매칭 0회 (실제 ${multiMatchCount}) - S77 결손 회귀. 풀 겹침이 있는데 단일 라벨로 흡수되면 fail.`);
+  });
+
+  // B안 (2026-07-14): 순수 운세(학설) 프리셋은 행운 번호 union 안에서만 추첨.
+  //   사용자 결정 - "운세 프리셋으로 뽑았으면 운세와 무관한 번호가 나오면 안 된다".
+  //   부수 효과: 모든 번호가 union 안 → 라벨이 항상 학설 매칭 (6번 폴백 미도달).
+  test('B안 - 순수 운세 프리셋: 추천 6개 전부 행운 union 안 + 라벨 전부 학설 (200회)', () => {
+    const sids = [STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_ZODIAC_ELEMENT];
+    const mapping = new Set(sids);
+    const zodiacs = ['aries', 'cancer', 'leo', 'virgo', 'scorpio'];
+    const stems = ['gap', 'gyeong', 'byeong', 'im', 'mu'];
+    let offPool = 0;
+    let nonMappingLabel = 0;
+    const N = 200;
+    for (let i = 0; i < N; i += 1) {
+      const ctx = {
+        seed: 0xC0FFEE + i, drwNo: 1225 + i, numberStats: [], bonusStats: [],
+        zodiac: zodiacs[i % zodiacs.length],
+        dayPillar: { stem: stems[i % stems.length], branch: 'rat' },
+        strategyIds: sids,
+      };
+      const r = recommendMulti(ctx);
+      const pool = new Set(computePoolForStrategies(sids, ctx));
+      r.numbers.forEach((n, k) => {
+        if (!pool.has(n)) offPool += 1;
+        const src = r.strategySources[k] || [];
+        if (src.length === 0 || !src.every((s) => mapping.has(s))) nonMappingLabel += 1;
+      });
+    }
+    assertEqual(offPool, 0, `순수 운세 프리셋인데 행운집합 밖 번호 ${offPool}건 (기대 0)`);
+    assertEqual(nonMappingLabel, 0, `학설 아닌 라벨 ${nonMappingLabel}건 (기대 0) - 6번 폴백 오라벨`);
+  });
+
+  // B안 (2026-07-14): 학설 + 비학설 혼합 프리셋은 풀 제한 없음 (전 범위 추첨 유지).
+  //   통계/랜덤은 1~45 전체가 정의라 union 개념 미성립. 혼합 시 union 밖 번호가 나올 수 있어야 정상.
+  test('B안 - 혼합 프리셋(학설+직감)은 전 범위 추첨 유지 (union 밖 번호 발생)', () => {
+    const sids = [STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS, STRATEGY_INTUITIVE];
+    const mappingOnly = [STRATEGY_ASTROLOGER, STRATEGY_FIVE_ELEMENTS];
+    let offPool = 0;
+    const N = 100;
+    for (let i = 0; i < N; i += 1) {
+      const ctx = {
+        seed: 0xBEEF + i, drwNo: 1225 + i, numberStats: [], bonusStats: [],
+        zodiac: 'leo', dayPillar: { stem: 'gap', branch: 'rat' },
+        strategyIds: sids,
+      };
+      const r = recommendMulti(ctx);
+      const pool = new Set(computePoolForStrategies(mappingOnly, ctx));
+      r.numbers.forEach((n) => { if (!pool.has(n)) offPool += 1; });
+    }
+    assertTrue(offPool > 0, `혼합 프리셋인데 union 밖 번호 0건 - 풀 제한이 혼합에도 잘못 적용됨 (offPool=${offPool})`);
   });
 
   test('S73 - secondStar 분기 bonusStats top K 라벨 부여', () => {
