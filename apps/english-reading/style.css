@@ -564,6 +564,15 @@ body {
 .author-btn[hidden] { display: none; } /* hidden 속성이 display:block에 덮이지 않게(#190) */
 .author-check { background: var(--bg-elev-2); color: var(--fg); border: 1px solid var(--line); cursor: pointer; border-radius: var(--r-2); font-weight: 700; }
 .author-check:hover { border-color: var(--er-accent); color: var(--er-accent); }
+.author-btn-row { display: flex; gap: var(--sp-2); margin-top: var(--sp-2); }
+.author-btn-row .author-btn { margin-top: 0; }
+.author-btn-row .author-check { flex: 1; }
+.author-clear {
+  flex: 0 0 auto; width: auto; padding-left: 20px; padding-right: 20px;
+  background: var(--bg-elev-2); color: var(--fg-dim); border: 1px solid var(--line);
+  border-radius: var(--r-2); font-weight: 700; cursor: pointer;
+}
+.author-clear:hover { border-color: var(--er-accent); color: var(--er-accent); }
 .author-result { margin-top: var(--sp-3); padding: var(--sp-3) var(--sp-4); border-radius: var(--r-2); font-size: 13px; line-height: 1.55; }
 .author-result.ok { background: var(--ok-bg); border: 1px solid var(--ok); color: var(--ok); font-weight: 700; }
 .author-result.bad { background: #fef2f2; border: 1px solid #fca5a5; color: #b91c1c; }

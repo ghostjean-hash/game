@@ -665,7 +665,15 @@ function renderAuthor() {
     showToast(`"${validObj.titleKr}"를 내 문제로 추가했습니다.`);
     renderAuthor();
   };
-  stage.append(pl, input, checkBtn, result, addBtn);
+  // 삭제(입력창 비우기) - 오류난 JSON을 한 번에 지운다(모바일에서 전체 선택이 어려운 문제 해소).
+  const clearBtn = document.createElement("button");
+  clearBtn.type = "button"; clearBtn.className = "btn author-btn author-clear"; clearBtn.textContent = "삭제";
+  clearBtn.onclick = () => {
+    input.value = ""; result.hidden = true; addBtn.hidden = true; validObj = null; input.focus();
+  };
+  const btnRow = document.createElement("div"); btnRow.className = "author-btn-row";
+  btnRow.append(clearBtn, checkBtn); // 삭제가 검증하기 좌측
+  stage.append(pl, input, btnRow, result, addBtn);
 
   // 3. 이미 만든 내 문제 목록
   const mine = getCustomPassages();

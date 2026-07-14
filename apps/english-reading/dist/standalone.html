@@ -716,6 +716,15 @@ body {
 .author-btn[hidden] { display: none; } /* hidden 속성이 display:block에 덮이지 않게(#190) */
 .author-check { background: var(--bg-elev-2); color: var(--fg); border: 1px solid var(--line); cursor: pointer; border-radius: var(--r-2); font-weight: 700; }
 .author-check:hover { border-color: var(--er-accent); color: var(--er-accent); }
+.author-btn-row { display: flex; gap: var(--sp-2); margin-top: var(--sp-2); }
+.author-btn-row .author-btn { margin-top: 0; }
+.author-btn-row .author-check { flex: 1; }
+.author-clear {
+  flex: 0 0 auto; width: auto; padding-left: 20px; padding-right: 20px;
+  background: var(--bg-elev-2); color: var(--fg-dim); border: 1px solid var(--line);
+  border-radius: var(--r-2); font-weight: 700; cursor: pointer;
+}
+.author-clear:hover { border-color: var(--er-accent); color: var(--er-accent); }
 .author-result { margin-top: var(--sp-3); padding: var(--sp-3) var(--sp-4); border-radius: var(--r-2); font-size: 13px; line-height: 1.55; }
 .author-result.ok { background: var(--ok-bg); border: 1px solid var(--ok); color: var(--ok); font-weight: 700; }
 .author-result.bad { background: #fef2f2; border: 1px solid #fca5a5; color: #b91c1c; }
@@ -3183,7 +3192,15 @@ function renderAuthor() {
     showToast(`"${validObj.titleKr}"를 내 문제로 추가했습니다.`);
     renderAuthor();
   };
-  stage.append(pl, input, checkBtn, result, addBtn);
+  // 삭제(입력창 비우기) - 오류난 JSON을 한 번에 지운다(모바일에서 전체 선택이 어려운 문제 해소).
+  const clearBtn = document.createElement("button");
+  clearBtn.type = "button"; clearBtn.className = "btn author-btn author-clear"; clearBtn.textContent = "삭제";
+  clearBtn.onclick = () => {
+    input.value = ""; result.hidden = true; addBtn.hidden = true; validObj = null; input.focus();
+  };
+  const btnRow = document.createElement("div"); btnRow.className = "author-btn-row";
+  btnRow.append(clearBtn, checkBtn); // 삭제가 검증하기 좌측
+  stage.append(pl, input, btnRow, result, addBtn);
 
   // 3. 이미 만든 내 문제 목록
   const mine = getCustomPassages();
