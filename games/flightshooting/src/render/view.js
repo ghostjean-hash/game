@@ -91,7 +91,7 @@ function drawFriendShot(ctx, b) {
   ctx.rotate(ang);
   ctx.fillStyle = col;
   star(ctx, 5, R * 1.4, R * 0.62); // 5각 반짝이(사이드 총알 star 헬퍼 재사용)
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = COLORS.friend.shotCore; // 흐린 코어(흰색 대신 - 눈부심 제거)
   ctx.beginPath(); ctx.arc(0, 0, R * 0.34, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
 }

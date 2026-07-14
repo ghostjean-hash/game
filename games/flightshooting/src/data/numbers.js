@@ -75,22 +75,24 @@ export const CFG = {
   //   아이템은 플레이어와 공유(누가 먹든 level +1). hp 5개(플레이어 목숨과 별개). 피해는 각자, 회복(H)은 공유.
   friend: {
     maxHp: 5, levelMax: 10, startLevel: 0, r: 12,
-    sideOffset: 48,   // 플레이어 옆으로 떨어지는 기본 가로거리
-    upOffset: 6,      // 살짝 위
-    maxDist: 150,     // 플레이어에서 최대 이탈 가로거리(너무 멀리 안 감)
-    aimBias: 0.35,    // 가까운 적 x로 끌리는 정도(0~1)
-    follow: 6,        // 위치 추종 속도(초당 비율)
+    // 완전 독립 유영(플레이어 무관, 사용자 지시). 자기 세로 밴드(homeYRatio)에서 가까운 적 x로 스스로 이동.
+    homeYRatio: 0.72, // 친구가 머무는 세로 위치. 플레이어(0.82)보다 위 = 별도 줄이라 겹쳐 헷갈리지 않는다
+    follow: 3,        // 자기 목표로 이동하는 속도(초당 비율)
     bobSpeed: 3.2, bobAmp: 10, // 위아래 살짝 흔들림
     enterTime: 1.2,   // 날아 들어오는 동안(이 시간 지나야 발사 시작)
     reEnterTime: 0.6, // 부활 시 재정렬 시간
     inv: 1.2,         // 피격 후 무적(초)
-    fireEvery: 0.22,  // 발사 주기(플레이어보다 약간 느리게)
+    fireEvery: 0.22,  // 발사 주기
     bulletSpeed: 340,
-    // 발 수 = shotsBase + level*shotsPerLevel(1~11), 총 부채각(도) = spreadBase + level*spreadPer → 넓어진다.
-    shotsBase: 1, shotsPerLevel: 1, spreadBase: 10, spreadPer: 7,
-    bulletR: 5, bulletRGrow: 0.25, dmgBase: 1, dmgGrow: 0.6,
+    // 발 수 = shotsBase + level*shotsPerLevel(1~11), 총 부채각(도) = spreadBase + level*spreadPer.
+    //   부채각은 좁게(사용자 "좌우로 너무 퍼진다") - 앞으로 모아 쏘되 레벨↑에 살짝만 넓어진다(만렙 ≈ 25도).
+    shotsBase: 1, shotsPerLevel: 1, spreadBase: 5, spreadPer: 2,
+    bulletR: 3, bulletRGrow: 0.12, dmgBase: 1, dmgGrow: 0.6, // 총알 크기 최소(사용자 "안 헷갈리게 최소로")
     speech: ['안녕!', '난 친구야', '같이 게임하자!'], speechEach: 1.1,
     reviveMsg: '다시 왔어!', reviveMsgTime: 1.4,
+    // 플레이 중 가끔 이야기(사용자 지시): chatterEvery(+jitter)마다 한 줄을 chatterShowTime 동안 말풍선으로.
+    chatter: ['좋아 좋아!', '이겨보자!', '내가 도와줄게', '잘한다!', '조심해!', '거의 다 왔어!', '재밌다!', '같이 하니까 좋아'],
+    chatterEvery: 6, chatterJitter: 4, chatterShowTime: 1.6,
   },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.
   // bonus = 보너스 기체: 화면을 가로질러(speed = 가로 이동 속도) 지나가며, 잡으면 파워업 확정 드롭.

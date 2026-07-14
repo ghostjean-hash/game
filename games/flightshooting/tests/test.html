@@ -400,6 +400,13 @@ test('기절한 친구는 H로 부활(hp 풀·down 해제)', () => {
   checkCollisions(g, 500, 1000);
   eq(g.friend.down, false, '부활'); eq(g.friend.hp, g.friend.maxHp, '풀피 회복');
 });
+test('친구 완전 독립: 가까운 적 x로 이동(플레이어 위치 무관)', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000);
+  g.friend.enterTimer = 0; g.friend.x = 250; g.player.x = 250; g.player.y = 800; // 플레이어는 가운데 고정
+  g.enemies = [{ x: 430, y: 300, r: 15 }]; // 오른쪽 위 적
+  for (let i = 0; i < 50; i++) stepFriend(g, 0.05, 500, 1000, true);
+  ok(g.friend.x > 360, '친구가 적(430) 쪽으로 스스로 이동(플레이어 250 무관)');
+});
 test('일반 모드(friend=null)는 아이템 공유·피격 영향 없음', () => {
   const g = friendGame({ friend: null }); // 친구 없음
   g.powerups = [{ x: 100, y: 100, r: 12, kind: 'P', t: 0 }];
