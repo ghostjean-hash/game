@@ -15,7 +15,85 @@ export function render(ctx, game, W, H) {
   drawTail(ctx, game);        // 뒤쪽 꼬리 비행기(플레이어보다 먼저 = 뒤에 깔림)
   drawOptions(ctx, game);     // 좌우 부속 비행기
   drawPlayer(ctx, game);
+  drawFriend(ctx, game);      // 친구 비행기(어린이 모드) + hp 점 + 말풍선(맨 위)
   drawParticles(ctx, game);
+}
+
+// 친구 비행기(어린이 모드, docs/09): 따뜻한 코랄 몸 + 눈·미소 + hp 점 + 말풍선. 기절 중엔 안 그린다.
+function drawFriend(ctx, game) {
+  const f = game.friend;
+  if (!f || f.down) return;
+  const r = f.r;
+  const c = COLORS.friend;
+  if (f.inv > 0 && Math.floor(f.inv * 12) % 2 === 0) { drawFriendSpeech(ctx, f); return; } // 피격 깜빡(말풍선은 유지)
+  ctx.save();
+  ctx.translate(f.x, f.y);
+  ctx.shadowColor = c.glow;
+  ctx.shadowBlur = 10;
+  ctx.fillStyle = c.body;
+  // 작은 날개 2개
+  ctx.beginPath(); ctx.ellipse(-r * 0.95, r * 0.15, r * 0.5, r * 0.28, -0.4, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(r * 0.95, r * 0.15, r * 0.5, r * 0.28, 0.4, 0, Math.PI * 2); ctx.fill();
+  // 둥근 몸통
+  ctx.beginPath(); ctx.ellipse(0, 0, r, r * 1.05, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowBlur = 0;
+  // 눈 2개 + 미소
+  ctx.fillStyle = c.eye;
+  ctx.beginPath(); ctx.arc(-r * 0.34, -r * 0.12, 1.6, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(r * 0.34, -r * 0.12, 1.6, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = c.eye; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.arc(0, r * 0.08, r * 0.4, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+  ctx.restore();
+  drawFriendHp(ctx, f);
+  drawFriendSpeech(ctx, f);
+}
+
+// 친구 hp 점(작은 하트 대신 점): 몸 아래 가로로. 채워진 = 남은 hp(핑크), 빈 = 잃음(흐림). HUD 아님(강화 정보 미표시).
+function drawFriendHp(ctx, f) {
+  const n = f.maxHp, gap = 6, y = f.y + f.r + 7;
+  const x0 = f.x - ((n - 1) * gap) / 2;
+  ctx.save();
+  for (let i = 0; i < n; i++) {
+    ctx.fillStyle = i < f.hp ? COLORS.friend.hpPip : 'rgba(255,255,255,0.18)';
+    ctx.beginPath(); ctx.arc(x0 + i * gap, y, 2, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// 친구 말풍선: 몸 위 둥근 사각형 + 꼬리 + 텍스트. f.msg 있을 때만.
+function drawFriendSpeech(ctx, f) {
+  if (!f.msg) return;
+  ctx.save();
+  ctx.font = 'bold 12px ui-monospace, monospace';
+  const tw = ctx.measureText(f.msg).width;
+  const padX = 8, h = 20, w = tw + padX * 2;
+  const x = f.x - w / 2, y = f.y - f.r - 16 - h;
+  ctx.fillStyle = 'rgba(18,22,32,0.92)';
+  ctx.strokeStyle = COLORS.friend.glow;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 6); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(f.x - 5, y + h - 0.5); ctx.lineTo(f.x + 5, y + h - 0.5); ctx.lineTo(f.x, y + h + 7); ctx.closePath();
+  ctx.fillStyle = 'rgba(18,22,32,0.92)'; ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(f.msg, f.x, y + h / 2);
+  ctx.restore();
+}
+
+// 친구 메인 총알: 따뜻한 색 별/반짝이(플레이어 냉색 빔·적 빨간 탄과 형태·색으로 구분). 레벨별 색.
+function drawFriendShot(ctx, b) {
+  const lv = b.level || 0;
+  const arr = COLORS.friend.shot;
+  const col = arr[Math.min(lv, arr.length - 1)];
+  const R = b.r;
+  const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+  ctx.save();
+  ctx.translate(b.x, b.y);
+  ctx.rotate(ang);
+  ctx.fillStyle = col;
+  star(ctx, 5, R * 1.4, R * 0.62); // 5각 반짝이(사이드 총알 star 헬퍼 재사용)
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath(); ctx.arc(0, 0, R * 0.34, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
 }
 
 // 구역별 색조의 은은한 성운 2개(radial gradient). 깊이감 + 구역마다 다른 분위기.
@@ -489,6 +567,7 @@ function drawBullets(ctx, game) {
   for (const b of game.bullets) {
     if (b.kind === 'laser') drawSideShape(ctx, b);
     else if (b.kind === 'missile') drawMissile(ctx, b);
+    else if (b.kind === 'fmain') drawFriendShot(ctx, b); // 친구 메인 총알(어린이 모드)
     else drawMainBeam(ctx, b);
   }
 }

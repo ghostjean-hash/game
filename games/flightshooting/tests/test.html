@@ -20,6 +20,7 @@ import { buildWaves, stageName } from '../src/core/waves.js';
 import { spawnEnemy, spawnBonus, spawnShards, dropItems, fieldBounds, spawnBoss, bossStyleFor, syncBossParts } from '../src/core/spawn.js';
 import { autopilotStep } from '../src/core/autopilot.js';
 import { hit, checkCollisions, updateEnemies, distToSegment, updateBoss } from '../src/core/world.js';
+import { spawnFriend, stepFriend, gainFriendLevel, friendTakeHit, reviveFriend } from '../src/core/friend.js';
 import { CFG } from '../src/data/numbers.js';
 
 const mkGame = () => ({ front: 1, options: [], zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [], player: { x: 100, y: 100 } });
@@ -325,6 +326,86 @@ const puGame = (inv) => ({ player: { x: 100, y: 100, r: 14, inv }, front: 1, par
   bullets: [], enemies: [], eBullets: [], boss: null, powerups: [{ x: 100, y: 100, r: 12, kind: 'P' }], sfx: [], score: 0 });
 test('무적(깜박) 중에도 파워업 획득', () => { const g = puGame(1); checkCollisions(g, 500, 1000); eq(g.front, 2); eq(g.powerups.length, 0); });
 test('무적 아닐 때도 파워업 정상 획득', () => { const g = puGame(0); checkCollisions(g, 500, 1000); eq(g.front, 2); eq(g.powerups.length, 0); });
+
+// ── 친구 비행기(어린이 모드, docs/09): 생성·강화·발사·아이템 공유·개별 피격·부활 ──
+const friendGame = (over) => ({
+  player: { x: 100, y: 100, r: 14, inv: 0 }, friend: null,
+  bullets: [], enemies: [], eBullets: [], boss: null, powerups: [], particles: [], sfx: [],
+  score: 0, front: 1, options: [], optionEvo: 0, zone: { level: 0, pulses: [] }, tail: [], partHistory: [],
+  lives: 5, maxLives: 5, cheat: null, ...over,
+});
+test('spawnFriend 생성: hp 5 · 시작 레벨', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000);
+  eq(g.friend.hp, CFG.friend.maxHp); eq(g.friend.level, CFG.friend.startLevel); ok(g.friend.down === false);
+});
+test('gainFriendLevel 10에서 상한', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000);
+  let n = 0; while (gainFriendLevel(g)) n++;
+  eq(g.friend.level, CFG.friend.levelMax); eq(n, CFG.friend.levelMax - CFG.friend.startLevel);
+});
+test('친구 발사: 레벨 높을수록 더 많은(넓은) 탄', () => {
+  const mk = (lv) => { const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.enterTimer = 0; g.friend.fireTimer = 0; g.friend.level = lv; stepFriend(g, 0.02, 500, 1000, true); return g.bullets.length; };
+  ok(mk(5) > mk(0), '레벨5가 레벨0보다 많은 탄');
+  eq(mk(0), CFG.friend.shotsBase, '레벨0 = 기본 발수');
+});
+test('친구 탄 kind = fmain', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.enterTimer = 0; g.friend.fireTimer = 0; g.friend.level = 3;
+  stepFriend(g, 0.02, 500, 1000, true);
+  ok(g.bullets.length > 0 && g.bullets.every((b) => b.kind === 'fmain'));
+});
+test('친구 등장(enter) 중엔 발사 안 함', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.fireTimer = 0; // enterTimer는 기본 > 0
+  stepFriend(g, 0.02, 500, 1000, true);
+  eq(g.bullets.length, 0, '등장 중 발사 대기');
+});
+test('아이템 공유: 내가 P 먹으면 나·친구 둘 다 강화', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000);
+  g.friend.x = 100; g.friend.y = -999; // 친구는 멀리(플레이어가 획득)
+  g.powerups = [{ x: 100, y: 100, r: 12, kind: 'P', t: 0 }];
+  checkCollisions(g, 500, 1000);
+  eq(g.front, 2, '내 메인 총알 강화'); eq(g.friend.level, CFG.friend.startLevel + 1, '친구도 강화');
+});
+test('아이템 공유: 친구가 T 먹어도 내 꼬리 비행기 강화', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000);
+  g.friend.x = 300; g.friend.y = 300; g.player.x = -999; g.player.y = -999; // 나는 멀리(친구가 획득)
+  g.powerups = [{ x: 300, y: 300, r: 12, kind: 'T', t: 0 }];
+  checkCollisions(g, 500, 1000);
+  eq(g.tail.length, 1, '친구가 먹어도 내 꼬리기 +1'); eq(g.friend.level, CFG.friend.startLevel + 1, '친구도 강화');
+});
+test('총알 피격은 각자: 친구만 hp 감소, 내 목숨 불변', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000);
+  g.friend.x = 200; g.friend.y = 200; g.friend.inv = 0;
+  g.player.x = -999; g.player.y = -999; g.player.inv = 0;
+  g.eBullets = [{ x: 200, y: 200, r: 5 }];
+  const hp0 = g.friend.hp, lives0 = g.lives;
+  checkCollisions(g, 500, 1000);
+  eq(g.friend.hp, hp0 - 1, '친구 hp -1'); eq(g.lives, lives0, '내 목숨 불변');
+});
+test('friendTakeHit hp 0 = 기절(down)', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.hp = 1; g.friend.inv = 0;
+  friendTakeHit(g);
+  ok(g.friend.down === true && g.friend.hp <= 0);
+});
+test('회복 H 공유: 나·친구 각각 hp 회복', () => {
+  const g = friendGame({ lives: 4 }); spawnFriend(g, 500, 1000); g.friend.hp = 3;
+  g.player.x = 100; g.player.y = 100;
+  g.powerups = [{ x: 100, y: 100, r: 12, kind: 'H', t: 0 }];
+  checkCollisions(g, 500, 1000);
+  eq(g.lives, 5, '내 목숨 +1'); eq(g.friend.hp, 4, '친구 hp +1');
+});
+test('기절한 친구는 H로 부활(hp 풀·down 해제)', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.down = true; g.friend.hp = 0;
+  g.player.x = 100; g.player.y = 100;
+  g.powerups = [{ x: 100, y: 100, r: 12, kind: 'H', t: 0 }];
+  checkCollisions(g, 500, 1000);
+  eq(g.friend.down, false, '부활'); eq(g.friend.hp, g.friend.maxHp, '풀피 회복');
+});
+test('일반 모드(friend=null)는 아이템 공유·피격 영향 없음', () => {
+  const g = friendGame({ friend: null }); // 친구 없음
+  g.powerups = [{ x: 100, y: 100, r: 12, kind: 'P', t: 0 }];
+  checkCollisions(g, 500, 1000);
+  eq(g.front, 2, '내 메인만 강화'); eq(g.friend, null, '친구 없음 유지');
+});
 
 report();
 </script>

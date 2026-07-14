@@ -71,6 +71,27 @@ export const CFG = {
       missileR: 2.6, missileRGrow: 0.16, missileDmgBase: 3, missileDmgGrow: 1.5, // base↑(0강화 가시성)·grow↓로 만렙 크기는 유지
     },
   },
+  // 친구 비행기(어린이 모드 전용, docs/09_friend.md). 메인 총알만 있고 강화 10단계로 부채꼴이 넓어진다.
+  //   아이템은 플레이어와 공유(누가 먹든 level +1). hp 5개(플레이어 목숨과 별개). 피해는 각자, 회복(H)은 공유.
+  friend: {
+    maxHp: 5, levelMax: 10, startLevel: 0, r: 12,
+    sideOffset: 48,   // 플레이어 옆으로 떨어지는 기본 가로거리
+    upOffset: 6,      // 살짝 위
+    maxDist: 150,     // 플레이어에서 최대 이탈 가로거리(너무 멀리 안 감)
+    aimBias: 0.35,    // 가까운 적 x로 끌리는 정도(0~1)
+    follow: 6,        // 위치 추종 속도(초당 비율)
+    bobSpeed: 3.2, bobAmp: 10, // 위아래 살짝 흔들림
+    enterTime: 1.2,   // 날아 들어오는 동안(이 시간 지나야 발사 시작)
+    reEnterTime: 0.6, // 부활 시 재정렬 시간
+    inv: 1.2,         // 피격 후 무적(초)
+    fireEvery: 0.22,  // 발사 주기(플레이어보다 약간 느리게)
+    bulletSpeed: 340,
+    // 발 수 = shotsBase + level*shotsPerLevel(1~11), 총 부채각(도) = spreadBase + level*spreadPer → 넓어진다.
+    shotsBase: 1, shotsPerLevel: 1, spreadBase: 10, spreadPer: 7,
+    bulletR: 5, bulletRGrow: 0.25, dmgBase: 1, dmgGrow: 0.6,
+    speech: ['안녕!', '난 친구야', '같이 게임하자!'], speechEach: 1.1,
+    reviveMsg: '다시 왔어!', reviveMsgTime: 1.4,
+  },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.
   // bonus = 보너스 기체: 화면을 가로질러(speed = 가로 이동 속도) 지나가며, 잡으면 파워업 확정 드롭.
   enemy: {

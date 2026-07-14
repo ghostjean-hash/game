@@ -5,6 +5,7 @@ import { CFG } from '../data/numbers.js';
 import { COLORS } from '../data/colors.js';
 import { playerFire, enemyFireAt } from './fire.js';
 import { stepOptions, stepTail, homeMissiles, tickZone, gainFront, gainOption, gainZone, gainTail, loseLastPart } from './parts.js';
+import { stepFriend, friendTakeHit, gainFriendLevel, reviveFriend } from './friend.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
 import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, dropMaybe, burst, fieldBounds, syncBossParts } from './spawn.js';
@@ -315,17 +316,28 @@ function playerHit(game) {
 function grabItem(game, kind) {
   // 이미 최대치라 강화가 무의미하면 점수 보너스로 전환(수집 보람 유지).
   const maxed = () => { game.score += CFG.maxedBonus; game.sfx.push('power'); };
-  if (kind === 'P') {
-    if (gainFront(game)) game.sfx.push('power'); else maxed();
-  } else if (kind === 'S') {
-    if (gainOption(game)) game.sfx.push('power'); else maxed();
-  } else if (kind === 'E') {
-    if (gainZone(game)) game.sfx.push('power'); else maxed();
-  } else if (kind === 'T') {
-    if (gainTail(game)) game.sfx.push('power'); else maxed();
-  } else if (kind === 'H') {
-    if (game.lives < (game.maxLives || CFG.player.maxLives)) { game.lives++; game.sfx.push('power'); } else maxed();
-  } else if (kind === 'B') {
+  const f = game.friend; // 어린이 모드 친구(있으면 아이템·회복 공유, docs/09)
+  if (kind === 'H') {
+    // 회복 공유: 친구가 기절했으면 부활, 아니면 나·친구 각각 hp 회복(상한 내).
+    let healed = false;
+    if (f && f.down) { reviveFriend(game); healed = true; }
+    if (game.lives < (game.maxLives || CFG.player.maxLives)) { game.lives++; healed = true; }
+    if (f && !f.down && f.hp < f.maxHp) { f.hp++; healed = true; }
+    if (healed) game.sfx.push('power'); else maxed();
+    return;
+  }
+  if (kind === 'P' || kind === 'S' || kind === 'E' || kind === 'T') {
+    // 아이템 공유: 누가 먹든 내 계통 + 친구 메인이 함께 오른다(서로서로 강화).
+    let gained = false;
+    if (kind === 'P') gained = gainFront(game);
+    else if (kind === 'S') gained = gainOption(game);
+    else if (kind === 'E') gained = gainZone(game);
+    else if (kind === 'T') gained = gainTail(game);
+    if (f && gainFriendLevel(game)) gained = true; // 어린이 모드: 아무 파츠나 친구 메인도 성장
+    if (gained) game.sfx.push('power'); else maxed();
+    return;
+  }
+  if (kind === 'B') {
     for (const e of game.enemies) {
       burst(game, e.x, e.y, e.color, 12);
       game.score += e.score;
@@ -405,11 +417,24 @@ export function checkCollisions(game, W, H) {
   game.enemies = game.enemies.filter((e) => !e.dead);
 
   // 파워업 획득은 피격 무적(깜박) 중에도 된다 - 피격 판정보다 먼저 처리한다.
+  //   어린이 모드: 플레이어 또는 친구가 닿으면 1회 획득(grabItem이 양쪽 공유 강화 처리).
   for (const it of game.powerups) {
     if (it.dead) continue;
-    if (hit(p, it)) { it.dead = true; grabItem(game, it.kind); }
+    const fr = game.friend;
+    if (hit(p, it) || (fr && !fr.down && hit(fr, it))) { it.dead = true; grabItem(game, it.kind); }
   }
   game.powerups = game.powerups.filter((it) => !it.dead);
+
+  // 친구 개별 피격(어린이 모드): 플레이어 무적과 독립. 친구가 맞으면 친구 hp만 깎는다(내 목숨 불변).
+  //   플레이어 무적으로 아래 return 되기 전에 처리해야 한다. 치트 무적이면 친구도 보호.
+  const fr = game.friend;
+  if (fr && !fr.down && fr.inv <= 0 && !(game.cheat && game.cheat.invincible)) {
+    let hitF = false;
+    for (const e of game.enemies) { if (hit(fr, e)) { hitF = true; break; } }
+    if (!hitF && game.boss && !game.boss.entering && hit(fr, game.boss)) hitF = true;
+    if (!hitF) for (const b of game.eBullets) { if (!b.dead && hit(fr, b)) { b.dead = true; hitF = true; break; } }
+    if (hitF) { friendTakeHit(game); game.eBullets = game.eBullets.filter((b) => !b.dead); }
+  }
 
   // 무적 중(피격 깜박) 또는 치트 무적이면 피격 판정 생략(아이템 획득은 위에서 이미 처리).
   if (p.inv > 0 || (game.cheat && game.cheat.invincible)) return;
@@ -509,6 +534,7 @@ export function stepWorld(game, dt, W, H) {
   }
   stepOptions(game, dt, !game.transitioning); // 옵션기 추종 + 발사(보스 클리어 후 전환 대기 중엔 발사 쉼)
   stepTail(game, dt, !game.transitioning);    // 꼬리 비행기 추종 + 유도탄 발사
+  stepFriend(game, dt, W, H, !game.transitioning); // 친구 비행기(어린이 모드) 유영 + 발사
   if (!intro) {
     spawnWaves(game, W);
     game.bonusTimer -= dt;           // 보너스 기체 주기 등장(파워업 공급원)

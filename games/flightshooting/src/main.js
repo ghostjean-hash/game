@@ -11,6 +11,7 @@ import { stepWorld, startStage, applyKeyboard } from './core/world.js';
 import { spawnEnemy, spawnBoss } from './core/spawn.js';
 import { autopilotStep } from './core/autopilot.js';
 import { gainFront, gainOption, gainZone, gainTail } from './core/parts.js';
+import { spawnFriend, gainFriendLevel } from './core/friend.js';
 import { render } from './render/view.js';
 import { createControls } from './input/controls.js';
 
@@ -75,6 +76,7 @@ function createGame() {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
     score: 0, lives: CFG.player.maxLives, maxLives: CFG.player.maxLives, stage: 1, fireTimer: 0, // maxLives는 난이도로 재설정
     front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
+    friend: null, // 어린이 모드에서만 생성(docs/09). 일반 모드는 null 유지.
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, apSkill: CFG.autopilot.default, cheat: null,
     difficulty: 'normal', enemyFireMul: 1, enemyShotsMax: 99, radialMul: 1, // 난이도(startGame에서 세팅). 어린이 모드는 발사 간격↑·조준 연발 단발화·방사 탄 감축
     bonusTimer: CFG.bonusShip.every,
@@ -213,6 +215,7 @@ function resetGame() {
   game.powerups = []; game.particles = []; game.boss = null;
   game.score = 0; game.maxLives = CFG.player.maxLives; game.lives = game.maxLives; // 난이도별 maxLives는 startGame에서 재설정
   game.front = 1; game.options = []; game.optionEvo = 0; game.zone = { level: 0, timer: null }; game.tail = []; game.partHistory = [];
+  game.friend = null; // 어린이 모드면 startGame에서 다시 생성
   game.stage = 1; game.fireTimer = 0;
   game.bossPending = false; game.transitioning = false;
   game.pendingTimer = null; game.transitionTimer = null; game.winTimer = null;
@@ -232,6 +235,7 @@ function startGame(diff) {
   gameScreen.hidden = false;
   resize();
   resetGame();
+  if (difficulty === 'kid') spawnFriend(game, W, H); // 어린이 모드: 친구 비행기 등장(docs/09)
   applyDevHook(); // 검증용: localhost에서 URL 파라미터로 시작 구역·파츠 지정
   setAutopilot(false); // 시작 시 기본은 수동(자동 시작 버튼이 이후 다시 켬)
   game.apSkill = apSkill;                       // 자동 플레이 실력 티어 반영
@@ -269,6 +273,8 @@ function applyDevHook() {
   const zone = num('zone'); if (zone != null) for (let i = 0; i < zone; i++) gainZone(game);
   // tail: 1~44. 4까지 대수, 그 뒤 낮은 무기부터 발별 순차 진화(44=전원 무기11).
   const tail = num('tail'); if (tail != null) for (let i = 0; i < tail; i++) gainTail(game);
+  // friendlv: 친구 메인 총알 레벨(0~10) 즉시 반영(어린이 모드에서 친구가 있을 때만). 부채 넓어짐 관찰용.
+  const flv = num('friendlv'); if (flv != null && game.friend) for (let i = 0; i < flv; i++) gainFriendLevel(game);
   const lives = num('lives'); if (lives != null) game.lives = Math.max(1, lives);
   const ap = q.get('ap'); if (ap && CFG.autopilot.tiers[ap]) apSkill = ap; // 검증용: 자동 플레이 실력 티어 지정(이후 game.apSkill에 반영)
   if (q.get('cheat') != null) { cheatEnabled = true; setCheat.checked = true; } // 검증 편의: 치트 박스 자동 표시
@@ -280,7 +286,10 @@ function applyDevHook() {
   // boss=1: 웨이브 건너뛰고 현재 구역 보스를 즉시 등장(부위 파괴형 스타일 관찰용).
   if (q.get('boss') != null) { game.introTimer = 0; game.waves = []; game.waveIdx = 0; spawnBoss(game, W, H); }
   if (stage != null) startStage(game); // 지정 구역 웨이브 재생성 + 배너
-  if (q.get('nointro') != null) game.introTimer = 0; // 검증 편의: 인트로 배너 건너뛰고 즉시 발사
+  if (q.get('nointro') != null) {
+    game.introTimer = 0; // 검증 편의: 인트로 배너 건너뛰고 즉시 발사
+    if (game.friend) { game.friend.enterTimer = 0; game.friend.speechIdx = CFG.friend.speech.length; game.friend.msg = null; } // 친구 등장·말풍선 건너뛰고 즉시 발사
+  }
   // warm=N: 시작 시 N프레임 미리 굴려 탄·상태를 진행시킨 화면을 바로 캡처(검증 편의).
   const warm = num('warm');
   if (warm != null) { game.introTimer = 0; for (let i = 0; i < warm; i++) stepWorld(game, 0.016, W, H); }
@@ -475,5 +484,8 @@ resize();
   const host = location.hostname;
   if (host !== 'localhost' && host !== '127.0.0.1') return;
   const q = new URLSearchParams(location.search);
-  if (q.get('dev') != null && q.get('auto') != null) { startGame(); setAutopilot(true); }
+  if (q.get('dev') == null) return;
+  const mode = q.get('kid') != null ? 'kid' : 'normal'; // ?kid=1 이면 어린이 모드(친구 등장)로 시작
+  if (q.get('auto') != null) { startGame(mode); setAutopilot(true); } // 자동 플레이
+  else if (q.get('kid') != null) startGame('kid');                    // 수동 관찰용 어린이 모드 시작
 })();

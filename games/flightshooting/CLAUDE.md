@@ -38,6 +38,7 @@ games/flightshooting/
 - `docs/06_boss.md` - 보스 부위 파괴형 + 다중 스타일 설계안(설계 단계, 구현 미착수)
 - `docs/07_balancing.md` - 밸런싱 종합(무기·적·보스·드롭 수치 정리 + 조정 이력)
 - `docs/08_deep-space-stages.md` - 21~30 스테이지 확장 + 완전 다른 형태 신규 적 설계안(설계 단계, 구현 미착수)
+- `docs/09_friend.md` - 친구 비행기(어린이 모드 전용): 등장 말풍선·자율 유영·메인 총알 10단계·아이템 공유·개별 HP·부활
 
 # 4. 절대 규칙 (표준 4.3 + 게임 고유)
 
@@ -80,4 +81,5 @@ games/flightshooting/
 - 2026-07-12(후속2): 원격 무기 외형 다듬기 - 사이드 크기 tier10 2/3 축소(drawSideShape 계수 0.7→0.22) + 메인 총알 단계별 다른 무늬 패턴 복원(마디·실선·톱니·구슬·마름모·물결·이중·나선·화살촉·링·플라즈마, 예전 0/2/6→새 0/1/2, 모든 무늬 cap(laneGap/2)로 침범 방지, mainLenPer 1.2→1.5) + 유도탄 형태(삼각→화살표→로켓) + 색 11색화(tailMissile). core 89 PASS + 캡처. docs 05·07 동기화.
 - 2026-07-13(원격 4차): 조정 2건 - 메인 총알 강화 0단계 마디 점 5→4개로 줄이고 간격 확대(view.drawMainBeam t===0, `pd=h*0.13`) + 보스 좌우 유영 점진 가속(등장 직후 매우 느리게→`bobRamp` 7초에 걸쳐 최대 속도 `bobFreq`까지, `boss.bobPhase` 위상 직접 누적, 진폭 불변, numbers/world.js). core 89 PASS.
 - 2026-07-14: 조작·AI 3건 - 플레이 중 뒤로가기 이탈 버그 수정(게임 화면 `←`가 허브 직행 링크라 게임 중에도 이탈 → `#game-home` + history.pushState/popstate로 게임 중 뒤로가기는 모드 선택으로, 모드 선택에서만 허브로. index.html·main.js) + 보스 좌우 유영 속도 절반(`bobFreq` 0.3→0.15, 진폭·램프 불변) + **자동 플레이 AI 판단 구조 교체**(한 걸음 그리디 → 2단계 빔서치: 후보로 seg=sim/2 굴려 도착점 구한 뒤 그 지점에서 다음 수까지 이어 평가, 첫 수 완전 생존 상위 BEAM6만 확장, 막다른 구석 자진 회피, autopilot.js `DEPTH`/`BEAM`·simulate tOff·decideTarget 재작성). core 89 PASS + 후반 구역21 자동 8초 생존.
+- 2026-07-14(후속): 어린이 모드 친구 비행기 신설(docs/09). 왼쪽에서 말풍선("안녕!"→"난 친구야"→"같이 게임하자!")으로 등장해 플레이어 옆을 자율 유영(가까운 적 조준)하며 함께 싸운다. 메인 총알만 보유(강화 10단계로 부채꼴이 넓어짐, 따뜻한 색 별 모양 = 플레이어 냉색 빔과 구분). 아이템 공유(누가 먹든 나 계통 + 친구 메인 함께 강화), 점수 공유. HP 하트 5개(플레이어와 별개 풀) - 피해는 각자, 회복(H)은 공유, hp 0 기절 후 H로 부활(level 유지). 강화 정보 HUD 미표시. `core/friend.js` 신설(순수), world 연동(stepFriend·grabItem 공유·개별 피격), view drawFriend/drawFriendShot, numbers/colors friend, kind 'fmain'. 일반 모드 무영향. core 101 PASS + 캡처(등장 말풍선·만렙 부채·일반 모드 무친구).
 - 진행/완료/다음 작업은 `PROGRESS.md` 참조.

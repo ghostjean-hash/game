@@ -93,4 +93,10 @@ export const COLORS = {
   // 캐릭터: 플레이어 = 와라와라(하얀 둥근 정령), 옵션기 = 토토로(회색). 작은 실루엣으로 표현.
   warawara: '#f6f8ff', warawaraGlow: '#dfe7ff', warawaraEye: '#33343d',
   totoro: { laser: '#9aa0ab', missile: '#6b7280', belly: '#e6e8ec', eye: '#2b2b30' },
+  // 친구 비행기(어린이 모드, docs/09). 몸은 따뜻한 코랄(플레이어 흰색·토토로 회색과 구분).
+  //   shot = 메인 총알(별 모양) 단계별 색 - 골드→핑크 따뜻한 계열(플레이어 냉색 빔, 적 빨간 탄과 색·형태로 구분).
+  friend: {
+    body: '#ff9e7a', glow: '#ffd0a8', eye: '#3a2418', hpPip: '#ff6b81',
+    shot: ['#ffd36b', '#ffc44d', '#ffb84d', '#ffa85c', '#ff9ab0', '#ff8fc0', '#ffb0d8', '#ffd08a', '#ffe08a', '#fff0c4', '#ffffff'],
+  },
 };

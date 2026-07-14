@@ -704,3 +704,28 @@
 - 보스 강화(일반 모드 후반 보스가 물렁): 근본 원인 진단·방향 확정(보스 hp가 잡몹과 달리 후반 배수 hardStage×1.35·voidStage×1.7를 못 받고 선형만 → 만렙 화력에 순삭)했으나 구현은 미착수(세션 중 AI 개선으로 화제 전환). '일반 모드만 vs 일반·어린이 공통' 사용자 답 대기. 처방안: spawn.js totalHp에 후반 배수 적용(일반 모드 game.difficulty!=='kid' 한정) + 최종보스 hp 역전 방지.
 - 배포(SW 버전 갱신 + push): 이번 봉합은 flightshooting 소스 commit+push까지. GitHub Pages 화면 반영(web-deploy)은 사용자 지시 대기. AI 개선은 실플레이로 확인 후 강도 조정(DEPTH 3·지평 확대) 여지.
 - 타 영역 미커밋 변경: lotto 다수·루트 CLAUDE.md·games/_registry.json·scripts/fetch-lotto-draws.bat가 이번 세션과 무관하게 워킹트리에 있음(다른 작업/자동화 추정). 이번 봉합에서 미포함.
+
+## 2026-07-14 - 어린이 모드 친구 비행기 (플랜→기획→구현→테스트 하네스 루프)
+
+### 사용자 지시
+어린이 모드에서 친구 비행기 신설. (1) 말풍선으로 "안녕/난 친구야/같이 게임하자"처럼 자연스럽게 이야기하며 등장, 함께 적을 물리침. (2) 아이템 공유 - 친구가 먹어도 내가 강화, 내가 먹어도 친구가 강화(서로서로). (3) 친구는 사이드·꼬리 비행기 없이 메인 총알만. 대신 메인이 각 강화당 10단계라 나보다 더 넓게 앞으로 쏨. 나와 총알 모양이 전부 달라 옆에서 구경하는 재미. (4) 친구 강화 정보는 따로 표시 안 함. (5) 점수 공유. (6) HP 하트 5개, 회복은 나와 공유하되 총알 피해는 각자.
+
+### 착수 전 해석 확정(지난 세션 오해석 disaster 재발 방지)
+- 해석 갈리는 핵심 3점을 AskUserQuestion으로 착수 전 확정: (1) 강화 공유 범위 = 모든 아이템 공유(P·S·E·T 누가 먹든 나 계통 + 친구 메인 +1). (2) 친구 hp 0 = 사라졌다가 H로 부활. (3) 이동 = 내 옆 자율 유영(가까운 적 조준). 나머지(총알은 내 냉색 빔과 완전 다른 따뜻한 별 모양, 등장 말풍선 3개, 강화 HUD 미표시, 점수 공유)는 지시대로 확정 진행.
+
+### 처방·산출물
+- **기획 SSOT** `docs/09_friend.md` 신설(등장·이동·무기 10단계·아이템 공유·HP/피격·부활·구현 위치·테스트).
+- **수치/색** numbers.js `CFG.friend`(hp5·level 0~10·발수 base+level·부채각 base+level*per·데미지·등장/말풍선 타이밍·부활 메시지), colors.js `COLORS.friend`(코랄 몸 + 골드→핑크 별 총알 11색).
+- **순수 로직** `core/friend.js` 신설: spawnFriend(왼쪽 밖에서 등장)/stepFriend(옆 유영+적 조준 끌림+흔들림, 말풍선 순차, enter 중 발사 대기, 발사)/gainFriendLevel/friendTakeHit(기절)/reviveFriend/nearestEnemyX. DOM/오디오 미의존, game.sfx로만 신호.
+- **world 연동** world.js: stepWorld에 stepFriend 호출. grabItem 재구성 - P·S·E·T는 내 계통 gainX + (친구 있으면) gainFriendLevel 함께(둘 중 하나만 올라도 성공), H는 부활/나·친구 각각 회복 공유. checkCollisions 아이템 획득에 친구 닿음 포함(1회), 친구 개별 피격(플레이어 무적과 독립, 친구 맞으면 친구 hp만·내 목숨 불변, 치트 무적은 친구도 보호).
+- **렌더** view.js: drawFriend(코랄 몸+눈+미소, hp 점 5개, 말풍선 둥근 사각형+꼬리), drawFriendShot(별 반짝이 - star 헬퍼 재사용), drawBullets에 kind 'fmain' 분기. 총알 데미지·충돌은 기존 정면 화력 경로 그대로(부위·코어 타격, 방패병 막힘) - 특례 없음.
+- **생성/dev** main.js: createGame·resetGame friend null, 어린이 모드 startGame에서 spawnFriend. dev 훅 `friendlv`(친구 레벨 즉시)·`kid`(어린이 모드 시작)·nointro가 친구 등장/말풍선 건너뛰기. 일반 모드는 friend null 유지(전 코드 inert).
+
+### 검증
+- core **101/101 PASS**(browser-shot dev-server http 로드, console "101/101 PASS"). 기존 89 + 친구 12(생성·레벨 상한·발사 넓어짐·kind fmain·enter 중 미발사·아이템 양방향 공유·개별 피격·기절·H 공유 회복·부활·일반 모드 무영향).
+- 실화면 캡처 3장: (1) 만렙(friendlv=10) 친구가 플레이어 왼쪽에서 별 총알을 넓은 부채로 발사(플레이어 시안 빔과 뚜렷이 구분, hp 점 5개, 웃는 얼굴). (2) 등장 말풍선 "안녕!" 정상 표시. (3) 일반 모드는 친구 없음 + 하트 3개(회귀 없음). JS 에러 0(오디오 경고·favicon 404만).
+- 산출물 이행 대조(#392): 지시 6항 전부 1:1 확인 - 말풍선 등장·아이템 양방향 공유·메인만(사이드/꼬리 없음)·10단계 넓은 부채·다른 총알 모양·강화 HUD 미표시·점수 공유·hp5 각자 피해/공유 회복. 오해석 0, 누락 0.
+
+### 미해결(사용자 결정 대기)
+- 배포(SW 캐시 버전 갱신 + GitHub Pages 반영, web-deploy): 이번 루프는 구현·테스트까지. 실기기 반영은 사용자 지시 대기(commit·push 포함 여부도).
+- 밸런스 체감(친구 부채각 80°가 과하게 넓은지, 데미지 세기): 실플레이 영역 - 필요 시 spreadPer·dmgGrow 조정.
