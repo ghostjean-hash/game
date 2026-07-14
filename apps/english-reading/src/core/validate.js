@@ -5,6 +5,15 @@ import { chunkViolations } from "./chunking.js";
 
 const norm = (t) => String(t).toLowerCase().replace(/[^a-z]/g, "");
 
+// 아이폰 등 모바일 키보드는 붙여넣을 때 직선 따옴표(" ')를 곡선(" " ' ')으로 바꾼다.
+// JSON은 직선 큰따옴표만 허용하므로 곡선을 직선으로 되돌려 JSON.parse가 깨지지 않게 한다.
+// 값 안에 일부러 넣은 곡선 따옴표도 직선이 되지만 뜻·구조에는 영향이 없다.
+export function normalizeSmartQuotes(s) {
+  return String(s)
+    .replace(/[“”„‟″‶]/g, '"')
+    .replace(/[‘’‚‛′‵]/g, "'");
+}
+
 // 반환: { ok, errors: [{ where, msg }] } - where는 사람이 읽는 위치("2번째 문장" 등)
 export function validatePassage(p) {
   const errors = [];

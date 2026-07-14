@@ -6,7 +6,7 @@ import { dirname, join } from "node:path";
 import { tokenize, resolveTargets } from "../src/core/tokenize.js";
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
 import { chunkBoundaries, gradeSlashes, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
-import { validatePassage } from "../src/core/validate.js";
+import { validatePassage, normalizeSmartQuotes } from "../src/core/validate.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 let failures = 0;
@@ -173,6 +173,14 @@ function check(name, cond, detail = "") {
   check("validate: grammar 없으면 검출", !validatePassage(noGrammar).ok);
 
   check("validate: 문장 없으면 검출", !validatePassage({ id: "x", level: 1, title: "T", titleKr: "가", sentences: [] }).ok);
+
+  // 모바일(아이폰) 곡선 따옴표 정규화 - 붙여넣기 시 "가 곡선으로 바뀌어 JSON.parse가 깨지던 것
+  const smart = '{ “id”: “test”, “level”: 1 }';
+  check("normalizeSmartQuotes: 곡선 따옴표 → 직선 후 파싱 성공", (() => {
+    try { const o = JSON.parse(normalizeSmartQuotes(smart)); return o.id === "test" && o.level === 1; }
+    catch { return false; }
+  })());
+  check("normalizeSmartQuotes: 직선 따옴표는 그대로", normalizeSmartQuotes('{"a":1}') === '{"a":1}');
 }
 
 // ── passages.json 데이터 무결성 ──────────────────────────────

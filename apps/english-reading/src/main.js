@@ -3,7 +3,7 @@
 import { tokenize } from "./core/tokenize.js";
 import { createCourse, courseProgress } from "./core/course.js";
 import { chunkBoundaries, gradeSlashes, chunkReasons } from "./core/chunking.js";
-import { validatePassage } from "./core/validate.js";
+import { validatePassage, normalizeSmartQuotes } from "./core/validate.js";
 import { createStorage } from "../../../shared/storage.js";
 import { registerServiceWorker } from "../../../shared/ui.js";
 
@@ -645,7 +645,8 @@ function renderAuthor() {
   checkBtn.onclick = () => {
     addBtn.hidden = true; validObj = null;
     let obj;
-    try { obj = JSON.parse(input.value); }
+    // 모바일(아이폰)이 붙여넣기 때 바꿔 넣는 곡선 따옴표를 직선으로 되돌린 뒤 파싱한다.
+    try { obj = JSON.parse(normalizeSmartQuotes(input.value)); }
     catch (e) { showAuthorResult(result, false, [{ where: "형식", msg: "JSON 형식이 아닙니다. 챗봇이 JSON만 출력했는지 확인하세요." }]); return; }
     const res = validatePassage(obj);
     if (res.ok) {
