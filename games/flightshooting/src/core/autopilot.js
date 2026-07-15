@@ -39,7 +39,7 @@ const OFFS = [
 
 // 시뮬레이션에 넣을 위협 목록. 각 위협의 미래 위치를 posAt로 정확히 재현할 수 있게 형태를 담는다.
 // k=0: 등속 직선(적탄·직하 적·보스). k=1: weaver(좌우 사인 흔들 + 낙하).
-function collectThreats(game) {
+export function collectThreats(game) {
   const out = [];
   const br = CFG.enemyBullet.r;
   for (const b of game.eBullets)
@@ -63,7 +63,7 @@ function collectThreats(game) {
 // 절대 시각(두 번째 수는 tOff=seg로 넘겨 위협의 미래 위치를 이어서 계산). 반환:
 //   { t: 이 수 안에서 산 시간(충돌 시 그 시각, 무사하면 segT), x·y: 수 끝(또는 충돌) 지점 }.
 // t가 클수록 안전하고, 끝 지점(x,y)은 다음 수의 출발점이 된다.
-function simulate(threats, tg, sx, sy, step, W, H, pr, segT, tOff) {
+export function simulate(threats, tg, sx, sy, step, W, H, pr, segT, tOff) {
   let x = sx, y = sy;
   const steps = Math.round(segT / SIM_DT);
   for (let k = 1; k <= steps; k++) {
@@ -85,7 +85,7 @@ function simulate(threats, tg, sx, sy, step, W, H, pr, segT, tOff) {
 
 // 목표 지점 주변 '여유 공간': 가장 가까운 위협까지의 거리(현재 위치 기준). 넓을수록 위협 없는 빈 공간이다.
 //   위협이 대부분 아래에 몰려 있으면 위쪽 지점의 여유가 커져, AI가 자연히 위쪽 빈 공간으로 올라간다.
-function clearanceAt(threats, tx, ty) {
+export function clearanceAt(threats, tx, ty) {
   let mind = Infinity;
   for (const th of threats) {
     const ox = th.k === 1 ? th.baseX : th.x;
@@ -104,9 +104,18 @@ function gauss() {
 
 // 목표 지점 '결정'(무거운 시뮬레이션 포함). 실력 티어(tier)마다 주기마다만 호출한다.
 // tier(있으면): sim=예측 지평, aimDeg=조준 각오차, threats=동시 고려 위협 수. 없으면 기존 완벽 동작(테스트용).
+// actor: 판단 주체 기체({x,y,r}). 생략 시 game.player(플레이어 자동조종). 친구 비행기(어린이 모드)는
+//   자기 기체를 넘겨 같은 빔서치로 회피·조준한다(docs/09). game 공유 자원(적·탄·파워업·목숨)은 그대로 참조.
 // 반환 { x, y, safe }: 갈 목표점 + 완전 생존(위협 없음) 여부.
-function decideTarget(game, W, H, pr, homeY, tier) {
-  const p = game.player;
+// opts.clearWhenSafe(기본 true): 안전할 때도 빈 공간(위협 없는 곳)을 선호할지. 플레이어는 true(불필요한
+//   피격 회피). 친구(어린이 모드)는 false로 넘겨, 안전할 땐 빈 구석으로 도망가지 않고 적을 조준하러 간다
+//   (무기 발사가 목적). 위험할 때(inDanger)의 회피는 옵션과 무관하게 항상 작동한다 = 회피 판단은 동일.
+// opts.mate(있으면): 분담 상대 기체(친구의 경우 플레이어). 화면 좌우를 나눠 서로 다른 쪽 적을 맡고, 상대가
+//   노리는 아이템은 양보한다(협력 분담, 사용자 지시). 친구는 보스전이 아닐 때만 넘긴다(보스전엔 둘 다 집중).
+export function decideTarget(game, W, H, pr, homeY, tier, actor, opts) {
+  const p = actor || game.player;
+  const clearWhenSafe = opts ? opts.clearWhenSafe !== false : true;
+  const mate = opts ? opts.mate : null;
   const simT = tier ? tier.sim : SIM_T;
   const aimDeg = tier ? tier.aimDeg : 0;
   const threatLim = tier ? tier.threats : Infinity;
@@ -130,8 +139,17 @@ function decideTarget(game, W, H, pr, homeY, tier) {
   // 조준 표적 선정: 보너스 기체(파워업 원천, 놓치면 성장 불가)를 최우선, 없으면 가장 가까운 위쪽 적.
   let bonus = null;
   for (const e of game.enemies) { if (e.type === 'bonus') { bonus = e; break; } }
-  let tgt = bonus, ty = -Infinity;
-  if (!tgt) { for (const e of game.enemies) { if (e.y < p.y - AIM_MARGIN && e.y > ty) { ty = e.y; tgt = e; } } }
+  let tgt = bonus;
+  if (!tgt) {
+    let bestSc = -Infinity;
+    for (const e of game.enemies) {
+      if (e.y >= p.y - AIM_MARGIN) continue;
+      let sc = e.y; // 아래일수록(친구에 가까울수록) 우선
+      // 분담: 상대(플레이어)와 화면 같은 반쪽에 있는 적은 후순위 → 반대쪽 적을 맡는다(반대쪽이 없으면 결국 선택).
+      if (mate && (e.x - W / 2) * (mate.x - W / 2) > 0) sc -= H;
+      if (sc > bestSc) { bestSc = sc; tgt = e; }
+    }
+  }
   if (!tgt && game.boss && !game.boss.entering) tgt = game.boss;
   if (tgt) {
     // 예측 조준(lead): 총알이 표적에 닿을 시간만큼 표적의 가로 이동을 미리 겨냥한다(빠른 보너스 기체 명중률↑).
@@ -143,11 +161,18 @@ function decideTarget(game, W, H, pr, homeY, tier) {
     targets.push({ x: clamp(leadX, pr, W - pr), y: homeY, bonus: tgt === bonus ? AIM_BONUS * 2 : AIM_BONUS });
   }
 
+  // 분담: 상대(플레이어)가 가장 가까이서 노리는 아이템 하나는 양보한다(내가 먹으러 가면 키위새는 다른 걸, 사용자 지시).
+  let mateItem = null;
+  if (mate && game.powerups.length > 1) {
+    let md = Infinity;
+    for (const it of game.powerups) { const d = Math.hypot(it.x - mate.x, it.y - mate.y); if (d < md) { md = d; mateItem = it; } }
+  }
   // 파워업: 목숨이 이미 최대면 회복 하트(H)는 무시(먹으러 갈 이유가 없다). 이미 아래로 지나친 것도 제외.
   // 남은 것 중 가장 가까운 하나를 실제 위치(세로 포함)로 향해 마중 나간다.
   let pu = null, pd = Infinity;
   const full = game.lives >= (game.maxLives || CFG.player.maxLives);
   for (const it of game.powerups) {
+    if (it === mateItem) continue; // 상대 몫 양보(분담) - 아이템이 하나뿐이면 양보 안 함(위 length>1 조건)
     if (it.kind === 'H' && full) continue;
     if (it.y > p.y + 40) continue;
     const d = Math.hypot(it.x - p.x, it.y - p.y);
@@ -199,7 +224,7 @@ function decideTarget(game, W, H, pr, homeY, tier) {
       //   강하게(도피 우선). 안전할 땐 약하게(×0.35) 반영하되 '위협이 여럿일 때만' - 탄 하나가 멀리
       //   있는 상황에서까지 미세 이동해 떨리지 않게 게이트를 둔다.
       const clr = (clearanceAt(threats, tg.x, tg.y) / H) * CLEAR_BONUS * threatFactor;
-      if (inDanger) s += clr; else if (threats.length >= 3) s += clr * 0.35;
+      if (inDanger) s += clr; else if (threats.length >= 3 && clearWhenSafe) s += clr * 0.35;
     }
     if (s > best) { best = s; bx = tg.x; by = tg.y; }
   }

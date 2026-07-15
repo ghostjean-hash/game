@@ -71,28 +71,43 @@ export const CFG = {
       missileR: 2.6, missileRGrow: 0.16, missileDmgBase: 3, missileDmgGrow: 1.5, // base↑(0강화 가시성)·grow↓로 만렙 크기는 유지
     },
   },
-  // 친구 비행기(어린이 모드 전용, docs/09_friend.md). 메인 총알만 있고 강화 10단계로 부채꼴이 넓어진다.
+  // 친구 비행기(어린이 모드 전용, docs/09_friend.md). 키위새 모양. 회색 직선 레이저만 쏜다(강화 10단계).
   //   아이템은 플레이어와 공유(누가 먹든 level +1). hp 5개(플레이어 목숨과 별개). 피해는 각자, 회복(H)은 공유.
   friend: {
     maxHp: 5, levelMax: 10, startLevel: 0, r: 12,
-    // 완전 독립 유영(플레이어 무관, 사용자 지시). 자기 세로 밴드(homeYRatio)에서 가까운 적 x로 스스로 이동.
-    homeYRatio: 0.72, // 친구가 머무는 세로 위치. 플레이어(0.82)보다 위 = 별도 줄이라 겹쳐 헷갈리지 않는다
-    follow: 3,        // 자기 목표로 이동하는 속도(초당 비율)
-    bobSpeed: 3.2, bobAmp: 10, // 위아래 살짝 흔들림
-    enterTime: 1.2,   // 날아 들어오는 동안(이 시간 지나야 발사 시작)
-    reEnterTime: 0.6, // 부활 시 재정렬 시간
-    inv: 1.2,         // 피격 후 무적(초)
-    fireEvery: 0.22,  // 발사 주기
-    bulletSpeed: 340,
-    // 발 수 = shotsBase + level*shotsPerLevel(1~11), 총 부채각(도) = spreadBase + level*spreadPer.
-    //   부채각은 좁게(사용자 "좌우로 너무 퍼진다") - 앞으로 모아 쏘되 레벨↑에 살짝만 넓어진다(만렙 ≈ 25도).
-    shotsBase: 1, shotsPerLevel: 1, spreadBase: 5, spreadPer: 2,
-    bulletR: 3, bulletRGrow: 0.12, dmgBase: 1, dmgGrow: 0.6, // 총알 크기 최소(사용자 "안 헷갈리게 최소로")
+    startXRatio: 0.16, // 등장 시작 x(화면 폭 비율). 화면 안 왼쪽 = 밖으로 안 나간다(사용자 지시)
+    // 이동: 플레이어 자동조종과 같은 빔서치 AI로 회피+조준(docs/09 3장). 이동 속도는 플레이어와 동일(CFG.player.speed).
+    homeYRatio: 0.80, // 친구가 머무는 세로 위치(화면 하단부 = 적 경로 끝자락). 여기서 조준+회피가 양립한다.
+                      // 너무 위(적 경로 한복판)면 늘 위험 판정이라 회피만 하고 조준을 못 한다(플레이어 0.82 바로 위)
+    decideEvery: 0.15, // 목표를 새로 계산하는 주기(초). 그 사이엔 정한 방향 유지(플레이어 AI와 동일)
+    aiDeadzone: 12,    // 안전할 때 이 픽셀 이내 목표 편차는 무시(떨림 방지)
+    aiSim: 0.7,        // 앞을 내다보는 시간(초). 플레이어(1.5)보다 짧게 = 먼 적은 위협으로 안 보고 조준 유지,
+                       //   코앞 위협만 회피(hp 5개라 좀 더 대담하게 싸운다). 너무 짧으면 회피 늦어 잘 맞는다
+    enterTime: 1.2,    // 날아 들어오는 동안(이 시간 지나야 발사 시작)
+    reEnterTime: 0.6,  // 부활 시 재정렬 시간
+    inv: 1.2,          // 피격 후 무적(초)
+    // 발사: 회색 직선 발사체(부리 모양, 부채 확산 없음). 발 수 = min(shotsMax, shotsBase+level)(최대 4).
+    //   강화해도 개별 총알 외형(길이·색·크기)은 고정, 발 수와 데미지만 증가(사용자 지시). 만렙에서도 직선 유지.
+    //   발사 속도는 플레이어 메인 총알과 동일(CFG.bullet.speed - 별도 값 두지 않음, 사용자 지시).
+    fireEvery: 0.22,
+    shotsBase: 1, shotsMax: 4, laneGap: 11, // 발사체 최대 4발(사용자 지시). laneGap = 나란한 발사체 사이 가로 간격
+    beamW: 2.6, beamLen: 24, // 발사체 폭(충돌 반경)·길이 - 강화해도 고정(외형 불변, 사용자 지시)
+    dmgBase: 1, dmgGrow: 0.6, // 데미지만 강화로 증가(파워)
+    mergeDist: 20, mergeRadius: 11, // 플레이어 메인 총알과 겹칠 때 합체 발광: 이 거리 안이면 중간에 발광(반경)
     speech: ['안녕!', '난 친구야', '같이 게임하자!'], speechEach: 1.1,
-    reviveMsg: '다시 왔어!', reviveMsgTime: 1.4,
-    // 플레이 중 가끔 이야기(사용자 지시): chatterEvery(+jitter)마다 한 줄을 chatterShowTime 동안 말풍선으로.
-    chatter: ['좋아 좋아!', '이겨보자!', '내가 도와줄게', '잘한다!', '조심해!', '거의 다 왔어!', '재밌다!', '같이 하니까 좋아'],
-    chatterEvery: 6, chatterJitter: 4, chatterShowTime: 1.6,
+    // 대사 3종(사용자 지시 - 앵무새 반복 금지). 상황마다 다양한 표현에서 매번 다르게 고른다.
+    // 1) 맞았을 때  2) 플레이어가 살려줬을 때  3) 적을 연달아 잡아 잘했을 때.
+    hitMsgs: ['아야!', '으악 맞았어!', '아 따가워!', '방금 위험했다!', '큭... 아직 버텨!', '아파아파!', '조심했어야 했는데!', '괜찮아, 쌩쌩해!'],
+    hitMsgTime: 1.3,
+    reviveMsgs: ['다시 왔어!', '고마워, 살려줘서!', '덕분에 살았어!', '역시 넌 최고야!', '다시 힘내볼게!', '이제 갚아줄 차례야!', '부활 완료!', '너 없으면 큰일 날 뻔!'],
+    reviveMsgTime: 1.4,
+    // 잘했을 때: 짧은 시간(praiseWindow) 안에 적 praiseKills마리 이상 처치 + 마지막 칭찬 후 praiseCooldown초
+    //   지났을 때만 칭찬 한 줄(연달아 쏟아지지 않게). 강화되면 적을 우수수 잡아 자주 나오던 걸 억제.
+    praiseMsgs: ['우와 잘한다!', '완전 멋져!', '대박이야!', '이 기세로 가자!', '너 진짜 잘한다!', '적들이 쓸려나가!', '환상적이야!', '역시 에이스!'],
+    praiseShowTime: 1.5, praiseKills: 8, praiseWindow: 2.5, praiseCooldown: 12,
+    // 평상시 잡담(인트로 후 가끔): chatterEvery(+jitter)마다 한 줄을 chatterShowTime 동안. 너무 잦지 않게 뜸하게.
+    chatter: ['좋아 좋아!', '이겨보자!', '내가 도와줄게', '재밌다!', '같이 하니까 좋아', '거의 다 왔어!', '집중하자!', '우리 팀 최고!'],
+    chatterEvery: 18, chatterJitter: 12, chatterShowTime: 1.6,
   },
   // 적 종류별 수치 (speed = 세로 낙하 속도, amp = weaver 가로 흔들 폭). 색은 colors.js.
   // bonus = 보너스 기체: 화면을 가로질러(speed = 가로 이동 속도) 지나가며, 잡으면 파워업 확정 드롭.

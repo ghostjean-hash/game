@@ -12,6 +12,7 @@ export function render(ctx, game, W, H) {
   drawBoss(ctx, game);
   drawEnemyBullets(ctx, game);
   drawBullets(ctx, game);
+  drawShotMerge(ctx, game);   // 플레이어 메인 총알 + 친구 발사체 겹침 시 합체 발광(어린이 모드)
   drawTail(ctx, game);        // 뒤쪽 꼬리 비행기(플레이어보다 먼저 = 뒤에 깔림)
   drawOptions(ctx, game);     // 좌우 부속 비행기
   drawPlayer(ctx, game);
@@ -19,7 +20,8 @@ export function render(ctx, game, W, H) {
   drawParticles(ctx, game);
 }
 
-// 친구 비행기(어린이 모드, docs/09): 따뜻한 코랄 몸 + 눈·미소 + hp 점 + 말풍선. 기절 중엔 안 그린다.
+// 친구 비행기(어린이 모드, docs/09): 갈색 키위새(통통한 몸 + 긴 부리 + 작은 날개 + 눈) + hp 점 + 말풍선.
+//   기절 중엔 안 그린다. 위(-y)가 나아가는 방향이라 부리를 앞(위)으로 길게 뻗는다.
 function drawFriend(ctx, game) {
   const f = game.friend;
   if (!f || f.down) return;
@@ -30,19 +32,20 @@ function drawFriend(ctx, game) {
   ctx.translate(f.x, f.y);
   ctx.shadowColor = c.glow;
   ctx.shadowBlur = 10;
+  // 작은 날개 2개(몸 양옆, 살짝 벌림)
   ctx.fillStyle = c.body;
-  // 작은 날개 2개
-  ctx.beginPath(); ctx.ellipse(-r * 0.95, r * 0.15, r * 0.5, r * 0.28, -0.4, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(r * 0.95, r * 0.15, r * 0.5, r * 0.28, 0.4, 0, Math.PI * 2); ctx.fill();
-  // 둥근 몸통
-  ctx.beginPath(); ctx.ellipse(0, 0, r, r * 1.05, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(-r * 0.82, r * 0.2, r * 0.42, r * 0.62, -0.35, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(r * 0.82, r * 0.2, r * 0.42, r * 0.62, 0.35, 0, Math.PI * 2); ctx.fill();
+  // 통통한 몸통(키위새 - 아래로 볼록한 서양배꼴)
+  ctx.beginPath(); ctx.ellipse(0, r * 0.12, r * 0.92, r * 1.08, 0, 0, Math.PI * 2); ctx.fill();
   ctx.shadowBlur = 0;
-  // 눈 2개 + 미소
+  // 긴 부리(위로 뻗은 가느다란 삼각 - 키위새 특징)
+  ctx.fillStyle = c.beak;
+  ctx.beginPath(); ctx.moveTo(-r * 0.16, -r * 0.72); ctx.lineTo(0, -r * 1.95); ctx.lineTo(r * 0.16, -r * 0.72); ctx.closePath(); ctx.fill();
+  // 눈 2개
   ctx.fillStyle = c.eye;
-  ctx.beginPath(); ctx.arc(-r * 0.34, -r * 0.12, 1.6, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(r * 0.34, -r * 0.12, 1.6, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = c.eye; ctx.lineWidth = 1.4;
-  ctx.beginPath(); ctx.arc(0, r * 0.08, r * 0.4, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+  ctx.beginPath(); ctx.arc(-r * 0.3, -r * 0.28, 1.9, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(r * 0.3, -r * 0.28, 1.9, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
   drawFriendHp(ctx, f);
   drawFriendSpeech(ctx, f);
@@ -79,20 +82,46 @@ function drawFriendSpeech(ctx, f) {
   ctx.restore();
 }
 
-// 친구 메인 총알: 따뜻한 색 별/반짝이(플레이어 냉색 빔·적 빨간 탄과 형태·색으로 구분). 레벨별 색.
+// 친구 발사체: 키위새 부리 모양(위로 뾰족한 가느다란 삼각, drawFriend 부리와 동일 실루엣). 어두운 회색 + 절제된 코어.
+//   b.len = 길이(부리 높이), b.r = 폭(밑변 반)·충돌 반경.
 function drawFriendShot(ctx, b) {
-  const lv = b.level || 0;
-  const arr = COLORS.friend.shot;
-  const col = arr[Math.min(lv, arr.length - 1)];
-  const R = b.r;
-  const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+  const col = COLORS.friend.shot; // 단일 색(강화해도 외형 불변 - 사용자 지시)
+  const w = b.r, len = b.len || w * 4;
   ctx.save();
   ctx.translate(b.x, b.y);
-  ctx.rotate(ang);
+  // 부리 삼각(위로 뾰족)
   ctx.fillStyle = col;
-  star(ctx, 5, R * 1.4, R * 0.62); // 5각 반짝이(사이드 총알 star 헬퍼 재사용)
-  ctx.fillStyle = COLORS.friend.shotCore; // 흐린 코어(흰색 대신 - 눈부심 제거)
-  ctx.beginPath(); ctx.arc(0, 0, R * 0.34, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-w, 0); ctx.lineTo(0, -len); ctx.lineTo(w, 0); ctx.closePath(); ctx.fill();
+  // 안쪽 코어 삼각(가늘게, 어둡게 - 눈부심 억제)
+  ctx.globalAlpha = 0.7;
+  ctx.fillStyle = COLORS.friend.shotCore;
+  ctx.beginPath(); ctx.moveTo(-w * 0.42, -len * 0.12); ctx.lineTo(0, -len * 0.82); ctx.lineTo(w * 0.42, -len * 0.12); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+// 합체 발광: 플레이어 메인 총알과 친구 발사체가 겹치면(가까우면) 두 총알 중간에 은은한 융합 발광을 얹는다
+//   (사용자 "겹치면 살짝 합체된 모습"). 로직 없이 렌더만 - 총알은 각자 그대로 날아간다. drawBullets 뒤에 호출.
+function drawShotMerge(ctx, game) {
+  const isMain = (b) => !b.dead && b.kind !== 'laser' && b.kind !== 'missile' && b.kind !== 'fmain';
+  const mains = game.bullets.filter(isMain);
+  const friends = game.bullets.filter((b) => b.kind === 'fmain' && !b.dead);
+  if (!mains.length || !friends.length) return;
+  const R = CFG.friend.mergeDist;
+  ctx.save();
+  for (const f of friends) {
+    for (const m of mains) {
+      const dx = f.x - m.x, dy = f.y - m.y, d2 = dx * dx + dy * dy;
+      if (d2 >= R * R) continue;
+      const t = 1 - Math.sqrt(d2) / R;                 // 가까울수록 강하게
+      const mx = (f.x + m.x) / 2, my = (f.y + m.y) / 2; // 두 총알 사이
+      const rad = CFG.friend.mergeRadius * (0.6 + 0.4 * t);
+      const g = ctx.createRadialGradient(mx, my, 0, mx, my, rad);
+      g.addColorStop(0, `rgba(210,240,255,${0.55 * t})`); // 시안(플레이어)+흰 융합
+      g.addColorStop(1, 'rgba(210,240,255,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(mx, my, rad, 0, Math.PI * 2); ctx.fill();
+    }
+  }
   ctx.restore();
 }
 

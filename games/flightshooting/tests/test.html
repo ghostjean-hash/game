@@ -343,10 +343,25 @@ test('gainFriendLevel 10에서 상한', () => {
   let n = 0; while (gainFriendLevel(g)) n++;
   eq(g.friend.level, CFG.friend.levelMax); eq(n, CFG.friend.levelMax - CFG.friend.startLevel);
 });
-test('친구 발사: 레벨 높을수록 더 많은(넓은) 탄', () => {
+test('친구 발사: 레벨 높을수록 더 많은 레이저', () => {
   const mk = (lv) => { const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.enterTimer = 0; g.friend.fireTimer = 0; g.friend.level = lv; stepFriend(g, 0.02, 500, 1000, true); return g.bullets.length; };
-  ok(mk(5) > mk(0), '레벨5가 레벨0보다 많은 탄');
+  ok(mk(5) > mk(0), '레벨5가 레벨0보다 많은 레이저');
   eq(mk(0), CFG.friend.shotsBase, '레벨0 = 기본 발수');
+});
+test('친구 발사체 발 수 최대 4(그 위는 길이만)', () => {
+  const mk = (lv) => { const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.enterTimer = 0; g.friend.fireTimer = 0; g.friend.level = lv; stepFriend(g, 0.02, 500, 1000, true); return g.bullets.length; };
+  eq(mk(3), CFG.friend.shotsMax, '레벨3 = 4발');
+  eq(mk(9), CFG.friend.shotsMax, '레벨9도 4발(상한)');
+});
+test('친구 만렙(10)도 직선 발사체 4발(전면 벽 전환 없음)', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.enterTimer = 0; g.friend.fireTimer = 0; g.friend.level = CFG.friend.levelMax;
+  stepFriend(g, 0.02, 500, 1000, true);
+  eq(g.bullets.length, CFG.friend.shotsMax, '만렙 4발'); ok(g.bullets.every((b) => b.kind === 'fmain' && !b.wall && b.vx === 0), '직선(벽 아님)');
+});
+test('친구 직선 레이저: 수평 확산 없음(vx=0)', () => {
+  const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.enterTimer = 0; g.friend.fireTimer = 0; g.friend.level = 5;
+  stepFriend(g, 0.02, 500, 1000, true);
+  ok(g.bullets.every((b) => b.vx === 0 && b.vy < 0), '모든 레이저가 곧게 위로(직선)');
 });
 test('친구 탄 kind = fmain', () => {
   const g = friendGame(); spawnFriend(g, 500, 1000); g.friend.enterTimer = 0; g.friend.fireTimer = 0; g.friend.level = 3;
@@ -400,12 +415,12 @@ test('기절한 친구는 H로 부활(hp 풀·down 해제)', () => {
   checkCollisions(g, 500, 1000);
   eq(g.friend.down, false, '부활'); eq(g.friend.hp, g.friend.maxHp, '풀피 회복');
 });
-test('친구 완전 독립: 가까운 적 x로 이동(플레이어 위치 무관)', () => {
+test('친구 빔서치 AI: 적 쪽으로 스스로 이동(플레이어 위치 무관)', () => {
   const g = friendGame(); spawnFriend(g, 500, 1000);
   g.friend.enterTimer = 0; g.friend.x = 250; g.player.x = 250; g.player.y = 800; // 플레이어는 가운데 고정
   g.enemies = [{ x: 430, y: 300, r: 15 }]; // 오른쪽 위 적
   for (let i = 0; i < 50; i++) stepFriend(g, 0.05, 500, 1000, true);
-  ok(g.friend.x > 360, '친구가 적(430) 쪽으로 스스로 이동(플레이어 250 무관)');
+  ok(g.friend.x > 360, '친구가 적(430)을 조준하러 스스로 이동(플레이어 250 무관)');
 });
 test('일반 모드(friend=null)는 아이템 공유·피격 영향 없음', () => {
   const g = friendGame({ friend: null }); // 친구 없음

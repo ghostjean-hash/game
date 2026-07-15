@@ -5,7 +5,7 @@ import { CFG } from '../data/numbers.js';
 import { COLORS } from '../data/colors.js';
 import { playerFire, enemyFireAt } from './fire.js';
 import { stepOptions, stepTail, homeMissiles, tickZone, gainFront, gainOption, gainZone, gainTail, loseLastPart } from './parts.js';
-import { stepFriend, friendTakeHit, gainFriendLevel, reviveFriend } from './friend.js';
+import { stepFriend, friendTakeHit, gainFriendLevel, reviveFriend, notifyFriendKill } from './friend.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
 import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, dropMaybe, burst, fieldBounds, syncBossParts } from './spawn.js';
@@ -341,6 +341,7 @@ function grabItem(game, kind) {
     for (const e of game.enemies) {
       burst(game, e.x, e.y, e.color, 12);
       game.score += e.score;
+      notifyFriendKill(game); // 어린이 모드: 연속 처치 칭찬 신호(친구 없으면 무시)
       // 봄으로 죽어도 보너스 기체는 파워업 확정 드롭(잡몹은 드롭 없음 - 봄이 과해지지 않게).
       if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount);
     }
@@ -380,6 +381,7 @@ export function checkCollisions(game, W, H) {
         if (e.hp <= 0) {
           e.dead = true;
           game.score += e.score;
+          notifyFriendKill(game); // 어린이 모드: 연속 처치 칭찬 신호(친구 없으면 무시)
           burst(game, e.x, e.y, e.color, 14);
           if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체 확정 드롭
           else dropMaybe(game, e.x, e.y); // 잡몹은 저확률 드롭(초반 성장 숨통)
