@@ -282,3 +282,12 @@
 - 변경 파일: core/normalize.js(신규)·chunking.js·validate.js / main.js / style.css / src/data/passages.json(30문장) / tests/run-node.mjs / tools/build-standalone.mjs / dist/standalone.html(재생성) / service-worker.js / CLAUDE.md / docs 계획서.
 - 배포: 커밋 b24794f 후 `/web-deploy` 배포 완료 - push origin/main + smoke 통과(허브·english-reading 2 URL HTTP 200 + 콘솔 에러 0 + `.passage-card`/`#grid-games .card` 가시). SW v185로 PWA 옛 캐시 자동 폐기, 실서비스 반영 확인.
 - 잔여: 다음 단계 후보(사양 비스코프) - 오디오·TTS·구간 재생, listeningSenseGroups, 말하기 변형, 신규 100문장. 2.32 잔여 3건 유지.
+
+## 2.36. 두 번째 코스 Word Order Foundations(100문장) 통합 + 코스 고르기 화면 (2026-07-15, 사용자 파일 제공)
+
+- 배경: 사용자가 앱 루트에 english_reading_100_sentences.json(1코스 word-order-foundations, 20지문 100문장)을 두고 "폴더 이동시키고 내용 추가"를 지시. 파일 검증 중 두 예상 밖 문제를 발견해 수정 전 보고 - (1) 앱이 courses[0] 하나만 렌더(코스 선택 UI 부재)라 새 코스를 그냥 추가하면 화면에 안 보임 (2) 100문장 중 6문장의 chunks 경계가 끊는 기준 규칙 위반. 통합 방식은 사용자가 '코스 고르기 화면 추가'(두 코스 병존)를 선택.
+- 데이터: 새 코스는 신 스키마(breakRules/naturalTranslation/wordOrderPoint) 완비 확인. 끊는 기준 위반 6건 chunks 경계 수정 - 짧은 주어+조동사 분리(Small breaks|can 등)는 동사까지 묶고, 구동사·복합전치사 꼬리(depend on|·across from| 등)는 목적어와 병합. 수정 후 validatePassage strict 전수 통과. passages.json courses에 코스 추가(총 2코스), 원본 json은 병합 완료 후 제거(git 복구 가능).
+- 앱 구조: main.js를 단일 코스에서 다중 코스로 확장. renderCourseList 신설(진입 → 코스 목록 → 코스 선택 → renderList(course) → 지문 목록). rebuildCourse가 baseData.courses 전체를 createCourse하고 customPassages는 첫 코스에만 합침(기존 동작 유지). renderList(course) 인자화, 뒤로가기·단어장 복귀·문제 출제·노출 설정·클리어 모달 경로를 새 구조에 정합(출제·설정·끊는기준 액션은 최상위 코스 목록으로 이동). 출제 id 중복 검사를 전 코스로 확장.
+- 규칙 완화: insight 하한을 1→0으로(tests·CLAUDE.md 4.3). insight는 원래 '구조적으로 어려운 문장에만' 넣는 선택 필드인데 기존 테스트가 지문당 최소 1개를 강제해, 쉬운 어순 기초 코스가 걸렸다. 어려운 문장 없는 지문은 insight 0이 정당하므로 상한 3만 유지.
+- 검증: node 테스트 전량 통과(두 코스 무결성·5등급·breakRules·strict). browser-shot 2회 - 코스 목록(마음의 법칙 6지문 + Word Order Foundations 20지문, 진행률·액션) / 새 코스 첫 지문 진입 후 끊기·해석(discouraged 주황 △ + missed 청록 ▾ + 비추천 이유 카드 + 자연해석 + 핵심 어순 + 문법 접힘), 콘솔 0. standalone 재빌드(285KB, 진입 치환 renderList→renderCourseList 동기), SW v186. 커밋 7207b97.
+- 잔여: 배포(/web-deploy)는 사용자 지시 대기(로컬 커밋까지). 다음 후보(사양 비스코프) 유지 - 오디오·TTS·구간 재생, 듣기 리듬 그룹, 말하기 변형.
