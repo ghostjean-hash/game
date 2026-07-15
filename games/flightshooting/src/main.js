@@ -30,6 +30,7 @@ const elOption = $('#option');
 const elZone = $('#zone');
 const elTail = $('#tail');
 const elLives = $('#lives');
+const lifeEls = elLives.querySelectorAll('.life'); // 하트 노드는 고정 → 1회만 조회(매 프레임 재쿼리 제거)
 const elMenuBest = $('#menu-best');
 const elBossBar = $('#boss-bar');
 const elBossName = $('#boss-name');
@@ -180,9 +181,11 @@ function setTailHud() {
   const T = CFG.parts.tail;
   const n = game.tail.length;
   if (n < T.maxCount) { elTail.textContent = n; elTail.classList.remove('mastered'); return; }
-  const minW = Math.min(...game.tail.map((t) => t.weapon)); // 최저 무기 단계(weapon 1=무강화)
+  let minW = Infinity;                                       // 최저 무기 단계(weapon 1=무강화) - 매 프레임 임시배열 없이 루프로
+  for (const t of game.tail) if (t.weapon < minW) minW = t.weapon;
   const tier = minW - 1;                                     // 티어(로마) = weapon-1 (0~10)
-  const raised = game.tail.filter((t) => t.weapon > minW).length; // 다음 단계로 오른 대수 = 서브스텝
+  let raised = 0;                                            // 다음 단계로 오른 대수 = 서브스텝
+  for (const t of game.tail) if (t.weapon > minW) raised++;
   if (tier <= 0) { elTail.textContent = n; elTail.classList.remove('mastered'); return; }
   elTail.textContent = tierText(tier, raised);
   elTail.classList.toggle('mastered', minW >= T.weaponMax);
@@ -194,7 +197,6 @@ function syncHud() {
   setEvoHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2, game.optionEvo || 0, COLORS.bulletShapeTier.length - 1);
   setPartHud(elZone, game.zone.level, CFG.parts.zone.levelMax);
   setTailHud();
-  const lifeEls = elLives.querySelectorAll('.life');
   const cap = game.maxLives || CFG.player.maxLives;
   lifeEls.forEach((el, i) => {
     el.hidden = i >= cap;                          // 난이도 최대값 초과 하트는 숨김(일반3 / 어린이5)

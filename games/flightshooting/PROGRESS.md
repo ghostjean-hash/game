@@ -773,3 +773,41 @@
 - 커밋은 이 봉합에서 수행(아래 commit). 실플레이 체감(분담 갈라짐·아이템 양보 자연스러움, 합체 발광 크기·색, 대사 빈도, 부리 발사체 모양)은 사용자 실측 영역 - 필요 시 재조정.
 - 배포(web-deploy, SW 캐시 갱신 + GitHub Pages): 미착수(별도 지시 대기).
 - **타 영역 변경 감지**: `apps/english-reading` 3파일 수정(chunking.js·validate.js) + untracked 2건(normalize.js·2026-07-15-phase1-refactor-plan.md)이 작업트리에 있음. 이 세션(flightshooting)과 무관한 다른 작업 산출물이라 봉합 add 대상에서 제외했다. 해당 도메인 세션에서 별도 커밋 필요(사용자 확인 영역).
+
+## 2026-07-15 (후속2) - 코드 런타임 최적화 (동작 100% 보존)
+
+### 사용자 지시
+- "코드 최적화 검토" → 3갈래 병렬 진단(게임 루프·충돌 / 캔버스 렌더 / core 로직)
+- "정석으로 진행" → 결과를 바꾸지 않는 최적화만 A→B→C 전면 적용 + 각 단계 검증
+
+### 진단 결론
+매 프레임(60fps) 도는 hot path의 "안 바뀌는데 매번 새로 만들고 버리는" 낭비가 끊김·발열의 축. 두 갈래 - GC 압박(목록을 통째로 새 배열 재생성) + 반복 재계산(배경 gradient·거리·선형 스캔). 지금 즉시 끊기진 않으나 저사양·후반 밀집 구간에서 새어나올 부분.
+
+### 완료 - A 렌더/계산 낭비 제거 (결과 동일)
+- view.drawBackground: 성운 radial gradient 2개를 {stage,W,H} 키로 캐싱. 프레임마다 createRadialGradient 재생성 제거(단일 최대 효과, 위험 낮음).
+- view.drawStars: 상수 fillStyle을 별마다→루프 밖 1회.
+- core/stars: 별 속도 40+z*140을 initStars에서 spd 필드로 사전계산, updateStars는 s.spd 재사용.
+- main.syncHud: 하트 노드(.life) querySelectorAll을 매 프레임→모듈 로드 시 1회.
+
+### 완료 - B 에너지존 판정 다이어트 (결과 동일)
+- parts.tickZone: pulse.hit 배열(includes O(n) 선형 스캔)→Set(has O(1)). 적별 플레이어 거리는 pulse와 무관하므로 프레임당 1회만 계산(펄스 여러 개일 때 중복 sqrt 제거). 적 많고 존 만렙일수록 효과 큼.
+
+### 완료 - C 목록 제자리 압축 (GC 근본 제거, 결과 동일)
+- world.js: retain(arr,keep) 헬퍼 도입(순서·잔존 요소·참조 filter와 동일). 매 프레임 `game.X = game.X.filter(...)`로 새 배열 갈아치우던 10곳(enemies 화면밖/dead·bullets·eBullets·powerups·particles) 전부 in-place 압축으로 → 프레임당 목록 재할당 0.
+- world.updateBoss: enrageMul의 boss.parts.filter(...).length를 카운트 루프로(sentinel 보스전 매 프레임 배열 할당 제거).
+- main.setTailHud: Math.min(...map)/filter().length를 루프로(매 프레임 임시배열 3개 제거).
+
+### 제외 (결과 변경되어 "100% 보존" 원칙 위배 - 사용자 결정 대기)
+- 유도탄 표적 캐싱(N프레임마다 재탐색): 유도 궤적이 미세하게 달라짐.
+- 아군탄 대 적 충돌 broad-phase(y버킷팅): 겹친 적 중 타격 대상 순서가 바뀔 수 있음(break 구조 의존).
+- 둘 다 성능 이득은 더 크나 보존 원칙에 걸려 보류. 사용자가 미세 동작 변경 허용 시 추가 가능.
+
+### 검증
+- node --check 5파일 ALL SYNTAX OK.
+- core **105/105 PASS**(browser-shot dev-server http, console "105/105 PASS" - 변경 전과 동일, 회귀 0).
+- 실플레이 2모드 캡처: 일반(구역5 파츠 만렙) 배경 성운·별·메인빔·사이드·존펄스(녹색 확장 링)·유도탄 정상, 어린이(구역3 친구) 키위새·말풍선·파티클 폭발 정상. 콘솔 실오류 0(404 favicon·AudioContext 경고만).
+- 산출물 이행 대조(#392): 지시 2건 1:1 반영, "정석"을 "결과 보존 안전 전면"으로 해석(제외 2건 명시 보고). 오해석 0.
+
+### 미해결(사용자 결정 대기)
+- 제외한 최적화 2건: 동작 미세 변경 허용 여부 사용자 결정 시 추가 착수.
+- 배포(web-deploy, SW 캐시 갱신 + GitHub Pages): 미착수(별도 지시 대기).

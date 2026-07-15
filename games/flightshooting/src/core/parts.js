@@ -223,18 +223,23 @@ export function tickZone(game, dt) {
   z.spawnTimer = (z.spawnTimer || 0) - dt;
   if (z.spawnTimer <= 0) {
     z.spawnTimer += ZONE.period[z.level];
-    z.pulses.push({ r: 0, hit: [] });
+    z.pulses.push({ r: 0, hit: new Set() }); // hit는 Set(맞은 대상 멤버십 O(1) 조회)
     game.sfx.push('zone');
   }
   let hitAny = false;
+  // 적별 플레이어까지 거리는 pulse와 무관하다 → 프레임당 1회만 계산(펄스 여러 개일 때 중복 sqrt 제거).
+  const enemies = game.enemies;
+  const dists = [];
+  for (let i = 0; i < enemies.length; i++) dists.push(Math.hypot(enemies[i].x - p.x, enemies[i].y - p.y));
   for (const pulse of z.pulses) {
     pulse.r += ZONE.speed * dt;
-    for (const e of game.enemies) {
-      if (e.dead || pulse.hit.includes(e)) continue;
+    for (let i = 0; i < enemies.length; i++) {
+      const e = enemies[i];
+      if (e.dead || pulse.hit.has(e)) continue;
       if (e.type === 'serpent' && e.seg === 'body') continue; // 뱀 몸통은 무적(존도 못 뚫는다 - 머리만)
-      const d = Math.hypot(e.x - p.x, e.y - p.y);
+      const d = dists[i];
       if (Math.abs(d - pulse.r) > half + e.r) continue;
-      e.hp -= dmg; pulse.hit.push(e); hitAny = true;
+      e.hp -= dmg; pulse.hit.add(e); hitAny = true;
       if (e.hp <= 0) {
         e.dead = true;
         game.score += e.score;
@@ -245,10 +250,10 @@ export function tickZone(game, dt) {
         game.sfx.push('explode');
       }
     }
-    if (game.boss && !game.boss.entering && !pulse.hit.includes(game.boss)) {
+    if (game.boss && !game.boss.entering && !pulse.hit.has(game.boss)) {
       const b = game.boss;
       const d = Math.hypot(b.x - p.x, b.y - p.y);
-      if (Math.abs(d - pulse.r) <= half + (b.rx || b.r)) { b.core.hp -= dmg; pulse.hit.push(b); hitAny = true; } // 존은 부위 관통, 코어 직격
+      if (Math.abs(d - pulse.r) <= half + (b.rx || b.r)) { b.core.hp -= dmg; pulse.hit.add(b); hitAny = true; } // 존은 부위 관통, 코어 직격
     }
   }
   z.pulses = z.pulses.filter((pulse) => pulse.r <= maxR); // 최대 반경 넘은 파동 소멸

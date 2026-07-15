@@ -172,7 +172,7 @@ export function updateEnemies(game, dt, W, H) {
     }
   }
   // 세로로 지나간 것 + 보너스 기체가 가로로 화면을 벗어난 것 제거.
-  game.enemies = game.enemies.filter((e) => e.y < H + e.r + 20 && e.x > -e.r - 40 && e.x < W + e.r + 40);
+  retain(game.enemies, (e) => e.y < H + e.r + 20 && e.x > -e.r - 40 && e.x < W + e.r + 40);
 }
 
 // 부위/코어 위치(src {x,y})에서 패턴 발사. shotsCap = 어린이 모드 조준 연발 상한.
@@ -242,7 +242,9 @@ export function updateBoss(game, dt, W, H) {
   syncBossParts(boss);
 
   // 광폭화(sentinel): 부순 weapon 수만큼 남은 weapon 발사 주기를 단축한다.
-  const enrageMul = st.enrage ? Math.pow(st.enrage, boss.parts.filter((p) => p.dead && p.role === 'weapon').length) : 1;
+  let deadWeapons = 0;
+  if (st.enrage) for (const pt of boss.parts) if (pt.dead && pt.role === 'weapon') deadWeapons++;
+  const enrageMul = st.enrage ? Math.pow(st.enrage, deadWeapons) : 1;
 
   // 살아있는 weapon 부위가 각자 패턴 발사.
   for (const part of boss.parts) {
@@ -277,21 +279,32 @@ function capArray(arr, lim) {
   if (arr.length > lim) arr.splice(0, arr.length - lim);
 }
 
+// keep이 참인 요소만 남기고 배열을 제자리 압축한다(filter의 새 배열 할당 없이 GC 압박 제거).
+// 잔존 요소·순서는 filter와 동일하고 배열 참조도 유지된다(매 프레임 재할당 → 0).
+function retain(arr, keep) {
+  let w = 0;
+  for (let i = 0; i < arr.length; i++) {
+    const v = arr[i];
+    if (keep(v)) arr[w++] = v;
+  }
+  arr.length = w;
+}
+
 function updateBullets(game, dt, W, H) {
   for (const b of game.bullets) { b.x += b.vx * dt; b.y += b.vy * dt; }
-  game.bullets = game.bullets.filter((b) => b.y > -20 && b.y < H + 20 && b.x > -20 && b.x < W + 20);
+  retain(game.bullets, (b) => b.y > -20 && b.y < H + 20 && b.x > -20 && b.x < W + 20);
   capArray(game.bullets, CFG.limits.bullets);
 }
 
 function updateEnemyBullets(game, dt, W, H) {
   for (const b of game.eBullets) { b.x += b.vx * dt; b.y += b.vy * dt; }
-  game.eBullets = game.eBullets.filter((b) => b.x > -20 && b.x < W + 20 && b.y > -20 && b.y < H + 20);
+  retain(game.eBullets, (b) => b.x > -20 && b.x < W + 20 && b.y > -20 && b.y < H + 20);
   capArray(game.eBullets, CFG.limits.eBullets);
 }
 
 function updatePowerups(game, dt, W, H) {
   for (const it of game.powerups) { it.y += it.vy * dt; it.t += dt; }
-  game.powerups = game.powerups.filter((it) => it.y < H + it.r + 10);
+  retain(game.powerups, (it) => it.y < H + it.r + 10);
 }
 
 function updateParticles(game, dt) {
@@ -299,7 +312,7 @@ function updateParticles(game, dt) {
     pt.age += dt; pt.x += pt.vx * dt; pt.y += pt.vy * dt;
     pt.vx *= 0.94; pt.vy *= 0.94;
   }
-  game.particles = game.particles.filter((pt) => pt.age < pt.life);
+  retain(game.particles, (pt) => pt.age < pt.life);
   capArray(game.particles, CFG.limits.particles);
 }
 
@@ -415,8 +428,8 @@ export function checkCollisions(game, W, H) {
       }
     }
   }
-  game.bullets = game.bullets.filter((b) => !b.dead);
-  game.enemies = game.enemies.filter((e) => !e.dead);
+  retain(game.bullets, (b) => !b.dead);
+  retain(game.enemies, (e) => !e.dead);
 
   // 파워업 획득은 피격 무적(깜박) 중에도 된다 - 피격 판정보다 먼저 처리한다.
   //   어린이 모드: 플레이어 또는 친구가 닿으면 1회 획득(grabItem이 양쪽 공유 강화 처리).
@@ -425,7 +438,7 @@ export function checkCollisions(game, W, H) {
     const fr = game.friend;
     if (hit(p, it) || (fr && !fr.down && hit(fr, it))) { it.dead = true; grabItem(game, it.kind); }
   }
-  game.powerups = game.powerups.filter((it) => !it.dead);
+  retain(game.powerups, (it) => !it.dead);
 
   // 친구 개별 피격(어린이 모드): 플레이어 무적과 독립. 친구가 맞으면 친구 hp만 깎는다(내 목숨 불변).
   //   플레이어 무적으로 아래 return 되기 전에 처리해야 한다. 치트 무적이면 친구도 보호.
@@ -435,7 +448,7 @@ export function checkCollisions(game, W, H) {
     for (const e of game.enemies) { if (hit(fr, e)) { hitF = true; break; } }
     if (!hitF && game.boss && !game.boss.entering && hit(fr, game.boss)) hitF = true;
     if (!hitF) for (const b of game.eBullets) { if (!b.dead && hit(fr, b)) { b.dead = true; hitF = true; break; } }
-    if (hitF) { friendTakeHit(game); game.eBullets = game.eBullets.filter((b) => !b.dead); }
+    if (hitF) { friendTakeHit(game); retain(game.eBullets, (b) => !b.dead); }
   }
 
   // 무적 중(피격 깜박) 또는 치트 무적이면 피격 판정 생략(아이템 획득은 위에서 이미 처리).
@@ -453,7 +466,7 @@ export function checkCollisions(game, W, H) {
   for (const b of game.eBullets) {
     if (hit(p, b)) { b.dead = true; playerHit(game); break; }
   }
-  game.eBullets = game.eBullets.filter((b) => !b.dead);
+  retain(game.eBullets, (b) => !b.dead);
 }
 
 function defeatBoss(game) {
