@@ -347,9 +347,9 @@ function check(name, cond, detail = "") {
         }
       });
 
-      // 지문당 insight 1~3개(구조 어려운 문장에만)
+      // 지문당 insight 0~3개(구조 어려운 문장에만 - 쉬운 지문은 0 정당, 상한만 강제)
       const insightCount = p.sentences.filter((s) => s.insight).length;
-      check(`data(${course.id}/${p.id}): insight 1~3개`, insightCount >= 1 && insightCount <= 3, `${insightCount}개`);
+      check(`data(${course.id}/${p.id}): insight 0~3개`, insightCount <= 3, `${insightCount}개`);
 
       // K. built-in 지문은 신 스키마 strict 검증 통과(naturalTranslation·wordOrderPoint 필수 + breakRules 범위·중복·추천경계 충돌 0)
       const strictRes = validatePassage(p, { strict: true });

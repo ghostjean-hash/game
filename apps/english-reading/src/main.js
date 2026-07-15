@@ -22,7 +22,8 @@ const el = {
   stage: document.getElementById("stage"),
 };
 
-let course = null;
+let course = null; // 현재 선택된 코스
+let courses = []; // 전체 코스 목록(코스 고르기 화면용)
 let baseData = null; // passages.json 원본(기본 지문)
 let currentPassage = null; // 지금 읽는 지문 - 단어장 등에서 돌아올 대상
 // 끊기/단어 터치 토글(각각 독립 on/off) - 둘이 본문에서 붙어 생기던 오터치를 사용자가 직접 조절.
@@ -57,10 +58,15 @@ const getSettings = () => ({ chunks: true, words: true, scope: true, ...(store.g
 // ── 내가 만든 문제(기기 저장) ── LLM으로 만든 지문을 검증 후 이 목록에 담아 기본 지문과 합쳐 읽는다.
 const getCustomPassages = () => store.get("customPassages", []);
 function isCustom(pid) { return getCustomPassages().some((p) => p.id === pid); }
-// 기본 지문 + 내가 만든 문제를 합쳐 코스를 다시 만든다(추가·삭제 후 호출).
+// 기본 지문 + 내가 만든 문제를 합쳐 코스들을 다시 만든다(추가·삭제 후 호출).
+// 사용자 출제 지문(customPassages)은 첫 코스에만 합친다(기존 동작 유지).
 function rebuildCourse() {
-  const base = baseData.courses[0];
-  course = createCourse({ ...base, passages: [...base.passages, ...getCustomPassages()] });
+  courses = baseData.courses.map((c, i) =>
+    i === 0
+      ? createCourse({ ...c, passages: [...c.passages, ...getCustomPassages()] })
+      : createCourse(c));
+  // 재빌드 후 현재 코스 참조 갱신(사라졌으면 해제)
+  if (course) course = courses.find((c) => c.id === course.id) || null;
 }
 
 // ── 읽기 진행 저장(기기 저장소) ── 지문별 문장 상태(그은 선·임시 단어·검토 여부)를 담아,
@@ -86,7 +92,7 @@ fetch("./src/data/passages.json", { cache: "no-cache" })
   .then((data) => {
     baseData = data;
     rebuildCourse();
-    renderList();
+    renderCourseList();
   })
   .catch(() => {
     el.title.textContent = "오류";
@@ -132,14 +138,63 @@ function labeledBlock(label, text, mod) {
   return wrap;
 }
 
-// ── 지문 목록 ──
-function renderList() {
-  currentPassage = null; // 목록으로 나오면 '읽던 지문' 해제(단어장 백은 목록으로)
+// ── 코스 고르기 (최상위 화면) ──
+// 지문 묶음(코스)이 여럿이라 먼저 코스를 고른 뒤 그 코스의 지문 목록으로 들어간다.
+function renderCourseList() {
+  currentPassage = null;
+  course = null;
+  const done = getDone();
+  setBar(0);
+  setTop({ title: "영어 독해", onBack: () => (window.location.href = "../../"), showVocab: true });
+
+  const stage = el.stage;
+  stage.className = "stage list-stage";
+  stage.innerHTML = "";
+
+  const summary = document.createElement("div");
+  summary.className = "list-summary";
+  summary.innerHTML = `<b>코스 ${courses.length}개</b> · 수집 단어 ${getVocab().length}개`;
+  stage.appendChild(summary);
+
+  const list = document.createElement("div");
+  list.className = "passage-list";
+  courses.forEach((c) => {
+    const prog = courseProgress(c, done);
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "passage-card course-card";
+    card.innerHTML =
+      `<span class="pc-body"><span class="pc-title">${c.title}${prog.cleared ? ' <span class="mine-badge">완주 ✓</span>' : ""}</span>` +
+      `<span class="pc-en">${c.passageCount}개 지문</span></span>` +
+      `<span class="pc-status${prog.cleared ? " done" : ""}">${prog.done} / ${prog.total}편</span>`;
+    card.onclick = () => renderList(c);
+    list.appendChild(card);
+  });
+  stage.appendChild(list);
+
+  // 전역 액션(코스 무관) - 출제·노출 설정·끊는 기준은 최상위에 둔다.
+  const actions = document.createElement("div");
+  actions.className = "list-actions";
+  const setBtn = document.createElement("button");
+  setBtn.type = "button"; setBtn.className = "text-btn settings-open"; setBtn.textContent = "노출 설정"; setBtn.onclick = openSettings;
+  const authorBtn = document.createElement("button");
+  authorBtn.type = "button"; authorBtn.className = "text-btn"; authorBtn.textContent = "문제 출제"; authorBtn.onclick = renderAuthor;
+  const guideBtn = document.createElement("button");
+  guideBtn.type = "button"; guideBtn.className = "text-btn"; guideBtn.textContent = "끊는 기준"; guideBtn.onclick = openGuide;
+  actions.append(guideBtn, setBtn, authorBtn);
+  stage.appendChild(actions);
+}
+
+// ── 지문 목록 (선택한 코스 안) ──
+function renderList(c) {
+  if (c) course = c;
+  if (!course) return renderCourseList();
+  currentPassage = null; // 목록으로 나오면 '읽던 지문' 해제(단어장 백은 이 목록으로)
   const done = getDone();
   const reads = getReads();
   const prog = courseProgress(course, done);
   setBar(prog.ratio);
-  setTop({ title: course.title, onBack: () => (window.location.href = "../../"), showVocab: true });
+  setTop({ title: course.title, onBack: renderCourseList, showVocab: true });
 
   const stage = el.stage;
   stage.className = "stage list-stage";
@@ -178,26 +233,6 @@ function renderList() {
     list.appendChild(card);
   });
   stage.appendChild(list);
-
-  const actions = document.createElement("div");
-  actions.className = "list-actions";
-  const setBtn = document.createElement("button");
-  setBtn.type = "button";
-  setBtn.className = "text-btn settings-open";
-  setBtn.textContent = "노출 설정";
-  setBtn.onclick = openSettings;
-  const authorBtn = document.createElement("button");
-  authorBtn.type = "button";
-  authorBtn.className = "text-btn";
-  authorBtn.textContent = "문제 출제";
-  authorBtn.onclick = renderAuthor;
-  const guideBtn = document.createElement("button");
-  guideBtn.type = "button";
-  guideBtn.className = "text-btn";
-  guideBtn.textContent = "끊는 기준";
-  guideBtn.onclick = openGuide;
-  actions.append(guideBtn, setBtn, authorBtn);
-  stage.appendChild(actions);
 }
 
 // ── 읽기 화면 ──
@@ -617,10 +652,10 @@ function showClearModal() {
     `<div class="modal-sub">${course.title}의 모든 지문을 완독했습니다. 이제 노출 설정에서 도움을 끄고 다시 읽으며 스스로 읽어내는 데 도전해 보세요.</div>`;
   const ok = document.createElement("button");
   ok.type = "button"; ok.className = "btn btn-primary"; ok.textContent = "확인";
-  ok.onclick = () => { backdrop.remove(); renderList(); };
+  ok.onclick = () => { backdrop.remove(); renderCourseList(); };
   modal.appendChild(ok);
   backdrop.appendChild(modal);
-  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) { backdrop.remove(); renderList(); } });
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) { backdrop.remove(); renderCourseList(); } });
   document.body.appendChild(backdrop);
 }
 
@@ -703,7 +738,7 @@ const AUTHORING_PROMPT = `너는 영어 독해 학습 앱의 문제 출제자다
 
 function renderAuthor() {
   currentPassage = null;
-  setTop({ title: "문제 출제", onBack: renderList, showVocab: false });
+  setTop({ title: "문제 출제", onBack: renderCourseList, showVocab: false });
   const stage = el.stage;
   stage.className = "stage author-stage";
   stage.innerHTML = "";
@@ -742,7 +777,7 @@ function renderAuthor() {
     catch (e) { showAuthorResult(result, false, [{ where: "형식", msg: "JSON 형식이 아닙니다. 챗봇이 JSON만 출력했는지 확인하세요." }]); return; }
     const res = validatePassage(obj);
     if (res.ok) {
-      const dupBase = baseData.courses[0].passages.some((p) => p.id === obj.id);
+      const dupBase = baseData.courses.some((c) => c.passages.some((p) => p.id === obj.id));
       const dupMine = getCustomPassages().some((p) => p.id === obj.id);
       if (dupBase || dupMine) { showAuthorResult(result, false, [{ where: "id", msg: `"${obj.id}"와 같은 id의 지문이 이미 있습니다. id를 바꾸세요.` }]); return; }
       validObj = obj; addBtn.hidden = false;
@@ -818,7 +853,7 @@ function showAuthorResult(host, ok, errors) {
 // ── 내 단어장 ──
 function renderVocab() {
   // 읽던 지문에서 왔으면 그 지문으로 복귀(진행 유지), 목록에서 왔으면 목록으로
-  const back = currentPassage ? () => renderReading(currentPassage) : renderList;
+  const back = currentPassage ? () => renderReading(currentPassage) : () => renderList(course);
   setTop({ title: "내 단어장", onBack: back, showVocab: false });
   const stage = el.stage;
   stage.className = "stage vocab-stage";
@@ -912,7 +947,7 @@ function openSettings() {
       scope: toggles.scope.checked,
     });
     backdrop.remove();
-    renderList();
+    course ? renderList(course) : renderCourseList();
   };
   modal.appendChild(ok);
   backdrop.appendChild(modal);

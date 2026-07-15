@@ -1996,6 +1996,4336 @@
           ]
         }
       ]
+    },
+    {
+      "id": "word-order-foundations",
+      "title": "Word Order Foundations",
+      "passages": [
+        {
+          "id": "slow-morning-start",
+          "level": 1,
+          "topic": "Daily Life",
+          "title": "A Slow Morning",
+          "titleKr": "느린 아침",
+          "sentences": [
+            {
+              "text": "I open the window after I wake up.",
+              "chunks": [
+                {
+                  "en": "I open the window",
+                  "kr": "나는 창문을 연다"
+                },
+                {
+                  "en": "after I wake up.",
+                  "kr": "내가 잠에서 깬 뒤에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 3,
+                    "reason": "짧게 구조를 확인하려면 주절 뒤에서 나눌 수도 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "open the window는 동사와 목적어가 하나의 의미를 이룹니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "나는 잠에서 깬 뒤 창문을 연다.",
+              "wordOrderPoint": {
+                "title": "행동 뒤에 시간 붙이기",
+                "explanation": "무엇을 하는지 먼저 말하고 after절로 시간을 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "after + 주어 + 동사",
+                  "note": "after I wake up은 ‘내가 잠에서 깬 뒤에’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "wake",
+                  "meaning": "잠에서 깨다"
+                }
+              ]
+            },
+            {
+              "text": "Fresh air makes the room feel better.",
+              "chunks": [
+                {
+                  "en": "Fresh air",
+                  "kr": "신선한 공기는"
+                },
+                {
+                  "en": "makes the room feel better.",
+                  "kr": "방이 더 좋게 느껴지도록 만든다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "makes the room feel은 연결 구조이므로 중간에서 끊지 않는 편이 좋습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "신선한 공기는 방 안을 한결 쾌적하게 만든다.",
+              "wordOrderPoint": {
+                "title": "make + 대상 + 동사원형",
+                "explanation": "makes the room feel은 ‘방이 느끼게 만든다’가 아니라 ‘방이 ~하게 느껴지도록 한다’로 이해합니다."
+              },
+              "grammar": [
+                {
+                  "label": "make + 목적어 + 동사원형",
+                  "note": "makes the room feel은 ‘방이 ~하게 느껴지게 하다’라는 구조입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "Fresh",
+                  "meaning": "신선한"
+                }
+              ]
+            },
+            {
+              "text": "I drink a glass of water before coffee.",
+              "chunks": [
+                {
+                  "en": "I drink a glass of water",
+                  "kr": "나는 물 한 잔을 마신다"
+                },
+                {
+                  "en": "before coffee.",
+                  "kr": "커피를 마시기 전에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "a glass of water는 하나의 수량 명사구입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "나는 커피보다 먼저 물 한 잔을 마신다.",
+              "wordOrderPoint": {
+                "title": "대상 뒤에 시간 순서 붙이기",
+                "explanation": "행동과 대상을 먼저 말한 뒤 before로 순서를 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "a glass of",
+                  "note": "a glass of water는 ‘물 한 잔’이라는 수량 표현입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "glass",
+                  "meaning": "잔"
+                }
+              ]
+            },
+            {
+              "text": "This simple routine helps me feel calm.",
+              "chunks": [
+                {
+                  "en": "This simple routine",
+                  "kr": "이 간단한 습관은"
+                },
+                {
+                  "en": "helps me feel calm.",
+                  "kr": "내가 차분함을 느끼도록 돕는다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "helps me feel은 하나의 연결 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "이 간단한 습관은 마음을 차분하게 해준다.",
+              "wordOrderPoint": {
+                "title": "help + 사람 + 동사원형",
+                "explanation": "helps me feel은 ‘내가 느끼도록 돕다’라는 순서입니다."
+              },
+              "grammar": [
+                {
+                  "label": "help + 목적어 + 동사원형",
+                  "note": "helps me feel은 ‘내가 느끼도록 돕다’라는 구조입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "routine",
+                  "meaning": "일상적인 습관"
+                }
+              ]
+            },
+            {
+              "text": "Then I begin the day without rushing.",
+              "chunks": [
+                {
+                  "en": "Then I begin the day",
+                  "kr": "그러고 나서 나는 하루를 시작한다"
+                },
+                {
+                  "en": "without rushing.",
+                  "kr": "서두르지 않고"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "without rushing은 전치사와 동명사 목적어가 하나의 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그러면 나는 서두르지 않고 하루를 시작한다.",
+              "wordOrderPoint": {
+                "title": "without + -ing",
+                "explanation": "without rushing은 ‘서두르지 않고’라는 방식 정보를 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "without + 동명사",
+                  "note": "without rushing은 ‘서두르지 않고’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "rushing",
+                  "meaning": "서두르기"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lost-umbrella",
+          "level": 1,
+          "topic": "Daily Life",
+          "title": "The Missing Umbrella",
+          "titleKr": "사라진 우산",
+          "sentences": [
+            {
+              "text": "Mina cannot find her umbrella this morning.",
+              "chunks": [
+                {
+                  "en": "Mina cannot find her umbrella",
+                  "kr": "미나는 자신의 우산을 찾을 수 없다"
+                },
+                {
+                  "en": "this morning.",
+                  "kr": "오늘 아침에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "cannot find는 조동사와 본동사이므로 붙여 읽습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "미나는 오늘 아침 우산을 찾지 못한다.",
+              "wordOrderPoint": {
+                "title": "cannot + 동사원형",
+                "explanation": "cannot find는 ‘찾을 수 없다’라는 하나의 표현입니다."
+              },
+              "grammar": [
+                {
+                  "label": "조동사 can의 부정",
+                  "note": "cannot 뒤에는 동사원형 find가 옵니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "umbrella",
+                  "meaning": "우산"
+                }
+              ]
+            },
+            {
+              "text": "She looks under the bed and behind the door.",
+              "chunks": [
+                {
+                  "en": "She looks under the bed",
+                  "kr": "그녀는 침대 아래를 살펴본다"
+                },
+                {
+                  "en": "and behind the door.",
+                  "kr": "그리고 문 뒤를"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "under the bed는 전치사구이므로 나누지 않는 편이 좋습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그녀는 침대 아래와 문 뒤를 살펴본다.",
+              "wordOrderPoint": {
+                "title": "and로 같은 종류 연결하기",
+                "explanation": "under the bed와 behind the door가 and로 연결됩니다."
+              },
+              "grammar": [
+                {
+                  "label": "병렬 구조",
+                  "note": "두 장소 표현이 and로 연결되어 있습니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "behind",
+                  "meaning": "뒤에"
+                }
+              ]
+            },
+            {
+              "text": "Her brother remembers seeing it near the sofa.",
+              "chunks": [
+                {
+                  "en": "Her brother remembers",
+                  "kr": "그녀의 남동생은 기억한다"
+                },
+                {
+                  "en": "seeing it near the sofa.",
+                  "kr": "그것을 소파 근처에서 본 것을"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 2,
+                    "reason": "remember의 내용을 뒤에서 확인하려고 끊을 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "seeing it은 동명사와 목적어가 연결됩니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그녀의 남동생은 우산을 소파 근처에서 본 기억이 난다.",
+              "wordOrderPoint": {
+                "title": "remember + -ing",
+                "explanation": "remembers seeing은 과거에 본 일을 기억한다는 뜻입니다."
+              },
+              "grammar": [
+                {
+                  "label": "remember + 동명사",
+                  "note": "remembers seeing은 ‘본 것을 기억하다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "remembers",
+                  "meaning": "기억한다"
+                },
+                {
+                  "word": "sofa",
+                  "meaning": "소파"
+                }
+              ]
+            },
+            {
+              "text": "They finally find it inside a shopping bag.",
+              "chunks": [
+                {
+                  "en": "They finally find it",
+                  "kr": "그들은 마침내 그것을 찾는다"
+                },
+                {
+                  "en": "inside a shopping bag.",
+                  "kr": "쇼핑백 안에서"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "inside a shopping bag은 하나의 장소 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그들은 마침내 쇼핑백 안에서 우산을 찾는다.",
+              "wordOrderPoint": {
+                "title": "행동 뒤에 장소 붙이기",
+                "explanation": "find it으로 행동을 말하고 inside 이하로 장소를 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "inside + 명사",
+                  "note": "inside a shopping bag은 ‘쇼핑백 안에서’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "finally",
+                  "meaning": "마침내"
+                }
+              ]
+            },
+            {
+              "text": "Mina laughs because she checked the bag twice.",
+              "chunks": [
+                {
+                  "en": "Mina laughs",
+                  "kr": "미나는 웃는다"
+                },
+                {
+                  "en": "because she checked the bag twice.",
+                  "kr": "그녀가 그 가방을 두 번 확인했기 때문에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 1,
+                    "reason": "결과와 이유의 경계이므로 자연스럽게 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "checked the bag은 동사와 목적어가 하나의 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "미나는 그 가방을 두 번이나 확인했기에 웃음이 난다.",
+              "wordOrderPoint": {
+                "title": "because로 이유 붙이기",
+                "explanation": "결과를 먼저 말하고 because절로 이유를 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "because절",
+                  "note": "because 이하가 Mina가 웃는 이유를 설명합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "twice",
+                  "meaning": "두 번"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "helping-neighbor",
+          "level": 1,
+          "topic": "Relationships",
+          "title": "Helping a Neighbor",
+          "titleKr": "이웃 돕기",
+          "sentences": [
+            {
+              "text": "Mr. Lee carries heavy boxes to his car.",
+              "chunks": [
+                {
+                  "en": "Mr. Lee carries heavy boxes",
+                  "kr": "이 씨는 무거운 상자들을 나른다"
+                },
+                {
+                  "en": "to his car.",
+                  "kr": "자신의 차로"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "heavy boxes는 형용사와 명사가 하나의 명사구입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "이 씨는 무거운 상자들을 차로 나른다.",
+              "wordOrderPoint": {
+                "title": "행동 뒤에 방향 붙이기",
+                "explanation": "무엇을 나르는지 먼저 말하고 to his car로 방향을 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "to + 장소",
+                  "note": "to his car는 ‘그의 차로’라는 방향 표현입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "carries",
+                  "meaning": "나른다"
+                },
+                {
+                  "word": "heavy",
+                  "meaning": "무거운"
+                }
+              ]
+            },
+            {
+              "text": "His neighbor sees him from across the street.",
+              "chunks": [
+                {
+                  "en": "His neighbor sees him",
+                  "kr": "그의 이웃은 그를 본다"
+                },
+                {
+                  "en": "from across the street.",
+                  "kr": "길 건너편에서"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "from across the street는 하나의 장소 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그의 이웃은 길 건너편에서 그를 본다.",
+              "wordOrderPoint": {
+                "title": "대상 뒤에 관찰 위치 붙이기",
+                "explanation": "sees him으로 핵심 사건을 말하고 from 이하로 위치를 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "from across",
+                  "note": "from across the street는 ‘길 건너편에서’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "across",
+                  "meaning": "건너편에"
+                }
+              ]
+            },
+            {
+              "text": "She walks over and offers to help.",
+              "chunks": [
+                {
+                  "en": "She walks over and offers to help.",
+                  "kr": "그녀는 다가가서 도와주겠다고 한다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "offers to help는 한 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그녀는 다가가서 도와주겠다고 한다.",
+              "wordOrderPoint": {
+                "title": "and로 연속 행동 연결하기",
+                "explanation": "walks over와 offers to help가 순서대로 이어집니다."
+              },
+              "grammar": [
+                {
+                  "label": "offer to + 동사원형",
+                  "note": "offers to help는 ‘도와주겠다고 제안하다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "offers",
+                  "meaning": "제안한다"
+                }
+              ]
+            },
+            {
+              "text": "Together, they finish the work in ten minutes.",
+              "chunks": [
+                {
+                  "en": "Together,",
+                  "kr": "함께,"
+                },
+                {
+                  "en": "they finish the work",
+                  "kr": "그들은 그 일을 끝낸다"
+                },
+                {
+                  "en": "in ten minutes.",
+                  "kr": "10분 만에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "finish the work는 동사와 목적어가 하나의 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "두 사람은 함께 10분 만에 일을 끝낸다.",
+              "wordOrderPoint": {
+                "title": "문두 부사 뒤에서 나누기",
+                "explanation": "Together가 전체 행동의 방식을 먼저 제시합니다."
+              },
+              "grammar": [
+                {
+                  "label": "in + 시간",
+                  "note": "in ten minutes는 ‘10분 만에’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "Together",
+                  "meaning": "함께"
+                }
+              ]
+            },
+            {
+              "text": "A small favor can make a big difference.",
+              "chunks": [
+                {
+                  "en": "A small favor",
+                  "kr": "작은 호의는"
+                },
+                {
+                  "en": "can make a big difference.",
+                  "kr": "큰 차이를 만들 수 있다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "can make는 조동사와 본동사이므로 붙여 읽습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "작은 호의가 큰 변화를 만들 수 있다.",
+              "wordOrderPoint": {
+                "title": "can + 동사원형",
+                "explanation": "can make는 ‘만들 수 있다’라는 의미를 이룹니다."
+              },
+              "grammar": [
+                {
+                  "label": "make a difference",
+                  "note": "make a difference는 ‘변화를 만들다, 영향을 주다’라는 표현입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "favor",
+                  "meaning": "호의"
+                },
+                {
+                  "word": "difference",
+                  "meaning": "차이, 변화"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "first-bus-ride",
+          "level": 1,
+          "topic": "Travel",
+          "title": "The First Bus Ride",
+          "titleKr": "첫 버스 여행",
+          "sentences": [
+            {
+              "text": "Joon takes a bus to the museum alone.",
+              "chunks": [
+                {
+                  "en": "Joon takes a bus",
+                  "kr": "준은 버스를 탄다"
+                },
+                {
+                  "en": "to the museum",
+                  "kr": "박물관으로"
+                },
+                {
+                  "en": "alone.",
+                  "kr": "혼자서"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "takes a bus는 동사와 목적어가 하나의 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "준은 혼자 버스를 타고 박물관에 간다.",
+              "wordOrderPoint": {
+                "title": "행동 뒤에 목적지와 상태 붙이기",
+                "explanation": "버스를 타는 행동 뒤에 목적지와 혼자라는 정보를 차례로 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "to + 장소",
+                  "note": "to the museum은 이동 목적지를 나타냅니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "alone",
+                  "meaning": "혼자"
+                }
+              ]
+            },
+            {
+              "text": "He checks the route on his phone twice.",
+              "chunks": [
+                {
+                  "en": "He checks the route",
+                  "kr": "그는 경로를 확인한다"
+                },
+                {
+                  "en": "on his phone",
+                  "kr": "휴대전화로"
+                },
+                {
+                  "en": "twice.",
+                  "kr": "두 번"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "checks the route는 동사와 목적어가 하나의 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그는 휴대전화로 버스 경로를 두 번 확인한다.",
+              "wordOrderPoint": {
+                "title": "행동 뒤에 수단과 횟수 붙이기",
+                "explanation": "핵심 행동 뒤에 수단과 횟수를 순서대로 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "on + 기기",
+                  "note": "on his phone은 ‘휴대전화로’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "route",
+                  "meaning": "경로"
+                }
+              ]
+            },
+            {
+              "text": "The driver tells him where to get off.",
+              "chunks": [
+                {
+                  "en": "The driver tells him",
+                  "kr": "운전기사는 그에게 알려준다"
+                },
+                {
+                  "en": "where to get off.",
+                  "kr": "어디에서 내려야 하는지를"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 3,
+                    "reason": "tells의 내용이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "to get off는 to부정사 구조이므로 붙여 읽습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "운전기사는 그에게 어디서 내려야 하는지 알려준다.",
+              "wordOrderPoint": {
+                "title": "where to + 동사원형",
+                "explanation": "where to get off는 ‘어디에서 내려야 하는지’라는 덩어리입니다."
+              },
+              "grammar": [
+                {
+                  "label": "의문사 + to부정사",
+                  "note": "where to get off는 ‘어디에서 내려야 하는지’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "driver",
+                  "meaning": "운전기사"
+                }
+              ]
+            },
+            {
+              "text": "Joon arrives early and waits near the entrance.",
+              "chunks": [
+                {
+                  "en": "Joon arrives early",
+                  "kr": "준은 일찍 도착한다"
+                },
+                {
+                  "en": "and waits near the entrance.",
+                  "kr": "그리고 입구 근처에서 기다린다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "near the entrance는 하나의 장소 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "준은 일찍 도착해 입구 근처에서 기다린다.",
+              "wordOrderPoint": {
+                "title": "and로 연속 행동 연결하기",
+                "explanation": "arrives와 waits가 같은 주어 Joon에 연결됩니다."
+              },
+              "grammar": [
+                {
+                  "label": "동사 병렬",
+                  "note": "arrives와 waits가 and로 연결되어 있습니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "entrance",
+                  "meaning": "입구"
+                }
+              ]
+            },
+            {
+              "text": "The trip feels easier than he expected.",
+              "chunks": [
+                {
+                  "en": "The trip feels easier",
+                  "kr": "그 여행은 더 쉽게 느껴진다"
+                },
+                {
+                  "en": "than he expected.",
+                  "kr": "그가 예상했던 것보다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": []
+              },
+              "naturalTranslation": "그 여행은 그가 예상했던 것보다 수월하게 느껴진다.",
+              "wordOrderPoint": {
+                "title": "비교급 + than",
+                "explanation": "easier than he expected를 한 비교 의미로 이해합니다."
+              },
+              "grammar": [
+                {
+                  "label": "비교급 + than",
+                  "note": "easier than은 ‘~보다 더 쉬운’이라는 비교 구조입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "expected",
+                  "meaning": "예상했다"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "game-night-plan",
+          "level": 1,
+          "topic": "Games",
+          "title": "Game Night",
+          "titleKr": "게임하는 밤",
+          "sentences": [
+            {
+              "text": "Our group meets online every Friday night.",
+              "chunks": [
+                {
+                  "en": "Our group meets online",
+                  "kr": "우리 모임은 온라인에서 만난다"
+                },
+                {
+                  "en": "every Friday night.",
+                  "kr": "매주 금요일 밤에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "every Friday night은 하나의 시간 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "우리 모임은 매주 금요일 밤 온라인에서 만난다.",
+              "wordOrderPoint": {
+                "title": "행동 뒤에 시간 붙이기",
+                "explanation": "meets online으로 행동과 장소를 말한 뒤 시간을 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "every + 시간",
+                  "note": "every Friday night은 ‘매주 금요일 밤에’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "group",
+                  "meaning": "모임"
+                }
+              ]
+            },
+            {
+              "text": "We choose a cooperative game with short matches.",
+              "chunks": [
+                {
+                  "en": "We choose a cooperative game",
+                  "kr": "우리는 협동 게임을 고른다"
+                },
+                {
+                  "en": "with short matches.",
+                  "kr": "짧은 경기가 있는"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "a cooperative game은 하나의 명사구입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "우리는 한 판이 짧은 협동 게임을 고른다.",
+              "wordOrderPoint": {
+                "title": "명사 뒤에 with로 설명 붙이기",
+                "explanation": "game을 먼저 말하고 with 이하에서 특징을 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "with + 명사",
+                  "note": "with short matches가 game의 특징을 덧붙입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "cooperative",
+                  "meaning": "협동하는"
+                },
+                {
+                  "word": "matches",
+                  "meaning": "경기들"
+                }
+              ]
+            },
+            {
+              "text": "Clear roles help everyone understand the plan.",
+              "chunks": [
+                {
+                  "en": "Clear roles",
+                  "kr": "명확한 역할은"
+                },
+                {
+                  "en": "help everyone understand the plan.",
+                  "kr": "모두가 계획을 이해하도록 돕는다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "help everyone understand는 한 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "역할이 명확하면 모두가 계획을 이해하기 쉽다.",
+              "wordOrderPoint": {
+                "title": "help + 사람 + 동사원형",
+                "explanation": "help everyone understand는 ‘모두가 이해하도록 돕다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "help + 목적어 + 동사원형",
+                  "note": "help everyone understand는 ‘모두가 이해하도록 돕다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "roles",
+                  "meaning": "역할들"
+                }
+              ]
+            },
+            {
+              "text": "We often lose, but nobody gets angry.",
+              "chunks": [
+                {
+                  "en": "We often lose,",
+                  "kr": "우리는 자주 지지만,"
+                },
+                {
+                  "en": "but nobody gets angry.",
+                  "kr": "아무도 화내지 않는다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "gets angry는 상태 변화를 나타내는 한 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "우리는 자주 지지만 아무도 화내지 않는다.",
+              "wordOrderPoint": {
+                "title": "but으로 반대 내용 연결하기",
+                "explanation": "앞의 패배와 뒤의 감정 반응을 but으로 대조합니다."
+              },
+              "grammar": [
+                {
+                  "label": "등위접속사 but",
+                  "note": "서로 반대되는 두 내용을 연결합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "angry",
+                  "meaning": "화난"
+                }
+              ]
+            },
+            {
+              "text": "The shared challenge makes the evening fun.",
+              "chunks": [
+                {
+                  "en": "The shared challenge",
+                  "kr": "함께하는 도전은"
+                },
+                {
+                  "en": "makes the evening fun.",
+                  "kr": "그 저녁을 즐겁게 만든다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "makes the evening fun은 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "함께 도전하는 과정이 저녁 시간을 즐겁게 만든다.",
+              "wordOrderPoint": {
+                "title": "make + 대상 + 형용사",
+                "explanation": "makes the evening fun은 ‘저녁을 즐겁게 만든다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "make + 목적어 + 형용사",
+                  "note": "makes the evening fun은 ‘저녁을 즐겁게 만들다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "challenge",
+                  "meaning": "도전"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "better-study-breaks",
+          "level": 1,
+          "topic": "Study",
+          "title": "Better Study Breaks",
+          "titleKr": "더 나은 공부 휴식",
+          "sentences": [
+            {
+              "text": "Long study sessions make my mind feel tired.",
+              "chunks": [
+                {
+                  "en": "Long study sessions",
+                  "kr": "긴 공부 시간은"
+                },
+                {
+                  "en": "make my mind feel tired.",
+                  "kr": "내 정신이 피곤함을 느끼게 만든다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "make my mind feel은 한 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "오래 공부하면 정신이 피곤해진다.",
+              "wordOrderPoint": {
+                "title": "make + 대상 + 동사원형",
+                "explanation": "make my mind feel은 ‘내 정신이 느끼게 만들다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "make + 목적어 + 동사원형",
+                  "note": "make my mind feel은 ‘내 정신이 ~하게 느끼도록 만들다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "sessions",
+                  "meaning": "학습 시간들"
+                }
+              ]
+            },
+            {
+              "text": "A short break gives my attention time to recover.",
+              "chunks": [
+                {
+                  "en": "A short break gives my attention time",
+                  "kr": "짧은 휴식은 내 집중력에 시간을 준다"
+                },
+                {
+                  "en": "to recover.",
+                  "kr": "회복할"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 6,
+                    "reason": "time을 뒤에서 설명하는 to부정사 앞에서 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 7,
+                    "reason": "to recover는 to부정사이므로 붙여 읽습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "짧은 휴식은 집중력이 회복할 시간을 준다.",
+              "wordOrderPoint": {
+                "title": "give + 대상 + 명사",
+                "explanation": "gives my attention time은 ‘집중력에 시간을 준다’라는 순서입니다."
+              },
+              "grammar": [
+                {
+                  "label": "to부정사의 형용사적 용법",
+                  "note": "to recover가 time을 꾸며 ‘회복할 시간’이 됩니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "attention",
+                  "meaning": "집중력"
+                },
+                {
+                  "word": "recover",
+                  "meaning": "회복하다"
+                }
+              ]
+            },
+            {
+              "text": "I stand up and stretch beside my desk.",
+              "chunks": [
+                {
+                  "en": "I stand up",
+                  "kr": "나는 일어선다"
+                },
+                {
+                  "en": "and stretch beside my desk.",
+                  "kr": "그리고 책상 옆에서 몸을 편다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "stand up은 하나의 구동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "나는 일어나 책상 옆에서 스트레칭한다.",
+              "wordOrderPoint": {
+                "title": "and로 연속 행동 연결하기",
+                "explanation": "stand up과 stretch가 순서대로 이어집니다."
+              },
+              "grammar": [
+                {
+                  "label": "구동사 stand up",
+                  "note": "stand up은 ‘일어서다’라는 하나의 표현입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "stretch",
+                  "meaning": "몸을 펴다"
+                }
+              ]
+            },
+            {
+              "text": "After five minutes, I return to the task.",
+              "chunks": [
+                {
+                  "en": "After five minutes,",
+                  "kr": "5분 뒤에,"
+                },
+                {
+                  "en": "I return to the task.",
+                  "kr": "나는 그 일로 돌아간다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "return to는 함께 쓰이는 동사 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "5분 뒤 나는 다시 과제로 돌아간다.",
+              "wordOrderPoint": {
+                "title": "문두 시간 표현",
+                "explanation": "After five minutes가 전체 행동의 시간을 먼저 제시합니다."
+              },
+              "grammar": [
+                {
+                  "label": "return to",
+                  "note": "return to the task는 ‘그 일로 돌아가다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "return",
+                  "meaning": "돌아가다"
+                }
+              ]
+            },
+            {
+              "text": "Small breaks can improve both speed and focus.",
+              "chunks": [
+                {
+                  "en": "Small breaks can improve",
+                  "kr": "짧은 휴식은 향상시킬 수 있다"
+                },
+                {
+                  "en": "both speed and focus.",
+                  "kr": "속도와 집중력 둘 다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "can improve는 조동사와 본동사이므로 붙여 읽습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "짧은 휴식은 속도와 집중력을 모두 높일 수 있다.",
+              "wordOrderPoint": {
+                "title": "both A and B",
+                "explanation": "both speed and focus는 두 대상을 함께 강조합니다."
+              },
+              "grammar": [
+                {
+                  "label": "both A and B",
+                  "note": "‘A와 B 둘 다’라는 병렬 구조입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "improve",
+                  "meaning": "향상시키다"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "weather-change",
+          "level": 1,
+          "topic": "Science",
+          "title": "A Sudden Weather Change",
+          "titleKr": "갑작스러운 날씨 변화",
+          "sentences": [
+            {
+              "text": "Dark clouds gather above the town before noon.",
+              "chunks": [
+                {
+                  "en": "Dark clouds gather above the town",
+                  "kr": "먹구름이 마을 위에 모인다"
+                },
+                {
+                  "en": "before noon.",
+                  "kr": "정오 전에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "above the town은 하나의 장소 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "정오가 되기 전에 먹구름이 마을 위로 몰려온다.",
+              "wordOrderPoint": {
+                "title": "행동 뒤에 시간 붙이기",
+                "explanation": "장소까지 포함한 핵심 장면 뒤에 시간을 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "before + 명사",
+                  "note": "before noon은 ‘정오 전에’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "gather",
+                  "meaning": "모이다"
+                }
+              ]
+            },
+            {
+              "text": "The wind becomes colder and moves the trees.",
+              "chunks": [
+                {
+                  "en": "The wind becomes colder",
+                  "kr": "바람은 더 차가워진다"
+                },
+                {
+                  "en": "and moves the trees.",
+                  "kr": "그리고 나무들을 흔든다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "becomes colder는 동사와 보어가 하나의 의미를 이룹니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "바람이 차가워지고 나무들을 흔든다.",
+              "wordOrderPoint": {
+                "title": "and로 상태와 행동 연결하기",
+                "explanation": "becomes와 moves가 같은 주어에 연결됩니다."
+              },
+              "grammar": [
+                {
+                  "label": "become + 형용사",
+                  "note": "becomes colder는 ‘더 차가워지다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "colder",
+                  "meaning": "더 차가운"
+                }
+              ]
+            },
+            {
+              "text": "People close their windows and hurry inside.",
+              "chunks": [
+                {
+                  "en": "People close their windows",
+                  "kr": "사람들은 창문을 닫는다"
+                },
+                {
+                  "en": "and hurry inside.",
+                  "kr": "그리고 서둘러 안으로 들어간다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "close their windows는 동사와 목적어가 하나의 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "사람들은 창문을 닫고 서둘러 실내로 들어간다.",
+              "wordOrderPoint": {
+                "title": "and로 연속 행동 연결하기",
+                "explanation": "close와 hurry가 같은 주어 People에 연결됩니다."
+              },
+              "grammar": [
+                {
+                  "label": "동사 병렬",
+                  "note": "close와 hurry가 and로 연결되어 있습니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "hurry",
+                  "meaning": "서두르다"
+                }
+              ]
+            },
+            {
+              "text": "Rain starts falling only a few minutes later.",
+              "chunks": [
+                {
+                  "en": "Rain starts falling",
+                  "kr": "비가 내리기 시작한다"
+                },
+                {
+                  "en": "only a few minutes later.",
+                  "kr": "불과 몇 분 뒤에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "starts falling은 하나의 동사 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "불과 몇 분 뒤 비가 내리기 시작한다.",
+              "wordOrderPoint": {
+                "title": "start + -ing",
+                "explanation": "starts falling은 ‘내리기 시작하다’라는 의미입니다."
+              },
+              "grammar": [
+                {
+                  "label": "start + 동명사",
+                  "note": "starts falling은 ‘내리기 시작하다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "falling",
+                  "meaning": "내리는 것"
+                }
+              ]
+            },
+            {
+              "text": "The warm morning quickly turns into a storm.",
+              "chunks": [
+                {
+                  "en": "The warm morning",
+                  "kr": "따뜻했던 아침은"
+                },
+                {
+                  "en": "quickly turns into a storm.",
+                  "kr": "빠르게 폭풍으로 바뀐다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "turns into는 함께 쓰이는 동사 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "따뜻했던 아침이 순식간에 폭풍우로 바뀐다.",
+              "wordOrderPoint": {
+                "title": "turn into",
+                "explanation": "turns into는 ‘~로 바뀌다’라는 하나의 표현입니다."
+              },
+              "grammar": [
+                {
+                  "label": "turn into",
+                  "note": "turns into a storm은 ‘폭풍으로 바뀌다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "storm",
+                  "meaning": "폭풍"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "remembering-names",
+          "level": 2,
+          "topic": "Psychology",
+          "title": "Remembering Names",
+          "titleKr": "이름 기억하기",
+          "sentences": [
+            {
+              "text": "Many people forget a name soon after hearing it.",
+              "chunks": [
+                {
+                  "en": "Many people forget a name",
+                  "kr": "많은 사람들은 이름을 잊는다"
+                },
+                {
+                  "en": "soon after hearing it.",
+                  "kr": "그것을 들은 직후에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 6,
+                    "reason": "after hearing it은 하나의 시간 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "많은 사람들은 이름을 듣고 얼마 지나지 않아 잊는다.",
+              "wordOrderPoint": {
+                "title": "after + -ing",
+                "explanation": "after hearing it은 ‘그것을 들은 뒤에’라는 뜻입니다."
+              },
+              "grammar": [
+                {
+                  "label": "after + 동명사",
+                  "note": "after hearing it은 ‘그것을 들은 뒤에’라는 시간 표현입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "hearing",
+                  "meaning": "듣기"
+                }
+              ]
+            },
+            {
+              "text": "The brain may not treat the name as important.",
+              "chunks": [
+                {
+                  "en": "The brain may not treat the name",
+                  "kr": "뇌는 그 이름을 중요하게 다루지 않을 수도 있다"
+                },
+                {
+                  "en": "as important.",
+                  "kr": "중요한 것으로"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "treat the name as important는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "뇌가 그 이름을 중요한 정보로 여기지 않을 수 있다.",
+              "wordOrderPoint": {
+                "title": "treat A as B",
+                "explanation": "treat the name as important는 ‘이름을 중요하게 여기다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "treat A as B",
+                  "note": "A를 B로 여기다라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "treat",
+                  "meaning": "다루다, 여기다"
+                }
+              ]
+            },
+            {
+              "text": "Repeating the name gives the memory another chance.",
+              "chunks": [
+                {
+                  "en": "Repeating the name",
+                  "kr": "그 이름을 반복하는 것은"
+                },
+                {
+                  "en": "gives the memory another chance.",
+                  "kr": "기억에 또 다른 기회를 준다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 0,
+                    "reason": "Repeating the name은 동명사구 주어이므로 붙여 읽습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "이름을 반복하면 기억할 기회가 한 번 더 생긴다.",
+              "wordOrderPoint": {
+                "title": "동명사 주어",
+                "explanation": "Repeating the name 전체가 문장의 주어입니다."
+              },
+              "grammar": [
+                {
+                  "label": "동명사 주어",
+                  "note": "Repeating이 명사처럼 쓰여 문장의 주어 역할을 합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "Repeating",
+                  "meaning": "반복하기"
+                }
+              ]
+            },
+            {
+              "text": "Using it in a sentence can help even more.",
+              "chunks": [
+                {
+                  "en": "Using it in a sentence",
+                  "kr": "그것을 문장 안에서 사용하는 것은"
+                },
+                {
+                  "en": "can help even more.",
+                  "kr": "훨씬 더 도움이 될 수 있다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "can help는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그 이름을 문장 속에서 사용하면 더 도움이 된다.",
+              "wordOrderPoint": {
+                "title": "동명사구 주어 + can",
+                "explanation": "Using 이하가 주어이고 can help가 서술부입니다."
+              },
+              "grammar": [
+                {
+                  "label": "동명사구 주어",
+                  "note": "Using it in a sentence가 문장의 주어입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "sentence",
+                  "meaning": "문장"
+                }
+              ]
+            },
+            {
+              "text": "A small effort makes new names easier to keep.",
+              "chunks": [
+                {
+                  "en": "A small effort",
+                  "kr": "작은 노력은"
+                },
+                {
+                  "en": "makes new names easier to keep.",
+                  "kr": "새 이름들을 기억하기 더 쉽게 만든다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "makes new names easier는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "작은 노력만으로도 새로운 이름을 더 쉽게 기억할 수 있다.",
+              "wordOrderPoint": {
+                "title": "make + 대상 + 형용사",
+                "explanation": "makes new names easier는 ‘새 이름들을 더 쉽게 만든다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "make + 목적어 + 형용사",
+                  "note": "makes new names easier는 ‘새 이름들을 더 쉽게 만들다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "effort",
+                  "meaning": "노력"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "quiet-cafe",
+          "level": 2,
+          "topic": "Daily Life",
+          "title": "A Quiet Cafe",
+          "titleKr": "조용한 카페",
+          "sentences": [
+            {
+              "text": "I found a cafe that stays quiet in the afternoon.",
+              "chunks": [
+                {
+                  "en": "I found a cafe",
+                  "kr": "나는 카페를 찾았다"
+                },
+                {
+                  "en": "that stays quiet in the afternoon.",
+                  "kr": "오후에도 조용한"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 3,
+                    "reason": "관계절이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "stays quiet는 동사와 보어가 하나의 의미를 이룹니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "나는 오후에도 조용한 카페를 찾았다.",
+              "wordOrderPoint": {
+                "title": "명사 뒤 관계절",
+                "explanation": "a cafe를 먼저 말하고 that절이 어떤 카페인지 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "주격 관계대명사 that",
+                  "note": "that stays quiet가 앞의 a cafe를 꾸밉니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "stays",
+                  "meaning": "계속 ~한 상태로 있다"
+                }
+              ]
+            },
+            {
+              "text": "The tables are far enough apart for private conversations.",
+              "chunks": [
+                {
+                  "en": "The tables are far enough apart",
+                  "kr": "테이블들은 충분히 멀리 떨어져 있다"
+                },
+                {
+                  "en": "for private conversations.",
+                  "kr": "개인적인 대화를 하기에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "far enough apart는 하나의 상태 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "테이블 간격이 넓어서 사적인 대화를 나누기 좋다.",
+              "wordOrderPoint": {
+                "title": "형용사 + enough",
+                "explanation": "far enough는 ‘충분히 멀리’라는 뜻입니다."
+              },
+              "grammar": [
+                {
+                  "label": "형용사 + enough",
+                  "note": "far enough는 ‘충분히 멀리’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "apart",
+                  "meaning": "떨어져"
+                },
+                {
+                  "word": "private",
+                  "meaning": "사적인"
+                }
+              ]
+            },
+            {
+              "text": "Soft music plays without covering nearby voices.",
+              "chunks": [
+                {
+                  "en": "Soft music plays",
+                  "kr": "잔잔한 음악이 흐른다"
+                },
+                {
+                  "en": "without covering nearby voices.",
+                  "kr": "근처 사람들의 목소리를 덮지 않으면서"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "without covering은 하나의 전치사구입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "잔잔한 음악이 흐르지만 근처 대화 소리를 가리지는 않는다.",
+              "wordOrderPoint": {
+                "title": "without + -ing",
+                "explanation": "without covering은 ‘가리지 않으면서’라는 뜻입니다."
+              },
+              "grammar": [
+                {
+                  "label": "without + 동명사",
+                  "note": "without covering은 ‘덮지 않으면서’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "covering",
+                  "meaning": "덮는 것"
+                }
+              ]
+            },
+            {
+              "text": "I can read there for an hour without noticing time.",
+              "chunks": [
+                {
+                  "en": "I can read there for an hour",
+                  "kr": "나는 그곳에서 한 시간 동안 책을 읽을 수 있다"
+                },
+                {
+                  "en": "without noticing time.",
+                  "kr": "시간을 의식하지 않고"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "can read는 조동사와 본동사이므로 붙여 읽습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "나는 그곳에서 시간 가는 줄 모르고 한 시간쯤 책을 읽을 수 있다.",
+              "wordOrderPoint": {
+                "title": "can + 동사원형",
+                "explanation": "can read는 ‘읽을 수 있다’라는 뜻입니다."
+              },
+              "grammar": [
+                {
+                  "label": "without + 동명사",
+                  "note": "without noticing time은 ‘시간을 의식하지 않고’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "noticing",
+                  "meaning": "알아차리기"
+                }
+              ]
+            },
+            {
+              "text": "It has become my favorite place to think.",
+              "chunks": [
+                {
+                  "en": "It has become my favorite place",
+                  "kr": "그곳은 내가 가장 좋아하는 장소가 되었다"
+                },
+                {
+                  "en": "to think.",
+                  "kr": "생각하기 위한"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 5,
+                    "reason": "to부정사가 place를 설명하므로 경계를 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "has become은 현재완료 구조이므로 붙여 읽습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그곳은 생각하기에 가장 좋아하는 장소가 되었다.",
+              "wordOrderPoint": {
+                "title": "place + to부정사",
+                "explanation": "to think가 place를 뒤에서 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "명사 + to부정사",
+                  "note": "place to think는 ‘생각할 장소’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "favorite",
+                  "meaning": "가장 좋아하는"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "asking-for-directions",
+          "level": 2,
+          "topic": "Travel",
+          "title": "Asking for Directions",
+          "titleKr": "길 묻기",
+          "sentences": [
+            {
+              "text": "A tourist asks me how to reach the old market.",
+              "chunks": [
+                {
+                  "en": "A tourist asks me",
+                  "kr": "한 관광객이 내게 묻는다"
+                },
+                {
+                  "en": "how to reach the old market.",
+                  "kr": "오래된 시장에 어떻게 가는지를"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 3,
+                    "reason": "asks의 내용이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "to reach는 to부정사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "한 관광객이 오래된 시장에 어떻게 가는지 내게 묻는다.",
+              "wordOrderPoint": {
+                "title": "how to + 동사원형",
+                "explanation": "how to reach는 ‘어떻게 도착하는지’라는 덩어리입니다."
+              },
+              "grammar": [
+                {
+                  "label": "의문사 + to부정사",
+                  "note": "how to reach는 ‘어떻게 가는지’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "tourist",
+                  "meaning": "관광객"
+                },
+                {
+                  "word": "reach",
+                  "meaning": "도착하다"
+                }
+              ]
+            },
+            {
+              "text": "I tell her to walk straight for two blocks.",
+              "chunks": [
+                {
+                  "en": "I tell her",
+                  "kr": "나는 그녀에게 말한다"
+                },
+                {
+                  "en": "to walk straight for two blocks.",
+                  "kr": "두 블록 동안 곧장 걸으라고"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "tell her to walk는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "나는 그녀에게 두 블록 곧장 걸으라고 말한다.",
+              "wordOrderPoint": {
+                "title": "tell + 사람 + to부정사",
+                "explanation": "tell her to walk는 ‘그녀에게 걸으라고 말하다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "tell + 목적어 + to부정사",
+                  "note": "tell her to walk는 ‘그녀에게 걸으라고 말하다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "straight",
+                  "meaning": "곧장"
+                }
+              ]
+            },
+            {
+              "text": "Then she should turn left at the bank.",
+              "chunks": [
+                {
+                  "en": "Then she should turn left",
+                  "kr": "그다음 그녀는 왼쪽으로 돌아야 한다"
+                },
+                {
+                  "en": "at the bank.",
+                  "kr": "은행에서"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "should turn은 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그다음 그녀는 은행 앞에서 왼쪽으로 돌아야 한다.",
+              "wordOrderPoint": {
+                "title": "should + 동사원형",
+                "explanation": "should turn은 ‘돌아야 한다’라는 뜻입니다."
+              },
+              "grammar": [
+                {
+                  "label": "조동사 should",
+                  "note": "should 뒤에는 동사원형 turn이 옵니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "bank",
+                  "meaning": "은행"
+                }
+              ]
+            },
+            {
+              "text": "The market is across from a large hotel.",
+              "chunks": [
+                {
+                  "en": "The market is across from a large hotel.",
+                  "kr": "그 시장은 큰 호텔 맞은편에 있다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "across from은 하나의 전치사 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그 시장은 큰 호텔 맞은편에 있다.",
+              "wordOrderPoint": {
+                "title": "across from",
+                "explanation": "across from은 ‘~의 맞은편에’라는 하나의 위치 표현입니다."
+              },
+              "grammar": [
+                {
+                  "label": "across from",
+                  "note": "across from a hotel은 ‘호텔 맞은편에’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "across",
+                  "meaning": "맞은편에"
+                }
+              ]
+            },
+            {
+              "text": "She repeats the directions to make sure she understood.",
+              "chunks": [
+                {
+                  "en": "She repeats the directions",
+                  "kr": "그녀는 길 안내를 반복해서 말한다"
+                },
+                {
+                  "en": "to make sure",
+                  "kr": "확실히 하기 위해"
+                },
+                {
+                  "en": "she understood.",
+                  "kr": "자신이 이해했는지를"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "make sure는 하나의 고정 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그녀는 제대로 이해했는지 확인하려고 길 안내를 다시 말해본다.",
+              "wordOrderPoint": {
+                "title": "to make sure",
+                "explanation": "to make sure는 ‘확실히 하기 위해’라는 목적 표현입니다."
+              },
+              "grammar": [
+                {
+                  "label": "to부정사의 목적",
+                  "note": "to make sure가 repeats의 목적을 나타냅니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "directions",
+                  "meaning": "길 안내"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "small-kindness",
+          "level": 2,
+          "topic": "Relationships",
+          "title": "A Small Kindness",
+          "titleKr": "작은 친절",
+          "sentences": [
+            {
+              "text": "A cashier notices that an older customer looks confused.",
+              "chunks": [
+                {
+                  "en": "A cashier notices",
+                  "kr": "한 계산원이 알아챈다"
+                },
+                {
+                  "en": "that an older customer looks confused.",
+                  "kr": "나이 든 손님이 혼란스러워 보인다는 것을"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 2,
+                    "reason": "that절 앞에서 구조를 확인하며 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 7,
+                    "reason": "looks confused는 동사와 보어입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "한 계산원은 나이 든 손님이 당황해 보인다는 것을 알아챈다.",
+              "wordOrderPoint": {
+                "title": "notice that + 문장",
+                "explanation": "notices 뒤의 that절이 알아챈 내용을 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "목적어 that절",
+                  "note": "that 이하가 notices의 목적어 역할을 합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "cashier",
+                  "meaning": "계산원"
+                },
+                {
+                  "word": "confused",
+                  "meaning": "혼란스러운"
+                }
+              ]
+            },
+            {
+              "text": "The machine is asking him to choose a language.",
+              "chunks": [
+                {
+                  "en": "The machine is asking him",
+                  "kr": "그 기계는 그에게 요구하고 있다"
+                },
+                {
+                  "en": "to choose a language.",
+                  "kr": "언어를 선택하라고"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "asking him to choose는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "기계가 그에게 언어를 선택하라고 안내하고 있다.",
+              "wordOrderPoint": {
+                "title": "ask + 사람 + to부정사",
+                "explanation": "is asking him to choose는 ‘그에게 선택하라고 요청하다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "ask + 목적어 + to부정사",
+                  "note": "ask him to choose는 ‘그에게 선택하라고 요청하다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "choose",
+                  "meaning": "선택하다"
+                }
+              ]
+            },
+            {
+              "text": "She steps closer and explains each button slowly.",
+              "chunks": [
+                {
+                  "en": "She steps closer",
+                  "kr": "그녀는 더 가까이 다가간다"
+                },
+                {
+                  "en": "and explains each button slowly.",
+                  "kr": "그리고 각 버튼을 천천히 설명한다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "each button은 하나의 명사구입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그녀는 가까이 다가가 각 버튼을 천천히 설명한다.",
+              "wordOrderPoint": {
+                "title": "and로 연속 행동 연결하기",
+                "explanation": "steps와 explains가 같은 주어에 연결됩니다."
+              },
+              "grammar": [
+                {
+                  "label": "동사 병렬",
+                  "note": "steps와 explains가 and로 연결됩니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "explains",
+                  "meaning": "설명한다"
+                }
+              ]
+            },
+            {
+              "text": "The customer thanks her before leaving the store.",
+              "chunks": [
+                {
+                  "en": "The customer thanks her",
+                  "kr": "그 손님은 그녀에게 감사한다"
+                },
+                {
+                  "en": "before leaving the store.",
+                  "kr": "가게를 떠나기 전에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "before leaving은 하나의 시간 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그 손님은 가게를 떠나기 전에 그녀에게 감사한다.",
+              "wordOrderPoint": {
+                "title": "before + -ing",
+                "explanation": "before leaving은 ‘떠나기 전에’라는 뜻입니다."
+              },
+              "grammar": [
+                {
+                  "label": "before + 동명사",
+                  "note": "before leaving the store는 ‘가게를 떠나기 전에’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "thanks",
+                  "meaning": "감사한다"
+                }
+              ]
+            },
+            {
+              "text": "Her help took less than a minute but mattered a lot.",
+              "chunks": [
+                {
+                  "en": "Her help took less than a minute",
+                  "kr": "그녀의 도움은 1분도 걸리지 않았다"
+                },
+                {
+                  "en": "but mattered a lot.",
+                  "kr": "하지만 큰 의미가 있었다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "less than a minute는 하나의 비교 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그녀의 도움은 1분도 걸리지 않았지만 큰 도움이 되었다.",
+              "wordOrderPoint": {
+                "title": "less than",
+                "explanation": "less than a minute는 ‘1분보다 적게’라는 비교 표현입니다."
+              },
+              "grammar": [
+                {
+                  "label": "less than",
+                  "note": "less than a minute는 ‘1분 미만’이라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "mattered",
+                  "meaning": "중요했다"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sleep-and-screens",
+          "level": 2,
+          "topic": "Health",
+          "title": "Screens Before Sleep",
+          "titleKr": "잠들기 전 화면",
+          "sentences": [
+            {
+              "text": "Bright screens can make it harder to fall asleep.",
+              "chunks": [
+                {
+                  "en": "Bright screens can make it harder",
+                  "kr": "밝은 화면은 더 어렵게 만들 수 있다"
+                },
+                {
+                  "en": "to fall asleep.",
+                  "kr": "잠드는 것을"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "can make는 조동사와 본동사입니다."
+                  },
+                  {
+                    "boundary": 6,
+                    "reason": "to fall asleep은 to부정사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "밝은 화면은 잠들기 어렵게 만들 수 있다.",
+              "wordOrderPoint": {
+                "title": "make it + 형용사 + to부정사",
+                "explanation": "make it harder to fall asleep은 ‘잠들기 더 어렵게 만들다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "make it + 형용사 + to부정사",
+                  "note": "it은 형식 목적어이고 to fall asleep이 실제 내용입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "asleep",
+                  "meaning": "잠든"
+                }
+              ]
+            },
+            {
+              "text": "Blue light may delay the signals that prepare the body for sleep.",
+              "chunks": [
+                {
+                  "en": "Blue light may delay the signals",
+                  "kr": "푸른빛은 신호를 늦출 수 있다"
+                },
+                {
+                  "en": "that prepare the body for sleep.",
+                  "kr": "몸을 잠들 준비시키는"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 5,
+                    "reason": "관계절이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "may delay는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "푸른빛은 몸을 수면에 대비시키는 신호를 늦출 수 있다.",
+              "wordOrderPoint": {
+                "title": "명사 뒤 관계절",
+                "explanation": "the signals를 먼저 말하고 that절이 어떤 신호인지 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "주격 관계대명사 that",
+                  "note": "that prepare the body for sleep가 signals를 꾸밉니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "delay",
+                  "meaning": "늦추다"
+                },
+                {
+                  "word": "signals",
+                  "meaning": "신호들"
+                }
+              ]
+            },
+            {
+              "text": "Reading on paper gives the eyes a calmer task.",
+              "chunks": [
+                {
+                  "en": "Reading on paper",
+                  "kr": "종이로 읽는 것은"
+                },
+                {
+                  "en": "gives the eyes a calmer task.",
+                  "kr": "눈에 더 차분한 일을 준다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 0,
+                    "reason": "Reading on paper는 하나의 동명사구입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "종이책 읽기는 눈에 더 편안한 활동이 된다.",
+              "wordOrderPoint": {
+                "title": "동명사구 주어",
+                "explanation": "Reading on paper 전체가 문장의 주어입니다."
+              },
+              "grammar": [
+                {
+                  "label": "동명사구 주어",
+                  "note": "Reading on paper가 하나의 주어 역할을 합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "calmer",
+                  "meaning": "더 차분한"
+                }
+              ]
+            },
+            {
+              "text": "Some people also lower the lights an hour before bed.",
+              "chunks": [
+                {
+                  "en": "Some people also lower the lights",
+                  "kr": "어떤 사람들은 조명도 낮춘다"
+                },
+                {
+                  "en": "an hour before bed.",
+                  "kr": "잠자리에 들기 한 시간 전에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 6,
+                    "reason": "an hour before bed는 하나의 시간 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "어떤 사람들은 잠들기 한 시간 전부터 조명을 어둡게 한다.",
+              "wordOrderPoint": {
+                "title": "시간 표현을 뒤에 붙이기",
+                "explanation": "행동을 먼저 말하고 an hour before bed로 시간을 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "시간 명사구",
+                  "note": "an hour before bed는 ‘잠자기 한 시간 전’이라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "lower",
+                  "meaning": "낮추다"
+                }
+              ]
+            },
+            {
+              "text": "A quieter evening can lead to better rest.",
+              "chunks": [
+                {
+                  "en": "A quieter evening",
+                  "kr": "더 조용한 저녁은"
+                },
+                {
+                  "en": "can lead to better rest.",
+                  "kr": "더 나은 휴식으로 이어질 수 있다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "lead to는 하나의 동사 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "조용한 저녁 시간은 더 나은 수면으로 이어질 수 있다.",
+              "wordOrderPoint": {
+                "title": "lead to",
+                "explanation": "lead to는 ‘~로 이어지다’라는 하나의 표현입니다."
+              },
+              "grammar": [
+                {
+                  "label": "lead to",
+                  "note": "lead to better rest는 ‘더 나은 휴식으로 이어지다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "rest",
+                  "meaning": "휴식"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "learning-from-mistakes",
+          "level": 2,
+          "topic": "Self Development",
+          "title": "Learning from Mistakes",
+          "titleKr": "실수에서 배우기",
+          "sentences": [
+            {
+              "text": "People often hide mistakes because they fear judgment.",
+              "chunks": [
+                {
+                  "en": "People often hide mistakes",
+                  "kr": "사람들은 자주 실수를 숨긴다"
+                },
+                {
+                  "en": "because they fear judgment.",
+                  "kr": "평가받는 것을 두려워하기 때문에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 6,
+                    "reason": "fear judgment는 동사와 목적어가 하나의 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "사람들은 평가받는 것이 두려워 실수를 숨기곤 한다.",
+              "wordOrderPoint": {
+                "title": "because로 이유 설명하기",
+                "explanation": "행동을 먼저 말하고 because절로 이유를 덧붙입니다."
+              },
+              "grammar": [
+                {
+                  "label": "because절",
+                  "note": "because 이하가 실수를 숨기는 이유를 설명합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "judgment",
+                  "meaning": "평가, 판단"
+                }
+              ]
+            },
+            {
+              "text": "But a mistake can show us what needs improvement.",
+              "chunks": [
+                {
+                  "en": "But a mistake can show us",
+                  "kr": "하지만 실수는 우리에게 보여줄 수 있다"
+                },
+                {
+                  "en": "what needs improvement.",
+                  "kr": "무엇이 개선을 필요로 하는지를"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 5,
+                    "reason": "show의 내용이 시작되므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "can show는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "하지만 실수는 무엇을 개선해야 하는지 알려줄 수 있다.",
+              "wordOrderPoint": {
+                "title": "what절",
+                "explanation": "what needs improvement가 show us의 내용을 나타냅니다."
+              },
+              "grammar": [
+                {
+                  "label": "명사절 what",
+                  "note": "what needs improvement는 ‘무엇이 개선이 필요한지’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "improvement",
+                  "meaning": "개선"
+                }
+              ]
+            },
+            {
+              "text": "Writing down the cause makes the lesson clearer.",
+              "chunks": [
+                {
+                  "en": "Writing down the cause",
+                  "kr": "원인을 적는 것은"
+                },
+                {
+                  "en": "makes the lesson clearer.",
+                  "kr": "그 교훈을 더 분명하게 만든다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 0,
+                    "reason": "Writing down은 하나의 구동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "실수의 원인을 적어보면 배운 점이 더 분명해진다.",
+              "wordOrderPoint": {
+                "title": "동명사구 주어",
+                "explanation": "Writing down the cause 전체가 문장의 주어입니다."
+              },
+              "grammar": [
+                {
+                  "label": "make + 목적어 + 형용사",
+                  "note": "makes the lesson clearer는 ‘교훈을 더 분명하게 만들다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "cause",
+                  "meaning": "원인"
+                },
+                {
+                  "word": "clearer",
+                  "meaning": "더 분명한"
+                }
+              ]
+            },
+            {
+              "text": "Trying again soon helps the new idea stay fresh.",
+              "chunks": [
+                {
+                  "en": "Trying again soon",
+                  "kr": "곧 다시 시도하는 것은"
+                },
+                {
+                  "en": "helps the new idea stay fresh.",
+                  "kr": "새로운 생각이 생생하게 유지되도록 돕는다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "helps the new idea stay는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "곧바로 다시 시도하면 새로 배운 내용이 오래 남는다.",
+              "wordOrderPoint": {
+                "title": "help + 대상 + 동사원형",
+                "explanation": "helps the new idea stay는 ‘새 생각이 유지되도록 돕다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "help + 목적어 + 동사원형",
+                  "note": "helps the new idea stay는 ‘새 생각이 유지되도록 돕다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "fresh",
+                  "meaning": "생생한"
+                }
+              ]
+            },
+            {
+              "text": "Progress grows when we use failure as information.",
+              "chunks": [
+                {
+                  "en": "Progress grows",
+                  "kr": "발전은 커진다"
+                },
+                {
+                  "en": "when we use failure as information.",
+                  "kr": "우리가 실패를 정보로 사용할 때"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "use failure as information은 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "실패를 정보로 활용할 때 발전할 수 있다.",
+              "wordOrderPoint": {
+                "title": "use A as B",
+                "explanation": "use failure as information은 ‘실패를 정보로 사용하다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "use A as B",
+                  "note": "A를 B로 사용하다라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "failure",
+                  "meaning": "실패"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "notifications-and-focus",
+          "level": 2,
+          "topic": "Technology",
+          "title": "Notifications and Focus",
+          "titleKr": "알림과 집중",
+          "sentences": [
+            {
+              "text": "Each notification asks the brain to change direction.",
+              "chunks": [
+                {
+                  "en": "Each notification asks the brain",
+                  "kr": "각 알림은 뇌에 요구한다"
+                },
+                {
+                  "en": "to change direction.",
+                  "kr": "방향을 바꾸라고"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "asks the brain to change는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "알림이 올 때마다 뇌는 하던 일에서 방향을 바꿔야 한다.",
+              "wordOrderPoint": {
+                "title": "ask + 대상 + to부정사",
+                "explanation": "asks the brain to change는 ‘뇌가 바꾸도록 요구하다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "ask + 목적어 + to부정사",
+                  "note": "asks the brain to change는 ‘뇌에 바꾸라고 요구하다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "notification",
+                  "meaning": "알림"
+                }
+              ]
+            },
+            {
+              "text": "Even a quick glance can interrupt a difficult task.",
+              "chunks": [
+                {
+                  "en": "Even a quick glance",
+                  "kr": "심지어 짧은 흘끗 보기조차"
+                },
+                {
+                  "en": "can interrupt a difficult task.",
+                  "kr": "어려운 일을 방해할 수 있다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "can interrupt는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "잠깐 알림을 보는 것만으로도 어려운 작업의 흐름이 끊길 수 있다.",
+              "wordOrderPoint": {
+                "title": "can + 동사원형",
+                "explanation": "can interrupt는 ‘방해할 수 있다’라는 뜻입니다."
+              },
+              "grammar": [
+                {
+                  "label": "Even + 명사구",
+                  "note": "Even이 ‘~조차도’라는 강조를 더합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "glance",
+                  "meaning": "흘끗 봄"
+                },
+                {
+                  "word": "interrupt",
+                  "meaning": "방해하다"
+                }
+              ]
+            },
+            {
+              "text": "It may take several minutes to regain full attention.",
+              "chunks": [
+                {
+                  "en": "It may take several minutes",
+                  "kr": "몇 분이 걸릴 수도 있다"
+                },
+                {
+                  "en": "to regain full attention.",
+                  "kr": "완전한 집중력을 되찾는 데"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "may take는 조동사와 본동사입니다."
+                  },
+                  {
+                    "boundary": 5,
+                    "reason": "to regain은 to부정사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "집중력을 완전히 되찾는 데 몇 분이 걸릴 수 있다.",
+              "wordOrderPoint": {
+                "title": "It takes + 시간 + to부정사",
+                "explanation": "It may take several minutes to regain은 ‘되찾는 데 몇 분이 걸릴 수 있다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "가주어 it",
+                  "note": "It이 형식상 주어이고 to regain 이하가 실제 내용입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "regain",
+                  "meaning": "되찾다"
+                }
+              ]
+            },
+            {
+              "text": "Turning off alerts creates longer periods of calm work.",
+              "chunks": [
+                {
+                  "en": "Turning off alerts",
+                  "kr": "알림을 끄는 것은"
+                },
+                {
+                  "en": "creates longer periods of calm work.",
+                  "kr": "더 긴 차분한 작업 시간을 만든다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 0,
+                    "reason": "Turning off는 하나의 구동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "알림을 끄면 방해 없이 집중하는 시간이 길어진다.",
+              "wordOrderPoint": {
+                "title": "동명사구 주어",
+                "explanation": "Turning off alerts 전체가 문장의 주어입니다."
+              },
+              "grammar": [
+                {
+                  "label": "동명사구 주어",
+                  "note": "Turning off alerts가 문장의 주어 역할을 합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "alerts",
+                  "meaning": "알림들"
+                },
+                {
+                  "word": "periods",
+                  "meaning": "기간들"
+                }
+              ]
+            },
+            {
+              "text": "The phone becomes a tool instead of a constant interruption.",
+              "chunks": [
+                {
+                  "en": "The phone becomes a tool",
+                  "kr": "휴대전화는 도구가 된다"
+                },
+                {
+                  "en": "instead of a constant interruption.",
+                  "kr": "끊임없는 방해 대신에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "instead of는 하나의 전치사 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그러면 휴대전화가 끊임없는 방해물이 아니라 도구가 된다.",
+              "wordOrderPoint": {
+                "title": "instead of",
+                "explanation": "instead of는 ‘~대신에’라는 하나의 표현입니다."
+              },
+              "grammar": [
+                {
+                  "label": "instead of",
+                  "note": "instead of a constant interruption은 ‘끊임없는 방해 대신에’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "constant",
+                  "meaning": "끊임없는"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "different-viewpoints",
+          "level": 2,
+          "topic": "Relationships",
+          "title": "Different Viewpoints",
+          "titleKr": "서로 다른 관점",
+          "sentences": [
+            {
+              "text": "Two friends can watch the same event and remember it differently.",
+              "chunks": [
+                {
+                  "en": "Two friends can watch the same event",
+                  "kr": "두 친구는 같은 사건을 볼 수 있다"
+                },
+                {
+                  "en": "and remember it differently.",
+                  "kr": "그리고 그것을 다르게 기억할 수 있다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "can watch는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "두 친구가 같은 일을 보고도 서로 다르게 기억할 수 있다.",
+              "wordOrderPoint": {
+                "title": "and로 동사 연결하기",
+                "explanation": "watch와 remember가 같은 주어에 연결됩니다."
+              },
+              "grammar": [
+                {
+                  "label": "동사 병렬",
+                  "note": "can이 watch와 remember 모두에 걸립니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "differently",
+                  "meaning": "다르게"
+                }
+              ]
+            },
+            {
+              "text": "Attention chooses details that seem important in the moment.",
+              "chunks": [
+                {
+                  "en": "Attention chooses details",
+                  "kr": "주의는 세부 사항을 선택한다"
+                },
+                {
+                  "en": "that seem important in the moment.",
+                  "kr": "그 순간 중요해 보이는"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 2,
+                    "reason": "관계절 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "seem important는 동사와 보어입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "사람의 주의는 그 순간 중요해 보이는 세부 정보만 골라낸다.",
+              "wordOrderPoint": {
+                "title": "명사 뒤 관계절",
+                "explanation": "details를 먼저 말하고 that절이 어떤 세부 사항인지 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "주격 관계대명사 that",
+                  "note": "that seem important가 details를 꾸밉니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "details",
+                  "meaning": "세부 사항들"
+                }
+              ]
+            },
+            {
+              "text": "Emotion also changes which parts feel strongest later.",
+              "chunks": [
+                {
+                  "en": "Emotion also changes",
+                  "kr": "감정은 또한 바꾼다"
+                },
+                {
+                  "en": "which parts feel strongest later.",
+                  "kr": "어떤 부분이 나중에 가장 강하게 느껴지는지를"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 2,
+                    "reason": "which절이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "feel strongest는 동사와 보어입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "감정은 나중에 어떤 부분이 가장 선명하게 남는지도 바꾼다.",
+              "wordOrderPoint": {
+                "title": "which절",
+                "explanation": "which parts feel strongest가 changes의 목적어 역할을 합니다."
+              },
+              "grammar": [
+                {
+                  "label": "간접의문문 which",
+                  "note": "which parts feel strongest는 ‘어떤 부분이 가장 강하게 느껴지는지’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "Emotion",
+                  "meaning": "감정"
+                }
+              ]
+            },
+            {
+              "text": "This is why honest people may disagree about what happened.",
+              "chunks": [
+                {
+                  "en": "This is why",
+                  "kr": "이것이 이유다"
+                },
+                {
+                  "en": "honest people may disagree",
+                  "kr": "정직한 사람들이 의견이 다를 수 있는"
+                },
+                {
+                  "en": "about what happened.",
+                  "kr": "무슨 일이 있었는지에 대해"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "may disagree는 조동사와 본동사입니다."
+                  },
+                  {
+                    "boundary": 7,
+                    "reason": "about what happened는 하나의 전치사구입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그래서 정직한 사람들도 무슨 일이 있었는지에 대해 의견이 다를 수 있다.",
+              "wordOrderPoint": {
+                "title": "This is why",
+                "explanation": "This is why는 ‘이것이 ~한 이유다’라는 연결 표현입니다."
+              },
+              "grammar": [
+                {
+                  "label": "why절",
+                  "note": "why 이하가 이유의 내용을 설명합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "disagree",
+                  "meaning": "의견이 다르다"
+                }
+              ]
+            },
+            {
+              "text": "Listening carefully can reveal the missing pieces in both stories.",
+              "chunks": [
+                {
+                  "en": "Listening carefully can reveal",
+                  "kr": "주의 깊게 듣는 것은 드러낼 수 있다"
+                },
+                {
+                  "en": "the missing pieces",
+                  "kr": "빠진 조각들을"
+                },
+                {
+                  "en": "in both stories.",
+                  "kr": "두 이야기 모두에서"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "can reveal는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "서로의 이야기를 잘 들으면 양쪽 이야기에서 빠진 부분을 찾을 수 있다.",
+              "wordOrderPoint": {
+                "title": "동명사구 주어 + can",
+                "explanation": "Listening carefully가 주어이고 can reveal이 서술부입니다."
+              },
+              "grammar": [
+                {
+                  "label": "동명사구 주어",
+                  "note": "Listening carefully가 문장의 주어입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "reveal",
+                  "meaning": "드러내다"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "why-habits-stick",
+          "level": 3,
+          "topic": "Psychology",
+          "title": "Why Habits Stick",
+          "titleKr": "습관이 굳어지는 이유",
+          "sentences": [
+            {
+              "text": "A habit becomes easier when the same action follows the same signal.",
+              "chunks": [
+                {
+                  "en": "A habit becomes easier",
+                  "kr": "습관은 더 쉬워진다"
+                },
+                {
+                  "en": "when the same action follows the same signal.",
+                  "kr": "같은 행동이 같은 신호를 뒤따를 때"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "becomes easier는 동사와 보어입니다."
+                  },
+                  {
+                    "boundary": 8,
+                    "reason": "follows the same signal은 동사와 목적어입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "같은 신호 뒤에 같은 행동을 반복하면 습관이 더 쉽게 자리 잡는다.",
+              "wordOrderPoint": {
+                "title": "when으로 조건 제시하기",
+                "explanation": "주절에서 결과를 말하고 when절에서 반복 조건을 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "시간·조건의 when절",
+                  "note": "when 이하가 습관이 쉬워지는 조건을 설명합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "signal",
+                  "meaning": "신호"
+                }
+              ]
+            },
+            {
+              "text": "The brain starts predicting what will happen after that signal appears.",
+              "chunks": [
+                {
+                  "en": "The brain starts predicting",
+                  "kr": "뇌는 예측하기 시작한다"
+                },
+                {
+                  "en": "what will happen",
+                  "kr": "무슨 일이 일어날지를"
+                },
+                {
+                  "en": "after that signal appears.",
+                  "kr": "그 신호가 나타난 뒤에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 3,
+                    "reason": "예측 내용이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "starts predicting은 하나의 동사 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "뇌는 그 신호가 나타난 뒤 어떤 일이 일어날지 예측하기 시작한다.",
+              "wordOrderPoint": {
+                "title": "start + -ing + what절",
+                "explanation": "starts predicting 뒤에 what절이 예측 내용을 제공합니다."
+              },
+              "grammar": [
+                {
+                  "label": "명사절 what",
+                  "note": "what will happen이 predicting의 목적어 역할을 합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "predicting",
+                  "meaning": "예측하기"
+                }
+              ]
+            },
+            {
+              "text": "If the result feels rewarding, the connection grows stronger.",
+              "chunks": [
+                {
+                  "en": "If the result feels rewarding,",
+                  "kr": "그 결과가 보람 있게 느껴진다면,"
+                },
+                {
+                  "en": "the connection grows stronger.",
+                  "kr": "그 연결은 더 강해진다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "feels rewarding은 동사와 보어입니다."
+                  },
+                  {
+                    "boundary": 7,
+                    "reason": "grows stronger는 동사와 보어입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그 결과가 만족스럽게 느껴지면 그 연결은 더 강해진다.",
+              "wordOrderPoint": {
+                "title": "If절로 조건 먼저 제시하기",
+                "explanation": "조건을 먼저 말한 뒤 주절에서 결과를 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "조건절 if",
+                  "note": "If 이하가 connection이 강해지는 조건을 나타냅니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "rewarding",
+                  "meaning": "보람 있는"
+                }
+              ]
+            },
+            {
+              "text": "This is why small rewards can support a new routine.",
+              "chunks": [
+                {
+                  "en": "This is why",
+                  "kr": "이것이 이유다"
+                },
+                {
+                  "en": "small rewards can support a new routine.",
+                  "kr": "작은 보상이 새로운 습관을 뒷받침할 수 있는"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "can support는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그래서 작은 보상이 새로운 습관 형성에 도움이 될 수 있다.",
+              "wordOrderPoint": {
+                "title": "This is why",
+                "explanation": "앞 문장의 설명을 받아 결과의 이유를 정리합니다."
+              },
+              "grammar": [
+                {
+                  "label": "why절",
+                  "note": "why 이하가 이유의 내용을 설명합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "support",
+                  "meaning": "도와주다, 뒷받침하다"
+                }
+              ]
+            },
+            {
+              "text": "Changing the signal can be more effective than fighting the habit directly.",
+              "chunks": [
+                {
+                  "en": "Changing the signal",
+                  "kr": "신호를 바꾸는 것은"
+                },
+                {
+                  "en": "can be more effective",
+                  "kr": "더 효과적일 수 있다"
+                },
+                {
+                  "en": "than fighting the habit directly.",
+                  "kr": "그 습관과 직접 싸우는 것보다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "more effective than fighting은 하나의 비교 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "습관 자체와 싸우기보다 신호를 바꾸는 편이 더 효과적일 수 있다.",
+              "wordOrderPoint": {
+                "title": "비교급 + than",
+                "explanation": "more effective than 이하를 하나의 비교 구조로 이해합니다."
+              },
+              "grammar": [
+                {
+                  "label": "비교급 + than",
+                  "note": "more effective than은 ‘~보다 더 효과적인’이라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "effective",
+                  "meaning": "효과적인"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "urban-trees",
+          "level": 3,
+          "topic": "Science",
+          "title": "Why Cities Need Trees",
+          "titleKr": "도시에 나무가 필요한 이유",
+          "sentences": [
+            {
+              "text": "Trees lower street temperatures by blocking sunlight and releasing moisture.",
+              "chunks": [
+                {
+                  "en": "Trees lower street temperatures",
+                  "kr": "나무는 거리 온도를 낮춘다"
+                },
+                {
+                  "en": "by blocking sunlight",
+                  "kr": "햇빛을 가림으로써"
+                },
+                {
+                  "en": "and releasing moisture.",
+                  "kr": "그리고 수분을 내보냄으로써"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "by blocking sunlight은 하나의 방법 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "나무는 햇빛을 가리고 수분을 내보내 거리 온도를 낮춘다.",
+              "wordOrderPoint": {
+                "title": "by + -ing",
+                "explanation": "by blocking과 by releasing이 방법을 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "by + 동명사",
+                  "note": "by blocking은 ‘가림으로써’라는 방법 표현입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "moisture",
+                  "meaning": "수분"
+                }
+              ]
+            },
+            {
+              "text": "Areas with more shade often remain cooler during extreme heat.",
+              "chunks": [
+                {
+                  "en": "Areas with more shade",
+                  "kr": "그늘이 더 많은 지역은"
+                },
+                {
+                  "en": "often remain cooler",
+                  "kr": "종종 더 시원하게 유지된다"
+                },
+                {
+                  "en": "during extreme heat.",
+                  "kr": "극심한 더위 동안"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "remain cooler는 동사와 보어입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그늘이 많은 지역은 극심한 더위에도 더 시원하게 유지된다.",
+              "wordOrderPoint": {
+                "title": "명사 뒤 with 설명",
+                "explanation": "Areas를 먼저 말하고 with 이하가 어떤 지역인지 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "with + 명사",
+                  "note": "with more shade가 Areas의 특징을 덧붙입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "shade",
+                  "meaning": "그늘"
+                },
+                {
+                  "word": "extreme",
+                  "meaning": "극심한"
+                }
+              ]
+            },
+            {
+              "text": "Their roots also absorb water that might otherwise flood roads.",
+              "chunks": [
+                {
+                  "en": "Their roots also absorb water",
+                  "kr": "그 뿌리들은 물도 흡수한다"
+                },
+                {
+                  "en": "that might otherwise flood roads.",
+                  "kr": "그렇지 않으면 도로를 침수시킬 수도 있는"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 4,
+                    "reason": "관계절이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 6,
+                    "reason": "might flood는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "나무뿌리는 그대로 두면 도로를 잠기게 할 수 있는 물도 흡수한다.",
+              "wordOrderPoint": {
+                "title": "명사 뒤 관계절",
+                "explanation": "water를 먼저 말하고 that절이 어떤 물인지 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "주격 관계대명사 that",
+                  "note": "that might otherwise flood roads가 water를 꾸밉니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "absorb",
+                  "meaning": "흡수하다"
+                },
+                {
+                  "word": "otherwise",
+                  "meaning": "그렇지 않으면"
+                }
+              ]
+            },
+            {
+              "text": "Birds and insects use city trees as places to rest and feed.",
+              "chunks": [
+                {
+                  "en": "Birds and insects use city trees",
+                  "kr": "새와 곤충은 도시의 나무를 사용한다"
+                },
+                {
+                  "en": "as places to rest and feed.",
+                  "kr": "쉬고 먹이를 먹을 장소로"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "use city trees as places는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "새와 곤충은 도시의 나무를 쉬고 먹이를 먹는 장소로 이용한다.",
+              "wordOrderPoint": {
+                "title": "use A as B",
+                "explanation": "use city trees as places는 ‘도시 나무를 장소로 사용하다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "use A as B",
+                  "note": "A를 B로 사용하다라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "insects",
+                  "meaning": "곤충들"
+                }
+              ]
+            },
+            {
+              "text": "Planting trees supports both human comfort and urban wildlife.",
+              "chunks": [
+                {
+                  "en": "Planting trees",
+                  "kr": "나무를 심는 것은"
+                },
+                {
+                  "en": "supports both human comfort and urban wildlife.",
+                  "kr": "사람의 쾌적함과 도시 야생동물 둘 다를 돕는다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "both human comfort and urban wildlife는 하나의 병렬 덩어리입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "나무를 심으면 사람의 쾌적함과 도시 생태계를 모두 지킬 수 있다.",
+              "wordOrderPoint": {
+                "title": "both A and B",
+                "explanation": "both human comfort and urban wildlife가 두 대상을 함께 강조합니다."
+              },
+              "grammar": [
+                {
+                  "label": "both A and B",
+                  "note": "‘A와 B 둘 다’라는 병렬 구조입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "wildlife",
+                  "meaning": "야생동물"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "how-recommendations-work",
+          "level": 3,
+          "topic": "Technology",
+          "title": "How Recommendations Work",
+          "titleKr": "추천 시스템의 작동 방식",
+          "sentences": [
+            {
+              "text": "A recommendation system studies the choices that users make over time.",
+              "chunks": [
+                {
+                  "en": "A recommendation system studies the choices",
+                  "kr": "추천 시스템은 선택들을 분석한다"
+                },
+                {
+                  "en": "that users make over time.",
+                  "kr": "사용자들이 시간이 지나며 하는"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 5,
+                    "reason": "관계절이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 8,
+                    "reason": "make over time이 아니라 make가 choices를 목적어로 가집니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "추천 시스템은 사용자가 오랫동안 해온 선택을 분석한다.",
+              "wordOrderPoint": {
+                "title": "명사 뒤 관계절",
+                "explanation": "the choices를 먼저 말하고 that절이 어떤 선택인지 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "목적격 관계대명사 that",
+                  "note": "that users make가 choices를 꾸밉니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "recommendation",
+                  "meaning": "추천"
+                }
+              ]
+            },
+            {
+              "text": "It compares those choices with patterns from many other users.",
+              "chunks": [
+                {
+                  "en": "It compares those choices",
+                  "kr": "그것은 그 선택들을 비교한다"
+                },
+                {
+                  "en": "with patterns from many other users.",
+                  "kr": "많은 다른 사용자들의 패턴과"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "compares those choices with patterns는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그 시스템은 그 선택들을 다른 많은 사용자의 패턴과 비교한다.",
+              "wordOrderPoint": {
+                "title": "compare A with B",
+                "explanation": "compares those choices with patterns는 ‘선택을 패턴과 비교하다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "compare A with B",
+                  "note": "A를 B와 비교하다라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "patterns",
+                  "meaning": "패턴들"
+                }
+              ]
+            },
+            {
+              "text": "The system then predicts which items a person may enjoy next.",
+              "chunks": [
+                {
+                  "en": "The system then predicts",
+                  "kr": "그 시스템은 그다음 예측한다"
+                },
+                {
+                  "en": "which items a person may enjoy next.",
+                  "kr": "어떤 항목을 그 사람이 다음에 좋아할지를"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 3,
+                    "reason": "예측 내용이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 8,
+                    "reason": "may enjoy는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그다음 시스템은 사용자가 다음에 어떤 항목을 좋아할지 예측한다.",
+              "wordOrderPoint": {
+                "title": "which절",
+                "explanation": "which items 이하가 predicts의 목적어 역할을 합니다."
+              },
+              "grammar": [
+                {
+                  "label": "간접의문문 which",
+                  "note": "which items a person may enjoy는 ‘어떤 항목을 좋아할지’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "predicts",
+                  "meaning": "예측한다"
+                }
+              ]
+            },
+            {
+              "text": "Accurate suggestions depend on both useful data and careful design.",
+              "chunks": [
+                {
+                  "en": "Accurate suggestions",
+                  "kr": "정확한 추천은"
+                },
+                {
+                  "en": "depend on both useful data and careful design.",
+                  "kr": "유용한 데이터와 신중한 설계 둘 다에 달려 있다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "depend on은 하나의 동사 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "정확한 추천은 유용한 데이터와 세심한 설계 모두에 달려 있다.",
+              "wordOrderPoint": {
+                "title": "depend on",
+                "explanation": "depend on은 ‘~에 달려 있다’라는 하나의 표현입니다."
+              },
+              "grammar": [
+                {
+                  "label": "depend on",
+                  "note": "depend on both A and B는 ‘A와 B 둘 다에 달려 있다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "Accurate",
+                  "meaning": "정확한"
+                }
+              ]
+            },
+            {
+              "text": "Poor data can produce confident results that are still wrong.",
+              "chunks": [
+                {
+                  "en": "Poor data can produce confident results",
+                  "kr": "부정확한 데이터는 확신에 찬 결과를 만들 수 있다"
+                },
+                {
+                  "en": "that are still wrong.",
+                  "kr": "여전히 틀린"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 5,
+                    "reason": "관계절이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "can produce는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "좋지 않은 데이터는 확신에 차 보이지만 틀린 결과를 만들 수 있다.",
+              "wordOrderPoint": {
+                "title": "명사 뒤 관계절",
+                "explanation": "results를 먼저 말하고 that절이 결과의 상태를 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "주격 관계대명사 that",
+                  "note": "that are still wrong이 results를 꾸밉니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "produce",
+                  "meaning": "만들어내다"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "understanding-fast-speech",
+          "level": 3,
+          "topic": "Language",
+          "title": "Understanding Fast Speech",
+          "titleKr": "빠른 영어 이해하기",
+          "sentences": [
+            {
+              "text": "Fast speech sounds difficult because familiar words often blend together.",
+              "chunks": [
+                {
+                  "en": "Fast speech sounds difficult",
+                  "kr": "빠른 말은 어렵게 들린다"
+                },
+                {
+                  "en": "because familiar words often blend together.",
+                  "kr": "익숙한 단어들이 자주 서로 이어지기 때문에"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "sounds difficult는 동사와 보어입니다."
+                  },
+                  {
+                    "boundary": 8,
+                    "reason": "blend together는 하나의 동사 표현입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "익숙한 단어들이 서로 이어져 들리기 때문에 빠른 말이 어렵게 느껴진다.",
+              "wordOrderPoint": {
+                "title": "because로 이유 설명하기",
+                "explanation": "결과를 먼저 말하고 because절로 원인을 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "because절",
+                  "note": "because 이하가 빠른 말이 어려운 이유를 설명합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "blend",
+                  "meaning": "섞이다, 이어지다"
+                }
+              ]
+            },
+            {
+              "text": "Listeners may know every word but miss the boundaries between them.",
+              "chunks": [
+                {
+                  "en": "Listeners may know every word",
+                  "kr": "듣는 사람들은 모든 단어를 알 수도 있다"
+                },
+                {
+                  "en": "but miss the boundaries between them.",
+                  "kr": "하지만 그들 사이의 경계를 놓친다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "may know는 조동사와 본동사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "단어를 모두 알아도 단어 사이의 경계를 놓칠 수 있다.",
+              "wordOrderPoint": {
+                "title": "but으로 대조하기",
+                "explanation": "단어 지식과 실제 인식의 차이를 but으로 대조합니다."
+              },
+              "grammar": [
+                {
+                  "label": "등위접속사 but",
+                  "note": "서로 반대되는 두 내용을 연결합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "boundaries",
+                  "meaning": "경계들"
+                }
+              ]
+            },
+            {
+              "text": "Repeated listening helps the brain predict common sound patterns.",
+              "chunks": [
+                {
+                  "en": "Repeated listening",
+                  "kr": "반복해서 듣는 것은"
+                },
+                {
+                  "en": "helps the brain predict common sound patterns.",
+                  "kr": "뇌가 흔한 소리 패턴을 예측하도록 돕는다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "helps the brain predict는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "반복해서 들으면 뇌가 자주 나오는 소리 패턴을 예측하게 된다.",
+              "wordOrderPoint": {
+                "title": "help + 대상 + 동사원형",
+                "explanation": "helps the brain predict는 ‘뇌가 예측하도록 돕다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "help + 목적어 + 동사원형",
+                  "note": "helps the brain predict는 ‘뇌가 예측하도록 돕다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "Repeated",
+                  "meaning": "반복된"
+                }
+              ]
+            },
+            {
+              "text": "Reading the transcript first can reduce the effort needed to follow the audio.",
+              "chunks": [
+                {
+                  "en": "Reading the transcript first",
+                  "kr": "대본을 먼저 읽는 것은"
+                },
+                {
+                  "en": "can reduce the effort",
+                  "kr": "노력을 줄일 수 있다"
+                },
+                {
+                  "en": "needed to follow the audio.",
+                  "kr": "오디오를 따라가는 데 필요한"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 7,
+                    "reason": "뒤에서 설명하는 분사구가 시작되므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "can reduce는 조동사와 본동사입니다."
+                  },
+                  {
+                    "boundary": 9,
+                    "reason": "to follow는 to부정사입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "대본을 먼저 읽으면 음성을 따라가는 데 필요한 부담을 줄일 수 있다.",
+              "wordOrderPoint": {
+                "title": "과거분사구의 뒤수식",
+                "explanation": "needed to follow the audio가 effort를 뒤에서 설명합니다."
+              },
+              "grammar": [
+                {
+                  "label": "과거분사 뒤수식",
+                  "note": "needed가 effort를 꾸며 ‘필요한 노력’이라는 뜻을 만듭니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "transcript",
+                  "meaning": "대본"
+                }
+              ]
+            },
+            {
+              "text": "Over time, the same sentence begins to sound slower and clearer.",
+              "chunks": [
+                {
+                  "en": "Over time,",
+                  "kr": "시간이 지나면서,"
+                },
+                {
+                  "en": "the same sentence begins to sound slower and clearer.",
+                  "kr": "같은 문장이 더 느리고 분명하게 들리기 시작한다"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "begins to sound는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "시간이 지나면 같은 문장도 더 느리고 또렷하게 들리기 시작한다.",
+              "wordOrderPoint": {
+                "title": "begin to + 동사원형",
+                "explanation": "begins to sound는 ‘들리기 시작하다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "begin to + 동사원형",
+                  "note": "begins to sound는 ‘들리기 시작하다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "clearer",
+                  "meaning": "더 분명한"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "choosing-good-information",
+          "level": 3,
+          "topic": "Critical Thinking",
+          "title": "Choosing Good Information",
+          "titleKr": "좋은 정보 고르기",
+          "sentences": [
+            {
+              "text": "Online information can appear reliable even when the source is weak.",
+              "chunks": [
+                {
+                  "en": "Online information can appear reliable",
+                  "kr": "온라인 정보는 신뢰할 만해 보일 수 있다"
+                },
+                {
+                  "en": "even when the source is weak.",
+                  "kr": "출처가 약할 때조차"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "can appear는 조동사와 본동사입니다."
+                  },
+                  {
+                    "boundary": 3,
+                    "reason": "appear reliable은 동사와 보어입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "출처가 부실해도 온라인 정보는 믿을 만해 보일 수 있다.",
+              "wordOrderPoint": {
+                "title": "appear + 형용사",
+                "explanation": "appear reliable은 ‘신뢰할 만해 보이다’라는 뜻입니다."
+              },
+              "grammar": [
+                {
+                  "label": "appear + 형용사",
+                  "note": "appear reliable은 ‘신뢰할 만해 보이다’라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "reliable",
+                  "meaning": "신뢰할 수 있는"
+                },
+                {
+                  "word": "source",
+                  "meaning": "출처"
+                }
+              ]
+            },
+            {
+              "text": "A confident tone does not prove that a claim is true.",
+              "chunks": [
+                {
+                  "en": "A confident tone does not prove",
+                  "kr": "자신감 있는 말투가 증명하지는 않는다"
+                },
+                {
+                  "en": "that a claim is true.",
+                  "kr": "어떤 주장이 사실이라는 것을"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 5,
+                    "reason": "that절이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "does not prove는 조동사 부정 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "자신감 있는 말투만으로 주장이 사실임을 증명할 수는 없다.",
+              "wordOrderPoint": {
+                "title": "prove that + 문장",
+                "explanation": "prove 뒤의 that절이 증명하려는 내용을 나타냅니다."
+              },
+              "grammar": [
+                {
+                  "label": "목적어 that절",
+                  "note": "that a claim is true가 prove의 목적어 역할을 합니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "claim",
+                  "meaning": "주장"
+                }
+              ]
+            },
+            {
+              "text": "Good readers ask who created the message and why it was published.",
+              "chunks": [
+                {
+                  "en": "Good readers ask",
+                  "kr": "좋은 독자는 묻는다"
+                },
+                {
+                  "en": "who created the message",
+                  "kr": "누가 그 메시지를 만들었는지"
+                },
+                {
+                  "en": "and why it was published.",
+                  "kr": "그리고 왜 그것이 공개되었는지를"
+                }
+              ],
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 2,
+                    "reason": "질문의 내용이 시작되는 경계이므로 나눌 수 있습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 10,
+                    "reason": "was published는 수동태이므로 붙여 읽습니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "좋은 독자는 누가 그 정보를 만들었고 왜 공개했는지 확인한다.",
+              "wordOrderPoint": {
+                "title": "간접의문문 병렬",
+                "explanation": "who절과 why절이 and로 연결되어 ask의 내용을 이룹니다."
+              },
+              "grammar": [
+                {
+                  "label": "간접의문문",
+                  "note": "who created와 why it was published가 ask의 목적어입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "published",
+                  "meaning": "공개된, 출판된"
+                }
+              ]
+            },
+            {
+              "text": "They compare the claim with evidence from independent sources.",
+              "chunks": [
+                {
+                  "en": "They compare the claim",
+                  "kr": "그들은 그 주장을 비교한다"
+                },
+                {
+                  "en": "with evidence from independent sources.",
+                  "kr": "독립적인 출처의 증거와"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "compare the claim with evidence는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "그들은 그 주장을 독립적인 출처의 증거와 비교한다.",
+              "wordOrderPoint": {
+                "title": "compare A with B",
+                "explanation": "compare the claim with evidence는 ‘주장을 증거와 비교하다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "compare A with B",
+                  "note": "A를 B와 비교하다라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "evidence",
+                  "meaning": "증거"
+                },
+                {
+                  "word": "independent",
+                  "meaning": "독립적인"
+                }
+              ]
+            },
+            {
+              "text": "Careful checking takes time, but it protects us from confident errors.",
+              "chunks": [
+                {
+                  "en": "Careful checking takes time,",
+                  "kr": "주의 깊게 확인하는 데는 시간이 걸리지만,"
+                },
+                {
+                  "en": "but it protects us",
+                  "kr": "그것은 우리를 보호한다"
+                },
+                {
+                  "en": "from confident errors.",
+                  "kr": "확신에 찬 오류로부터"
+                }
+              ],
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 6,
+                    "reason": "protects us from errors는 하나의 구조입니다."
+                  }
+                ]
+              },
+              "naturalTranslation": "꼼꼼한 확인에는 시간이 들지만 확신에 찬 오류로부터 우리를 지켜준다.",
+              "wordOrderPoint": {
+                "title": "protect A from B",
+                "explanation": "protects us from errors는 ‘우리를 오류로부터 보호하다’라는 구조입니다."
+              },
+              "grammar": [
+                {
+                  "label": "protect A from B",
+                  "note": "A를 B로부터 보호하다라는 뜻입니다."
+                }
+              ],
+              "words": [
+                {
+                  "word": "protects",
+                  "meaning": "보호한다"
+                },
+                {
+                  "word": "errors",
+                  "meaning": "오류들"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

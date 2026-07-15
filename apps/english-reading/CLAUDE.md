@@ -55,7 +55,7 @@ apps/english-reading/
    - `wordOrderPoint`: 그 문장 핵심 어순·패턴 1개(`title`+`explanation`). 검토 후 기본 노출(상세 문법은 접힘). 없으면 fallback(grammar[0]).
    - `words`: 걸림돌 단어 + 뜻. **words에 등록된 주요 단어만 클릭·수집 대상**이다(일반 단어는 끊기 틈과의 오터치를 막기 위해 터치 비활성, 밑줄 표시 없음 - 2026-07-09 사용자 지시). word는 text에 실재(같은 단어 여러 번이면 nth 1-based). meaning은 한국어 뜻. 클릭=임시 수집(오렌지) → 해석 시 뜻 공개 + 단어장 영구 저장(선유추 후확인).
    - `grammar`: 그 문장에 포함된 모든 문법 요소(이름표 label + 한 줄 설명 note), 1개 이상 필수. 해석 채점 후 "문법 자세히 보기" 토글로 펼치는 접힘 목록(핵심 어순은 기본 노출, 상세 문법은 접힘).
-   - `insight`: 구조적으로 어려운 문장에만(지문당 1~3개). 4필드 필수 - 검토 후 심화 카드(공식·왜·비문, 자연 해석은 naturalTranslation이 전담)로 열림(설정 토글).
+   - `insight`: 구조적으로 어려운 문장에만(지문당 0~3개 - 쉬운 지문은 0 정당, 상한 3). 4필드 필수 - 검토 후 심화 카드(공식·왜·비문, 자연 해석은 naturalTranslation이 전담)로 열림(설정 토글).
 4.4. 콘텐츠 보강 후 `node apps/english-reading/tests/run-node.mjs`로 무결성 자동 검증(죽은 입력 0·청킹 재구성·끊는 기준 위반 0·grammar 1개 이상·insight 4필드·words 실재·5등급 채점·breakRules 범위·중복·built-in strict 신 필드). built-in은 strict(신 필드 필수), 출제 화면·customPassages는 관대(신 필드 없어도 통과, 있으면 형식 검증).
 
 # 5. 작업 시 주의

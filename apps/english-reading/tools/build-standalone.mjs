@@ -48,13 +48,13 @@ main = mustReplace(
   .then((data) => {
     baseData = data;
     rebuildCourse();
-    renderList();
+    renderCourseList();
   })
   .catch(() => {
     el.title.textContent = "오류";
     el.stage.innerHTML = '<p class="empty">지문을 불러오지 못했습니다.</p>';
   });`,
-  "baseData = EMBEDDED_PASSAGES;\nrebuildCourse();\nrenderList();",
+  "baseData = EMBEDDED_PASSAGES;\nrebuildCourse();\nrenderCourseList();",
   "데이터 인라인"
 );
 
