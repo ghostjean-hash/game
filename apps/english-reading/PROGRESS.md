@@ -267,3 +267,17 @@
 - 판정: 예정 6개 개편 모두 현 구조에서 가능. core 순수함수 격리가 좋아 신 필드를 옵셔널+fallback으로 얹으면 기존 데이터·사용자 customPassages 하위호환 유지 가능. 주요 위험 2: (a) customPassages가 localStorage에 현 스키마로 저장돼 스키마 변경 시 방어 없으면 사용자 데이터 손상 (b) 스키마가 데이터·AUTHORING_PROMPT 하드코딩 문자열·validate.js·build-standalone 4곳에 흩어져 동기 갱신 필요.
 - 산출물: docs/2026-07-15-current-state-analysis.md (15항목 - 개요/실제 흐름/끊어읽기 판정 구조/데이터 스키마/해석·문법 UI/오디오·말하기/상태 저장/파일 역할/개편별 영향도 8종/유지 기능/교체 기능/위험/권장 순서/미확인/다음 지시 필수사항). 코드·UI·데이터 0 변경(git status 확인, flightshooting 7파일 변경은 타 세션분이라 본 봉합에서 제외).
 - 잔여: 다음 구현 단계는 사용자가 확장 스키마 확정본과 "전 문장 한 화면 구조 유지 여부"를 정한 뒤 착수. 2.32 잔여 3건 유지.
+
+## 2.35. 1차 개편 - O/X→5등급 채점 + 직독직해/자연해석 분리 + 문법 계층화 (2026-07-15, 사용자 확정 사양)
+
+- 배경: 2.34 분석 문서(ba3bddc)를 기준으로 1차 개편 착수. 확정 사양대로 (1) O/X 이진 채점을 추천/허용/비추천/다른분할/놓침 5등급으로 (2) 직독직해와 자연스러운 완역 분리 (3) 핵심 어순 기본 노출·상세 문법 접기 (4) 30문장 마이그레이션. 비스코프: 오디오·TTS·녹음·말하기·듣기그룹·문장 네비게이션·신규 콘텐츠. 계획 문서 docs/2026-07-15-phase1-refactor-plan.md.
+- 스키마: sentence에 옵셔널 신 필드 3종 - `naturalTranslation`(완역), `wordOrderPoint{title,explanation}`(핵심 어순 1개), `breakRules{allowed[],discouraged[]}`(각 {boundary(0-based 토큰 틈),reason}). chunks는 개명 없이 대표 추천 청킹으로 유지(customPassages 호환 비용 최소화).
+- 하위호환: `core/normalize.js:normalizeSentence` 신설 - 렌더·검증·빌드·테스트 공용 단일 fallback 지점. customPassages를 영구 변환하지 않고 렌더 진입 시 통과. breakRules 없으면 빈 배열, naturalTranslation 없으면 insight.natural→chunks.kr, wordOrderPoint 없으면 grammar[0]. localStorage 강제 초기화 안 함.
+- 채점: `core/chunking.js:gradeChunks` 신설(기존 gradeSlashes 보존). recommended>allowed>discouraged>neutral 우선순위 + missed. main.js applyGrade가 g-recommended/g-allowed/g-discouraged/g-neutral/g-missed 클래스 매핑. CSS 빨간 X 폐기 - 추천 청록 채운 원/허용 회색 빈 원/비추천 주황 △(개선 가이드)/놓침 청록 ▾/다른분할 마크 없음(색+모양 병행 접근성 유지).
+- 검증 이중 모드: `validate.js` validatePassage(p,{strict}). built-in(tests)=strict 신 필드 필수, 출제 화면·customPassages=관대(신 필드 있으면 형식 검증, 없어도 통과). breakRules boundary 범위·중복·추천경계 충돌·reason 검증 추가.
+- UI(main.js): buildDetail 순서 = 선택한 비추천 이유 카드 → 직독직해 → 자연스러운 해석(별도 카드) → 수집단어 → 핵심 어순(기본 노출) → 상세 문법("문법 자세히 보기" 토글, aria-expanded) → insight(scope ON, 자연해석 블록 제거로 중복 방지). AUTHORING_PROMPT 신 스키마 규칙+예시 갱신.
+- 마이그레이션: 30문장에 신 필드 3종 추가. 6지문을 서브에이전트 6개 병렬 위임(naturalTranslation·wordOrderPoint·breakRules 생성) 후 boundary 전량 재검산 - 28문장 정확, 지문1 s1 discouraged reason 1건만 교정(at|the). insight.natural 16문장은 완역 이관, 14문장 신규 완역. 영어 원문·chunks·words·grammar·insight 불변.
+- 검증: node 테스트 전량 통과(gradeChunks 5등급·normalize fallback·breakRules 범위/중복·built-in 30문장 strict 무결성 신설). browser-shot 실경로 - 추천(청록●)/비추천(주황△)/다른분할(연회색)/놓침(청록▾) 판정 + 비추천 이유 카드 + 직독직해/자연해석 분리 + 핵심 어순 + 문법 접힘(measure visible=false)→토글 펼침(true), 콘솔 0. standalone 재빌드(150KB, normalize.js 추가) file:// 동작 확인. SW v184→v185.
+- 버그 1건 수정: `.grammar-list{display:flex}`가 [hidden] 속성을 명시도에서 덮어써 문법 목록이 항상 펼쳐지던 것 → `.grammar-list[hidden]{display:none}` 명시 재지정.
+- 변경 파일: core/normalize.js(신규)·chunking.js·validate.js / main.js / style.css / src/data/passages.json(30문장) / tests/run-node.mjs / tools/build-standalone.mjs / dist/standalone.html(재생성) / service-worker.js / CLAUDE.md / docs 계획서.
+- 잔여: 다음 단계 후보(사양 비스코프) - 오디오·TTS·구간 재생, listeningSenseGroups, 말하기 변형, 신규 100문장. 2.32 잔여 3건 유지.

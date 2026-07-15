@@ -5,8 +5,9 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { tokenize, resolveTargets } from "../src/core/tokenize.js";
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
-import { chunkBoundaries, gradeSlashes, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
+import { chunkBoundaries, gradeSlashes, gradeChunks, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
 import { validatePassage, normalizeSmartQuotes } from "../src/core/validate.js";
+import { normalizeSentence, boundarySet, reasonByBoundary } from "../src/core/normalize.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 let failures = 0;
@@ -82,6 +83,116 @@ function check(name, cond, detail = "") {
 
   const single = chunkBoundaries(tokenize("Hello world."), [{ en: "Hello world." }]);
   check("chunking: 청킹 1개면 경계 0개", single.size === 0);
+}
+
+// ── gradeChunks (추천/허용/비추천/neutral/missed 5등급 판정) ──────────────────────────────
+{
+  // "All day long, you feel that everyone is staring at the stain." = 12토큰, 추천경계 {2,8}
+  const boundaries = new Set([2, 8]);
+  const allowedSet = new Set([5]);   // 다른 자연스러운 분할
+  const discSet = new Set([4]);      // 핵심 구조를 가르는 비추천 위치
+  const g = gradeChunks(boundaries, allowedSet, discSet, [2, 4, 5, 7]);
+  check("gradeChunks: recommended = 그은 선 ∩ 추천경계", g.recommended.join() === "2");            // B
+  check("gradeChunks: allowed = allowed 목록 위치", g.allowed.join() === "5");                     // C
+  check("gradeChunks: discouraged = discouraged 목록 위치", g.discouraged.join() === "4");         // D
+  check("gradeChunks: neutral = 어느 목록에도 없는 위치", g.neutral.join() === "7");                // E
+  check("gradeChunks: missed = 안 그은 추천경계", g.missed.join() === "8");                         // F
+  // 우선순위: 추천경계이면서 allowed에도 있으면 recommended 우선
+  const g2 = gradeChunks(new Set([2]), new Set([2]), new Set(), [2]);
+  check("gradeChunks: recommended가 allowed보다 우선", g2.recommended.join() === "2" && g2.allowed.length === 0);
+  // 추천경계 계산이 gradeChunks 입력과 이어짐 (A: 청킹 단어 수 누적)
+  const toks = tokenize("All day long, you feel that everyone is staring at the stain.");
+  const b = chunkBoundaries(toks, [{ en: "All day long," }, { en: "you feel that everyone is staring" }, { en: "at the stain." }]);
+  check("gradeChunks: 추천경계는 chunkBoundaries 그대로", b.has(2) && b.has(8) && b.size === 2);   // A
+}
+
+// ── normalizeSentence / boundarySet (하위호환 fallback) ──────────────────────────────
+{
+  // I. 신규 필드 없는 구스키마 → 기본값·fallback
+  const old = {
+    text: "Confirmation bias is the habit.",
+    chunks: [{ en: "Confirmation bias is the habit.", kr: "확증 편향은 습관이다" }],
+    grammar: [{ label: "be동사", note: "A is B - A는 B다." }],
+    insight: { formula: "f", why: "y", wrong: "x", natural: "확증 편향은 하나의 습관이다." },
+  };
+  const n = normalizeSentence(old);
+  check("normalize: breakRules 없으면 빈 allowed/discouraged", n.breakRules.allowed.length === 0 && n.breakRules.discouraged.length === 0); // I
+  check("normalize: naturalTranslation 없으면 insight.natural 사용", n.naturalTranslation === "확증 편향은 하나의 습관이다."); // J-1
+  check("normalize: wordOrderPoint 없으면 grammar[0]로 fallback", n.wordOrderPoint && n.wordOrderPoint.title === "be동사" && n.wordOrderPoint.fromGrammar === true);
+
+  // J-2. naturalTranslation·insight 둘 다 없으면 직독직해 chunks.kr 이어붙임
+  const noNat = { text: "A B.", chunks: [{ en: "A", kr: "가" }, { en: "B.", kr: "나" }], grammar: [{ label: "x", note: "y" }] };
+  check("normalize: 자연해석·insight 둘 다 없으면 chunks.kr 이어붙임", normalizeSentence(noNat).naturalTranslation === "가 나");
+
+  // 신 필드가 있으면 그대로 우선
+  const neu = {
+    text: "A B C.", chunks: [{ en: "A B C.", kr: "가나다" }],
+    naturalTranslation: "완역", wordOrderPoint: { title: "T", explanation: "E" },
+    breakRules: { allowed: [{ boundary: 1, reason: "이유" }], discouraged: [] },
+  };
+  const nn = normalizeSentence(neu);
+  check("normalize: 신 필드 있으면 그대로 사용", nn.naturalTranslation === "완역" && nn.wordOrderPoint.title === "T" && !nn.wordOrderPoint.fromGrammar);
+  const toks3 = tokenize("A B C.");
+  check("boundarySet: allowed → boundary Set", boundarySet(nn.breakRules, "allowed", toks3.length).has(1));
+  check("reasonByBoundary: boundary → reason 맵", reasonByBoundary(nn.breakRules, "allowed").get(1) === "이유");
+  // 범위 밖 boundary는 boundarySet에서 조용히 제외(방어)
+  const bad = { allowed: [{ boundary: 99, reason: "r" }] };
+  check("boundarySet: 범위 밖 boundary 제외", boundarySet(bad, "allowed", toks3.length).size === 0);
+}
+
+// ── validate 신규 필드 검증 (breakRules 범위·중복, strict 모드) ──────────────────────────────
+{
+  const base = {
+    id: "v-new", level: 1, title: "T", titleKr: "가",
+    sentences: [{
+      text: "Confirmation bias is the habit of noticing only what we already believe.",
+      chunks: [
+        { en: "Confirmation bias is the habit", kr: "확증 편향은 습관이다" },
+        { en: "of noticing only what we already believe.", kr: "우리가 이미 믿는 것만 알아채는" },
+      ],
+      grammar: [{ label: "of+동명사", note: "설명" }],
+      words: [{ word: "bias", meaning: "편향" }],
+      naturalTranslation: "확증 편향은 우리가 이미 믿는 것만 알아채는 습관이다.",
+      wordOrderPoint: { title: "be + 명사", explanation: "A is B 구조." },
+      breakRules: { allowed: [{ boundary: 2, reason: "명사구 뒤 끊어도 됨" }], discouraged: [] },
+    }],
+  };
+  check("validate(new): 신 필드 갖춘 지문 통과(관대 모드)", validatePassage(base).ok);
+  check("validate(new): strict 모드에서도 통과", validatePassage(base, { strict: true }).ok);
+
+  // G. allowed/discouraged 중복
+  const dup = JSON.parse(JSON.stringify(base));
+  dup.sentences[0].breakRules = { allowed: [{ boundary: 2, reason: "a" }], discouraged: [{ boundary: 2, reason: "b" }] };
+  check("validate(new): allowed·discouraged 중복 검출", !validatePassage(dup).ok); // G
+
+  // H. 범위 밖 boundary (12토큰 아님, 이 문장 토큰 수-2 초과)
+  const oob = JSON.parse(JSON.stringify(base));
+  oob.sentences[0].breakRules = { allowed: [{ boundary: 999, reason: "a" }], discouraged: [] };
+  check("validate(new): 범위 밖 boundary 검출", !validatePassage(oob).ok); // H
+
+  // 추천 경계(chunks 경계=4)를 discouraged에 넣으면 검출
+  const recDisc = JSON.parse(JSON.stringify(base));
+  const recB = [...chunkBoundaries(tokenize(base.sentences[0].text), base.sentences[0].chunks)][0];
+  recDisc.sentences[0].breakRules = { allowed: [], discouraged: [{ boundary: recB, reason: "x" }] };
+  check("validate(new): 추천경계를 discouraged에 넣으면 검출", !validatePassage(recDisc).ok);
+
+  // reason 누락
+  const noReason = JSON.parse(JSON.stringify(base));
+  noReason.sentences[0].breakRules = { allowed: [{ boundary: 2 }], discouraged: [] };
+  check("validate(new): breakRules reason 누락 검출", !validatePassage(noReason).ok);
+
+  // strict에서 naturalTranslation·wordOrderPoint 누락은 실패, 관대 모드는 통과(하위호환)
+  const legacy = {
+    id: "v-old", level: 1, title: "T", titleKr: "가",
+    sentences: [{
+      text: "Confirmation bias is the habit of noticing only what we already believe.",
+      chunks: base.sentences[0].chunks,
+      grammar: [{ label: "of+동명사", note: "설명" }],
+    }],
+  };
+  check("validate(old): 구스키마 관대 모드 통과(하위호환)", validatePassage(legacy).ok); // I(검증측)
+  check("validate(old): strict 모드에서는 신 필드 누락 실패", !validatePassage(legacy, { strict: true }).ok);
+  check("validate(old): naturalTranslation 문자열 아니면 검출", !validatePassage({ ...legacy, sentences: [{ ...legacy.sentences[0], naturalTranslation: 123 }] }).ok);
 }
 
 // ── boundaryReason (끊는 이유 자동 판별) ──────────────────────────────
@@ -239,6 +350,17 @@ function check(name, cond, detail = "") {
       // 지문당 insight 1~3개(구조 어려운 문장에만)
       const insightCount = p.sentences.filter((s) => s.insight).length;
       check(`data(${course.id}/${p.id}): insight 1~3개`, insightCount >= 1 && insightCount <= 3, `${insightCount}개`);
+
+      // K. built-in 지문은 신 스키마 strict 검증 통과(naturalTranslation·wordOrderPoint 필수 + breakRules 범위·중복·추천경계 충돌 0)
+      const strictRes = validatePassage(p, { strict: true });
+      check(`data(${course.id}/${p.id}): 신 스키마 strict 통과`, strictRes.ok, strictRes.errors.map((e) => `${e.where}:${e.msg}`).join(" / "));
+      // 각 문장 신 필드 개별 확인
+      p.sentences.forEach((s, si) => {
+        const label = `${course.id}/${p.id} s${si + 1}`;
+        check(`data(${label}): naturalTranslation 존재`, typeof s.naturalTranslation === "string" && s.naturalTranslation.length > 0);
+        check(`data(${label}): wordOrderPoint 완비`, !!(s.wordOrderPoint && s.wordOrderPoint.title && s.wordOrderPoint.explanation));
+        check(`data(${label}): breakRules 형태`, s.breakRules && Array.isArray(s.breakRules.allowed) && Array.isArray(s.breakRules.discouraged));
+      });
 
       prevLevel = p.level;
     }

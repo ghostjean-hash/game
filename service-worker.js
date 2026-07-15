@@ -129,7 +129,8 @@
 // v182 (2026-07-12): flightshooting 원격 3차 - 무기 외형 다듬기(사이드 크기 tier10 2/3 축소·메인 총알 단계별 다른 무늬 패턴 복원·유도탄 삼각→화살표 형태 + 색 11색화). PWA 옛 캐시 무효화.
 // v183 (2026-07-14): english-reading 문제 출제 화면 '삭제' 버튼 추가(검증하기 좌측) - 붙여넣은 JSON 입력창과 검증 에러 표시를 한 번에 비움(모바일에서 긴 텍스트를 전체 선택해 지우기 어렵던 문제 해소). PWA 옛 캐시 무효화.
 // v184 (2026-07-14): english-reading 출제 화면 아이폰 스마트 따옴표 자동 교정 - 붙여넣을 때 직선 따옴표(")가 곡선(" ")으로 바뀌어 JSON.parse가 깨지던 것을 검증 직전 정규화로 되돌림(normalizeSmartQuotes). PWA 옛 캐시 무효화.
-const CACHE_VERSION = "v184";
+// v185 (2026-07-15): english-reading 1차 개편 - O/X 채점을 추천/허용/비추천/다른분할/놓침 5등급으로 전환(gradeChunks + breakRules 데이터, 빨간 X 폐기·색+모양 병행) + 직독직해/자연스러운 완역 분리(naturalTranslation) + 핵심 어순 기본 노출·상세 문법 접기(wordOrderPoint). 신규 필드는 옵셔널+fallback(normalizeSentence)으로 customPassages 하위호환. 30문장 마이그레이션. PWA 옛 캐시 무효화.
+const CACHE_VERSION = "v185";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

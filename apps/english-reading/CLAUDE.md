@@ -48,17 +48,20 @@ apps/english-reading/
 
 4.1. `courses`: `[{ id, title, passages }]`. passages는 level 오름차순(createCourse가 정렬을 보장하므로 데이터 순서는 무관하나 가급적 정렬해 둔다).
 4.2. `passage`: `{ id, level, title, titleKr, sentences }`. id 유일. 전체 텍스트는 sentences.text를 이어 조합(따로 저장 안 함).
-4.3. `sentence`: `{ text, chunks[{en,kr}], words[{word,nth?,meaning}], grammar[{label,note}], insight?{formula,why,wrong,natural} }`.
-   - `chunks`: en을 공백으로 이어 붙이면 원문과 일치(구두점·대소문자 제외). kr은 어순·구조가 드러나는 직독직해로 쓰고 단순 의역 금지. **chunks의 경계가 곧 해석 채점의 정답**(core/chunking.js가 단어 수 누적으로 계산). 경계는 '끊는 기준' 팝업 규칙과 일치해야 하며, `chunkViolations` 4규칙(be동사·조동사 뒤 금지·짧은 주어 2단어 이하 뒤 동사 앞 금지·짧은 전치사구 2단어 이하 앞 금지·전치사가 앞 덩어리 끝에 남아 목적어와 갈림 금지, 콤마 뒤·that/to절은 예외)을 어기면 테스트가 실패한다 - 잘게 찢지 말고 의미 덩어리로 크게 묶는다.
+4.3. `sentence`: `{ text, chunks[{en,kr}], naturalTranslation, wordOrderPoint{title,explanation}, breakRules{allowed[{boundary,reason}],discouraged[{boundary,reason}]}, words[{word,nth?,meaning}], grammar[{label,note}], insight?{formula,why,wrong,natural} }`. **신 필드(naturalTranslation·wordOrderPoint·breakRules)는 옵셔널 - 없으면 `core/normalize.js:normalizeSentence`가 fallback을 채운다(customPassages 하위호환).**
+   - `chunks`: en을 공백으로 이어 붙이면 원문과 일치(구두점·대소문자 제외). kr은 어순·구조가 드러나는 직독직해로 쓰고 단순 의역 금지. **chunks의 경계가 곧 대표 추천 끊기(채점의 recommended)**(core/chunking.js가 단어 수 누적으로 계산). 경계는 '끊는 기준' 팝업 규칙과 일치해야 하며, `chunkViolations` 4규칙(be동사·조동사 뒤 금지·짧은 주어 2단어 이하 뒤 동사 앞 금지·짧은 전치사구 2단어 이하 앞 금지·전치사가 앞 덩어리 끝에 남아 목적어와 갈림 금지, 콤마 뒤·that/to절은 예외)을 어기면 테스트가 실패한다 - 잘게 찢지 말고 의미 덩어리로 크게 묶는다.
+   - `breakRules`: 끊기 5등급 채점의 허용/비추천 위치. `boundary`는 **0-based 토큰 틈 번호**(b번 단어와 b+1번 단어 사이, 유효 0~토큰수-2). `allowed`=대표 경계는 아니나 끊어도 자연스러운 위치, `discouraged`=끊으면 핵심 구조가 갈려 이해를 방해하는 위치. 각 `reason` 필수(비추천은 사용자가 실제 그은 위치의 이유만 해석 카드 상단에 노출). 대표 chunks 경계를 넣거나 allowed·discouraged 중복이면 validate 실패. 억지로 채우지 말 것(없으면 빈 배열). 채점 판정 = `core/chunking.js:gradeChunks`(recommended>allowed>discouraged>neutral, missed=안 그은 추천경계).
+   - `naturalTranslation`: 문장 전체의 자연스러운 한국어 완역(직독직해 조각 잇기 금지). 검토 후 직독직해와 구분된 카드로 표시. 없으면 fallback(insight.natural → chunks.kr 이어붙임).
+   - `wordOrderPoint`: 그 문장 핵심 어순·패턴 1개(`title`+`explanation`). 검토 후 기본 노출(상세 문법은 접힘). 없으면 fallback(grammar[0]).
    - `words`: 걸림돌 단어 + 뜻. **words에 등록된 주요 단어만 클릭·수집 대상**이다(일반 단어는 끊기 틈과의 오터치를 막기 위해 터치 비활성, 밑줄 표시 없음 - 2026-07-09 사용자 지시). word는 text에 실재(같은 단어 여러 번이면 nth 1-based). meaning은 한국어 뜻. 클릭=임시 수집(오렌지) → 해석 시 뜻 공개 + 단어장 영구 저장(선유추 후확인).
-   - `grammar`: 그 문장에 포함된 모든 문법 요소(이름표 label + 한 줄 설명 note), 1개 이상 필수. 해석 채점 후 끊어 읽기 해석 아래에 전부 표시.
-   - `insight`: 구조적으로 어려운 문장에만(지문당 1~3개). 4필드 필수 - 검토 후 문법 목록 아래에 심화 카드로 열림(설정 토글).
-4.4. 콘텐츠 보강 후 `node apps/english-reading/tests/run-node.mjs`로 무결성 자동 검증(죽은 입력 0·청킹 재구성·끊는 기준 위반 0·grammar 1개 이상·insight 4필드·words 실재·채점 로직).
+   - `grammar`: 그 문장에 포함된 모든 문법 요소(이름표 label + 한 줄 설명 note), 1개 이상 필수. 해석 채점 후 "문법 자세히 보기" 토글로 펼치는 접힘 목록(핵심 어순은 기본 노출, 상세 문법은 접힘).
+   - `insight`: 구조적으로 어려운 문장에만(지문당 1~3개). 4필드 필수 - 검토 후 심화 카드(공식·왜·비문, 자연 해석은 naturalTranslation이 전담)로 열림(설정 토글).
+4.4. 콘텐츠 보강 후 `node apps/english-reading/tests/run-node.mjs`로 무결성 자동 검증(죽은 입력 0·청킹 재구성·끊는 기준 위반 0·grammar 1개 이상·insight 4필드·words 실재·5등급 채점·breakRules 범위·중복·built-in strict 신 필드). built-in은 strict(신 필드 필수), 출제 화면·customPassages는 관대(신 필드 없어도 통과, 있으면 형식 검증).
 
 # 5. 작업 시 주의
 
-5.1. 색만으로 정보 전달 금지(접근성)가 기본이나, 본문 단어는 밑줄 등 표시 없이 깨끗하게 둔다(사용자 명시 지시). 임시 수집만 오렌지 배경으로 표시, 채점은 끊기 표시 위 모양(빈 원/x/삼각형)으로 병행 구분(색만 아님).
-5.2. 검증은 정적 확인만으로 "됐다" 금지. browser-shot + playwright로 전 분기 실경로 재생 - / 선 긋기 토글·해석 채점 3표시(맞음 위 빈 붉은 원/잘못 연회색 + 위 붉은 x/빼먹음 붉은 / + 위 삼각형)·주요 단어만 터치·검토 후 선·단어 잠금·검토 후에야 해석+문법 목록+심화 카드 공개·단어 임시 수집(오렌지 하이라이트+토스트, 뜻 감춤)·해석 시 [단어-뜻] 리스트 공개+영구 저장·N회독 버튼·회독 시 clean slate(임시 하이라이트 리셋)·코스 클리어 모달·단어장 카드 펼침/삭제·노출 설정 OFF까지.
+5.1. 색만으로 정보 전달 금지(접근성)가 기본이나, 본문 단어는 밑줄 등 표시 없이 깨끗하게 둔다(사용자 명시 지시). 임시 수집만 오렌지 배경으로 표시, 채점은 끊기 표시 위 모양(추천=청록 채운 원/허용=회색 빈 원/비추천=주황 삼각형/놓침=청록 삼각형/다른분할=마크 없음)으로 병행 구분(색만 아님). **빨간 X 폐기**(O/X 이진 → 5등급, 2026-07-15).
+5.2. 검증은 정적 확인만으로 "됐다" 금지. browser-shot + playwright로 전 분기 실경로 재생 - / 선 긋기 토글·해석 채점 5등급(추천 청록●/허용 회색○/비추천 주황△/다른분할 연회색 마크없음/놓침 청록▾)·선택한 비추천 위치 이유 카드·직독직해와 자연스러운 완역 분리 카드·핵심 어순 기본 노출·상세 문법 접기/펼치기·주요 단어만 터치·검토 후 선·단어 잠금·단어 임시 수집(오렌지 하이라이트+토스트, 뜻 감춤)·해석 시 [단어-뜻] 리스트 공개+영구 저장·N회독 버튼·회독 시 clean slate·코스 클리어 모달·단어장 카드 펼침/삭제·구스키마 customPassage fallback·노출 설정 OFF까지.
 5.3. 유닛 테스트: `tests/run-node.mjs` (core 순수 로직 + 데이터 무결성). 로직·데이터 변경 시 실행이 기본.
 5.4. 배포는 `/web-deploy` (도메인 루트 `.claude/deploy.json`, smoke 셀렉터 `.passage-card`). SW 캐시 버전 bump는 루트 service-worker.js 소관.
 5.5. 진행/완료/다음 작업은 `PROGRESS.md` 참조.

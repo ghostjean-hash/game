@@ -35,6 +35,7 @@ const dataSafe = dataRaw.replace(/<\//g, "<\\/"); // </script> 조기 종료 방
 const tokenize = stripExports(read(join(app, "src", "core", "tokenize.js")));
 const course = stripExports(read(join(app, "src", "core", "course.js")));
 const chunking = stripExports(read(join(app, "src", "core", "chunking.js")));
+const normalize = stripExports(read(join(app, "src", "core", "normalize.js")));
 const validate = stripImports(stripExports(read(join(app, "src", "core", "validate.js"))));
 const storage = stripExports(read(join(hub, "shared", "storage.js")));
 let main = stripImports(read(join(app, "src", "main.js")));
@@ -86,6 +87,7 @@ ${storage}
 ${tokenize}
 ${course}
 ${chunking}
+${normalize}
 ${validate}
 ${main}
 </script>

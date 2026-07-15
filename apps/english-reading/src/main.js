@@ -2,8 +2,9 @@
 // 순수 로직은 core(tokenize·course·chunking)에 위임하고, 여기서 DOM만 만진다.
 import { tokenize } from "./core/tokenize.js";
 import { createCourse, courseProgress } from "./core/course.js";
-import { chunkBoundaries, gradeSlashes, chunkReasons } from "./core/chunking.js";
+import { chunkBoundaries, gradeChunks, chunkReasons } from "./core/chunking.js";
 import { validatePassage, normalizeSmartQuotes } from "./core/validate.js";
+import { normalizeSentence, boundarySet, reasonByBoundary } from "./core/normalize.js";
 import { createStorage } from "../../../shared/storage.js";
 import { registerServiceWorker } from "../../../shared/ui.js";
 
@@ -240,7 +241,9 @@ function renderReading(p) {
   stage.appendChild(doneBtn);
 }
 
-function renderSentence(s, sIndex, passage, settings) {
+function renderSentence(rawS, sIndex, passage, settings) {
+  // 신·구 스키마를 같은 모양으로 - 신규 필드 기본값·fallback을 한 지점에서 채운다(customPassages 하위호환).
+  const s = normalizeSentence(rawS);
   const block = document.createElement("div");
   block.className = "sentence-block";
 
@@ -271,20 +274,34 @@ function renderSentence(s, sIndex, passage, settings) {
     reviewed,
   });
 
+  // 대표 추천 경계 + 허용/비추천 위치(0-based 토큰 틈 번호). 없으면 빈 Set(구스키마 = 추천/놓침만).
+  const boundaries = chunkBoundaries(tokens, s.chunks);
+  const allowedSet = boundarySet(s.breakRules, "allowed", tokens.length);
+  const discouragedSet = boundarySet(s.breakRules, "discouraged", tokens.length);
+  const gradeNow = () => gradeChunks(boundaries, allowedSet, discouragedSet, slashes);
+
+  // 채점 표시 - 그은 선을 추천/허용/비추천/다른분할(neutral)/놓침(missed)으로 나눠 색+모양 병행.
   const applyGrade = () => {
-    const grade = gradeSlashes(chunkBoundaries(tokens, s.chunks), slashes);
-    grade.correct.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-correct"));
-    grade.wrong.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-wrong"));
-    grade.missed.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("slashed", "g-missed"));
+    const g = gradeNow();
+    g.recommended.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("g-recommended"));
+    g.allowed.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("g-allowed"));
+    g.discouraged.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("g-discouraged"));
+    g.neutral.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("g-neutral"));
+    g.missed.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("slashed", "g-missed"));
   };
   const buildDetail = () => {
     const d = document.createElement("div");
     d.className = "review-detail";
-    d.appendChild(buildChunks(s)); // 번역(끊어 읽기 해석)
-    // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 번역 바로 아래에 공개 + 영구 저장(중복은 무시)
+    // 사용자가 실제로 그은 비추천 위치의 이유만 카드 상단에 간결히(안 그은 비추천은 노출 안 함)
+    const disc = buildDiscouragedReasons(gradeNow(), s);
+    if (disc) d.appendChild(disc);
+    d.appendChild(buildChunks(s)); // ① 직독직해(대표 추천 청킹 en 덩어리 + 이유 태그)
+    d.appendChild(buildNatural(s)); // ② 자연스러운 전체 해석(직독직해와 구분된 영역)
+    // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 공개 + 영구 저장(중복은 무시)
     if (flagged.size) d.appendChild(buildCollectedWords([...flagged.values()], s, passage));
-    if (s.grammar && s.grammar.length) d.appendChild(buildGrammar(s));
-    if (s.insight && settings.scope) d.appendChild(buildScopeCard(s));
+    if (s.wordOrderPoint) d.appendChild(buildWordOrder(s)); // ③ 핵심 어순/패턴(기본 노출)
+    if (s.grammar && s.grammar.length) d.appendChild(buildGrammar(s)); // ④ 상세 문법(기본 접힘)
+    if (s.insight && settings.scope) d.appendChild(buildScopeCard(s)); // ⑤ 심화 카드(scope ON)
     return d;
   };
 
@@ -443,6 +460,43 @@ function buildChunks(s) {
   return host;
 }
 
+// 사용자가 실제로 그은 비추천 위치의 개선 이유(경고가 아니라 가이드). 선택한 위치만 보여준다.
+function buildDiscouragedReasons(grade, s) {
+  if (!grade.discouraged.length) return null;
+  const map = reasonByBoundary(s.breakRules, "discouraged");
+  const host = document.createElement("div");
+  host.className = "disc-reasons";
+  grade.discouraged.forEach((b) => {
+    const r = map.get(b);
+    if (!r) return;
+    const row = document.createElement("div");
+    row.className = "disc-row";
+    row.textContent = r;
+    host.appendChild(row);
+  });
+  return host.children.length ? host : null;
+}
+
+// 자연스러운 전체 해석 - 직독직해(조각)와 달리 한 문장으로 매끄럽게 읽히는 완역.
+function buildNatural(s) {
+  const host = document.createElement("div");
+  host.className = "natural-trans";
+  const label = document.createElement("div"); label.className = "nt-label"; label.textContent = "자연스러운 해석";
+  const body = document.createElement("div"); body.className = "nt-body"; body.textContent = s.naturalTranslation;
+  host.append(label, body);
+  return host;
+}
+
+// 핵심 어순/패턴 - 문장당 1개만 기본 노출(상세 문법은 접어 둔다).
+function buildWordOrder(s) {
+  const host = document.createElement("div");
+  host.className = "word-order";
+  const t = document.createElement("div"); t.className = "wo-title"; t.textContent = s.wordOrderPoint.title;
+  const e = document.createElement("div"); e.className = "wo-exp"; e.textContent = s.wordOrderPoint.explanation;
+  host.append(t, e);
+  return host;
+}
+
 // 끊는 기준 커닝페이퍼 - 상단바 버튼으로 언제든 오버레이로 열어 보는 공용 참고 카드
 function openGuide() {
   const backdrop = document.createElement("div");
@@ -489,29 +543,49 @@ function buildGuideCard() {
   return card;
 }
 
-// 검토 후 공개되는 문법 목록 - 이 문장에 포함된 모든 문법 요소(이름표 + 한 줄 설명)
+// 검토 후 공개되는 상세 문법 - 기본 접힘. "문법 자세히 보기"로 펼친다(핵심 어순만 기본 노출).
+// 해석 버튼의 review-detail 전체 접기와 별개로, 이 블록 안에서만 목록을 여닫는다.
 function buildGrammar(s) {
   const host = document.createElement("div");
-  host.className = "grammar-list";
+  host.className = "grammar-block";
+
+  const list = document.createElement("div");
+  list.className = "grammar-list";
+  list.hidden = true;
   s.grammar.forEach((g) => {
     const row = document.createElement("div");
     row.className = "grammar-row";
     const tag = document.createElement("span"); tag.className = "grammar-tag"; tag.textContent = g.label;
     const note = document.createElement("span"); note.className = "grammar-note"; note.textContent = g.note;
     row.append(tag, note);
-    host.appendChild(row);
+    list.appendChild(row);
   });
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "grammar-toggle";
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.textContent = `문법 자세히 보기 (${s.grammar.length})`;
+  toggle.onclick = (e) => {
+    e.stopPropagation();
+    const open = list.hidden; // 지금 열리는지
+    list.hidden = !open;
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    toggle.textContent = open ? "문법 접기" : `문법 자세히 보기 (${s.grammar.length})`;
+  };
+
+  host.append(toggle, list);
   return host;
 }
 
-// 구조가 특히 어려운 문장의 심화 해설 카드(설정 ON일 때 검토 후 함께 공개)
+// 구조가 특히 어려운 문장의 심화 해설 카드(설정 ON일 때 검토 후 함께 공개).
+// 자연스러운 해석은 위 buildNatural이 전담하므로 여기서는 공식·왜·비문만 보여준다(중복 제거).
 function buildScopeCard(s) {
   const card = document.createElement("div");
   card.className = "scope-card";
   card.appendChild(labeledBlock("공식", s.insight.formula, "formula"));
   card.appendChild(labeledBlock("왜 이 구조인가", s.insight.why));
   card.appendChild(labeledBlock("이렇게 쓰면 비문", s.insight.wrong, "wrong-example"));
-  card.appendChild(labeledBlock("자연스러운 해석", s.insight.natural));
   return card;
 }
 
@@ -564,27 +638,39 @@ const AUTHORING_PROMPT = `너는 영어 독해 학습 앱의 문제 출제자다
     {
       "text": "영어 원문 문장.",
       "chunks": [
-        { "en": "끊어읽기 덩어리(영어)", "kr": "그 덩어리의 직독직해(한글)" }
+        { "en": "대표 추천 끊어읽기 덩어리(영어)", "kr": "그 덩어리의 직독직해(한글)" }
       ],
-      "grammar": [ { "label": "문법 이름표", "note": "한 줄 설명" } ],
+      "naturalTranslation": "문장 전체의 자연스러운 한국어 완역",
+      "wordOrderPoint": { "title": "핵심 어순·패턴 이름", "explanation": "한 줄 설명" },
+      "breakRules": {
+        "allowed": [ { "boundary": 0, "reason": "여기서도 자연스럽게 끊을 수 있는 이유" } ],
+        "discouraged": [ { "boundary": 0, "reason": "여기서 끊으면 핵심 구조가 갈려 이해를 방해하는 이유" } ]
+      },
+      "grammar": [ { "label": "문법 이름표", "note": "상세 설명" } ],
       "words": [ { "word": "어려운 단어", "meaning": "한글 뜻" } ]
     }
   ]
 }
 
 [규칙]
-1. chunks의 en을 공백으로 이어 붙이면 원문 text와 정확히 같아야 한다(구두점·대소문자만 예외).
+1. chunks는 대표(가장 권장하는) 끊어읽기다. en을 공백으로 이어 붙이면 원문 text와 정확히 같아야 한다(구두점·대소문자만 예외).
 2. 끊어읽기(chunks)는 잘게 쪼개지 말고 '의미 덩어리'로 크게 묶어라. 다음 자리는 절대 끊지 마라:
    - be동사·조동사 뒤 (예: "is the habit"은 한 덩어리. 단 뒤가 that절·to부정사면 끊어도 됨)
    - 짧은 주어(2단어 이하) 뒤에서 동사 앞
    - 짧은 전치사구(2단어 이하) 앞 (of noticing, at all 등)
    - 전치사와 그 목적어 사이 ("searches for | facts"처럼 끊지 마라)
    끊어도 되는 자리: 접속사·관계사·that·to 앞 / 콤마 뒤 / 긴 주어(3단어 이상) 뒤 동사 앞 / 긴 전치사구 앞.
-3. kr은 의역이 아니라 어순·구조가 드러나는 직독직해로 써라.
-4. grammar는 그 문장에 든 문법 요소를 1개 이상, 이름표(label)+한 줄 설명(note)으로.
-5. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 나온 형태 그대로 적어라 - 활용형(-s·-ed·-ing 등)을 원형으로 바꾸지 마라(원문이 "triggers"면 "trigger"가 아니라 "triggers", 원문이 "noticing"이면 "notice"가 아니라 "noticing"). meaning(뜻)에는 원형 뜻을 써도 된다.
-6. insight는 구조가 특히 어려운 문장에만 넣어라(빼도 됨). 넣으면 formula·why·wrong·natural 4필드를 모두 채워라.
-7. level은 난이도 숫자(1이 가장 쉬움). id는 다른 지문과 겹치지 않는 영문 이름.
+3. kr은 의역이 아니라 어순·구조가 드러나는 직독직해로 써라. naturalTranslation은 반대로 조각을 잇지 말고 한 문장으로 매끄럽게 읽히는 완역으로 써라(필수).
+4. wordOrderPoint는 그 문장의 가장 중요한 어순·패턴 1개만(필수). title(패턴 이름)+explanation(한 줄 설명). grammar와 겹치지 않게 핵심만.
+5. breakRules의 boundary는 0부터 세는 '단어 사이 틈 번호'다 - 0번 단어와 1번 단어 사이가 0, 1번과 2번 사이가 1. 예: 단어가 ["We","believe","that","others"]면 believe와 that 사이는 boundary 1.
+   - allowed: 대표 chunks 경계는 아니지만 거기서 끊어도 자연스러운 다른 위치.
+   - discouraged: 거기서 끊으면 핵심 구조(동사구·전치사구 등)가 갈려 이해를 방해하는 위치.
+   - 모든 틈을 억지로 채우지 마라. 정말 의미 있는 위치만 넣고, 없으면 빈 배열([])로 둬라. 대표 chunks 경계는 discouraged에 넣지 마라.
+6. grammar는 그 문장에 든 문법 요소를 1개 이상, 이름표(label)+상세 설명(note)으로.
+7. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 나온 형태 그대로 적어라 - 활용형(-s·-ed·-ing 등)을 원형으로 바꾸지 마라(원문이 "triggers"면 "trigger"가 아니라 "triggers", 원문이 "noticing"이면 "notice"가 아니라 "noticing"). meaning(뜻)에는 원형 뜻을 써도 된다.
+8. insight는 구조가 특히 어려운 문장에만 넣어라(빼도 됨). 넣으면 formula·why·wrong·natural 4필드를 모두 채워라.
+9. level은 난이도 숫자(1이 가장 쉬움). id는 다른 지문과 겹치지 않는 영문 이름.
+10. 신규 필드(naturalTranslation·wordOrderPoint·breakRules)를 넣지 않은 예전 형식도 앱에서 열리기는 하지만, 새로 만들 때는 위 필드를 모두 채워라.
 
 [규칙을 지킨 올바른 예시]
 {
@@ -599,6 +685,12 @@ const AUTHORING_PROMPT = `너는 영어 독해 학습 앱의 문제 출제자다
         { "en": "Confirmation bias is the habit", "kr": "확증 편향은 습관이다" },
         { "en": "of noticing only what we already believe.", "kr": "우리가 이미 믿는 것만 알아채는" }
       ],
+      "naturalTranslation": "확증 편향은 우리가 이미 믿는 것만 알아채려는 습관이다.",
+      "wordOrderPoint": { "title": "be동사 + 명사 보어", "explanation": "'A is B' 구조 - is 뒤의 the habit이 주어를 설명하는 보어라 붙여 읽는다." },
+      "breakRules": {
+        "allowed": [],
+        "discouraged": [ { "boundary": 2, "reason": "is 뒤에서 끊으면 보어 the habit이 떨어져 나갑니다. is the habit을 한 덩어리로 붙여 읽으세요." } ]
+      },
       "grammar": [
         { "label": "of + 동명사", "note": "the habit of noticing - '알아채는 습관'. of 뒤 동사는 -ing." }
       ],

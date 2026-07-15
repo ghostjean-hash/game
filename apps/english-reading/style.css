@@ -222,35 +222,48 @@ body {
   .gap:not(.slashed):hover { color: rgba(26,30,40,0.3); }
 }
 .gap.slashed { color: var(--fg); } /* 긋기 기본 = 본문과 같은 검정 */
-/* 검토 결과 3색·모양 - 맞음: 검정 / 위에 빨간 작은 원, 잘못 그음: 회색 / 위에 빨간 작은 x,
-   빼먹음(그었어야 하나 놓친 곳): 빨간 / */
-.gap.g-correct { color: var(--fg); }
-.gap.g-wrong { color: #ccd2dc; } /* 틀린 끊기 - 더 연한 회색(뒤로 물러남) */
-.gap.g-missed { color: #dc2626; }
-/* 정오 마크 - 끊기 표시(/) 바로 위에 작게 얹는다 (맞음=빈 원, 틀림=x, 빼먹음=작은 삼각형) */
-.gap.g-correct::before,
-.gap.g-wrong::before,
+/* 검토 결과 - 5등급 색+모양 병행(색만으로 구분하지 않음, 빨간 X 폐기).
+   추천=청록 채운 원 / 허용=회색 빈 원("가능한 끊기") / 비추천=주황 빈 삼각형(개선 가이드, 경고 아님)
+   다른 분할(neutral)=마크 없이 연회색 선 유지 / 놓친 추천=청록 + 아래 삼각형(여기 놓침) */
+.gap.g-recommended { color: var(--er-accent); }
+.gap.g-allowed { color: #9aa3b2; }
+.gap.g-discouraged { color: #ea8a2f; }
+.gap.g-neutral { color: #c7ccd6; }
+.gap.g-missed { color: var(--er-accent); }
+/* 등급 마크 - 끊기 표시(/) 바로 위에 작게 얹는다. neutral은 마크 없음(선만 유지) */
+.gap.g-recommended::before,
+.gap.g-allowed::before,
+.gap.g-discouraged::before,
 .gap.g-missed::before {
   position: absolute;
   left: 50%;
   top: -0.05em;
   transform: translateX(-50%);
-  color: #dc2626;
   line-height: 1;
   pointer-events: none;
 }
-/* 맞은 끊기 - 안이 빈 붉은 원(테두리만) */
-.gap.g-correct::before {
+/* 추천 - 청록 채운 원(가장 긍정적) */
+.gap.g-recommended::before {
   content: "";
   width: 0.4em;
   height: 0.4em;
-  border: 1.6px solid #dc2626;
+  background: var(--er-accent);
   border-radius: 50%;
   box-sizing: border-box;
 }
-.gap.g-wrong::before { content: "✕"; font-size: 0.58em; font-weight: 900; }
-/* 빼먹은 끊기 - / 위에 작은 삼각형으로 '여기 놓침' 표시 */
-.gap.g-missed::before { content: "▾"; font-size: 0.62em; font-weight: 900; top: -0.15em; }
+/* 허용 - 회색 빈 원(테두리만, '여기도 가능') */
+.gap.g-allowed::before {
+  content: "";
+  width: 0.4em;
+  height: 0.4em;
+  border: 1.6px solid #9aa3b2;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+/* 비추천 - 주황 빈 삼각형(개선 가이드) */
+.gap.g-discouraged::before { content: "△"; color: #ea8a2f; font-size: 0.66em; font-weight: 900; top: -0.18em; }
+/* 놓친 추천 - / 위 아래 향한 삼각형(여기 놓침), 청록 */
+.gap.g-missed::before { content: "▾"; color: var(--er-accent); font-size: 0.62em; font-weight: 900; top: -0.15em; }
 
 /* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다 */
 .review-btn {
@@ -323,6 +336,68 @@ body {
   white-space: nowrap;
 }
 .grammar-note { color: var(--fg-dim); }
+
+/* 선택한 비추천 위치의 개선 이유(경고 아닌 가이드) - 해석 카드 맨 위에 간결히 */
+.disc-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: #fff4e8;
+  border: 1px solid #f2c894;
+  border-left: 3px solid #ea8a2f;
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
+}
+.disc-row { font-size: 13px; line-height: 1.55; color: #8a5417; }
+
+/* 자연스러운 전체 해석 - 직독직해(조각)와 시각적으로 구분되는 별도 영역 */
+.natural-trans {
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
+}
+.nt-label { font-size: 11.5px; font-weight: 700; color: var(--fg-mute); margin-bottom: 4px; }
+.nt-body { font-size: 15px; font-weight: 600; color: var(--fg); line-height: 1.6; }
+
+/* 핵심 어순/패턴 - 문장당 1개 기본 노출(상세 문법은 접어 둔다) */
+.word-order {
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--accent-weak, #eef2ff);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
+}
+.wo-title { font-size: 13.5px; font-weight: 800; color: var(--er-accent); margin-bottom: 3px; }
+.wo-exp { font-size: 13.5px; color: var(--fg-dim); line-height: 1.55; }
+
+/* 상세 문법 - 기본 접힘, "문법 자세히 보기" 토글로 펼침 */
+.grammar-block { margin: var(--sp-2) 0; }
+.grammar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--fg-dim);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.grammar-toggle::before { content: "▸"; font-size: 10px; }
+.grammar-toggle[aria-expanded="true"]::before { content: "▾"; }
+.grammar-toggle:hover { color: var(--er-accent); border-color: var(--er-accent); }
+.grammar-block .grammar-list { margin-top: 8px; }
+/* .grammar-list의 display:flex가 [hidden] 속성(display:none)을 명시도에서 덮어쓰므로 명시 재지정 */
+.grammar-list[hidden] { display: none; }
 
 .w {
   position: relative;

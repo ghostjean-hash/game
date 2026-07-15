@@ -1,7 +1,7 @@
 // 지문 한 편의 데이터 무결성 + 끊는 기준 검증. DOM 미의존 순수 로직.
 // 출제 관리 화면(붙여넣기 검증)과 tests/run-node.mjs가 같은 규칙을 공유한다.
 import { tokenize, resolveTargets } from "./tokenize.js";
-import { chunkViolations } from "./chunking.js";
+import { chunkViolations, chunkBoundaries } from "./chunking.js";
 
 const norm = (t) => String(t).toLowerCase().replace(/[^a-z]/g, "");
 
@@ -15,7 +15,10 @@ export function normalizeSmartQuotes(s) {
 }
 
 // 반환: { ok, errors: [{ where, msg }] } - where는 사람이 읽는 위치("2번째 문장" 등)
-export function validatePassage(p) {
+// opts.strict=true(built-in 콘텐츠 회귀)면 신규 필드(naturalTranslation·wordOrderPoint)를 필수화.
+// 기본(false, 출제 화면·customPassages)은 신규 필드가 있으면 형식만 검증하고 없어도 통과(하위호환).
+export function validatePassage(p, opts = {}) {
+  const strict = !!opts.strict;
   const errors = [];
   const push = (where, msg) => errors.push({ where, msg });
 
@@ -59,6 +62,54 @@ export function validatePassage(p) {
     if (s.insight) {
       const full = s.insight.formula && s.insight.why && s.insight.wrong && s.insight.natural;
       if (!full) push(w, "insight를 넣으면 공식(formula)·왜(why)·비문(wrong)·자연(natural) 4필드를 모두 채워야 합니다.");
+    }
+
+    // ── 신규 필드(옵셔널+fallback) 검증 ──
+    // 자연스러운 전체 해석
+    if (s.naturalTranslation != null && typeof s.naturalTranslation !== "string") {
+      push(w, "naturalTranslation(자연스러운 전체 해석)은 문자열이어야 합니다.");
+    } else if (strict && !s.naturalTranslation) {
+      push(w, "naturalTranslation(자연스러운 전체 해석)이 필요합니다.");
+    }
+
+    // 핵심 어순/패턴
+    if (s.wordOrderPoint != null) {
+      if (typeof s.wordOrderPoint !== "object" || Array.isArray(s.wordOrderPoint) || !s.wordOrderPoint.title || !s.wordOrderPoint.explanation) {
+        push(w, "wordOrderPoint에 title(핵심 어순·패턴)과 explanation(설명)이 모두 필요합니다.");
+      }
+    } else if (strict) {
+      push(w, "wordOrderPoint(핵심 어순·패턴)가 필요합니다.");
+    }
+
+    // 끊기 등급 규칙(breakRules) - 있으면 형식·범위·중복 검증(없어도 통과, strict도 필수화하지 않음)
+    if (s.breakRules != null) {
+      const br = s.breakRules;
+      if (typeof br !== "object" || Array.isArray(br)) {
+        push(w, "breakRules는 { allowed, discouraged } 객체여야 합니다.");
+      } else {
+        const tokenLen = tokens.length;
+        const boundaries = chunkBoundaries(tokens, s.chunks);
+        const checkList = (key) => {
+          if (br[key] == null) return [];
+          if (!Array.isArray(br[key])) { push(w, `breakRules.${key}는 배열이어야 합니다.`); return []; }
+          const seen = new Set();
+          const bs = [];
+          br[key].forEach((r, ri) => {
+            if (!r || typeof r !== "object") { push(w, `breakRules.${key} ${ri + 1}번은 { boundary, reason } 객체여야 합니다.`); return; }
+            if (!Number.isInteger(r.boundary)) { push(w, `breakRules.${key} ${ri + 1}번의 boundary는 정수(토큰 틈 번호)여야 합니다.`); return; }
+            if (r.boundary < 0 || r.boundary > tokenLen - 2) { push(w, `breakRules.${key}의 boundary ${r.boundary}가 범위(0~${tokenLen - 2})를 벗어납니다.`); return; }
+            if (seen.has(r.boundary)) { push(w, `breakRules.${key}에 boundary ${r.boundary}가 중복됩니다.`); return; }
+            if (!r.reason) push(w, `breakRules.${key}의 boundary ${r.boundary}에 이유(reason)가 필요합니다.`);
+            seen.add(r.boundary);
+            bs.push(r.boundary);
+          });
+          return bs;
+        };
+        const allowedBs = checkList("allowed");
+        const discBs = checkList("discouraged");
+        allowedBs.forEach((b) => { if (discBs.includes(b)) push(w, `boundary ${b}가 allowed와 discouraged에 동시에 등록됐습니다.`); });
+        discBs.forEach((b) => { if (boundaries.has(b)) push(w, `boundary ${b}는 대표 추천 경계이므로 discouraged에 넣을 수 없습니다.`); });
+      }
     }
   });
 

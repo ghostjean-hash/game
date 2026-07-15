@@ -374,35 +374,48 @@ body {
   .gap:not(.slashed):hover { color: rgba(26,30,40,0.3); }
 }
 .gap.slashed { color: var(--fg); } /* 긋기 기본 = 본문과 같은 검정 */
-/* 검토 결과 3색·모양 - 맞음: 검정 / 위에 빨간 작은 원, 잘못 그음: 회색 / 위에 빨간 작은 x,
-   빼먹음(그었어야 하나 놓친 곳): 빨간 / */
-.gap.g-correct { color: var(--fg); }
-.gap.g-wrong { color: #ccd2dc; } /* 틀린 끊기 - 더 연한 회색(뒤로 물러남) */
-.gap.g-missed { color: #dc2626; }
-/* 정오 마크 - 끊기 표시(/) 바로 위에 작게 얹는다 (맞음=빈 원, 틀림=x, 빼먹음=작은 삼각형) */
-.gap.g-correct::before,
-.gap.g-wrong::before,
+/* 검토 결과 - 5등급 색+모양 병행(색만으로 구분하지 않음, 빨간 X 폐기).
+   추천=청록 채운 원 / 허용=회색 빈 원("가능한 끊기") / 비추천=주황 빈 삼각형(개선 가이드, 경고 아님)
+   다른 분할(neutral)=마크 없이 연회색 선 유지 / 놓친 추천=청록 + 아래 삼각형(여기 놓침) */
+.gap.g-recommended { color: var(--er-accent); }
+.gap.g-allowed { color: #9aa3b2; }
+.gap.g-discouraged { color: #ea8a2f; }
+.gap.g-neutral { color: #c7ccd6; }
+.gap.g-missed { color: var(--er-accent); }
+/* 등급 마크 - 끊기 표시(/) 바로 위에 작게 얹는다. neutral은 마크 없음(선만 유지) */
+.gap.g-recommended::before,
+.gap.g-allowed::before,
+.gap.g-discouraged::before,
 .gap.g-missed::before {
   position: absolute;
   left: 50%;
   top: -0.05em;
   transform: translateX(-50%);
-  color: #dc2626;
   line-height: 1;
   pointer-events: none;
 }
-/* 맞은 끊기 - 안이 빈 붉은 원(테두리만) */
-.gap.g-correct::before {
+/* 추천 - 청록 채운 원(가장 긍정적) */
+.gap.g-recommended::before {
   content: "";
   width: 0.4em;
   height: 0.4em;
-  border: 1.6px solid #dc2626;
+  background: var(--er-accent);
   border-radius: 50%;
   box-sizing: border-box;
 }
-.gap.g-wrong::before { content: "✕"; font-size: 0.58em; font-weight: 900; }
-/* 빼먹은 끊기 - / 위에 작은 삼각형으로 '여기 놓침' 표시 */
-.gap.g-missed::before { content: "▾"; font-size: 0.62em; font-weight: 900; top: -0.15em; }
+/* 허용 - 회색 빈 원(테두리만, '여기도 가능') */
+.gap.g-allowed::before {
+  content: "";
+  width: 0.4em;
+  height: 0.4em;
+  border: 1.6px solid #9aa3b2;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+/* 비추천 - 주황 빈 삼각형(개선 가이드) */
+.gap.g-discouraged::before { content: "△"; color: #ea8a2f; font-size: 0.66em; font-weight: 900; top: -0.18em; }
+/* 놓친 추천 - / 위 아래 향한 삼각형(여기 놓침), 청록 */
+.gap.g-missed::before { content: "▾"; color: var(--er-accent); font-size: 0.62em; font-weight: 900; top: -0.15em; }
 
 /* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다 */
 .review-btn {
@@ -475,6 +488,68 @@ body {
   white-space: nowrap;
 }
 .grammar-note { color: var(--fg-dim); }
+
+/* 선택한 비추천 위치의 개선 이유(경고 아닌 가이드) - 해석 카드 맨 위에 간결히 */
+.disc-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: #fff4e8;
+  border: 1px solid #f2c894;
+  border-left: 3px solid #ea8a2f;
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
+}
+.disc-row { font-size: 13px; line-height: 1.55; color: #8a5417; }
+
+/* 자연스러운 전체 해석 - 직독직해(조각)와 시각적으로 구분되는 별도 영역 */
+.natural-trans {
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
+}
+.nt-label { font-size: 11.5px; font-weight: 700; color: var(--fg-mute); margin-bottom: 4px; }
+.nt-body { font-size: 15px; font-weight: 600; color: var(--fg); line-height: 1.6; }
+
+/* 핵심 어순/패턴 - 문장당 1개 기본 노출(상세 문법은 접어 둔다) */
+.word-order {
+  margin: var(--sp-2) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--accent-weak, #eef2ff);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  animation: er-pop 0.25s var(--ease);
+}
+.wo-title { font-size: 13.5px; font-weight: 800; color: var(--er-accent); margin-bottom: 3px; }
+.wo-exp { font-size: 13.5px; color: var(--fg-dim); line-height: 1.55; }
+
+/* 상세 문법 - 기본 접힘, "문법 자세히 보기" 토글로 펼침 */
+.grammar-block { margin: var(--sp-2) 0; }
+.grammar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--fg-dim);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.grammar-toggle::before { content: "▸"; font-size: 10px; }
+.grammar-toggle[aria-expanded="true"]::before { content: "▾"; }
+.grammar-toggle:hover { color: var(--er-accent); border-color: var(--er-accent); }
+.grammar-block .grammar-list { margin-top: 8px; }
+/* .grammar-list의 display:flex가 [hidden] 속성(display:none)을 명시도에서 덮어쓰므로 명시 재지정 */
+.grammar-list[hidden] { display: none; }
 
 .w {
   position: relative;
@@ -776,8 +851,8 @@ const EMBEDDED_PASSAGES = {
     "note": "하이브리드 독해 데이터 - 코스 단위. 코스는 완만한 난이도 순으로 정렬된 지문 묶음. 개별 지문 완독은 진행률만 채우고, 코스 전체 완주 시 클리어.",
     "course": "{ id, title, passages[] }  (passages는 level 오름차순)",
     "passage": "{ id, level, title, titleKr, sentences[] }  (전체 텍스트는 sentences.text를 이어 조합, 따로 저장 안 함)",
-    "sentence": "{ text, chunks[{en,kr}], words[{word, nth?, meaning}], grammar[{label,note}], insight?{formula,why,wrong,natural} }",
-    "rules": "chunks.en을 공백으로 이어 붙이면 text와 일치(구두점·대소문자 제외). words.word는 text에 실재(같은 단어 여러 번이면 nth 1-based), 걸림돌 단어만 0~3개, meaning은 한국어 뜻. insight는 구조적으로 어려운 문장에만(지문당 1~3개). kr은 어순·구조가 드러나는 직독직해로 쓰고 단순 의역 금지. grammar는 그 문장에 포함된 모든 문법 요소(이름표 + 한 줄 설명)를 1개 이상 나열하며, / 검토 후 문장 아래에 전부 표시된다."
+    "sentence": "{ text, chunks[{en,kr}], naturalTranslation, wordOrderPoint{title,explanation}, breakRules{allowed[{boundary,reason}],discouraged[{boundary,reason}]}, words[{word,nth?,meaning}], grammar[{label,note}], insight?{formula,why,wrong,natural} }",
+    "rules": "chunks.en을 공백으로 이어 붙이면 text와 일치(구두점·대소문자 제외). words.word는 text에 실재(같은 단어 여러 번이면 nth 1-based), 걸림돌 단어만 0~3개, meaning은 한국어 뜻. insight는 구조적으로 어려운 문장에만(지문당 1~3개). kr은 어순·구조가 드러나는 직독직해로 쓰고 단순 의역 금지. grammar는 그 문장에 포함된 모든 문법 요소(이름표 + 한 줄 설명)를 1개 이상 나열하며, / 검토 후 문장 아래에 전부 표시된다. naturalTranslation은 문장 전체의 자연스러운 완역(직독직해 조각 잇기 금지). wordOrderPoint는 그 문장 핵심 어순/패턴 1개. breakRules.boundary는 0-based 토큰 틈 번호(대표 chunks 경계는 넣지 않음). 신 필드가 없는 예전 데이터는 렌더 시 fallback으로 열린다."
   },
   "courses": [
     {
@@ -802,6 +877,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "오늘 아침 셔츠에"
                 }
               ],
+              "naturalTranslation": "오늘 아침 당신은 셔츠에 커피를 좀 쏟았다.",
+              "wordOrderPoint": {
+                "title": "spill A on B (A를 B에 쏟다)",
+                "explanation": "동사 뒤에 쏟은 대상(coffee)이 먼저 오고, 그다음 on으로 쏟은 장소(shirt)를 붙입니다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 0,
+                    "reason": "You는 한 단어짜리 짧은 주어입니다. 동사 spilled까지 붙여 'You spilled'로 읽으세요."
+                  },
+                  {
+                    "boundary": 4,
+                    "reason": "on your shirt는 하나의 전치사구입니다. on 뒤 your shirt까지 붙여 읽으세요."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "spilled",
@@ -835,6 +928,29 @@ const EMBEDDED_PASSAGES = {
                   "kr": "그 얼룩을"
                 }
               ],
+              "naturalTranslation": "하루 종일 당신은 모두가 그 얼룩을 쳐다보고 있다고 느낀다.",
+              "wordOrderPoint": {
+                "title": "feel that + 절 (~라고 느끼다)",
+                "explanation": "feel 뒤의 that은 '~라고'로, 뒤에 오는 문장 전체가 느끼는 내용입니다."
+              },
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 4,
+                    "reason": "feel 뒤 that절을 하나로 보고 'you feel' 다음에서 끊어 읽어도 자연스럽습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 7,
+                    "reason": "is staring은 '~하고 있다'는 진행형 한 덩어리입니다. is와 staring을 붙여 읽으세요."
+                  },
+                  {
+                    "boundary": 9,
+                    "reason": "at the stain은 하나의 전치사구입니다. at 다음 the stain까지 붙여 읽으세요."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "staring",
@@ -872,6 +988,20 @@ const EMBEDDED_PASSAGES = {
                   "kr": "거의 아무도 그것을 알아채지조차 못한다는 것이다"
                 }
               ],
+              "naturalTranslation": "하지만 진실은 거의 아무도 그것을 알아차리지조차 못한다는 것이다.",
+              "wordOrderPoint": {
+                "title": "주어 is that + 절 (~은 …라는 것이다)",
+                "explanation": "be동사 is 뒤의 that절 전체가 주어의 정체를 설명하는 보어입니다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 6,
+                    "reason": "no one은 '아무도'라는 한 덩어리입니다. no와 one을 붙여 읽으세요."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "notices",
@@ -901,10 +1031,30 @@ const EMBEDDED_PASSAGES = {
                   "kr": "스포트라이트 효과라고"
                 }
               ],
+              "naturalTranslation": "심리학자들은 이 흔한 느낌을 스포트라이트 효과라고 부른다.",
+              "wordOrderPoint": {
+                "title": "call A B (A를 B라고 부르다)",
+                "explanation": "call 뒤에 부르는 대상(this common feeling)이 먼저, 그다음 그 이름(the spotlight effect)이 이어집니다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "call은 뒤의 목적어와 이어지는 동사입니다. call this common feeling까지 붙여 읽으세요."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "Psychologists",
                   "meaning": "심리학자들"
+                }
+              ],
+              "grammar": [
+                {
+                  "label": "5형식 call A B",
+                  "note": "call + 목적어 + 이름 = 'A를 B라고 부르다'. 뒤의 B가 앞 A의 이름이 됩니다."
                 }
               ],
               "insight": {
@@ -912,13 +1062,7 @@ const EMBEDDED_PASSAGES = {
                 "why": "call 뒤에 '이 느낌(A)'과 '스포트라이트 효과(B)'가 나란히 오는 5형식입니다. 뒤의 B가 앞 A의 이름이 됩니다.",
                 "wrong": "Psychologists call the spotlight effect this feeling (X) - A와 B 순서가 바뀌면 '효과를 느낌이라 부른다'는 엉뚱한 뜻이 됨",
                 "natural": "심리학자들은 이 흔한 느낌을 스포트라이트 효과라고 부른다."
-              },
-              "grammar": [
-                {
-                  "label": "5형식 call A B",
-                  "note": "call + 목적어 + 이름 = 'A를 B라고 부르다'. 뒤의 B가 앞 A의 이름이 됩니다."
-                }
-              ]
+              }
             },
             {
               "text": "We believe that others watch us far more closely than they actually do.",
@@ -936,6 +1080,29 @@ const EMBEDDED_PASSAGES = {
                   "kr": "실제로 그러는 것보다"
                 }
               ],
+              "naturalTranslation": "우리는 남들이 실제로 그러는 것보다 훨씬 더 유심히 우리를 지켜본다고 믿는다.",
+              "wordOrderPoint": {
+                "title": "than + 주어 + do (대동사)",
+                "explanation": "than 뒤의 do는 앞에 나온 동사 watch를 대신 받는 대동사로, '그러는 것'이라는 뜻입니다."
+              },
+              "breakRules": {
+                "allowed": [
+                  {
+                    "boundary": 1,
+                    "reason": "believe 뒤 that절을 하나로 보고 'We believe' 다음에서 끊어 읽어도 자연스럽습니다."
+                  }
+                ],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "watch us는 동사와 목적어가 붙는 한 덩어리입니다. watch 다음 us까지 붙여 읽으세요."
+                  },
+                  {
+                    "boundary": 6,
+                    "reason": "far more closely는 '훨씬 더 유심히'라는 한 덩어리입니다. far more closely를 붙여 읽으세요."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "closely",
@@ -946,12 +1113,6 @@ const EMBEDDED_PASSAGES = {
                   "meaning": "실제로"
                 }
               ],
-              "insight": {
-                "formula": "비교급(more + 부사) + than + 주어 + do  =  ~가 하는 것보다 더 ~하게",
-                "why": "'far more closely'는 비교급을 강조하고, than 뒤의 'they actually do'가 비교 대상입니다. do는 앞의 watch를 대신합니다.",
-                "wrong": "We believe others watch us closely than they do (X) - 비교급 more 없이 than만 쓰면 비문",
-                "natural": "우리는 남들이 실제로 그러는 것보다 훨씬 더 유심히 우리를 지켜본다고 믿는다."
-              },
               "grammar": [
                 {
                   "label": "목적어 that절",
@@ -965,7 +1126,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "대동사 do",
                   "note": "than they actually do의 do는 앞의 watch를 대신하는 대동사입니다."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "비교급(more + 부사) + than + 주어 + do  =  ~가 하는 것보다 더 ~하게",
+                "why": "'far more closely'는 비교급을 강조하고, than 뒤의 'they actually do'가 비교 대상입니다. do는 앞의 watch를 대신합니다.",
+                "wrong": "We believe others watch us closely than they do (X) - 비교급 more 없이 than만 쓰면 비문",
+                "natural": "우리는 남들이 실제로 그러는 것보다 훨씬 더 유심히 우리를 지켜본다고 믿는다."
+              }
             }
           ]
         },
@@ -987,6 +1154,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "우리가 이미 믿는 것만 알아채는"
                 }
               ],
+              "naturalTranslation": "확증 편향이란 우리가 이미 믿고 있는 것만 눈여겨보는 습관이다.",
+              "wordOrderPoint": {
+                "title": "the habit of -ing (~하는 습관)",
+                "explanation": "'습관'을 먼저 말하고 of 뒤에 어떤 습관인지 -ing로 붙인다. 한국어 어순과 반대라 뒤에서부터 당겨 읽어야 한다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "is와 the habit는 be동사와 보어라 붙여 읽어야 '~는 습관이다'가 한 덩어리로 잡힌다."
+                  },
+                  {
+                    "boundary": 5,
+                    "reason": "of와 noticing은 전치사와 그 목적어라 함께 두면 '눈여겨보는 것에 대한'이라는 연결이 살아난다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "bias",
@@ -1024,6 +1209,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "(어떤 사실?) 그것을 뒷받침해 주는"
                 }
               ],
+              "naturalTranslation": "일단 어떤 생각을 받아들이고 나면, 우리 마음은 그 생각을 뒷받침해 주는 사실들만 조용히 찾아 나선다.",
+              "wordOrderPoint": {
+                "title": "Once 주어+동사 (일단 ~하면)",
+                "explanation": "문장 앞 Once는 '일단 ~하고 나면'이라는 조건을 먼저 깔고, 콤마 뒤에 진짜 하고 싶은 말(주절)이 온다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 9,
+                    "reason": "for와 facts는 전치사와 목적어라 붙여 두면 '사실들을 향해 찾는다'가 자연스럽게 이어진다."
+                  },
+                  {
+                    "boundary": 12,
+                    "reason": "support와 it은 동사와 목적어라 함께 읽어야 '그것을 뒷받침한다'가 한 호흡에 들어온다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "accept",
@@ -1034,12 +1237,6 @@ const EMBEDDED_PASSAGES = {
                   "meaning": "조용히, 슬며시"
                 }
               ],
-              "insight": {
-                "formula": "명사(facts) + that + 동사(support ~): 앞의 명사를 꾸미는 주격 관계대명사절",
-                "why": "facts 뒤에 that절을 붙여 '어떤 사실인지'를 좁혀 설명한다. that은 facts를 대신 가리키며 그 절의 주어 역할을 한다.",
-                "wrong": "our mind searches for facts support it (X) - facts와 support를 이어 줄 that이 없어 동사가 두 개(searches, support)인 채로 문장이 끊긴다.",
-                "natural": "일단 어떤 생각을 받아들이고 나면, 우리 마음은 그 생각을 뒷받침해 주는 사실들만 조용히 찾아 나선다."
-              },
               "grammar": [
                 {
                   "label": "접속사 Once",
@@ -1053,7 +1250,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "구동사 search for",
                   "note": "search for ~ = '~을 찾아 나서다'."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "명사(facts) + that + 동사(support ~): 앞의 명사를 꾸미는 주격 관계대명사절",
+                "why": "facts 뒤에 that절을 붙여 '어떤 사실인지'를 좁혀 설명한다. that은 facts를 대신 가리키며 그 절의 주어 역할을 한다.",
+                "wrong": "our mind searches for facts support it (X) - facts와 support를 이어 줄 that이 없어 동사가 두 개(searches, support)인 채로 문장이 끊긴다.",
+                "natural": "일단 어떤 생각을 받아들이고 나면, 우리 마음은 그 생각을 뒷받침해 주는 사실들만 조용히 찾아 나선다."
+              }
             },
             {
               "text": "At the same time, it tends to ignore the evidence that proves us wrong.",
@@ -1075,6 +1278,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "(어떤 증거?) 우리가 틀렸음을 증명하는"
                 }
               ],
+              "naturalTranslation": "동시에 우리 마음은 자신이 틀렸음을 증명하는 증거는 무시하는 경향이 있다.",
+              "wordOrderPoint": {
+                "title": "tend to + 동사원형 (~하는 경향이 있다)",
+                "explanation": "tends 뒤의 to ignore가 하나로 '무시하는 경향'을 이룬다. to와 동사원형을 붙여 읽어야 뜻이 산다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 6,
+                    "reason": "to와 ignore는 to부정사 한 덩어리라 붙여 읽어야 '무시하려는'이라는 의미가 이어진다."
+                  },
+                  {
+                    "boundary": 11,
+                    "reason": "proves와 us는 동사와 목적어라 함께 두면 '우리가 틀렸음을 증명한다'가 매끄럽게 연결된다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "tends",
@@ -1124,18 +1345,30 @@ const EMBEDDED_PASSAGES = {
                   "kr": "자기들이 옳았다는 것을"
                 }
               ],
+              "naturalTranslation": "그래서 두 사람이 같은 이야기를 읽고도 저마다 자기가 옳았다고 더욱 확신하게 되는 것이다.",
+              "wordOrderPoint": {
+                "title": "This is why + 절 (그래서 ~하다)",
+                "explanation": "'이것이 why 이하의 이유다'라는 구조로, 결과를 먼저 던진 뒤 이어지는 절로 상황을 풀어 준다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "can과 read는 조동사와 본동사라 붙여 읽어야 '읽을 수 있다'가 한 덩어리로 잡힌다."
+                  },
+                  {
+                    "boundary": 12,
+                    "reason": "feel과 sure는 동사와 보어라 함께 두면 '확신한다'는 뜻이 끊기지 않는다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "sure",
                   "meaning": "확신하는"
                 }
               ],
-              "insight": {
-                "formula": "feel sure + that + 주어+동사: '~라는 것을 확신하다'로 that절이 확신의 내용을 담는다",
-                "why": "sure 뒤의 that절은 '무엇을' 확신하는지 그 내용을 통째로 이끈다. 여기서 that은 '~라는 것'이라는 뜻이다.",
-                "wrong": "both feel sure they were right에서 that과 주어까지 빼 both feel sure were right (X)로 쓰면, 누가 옳았다는 것인지 주어가 사라져 뜻이 무너진다.",
-                "natural": "그래서 두 사람이 같은 이야기를 읽고도 저마다 자기가 옳았다고 더욱 확신하게 되는 것이다."
-              },
               "grammar": [
                 {
                   "label": "This is why",
@@ -1149,7 +1382,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "that절(확신의 내용)",
                   "note": "feel sure that ~ - 무엇을 확신하는지 that절이 담습니다."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "feel sure + that + 주어+동사: '~라는 것을 확신하다'로 that절이 확신의 내용을 담는다",
+                "why": "sure 뒤의 that절은 '무엇을' 확신하는지 그 내용을 통째로 이끈다. 여기서 that은 '~라는 것'이라는 뜻이다.",
+                "wrong": "both feel sure they were right에서 that과 주어까지 빼 both feel sure were right (X)로 쓰면, 누가 옳았다는 것인지 주어가 사라져 뜻이 무너진다.",
+                "natural": "그래서 두 사람이 같은 이야기를 읽고도 저마다 자기가 옳았다고 더욱 확신하게 되는 것이다."
+              }
             },
             {
               "text": "Knowing this trap will not switch it off, but it can make you pause before you judge.",
@@ -1171,6 +1410,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "당신이 판단하기 전에"
                 }
               ],
+              "naturalTranslation": "이 함정을 안다고 해서 그것이 꺼지지는 않겠지만, 판단하기 전에 잠시 멈추게 해 줄 수는 있다.",
+              "wordOrderPoint": {
+                "title": "make + 목적어 + 동사원형 (~가 …하게 하다)",
+                "explanation": "사역동사 make 뒤엔 목적어와 동사원형이 이어져 'you pause', 즉 '네가 멈추게 하다'라는 뜻이 된다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "not과 switch는 부정어와 본동사라 붙여 읽어야 '끄지 않는다'가 한 흐름으로 이어진다."
+                  },
+                  {
+                    "boundary": 11,
+                    "reason": "make와 you는 사역동사와 목적어라 함께 두면 '네가 …하게 만든다' 구조가 살아난다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "trap",
@@ -1232,6 +1489,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "낯선 사람들에게 둘러싸인 채로"
                 }
               ],
+              "naturalTranslation": "붐비는 거리 한복판에서, 낯선 사람들에게 둘러싸인 채로 네가 쓰러졌다고 상상해 보라.",
+              "wordOrderPoint": {
+                "title": "분사구문 surrounded by",
+                "explanation": "문장 끝의 과거분사 surrounded는 앞의 you를 뒤에서 꾸며 '~에 둘러싸인 채로'라는 상황을 덧붙인다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "전치사 on은 뒤의 목적어 a crowded street와 한 덩어리이니 'on a crowded street'를 통째로 묶어 읽으세요."
+                  },
+                  {
+                    "boundary": 9,
+                    "reason": "전치사 by는 목적어 strangers와 붙여 'by strangers'로 함께 읽는 편이 자연스럽습니다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "collapse",
@@ -1242,12 +1517,6 @@ const EMBEDDED_PASSAGES = {
                   "meaning": "둘러싸인"
                 }
               ],
-              "insight": {
-                "formula": "명사 + 분사(-ed): ~된 채로 (수동 분사구가 명사를 뒤에서 꾸밈)",
-                "why": "surrounded by strangers는 you를 뒤에서 설명하는 분사구다. 관계절 who are surrounded의 who are가 생략된 형태로, '낯선 사람들에게 둘러싸인 (너)'로 붙는다.",
-                "wrong": "Imagine that you collapse, strangers around. (분사 없이 명사만 나열하면 문장 연결이 끊긴다) (X)",
-                "natural": "붐비는 거리 한복판에서, 낯선 사람들에게 둘러싸인 채로 네가 쓰러졌다고 상상해 보라."
-              },
               "grammar": [
                 {
                   "label": "명령문",
@@ -1257,7 +1526,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "과거분사 수식",
                   "note": "surrounded by strangers가 you를 뒤에서 꾸밉니다 - '둘러싸인 채로'."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "명사 + 분사(-ed): ~된 채로 (수동 분사구가 명사를 뒤에서 꾸밈)",
+                "why": "surrounded by strangers는 you를 뒤에서 설명하는 분사구다. 관계절 who are surrounded의 who are가 생략된 형태로, '낯선 사람들에게 둘러싸인 (너)'로 붙는다.",
+                "wrong": "Imagine that you collapse, strangers around. (분사 없이 명사만 나열하면 문장 연결이 끊긴다) (X)",
+                "natural": "붐비는 거리 한복판에서, 낯선 사람들에게 둘러싸인 채로 네가 쓰러졌다고 상상해 보라."
+              }
             },
             {
               "text": "You might expect that someone will rush to help you right away.",
@@ -1279,6 +1554,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "곧바로, 즉시"
                 }
               ],
+              "naturalTranslation": "너는 아마 누군가가 곧장 너를 도우러 달려올 거라고 기대할지도 모른다.",
+              "wordOrderPoint": {
+                "title": "expect that ~ (기대의 내용)",
+                "explanation": "'~라고 기대하다'는 expect 뒤에 that절을 두어 기대하는 내용 전체를 담는다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 5,
+                    "reason": "조동사 will과 본동사 rush는 'will rush'로 붙는 하나의 서술어이니 사이를 끊지 마세요."
+                  },
+                  {
+                    "boundary": 7,
+                    "reason": "to help는 to부정사 한 덩어리이니 'to help you'로 묶어 읽으세요."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "rush",
@@ -1312,6 +1605,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "이상하고 불안한 진실을"
                 }
               ],
+              "naturalTranslation": "하지만 심리학자들은 이상하고 불편한 진실 하나를 발견했다.",
+              "wordOrderPoint": {
+                "title": "현재완료 have discovered",
+                "explanation": "'have + 과거분사'는 과거에 발견한 사실이 지금까지 유효함을 나타내 '발견했다'로 옮긴다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "have와 discovered는 'have discovered'라는 하나의 서술어이니 붙여 읽으세요."
+                  },
+                  {
+                    "boundary": 4,
+                    "reason": "관사 a는 뒤따르는 명사구 'a strange and unsettling truth'와 한 덩어리이니 함께 묶으세요."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "psychologists",
@@ -1357,18 +1668,30 @@ const EMBEDDED_PASSAGES = {
                   "kr": "나설 가능성이"
                 }
               ],
+              "naturalTranslation": "지켜보는 사람이 많을수록, 오히려 누구든 선뜻 나설 가능성은 그만큼 줄어든다.",
+              "wordOrderPoint": {
+                "title": "The 비교급 ~, the 비교급 ~",
+                "explanation": "'~하면 할수록 그만큼 더/덜 ~하다' 구문으로, 앞 the절이 조건, 뒤 the절이 그 결과를 잡아 준다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 4,
+                    "reason": "are와 watching은 'are watching'이라는 하나의 서술어이니 사이를 끊지 마세요."
+                  },
+                  {
+                    "boundary": 11,
+                    "reason": "to step은 to부정사 한 덩어리이니 'to step forward'로 묶어 읽으세요."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "likely",
                   "meaning": "~할 가능성이 있는"
                 }
               ],
-              "insight": {
-                "formula": "The + 비교급 ~, the + 비교급 ~: ~할수록 그만큼 더/덜 …하다",
-                "why": "앞의 the more(원인)와 뒤의 the less(결과)가 한 쌍을 이루는 상관 구문이다. 지켜보는 사람 수가 늘수록 나설 가능성이 반비례로 줄어든다는 관계를 한 문장에 담았다.",
-                "wrong": "More people watch, less anyone helps. (the가 빠지면 비교급 상관 구문 자체가 성립하지 않는다) (X)",
-                "natural": "지켜보는 사람이 많을수록, 오히려 누구든 선뜻 나설 가능성은 그만큼 줄어든다."
-              },
               "grammar": [
                 {
                   "label": "The 비교급, the 비교급",
@@ -1382,7 +1705,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "be likely to V",
                   "note": "likely ~ to step forward = '나설 가능성이 있는'."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "The + 비교급 ~, the + 비교급 ~: ~할수록 그만큼 더/덜 …하다",
+                "why": "앞의 the more(원인)와 뒤의 the less(결과)가 한 쌍을 이루는 상관 구문이다. 지켜보는 사람 수가 늘수록 나설 가능성이 반비례로 줄어든다는 관계를 한 문장에 담았다.",
+                "wrong": "More people watch, less anyone helps. (the가 빠지면 비교급 상관 구문 자체가 성립하지 않는다) (X)",
+                "natural": "지켜보는 사람이 많을수록, 오히려 누구든 선뜻 나설 가능성은 그만큼 줄어든다."
+              }
             },
             {
               "text": "This happens because each person quietly assumes that someone else will take action.",
@@ -1400,18 +1729,30 @@ const EMBEDDED_PASSAGES = {
                   "kr": "다른 누군가가 행동에 나설 거라고"
                 }
               ],
+              "naturalTranslation": "이런 일이 벌어지는 건, 각자가 '다른 누군가가 하겠지' 하고 속으로 넘겨짚기 때문이다.",
+              "wordOrderPoint": {
+                "title": "assume that ~ (가정의 내용)",
+                "explanation": "'~라고 넘겨짚다/가정하다'는 assume 뒤 that절에 가정하는 내용 전체를 담는다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 10,
+                    "reason": "조동사 will과 본동사 take는 'will take'로 붙는 하나의 서술어이니 사이를 끊지 마세요."
+                  },
+                  {
+                    "boundary": 11,
+                    "reason": "동사 take와 목적어 action은 'take action'으로 붙여 읽는 편이 자연스럽습니다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "assumes",
                   "meaning": "(당연하다는 듯) 추정하다, 넘겨짚다"
                 }
               ],
-              "insight": {
-                "formula": "S V because + 주어 + assume that + 절: ~는 …라고 추정하기 때문에 -하다",
-                "why": "because가 이유 부사절을 이끌고, 그 안의 assumes that이 다시 목적어 절을 품는 2중 구조다. '각자 남이 하겠지'라고 넘겨짚는 것이 앞 문장(아무도 안 나섬)의 원인이 된다.",
-                "wrong": "This happens because each person assumes someone will take action, quietly. (부사 quietly가 문미로 밀리면 무엇을 꾸미는지 흐려진다) (X)",
-                "natural": "이런 일이 벌어지는 건, 각자가 '다른 누군가가 하겠지' 하고 속으로 넘겨짚기 때문이다."
-              },
               "grammar": [
                 {
                   "label": "이유 부사절 because",
@@ -1425,7 +1766,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "each + 단수",
                   "note": "each person은 한 명씩 가리켜 단수 - 동사도 assumes."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "S V because + 주어 + assume that + 절: ~는 …라고 추정하기 때문에 -하다",
+                "why": "because가 이유 부사절을 이끌고, 그 안의 assumes that이 다시 목적어 절을 품는 2중 구조다. '각자 남이 하겠지'라고 넘겨짚는 것이 앞 문장(아무도 안 나섬)의 원인이 된다.",
+                "wrong": "This happens because each person assumes someone will take action, quietly. (부사 quietly가 문미로 밀리면 무엇을 꾸미는지 흐려진다) (X)",
+                "natural": "이런 일이 벌어지는 건, 각자가 '다른 누군가가 하겠지' 하고 속으로 넘겨짚기 때문이다."
+              }
             }
           ]
         },
@@ -1447,6 +1794,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "진짜 약을 전혀 담고 있지 않은"
                 }
               ],
+              "naturalTranslation": "위약(플라시보)은 진짜 약이 전혀 들어 있지 않은 가짜 알약이다.",
+              "wordOrderPoint": {
+                "title": "명사를 뒤에서 꾸미는 that절",
+                "explanation": "that contains ~는 앞의 명사 pill을 뒤에서 수식하며, 한국어와 달리 꾸미는 말이 명사 뒤에 온다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "be동사 is 바로 뒤는 끊지 않는다. 'is a fake pill'을 한 호흡으로 읽는다."
+                  },
+                  {
+                    "boundary": 7,
+                    "reason": "동사 contains와 목적어 'no real medicine'을 갈라놓지 말고 붙여 읽는다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "placebo",
@@ -1496,18 +1861,26 @@ const EMBEDDED_PASSAGES = {
                   "kr": "이 텅 빈 알약들을."
                 }
               ],
+              "naturalTranslation": "이상하게도, 많은 환자들은 이 텅 빈 알약을 받은 뒤에 상태가 나아진다.",
+              "wordOrderPoint": {
+                "title": "수동태 be given",
+                "explanation": "'are given'은 be+과거분사로, 능동 give(주다)와 반대로 '받다/주어지다'의 당하는 방향을 나타낸다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 7,
+                    "reason": "are와 given을 가르면 수동태가 끊긴다. 'they are given'을 한 덩어리로 읽는다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "Strangely",
                   "meaning": "이상하게도"
                 }
               ],
-              "insight": {
-                "formula": "주어 + be동사 + 과거분사(given) + 남은 목적어 → '~을 받다'(수동태)",
-                "why": "give는 목적어를 둘 갖는 동사라, 수동태로 뒤집혀도 목적어(these empty pills) 하나가 동사 뒤에 그대로 남는다. '환자들이 빈 알약을 받는다'로 읽는다.",
-                "wrong": "many patients get better after they give these empty pills (X)",
-                "natural": "이상하게도, 많은 환자들은 이 텅 빈 알약을 받은 뒤에 상태가 나아진다."
-              },
               "grammar": [
                 {
                   "label": "문장 부사",
@@ -1525,7 +1898,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "get + 형용사",
                   "note": "get better - '나아지다', 상태의 변화를 나타냅니다."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "주어 + be동사 + 과거분사(given) + 남은 목적어 → '~을 받다'(수동태)",
+                "why": "give는 목적어를 둘 갖는 동사라, 수동태로 뒤집혀도 목적어(these empty pills) 하나가 동사 뒤에 그대로 남는다. '환자들이 빈 알약을 받는다'로 읽는다.",
+                "wrong": "many patients get better after they give these empty pills (X)",
+                "natural": "이상하게도, 많은 환자들은 이 텅 빈 알약을 받은 뒤에 상태가 나아진다."
+              }
             },
             {
               "text": "When people are told that a drug is powerful, their brains start to expect relief.",
@@ -1555,18 +1934,30 @@ const EMBEDDED_PASSAGES = {
                   "kr": "(통증의) 완화를."
                 }
               ],
+              "naturalTranslation": "약이 강력하다는 말을 들으면, 사람들의 뇌는 통증 완화를 기대하기 시작한다.",
+              "wordOrderPoint": {
+                "title": "수동태 be told + that절",
+                "explanation": "'be told that ~'는 '~라는 말을 듣다'로, 능동 tell(말하다)과 주어가 하는 방향이 반대다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "are와 told 사이는 끊지 않는다. 수동태 'are told'는 붙여 읽는다."
+                  },
+                  {
+                    "boundary": 12,
+                    "reason": "to와 expect를 가르지 말고 to부정사 'to expect'를 한 덩어리로 읽는다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "relief",
                   "meaning": "완화, (통증의) 경감"
                 }
               ],
-              "insight": {
-                "formula": "people are told + that절 → '사람들은 ~라고 듣는다'(수동태)",
-                "why": "tell A that절(A에게 ~라고 말하다)이 수동으로 뒤집히면, 말을 들은 사람(people)이 주어가 되고 that절 내용이 그대로 뒤에 남는다.",
-                "wrong": "When people tell that a drug is powerful (X)",
-                "natural": "약이 강력하다는 말을 들으면, 사람들의 뇌는 통증 완화를 기대하기 시작한다."
-              },
               "grammar": [
                 {
                   "label": "시간 접속사 When",
@@ -1580,7 +1971,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "start to V",
                   "note": "start to expect = '기대하기 시작하다'."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "people are told + that절 → '사람들은 ~라고 듣는다'(수동태)",
+                "why": "tell A that절(A에게 ~라고 말하다)이 수동으로 뒤집히면, 말을 들은 사람(people)이 주어가 되고 that절 내용이 그대로 뒤에 남는다.",
+                "wrong": "When people tell that a drug is powerful (X)",
+                "natural": "약이 강력하다는 말을 들으면, 사람들의 뇌는 통증 완화를 기대하기 시작한다."
+              }
             },
             {
               "text": "This expectation can push the body to release its own natural painkillers.",
@@ -1594,6 +1991,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "몸 자신의 천연 진통제를 방출하도록"
                 }
               ],
+              "naturalTranslation": "이 기대감은 몸이 스스로의 천연 진통제를 분비하도록 밀어붙일 수 있다.",
+              "wordOrderPoint": {
+                "title": "push + 목적어 + to부정사",
+                "explanation": "'push the body to release ~'는 '몸이 ~하도록 밀어붙이다'로, 목적어 다음에 오는 to부정사가 그 목적어의 행동을 나타낸다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "조동사 can 바로 뒤는 끊지 않는다. 'can push'를 붙여 읽는다."
+                  },
+                  {
+                    "boundary": 6,
+                    "reason": "to와 release를 가르지 말고 to부정사 'to release'를 한 덩어리로 읽는다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "release",
@@ -1635,18 +2050,30 @@ const EMBEDDED_PASSAGES = {
                   "kr": "그것을 믿었던 (그 마음에)."
                 }
               ],
+              "naturalTranslation": "그래서 그 치유는 알약이 아니라, 그것을 믿은 마음에 의해 만들어진 것이다.",
+              "wordOrderPoint": {
+                "title": "수동태 be created + by 행위자",
+                "explanation": "'was created by ~'는 '~에 의해 만들어지다'로, by 뒤에 오는 말이 실제로 그 일을 한 주체다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 3,
+                    "reason": "was와 created 사이는 끊지 않는다. 수동태 'was created'는 붙여 읽는다."
+                  },
+                  {
+                    "boundary": 15,
+                    "reason": "전치사 in과 목적어 it을 갈라놓지 말고 'in it'을 붙여 읽는다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "cure",
                   "meaning": "치유, 치료(된 것)"
                 }
               ],
-              "insight": {
-                "formula": "was created + not by A, but by B → 'A가 아니라 B에 의해 만들어졌다'(수동태 + 상관접속)",
-                "why": "was created(수동태)에 'not A but B' 상관접속이 by구로 붙어, 진짜 원인이 A(알약)가 아니라 B(마음)임을 대비시킨다.",
-                "wrong": "So the cure created not the pill but the mind (X)",
-                "natural": "그래서 그 치유는 알약이 아니라, 그것을 믿은 마음에 의해 만들어진 것이다."
-              },
               "grammar": [
                 {
                   "label": "수동태",
@@ -1660,7 +2087,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "주격 관계대명사 that",
                   "note": "the mind that believed in it - 어떤 마음인지 that절이 설명합니다."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "was created + not by A, but by B → 'A가 아니라 B에 의해 만들어졌다'(수동태 + 상관접속)",
+                "why": "was created(수동태)에 'not A but B' 상관접속이 by구로 붙어, 진짜 원인이 A(알약)가 아니라 B(마음)임을 대비시킨다.",
+                "wrong": "So the cure created not the pill but the mind (X)",
+                "natural": "그래서 그 치유는 알약이 아니라, 그것을 믿은 마음에 의해 만들어진 것이다."
+              }
             }
           ]
         },
@@ -1698,6 +2131,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "자기가 아는 것에 대해"
                 }
               ],
+              "naturalTranslation": "가장 적게 아는 사람일수록 정작 자기가 아는 것에 대해 가장 자신만만해하는 경우가 많다.",
+              "wordOrderPoint": {
+                "title": "who 관계절의 후치수식",
+                "explanation": "영어는 who절이 명사(people, the ones)를 뒤에서 꾸미지만, 한국어는 '~하는 사람'처럼 명사 앞으로 당겨 번역해야 자연스럽다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "who와 know 사이를 끊으면 'who know the least'라는 하나의 관계절이 둘로 쪼개진다. 관계절은 한 덩어리로 크게 묶어라."
+                  },
+                  {
+                    "boundary": 10,
+                    "reason": "who와 feel 사이를 끊으면 'the ones'를 수식하는 관계절이 갈라진다. who부터 confident까지 통째로 묶어라."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "confident",
@@ -1743,6 +2194,20 @@ const EMBEDDED_PASSAGES = {
                   "kr": "그들의 실험에서"
                 }
               ],
+              "naturalTranslation": "1990년대에 두 심리학자는 자신들의 실험에서 몇 번이고 되풀이해 나타나는 이상한 패턴 하나를 발견했다.",
+              "wordOrderPoint": {
+                "title": "that 관계절의 후치수식",
+                "explanation": "'a strange pattern that appeared...'처럼 that절이 명사를 뒤에서 꾸미면, 한국어는 '~하는 패턴'으로 명사 앞에 붙여 옮겨야 한다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 9,
+                    "reason": "that과 appeared 사이를 끊으면 명사 pattern을 꾸미는 관계절이 시작하자마자 잘린다. that부터 again까지 한 덩어리로 묶어라."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "psychologists",
@@ -1800,6 +2265,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "실제로 가장 높은 점수를 받은"
                 }
               ],
+              "naturalTranslation": "하위 25%에 든 학생들은, 정작 최고점을 받은 학생들보다 자기가 훨씬 더 잘했다고 믿었다.",
+              "wordOrderPoint": {
+                "title": "비교급 강조 far better than",
+                "explanation": "far는 비교급 better를 강조해 '훨씬 더 잘'이라는 뜻이며, than 뒤의 대상과 한 덩어리로 이어져 비교의 기준을 이룬다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "who와 scored 사이를 끊으면 주어 Students를 꾸미는 관계절이 시작부터 갈라진다. who부터 quarter까지 묶어라."
+                  },
+                  {
+                    "boundary": 13,
+                    "reason": "than과 students 사이를 끊으면 비교 대상이 than에서 떨어져 나간다. 'than students'는 붙여서 비교 기준으로 읽어라."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "quarter",
@@ -1810,12 +2293,6 @@ const EMBEDDED_PASSAGES = {
                   "meaning": "점수, 성적"
                 }
               ],
-              "insight": {
-                "formula": "주어(Students) + [who + 동사...] 관계절 + believed + (that 생략) 절 ... + far better than + 주어2 [who ...]",
-                "why": "두 무리의 학생을 각각 who 관계절로 수식해 대비시키고, far better than으로 두 무리의 성취를 비교한다.",
-                "wrong": "Students scored in the bottom quarter believed... (X) - 주어 Students를 꾸미는 관계대명사 who가 빠지면 동사가 둘(scored, believed)이라 문장이 끊긴다.",
-                "natural": "하위 25%에 든 학생들은, 정작 최고점을 받은 학생들보다 자기가 훨씬 더 잘했다고 믿었다."
-              },
               "grammar": [
                 {
                   "label": "주격 관계대명사 who",
@@ -1833,7 +2310,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "비교급 강조 far",
                   "note": "far better than ~ = '~보다 훨씬 더 잘'."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "주어(Students) + [who + 동사...] 관계절 + believed + (that 생략) 절 ... + far better than + 주어2 [who ...]",
+                "why": "두 무리의 학생을 각각 who 관계절로 수식해 대비시키고, far better than으로 두 무리의 성취를 비교한다.",
+                "wrong": "Students scored in the bottom quarter believed... (X) - 주어 Students를 꾸미는 관계대명사 who가 빠지면 동사가 둘(scored, believed)이라 문장이 끊긴다.",
+                "natural": "하위 25%에 든 학생들은, 정작 최고점을 받은 학생들보다 자기가 훨씬 더 잘했다고 믿었다."
+              }
             },
             {
               "text": "The reason is simple: the skills that you need to solve a problem are the same skills that you need to judge how well you solved it.",
@@ -1863,18 +2346,30 @@ const EMBEDDED_PASSAGES = {
                   "kr": "자기가 그것을 얼마나 잘 풀었는지를"
                 }
               ],
+              "naturalTranslation": "이유는 간단하다. 문제를 푸는 데 필요한 능력이, 곧 그 풀이가 얼마나 좋았는지 판단하는 데 필요한 능력과 똑같기 때문이다.",
+              "wordOrderPoint": {
+                "title": "the same A that B 구문",
+                "explanation": "'the same skills that you need...'는 'B하는 데 필요한 바로 그 능력'이라는 뜻으로, same과 that절이 짝을 이뤄 동일함을 강조한다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 6,
+                    "reason": "that과 you 사이를 끊으면 skills를 꾸미는 관계절이 시작부터 갈라진다. that부터 problem까지 한 덩어리로 묶어라."
+                  },
+                  {
+                    "boundary": 15,
+                    "reason": "same과 skills 사이를 끊으면 'the same skills'라는 한 덩어리가 쪼개진다. the same skills는 붙여서 읽어라."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "judge",
                   "meaning": "판단하다, 평가하다"
                 }
               ],
-              "insight": {
-                "formula": "the skills [that you need to solve...] are the same skills [that you need to judge...]",
-                "why": "같은 명사(skills)를 두 번 쓰고 각각 that 관계절로 수식해, '문제를 푸는 능력'과 '그 풀이를 평가하는 능력'이 같음을 대응시킨다.",
-                "wrong": "the skills you need are the same you need to judge (X) - 두 번째 skills가 빠지면 무엇이 같다는 것인지 비교 대상이 사라진다.",
-                "natural": "이유는 간단하다. 문제를 푸는 데 필요한 능력이, 곧 그 풀이가 얼마나 좋았는지 판단하는 데 필요한 능력과 똑같기 때문이다."
-              },
               "grammar": [
                 {
                   "label": "목적격 관계대명사 that",
@@ -1888,7 +2383,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "the same ~ that",
                   "note": "the same skills that ~ = '~와 똑같은 능력'."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "the skills [that you need to solve...] are the same skills [that you need to judge...]",
+                "why": "같은 명사(skills)를 두 번 쓰고 각각 that 관계절로 수식해, '문제를 푸는 능력'과 '그 풀이를 평가하는 능력'이 같음을 대응시킨다.",
+                "wrong": "the skills you need are the same you need to judge (X) - 두 번째 skills가 빠지면 무엇이 같다는 것인지 비교 대상이 사라진다.",
+                "natural": "이유는 간단하다. 문제를 푸는 데 필요한 능력이, 곧 그 풀이가 얼마나 좋았는지 판단하는 데 필요한 능력과 똑같기 때문이다."
+              }
             },
             {
               "text": "So the less you know about a subject, the harder it becomes to see the gaps that separate you from a true expert.",
@@ -1918,6 +2419,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "당신을 진짜 전문가와 갈라놓는"
                 }
               ],
+              "naturalTranslation": "그래서 어떤 분야를 덜 알수록, 자신과 진짜 전문가를 갈라놓는 간극을 알아보기가 그만큼 더 어려워진다.",
+              "wordOrderPoint": {
+                "title": "the+비교급, the+비교급 상관구문",
+                "explanation": "'the less..., the harder...'는 '덜 ~할수록 더 ~하다'라는 짝 구문으로, 앞뒤 the+비교급 덩어리가 함께 하나의 인과를 이룬다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 8,
+                    "reason": "the와 harder 사이를 끊으면 'the harder it becomes'라는 상관구문 한쪽이 갈라진다. the harder부터 becomes까지 묶어라."
+                  },
+                  {
+                    "boundary": 16,
+                    "reason": "that과 separate 사이를 끊으면 the gaps를 꾸미는 관계절이 시작부터 잘린다. that부터 expert까지 한 덩어리로 묶어라."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "subject",
@@ -1932,12 +2451,6 @@ const EMBEDDED_PASSAGES = {
                   "meaning": "전문가"
                 }
               ],
-              "insight": {
-                "formula": "The 비교급 ~, the 비교급 ~ (~할수록 그만큼 더 ~하다) + gaps [that separate A from B]",
-                "why": "'the 비교급, the 비교급' 구문으로 두 변화의 비례 관계를 나타내고, that 관계절이 gaps를 수식한다.",
-                "wrong": "The less you know, harder it becomes (X) - 뒤 절의 the가 빠지면 비교급 상관 구문이 성립하지 않는다.",
-                "natural": "그래서 어떤 분야를 덜 알수록, 자신과 진짜 전문가를 갈라놓는 간극을 알아보기가 그만큼 더 어려워진다."
-              },
               "grammar": [
                 {
                   "label": "The 비교급, the 비교급",
@@ -1955,7 +2468,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "separate A from B",
                   "note": "'A를 B와 갈라놓다' 짝 표현입니다."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "The 비교급 ~, the 비교급 ~ (~할수록 그만큼 더 ~하다) + gaps [that separate A from B]",
+                "why": "'the 비교급, the 비교급' 구문으로 두 변화의 비례 관계를 나타내고, that 관계절이 gaps를 수식한다.",
+                "wrong": "The less you know, harder it becomes (X) - 뒤 절의 the가 빠지면 비교급 상관 구문이 성립하지 않는다.",
+                "natural": "그래서 어떤 분야를 덜 알수록, 자신과 진짜 전문가를 갈라놓는 간극을 알아보기가 그만큼 더 어려워진다."
+              }
             }
           ]
         },
@@ -1981,6 +2500,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "뒤따르는 모든 판단을"
                 }
               ],
+              "naturalTranslation": "당신이 처음 듣는 숫자가 그 뒤에 이어지는 모든 판단을 조용히 다시 빚어낼 수 있다.",
+              "wordOrderPoint": {
+                "title": "목적격 관계대명사 생략 (number you hear)",
+                "explanation": "'number' 뒤에 'that/which'가 생략된 채 'you hear'가 곧바로 붙어 '당신이 듣는 숫자'로 앞 명사를 꾸민다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 2,
+                    "reason": "'number'과 'you hear'는 관계대명사가 생략된 채 하나의 명사 덩어리('당신이 듣는 숫자')이므로 붙여서 읽는 편이 좋다."
+                  },
+                  {
+                    "boundary": 9,
+                    "reason": "'judgment'과 'that follows'는 관계절로 이어진 한 덩어리이니 명사와 관계절을 갈라 읽지 않는 편이 좋다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "reshape",
@@ -2022,6 +2559,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "10 아니면 65에 멈추도록"
                 }
               ],
+              "naturalTranslation": "한 유명한 실험에서 연구자들은, 10이나 65에 멈추도록 몰래 조작된 운명의 돌림판을 돌렸다.",
+              "wordOrderPoint": {
+                "title": "과거완료 수동태 + 부사 삽입 (had secretly been fixed)",
+                "explanation": "'had been p.p.'(과거완료 수동)의 had와 been 사이에 부사 secretly가 끼어 '몰래 조작되어 있었다'는 뜻이 된다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 13,
+                    "reason": "'been'과 'fixed'는 과거완료 수동태('조작되어 있었다')의 한 몸이므로 사이를 끊지 말고 붙여 읽는 편이 좋다."
+                  },
+                  {
+                    "boundary": 15,
+                    "reason": "'to'와 'land'는 '멈추도록'이라는 to부정사 한 덩어리이니 갈라 읽지 않는 편이 좋다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "spun",
@@ -2032,12 +2587,6 @@ const EMBEDDED_PASSAGES = {
                   "meaning": "(여기선) 조작된, 짜여진"
                 }
               ],
-              "insight": {
-                "formula": "선행사 + that + had been + p.p. (과거완료 수동) = (그 이전에 이미) ~되어 있었다",
-                "why": "'a wheel of fortune'을 뒤의 that절이 꾸미고, 'had (secretly) been fixed'는 돌리기 전에 이미 조작이 끝나 있었음을 나타내는 과거완료 수동태입니다.",
-                "wrong": "a wheel that had secretly fixed to land on ten (X) - 바퀴가 스스로 조작한 게 아니라 조작'된' 것이므로 수동태 been fixed가 필요",
-                "natural": "한 유명한 실험에서 연구자들은, 10이나 65에 멈추도록 몰래 조작된 운명의 돌림판을 돌렸다."
-              },
               "grammar": [
                 {
                   "label": "주격 관계대명사 that",
@@ -2055,7 +2604,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "either A or B",
                   "note": "ten 아니면 sixty-five, 둘 중 하나입니다."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "선행사 + that + had been + p.p. (과거완료 수동) = (그 이전에 이미) ~되어 있었다",
+                "why": "'a wheel of fortune'을 뒤의 that절이 꾸미고, 'had (secretly) been fixed'는 돌리기 전에 이미 조작이 끝나 있었음을 나타내는 과거완료 수동태입니다.",
+                "wrong": "a wheel that had secretly fixed to land on ten (X) - 바퀴가 스스로 조작한 게 아니라 조작'된' 것이므로 수동태 been fixed가 필요",
+                "natural": "한 유명한 실험에서 연구자들은, 10이나 65에 멈추도록 몰래 조작된 운명의 돌림판을 돌렸다."
+              }
             },
             {
               "text": "Then they asked the participants whether the percentage of African nations in the United Nations was higher or lower than the number the wheel had shown.",
@@ -2081,6 +2636,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "그 바퀴가 보여준 숫자보다"
                 }
               ],
+              "naturalTranslation": "그런 다음 그들은 참가자들에게, 유엔 소속 아프리카 국가의 비율이 바퀴가 보여준 숫자보다 높은지 낮은지를 물었다.",
+              "wordOrderPoint": {
+                "title": "ask A whether B (간접의문 목적어)",
+                "explanation": "'ask + 대상 + whether ...' 구조로, whether 이하 전체가 '~인지 아닌지'라는 물음의 내용(목적어)이 된다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 21,
+                    "reason": "'number'과 'the wheel had shown'은 관계대명사가 생략된 관계절('바퀴가 보여준 숫자')이니 명사와 갈라 읽지 않는 편이 좋다."
+                  },
+                  {
+                    "boundary": 24,
+                    "reason": "'had'와 'shown'은 과거완료('보여준')의 한 몸이므로 사이를 끊지 않고 붙여 읽는 편이 좋다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "participants",
@@ -2091,12 +2664,6 @@ const EMBEDDED_PASSAGES = {
                   "meaning": "비율, 퍼센트"
                 }
               ],
-              "insight": {
-                "formula": "ask + 사람 + whether절(~인지) ... than + [명사 + (that 생략) + 주어 + 동사]",
-                "why": "'ask A whether ~'는 A에게 ~인지 묻다. than 뒤의 'the number (that) the wheel had shown'은 목적격 관계대명사가 생략된 채 the number를 뒤에서 꾸밉니다.",
-                "wrong": "than the number what the wheel had shown (X) - 선행사 the number가 이미 있으므로 what이 아니라 that(또는 생략)이어야 함",
-                "natural": "그런 다음 그들은 참가자들에게, 유엔 소속 아프리카 국가의 비율이 바퀴가 보여준 숫자보다 높은지 낮은지를 물었다."
-              },
               "grammar": [
                 {
                   "label": "ask A whether",
@@ -2114,7 +2681,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "과거완료",
                   "note": "had shown - 질문한 시점보다 앞서 바퀴가 보여 준 일입니다."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "ask + 사람 + whether절(~인지) ... than + [명사 + (that 생략) + 주어 + 동사]",
+                "why": "'ask A whether ~'는 A에게 ~인지 묻다. than 뒤의 'the number (that) the wheel had shown'은 목적격 관계대명사가 생략된 채 the number를 뒤에서 꾸밉니다.",
+                "wrong": "than the number what the wheel had shown (X) - 선행사 the number가 이미 있으므로 what이 아니라 that(또는 생략)이어야 함",
+                "natural": "그런 다음 그들은 참가자들에게, 유엔 소속 아프리카 국가의 비율이 바퀴가 보여준 숫자보다 높은지 낮은지를 물었다."
+              }
             },
             {
               "text": "Astonishingly, those who saw sixty-five guessed far larger figures than those who saw ten, even though the wheel was obviously random.",
@@ -2140,6 +2713,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "그 바퀴가 명백히 무작위였는데도"
                 }
               ],
+              "naturalTranslation": "놀랍게도, 65를 본 사람들은 10을 본 사람들보다 훨씬 큰 수치를 답했다. 바퀴가 명백히 무작위였는데도 말이다.",
+              "wordOrderPoint": {
+                "title": "주격 관계대명사 who + 비교급 than 병렬",
+                "explanation": "'those who saw ~'(~을 본 사람들)가 앞뒤로 반복되며 'than'으로 두 집단을 비교하는 대칭 구조다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 1,
+                    "reason": "'those'와 'who saw sixty-five'는 관계절이 붙은 한 덩어리('65를 본 사람들')이므로 갈라 읽지 않는 편이 좋다."
+                  },
+                  {
+                    "boundary": 10,
+                    "reason": "'those'와 'who saw ten'도 마찬가지로 관계절 한 덩어리('10을 본 사람들')이니 사이를 끊지 않는 편이 좋다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "Astonishingly",
@@ -2193,6 +2784,24 @@ const EMBEDDED_PASSAGES = {
                   "kr": "그 근처에 갇혀 있는"
                 }
               ],
+              "naturalTranslation": "그 무의미한 숫자에 닻이 내려진 채, 정신은 너무 조금만 조정한 나머지 그 근처에 갇힌 답에 안착하고 만다.",
+              "wordOrderPoint": {
+                "title": "수동 분사구문 문두 (Anchored to ...)",
+                "explanation": "과거분사 Anchored가 문장 앞에 나와 '~에 닻이 내려진 채'라는 수동의 배경 상황을 먼저 깔아 준다."
+              },
+              "breakRules": {
+                "allowed": [],
+                "discouraged": [
+                  {
+                    "boundary": 0,
+                    "reason": "'Anchored'와 'to that meaningless number'는 '~에 닻이 내려진 채'라는 분사구 한 덩어리이므로 붙여 읽는 편이 좋다."
+                  },
+                  {
+                    "boundary": 12,
+                    "reason": "'on'과 'an answer'는 '답에'라는 전치사구 한 덩어리이니 전치사만 앞에 남기지 말고 목적어와 붙여 읽는 편이 좋다."
+                  }
+                ]
+              },
               "words": [
                 {
                   "word": "Anchored",
@@ -2207,12 +2816,6 @@ const EMBEDDED_PASSAGES = {
                   "meaning": "(settle on) ~로 정하다, 안착하다"
                 }
               ],
-              "insight": {
-                "formula": "p.p. ~ , 주어 + 동사 (분사구문) = ~된 채로, 주어가 …하다",
-                "why": "문장 맨 앞 'Anchored to...'는 'Because the mind is anchored to...'를 줄인 분사구문입니다. 주어(the mind)가 닻에 '붙들리는' 수동 관계라 과거분사 Anchored를 씁니다.",
-                "wrong": "Anchoring to that number, the mind adjusts too little (X) - 정신이 스스로 닻을 내리는 게 아니라 닻에 붙들리는 쪽이므로 현재분사 Anchoring이 아닌 과거분사 Anchored",
-                "natural": "그 무의미한 숫자에 닻이 내려진 채, 정신은 너무 조금만 조정한 나머지 그 근처에 갇힌 답에 안착하고 만다."
-              },
               "grammar": [
                 {
                   "label": "과거분사 분사구문",
@@ -2230,7 +2833,13 @@ const EMBEDDED_PASSAGES = {
                   "label": "stay + 과거분사",
                   "note": "stays trapped = '갇힌 채로 있다'."
                 }
-              ]
+              ],
+              "insight": {
+                "formula": "p.p. ~ , 주어 + 동사 (분사구문) = ~된 채로, 주어가 …하다",
+                "why": "문장 맨 앞 'Anchored to...'는 'Because the mind is anchored to...'를 줄인 분사구문입니다. 주어(the mind)가 닻에 '붙들리는' 수동 관계라 과거분사 Anchored를 씁니다.",
+                "wrong": "Anchoring to that number, the mind adjusts too little (X) - 정신이 스스로 닻을 내리는 게 아니라 닻에 붙들리는 쪽이므로 현재분사 Anchoring이 아닌 과거분사 Anchored",
+                "natural": "그 무의미한 숫자에 닻이 내려진 채, 정신은 너무 조금만 조정한 나머지 그 근처에 갇힌 답에 안착하고 만다."
+              }
             }
           ]
         }
@@ -2473,6 +3082,7 @@ function chunkViolations(tokens, chunks) {
 
 // slashes: 사용자가 그은 틈 번호 목록. 정답 경계와 대조해 세 갈래로 나눈다.
 // correct = 그었고 정답 / wrong = 그었지만 정답 아님 / missed = 정답인데 안 그음.
+// (구 이진 판정 - 내부 재사용·기존 회귀 테스트용으로 보존. 화면 채점은 gradeChunks가 대체.)
 function gradeSlashes(boundaries, slashes) {
   const drawn = new Set(slashes);
   const correct = [];
@@ -2481,6 +3091,99 @@ function gradeSlashes(boundaries, slashes) {
   drawn.forEach((g) => (boundaries.has(g) ? correct : wrong).push(g));
   boundaries.forEach((g) => { if (!drawn.has(g)) missed.push(g); });
   return { correct, wrong, missed };
+}
+
+// 끊기 5등급 판정 - O/X 이진을 대체한다. 사용자가 그은 선을 대표 추천 경계와
+// 허용(allowed)·비추천(discouraged) 목록에 대조해 나눈다.
+//   recommended = 그었고 대표 추천 경계와 일치
+//   allowed     = 대표 경계는 아니지만 breakRules.allowed에 등록된 위치
+//   discouraged = breakRules.discouraged에 등록된 위치
+//   neutral     = 그었지만 어느 목록에도 없는 위치(단일 정답 강제 금지 - 다른 분할로 인정)
+//   missed      = 대표 추천 경계인데 긋지 않음
+// 우선순위 recommended > allowed > discouraged > neutral (한 선은 한 분류에만).
+function gradeChunks(boundaries, allowedSet, discouragedSet, slashes) {
+  const drawn = new Set(slashes);
+  const allowed0 = allowedSet instanceof Set ? allowedSet : new Set(allowedSet || []);
+  const discouraged0 = discouragedSet instanceof Set ? discouragedSet : new Set(discouragedSet || []);
+  const recommended = [];
+  const allowed = [];
+  const discouraged = [];
+  const neutral = [];
+  const missed = [];
+  drawn.forEach((g) => {
+    if (boundaries.has(g)) recommended.push(g);
+    else if (allowed0.has(g)) allowed.push(g);
+    else if (discouraged0.has(g)) discouraged.push(g);
+    else neutral.push(g);
+  });
+  boundaries.forEach((g) => { if (!drawn.has(g)) missed.push(g); });
+  return { recommended, allowed, discouraged, neutral, missed };
+}
+
+// 문장 스키마 정규화 - 신규 필드(naturalTranslation·wordOrderPoint·breakRules)의
+// 기본값과 하위호환 fallback을 한 곳에서 제공한다. DOM 미의존 순수 함수.
+//
+// 목적: customPassages(localStorage에 구스키마로 저장된 사용자 지문)를 영구 변환하지 않고,
+// 렌더·채점 진입 시점에 이 함수 하나만 통과시켜 신·구 스키마를 같은 모양으로 다룬다.
+// 원본 객체는 변형하지 않고 얕은 사본에 신 필드를 채워 반환한다.
+
+// breakRules.allowed / discouraged → boundary 번호 Set (0-based 토큰 gap 인덱스).
+// 잘못된/범위 밖 항목은 조용히 버린다(렌더는 방어적, 엄격 검증은 validate.js 소관).
+function boundarySet(rules, key, tokenLen) {
+  const set = new Set();
+  const list = rules && Array.isArray(rules[key]) ? rules[key] : [];
+  for (const r of list) {
+    const b = r && Number.isInteger(r.boundary) ? r.boundary : null;
+    if (b !== null && b >= 0 && b <= tokenLen - 2) set.add(b);
+  }
+  return set;
+}
+
+// breakRules 항목에서 boundary → reason 맵(선택한 비추천 위치의 이유 표시용).
+function reasonByBoundary(rules, key) {
+  const map = new Map();
+  const list = rules && Array.isArray(rules[key]) ? rules[key] : [];
+  for (const r of list) {
+    if (r && Number.isInteger(r.boundary) && r.reason) map.set(r.boundary, String(r.reason));
+  }
+  return map;
+}
+
+// 직독직해 조각을 임시로 이어 붙인 완역 fallback - naturalTranslation·insight.natural이 둘 다 없을 때만.
+function joinChunkKr(chunks) {
+  return (Array.isArray(chunks) ? chunks : [])
+    .map((c) => (c && c.kr ? String(c.kr).trim() : ""))
+    .filter(Boolean)
+    .join(" ");
+}
+
+function normalizeSentence(s) {
+  const src = s && typeof s === "object" ? s : {};
+  const chunks = Array.isArray(src.chunks) ? src.chunks : [];
+  const grammar = Array.isArray(src.grammar) ? src.grammar : [];
+
+  // 자연스러운 전체 해석: 신 필드 → insight.natural → 직독직해 이어붙임(임시)
+  let naturalTranslation = "";
+  if (src.naturalTranslation) naturalTranslation = String(src.naturalTranslation);
+  else if (src.insight && src.insight.natural) naturalTranslation = String(src.insight.natural);
+  else naturalTranslation = joinChunkKr(chunks);
+
+  // 핵심 어순/패턴: 신 필드 → grammar[0](이름표=제목, 설명=explanation)
+  let wordOrderPoint = null;
+  if (src.wordOrderPoint && src.wordOrderPoint.title && src.wordOrderPoint.explanation) {
+    wordOrderPoint = { title: String(src.wordOrderPoint.title), explanation: String(src.wordOrderPoint.explanation) };
+  } else if (grammar[0] && grammar[0].label && grammar[0].note) {
+    wordOrderPoint = { title: String(grammar[0].label), explanation: String(grammar[0].note), fromGrammar: true };
+  }
+
+  // 끊기 등급 규칙: 없으면 빈 배열(기존 이진 정답만 있는 구스키마와 동일하게 추천/놓침만 판정)
+  const br = src.breakRules && typeof src.breakRules === "object" ? src.breakRules : {};
+  const breakRules = {
+    allowed: Array.isArray(br.allowed) ? br.allowed : [],
+    discouraged: Array.isArray(br.discouraged) ? br.discouraged : [],
+  };
+
+  return { ...src, chunks, grammar, naturalTranslation, wordOrderPoint, breakRules };
 }
 
 // 지문 한 편의 데이터 무결성 + 끊는 기준 검증. DOM 미의존 순수 로직.
@@ -2498,7 +3201,10 @@ function normalizeSmartQuotes(s) {
 }
 
 // 반환: { ok, errors: [{ where, msg }] } - where는 사람이 읽는 위치("2번째 문장" 등)
-function validatePassage(p) {
+// opts.strict=true(built-in 콘텐츠 회귀)면 신규 필드(naturalTranslation·wordOrderPoint)를 필수화.
+// 기본(false, 출제 화면·customPassages)은 신규 필드가 있으면 형식만 검증하고 없어도 통과(하위호환).
+function validatePassage(p, opts = {}) {
+  const strict = !!opts.strict;
   const errors = [];
   const push = (where, msg) => errors.push({ where, msg });
 
@@ -2542,6 +3248,54 @@ function validatePassage(p) {
     if (s.insight) {
       const full = s.insight.formula && s.insight.why && s.insight.wrong && s.insight.natural;
       if (!full) push(w, "insight를 넣으면 공식(formula)·왜(why)·비문(wrong)·자연(natural) 4필드를 모두 채워야 합니다.");
+    }
+
+    // ── 신규 필드(옵셔널+fallback) 검증 ──
+    // 자연스러운 전체 해석
+    if (s.naturalTranslation != null && typeof s.naturalTranslation !== "string") {
+      push(w, "naturalTranslation(자연스러운 전체 해석)은 문자열이어야 합니다.");
+    } else if (strict && !s.naturalTranslation) {
+      push(w, "naturalTranslation(자연스러운 전체 해석)이 필요합니다.");
+    }
+
+    // 핵심 어순/패턴
+    if (s.wordOrderPoint != null) {
+      if (typeof s.wordOrderPoint !== "object" || Array.isArray(s.wordOrderPoint) || !s.wordOrderPoint.title || !s.wordOrderPoint.explanation) {
+        push(w, "wordOrderPoint에 title(핵심 어순·패턴)과 explanation(설명)이 모두 필요합니다.");
+      }
+    } else if (strict) {
+      push(w, "wordOrderPoint(핵심 어순·패턴)가 필요합니다.");
+    }
+
+    // 끊기 등급 규칙(breakRules) - 있으면 형식·범위·중복 검증(없어도 통과, strict도 필수화하지 않음)
+    if (s.breakRules != null) {
+      const br = s.breakRules;
+      if (typeof br !== "object" || Array.isArray(br)) {
+        push(w, "breakRules는 { allowed, discouraged } 객체여야 합니다.");
+      } else {
+        const tokenLen = tokens.length;
+        const boundaries = chunkBoundaries(tokens, s.chunks);
+        const checkList = (key) => {
+          if (br[key] == null) return [];
+          if (!Array.isArray(br[key])) { push(w, `breakRules.${key}는 배열이어야 합니다.`); return []; }
+          const seen = new Set();
+          const bs = [];
+          br[key].forEach((r, ri) => {
+            if (!r || typeof r !== "object") { push(w, `breakRules.${key} ${ri + 1}번은 { boundary, reason } 객체여야 합니다.`); return; }
+            if (!Number.isInteger(r.boundary)) { push(w, `breakRules.${key} ${ri + 1}번의 boundary는 정수(토큰 틈 번호)여야 합니다.`); return; }
+            if (r.boundary < 0 || r.boundary > tokenLen - 2) { push(w, `breakRules.${key}의 boundary ${r.boundary}가 범위(0~${tokenLen - 2})를 벗어납니다.`); return; }
+            if (seen.has(r.boundary)) { push(w, `breakRules.${key}에 boundary ${r.boundary}가 중복됩니다.`); return; }
+            if (!r.reason) push(w, `breakRules.${key}의 boundary ${r.boundary}에 이유(reason)가 필요합니다.`);
+            seen.add(r.boundary);
+            bs.push(r.boundary);
+          });
+          return bs;
+        };
+        const allowedBs = checkList("allowed");
+        const discBs = checkList("discouraged");
+        allowedBs.forEach((b) => { if (discBs.includes(b)) push(w, `boundary ${b}가 allowed와 discouraged에 동시에 등록됐습니다.`); });
+        discBs.forEach((b) => { if (boundaries.has(b)) push(w, `boundary ${b}는 대표 추천 경계이므로 discouraged에 넣을 수 없습니다.`); });
+      }
     }
   });
 
@@ -2776,7 +3530,9 @@ function renderReading(p) {
   stage.appendChild(doneBtn);
 }
 
-function renderSentence(s, sIndex, passage, settings) {
+function renderSentence(rawS, sIndex, passage, settings) {
+  // 신·구 스키마를 같은 모양으로 - 신규 필드 기본값·fallback을 한 지점에서 채운다(customPassages 하위호환).
+  const s = normalizeSentence(rawS);
   const block = document.createElement("div");
   block.className = "sentence-block";
 
@@ -2807,20 +3563,34 @@ function renderSentence(s, sIndex, passage, settings) {
     reviewed,
   });
 
+  // 대표 추천 경계 + 허용/비추천 위치(0-based 토큰 틈 번호). 없으면 빈 Set(구스키마 = 추천/놓침만).
+  const boundaries = chunkBoundaries(tokens, s.chunks);
+  const allowedSet = boundarySet(s.breakRules, "allowed", tokens.length);
+  const discouragedSet = boundarySet(s.breakRules, "discouraged", tokens.length);
+  const gradeNow = () => gradeChunks(boundaries, allowedSet, discouragedSet, slashes);
+
+  // 채점 표시 - 그은 선을 추천/허용/비추천/다른분할(neutral)/놓침(missed)으로 나눠 색+모양 병행.
   const applyGrade = () => {
-    const grade = gradeSlashes(chunkBoundaries(tokens, s.chunks), slashes);
-    grade.correct.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-correct"));
-    grade.wrong.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("g-wrong"));
-    grade.missed.forEach((g) => gapEls.get(g) && gapEls.get(g).classList.add("slashed", "g-missed"));
+    const g = gradeNow();
+    g.recommended.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("g-recommended"));
+    g.allowed.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("g-allowed"));
+    g.discouraged.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("g-discouraged"));
+    g.neutral.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("g-neutral"));
+    g.missed.forEach((b) => gapEls.get(b) && gapEls.get(b).classList.add("slashed", "g-missed"));
   };
   const buildDetail = () => {
     const d = document.createElement("div");
     d.className = "review-detail";
-    d.appendChild(buildChunks(s)); // 번역(끊어 읽기 해석)
-    // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 번역 바로 아래에 공개 + 영구 저장(중복은 무시)
+    // 사용자가 실제로 그은 비추천 위치의 이유만 카드 상단에 간결히(안 그은 비추천은 노출 안 함)
+    const disc = buildDiscouragedReasons(gradeNow(), s);
+    if (disc) d.appendChild(disc);
+    d.appendChild(buildChunks(s)); // ① 직독직해(대표 추천 청킹 en 덩어리 + 이유 태그)
+    d.appendChild(buildNatural(s)); // ② 자연스러운 전체 해석(직독직해와 구분된 영역)
+    // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 공개 + 영구 저장(중복은 무시)
     if (flagged.size) d.appendChild(buildCollectedWords([...flagged.values()], s, passage));
-    if (s.grammar && s.grammar.length) d.appendChild(buildGrammar(s));
-    if (s.insight && settings.scope) d.appendChild(buildScopeCard(s));
+    if (s.wordOrderPoint) d.appendChild(buildWordOrder(s)); // ③ 핵심 어순/패턴(기본 노출)
+    if (s.grammar && s.grammar.length) d.appendChild(buildGrammar(s)); // ④ 상세 문법(기본 접힘)
+    if (s.insight && settings.scope) d.appendChild(buildScopeCard(s)); // ⑤ 심화 카드(scope ON)
     return d;
   };
 
@@ -2979,6 +3749,43 @@ function buildChunks(s) {
   return host;
 }
 
+// 사용자가 실제로 그은 비추천 위치의 개선 이유(경고가 아니라 가이드). 선택한 위치만 보여준다.
+function buildDiscouragedReasons(grade, s) {
+  if (!grade.discouraged.length) return null;
+  const map = reasonByBoundary(s.breakRules, "discouraged");
+  const host = document.createElement("div");
+  host.className = "disc-reasons";
+  grade.discouraged.forEach((b) => {
+    const r = map.get(b);
+    if (!r) return;
+    const row = document.createElement("div");
+    row.className = "disc-row";
+    row.textContent = r;
+    host.appendChild(row);
+  });
+  return host.children.length ? host : null;
+}
+
+// 자연스러운 전체 해석 - 직독직해(조각)와 달리 한 문장으로 매끄럽게 읽히는 완역.
+function buildNatural(s) {
+  const host = document.createElement("div");
+  host.className = "natural-trans";
+  const label = document.createElement("div"); label.className = "nt-label"; label.textContent = "자연스러운 해석";
+  const body = document.createElement("div"); body.className = "nt-body"; body.textContent = s.naturalTranslation;
+  host.append(label, body);
+  return host;
+}
+
+// 핵심 어순/패턴 - 문장당 1개만 기본 노출(상세 문법은 접어 둔다).
+function buildWordOrder(s) {
+  const host = document.createElement("div");
+  host.className = "word-order";
+  const t = document.createElement("div"); t.className = "wo-title"; t.textContent = s.wordOrderPoint.title;
+  const e = document.createElement("div"); e.className = "wo-exp"; e.textContent = s.wordOrderPoint.explanation;
+  host.append(t, e);
+  return host;
+}
+
 // 끊는 기준 커닝페이퍼 - 상단바 버튼으로 언제든 오버레이로 열어 보는 공용 참고 카드
 function openGuide() {
   const backdrop = document.createElement("div");
@@ -3025,29 +3832,49 @@ function buildGuideCard() {
   return card;
 }
 
-// 검토 후 공개되는 문법 목록 - 이 문장에 포함된 모든 문법 요소(이름표 + 한 줄 설명)
+// 검토 후 공개되는 상세 문법 - 기본 접힘. "문법 자세히 보기"로 펼친다(핵심 어순만 기본 노출).
+// 해석 버튼의 review-detail 전체 접기와 별개로, 이 블록 안에서만 목록을 여닫는다.
 function buildGrammar(s) {
   const host = document.createElement("div");
-  host.className = "grammar-list";
+  host.className = "grammar-block";
+
+  const list = document.createElement("div");
+  list.className = "grammar-list";
+  list.hidden = true;
   s.grammar.forEach((g) => {
     const row = document.createElement("div");
     row.className = "grammar-row";
     const tag = document.createElement("span"); tag.className = "grammar-tag"; tag.textContent = g.label;
     const note = document.createElement("span"); note.className = "grammar-note"; note.textContent = g.note;
     row.append(tag, note);
-    host.appendChild(row);
+    list.appendChild(row);
   });
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "grammar-toggle";
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.textContent = `문법 자세히 보기 (${s.grammar.length})`;
+  toggle.onclick = (e) => {
+    e.stopPropagation();
+    const open = list.hidden; // 지금 열리는지
+    list.hidden = !open;
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    toggle.textContent = open ? "문법 접기" : `문법 자세히 보기 (${s.grammar.length})`;
+  };
+
+  host.append(toggle, list);
   return host;
 }
 
-// 구조가 특히 어려운 문장의 심화 해설 카드(설정 ON일 때 검토 후 함께 공개)
+// 구조가 특히 어려운 문장의 심화 해설 카드(설정 ON일 때 검토 후 함께 공개).
+// 자연스러운 해석은 위 buildNatural이 전담하므로 여기서는 공식·왜·비문만 보여준다(중복 제거).
 function buildScopeCard(s) {
   const card = document.createElement("div");
   card.className = "scope-card";
   card.appendChild(labeledBlock("공식", s.insight.formula, "formula"));
   card.appendChild(labeledBlock("왜 이 구조인가", s.insight.why));
   card.appendChild(labeledBlock("이렇게 쓰면 비문", s.insight.wrong, "wrong-example"));
-  card.appendChild(labeledBlock("자연스러운 해석", s.insight.natural));
   return card;
 }
 
@@ -3100,27 +3927,39 @@ const AUTHORING_PROMPT = `너는 영어 독해 학습 앱의 문제 출제자다
     {
       "text": "영어 원문 문장.",
       "chunks": [
-        { "en": "끊어읽기 덩어리(영어)", "kr": "그 덩어리의 직독직해(한글)" }
+        { "en": "대표 추천 끊어읽기 덩어리(영어)", "kr": "그 덩어리의 직독직해(한글)" }
       ],
-      "grammar": [ { "label": "문법 이름표", "note": "한 줄 설명" } ],
+      "naturalTranslation": "문장 전체의 자연스러운 한국어 완역",
+      "wordOrderPoint": { "title": "핵심 어순·패턴 이름", "explanation": "한 줄 설명" },
+      "breakRules": {
+        "allowed": [ { "boundary": 0, "reason": "여기서도 자연스럽게 끊을 수 있는 이유" } ],
+        "discouraged": [ { "boundary": 0, "reason": "여기서 끊으면 핵심 구조가 갈려 이해를 방해하는 이유" } ]
+      },
+      "grammar": [ { "label": "문법 이름표", "note": "상세 설명" } ],
       "words": [ { "word": "어려운 단어", "meaning": "한글 뜻" } ]
     }
   ]
 }
 
 [규칙]
-1. chunks의 en을 공백으로 이어 붙이면 원문 text와 정확히 같아야 한다(구두점·대소문자만 예외).
+1. chunks는 대표(가장 권장하는) 끊어읽기다. en을 공백으로 이어 붙이면 원문 text와 정확히 같아야 한다(구두점·대소문자만 예외).
 2. 끊어읽기(chunks)는 잘게 쪼개지 말고 '의미 덩어리'로 크게 묶어라. 다음 자리는 절대 끊지 마라:
    - be동사·조동사 뒤 (예: "is the habit"은 한 덩어리. 단 뒤가 that절·to부정사면 끊어도 됨)
    - 짧은 주어(2단어 이하) 뒤에서 동사 앞
    - 짧은 전치사구(2단어 이하) 앞 (of noticing, at all 등)
    - 전치사와 그 목적어 사이 ("searches for | facts"처럼 끊지 마라)
    끊어도 되는 자리: 접속사·관계사·that·to 앞 / 콤마 뒤 / 긴 주어(3단어 이상) 뒤 동사 앞 / 긴 전치사구 앞.
-3. kr은 의역이 아니라 어순·구조가 드러나는 직독직해로 써라.
-4. grammar는 그 문장에 든 문법 요소를 1개 이상, 이름표(label)+한 줄 설명(note)으로.
-5. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 나온 형태 그대로 적어라 - 활용형(-s·-ed·-ing 등)을 원형으로 바꾸지 마라(원문이 "triggers"면 "trigger"가 아니라 "triggers", 원문이 "noticing"이면 "notice"가 아니라 "noticing"). meaning(뜻)에는 원형 뜻을 써도 된다.
-6. insight는 구조가 특히 어려운 문장에만 넣어라(빼도 됨). 넣으면 formula·why·wrong·natural 4필드를 모두 채워라.
-7. level은 난이도 숫자(1이 가장 쉬움). id는 다른 지문과 겹치지 않는 영문 이름.
+3. kr은 의역이 아니라 어순·구조가 드러나는 직독직해로 써라. naturalTranslation은 반대로 조각을 잇지 말고 한 문장으로 매끄럽게 읽히는 완역으로 써라(필수).
+4. wordOrderPoint는 그 문장의 가장 중요한 어순·패턴 1개만(필수). title(패턴 이름)+explanation(한 줄 설명). grammar와 겹치지 않게 핵심만.
+5. breakRules의 boundary는 0부터 세는 '단어 사이 틈 번호'다 - 0번 단어와 1번 단어 사이가 0, 1번과 2번 사이가 1. 예: 단어가 ["We","believe","that","others"]면 believe와 that 사이는 boundary 1.
+   - allowed: 대표 chunks 경계는 아니지만 거기서 끊어도 자연스러운 다른 위치.
+   - discouraged: 거기서 끊으면 핵심 구조(동사구·전치사구 등)가 갈려 이해를 방해하는 위치.
+   - 모든 틈을 억지로 채우지 마라. 정말 의미 있는 위치만 넣고, 없으면 빈 배열([])로 둬라. 대표 chunks 경계는 discouraged에 넣지 마라.
+6. grammar는 그 문장에 든 문법 요소를 1개 이상, 이름표(label)+상세 설명(note)으로.
+7. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 나온 형태 그대로 적어라 - 활용형(-s·-ed·-ing 등)을 원형으로 바꾸지 마라(원문이 "triggers"면 "trigger"가 아니라 "triggers", 원문이 "noticing"이면 "notice"가 아니라 "noticing"). meaning(뜻)에는 원형 뜻을 써도 된다.
+8. insight는 구조가 특히 어려운 문장에만 넣어라(빼도 됨). 넣으면 formula·why·wrong·natural 4필드를 모두 채워라.
+9. level은 난이도 숫자(1이 가장 쉬움). id는 다른 지문과 겹치지 않는 영문 이름.
+10. 신규 필드(naturalTranslation·wordOrderPoint·breakRules)를 넣지 않은 예전 형식도 앱에서 열리기는 하지만, 새로 만들 때는 위 필드를 모두 채워라.
 
 [규칙을 지킨 올바른 예시]
 {
@@ -3135,6 +3974,12 @@ const AUTHORING_PROMPT = `너는 영어 독해 학습 앱의 문제 출제자다
         { "en": "Confirmation bias is the habit", "kr": "확증 편향은 습관이다" },
         { "en": "of noticing only what we already believe.", "kr": "우리가 이미 믿는 것만 알아채는" }
       ],
+      "naturalTranslation": "확증 편향은 우리가 이미 믿는 것만 알아채려는 습관이다.",
+      "wordOrderPoint": { "title": "be동사 + 명사 보어", "explanation": "'A is B' 구조 - is 뒤의 the habit이 주어를 설명하는 보어라 붙여 읽는다." },
+      "breakRules": {
+        "allowed": [],
+        "discouraged": [ { "boundary": 2, "reason": "is 뒤에서 끊으면 보어 the habit이 떨어져 나갑니다. is the habit을 한 덩어리로 붙여 읽으세요." } ]
+      },
       "grammar": [
         { "label": "of + 동명사", "note": "the habit of noticing - '알아채는 습관'. of 뒤 동사는 -ing." }
       ],

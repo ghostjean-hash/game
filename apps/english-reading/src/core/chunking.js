@@ -107,6 +107,7 @@ export function chunkViolations(tokens, chunks) {
 
 // slashes: 사용자가 그은 틈 번호 목록. 정답 경계와 대조해 세 갈래로 나눈다.
 // correct = 그었고 정답 / wrong = 그었지만 정답 아님 / missed = 정답인데 안 그음.
+// (구 이진 판정 - 내부 재사용·기존 회귀 테스트용으로 보존. 화면 채점은 gradeChunks가 대체.)
 export function gradeSlashes(boundaries, slashes) {
   const drawn = new Set(slashes);
   const correct = [];
@@ -115,4 +116,31 @@ export function gradeSlashes(boundaries, slashes) {
   drawn.forEach((g) => (boundaries.has(g) ? correct : wrong).push(g));
   boundaries.forEach((g) => { if (!drawn.has(g)) missed.push(g); });
   return { correct, wrong, missed };
+}
+
+// 끊기 5등급 판정 - O/X 이진을 대체한다. 사용자가 그은 선을 대표 추천 경계와
+// 허용(allowed)·비추천(discouraged) 목록에 대조해 나눈다.
+//   recommended = 그었고 대표 추천 경계와 일치
+//   allowed     = 대표 경계는 아니지만 breakRules.allowed에 등록된 위치
+//   discouraged = breakRules.discouraged에 등록된 위치
+//   neutral     = 그었지만 어느 목록에도 없는 위치(단일 정답 강제 금지 - 다른 분할로 인정)
+//   missed      = 대표 추천 경계인데 긋지 않음
+// 우선순위 recommended > allowed > discouraged > neutral (한 선은 한 분류에만).
+export function gradeChunks(boundaries, allowedSet, discouragedSet, slashes) {
+  const drawn = new Set(slashes);
+  const allowed0 = allowedSet instanceof Set ? allowedSet : new Set(allowedSet || []);
+  const discouraged0 = discouragedSet instanceof Set ? discouragedSet : new Set(discouragedSet || []);
+  const recommended = [];
+  const allowed = [];
+  const discouraged = [];
+  const neutral = [];
+  const missed = [];
+  drawn.forEach((g) => {
+    if (boundaries.has(g)) recommended.push(g);
+    else if (allowed0.has(g)) allowed.push(g);
+    else if (discouraged0.has(g)) discouraged.push(g);
+    else neutral.push(g);
+  });
+  boundaries.forEach((g) => { if (!drawn.has(g)) missed.push(g); });
+  return { recommended, allowed, discouraged, neutral, missed };
 }
