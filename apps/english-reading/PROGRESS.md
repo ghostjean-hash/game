@@ -280,4 +280,5 @@
 - 검증: node 테스트 전량 통과(gradeChunks 5등급·normalize fallback·breakRules 범위/중복·built-in 30문장 strict 무결성 신설). browser-shot 실경로 - 추천(청록●)/비추천(주황△)/다른분할(연회색)/놓침(청록▾) 판정 + 비추천 이유 카드 + 직독직해/자연해석 분리 + 핵심 어순 + 문법 접힘(measure visible=false)→토글 펼침(true), 콘솔 0. standalone 재빌드(150KB, normalize.js 추가) file:// 동작 확인. SW v184→v185.
 - 버그 1건 수정: `.grammar-list{display:flex}`가 [hidden] 속성을 명시도에서 덮어써 문법 목록이 항상 펼쳐지던 것 → `.grammar-list[hidden]{display:none}` 명시 재지정.
 - 변경 파일: core/normalize.js(신규)·chunking.js·validate.js / main.js / style.css / src/data/passages.json(30문장) / tests/run-node.mjs / tools/build-standalone.mjs / dist/standalone.html(재생성) / service-worker.js / CLAUDE.md / docs 계획서.
+- 배포: 커밋 b24794f 후 `/web-deploy` 배포 완료 - push origin/main + smoke 통과(허브·english-reading 2 URL HTTP 200 + 콘솔 에러 0 + `.passage-card`/`#grid-games .card` 가시). SW v185로 PWA 옛 캐시 자동 폐기, 실서비스 반영 확인.
 - 잔여: 다음 단계 후보(사양 비스코프) - 오디오·TTS·구간 재생, listeningSenseGroups, 말하기 변형, 신규 100문장. 2.32 잔여 3건 유지.
