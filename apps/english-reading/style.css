@@ -265,21 +265,22 @@ body {
 /* 놓친 추천 - / 위 아래 향한 삼각형(여기 놓침), 청록 */
 .gap.g-missed::before { content: "▾"; color: var(--er-accent); font-size: 0.62em; font-weight: 900; top: -0.15em; }
 
-/* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다 */
+/* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다.
+   한 줄씩 눌러 읽는 게 핵심 행동이라, 강조색으로 눈에 띄게 둔다(완료 버튼에 눈길을 뺏기지 않게). */
 .review-btn {
   float: right;
   margin: 2px 0 2px 10px;
-  padding: 3px 12px;
+  padding: 4px 14px;
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--fg-dim);
-  background: var(--bg-elev-2);
-  border: 1px solid var(--line);
+  color: var(--er-accent);
+  background: var(--accent-weak, #eef2ff);
+  border: 1px solid var(--er-accent);
   border-radius: 999px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.review-btn:hover { color: var(--er-accent); border-color: var(--er-accent); }
+.review-btn:hover { color: #fff; background: var(--er-accent); }
 
 /* 덩어리별 "왜 여기서 끊는가" 이유 태그 */
 .chunk-why {
@@ -363,6 +364,15 @@ body {
 }
 .nt-label { font-size: 11.5px; font-weight: 700; color: var(--fg-mute); margin-bottom: 4px; }
 .nt-body { font-size: 15px; font-weight: 600; color: var(--fg); line-height: 1.6; }
+/* 직독직해 카드 안에 들어간 자연스러운 해석 - 별도 카드가 아니라 구분선으로만 나눈다. */
+.chunks .natural-trans {
+  margin: 0;
+  padding: var(--sp-3) 0 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+}
 
 /* 핵심 어순/패턴 - 문장당 1개 기본 노출(상세 문법은 접어 둔다) */
 .word-order {
@@ -466,12 +476,16 @@ body {
 .cw-mean.cw-empty { color: var(--fg-mute); font-style: italic; }
 
 /* 끊어 읽기 청킹 */
-.chunks { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-2); }
-.chunk {
+/* 직독직해 - 덩어리들을 하나의 카드에 여러 줄로 담는다(덩어리마다 카드를 쪼개지 않는다). */
+.chunks {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  margin: var(--sp-3) 0 var(--sp-2);
   padding: var(--sp-3) var(--sp-4);
   border-radius: var(--r-2);
   background: var(--bg-elev);
   border: 1px solid var(--line);
+}
+.chunk {
   opacity: 0;
   animation: er-slide 0.3s var(--ease) forwards;
 }
@@ -508,6 +522,10 @@ body {
   padding: var(--sp-3);
   border-radius: var(--r-2);
 }
+
+/* 보조 "전체 해석 펼치기" - 문장 위 오른쪽에 작고 약하게(기본은 한 줄씩 읽는 흐름, 이건 지름길). */
+.reading-tools { display: flex; justify-content: flex-end; margin-bottom: var(--sp-2); }
+.reading-tools .all-interpret { margin: 0; padding: 6px 13px; font-size: 12px; }
 
 .read-done {
   display: block;
@@ -597,6 +615,15 @@ body {
 }
 .toggle-row input { width: 20px; height: 20px; accent-color: var(--er-accent); }
 .app-modal .btn-primary { margin-top: var(--sp-2); }
+
+/* 완독 후 다음 행동 선택 - 세로로 쌓은 버튼(다음 지문/재독/목록). */
+.modal-actions { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-3); }
+.modal-actions .btn { width: 100%; padding: 13px; font-size: 15px; border-radius: var(--r-2); font-weight: 700; cursor: pointer; }
+.modal-actions .btn-primary { margin-top: 0; }
+.na-secondary { background: var(--bg-elev-2); color: var(--fg); border: 1px solid var(--line); }
+.na-secondary:hover { border-color: var(--er-accent); color: var(--er-accent); }
+.na-ghost { background: transparent; color: var(--fg-dim); border: 1px solid transparent; }
+.na-ghost:hover { color: var(--fg); background: var(--bg-elev-2); }
 
 /* 공용 버튼 - 라이트 강조색 */
 .reader-page .btn-primary,

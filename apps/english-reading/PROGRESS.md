@@ -303,3 +303,14 @@
 - 산출물: docs/2026-07-15-content-validation-report.md(10섹션 + 판정 표, 220줄). 데이터는 지시대로 미수정.
 - 배포: deploy.json이 이전 flightshooting 세션 설정(deploy.paths=games/flightshooting)으로 남아 web-deploy를 돌리면 무관한 변경을 커밋할 위험이라 회피, 보고서만 직접 커밋 후 push(ab999da, origin/main 반영·rev-list 0 확인). 무인 저장 모드(사용자 퇴근)로 커밋+push 자동 완주.
 - 잔여(사용자 결정 대기): (a) 발견 문제를 실제 데이터에 반영할지 - major 21건은 죽은 allowed 삭제라 위험 낮은 일괄 작업 + validate.js에 allowed-대표경계 중복 검사 추가가 근본 처방 (b) minor 9건 반영 여부 (c) 사용자 제시 검수 규칙 자체를 앱 AUTHORING_PROMPT/CLAUDE.md에 영구 반영할지(이번엔 검수 기준으로만 적용).
+
+## 2.38. 지문 진행 버그 + 부수 버그 3건 + 직독직해·자연해석 카드 통합 + 완료 흐름 재설계 (2026-07-16, 사용자 "전체 버그 확인" → 연속 UX 지시)
+
+- 핵심 버그(사용자 "한 문제 풀면 다음 문제로 못 넘어감"): 지문 읽기 화면에서 뒤로가기(←)를 누르면 지문 목록이 빈 화면이 되고 페이지 에러(Cannot read properties of undefined 'filter'). 원인 - setTop의 `el.back.onclick = onBack`이 renderList를 직접 연결해, 뒤로가기 클릭의 MouseEvent가 renderList(c)의 c로 새어 들어가 `if(c) course=c`로 course를 이벤트 객체로 덮어썼고, 이어지는 courseProgress에서 course.passages.filter가 터짐. `el.back.onclick = () => onBack()`으로 이벤트 인자 유입을 원천 차단. 지문을 읽고 목록으로 못 돌아가 다음 지문을 못 고르던 증상의 정체.
+- 병렬 에이전트(general-purpose)로 나머지 버그 전수 점검 후 3건 수정: (a) 노출 설정 chunks OFF + words ON에서 단어 공개·영구 저장이 [해석] 버튼(settings.chunks 안에서만 생성)에만 묶여, 담은 단어를 못 꺼내고 회독 시 소실 → buildDetail을 chunks 분기로 나누고, reviewBtn을 hasClickableWords일 때도 "단어 뜻 보기"로 생성해 단어 공개·저장 경로 확보. (b) lastPassage가 저장만 되고 복원 코드가 없던 죽은 이어읽기 → bootScreen 신설(초기 로드 시 findPassageLocation으로 마지막 지문·코스 복원). (c) validate의 chunks-원문 일치 검사가 알파벳 시퀀스만 비교해 하이픈·공백 차이로 토큰 수가 어긋나도 통과하던 것 → chunkEnJoined의 tokenize clean 배열을 원문 토큰과 1:1 대조 추가(customPassages 채점 위치 밀림 방지).
+- 직독직해 카드 통합(사용자 "줄단위 카드 분리, 하나의 카드에"): 덩어리마다 별도 카드이던 것을 하나의 카드 안 여러 줄로. 카드 스타일(테두리·배경)을 .chunks 컨테이너로 옮기고 .chunk는 행으로.
+- 자연스러운 해석 통합(사용자 "구분선만 넣어 하나의 카드에"): buildNatural을 직독직해 카드(.chunks) 안으로 넣고, .chunks .natural-trans에서 카드 스타일 제거 + border-top 구분선만.
+- 완료 흐름 재설계(사용자 "나도 모르게 완료 누름" 제기 → "해석 안 봐도 되나" 상의 → 방향 승인): "1회독 완료" 버튼을 "이 지문 다 읽었어요"로 바꾸고, 누르면 showNextActionModal(다음 지문 / 한 번 더 읽기 / 지문 목록으로)을 띄운다. finishRound는 자동 재독 대신 이 선택 창으로(코스 마지막 완주 시 클리어 모달 유지). 완료는 해석을 안 봐도 자유롭게 누를 수 있다(흐름 우선, 막지 않음 - 강제 문제풀이 금지 철학). 유일한 파란 버튼이 완료뿐이라 눈길이 쏠리던 문제는 문장 [해석] 버튼을 강조색(파란 테두리·글자)으로, 보조 "전체 해석 펼치기"(약하게, 아직 안 본 문장만 펼침)를 문장 위에 추가해 완화. mkBtn·nextPassageInCourse 헬퍼 신설.
+- 검증: node 테스트 전량 통과(validate 강화가 두 코스 기존 지문 무결). browser-shot 실경로 다수 - 뒤로가기 목록 복원(콘솔 0)·chunks OFF에서 단어 담고 공개·저장·reload 후 이어읽기 지문 복원·직독직해 3덩어리 한 카드·자연해석 구분선 통합·완료 후 선택창·다음 지문 이동·전체 해석 펼치기 모두 콘솔 0. standalone 재빌드(291KB), build-standalone fetch 치환 패턴을 renderCourseList→bootScreen으로 동기. SW 캐시 버전 bump는 배포 시(이번은 로컬 커밋).
+- 변경 파일: src/main.js / src/core/validate.js / style.css / tools/build-standalone.mjs / dist/standalone.html(재생성).
+- 잔여: (1) 배포(/web-deploy)는 deploy.json이 flightshooting을 가리켜 회피, 사용자 지시 대기. (2) flightshooting 10여 파일 미커밋 변경은 타 세션분이라 이번 봉합 제외 - 사용자 처리 대기. (3) 2.37 검수 잔여(죽은 allowed 데이터 반영 등) 유지.

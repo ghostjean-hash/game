@@ -41,8 +41,17 @@ export function validatePassage(p, opts = {}) {
     const tokens = tokenize(s.text);
 
     if (!Array.isArray(s.chunks) || s.chunks.length < 1) { push(w, "끊어읽기 덩어리(chunks)가 필요합니다."); return; }
-    if (norm(s.chunks.map((c) => c.en).join(" ")) !== norm(s.text)) {
+    const chunkEnJoined = s.chunks.map((c) => c.en).join(" ");
+    if (norm(chunkEnJoined) !== norm(s.text)) {
       push(w, "chunks의 en을 공백으로 이으면 원문과 정확히 같아야 합니다(현재 어긋남).");
+    } else {
+      // 글자는 같아도 단어(토큰) 경계가 어긋나면 채점 위치가 밀린다(하이픈·공백 차이 등).
+      // chunkBoundaries가 공백 분할 단어 수로 경계를 잡으므로 토큰 단위로 재확인한다.
+      const chunkToks = tokenize(chunkEnJoined).map((t) => t.clean);
+      const textToks = tokens.map((t) => t.clean);
+      if (chunkToks.length !== textToks.length || chunkToks.some((c, k) => c !== textToks[k])) {
+        push(w, "chunks의 단어 나눔이 원문과 어긋납니다 - 하이픈·공백 때문에 단어 수가 달라 채점 위치가 밀립니다.");
+      }
     }
     if (!s.chunks.every((c) => c && c.en && c.kr)) push(w, "각 덩어리에 en(영어)과 kr(직독직해 한글)이 모두 필요합니다.");
 

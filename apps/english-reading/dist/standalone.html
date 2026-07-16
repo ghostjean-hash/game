@@ -417,21 +417,22 @@ body {
 /* 놓친 추천 - / 위 아래 향한 삼각형(여기 놓침), 청록 */
 .gap.g-missed::before { content: "▾"; color: var(--er-accent); font-size: 0.62em; font-weight: 900; top: -0.15em; }
 
-/* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다 */
+/* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다.
+   한 줄씩 눌러 읽는 게 핵심 행동이라, 강조색으로 눈에 띄게 둔다(완료 버튼에 눈길을 뺏기지 않게). */
 .review-btn {
   float: right;
   margin: 2px 0 2px 10px;
-  padding: 3px 12px;
+  padding: 4px 14px;
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--fg-dim);
-  background: var(--bg-elev-2);
-  border: 1px solid var(--line);
+  color: var(--er-accent);
+  background: var(--accent-weak, #eef2ff);
+  border: 1px solid var(--er-accent);
   border-radius: 999px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.review-btn:hover { color: var(--er-accent); border-color: var(--er-accent); }
+.review-btn:hover { color: #fff; background: var(--er-accent); }
 
 /* 덩어리별 "왜 여기서 끊는가" 이유 태그 */
 .chunk-why {
@@ -515,6 +516,15 @@ body {
 }
 .nt-label { font-size: 11.5px; font-weight: 700; color: var(--fg-mute); margin-bottom: 4px; }
 .nt-body { font-size: 15px; font-weight: 600; color: var(--fg); line-height: 1.6; }
+/* 직독직해 카드 안에 들어간 자연스러운 해석 - 별도 카드가 아니라 구분선으로만 나눈다. */
+.chunks .natural-trans {
+  margin: 0;
+  padding: var(--sp-3) 0 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+}
 
 /* 핵심 어순/패턴 - 문장당 1개 기본 노출(상세 문법은 접어 둔다) */
 .word-order {
@@ -618,12 +628,16 @@ body {
 .cw-mean.cw-empty { color: var(--fg-mute); font-style: italic; }
 
 /* 끊어 읽기 청킹 */
-.chunks { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-3) 0 var(--sp-2); }
-.chunk {
+/* 직독직해 - 덩어리들을 하나의 카드에 여러 줄로 담는다(덩어리마다 카드를 쪼개지 않는다). */
+.chunks {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  margin: var(--sp-3) 0 var(--sp-2);
   padding: var(--sp-3) var(--sp-4);
   border-radius: var(--r-2);
   background: var(--bg-elev);
   border: 1px solid var(--line);
+}
+.chunk {
   opacity: 0;
   animation: er-slide 0.3s var(--ease) forwards;
 }
@@ -660,6 +674,10 @@ body {
   padding: var(--sp-3);
   border-radius: var(--r-2);
 }
+
+/* 보조 "전체 해석 펼치기" - 문장 위 오른쪽에 작고 약하게(기본은 한 줄씩 읽는 흐름, 이건 지름길). */
+.reading-tools { display: flex; justify-content: flex-end; margin-bottom: var(--sp-2); }
+.reading-tools .all-interpret { margin: 0; padding: 6px 13px; font-size: 12px; }
 
 .read-done {
   display: block;
@@ -749,6 +767,15 @@ body {
 }
 .toggle-row input { width: 20px; height: 20px; accent-color: var(--er-accent); }
 .app-modal .btn-primary { margin-top: var(--sp-2); }
+
+/* 완독 후 다음 행동 선택 - 세로로 쌓은 버튼(다음 지문/재독/목록). */
+.modal-actions { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-3); }
+.modal-actions .btn { width: 100%; padding: 13px; font-size: 15px; border-radius: var(--r-2); font-weight: 700; cursor: pointer; }
+.modal-actions .btn-primary { margin-top: 0; }
+.na-secondary { background: var(--bg-elev-2); color: var(--fg); border: 1px solid var(--line); }
+.na-secondary:hover { border-color: var(--er-accent); color: var(--er-accent); }
+.na-ghost { background: transparent; color: var(--fg-dim); border: 1px solid transparent; }
+.na-ghost:hover { color: var(--fg); background: var(--bg-elev-2); }
 
 /* 공용 버튼 - 라이트 강조색 */
 .reader-page .btn-primary,
@@ -7557,8 +7584,17 @@ function validatePassage(p, opts = {}) {
     const tokens = tokenize(s.text);
 
     if (!Array.isArray(s.chunks) || s.chunks.length < 1) { push(w, "끊어읽기 덩어리(chunks)가 필요합니다."); return; }
-    if (norm(s.chunks.map((c) => c.en).join(" ")) !== norm(s.text)) {
+    const chunkEnJoined = s.chunks.map((c) => c.en).join(" ");
+    if (norm(chunkEnJoined) !== norm(s.text)) {
       push(w, "chunks의 en을 공백으로 이으면 원문과 정확히 같아야 합니다(현재 어긋남).");
+    } else {
+      // 글자는 같아도 단어(토큰) 경계가 어긋나면 채점 위치가 밀린다(하이픈·공백 차이 등).
+      // chunkBoundaries가 공백 분할 단어 수로 경계를 잡으므로 토큰 단위로 재확인한다.
+      const chunkToks = tokenize(chunkEnJoined).map((t) => t.clean);
+      const textToks = tokens.map((t) => t.clean);
+      if (chunkToks.length !== textToks.length || chunkToks.some((c, k) => c !== textToks[k])) {
+        push(w, "chunks의 단어 나눔이 원문과 어긋납니다 - 하이픈·공백 때문에 단어 수가 달라 채점 위치가 밀립니다.");
+      }
     }
     if (!s.chunks.every((c) => c && c.en && c.kr)) push(w, "각 덩어리에 en(영어)과 kr(직독직해 한글)이 모두 필요합니다.");
 
@@ -7696,6 +7732,23 @@ function rebuildCourse() {
   if (course) course = courses.find((c) => c.id === course.id) || null;
 }
 
+// lastPassage(마지막 읽던 지문) id로 그 지문과 소속 코스를 찾는다 - 앱 재시작 시 이어읽기 복원용.
+function findPassageLocation(pid) {
+  for (const c of courses) {
+    const p = c.passageById(pid);
+    if (p) return { course: c, passage: p };
+  }
+  return null;
+}
+
+// 앱 첫 화면 결정 - 마지막에 읽던 지문이 남아 있으면 그 지문으로 바로 복원(이어읽기), 없으면 코스 목록.
+function bootScreen() {
+  const lastId = store.get("lastPassage", null);
+  const loc = lastId ? findPassageLocation(lastId) : null;
+  if (loc) { course = loc.course; renderReading(loc.passage); }
+  else renderCourseList();
+}
+
 // ── 읽기 진행 저장(기기 저장소) ── 지문별 문장 상태(그은 선·임시 단어·검토 여부)를 담아,
 // 단어장을 갔다 오거나 앱을 껐다 켜도 읽던 자리와 표시가 그대로 복원되게 한다.
 const getProgress = () => store.get("progress", {});
@@ -7716,7 +7769,7 @@ function clearPassageProgress(pid) {
 
 baseData = EMBEDDED_PASSAGES;
 rebuildCourse();
-renderCourseList();
+bootScreen();
 
 function setBar(ratio) { el.bar.style.width = `${Math.round(ratio * 100)}%`; }
 // 화면 하단에 잠깐 뜨는 안내 메시지(임시 수집·회독 완료 등)
@@ -7740,7 +7793,9 @@ function copyText(text, okMsg) {
 
 function setTop({ title, onBack, showVocab }) {
   el.title.textContent = title;
-  el.back.onclick = onBack;
+  // 화살표로 감싸 클릭 이벤트 객체가 onBack의 첫 인자로 새지 않게 한다.
+  // (renderList(c)처럼 인자를 받는 함수를 직접 연결하면 MouseEvent가 c로 들어가 course를 덮어썼다.)
+  el.back.onclick = () => onBack();
   el.vocab.style.display = showVocab ? "" : "none";
   el.vocab.onclick = renderVocab;
   // 끊기/단어 토글은 기본 숨김 - 읽기 화면에서만 개별 노출(renderReading)
@@ -7882,15 +7937,30 @@ function renderReading(p) {
   const article = document.createElement("div");
   article.className = "article";
   p.sentences.forEach((s, i) => article.appendChild(renderSentence(s, i, p, settings)));
+
+  // 보조: 한 줄씩 누르지 않고 아직 안 본 문장의 해석을 한꺼번에 펼치는 편의 버튼(끊어읽기 ON일 때만, 약하게).
+  // 기본은 문장마다 [해석]을 눌러 능동적으로 읽는 흐름이고, 이건 급할 때 쓰는 지름길이다.
+  if (settings.chunks) {
+    const tools = document.createElement("div");
+    tools.className = "reading-tools";
+    tools.appendChild(mkBtn("전체 해석 펼치기", "text-btn all-interpret", () => {
+      article.querySelectorAll(".sentence-block").forEach((blk) => {
+        if (!blk.querySelector(".review-detail")) {
+          const rb = blk.querySelector(".review-btn");
+          if (rb) rb.click();
+        }
+      });
+    }));
+    stage.appendChild(tools);
+  }
   stage.appendChild(article);
   applyTouch(); // 토글 상태를 버튼·본문(no-chunk/no-word)에 반영
 
-  // 다회독 루프 - 회독을 마칠 때마다 같은 지문을 새 마음으로 다시 읽도록 유도
-  const nextRound = (getReads()[p.id] || 0) + 1;
+  // 완독 매듭 - 해석을 안 봐도 자유롭게 누를 수 있다(막지 않는다). 누른 뒤 다음 지문/재독/목록은 선택 창에서 고른다.
   const doneBtn = document.createElement("button");
   doneBtn.type = "button";
   doneBtn.className = "btn btn-primary read-done";
-  doneBtn.textContent = `${nextRound}회독 완료`;
+  doneBtn.textContent = "이 지문 다 읽었어요";
   doneBtn.onclick = () => finishRound(p);
   stage.appendChild(doneBtn);
 }
@@ -7914,6 +7984,8 @@ function renderSentence(rawS, sIndex, passage, settings) {
   });
   // 단어장(영구)에 이미 담긴 단어 - 회독 때 '이미 아는 단어'로 은은히 표시(중앙 하단 점).
   const vocabKeys = settings.words ? new Set(getVocab().map((v) => v.wordKey)) : new Set();
+  // 이 문장에 눌러 담을 수 있는 주요 단어가 있는지 - 끊어읽기(chunks)를 꺼도 단어 공개·저장 버튼을 띄우기 위한 판정.
+  const hasClickableWords = settings.words && tokens.some((t) => t.clean && meaningByClean.has(t.clean));
 
   // 저장된 진행 복원 - 그은 선·임시 단어·검토 여부를 기기 저장소에서 되살린다.
   const saved = loadSentenceState(passage.id, sIndex) || {};
@@ -7946,16 +8018,30 @@ function renderSentence(rawS, sIndex, passage, settings) {
   const buildDetail = () => {
     const d = document.createElement("div");
     d.className = "review-detail";
-    // 사용자가 실제로 그은 비추천 위치의 이유만 카드 상단에 간결히(안 그은 비추천은 노출 안 함)
-    const disc = buildDiscouragedReasons(gradeNow(), s);
-    if (disc) d.appendChild(disc);
-    d.appendChild(buildChunks(s)); // ① 직독직해(대표 추천 청킹 en 덩어리 + 이유 태그)
-    d.appendChild(buildNatural(s)); // ② 자연스러운 전체 해석(직독직해와 구분된 영역)
-    // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 공개 + 영구 저장(중복은 무시)
+    // 끊어읽기(chunks) ON일 때만 채점 이유·직독직해·자연해석·어순·문법·심화를 공개한다.
+    if (settings.chunks) {
+      // 사용자가 실제로 그은 비추천 위치의 이유만 카드 상단에 간결히(안 그은 비추천은 노출 안 함)
+      const disc = buildDiscouragedReasons(gradeNow(), s);
+      if (disc) d.appendChild(disc);
+      const interp = buildChunks(s); // ① 직독직해(대표 추천 청킹 en 덩어리 + 이유 태그)
+      interp.appendChild(buildNatural(s)); // ② 자연스러운 전체 해석을 같은 카드 안에 구분선으로 이어 붙인다
+      d.appendChild(interp);
+    }
+    // 후(後) 확인: 이 문장에서 임시 수집한 단어들의 뜻을 공개 + 영구 저장(중복은 무시).
+    // 끊어읽기를 꺼도 이 경로로 단어를 공개·저장해야 담은 단어가 소실되지 않는다.
     if (flagged.size) d.appendChild(buildCollectedWords([...flagged.values()], s, passage));
-    if (s.wordOrderPoint) d.appendChild(buildWordOrder(s)); // ③ 핵심 어순/패턴(기본 노출)
-    if (s.grammar && s.grammar.length) d.appendChild(buildGrammar(s)); // ④ 상세 문법(기본 접힘)
-    if (s.insight && settings.scope) d.appendChild(buildScopeCard(s)); // ⑤ 심화 카드(scope ON)
+    if (settings.chunks) {
+      if (s.wordOrderPoint) d.appendChild(buildWordOrder(s)); // ③ 핵심 어순/패턴(기본 노출)
+      if (s.grammar && s.grammar.length) d.appendChild(buildGrammar(s)); // ④ 상세 문법(기본 접힘)
+      if (s.insight && settings.scope) d.appendChild(buildScopeCard(s)); // ⑤ 심화 카드(scope ON)
+    }
+    // 끊어읽기가 꺼져 해설이 없고 담은 단어도 없으면 빈 카드 대신 안내.
+    if (!settings.chunks && !flagged.size) {
+      const note = document.createElement("div");
+      note.className = "cw-row cw-empty";
+      note.textContent = "이 문장에서 담은 단어가 없습니다. 모르는 단어를 눌러 담아 보세요.";
+      d.appendChild(note);
+    }
     return d;
   };
 
@@ -8016,14 +8102,16 @@ function renderSentence(rawS, sIndex, passage, settings) {
     }
   });
 
-  // 문장 끝 "/ 검토" - 첫 클릭은 채점 + 해설 공개, 이후 클릭마다 해설 접힘/펼침 토글.
+  // 문장 끝 버튼 - 첫 클릭은 채점 + 해설 공개, 이후 클릭마다 해설 접힘/펼침 토글.
   // 채점 결과(선 색)와 잠금은 유지된다 - 접어도 채점이 무르지 않는다.
+  // 끊어읽기가 꺼져도 담을 주요 단어가 있으면 버튼을 띄워 단어 뜻 공개·저장 경로를 남긴다.
+  const hasReviewBtn = settings.chunks || hasClickableWords;
   let detail = null;
-  if (settings.chunks) {
+  if (hasReviewBtn) {
     const reviewBtn = document.createElement("button");
     reviewBtn.type = "button";
     reviewBtn.className = "review-btn";
-    reviewBtn.textContent = "해석";
+    reviewBtn.textContent = settings.chunks ? "해석" : "단어 뜻 보기";
     reviewBtn.onclick = (e) => {
       e.stopPropagation();
       removeHint();
@@ -8032,7 +8120,7 @@ function renderSentence(rawS, sIndex, passage, settings) {
         return;
       }
       reviewed = true;
-      applyGrade();
+      if (settings.chunks) applyGrade();
       detail = buildDetail();
       block.appendChild(detail);
       persist();
@@ -8043,8 +8131,8 @@ function renderSentence(rawS, sIndex, passage, settings) {
   block.appendChild(line);
 
   // 이미 검토를 마친 문장이면(복원) 채점 색과 해설을 펼친 상태로 되살린다.
-  if (reviewed && settings.chunks) {
-    applyGrade();
+  if (reviewed && hasReviewBtn) {
+    if (settings.chunks) applyGrade();
     detail = buildDetail();
     block.appendChild(detail);
   }
@@ -8243,8 +8331,22 @@ function buildScopeCard(s) {
   return card;
 }
 
-// 회독 완료 - 회독수를 올리고 같은 지문을 clean slate(임시 하이라이트 리셋)로 다시 열어 반복 읽기를 유도.
-// 개별 완독은 조용히 진행률만 채우고, 코스 전체 완주를 처음 달성할 때만 클리어 연출.
+// 버튼 요소 생성 헬퍼(라벨·클래스·클릭).
+function mkBtn(label, cls, onClick) {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = cls; b.textContent = label; b.onclick = onClick;
+  return b;
+}
+
+// 같은 코스에서 지금 지문 바로 다음(level 정렬 순) 지문. 마지막이면 null.
+function nextPassageInCourse(p) {
+  if (!course) return null;
+  const idx = course.passages.findIndex((x) => x.id === p.id);
+  return idx >= 0 ? (course.passages[idx + 1] || null) : null;
+}
+
+// 지문 완독 처리 - 회독수·완독 기록을 올리고 이 지문의 임시 진행(그은 선·임시 단어)을 비운다(영구 단어장은 유지).
+// 해석을 안 봐도 자유롭게 완독할 수 있다(흐름 우선). 다음에 뭘 할지는 완료 후 선택 창에서 사용자가 고른다.
 function finishRound(p) {
   const reads = getReads();
   const round = (reads[p.id] || 0) + 1;
@@ -8253,11 +8355,33 @@ function finishRound(p) {
   reads[p.id] = round;
   store.set("reads", reads);
   if (!done.includes(p.id)) { done.push(p.id); store.set("done", done); }
-  clearPassageProgress(p.id); // 회독을 마쳤으니 이 지문의 그은 선·임시 단어를 비워 clean slate로(영구 단어장은 유지)
+  clearPassageProgress(p.id);
   const prog = courseProgress(course, done);
-  if (prog.cleared && !wasCleared) { showClearModal(); return; }
-  showToast(`${round}회독 완료! 새 마음으로 다시 읽어 보세요.`);
-  renderReading(p); // 깨끗한 상태로 다시 그린다
+  if (prog.cleared && !wasCleared) { showClearModal(); return; } // 코스 전체를 처음 완주하면 클리어 연출 우선
+  showNextActionModal(p, round);
+}
+
+// 완독 후 - "완료"가 무슨 뜻이고 다음에 뭘 하는지 한 자리에서 고르게 한다(다음 지문/재독/목록).
+function showNextActionModal(p, round) {
+  const next = nextPassageInCourse(p);
+  const backdrop = document.createElement("div");
+  backdrop.className = "modal-backdrop";
+  const modal = document.createElement("div");
+  modal.className = "app-modal";
+  modal.innerHTML =
+    `<div class="modal-badge">✓</div>` +
+    `<div class="modal-msg">이 지문을 다 읽었어요</div>` +
+    `<div class="modal-sub">${p.titleKr}${round > 1 ? ` · ${round}번째 읽기` : ""}. 이제 무엇을 할까요?</div>`;
+  const actions = document.createElement("div");
+  actions.className = "modal-actions";
+  const close = () => backdrop.remove();
+  if (next) actions.appendChild(mkBtn("다음 지문 →", "btn btn-primary", () => { close(); renderReading(next); }));
+  actions.appendChild(mkBtn("한 번 더 읽기", "btn na-secondary", () => { close(); renderReading(p); }));
+  actions.appendChild(mkBtn("지문 목록으로", "btn na-ghost", () => { close(); renderList(course); }));
+  modal.appendChild(actions);
+  backdrop.appendChild(modal);
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) close(); });
+  document.body.appendChild(backdrop);
 }
 
 function showClearModal() {
