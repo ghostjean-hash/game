@@ -19,7 +19,7 @@ import { optionSlot, gainFront, gainOption, gainZone, gainTail, loseLastPart, ti
 import { buildWaves, stageName } from '../src/core/waves.js';
 import { spawnEnemy, spawnBonus, spawnShards, dropItems, fieldBounds, spawnBoss, bossStyleFor, syncBossParts } from '../src/core/spawn.js';
 import { autopilotStep } from '../src/core/autopilot.js';
-import { hit, checkCollisions, updateEnemies, distToSegment, updateBoss } from '../src/core/world.js';
+import { hit, checkCollisions, updateEnemies, distToSegment, updateBoss, capBullets } from '../src/core/world.js';
 import { spawnFriend, stepFriend, gainFriendLevel, friendTakeHit, reviveFriend } from '../src/core/friend.js';
 import { CFG } from '../src/data/numbers.js';
 
@@ -427,6 +427,27 @@ test('일반 모드(friend=null)는 아이템 공유·피격 영향 없음', () 
   g.powerups = [{ x: 100, y: 100, r: 12, kind: 'P', t: 0 }];
   checkCollisions(g, 500, 1000);
   eq(g.front, 2, '내 메인만 강화'); eq(g.friend, null, '친구 없음 유지');
+});
+
+// ── capBullets: 총알 상한 초과 시 유도탄(missile)은 보존하고 일반 직진탄(오래된 순)만 제거 ──
+test('capBullets 상한 이하면 그대로', () => {
+  const g = { bullets: Array.from({ length: 5 }, () => ({ kind: 'main' })) };
+  capBullets(g, 10); eq(g.bullets.length, 5);
+});
+test('capBullets 초과분은 오래된 직진탄부터 제거', () => {
+  const g = { bullets: Array.from({ length: 12 }, (_, i) => ({ kind: 'main', id: i })) };
+  capBullets(g, 10);
+  eq(g.bullets.length, 10);
+  eq(g.bullets[0].id, 2, '앞쪽(오래된) 2개 제거');
+});
+test('capBullets 유도탄은 상한 초과에도 보존', () => {
+  // 앞에 미사일 3 + 뒤에 직진탄 200. 상한 160 → 직진탄만 43개 제거, 미사일 3 전부 생존.
+  const bullets = [{ kind: 'missile' }, { kind: 'missile' }, { kind: 'missile' }];
+  for (let i = 0; i < 200; i++) bullets.push({ kind: 'main' });
+  const g = { bullets };
+  capBullets(g, 160);
+  eq(g.bullets.length, 160);
+  eq(g.bullets.filter((b) => b.kind === 'missile').length, 3, '미사일 3발 모두 생존');
 });
 
 report();

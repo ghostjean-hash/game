@@ -7,7 +7,7 @@ import { CFG } from './data/numbers.js';
 import { COLORS } from './data/colors.js';
 import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
-import { stepWorld, startStage, applyKeyboard } from './core/world.js';
+import { stepWorld, startStage, applyKeyboard, updateParticles } from './core/world.js';
 import { spawnEnemy, spawnBoss } from './core/spawn.js';
 import { autopilotStep } from './core/autopilot.js';
 import { gainFront, gainOption, gainZone, gainTail } from './core/parts.js';
@@ -37,9 +37,6 @@ const elBossName = $('#boss-name');
 const elBossFill = $('#boss-hp-fill');
 const elBanner = $('#banner');
 const btnStart = $('#btn-start');
-const btnStartKid = $('#btn-start-kid');
-const btnAutoStart = $('#btn-auto-start');
-const btnHow = $('#btn-how');
 const btnMute = $('#btn-mute');
 const btnPause = $('#btn-pause');
 const btnAuto = $('#btn-auto');
@@ -58,12 +55,18 @@ const store = createStorage('flightshooting');
 
 // ── 상태 ──
 let W = 0, H = 0, dpr = 1;
-let state = 'menu'; // menu | playing | paused | over | won
+let state = 'menu'; // menu | playing | paused | dying | over | won
 let best = store.get('best', 0);
 let bannerTimer = 0;
+let deathTimer = 0; // 죽는 연출(dying) 남은 시간. 0이 되면 결과 팝업.
 // 환경설정(localStorage 저장) + 치트 상태(세션).
 let apSkill = store.get('apSkill', CFG.autopilot.default);
-let difficulty = store.get('difficulty', 'normal'); // 'normal' | 'kid'(어린이 모드 = 적이 덜 쏨)
+// 난이도(easy | normal | hard | insane). 구버전 저장값('kid' 등)이나 미지정은 보통으로 정규화.
+let difficulty = store.get('difficulty', 'normal');
+if (!CFG.difficulty[difficulty]) difficulty = 'normal';
+// 친구 동행 / 자동 플레이는 난이도와 독립된 홈 토글(사용자 지시 2026-07-16). 선택을 기억한다.
+let friendOn = store.get('friendOn', false);
+let autoOn = store.get('autoOn', false);
 let cheatEnabled = store.get('cheat', false);
 // 치트 세부 설정도 localStorage 저장/복원(사용자 지시 2026-07-10). 켜기 여부(cheat)와 별도 키(cheatCfg).
 const CHEAT_DEFAULT = { speed: 1, invincible: false, dropChance: null, dropKinds: { P: true, S: true, E: true, T: true, H: true, B: true } };
@@ -78,8 +81,10 @@ function createGame() {
     score: 0, lives: CFG.player.maxLives, maxLives: CFG.player.maxLives, stage: 1, fireTimer: 0, // maxLives는 난이도로 재설정
     front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
     friend: null, // 어린이 모드에서만 생성(docs/09). 일반 모드는 null 유지.
-    waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, autopilot: false, apSkill: CFG.autopilot.default, cheat: null,
-    difficulty: 'normal', enemyFireMul: 1, enemyShotsMax: 99, radialMul: 1, // 난이도(startGame에서 세팅). 어린이 모드는 발사 간격↑·조준 연발 단발화·방사 탄 감축
+    waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, apSkill: CFG.autopilot.default, cheat: null,
+    // 자동 플레이(하이브리드): autoAssist 켜짐 + 손 안 댐(dragging=false) + 복귀 대기 끝(manualTimer<=0)일 때만 자동.
+    autoAssist: false, dragging: false, manualTimer: 0,
+    difficulty: 'normal', enemyFireMul: 1, enemyHpMul: 1, enemyShotsMax: 99, radialMul: 1, // 난이도(startGame에서 세팅)
     bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
     sfx: [], events: [],
@@ -109,11 +114,23 @@ const controls = createControls(canvas, game, {
 // ── 루프 ──
 const loop = createLoop({
   update: (dt) => {
+    // 죽는 연출 중: 게임은 멈추고 폭발 파편만 계속 움직인다. 시간이 다 되면 결과 팝업.
+    if (state === 'dying') {
+      updateParticles(game, dt);
+      if (game.bombFlash > 0) game.bombFlash -= dt;
+      deathTimer -= dt;
+      if (deathTimer <= 0) gameOver();
+      return;
+    }
     if (state !== 'playing') return;
     // 치트 플레이 속도: mul회 물리 서브스텝(dt 단위)으로 탄 관통 없이 배속(x1/2/4/8).
     const mul = cheatEnabled ? cheatSpeed : 1;
-    if (game.autopilot) autopilotStep(game, dt * mul, W, H);
+    // 하이브리드 자동: 자동 보조가 켜져 있고, 손을 대지 않았고, 손 뗀 뒤 복귀 대기가 끝났을 때만 AI가 몬다.
+    //   조작 중이거나 손 뗀 직후 resumeDelay 동안은 내 조작(키보드/드래그) 우선.
+    const autoNow = game.autoAssist && !game.dragging && game.manualTimer <= 0;
+    if (autoNow) autopilotStep(game, dt * mul, W, H);
     else applyKeyboard(game, controls.keys, dt * mul, W, H);
+    if (game.manualTimer > 0) game.manualTimer -= dt; // 복귀 대기 카운트다운(체감 시간이라 배속 무관)
     for (let i = 0; i < mul; i++) stepWorld(game, dt, W, H);
     // core가 남긴 사운드 신호 재생
     for (const s of game.sfx) sound.play(s);
@@ -143,6 +160,11 @@ function handleEvent(ev) {
       elBossBar.hidden = false;
       break;
     case 'boss-clear': elBossBar.hidden = true; break;
+    case 'death': // 목숨 0: 죽는 연출 시작(폭발), deathTime 뒤 gameOver 팝업
+      state = 'dying';
+      deathTimer = CFG.emote.deathTime;
+      sound.play('explode');
+      break;
     case 'gameover': gameOver(); break;
     case 'win': gameWon(); break;
   }
@@ -212,13 +234,15 @@ function showBanner(big, sub, dur = 1.6) {
 
 // ── 게임 플로우 ──
 function resetGame() {
-  game.player = { x: W * 0.5, y: H * CFG.player.yRatio, r: CFG.player.r, inv: 0 };
+  game.player = { x: W * 0.5, y: H * CFG.player.yRatio, r: CFG.player.r, inv: 0, dead: false, emo: null, emoT: 0 };
+  game.bombFlash = 0;
   game.bullets = []; game.enemies = []; game.eBullets = [];
   game.powerups = []; game.particles = []; game.boss = null;
   game.score = 0; game.maxLives = CFG.player.maxLives; game.lives = game.maxLives; // 난이도별 maxLives는 startGame에서 재설정
   game.front = 1; game.options = []; game.optionEvo = 0; game.zone = { level: 0, timer: null }; game.tail = []; game.partHistory = [];
-  game.friend = null; // 어린이 모드면 startGame에서 다시 생성
+  game.friend = null; // 친구 동행 켜짐이면 startGame에서 다시 생성
   game.stage = 1; game.fireTimer = 0;
+  game.dragging = false; game.manualTimer = 0; // 하이브리드 자동 상태 초기화
   game.bossPending = false; game.transitioning = false;
   game.pendingTimer = null; game.transitionTimer = null; game.winTimer = null;
   game.sfx.length = 0; game.events.length = 0;
@@ -237,18 +261,19 @@ function startGame(diff) {
   gameScreen.hidden = false;
   resize();
   resetGame();
-  if (difficulty === 'kid') spawnFriend(game, W, H); // 어린이 모드: 친구 비행기 등장(docs/09)
+  if (friendOn) spawnFriend(game, W, H); // 친구 동행 토글(난이도 무관, docs/09)
   applyDevHook(); // 검증용: localhost에서 URL 파라미터로 시작 구역·파츠 지정
-  setAutopilot(false); // 시작 시 기본은 수동(자동 시작 버튼이 이후 다시 켬)
+  setAutoAssist(autoOn); // 홈의 자동 플레이 토글 반영(하이브리드)
   game.apSkill = apSkill;                       // 자동 플레이 실력 티어 반영
-  game.difficulty = difficulty;                 // 난이도 모드
+  game.difficulty = difficulty;                 // 난이도
   const diffCfg = CFG.difficulty[difficulty] || CFG.difficulty.normal;
   game.enemyFireMul = diffCfg.enemyFireMul;
+  game.enemyHpMul = diffCfg.enemyHpMul != null ? diffCfg.enemyHpMul : 1; // 난이도별 적 체력 배수
   game.enemyShotsMax = diffCfg.enemyShotsMax || 99;
-  game.radialMul = diffCfg.radialMul != null ? diffCfg.radialMul : 1; // 방사·자폭 탄 개수 배수(어린이 모드 감축)
-  game.maxLives = diffCfg.maxLives || CFG.player.maxLives; // 난이도별 목숨 최대값(어린이 5)
+  game.radialMul = diffCfg.radialMul != null ? diffCfg.radialMul : 1; // 방사·자폭 탄 개수 배수(쉬움 감축)
+  game.maxLives = diffCfg.maxLives || CFG.player.maxLives; // 난이도별 목숨 최대값(쉬움 5 ~ 매우 어려움 1)
   game.lives = game.maxLives;                             // 시작 목숨 = 최대값(resetGame 기본3 위로 재설정)
-  // 난이도 시작 보너스: 어린이 모드는 메인 총알·꼬리 비행기를 조금 갖춘 채 출발(더 쉽게)
+  // 난이도 시작 보너스: '쉬움'은 메인 총알·꼬리 비행기를 조금 갖춘 채 출발(옛 어린이 배려 흡수)
   for (let i = 1; i < diffCfg.startFront; i++) gainFront(game);
   for (let i = 0; i < diffCfg.startTail; i++) gainTail(game);
   game.cheat = cheatEnabled ? cheatState : null; // 치트 켜짐 시에만 core가 참조
@@ -282,6 +307,10 @@ function applyDevHook() {
   if (q.get('cheat') != null) { cheatEnabled = true; setCheat.checked = true; } // 검증 편의: 치트 박스 자동 표시
   // pow=P|S|E|T|H|B: 해당 파워업 하나를 화면 위쪽에 스폰(내려오며 획득 확인용).
   const pow = q.get('pow'); if (pow) game.powerups.push({ x: W * 0.5, y: H * 0.3, r: 12, vy: 70, kind: pow, t: 0 });
+  // emo=happy|cry: 표정 검증용. 바푸리(+친구) 표정을 강제 고정(캡처 동안 유지).
+  const emo = q.get('emo');
+  if (emo) { game.player.emo = emo; game.player.emoT = 999; if (game.friend) { game.friend.emo = emo; game.friend.emoT = 999; } }
+  const pr = num('pr'); if (pr != null) { game.player.r = pr; if (game.friend) game.friend.r = pr; } // 표정·외형 확대 관찰용
   // spawn=<적종류>: 해당 적을 화면 상단에 즉시 스폰(신규 적 외형·행동 관찰용).
   const spawnType = q.get('spawn');
   if (spawnType) { game.introTimer = 0; for (const xr of [0.35, 0.65]) spawnEnemy(game, spawnType, xr, W); }
@@ -392,16 +421,34 @@ function setupFullscreen() {
 }
 
 // ── 버튼 / 초기화 ──
-btnStart.addEventListener('click', () => startGame('normal'));
-btnStartKid.addEventListener('click', () => startGame('kid'));
+btnStart.addEventListener('click', () => startGame(difficulty));
+// 난이도 세그먼트: 버튼 하나를 켜고 나머지 끈다. 선택은 localStorage에 기억.
+const diffSeg = $('#diff-seg');
+function syncDiffSeg() {
+  diffSeg.querySelectorAll('.seg-btn').forEach((b) => {
+    const on = b.dataset.diff === difficulty;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-checked', String(on));
+  });
+}
+diffSeg.addEventListener('click', (e) => {
+  const b = e.target.closest('.seg-btn'); if (!b) return;
+  difficulty = b.dataset.diff; store.set('difficulty', difficulty);
+  syncDiffSeg();
+});
+// 친구 동행 / 자동 플레이 아이콘 토글(난이도 무관, 눌러서 on/off). 선택 기억.
+const optFriend = $('#opt-friend');
+const optAuto = $('#opt-auto');
+function setOptIcon(btn, on) { btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', String(on)); }
+setOptIcon(optFriend, friendOn);
+setOptIcon(optAuto, autoOn);
+optFriend.addEventListener('click', () => { friendOn = !friendOn; store.set('friendOn', friendOn); setOptIcon(optFriend, friendOn); });
+optAuto.addEventListener('click', () => { autoOn = !autoOn; store.set('autoOn', autoOn); setOptIcon(optAuto, autoOn); });
+syncDiffSeg();
 // 게임 화면 ← : 허브로 직행하지 않고 뒤로가기(→ popstate → backToMenu)로 모드 선택 화면에 돌아간다.
 $('#game-home').addEventListener('click', (e) => { e.preventDefault(); history.back(); });
 // 폰/브라우저 자체 뒤로가기: 플레이/일시정지 중이면 게임 밖 이탈 대신 모드 선택으로. 메뉴에선 그대로 허브로 나간다.
 window.addEventListener('popstate', () => { if (state === 'playing' || state === 'paused') backToMenu(true); });
-btnHow.addEventListener('click', () => {
-  const tips = $('#menu-tips');
-  tips.hidden = !tips.hidden;
-});
 btnPause.addEventListener('click', togglePause);
 btnMute.addEventListener('click', () => {
   const m = !sound.isMuted();
@@ -409,14 +456,15 @@ btnMute.addEventListener('click', () => {
   btnMute.innerHTML = m ? ICON.volumeOff : ICON.volumeOn;
   btnMute.setAttribute('aria-label', m ? '소리 켜기' : '소리 끄기');
 });
-function setAutopilot(on) {
-  game.autopilot = on;
+// 자동 보조(하이브리드) 켜기/끄기. 켜져 있으면 손 안 댈 때 AI가 몰고, 손대면 내 조작이 우선한다.
+function setAutoAssist(on) {
+  game.autoAssist = on;
+  game.manualTimer = 0; // 토글 즉시 반영(대기 잔여 제거)
   btnAuto.classList.toggle('on', on);
   btnAuto.setAttribute('aria-pressed', String(on));
   btnAuto.setAttribute('aria-label', on ? '자동 플레이 끄기' : '자동 플레이 켜기');
 }
-btnAuto.addEventListener('click', () => setAutopilot(!game.autopilot));
-btnAutoStart.addEventListener('click', () => { startGame(); setAutopilot(true); });
+btnAuto.addEventListener('click', () => setAutoAssist(!game.autoAssist));
 canvas.addEventListener('click', () => { if (state === 'paused') togglePause(); });
 
 // ── 환경설정 모달 ──
@@ -476,18 +524,20 @@ cheatHead.addEventListener('pointermove', (e) => {
 cheatHead.addEventListener('pointerup', () => { cheatDrag = null; });
 
 elMenuBest.textContent = best;
-$('#menu-tips').hidden = true;
 setupFullscreen();
 resize();
 
 // 검증 전용(localhost 한정): ?dev=1&auto=1 이면 로드 즉시 자동 플레이 시작.
+//   ?diff=easy|normal|hard|insane 난이도 지정, ?friend=1(또는 옛 ?kid=1) 친구 동행 켬.
 // 운영 배포(github.io)에선 hostname 게이트로 완전 무효 - 일반 플레이 영향 0.
 (function autoStartHook() {
   const host = location.hostname;
   if (host !== 'localhost' && host !== '127.0.0.1') return;
   const q = new URLSearchParams(location.search);
   if (q.get('dev') == null) return;
-  const mode = q.get('kid') != null ? 'kid' : 'normal'; // ?kid=1 이면 어린이 모드(친구 등장)로 시작
-  if (q.get('auto') != null) { startGame(mode); setAutopilot(true); } // 자동 플레이
-  else if (q.get('kid') != null) startGame('kid');                    // 수동 관찰용 어린이 모드 시작
+  const d = q.get('diff');
+  const diff = d && CFG.difficulty[d] ? d : (q.get('kid') != null ? 'easy' : 'normal');
+  if (q.get('friend') != null || q.get('kid') != null) { friendOn = true; setOptIcon(optFriend, true); }
+  if (q.get('auto') != null) { autoOn = true; setOptIcon(optAuto, true); startGame(diff); } // 자동 플레이(하이브리드)
+  else if (q.get('kid') != null || q.get('friend') != null || d != null) startGame(diff); // 수동 관찰용 시작
 })();

@@ -259,7 +259,7 @@ export function updateBoss(game, dt, W, H) {
   if (boss.core.exposed && st.corePattern) {
     boss.coreTimer -= dt;
     if (boss.coreTimer <= 0) {
-      boss.coreTimer = st.coreEvery * mul;
+      boss.coreTimer = (boss.coreEvery || st.coreEvery) * mul; // 강화판은 spawnBoss가 단축해 저장
       bossFire(game, boss, st.corePattern, shotsCap);
     }
   }
@@ -279,6 +279,19 @@ function capArray(arr, lim) {
   if (arr.length > lim) arr.splice(0, arr.length - lim);
 }
 
+// 총알 상한 적용(미사일 보호판). capArray는 오래된 것부터 자르는데, 유도탄(missile)은 유도하며 오래 생존해
+//   상한 초과 시 1순위로 잘려 '가다가 중간에 사라지는' 버그가 있었다(사용자 보고 2026-07-16). 유도탄은 소수라
+//   상한 계산에서 제외하고, 초과분은 일반 직진탄(오래된 순)에서만 제거한다.
+export function capBullets(game, lim) {
+  const arr = game.bullets;
+  if (arr.length <= lim) return;
+  let excess = arr.length - lim;
+  retain(arr, (b) => {
+    if (excess > 0 && b.kind !== 'missile') { excess--; return false; } // 오래된 직진탄부터 제거
+    return true;                                                        // 유도탄은 항상 보존
+  });
+}
+
 // keep이 참인 요소만 남기고 배열을 제자리 압축한다(filter의 새 배열 할당 없이 GC 압박 제거).
 // 잔존 요소·순서는 filter와 동일하고 배열 참조도 유지된다(매 프레임 재할당 → 0).
 function retain(arr, keep) {
@@ -293,7 +306,7 @@ function retain(arr, keep) {
 function updateBullets(game, dt, W, H) {
   for (const b of game.bullets) { b.x += b.vx * dt; b.y += b.vy * dt; }
   retain(game.bullets, (b) => b.y > -20 && b.y < H + 20 && b.x > -20 && b.x < W + 20);
-  capArray(game.bullets, CFG.limits.bullets);
+  capBullets(game, CFG.limits.bullets);
 }
 
 function updateEnemyBullets(game, dt, W, H) {
@@ -307,7 +320,7 @@ function updatePowerups(game, dt, W, H) {
   retain(game.powerups, (it) => it.y < H + it.r + 10);
 }
 
-function updateParticles(game, dt) {
+export function updateParticles(game, dt) {
   for (const pt of game.particles) {
     pt.age += dt; pt.x += pt.vx * dt; pt.y += pt.vy * dt;
     pt.vx *= 0.94; pt.vy *= 0.94;
@@ -323,7 +336,21 @@ function playerHit(game) {
   p.inv = CFG.player.invAfterHit;
   burst(game, p.x, p.y, COLORS.playerHitSpark, 18);
   game.sfx.push('playerhit');
-  if (game.lives <= 0) game.events.push({ type: 'gameover' });
+  if (game.lives <= 0) {
+    // 죽음: 큰 폭발 연출을 남기고 'death' 신호만 보낸다. 팝업은 main이 연출(deathTime) 뒤에 띄운다.
+    p.dead = true; p.emo = null;
+    burst(game, p.x, p.y, COLORS.player, 30);
+    burst(game, p.x, p.y, COLORS.playerCore, 22);
+    game.events.push({ type: 'death' });
+  } else {
+    p.emo = 'cry'; p.emoT = CFG.emote.cry; // 맞았을 때 우는 표정(죽지 않았을 때만)
+  }
+}
+
+// 아이템 획득 성공 시 나(+살아있는 친구)가 잠깐 웃는 표정.
+function setHappy(game) {
+  const p = game.player; if (p) { p.emo = 'happy'; p.emoT = CFG.emote.happy; }
+  const f = game.friend; if (f && !f.down) { f.emo = 'happy'; f.emoT = CFG.emote.happy; }
 }
 
 function grabItem(game, kind) {
@@ -336,7 +363,7 @@ function grabItem(game, kind) {
     if (f && f.down) { reviveFriend(game); healed = true; }
     if (game.lives < (game.maxLives || CFG.player.maxLives)) { game.lives++; healed = true; }
     if (f && !f.down && f.hp < f.maxHp) { f.hp++; healed = true; }
-    if (healed) game.sfx.push('power'); else maxed();
+    if (healed) { game.sfx.push('power'); setHappy(game); } else maxed();
     return;
   }
   if (kind === 'P' || kind === 'S' || kind === 'E' || kind === 'T') {
@@ -347,7 +374,7 @@ function grabItem(game, kind) {
     else if (kind === 'E') gained = gainZone(game);
     else if (kind === 'T') gained = gainTail(game);
     if (f && gainFriendLevel(game)) gained = true; // 어린이 모드: 아무 파츠나 친구 메인도 성장
-    if (gained) game.sfx.push('power'); else maxed();
+    if (gained) { game.sfx.push('power'); setHappy(game); } else maxed();
     return;
   }
   if (kind === 'B') {
@@ -363,6 +390,8 @@ function grabItem(game, kind) {
     if (game.boss && !game.boss.entering) {
       damageCore(game, Math.ceil(game.boss.core.maxHp * 0.15)); // 봄은 코어 직격(가림 무시)
     }
+    game.bombFlash = CFG.bombFlash; // 화면 전체 은은한 폭발 섬광(view가 소비)
+    setHappy(game);
     game.sfx.push('bomb');
   }
 }
@@ -541,6 +570,8 @@ export function stepWorld(game, dt, W, H) {
   const intro = game.introTimer > 0;
   if (intro) game.introTimer -= dt; else game.elapsed += dt;
   if (game.player.inv > 0) game.player.inv -= dt;
+  if (game.player.emoT > 0) { game.player.emoT -= dt; if (game.player.emoT <= 0) game.player.emo = null; } // 표정 원상복귀
+  if (game.bombFlash > 0) game.bombFlash -= dt; // 봄 섬광 감쇠
   updateStars(game, dt, W, H);
   game.fireTimer -= dt;
   if (game.fireTimer <= 0) {

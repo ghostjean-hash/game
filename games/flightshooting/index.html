@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="../../shared/tokens.css" />
 <link rel="stylesheet" href="../../shared/base.css" />
 <link rel="stylesheet" href="styles/main.css" />
-<title>Sky Raider - game_ghost</title>
+<title>바푸리의 모험 - game_ghost</title>
 </head>
 <body>
 <div class="page shooter">
@@ -18,45 +18,54 @@
   <div id="menu-screen" class="menu-screen">
     <div class="topbar">
       <a href="../../" class="home" aria-label="홈으로">←</a>
-      <h1 class="sr-only">Sky Raider</h1>
-      <div class="menu-title">SKY RAIDER</div>
+      <h1 class="sr-only">바푸리의 모험</h1>
+      <div class="menu-title">바푸리의 모험</div>
     </div>
     <div class="menu-stage">
       <div class="menu-hero">
         <div class="hero-craft" aria-hidden="true">
           <svg viewBox="0 0 64 64" width="88" height="88">
-            <!-- 와라와라(게임 내 플레이어와 동일): 하얀 물방울 몸통 + 작은 손발 + 눈 2개 -->
-            <path d="M32 6 C47 13, 49 41, 32 57 C15 41, 17 13, 32 6 Z" fill="#f6f8ff"/>
-            <ellipse cx="17" cy="42" rx="3.3" ry="5" fill="#f6f8ff" transform="rotate(22 17 42)"/>
-            <ellipse cx="47" cy="42" rx="3.3" ry="5" fill="#f6f8ff" transform="rotate(-22 47 42)"/>
-            <ellipse cx="26" cy="57" rx="4" ry="3" fill="#f6f8ff"/>
-            <ellipse cx="38" cy="57" rx="4" ry="3" fill="#f6f8ff"/>
-            <circle cx="25.5" cy="30" r="3.4" fill="#33343d"/>
-            <circle cx="38.5" cy="30" r="3.4" fill="#33343d"/>
+            <!-- 바푸리(게임 내 플레이어와 동일): 동그란 흰 몸통 + 몸에 붙은 손발 + 눈 2개 -->
+            <!-- 손발을 몸통보다 먼저 그려 몸통이 이음새를 덮게 한다(몸에 붙어 보이도록) -->
+            <ellipse cx="13" cy="40" rx="4.5" ry="6" fill="#f6f8ff" transform="rotate(20 13 40)"/>
+            <ellipse cx="51" cy="40" rx="4.5" ry="6" fill="#f6f8ff" transform="rotate(-20 51 40)"/>
+            <ellipse cx="25" cy="55" rx="5.5" ry="4" fill="#f6f8ff"/>
+            <ellipse cx="39" cy="55" rx="5.5" ry="4" fill="#f6f8ff"/>
+            <!-- 동그란 몸통(얼굴) + 작은 눈 + 붉은 'O' 입 -->
+            <ellipse cx="32" cy="32" rx="22" ry="24" fill="#f6f8ff"/>
+            <circle cx="25.5" cy="30" r="2.6" fill="#33343d"/>
+            <circle cx="38.5" cy="30" r="2.6" fill="#33343d"/>
+            <circle cx="32" cy="41" r="3.4" fill="none" stroke="#e0555f" stroke-width="2.2"/>
           </svg>
         </div>
-        <p class="menu-tagline">손가락으로 기체를 끌어 적을 뚫고 30개 구역의 보스를 격파하라.</p>
         <div class="menu-best" aria-live="polite">
           <span class="best-label">최고 점수</span>
           <b id="menu-best">0</b>
         </div>
       </div>
       <div class="menu-actions">
-        <button id="btn-start" class="btn btn-primary btn-play" type="button">일반 모드 시작</button>
-        <button id="btn-start-kid" class="btn btn-kid btn-play" type="button">어린이 모드 시작 <small>적이 총알을 덜 쏴요</small></button>
-        <button id="btn-auto-start" class="btn btn-auto-start" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg><span>자동 플레이로 시작</span></button>
-        <button id="btn-how" class="btn btn-how" type="button">조작법</button>
+        <div class="diff-select">
+          <span class="opt-label">난이도</span>
+          <div class="seg seg-vert" id="diff-seg" role="radiogroup" aria-label="난이도 선택">
+            <button type="button" class="seg-btn" data-diff="easy" role="radio" aria-checked="false">쉬움</button>
+            <button type="button" class="seg-btn on" data-diff="normal" role="radio" aria-checked="true">보통</button>
+            <button type="button" class="seg-btn" data-diff="hard" role="radio" aria-checked="false">어려움</button>
+            <button type="button" class="seg-btn" data-diff="insane" role="radio" aria-checked="false">매우 어려움</button>
+          </div>
+        </div>
+        <div class="opt-icons">
+          <button id="opt-friend" class="opt-icon" type="button" aria-pressed="false" aria-label="친구 동행">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="10" cy="11.5" rx="7" ry="6"/><path d="M16 9c3 0 5.2 1 6 3.2"/><path d="M7 17.3v3"/><path d="M12 17.3v3"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+            <span>친구</span>
+          </button>
+          <button id="opt-auto" class="opt-icon" type="button" aria-pressed="false" aria-label="자동 플레이">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+            <span>자동</span>
+          </button>
+        </div>
+        <button id="btn-start" class="btn btn-primary btn-play" type="button">시작</button>
         <button id="btn-settings" class="btn btn-how" type="button">환경설정</button>
       </div>
-      <ul class="menu-tips" id="menu-tips">
-        <li><b>이동</b> 화면을 손가락으로 끌면 기체가 따라옵니다 (PC: 방향키/마우스)</li>
-        <li><b>발사</b> 자동으로 나갑니다</li>
-        <li><b>P</b> 앞쪽 화력이 세집니다 (8발까지 늘고, 그 뒤엔 가운데 탄부터 색이 밝아지며 강해집니다)</li>
-        <li><b>S</b> 좌우에 부속 비행기가 붙어 레이저를 쏩니다 (최대 8대, 많을수록 굵고 셉니다)</li>
-        <li><b>E</b> 내 주변 에너지존이 커져 닿는 적에게 계속 피해를 줍니다</li>
-        <li><b>T</b> 뒤에 꼬리 비행기가 붙어 유도탄을 쏩니다 (4대까지 늘고, 그 뒤 무기가 커집니다)</li>
-        <li><b><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></b> 목숨 3개. 부딪히면 하나 줄고 마지막에 얻은 파츠도 하나 사라집니다</li>
-      </ul>
     </div>
   </div>
 
@@ -78,6 +87,18 @@
         <input type="checkbox" id="set-cheat" />
       </label>
       <p class="set-note">치트 박스는 게임 화면에서 마우스로 끌어 옮길 수 있습니다.</p>
+      <section class="set-help">
+        <h3 class="set-subtitle">조작법</h3>
+        <ul class="help-list">
+          <li><b>이동</b> 화면을 손가락으로 끌면 기체가 따라옵니다 (PC: 방향키/마우스)</li>
+          <li><b>발사</b> 자동으로 나갑니다</li>
+          <li><b>P</b> 앞쪽 화력이 세집니다 (8발까지 늘고, 그 뒤엔 가운데 탄부터 색이 밝아지며 강해집니다)</li>
+          <li><b>S</b> 좌우에 부속 비행기가 붙어 레이저를 쏩니다 (최대 8대, 많을수록 굵고 셉니다)</li>
+          <li><b>E</b> 내 주변 에너지존이 커져 닿는 적에게 계속 피해를 줍니다</li>
+          <li><b>T</b> 뒤에 꼬리 비행기가 붙어 유도탄을 쏩니다 (4대까지 늘고, 그 뒤 무기가 커집니다)</li>
+          <li><b><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></b> 목숨은 난이도에 따라 다릅니다. 부딪히면 하나 줄고 마지막에 얻은 파츠도 하나 사라집니다</li>
+        </ul>
+      </section>
       <button id="set-close" class="btn btn-primary" type="button">닫기</button>
     </div>
   </div>
@@ -86,7 +107,7 @@
   <div id="game-screen" class="game-screen" hidden>
     <div class="topbar">
       <a href="../../" id="game-home" class="home" aria-label="모드 선택으로">←</a>
-      <h1 class="sr-only">Sky Raider</h1>
+      <h1 class="sr-only">바푸리의 모험</h1>
       <div class="score-big" aria-live="polite" aria-label="점수">
         <b id="score">0</b>
       </div>

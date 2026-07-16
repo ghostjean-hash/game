@@ -18,6 +18,18 @@ export function render(ctx, game, W, H) {
   drawPlayer(ctx, game);
   drawFriend(ctx, game);      // 친구 비행기(어린이 모드) + hp 점 + 말풍선(맨 위)
   drawParticles(ctx, game);
+  drawBombFlash(ctx, game, W, H); // 봄 획득 시 화면 전체 은은한 폭발 섬광
+}
+
+// 봄(B) 획득 섬광: 화면 전체에 따뜻한 빛이 번쩍 번졌다 사라진다(폭탄이 터진 느낌).
+function drawBombFlash(ctx, game, W, H) {
+  if (!(game.bombFlash > 0)) return;
+  const a = Math.min(1, game.bombFlash / CFG.bombFlash);
+  ctx.save();
+  ctx.globalAlpha = a * 0.9; // 남은 시간에 비례해 페이드아웃(색 자체도 반투명이라 은은하게)
+  ctx.fillStyle = COLORS.bombFlash;
+  ctx.fillRect(0, 0, W, H);
+  ctx.restore();
 }
 
 // 친구 비행기(어린이 모드, docs/09): 갈색 키위새(통통한 몸 + 긴 부리 + 작은 날개 + 눈) + hp 점 + 말풍선.
@@ -42,10 +54,8 @@ function drawFriend(ctx, game) {
   // 긴 부리(위로 뻗은 가느다란 삼각 - 키위새 특징)
   ctx.fillStyle = c.beak;
   ctx.beginPath(); ctx.moveTo(-r * 0.16, -r * 0.72); ctx.lineTo(0, -r * 1.95); ctx.lineTo(r * 0.16, -r * 0.72); ctx.closePath(); ctx.fill();
-  // 눈 2개
-  ctx.fillStyle = c.eye;
-  ctx.beginPath(); ctx.arc(-r * 0.3, -r * 0.28, 1.9, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(r * 0.3, -r * 0.28, 1.9, 0, Math.PI * 2); ctx.fill();
+  // 표정: 위 보는 얼굴 - 눈만(입은 부리). 맞으면 울고, 아이템 먹으면 웃는다(바푸리와 동일 규칙).
+  drawFace(ctx, { eyeX: r * 0.3, eyeY: -r * 0.28, eyeR: 1.7, eyeColor: c.eye, tearColor: COLORS.warawaraTear, emo: f.emo });
   ctx.restore();
   drawFriendHp(ctx, f);
   drawFriendSpeech(ctx, f);
@@ -223,9 +233,35 @@ function drawStars(ctx, game) {
 }
 
 // 플레이어 = 와라와라: 위가 좁고 아래가 통통한 하얀 물방울 몸통 + 검은 점 눈 2개 + 부드러운 발광.
+// 표정(공용): 캐릭터 로컬좌표(0,0 중심)에 눈·입을 emo에 맞게 그린다. 바푸리·키위새 공용.
+//   emo: 'happy'(웃음) / 'cry'(울음) / 그 외(기본). mouthR<=0이면 입은 그리지 않는다(키위새는 부리라 눈만).
+function drawFace(ctx, o) {
+  const { eyeX, eyeY, eyeR, eyeColor, mouthY = 0, mouthR = 0, mouthColor, tearColor, emo } = o;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (emo === 'happy') {
+    ctx.strokeStyle = eyeColor; ctx.lineWidth = 1.6;
+    for (const sx of [-1, 1]) { ctx.beginPath(); ctx.arc(sx * eyeX, eyeY + eyeR, eyeR * 1.3, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke(); } // 눈 ^ ^
+    if (mouthR > 0) { ctx.strokeStyle = mouthColor; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.arc(0, mouthY - mouthR, mouthR * 1.5, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke(); } // 웃는 입 ‿
+    return;
+  }
+  if (emo === 'cry') {
+    ctx.strokeStyle = eyeColor; ctx.lineWidth = 1.6;
+    for (const sx of [-1, 1]) { ctx.beginPath(); ctx.arc(sx * eyeX, eyeY - eyeR, eyeR * 1.3, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke(); } // 감은 눈 ˇ ˇ
+    ctx.fillStyle = tearColor;
+    for (const sx of [-1, 1]) { ctx.beginPath(); ctx.ellipse(sx * eyeX, eyeY + eyeR * 2.4, eyeR * 0.85, eyeR * 1.7, 0, 0, Math.PI * 2); ctx.fill(); } // 흘러내리는 눈물방울
+    if (mouthR > 0) { ctx.fillStyle = mouthColor; ctx.beginPath(); ctx.ellipse(0, mouthY, mouthR * 0.8, mouthR, 0, 0, Math.PI * 2); ctx.fill(); } // 벌린 입
+    return;
+  }
+  // 기본: 작은 점 눈 + 붉은 'O' 입(링)
+  ctx.fillStyle = eyeColor;
+  ctx.beginPath(); ctx.arc(-eyeX, eyeY, eyeR, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(eyeX, eyeY, eyeR, 0, Math.PI * 2); ctx.fill();
+  if (mouthR > 0) { ctx.strokeStyle = mouthColor; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(0, mouthY, mouthR, 0, Math.PI * 2); ctx.stroke(); }
+}
+
 function drawPlayer(ctx, game) {
   const p = game.player;
-  if (!p) return;
+  if (!p || p.dead) return; // 죽으면 몸통 대신 폭발 파편만 보인다(연출)
   if (p.inv > 0 && Math.floor(p.inv * 12) % 2 === 0) return; // 무적 깜빡
   const r = p.r;
   ctx.save();
@@ -233,21 +269,19 @@ function drawPlayer(ctx, game) {
   ctx.shadowColor = COLORS.warawaraGlow;
   ctx.shadowBlur = 12;
   ctx.fillStyle = COLORS.warawara;
-  ctx.beginPath();
-  ctx.moveTo(0, -r - 2);
-  ctx.bezierCurveTo(-r * 1.05, -r * 0.5, -r * 0.95, r, 0, r + 1);
-  ctx.bezierCurveTo(r * 0.95, r, r * 1.05, -r * 0.5, 0, -r - 2);
-  ctx.closePath();
-  ctx.fill();
-  // 아주 작은 손(좌우 하단) + 발(아래) - 몸통과 같은 흰색, 살짝 튀어나오게
-  ctx.beginPath(); ctx.ellipse(-r * 0.82, r * 0.42, r * 0.17, r * 0.26, 0.5, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(r * 0.82, r * 0.42, r * 0.17, r * 0.26, -0.5, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(-r * 0.3, r * 1.02, r * 0.2, r * 0.15, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(r * 0.3, r * 1.02, r * 0.2, r * 0.15, 0, 0, Math.PI * 2); ctx.fill();
+  // 손(좌우) + 발(아래)을 먼저 그려 몸통이 이음새를 덮게 한다(몸에 붙어 보이도록, 사용자 지시 2026-07-16)
+  ctx.beginPath(); ctx.ellipse(-r * 0.72, r * 0.4, r * 0.2, r * 0.28, 0.4, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(r * 0.72, r * 0.4, r * 0.2, r * 0.28, -0.4, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(-r * 0.34, r * 0.92, r * 0.26, r * 0.2, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(r * 0.34, r * 0.92, r * 0.26, r * 0.2, 0, 0, Math.PI * 2); ctx.fill();
+  // 동그란 몸통(얼굴) - 거의 원형
+  ctx.beginPath(); ctx.ellipse(0, 0, r * 0.98, r * 1.08, 0, 0, Math.PI * 2); ctx.fill();
   ctx.shadowBlur = 0;
-  ctx.fillStyle = COLORS.warawaraEye;
-  ctx.beginPath(); ctx.arc(-r * 0.32, -r * 0.08, 2, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(r * 0.32, -r * 0.08, 2, 0, Math.PI * 2); ctx.fill();
+  // 얼굴: 몸은 위(진행 방향)로 나아가되 표정은 고개를 아래로 돌려 플레이어를 본다(얼굴을 몸 하단부에, 사용자 지시)
+  drawFace(ctx, {
+    eyeX: r * 0.32, eyeY: r * 0.3, eyeR: 1.6, eyeColor: COLORS.warawaraEye,
+    mouthY: r * 0.62, mouthR: r * 0.16, mouthColor: COLORS.warawaraMouth, tearColor: COLORS.warawaraTear, emo: p.emo,
+  });
   ctx.restore();
 }
 
@@ -624,7 +658,7 @@ function drawEnemyBullets(ctx, game) {
 // 파워업 = 각진 육각형 아이템(둥근 적 정령과 형태로 구분) + 밝은 색 채움 + 흰 테두리 + 글자.
 // 예외: 회복(H)은 육각형 없이 하트 모양 자체로 그린다(사용자 지시 2026-07-09).
 function drawPowerups(ctx, game) {
-  const label = { P: 'P', S: 'S', E: 'E', T: 'T', B: 'B' };
+  const label = { P: 'P', S: 'S', E: 'E', T: 'T' };
   for (const it of game.powerups) {
     const col = COLORS.powerup[it.kind];
     ctx.save();
@@ -646,6 +680,25 @@ function drawPowerups(ctx, game) {
       ctx.bezierCurveTo(-hs * 1.15, -hs * 0.1, -hs * 0.65, -hs * 1.05, 0, -hs * 0.32); // 왼쪽 잎 → 중앙 홈
       ctx.bezierCurveTo(hs * 0.65, -hs * 1.05, hs * 1.15, -hs * 0.1, 0, hs * 0.9);     // 오른쪽 잎 → 아래 점
       ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.restore();
+      continue;
+    }
+    if (it.kind === 'B') {
+      // 봄 = 둥근 폭탄(짙은 몸 + 도화선 + 불꽃)으로 그려 폭탄임을 알아보게 한다(사용자 지시 2026-07-16).
+      const bs = it.r;
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = COLORS.bomb; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(0, bs * 0.18, bs * 0.85, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      // 흰 하이라이트 점
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.beginPath(); ctx.arc(-bs * 0.3, bs * 0.42, bs * 0.16, 0, Math.PI * 2); ctx.fill();
+      // 도화선(위로 굽은 선)
+      ctx.strokeStyle = COLORS.bombFuse; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(bs * 0.32, -bs * 0.58); ctx.quadraticCurveTo(bs * 0.75, -bs * 1.0, bs * 0.45, -bs * 1.28); ctx.stroke();
+      // 도화선 끝 불꽃(발광)
+      ctx.shadowColor = COLORS.bombSpark; ctx.shadowBlur = 10;
+      ctx.fillStyle = COLORS.bombSpark;
+      ctx.beginPath(); ctx.arc(bs * 0.45, -bs * 1.32, bs * 0.24, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
       continue;
     }

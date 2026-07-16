@@ -47,7 +47,7 @@
     },
     {
       "id": "flightshooting",
-      "title": "Sky Raider",
+      "title": "바푸리의 모험",
       "subtitle": "손끝으로 끄는 세로 스크롤 비행 슈팅",
       "path": "games/flightshooting/",
       "status": "playable",

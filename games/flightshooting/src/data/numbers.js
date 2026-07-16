@@ -3,22 +3,31 @@
 
 export const CFG = {
   player: { r: 14, speed: 340, fireEvery: 0.154, maxLives: 3, invAfterHit: 1.6, yRatio: 0.82 },
+  // 표정·죽는 연출 시간(초). emoCry = 총알 맞았을 때 우는 표정 지속, emoHappy = 아이템 먹었을 때 웃는 표정 지속.
+  //   deathTime = 목숨이 0이 됐을 때 폭발 연출을 보여주고 결과 팝업을 띄우기까지의 시간(사용자 지시 2026-07-16).
+  emote: { cry: 1.2, happy: 0.9, deathTime: 1.1 },
+  // B(봄) 획득 시 화면 전체에 번지는 은은한 폭발 섬광 지속(초). 폭탄임을 눈에 알리는 연출.
+  bombFlash: 0.55,
   // 적 출현 가로 영역: 화면(캔버스)이 넓어도 적 스폰 x를 중앙 고정폭 안으로 제한한다(사용자 지시 2026-07-10).
   //   width = 플레이필드 최대 가로폭(px). 화면이 이보다 좁으면 화면폭을 그대로 쓴다(min). 좌우 여백은 균등 분할.
   //   보너스 기체(화면 가로지르기)·보스(중앙 유영)는 예외 - 이 제한을 받지 않는다.
   field: { width: 960 },
-  // 난이도 모드(시작 화면에서 선택). 어린이 모드는 적·보스 발사 주기를 배수로 늘려 총알을 덜 쏘게 하고,
-  //   시작 화력도 조금 얹어 더 쉽게 출발한다.
-  //   enemyFireMul = 적 발사 간격 배수(1 = 일반, 2.2 = 발사 간격 2.2배 → 총알 절반 이하). 탄 수·패턴은 그대로.
-  //   startFront = 시작 메인 총알 수(front 값, 1 = 기본 1발), startTail = 시작 꼬리 비행기 대수(0 = 없음).
-  //   enemyShotsMax = 적·보스의 조준 연발(gunner·turret·보스 3연발 등) 한 발 묶음의 탄 수 상한.
-  //     어린이 모드는 1 = 여러 발 확산 조준을 정중앙 단발로 줄인다(사용자 지시 2026-07-10). 부채 방사 패턴은 제외.
-  //   radialMul = 방사·자폭 탄(기뢰 자폭 파편·결정체 반사탄) 개수 배수. 조준 연발(enemyShotsMax)로 안 줄던
-  //     21~30 이질 적의 방사 탄막을 어린이 모드에서 함께 감축한다(사용자 지시 2026-07-12). 1 = 감축 없음.
-  //   maxLives = 목숨 최대값(= 시작 목숨 + 회복 상한). 어린이 모드는 5로 늘려 더 여유롭게(사용자 지시 2026-07-12).
+  // 난이도(시작 화면에서 선택, 사용자 지시 2026-07-16). 쉬움/보통/어려움/매우 어려움 4단계.
+  //   난이도가 함께 바꾸는 3축 = 적이 쏘는 총알 양(enemyFireMul) + 적 체력(enemyHpMul) + 내 목숨(maxLives).
+  //   쉬움일수록 적이 덜 쏘고, 적 체력이 낮고, 목숨이 많다. 매우 어려움은 반대.
+  //   '쉬움'은 옛 어린이 모드의 배려(정중앙 단발 사격·시작 화력·방사 탄 감축)를 그대로 흡수한다(사용자 확정).
+  //   친구 비행기는 더 이상 난이도에 묶이지 않는다 - 홈의 '친구 동행' 토글로 어느 난이도든 켤 수 있다.
+  //   enemyFireMul = 적 발사 간격 배수(1 = 보통, 2.2 = 간격 2.2배 → 총알 절반 이하, 0.5 = 간격 절반 → 두 배로 쏨).
+  //   enemyHpMul   = 잡몹 체력 배수(구역 스케일 위에 곱함). 보스 체력은 별도 공식이라 이 배수 미적용.
+  //   startFront   = 시작 메인 총알 수(1 = 기본 1발), startTail = 시작 꼬리 비행기 대수(0 = 없음).
+  //   enemyShotsMax= 적·보스 조준 연발(gunner·turret·보스 3연발 등) 한 묶음 탄 수 상한(1 = 정중앙 단발화, 99 = 제한 없음).
+  //   radialMul    = 방사·자폭 탄(기뢰 파편·결정체 반사탄) 개수 배수(1 = 감축 없음, 0.4 = 감축).
+  //   maxLives     = 목숨 최대값(= 시작 목숨 + 회복 상한).
   difficulty: {
-    normal: { enemyFireMul: 1,   startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
-    kid:    { enemyFireMul: 2.2, startFront: 2, startTail: 1, enemyShotsMax: 1,  radialMul: 0.4, maxLives: 5 },
+    easy:   { enemyFireMul: 2.2, enemyHpMul: 0.85, startFront: 2, startTail: 1, enemyShotsMax: 1,  radialMul: 0.4, maxLives: 5 },
+    normal: { enemyFireMul: 1,   enemyHpMul: 1,    startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
+    hard:   { enemyFireMul: 0.7, enemyHpMul: 1.3,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 2 },
+    insane: { enemyFireMul: 0.5, enemyHpMul: 1.6,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 1 },
   },
   // 무기 강화 = 발별 순차 진화 10단계(사용자 확정 2026-07-10). 강화 아이템마다 총알 하나씩 순차로 진화.
   //   메인·사이드는 가운데(안쪽)부터, 유도탄은 낮은 것부터. 각 탄 tier 0(무강화)~10. 형태는 단계마다 다른 패턴(view가 tier로 그린다).
@@ -167,22 +176,31 @@ export const CFG = {
   //   orbit=true면 코어 주위 회전(초기각 angle + 공통 orbitR/orbitSpeed). shape = 렌더 형태. fireEvery = 발사 주기.
   //   corePattern/coreEvery = 코어 자체 공격(노출 시). enrage = sentinel 광폭화(부위 하나 깰 때마다 남은 weapon 주기 배수).
   //   partScore = 부위 하나 파괴 점수.
+  // 각 스타일의 강화판(upgrade): 후반 5구역(6~10·16~20·26~30)에서 적용. 사용자 지시 2026-07-16.
+  //   extraParts = 추가로 붙는 부위(겉모습·화력 강화), fireMul = 부위 발사 주기 배수(<1 = 더 자주),
+  //   coreMul = 코어 자체 공격 주기 배수. hp는 spawnBoss가 (코어+전체 부위) 비율 합으로 정규화한다.
   bossStyles: {
     battleship: { coreRatio: 0.5, partScore: 200, parts: [
       { id: 'gunL', role: 'weapon', pattern: 'fan',  ox: -42, oy: 8, r: 14, hpRatio: 0.25, fireEvery: 1.5, shape: 'turret' },
       { id: 'gunR', role: 'weapon', pattern: 'aim3', ox:  42, oy: 8, r: 14, hpRatio: 0.25, fireEvery: 1.4, shape: 'turret' },
-    ] },
+    ], upgrade: { fireMul: 0.7, extraParts: [
+      { id: 'gunT', role: 'weapon', pattern: 'ring', ox: 0, oy: -34, r: 13, hpRatio: 0.22, fireEvery: 1.7, shape: 'turret' },
+    ] } },
     bio: { coreRatio: 0.34, partScore: 180, corePattern: 'aim3', coreEvery: 1.6, parts: [
       { id: 'armL', role: 'shield', ox: -38, oy: 4,   r: 13, hpRatio: 0.22, shape: 'tentacle' },
       { id: 'armR', role: 'shield', ox:  38, oy: 4,   r: 13, hpRatio: 0.22, shape: 'tentacle' },
       { id: 'armT', role: 'shield', ox:   0, oy: -34, r: 12, hpRatio: 0.22, shape: 'tentacle' },
-    ] },
+    ], upgrade: { fireMul: 0.7, coreMul: 0.7, extraParts: [
+      { id: 'armW', role: 'weapon', pattern: 'fan', ox: 0, oy: 34, r: 12, hpRatio: 0.2, fireEvery: 1.5, shape: 'tentacle' },
+    ] } },
     orbiter: { coreRatio: 0.4, partScore: 160, corePattern: 'ring', coreEvery: 2.0, orbitR: 48, orbitSpeed: 1.3, parts: [
       { id: 'sh0', role: 'shield', orbit: true, angle: 0,      r: 12, hpRatio: 0.15, shape: 'shard' },
       { id: 'sh1', role: 'shield', orbit: true, angle: 1.5708, r: 12, hpRatio: 0.15, shape: 'shard' },
       { id: 'sh2', role: 'shield', orbit: true, angle: 3.1416, r: 12, hpRatio: 0.15, shape: 'shard' },
       { id: 'sh3', role: 'shield', orbit: true, angle: 4.7124, r: 12, hpRatio: 0.15, shape: 'shard' },
-    ] },
+    ], upgrade: { fireMul: 0.7, coreMul: 0.7, extraParts: [
+      { id: 'gunT', role: 'weapon', pattern: 'fan', ox: 0, oy: -44, r: 13, hpRatio: 0.2, fireEvery: 1.6, shape: 'turret' },
+    ] } },
     sentinel: { coreRatio: 0.3, partScore: 400, enrage: 0.72, parts: [
       { id: 'head',  role: 'weapon', pattern: 'ring', ox:   0, oy: -44, r: 16, hpRatio: 0.18, fireEvery: 2.2, shape: 'turret' },
       { id: 'armL',  role: 'weapon', pattern: 'fan',  ox: -54, oy: 2,   r: 15, hpRatio: 0.16, fireEvery: 1.5, shape: 'turret' },
@@ -192,6 +210,8 @@ export const CFG = {
   },
   // 구역 → 보스 스타일 매핑 경계(docs/06 §4). 이 구역부터 해당 스타일. 30(최종)은 sentinel 고정.
   bossStyleFrom: { bio: 11, orbiter: 21 },
+  // 강화판 경계: 10구역 묶음 안에서 이 위치(0-based)부터 강화판 보스. 5 = 각 묶음의 뒤 5개(6~10·16~20·26~30).
+  bossUpgradeFrom: 5,
   // 11구역~ 신규 적(splitter/shielder/rusher), 21구역~ 이질 기계 적(turret/prism/mine/warper). 30구역이 최종.
   stageCount: 30,
   // 11구역 이후 추가 체력 배수(신규 적 구간 난이도 가속). 최종 hp = 기존 스케일 × (구역>=11이면 이 배수).
@@ -210,7 +230,10 @@ export const CFG = {
   //   sim = 회피·조준 예측 지평(초). 얼마나 앞을 내다보나(고수일수록 멀리).
   //   threats = 동시에 고려하는 위협 수(가까운 것부터). 사람 MOT 한계 약 4~5개(고수·프로는 상향).
   autopilot: {
-    default: 'beginner',
+    default: 'pro', // 자동 플레이 AI 기본 실력(사용자 지시 2026-07-16). 환경설정에서 바꿀 수 있다.
+    // 자동 플레이(보조) 켠 상태에서 손으로 조작하면 그동안 수동, 손을 떼면 resumeDelay초 뒤 자동으로 복귀한다
+    //   (하이브리드 조작, 사용자 지시 2026-07-16). 조작 중엔 계속 수동 유지, 마지막 조작 후 이 시간이 지나야 자동.
+    resumeDelay: 0.5,
     tiers: {
       // 전반 상향(2026-07-14 사용자 지시 "초보도 똑똑하게"): 예측 시간 sim·동시 위협 threats↑, 반응 react↓.
       //   실력 차이(단조 증가)는 유지. sim은 2단계 빔서치에서 각 수 sim/2초 지평이 된다.

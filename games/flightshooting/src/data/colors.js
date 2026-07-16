@@ -90,8 +90,12 @@ export const COLORS = {
   zoneRgbByLevel: ['169,139,255', '139,180,255', '110,220,235', '110,240,180', '150,255,120'],
   // 배경 성운: 구역별로 순환하는 은은한 색조(깊이감 + 구역마다 다른 분위기). drawBackground가 radial gradient로.
   stageNebula: ['rgba(70,100,180,0.13)', 'rgba(150,80,150,0.13)', 'rgba(80,150,140,0.13)', 'rgba(185,120,70,0.12)', 'rgba(110,90,195,0.13)', 'rgba(190,80,110,0.12)'],
-  // 캐릭터: 플레이어 = 와라와라(하얀 둥근 정령), 옵션기 = 토토로(회색). 작은 실루엣으로 표현.
+  // 캐릭터: 플레이어 = 바푸리(하얀 둥근 정령), 옵션기 = 토토로(회색). 작은 실루엣으로 표현.
+  //   Mouth = 붉은 조그만 'O' 입, Tear = 우는 표정의 눈물(하늘색). 표정은 view.drawFace가 emo로 그린다.
   warawara: '#f6f8ff', warawaraGlow: '#dfe7ff', warawaraEye: '#33343d',
+  warawaraMouth: '#e0555f', warawaraTear: '#3d9bf0',
+  // B(봄) 폭탄: 아이템 몸체(짙은 회흑) + 도화선 불꽃 + 획득 섬광. 폭탄임을 알아보게.
+  bomb: '#2c3444', bombFuse: '#ffb04a', bombSpark: '#ffe08a', bombFlash: 'rgba(255,236,180,0.5)',
   totoro: { laser: '#9aa0ab', missile: '#6b7280', belly: '#e6e8ec', eye: '#2b2b30' },
   // 친구 비행기(어린이 모드, docs/09). 키위새 몸은 갈색 계열(플레이어 흰색·토토로 회색과 구분).
   //   shot = 직선 레이저 단계별 색 - 회색 계열(사용자 지시). 냉색 빔·빨간 적탄과 회색으로 구분.

@@ -46,14 +46,18 @@ export function friendTakeHit(game) {
   burst(game, f.x, f.y, COLORS.friend.body, 12);
   game.sfx.push('playerhit');
   if (f.hp <= 0) {
+    // 죽음: 확실한 폭발(몸·글로우·부리색 파편을 겹쳐 크게 터뜨림).
     f.down = true;
-    f.msg = null;
-    burst(game, f.x, f.y, COLORS.friend.glow, 22);
+    f.msg = null; f.emo = null;
+    burst(game, f.x, f.y, COLORS.friend.body, 26);
+    burst(game, f.x, f.y, COLORS.friend.glow, 20);
+    burst(game, f.x, f.y, COLORS.friend.beak, 12);
     game.sfx.push('explode');
   } else {
-    // 맞았을 때 대사(다양한 표현에서 랜덤). 기절이 아닐 때만.
+    // 맞았을 때 대사(다양한 표현에서 랜덤) + 우는 표정. 기절이 아닐 때만.
     f.hitMsg = pick(F.hitMsgs);
     f.hitShow = F.hitMsgTime;
+    f.emo = 'cry'; f.emoT = CFG.emote.cry;
   }
   return true;
 }
@@ -135,6 +139,7 @@ export function stepFriend(game, dt, W, H, canFire = true) {
   if (!f) return;
   if (f.down) { f.msg = null; return; }
   f.inv = Math.max(0, f.inv - dt);
+  if (f.emoT > 0) { f.emoT -= dt; if (f.emoT <= 0) f.emo = null; } // 표정 원상복귀
 
   // 연속 처치 창(window) 감쇠: 시간이 지나면 누적 킬 초기화(연달아 잡아야 칭찬). 칭찬 쿨다운도 감쇠.
   if (f.killWindow > 0) { f.killWindow -= dt; if (f.killWindow <= 0) f.killCount = 0; }

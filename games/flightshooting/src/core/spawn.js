@@ -2,12 +2,13 @@
 import { CFG } from '../data/numbers.js';
 import { COLORS } from '../data/colors.js';
 
-// 구역 스케일 반영 체력: 기본 hp × 구역 배수, 11구역부터 추가 배수(hardStage).
-function scaledHp(base, stage) {
+// 구역 스케일 반영 체력: 기본 hp × 구역 배수, 11구역부터 추가 배수(hardStage) × 난이도 배수(diffMul).
+//   diffMul = 난이도별 적 체력 배수(game.enemyHpMul, 쉬움 0.85 ~ 매우 어려움 1.6). 미지정 시 1(보통).
+function scaledHp(base, stage, diffMul = 1) {
   let hp = Math.ceil((base || 1) * (1 + (stage - 1) * CFG.enemyHpScale));
   if (stage >= CFG.hardStage.from) hp = Math.ceil(hp * CFG.hardStage.hpMul);
   if (stage >= CFG.voidStage.from) hp = Math.ceil(hp * CFG.voidStage.hpMul); // 21~30 이질 적 구간 가속
-  return hp;
+  return Math.max(1, Math.ceil(hp * diffMul));
 }
 
 // 적 출현 가로 영역(플레이필드): 화면폭 W가 넓어도 중앙 고정폭(CFG.field.width) 안으로 제한한다.
@@ -24,7 +25,7 @@ export function spawnEnemy(game, type, xr, W) {
   const spec = CFG.enemy[type];
   const fb = fieldBounds(W); // 화면폭과 무관하게 중앙 고정폭 안에서만 출현
   const x = Math.max(fb.left + spec.r + 6, Math.min(fb.right - spec.r - 6, fb.left + xr * fb.width));
-  const hp = scaledHp(spec.hp, game.stage);
+  const hp = scaledHp(spec.hp, game.stage, game.enemyHpMul || 1);
   const e = {
     type, x, baseX: x, y: -spec.r - 10,
     r: spec.r, hp, maxHp: hp,
@@ -45,7 +46,7 @@ function spawnCoil(game, xr, W) {
   const fb = fieldBounds(W);
   const half = spec.nodeGap / 2;
   const cx = Math.max(fb.left + half + spec.r, Math.min(fb.right - half - spec.r, fb.left + xr * fb.width));
-  const hp = scaledHp(spec.hp, game.stage);
+  const hp = scaledHp(spec.hp, game.stage, game.enemyHpMul || 1);
   const mk = (dx) => ({
     type: 'coil', x: cx + dx, baseX: cx + dx, y: -spec.r - 10,
     r: spec.r, hp, maxHp: hp, speed: spec.speed, score: spec.score,
@@ -63,7 +64,7 @@ function spawnSerpent(game, xr, W) {
   const spec = CFG.enemy.serpent;
   const fb = fieldBounds(W);
   const cx = Math.max(fb.left + spec.r + 6, Math.min(fb.right - spec.r - 6, fb.left + xr * fb.width));
-  const hp = scaledHp(spec.hp, game.stage);
+  const hp = scaledHp(spec.hp, game.stage, game.enemyHpMul || 1);
   const head = {
     type: 'serpent', seg: 'head', x: cx, baseX: cx, y: -spec.r - 10,
     r: spec.r, hp, maxHp: hp, speed: spec.speed, score: spec.score,
@@ -87,7 +88,7 @@ function spawnSerpent(game, xr, W) {
 export function spawnShards(game, x, y) {
   const c = CFG.enemy.shard;
   const n = CFG.enemy.splitter.shardCount;
-  const hp = scaledHp(c.hp, game.stage);
+  const hp = scaledHp(c.hp, game.stage, game.enemyHpMul || 1);
   for (let i = 0; i < n; i++) {
     const dir = n === 1 ? 0 : (i / (n - 1) - 0.5) * 2; // -1..1
     game.enemies.push({
@@ -123,23 +124,33 @@ export function spawnBoss(game, W, H) {
   const sc = COLORS.boss.styles[style];
   const base = isFinal ? CFG.finalBoss : CFG.miniBoss;
   const totalHp = isFinal ? base.hp : base.baseHp + (game.stage - 1) * base.hpPerStage;
-  const coreHp = Math.max(1, Math.ceil(totalHp * st.coreRatio));
-  const parts = st.parts.map((pp) => {
-    const php = Math.max(1, Math.ceil(totalHp * pp.hpRatio));
-    return { ...pp, hp: php, maxHp: php, dead: false, fireTimer: (pp.fireEvery || 0) * Math.random(), x: 0, y: 0 };
+  // 강화판: 후반 5구역(6~10·16~20·26~30, 최종 제외). 추가 부위 + 발사 주기 단축(사용자 지시 2026-07-16).
+  const upgraded = !isFinal && st.upgrade && ((game.stage - 1) % 10) >= CFG.bossUpgradeFrom;
+  const up = upgraded ? st.upgrade : null;
+  const fireMul = up ? up.fireMul : 1;
+  const coreMul = up && up.coreMul ? up.coreMul : 1;
+  const partDefs = up ? st.parts.concat(up.extraParts) : st.parts;
+  // hp 정규화: 부위가 늘어도 (코어 + 전체 부위) 비율 합으로 나눠 총 hp가 일정하게 유지되도록.
+  const ratioSum = st.coreRatio + partDefs.reduce((s, pp) => s + pp.hpRatio, 0);
+  const coreHp = Math.max(1, Math.ceil((totalHp * st.coreRatio) / ratioSum));
+  const parts = partDefs.map((pp) => {
+    const php = Math.max(1, Math.ceil((totalHp * pp.hpRatio) / ratioSum));
+    const fe = (pp.fireEvery || 0) * fireMul; // 강화판은 부위 발사 더 자주
+    return { ...pp, fireEvery: fe, hp: php, maxHp: php, dead: false, fireTimer: fe * Math.random(), x: 0, y: 0 };
   });
   const hasShield = parts.some((p) => p.role === 'shield');
+  const coreEvery = (st.coreEvery || 1.4) * coreMul; // 강화판은 코어 공격도 더 자주
   game.boss = {
-    kind: isFinal ? 'final' : 'mini', style,
+    kind: isFinal ? 'final' : 'mini', style, upgraded,
     x: W / 2, y: -base.ry - 20, targetY: CFG.boss.spawnTop + base.ry,
     rx: base.rx, ry: base.ry, color: sc.core, colors: sc,
     core: { hp: coreHp, maxHp: coreHp, exposed: !hasShield }, // 방어구 없으면 처음부터 노출
-    parts, orbitAngle: 0, coreTimer: (st.coreEvery || 1.4) * Math.random(),
+    parts, orbitAngle: 0, coreEvery, coreTimer: coreEvery * Math.random(),
     score: base.score, t: 0, entering: true,
     escortTimer: isFinal ? Infinity : CFG.miniBoss.escortEvery,
   };
   syncBossParts(game.boss); // 등장 이동 중에도 부위가 코어에 붙어 보이게 초기 위치 계산
-  game.events.push({ type: 'boss-appear', name: isFinal ? '최종 보스' : `구역 ${game.stage} 보스` });
+  game.events.push({ type: 'boss-appear', name: isFinal ? '최종 보스' : `구역 ${game.stage} 보스${upgraded ? ' (강화)' : ''}` });
   if (!isFinal) spawnEscort(game, CFG.miniBoss.escortInit, W);
   game.sfx.push('start');
 }

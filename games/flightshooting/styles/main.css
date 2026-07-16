@@ -124,8 +124,35 @@
 .menu-best { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .menu-best .best-label { font-size: 11px; letter-spacing: 1px; color: var(--fg-mute); }
 .menu-best b { font-family: var(--font-mono); font-size: 26px; font-weight: 800; color: var(--sky-power); }
-.menu-actions { display: flex; flex-direction: column; gap: var(--sp-2); width: min(260px, 80%); }
+.menu-actions { display: flex; flex-direction: column; gap: var(--sp-2); width: min(320px, 88%); }
 .btn-play { font-size: 18px; padding: var(--sp-4); letter-spacing: 2px; }
+
+/* 난이도 선택 세그먼트(세로 1열) */
+.diff-select { display: flex; flex-direction: column; gap: 6px; }
+.opt-label { font-size: 12px; color: var(--fg-dim); letter-spacing: 1px; }
+.seg { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.seg-btn {
+  padding: 11px 6px; border: 1px solid var(--line); border-radius: var(--r-3);
+  background: var(--bg-elev); color: var(--fg-dim); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: background .12s, color .12s, border-color .12s;
+}
+/* 난이도 선택색(시안). 선택된 항목 앞에 체크마크로 시인성 강화 */
+.seg-btn.on { background: var(--sky-accent); border-color: var(--sky-accent); color: #071018; }
+.seg-btn.on::before { content: '\2713'; margin-right: 6px; font-weight: 900; }
+
+/* 친구 동행 / 자동 플레이 아이콘 토글(눌러서 on/off). 난이도와 다른 색으로 구분 */
+.opt-icons { display: flex; gap: var(--sp-2); }
+.opt-icon {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 12px 6px; border: 1px solid var(--line); border-radius: var(--r-3);
+  background: var(--bg-elev); color: var(--fg-dim); cursor: pointer;
+  font-size: 12px; font-weight: 700; transition: background .12s, color .12s, border-color .12s;
+}
+.opt-icon svg { display: block; }
+.opt-icon:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; }
+/* 친구 = 초록, 자동 = 보라 (서로도 다르게, 난이도 시안과도 다르게) */
+#opt-friend.on { background: #5fe0a0; border-color: #5fe0a0; color: #05231a; }
+#opt-auto.on { background: #b191ff; border-color: #b191ff; color: #140a2e; }
 /* 어린이 모드 시작: 일반(민트)과 구분되는 따뜻한 노란 톤 + 작은 부제 */
 .btn-kid { background: #ffd36b; border-color: #ffd36b; color: #3a2e0a; display: flex; flex-direction: column; gap: 2px; line-height: 1.15; }
 .btn-kid small { font-size: 11px; font-weight: 600; letter-spacing: 0; opacity: 0.75; }
@@ -152,6 +179,7 @@
   padding: 22px; width: min(88vw, 340px);
   display: flex; flex-direction: column; gap: 16px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  max-height: 88vh; overflow-y: auto; /* 조작법 포함해 길어지면 모달 안에서 스크롤 */
 }
 .settings-title { font-size: 18px; font-weight: 800; color: #e8eeff; margin: 0; }
 .set-field { display: flex; flex-direction: column; gap: 6px; color: #b9c4de; font-size: 14px; }
@@ -162,6 +190,12 @@
 .set-toggle { flex-direction: row; align-items: center; justify-content: space-between; }
 .set-toggle input { width: 20px; height: 20px; accent-color: #5fe8ff; }
 .set-note { font-size: 12px; color: #7f8aa8; margin: 0; }
+/* 환경설정 안 조작법 섹션 */
+.set-help { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #2a3550; padding-top: 14px; }
+.set-subtitle { font-size: 15px; font-weight: 800; color: #e8eeff; margin: 0; }
+.help-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.help-list li { font-size: 13px; line-height: 1.4; color: #b9c4de; }
+.help-list b { color: #e8eeff; }
 
 /* ── 치트 박스(게임 화면 오버레이, 드래그 이동) ── */
 .cheat-box {
