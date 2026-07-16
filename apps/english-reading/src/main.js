@@ -90,6 +90,8 @@ function bootScreen() {
 // ── 읽기 진행 저장(기기 저장소) ── 지문별 문장 상태(그은 선·임시 단어·검토 여부)를 담아,
 // 단어장을 갔다 오거나 앱을 껐다 켜도 읽던 자리와 표시가 그대로 복원되게 한다.
 const getProgress = () => store.get("progress", {});
+// 완독 표시 구분용 - { pid: { chunkOk, hadWords } }. 끊기를 다 맞췄는지 + 모르는 단어를 담았는지.
+const getDoneMeta = () => store.get("doneMeta", {});
 function saveSentenceState(pid, si, st) {
   const prog = getProgress();
   if (!prog[pid]) prog[pid] = { sentences: [] };
@@ -231,17 +233,29 @@ function renderList(c) {
   stage.appendChild(summary);
 
   const progress = getProgress();
+  const doneMeta = getDoneMeta();
   const customIds = new Set(getCustomPassages().map((p) => p.id));
   const list = document.createElement("div");
   list.className = "passage-list";
   course.passages.forEach((p) => {
     const card = document.createElement("button");
     card.type = "button";
-    card.className = "passage-card";
     const r = reads[p.id] || 0;
     const isDone = done.includes(p.id);
     const inProgress = !!progress[p.id]; // 저장된 진행이 있으면 첫 회독 중이어도 '읽는 중'
-    const status = isDone ? `완독 ✓${r > 1 ? ` · ${r}회독` : ""}` : ((r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음");
+    const meta = doneMeta[p.id];
+    // 완독 표시 3종: 완벽(끊기 다 맞고 모르는 단어 없음)=카드 딤드 / 끊기 틀림=끊기 태그 / 단어 담음=단어 태그
+    let status, perfect = false;
+    if (isDone) {
+      const tags = [];
+      if (meta && !meta.chunkOk) tags.push("끊기");
+      if (meta && meta.hadWords) tags.push("단어");
+      perfect = meta ? (meta.chunkOk && !meta.hadWords) : false;
+      status = `${tags.length ? tags.join(" · ") + " · " : ""}완독 ✓${r > 1 ? ` · ${r}회독` : ""}`;
+    } else {
+      status = (r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음";
+    }
+    card.className = "passage-card" + (perfect ? " done-perfect" : "");
     card.innerHTML =
       `<span class="lv">Lv ${p.level}</span>` +
       `<span class="pc-body"><span class="pc-title">${p.titleKr}${customIds.has(p.id) ? ' <span class="mine-badge">내 문제</span>' : ""}</span><span class="pc-en">${p.title}</span></span>` +
@@ -691,6 +705,28 @@ function nextPassageInCourse(p) {
   return idx >= 0 ? (course.passages[idx + 1] || null) : null;
 }
 
+// 이 지문에서 모르는 단어(수집)를 담았는지 - 완독 표시 구분용.
+function passageHasVocab(pid) {
+  return getVocab().some((v) => v.passageId === pid);
+}
+// 완독 시점 끊기 정확도 - 모든 문장에서 추천 경계를 정확히 긋고(놓침 0) 잘못 그은 곳(비추천·다른 분할)이 없으면 true.
+// 끊기 기능을 끈(chunks OFF) 경우엔 끊기 이슈 없음으로 본다.
+function computeChunkOk(p) {
+  if (!getSettings().chunks) return true;
+  const sents = (getProgress()[p.id] || {}).sentences || [];
+  for (let i = 0; i < p.sentences.length; i++) {
+    const s = normalizeSentence(p.sentences[i]);
+    const tokens = tokenize(s.text);
+    const boundaries = chunkBoundaries(tokens, s.chunks);
+    const allowedSet = boundarySet(s.breakRules, "allowed", tokens.length);
+    const discouragedSet = boundarySet(s.breakRules, "discouraged", tokens.length);
+    const slashes = (sents[i] && sents[i].slashes) || [];
+    const g = gradeChunks(boundaries, allowedSet, discouragedSet, slashes);
+    if (g.missed.length || g.neutral.length || g.discouraged.length) return false;
+  }
+  return true;
+}
+
 // 지문 완독 처리 - 회독수·완독 기록을 올리고 이 지문의 임시 진행(그은 선·임시 단어)을 비운다(영구 단어장은 유지).
 // 해석을 안 봐도 자유롭게 완독할 수 있다(흐름 우선). 다음에 뭘 할지는 완료 후 선택 창에서 사용자가 고른다.
 function finishRound(p) {
@@ -701,6 +737,10 @@ function finishRound(p) {
   reads[p.id] = round;
   store.set("reads", reads);
   if (!done.includes(p.id)) { done.push(p.id); store.set("done", done); }
+  // 완독 품질 기록(진행 리셋 전) - 끊기를 다 맞췄는지 + 모르는 단어를 담았는지로 목록 표시를 나눈다.
+  const meta = getDoneMeta();
+  meta[p.id] = { chunkOk: computeChunkOk(p), hadWords: passageHasVocab(p.id) };
+  store.set("doneMeta", meta);
   clearPassageProgress(p.id);
   const prog = courseProgress(course, done);
   if (prog.cleared && !wasCleared) { showClearModal(); return; } // 코스 전체를 처음 완주하면 클리어 연출 우선

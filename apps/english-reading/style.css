@@ -230,10 +230,11 @@ body {
 .gap.g-discouraged { color: #ea8a2f; }
 .gap.g-neutral { color: #c7ccd6; }
 .gap.g-missed { color: var(--er-accent); }
-/* 등급 마크 - 끊기 표시(/) 바로 위에 작게 얹는다. neutral은 마크 없음(선만 유지) */
+/* 등급 마크 - 끊기 표시(/) 바로 위에 얹는다. 원(O)·x·삼각형(△)·화살표(▾)의 시각 크기를 맞춘다. */
 .gap.g-recommended::before,
 .gap.g-allowed::before,
 .gap.g-discouraged::before,
+.gap.g-neutral::before,
 .gap.g-missed::before {
   position: absolute;
   left: 50%;
@@ -245,8 +246,8 @@ body {
 /* 추천 - 청록 채운 원(가장 긍정적) */
 .gap.g-recommended::before {
   content: "";
-  width: 0.4em;
-  height: 0.4em;
+  width: 0.42em;
+  height: 0.42em;
   background: var(--er-accent);
   border-radius: 50%;
   box-sizing: border-box;
@@ -254,16 +255,18 @@ body {
 /* 허용 - 회색 빈 원(테두리만, '여기도 가능') */
 .gap.g-allowed::before {
   content: "";
-  width: 0.4em;
-  height: 0.4em;
+  width: 0.42em;
+  height: 0.42em;
   border: 1.6px solid #9aa3b2;
   border-radius: 50%;
   box-sizing: border-box;
 }
 /* 비추천 - 주황 빈 삼각형(개선 가이드) */
-.gap.g-discouraged::before { content: "△"; color: #ea8a2f; font-size: 0.66em; font-weight: 900; top: -0.18em; }
-/* 놓친 추천 - / 위 아래 향한 화살표(여기 놓침). 눈에 띄게 크고 붉게. */
-.gap.g-missed::before { content: "▾"; color: #dc2626; font-size: 1.1em; font-weight: 900; top: -0.32em; }
+.gap.g-discouraged::before { content: "△"; color: #ea8a2f; font-size: 0.82em; font-weight: 900; top: -0.2em; }
+/* 다른 분할(neutral) - 회색 선 위에 붉은 작은 x */
+.gap.g-neutral::before { content: "✕"; color: #dc2626; font-size: 0.6em; font-weight: 900; top: -0.1em; }
+/* 놓친 추천 - / 위 아래 향한 화살표(여기 놓침), 붉게 */
+.gap.g-missed::before { content: "▾"; color: #dc2626; font-size: 0.78em; font-weight: 900; top: -0.2em; }
 
 /* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다.
    한 줄씩 눌러 읽는 게 핵심 행동이라, 강조색으로 눈에 띄게 둔다(완료 버튼에 눈길을 뺏기지 않게). */
@@ -658,6 +661,10 @@ body {
   font-size: 10px; font-weight: 700; color: #c2410c;
   background: #ffedd5; border-radius: 999px; padding: 1px 7px; vertical-align: 1px;
 }
+
+/* 완벽 완독(끊기 다 맞고 모르는 단어 없음) - 카드를 흐리게 딤드해 다시 볼 필요가 적음을 나타낸다.
+   끊기 틀림·단어 담음은 딤드 없이 상태 태그(끊기·완독 / 단어·완독)로만 구분한다. */
+.passage-card.done-perfect { opacity: 0.5; }
 
 /* ── 문제 출제 화면 ── */
 .author-intro {

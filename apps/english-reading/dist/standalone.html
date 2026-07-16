@@ -382,10 +382,11 @@ body {
 .gap.g-discouraged { color: #ea8a2f; }
 .gap.g-neutral { color: #c7ccd6; }
 .gap.g-missed { color: var(--er-accent); }
-/* 등급 마크 - 끊기 표시(/) 바로 위에 작게 얹는다. neutral은 마크 없음(선만 유지) */
+/* 등급 마크 - 끊기 표시(/) 바로 위에 얹는다. 원(O)·x·삼각형(△)·화살표(▾)의 시각 크기를 맞춘다. */
 .gap.g-recommended::before,
 .gap.g-allowed::before,
 .gap.g-discouraged::before,
+.gap.g-neutral::before,
 .gap.g-missed::before {
   position: absolute;
   left: 50%;
@@ -397,8 +398,8 @@ body {
 /* 추천 - 청록 채운 원(가장 긍정적) */
 .gap.g-recommended::before {
   content: "";
-  width: 0.4em;
-  height: 0.4em;
+  width: 0.42em;
+  height: 0.42em;
   background: var(--er-accent);
   border-radius: 50%;
   box-sizing: border-box;
@@ -406,16 +407,18 @@ body {
 /* 허용 - 회색 빈 원(테두리만, '여기도 가능') */
 .gap.g-allowed::before {
   content: "";
-  width: 0.4em;
-  height: 0.4em;
+  width: 0.42em;
+  height: 0.42em;
   border: 1.6px solid #9aa3b2;
   border-radius: 50%;
   box-sizing: border-box;
 }
 /* 비추천 - 주황 빈 삼각형(개선 가이드) */
-.gap.g-discouraged::before { content: "△"; color: #ea8a2f; font-size: 0.66em; font-weight: 900; top: -0.18em; }
-/* 놓친 추천 - / 위 아래 향한 화살표(여기 놓침). 눈에 띄게 크고 붉게. */
-.gap.g-missed::before { content: "▾"; color: #dc2626; font-size: 1.1em; font-weight: 900; top: -0.32em; }
+.gap.g-discouraged::before { content: "△"; color: #ea8a2f; font-size: 0.82em; font-weight: 900; top: -0.2em; }
+/* 다른 분할(neutral) - 회색 선 위에 붉은 작은 x */
+.gap.g-neutral::before { content: "✕"; color: #dc2626; font-size: 0.6em; font-weight: 900; top: -0.1em; }
+/* 놓친 추천 - / 위 아래 향한 화살표(여기 놓침), 붉게 */
+.gap.g-missed::before { content: "▾"; color: #dc2626; font-size: 0.78em; font-weight: 900; top: -0.2em; }
 
 /* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다.
    한 줄씩 눌러 읽는 게 핵심 행동이라, 강조색으로 눈에 띄게 둔다(완료 버튼에 눈길을 뺏기지 않게). */
@@ -810,6 +813,10 @@ body {
   font-size: 10px; font-weight: 700; color: #c2410c;
   background: #ffedd5; border-radius: 999px; padding: 1px 7px; vertical-align: 1px;
 }
+
+/* 완벽 완독(끊기 다 맞고 모르는 단어 없음) - 카드를 흐리게 딤드해 다시 볼 필요가 적음을 나타낸다.
+   끊기 틀림·단어 담음은 딤드 없이 상태 태그(끊기·완독 / 단어·완독)로만 구분한다. */
+.passage-card.done-perfect { opacity: 0.5; }
 
 /* ── 문제 출제 화면 ── */
 .author-intro {
@@ -7762,6 +7769,8 @@ function bootScreen() {
 // ── 읽기 진행 저장(기기 저장소) ── 지문별 문장 상태(그은 선·임시 단어·검토 여부)를 담아,
 // 단어장을 갔다 오거나 앱을 껐다 켜도 읽던 자리와 표시가 그대로 복원되게 한다.
 const getProgress = () => store.get("progress", {});
+// 완독 표시 구분용 - { pid: { chunkOk, hadWords } }. 끊기를 다 맞췄는지 + 모르는 단어를 담았는지.
+const getDoneMeta = () => store.get("doneMeta", {});
 function saveSentenceState(pid, si, st) {
   const prog = getProgress();
   if (!prog[pid]) prog[pid] = { sentences: [] };
@@ -7895,17 +7904,29 @@ function renderList(c) {
   stage.appendChild(summary);
 
   const progress = getProgress();
+  const doneMeta = getDoneMeta();
   const customIds = new Set(getCustomPassages().map((p) => p.id));
   const list = document.createElement("div");
   list.className = "passage-list";
   course.passages.forEach((p) => {
     const card = document.createElement("button");
     card.type = "button";
-    card.className = "passage-card";
     const r = reads[p.id] || 0;
     const isDone = done.includes(p.id);
     const inProgress = !!progress[p.id]; // 저장된 진행이 있으면 첫 회독 중이어도 '읽는 중'
-    const status = isDone ? `완독 ✓${r > 1 ? ` · ${r}회독` : ""}` : ((r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음");
+    const meta = doneMeta[p.id];
+    // 완독 표시 3종: 완벽(끊기 다 맞고 모르는 단어 없음)=카드 딤드 / 끊기 틀림=끊기 태그 / 단어 담음=단어 태그
+    let status, perfect = false;
+    if (isDone) {
+      const tags = [];
+      if (meta && !meta.chunkOk) tags.push("끊기");
+      if (meta && meta.hadWords) tags.push("단어");
+      perfect = meta ? (meta.chunkOk && !meta.hadWords) : false;
+      status = `${tags.length ? tags.join(" · ") + " · " : ""}완독 ✓${r > 1 ? ` · ${r}회독` : ""}`;
+    } else {
+      status = (r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음";
+    }
+    card.className = "passage-card" + (perfect ? " done-perfect" : "");
     card.innerHTML =
       `<span class="lv">Lv ${p.level}</span>` +
       `<span class="pc-body"><span class="pc-title">${p.titleKr}${customIds.has(p.id) ? ' <span class="mine-badge">내 문제</span>' : ""}</span><span class="pc-en">${p.title}</span></span>` +
@@ -8355,6 +8376,28 @@ function nextPassageInCourse(p) {
   return idx >= 0 ? (course.passages[idx + 1] || null) : null;
 }
 
+// 이 지문에서 모르는 단어(수집)를 담았는지 - 완독 표시 구분용.
+function passageHasVocab(pid) {
+  return getVocab().some((v) => v.passageId === pid);
+}
+// 완독 시점 끊기 정확도 - 모든 문장에서 추천 경계를 정확히 긋고(놓침 0) 잘못 그은 곳(비추천·다른 분할)이 없으면 true.
+// 끊기 기능을 끈(chunks OFF) 경우엔 끊기 이슈 없음으로 본다.
+function computeChunkOk(p) {
+  if (!getSettings().chunks) return true;
+  const sents = (getProgress()[p.id] || {}).sentences || [];
+  for (let i = 0; i < p.sentences.length; i++) {
+    const s = normalizeSentence(p.sentences[i]);
+    const tokens = tokenize(s.text);
+    const boundaries = chunkBoundaries(tokens, s.chunks);
+    const allowedSet = boundarySet(s.breakRules, "allowed", tokens.length);
+    const discouragedSet = boundarySet(s.breakRules, "discouraged", tokens.length);
+    const slashes = (sents[i] && sents[i].slashes) || [];
+    const g = gradeChunks(boundaries, allowedSet, discouragedSet, slashes);
+    if (g.missed.length || g.neutral.length || g.discouraged.length) return false;
+  }
+  return true;
+}
+
 // 지문 완독 처리 - 회독수·완독 기록을 올리고 이 지문의 임시 진행(그은 선·임시 단어)을 비운다(영구 단어장은 유지).
 // 해석을 안 봐도 자유롭게 완독할 수 있다(흐름 우선). 다음에 뭘 할지는 완료 후 선택 창에서 사용자가 고른다.
 function finishRound(p) {
@@ -8365,6 +8408,10 @@ function finishRound(p) {
   reads[p.id] = round;
   store.set("reads", reads);
   if (!done.includes(p.id)) { done.push(p.id); store.set("done", done); }
+  // 완독 품질 기록(진행 리셋 전) - 끊기를 다 맞췄는지 + 모르는 단어를 담았는지로 목록 표시를 나눈다.
+  const meta = getDoneMeta();
+  meta[p.id] = { chunkOk: computeChunkOk(p), hadWords: passageHasVocab(p.id) };
+  store.set("doneMeta", meta);
   clearPassageProgress(p.id);
   const prog = courseProgress(course, done);
   if (prog.cleared && !wasCleared) { showClearModal(); return; } // 코스 전체를 처음 완주하면 클리어 연출 우선
