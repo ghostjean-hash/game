@@ -262,8 +262,8 @@ body {
 }
 /* 비추천 - 주황 빈 삼각형(개선 가이드) */
 .gap.g-discouraged::before { content: "△"; color: #ea8a2f; font-size: 0.66em; font-weight: 900; top: -0.18em; }
-/* 놓친 추천 - / 위 아래 향한 삼각형(여기 놓침), 청록 */
-.gap.g-missed::before { content: "▾"; color: var(--er-accent); font-size: 0.62em; font-weight: 900; top: -0.15em; }
+/* 놓친 추천 - / 위 아래 향한 화살표(여기 놓침). 눈에 띄게 크고 붉게. */
+.gap.g-missed::before { content: "▾"; color: #dc2626; font-size: 1.1em; font-weight: 900; top: -0.32em; }
 
 /* "해석" 버튼 - 오른손 터치가 편하도록 문장 오른쪽 끝에 띄운다.
    한 줄씩 눌러 읽는 게 핵심 행동이라, 강조색으로 눈에 띄게 둔다(완료 버튼에 눈길을 뺏기지 않게). */
@@ -523,10 +523,6 @@ body {
   border-radius: var(--r-2);
 }
 
-/* 보조 "전체 해석 펼치기" - 문장 위 오른쪽에 작고 약하게(기본은 한 줄씩 읽는 흐름, 이건 지름길). */
-.reading-tools { display: flex; justify-content: flex-end; margin-bottom: var(--sp-2); }
-.reading-tools .all-interpret { margin: 0; padding: 6px 13px; font-size: 12px; }
-
 .read-done {
   display: block;
   width: 100%;
@@ -614,16 +610,31 @@ body {
   cursor: pointer;
 }
 .toggle-row input { width: 20px; height: 20px; accent-color: var(--er-accent); }
+.settings-sub-head { margin-top: var(--sp-4); font-size: 12px; font-weight: 800; color: var(--fg-mute); letter-spacing: 0.02em; }
 .app-modal .btn-primary { margin-top: var(--sp-2); }
 
-/* 완독 후 다음 행동 선택 - 세로로 쌓은 버튼(다음 지문/재독/목록). */
-.modal-actions { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-3); }
+/* 완독 후 다음 행동 선택 팝업 - 픽토그램+제목만, 우상단 X, 동일 스타일 버튼 3개 */
+.next-action-modal { position: relative; }
+.modal-close {
+  position: absolute; top: var(--sp-3); right: var(--sp-3);
+  width: 32px; height: 32px; padding: 6px;
+  color: var(--fg-mute); background: transparent; border: none; border-radius: var(--r-2); cursor: pointer;
+}
+.modal-close svg { width: 20px; height: 20px; }
+.modal-close:hover { color: var(--fg); background: var(--bg-elev-2); }
+.na-head { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); padding: var(--sp-3) 0 var(--sp-2); }
+.na-icon { color: var(--er-accent); line-height: 0; }
+.na-icon svg { width: 34px; height: 34px; }
+.na-title { font-size: 18px; font-weight: 800; color: var(--fg); text-align: center; }
+
+.modal-actions { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-2); }
 .modal-actions .btn { width: 100%; padding: 13px; font-size: 15px; border-radius: var(--r-2); font-weight: 700; cursor: pointer; }
-.modal-actions .btn-primary { margin-top: 0; }
-.na-secondary { background: var(--bg-elev-2); color: var(--fg); border: 1px solid var(--line); }
-.na-secondary:hover { border-color: var(--er-accent); color: var(--er-accent); }
-.na-ghost { background: transparent; color: var(--fg-dim); border: 1px solid transparent; }
-.na-ghost:hover { color: var(--fg); background: var(--bg-elev-2); }
+.na-item {
+  display: flex; align-items: center; gap: 10px; justify-content: flex-start;
+  background: var(--bg-elev-2); color: var(--fg); border: 1px solid var(--line);
+}
+.na-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+.na-item:hover { border-color: var(--er-accent); color: var(--er-accent); }
 
 /* 공용 버튼 - 라이트 강조색 */
 .reader-page .btn-primary,

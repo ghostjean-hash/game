@@ -2,9 +2,9 @@
 
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
-## 직전 작업 (2026-07-16, english-reading 지문 진행 버그 4건 + 읽기 카드·완료 흐름 재설계)
+## 직전 작업 (2026-07-16, english-reading 읽기 화면 버그 4건 + 완료 흐름·상단바 UX 전면 개편)
 
-사용자가 "한 문제를 풀면 다음 문제로 못 넘어간다, 전체 버그 확인"을 지시. 재현 결과 지문 읽기 화면에서 뒤로가기(←)를 누르면 지문 목록이 빈 화면이 되고 페이지 에러였다. 원인 - setTop이 `el.back.onclick = onBack`으로 renderList를 직접 연결해, 뒤로가기 클릭의 MouseEvent가 renderList(c)의 c로 새어 course를 이벤트 객체로 덮어써 courseProgress에서 터짐. `() => onBack()`으로 인자 유입 차단. 이어 병렬 에이전트로 부수 버그 3건 수정 - (a) chunks OFF+words ON에서 단어 공개·저장이 [해석] 버튼에만 묶여 담은 단어 소실 → reviewBtn을 "단어 뜻 보기"로도 생성 (b) lastPassage 저장만 되고 복원 없던 죽은 이어읽기 → bootScreen 신설 (c) validate가 하이픈·공백 차이로 토큰 수 어긋나도 통과 → 토큰 clean 배열 대조 추가. 이후 UX 지시 연속 - 직독직해 덩어리별 카드를 한 카드로 통합, 자연스러운 해석도 같은 카드에 구분선으로 통합. 마지막으로 완료 흐름 재설계("나도 모르게 완료 누름" 제기 → "해석 안 봐도 되나" 상의 → 승인): "1회독 완료"→"이 지문 다 읽었어요" + 누르면 [다음 지문]/[한 번 더 읽기]/[지문 목록으로] 선택창(showNextActionModal), 완료는 해석 안 봐도 자유(흐름 우선), 문장 [해석] 버튼 강조 + 보조 "전체 해석 펼치기". 검증 browser-shot 전 경로 콘솔 0, 유닛 통과, standalone 291KB 재빌드. **다음 행동** = (1) 배포(/web-deploy)는 deploy.json이 flightshooting 가리켜 회피, 사용자 지시 대기 (2) flightshooting 10여 파일 미커밋 변경은 타 세션분, 사용자 처리 대기 (3) 2.37 검수 잔여 유지. 상세: apps/english-reading/PROGRESS.md 2.38.
+사용자 "한 문제 풀면 다음 못 넘어감, 전체 버그 확인"으로 시작. 핵심 버그 - 지문 읽기 화면에서 뒤로가기(←) 누르면 목록이 빈 화면 + 페이지 에러였다. 원인은 setTop이 `el.back.onclick = onBack`으로 renderList를 직접 연결해 뒤로가기 클릭의 MouseEvent가 renderList(c)의 c로 새어 course를 덮어쓴 것. `() => onBack()`으로 차단. 병렬 에이전트로 부수 3건 수정 - chunks OFF+words ON 단어 소실(reviewBtn "단어 뜻 보기"로도 생성) / 죽은 이어읽기(bootScreen 신설) / 하이픈·공백 토큰 수 어긋나도 통과하던 validate(토큰 clean 대조 추가). 이어 UI 연속 개편 - 직독직해+자연스러운 해석을 한 카드에 구분선으로 통합, 놓침 화살표(▾) 크게+붉은색. 완료 흐름 재설계(사용자 "나도 모르게 완료 누름"→"해석 안 봐도 되나" 상의→승인): 하단 버튼을 "전체 해석"(안 본 문장 펼침)↔"완료"(누르면 다음 지문/한 번 더/목록 선택 팝업)로, 팝업은 X 닫기+책 픽토그램+제목만+SVG 버튼 3개. 상단바 끊기/단어 토글 제거하고 홈 "환경설정"(구 노출 설정)에 "터치 대상"으로 이동. 커밋 4f4b38e(버그+카드 통합+1차 재설계) 이후 UI 다듬기 별도 커밋 예정. 검증 browser-shot 전 경로 콘솔 0, 유닛 통과, standalone 292KB. **다음 행동** = (1) 배포(/web-deploy)는 deploy.json이 flightshooting 가리켜 회피, 사용자 지시 대기 (2) flightshooting 11개 파일 미커밋(타 세션분) 사용자 처리 대기 (3) 2.37 검수 잔여. 상세: apps/english-reading/PROGRESS.md 2.38+2.39.
 
 ## 이전 작업 (2026-07-16, english-reading 100문장 콘텐츠 검수 보고서)
 

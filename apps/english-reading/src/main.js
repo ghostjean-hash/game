@@ -15,11 +15,19 @@ const store = createStorage("english-reading");
 const el = {
   back: document.getElementById("nav-back"),
   title: document.getElementById("topbar-title"),
-  chunk: document.getElementById("nav-chunk"),
-  word: document.getElementById("nav-word"),
   vocab: document.getElementById("nav-vocab"),
   bar: document.getElementById("bar-fill"),
   stage: document.getElementById("stage"),
+};
+
+// 팝업·버튼용 인라인 SVG 아이콘(Feather 계열, 외부 의존 0).
+const SVG_ATTR = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+const ICON = {
+  close: `<svg ${SVG_ATTR}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  book: `<svg ${SVG_ATTR}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+  next: `<svg ${SVG_ATTR}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
+  repeat: `<svg ${SVG_ATTR}><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>`,
+  list: `<svg ${SVG_ATTR}><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
 };
 
 let course = null; // 현재 선택된 코스
@@ -31,15 +39,8 @@ let touchChunk = true;   // 켜짐: 단어 사이 틈을 눌러 끊기 / 꺼짐:
 let touchWord = false;   // 켜짐: 주요 단어를 눌러 수집 / 꺼짐: 단어 터치 무시
 { const t = store.get("touch", {}) || {}; touchChunk = t.chunk !== false; touchWord = !!t.word; }
 const saveTouch = () => store.set("touch", { chunk: touchChunk, word: touchWord });
-// 토글 클릭 = 해당 터치 on/off 반전. 상단바 버튼은 앱 내내 하나라 여기서 1회 바인딩.
-el.chunk.onclick = () => { touchChunk = !touchChunk; saveTouch(); applyTouch(); };
-el.word.onclick = () => { touchWord = !touchWord; saveTouch(); applyTouch(); };
-// 토글 상태를 버튼(active/aria) + 본문(no-chunk/no-word로 pointer-events 제어)에 반영.
+// 끊기/단어 터치 대상은 환경설정에서 정한다(상단바 토글 폐지). 본문에 no-chunk/no-word로 pointer-events만 반영.
 function applyTouch() {
-  el.chunk.classList.toggle("active", touchChunk);
-  el.chunk.setAttribute("aria-pressed", touchChunk ? "true" : "false");
-  el.word.classList.toggle("active", touchWord);
-  el.word.setAttribute("aria-pressed", touchWord ? "true" : "false");
   const art = el.stage.querySelector(".article");
   if (art) {
     art.classList.toggle("no-chunk", !touchChunk);
@@ -143,9 +144,6 @@ function setTop({ title, onBack, showVocab }) {
   el.back.onclick = () => onBack();
   el.vocab.style.display = showVocab ? "" : "none";
   el.vocab.onclick = renderVocab;
-  // 끊기/단어 토글은 기본 숨김 - 읽기 화면에서만 개별 노출(renderReading)
-  el.chunk.style.display = "none";
-  el.word.style.display = "none";
 }
 
 function labeledBlock(label, text, mod) {
@@ -195,7 +193,7 @@ function renderCourseList() {
   const actions = document.createElement("div");
   actions.className = "list-actions";
   const setBtn = document.createElement("button");
-  setBtn.type = "button"; setBtn.className = "text-btn settings-open"; setBtn.textContent = "노출 설정"; setBtn.onclick = openSettings;
+  setBtn.type = "button"; setBtn.className = "text-btn settings-open"; setBtn.textContent = "환경설정"; setBtn.onclick = openSettings;
   const authorBtn = document.createElement("button");
   authorBtn.type = "button"; authorBtn.className = "text-btn"; authorBtn.textContent = "문제 출제"; authorBtn.onclick = renderAuthor;
   const guideBtn = document.createElement("button");
@@ -261,9 +259,6 @@ function renderReading(p) {
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
   setTop({ title: p.titleKr, onBack: renderList, showVocab: true });
-  // 상단바 끊기/단어 토글 - 해당 노출 설정이 켜졌을 때만 표시(읽기 화면 전용)
-  el.chunk.style.display = settings.chunks ? "" : "none";
-  el.word.style.display = settings.words ? "" : "none";
 
   const stage = el.stage;
   stage.className = "stage reading-stage";
@@ -274,43 +269,48 @@ function renderReading(p) {
     const hint = document.createElement("div");
     hint.className = "first-hint";
     hint.id = "first-hint";
-    hint.textContent = "상단의 끊기·단어 버튼으로 지금 무엇을 누를지 켜고 끄세요. 끊기를 켜면 단어 사이 틈을 눌러 선(/)을 긋고, 단어를 켜면 모르는 단어를 눌러 담습니다. 문장 끝 [해석]으로 채점합니다.";
+    hint.textContent = "단어 사이 틈을 눌러 선(/)을 긋고, 주요 단어를 눌러 담아 보세요. 문장 끝 [해석]으로 채점하고, 맨 아래 [전체 해석]으로 한꺼번에 펼칠 수 있습니다. 끊기·단어 터치를 켜고 끄는 건 홈의 환경설정에 있습니다.";
     stage.appendChild(hint);
     store.set("seenIntro", true);
   }
 
+  let refreshDone = () => {};
   const article = document.createElement("div");
   article.className = "article";
-  p.sentences.forEach((s, i) => article.appendChild(renderSentence(s, i, p, settings)));
-
-  // 보조: 한 줄씩 누르지 않고 아직 안 본 문장의 해석을 한꺼번에 펼치는 편의 버튼(끊어읽기 ON일 때만, 약하게).
-  // 기본은 문장마다 [해석]을 눌러 능동적으로 읽는 흐름이고, 이건 급할 때 쓰는 지름길이다.
-  if (settings.chunks) {
-    const tools = document.createElement("div");
-    tools.className = "reading-tools";
-    tools.appendChild(mkBtn("전체 해석 펼치기", "text-btn all-interpret", () => {
-      article.querySelectorAll(".sentence-block").forEach((blk) => {
-        if (!blk.querySelector(".review-detail")) {
-          const rb = blk.querySelector(".review-btn");
-          if (rb) rb.click();
-        }
-      });
-    }));
-    stage.appendChild(tools);
-  }
+  // 각 문장 해석이 끝날 때마다 하단 버튼 상태를 다시 계산한다(onReviewed 콜백).
+  p.sentences.forEach((s, i) => article.appendChild(renderSentence(s, i, p, settings, () => refreshDone())));
   stage.appendChild(article);
   applyTouch(); // 토글 상태를 버튼·본문(no-chunk/no-word)에 반영
 
-  // 완독 매듭 - 해석을 안 봐도 자유롭게 누를 수 있다(막지 않는다). 누른 뒤 다음 지문/재독/목록은 선택 창에서 고른다.
+  // 하단 버튼 하나로 통합 - 아직 안 본 문장이 있으면 "전체 해석"(한꺼번에 펼쳐 채점),
+  // 모든 문장을 해석하면 "완료"로 바뀌고 누르면 다음 행동 선택 창을 띄운다.
+  // 끊어 읽기 채점을 끈(chunks OFF) 경우엔 해석 개념이 없어 바로 "완료"로 둔다.
   const doneBtn = document.createElement("button");
   doneBtn.type = "button";
   doneBtn.className = "btn btn-primary read-done";
-  doneBtn.textContent = "이 지문 다 읽었어요";
-  doneBtn.onclick = () => finishRound(p);
+  const allReviewed = () => !settings.chunks ||
+    [...article.querySelectorAll(".sentence-block")].every((blk) => blk.querySelector(".review-detail"));
+  refreshDone = () => {
+    const done = allReviewed();
+    doneBtn.dataset.mode = done ? "done" : "interpret";
+    doneBtn.textContent = done ? "완료" : "전체 해석";
+  };
+  doneBtn.onclick = () => {
+    if (doneBtn.dataset.mode === "done") { finishRound(p); return; }
+    // 전체 해석 - 아직 안 본 문장을 모두 펼쳐 채점한 뒤 버튼을 "완료"로 전환
+    article.querySelectorAll(".sentence-block").forEach((blk) => {
+      if (!blk.querySelector(".review-detail")) {
+        const rb = blk.querySelector(".review-btn");
+        if (rb) rb.click();
+      }
+    });
+    refreshDone();
+  };
+  refreshDone();
   stage.appendChild(doneBtn);
 }
 
-function renderSentence(rawS, sIndex, passage, settings) {
+function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
   // 신·구 스키마를 같은 모양으로 - 신규 필드 기본값·fallback을 한 지점에서 채운다(customPassages 하위호환).
   const s = normalizeSentence(rawS);
   const block = document.createElement("div");
@@ -469,6 +469,7 @@ function renderSentence(rawS, sIndex, passage, settings) {
       detail = buildDetail();
       block.appendChild(detail);
       persist();
+      if (onReviewed) onReviewed(); // 하단 버튼(전체 해석 ↔ 완료) 상태 갱신
     };
     line.appendChild(reviewBtn);
   }
@@ -703,27 +704,40 @@ function finishRound(p) {
   clearPassageProgress(p.id);
   const prog = courseProgress(course, done);
   if (prog.cleared && !wasCleared) { showClearModal(); return; } // 코스 전체를 처음 완주하면 클리어 연출 우선
-  showNextActionModal(p, round);
+  showNextActionModal(p);
 }
 
-// 완독 후 - "완료"가 무슨 뜻이고 다음에 뭘 하는지 한 자리에서 고르게 한다(다음 지문/재독/목록).
-function showNextActionModal(p, round) {
+// 완독 후 - 다음에 뭘 할지 한 자리에서 고르게 한다(다음 지문/재독/목록).
+// 부연 문구 없이 픽토그램 + 지문 제목만, 우상단 X로 닫기, 세 버튼은 동일 스타일 + 앞에 SVG 아이콘.
+function showNextActionModal(p) {
   const next = nextPassageInCourse(p);
   const backdrop = document.createElement("div");
   backdrop.className = "modal-backdrop";
   const modal = document.createElement("div");
-  modal.className = "app-modal";
-  modal.innerHTML =
-    `<div class="modal-badge">✓</div>` +
-    `<div class="modal-msg">이 지문을 다 읽었어요</div>` +
-    `<div class="modal-sub">${p.titleKr}${round > 1 ? ` · ${round}번째 읽기` : ""}. 이제 무엇을 할까요?</div>`;
+  modal.className = "app-modal next-action-modal";
+  const close = () => backdrop.remove();
+
+  const x = document.createElement("button");
+  x.type = "button"; x.className = "modal-close"; x.setAttribute("aria-label", "닫기");
+  x.innerHTML = ICON.close;
+  x.onclick = close;
+
+  const head = document.createElement("div");
+  head.className = "na-head";
+  head.innerHTML = `<div class="na-icon">${ICON.book}</div><div class="na-title">${p.titleKr}</div>`;
+
   const actions = document.createElement("div");
   actions.className = "modal-actions";
-  const close = () => backdrop.remove();
-  if (next) actions.appendChild(mkBtn("다음 지문 →", "btn btn-primary", () => { close(); renderReading(next); }));
-  actions.appendChild(mkBtn("한 번 더 읽기", "btn na-secondary", () => { close(); renderReading(p); }));
-  actions.appendChild(mkBtn("지문 목록으로", "btn na-ghost", () => { close(); renderList(course); }));
-  modal.appendChild(actions);
+  const item = (icon, label, on) => {
+    const b = mkBtn("", "btn na-item", on);
+    b.innerHTML = `${icon}<span>${label}</span>`;
+    return b;
+  };
+  if (next) actions.appendChild(item(ICON.next, "다음 지문", () => { close(); renderReading(next); }));
+  actions.appendChild(item(ICON.repeat, "한 번 더 읽기", () => { close(); renderReading(p); }));
+  actions.appendChild(item(ICON.list, "지문 목록으로", () => { close(); renderList(course); }));
+
+  modal.append(x, head, actions);
   backdrop.appendChild(modal);
   backdrop.addEventListener("click", (e) => { if (e.target === backdrop) close(); });
   document.body.appendChild(backdrop);
@@ -1003,28 +1017,40 @@ function openSettings() {
   modal.className = "app-modal settings-modal";
 
   const title = document.createElement("div");
-  title.className = "modal-msg"; title.textContent = "노출 설정";
+  title.className = "modal-msg"; title.textContent = "환경설정";
   const desc = document.createElement("div");
   desc.className = "modal-sub";
-  desc.textContent = "도움을 얼마나 드러낼지 직접 정합니다. 익숙해지면 하나씩 꺼 스스로 읽어 보세요.";
+  desc.textContent = "도움 노출과 터치 대상을 직접 정합니다. 익숙해지면 하나씩 꺼 스스로 읽어 보세요.";
   modal.append(title, desc);
 
-  const opts = [
-    ["chunks", "끊어 읽기 긋기 · 해석 채점"],
-    ["words", "단어 뜻 보기 · 수집"],
-    ["scope", "검토 후 구조 심화 해설"],
-  ];
-  const toggles = {};
-  opts.forEach(([key, label]) => {
+  // 토글 한 줄을 만드는 헬퍼(라벨 + 체크박스).
+  const addToggle = (bag, key, label, checked) => {
     const rowL = document.createElement("label");
     rowL.className = "toggle-row";
     const span = document.createElement("span"); span.textContent = label;
     const cb = document.createElement("input");
-    cb.type = "checkbox"; cb.checked = !!s[key];
-    toggles[key] = cb;
+    cb.type = "checkbox"; cb.checked = !!checked;
+    bag[key] = cb;
     rowL.append(span, cb);
     modal.appendChild(rowL);
-  });
+  };
+  const addSubHead = (text) => {
+    const h = document.createElement("div");
+    h.className = "settings-sub-head"; h.textContent = text;
+    modal.appendChild(h);
+  };
+
+  // 1) 도움 노출 설정
+  const toggles = {};
+  addToggle(toggles, "chunks", "끊어 읽기 긋기 · 해석 채점", s.chunks);
+  addToggle(toggles, "words", "단어 뜻 보기 · 수집", s.words);
+  addToggle(toggles, "scope", "검토 후 구조 심화 해설", s.scope);
+
+  // 2) 터치 대상 - 예전 상단바 토글을 이리로 옮김(끊기 틈과 단어가 붙어 생기는 오터치를 미리 조절).
+  addSubHead("터치 대상");
+  const touchToggles = {};
+  addToggle(touchToggles, "chunk", "끊기 틈 터치", touchChunk);
+  addToggle(touchToggles, "word", "단어 터치", touchWord);
 
   const ok = document.createElement("button");
   ok.type = "button"; ok.className = "btn btn-primary"; ok.textContent = "저장";
@@ -1034,6 +1060,9 @@ function openSettings() {
       words: toggles.words.checked,
       scope: toggles.scope.checked,
     });
+    touchChunk = touchToggles.chunk.checked;
+    touchWord = touchToggles.word.checked;
+    saveTouch();
     backdrop.remove();
     course ? renderList(course) : renderCourseList();
   };

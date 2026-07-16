@@ -314,3 +314,12 @@
 - 검증: node 테스트 전량 통과(validate 강화가 두 코스 기존 지문 무결). browser-shot 실경로 다수 - 뒤로가기 목록 복원(콘솔 0)·chunks OFF에서 단어 담고 공개·저장·reload 후 이어읽기 지문 복원·직독직해 3덩어리 한 카드·자연해석 구분선 통합·완료 후 선택창·다음 지문 이동·전체 해석 펼치기 모두 콘솔 0. standalone 재빌드(291KB), build-standalone fetch 치환 패턴을 renderCourseList→bootScreen으로 동기. SW 캐시 버전 bump는 배포 시(이번은 로컬 커밋).
 - 변경 파일: src/main.js / src/core/validate.js / style.css / tools/build-standalone.mjs / dist/standalone.html(재생성).
 - 잔여: (1) 배포(/web-deploy)는 deploy.json이 flightshooting을 가리켜 회피, 사용자 지시 대기. (2) flightshooting 10여 파일 미커밋 변경은 타 세션분이라 이번 봉합 제외 - 사용자 처리 대기. (3) 2.37 검수 잔여(죽은 allowed 데이터 반영 등) 유지.
+
+## 2.39. 읽기 화면 완료 흐름 + 상단바 정리 - UI 다듬기 (2026-07-16, 사용자 연속 UI 지시)
+
+- 배경: 2.38에 이어 같은 읽기 화면을 사용자 지시로 연속 다듬음. 지시 두 묶음.
+- 첫 묶음(끊기 표시·완료 흐름): (1) 놓친 추천 자리(▾) 마크를 크게(0.62em→1.1em) + 붉은색(#dc2626)으로 바꿔 눈에 띄게. (2) 상단 보조 "전체 해석 펼치기" 버튼을 없애고, 하단 버튼 하나로 통합 - 아직 안 본 문장이 있으면 "전체 해석"(누르면 안 본 문장 모두 펼쳐 채점), 모든 문장이 해석되면 "완료"로 바뀌고 누르면 다음 행동 선택 창(개별 해석으로 다 채워도 자동 전환, renderSentence에 onReviewed 콜백 + renderReading의 refreshDone/allReviewed). chunks OFF면 해석 개념이 없어 바로 "완료". (3) 완료 팝업(showNextActionModal) 재디자인 - 부연 문구 삭제하고 책 픽토그램 + 지문 제목만 중앙 정렬, 우상단 X 닫기, 세 버튼(다음 지문/한 번 더 읽기/지문 목록으로)을 동일 스타일 + 앞에 SVG 아이콘(→/↻/≡)으로. 인라인 SVG 아이콘 상수 ICON(close/book/next/repeat/list) 신설.
+- 둘째 묶음(상단바→환경설정): 상단바의 끊기(가위)·단어(T) 터치 토글 버튼을 완전 제거(index.html + build-standalone 템플릿 + main.js el.chunk/word·바인딩·applyTouch·setTop·renderReading 참조 전부 정리). 홈(코스 목록) 하단 "노출 설정" 버튼을 "환경설정"으로 개명하고, 그 모달에 기존 노출 3종(끊어 읽기/단어/구조 심화) 아래 "터치 대상" 소제목 + 끊기 틈 터치·단어 터치 2종을 추가(저장 시 touch 상태 함께 반영). 상단바에서 실시간 전환하던 것을 환경설정에서 미리 정하는 방식으로 이동(오터치 방지 취지는 유지). 첫 진입 안내 문구도 "상단 버튼" 언급을 걷어내고 환경설정 안내로 정합.
+- 검증: node 테스트 전량 통과. browser-shot 다수 - 놓침 화살표 붉은·크게, 하단 "전체 해석"→(전체 펼침)→"완료"→팝업 전환, 팝업 X·픽토그램·제목·SVG 버튼 3개, 상단바 끊기/단어 제거(단어장만), 환경설정 5토글 모두 콘솔 0. standalone 재빌드(292KB).
+- 변경 파일: src/main.js / style.css / index.html / tools/build-standalone.mjs / dist/standalone.html(재생성).
+- 잔여: (1) 배포(/web-deploy)는 deploy.json이 flightshooting 가리켜 회피, 사용자 지시 대기. (2) flightshooting 11개 파일 미커밋 변경은 타 세션분, 이번 봉합 제외 - 사용자 처리 대기. (3) 2.37 검수 잔여 유지.
