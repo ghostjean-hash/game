@@ -54,7 +54,8 @@ body {
   border-radius: var(--r-2);
   cursor: pointer;
 }
-.nav-back { font-size: 20px; }
+.nav-btn svg { width: 20px; height: 20px; display: block; }
+.nav-back { padding: 0; } /* 아이콘 전용 - 정사각 38x38 안에 SVG를 flex로 정중앙 정렬 */
 .nav-btn:active { transform: scale(0.95); }
 .topbar-title {
   flex: 1;
@@ -550,21 +551,21 @@ body {
   font-size: 15px;
   font-weight: 700;
   color: var(--fg);
-  background: transparent;
-  border: none;
-  cursor: pointer;
 }
 .vocab-del {
   flex-shrink: 0;
   width: 44px;
   align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--fg-mute);
   background: transparent;
   border: none;
   border-left: 1px solid var(--line);
   cursor: pointer;
-  font-size: 13px;
 }
+.vocab-del svg { width: 16px; height: 16px; display: block; }
 .vocab-del:hover { color: #b91c1c; background: #fef2f2; }
 .vocab-detail {
   padding: var(--sp-3) var(--sp-4);

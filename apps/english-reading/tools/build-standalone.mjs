@@ -72,7 +72,7 @@ ${css}
 <body>
 <div class="page reader-page">
   <header class="topbar">
-    <button class="nav-btn nav-back" id="nav-back" type="button" aria-label="뒤로">←</button>
+    <button class="nav-btn nav-back" id="nav-back" type="button" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></button>
     <div class="topbar-title" id="topbar-title">불러오는 중…</div>
     <button class="nav-btn nav-vocab" id="nav-vocab" type="button">단어장</button>
   </header>

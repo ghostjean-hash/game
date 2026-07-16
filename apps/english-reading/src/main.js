@@ -23,6 +23,7 @@ const el = {
 // 팝업·버튼용 인라인 SVG 아이콘(Feather 계열, 외부 의존 0).
 const SVG_ATTR = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
 const ICON = {
+  back: `<svg ${SVG_ATTR}><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`,
   close: `<svg ${SVG_ATTR}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
   book: `<svg ${SVG_ATTR}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
   next: `<svg ${SVG_ATTR}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
@@ -70,21 +71,10 @@ function rebuildCourse() {
   if (course) course = courses.find((c) => c.id === course.id) || null;
 }
 
-// lastPassage(마지막 읽던 지문) id로 그 지문과 소속 코스를 찾는다 - 앱 재시작 시 이어읽기 복원용.
-function findPassageLocation(pid) {
-  for (const c of courses) {
-    const p = c.passageById(pid);
-    if (p) return { course: c, passage: p };
-  }
-  return null;
-}
-
-// 앱 첫 화면 결정 - 마지막에 읽던 지문이 남아 있으면 그 지문으로 바로 복원(이어읽기), 없으면 코스 목록.
+// 앱 첫 화면은 항상 홈(코스 목록). 예전엔 마지막 읽던 지문으로 바로 복원했으나,
+// 사용자 지시(2026-07-16)로 진입은 언제나 홈화면으로 고정한다(읽던 자리 표시는 지문 재진입 시 progress로 복원).
 function bootScreen() {
-  const lastId = store.get("lastPassage", null);
-  const loc = lastId ? findPassageLocation(lastId) : null;
-  if (loc) { course = loc.course; renderReading(loc.passage); }
-  else renderCourseList();
+  renderCourseList();
 }
 
 // ── 읽기 진행 저장(기기 저장소) ── 지문별 문장 상태(그은 선·임시 단어·검토 여부)를 담아,
@@ -141,6 +131,7 @@ function copyText(text, okMsg) {
 
 function setTop({ title, onBack, showVocab }) {
   el.title.textContent = title;
+  el.back.innerHTML = ICON.back; // 유니코드 문자 대신 SVG 아이콘(글자 baseline 어긋남·폰트 편차 제거)
   // 화살표로 감싸 클릭 이벤트 객체가 onBack의 첫 인자로 새지 않게 한다.
   // (renderList(c)처럼 인자를 받는 함수를 직접 연결하면 MouseEvent가 c로 들어가 course를 덮어썼다.)
   el.back.onclick = () => onBack();
@@ -269,7 +260,6 @@ function renderList(c) {
 // ── 읽기 화면 ──
 function renderReading(p) {
   currentPassage = p; // 단어장에서 이 지문으로 돌아온다
-  store.set("lastPassage", p.id); // 앱 재시작 시 '이어읽기' 대상
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
   setTop({ title: p.titleKr, onBack: renderList, showVocab: true });
@@ -1025,7 +1015,7 @@ function renderVocab() {
 
   const head = document.createElement("div");
   head.className = "list-summary";
-  head.innerHTML = `<b>${vocab.length}개</b> 수집 · 단어를 눌러 뜻과 예문 확인`;
+  head.innerHTML = `<b>${vocab.length}개</b> 수집 · 뜻과 예문이 바로 보입니다`;
   stage.appendChild(head);
 
   const listEl = document.createElement("div");
@@ -1036,20 +1026,20 @@ function renderVocab() {
 
     const row = document.createElement("div");
     row.className = "vocab-row";
-    const word = document.createElement("button");
-    word.type = "button"; word.className = "vocab-word"; word.textContent = v.word;
+    const word = document.createElement("div");
+    word.className = "vocab-word"; word.textContent = v.word;
     const del = document.createElement("button");
-    del.type = "button"; del.className = "vocab-del"; del.textContent = "✕"; del.setAttribute("aria-label", "단어 삭제");
+    del.type = "button"; del.className = "vocab-del"; del.innerHTML = ICON.close; del.setAttribute("aria-label", "단어 삭제");
     row.append(word, del);
 
+    // 뜻·예문·출처를 접지 않고 바로 표시(사용자 지시 2026-07-16). 삭제는 오른쪽 버튼으로 즉시.
     const detail = document.createElement("div");
-    detail.className = "vocab-detail"; detail.hidden = true;
+    detail.className = "vocab-detail";
     detail.innerHTML =
       `<div class="vd-mean${v.meaning ? "" : " vd-empty"}">${v.meaning || "뜻 미등록 - 직접 채워 보세요"}</div>` +
       `<div class="vd-ex">${v.sentence}</div>` +
       `<div class="vd-src">${v.passageTitle}</div>`;
 
-    word.onclick = () => { detail.hidden = !detail.hidden; }; // 뜻 먼저 떠올려 보고 확인
     del.onclick = () => {
       store.set("vocab", getVocab().filter((x) => x.wordKey !== v.wordKey));
       renderVocab();
