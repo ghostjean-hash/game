@@ -323,3 +323,14 @@
 - 검증: node 테스트 전량 통과. browser-shot 다수 - 놓침 화살표 붉은·크게, 하단 "전체 해석"→(전체 펼침)→"완료"→팝업 전환, 팝업 X·픽토그램·제목·SVG 버튼 3개, 상단바 끊기/단어 제거(단어장만), 환경설정 5토글 모두 콘솔 0. standalone 재빌드(292KB).
 - 변경 파일: src/main.js / style.css / index.html / tools/build-standalone.mjs / dist/standalone.html(재생성).
 - 잔여: (1) 배포(/web-deploy)는 deploy.json이 flightshooting 가리켜 회피, 사용자 지시 대기. (2) flightshooting 11개 파일 미커밋 변경은 타 세션분, 이번 봉합 제외 - 사용자 처리 대기. (3) 2.37 검수 잔여 유지.
+
+## 2.40. 채점 마크 정비 + 완독 표시 3종 + 숙어 등록 (2026-07-16, 사용자 연속 지시)
+
+- 배경: 읽기 화면을 사용자가 세 방향으로 다듬음 - 채점 표시 마크, 완독 상태 구분, 쉬운 낱말로 된 숙어 대응. 커밋 a223ec8(마크+완독)·547597f(숙어).
+- 채점 마크(사용자 "회색 끊기 위 붉은 x, X·O·화살표 크기 같게"): 다른 분할(neutral, 그었지만 추천도 허용도 아닌 위치)에 붉은 작은 x(✕)를 새로 넣고, 놓침(missed) 화살표(▾)를 붉게, 추천 원(●)·허용 원(○)·비추천 삼각형(△)·다른분할 x(✕)·놓침 화살표(▾)의 시각 크기를 서로 통일(원 0.42em, 글자 마크는 잉크 비율 달라 △0.82·✕0.6·▾0.78em으로 눈맞춤, browser-shot 확대로 조정). CLAUDE.md 5.1의 "빨간 X 폐기"를 "다른분할·놓침에 붉은 마크 사용(사용자 지시)"으로 갱신.
+- 완독 표시 3종(사용자 "모두 맞춘/끊기 틀린/단어 있는 완독을 다르게"): 완독 시점에 doneMeta{chunkOk, hadWords}를 기록(clearPassageProgress 전). computeChunkOk = 모든 문장에서 추천 경계를 정확히 긋고(놓침 0) 틀린 곳(비추천·다른분할)이 없으면 true(끊기 OFF면 이슈 없음으로 true), passageHasVocab = 이 지문 출처 단어가 단어장에 있으면 true. 목록 표시 - 완벽(끊기 다 맞고 모르는 단어 없음)은 카드 전체 딤드(opacity 0.5, "다시 볼 필요 적음"), 끊기 틀림은 "끊기 · 완독", 단어 담음은 "단어 · 완독" 태그(딤드 없음). 둘 다면 "끊기 · 단어 · 완독". 기존 완독(doneMeta 없음)은 하위호환으로 그냥 "완독 ✓".
+- 숙어 등록(사용자 "takes a bus처럼 쉬운 낱말로 된 표현이 해석 안 됨, 지금대로 두고 숙어만 추가"): words에 여러 낱말 표현을 띄어쓰기째 허용. core/tokenize.js matchWordTargets 신설 - word를 공백으로 쪼갠 조각의 clean이 원문 토큰과 연속으로 일치하는 시작 위치를 nth로 찾아 indices를 돌려준다(단일 낱말=1토큰, 숙어=연속 N토큰, 토큰 겹침 방지). renderSentence를 타겟(그룹) 기반으로 재작성 - tokenToTarget/spanByIndex/toggleTarget로 표현 속 아무 낱말이나 누르면 그 표현의 모든 토큰이 함께 오렌지로 켜지고, 해석 시 [표현 - 뜻] 한 줄로 공개·단어장 저장. 낱말 몸통만 반응(기존 gap-hit 오버레이가 틈·가장자리를 끊기로 가져감)해 끊기 틈을 침범하지 않는다. 본문 표시는 지금대로 깨끗하게(밑줄 없음) 두고 누를 때만 묶음이 드러난다. flag 저장은 타겟 첫 토큰 인덱스 기준이라 기존 단일 낱말 저장과 하위호환.
+- 정합: validate.js·tests/run-node.mjs를 matchWordTargets 기반으로(숙어 실재 검증 + 유닛 2건 신설), AUTHORING_PROMPT 7번 규칙·CLAUDE.md 4.3 words 규약에 숙어 허용 명시. 데이터는 "첫 버스 여행" 지문에 takes a bus·where to get off 2개 추가.
+- 검증: node 테스트 전량 통과. browser-shot - 채점 마크(주황 △·붉은 ✕·파랑 ● 나란히 크기 맞음, 확대 확인) / 완독("끊기 · 완독" 태그 + 완벽 딤드) / 숙어("takes a bus" 세 낱말 묶음 오렌지 + 해석 시 "takes a bus - 버스를 타다" 공개 + 토스트) 모두 콘솔 0. standalone 재빌드(295KB).
+- 변경 파일: src/core/tokenize.js·validate.js / src/main.js / src/data/passages.json / tests/run-node.mjs / style.css / CLAUDE.md / dist/standalone.html(재생성).
+- 잔여: (1) 배포(/web-deploy)는 deploy.json이 flightshooting 가리켜 회피, 사용자 지시 대기. (2) flightshooting 미커밋 변경은 사용자 "그대로 둬" 지시로 유지(타 머신 d665eb5 커밋과 별개 로컬 잔여). (3) 다른 지문에도 숙어 추가 여지. (4) 2.37 검수 잔여 유지.
