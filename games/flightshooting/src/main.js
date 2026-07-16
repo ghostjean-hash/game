@@ -5,6 +5,8 @@ import { createStorage } from '../../../shared/storage.js';
 import { showModal, registerServiceWorker } from '../../../shared/ui.js';
 import { CFG } from './data/numbers.js';
 import { COLORS } from './data/colors.js';
+import { COUNTRIES, START_COUNTRY } from './data/countries.js';
+import { WORLD_PATHS, MAP_W, MAP_H, lonToX, latToY } from './data/worldmap.js';
 import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard, updateParticles } from './core/world.js';
@@ -25,6 +27,7 @@ const canvas = $('#board');
 const ctx = canvas.getContext('2d');
 const elScore = $('#score');
 const elStage = $('#stage');
+const elLoc = $('#hud-loc'); // 현재 여행 중인 나라·수도(HUD)
 const elFront = $('#front');
 const elOption = $('#option');
 const elZone = $('#zone');
@@ -55,7 +58,7 @@ const store = createStorage('flightshooting');
 
 // ── 상태 ──
 let W = 0, H = 0, dpr = 1;
-let state = 'menu'; // menu | playing | paused | dying | over | won
+let state = 'menu'; // menu | playing | paused | dying | over | won | map(세계 여행 지도)
 let best = store.get('best', 0);
 let bannerTimer = 0;
 let deathTimer = 0; // 죽는 연출(dying) 남은 시간. 0이 되면 결과 팝업.
@@ -86,7 +89,8 @@ function createGame() {
     autoAssist: false, dragging: false, manualTimer: 0,
     difficulty: 'normal', enemyFireMul: 1, enemyHpMul: 1, enemyShotsMax: 99, radialMul: 1, // 난이도(startGame에서 세팅)
     bonusTimer: CFG.bonusShip.every,
-    bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null,
+    bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null, bossDeathTimer: null,
+    tourIdx: START_COUNTRY, tourPath: [START_COUNTRY], // 세계 여행: 현재 나라 + 지나온 경로(docs/10)
     sfx: [], events: [],
   };
 }
@@ -167,6 +171,7 @@ function handleEvent(ev) {
       break;
     case 'gameover': gameOver(); break;
     case 'win': gameWon(); break;
+    case 'show-map': showMap(); break; // 구역 클리어 → 세계 여행 지도로 다음 목적지 선택(docs/10)
   }
 }
 
@@ -215,6 +220,8 @@ function setTailHud() {
 function syncHud() {
   elScore.textContent = game.score;
   elStage.textContent = game.stage;
+  const c = COUNTRIES[game.tourIdx]; // 현재 여행 나라·수도(구역 이름 문자열 대신 표시)
+  if (c) elLoc.textContent = `${c.ko} · ${c.cap}`;
   setFrontHud();
   setEvoHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2, game.optionEvo || 0, COLORS.bulletShapeTier.length - 1);
   setPartHud(elZone, game.zone.level, CFG.parts.zone.levelMax);
@@ -242,9 +249,10 @@ function resetGame() {
   game.front = 1; game.options = []; game.optionEvo = 0; game.zone = { level: 0, timer: null }; game.tail = []; game.partHistory = [];
   game.friend = null; // 친구 동행 켜짐이면 startGame에서 다시 생성
   game.stage = 1; game.fireTimer = 0;
+  game.tourIdx = START_COUNTRY; game.tourPath = [START_COUNTRY]; // 세계 여행 경로 초기화(한국 출발)
   game.dragging = false; game.manualTimer = 0; // 하이브리드 자동 상태 초기화
   game.bossPending = false; game.transitioning = false;
-  game.pendingTimer = null; game.transitionTimer = null; game.winTimer = null;
+  game.pendingTimer = null; game.transitionTimer = null; game.winTimer = null; game.bossDeathTimer = null;
   game.sfx.length = 0; game.events.length = 0;
   elBossBar.hidden = true;
   initStars(game, W, H);
@@ -380,6 +388,217 @@ function commitBest() {
   return false;
 }
 
+// ── 세계 여행 지도(docs/10) ──
+// 보스 격파 → 세계지도가 떠 현재 나라의 이웃 중 다음 목적지를 고른다 → 비행 연출 → 다음 구역.
+const mapOverlay = $('#map-overlay');
+const mapViewport = $('#map-viewport');
+const mapTitle = $('#map-title');
+const mapHint = $('#map-hint');
+const mapCard = $('#map-card');
+let flyRaf = 0; // 비행 애니메이션 rAF 핸들(정리용)
+let tourScale = 1; // 확대 배율 보정(핀·글자가 화면에서 일정 크기로 보이도록). renderMap이 갱신.
+let tourVB = null; // 현재 지도 viewBox {x,y,w,h} - 드래그·확대축소로 갱신
+let tourCands = []; // 현재 화면 후보 목록(홈 버튼 재중심용)
+const cityX = (i) => lonToX(COUNTRIES[i].lon);
+const cityY = (i) => latToY(COUNTRIES[i].lat);
+
+function showMap() {
+  const cur = game.tourIdx;
+  const cands = COUNTRIES[cur].next.filter((i) => !game.tourPath.includes(i));
+  // 갈 수 있는 이웃이 없으면(종착 호주 등) 지도를 생략하고 곧장 다음 구역으로.
+  if (!cands.length) { advanceStage(); return; }
+  state = 'map';
+  loop.pause();
+  mapCard.hidden = true;
+  mapHint.hidden = false;
+  mapTitle.textContent = '다음 목적지를 골라라';
+  mapOverlay.hidden = false; // 먼저 표시해 map-viewport 실제 크기를 확보(화면 꽉 채우기)
+  renderMap(cur, cands);
+}
+
+// 현재+후보를 감싸는 초기 확대 영역을 {x,y,w,h}로 계산. 화면 비율에 맞춰 여백 없이 채운다.
+//   vpW/vpH = 지도 표시 영역 실제 픽셀 크기.
+function computeViewBox(cur, cands, vpW, vpH) {
+  const T = CFG.tour;
+  const aspect = vpW / vpH;
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const i of [cur, ...cands]) {
+    const x = cityX(i), y = cityY(i);
+    if (x < minX) minX = x; if (x > maxX) maxX = x;
+    if (y < minY) minY = y; if (y > maxY) maxY = y;
+  }
+  let x = minX - T.zoomPad, y = minY - T.zoomPad;
+  let w = (maxX - minX) + T.zoomPad * 2, h = (maxY - minY) + T.zoomPad * 2;
+  if (w < T.zoomMinW) { x -= (T.zoomMinW - w) / 2; w = T.zoomMinW; }
+  if (w / h < aspect) { const nw = h * aspect; x -= (nw - w) / 2; w = nw; }
+  else { const nh = w / aspect; y -= (nh - h) / 2; h = nh; }
+  return { x, y, w, h };
+}
+
+// 도시 하나: 점 + 2줄 라벨(윗줄 나라이름 작게·다른 색, 아랫줄 수도 상태색). clickable이면 후보(맥동·클릭), faint면 흐리게.
+function cityMark(i, mk, dotColor, s, clickable, faint) {
+  const x = cityX(i).toFixed(1), yv = cityY(i);
+  const dot = mk.dot * s;
+  const capY = yv - dot - CFG.tour.mark.labelGap * s;              // 수도(아랫줄) - 점 바로 위
+  const nameY = capY - mk.cap * s * 0.92 - CFG.tour.mark.nameLift * s; // 나라이름(윗줄) - 수도 위 + 추가로 올림
+  const op = faint ? ' opacity="0.55"' : '';
+  const open = clickable ? `<g class="map-pick" data-dest="${i}"${op}>` : `<g${op}>`;
+  const dotEl = `<circle ${clickable ? 'class="pick-dot" ' : ''}cx="${x}" cy="${yv.toFixed(1)}" r="${dot.toFixed(1)}" fill="${dotColor}" stroke="#0b1020" stroke-width="${(1.5 * s).toFixed(2)}"/>`;
+  const nameEl = `<text x="${x}" y="${nameY.toFixed(1)}" text-anchor="middle" font-size="${(mk.name * s).toFixed(1)}" font-weight="600" fill="${COLORS.tour.countryLabel}">${COUNTRIES[i].ko}</text>`;
+  const capEl = `<text x="${x}" y="${capY.toFixed(1)}" text-anchor="middle" font-size="${(mk.cap * s).toFixed(1)}" font-weight="700" fill="${dotColor}">${COUNTRIES[i].cap}</text>`;
+  return open + dotEl + nameEl + capEl + '</g>';
+}
+
+// 지도 SVG를 그린다. 모든 나라 수도 표시(현재/후보 크게, 방문 중간, 나머지 작고 흐리게) + 경로 점선 + 비행기.
+function renderMap(cur, cands) {
+  const fx = (i) => cityX(i).toFixed(1);
+  const fy = (i) => cityY(i).toFixed(1);
+  const vpW = mapViewport.clientWidth || CFG.tour.zoomRefW;
+  const vpH = mapViewport.clientHeight || (vpW / CFG.tour.aspect);
+  tourVB = computeViewBox(cur, cands, vpW, vpH);
+  tourCands = cands;
+  tourScale = tourVB.w / vpW; // 화면 일정 픽셀 역보정
+  const s = tourScale;
+  const M = CFG.tour.mark;
+  const path = game.tourPath;
+  const candSet = new Set(cands);
+  const visitedSet = new Set(path);
+  let route = '';
+  if (path.length > 1) {
+    route = `<path d="${path.map((i, k) => (k ? 'L' : 'M') + fx(i) + ',' + fy(i)).join('')}" fill="none" stroke="${COLORS.tour.route}" stroke-width="${(2.5 * s).toFixed(2)}" stroke-dasharray="${(6 * s).toFixed(1)} ${(6 * s).toFixed(1)}" opacity="0.8"/>`;
+  }
+  let cities = '';
+  for (let i = 0; i < COUNTRIES.length; i++) {
+    if (i === cur) cities += cityMark(i, M.cur, COLORS.tour.current, s, false, false);
+    else if (candSet.has(i)) cities += cityMark(i, M.cand, COLORS.tour.candidate, s, true, false);
+    else if (visitedSet.has(i)) cities += cityMark(i, M.visited, COLORS.tour.visited, s, false, false);
+    else cities += cityMark(i, M.other, COLORS.tour.dim, s, false, true);
+  }
+  const plane = `<g id="tour-plane" transform="translate(${fx(cur)},${fy(cur)})"><circle r="${(7 * s).toFixed(1)}" fill="${COLORS.tour.current}" stroke="#0b1020" stroke-width="${(2 * s).toFixed(2)}"/></g>`;
+  const vb = `${tourVB.x.toFixed(1)} ${tourVB.y.toFixed(1)} ${tourVB.w.toFixed(1)} ${tourVB.h.toFixed(1)}`;
+  // 대륙별로 다른 색 칠(WORLD_PATHS의 대륙명 c → COLORS.tour.continent 색)
+  const sw = (CFG.tour.borderW * s).toFixed(2);
+  const land = WORLD_PATHS.map((wp) => `<path d="${wp.d}" fill="${COLORS.tour.continent[wp.c] || COLORS.tour.land}" stroke="${COLORS.tour.border}" stroke-width="${sw}"/>`).join('');
+  mapViewport.innerHTML = `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="${MAP_W}" height="${MAP_H}" fill="#0b1020"/>${land}${route}${cities}${plane}</svg>`;
+  mapViewport.querySelectorAll('.map-pick').forEach((g) => {
+    g.addEventListener('click', () => { if (!mapDragMoved) chooseDest(Number(g.dataset.dest)); });
+  });
+}
+
+// viewBox만 갱신(드래그·확대축소·홈 공용, 재렌더 없음).
+function setViewBox() {
+  const svg = mapViewport.querySelector('svg');
+  if (svg && tourVB) svg.setAttribute('viewBox', `${tourVB.x.toFixed(1)} ${tourVB.y.toFixed(1)} ${tourVB.w.toFixed(1)} ${tourVB.h.toFixed(1)}`);
+}
+
+// 확대/축소(중심 유지). factor<1 확대, >1 축소.
+function zoomMap(factor) {
+  if (!tourVB) return;
+  const T = CFG.tour;
+  let nw = Math.max(T.zoomWMin, Math.min(T.zoomWMax, tourVB.w * factor));
+  const nh = nw * (tourVB.h / tourVB.w);
+  tourVB.x += (tourVB.w - nw) / 2; tourVB.y += (tourVB.h - nh) / 2;
+  tourVB.w = nw; tourVB.h = nh;
+  setViewBox();
+}
+
+// 홈: 현재 위치+후보가 보이도록 뷰 복귀.
+function recenterMap() {
+  const vpW = mapViewport.clientWidth || CFG.tour.zoomRefW;
+  const vpH = mapViewport.clientHeight || (vpW / CFG.tour.aspect);
+  tourVB = computeViewBox(game.tourIdx, tourCands, vpW, vpH);
+  setViewBox();
+}
+
+// 후보 클릭 → 비행기가 목적지로 날아가는 연출 → 도착 카드('나라-수도') → 다음 구역.
+function chooseDest(dest) {
+  if (state !== 'map' || flyRaf) return; // 연출 중 재클릭은 flyRaf 가드로 차단(핀·라벨을 지우지 않아 대상 이름이 유지됨)
+  mapHint.hidden = true;
+  mapTitle.textContent = `${COUNTRIES[dest].ko}(으)로!`;
+  const from = game.tourIdx;
+  flyTo(from, dest, () => {
+    game.tourIdx = dest;
+    game.tourPath.push(dest);
+    mapCard.innerHTML = `${COUNTRIES[dest].ko} 도착!<br>수도는 <b>${COUNTRIES[dest].cap}</b>`;
+    mapCard.hidden = false;
+    sound.play('start'); // 도착 효과음(기존 사운드 재사용)
+    flyRaf = 0;
+    setTimeout(closeMapAndAdvance, CFG.tour.cardTime * 1000);
+  });
+}
+
+// 비행기 마커를 from→dest로 flyTime초에 걸쳐 이동시키고 노란 경로선을 그려나간다.
+function flyTo(from, dest, done) {
+  const x0 = cityX(from), y0 = cityY(from), x1 = cityX(dest), y1 = cityY(dest);
+  const svg = mapViewport.querySelector('svg');
+  const plane = mapViewport.querySelector('#tour-plane');
+  if (!svg || !plane) { done(); return; }
+  const fly = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  fly.setAttribute('fill', 'none');
+  fly.setAttribute('stroke', COLORS.tour.current);
+  fly.setAttribute('stroke-width', (2.5 * tourScale).toFixed(2));
+  fly.setAttribute('stroke-dasharray', `${(6 * tourScale).toFixed(1)} ${(6 * tourScale).toFixed(1)}`);
+  svg.insertBefore(fly, plane);
+  const dur = Math.max(1, CFG.tour.flyTime * 1000);
+  const t0 = performance.now();
+  const step = (now) => {
+    const t = Math.min(1, (now - t0) / dur);
+    const x = x0 + (x1 - x0) * t, y = y0 + (y1 - y0) * t;
+    plane.setAttribute('transform', `translate(${x.toFixed(1)},${y.toFixed(1)})`);
+    fly.setAttribute('d', `M${x0.toFixed(1)},${y0.toFixed(1)}L${x.toFixed(1)},${y.toFixed(1)}`);
+    if (t < 1) flyRaf = requestAnimationFrame(step);
+    else { flyRaf = 0; done(); }
+  };
+  flyRaf = requestAnimationFrame(step);
+}
+
+function closeMapAndAdvance() {
+  mapOverlay.hidden = true;
+  mapCard.hidden = true;
+  advanceStage();
+}
+
+// world.js nextStage와 동일 효과: 다음 구역 웨이브 준비 후 루프 재개.
+function advanceStage() {
+  if (flyRaf) { cancelAnimationFrame(flyRaf); flyRaf = 0; }
+  game.stage++;
+  startStage(game); // 화력·목숨·점수 유지, '구역 N' 배너 이벤트 push(resume 후 소비)
+  state = 'playing';
+  loop.resume();
+}
+
+// ── 지도 인터랙션(드래그 스크롤 + 확대축소 + 홈) - 모듈 로드 시 1회 바인딩 ──
+let mapDrag = null, mapDragMoved = false;
+mapViewport.addEventListener('pointerdown', (e) => {
+  if (!tourVB) return;
+  mapDrag = { px: e.clientX, py: e.clientY, ox: tourVB.x, oy: tourVB.y, id: e.pointerId };
+  mapDragMoved = false;
+  // 여기서 포인터를 캡처하지 않는다 - 캡처하면 도시 핀(자식)의 click이 삼켜져 목적지 터치가 안 된다.
+  //   실제로 움직임이 임계를 넘은 순간에만(아래 pointermove) 캡처해 드래그를 이어받는다.
+});
+mapViewport.addEventListener('pointermove', (e) => {
+  if (!mapDrag || !tourVB) return;
+  const k = tourVB.w / (mapViewport.clientWidth || 1); // 화면px → 지도 단위
+  if (!mapDragMoved && Math.abs(e.clientX - mapDrag.px) + Math.abs(e.clientY - mapDrag.py) > 5) {
+    mapDragMoved = true;
+    mapViewport.setPointerCapture(mapDrag.id); // 드래그 확정 시에만 캡처(탭은 핀 클릭으로 남김)
+  }
+  if (!mapDragMoved) return;
+  tourVB.x = mapDrag.ox - (e.clientX - mapDrag.px) * k;
+  tourVB.y = mapDrag.oy - (e.clientY - mapDrag.py) * k;
+  setViewBox();
+});
+const endDrag = () => { mapDrag = null; };
+mapViewport.addEventListener('pointerup', endDrag);
+mapViewport.addEventListener('pointercancel', endDrag);
+mapViewport.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  zoomMap(e.deltaY > 0 ? CFG.tour.zoomStep : 1 / CFG.tour.zoomStep);
+}, { passive: false });
+$('#map-zoom-in').addEventListener('click', () => zoomMap(1 / CFG.tour.zoomStep));
+$('#map-zoom-out').addEventListener('click', () => zoomMap(CFG.tour.zoomStep));
+$('#map-home').addEventListener('click', recenterMap);
+
 // fromPop = popstate(폰 백버튼/화면 ← 경유)로 불린 경우. 그 외(게임오버 모달 '홈' 등) 직접 호출 시엔
 //   startGame에서 쌓은 game 히스토리 지점을 소비해, 다음 시작 때 push가 정상 동작하도록 정리한다.
 function backToMenu(fromPop) {
@@ -507,6 +726,8 @@ $('#cheat-fold').addEventListener('click', () => {
   body.hidden = !body.hidden;
   $('#cheat-fold').textContent = body.hidden ? '+' : '−';
 });
+// 지도 테스트: 게임 중 언제든 세계 여행 지도를 띄운다(전투를 다 거치지 않고 여행·경로 확인). 치트 전용.
+$('#cheat-map').addEventListener('click', () => { if (state === 'playing') showMap(); });
 // 헤더를 잡고 드래그해 치트 박스를 옮긴다(fixed 좌표라 화면 어디든).
 let cheatDrag = null;
 const cheatHead = $('#cheat-head');
@@ -539,5 +760,7 @@ resize();
   const diff = d && CFG.difficulty[d] ? d : (q.get('kid') != null ? 'easy' : 'normal');
   if (q.get('friend') != null || q.get('kid') != null) { friendOn = true; setOptIcon(optFriend, true); }
   if (q.get('auto') != null) { autoOn = true; setOptIcon(optAuto, true); startGame(diff); } // 자동 플레이(하이브리드)
-  else if (q.get('kid') != null || q.get('friend') != null || d != null) startGame(diff); // 수동 관찰용 시작
+  else if (q.get('kid') != null || q.get('friend') != null || d != null || q.get('showmap') != null) startGame(diff); // 수동 관찰용 시작
+  // showmap=1: 세계 여행 지도를 즉시 띄운다(?stage=N으로 현재 나라 대신 구역만 바꿀 수 있음). 지도 UI 검증 전용.
+  if (q.get('showmap') != null) showMap();
 })();

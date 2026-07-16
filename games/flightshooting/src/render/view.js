@@ -252,11 +252,11 @@ function drawFace(ctx, o) {
     if (mouthR > 0) { ctx.fillStyle = mouthColor; ctx.beginPath(); ctx.ellipse(0, mouthY, mouthR * 0.8, mouthR, 0, 0, Math.PI * 2); ctx.fill(); } // 벌린 입
     return;
   }
-  // 기본: 작은 점 눈 + 붉은 'O' 입(링)
+  // 기본: 작은 점 눈 + 붉은 입(홈 화면 바푸리와 동일 - 채운 세로 타원)
   ctx.fillStyle = eyeColor;
   ctx.beginPath(); ctx.arc(-eyeX, eyeY, eyeR, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.arc(eyeX, eyeY, eyeR, 0, Math.PI * 2); ctx.fill();
-  if (mouthR > 0) { ctx.strokeStyle = mouthColor; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(0, mouthY, mouthR, 0, Math.PI * 2); ctx.stroke(); }
+  if (mouthR > 0) { ctx.fillStyle = mouthColor; ctx.beginPath(); ctx.ellipse(0, mouthY, mouthR * 0.72, mouthR, 0, 0, Math.PI * 2); ctx.fill(); }
 }
 
 function drawPlayer(ctx, game) {
@@ -277,10 +277,10 @@ function drawPlayer(ctx, game) {
   // 동그란 몸통(얼굴) - 거의 원형
   ctx.beginPath(); ctx.ellipse(0, 0, r * 0.98, r * 1.08, 0, 0, Math.PI * 2); ctx.fill();
   ctx.shadowBlur = 0;
-  // 얼굴: 몸은 위(진행 방향)로 나아가되 표정은 고개를 아래로 돌려 플레이어를 본다(얼굴을 몸 하단부에, 사용자 지시)
+  // 얼굴: 홈 화면 바푸리와 동일한 비율(정면) - 눈은 몸통 중앙 살짝 위, 입은 중앙 아래(사용자 지시).
   drawFace(ctx, {
-    eyeX: r * 0.32, eyeY: r * 0.3, eyeR: 1.6, eyeColor: COLORS.warawaraEye,
-    mouthY: r * 0.62, mouthR: r * 0.16, mouthColor: COLORS.warawaraMouth, tearColor: COLORS.warawaraTear, emo: p.emo,
+    eyeX: r * 0.29, eyeY: -r * 0.09, eyeR: r * 0.11, eyeColor: COLORS.warawaraEye,
+    mouthY: r * 0.4, mouthR: r * 0.15, mouthColor: COLORS.warawaraMouth, tearColor: COLORS.warawaraTear, emo: p.emo,
   });
   ctx.restore();
 }
@@ -671,15 +671,28 @@ function drawPowerups(ctx, game) {
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 1.5;
     if (it.kind === 'H') {
-      // 회복 = 하트 모양 그 자체(빨간 채움 + 흰 테두리 + 글로우). 좌우 대칭 정석 하트 곡선.
+      // 회복 = 고품질 하트: 세로 그라데이션(밝은→진한 빨강) + 흰 테두리 + 좌상단 광택 + 글로우. 좌우 대칭 곡선.
       const hs = it.r;
+      const HC = COLORS.heart;
       ctx.lineJoin = 'round';
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.moveTo(0, hs * 0.9);                                        // 아래 뾰족점
-      ctx.bezierCurveTo(-hs * 1.15, -hs * 0.1, -hs * 0.65, -hs * 1.05, 0, -hs * 0.32); // 왼쪽 잎 → 중앙 홈
-      ctx.bezierCurveTo(hs * 0.65, -hs * 1.05, hs * 1.15, -hs * 0.1, 0, hs * 0.9);     // 오른쪽 잎 → 아래 점
-      ctx.closePath(); ctx.fill(); ctx.stroke();
+      const heartPath = () => {
+        ctx.beginPath();
+        ctx.moveTo(0, hs * 0.98);                                              // 아래 뾰족점
+        ctx.bezierCurveTo(-hs * 1.28, -hs * 0.18, -hs * 0.74, -hs * 1.18, 0, -hs * 0.44); // 왼쪽 잎 → 중앙 홈
+        ctx.bezierCurveTo(hs * 0.74, -hs * 1.18, hs * 1.28, -hs * 0.18, 0, hs * 0.98);     // 오른쪽 잎 → 아래 점
+        ctx.closePath();
+      };
+      // 채움(세로 그라데이션) + 발광
+      const grad = ctx.createLinearGradient(0, -hs, 0, hs);
+      grad.addColorStop(0, HC.light); grad.addColorStop(0.5, HC.mid); grad.addColorStop(1, HC.dark);
+      ctx.shadowColor = HC.glow; ctx.shadowBlur = 16;
+      heartPath(); ctx.fillStyle = grad; ctx.fill();
+      ctx.shadowBlur = 0;
+      // 흰 테두리
+      heartPath(); ctx.strokeStyle = HC.edge; ctx.lineWidth = 1.8; ctx.stroke();
+      // 좌상단 광택(잎에 비스듬한 하이라이트)
+      ctx.fillStyle = HC.shine;
+      ctx.beginPath(); ctx.ellipse(-hs * 0.44, -hs * 0.52, hs * 0.26, hs * 0.44, -0.5, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
       continue;
     }

@@ -243,6 +243,28 @@ export const CFG = {
       pro:          { react: 0.16, aimDeg: 0.8, sim: 2.1, threats: 999 },
     },
   },
+  // 세계 여행(docs/10): 구역 보스 격파 후 세계지도가 떠 다음 목적지(이웃 나라)를 고른다.
+  //   flyTime = 목적지로 비행기가 날아가는 연출(초), cardTime = 도착 후 '나라-수도' 카드 표시(초).
+  //   지도는 세계 전체가 아니라 현재 위치+후보를 감싸는 영역으로 확대해 핀을 손가락으로 누를 수 있게 한다(사용자 지시).
+  //     zoomPad = 확대 영역 여백(지도 좌표), zoomMinW = 최소 가로폭(너무 확대 방지), aspect = 지도 창 가로:세로 비율.
+  //     zoomRefW = 화면 기준 폭(px) - 확대해도 핀·글자가 이 폭 기준 일정 픽셀로 보이게 크기를 역보정한다.
+  //   mark = 지도 위 도시 마크 크기(지도 좌표, 렌더 시 확대배율 s를 곱함). 상태별로 점 크기·라벨 폰트를 달리한다.
+  //     cur=현재 위치, cand=고를 수 있는 이웃, visited=지나온 곳, other=아직 안 간 나머지. name=나라이름 폰트, cap=수도 폰트.
+  //     labelGap=점과 수도라벨 세로 간격. zoomStep=확대/축소 버튼 배율, zoomWMin/Max=viewBox 가로폭 한계(확대·축소 상한).
+  tour: {
+    enabled: true, flyTime: 1.4, cardTime: 1.6, zoomPad: 40, zoomMinW: 260, aspect: 1.35, zoomRefW: 560,
+    mark: {
+      cur: { dot: 8, name: 11, cap: 15 },
+      cand: { dot: 11, name: 11, cap: 15 },
+      visited: { dot: 5, name: 8.5, cap: 10 },
+      other: { dot: 3, name: 7.5, cap: 8 },
+      labelGap: 4,
+      nameLift: 5, // 나라이름(윗줄)을 수도 위로 추가로 올리는 화면 px(사용자 지시)
+    },
+    zoomStep: 1.35, zoomWMin: 90, zoomWMax: 1400,
+    bossDeathTime: 1.5, // 보스 격파 후 폭발 연출을 보여주고 이 시간 뒤에 지도를 띄운다(사용자 지시)
+    borderW: 0.9, // 국가 경계선 굵기(지도 좌표, s 곱) - 잘 보이게 키움(사용자 지시)
+  },
 };
 
 // 구역 이름 (1~30). 11구역부터 미지의 심우주, 21구역부터 이질 기계 문명 - 완전 다른 적들이 출현한다.

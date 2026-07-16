@@ -35,7 +35,7 @@
             <ellipse cx="32" cy="32" rx="22" ry="24" fill="#f6f8ff"/>
             <circle cx="25.5" cy="30" r="2.6" fill="#33343d"/>
             <circle cx="38.5" cy="30" r="2.6" fill="#33343d"/>
-            <circle cx="32" cy="41" r="3.4" fill="none" stroke="#e0555f" stroke-width="2.2"/>
+            <ellipse cx="32" cy="41" rx="2.5" ry="3.4" fill="#c8434d" stroke="#e0555f" stroke-width="2"/>
           </svg>
         </div>
         <div class="menu-best" aria-live="polite">
@@ -87,18 +87,6 @@
         <input type="checkbox" id="set-cheat" />
       </label>
       <p class="set-note">치트 박스는 게임 화면에서 마우스로 끌어 옮길 수 있습니다.</p>
-      <section class="set-help">
-        <h3 class="set-subtitle">조작법</h3>
-        <ul class="help-list">
-          <li><b>이동</b> 화면을 손가락으로 끌면 기체가 따라옵니다 (PC: 방향키/마우스)</li>
-          <li><b>발사</b> 자동으로 나갑니다</li>
-          <li><b>P</b> 앞쪽 화력이 세집니다 (8발까지 늘고, 그 뒤엔 가운데 탄부터 색이 밝아지며 강해집니다)</li>
-          <li><b>S</b> 좌우에 부속 비행기가 붙어 레이저를 쏩니다 (최대 8대, 많을수록 굵고 셉니다)</li>
-          <li><b>E</b> 내 주변 에너지존이 커져 닿는 적에게 계속 피해를 줍니다</li>
-          <li><b>T</b> 뒤에 꼬리 비행기가 붙어 유도탄을 쏩니다 (4대까지 늘고, 그 뒤 무기가 커집니다)</li>
-          <li><b><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></b> 목숨은 난이도에 따라 다릅니다. 부딪히면 하나 줄고 마지막에 얻은 파츠도 하나 사라집니다</li>
-        </ul>
-      </section>
       <button id="set-close" class="btn btn-primary" type="button">닫기</button>
     </div>
   </div>
@@ -112,7 +100,7 @@
         <b id="score">0</b>
       </div>
       <div class="mini-hud" aria-live="polite">
-        <span class="mh"><small>구역</small><b id="stage">1</b></span>
+        <span class="mh mh-loc"><b id="hud-loc">한국 · 서울</b><small>구역 <b id="stage">1</b></small></span>
         <span class="mh sep">·</span>
         <span class="mh row"><i class="pbadge b-P" aria-label="전방 화력">P</i><b id="front">1</b></span>
         <span class="mh row"><i class="pbadge b-S" aria-label="옵션기">S</i><b id="option">0</b></span>
@@ -175,7 +163,26 @@
             <label><input type="checkbox" data-kind="B" checked /><span>B</span></label>
           </div>
         </div>
+        <div class="cheat-row">
+          <span class="cheat-label">여행 지도</span>
+          <button type="button" id="cheat-map" class="cheat-btn">지도 열기</button>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- 세계 여행 지도(구역 클리어 후 다음 목적지 선택, docs/10). SVG·핀은 main.js가 채운다. -->
+  <div id="map-overlay" class="map-overlay" hidden>
+    <div class="map-panel" role="dialog" aria-label="세계 여행 지도">
+      <div class="map-title" id="map-title">다음 목적지를 골라라</div>
+      <div class="map-viewport" id="map-viewport"></div>
+      <div class="map-controls">
+        <button type="button" id="map-home" class="map-ctrl" aria-label="내 위치로">내 위치</button>
+        <button type="button" id="map-zoom-in" class="map-ctrl map-ctrl-sq" aria-label="확대">＋</button>
+        <button type="button" id="map-zoom-out" class="map-ctrl map-ctrl-sq" aria-label="축소">－</button>
+      </div>
+      <div class="map-hint" id="map-hint">지도를 끌어 움직이고, 밝게 빛나는 도시를 눌러 여행을 떠나자</div>
+      <div class="map-card" id="map-card" hidden></div>
     </div>
   </div>
 </div>

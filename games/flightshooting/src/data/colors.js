@@ -96,6 +96,8 @@ export const COLORS = {
   warawaraMouth: '#e0555f', warawaraTear: '#3d9bf0',
   // B(봄) 폭탄: 아이템 몸체(짙은 회흑) + 도화선 불꽃 + 획득 섬광. 폭탄임을 알아보게.
   bomb: '#2c3444', bombFuse: '#ffb04a', bombSpark: '#ffe08a', bombFlash: 'rgba(255,236,180,0.5)',
+  // H(회복) 하트: 고품질 렌더 - 위(밝은 빨강)→아래(진한 빨강) 세로 그라데이션 + 흰 테두리 + 좌상단 광택.
+  heart: { light: '#ff8093', mid: '#ff4759', dark: '#d81e3a', edge: 'rgba(255,255,255,0.92)', shine: 'rgba(255,255,255,0.55)', glow: '#ff5566' },
   totoro: { laser: '#9aa0ab', missile: '#6b7280', belly: '#e6e8ec', eye: '#2b2b30' },
   // 친구 비행기(어린이 모드, docs/09). 키위새 몸은 갈색 계열(플레이어 흰색·토토로 회색과 구분).
   //   shot = 직선 레이저 단계별 색 - 회색 계열(사용자 지시). 냉색 빔·빨간 적탄과 회색으로 구분.
@@ -105,5 +107,19 @@ export const COLORS = {
     //   강화해도 색은 변하지 않는다(단일 색, 사용자 지시).
     shot: '#4a4f55',    // 발사체 몸(어두운 회색, 강화 무관 고정)
     shotCore: '#767c83', // 코어(중간 회색 - 흰색 발광 제거, 은은하게만)
+  },
+  // 세계 여행 지도(docs/10). 게임 밤하늘 톤과 맞춘 어두운 남색 계열.
+  //   land/border = 대륙·국경선, route = 지나온 여행 경로(점선), visited = 방문한 도시,
+  //   current = 지금 위치(노랑 강조), candidate = 고를 수 있는 이웃(밝은 시안 강조), dim = 아직 못 가는 곳, plane = 비행기.
+  tour: {
+    land: '#233a5e', border: '#7c9bc8', // border = 국가 경계선(더 밝게 - 잘 보이게, 사용자 지시)
+    route: '#ffd24a', visited: '#4ae0c8', current: '#ffd24a',
+    candidate: '#7fe3ff', dim: '#7d8db0', plane: '#ffffff',
+    countryLabel: '#9fb0cf', // 나라이름(윗줄) - 수도(아랫줄, 상태색)와 구분되는 흐린 회청색
+    // 대륙별 채움색(밤하늘 톤에 맞춰 채도 낮춘 구분색). worldmap.js WORLD_PATHS의 c와 매칭.
+    continent: {
+      Asia: '#2f4a6b', Europe: '#43406e', Africa: '#5f4a2f',
+      'North America': '#2f5f4a', 'South America': '#5f3a2f', Oceania: '#5e2f52', Other: '#2a3a52',
+    },
   },
 };

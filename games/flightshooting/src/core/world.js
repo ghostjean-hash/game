@@ -3,6 +3,7 @@
 // 화면 전환 지연은 setTimeout이 아니라 dt 기반 타이머라 일시정지에도 안전하다.
 import { CFG } from '../data/numbers.js';
 import { COLORS } from '../data/colors.js';
+import { COUNTRIES } from '../data/countries.js';
 import { playerFire, enemyFireAt } from './fire.js';
 import { stepOptions, stepTail, homeMissiles, tickZone, gainFront, gainOption, gainZone, gainTail, loseLastPart } from './parts.js';
 import { stepFriend, friendTakeHit, gainFriendLevel, reviveFriend, notifyFriendKill } from './friend.js';
@@ -515,6 +516,12 @@ function defeatBoss(game) {
 
   if (wasFinal) {
     game.winTimer = 0.9;
+  } else if (CFG.tour.enabled) {
+    // 세계 여행(docs/10): 보스 폭발 연출을 잠깐 보여준 뒤 지도를 띄운다(사용자 지시). transitioning=true를
+    //   유지하되 전환 타이머 대신 bossDeathTimer만 돌린다(만료 시 show-map). 자동 구역 진행은 없다.
+    //   지도에서 목적지 선택·비행 연출이 끝나면 main이 stage++·startStage로 직접 재개한다.
+    game.sfx.push('stageclear');
+    game.bossDeathTimer = CFG.tour.bossDeathTime;
   } else {
     game.sfx.push('stageclear');
     game.events.push({ type: 'banner', big: '구역 클리어', sub: `구역 ${game.stage + 1}로`, dur: 2.0 });
@@ -530,7 +537,9 @@ export function startStage(game) {
   game.transitioning = false; // 새 구역 웨이브 준비 완료 → 진행 판정 재개
   game.pendingTimer = null;
   game.introTimer = CFG.stageIntro; // 구역 시작 배너 표시 동안 적 스폰 정지
-  game.events.push({ type: 'banner', big: `구역 ${game.stage}`, sub: stageName(game.stage), dur: CFG.stageIntro });
+  // 배너: 스테이지 이름 문자열 대신 여행 중인 나라·수도를 보여준다(사용자 지시). 여행 꺼짐이면 기존 이름.
+  const sub = CFG.tour.enabled ? `${COUNTRIES[game.tourIdx].ko} · ${COUNTRIES[game.tourIdx].cap}` : stageName(game.stage);
+  game.events.push({ type: 'banner', big: `구역 ${game.stage}`, sub, dur: CFG.stageIntro });
 }
 
 function nextStage(game) {
@@ -540,6 +549,10 @@ function nextStage(game) {
 
 function checkProgress(game, dt, W, H) {
   if (game.transitioning) {
+    if (game.bossDeathTimer != null) { // 보스 폭발 연출 후 지도 띄우기(세계 여행)
+      game.bossDeathTimer -= dt;
+      if (game.bossDeathTimer <= 0) { game.bossDeathTimer = null; game.events.push({ type: 'show-map' }); }
+    }
     if (game.transitionTimer != null) {
       game.transitionTimer -= dt;
       if (game.transitionTimer <= 0) { game.transitionTimer = null; nextStage(game); }
