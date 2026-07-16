@@ -37,6 +37,7 @@ const course = stripExports(read(join(app, "src", "core", "course.js")));
 const chunking = stripExports(read(join(app, "src", "core", "chunking.js")));
 const normalize = stripExports(read(join(app, "src", "core", "normalize.js")));
 const validate = stripImports(stripExports(read(join(app, "src", "core", "validate.js"))));
+const authoring = stripImports(stripExports(read(join(app, "src", "core", "authoring-index.js"))));
 const storage = stripExports(read(join(hub, "shared", "storage.js")));
 let main = stripImports(read(join(app, "src", "main.js")));
 
@@ -87,6 +88,7 @@ ${course}
 ${chunking}
 ${normalize}
 ${validate}
+${authoring}
 ${main}
 </script>
 </body>

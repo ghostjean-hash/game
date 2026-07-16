@@ -7,6 +7,7 @@ import { tokenize, resolveTargets, matchWordTargets } from "../src/core/tokenize
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
 import { chunkBoundaries, gradeSlashes, gradeChunks, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
 import { validatePassage, normalizeSmartQuotes } from "../src/core/validate.js";
+import { analyzeContent, nextCurriculumHint, buildAuthoringPackage, compareAgainstExisting, RULES_VERSION } from "../src/core/authoring-index.js";
 import { normalizeSentence, boundarySet, reasonByBoundary } from "../src/core/normalize.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -371,6 +372,37 @@ function check(name, cond, detail = "") {
       prevLevel = p.level;
     }
   }
+}
+
+// ── authoring-index (출제 관리 순수 로직) ──────────────────
+{
+  const data = JSON.parse(readFileSync(join(here, "../src/data/passages.json"), "utf8"));
+  const passages = data.courses.flatMap((c) => c.passages);
+  const idx = analyzeContent(passages);
+  check("authoring: 지문 수 집계", idx.totalPassages === passages.length, `${idx.totalPassages}`);
+  check("authoring: 문장 수 집계", idx.totalSentences === passages.reduce((n, p) => n + p.sentences.length, 0));
+  check("authoring: level 분포 합 = 지문 수", Object.values(idx.levelDistribution).reduce((a, b) => a + b, 0) === passages.length);
+  check("authoring: topic 분포 존재", Object.keys(idx.topicDistribution).length >= 1);
+  check("authoring: 제목 완전중복 0(현재 데이터)", idx.titleDuplicates.length === 0, idx.titleDuplicates.join(","));
+  check("authoring: 문장 완전중복 0(현재 데이터)", idx.exactSentenceDuplicates.length === 0, `${idx.exactSentenceDuplicates.length}건`);
+
+  const hint = nextCurriculumHint(passages, idx);
+  check("authoring: 다음 지문 번호 = 지문수+1", hint.nextPassageNumber === passages.length + 1);
+  check("authoring: 기존 id 목록 전달", hint.existingIds.length === passages.length);
+
+  const pkg = buildAuthoringPackage(passages, { batchSize: 1 });
+  check("authoring: 패키지에 규칙/스키마 버전 포함", pkg.includes(`rulesVersion=${RULES_VERSION}`));
+  check("authoring: 패키지에 작성 규칙·양식 포함", pkg.includes("[작성 규칙]") && pkg.includes("[양식]"));
+  check("authoring: 패키지에 현재 상태 포함", pkg.includes("현재 공식 콘텐츠 상태") && pkg.includes(`${idx.totalPassages}편`));
+  check("authoring: 패키지에 앵커 포함", pkg.includes("[레벨 앵커]"));
+
+  const first = passages[0];
+  const idDup = compareAgainstExisting({ id: first.id, title: "X", titleKr: "임시제목", level: hint.recommendedLevel, topic: "T", sentences: [] }, passages);
+  check("authoring: 기존 id 중복 검출", idDup.notes.some((n) => n.kind === "dup" && /id/.test(n.msg)));
+  const sentDup = compareAgainstExisting({ id: "brand-new-xyz", title: "Y", titleKr: "새 제목 특수", level: hint.recommendedLevel, topic: "T", sentences: [{ text: first.sentences[0].text }] }, passages);
+  check("authoring: 기존 문장 완전동일 검출", sentDup.notes.some((n) => n.kind === "dup" && /문장/.test(n.msg)));
+  const clean = compareAgainstExisting({ id: "totally-fresh-abc", title: "Fresh Title", titleKr: "완전히 새로운 제목 98765", level: hint.recommendedLevel, topic: "T", sentences: [{ text: "This is a brand new sentence never used before here." }] }, passages);
+  check("authoring: 깨끗한 신규는 중복 note 0", clean.notes.filter((n) => n.kind === "dup").length === 0, clean.notes.map((n) => n.msg).join(" / "));
 }
 
 console.log(failures === 0 ? "\n모든 테스트 통과" : `\n실패 ${failures}건`);

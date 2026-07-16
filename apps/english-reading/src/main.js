@@ -4,6 +4,7 @@ import { tokenize, matchWordTargets } from "./core/tokenize.js";
 import { createCourse, courseProgress } from "./core/course.js";
 import { chunkBoundaries, gradeChunks, chunkReasons } from "./core/chunking.js";
 import { validatePassage, normalizeSmartQuotes } from "./core/validate.js";
+import { analyzeContent, nextCurriculumHint, buildAuthoringPackage, compareAgainstExisting, RULES_VERSION, SCHEMA_VERSION, CURRICULUM } from "./core/authoring-index.js";
 import { normalizeSentence, boundarySet, reasonByBoundary } from "./core/normalize.js";
 import { createStorage } from "../../../shared/storage.js";
 import { registerServiceWorker } from "../../../shared/ui.js";
@@ -805,81 +806,9 @@ function showClearModal() {
 }
 
 // ── 문제 출제 (LLM으로 만든 지문을 검증해 내 문제로 추가) ──
-// LLM에 그대로 붙여넣을 출제 규칙 - 양식·끊는 기준·예시를 담아 규칙 준수를 유도한다.
-const AUTHORING_PROMPT = `너는 영어 독해 학습 앱의 문제 출제자다. 아래 [양식]과 [규칙]을 정확히 지켜, 지문 한 편을 JSON 하나로만 출력해라(설명·코드블록 없이 JSON만).
-
-[양식]
-{
-  "id": "고유한-영문소문자-하이픈-이름",
-  "level": 1,
-  "title": "영어 제목",
-  "titleKr": "한글 제목",
-  "sentences": [
-    {
-      "text": "영어 원문 문장.",
-      "chunks": [
-        { "en": "대표 추천 끊어읽기 덩어리(영어)", "kr": "그 덩어리의 직독직해(한글)" }
-      ],
-      "naturalTranslation": "문장 전체의 자연스러운 한국어 완역",
-      "wordOrderPoint": { "title": "핵심 어순·패턴 이름", "explanation": "한 줄 설명" },
-      "breakRules": {
-        "allowed": [ { "boundary": 0, "reason": "여기서도 자연스럽게 끊을 수 있는 이유" } ],
-        "discouraged": [ { "boundary": 0, "reason": "여기서 끊으면 핵심 구조가 갈려 이해를 방해하는 이유" } ]
-      },
-      "grammar": [ { "label": "문법 이름표", "note": "상세 설명" } ],
-      "words": [ { "word": "어려운 단어", "meaning": "한글 뜻" } ]
-    }
-  ]
-}
-
-[규칙]
-1. chunks는 대표(가장 권장하는) 끊어읽기다. en을 공백으로 이어 붙이면 원문 text와 정확히 같아야 한다(구두점·대소문자만 예외).
-2. 끊어읽기(chunks)는 잘게 쪼개지 말고 '의미 덩어리'로 크게 묶어라. 다음 자리는 절대 끊지 마라:
-   - be동사·조동사 뒤 (예: "is the habit"은 한 덩어리. 단 뒤가 that절·to부정사면 끊어도 됨)
-   - 짧은 주어(2단어 이하) 뒤에서 동사 앞
-   - 짧은 전치사구(2단어 이하) 앞 (of noticing, at all 등)
-   - 전치사와 그 목적어 사이 ("searches for | facts"처럼 끊지 마라)
-   끊어도 되는 자리: 접속사·관계사·that·to 앞 / 콤마 뒤 / 긴 주어(3단어 이상) 뒤 동사 앞 / 긴 전치사구 앞.
-3. kr은 의역이 아니라 어순·구조가 드러나는 직독직해로 써라. naturalTranslation은 반대로 조각을 잇지 말고 한 문장으로 매끄럽게 읽히는 완역으로 써라(필수).
-4. wordOrderPoint는 그 문장의 가장 중요한 어순·패턴 1개만(필수). title(패턴 이름)+explanation(한 줄 설명). grammar와 겹치지 않게 핵심만.
-5. breakRules의 boundary는 0부터 세는 '단어 사이 틈 번호'다 - 0번 단어와 1번 단어 사이가 0, 1번과 2번 사이가 1. 예: 단어가 ["We","believe","that","others"]면 believe와 that 사이는 boundary 1.
-   - allowed: 대표 chunks 경계는 아니지만 거기서 끊어도 자연스러운 다른 위치.
-   - discouraged: 거기서 끊으면 핵심 구조(동사구·전치사구 등)가 갈려 이해를 방해하는 위치.
-   - 모든 틈을 억지로 채우지 마라. 정말 의미 있는 위치만 넣고, 없으면 빈 배열([])로 둬라. 대표 chunks 경계는 discouraged에 넣지 마라.
-6. grammar는 그 문장에 든 문법 요소를 1개 이상, 이름표(label)+상세 설명(note)으로.
-7. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 나온 형태 그대로 적어라 - 활용형(-s·-ed·-ing 등)을 원형으로 바꾸지 마라(원문이 "triggers"면 "trigger"가 아니라 "triggers", 원문이 "noticing"이면 "notice"가 아니라 "noticing"). meaning(뜻)에는 원형 뜻을 써도 된다. 낱말 하나가 쉬워도 뜻이 안 통하는 숙어·표현("takes a bus", "where to get off" 등)은 word에 띄어쓰기 포함해 원문 그대로 연속으로 적어라 - 원문에 그 낱말들이 이어져 나와야 하며, 앱이 그 표현 전체를 하나의 묶음으로 눌러 담게 한다. meaning엔 표현 전체 뜻을 쓴다.
-8. insight는 구조가 특히 어려운 문장에만 넣어라(빼도 됨). 넣으면 formula·why·wrong·natural 4필드를 모두 채워라.
-9. level은 난이도 숫자(1이 가장 쉬움). id는 다른 지문과 겹치지 않는 영문 이름.
-10. 신규 필드(naturalTranslation·wordOrderPoint·breakRules)를 넣지 않은 예전 형식도 앱에서 열리기는 하지만, 새로 만들 때는 위 필드를 모두 채워라.
-
-[규칙을 지킨 올바른 예시]
-{
-  "id": "example-mind",
-  "level": 1,
-  "title": "A Small Example",
-  "titleKr": "작은 예시",
-  "sentences": [
-    {
-      "text": "Confirmation bias is the habit of noticing only what we already believe.",
-      "chunks": [
-        { "en": "Confirmation bias is the habit", "kr": "확증 편향은 습관이다" },
-        { "en": "of noticing only what we already believe.", "kr": "우리가 이미 믿는 것만 알아채는" }
-      ],
-      "naturalTranslation": "확증 편향은 우리가 이미 믿는 것만 알아채려는 습관이다.",
-      "wordOrderPoint": { "title": "be동사 + 명사 보어", "explanation": "'A is B' 구조 - is 뒤의 the habit이 주어를 설명하는 보어라 붙여 읽는다." },
-      "breakRules": {
-        "allowed": [],
-        "discouraged": [ { "boundary": 2, "reason": "is 뒤에서 끊으면 보어 the habit이 떨어져 나갑니다. is the habit을 한 덩어리로 붙여 읽으세요." } ]
-      },
-      "grammar": [
-        { "label": "of + 동명사", "note": "the habit of noticing - '알아채는 습관'. of 뒤 동사는 -ing." }
-      ],
-      "words": [ { "word": "bias", "meaning": "편향, 치우침" } ]
-    }
-  ]
-}
-
-이제 주제를 "(원하는 주제를 여기에)"로 정해, 위 규칙을 지킨 지문 한 편을 JSON으로만 출력해라.`;
+// 정성 출제 규칙·패키지 조립은 core/authoring-index.js가 단일 권위. 여기서는 화면 조립만 한다.
+// 공식 콘텐츠 = 기본 passages(baseData)만. customPassages(내가 만든 문제)는 공식 진행률에 넣지 않는다.
+const officialPassages = () => (baseData ? baseData.courses.flatMap((c) => c.passages) : []);
 
 function renderAuthor() {
   currentPassage = null;
@@ -888,19 +817,35 @@ function renderAuthor() {
   stage.className = "stage author-stage";
   stage.innerHTML = "";
 
+  const official = officialPassages();
+  const index = analyzeContent(official);
+  const hint = nextCurriculumHint(official, index);
+
   const intro = document.createElement("p");
   intro.className = "author-intro";
-  intro.textContent = "챗봇(LLM)에 아래 '출제 규칙'을 붙여넣어 문제를 만든 뒤, 그 결과(JSON)를 붙여넣고 검증하세요. 규칙을 어기면 어디가 틀렸는지 알려 드립니다.";
+  intro.textContent = "챗봇(LLM)에 아래 '출제 패키지'를 통째로 붙여넣어 문제를 만든 뒤, 그 결과(JSON)를 붙여넣고 검증하세요. 어느 챗봇을 쓰든 같은 규칙·현재 상태·기준 예시가 전달됩니다.";
   stage.appendChild(intro);
 
-  // 1. 출제 규칙 (복사해서 챗봇에)
-  const rl = document.createElement("div"); rl.className = "author-label"; rl.textContent = "1. 출제 규칙 - 챗봇에 붙여넣기";
+  // 0. 현재 공식 콘텐츠 상태 + 다음 권장(모두 목표값, 강제 아님)
+  const distStr = (o) => Object.entries(o).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(" · ") || "(없음)";
+  const status = document.createElement("div");
+  status.className = "author-status";
+  status.innerHTML =
+    `<div class="as-row"><b>공식 지문 ${index.totalPassages}편 · 문장 ${index.totalSentences}개</b> <span class="as-mute">(목표 ${CURRICULUM.targetPassages}편 · ${CURRICULUM.targetSentences}문장)</span></div>` +
+    `<div class="as-row as-mute">level 분포 ${distStr(index.levelDistribution)}</div>` +
+    `<div class="as-row as-mute">주제 분포 ${distStr(index.topicDistribution)}</div>` +
+    `<div class="as-row">다음 권장: <b>${hint.nextPassageNumber}번째 지문</b> · level ${hint.recommendedLevel} · 주제 ${hint.recommendedTopics.join(" / ") || "자유"}</div>`;
+  stage.appendChild(status);
+
+  // 1. 출제 패키지 (규칙 + 현재 상태 + 힌트 + 앵커를 한 덩어리로) - 복사해서 챗봇에
+  const pkg = buildAuthoringPackage(official, { batchSize: 1 });
+  const rl = document.createElement("div"); rl.className = "author-label"; rl.textContent = `1. 출제 패키지 - 챗봇에 통째로 붙여넣기 (규칙 v${RULES_VERSION} · 스키마 v${SCHEMA_VERSION})`;
   const ruleTa = document.createElement("textarea");
-  ruleTa.className = "author-rule"; ruleTa.readOnly = true; ruleTa.rows = 5; ruleTa.value = AUTHORING_PROMPT;
+  ruleTa.className = "author-rule"; ruleTa.readOnly = true; ruleTa.rows = 6; ruleTa.value = pkg;
   const ruleCopy = document.createElement("button");
   ruleCopy.type = "button"; ruleCopy.className = "btn btn-primary author-btn";
-  ruleCopy.textContent = "출제 규칙 복사";
-  ruleCopy.onclick = () => copyText(AUTHORING_PROMPT, "출제 규칙을 복사했습니다. 챗봇에 붙여넣으세요.");
+  ruleCopy.textContent = "출제 패키지 복사";
+  ruleCopy.onclick = () => copyText(pkg, "출제 패키지를 복사했습니다. 챗봇에 붙여넣으세요.");
   stage.append(rl, ruleTa, ruleCopy);
 
   // 2. 결과 붙여넣기 + 검증
@@ -919,15 +864,17 @@ function renderAuthor() {
     let obj;
     // 모바일(아이폰)이 붙여넣기 때 바꿔 넣는 곡선 따옴표를 직선으로 되돌린 뒤 파싱한다.
     try { obj = JSON.parse(normalizeSmartQuotes(input.value)); }
-    catch (e) { showAuthorResult(result, false, [{ where: "형식", msg: "JSON 형식이 아닙니다. 챗봇이 JSON만 출력했는지 확인하세요." }]); return; }
+    catch (e) { showAuthorResult(result, { ok: false, errors: [{ where: "형식", msg: "JSON 형식이 아닙니다. 챗봇이 JSON만 출력했는지 확인하세요." }], notes: [] }); return; }
+    // 형식·자동규칙 = validatePassage / 기존 콘텐츠와의 중복·힌트 대조 = compareAgainstExisting
     const res = validatePassage(obj);
-    if (res.ok) {
-      const dupBase = baseData.courses.some((c) => c.passages.some((p) => p.id === obj.id));
-      const dupMine = getCustomPassages().some((p) => p.id === obj.id);
-      if (dupBase || dupMine) { showAuthorResult(result, false, [{ where: "id", msg: `"${obj.id}"와 같은 id의 지문이 이미 있습니다. id를 바꾸세요.` }]); return; }
-      validObj = obj; addBtn.hidden = false;
+    const cmp = compareAgainstExisting(obj, official);
+    if (getCustomPassages().some((p) => p.id === obj.id)) {
+      cmp.notes.unshift({ kind: "dup", msg: `id "${obj.id}"가 내가 만든 문제와 중복됩니다. id를 바꾸세요.` });
     }
-    showAuthorResult(result, res.ok, res.errors);
+    const blockingDup = cmp.notes.some((n) => n.kind === "dup");
+    const ok = res.ok && !blockingDup;
+    if (ok) { validObj = obj; addBtn.hidden = false; }
+    showAuthorResult(result, { ok, errors: res.errors, notes: cmp.notes });
   };
   addBtn.onclick = () => {
     if (!validObj) return;
@@ -975,24 +922,44 @@ function renderAuthor() {
   }
 }
 
-// 검증 결과 표시 - 통과면 초록 한 줄, 위반이면 어디가 왜 틀렸는지 목록
-function showAuthorResult(host, ok, errors) {
+// 검증 결과 표시 - r = { ok, errors:[{where,msg}], notes:[{kind,msg}] }.
+// 형식 오류(validatePassage)와 기존 콘텐츠 대조(compareAgainstExisting)를 구획해 보여준다.
+// errors·dup(중복)은 고쳐야 추가 가능, curriculum/info는 참고(추가 가능).
+function showAuthorResult(host, r) {
+  const errors = r.errors || [];
+  const notes = r.notes || [];
+  const dupNotes = notes.filter((n) => n.kind === "dup");
+  const refNotes = notes.filter((n) => n.kind !== "dup");
   host.hidden = false;
-  host.className = `author-result ${ok ? "ok" : "bad"}`;
+  host.className = `author-result ${r.ok ? "ok" : "bad"}`;
   host.innerHTML = "";
-  if (ok) {
+
+  if (r.ok && !errors.length && !notes.length) {
     host.textContent = "✓ 규칙을 모두 지켰습니다. '내 문제로 추가'를 누르세요.";
     return;
   }
-  const h = document.createElement("div"); h.className = "ar-head"; h.textContent = `고칠 곳 ${errors.length}가지:`;
-  host.appendChild(h);
-  errors.forEach((e) => {
-    const row = document.createElement("div"); row.className = "ar-row";
-    const wh = document.createElement("span"); wh.className = "ar-where"; wh.textContent = e.where;
-    const ms = document.createElement("span"); ms.className = "ar-msg"; ms.textContent = e.msg;
-    row.append(wh, ms);
-    host.appendChild(row);
-  });
+
+  const section = (title, rows, cls) => {
+    if (!rows.length) return;
+    const h = document.createElement("div"); h.className = `ar-head ${cls || ""}`; h.textContent = title;
+    host.appendChild(h);
+    rows.forEach((e) => {
+      const row = document.createElement("div"); row.className = "ar-row";
+      if (e.where) { const wh = document.createElement("span"); wh.className = "ar-where"; wh.textContent = e.where; row.appendChild(wh); }
+      const ms = document.createElement("span"); ms.className = "ar-msg"; ms.textContent = e.msg; row.appendChild(ms);
+      host.appendChild(row);
+    });
+  };
+
+  section(`형식 오류 ${errors.length}가지 (고쳐야 추가 가능):`, errors, "ar-bad");
+  section(`기존 콘텐츠 중복 ${dupNotes.length}가지 (고쳐야 추가 가능):`, dupNotes, "ar-bad");
+  section(`커리큘럼 참고 ${refNotes.length}가지 (추가는 가능):`, refNotes, "ar-ref");
+
+  if (r.ok) {
+    const line = document.createElement("div"); line.className = "ar-ok-line";
+    line.textContent = "✓ 형식·중복 통과. 위 참고 사항을 확인하고 '내 문제로 추가'를 누르세요.";
+    host.appendChild(line);
+  }
 }
 
 // ── 내 단어장 ──

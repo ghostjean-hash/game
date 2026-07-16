@@ -701,6 +701,16 @@ body {
 .ar-row { display: flex; gap: 8px; padding: 3px 0; }
 .ar-where { flex-shrink: 0; font-weight: 700; min-width: 76px; }
 .ar-msg { color: #7f1d1d; }
+/* 출제 현재 상태 요약 */
+.author-status { margin: var(--sp-2) 0 var(--sp-3); padding: var(--sp-3) var(--sp-4); background: var(--bg-elev-2); border: 1px solid var(--line); border-radius: var(--r-2); font-size: 13px; line-height: 1.6; }
+.as-row + .as-row { margin-top: 2px; }
+.as-mute { color: var(--fg-mute); font-size: 12.5px; }
+/* 검증 결과 구획 - 형식/중복(빨강, 고쳐야 함) vs 커리큘럼 참고(주황, 추가 가능) */
+.ar-head.ar-bad { color: #b91c1c; }
+.ar-head.ar-ref { color: #b45309; margin-top: 10px; }
+.author-result.ok .ar-msg { color: var(--fg-dim); }
+.author-result.ok .ar-where { color: var(--fg); }
+.ar-ok-line { margin-top: 10px; font-weight: 800; color: var(--ok); }
 .author-mine-list { display: flex; flex-direction: column; gap: var(--sp-2); }
 .author-mine-row {
   display: flex; align-items: center; gap: var(--sp-2);

@@ -334,3 +334,23 @@
 - 검증: node 테스트 전량 통과. browser-shot - 채점 마크(주황 △·붉은 ✕·파랑 ● 나란히 크기 맞음, 확대 확인) / 완독("끊기 · 완독" 태그 + 완벽 딤드) / 숙어("takes a bus" 세 낱말 묶음 오렌지 + 해석 시 "takes a bus - 버스를 타다" 공개 + 토스트) 모두 콘솔 0. standalone 재빌드(295KB).
 - 변경 파일: src/core/tokenize.js·validate.js / src/main.js / src/data/passages.json / tests/run-node.mjs / style.css / CLAUDE.md / dist/standalone.html(재생성).
 - 잔여: (1) 배포(/web-deploy)는 deploy.json이 flightshooting 가리켜 회피, 사용자 지시 대기. (2) flightshooting 미커밋 변경은 사용자 "그대로 둬" 지시로 유지(타 머신 d665eb5 커밋과 별개 로컬 잔여). (3) 다른 지문에도 숙어 추가 여지. (4) 2.37 검수 잔여 유지.
+
+## 2.41. UI 버튼 SVG화 + 진입 홈 고정 + 마음의 법칙 삭제 + 단어장 뜻 바로보기 (2026-07-16, 사용자 연속 UI 지시)
+
+- 배경: 사용자 연속 UI 지시 묶음. 선행 커밋 7d441f1로 봉합.
+- 뒤로가기·단어장 삭제 버튼: 유니코드 문자(←/✕)라 폰트마다 허접하고 박스 중앙정렬이 안 맞던 것을 SVG 아이콘으로 교체(ICON.back 신설, setTop이 주입 / vocab-del은 ICON.close). "UI 버튼은 이모지/유니코드 금지, SVG만"이 사용자 명시 규칙. build-standalone 템플릿의 뒤로가기 화살표 누락분도 SVG로 동기화(앞 세션 index.html/main.js만 고치고 템플릿 놓친 것 검수로 발견).
+- 진입 홈 고정: bootScreen이 마지막 읽던 지문으로 바로 들어가던 것을 항상 renderCourseList로. findPassageLocation·lastPassage set 제거(읽던 자리는 지문 재진입 시 progress 복원). CLAUDE.md 3.6 갱신.
+- 마음의 법칙 삭제: mind-laws 코스 데이터 통째 제거(word-order-foundations 단일 코스, 20지문 100문장 유지). standalone 295→224KB.
+- 단어장 뜻 바로보기: 뜻·예문·출처가 접혀 단어를 눌러야 펼쳐지던 것을 항상 펼침으로. word를 button→div(클릭 토글 폐지), 삭제는 즉시(기존 유지). 시드 3단어로 browser-shot 검증(뜻 바로 보임 + ✕ 삭제 즉시 3→2).
+
+## 2.42. 출제 패키지 시스템 PHASE B 1단계 (2026-07-16, ChatGPT 제안 + 사용자 확정)
+
+- 배경: 여러 LLM이 시간차로 문제를 만들어도 난이도·청킹·직독직해·문법·어휘 기준이 안 흔들리게 하는 토대. 최종 200지문·1000문장. ChatGPT 풀 파이프라인(10단계)은 현 규모(20지문 100문장, 무빌드) 과설계로 판단, 사용자와 A안 1단계만 확정. 계획 docs/2026-07-16-authoring-package-plan.md.
+- 규칙 권위 이원(사용자 확정, 복사 금지): 자동 검증 = core/validate.js(코드 판정). 정성 규칙(자연스러움·난이도·청킹 원칙 등, 코드 판정 불가) = core/authoring-index.js:AUTHORING_RULES 단일 위치(기존 main.js의 AUTHORING_PROMPT를 이관). 출제 패키지는 둘 + 현재 상태 조립 파생물. RULES_VERSION/SCHEMA_VERSION 추적.
+- 신설 core/authoring-index.js(순수, DOM 미의존): analyzeContent(지문/문장 수·level/topic/grammar 분포·단어 빈도·제목/문장 완전중복·시작표현·최근지문·과다구조) / nextCurriculumHint(다음 번호·권장 level=최소분포·권장 topic·기존 id) / extractAnchors(지정 id 앵커, DEFAULT_ANCHORS level별 1개) / buildAuthoringPackage(규칙+상태+힌트+앵커+스키마+출력요구 조립) / compareAgainstExisting(기존 id/제목/문장 완전중복·정규화 제목·level 힌트 대조, dup/curriculum/info 구분).
+- 데이터 근거: passage에 topic 필드 실재(12종). level 1~3 문장길이로 정렬 양호. 제목·문장 완전중복 0. CLAUDE.md 4.2에 topic 스키마 명시(문서 누락 보정).
+- main.js 연결: renderAuthor에 현재 상태 요약 박스 + "출제 패키지 복사"(기존 "출제 규칙 복사" 승격) + 붙여넣기 검증에 compareAgainstExisting 병행([형식 오류]/[기존 중복] 고쳐야 추가 / [커리큘럼 참고] 추가 가능 구획). build-standalone 인라인 목록에 authoring-index 추가.
+- 한계(1단계 미지원, 명시): 의미 유사도(정규화 문자열 완전동일만) · 목표구조 기반 underused · LLM 검수/수정 패키지 · severity 3단계. customPassages는 공식 진행률 미합산.
+- 검증: node 테스트 전량 통과(authoring 유닛 16건 신설). browser-shot - 출제화면 상태요약("20편·100문장, 목표 200·1000", level/topic 분포, 다음 권장 21번째·level3) + 패키지 복사 버튼 + 신규 지문 검증 시 "커리큘럼 참고(level 1, 권장 3)" 초록 구획, 콘솔 0. standalone 재빌드(237KB).
+- 변경 파일: src/core/authoring-index.js(신규) / src/main.js / tools/build-standalone.mjs / tests/run-node.mjs / style.css / CLAUDE.md / docs/2026-07-16-authoring-package-plan.md(신규) / dist/standalone.html(재생성).
+- 잔여: (1) 배포 미실행(deploy.json flightshooting 가리킴, 배포 시 SW 캐시 bump 필요). (2) PHASE B 2단계 후보 - LLM 검수/수정 패키지·severity·목표구조 리스트·level 밴드 확장·customPassages→passages 병합 도구. (3) 앵커 기본 id는 임시(사용자 조정 가능). (4) flightshooting 미커밋분 유지.
