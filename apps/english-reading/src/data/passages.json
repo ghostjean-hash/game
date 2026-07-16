@@ -2685,6 +2685,10 @@
               ],
               "words": [
                 {
+                  "word": "takes a bus",
+                  "meaning": "버스를 타다"
+                },
+                {
                   "word": "alone",
                   "meaning": "혼자"
                 }
@@ -2771,6 +2775,10 @@
                 }
               ],
               "words": [
+                {
+                  "word": "where to get off",
+                  "meaning": "어디에서 내릴지"
+                },
                 {
                   "word": "driver",
                   "meaning": "운전기사"

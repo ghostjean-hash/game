@@ -1,6 +1,6 @@
 // 지문 한 편의 데이터 무결성 + 끊는 기준 검증. DOM 미의존 순수 로직.
 // 출제 관리 화면(붙여넣기 검증)과 tests/run-node.mjs가 같은 규칙을 공유한다.
-import { tokenize, resolveTargets } from "./tokenize.js";
+import { tokenize, matchWordTargets } from "./tokenize.js";
 import { chunkViolations, chunkBoundaries } from "./chunking.js";
 
 const norm = (t) => String(t).toLowerCase().replace(/[^a-z]/g, "");
@@ -63,8 +63,8 @@ export function validatePassage(p, opts = {}) {
     });
 
     (s.words || []).forEach((wd) => {
-      const r = resolveTargets(tokens, [wd])[0];
-      if (!r || r.index < 0) push(w, `단어 "${wd && wd.word}"가 원문에 없습니다 - 원문에 나온 형태 그대로 적으세요(활용형이면 -s·-ed·-ing 등을 원형으로 바꾸지 말 것).`);
+      const m = matchWordTargets(tokens, [wd]);
+      if (!m.length) push(w, `단어/표현 "${wd && wd.word}"가 원문에 연속으로 없습니다 - 원문에 나온 형태 그대로 적으세요(활용형 유지, 숙어는 띄어쓰기 포함해 연속으로).`);
       if (!wd || !wd.meaning) push(w, `단어 "${wd && wd.word}"의 뜻(meaning)이 필요합니다.`);
     });
 

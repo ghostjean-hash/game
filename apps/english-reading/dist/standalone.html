@@ -3576,6 +3576,10 @@ const EMBEDDED_PASSAGES = {
               ],
               "words": [
                 {
+                  "word": "takes a bus",
+                  "meaning": "버스를 타다"
+                },
+                {
                   "word": "alone",
                   "meaning": "혼자"
                 }
@@ -3662,6 +3666,10 @@ const EMBEDDED_PASSAGES = {
                 }
               ],
               "words": [
+                {
+                  "word": "where to get off",
+                  "meaning": "어디에서 내릴지"
+                },
                 {
                   "word": "driver",
                   "meaning": "운전기사"
@@ -7286,6 +7294,35 @@ function tokenize(text) {
     }));
 }
 
+// words의 각 항목을 원문 토큰 시퀀스에 매칭한다. 단일 낱말은 토큰 1개, 숙어("takes a bus")는 연속 N개.
+// word를 공백으로 쪼갠 각 조각의 clean이 원문 토큰의 clean과 순서대로 일치하는 시작 위치를 찾는다.
+// nth(1-based)로 같은 표현이 여러 번 나올 때 위치를 고른다. 반환: [{ ...원항목, indices:[토큰인덱스...] }] (매칭 실패·토큰 겹침 항목은 제외).
+function matchWordTargets(tokens, words = []) {
+  const cleanTokens = tokens.map((t) => t.clean);
+  const used = new Array(tokens.length).fill(false);
+  const out = [];
+  for (const w of words) {
+    const parts = String(w.word).toLowerCase().split(/\s+/).map((p) => p.replace(/[^a-z']/g, "")).filter(Boolean);
+    if (!parts.length) continue;
+    const nth = w.nth || 1;
+    let seen = 0;
+    let start = -1;
+    for (let i = 0; i + parts.length <= cleanTokens.length; i++) {
+      let ok = true;
+      for (let j = 0; j < parts.length; j++) {
+        if (cleanTokens[i + j] !== parts[j]) { ok = false; break; }
+      }
+      if (ok) { seen += 1; if (seen === nth) { start = i; break; } }
+    }
+    if (start < 0) continue;
+    const indices = parts.map((_, j) => start + j);
+    if (indices.some((idx) => used[idx])) continue; // 다른 표현과 토큰이 겹치면 건너뛴다
+    indices.forEach((idx) => { used[idx] = true; });
+    out.push({ ...w, indices });
+  }
+  return out;
+}
+
 // targetWords(데이터의 { word, nth, ... })를 실제 토큰 인덱스로 해석한다.
 // 같은 단어가 여러 번 나올 때 nth(1-based)로 몇 번째를 가리키는지 정한다.
 // 해석 실패 시 index: -1 (데이터 오류 방어).
@@ -7622,8 +7659,8 @@ function validatePassage(p, opts = {}) {
     });
 
     (s.words || []).forEach((wd) => {
-      const r = resolveTargets(tokens, [wd])[0];
-      if (!r || r.index < 0) push(w, `단어 "${wd && wd.word}"가 원문에 없습니다 - 원문에 나온 형태 그대로 적으세요(활용형이면 -s·-ed·-ing 등을 원형으로 바꾸지 말 것).`);
+      const m = matchWordTargets(tokens, [wd]);
+      if (!m.length) push(w, `단어/표현 "${wd && wd.word}"가 원문에 연속으로 없습니다 - 원문에 나온 형태 그대로 적으세요(활용형 유지, 숙어는 띄어쓰기 포함해 연속으로).`);
       if (!wd || !wd.meaning) push(w, `단어 "${wd && wd.word}"의 뜻(meaning)이 필요합니다.`);
     });
 
@@ -8005,30 +8042,49 @@ function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
   line.className = "sentence-line";
 
   const tokens = tokenize(s.text);
-  // 뜻 힌트 맵 - 데이터에 뜻을 넣어둔 단어는 해석 시 뜻까지 보여준다(없으면 뜻은 비운 채 단어만 담는다).
-  // 어떤 단어를 모르는지는 학습자가 정하므로, 특정 단어만 클릭 가능하게 제한하지 않는다.
-  const meaningByClean = new Map();
-  if (settings.words) (s.words || []).forEach((w) => {
-    const k = String(w.word).toLowerCase().replace(/[^a-z']/g, "");
-    if (k && !meaningByClean.has(k)) meaningByClean.set(k, w.meaning);
-  });
+  // 단어/숙어 타겟 - words 각 항목을 원문 토큰에 매칭(단일 낱말=1토큰, 숙어 "takes a bus"=연속 N토큰).
+  // 뜻이 등록된 것만 터치 대상이라, 학습자는 낱말이든 표현이든 눌러 임시 수집한다.
+  const targets = settings.words ? matchWordTargets(tokens, s.words || []) : [];
+  const tokenToTarget = new Map(); // 토큰 인덱스 → 그 토큰이 속한 타겟(단어/숙어)
+  targets.forEach((t) => t.indices.forEach((idx) => tokenToTarget.set(idx, t)));
+  const spanByIndex = new Map(); // 토큰 인덱스 → span(숙어 그룹을 함께 하이라이트하려면 필요)
   // 단어장(영구)에 이미 담긴 단어 - 회독 때 '이미 아는 단어'로 은은히 표시(중앙 하단 점).
   const vocabKeys = settings.words ? new Set(getVocab().map((v) => v.wordKey)) : new Set();
-  // 이 문장에 눌러 담을 수 있는 주요 단어가 있는지 - 끊어읽기(chunks)를 꺼도 단어 공개·저장 버튼을 띄우기 위한 판정.
-  const hasClickableWords = settings.words && tokens.some((t) => t.clean && meaningByClean.has(t.clean));
+  // 이 문장에 눌러 담을 수 있는 단어/숙어가 있는지 - 끊어읽기(chunks)를 꺼도 단어 공개·저장 버튼을 띄우기 위한 판정.
+  const hasClickableWords = targets.length > 0;
 
   // 저장된 진행 복원 - 그은 선·임시 단어·검토 여부를 기기 저장소에서 되살린다.
   const saved = loadSentenceState(passage.id, sIndex) || {};
   const slashes = new Set(saved.slashes || []);
-  const flagged = new Map((saved.flags || []).map(([i, word, meaning]) => [i, { word, meaning }]));
+  // 임시 수집(flagged): 타겟 첫 토큰 인덱스 → {word, meaning, indices}. 저장된 첫 인덱스로 현재 타겟과 다시 잇는다(단일 낱말 하위호환).
+  const flagged = new Map();
+  (saved.flags || []).forEach(([fi, word, meaning]) => {
+    const t = targets.find((x) => x.indices[0] === fi);
+    if (t) flagged.set(fi, { word, meaning, indices: t.indices });
+  });
   let reviewed = !!saved.reviewed;
   const gapEls = new Map(); // 틈 번호 → 요소
 
   const persist = () => saveSentenceState(passage.id, sIndex, {
     slashes: [...slashes],
-    flags: [...flagged].map(([i, v]) => [i, v.word, v.meaning]),
+    flags: [...flagged].map(([fi, v]) => [fi, v.word, v.meaning]),
     reviewed,
   });
+
+  // 타겟(단어/숙어) 임시 수집 토글 - 숙어는 속한 토큰 전부를 함께 켜고 끈다.
+  const toggleTarget = (t) => {
+    const fi = t.indices[0];
+    const paint = (on) => t.indices.forEach((idx) => {
+      const sp = spanByIndex.get(idx); if (sp) sp.classList.toggle("flagged", on);
+    });
+    if (flagged.has(fi)) { flagged.delete(fi); paint(false); }
+    else {
+      flagged.set(fi, { word: t.word, meaning: t.meaning || "", indices: t.indices });
+      paint(true);
+      showToast("단어장에 임시 저장되었습니다.");
+    }
+    persist();
+  };
 
   // 대표 추천 경계 + 허용/비추천 위치(0-based 토큰 틈 번호). 없으면 빈 Set(구스키마 = 추천/놓침만).
   const boundaries = chunkBoundaries(tokens, s.chunks);
@@ -8079,26 +8135,20 @@ function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
     const span = document.createElement("span");
     span.textContent = tok.raw;
     span.className = "w";
+    spanByIndex.set(i, span);
     if (tok.clean && vocabKeys.has(tok.clean)) span.classList.add("saved");
-    // 뜻이 등록된 주요 단어만 터치 대상 - 일반 단어까지 터치되면 끊기 틈과 오터치가 잦아 제한(사용자 지시).
-    if (settings.words && tok.clean && meaningByClean.has(tok.clean)) {
+    // 뜻이 등록된 단어/숙어만 터치 대상 - 일반 단어까지 터치되면 끊기 틈과 오터치가 잦아 제한(사용자 지시).
+    // 숙어는 속한 토큰 아무 곳이나 눌러도 그 표현 전체가 함께 켜진다(낱말 몸통만 반응해 끊기 틈은 침범 안 함).
+    const target = tokenToTarget.get(i);
+    if (target) {
       span.classList.add("word");
-      if (flagged.has(i)) span.classList.add("flagged"); // 복원
-      const displayWord = tok.raw.replace(/^[^A-Za-z'-]+|[^A-Za-z'-]+$/g, "") || tok.clean;
+      if (flagged.has(target.indices[0])) span.classList.add("flagged"); // 복원
       // 선(先) 유추: 터치해도 뜻을 바로 열지 않고 '임시 수집'으로만 표시한다.
       span.onclick = (e) => {
         e.stopPropagation();
         removeHint();
         if (reviewed) return; // 해석 후엔 뜻이 이미 공개돼 표시가 의미 없다
-        if (flagged.has(i)) {
-          flagged.delete(i);
-          span.classList.remove("flagged");
-        } else {
-          flagged.set(i, { word: displayWord, meaning: meaningByClean.get(tok.clean) || "" });
-          span.classList.add("flagged");
-          showToast("단어장에 임시 저장되었습니다.");
-        }
-        persist();
+        toggleTarget(target);
       };
     }
     line.appendChild(span);

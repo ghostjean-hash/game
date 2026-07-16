@@ -3,7 +3,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { tokenize, resolveTargets } from "../src/core/tokenize.js";
+import { tokenize, resolveTargets, matchWordTargets } from "../src/core/tokenize.js";
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
 import { chunkBoundaries, gradeSlashes, gradeChunks, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
 import { validatePassage, normalizeSmartQuotes } from "../src/core/validate.js";
@@ -32,6 +32,12 @@ function check(name, cond, detail = "") {
   check("resolveTargets: nth=2 해석", t2[0].index === 3);
   const miss = resolveTargets(dup, [{ word: "absent" }]);
   check("resolveTargets: 미존재 단어 index -1", miss[0].index === -1);
+
+  const phraseToks = tokenize("Joon takes a bus to the museum alone.");
+  const ph = matchWordTargets(phraseToks, [{ word: "takes a bus", meaning: "버스를 타다" }]);
+  check("matchWordTargets: 숙어 연속 매칭", ph.length === 1 && ph[0].indices.join(",") === "1,2,3");
+  const phMiss = matchWordTargets(phraseToks, [{ word: "takes a train", meaning: "x" }]);
+  check("matchWordTargets: 불연속 미매칭", phMiss.length === 0);
 }
 
 // ── createCourse / courseProgress ──────────────────────────────
@@ -328,10 +334,10 @@ function check(name, cond, detail = "") {
 
         // 주요 단어: 0~3개, 각 단어는 원문에 실재(nth 해석), 뜻 존재
         check(`data(${label}): 주요 단어 0~3개`, Array.isArray(s.words) && s.words.length <= 3);
-        const resolved = resolveTargets(tokens, s.words || []);
-        resolved.forEach((w) => {
-          check(`data(${label} '${w.word}'): 단어가 문장에 실재(죽은 입력 0)`, w.index >= 0);
-          check(`data(${label} '${w.word}'): 뜻 존재`, !!w.meaning);
+        (s.words || []).forEach((wd) => {
+          const m = matchWordTargets(tokens, [wd]);
+          check(`data(${label} '${wd.word}'): 단어가 문장에 실재(죽은 입력 0)`, m.length > 0);
+          check(`data(${label} '${wd.word}'): 뜻 존재`, !!wd.meaning);
         });
 
         // 문법 목록: 문장마다 1개 이상, 각 항목은 이름표+설명 필수 (/ 검토 후 전부 표시)

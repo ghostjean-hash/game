@@ -1,6 +1,6 @@
 // 하이브리드 독해 - 몰입 리딩 + 끊어 읽기 직접 긋기·채점 + 코스 진행·전체 클리어.
 // 순수 로직은 core(tokenize·course·chunking)에 위임하고, 여기서 DOM만 만진다.
-import { tokenize } from "./core/tokenize.js";
+import { tokenize, matchWordTargets } from "./core/tokenize.js";
 import { createCourse, courseProgress } from "./core/course.js";
 import { chunkBoundaries, gradeChunks, chunkReasons } from "./core/chunking.js";
 import { validatePassage, normalizeSmartQuotes } from "./core/validate.js";
@@ -334,30 +334,49 @@ function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
   line.className = "sentence-line";
 
   const tokens = tokenize(s.text);
-  // 뜻 힌트 맵 - 데이터에 뜻을 넣어둔 단어는 해석 시 뜻까지 보여준다(없으면 뜻은 비운 채 단어만 담는다).
-  // 어떤 단어를 모르는지는 학습자가 정하므로, 특정 단어만 클릭 가능하게 제한하지 않는다.
-  const meaningByClean = new Map();
-  if (settings.words) (s.words || []).forEach((w) => {
-    const k = String(w.word).toLowerCase().replace(/[^a-z']/g, "");
-    if (k && !meaningByClean.has(k)) meaningByClean.set(k, w.meaning);
-  });
+  // 단어/숙어 타겟 - words 각 항목을 원문 토큰에 매칭(단일 낱말=1토큰, 숙어 "takes a bus"=연속 N토큰).
+  // 뜻이 등록된 것만 터치 대상이라, 학습자는 낱말이든 표현이든 눌러 임시 수집한다.
+  const targets = settings.words ? matchWordTargets(tokens, s.words || []) : [];
+  const tokenToTarget = new Map(); // 토큰 인덱스 → 그 토큰이 속한 타겟(단어/숙어)
+  targets.forEach((t) => t.indices.forEach((idx) => tokenToTarget.set(idx, t)));
+  const spanByIndex = new Map(); // 토큰 인덱스 → span(숙어 그룹을 함께 하이라이트하려면 필요)
   // 단어장(영구)에 이미 담긴 단어 - 회독 때 '이미 아는 단어'로 은은히 표시(중앙 하단 점).
   const vocabKeys = settings.words ? new Set(getVocab().map((v) => v.wordKey)) : new Set();
-  // 이 문장에 눌러 담을 수 있는 주요 단어가 있는지 - 끊어읽기(chunks)를 꺼도 단어 공개·저장 버튼을 띄우기 위한 판정.
-  const hasClickableWords = settings.words && tokens.some((t) => t.clean && meaningByClean.has(t.clean));
+  // 이 문장에 눌러 담을 수 있는 단어/숙어가 있는지 - 끊어읽기(chunks)를 꺼도 단어 공개·저장 버튼을 띄우기 위한 판정.
+  const hasClickableWords = targets.length > 0;
 
   // 저장된 진행 복원 - 그은 선·임시 단어·검토 여부를 기기 저장소에서 되살린다.
   const saved = loadSentenceState(passage.id, sIndex) || {};
   const slashes = new Set(saved.slashes || []);
-  const flagged = new Map((saved.flags || []).map(([i, word, meaning]) => [i, { word, meaning }]));
+  // 임시 수집(flagged): 타겟 첫 토큰 인덱스 → {word, meaning, indices}. 저장된 첫 인덱스로 현재 타겟과 다시 잇는다(단일 낱말 하위호환).
+  const flagged = new Map();
+  (saved.flags || []).forEach(([fi, word, meaning]) => {
+    const t = targets.find((x) => x.indices[0] === fi);
+    if (t) flagged.set(fi, { word, meaning, indices: t.indices });
+  });
   let reviewed = !!saved.reviewed;
   const gapEls = new Map(); // 틈 번호 → 요소
 
   const persist = () => saveSentenceState(passage.id, sIndex, {
     slashes: [...slashes],
-    flags: [...flagged].map(([i, v]) => [i, v.word, v.meaning]),
+    flags: [...flagged].map(([fi, v]) => [fi, v.word, v.meaning]),
     reviewed,
   });
+
+  // 타겟(단어/숙어) 임시 수집 토글 - 숙어는 속한 토큰 전부를 함께 켜고 끈다.
+  const toggleTarget = (t) => {
+    const fi = t.indices[0];
+    const paint = (on) => t.indices.forEach((idx) => {
+      const sp = spanByIndex.get(idx); if (sp) sp.classList.toggle("flagged", on);
+    });
+    if (flagged.has(fi)) { flagged.delete(fi); paint(false); }
+    else {
+      flagged.set(fi, { word: t.word, meaning: t.meaning || "", indices: t.indices });
+      paint(true);
+      showToast("단어장에 임시 저장되었습니다.");
+    }
+    persist();
+  };
 
   // 대표 추천 경계 + 허용/비추천 위치(0-based 토큰 틈 번호). 없으면 빈 Set(구스키마 = 추천/놓침만).
   const boundaries = chunkBoundaries(tokens, s.chunks);
@@ -408,26 +427,20 @@ function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
     const span = document.createElement("span");
     span.textContent = tok.raw;
     span.className = "w";
+    spanByIndex.set(i, span);
     if (tok.clean && vocabKeys.has(tok.clean)) span.classList.add("saved");
-    // 뜻이 등록된 주요 단어만 터치 대상 - 일반 단어까지 터치되면 끊기 틈과 오터치가 잦아 제한(사용자 지시).
-    if (settings.words && tok.clean && meaningByClean.has(tok.clean)) {
+    // 뜻이 등록된 단어/숙어만 터치 대상 - 일반 단어까지 터치되면 끊기 틈과 오터치가 잦아 제한(사용자 지시).
+    // 숙어는 속한 토큰 아무 곳이나 눌러도 그 표현 전체가 함께 켜진다(낱말 몸통만 반응해 끊기 틈은 침범 안 함).
+    const target = tokenToTarget.get(i);
+    if (target) {
       span.classList.add("word");
-      if (flagged.has(i)) span.classList.add("flagged"); // 복원
-      const displayWord = tok.raw.replace(/^[^A-Za-z'-]+|[^A-Za-z'-]+$/g, "") || tok.clean;
+      if (flagged.has(target.indices[0])) span.classList.add("flagged"); // 복원
       // 선(先) 유추: 터치해도 뜻을 바로 열지 않고 '임시 수집'으로만 표시한다.
       span.onclick = (e) => {
         e.stopPropagation();
         removeHint();
         if (reviewed) return; // 해석 후엔 뜻이 이미 공개돼 표시가 의미 없다
-        if (flagged.has(i)) {
-          flagged.delete(i);
-          span.classList.remove("flagged");
-        } else {
-          flagged.set(i, { word: displayWord, meaning: meaningByClean.get(tok.clean) || "" });
-          span.classList.add("flagged");
-          showToast("단어장에 임시 저장되었습니다.");
-        }
-        persist();
+        toggleTarget(target);
       };
     }
     line.appendChild(span);
@@ -844,7 +857,7 @@ const AUTHORING_PROMPT = `너는 영어 독해 학습 앱의 문제 출제자다
    - discouraged: 거기서 끊으면 핵심 구조(동사구·전치사구 등)가 갈려 이해를 방해하는 위치.
    - 모든 틈을 억지로 채우지 마라. 정말 의미 있는 위치만 넣고, 없으면 빈 배열([])로 둬라. 대표 chunks 경계는 discouraged에 넣지 마라.
 6. grammar는 그 문장에 든 문법 요소를 1개 이상, 이름표(label)+상세 설명(note)으로.
-7. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 나온 형태 그대로 적어라 - 활용형(-s·-ed·-ing 등)을 원형으로 바꾸지 마라(원문이 "triggers"면 "trigger"가 아니라 "triggers", 원문이 "noticing"이면 "notice"가 아니라 "noticing"). meaning(뜻)에는 원형 뜻을 써도 된다.
+7. words는 어려운 단어만 넣어라(없으면 []). word는 반드시 원문 text에 나온 형태 그대로 적어라 - 활용형(-s·-ed·-ing 등)을 원형으로 바꾸지 마라(원문이 "triggers"면 "trigger"가 아니라 "triggers", 원문이 "noticing"이면 "notice"가 아니라 "noticing"). meaning(뜻)에는 원형 뜻을 써도 된다. 낱말 하나가 쉬워도 뜻이 안 통하는 숙어·표현("takes a bus", "where to get off" 등)은 word에 띄어쓰기 포함해 원문 그대로 연속으로 적어라 - 원문에 그 낱말들이 이어져 나와야 하며, 앱이 그 표현 전체를 하나의 묶음으로 눌러 담게 한다. meaning엔 표현 전체 뜻을 쓴다.
 8. insight는 구조가 특히 어려운 문장에만 넣어라(빼도 됨). 넣으면 formula·why·wrong·natural 4필드를 모두 채워라.
 9. level은 난이도 숫자(1이 가장 쉬움). id는 다른 지문과 겹치지 않는 영문 이름.
 10. 신규 필드(naturalTranslation·wordOrderPoint·breakRules)를 넣지 않은 예전 형식도 앱에서 열리기는 하지만, 새로 만들 때는 위 필드를 모두 채워라.
