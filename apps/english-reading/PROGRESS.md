@@ -353,4 +353,14 @@
 - 한계(1단계 미지원, 명시): 의미 유사도(정규화 문자열 완전동일만) · 목표구조 기반 underused · LLM 검수/수정 패키지 · severity 3단계. customPassages는 공식 진행률 미합산.
 - 검증: node 테스트 전량 통과(authoring 유닛 16건 신설). browser-shot - 출제화면 상태요약("20편·100문장, 목표 200·1000", level/topic 분포, 다음 권장 21번째·level3) + 패키지 복사 버튼 + 신규 지문 검증 시 "커리큘럼 참고(level 1, 권장 3)" 초록 구획, 콘솔 0. standalone 재빌드(237KB).
 - 변경 파일: src/core/authoring-index.js(신규) / src/main.js / tools/build-standalone.mjs / tests/run-node.mjs / style.css / CLAUDE.md / docs/2026-07-16-authoring-package-plan.md(신규) / dist/standalone.html(재생성).
-- 잔여: (1) 배포 미실행(deploy.json flightshooting 가리킴, 배포 시 SW 캐시 bump 필요). (2) PHASE B 2단계 후보 - LLM 검수/수정 패키지·severity·목표구조 리스트·level 밴드 확장·customPassages→passages 병합 도구. (3) 앵커 기본 id는 임시(사용자 조정 가능). (4) flightshooting 미커밋분 유지.
+- 잔여: (1) 배포 미실행(deploy.json flightshooting 가리킴, 배포 시 SW 캐시 bump 필요). (2) PHASE B 2단계 후보 - LLM 검수/수정 패키지·severity·목표구조 리스트·level 밴드 확장. (3) 앵커 기본 id는 임시(사용자 조정 가능). (4) flightshooting 미커밋분 유지.
+
+## 2.43. 앱 내 문제 입력 폐지 - 출제 패키지 복사 전용으로 축소 (2026-07-16, 사용자 지시)
+
+- 배경: 사용자가 출제 화면 흐름을 이상하게 느낌("패키지 복사해서 아래에 붙여넣는 거야?"). 진단 - 복사(주문서)와 붙여넣기(챗봇 결과)는 다른 텍스트인데 중간의 외부 챗봇 단계가 화면에 안 드러나 오해 유발. 사용자 결정: 앱에서 직접 문제를 입력·저장하는 기능 자체를 폐지하고, 만든 JSON은 자비스에게 직접 전달하는 방식으로. 화면은 "패키지 복사만 남김"(AskUserQuestion 확정).
+- 제거: renderAuthor의 붙여넣기 textarea·검증하기·삭제·내 문제로 추가·내가 만든 문제 목록(배포용 복사/삭제)·showAuthorResult 함수. customPassages 인프라 전체 - getCustomPassages·isCustom(죽은 함수)·rebuildCourse의 custom 합치기·목록의 '내 문제' 뱃지. main.js에서 validatePassage·compareAgainstExisting·normalizeSmartQuotes import 제거(미사용).
+- 유지: 출제 패키지 화면의 현재 상태 요약 + '출제 패키지 복사'. core/authoring-index.js 전체(analyze·hint·anchor·package·compare)는 자비스가 커밋 전 검증·상태분석에 계속 쓰므로 존치. validate.js도 자비스·테스트가 사용. 홈 버튼·화면 제목을 '출제 패키지'로 개명, 안내 문구를 "챗봇이 만든 JSON은 자비스에게 전달" 흐름으로.
+- 규칙 권위 이원은 유지(자동검증 validate.js / 정성규칙 authoring-index.js:AUTHORING_RULES). 모든 지문은 passages.json 단일 소스.
+- 검증: node 테스트 전량 통과(authoring 유닛 유지). browser-shot - 출제 패키지 화면(상태요약 + 패키지 복사만, 입력/검증/목록 사라짐) + 지문 목록 회귀 없음(20지문 정상, 뱃지 없음) 콘솔 0. standalone 재빌드(231KB).
+- 문서: CLAUDE.md 2장 트리·3.6·3.9·4.3·4.4·5.2 갱신(customPassages·앱 입력 폐지 반영). PROGRESS.
+- 잔여: 2.42 잔여 승계(배포 미실행·2단계 후보·앵커 임시·flightshooting).

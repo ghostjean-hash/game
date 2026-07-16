@@ -6090,16 +6090,10 @@ const getReads = () => store.get("reads", {}); // { passageId: 회독수 }
 const getVocab = () => store.get("vocab", []); // [{ wordKey, word, meaning, sentence, passageId, passageTitle }]
 const getSettings = () => ({ chunks: true, words: true, scope: true, ...(store.get("settings", {}) || {}) });
 
-// ── 내가 만든 문제(기기 저장) ── LLM으로 만든 지문을 검증 후 이 목록에 담아 기본 지문과 합쳐 읽는다.
-const getCustomPassages = () => store.get("customPassages", []);
-function isCustom(pid) { return getCustomPassages().some((p) => p.id === pid); }
-// 기본 지문 + 내가 만든 문제를 합쳐 코스들을 다시 만든다(추가·삭제 후 호출).
-// 사용자 출제 지문(customPassages)은 첫 코스에만 합친다(기존 동작 유지).
+// 모든 지문은 passages.json 단일 소스(앱에서 직접 입력·저장하는 기능은 폐지, 2026-07-16 사용자 결정).
+// 새 문제는 JSON을 자비스에게 주면 자비스가 passages.json에 커밋해 전체 배포한다.
 function rebuildCourse() {
-  courses = baseData.courses.map((c, i) =>
-    i === 0
-      ? createCourse({ ...c, passages: [...c.passages, ...getCustomPassages()] })
-      : createCourse(c));
+  courses = baseData.courses.map((c) => createCourse(c));
   // 재빌드 후 현재 코스 참조 갱신(사라졌으면 해제)
   if (course) course = courses.find((c) => c.id === course.id) || null;
 }
@@ -6213,7 +6207,7 @@ function renderCourseList() {
   const setBtn = document.createElement("button");
   setBtn.type = "button"; setBtn.className = "text-btn settings-open"; setBtn.textContent = "환경설정"; setBtn.onclick = openSettings;
   const authorBtn = document.createElement("button");
-  authorBtn.type = "button"; authorBtn.className = "text-btn"; authorBtn.textContent = "문제 출제"; authorBtn.onclick = renderAuthor;
+  authorBtn.type = "button"; authorBtn.className = "text-btn"; authorBtn.textContent = "출제 패키지"; authorBtn.onclick = renderAuthor;
   const guideBtn = document.createElement("button");
   guideBtn.type = "button"; guideBtn.className = "text-btn"; guideBtn.textContent = "끊는 기준"; guideBtn.onclick = openGuide;
   actions.append(guideBtn, setBtn, authorBtn);
@@ -6250,7 +6244,6 @@ function renderList(c) {
 
   const progress = getProgress();
   const doneMeta = getDoneMeta();
-  const customIds = new Set(getCustomPassages().map((p) => p.id));
   const list = document.createElement("div");
   list.className = "passage-list";
   course.passages.forEach((p) => {
@@ -6274,7 +6267,7 @@ function renderList(c) {
     card.className = "passage-card" + (perfect ? " done-perfect" : "");
     card.innerHTML =
       `<span class="lv">Lv ${p.level}</span>` +
-      `<span class="pc-body"><span class="pc-title">${p.titleKr}${customIds.has(p.id) ? ' <span class="mine-badge">내 문제</span>' : ""}</span><span class="pc-en">${p.title}</span></span>` +
+      `<span class="pc-body"><span class="pc-title">${p.titleKr}</span><span class="pc-en">${p.title}</span></span>` +
       `<span class="pc-status${isDone ? " done" : ""}">${status}</span>`;
     card.onclick = () => renderReading(p);
     list.appendChild(card);
@@ -6829,14 +6822,16 @@ function showClearModal() {
   document.body.appendChild(backdrop);
 }
 
-// ── 문제 출제 (LLM으로 만든 지문을 검증해 내 문제로 추가) ──
+// ── 출제 패키지 (챗봇에 줄 주문서 복사 전용) ──
 // 정성 출제 규칙·패키지 조립은 core/authoring-index.js가 단일 권위. 여기서는 화면 조립만 한다.
-// 공식 콘텐츠 = 기본 passages(baseData)만. customPassages(내가 만든 문제)는 공식 진행률에 넣지 않는다.
+// 공식 콘텐츠 = 기본 passages(baseData)만(모든 지문의 단일 소스).
 const officialPassages = () => (baseData ? baseData.courses.flatMap((c) => c.passages) : []);
 
+// 출제 패키지 화면 - 새 문제를 만들 때 챗봇에 줄 '주문서'를 복사한다.
+// 앱에서 직접 입력·저장하는 기능은 폐지(2026-07-16 사용자 결정). 챗봇이 만든 JSON은 자비스에게 전달해 passages.json에 커밋한다.
 function renderAuthor() {
   currentPassage = null;
-  setTop({ title: "문제 출제", onBack: renderCourseList, showVocab: false });
+  setTop({ title: "출제 패키지", onBack: renderCourseList, showVocab: false });
   const stage = el.stage;
   stage.className = "stage author-stage";
   stage.innerHTML = "";
@@ -6847,10 +6842,10 @@ function renderAuthor() {
 
   const intro = document.createElement("p");
   intro.className = "author-intro";
-  intro.textContent = "챗봇(LLM)에 아래 '출제 패키지'를 통째로 붙여넣어 문제를 만든 뒤, 그 결과(JSON)를 붙여넣고 검증하세요. 어느 챗봇을 쓰든 같은 규칙·현재 상태·기준 예시가 전달됩니다.";
+  intro.textContent = "새 문제를 만들 때 챗봇(ChatGPT·Gemini 등)에 그대로 붙여넣을 '주문서'입니다. 어느 챗봇에 줘도 같은 규칙·현재 상태·기준 예시가 전달됩니다. 챗봇이 만든 문제(JSON)는 자비스에게 전달하면 전체에 반영됩니다.";
   stage.appendChild(intro);
 
-  // 0. 현재 공식 콘텐츠 상태 + 다음 권장(모두 목표값, 강제 아님)
+  // 현재 공식 콘텐츠 상태 + 다음 권장(모두 목표값, 강제 아님)
   const distStr = (o) => Object.entries(o).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(" · ") || "(없음)";
   const status = document.createElement("div");
   status.className = "author-status";
@@ -6861,129 +6856,16 @@ function renderAuthor() {
     `<div class="as-row">다음 권장: <b>${hint.nextPassageNumber}번째 지문</b> · level ${hint.recommendedLevel} · 주제 ${hint.recommendedTopics.join(" / ") || "자유"}</div>`;
   stage.appendChild(status);
 
-  // 1. 출제 패키지 (규칙 + 현재 상태 + 힌트 + 앵커를 한 덩어리로) - 복사해서 챗봇에
+  // 출제 패키지(규칙 + 현재 상태 + 힌트 + 앵커를 한 덩어리로) - 복사해서 챗봇에
   const pkg = buildAuthoringPackage(official, { batchSize: 1 });
-  const rl = document.createElement("div"); rl.className = "author-label"; rl.textContent = `1. 출제 패키지 - 챗봇에 통째로 붙여넣기 (규칙 v${RULES_VERSION} · 스키마 v${SCHEMA_VERSION})`;
+  const rl = document.createElement("div"); rl.className = "author-label"; rl.textContent = `출제 패키지 - 챗봇에 통째로 붙여넣기 (규칙 v${RULES_VERSION} · 스키마 v${SCHEMA_VERSION})`;
   const ruleTa = document.createElement("textarea");
-  ruleTa.className = "author-rule"; ruleTa.readOnly = true; ruleTa.rows = 6; ruleTa.value = pkg;
+  ruleTa.className = "author-rule"; ruleTa.readOnly = true; ruleTa.rows = 10; ruleTa.value = pkg;
   const ruleCopy = document.createElement("button");
   ruleCopy.type = "button"; ruleCopy.className = "btn btn-primary author-btn";
   ruleCopy.textContent = "출제 패키지 복사";
   ruleCopy.onclick = () => copyText(pkg, "출제 패키지를 복사했습니다. 챗봇에 붙여넣으세요.");
   stage.append(rl, ruleTa, ruleCopy);
-
-  // 2. 결과 붙여넣기 + 검증
-  const pl = document.createElement("div"); pl.className = "author-label"; pl.textContent = "2. 만들어진 문제(JSON) 붙여넣기";
-  const input = document.createElement("textarea");
-  input.className = "author-input"; input.rows = 8; input.placeholder = '{ "id": "...", "level": 1, "title": "...", ... }';
-  const result = document.createElement("div"); result.className = "author-result"; result.hidden = true;
-  const checkBtn = document.createElement("button");
-  checkBtn.type = "button"; checkBtn.className = "btn author-btn author-check"; checkBtn.textContent = "검증하기";
-  const addBtn = document.createElement("button");
-  addBtn.type = "button"; addBtn.className = "btn btn-primary author-btn"; addBtn.textContent = "내 문제로 추가"; addBtn.hidden = true;
-  let validObj = null;
-
-  checkBtn.onclick = () => {
-    addBtn.hidden = true; validObj = null;
-    let obj;
-    // 모바일(아이폰)이 붙여넣기 때 바꿔 넣는 곡선 따옴표를 직선으로 되돌린 뒤 파싱한다.
-    try { obj = JSON.parse(normalizeSmartQuotes(input.value)); }
-    catch (e) { showAuthorResult(result, { ok: false, errors: [{ where: "형식", msg: "JSON 형식이 아닙니다. 챗봇이 JSON만 출력했는지 확인하세요." }], notes: [] }); return; }
-    // 형식·자동규칙 = validatePassage / 기존 콘텐츠와의 중복·힌트 대조 = compareAgainstExisting
-    const res = validatePassage(obj);
-    const cmp = compareAgainstExisting(obj, official);
-    if (getCustomPassages().some((p) => p.id === obj.id)) {
-      cmp.notes.unshift({ kind: "dup", msg: `id "${obj.id}"가 내가 만든 문제와 중복됩니다. id를 바꾸세요.` });
-    }
-    const blockingDup = cmp.notes.some((n) => n.kind === "dup");
-    const ok = res.ok && !blockingDup;
-    if (ok) { validObj = obj; addBtn.hidden = false; }
-    showAuthorResult(result, { ok, errors: res.errors, notes: cmp.notes });
-  };
-  addBtn.onclick = () => {
-    if (!validObj) return;
-    const list = getCustomPassages();
-    list.push(validObj);
-    store.set("customPassages", list);
-    rebuildCourse();
-    showToast(`"${validObj.titleKr}"를 내 문제로 추가했습니다.`);
-    renderAuthor();
-  };
-  // 삭제(입력창 비우기) - 오류난 JSON을 한 번에 지운다(모바일에서 전체 선택이 어려운 문제 해소).
-  const clearBtn = document.createElement("button");
-  clearBtn.type = "button"; clearBtn.className = "btn author-btn author-clear"; clearBtn.textContent = "삭제";
-  clearBtn.onclick = () => {
-    input.value = ""; result.hidden = true; addBtn.hidden = true; validObj = null; input.focus();
-  };
-  const btnRow = document.createElement("div"); btnRow.className = "author-btn-row";
-  btnRow.append(clearBtn, checkBtn); // 삭제가 검증하기 좌측
-  stage.append(pl, input, btnRow, result, addBtn);
-
-  // 3. 이미 만든 내 문제 목록
-  const mine = getCustomPassages();
-  if (mine.length) {
-    const ml = document.createElement("div"); ml.className = "author-label"; ml.textContent = `내가 만든 문제 (${mine.length}편)`;
-    stage.appendChild(ml);
-    const mlist = document.createElement("div"); mlist.className = "author-mine-list";
-    mine.forEach((p) => {
-      const row = document.createElement("div"); row.className = "author-mine-row";
-      const t = document.createElement("span"); t.className = "amr-title"; t.textContent = `${p.titleKr} · Lv ${p.level}`;
-      const exp = document.createElement("button");
-      exp.type = "button"; exp.className = "amr-btn"; exp.textContent = "배포용 복사";
-      exp.onclick = () => copyText(JSON.stringify(p, null, 2), "배포용 JSON을 복사했습니다. 자비스에게 주면 모두에게 배포합니다.");
-      const del = document.createElement("button");
-      del.type = "button"; del.className = "amr-btn amr-del"; del.textContent = "삭제";
-      del.onclick = () => {
-        store.set("customPassages", getCustomPassages().filter((x) => x.id !== p.id));
-        clearPassageProgress(p.id);
-        rebuildCourse();
-        renderAuthor();
-      };
-      row.append(t, exp, del);
-      mlist.appendChild(row);
-    });
-    stage.appendChild(mlist);
-  }
-}
-
-// 검증 결과 표시 - r = { ok, errors:[{where,msg}], notes:[{kind,msg}] }.
-// 형식 오류(validatePassage)와 기존 콘텐츠 대조(compareAgainstExisting)를 구획해 보여준다.
-// errors·dup(중복)은 고쳐야 추가 가능, curriculum/info는 참고(추가 가능).
-function showAuthorResult(host, r) {
-  const errors = r.errors || [];
-  const notes = r.notes || [];
-  const dupNotes = notes.filter((n) => n.kind === "dup");
-  const refNotes = notes.filter((n) => n.kind !== "dup");
-  host.hidden = false;
-  host.className = `author-result ${r.ok ? "ok" : "bad"}`;
-  host.innerHTML = "";
-
-  if (r.ok && !errors.length && !notes.length) {
-    host.textContent = "✓ 규칙을 모두 지켰습니다. '내 문제로 추가'를 누르세요.";
-    return;
-  }
-
-  const section = (title, rows, cls) => {
-    if (!rows.length) return;
-    const h = document.createElement("div"); h.className = `ar-head ${cls || ""}`; h.textContent = title;
-    host.appendChild(h);
-    rows.forEach((e) => {
-      const row = document.createElement("div"); row.className = "ar-row";
-      if (e.where) { const wh = document.createElement("span"); wh.className = "ar-where"; wh.textContent = e.where; row.appendChild(wh); }
-      const ms = document.createElement("span"); ms.className = "ar-msg"; ms.textContent = e.msg; row.appendChild(ms);
-      host.appendChild(row);
-    });
-  };
-
-  section(`형식 오류 ${errors.length}가지 (고쳐야 추가 가능):`, errors, "ar-bad");
-  section(`기존 콘텐츠 중복 ${dupNotes.length}가지 (고쳐야 추가 가능):`, dupNotes, "ar-bad");
-  section(`커리큘럼 참고 ${refNotes.length}가지 (추가는 가능):`, refNotes, "ar-ref");
-
-  if (r.ok) {
-    const line = document.createElement("div"); line.className = "ar-ok-line";
-    line.textContent = "✓ 형식·중복 통과. 위 참고 사항을 확인하고 '내 문제로 추가'를 누르세요.";
-    host.appendChild(line);
-  }
 }
 
 // ── 내 단어장 ──

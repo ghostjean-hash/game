@@ -22,7 +22,7 @@ apps/english-reading/
 ├── tests/run-node.mjs    # core 유닛 + passages.json 무결성 (node로 실행)
 ├── tools/build-standalone.mjs
 └── src/
-    ├── main.js           # 화면 조립 + 클릭/이벤트 (DOM). 목록·읽기·단어장·설정·문제 출제
+    ├── main.js           # 화면 조립 + 클릭/이벤트 (DOM). 목록·읽기·단어장·설정·출제 패키지
     ├── core/
     │   ├── tokenize.js   # 문장 토큰화 + nth 해석 + 숙어 연속 매칭 (순수, DOM 미의존)
     │   ├── course.js     # 코스·지문·진행 순수 로직 (createCourse / courseProgress)
@@ -41,10 +41,10 @@ apps/english-reading/
 3.3. **라이트 테마 단독**. body 스코프에서 글로벌 다크 토큰을 라이트로 재정의. 테마 토글 없음.
 3.4. **난이도 = 지문 자체(완만한 사다리)**. 지문에 level을 매겨 오름차순 정렬(한 편에 길이·구문·어휘 중 하나만 상승). 도움 노출량은 난이도가 아니라 학습자 설정. **클리어 = 코스 전체 완주**이고, 개별 지문 완독은 진행률만 채우며 연출을 두지 않는다.
 3.5. **순수 로직은 core/에 격리**. tokenize·course는 DOM 미의존. main.js만 DOM을 만진다. courseProgress는 done 배열 주입으로 테스트 결정성 확보.
-3.6. **상태는 기기 저장**(localStorage, `createStorage("english-reading")`): `done`(완독 지문 id), `reads`(지문별 회독수), `vocab`(단어+뜻+원문+출처), `settings`(노출 토글), `seenIntro`(첫 안내 1회), `progress`(지문별 읽기 진행 - 문장마다 그은 선·임시 단어·검토 여부. 단어장·목록을 오가거나 앱을 껐다 켜도 복원, 회독 완료 시 해당 지문분 리셋), `customPassages`(사용자가 '문제 출제' 화면에서 검증 통과시켜 추가한 지문 배열 - 기본 지문과 합쳐 코스를 만든다). 앱 진입은 항상 홈(코스 목록)으로 고정한다(2026-07-16 사용자 지시, 마지막 읽던 지문 자동 복원 폐지 - 읽던 자리 표시는 지문 재진입 시 `progress`로 복원). 단어장 백버튼은 읽던 지문이 있으면 그 지문으로 복귀(목록에서 왔으면 목록으로).
-3.9. **문제 출제(크리에이터) + 출제 패키지 시스템**(PHASE B 1단계, 2026-07-16 확정, 계획 `docs/2026-07-16-authoring-package-plan.md`). 목표는 여러 LLM(ChatGPT/Gemini/Claude 등)이 시간차로 나눠 만들어도 기준이 흔들리지 않게 하는 것(최종 200지문·1000문장). '문제 출제' 화면이 (a)현재 공식 콘텐츠 상태(지문/문장 수·level/topic 분포·과다 문법·중복 현황)와 다음 권장(번호·level·topic)을 자동 요약 표시하고, (b)`buildAuthoringPackage`로 정성 규칙 + 현재 상태 + 힌트 + 레벨 앵커 + 스키마 버전을 한 덩어리 '출제 패키지'로 복사(어느 챗봇에 줘도 동일)한다. LLM이 만든 지문 JSON을 붙여넣으면 `validatePassage`(형식·자동규칙) + `compareAgainstExisting`(기존 id/제목/문장 중복·커리큘럼 힌트 대조)를 함께 돌려 [형식 오류]/[기존 중복](고쳐야 추가 가능)과 [커리큘럼 참고](추가 가능)로 구획 표시 → 통과분만 `customPassages`에 추가(내 문제 뱃지). '배포용 복사'로 JSON을 얻어 자비스가 passages.json에 커밋하면 전체 배포. 서버·계정 없이 로컬 저장(6.2 서버리스 유지).
-   - **규칙 권위 이원(복사 금지)**: 자동 검증 규칙 = `core/validate.js`(코드 판정). 정성 규칙(자연스러움·난이도·청킹 원칙 등, 코드 판정 불가) = `core/authoring-index.js:AUTHORING_RULES`(단일 위치). 출제 패키지는 이 둘 + 현재 상태를 조립한 파생물이며 별도 원본으로 수작업 복제하지 않는다. `RULES_VERSION`/`SCHEMA_VERSION`으로 추적.
-   - **한계(1단계 미지원, 과장 금지)**: 의미 유사도 검사(임베딩 없음, 정규화 문자열 완전동일만) · 목표 구조 기반 underused 구조 · LLM 검수/수정 패키지 · severity 3단계. customPassages는 공식 진행률에 자동 합산하지 않는다(공식=기본 passages.json만).
+3.6. **상태는 기기 저장**(localStorage, `createStorage("english-reading")`): `done`(완독 지문 id), `reads`(지문별 회독수), `vocab`(단어+뜻+원문+출처), `settings`(노출 토글), `seenIntro`(첫 안내 1회), `progress`(지문별 읽기 진행 - 문장마다 그은 선·임시 단어·검토 여부. 단어장·목록을 오가거나 앱을 껐다 켜도 복원, 회독 완료 시 해당 지문분 리셋). 앱 진입은 항상 홈(코스 목록)으로 고정한다(2026-07-16 사용자 지시, 마지막 읽던 지문 자동 복원 폐지 - 읽던 자리 표시는 지문 재진입 시 `progress`로 복원). 단어장 백버튼은 읽던 지문이 있으면 그 지문으로 복귀(목록에서 왔으면 목록으로).
+3.9. **출제 패키지 (문제 만들기 흐름)**(PHASE B 1단계, 2026-07-16 확정, 계획 `docs/2026-07-16-authoring-package-plan.md`). 목표는 여러 LLM(ChatGPT/Gemini/Claude 등)이 시간차로 나눠 만들어도 기준이 흔들리지 않게 하는 것(최종 200지문·1000문장). **앱에서 직접 JSON을 붙여넣어 저장하는 기능은 폐지(2026-07-16 사용자 결정) - `customPassages`·앱 내 검증·내 문제 목록 모두 제거.** 대신 '출제 패키지' 화면이 (a)현재 공식 콘텐츠 상태(지문/문장 수·level/topic 분포·과다 문법·중복 현황)와 다음 권장(번호·level·topic)을 자동 요약하고, (b)`buildAuthoringPackage`로 정성 규칙 + 현재 상태 + 힌트 + 레벨 앵커 + 스키마 버전을 한 덩어리 '주문서'로 복사(어느 챗봇에 줘도 동일)한다. **사용자는 그 주문서를 챗봇에 붙여 문제(JSON)를 만든 뒤, 그 JSON을 자비스에게 전달**하면 자비스가 `validatePassage`(형식·자동규칙) + `compareAgainstExisting`(기존 중복·힌트 대조)로 검증 후 `passages.json`에 커밋해 전체 배포한다. 앱은 서버·계정 없이 순수 학습 전용(6.2 서버리스 유지).
+   - **규칙 권위 이원(복사 금지)**: 자동 검증 규칙 = `core/validate.js`(코드 판정). 정성 규칙(자연스러움·난이도·청킹 원칙 등, 코드 판정 불가) = `core/authoring-index.js:AUTHORING_RULES`(단일 위치). 출제 패키지는 이 둘 + 현재 상태를 조립한 파생물이며 별도 원본으로 수작업 복제하지 않는다. `RULES_VERSION`/`SCHEMA_VERSION`으로 추적. `validatePassage`·`compareAgainstExisting`은 앱 UI에서 빠졌지만 자비스가 커밋 전 검증에 쓰므로 core에 유지(테스트도 사용).
+   - **한계(1단계 미지원, 과장 금지)**: 의미 유사도 검사(임베딩 없음, 정규화 문자열 완전동일만) · 목표 구조 기반 underused 구조 · LLM 검수/수정 패키지 · severity 3단계.
 3.7. **노출 설정 3종**(`chunks`/`words`/`scope`) 기본 전부 켜짐. OFF면 해당 상호작용·시각 요소를 비활성한다.
 3.8. **standalone.html은 생성물**. 직접 수정 금지, 원본 수정 후 `tools/build-standalone.mjs` 재실행. 빌드는 치환 패턴(fetch 블록·SW 등록 줄) 미발견 시 즉시 실패 - 그 줄을 바꾸면 빌드 스크립트도 함께 갱신.
 
@@ -52,7 +52,7 @@ apps/english-reading/
 
 4.1. `courses`: `[{ id, title, passages }]`. passages는 level 오름차순(createCourse가 정렬을 보장하므로 데이터 순서는 무관하나 가급적 정렬해 둔다).
 4.2. `passage`: `{ id, level, topic, title, titleKr, sentences }`. id 유일. `topic`은 주제 분류(영어, 예 "Daily Life" - 출제 분포·힌트에 쓰임). 전체 텍스트는 sentences.text를 이어 조합(따로 저장 안 함).
-4.3. `sentence`: `{ text, chunks[{en,kr}], naturalTranslation, wordOrderPoint{title,explanation}, breakRules{allowed[{boundary,reason}],discouraged[{boundary,reason}]}, words[{word,nth?,meaning}], grammar[{label,note}], insight?{formula,why,wrong,natural} }`. **신 필드(naturalTranslation·wordOrderPoint·breakRules)는 옵셔널 - 없으면 `core/normalize.js:normalizeSentence`가 fallback을 채운다(customPassages 하위호환).**
+4.3. `sentence`: `{ text, chunks[{en,kr}], naturalTranslation, wordOrderPoint{title,explanation}, breakRules{allowed[{boundary,reason}],discouraged[{boundary,reason}]}, words[{word,nth?,meaning}], grammar[{label,note}], insight?{formula,why,wrong,natural} }`. **신 필드(naturalTranslation·wordOrderPoint·breakRules)는 옵셔널 - 없으면 `core/normalize.js:normalizeSentence`가 fallback을 채운다(구스키마 지문 하위호환).**
    - `chunks`: en을 공백으로 이어 붙이면 원문과 일치(구두점·대소문자 제외). kr은 어순·구조가 드러나는 직독직해로 쓰고 단순 의역 금지. **chunks의 경계가 곧 대표 추천 끊기(채점의 recommended)**(core/chunking.js가 단어 수 누적으로 계산). 경계는 '끊는 기준' 팝업 규칙과 일치해야 하며, `chunkViolations` 4규칙(be동사·조동사 뒤 금지·짧은 주어 2단어 이하 뒤 동사 앞 금지·짧은 전치사구 2단어 이하 앞 금지·전치사가 앞 덩어리 끝에 남아 목적어와 갈림 금지, 콤마 뒤·that/to절은 예외)을 어기면 테스트가 실패한다 - 잘게 찢지 말고 의미 덩어리로 크게 묶는다.
    - `breakRules`: 끊기 5등급 채점의 허용/비추천 위치. `boundary`는 **0-based 토큰 틈 번호**(b번 단어와 b+1번 단어 사이, 유효 0~토큰수-2). `allowed`=대표 경계는 아니나 끊어도 자연스러운 위치, `discouraged`=끊으면 핵심 구조가 갈려 이해를 방해하는 위치. 각 `reason` 필수(비추천은 사용자가 실제 그은 위치의 이유만 해석 카드 상단에 노출). 대표 chunks 경계를 넣거나 allowed·discouraged 중복이면 validate 실패. 억지로 채우지 말 것(없으면 빈 배열). 채점 판정 = `core/chunking.js:gradeChunks`(recommended>allowed>discouraged>neutral, missed=안 그은 추천경계).
    - `naturalTranslation`: 문장 전체의 자연스러운 한국어 완역(직독직해 조각 잇기 금지). 검토 후 직독직해와 구분된 카드로 표시. 없으면 fallback(insight.natural → chunks.kr 이어붙임).
@@ -60,12 +60,12 @@ apps/english-reading/
    - `words`: 걸림돌 단어 + 뜻. **words에 등록된 주요 단어만 클릭·수집 대상**이다(일반 단어는 끊기 틈과의 오터치를 막기 위해 터치 비활성, 밑줄 표시 없음 - 2026-07-09 사용자 지시). word는 text에 실재(같은 단어 여러 번이면 nth 1-based). **단일 낱말뿐 아니라 숙어·표현(여러 낱말, 띄어쓰기 포함 "takes a bus"·"where to get off")도 가능** - 원문에 연속으로 나오면 `core/tokenize.js:matchWordTargets`가 묶음으로 잡아, 그 표현 속 아무 낱말이나 눌러도 전체가 함께 수집된다(2026-07-16, 쉬운 낱말로 된 숙어 대응. 낱말 몸통만 반응해 끊기 틈은 침범 안 함). meaning은 한국어 뜻(표현이면 표현 전체 뜻). 클릭=임시 수집(오렌지) → 해석 시 뜻 공개 + 단어장 영구 저장(선유추 후확인).
    - `grammar`: 그 문장에 포함된 모든 문법 요소(이름표 label + 한 줄 설명 note), 1개 이상 필수. 해석 채점 후 "문법 자세히 보기" 토글로 펼치는 접힘 목록(핵심 어순은 기본 노출, 상세 문법은 접힘).
    - `insight`: 구조적으로 어려운 문장에만(지문당 0~3개 - 쉬운 지문은 0 정당, 상한 3). 4필드 필수 - 검토 후 심화 카드(공식·왜·비문, 자연 해석은 naturalTranslation이 전담)로 열림(설정 토글).
-4.4. 콘텐츠 보강 후 `node apps/english-reading/tests/run-node.mjs`로 무결성 자동 검증(죽은 입력 0·청킹 재구성·끊는 기준 위반 0·grammar 1개 이상·insight 4필드·words 실재·5등급 채점·breakRules 범위·중복·built-in strict 신 필드). built-in은 strict(신 필드 필수), 출제 화면·customPassages는 관대(신 필드 없어도 통과, 있으면 형식 검증).
+4.4. 콘텐츠 보강 후 `node apps/english-reading/tests/run-node.mjs`로 무결성 자동 검증(죽은 입력 0·청킹 재구성·끊는 기준 위반 0·grammar 1개 이상·insight 4필드·words 실재·5등급 채점·breakRules 범위·중복·built-in strict 신 필드). built-in은 strict(신 필드 필수), 자비스가 커밋 전 새 지문을 검증할 때는 관대(신 필드 없어도 통과, 있으면 형식 검증 - 구스키마 하위호환).
 
 # 5. 작업 시 주의
 
 5.1. 색만으로 정보 전달 금지(접근성)가 기본이나, 본문 단어는 밑줄 등 표시 없이 깨끗하게 둔다(사용자 명시 지시). 임시 수집만 오렌지 배경으로 표시, 채점은 끊기 표시 위 모양(추천=청록 채운 원 ●/허용=회색 빈 원 ○/비추천=주황 삼각형 △/다른분할=붉은 x ✕/놓침=붉은 아래 화살표 ▾)으로 병행 구분(색만 아님). 네 마크(●○△✕▾)는 시각 크기를 서로 통일한다. O/X 이진에서 5등급으로 전환(2026-07-15), 다른분할·놓침에 붉은 마크 사용은 사용자 지시(2026-07-16 - 기존 "빨간 X 폐기"를 대체).
-5.2. 검증은 정적 확인만으로 "됐다" 금지. browser-shot + playwright로 전 분기 실경로 재생 - / 선 긋기 토글·해석 채점 5등급(추천 청록●/허용 회색○/비추천 주황△/다른분할 연회색 마크없음/놓침 청록▾)·선택한 비추천 위치 이유 카드·직독직해와 자연스러운 완역 분리 카드·핵심 어순 기본 노출·상세 문법 접기/펼치기·주요 단어만 터치·검토 후 선·단어 잠금·단어 임시 수집(오렌지 하이라이트+토스트, 뜻 감춤)·해석 시 [단어-뜻] 리스트 공개+영구 저장·N회독 버튼·회독 시 clean slate·코스 클리어 모달·단어장 카드 펼침/삭제·구스키마 customPassage fallback·노출 설정 OFF까지.
+5.2. 검증은 정적 확인만으로 "됐다" 금지. browser-shot + playwright로 전 분기 실경로 재생 - / 선 긋기 토글·해석 채점 5등급(추천 청록●/허용 회색○/비추천 주황△/다른분할 연회색 마크없음/놓침 청록▾)·선택한 비추천 위치 이유 카드·직독직해와 자연스러운 완역 분리 카드·핵심 어순 기본 노출·상세 문법 접기/펼치기·주요 단어만 터치·검토 후 선·단어 잠금·단어 임시 수집(오렌지 하이라이트+토스트, 뜻 감춤)·해석 시 [단어-뜻] 리스트 공개+영구 저장·N회독 버튼·회독 시 clean slate·코스 클리어 모달·단어장 카드 펼침/삭제·구스키마 지문 fallback·출제 패키지 상태요약·패키지 복사·노출 설정 OFF까지.
 5.3. 유닛 테스트: `tests/run-node.mjs` (core 순수 로직 + 데이터 무결성). 로직·데이터 변경 시 실행이 기본.
 5.4. 배포는 `/web-deploy` (도메인 루트 `.claude/deploy.json`, smoke 셀렉터 `.passage-card`). SW 캐시 버전 bump는 루트 service-worker.js 소관.
 5.5. 진행/완료/다음 작업은 `PROGRESS.md` 참조.
