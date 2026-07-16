@@ -291,3 +291,15 @@
 - 규칙 완화: insight 하한을 1→0으로(tests·CLAUDE.md 4.3). insight는 원래 '구조적으로 어려운 문장에만' 넣는 선택 필드인데 기존 테스트가 지문당 최소 1개를 강제해, 쉬운 어순 기초 코스가 걸렸다. 어려운 문장 없는 지문은 insight 0이 정당하므로 상한 3만 유지.
 - 검증: node 테스트 전량 통과(두 코스 무결성·5등급·breakRules·strict). browser-shot 2회 - 코스 목록(마음의 법칙 6지문 + Word Order Foundations 20지문, 진행률·액션) / 새 코스 첫 지문 진입 후 끊기·해석(discouraged 주황 △ + missed 청록 ▾ + 비추천 이유 카드 + 자연해석 + 핵심 어순 + 문법 접힘), 콘솔 0. standalone 재빌드(285KB, 진입 치환 renderList→renderCourseList 동기), SW v186. 커밋 7207b97.
 - 잔여: 배포(/web-deploy)는 사용자 지시 대기(로컬 커밋까지). 다음 후보(사양 비스코프) 유지 - 오디오·TTS·구간 재생, 듣기 리듬 그룹, 말하기 변형.
+
+## 2.37. Word Order Foundations 100문장 콘텐츠 검수 (2026-07-16, 사용자 검수 규칙 제공)
+
+- 배경: 사용자가 영어 독해 문제의 작성·검수 규칙(16장, 문제 단위·난이도·영어 원문·청킹·직독직해·자연해석·breakRules·wordOrderPoint·grammar·words·지문 품질·severity·판정)을 제시하고, word-order-foundations 코스 20지문 100문장을 이 규칙으로 전수 검수하라고 지시. 명시 제약 - 원본 미수정, 검수 보고서만 작성, 데이터 수정 금지. 지목한 english_reading_100_sentences.json은 이미 2.36에서 passages.json에 병합·제거된 상태라 현행 라이브 버전을 대상으로 검수.
+- 방식: 자동 검증(코드) + 내용 검수(general-purpose 에이전트 5개 병렬, 지문 4편씩) + 반복 패턴 코드 전수 교차검증. 자동 검증은 validatePassage strict + 문장수 5개·level 범위·id 중복·단어수 권장범위를 별도 스크립트로 보강.
+- 자동 검증 결과: critical 0, major 0. 문장 수 20지문 전부 5문장·chunks.en 결합 원문 일치·boundary 범위·문법/단어 실재·제목·id 전부 통과. 유일 지적은 단어 수 권장 범위 이탈 33건(경고, 특히 L3 지문이 권장 하한 12에 못 미쳐 9~11단어 - 구조 난이도는 L3에 맞아 실패 아닌 사람 검토 대상).
+- 핵심 발견(계통적 결함): breakRules.allowed 항목이 이 코스 전체 21개인데 전부 그 문장의 대표 청킹 경계(recommended)와 같은 위치라 gradeChunks가 항상 recommended로 먼저 분류 = 화면에서 발동 안 하는 죽은 데이터. 살아있는 진짜 대안 분할 allowed는 0개. 콘텐츠 생성 시 절/부정사 시작 경계(that/which/what/who/how to/to/동명사/과거분사)를 기계적으로 allowed에 넣은 흔적, 15개 지문에 분포(코드 chunkBoundaries로 21건 전수 확정, LLM 판정과 100% 일치). 학습자 실사용엔 무해하나 앱 규약(CLAUDE.md 4.3: 대표 경계를 allowed에 넣으면 validate 실패) 위반. 원인은 validate.js가 discouraged의 대표경계 중복만 검사(line 111)하고 allowed는 미검사 = 규약-구현 불일치.
+- severity 판정: allowed 대표경계 중복을 major로 통일(규칙 14장 'allowed 판정 오류' + 규약 명시 위반 근거, 단 실사용 무해 명기). 에이전트 5개 중 1개는 major·4개는 minor로 봤으나 규약 위반 명시성 존중해 major 통일. 그 외 내용 minor 9건 - 번역 뉘앙스 확대/축소 5(버스·'오후에도'·give→된다·단언 약화·supports/wildlife), 기초 단어 오등록 2(sofa·Emotion), 시제 일관성 1(understood), 지시어 불명확 1(the new idea).
+- 최종 판정(규칙 15장): 규칙 준수 5지문(helping-neighbor·game-night-plan·weather-change·remembering-names·notifications-and-focus, 전부 allowed 중복 없음) / 규칙위반-수정 후 사용 15지문(전부 allowed 중복 원인) / 사용 금지 0. 합계 critical 0·major 21·minor 9.
+- 산출물: docs/2026-07-15-content-validation-report.md(10섹션 + 판정 표, 220줄). 데이터는 지시대로 미수정.
+- 배포: deploy.json이 이전 flightshooting 세션 설정(deploy.paths=games/flightshooting)으로 남아 web-deploy를 돌리면 무관한 변경을 커밋할 위험이라 회피, 보고서만 직접 커밋 후 push(ab999da, origin/main 반영·rev-list 0 확인). 무인 저장 모드(사용자 퇴근)로 커밋+push 자동 완주.
+- 잔여(사용자 결정 대기): (a) 발견 문제를 실제 데이터에 반영할지 - major 21건은 죽은 allowed 삭제라 위험 낮은 일괄 작업 + validate.js에 allowed-대표경계 중복 검사 추가가 근본 처방 (b) minor 9건 반영 여부 (c) 사용자 제시 검수 규칙 자체를 앱 AUTHORING_PROMPT/CLAUDE.md에 영구 반영할지(이번엔 검수 기준으로만 적용).
