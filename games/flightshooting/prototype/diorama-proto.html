@@ -1,0 +1,275 @@
+<!doctype html>
+<!--
+  디오라마 배경 기술 프로토타입 (WORLD_DIORAMA_SPEC v0.1 검증용).
+  완전 독립 샌드박스 - 기존 game 코드(main.js/view.js/backgroundPools)와 A안 미커밋 파일을 전혀 쓰지 않는다.
+  아트 에셋 없이 placeholder(청크·랜드마크)를 런타임 코드로 생성한다.
+  검증 목표: 청크 세로 연결+오버랩 블렌드 / 월드좌표 2.4x 확대→1.0x 줌아웃+카메라 중심 보간 /
+            줌 후 스크롤 연결 / 랜드마크 고해상 레이어 정합 / 스크롤 3프리셋 / DPR / 전투 가독성.
+  개발자 키: 1/2/3 = 스크롤 slow/normal/fast, R = 인트로 재생, G = 격자 토글, B = 오버랩 블렌드 토글, P = 일시정지.
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Diorama Prototype v0.1</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0a0e18; overflow: hidden; font-family: system-ui, sans-serif; }
+  #stage { position: fixed; inset: 0; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud { position: fixed; left: 8px; top: 8px; color: #cfe0ff; font-size: 12px; line-height: 1.5;
+         background: rgba(8,14,26,0.55); padding: 6px 9px; border-radius: 6px; white-space: pre; pointer-events: none; }
+  #keys { position: fixed; right: 8px; bottom: 8px; color: #93a7c9; font-size: 11px; line-height: 1.5;
+          background: rgba(8,14,26,0.5); padding: 6px 9px; border-radius: 6px; white-space: pre; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage"><canvas id="c"></canvas></div>
+<div id="hud"></div>
+<div id="keys">키: 1/2/3 스크롤 느림/보통/빠름 · R 인트로 재생 · G 격자 · B 블렌드 · P 일시정지</div>
+<script>
+'use strict';
+// ── 상수 (프로토타입 기준값, SPEC §11) ──
+const LOGICAL_W = 720, LOGICAL_H = 1280;      // 논리 기준 해상도(9:16)
+const CHUNK_W = 1080, CHUNK_H = 2048;          // 청크 원본 픽셀
+const OVERLAP = 128;                           // 청크 상하 오버랩(원본 px, SPEC 96~160)
+const INTRO_START_SCALE = 2.4, PLAY_SCALE = 1.0, INTRO_DUR = 1.8; // 인트로 줌
+const SCROLL_BASE = 60;                        // 배경 스크롤 baseline(논리 px/s)
+const SCROLL_PRESETS = { slow: 0.85, normal: 1.0, fast: 1.15 };
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const hud = document.getElementById('hud');
+let W = 0, H = 0, dpr = 1;
+function resize() {
+  const r = canvas.getBoundingClientRect();
+  W = Math.max(1, Math.floor(r.width));
+  H = Math.max(1, Math.floor(r.height));
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.floor(W * dpr);
+  canvas.height = Math.floor(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener('resize', resize);
+
+// 논리 좌표를 실제 화면에 맞추는 배율(반응형): 세로 기준 fit.
+function viewScale() { return H / LOGICAL_H; }
+
+// ── placeholder 청크 생성 (offscreen canvas, 코드 생성 - 아트 에셋 대체) ──
+// 각 청크: 구간색 세로 그라데이션 + 격자 + 원경 건물 블록 + 상하 오버랩 alpha 사전 굽기(런타임 블렌드 비용 0).
+function makeChunk(theme) {
+  const cv = document.createElement('canvas');
+  cv.width = CHUNK_W; cv.height = CHUNK_H;
+  const g = cv.getContext('2d');
+  // 구간 배경 그라데이션
+  const grad = g.createLinearGradient(0, 0, 0, CHUNK_H);
+  grad.addColorStop(0, theme.top); grad.addColorStop(1, theme.bottom);
+  g.fillStyle = grad; g.fillRect(0, 0, CHUNK_W, CHUNK_H);
+  // 격자(스크롤·경계 가시화)
+  g.strokeStyle = 'rgba(255,255,255,0.06)'; g.lineWidth = 2;
+  for (let x = 0; x <= CHUNK_W; x += 120) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, CHUNK_H); g.stroke(); }
+  for (let y = 0; y <= CHUNK_H; y += 120) { g.beginPath(); g.moveTo(0, y); g.lineTo(CHUNK_W, y); g.stroke(); }
+  // 원경 건물 블록(저대비 - 가독성 배경). 중앙 60%는 비워 전투 가독성 보호.
+  g.fillStyle = theme.block;
+  const cxLo = CHUNK_W * 0.20, cxHi = CHUNK_W * 0.80; // 중앙 보호대(20~80%) 바깥에만
+  for (let i = 0; i < 26; i++) {
+    const bw = 40 + (i * 53 % 90);
+    let bx = (i * 137) % CHUNK_W;
+    if (bx > cxLo - bw && bx < cxHi) bx = (bx < CHUNK_W / 2) ? (cxLo - bw) * (bx / (cxLo || 1)) : cxHi + (bx - cxHi) * 0.5;
+    const by = 80 + (i * 197) % (CHUNK_H - 300);
+    const bh = 70 + (i * 71 % 160);
+    g.globalAlpha = 0.5; g.fillRect(bx, by, bw, bh); g.globalAlpha = 1;
+  }
+  // 구간 라벨(디버그용 - 어느 청크인지)
+  g.fillStyle = 'rgba(255,255,255,0.28)'; g.font = 'bold 90px system-ui';
+  g.textAlign = 'center'; g.fillText(theme.label, CHUNK_W / 2, CHUNK_H / 2);
+  // 상하 오버랩 alpha 사전 굽기: 위 OVERLAP는 위로 갈수록 투명, 아래 OVERLAP는 아래로 갈수록 투명.
+  //   → 청크를 단순 겹쳐 그려도(source-over) 경계가 크로스페이드된다(매 프레임 마스크 불필요 = 블렌드 비용 0).
+  bakeOverlapAlpha(g, cv);
+  return cv;
+}
+function bakeOverlapAlpha(g, cv) {
+  const img = g.getImageData(0, 0, CHUNK_W, CHUNK_H);
+  const d = img.data;
+  for (let y = 0; y < CHUNK_H; y++) {
+    let a = 1;
+    if (y < OVERLAP) a = y / OVERLAP;                       // 상단 페이드인
+    else if (y > CHUNK_H - OVERLAP) a = (CHUNK_H - y) / OVERLAP; // 하단 페이드아웃
+    if (a < 1) { const row = y * CHUNK_W * 4; for (let x = 0; x < CHUNK_W; x++) d[row + x * 4 + 3] = Math.round(d[row + x * 4 + 3] * a); }
+  }
+  g.putImageData(img, 0, 0);
+}
+// 블렌드 미적용(단순 맞붙이기) 비교용: 오버랩 alpha 안 구운 버전.
+function makeChunkHard(theme) {
+  const cv = document.createElement('canvas'); cv.width = CHUNK_W; cv.height = CHUNK_H;
+  const g = cv.getContext('2d');
+  const grad = g.createLinearGradient(0, 0, 0, CHUNK_H);
+  grad.addColorStop(0, theme.top); grad.addColorStop(1, theme.bottom);
+  g.fillStyle = grad; g.fillRect(0, 0, CHUNK_W, CHUNK_H);
+  g.fillStyle = 'rgba(255,255,255,0.06)'; g.font = 'bold 90px system-ui'; g.textAlign = 'center';
+  g.fillText(theme.label, CHUNK_W / 2, CHUNK_H / 2);
+  return cv;
+}
+
+// 고해상 랜드마크 placeholder(경복궁 흉내: 돌담 + 기와지붕 2단). 투명 배경. 2.4x 확대 대비 고해상.
+function makeLandmark() {
+  const S = 640; const cv = document.createElement('canvas'); cv.width = S; cv.height = S;
+  const g = cv.getContext('2d');
+  g.fillStyle = '#3a2a22'; g.fillRect(S * 0.18, S * 0.62, S * 0.64, S * 0.22); // 돌담 기단
+  const roof = (cx, cy, w, h, col) => { g.fillStyle = col; g.beginPath();
+    g.moveTo(cx - w, cy); g.quadraticCurveTo(cx - w * 0.5, cy - h * 1.4, cx, cy - h);
+    g.quadraticCurveTo(cx + w * 0.5, cy - h * 1.4, cx + w, cy); g.closePath(); g.fill(); };
+  g.fillStyle = '#5a3d2e'; g.fillRect(S * 0.30, S * 0.44, S * 0.40, S * 0.20);   // 몸체
+  roof(S * 0.5, S * 0.46, S * 0.30, S * 0.14, '#8a2f2f');                          // 아래 지붕
+  roof(S * 0.5, S * 0.30, S * 0.24, S * 0.12, '#a03a3a');                          // 위 지붕(2단)
+  g.fillStyle = '#c9662f'; g.fillRect(S * 0.46, S * 0.50, S * 0.08, S * 0.14);      // 붉은 문
+  return cv;
+}
+
+// ── 월드 구성 ──
+const THEMES = [
+  { label: '전통', top: '#2a3550', bottom: '#6b5a44', block: '#141d30' },  // 청크0 전통 지역
+  { label: '도심', top: '#28324e', bottom: '#3f4a68', block: '#0e1526' },  // 청크1 도심
+  { label: '한강', top: '#223047', bottom: '#2b5566', block: '#122436' },  // 청크2 한강/현대
+];
+let chunksSoft = [], chunksHard = [], landmark = null;
+// 청크는 아래→위로 이어 붙인다. 유효 높이 = CHUNK_H - OVERLAP(겹침만큼 당겨 배치).
+const chunkStep = CHUNK_H - OVERLAP;                 // 청크 간 월드 세로 간격(원본 px)
+const worldPxToLogical = LOGICAL_W / CHUNK_W;        // 원본 px → 논리 px(폭 맞춤)
+const chunkStepL = chunkStep * worldPxToLogical;     // 논리 기준 청크 간격
+const chunkHL = CHUNK_H * worldPxToLogical;          // 논리 기준 청크 높이
+function worldTopOf(i) { return i * chunkStepL; }    // i번 청크 상단 월드 y(논리)
+const WORLD_H = worldTopOf(THEMES.length - 1) + chunkHL; // 전체 월드 세로(논리)
+
+// 랜드마크 월드 배치: 측면형(좌측 x=0.26), 첫 청크(전통) 하단부.
+const landmarkL = { x: LOGICAL_W * 0.26, y: chunkHL * 0.62, w: LOGICAL_W * 0.46, h: LOGICAL_W * 0.46 };
+
+// ── 카메라 ──
+// worldToScreen: 화면 중심에 카메라 중심(cam.x,cam.y)이 오도록, 줌 s로 확대. 반응형 배율(vs) 곱.
+const cam = { x: LOGICAL_W / 2, y: 0, s: PLAY_SCALE };
+function w2s(wx, wy) {
+  const vs = viewScale();
+  return { x: W / 2 + (wx - cam.x) * cam.s * vs, y: H / 2 + (wy - cam.y) * cam.s * vs };
+}
+// 플레이 기준 카메라 중심 y: 플레이어가 화면 하단(yRatio 0.82)에 오도록 카메라를 잡는다.
+//   스크롤 진행에 따라 playCamY가 증가(월드 아래로 전진 = 배경이 화면 위로 흐름).
+let playCamY = LOGICAL_H * 0.5; // 시작: 첫 청크 상단 부근이 화면에 오게
+const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+// ── 상태 ──
+let state = 'intro', introT = 0, scrollPreset = 'normal', paused = false;
+let showGrid = true, blend = true;
+// 포커스(인트로 줌 중심) = 랜드마크 월드좌표 중심.
+const focus = { x: landmarkL.x + landmarkL.w * 0.5, y: landmarkL.y - landmarkL.h * 0.3 };
+function resetIntro() { state = 'intro'; introT = 0; }
+
+// ── 더미 전투(가독성 검증용): 플레이어 + 아군탄(위로) + 적(아래로) ──
+const player = { x: LOGICAL_W / 2, y: 0, r: 14 };
+let pbul = [], enemies = [], fireT = 0, spawnT = 0;
+function stepCombat(dt) {
+  // 플레이어는 화면 하단 고정(입력 없이 좌우 살짝 왕복 - 가독성 관찰용)
+  player.x = LOGICAL_W / 2 + Math.sin(nowT * 1.3) * LOGICAL_W * 0.22;
+  player.y = LOGICAL_H * 0.82;
+  fireT -= dt; if (fireT <= 0) { fireT = 0.14; pbul.push({ x: player.x, y: player.y, r: 5 }); }
+  for (const b of pbul) b.y -= 520 * dt;
+  pbul = pbul.filter((b) => b.y > -20);
+  spawnT -= dt; if (spawnT <= 0) { spawnT = 0.6; enemies.push({ x: LOGICAL_W * (0.15 + Math.random() * 0.7), y: -20, r: 16 }); }
+  for (const e of enemies) e.y += 150 * dt;
+  enemies = enemies.filter((e) => e.y < LOGICAL_H + 30);
+}
+function drawCombat() {
+  const vs = viewScale();
+  const L = (lx, ly) => ({ x: W / 2 + (lx - LOGICAL_W / 2) * vs, y: (ly) * vs }); // 전투는 화면 고정 좌표(카메라 무관)
+  // 적(빨강)
+  for (const e of enemies) { const p = L(e.x, e.y); ctx.fillStyle = '#ff5a4a'; ctx.beginPath(); ctx.arc(p.x, p.y, e.r * vs, 0, 7); ctx.fill(); }
+  // 아군탄(청록)
+  ctx.fillStyle = '#3fe0ff';
+  for (const b of pbul) { const p = L(b.x, b.y); ctx.beginPath(); ctx.arc(p.x, p.y, b.r * vs, 0, 7); ctx.fill(); }
+  // 플레이어(흰)
+  const pp = L(player.x, player.y); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(pp.x, pp.y, player.r * vs, 0, 7); ctx.fill();
+  ctx.fillStyle = '#222'; ctx.beginPath(); ctx.arc(pp.x - 4 * vs, pp.y - 2 * vs, 2 * vs, 0, 7); ctx.arc(pp.x + 4 * vs, pp.y - 2 * vs, 2 * vs, 0, 7); ctx.fill();
+}
+
+// ── 렌더 ──
+function drawWorld() {
+  const arr = blend ? chunksSoft : chunksHard;
+  const vs = viewScale();
+  const dw = LOGICAL_W * cam.s * vs;             // 청크 화면 폭
+  const dh = chunkHL * cam.s * vs;               // 청크 화면 높이
+  for (let i = 0; i < arr.length; i++) {
+    const top = w2s(0, worldTopOf(i));
+    const sx = W / 2 + (0 - cam.x) * cam.s * vs;
+    // 화면 밖 컬링
+    if (top.y > H || top.y + dh < 0) continue;
+    ctx.drawImage(arr[i], sx, top.y, dw, dh);
+  }
+  // 격자 토글 off면 소프트 청크 위에 덮개(격자 감추기용은 생략 - 격자는 청크에 구워짐)
+  // 랜드마크(고해상 레이어) - 월드 좌표 정합. 줌·카메라 따라 배경 속 위치 유지.
+  if (landmark) {
+    const p = w2s(landmarkL.x, landmarkL.y);
+    ctx.drawImage(landmark, p.x, p.y, landmarkL.w * cam.s * vs, landmarkL.h * cam.s * vs);
+  }
+}
+
+let nowT = 0, lastMs = 0, fps = 0, fpsAcc = 0, fpsN = 0;
+function frame(ms) {
+  if (!lastMs) lastMs = ms;
+  let dt = (ms - lastMs) / 1000; lastMs = ms;
+  if (dt > 0.05) dt = 0.05;
+  if (!paused) {
+    nowT += dt;
+    if (state === 'intro') {
+      introT += dt;
+      const p = Math.min(1, introT / INTRO_DUR);
+      const e = easeOutCubic(p);
+      cam.s = INTRO_START_SCALE + (PLAY_SCALE - INTRO_START_SCALE) * e;   // 2.4 → 1.0
+      cam.x = focus.x + (LOGICAL_W / 2 - focus.x) * e;                    // 포커스 → 플레이 중심 보간
+      cam.y = focus.y + (playCamY - focus.y) * e;
+      if (p >= 1) { state = 'play'; }
+    } else {
+      cam.s = PLAY_SCALE; cam.x = LOGICAL_W / 2;
+      playCamY += SCROLL_BASE * SCROLL_PRESETS[scrollPreset] * dt;         // 스크롤 전진
+      if (playCamY > WORLD_H - LOGICAL_H * 0.5) playCamY = WORLD_H - LOGICAL_H * 0.5; // 월드 끝 클램프
+      cam.y = playCamY;
+      stepCombat(dt);
+    }
+    // fps
+    fpsAcc += dt; fpsN++; if (fpsAcc >= 0.5) { fps = Math.round(fpsN / fpsAcc); fpsAcc = 0; fpsN = 0; }
+  }
+  // 그리기
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  drawWorld();
+  if (state === 'play') drawCombat();
+  // HUD
+  const mem = (performance && performance.memory) ? (performance.memory.usedJSHeapSize / 1048576).toFixed(1) + 'MB' : 'n/a';
+  hud.textContent =
+    `state: ${state}${paused ? ' (paused)' : ''}\n` +
+    `zoom: ${cam.s.toFixed(2)}x   camY: ${cam.y.toFixed(0)}/${WORLD_H.toFixed(0)}\n` +
+    `scroll: ${scrollPreset} (${(SCROLL_BASE * SCROLL_PRESETS[scrollPreset]).toFixed(0)} px/s)\n` +
+    `blend: ${blend ? 'on(crossfade)' : 'off(hard)'}   dpr: ${dpr}\n` +
+    `canvas: ${W}x${H} (internal ${canvas.width}x${canvas.height})\n` +
+    `fps: ${fps}   mem: ${mem}`;
+  requestAnimationFrame(frame);
+}
+
+addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  if (k === '1') scrollPreset = 'slow';
+  else if (k === '2') scrollPreset = 'normal';
+  else if (k === '3') scrollPreset = 'fast';
+  else if (k === 'r') resetIntro();
+  else if (k === 'g') showGrid = !showGrid;
+  else if (k === 'b') blend = !blend;
+  else if (k === 'p') paused = !paused;
+  else if (k === 'j') { state = 'play'; cam.s = PLAY_SCALE; cam.x = LOGICAL_W / 2; playCamY = chunkStepL; } // 청크 경계로 점프(오버랩 블렌드 검증)
+});
+
+// ── 초기화 ──
+resize();
+chunksSoft = THEMES.map(makeChunk);
+chunksHard = THEMES.map(makeChunkHard);
+landmark = makeLandmark();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

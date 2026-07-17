@@ -4,9 +4,15 @@ Status: DRAFT
 Version: 0.1
 Implementation Status: NOT APPROVED
 Numeric Values: PROVISIONAL
+Prototype Baseline Version: 0.1
+Prototype Baseline Status: APPROVED FOR TECHNICAL TEST ONLY
+Final Production Approval: NOT APPROVED
 
 이 문서는 기술 실측과 초기 제안을 기록한 공동 검토 초안이다.
-`[실측]` 항목은 현재 코드 확인 결과이며,
+분류 규칙(혼용 금지):
+- `[실측]` = 현재 코드에서 확인한 사실
+- `[프로토타입 기준]` = 기술 테스트 전용으로 승인된 임시값(Prototype Baseline v0.1). 최종 아님
+- `[최종 확정]` = 프로토타입 검증 이후에만 사용(현재 없음)
 `[제안]` 항목은 프로토타입 검증 전까지 확정값이 아니다.
 
 본 문서의 수치와 구조를 근거로 코드·에셋을 구현하거나
@@ -204,3 +210,38 @@ Numeric Values: PROVISIONAL
 - **가독성**: 디오라마 위 탄환·적 대비 저하. → 검증: 전투 밀집 상황 캡처(중앙 60% 보호 실효 확인).
 - **줌 중 해상도 저하**: 인트로 2.4x 확대 시 픽셀 뭉개짐. → 검증: 랜드마크 레이어를 확대 배율 고려한 고해상도로 제작하거나 인트로 전용 고해상 컷 사용.
 - **50개국 로딩**: 전량 프리로드 시 메모리 초과. → 검증: 현재+인접 스테이지만 로드/언로드(LRU) 전략 프로토타입.
+
+---
+
+## 11. 프로토타입 기준값 (Prototype Baseline v0.1)
+
+전부 `[프로토타입 기준]` — 기술 테스트 전용 승인 임시값. 프로토타입 검수 후 FINAL/REVISE/REJECT로 재분류한다. 지금은 최종 확정값 없음.
+
+- 해상도: 논리 720×1280, dpr 2캡, 60fps(min 30), 9:16, 반응형 표시. 게임·배경 메타 좌표 모두 논리 720×1280 기준.
+- 청크: 폭 1080 × 높이 2048, 불투명 WebP q80, 한국 2~3개, 동일 시점·조명·원근·건물 스케일.
+- 청크 연결: 오버랩 96~160px 크로스페이드. 블렌드 구간엔 랜드마크 금지, 도로·강·평지·숲 등 연결 쉬운 환경만. 블렌드 비용이 크면 오버랩 alpha를 청크에 사전 굽는다(런타임 마스크 회피).
+- 카메라: 비스듬한 탑다운, 수평면 기준 pitch ≈ 55°(수직 탑다운 기준 35° 기울기), roll 0. 인트로·플레이 각도 동일, 거리/crop scale만 변경. 원근 투영 전 청크 동일. 55°는 시작값(시안 검증 대상).
+- 인트로 줌: 시작 2.4x → 플레이 1.0x, 1.8s, easeOutCubic. 인트로 중 진행 정지, 줌 완료 후 스크롤·적 스폰·입력 시작. 플레이어는 줌 종료 0.2~0.3s 전 등장 가능. HUD는 줌 종료 직전/시. 인트로 전용 별도 배경 교체 금지(같은 좌표 확대→1.0x).
+- 포커스: 줌 중심 = 랜드마크 월드 좌표. 줌아웃하며 카메라 중심을 gameplay 기준 중심으로 보간(단순 ctx.scale 금지, 포커스+중심 이동 병행).
+- 랜드마크: 동일 렌더 소스의 고해상 투명 레이어 허용(2.4x 뭉개짐 방지). 인트로 전용 다른 그림·다른 각도 금지, 배경 속 위치와 정합.
+- 스크롤 속도: 기존 게임엔 배경 스크롤이 사실상 없음([실측] 별 40~166px/s, 배경 BG_SCROLL 22 — A안에서 추가). baseline은 프로토타입에서 전투 템포 유지 기준으로 잡고 slow 0.85 / normal 1.0 / fast 1.15 프리셋을 개발자 옵션으로 즉시 비교, 검수 후 택1. 배경을 위해 전투 속도 변경 금지.
+
+---
+
+## 12. Prototype Validation Status
+
+용어: `PASS`=검증 범위에서 실제 확인 / `NOT TESTED`=미확인 / `FAIL`=확인했으나 기준 미달 / `PROVISIONAL`=테스트용 임시값 / `FINAL`=최종 승인. 현재 `FINAL` 없음.
+
+| 항목 | 상태 |
+|---|---|
+| Technical Rendering Structure | PASS |
+| Placeholder Zoom Continuity | PASS |
+| Placeholder Focus Interpolation | PASS |
+| Placeholder Chunk Rendering | PASS |
+| Placeholder Combat Readability | PASS |
+| Real Art Validation | NOT TESTED |
+| DPR 2 Validation | NOT TESTED |
+| Mobile Device Validation | NOT TESTED |
+| Production Approval | NOT APPROVED |
+
+주의: 위 PASS는 모두 **플레이스홀더 범위**에서 확인한 것이다. 실제 프리렌더 디오라마 입체감·랜드마크 2.4x 확대 품질·실제 경계 연결·실배경 가독성·DPR 2 성능·모바일 실기기·실제 WebP 로딩과 메모리·스테이지 전체 길이 메모리 해제·국가 전환 캐시는 검증하지 않았다(NOT TESTED).
