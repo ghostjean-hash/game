@@ -1,0 +1,154 @@
+<!doctype html>
+<!--
+  카메라 Pitch 50/55/60도 블록아웃 비교 (KOREA_DIORAMA_ART_SPEC §15-1).
+  독립 샌드박스 - 기존 game/A안/diorama-proto 무관.
+
+  ⚠ 경고 (반드시 명심):
+    - 이것은 Canvas 2D pseudo-projection(의사 투영)이다.
+    - 실제 3D 렌더가 아니다.
+    - 카메라 각도 경향 비교용이다.
+    - 재질·조명·최종 입체감은 판단할 수 없다.
+    - 최종 Pitch 확정 근거로 이 도구를 단독 사용하는 것을 금지한다(실제 3D/AI 렌더로 재판정).
+  투영: 비스듬한 탑다운. 화면세로 = 깊이 D·sin(pitch) + 높이 H·cos(pitch). pitch↑ 탑다운적, pitch↓ 측면적.
+  키: 5/6/7 = pitch 50/55/60 · C = clean/overlay 토글 · Z = 인트로2.4x/플레이1.0x 토글.
+-->
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Pitch Compare</title>
+<style>
+  html,body{margin:0;height:100%;background:#0a0e18;overflow:hidden;font-family:system-ui,sans-serif}
+  canvas{display:block;width:100%;height:100%}
+  #hud{position:fixed;left:8px;top:8px;color:#cfe0ff;font-size:13px;line-height:1.5;background:rgba(8,14,26,.55);padding:6px 9px;border-radius:6px;white-space:pre;pointer-events:none}
+</style></head>
+<body><canvas id="c"></canvas><div id="hud"></div>
+<script>
+'use strict';
+const LOGICAL_W=720, LOGICAL_H=1280;
+const canvas=document.getElementById('c'), ctx=canvas.getContext('2d'), hud=document.getElementById('hud');
+let W=0,H=0,dpr=1;
+function resize(){const r=canvas.getBoundingClientRect();W=Math.max(1,Math.floor(r.width));H=Math.max(1,Math.floor(r.height));
+  dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.floor(W*dpr);canvas.height=Math.floor(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}
+addEventListener('resize',resize);
+const vs=()=>H/LOGICAL_H;
+
+// ── 상태 ──
+let pitch=55, mode='clean', view='play';
+
+// ── 장면 데이터 (동일 장면, 월드 좌표) ──
+// x = 좌우(논리, 0~720 기준 중심 360), d = 깊이(진행방향, 0 가까움 ~ 큰값 멀리/위), h = 높이.
+// 경복궁 좌측(x 26%). 중앙 60%(x 144~576)는 저대비 지형만.
+const CX = LOGICAL_W*0.5;
+function box(x,d,w,depth,h,color,roof){return {x,d,w,depth,h,color,roof};}
+const scene = [];
+// 지면 도로(중앙, 저대비) - 높이 0
+scene.push({ground:true, x:CX-70, d:0, w:140, depth:1500, color:'#3a4256'});
+// 경복궁(좌측 x 0.26 ≈ 187): 기단+몸체+2단지붕
+const GX = LOGICAL_W*0.26;
+scene.push(box(GX-70, 380, 140, 120, 20, '#4a3527'));        // 기단
+scene.push(box(GX-55, 400, 110, 80, 70, '#5a3d2e', 'palace')); // 몸체+지붕
+// 전통 한옥 몇 채(좌측 주변, 낮음)
+scene.push(box(GX-30, 200, 70, 55, 40, '#4d3a2a', 'hip'));
+scene.push(box(GX+60, 250, 60, 50, 36, '#4d3a2a', 'hip'));
+scene.push(box(GX-90, 300, 55, 45, 34, '#463527', 'hip'));
+// 담장(경복궁 앞 낮고 길게)
+scene.push(box(GX-110, 150, 240, 18, 22, '#3e3226'));
+// 수목(초록, 중앙 보호대 가장자리·좌우)
+for(const t of [[GX+40,140,26],[GX-120,240,24],[LOGICAL_W*0.7,300,28],[LOGICAL_W*0.78,180,24],[CX+30,520,22]])
+  scene.push({tree:true,x:t[0],d:t[1],r:t[2],h:44});
+// 우측 일반 저층 건물(톤 억제)
+scene.push(box(LOGICAL_W*0.72, 420, 90, 70, 60, '#2c3346'));
+scene.push(box(LOGICAL_W*0.80, 300, 70, 60, 48, '#2a3040'));
+// 상단 연결부 암시(다음 청크 방향 - 먼 평지/저층)
+scene.push(box(CX-140, 900, 90, 60, 30, '#2b3242'));
+scene.push(box(CX+80, 980, 80, 55, 34, '#2b3242'));
+
+// ── 투영 ──
+function proj(wx, wd, wh){
+  const p=pitch*Math.PI/180;
+  return { x: (wx-CX), y: -(wd*Math.sin(p)) - (wh*Math.cos(p)) };
+}
+// 카메라(인트로 줌: 경복궁 포커스). play=1.0x 중심 화면중앙, intro=2.4x 경복궁.
+const focus = proj(GX, 400, 60);
+function cam(){ return view==='intro' ? {s:2.4, cx:focus.x, cy:focus.y} : {s:1.0, cx:0, cy:proj(0,420,0).y}; }
+function toScreen(pt){ const c=cam(); const k=vs()*c.s;
+  return { x: W/2 + (pt.x - c.cx)*k, y: H*0.62 + (pt.y - c.cy)*k }; }
+
+function quad(x1,d1,x2,d2,h){ // 지면 사각(높이 h)의 4모서리 화면좌표
+  return [proj(x1,d1,h),proj(x2,d1,h),proj(x2,d2,h),proj(x1,d2,h)].map(toScreen); }
+function fillPoly(pts,color){ ctx.fillStyle=color; ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x,pts[i].y); ctx.closePath(); ctx.fill(); }
+
+function shade(hex,f){ const n=parseInt(hex.slice(1),16); let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  r=Math.round(r*f);g=Math.round(g*f);b=Math.round(b*f); return `rgb(${r},${g},${b})`; }
+
+function drawBox(o){
+  const x1=o.x, x2=o.x+o.w, d1=o.d, d2=o.d+o.depth;
+  // 윗면
+  fillPoly(quad(x1,d1,x2,d2,o.h), shade(o.color,1.25));
+  // 앞면(가까운 쪽 d1, 높이 0~h)
+  fillPoly([proj(x1,d1,0),proj(x2,d1,0),proj(x2,d1,o.h),proj(x1,d1,o.h)].map(toScreen), shade(o.color,0.75));
+  // 옆면(좌)
+  fillPoly([proj(x1,d1,0),proj(x1,d2,0),proj(x1,d2,o.h),proj(x1,d1,o.h)].map(toScreen), shade(o.color,0.6));
+  // 지붕
+  if(o.roof==='palace'){ // 붉은 2단 지붕
+    const rh=o.h+42, rh2=o.h+78;
+    fillPoly([proj(x1-14,d1-8,o.h),proj(x2+14,d1-8,o.h),proj(x2+14,d2+8,o.h),proj(x1-14,d2+8,o.h)].map(toScreen), shade('#8a2f2f',1.1));
+    fillPoly(quad(x1+6,d1+8,x2-6,d2-8,rh), shade('#a03a3a',1.2));
+    // 지붕 능선 상단 살짝
+    fillPoly([proj(x1+18,d1+16,rh),proj(x2-18,d1+16,rh),proj(x2-18,d2-16,rh),proj(x1+18,d2-16,rh)].map(toScreen), shade('#b04545',1.25));
+  } else if(o.roof==='hip'){ // 전통 기와(어두운 청) 지붕
+    fillPoly([proj(x1-6,d1-4,o.h),proj(x2+6,d1-4,o.h),proj(x2+6,d2+4,o.h),proj(x1-6,d2+4,o.h)].map(toScreen), shade('#37506e',1.05));
+  }
+}
+function drawTree(t){ // 수목: 낮은 초록 덩어리
+  const c=proj(t.x, t.d, t.h); const s=toScreen(c); const r=t.r*vs()*cam().s;
+  ctx.fillStyle='#2f5a3a'; ctx.beginPath(); ctx.ellipse(s.x,s.y,r,r*(0.6+0.4*Math.sin(pitch*Math.PI/180)),0,0,7); ctx.fill();
+}
+function drawGround(o){
+  const x1=o.x,x2=o.x+o.w,d1=o.d,d2=o.d+o.depth;
+  fillPoly(quad(x1,d1,x2,d2,0), o.color);
+}
+
+function drawScene(){
+  // 배경(대기)
+  const bg=ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#1a2436'); bg.addColorStop(1,'#3a4258');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  // 지면 격자(깊이감)
+  ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+  for(let d=0; d<=1500; d+=120){ const a=toScreen(proj(-260,d,0)), b=toScreen(proj(260,d,0)); ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+  // 페인터 정렬: 깊이 큰(먼) 것부터. tree/ground/box 공통 d 기준.
+  const items=scene.slice().sort((a,b)=> (b.d+(b.depth||0)/2) - (a.d+(a.depth||0)/2));
+  for(const o of items){ if(o.ground) drawGround(o); else if(o.tree) drawTree(o); else drawBox(o); }
+}
+
+function drawOverlay(){ // gameplay overlay: 중앙 60% + 플레이어 + 적 + 탄(화면 고정)
+  const k=vs(); const L=(lx,ly)=>({x:W/2+(lx-LOGICAL_W/2)*k, y:ly*k});
+  // 중앙 보호 60% (X 144~576)
+  const a=L(144,0), b=L(576,0);
+  ctx.fillStyle='rgba(80,180,255,0.10)'; ctx.fillRect(a.x,0,b.x-a.x,H);
+  ctx.strokeStyle='rgba(80,180,255,0.5)'; ctx.setLineDash([6,6]); ctx.strokeRect(a.x,0,b.x-a.x,H); ctx.setLineDash([]);
+  // 적(빨강) 상단
+  ctx.fillStyle='#ff5a4a'; for(const e of [[0.4,0.18],[0.55,0.26],[0.62,0.12]]){const p=L(LOGICAL_W*e[0],LOGICAL_H*e[1]);ctx.beginPath();ctx.arc(p.x,p.y,16*k,0,7);ctx.fill();}
+  // 탄환(청록) 중앙 세로
+  ctx.fillStyle='#3fe0ff'; for(let i=0;i<6;i++){const p=L(LOGICAL_W*0.5,LOGICAL_H*(0.4+i*0.06));ctx.beginPath();ctx.arc(p.x,p.y,5*k,0,7);ctx.fill();}
+  // 적탄(주황) 몇
+  ctx.fillStyle='#ffb020'; for(const e of [[0.45,0.4],[0.58,0.5]]){const p=L(LOGICAL_W*e[0],LOGICAL_H*e[1]);ctx.beginPath();ctx.arc(p.x,p.y,5*k,0,7);ctx.fill();}
+  // 플레이어(흰) 하단
+  const pp=L(LOGICAL_W*0.5,LOGICAL_H*0.82); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(pp.x,pp.y,14*k,0,7); ctx.fill();
+}
+
+function frame(){
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  drawScene();
+  if(mode==='overlay') drawOverlay();
+  hud.textContent = `Pitch: ${pitch}°  (키 5/6/7)\nview: ${view} ${cam().s}x  (Z 토글)\nmode: ${mode}  (C 토글)\n장면: 동일 데이터, pitch만 변수\n⚠ Canvas 2D 의사투영 · 각도 경향 비교용 · 최종 확정 근거 아님`;
+  requestAnimationFrame(frame);
+}
+addEventListener('keydown',(e)=>{const k=e.key.toLowerCase();
+  if(k==='5')pitch=50; else if(k==='6')pitch=55; else if(k==='7')pitch=60;
+  else if(k==='c')mode=(mode==='clean'?'overlay':'clean');
+  else if(k==='z')view=(view==='play'?'intro':'play');
+});
+resize(); requestAnimationFrame(frame);
+</script>
+</body></html>
