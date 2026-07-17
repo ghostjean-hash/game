@@ -905,3 +905,26 @@
 ### 미해결 (잔여 유지)
 - 이전 entry의 잔여(대만·필리핀 방향 결정 / docs 동기화 / 배포+SW / 데이터 재생성 스크립트 이관) 그대로 유효. 야간작업으로 필리핀·태국 표시는 보강됐으나 대만 표시 방향 정책은 여전히 사용자 결정 대기.
 - docs SSOT 역전 지속: 세계 여행·서울 배경·31~40 확장이 코드/신규 설계문서(11·12)로 앞서갔고 기존 docs 01~09 본문 반영은 미완(01만 부분 M).
+
+## 2026-07-17~18 - 버그 수정 3건 + 배경 방식 전환(디오라마) 설계·프로토타입 (ChatGPT 협업 세션)
+
+긴 세션. 실플레이 버그 수정 3건을 배포(push)한 뒤, 배경 방식을 "공용 하늘 배경(A안)"에서 "프리렌더 2.5D 국가 디오라마"로 전환하는 설계·기술 검증을 ChatGPT와 왕복 협업으로 진행했다. 디오라마 관련 산출물은 사용자가 배포 보류를 durable 지시해 **로컬 커밋만(push 보류)** 상태다.
+
+### 완료 - 실플레이 버그·정리 3건 (push 완료)
+- **보스 격파 무한 폭발 버그**(b4aa5b7): `defeatBoss` 재진입 가드 신설. 사망 연출(dur초) 동안 보스가 화면에 남고 코어 hp<=0이 유지돼 update의 일괄 격파 판정·코어 피격이 매 프레임 재호출→deathT 리셋+드롭·점수·폭발 무한 반복하던 것. `if(boss.dying)return`. 회귀 테스트 추가(core 124 PASS, 가드 무력화 시 정확히 1 FAIL 재현으로 검증).
+- **URL 파라미터 치트 전면 삭제**(c977919): `applyDevHook`(?stage/front/spawn/emo 등 16종)·`autoStartHook`(?dev/auto/diff) 제거. 규칙 "치트는 버튼으로". 대신 치트 버튼 신설(보스 소환·무기 강화, 기존 지도 열기와 함께). 미사용 import 정리.
+- **세계 여행 나라 구성 재편**(7f14e17): ChatGPT 초안대로 54개국+2여행지=56스테이지(제외10/추가10). 데이터 3파일 분리 - `countries.js`(라우팅, next 자동생성·type/parentCountry, 발리·하와이 travel), `countries.education.js`(교육 메타 56, 에이전트 위임 작성), `backgroundPools.js`(하늘 풀16+오버레이). `docs/10`(데이터구조)·`docs/13`(배경 프롬프트) 신설. 콩고민주공화국 이름 통일(worldmap "콩고 민주 공화국"→"콩고민주공화국", 선택 하이라이트 매칭 복구). 정적 검증·backgroundPools 검증·지도 실플레이 0 FAIL.
+
+### 진행/설계 - 배경 방식 전환: 하늘 A안 → 디오라마 2.5D (로컬 커밋, push 보류)
+- 방향 전환 배경: 사용자가 "공용 하늘 배경 16풀 + 오버레이"(A안) 방식을 폐기하고, 첨부 "한국 스테이지" 콘셉트 이미지 기준의 **비스듬한 항공 시점 미니어처 디오라마**(중앙 한강 이동축 + 좌우 랜드마크 + 인트로 줌인→플레이 줌아웃 같은 공간)로 전환 결정. 구현 방식은 프리렌더 2.5D(2D Canvas 유지, 3D 엔진 미도입) 확정.
+- 산출물(로컬 커밋 ahead 5): `docs/WORLD_DIORAMA_SPEC.md`(기술 실측 12문답+렌더/청크/좌표/성능 초안, 872d759)·`prototype/diorama-proto.html`(독립 기술 프로토타입, 청크 세로연결+오버랩 블렌드+인트로 줌+스크롤, placeholder 코드생성, ba45de3)·`docs/KOREA_DIORAMA_ART_SPEC.md`(아트+기술 통합 초안, 90ff3c9)·`prototype/pitch-compare.html`(각도 의사투영 비교, e0e1800)·아트 SSOT 6문서 편입(b4148f9).
+- 아트 SSOT: ChatGPT가 만든 6문서(STYLE_GUIDE·COUNTRY_TEMPLATE·IMAGE_PROMPT_TEMPLATE·ASSET_RULES·DEFINITION_OF_DONE·CHANGELOG)를 `docs/ChatGPT_World_Diorama_Art_MD_MASTER/`에 공식명으로 편입. 카메라·구도·중앙축·랜드마크·프롬프트·완료기준의 최상위 기준. KOREA/WORLD SPEC의 충돌 문장(야간 금지·한강 축소·pitch 숫자)을 이 SSOT 참조로 정리(아트=6문서, 기술=SPEC 역할 분리). 카메라는 숫자 각도 폐기, 최신 승인 기준 이미지 인상 우선.
+- 검수 인프라: `prototype/image-review.html`(실제 이미지 `assets/diorama/KR/KR-day-concept-v01.png` 로드 검수용, 없으면 IMAGE NOT FOUND). 첫 실제 이미지 확정 파일명 `KR-day-concept-v01.png`(PNG 원본 관리, 런타임 WebP는 파생본).
+
+### 부수 - Claude Code 표식 글로벌 규칙 (buffer 인계)
+- 사용자 durable 지시(2회 강조): 모든 답변·제안 서두에 "Claude Code" 표식. 도메인 cwd라 글로벌 직접 수정 불가 → `.jarvis-handoff.jsonl`에 P1 인계(output-styles/jarvis-direct.md 반영 요망). 이 세션은 즉시 준수.
+
+### 미해결 (사용자 결정/보류 대기)
+- **미커밋 A안 잔여**(사용자 보류 지시): `src/render/view.js`·`src/data/backgroundPools.js`(하늘 배경 이미지 연결 + BG-01 테스트)·`assets/`(README·폴더·BG-01 하늘 이미지). 디오라마 방식 확정 시 되돌리기/재설계 결정 필요. `prototype/image-review.html`도 미커밋(경로는 실제 이미지 확정 후 조정).
+- **push 보류**: 디오라마 로컬 커밋 5건 + 봉합. 사용자가 "실제 배경 이미지 준비·검수 후 배포" 지시. web-deploy·이미지 최적화·SW 버전업 계속 보류.
+- **다음 단계**: ChatGPT가 `KR-day-concept-v01.png`(디오라마 콘셉트 이미지) 제작 → `assets/diorama/KR/`에 배치 → image-review.html 경로 맞춤 → 인트로 줌/스크롤/중앙축/좌우 랜드마크/전투 가독성 검수.
