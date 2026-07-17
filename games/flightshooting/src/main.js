@@ -6,7 +6,7 @@ import { showModal, registerServiceWorker } from '../../../shared/ui.js';
 import { CFG } from './data/numbers.js';
 import { COLORS } from './data/colors.js';
 import { COUNTRIES, START_COUNTRY } from './data/countries.js';
-import { WORLD_PATHS, MAP_W, MAP_H, lonToX, latToY } from './data/worldmap.js';
+import { COUNTRY_PATHS, MAP_W, MAP_H, lonToX, latToY } from './data/worldmap.js';
 import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard, updateParticles } from './core/world.js';
@@ -90,6 +90,7 @@ function createGame() {
     difficulty: 'normal', enemyFireMul: 1, enemyHpMul: 1, enemyShotsMax: 99, radialMul: 1, // 난이도(startGame에서 세팅)
     bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null, bossDeathTimer: null,
+    shake: 0, // 화면 흔들림(보스 사망 연출 등, view/main render가 소비)
     tourIdx: START_COUNTRY, tourPath: [START_COUNTRY], // 세계 여행: 현재 나라 + 지나온 경로(docs/10)
     sfx: [], events: [],
   };
@@ -152,7 +153,17 @@ const loop = createLoop({
     }
     syncHud();
   },
-  render: () => render(ctx, game, W, H),
+  render: () => {
+    const sh = game.shake || 0; // 보스 사망 등 화면 흔들림
+    if (sh > 0) {
+      ctx.save();
+      ctx.translate((Math.random() - 0.5) * sh, (Math.random() - 0.5) * sh);
+      render(ctx, game, W, H);
+      ctx.restore();
+    } else {
+      render(ctx, game, W, H);
+    }
+  },
 });
 
 function handleEvent(ev) {
@@ -253,13 +264,32 @@ function resetGame() {
   game.dragging = false; game.manualTimer = 0; // 하이브리드 자동 상태 초기화
   game.bossPending = false; game.transitioning = false;
   game.pendingTimer = null; game.transitionTimer = null; game.winTimer = null; game.bossDeathTimer = null;
+  game.shake = 0;
   game.sfx.length = 0; game.events.length = 0;
   elBossBar.hidden = true;
   initStars(game, W, H);
   startStage(game); // '구역 1' 배너 이벤트는 첫 프레임에 소비됨
 }
 
-function startGame(diff) {
+// ── 중간 저장(이어서 하기) ──
+// 진행 상황을 localStorage에 저장해 홈의 '이어서 하기'로 재개한다. 화력은 파워업 획득 순서(partHistory)를
+// 처음부터 재생해 복원하므로 core 로직을 건드리지 않는다(gain 함수가 상태·이력을 그대로 재구성).
+const SAVE_KEY = 'save';
+const GAIN_BY_PART = { front: gainFront, option: gainOption, optionEvo: gainOption, zone: gainZone, tail: gainTail, tailWeapon: gainTail };
+function saveProgress() {
+  if (state !== 'playing') return; // 진행 중 상태만 저장(전환·연출 중 저장 방지)
+  store.set(SAVE_KEY, {
+    stage: game.stage, score: game.score, lives: game.lives, maxLives: game.maxLives,
+    tourIdx: game.tourIdx, tourPath: game.tourPath.slice(),
+    partHistory: game.partHistory.slice(),
+    difficulty, friendOn, autoOn, apSkill,
+    friendLevel: game.friend ? game.friend.level : null,
+  });
+}
+function clearProgress() { store.remove(SAVE_KEY); }
+function loadProgress() { return store.get(SAVE_KEY, null); }
+
+function startGame(diff, saved) {
   if (diff) { difficulty = diff; store.set('difficulty', diff); } // 모드 버튼으로 시작하면 선택 기억
   sound.unlockAudio();
   // 뒤로가기(화면 ← / 폰 백버튼)로 게임 밖 이탈 대신 모드 선택으로 돌아가게 히스토리 지점을 하나 쌓는다.
@@ -279,17 +309,33 @@ function startGame(diff) {
   game.enemyHpMul = diffCfg.enemyHpMul != null ? diffCfg.enemyHpMul : 1; // 난이도별 적 체력 배수
   game.enemyShotsMax = diffCfg.enemyShotsMax || 99;
   game.radialMul = diffCfg.radialMul != null ? diffCfg.radialMul : 1; // 방사·자폭 탄 개수 배수(쉬움 감축)
-  game.maxLives = diffCfg.maxLives || CFG.player.maxLives; // 난이도별 목숨 최대값(쉬움 5 ~ 매우 어려움 1)
+  game.maxLives = diffCfg.maxLives || CFG.player.maxLives; // 난이도별 목숨 최대값(쉬움 5 ~ 어려움/매우 어려움 3, 최소 3)
   game.lives = game.maxLives;                             // 시작 목숨 = 최대값(resetGame 기본3 위로 재설정)
-  // 난이도 시작 보너스: '쉬움'은 메인 총알·꼬리 비행기를 조금 갖춘 채 출발(옛 어린이 배려 흡수)
-  for (let i = 1; i < diffCfg.startFront; i++) gainFront(game);
-  for (let i = 0; i < diffCfg.startTail; i++) gainTail(game);
+  if (saved) {
+    // 이어서 하기: 저장된 구역·점수·목숨·여행경로·화력을 되살린다.
+    game.stage = saved.stage;
+    game.score = saved.score;
+    game.maxLives = saved.maxLives || game.maxLives;
+    game.lives = saved.lives != null ? saved.lives : game.lives;
+    game.tourIdx = saved.tourIdx != null ? saved.tourIdx : game.tourIdx;
+    game.tourPath = Array.isArray(saved.tourPath) ? saved.tourPath.slice() : game.tourPath;
+    // 파워업 획득 순서를 처음부터 재생해 화력 복원(gain 함수가 front/option/zone/tail·이력을 재구성)
+    game.partHistory = [];
+    for (const p of (saved.partHistory || [])) { const fn = GAIN_BY_PART[p]; if (fn) fn(game); }
+    if (game.friend && saved.friendLevel != null) game.friend.level = saved.friendLevel;
+    startStage(game); // 복원된 구역의 웨이브·배너 재생성
+  } else {
+    // 난이도 시작 보너스: '쉬움'은 메인 총알·꼬리 비행기를 조금 갖춘 채 출발(옛 어린이 배려 흡수)
+    for (let i = 1; i < diffCfg.startFront; i++) gainFront(game);
+    for (let i = 0; i < diffCfg.startTail; i++) gainTail(game);
+  }
   game.cheat = cheatEnabled ? cheatState : null; // 치트 켜짐 시에만 core가 참조
   state = 'playing';
   updateCheatVisible();
   syncHud();
   sound.play('start');
   loop.start();
+  saveProgress(); // 진행 저장(홈 '이어서 하기'가 이 상태로 재개)
 }
 
 // 검증 전용 dev 훅(localhost 한정): ?dev=1 + stage/front/option/zone/lives로 특정 상태 시작.
@@ -302,6 +348,8 @@ function applyDevHook() {
   const num = (k) => { const v = q.get(k); return v == null ? null : Number(v); };
   const stage = num('stage');
   if (stage != null) game.stage = Math.max(1, Math.min(stage, CFG.stageCount));
+  // tour: 시작 여행 나라 인덱스(0~49). 지도 특정 지역(예: 붙어 있는 싱가포르·말레이시아) 관찰용.
+  const tour = num('tour'); if (tour != null && tour >= 0 && tour < COUNTRIES.length) { game.tourIdx = tour; game.tourPath = [tour]; }
   // front: 1~88. 9 이상이면 발별 진화가 보인다(가운데 탄부터 8발마다 티어 +1).
   const front = num('front'); if (front != null) for (let i = 1; i < front; i++) gainFront(game);
   const option = num('option'); if (option != null) for (let i = 0; i < option; i++) gainOption(game);
@@ -352,6 +400,7 @@ function togglePause() {
 async function gameOver() {
   state = 'over';
   loop.pause();
+  clearProgress(); // 격추 = 저장 무효화(이어하기 불가)
   sound.play('gameover');
   const isBest = commitBest();
   const choice = await showModal({
@@ -369,6 +418,7 @@ async function gameOver() {
 async function gameWon() {
   state = 'won';
   loop.pause();
+  clearProgress(); // 완주 = 저장 무효화
   sound.play('stageclear');
   const isBest = commitBest();
   const choice = await showModal({
@@ -432,20 +482,39 @@ function computeViewBox(cur, cands, vpW, vpH) {
   if (w < T.zoomMinW) { x -= (T.zoomMinW - w) / 2; w = T.zoomMinW; }
   if (w / h < aspect) { const nw = h * aspect; x -= (nw - w) / 2; w = nw; }
   else { const nh = w / aspect; y -= (nh - h) / 2; h = nh; }
+  // 기본 확대를 한 단계 높인다(나라 이름 가독성, 사용자 지시). 중심 유지하며 뷰박스 축소.
+  const zf = 1 / T.zoomStep;
+  x += w * (1 - zf) / 2; y += h * (1 - zf) / 2; w *= zf; h *= zf;
   return { x, y, w, h };
 }
 
 // 도시 하나: 점 + 2줄 라벨(윗줄 나라이름 작게·다른 색, 아랫줄 수도 상태색). clickable이면 후보(맥동·클릭), faint면 흐리게.
 function cityMark(i, mk, dotColor, s, clickable, faint) {
-  const x = cityX(i).toFixed(1), yv = cityY(i);
+  const C = COUNTRIES[i];
+  const x = cityX(i), yv = cityY(i);
   const dot = mk.dot * s;
-  const capY = yv - dot - CFG.tour.mark.labelGap * s;              // 수도(아랫줄) - 점 바로 위
-  const nameY = capY - mk.cap * s * 0.92 - CFG.tour.mark.nameLift * s; // 나라이름(윗줄) - 수도 위 + 추가로 올림
+  const gap = CFG.tour.mark.labelGap * s;
+  const nameFs = (mk.name * s).toFixed(1), capFs = (mk.cap * s).toFixed(1);
   const op = faint ? ' opacity="0.55"' : '';
   const open = clickable ? `<g class="map-pick" data-dest="${i}"${op}>` : `<g${op}>`;
-  const dotEl = `<circle ${clickable ? 'class="pick-dot" ' : ''}cx="${x}" cy="${yv.toFixed(1)}" r="${dot.toFixed(1)}" fill="${dotColor}" stroke="#0b1020" stroke-width="${(1.5 * s).toFixed(2)}"/>`;
-  const nameEl = `<text x="${x}" y="${nameY.toFixed(1)}" text-anchor="middle" font-size="${(mk.name * s).toFixed(1)}" font-weight="600" fill="${COLORS.tour.countryLabel}">${COUNTRIES[i].ko}</text>`;
-  const capEl = `<text x="${x}" y="${capY.toFixed(1)}" text-anchor="middle" font-size="${(mk.cap * s).toFixed(1)}" font-weight="700" fill="${dotColor}">${COUNTRIES[i].cap}</text>`;
+  const dotEl = `<circle ${clickable ? 'class="pick-dot" ' : ''}cx="${x.toFixed(1)}" cy="${yv.toFixed(1)}" r="${dot.toFixed(1)}" fill="${dotColor}" stroke="#0b1020" stroke-width="${(1.5 * s).toFixed(2)}"/>`;
+  let nameX, nameY, capX, capY, anchor;
+  if (C.labelDir === 'right' || C.labelDir === 'left') {
+    // 붙어 있는 나라(싱가포르·말레이시아) 겹침 방지: 라벨을 점 옆(우/좌)에 나라(위)·수도(아래) 2줄로.
+    anchor = C.labelDir === 'right' ? 'start' : 'end';
+    nameX = capX = (C.labelDir === 'right' ? x + dot + gap : x - dot - gap).toFixed(1);
+    nameY = (yv - 1 * s).toFixed(1);            // 나라(윗줄)
+    capY = (yv + mk.cap * s * 0.95).toFixed(1); // 수도(아랫줄)
+  } else {
+    // 기본: 점 위에 나라(윗줄)·수도(아랫줄)
+    anchor = 'middle';
+    nameX = capX = x.toFixed(1);
+    const cy = yv - dot - gap;                   // 수도 - 점 바로 위
+    capY = cy.toFixed(1);
+    nameY = (cy - mk.cap * s * 0.92 - CFG.tour.mark.nameLift * s).toFixed(1); // 나라 - 수도 위 + 추가로 올림
+  }
+  const nameEl = `<text x="${nameX}" y="${nameY}" text-anchor="${anchor}" font-size="${nameFs}" font-weight="600" fill="${COLORS.tour.countryLabel}">${C.ko}</text>`;
+  const capEl = `<text x="${capX}" y="${capY}" text-anchor="${anchor}" font-size="${capFs}" font-weight="700" fill="${dotColor}">${C.cap}</text>`;
   return open + dotEl + nameEl + capEl + '</g>';
 }
 
@@ -476,12 +545,23 @@ function renderMap(cur, cands) {
   }
   const plane = `<g id="tour-plane" transform="translate(${fx(cur)},${fy(cur)})"><circle r="${(7 * s).toFixed(1)}" fill="${COLORS.tour.current}" stroke="#0b1020" stroke-width="${(2 * s).toFixed(2)}"/></g>`;
   const vb = `${tourVB.x.toFixed(1)} ${tourVB.y.toFixed(1)} ${tourVB.w.toFixed(1)} ${tourVB.h.toFixed(1)}`;
-  // 대륙별로 다른 색 칠(WORLD_PATHS의 대륙명 c → COLORS.tour.continent 색)
+  // 나라별 path를 대륙 색으로 칠한다(COUNTRY_PATHS). data-ko로 선택 나라 하나만 하이라이트 가능.
   const sw = (CFG.tour.borderW * s).toFixed(2);
-  const land = WORLD_PATHS.map((wp) => `<path d="${wp.d}" fill="${COLORS.tour.continent[wp.c] || COLORS.tour.land}" stroke="${COLORS.tour.border}" stroke-width="${sw}"/>`).join('');
+  const land = COUNTRY_PATHS.map((cp) => `<path data-ko="${cp.ko}" data-cont="${cp.cont}" d="${cp.d}" fill="${COLORS.tour.continent[cp.cont] || COLORS.tour.land}" stroke="${COLORS.tour.border}" stroke-width="${sw}"/>`).join('');
   mapViewport.innerHTML = `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="${MAP_W}" height="${MAP_H}" fill="#0b1020"/>${land}${route}${cities}${plane}</svg>`;
   mapViewport.querySelectorAll('.map-pick').forEach((g) => {
     g.addEventListener('click', () => { if (!mapDragMoved) chooseDest(Number(g.dataset.dest)); });
+  });
+}
+
+// 선택한 나라 하나만 살짝 밝게 강조(사용자 지시). 그 나라 대륙의 밝은 톤을 쓴다. 나머지는 원래 색.
+function highlightCountry(ko) {
+  const svg = mapViewport.querySelector('svg');
+  if (!svg) return;
+  svg.querySelectorAll('path[data-ko]').forEach((p) => {
+    const cont = p.getAttribute('data-cont');
+    const base = COLORS.tour.continent[cont] || COLORS.tour.land;
+    p.setAttribute('fill', p.getAttribute('data-ko') === ko ? (COLORS.tour.continentHi[cont] || base) : base);
   });
 }
 
@@ -515,6 +595,7 @@ function chooseDest(dest) {
   if (state !== 'map' || flyRaf) return; // 연출 중 재클릭은 flyRaf 가드로 차단(핀·라벨을 지우지 않아 대상 이름이 유지됨)
   mapHint.hidden = true;
   mapTitle.textContent = `${COUNTRIES[dest].ko}(으)로!`;
+  highlightCountry(COUNTRIES[dest].ko); // 선택한 나라 하나만 살짝 강조
   const from = game.tourIdx;
   flyTo(from, dest, () => {
     game.tourIdx = dest;
@@ -565,6 +646,7 @@ function advanceStage() {
   startStage(game); // 화력·목숨·점수 유지, '구역 N' 배너 이벤트 push(resume 후 소비)
   state = 'playing';
   loop.resume();
+  saveProgress(); // 새 구역 진입마다 자동 저장
 }
 
 // ── 지도 인터랙션(드래그 스크롤 + 확대축소 + 홈) - 모듈 로드 시 1회 바인딩 ──
@@ -608,6 +690,7 @@ function backToMenu(fromPop) {
   menuScreen.hidden = false;
   elMenuBest.textContent = best;
   updateCheatVisible();
+  syncResumeBtn(); // 저장이 있으면 '이어서 하기' 버튼 표시/갱신
   if (!fromPop && history.state && history.state.screen === 'game') history.back();
 }
 
@@ -641,6 +724,28 @@ function setupFullscreen() {
 
 // ── 버튼 / 초기화 ──
 btnStart.addEventListener('click', () => startGame(difficulty));
+
+// '이어서 하기': 저장된 진행을 그대로 재개. 저장이 있을 때만 홈에 표시한다.
+const btnResume = $('#btn-resume');
+function syncResumeBtn() {
+  const s = loadProgress();
+  const has = !!(s && s.stage);
+  btnResume.disabled = !has; // 저장 없으면 비활성(회색), 있을 때만 활성
+  const sub = btnResume.querySelector('.resume-sub');
+  if (sub) {
+    const c = has ? COUNTRIES[s.tourIdx] : null;
+    sub.textContent = has ? `${c ? c.ko : ''} · 구역 ${s.stage}` : '저장된 게임 없음';
+  }
+}
+btnResume.addEventListener('click', () => {
+  const s = loadProgress();
+  if (!s) return;
+  if (s.difficulty) { difficulty = s.difficulty; store.set('difficulty', difficulty); syncDiffSeg(); }
+  friendOn = !!s.friendOn; autoOn = !!s.autoOn; apSkill = s.apSkill || apSkill;
+  setOptIcon(optFriend, friendOn); setOptIcon(optAuto, autoOn);
+  startGame(s.difficulty, s);
+});
+syncResumeBtn(); // 초기 홈 진입 시 저장 여부 반영
 // 난이도 세그먼트: 버튼 하나를 켜고 나머지 끈다. 선택은 localStorage에 기억.
 const diffSeg = $('#diff-seg');
 function syncDiffSeg() {

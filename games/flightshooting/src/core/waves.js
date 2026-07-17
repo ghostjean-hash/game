@@ -6,6 +6,7 @@ import { CFG, STAGE_NAMES } from '../data/numbers.js';
 const cols = (n) => Array.from({ length: n }, (_, i) => (i + 1) / (n + 1));
 
 export function buildWaves(stage) {
+  if (stage >= CFG.aeonStage.from) return buildAeonWaves(stage); // 31구역~: 빛 생명체 구간
   if (stage >= CFG.voidStage.from) return buildVoidWaves(stage); // 21구역~: 이질 기계 적 구간
   if (stage >= CFG.hardStage.from) return buildHardWaves(stage); // 11구역~: 신규 적 구간
   const s = Math.min(stage - 1, 6); // 난이도 가중(상한으로 후반 과밀 방지)
@@ -69,6 +70,28 @@ function buildVoidWaves(stage) {
   if (stage >= V.coilFrom) { t += 2.2; add('coil', [0.25, 0.62]); }
   if (s >= 1) { t += 2.2; add('prism', cols(3 + Math.min(s, 3))); }
   if (s >= 2) { t += 2.4; add('turret', cols(3 + Math.min(s, 2))); }
+  return w;
+}
+
+// 31~40 구역: 빛·에너지 생명체(wisp 도깨비불·jelly 빛해파리·bloom 빛꽃·whale 빛고래) 위주.
+//   곡선·발광 계열로 앞 구간(기계)과 확 다르다. 구역이 오를수록 밀도↑, whale은 커서 한 번에 1마리만 배치.
+function buildAeonWaves(stage) {
+  const s = Math.min(stage - CFG.aeonStage.from, 6);
+  const w = [];
+  let t = 1.0;
+  const add = (type, xs) => { w.push({ t, enemies: xs.map((xr) => ({ type, xr })) }); };
+
+  add('wisp', cols(3 + Math.min(s, 3)));
+  t += 2.2; add('jelly', cols(2 + Math.min(s, 2)));
+  t += 2.4; add('bloom', cols(2 + Math.min(s, 3)));
+  t += 2.2; add('wisp', cols(4 + Math.min(s, 3)));
+  if (stage >= CFG.aeonStage.from + 1) { t += 2.6; add('whale', [0.5]); } // 32구역~ 빛고래 1마리
+  t += 2.4; add('bloom', cols(3 + Math.min(s, 3)));
+  t += 2.2; add('jelly', cols(2 + Math.min(s, 2)));
+  t += 2.4; add('wisp', cols(4 + Math.min(s, 3)));
+  if (s >= 1) { t += 2.2; add('bloom', cols(3 + Math.min(s, 3))); }
+  if (s >= 2) { t += 2.6; add('whale', [0.35, 0.65]); } // 후반: 빛고래 2마리
+  if (s >= 3) { t += 2.2; add('jelly', cols(3 + Math.min(s, 2))); }
   return w;
 }
 

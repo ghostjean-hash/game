@@ -9,7 +9,7 @@ import { stepOptions, stepTail, homeMissiles, tickZone, gainFront, gainOption, g
 import { stepFriend, friendTakeHit, gainFriendLevel, reviveFriend, notifyFriendKill } from './friend.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
-import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, dropItems, dropMaybe, burst, fieldBounds, syncBossParts } from './spawn.js';
+import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, spawnWispChild, dropItems, dropMaybe, burst, fieldBounds, syncBossParts } from './spawn.js';
 
 export function hit(a, b) {
   const dx = a.x - b.x, dy = a.y - b.y;
@@ -77,6 +77,7 @@ export function updateEnemies(game, dt, W, H) {
   const p = game.player;
   const mul = game.enemyFireMul || 1; // 난이도: 어린이 모드면 발사 간격을 늘려 덜 쏘게
   const shotsCap = game.enemyShotsMax || 99; // 난이도: 어린이 모드면 조준 연발을 정중앙 단발로 줄임
+  const wispSpawns = []; // 도깨비불 분열은 루프 중 game.enemies를 늘리지 않도록 모았다가 루프 후 생성
   for (const e of game.enemies) {
     e.t += dt;
     if (e.type === 'bonus') {
@@ -139,6 +140,60 @@ export function updateEnemies(game, dt, W, H) {
       }
       continue;
     }
+    if (e.type === 'wisp') {
+      // 도깨비불: 지그재그(사인)로 부유 하강하며 splitEvery마다 작은 자식을 낳는다(splitMax까지).
+      e.y += e.speed * dt;
+      e.x = e.baseX + Math.sin(e.t * e.freq) * e.amp;
+      e.splitTimer -= dt;
+      if (e.splitTimer <= 0 && e.splits < CFG.enemy.wisp.splitMax && e.y > 0 && e.y < H * 0.7) {
+        e.splitTimer = CFG.enemy.wisp.splitEvery;
+        e.splits++;
+        wispSpawns.push({ x: e.x, y: e.y });
+      }
+      continue;
+    }
+    if (e.type === 'jelly') {
+      // 빛해파리: 느리게 하강 + 좌우로 부드럽게 유영. 발사 없음(접촉 피해만).
+      e.y += e.speed * dt;
+      e.x = e.baseX + Math.sin(e.t * CFG.enemy.jelly.sway) * CFG.enemy.jelly.swayAmp;
+      continue;
+    }
+    if (e.type === 'bloom') {
+      // 빛꽃: 하강 → 멈춰 방사형 '개화' → 다시 하강을 반복. 꽃잎(탄) 수는 radialMul(쉬움 감축) 반영.
+      const bl = CFG.enemy.bloom;
+      e.bloomTimer -= dt;
+      if (!e.blooming) {
+        e.y += e.speed * dt;
+        if (e.bloomTimer <= 0 && e.y > 20) {
+          e.blooming = true;
+          e.bloomTimer = bl.holdTime;
+          const n = Math.max(3, Math.round(bl.petals * (game.radialMul || 1)));
+          const off = Math.random() * Math.PI * 2;
+          for (let i = 0; i < n; i++) {
+            const a = off + (i / n) * Math.PI * 2;
+            game.eBullets.push({ x: e.x, y: e.y, vx: Math.cos(a) * bl.petalSpeed, vy: Math.sin(a) * bl.petalSpeed, r: CFG.enemyBullet.r });
+          }
+          game.sfx.push('hit');
+        }
+      } else if (e.bloomTimer <= 0) {
+        e.blooming = false;
+        e.bloomTimer = bl.bloomEvery * mul; // 재개화까지 하강(난이도 배수로 개화 빈도 조절)
+      }
+      continue;
+    }
+    if (e.type === 'whale') {
+      // 빛고래: 크고 느린 유영체 - 좌우 곡선 유영 + 하강, 가끔 조준 3연발(어린이 모드는 정중앙 단발).
+      const wh = CFG.enemy.whale;
+      e.y += e.speed * dt;
+      e.x = e.baseX + Math.sin(e.t * wh.driftFreq) * wh.driftAmp;
+      e.fireTimer -= dt;
+      if (e.fireTimer <= 0 && e.y > 20) {
+        e.fireTimer = wh.fireEvery * mul;
+        const n = Math.min(wh.shots, shotsCap);
+        for (let i = 0; i < n; i++) enemyFireAt(game, e, p.x + (i - (n - 1) / 2) * wh.spread, p.y);
+      }
+      continue;
+    }
     e.y += e.speed * dt;
     if (e.type === 'weaver') {
       e.x = e.baseX + Math.sin(e.t * CFG.enemy.weaver.freq) * CFG.enemy.weaver.amp;
@@ -172,6 +227,7 @@ export function updateEnemies(game, dt, W, H) {
       }
     }
   }
+  for (const s of wispSpawns) { spawnWispChild(game, s.x, s.y); burst(game, s.x, s.y, COLORS.enemy.wispGlow, 5); game.sfx.push('hit'); }
   // 세로로 지나간 것 + 보너스 기체가 가로로 화면을 벗어난 것 제거.
   retain(game.enemies, (e) => e.y < H + e.r + 20 && e.x > -e.r - 40 && e.x < W + e.r + 40);
 }
@@ -221,6 +277,7 @@ function destroyPart(game, part) {
 export function updateBoss(game, dt, W, H) {
   const boss = game.boss;
   if (!boss) return;
+  if (boss.dying) { stepBossDeath(game, boss, dt); return; } // 사망 연출 중엔 보스 로직 정지
   const st = CFG.bossStyles[boss.style];
   const mul = game.enemyFireMul || 1;          // 어린이 모드 발사 간격 배수
   const shotsCap = game.enemyShotsMax || 99;   // 어린이 모드 조준 연발 상한
@@ -502,31 +559,49 @@ export function checkCollisions(game, W, H) {
 function defeatBoss(game) {
   const boss = game.boss;
   game.score += boss.score;
-  burst(game, boss.x, boss.y, COLORS.hitSpark, 40);
-  burst(game, boss.x - 20, boss.y - 10, COLORS.clearSpark, 30);
   const wasFinal = boss.kind === 'final';
   dropItems(game, boss.x, boss.y, wasFinal ? CFG.bossDrop.final : CFG.bossDrop.mini); // 보스 격파 확정 드롭
-  game.boss = null;
   game.bossPending = false;
   game.transitioning = true; // 전환 대기(다음 구역 준비 전 재소환 차단)
   game.enemies = [];
   game.eBullets = [];
   game.events.push({ type: 'boss-clear' });
   game.sfx.push('bossdown');
+  // 보스를 즉시 지우지 않고 '사망 연출' 상태로 둔다. updateBoss가 dur초 동안 몸 전체에서 연쇄 폭발 +
+  //   화면 흔들림을 진행하고, 끝에 큰 폭발과 함께 boss=null로 제거하며 다음 흐름(승리/지도/다음 구역)을 튼다.
+  boss.dying = true;
+  boss.deathT = 0;
+  boss.burstT = 0;
+  boss.deathDur = wasFinal ? CFG.bossDeath.finalDur : CFG.bossDeath.dur;
+  burst(game, boss.x, boss.y, COLORS.hitSpark, 24); // 첫 폭발
+}
 
-  if (wasFinal) {
-    game.winTimer = 0.9;
-  } else if (CFG.tour.enabled) {
-    // 세계 여행(docs/10): 보스 폭발 연출을 잠깐 보여준 뒤 지도를 띄운다(사용자 지시). transitioning=true를
-    //   유지하되 전환 타이머 대신 bossDeathTimer만 돌린다(만료 시 show-map). 자동 구역 진행은 없다.
-    //   지도에서 목적지 선택·비행 연출이 끝나면 main이 stage++·startStage로 직접 재개한다.
-    game.sfx.push('stageclear');
-    game.bossDeathTimer = CFG.tour.bossDeathTime;
-  } else {
-    game.sfx.push('stageclear');
-    game.events.push({ type: 'banner', big: '구역 클리어', sub: `구역 ${game.stage + 1}로`, dur: 2.0 });
-    game.transitionTimer = 1.9;
+// 보스 사망 연출: 몸 전체에서 연쇄 폭발 + 화면 흔들림(감쇠), dur 후 큰 폭발과 함께 제거하고 다음 흐름을 튼다.
+function stepBossDeath(game, boss, dt) {
+  const D = CFG.bossDeath;
+  const rx = boss.rx || 40, ry = boss.ry || 34;
+  boss.deathT += dt;
+  game.shake = D.shake * Math.max(0, 1 - boss.deathT / boss.deathDur);
+  boss.burstT -= dt;
+  if (boss.burstT <= 0) {
+    boss.burstT = D.burstEvery;
+    const ex = boss.x + (Math.random() - 0.5) * rx * 2.2;
+    const ey = boss.y + (Math.random() - 0.5) * ry * 2.2;
+    burst(game, ex, ey, Math.random() < 0.5 ? COLORS.hitSpark : COLORS.clearSpark, D.burstN);
+    game.bombFlash = Math.max(game.bombFlash || 0, CFG.bombFlash * 0.4);
+    game.sfx.push('explode');
   }
+  if (boss.deathT < boss.deathDur) return;
+  // 종료: 큰 폭발 + 보스 제거 + 다음 흐름(승리 / 세계지도 / 다음 구역)
+  const wasFinal = boss.kind === 'final';
+  burst(game, boss.x, boss.y, COLORS.hitSpark, D.finalBurstN);
+  burst(game, boss.x, boss.y, COLORS.clearSpark, Math.floor(D.finalBurstN * 0.7));
+  game.bombFlash = CFG.bombFlash;
+  game.shake = 0;
+  game.boss = null;
+  if (wasFinal) { game.winTimer = 0.6; }
+  else if (CFG.tour.enabled) { game.sfx.push('stageclear'); game.events.push({ type: 'show-map' }); }
+  else { game.sfx.push('stageclear'); game.events.push({ type: 'banner', big: '구역 클리어', sub: `구역 ${game.stage + 1}로`, dur: 2.0 }); game.transitionTimer = 1.9; }
 }
 
 export function startStage(game) {
@@ -537,9 +612,9 @@ export function startStage(game) {
   game.transitioning = false; // 새 구역 웨이브 준비 완료 → 진행 판정 재개
   game.pendingTimer = null;
   game.introTimer = CFG.stageIntro; // 구역 시작 배너 표시 동안 적 스폰 정지
-  // 배너: 스테이지 이름 문자열 대신 여행 중인 나라·수도를 보여준다(사용자 지시). 여행 꺼짐이면 기존 이름.
-  const sub = CFG.tour.enabled ? `${COUNTRIES[game.tourIdx].ko} · ${COUNTRIES[game.tourIdx].cap}` : stageName(game.stage);
-  game.events.push({ type: 'banner', big: `구역 ${game.stage}`, sub, dur: CFG.stageIntro });
+  // 배너: 여행 중인 나라·수도를 크게(big), 구역 번호는 작게(sub) 보여준다(사용자 지시). 여행 꺼짐이면 기존 이름.
+  const place = CFG.tour.enabled ? `${COUNTRIES[game.tourIdx].ko} · ${COUNTRIES[game.tourIdx].cap}` : stageName(game.stage);
+  game.events.push({ type: 'banner', big: place, sub: `구역 ${game.stage}`, dur: CFG.stageIntro });
 }
 
 function nextStage(game) {
@@ -549,10 +624,7 @@ function nextStage(game) {
 
 function checkProgress(game, dt, W, H) {
   if (game.transitioning) {
-    if (game.bossDeathTimer != null) { // 보스 폭발 연출 후 지도 띄우기(세계 여행)
-      game.bossDeathTimer -= dt;
-      if (game.bossDeathTimer <= 0) { game.bossDeathTimer = null; game.events.push({ type: 'show-map' }); }
-    }
+    // 보스 사망 연출(연쇄 폭발·흔들림)과 show-map 트리거는 updateBoss/stepBossDeath가 담당한다.
     if (game.transitionTimer != null) {
       game.transitionTimer -= dt;
       if (game.transitionTimer <= 0) { game.transitionTimer = null; nextStage(game); }

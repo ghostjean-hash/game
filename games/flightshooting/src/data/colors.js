@@ -46,6 +46,15 @@ export const COLORS = {
     coilArc: '#d6f0ff',     // 노드 사이 아크 번개(밝은 흰-하늘)
     serpent: '#7f93ba',     // 기계 뱀 몸통 마디(강철 - 무적 방어)
     serpentHead: '#ff7a48', // 기계 뱀 머리(약점 경고 주황)
+    // 31~40 빛·에너지 생명체(곡선·발광·반투명). 밝은 파스텔 발광색으로 정령(따뜻한 적·주황)·기계(강철 청)와 대비.
+    wisp: '#9bf0ff',        // 도깨비불(맑은 청백 발광)
+    wispGlow: '#f0feff',    // 도깨비불 코어(흰 발광)
+    jelly: '#c9a6ff',       // 빛해파리(연보라 발광)
+    jellyTentacle: 'rgba(201,166,255,0.55)', // 늘어진 촉수(반투명)
+    bloom: '#ffcf9a',       // 빛꽃 꽃잎(따뜻한 금빛 발광)
+    bloomCore: '#fff2c8',   // 빛꽃 중심(밝은 크림)
+    whale: '#9ee0ff',       // 빛고래 몸(맑은 하늘 발광)
+    whaleCore: '#fff4c0',   // 빛고래 약점 코어(따뜻한 발광)
   },
   // 보스 색 (중보스 mini 1~19 / 기계 중보스 machine 21~29 / 최종 final 30)
   boss: {
@@ -120,6 +129,11 @@ export const COLORS = {
     continent: {
       Asia: '#2f4a6b', Europe: '#43406e', Africa: '#5f4a2f',
       'North America': '#2f5f4a', 'South America': '#5f3a2f', Oceania: '#5e2f52', Other: '#2a3a52',
+    },
+    // 선택한 목적지의 대륙만 살짝 밝게 강조(사용자 지시). continent 원색의 명도를 올린 버전.
+    continentHi: {
+      Asia: '#4a6d99', Europe: '#645f9c', Africa: '#8c6f45',
+      'North America': '#458c6d', 'South America': '#8c5745', Oceania: '#8a457a', Other: '#415377',
     },
   },
 };

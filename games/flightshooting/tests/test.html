@@ -17,7 +17,7 @@ import { test, eq, ok, report } from './runner.js';
 import { frontSpec, speedMul } from '../src/core/fire.js';
 import { optionSlot, gainFront, gainOption, gainZone, gainTail, loseLastPart, tickZone } from '../src/core/parts.js';
 import { buildWaves, stageName } from '../src/core/waves.js';
-import { spawnEnemy, spawnBonus, spawnShards, dropItems, fieldBounds, spawnBoss, bossStyleFor, syncBossParts } from '../src/core/spawn.js';
+import { spawnEnemy, spawnBonus, spawnShards, spawnWispChild, dropItems, fieldBounds, spawnBoss, bossStyleFor, syncBossParts } from '../src/core/spawn.js';
 import { autopilotStep } from '../src/core/autopilot.js';
 import { hit, checkCollisions, updateEnemies, distToSegment, updateBoss, capBullets } from '../src/core/world.js';
 import { spawnFriend, stepFriend, gainFriendLevel, friendTakeHit, reviveFriend } from '../src/core/friend.js';
@@ -165,7 +165,8 @@ test('11구역 체력 추가 배수', () => {
 test('buildWaves 15구역 유효', () => { ok(buildWaves(15).length > 0); });
 test('stageName 20구역 존재', () => { ok(stageName(20).length > 0); });
 // ── 21~30 이질 기계 적 구간(docs/08) ──
-test('stageName 30구역 = 최종 결전', () => { eq(stageName(30), '최종 결전'); });
+test('stageName 40구역 = 최종 결전', () => { eq(stageName(40), '최종 결전'); });
+test('stageName 30구역 이름 존재(더 이상 최종 아님)', () => { ok(stageName(30).length > 0); ok(stageName(30) !== '최종 결전'); });
 test('buildWaves 25구역(void) 이질 적 포함', () => {
   const w = buildWaves(25); ok(w.length > 0);
   const types = new Set(w.flatMap((x) => x.enemies.map((e) => e.type)));
@@ -220,6 +221,70 @@ test('buildWaves 22구역엔 coil·serpent 없음', () => {
   ok(!types.has('coil') && !types.has('serpent'));
 });
 
+// ── 31~40 빛·에너지 생명체 구간(docs/12): wisp / jelly / bloom / whale ──
+const aeonGame = (over) => ({
+  stage: 33, enemies: [], eBullets: [], particles: [], sfx: [], enemyFireMul: 1, enemyShotsMax: 99, radialMul: 1,
+  player: { x: 250, y: 700, r: 14 }, ...over,
+});
+test('spawnEnemy wisp 초기화: 분열 타이머·카운트·유영 파라미터', () => {
+  const g = { stage: 31, enemies: [] }; spawnEnemy(g, 'wisp', 0.5, 500);
+  const e = g.enemies[0]; ok(e.splitTimer > 0); eq(e.splits, 0); ok(e.amp > 0 && e.freq > 0);
+});
+test('spawnEnemy bloom 초기화: 개화 대기(하강 상태)', () => {
+  const g = { stage: 31, enemies: [] }; spawnEnemy(g, 'bloom', 0.5, 500);
+  eq(g.enemies[0].blooming, false); ok(g.enemies[0].bloomTimer > 0);
+});
+test('spawnWispChild = 작은 자식(재분열 안 함)', () => {
+  const g = { stage: 33, enemies: [] }; spawnWispChild(g, 200, 100);
+  const c = g.enemies[0]; eq(c.type, 'wisp'); ok(c.child === true);
+  ok(c.r < CFG.enemy.wisp.r, '부모보다 작음'); eq(c.splits, CFG.enemy.wisp.splitMax, '더 못 나눔');
+});
+test('wisp: 하강 중 분열해 자식이 늘어난다', () => {
+  const g = aeonGame({ stage: 33 }); spawnEnemy(g, 'wisp', 0.5, 500);
+  for (let i = 0; i < 80; i++) updateEnemies(g, 0.05, 500, 900); // 4s 진행(splitEvery 여러 번)
+  ok(g.enemies.length > 1, '분열로 개체 증가');
+  ok(g.enemies.some((e) => e.child), '자식 도깨비불 존재');
+});
+test('bloom: 하강 후 방사형 탄 개화(radialMul 반영)', () => {
+  const g = aeonGame({ stage: 33 }); spawnEnemy(g, 'bloom', 0.5, 500);
+  for (let i = 0; i < 60; i++) updateEnemies(g, 0.05, 500, 900); // 3s (descendTime 지나 개화)
+  ok(g.eBullets.length >= 3, '개화 방사탄 발사');
+});
+test('bloom 쉬움(radialMul 0.4)은 꽃잎 수 감축', () => {
+  const full = aeonGame({ stage: 33, radialMul: 1 }); spawnEnemy(full, 'bloom', 0.5, 500);
+  const easy = aeonGame({ stage: 33, radialMul: 0.4 }); spawnEnemy(easy, 'bloom', 0.5, 500);
+  for (let i = 0; i < 40; i++) { updateEnemies(full, 0.05, 500, 900); updateEnemies(easy, 0.05, 500, 900); }
+  ok(easy.eBullets.length < full.eBullets.length, '쉬움 개화 탄이 더 적음');
+});
+test('whale: 조준 발사(일반 3발, 어린이 단발)', () => {
+  const g = aeonGame(); spawnEnemy(g, 'whale', 0.5, 500); g.enemies[0].fireTimer = 0; g.enemies[0].y = 100;
+  updateEnemies(g, 0.016, 500, 900);
+  eq(g.eBullets.length, CFG.enemy.whale.shots);
+  const k = aeonGame({ enemyShotsMax: 1 }); spawnEnemy(k, 'whale', 0.5, 500); k.enemies[0].fireTimer = 0; k.enemies[0].y = 100;
+  updateEnemies(k, 0.016, 500, 900);
+  eq(k.eBullets.length, 1, '어린이 모드 정중앙 단발');
+});
+test('jelly: 발사 없이 유영만(접촉 피해)', () => {
+  const g = aeonGame(); spawnEnemy(g, 'jelly', 0.5, 500); g.enemies[0].y = 200;
+  for (let i = 0; i < 30; i++) updateEnemies(g, 0.05, 500, 900);
+  eq(g.eBullets.length, 0, '빛해파리는 탄을 쏘지 않음');
+});
+test('buildAeonWaves 33구역 = 빛 생명체만(기계·정령 없음)', () => {
+  const types = new Set(buildWaves(33).flatMap((x) => x.enemies.map((e) => e.type)));
+  ok(['wisp', 'jelly', 'bloom', 'whale'].some((t) => types.has(t)), '빛 생명체 포함');
+  ok(!['turret', 'prism', 'mine', 'warper', 'coil', 'serpent'].some((t) => types.has(t)), '기계 적 없음');
+});
+test('buildAeonWaves 후반(35~)에 빛고래 편성', () => {
+  ok(new Set(buildWaves(35).flatMap((x) => x.enemies.map((e) => e.type))).has('whale'));
+});
+test('buildWaves 40구역 유효', () => { ok(buildWaves(40).length > 0); });
+test('31구역 aeon 추가 체력 배수', () => {
+  const a = { stage: 30, enemies: [] }, b = { stage: 31, enemies: [] };
+  spawnEnemy(a, 'drone', 0.5, 400); spawnEnemy(b, 'drone', 0.5, 400);
+  ok(b.enemies[0].hp > a.enemies[0].hp, '31구역이 더 단단');
+});
+test('stageCount = 40', () => { eq(CFG.stageCount, 40); });
+
 // ── 자동 플레이: 미래 시뮬레이션 회피/조준/획득 ──
 const apGame = (over) => ({ player: { x: 200, y: 800, r: 14 }, eBullets: [], enemies: [], powerups: [], boss: null, ...over });
 // 정면으로 떨어져 나를 맞힐 코스의 탄은 크게 비켜선다(좌우 아무 쪽이든).
@@ -255,7 +320,12 @@ const bossGame = (stage) => ({ stage, enemies: [], eBullets: [], bullets: [], pa
 const placeBoss = (g) => { g.boss.entering = false; g.boss.x = 250; g.boss.y = 120; syncBossParts(g.boss); };
 test('bossStyleFor 구역별 스타일', () => {
   eq(bossStyleFor(1), 'battleship'); eq(bossStyleFor(10), 'battleship');
-  eq(bossStyleFor(11), 'bio'); eq(bossStyleFor(21), 'orbiter'); eq(bossStyleFor(30), 'sentinel');
+  eq(bossStyleFor(11), 'bio'); eq(bossStyleFor(21), 'orbiter'); eq(bossStyleFor(30), 'orbiter');
+  eq(bossStyleFor(40), 'sentinel'); // 40 = 최종
+});
+test('bossStyleFor 31~39 = 세 스타일 순환 재활용', () => {
+  eq(bossStyleFor(31), 'battleship'); eq(bossStyleFor(32), 'bio'); eq(bossStyleFor(33), 'orbiter');
+  eq(bossStyleFor(34), 'battleship'); eq(bossStyleFor(39), 'orbiter');
 });
 test('battleship = 포탑 2 + 코어 처음부터 노출(방어구 없음)', () => {
   const g = bossGame(3); spawnBoss(g, 500, 800);
@@ -293,12 +363,14 @@ test('유도탄은 방어구 무시하고 코어 직격', () => {
   checkCollisions(g, 500, 800);
   ok(g.boss.core.hp < core0, '가려져도 유도탄은 코어 타격');
 });
-test('코어 hp 0 = 보스 격파', () => {
+test('코어 hp 0 = 보스 격파 → 사망 연출 후 제거', () => {
   const g = bossGame(3); spawnBoss(g, 500, 800); placeBoss(g);
   g.boss.core.hp = 1;
   g.bullets.push({ x: 250, y: 120, r: 5, dmg: 5, kind: 'main' }); // 중앙 = 코어(포탑은 좌우)
   checkCollisions(g, 500, 800);
-  eq(g.boss, null, '격파로 boss 제거');
+  ok(g.boss && g.boss.dying, '즉시 제거가 아니라 사망 연출(dying) 시작');
+  for (let i = 0; i < 200 && g.boss; i++) updateBoss(g, 0.05, 500, 800); // 연출(deathDur) 경과
+  eq(g.boss, null, '사망 연출 후 boss 제거');
 });
 test('살아있는 weapon 부위는 발사, 죽은 부위는 정지', () => {
   const g = bossGame(3); spawnBoss(g, 500, 800); g.boss.entering = false; g.boss.x = 250; g.boss.y = 120;

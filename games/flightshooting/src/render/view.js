@@ -1,11 +1,14 @@
 // 캔버스 렌더링 (game 상태를 읽어 그리기만). 로직 없음. 색은 colors.js에서만.
 import { COLORS } from '../data/colors.js';
 import { CFG } from '../data/numbers.js';
+import { COUNTRIES } from '../data/countries.js';
+import { SCENES } from '../data/scenes.js';
 
 export function render(ctx, game, W, H) {
   ctx.clearRect(0, 0, W, H);
-  drawBackground(ctx, game, W, H); // 구역별 색조 성운(깊이감)
+  drawBackground(ctx, game, W, H); // 나라 배경(하늘 그라데이션) 또는 구역별 성운
   drawStars(ctx, game);
+  drawScenery(ctx, game, W, H);    // 나라별 지평선 실루엣(게임 요소 뒤 = 가독성 보존)
   drawZone(ctx, game);        // 플레이어 아래에 깔리는 에너지존 오라
   drawPowerups(ctx, game);
   drawEnemies(ctx, game);
@@ -135,22 +138,96 @@ function drawShotMerge(ctx, game) {
   ctx.restore();
 }
 
-// 구역별 색조의 은은한 성운 2개(radial gradient). 깊이감 + 구역마다 다른 분위기.
-// gradient는 구역·화면크기에만 의존해 매 프레임 동일하다 → 캐시해 재사용(프레임마다 재생성 제거).
-let bgCache = null; // { stage, W, H, g1, g2 }
+// 배경: 나라 테마가 있으면 하늘 세로 그라데이션(나라색) + 성운, 없으면 구역별 성운만.
+// gradient는 나라·구역·화면크기에만 의존해 매 프레임 동일하다 → 캐시해 재사용(프레임마다 재생성 제거).
+let bgCache = null; // { key, W, H, sky, g1, g2 }
 function drawBackground(ctx, game, W, H) {
   const stage = game.stage || 1;
-  if (!bgCache || bgCache.stage !== stage || bgCache.W !== W || bgCache.H !== H) {
+  const nation = COUNTRIES[game.tourIdx];
+  const scene = nation && SCENES[nation.ko];
+  const key = scene ? 'n:' + nation.ko : 's:' + stage;
+  if (!bgCache || bgCache.key !== key || bgCache.W !== W || bgCache.H !== H) {
     const arr = COLORS.stageNebula;
     const s = stage - 1;
+    let sky = null;
+    if (scene) { // 나라 하늘: 위(우주)→아래(지평선) 세로 그라데이션
+      sky = ctx.createLinearGradient(0, 0, 0, H);
+      const c = scene.sky;
+      sky.addColorStop(0, c[0]); sky.addColorStop(0.6, c[1] || c[0]); sky.addColorStop(1, c[2] || c[1] || c[0]);
+    }
     const g1 = ctx.createRadialGradient(W * 0.28, H * 0.22, 0, W * 0.28, H * 0.22, W * 0.75);
     g1.addColorStop(0, arr[s % arr.length]); g1.addColorStop(1, 'rgba(0,0,0,0)');
     const g2 = ctx.createRadialGradient(W * 0.74, H * 0.72, 0, W * 0.74, H * 0.72, W * 0.65);
     g2.addColorStop(0, arr[(s + 3) % arr.length]); g2.addColorStop(1, 'rgba(0,0,0,0)');
-    bgCache = { stage, W, H, g1, g2 };
+    bgCache = { key, W, H, sky, g1, g2 };
   }
+  if (bgCache.sky) { ctx.fillStyle = bgCache.sky; ctx.fillRect(0, 0, W, H); }
   ctx.fillStyle = bgCache.g1; ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = bgCache.g2; ctx.fillRect(0, 0, W, H);
+}
+
+// 나라별 지평선 실루엣(게임 요소 뒤에 그려 가독성 보존). 현재 서울만, 나머지 나라는 점진 확장.
+function drawScenery(ctx, game, W, H) {
+  const nation = COUNTRIES[game.tourIdx];
+  const scene = nation && SCENES[nation.ko];
+  if (!scene || !scene.silhouette) return;
+  if (scene.silhouette === 'seoul') drawSeoul(ctx, scene, W, H);
+}
+
+// 서울: 뒷산 능선 + 한강 반짝임 + 기와지붕(경복궁) 능선 + N서울타워 실루엣(docs/11 §1).
+// 좌표는 화면 비율 기반 배경 장식 상수(게임 로직 수치가 아니라 view 지역 상수).
+function drawSeoul(ctx, scene, W, H) {
+  const base = H * 0.86;        // 지평선(실루엣 바닥)
+  const dark = '#0a1526';       // 건물 실루엣(배경보다 어두운 남색)
+  const rim = scene.accent;     // 단청·타워 상단 림라이트(빨강)
+  ctx.save();
+  // 1) 뒷산 능선(가장 뒤, 흐린 남색)
+  ctx.fillStyle = '#14294a';
+  ctx.beginPath();
+  ctx.moveTo(0, H * 0.76);
+  for (const [rx, ry] of [[0.15, 0.72], [0.3, 0.75], [0.45, 0.70], [0.6, 0.74], [0.78, 0.71], [1, 0.75]]) ctx.lineTo(W * rx, H * ry);
+  ctx.lineTo(W, base); ctx.lineTo(0, base); ctx.closePath(); ctx.fill();
+  // 2) 한강(하단 어두운 물 + 별빛 반짝임)
+  ctx.fillStyle = '#0c1f3d';
+  ctx.fillRect(0, base, W, H - base);
+  ctx.fillStyle = 'rgba(120,160,220,0.5)';
+  for (const [gx, gy] of [[0.12, 0.92], [0.28, 0.95], [0.5, 0.91], [0.68, 0.96], [0.85, 0.93]]) ctx.fillRect(W * gx, H * gy, W * 0.05, 1.5);
+  // 3) 기와지붕(경복궁) - 처마 곡선 지붕 여러 채
+  ctx.fillStyle = dark;
+  drawHanok(ctx, W * 0.12, base, W * 0.15, H * 0.045, rim);
+  drawHanok(ctx, W * 0.33, base, W * 0.19, H * 0.055, rim);
+  drawHanok(ctx, W * 0.58, base, W * 0.13, H * 0.04, rim);
+  // 4) N서울타워(우측 산 위로 솟음)
+  drawSeoulTower(ctx, W * 0.82, base, H, dark, rim);
+  ctx.restore();
+}
+
+// 기와집 한 채: 벽 + 처마가 위로 솟은 지붕 곡선 + 용마루 끝 단청 점.
+function drawHanok(ctx, cx, base, w, roofH, rim) {
+  const bodyH = roofH * 1.1;
+  const y0 = base - bodyH;
+  ctx.fillRect(cx - w * 0.38, y0, w * 0.76, bodyH);          // 벽
+  ctx.beginPath();                                            // 지붕(처마 곡선)
+  ctx.moveTo(cx - w * 0.5, y0);
+  ctx.quadraticCurveTo(cx - w * 0.5, y0 - roofH * 0.7, cx, y0 - roofH);
+  ctx.quadraticCurveTo(cx + w * 0.5, y0 - roofH * 0.7, cx + w * 0.5, y0);
+  ctx.quadraticCurveTo(cx, y0 - roofH * 0.25, cx - w * 0.5, y0);
+  ctx.fill();
+  ctx.fillStyle = rim;                                        // 용마루 림
+  ctx.fillRect(cx - w * 0.5, y0 - roofH * 0.9, w, 1.2);
+  ctx.fillStyle = '#0a1526';
+}
+
+// N서울타워: 산 위 기단 + 가는 탑신 + 전망대 원반 + 첨탑, 상단 빨강 등.
+function drawSeoulTower(ctx, cx, base, H, dark, rim) {
+  const topY = base - H * 0.30;   // 탑 꼭대기
+  const deckY = base - H * 0.22;  // 전망대
+  ctx.fillStyle = dark;
+  ctx.fillRect(cx - 3, deckY, 6, base - deckY);         // 탑신(전망대~바닥)
+  ctx.beginPath(); ctx.ellipse(cx, deckY, 12, 5, 0, 0, Math.PI * 2); ctx.fill(); // 전망대 원반
+  ctx.fillRect(cx - 1.5, topY, 3, deckY - topY);        // 첨탑
+  ctx.fillStyle = rim;                                   // 꼭대기 빨강 등
+  ctx.beginPath(); ctx.arc(cx, topY, 2.4, 0, Math.PI * 2); ctx.fill();
 }
 
 // 에너지존 = 펄스파: 플레이어 중심에서 퍼지는 링을 그린다. 커질수록 옅어져 파동이 나가는 게 보인다.
@@ -426,6 +503,61 @@ function drawEnemies(ctx, game) {
         ctx.closePath(); ctx.fill();
         ctx.strokeStyle = 'rgba(255,255,255,0.32)'; ctx.lineWidth = 1.5; ctx.stroke();
       }
+    } else if (e.type === 'wisp') {
+      // 도깨비불: 반투명 오라 + 흔들리는 꼬리불 + 둥근 몸 + 흰 발광 코어(눈 없음 = 빛 생명체).
+      ctx.shadowColor = COLORS.enemy.wispGlow; ctx.shadowBlur = 14;
+      ctx.globalAlpha = 0.3; ctx.beginPath(); ctx.arc(0, -r * 0.1, r * 1.15, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.moveTo(-r * 0.5, r * 0.35);
+      ctx.quadraticCurveTo(Math.sin(e.t * 8) * r * 0.5, r * 1.5, r * 0.5, r * 0.35); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.arc(0, -r * 0.1, r * 0.72, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = COLORS.enemy.wispGlow;
+      ctx.beginPath(); ctx.arc(0, -r * 0.1, r * 0.34, 0, Math.PI * 2); ctx.fill();
+    } else if (e.type === 'jelly') {
+      // 빛해파리: 아래로 늘어진 물결 촉수 여러 가닥 + 반투명 종(돔) 몸 + 내부 발광 점.
+      ctx.shadowColor = e.color; ctx.shadowBlur = 16;
+      ctx.strokeStyle = COLORS.enemy.jellyTentacle; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+      for (let k = -2; k <= 2; k++) {
+        const bx = k * r * 0.32;
+        ctx.beginPath(); ctx.moveTo(bx, r * 0.15);
+        for (let sgm = 1; sgm <= 4; sgm++) { const yy = r * 0.15 + sgm * r * 0.5; const xx = bx + Math.sin(e.t * 3 + sgm * 0.9 + k) * r * 0.26; ctx.lineTo(xx, yy); }
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 0.82;
+      ctx.beginPath(); ctx.ellipse(0, 0, r * 0.95, r * 0.82, 0, Math.PI, 0); ctx.fill();       // 위 반원 돔
+      ctx.beginPath(); ctx.ellipse(0, 0, r * 0.95, r * 0.32, 0, 0, Math.PI); ctx.fill();        // 아래 볼록
+      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+      ctx.fillStyle = '#ffffff'; ctx.globalAlpha = 0.5;
+      for (const dx of [-0.4, 0, 0.4]) { ctx.beginPath(); ctx.arc(dx * r, -r * 0.15, r * 0.1, 0, Math.PI * 2); ctx.fill(); }
+      ctx.globalAlpha = 1;
+    } else if (e.type === 'bloom') {
+      // 빛꽃: 방사형 꽃잎(개화 중이면 활짝 벌어짐) + 밝은 중심 코어.
+      ctx.shadowColor = e.color; ctx.shadowBlur = 14;
+      const open = e.blooming ? 1 : 0.5;
+      const petals = 8;
+      for (let i = 0; i < petals; i++) {
+        const a = (i / petals) * Math.PI * 2;
+        ctx.save(); ctx.rotate(a);
+        ctx.beginPath(); ctx.ellipse(0, -(r * 0.55 * open + r * 0.22), r * 0.26, r * 0.55 * open + r * 0.18, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = COLORS.enemy.bloomCore;
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.4, 0, Math.PI * 2); ctx.fill();
+    } else if (e.type === 'whale') {
+      // 빛고래: 유선형 몸 + 위 꼬리지느러미 + 옆 지느러미 + 맥동하는 발광 약점 코어.
+      ctx.shadowColor = e.color; ctx.shadowBlur = 18;
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath(); ctx.moveTo(-r * 0.2, -r * 0.6); ctx.lineTo(0, -r * 1.28); ctx.lineTo(r * 0.2, -r * 0.6); ctx.closePath(); ctx.fill(); // 꼬리
+      ctx.beginPath(); ctx.ellipse(-r * 0.95, r * 0.22, r * 0.42, r * 0.2, -0.5, 0, Math.PI * 2); ctx.fill(); // 좌 지느러미
+      ctx.beginPath(); ctx.ellipse(r * 0.95, r * 0.22, r * 0.42, r * 0.2, 0.5, 0, Math.PI * 2); ctx.fill();  // 우 지느러미
+      ctx.beginPath(); ctx.ellipse(0, 0, r * 1.12, r * 0.7, 0, 0, Math.PI * 2); ctx.fill();                  // 몸
+      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+      const pul = 0.7 + Math.sin(e.t * 4) * 0.3;
+      ctx.fillStyle = COLORS.enemy.whaleCore;
+      ctx.beginPath(); ctx.arc(0, r * 0.08, r * 0.3 * pul, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.arc(0, r * 0.08, r * 0.13 * pul, 0, Math.PI * 2); ctx.fill();
     } else {
       ctx.beginPath(); ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2); ctx.fill();
       spriteEyes(ctx, r);
@@ -439,8 +571,10 @@ function drawBoss(ctx, game) {
   const boss = game.boss;
   if (!boss) return;
   const sc = boss.colors;
+  const fade = boss.dying ? Math.max(0.15, 1 - boss.deathT / boss.deathDur) : 1; // 사망 중 서서히 흐려짐
   // 코어(본체). 방어구로 가려져 있으면 어둡게, 노출되면 발광 코어.
   ctx.save();
+  ctx.globalAlpha = fade;
   ctx.translate(boss.x, boss.y);
   ctx.shadowColor = sc.core;
   ctx.shadowBlur = boss.kind === 'final' ? 20 : 14;

@@ -26,15 +26,15 @@ export const CFG = {
   difficulty: {
     easy:   { enemyFireMul: 2.2, enemyHpMul: 0.85, startFront: 2, startTail: 1, enemyShotsMax: 1,  radialMul: 0.4, maxLives: 5 },
     normal: { enemyFireMul: 1,   enemyHpMul: 1,    startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
-    hard:   { enemyFireMul: 0.7, enemyHpMul: 1.3,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 2 },
-    insane: { enemyFireMul: 0.5, enemyHpMul: 1.6,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 1 },
+    hard:   { enemyFireMul: 0.7, enemyHpMul: 1.3,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
+    insane: { enemyFireMul: 0.5, enemyHpMul: 1.6,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
   },
   // 무기 강화 = 발별 순차 진화 10단계(사용자 확정 2026-07-10). 강화 아이템마다 총알 하나씩 순차로 진화.
   //   메인·사이드는 가운데(안쪽)부터, 유도탄은 낮은 것부터. 각 탄 tier 0(무강화)~10. 형태는 단계마다 다른 패턴(view가 tier로 그린다).
   bullet: {
     // 사이드 총알·유도탄 속도는 강화 3단계마다 한 계단 빨라진다. 실제 = base * (1 + floor(tier/3) * speedPer3).
     //   메인 총알(전방화력)만 예외: 강화 단계와 무관하게 항상 speed 고정으로 발사한다(사용자 지시 2026-07-12).
-    speed: 360, speedPer3: 0.15,
+    speed: 432, speedPer3: 0.15, // 메인 총알·키위새 총알 발사 속도(사이드·유도탄은 별도 값). 360→432(120%, 사용자 지시)
     // 메인 빔 크기: 단계(tier 0~10)로 길이·굵기 증가. 빔 형태 패턴은 view.drawMainBeam이 tier로 그린다.
     //   0강화·중간 단계 모두 절반으로 축소(사용자 지시 2026-07-10).
     // 반폭 W = mainWBase + tier*mainWPer. 가로 폭은 view가 cap(laneGap/2)로 잘라 옆칸 침범을 막는다.
@@ -150,6 +150,17 @@ export const CFG = {
     // serpent: 머리 + 몸통 마디(segCount) 체인. 머리만 약점(몸통은 무적 - 아군탄을 막는다). 머리가 사인파
     //   (amp/freq)로 하강하고 몸통이 지연 추종해 구불거린다. 머리를 잡아야 전체가 격파된다. 28구역부터.
     serpent:  { r: 15, hp: 6, speed: 90,  score: 500, segCount: 5, segGap: 21, segFollow: 11, amp: 96, freq: 1.5 },
+    // ── 31~40 구역 전용 신규 적(docs/12). 빛·에너지 생명체 - 곡선·발광·반투명으로 정령(둥근 유기체)·기계(각진 강철)와 확연히 대비 ──
+    // wisp: 도깨비불 - 지그재그(사인)로 부유 하강하며 splitEvery마다 작은 자식 도깨비불을 낳는다(splitMax까지). 약하고 빠름.
+    //   childScale = 자식 크기 비율(부모보다 작다). 자식은 재분열하지 않는다.
+    wisp:   { r: 13, hp: 2, speed: 96,  score: 300, amp: 62, freq: 3.0, splitEvery: 1.5, splitMax: 2, childScale: 0.6 },
+    // jelly: 빛해파리 - 느리게 하강하며 좌우로 부드럽게 유영(sway). 발사 없이 접촉 피해만(느린 대신 크고 단단).
+    jelly:  { r: 22, hp: 6, speed: 54,  score: 450, sway: 0.9, swayAmp: 24 },
+    // bloom: 빛꽃 - 잠깐 하강 후 멈춰 방사형 탄을 '개화'하고 다시 하강하기를 반복. petals = 개화 꽃잎(탄) 수(radialMul 반영).
+    //   descendTime = 첫 하강 시간, holdTime = 개화(정지) 유지, bloomEvery = 재개화까지 하강 주기.
+    bloom:  { r: 17, hp: 4, speed: 72,  score: 400, descendTime: 1.2, holdTime: 0.8, bloomEvery: 2.2, petals: 12, petalSpeed: 175 },
+    // whale: 빛고래 - 크고 느린 유영체. 좌우 곡선 유영(driftAmp/driftFreq) + 하강, 발광 약점 코어. 매우 단단(대형).
+    whale:  { r: 30, hp: 14, speed: 40, score: 900, driftAmp: 70, driftFreq: 0.6, fireEvery: 2.4, shots: 3, spread: 38 },
   },
   // 구역이 오를수록 적 체력 상승: hp = ceil(base * (1 + (stage-1)*scale)). 10구역 ≈ 3.5배.
   enemyHpScale: 0.28,
@@ -161,14 +172,17 @@ export const CFG = {
   bonusShip: { every: 10, dropCount: 1, yRatio: 0.22 },
   // 보스 격파 시 확정 드롭 수(중보스 / 최종보스).
   bossDrop: { mini: 2, final: 4 },
-  // 중보스(1~29구역): 작고 hp 낮음 + 호위 비행체 주기 소환. 최종보스(30구역): 크고 단단한 2패턴.
+  // 중보스(1~39구역): 작고 hp 낮음 + 호위 비행체 주기 소환. 최종보스(40구역): 크고 단단한 2패턴.
   // hp는 3계통 화력 성장에 맞춰 상향(중보스 baseHp 55→90·구역당 22→32, 최종 420→980).
   miniBoss: { rx: 30, ry: 26, baseHp: 66, hpPerStage: 34, score: 900, escortEvery: 4.5, escortInit: 2 },
-  // 최종보스는 30구역. 그때까지 화력이 최대로 성장하므로 hp를 크게 상향.
+  // 최종보스는 40구역. 그때까지 화력이 최대로 성장하므로 hp를 크게 상향.
   finalBoss: { rx: 50, ry: 44, hp: 1500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
   // bobRamp = 등장 완료 후 좌우 유영이 0에서 최대 속도(bobFreq)까지 서서히 빨라지는 시간(초, 사용자 지시 2026-07-12).
   boss: { bobAmp: 0.32, bobFreq: 0.15, bobRamp: 7, spawnTop: 62 },
+  // 보스 사망 연출: 즉시 사라지지 않고 dur초 동안 몸 전체에서 연쇄 폭발 + 화면 흔들림, 끝에 큰 폭발.
+  //   burstEvery=연쇄 폭발 간격(초), burstN=폭발당 파티클, shake=화면 흔들림 최대 픽셀, dur/finalDur=중보스/최종보스 연출 길이.
+  bossDeath: { burstEvery: 0.1, burstN: 16, shake: 13, dur: 1.6, finalDur: 2.8, finalBurstN: 52 },
   // 부위 파괴형 보스(docs/06). 스타일 = 코어 + 부위(weapon 포탑 / shield 방어구).
   //   총 hp(miniBoss/finalBoss 공식)를 coreRatio(코어) + 각 부위 hpRatio 합으로 나눈다(합 = 1).
   //   role weapon = 자기 발사 패턴 보유(부수면 그 패턴 영구 정지). role shield = 코어를 가림(다 부수면 코어 노출).
@@ -208,17 +222,21 @@ export const CFG = {
       { id: 'chest', role: 'shield', ox:   0, oy: 16,  r: 20, hpRatio: 0.20, shape: 'plate' },
     ] },
   },
-  // 구역 → 보스 스타일 매핑 경계(docs/06 §4). 이 구역부터 해당 스타일. 30(최종)은 sentinel 고정.
+  // 구역 → 보스 스타일 매핑 경계(docs/06 §4). 이 구역부터 해당 스타일. 40(최종)은 sentinel 고정.
+  //   31~39는 세 부위파괴형(battleship/bio/orbiter)을 순환 재활용한다(spawn.bossStyleFor).
   bossStyleFrom: { bio: 11, orbiter: 21 },
   // 강화판 경계: 10구역 묶음 안에서 이 위치(0-based)부터 강화판 보스. 5 = 각 묶음의 뒤 5개(6~10·16~20·26~30).
   bossUpgradeFrom: 5,
-  // 11구역~ 신규 적(splitter/shielder/rusher), 21구역~ 이질 기계 적(turret/prism/mine/warper). 30구역이 최종.
-  stageCount: 30,
+  // 11구역~ 신규 적(splitter/shielder/rusher), 21구역~ 이질 기계 적(turret/prism/mine/warper),
+  //   31구역~ 빛·에너지 생명체(wisp/jelly/bloom/whale, docs/12). 40구역이 최종.
+  stageCount: 40,
   // 11구역 이후 추가 체력 배수(신규 적 구간 난이도 가속). 최종 hp = 기존 스케일 × (구역>=11이면 이 배수).
   hardStage: { from: 11, hpMul: 1.35 },
   // 21구역 이후 추가 체력 배수(4계통 만렙 근접 구간 - 순삭 방지). hardStage 위에 곱해진다. dev 훅 실측 후 조정.
   //   coilFrom / serpentFrom = 2차 이질 적(연결선·체인)이 웨이브에 합류하는 구역(docs/08 - 후반 압박 가중).
   voidStage: { from: 21, hpMul: 1.7, coilFrom: 26, serpentFrom: 28 },
+  // 31구역 이후 추가 체력 배수(빛 생명체 구간 - 최종 10구역 난이도). voidStage 위에 곱해진다. dev 훅 실측 후 조정.
+  aeonStage: { from: 31, hpMul: 1.3 },
   stageIntro: 2.2, // 구역 시작 배너 표시 동안 적 스폰 정지(초)
   maxedBonus: 300, // 파츠·목숨이 이미 최대일 때 파워업 획득 시 대신 주는 점수
   starCount: 70,
@@ -254,10 +272,11 @@ export const CFG = {
   tour: {
     enabled: true, flyTime: 1.4, cardTime: 1.6, zoomPad: 40, zoomMinW: 260, aspect: 1.35, zoomRefW: 560,
     mark: {
-      cur: { dot: 8, name: 11, cap: 15 },
-      cand: { dot: 11, name: 11, cap: 15 },
-      visited: { dot: 5, name: 8.5, cap: 10 },
-      other: { dot: 3, name: 7.5, cap: 8 },
+      // name(나라이름) = 기존 값의 70%로 축소(사용자 지시). cap(수도)·dot은 유지.
+      cur: { dot: 8, name: 7.7, cap: 15 },
+      cand: { dot: 11, name: 7.7, cap: 15 },
+      visited: { dot: 5, name: 5.95, cap: 10 },
+      other: { dot: 3, name: 5.25, cap: 8 },
       labelGap: 4,
       nameLift: 5, // 나라이름(윗줄)을 수도 위로 추가로 올리는 화면 px(사용자 지시)
     },
@@ -267,12 +286,14 @@ export const CFG = {
   },
 };
 
-// 구역 이름 (1~30). 11구역부터 미지의 심우주, 21구역부터 이질 기계 문명 - 완전 다른 적들이 출현한다.
+// 구역 이름 (1~40). 11~ 미지의 심우주, 21~ 이질 기계 문명, 31~ 빛·에너지 생명체 - 구간마다 완전 다른 적들이 출현한다.
 export const STAGE_NAMES = [
   '소행성 지대', '적 함대 전선', '폐허 정거장', '운석 회랑', '적 보급선',
   '전자 폭풍', '궤도 방어선', '침묵의 성역', '모함 외곽', '모함 최심부',
   '차원의 경계', '분열체 군집', '수호벽 지대', '혜성 폭류', '암흑 성운',
   '반란 함대', '플라스마 지옥', '파멸의 궤도', '최후 방어선', '심연의 관문',
   '기계 성역', '결정 동굴', '방전 회로', '기뢰 지대', '왜곡 성운',
-  '강철 함대', '침묵의 기계신', '무한 회랑', '종말 관측소', '최종 결전',
+  '강철 함대', '침묵의 기계신', '무한 회랑', '종말 관측소', '기계 심연',
+  '여명의 성단', '빛의 해류', '오로라 회랑', '광휘의 정원', '성광 군무',
+  '프리즘 바다', '백광 지대', '영광의 문', '창천의 눈', '최종 결전',
 ];

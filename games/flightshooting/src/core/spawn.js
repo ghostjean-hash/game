@@ -8,6 +8,7 @@ function scaledHp(base, stage, diffMul = 1) {
   let hp = Math.ceil((base || 1) * (1 + (stage - 1) * CFG.enemyHpScale));
   if (stage >= CFG.hardStage.from) hp = Math.ceil(hp * CFG.hardStage.hpMul);
   if (stage >= CFG.voidStage.from) hp = Math.ceil(hp * CFG.voidStage.hpMul); // 21~30 이질 적 구간 가속
+  if (stage >= CFG.aeonStage.from) hp = Math.ceil(hp * CFG.aeonStage.hpMul); // 31~40 빛 생명체 구간 가속
   return Math.max(1, Math.ceil(hp * diffMul));
 }
 
@@ -35,8 +36,24 @@ export function spawnEnemy(game, type, xr, W) {
   if (type === 'rusher') { e.phase = 0; e.vx = 0; e.vy = spec.drift; e.speed = 0; } // 0=조준하며 천천히 하강
   if (type === 'shielder') e.shielded = true;
   if (type === 'warper') { e.warpTimer = spec.warpEvery; e.vuln = 0; }              // 순간이동 타이머 + 취약 타이머
+  // 빛 생명체(31~40): 이동·행동 파라미터를 개체에 실어 둔다(자식·재하강 등 개체별로 달라질 수 있어).
+  if (type === 'wisp')  { e.amp = spec.amp; e.freq = spec.freq; e.splitTimer = spec.splitEvery; e.splits = 0; }
+  if (type === 'bloom') { e.bloomTimer = spec.descendTime; e.blooming = false; }
   game.enemies.push(e);
   return e;
+}
+
+// 도깨비불(wisp) 분열: 부모 옆에 작은 자식 도깨비불을 낳는다. 자식은 재분열하지 않는다(splits 만렙).
+//   기존 잡몹과 동일한 충돌·드롭 로직을 그대로 타도록 표준 적 객체로 만든다.
+export function spawnWispChild(game, x, y) {
+  const spec = CFG.enemy.wisp;
+  const hp = scaledHp(1, game.stage, game.enemyHpMul || 1); // 자식은 base hp 1(약함)
+  game.enemies.push({
+    type: 'wisp', child: true, x, baseX: x, y,
+    r: spec.r * spec.childScale, hp, maxHp: hp, speed: spec.speed * 1.18,
+    score: Math.round(spec.score * 0.3), color: COLORS.enemy.wisp, t: 0, fireTimer: 0,
+    amp: spec.amp * 0.6, freq: spec.freq * 1.35, splitTimer: Infinity, splits: spec.splitMax,
+  });
 }
 
 // 전격 코일: 노드 2개를 nodeGap 간격으로 나란히 스폰한다. 서로 mate로 연결(둘 다 살아야 아크 유지).
@@ -108,15 +125,19 @@ export function spawnEscort(game, n, W) {
   }
 }
 
-// 구역 → 보스 스타일(docs/06 §4). 30 = sentinel(최종), 21~29 = orbiter, 11~20 = bio, 1~10 = battleship.
+// 구역 → 보스 스타일(docs/06 §4). 40 = sentinel(최종), 31~39 = 세 스타일 순환 재활용,
+//   21~30 = orbiter, 11~20 = bio, 1~10 = battleship.
 export function bossStyleFor(stage) {
-  if (stage >= CFG.stageCount) return 'sentinel';
-  if (stage >= CFG.bossStyleFrom.orbiter) return 'orbiter';
-  if (stage >= CFG.bossStyleFrom.bio) return 'bio';
-  return 'battleship';
+  if (stage >= CFG.stageCount) return 'sentinel';                 // 40 최종
+  if (stage >= CFG.aeonStage.from) {                              // 31~39: battleship→bio→orbiter 순환
+    return ['battleship', 'bio', 'orbiter'][(stage - CFG.aeonStage.from) % 3];
+  }
+  if (stage >= CFG.bossStyleFrom.orbiter) return 'orbiter';       // 21~30
+  if (stage >= CFG.bossStyleFrom.bio) return 'bio';               // 11~20
+  return 'battleship';                                            // 1~10
 }
 
-// 보스 등장(부위 파괴형). 1~29 = 중보스(호위 동반), 30 = 최종보스. 스타일별 코어 + 부위를 조립한다.
+// 보스 등장(부위 파괴형). 1~39 = 중보스(호위 동반), 40 = 최종보스. 스타일별 코어 + 부위를 조립한다.
 export function spawnBoss(game, W, H) {
   const isFinal = game.stage >= CFG.stageCount;
   const style = bossStyleFor(game.stage);
