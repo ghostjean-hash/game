@@ -10,10 +10,10 @@ import { COUNTRY_PATHS, MAP_W, MAP_H, lonToX, latToY } from './data/worldmap.js'
 import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard, updateParticles } from './core/world.js';
-import { spawnEnemy, spawnBoss } from './core/spawn.js';
+import { spawnBoss } from './core/spawn.js';
 import { autopilotStep } from './core/autopilot.js';
 import { gainFront, gainOption, gainZone, gainTail } from './core/parts.js';
-import { spawnFriend, gainFriendLevel } from './core/friend.js';
+import { spawnFriend } from './core/friend.js';
 import { render } from './render/view.js';
 import { createControls } from './input/controls.js';
 
@@ -300,7 +300,6 @@ function startGame(diff, saved) {
   resize();
   resetGame();
   if (friendOn) spawnFriend(game, W, H); // 친구 동행 토글(난이도 무관, docs/09)
-  applyDevHook(); // 검증용: localhost에서 URL 파라미터로 시작 구역·파츠 지정
   setAutoAssist(autoOn); // 홈의 자동 플레이 토글 반영(하이브리드)
   game.apSkill = apSkill;                       // 자동 플레이 실력 티어 반영
   game.difficulty = difficulty;                 // 난이도
@@ -336,48 +335,6 @@ function startGame(diff, saved) {
   sound.play('start');
   loop.start();
   saveProgress(); // 진행 저장(홈 '이어서 하기'가 이 상태로 재개)
-}
-
-// 검증 전용 dev 훅(localhost 한정): ?dev=1 + stage/front/option/zone/lives로 특정 상태 시작.
-// 운영 배포(github.io)에선 hostname 게이트로 완전 무효 - 일반 플레이 영향 0.
-function applyDevHook() {
-  const host = location.hostname;
-  if (host !== 'localhost' && host !== '127.0.0.1') return;
-  const q = new URLSearchParams(location.search);
-  if (q.get('dev') == null) return;
-  const num = (k) => { const v = q.get(k); return v == null ? null : Number(v); };
-  const stage = num('stage');
-  if (stage != null) game.stage = Math.max(1, Math.min(stage, CFG.stageCount));
-  // tour: 시작 여행 나라 인덱스(0~49). 지도 특정 지역(예: 붙어 있는 싱가포르·말레이시아) 관찰용.
-  const tour = num('tour'); if (tour != null && tour >= 0 && tour < COUNTRIES.length) { game.tourIdx = tour; game.tourPath = [tour]; }
-  // front: 1~88. 9 이상이면 발별 진화가 보인다(가운데 탄부터 8발마다 티어 +1).
-  const front = num('front'); if (front != null) for (let i = 1; i < front; i++) gainFront(game);
-  const option = num('option'); if (option != null) for (let i = 0; i < option; i++) gainOption(game);
-  const zone = num('zone'); if (zone != null) for (let i = 0; i < zone; i++) gainZone(game);
-  // tail: 1~44. 4까지 대수, 그 뒤 낮은 무기부터 발별 순차 진화(44=전원 무기11).
-  const tail = num('tail'); if (tail != null) for (let i = 0; i < tail; i++) gainTail(game);
-  // friendlv: 친구 메인 총알 레벨(0~10) 즉시 반영(어린이 모드에서 친구가 있을 때만). 부채 넓어짐 관찰용.
-  const flv = num('friendlv'); if (flv != null && game.friend) for (let i = 0; i < flv; i++) gainFriendLevel(game);
-  const lives = num('lives'); if (lives != null) game.lives = Math.max(1, lives);
-  const ap = q.get('ap'); if (ap && CFG.autopilot.tiers[ap]) apSkill = ap; // 검증용: 자동 플레이 실력 티어 지정(이후 game.apSkill에 반영)
-  if (q.get('cheat') != null) { cheatEnabled = true; setCheat.checked = true; } // 검증 편의: 치트 박스 자동 표시
-  // pow=P|S|E|T|H|B: 해당 파워업 하나를 화면 위쪽에 스폰(내려오며 획득 확인용).
-  const pow = q.get('pow'); if (pow) game.powerups.push({ x: W * 0.5, y: H * 0.3, r: 12, vy: 70, kind: pow, t: 0 });
-  // emo=happy|cry: 표정 검증용. 바푸리(+친구) 표정을 강제 고정(캡처 동안 유지).
-  const emo = q.get('emo');
-  if (emo) { game.player.emo = emo; game.player.emoT = 999; if (game.friend) { game.friend.emo = emo; game.friend.emoT = 999; } }
-  const pr = num('pr'); if (pr != null) { game.player.r = pr; if (game.friend) game.friend.r = pr; } // 표정·외형 확대 관찰용
-  // spawn=<적종류>: 해당 적을 화면 상단에 즉시 스폰(신규 적 외형·행동 관찰용).
-  const spawnType = q.get('spawn');
-  if (spawnType) { game.introTimer = 0; for (const xr of [0.35, 0.65]) spawnEnemy(game, spawnType, xr, W); }
-  if (stage != null) startStage(game); // 지정 구역 웨이브 재생성 + 배너
-  if (q.get('nointro') != null) {
-    game.introTimer = 0; // 검증 편의: 인트로 배너 건너뛰고 즉시 발사
-    if (game.friend) { game.friend.enterTimer = 0; game.friend.speechIdx = CFG.friend.speech.length; game.friend.msg = null; } // 친구 등장·말풍선 건너뛰고 즉시 발사
-  }
-  // warm=N: 시작 시 N프레임 미리 굴려 탄·상태를 진행시킨 화면을 바로 캡처(검증 편의).
-  const warm = num('warm');
-  if (warm != null) { game.introTimer = 0; for (let i = 0; i < warm; i++) stepWorld(game, 0.016, W, H); }
 }
 
 function togglePause() {
@@ -837,6 +794,12 @@ $('#cheat-boss').addEventListener('click', () => {
   game.introTimer = 0; game.waves = []; game.waveIdx = 0;
   spawnBoss(game, W, H);
 });
+// 무기 강화: 4계통(메인·사이드·존·꼬리)을 한 단계씩 올린다. 화력 성장 관찰용.
+$('#cheat-weapon').addEventListener('click', () => {
+  if (state !== 'playing') return;
+  gainFront(game); gainOption(game); gainZone(game); gainTail(game);
+  syncHud();
+});
 // 헤더를 잡고 드래그해 치트 박스를 옮긴다(fixed 좌표라 화면 어디든).
 let cheatDrag = null;
 const cheatHead = $('#cheat-head');
@@ -856,20 +819,3 @@ cheatHead.addEventListener('pointerup', () => { cheatDrag = null; });
 elMenuBest.textContent = best;
 setupFullscreen();
 resize();
-
-// 검증 전용(localhost 한정): ?dev=1&auto=1 이면 로드 즉시 자동 플레이 시작.
-//   ?diff=easy|normal|hard|insane 난이도 지정, ?friend=1(또는 옛 ?kid=1) 친구 동행 켬.
-// 운영 배포(github.io)에선 hostname 게이트로 완전 무효 - 일반 플레이 영향 0.
-(function autoStartHook() {
-  const host = location.hostname;
-  if (host !== 'localhost' && host !== '127.0.0.1') return;
-  const q = new URLSearchParams(location.search);
-  if (q.get('dev') == null) return;
-  const d = q.get('diff');
-  const diff = d && CFG.difficulty[d] ? d : (q.get('kid') != null ? 'easy' : 'normal');
-  if (q.get('friend') != null || q.get('kid') != null) { friendOn = true; setOptIcon(optFriend, true); }
-  if (q.get('auto') != null) { autoOn = true; setOptIcon(optAuto, true); startGame(diff); } // 자동 플레이(하이브리드)
-  else if (q.get('kid') != null || q.get('friend') != null || d != null || q.get('showmap') != null) startGame(diff); // 수동 관찰용 시작
-  // showmap=1: 세계 여행 지도를 즉시 띄운다(?stage=N으로 현재 나라 대신 구역만 바꿀 수 있음). 지도 UI 검증 전용.
-  if (q.get('showmap') != null) showMap();
-})();
