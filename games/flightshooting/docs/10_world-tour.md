@@ -1,0 +1,47 @@
+# 10. 세계 여행 스테이지 (데이터 구조 · 확장 절차)
+
+세계 여행 스테이지의 나라 구성 · 교육 메타 · 배경 데이터 SSOT. 게임 흐름(보스 격파 → 지도 → 목적지 선택 → 비행)은 docs/01_spec.md, 배경 이미지 생성 프롬프트는 docs/13_background-prompts.md 참조.
+
+## 1. 구성 요약
+
+1.1. 총 **56개 스테이지 = 54개 국가 + 2개 여행지**(발리·하와이). "56개국"이라 부르지 않는다 - 발리·하와이는 주권 국가가 아니라 소속 나라(인도네시아·미국)의 여행지다.
+1.2. 한 판은 `CFG.stageCount`(현재 40) 구역에서 끝난다. 나라 풀이 56개라 40구역 여정에 여유가 있다(이웃이 없으면 지도가 자동 진행).
+1.3. 한국(서울)에서 출발해 대체로 서쪽으로 지구를 한 바퀴 돈다(아시아 → 중동·아프리카 → 유럽 → 아메리카 → 오세아니아 → 호주 종착).
+
+## 2. 파일 분리 (관심사 분리)
+
+데이터를 세 파일로 나눈다. 나라 식별자 `ko`(한국어 이름)를 공통 키로 이어 붙인다. 지도가 열릴 때마다 쓰이는 핫 데이터(라우팅)와, 교육 콘텐츠·배경 프롬프트처럼 성격이 다른 데이터를 한 파일에 섞지 않기 위함이다.
+
+| 파일 | 역할 | 주요 필드 |
+|---|---|---|
+| `src/data/countries.js` | 지도·라우팅 전용 | ko, cap, lon, lat, cont, next, type, parentCountry, labelDir |
+| `src/data/countries.education.js` | 교육 메타(교과 개념) | feature, eduKey, bgConcept, majorResources, colorAccent, note |
+| `src/data/backgroundPools.js` | 공용 배경 풀 + 국가별 오버레이 | BG_POOLS(16종), COUNTRY_BG(56 매핑) |
+
+2.1. **countries.js**: `type`은 `'country'`(주권 국가 54) 또는 `'travel'`(여행지 2). 여행지는 `parentCountry`(소속 나라)를 가지며 `cap` 자리에 소속 나라를 표기한다. `next`는 배열 정의 뒤 `[i+1..i+4]`를 자동 계산하며 배열 끝을 넘는 인덱스는 잘라낸다(범위 초과 원천 차단). `labelDir`는 붙어 있는 도시(싱가포르·말레이시아) 라벨 겹침 방지용.
+2.2. **cont**는 `worldmap.js`의 대륙명(Asia/Africa/Europe/North America/South America/Oceania)과 일치해야 지도 대륙 하이라이트가 동작한다. 러시아는 영토 대부분이 아시아라 현 프로젝트 기준 `Asia`로 둔다.
+2.3. **countries.education.js**: 한국 초·중·고 사회·지리 교과 대표 개념 중심. 수도 암기보다 지형·기후·산업·문화·환경·교통을 우선하고, 나라마다 학습 주제가 최대한 겹치지 않게 배분한다. 정치·종교·분쟁은 사실 중심 중립 표현만 쓴다.
+
+## 3. 배경 재사용 구조 (공용 풀 + 오버레이)
+
+국가별 완성 배경 56장을 만들지 않는다. **공용 기반 배경 16종(BG-01~16) + 국가별 오버레이**(랜드마크 실루엣·자연지형·포인트컬러) 조합으로 간다. 같은 풀에 나라가 몰리면(예: BG-12 유럽 9개국) 풀 주석의 `variants` 개념으로 오버레이·결을 분기해 단조로움을 관리한다.
+
+3.1. 배경 설계 규칙: 종스크롤 무한 반복(seamless vertical loop), 플레이 가독성 우선(저채도·저대비, 강한 흰/검/네온 면적 금지), 랜드마크는 실루엣, 전경보다 원경. 국가 차이는 (1) 랜드마크 실루엣 (2) 자연지형·식생 (3) 포인트컬러 3가지로만 준다.
+3.2. 실제 이미지는 아직 없다(placeholder). 생성용 프롬프트는 docs/13_background-prompts.md의 16풀별 텍스트를 이미지 생성 AI에 넣어 제작한다. 현재 인게임 배경 렌더(`view.js drawBackground`)는 서울 실루엣만 하드코딩돼 있고, 나머지 나라는 공용 우주·하늘 그라데이션 배경이다 - 풀/오버레이 이미지가 준비되면 그때 렌더에 연결한다.
+
+## 4. 에셋 명명 규칙
+
+- 공용 풀: `bg_pool_<ID>_<promptKey>` (예: `bg_pool_BG-01_eastasia_city_mountain`)
+- 국가 오버레이: `overlay_<국가영문>_<요소>` (예: `overlay_korea_palace_roof`, `overlay_egypt_pyramid`, `overlay_bali_temple_gate`, `overlay_hawaii_volcano`)
+
+## 5. 새 국가·여행지 추가 절차
+
+1. `countries.js` RAW 배열에 항목 추가(원하는 순서 위치). 일반국은 `T(ko, cap, lon, lat, cont)` 헬퍼, 여행지는 `{ ..., type:'travel', parentCountry }` 리터럴. next는 자동 재계산되므로 손대지 않는다.
+2. `cont`가 worldmap.js에 있는 대륙명인지 확인. 그 나라 국경 path가 worldmap.js `COUNTRY_PATHS`에 있어야 대륙 색칠·선택 하이라이트가 동작한다. 없으면 지도 생성 스크립트(Natural Earth 110m 기반)로 재생성하거나 path를 추가한다. **ko 표기가 countries.js와 worldmap.js에서 정확히 일치해야 한다**(과거 "콩고 민주 공화국"↔"콩고민주공화국" 띄어쓰기 불일치로 선택 하이라이트가 안 되던 버그).
+3. `countries.education.js`에 같은 ko 키로 교육 메타 6필드 추가.
+4. `backgroundPools.js` `COUNTRY_BG`에 같은 ko 키로 풀·오버레이 매핑 추가(새 풀이 필요하면 BG_POOLS에 정의).
+5. 검증: 세 파일의 ko 키 집합이 서로 일치하는지, 모든 `pool` 참조가 BG_POOLS에 있는지 확인.
+
+## 6. 지도 데이터 출처
+
+`worldmap.js` 국경 path는 Natural Earth 110m(퍼블릭 도메인)를 equirectangular 투영(viewBox 1000x500)으로 단순화해 생성한 것이다. 콩고민주공화국을 포함한 국가 영역은 모두 이 데이터에 들어 있다.
