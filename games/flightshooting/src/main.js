@@ -370,8 +370,6 @@ function applyDevHook() {
   // spawn=<적종류>: 해당 적을 화면 상단에 즉시 스폰(신규 적 외형·행동 관찰용).
   const spawnType = q.get('spawn');
   if (spawnType) { game.introTimer = 0; for (const xr of [0.35, 0.65]) spawnEnemy(game, spawnType, xr, W); }
-  // boss=1: 웨이브 건너뛰고 현재 구역 보스를 즉시 등장(부위 파괴형 스타일 관찰용).
-  if (q.get('boss') != null) { game.introTimer = 0; game.waves = []; game.waveIdx = 0; spawnBoss(game, W, H); }
   if (stage != null) startStage(game); // 지정 구역 웨이브 재생성 + 배너
   if (q.get('nointro') != null) {
     game.introTimer = 0; // 검증 편의: 인트로 배너 건너뛰고 즉시 발사
@@ -833,6 +831,12 @@ $('#cheat-fold').addEventListener('click', () => {
 });
 // 지도 테스트: 게임 중 언제든 세계 여행 지도를 띄운다(전투를 다 거치지 않고 여행·경로 확인). 치트 전용.
 $('#cheat-map').addEventListener('click', () => { if (state === 'playing') showMap(); });
+// 보스 소환: 진행 중인 구역의 웨이브를 건너뛰고 현재 구역 보스를 즉시 등장(부위 파괴·격파 연출 확인용).
+$('#cheat-boss').addEventListener('click', () => {
+  if (state !== 'playing' || game.boss || game.bossPending) return;
+  game.introTimer = 0; game.waves = []; game.waveIdx = 0;
+  spawnBoss(game, W, H);
+});
 // 헤더를 잡고 드래그해 치트 박스를 옮긴다(fixed 좌표라 화면 어디든).
 let cheatDrag = null;
 const cheatHead = $('#cheat-head');

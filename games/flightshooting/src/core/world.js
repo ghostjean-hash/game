@@ -558,6 +558,10 @@ export function checkCollisions(game, W, H) {
 
 function defeatBoss(game) {
   const boss = game.boss;
+  // 재진입 가드: 이미 사망 연출 중이면 무시한다. 사망 연출 dur초 동안 보스는 화면에 남고 코어 hp<=0이 유지되어
+  //   update의 일괄 격파 판정(존 등)·코어 피격이 매 프레임 이 함수를 다시 부른다. 가드가 없으면 deathT 리셋 +
+  //   드롭·점수·폭발이 매 프레임 반복되어 연출이 영원히 끝나지 않는다(무한 폭발·아이템 반복 버그).
+  if (boss.dying) return;
   game.score += boss.score;
   const wasFinal = boss.kind === 'final';
   dropItems(game, boss.x, boss.y, wasFinal ? CFG.bossDrop.final : CFG.bossDrop.mini); // 보스 격파 확정 드롭

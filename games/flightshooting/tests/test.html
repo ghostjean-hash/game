@@ -372,6 +372,26 @@ test('코어 hp 0 = 보스 격파 → 사망 연출 후 제거', () => {
   for (let i = 0; i < 200 && g.boss; i++) updateBoss(g, 0.05, 500, 800); // 연출(deathDur) 경과
   eq(g.boss, null, '사망 연출 후 boss 제거');
 });
+test('사망 연출 중 추가 피격이 연출을 리셋하지 않음(무한 폭발·드롭 방지)', () => {
+  const g = bossGame(3); spawnBoss(g, 500, 800); placeBoss(g);
+  g.boss.core.hp = 1;
+  g.bullets.push({ x: 250, y: 120, r: 5, dmg: 5, kind: 'main' }); // 중앙 = 코어
+  checkCollisions(g, 500, 800); // 격파 → 사망 연출(dying) 시작
+  ok(g.boss && g.boss.dying, 'dying 시작');
+  const scoreAfterKill = g.score, dropAfterKill = g.powerups.length;
+  // 사망 연출 중 코어가 계속 피격돼도(총알 재공급) 재격파되지 않아야: 점수 재가산·드롭·deathT 리셋 금지
+  for (let i = 0; i < 5; i++) {
+    g.boss.core.hp = 0; // 코어 hp<=0 유지(존 등 총알 외 피해 상황 모사)
+    g.bullets.push({ x: 250, y: 120, r: 5, dmg: 5, kind: 'main' });
+    checkCollisions(g, 500, 800);
+    updateBoss(g, 0.05, 500, 800);
+    if (g.boss) ok(g.boss.deathT > 0, 'deathT가 0으로 리셋되지 않고 진행');
+  }
+  eq(g.score, scoreAfterKill, '재격파로 점수 재가산 안 됨');
+  eq(g.powerups.length, dropAfterKill, '재격파로 드롭 반복 안 됨');
+  for (let i = 0; i < 200 && g.boss; i++) updateBoss(g, 0.05, 500, 800);
+  eq(g.boss, null, '연출은 유한 시간 뒤 끝나 보스 제거(무한 반복 아님)');
+});
 test('살아있는 weapon 부위는 발사, 죽은 부위는 정지', () => {
   const g = bossGame(3); spawnBoss(g, 500, 800); g.boss.entering = false; g.boss.x = 250; g.boss.y = 120;
   g.enemyFireMul = 1; g.enemyShotsMax = 99;
