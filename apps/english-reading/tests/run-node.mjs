@@ -233,6 +233,13 @@ function check(name, cond, detail = "") {
   // be동사 뒤라도 that절 보어는 정당(예외)
   check("violation: be동사 뒤 that절은 정당",
     V("The truth is that no one notices.", ["The truth is", "that no one notices."]).length === 0);
+  // T-101: 절 안의 본동사 does는 조동사가 아니므로 그 뒤 끊기는 정당
+  check("violation: 절 안 본동사 does 뒤 끊기는 정당",
+    V("Experienced players study what an opponent does before making a risky move.",
+      ["Experienced players study", "what an opponent does", "before making a risky move."]).length === 0);
+  // T-101: 대동사 did 뒤 비교절도 정당
+  check("violation: 대동사 did 뒤 끊기는 정당",
+    V("She studies harder than he did last year.", ["She studies harder", "than he did", "last year."]).length === 0);
   // B. 짧은 주어(2단어 이하) 뒤 조동사 앞은 위반
   check("violation: 짧은 주어 뒤 조동사 앞 분리",
     V("A placebo is a fake pill.", ["A placebo", "is a fake pill."]).some((v) => v.kind === "aux-head"));

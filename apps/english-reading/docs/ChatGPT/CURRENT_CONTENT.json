@@ -4356,8 +4356,12 @@
                   "kr": "숙련된 플레이어들은 살펴본다"
                 },
                 {
-                  "en": "what an opponent does before making a risky move.",
-                  "kr": "상대가 위험한 행동을 하기 전에 무엇을 하는지를"
+                  "en": "what an opponent does",
+                  "kr": "상대가 무엇을 하는지를"
+                },
+                {
+                  "en": "before making a risky move.",
+                  "kr": "위험한 행동을 하기 전에"
                 }
               ],
               "breakRules": {

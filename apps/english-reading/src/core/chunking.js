@@ -71,8 +71,12 @@ export function chunkReasons(tokens, chunks) {
 const AUX_TAIL = new Set([
   "is", "are", "was", "were", "am", "be", "been", "being",
   "will", "would", "shall", "should", "can", "could", "may", "might", "must",
-  "do", "does", "did", "have", "has", "had",
+  "have", "has", "had",
 ]);
+// do/does/did는 AUX_TAIL에서 뺀다(T-101). 청크 '끝'에 오는 do/does/did는 대개
+// 본동사·대동사다("what an opponent does" / "more than they did") - 조동사 do는
+// 뒤에 본동사를 데려오므로("does know") 청크 끝에 홀로 남지 않는다. 조동사로 오인해
+// 정당한 끊기(관계절·의문사절 끝 뒤)를 막던 문제를 없앤다.
 // 절·부정사를 여는 낱말 - be동사 뒤라도 이 앞에서는 끊어 읽는 게 정당(that절 보어, be+to 용법 등).
 const CLAUSE_LEAD = new Set([
   "that", "who", "whom", "whose", "which", "when", "where", "why", "how", "whether", "to",
