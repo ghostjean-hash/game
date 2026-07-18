@@ -286,6 +286,24 @@ body {
 }
 .review-btn:hover { color: #fff; background: var(--er-accent); }
 
+/* 문장 끝 "해석" 왼쪽의 원문 복사 아이콘 버튼 (review-btn과 높이 통일) */
+.sentence-copy-btn {
+  float: right;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px 0 2px 6px;
+  padding: 3px 9px;
+  color: var(--er-accent);
+  background: var(--accent-weak, #eef2ff);
+  border: 1px solid var(--er-accent);
+  border-radius: 999px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.sentence-copy-btn:hover { color: #fff; background: var(--er-accent); }
+.sentence-copy-btn svg { width: 15px; height: 15px; }
+
 /* 덩어리별 "왜 여기서 끊는가" 이유 태그 */
 .chunk-why {
   margin-left: 8px;
@@ -526,6 +544,30 @@ body {
   padding: var(--sp-3);
   border-radius: var(--r-2);
 }
+
+/* 하단 액션 줄 - 복사 버튼 + 전체 해석/완료 버튼 나란히 */
+.read-actions {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-2);
+  margin-top: var(--sp-6);
+}
+.read-actions .read-done { flex: 1; width: auto; margin-top: 0; }
+.doc-copy-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  color: var(--er-accent);
+  background: var(--accent-weak, #eef2ff);
+  border: 1px solid var(--er-accent);
+  border-radius: var(--r-2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.doc-copy-btn:hover { color: #fff; background: var(--er-accent); }
+.doc-copy-btn svg { width: 20px; height: 20px; }
 
 .read-done {
   display: block;

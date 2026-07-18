@@ -29,6 +29,7 @@ const ICON = {
   next: `<svg ${SVG_ATTR}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
   repeat: `<svg ${SVG_ATTR}><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>`,
   list: `<svg ${SVG_ATTR}><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
+  copy: `<svg ${SVG_ATTR}><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
 };
 
 let course = null; // 현재 선택된 코스
@@ -304,7 +305,28 @@ function renderReading(p) {
     refreshDone();
   };
   refreshDone();
-  stage.appendChild(doneBtn);
+
+  // 하단 액션 줄 - 왼쪽 복사 버튼(지문 원문 전체) + 오른쪽 "전체 해석/완료" 버튼.
+  // 원문은 문장 text만 공백으로 이어 붙인다(끊기·해설 제외, LLM에 통째로 물어볼 때 쓰도록).
+  const actions = document.createElement("div");
+  actions.className = "read-actions";
+  const docCopyBtn = document.createElement("button");
+  docCopyBtn.type = "button";
+  docCopyBtn.className = "doc-copy-btn";
+  docCopyBtn.innerHTML = ICON.copy;
+  docCopyBtn.title = "지문 원문 전체 복사";
+  docCopyBtn.setAttribute("aria-label", "지문 원문 전체 복사");
+  docCopyBtn.onclick = () => {
+    const full = p.sentences.map((raw) => normalizeSentence(raw).text).join(" ");
+    copyText(full, "지문 원문을 복사했습니다.");
+  };
+  actions.appendChild(docCopyBtn);
+  actions.appendChild(doneBtn);
+  stage.appendChild(actions);
+
+  // 지문 진입 시 항상 최상단부터 - 회독 완료 모달(다음 지문/한 번 더 읽기)을 하단에서 눌러도
+  // 스크롤 컨테이너(.stage)의 이전 위치가 남지 않도록 리셋한다.
+  stage.scrollTop = 0;
 }
 
 function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
@@ -482,6 +504,17 @@ function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
       if (onReviewed) onReviewed(); // 하단 버튼(전체 해석 ↔ 완료) 상태 갱신
     };
     line.appendChild(reviewBtn);
+
+    // "해석" 왼쪽 복사 버튼 - 이 문장 원문만 복사(LLM에 물어볼 때 쓰도록, 끊기·설명 제외).
+    // float:right라 reviewBtn 뒤에 넣어야 화면상 왼쪽에 온다.
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "sentence-copy-btn";
+    copyBtn.innerHTML = ICON.copy;
+    copyBtn.title = "이 문장 원문 복사";
+    copyBtn.setAttribute("aria-label", "이 문장 원문 복사");
+    copyBtn.onclick = (e) => { e.stopPropagation(); copyText(s.text, "문장을 복사했습니다."); };
+    line.appendChild(copyBtn);
   }
 
   block.appendChild(line);
