@@ -364,3 +364,15 @@
 - 검증: node 테스트 전량 통과(authoring 유닛 유지). browser-shot - 출제 패키지 화면(상태요약 + 패키지 복사만, 입력/검증/목록 사라짐) + 지문 목록 회귀 없음(20지문 정상, 뱃지 없음) 콘솔 0. standalone 재빌드(231KB).
 - 문서: CLAUDE.md 2장 트리·3.6·3.9·4.3·4.4·5.2 갱신(customPassages·앱 입력 폐지 반영). PROGRESS.
 - 잔여: 2.42 잔여 승계(배포 미실행·2단계 후보·앵커 임시·flightshooting).
+
+## 2.44. ChatGPT/Gemini 협업 출제 워크플로우 정립 + 200편 커리큘럼 확정 (2026-07-18~19)
+
+여러 LLM으로 문제를 만들되 난이도·청킹·어휘 기준이 안 흔들리게 하는 출제 체계를 실제로 가동해 보고, 200편 커리큘럼 설계를 확정한 긴 세션.
+
+- 읽기 UX 2건(877999c): 회독 완료 모달에서 '다음 지문'/'한 번 더 읽기' 시 지문 최상단으로 스크롤 리셋(.stage.scrollTop=0, 하단에서 눌러도 위부터). 각 문장 '해석' 왼쪽 + 지문 하단 '전체 해석' 왼쪽에 원문 복사 버튼(그 문장 원문 / 지문 전체 원문, ICON.copy SVG + copyText 재사용). playwright 실경로 검증(scrollTop 1596→0, 복사값 일치).
+- ChatGPT 출제 워크플로우 정립(왕복 다수, a2ec9f6·45a44c2·d0052f4): 과설계 초기 패키지(8단계 상태머신·앱 dry-run·앱 입력계약 전제)를 슬림 5문서로 축소. insight 4필드 역할(wrong=비문 예시, natural=검증 필수·화면 미표시)·grammar 1~2·words 0~3 권장 보완. 출제 착수 전 자비스가 최신 현황 9항목(지문/문장 수·다음 ID·분포·최근 소재·과다 구조·중복)을 ChatGPT에 전달하는 의무를 WORKFLOW/PROJECT_INSTRUCTIONS에 명문화. 출제 단위 기본 5편·passages-draft-NNN-MMM.json·docs/ChatGPT/incoming/(gitignore) 규칙 확정.
+- 지문 21~25 5편 반영(6ae75cd): ChatGPT 출제→자비스 validatePassage+compareAgainstExisting 검증→끊기 위반 2편 chunks 교정→passages.json 병합(20→25편)+CURRENT_CONTENT 동기+standalone 재빌드.
+- T-101(084a7f8·cf41f2e·59dcb45): chunkViolations가 절 안 본동사·대동사 do/does/did를 조동사로 오인해 정당한 끊기(관계절·의문사절 끝 뒤)를 막던 문제. AUX_TAIL에서 do/does/did 분리, reading-the-opponent를 자연스러운 3분할로 복원, 회귀 테스트 2건.
+- 26~35 출제 품질 비교(Claude vs ChatGPT, docs/ChatGPT/incoming 비교용 미커밋): 둘 다 검증 0오류. Claude가 앱 데이터(breakRules 오답 해설·과다구조 회피·숙어 수집)에서 우위, ChatGPT가 인물 서사 흥미에서 우위. 사용자 결정 - 출제는 Claude Code, 감수는 ChatGPT.
+- 200편 커리큘럼 확정본 v3(docs/ChatGPT/CURRICULUM_REVIEW.md): 난이도 3단계 60/80/60, 목표 중학~고1, 숙어 평균 지문당 1개(쉬운 단계는 적게). topic 12종×난이도 배분 확정, 소재 200편을 4갈래 병렬 생성. ChatGPT·Gemini·Claude 3차 감수로 63건 수정(중복 소재 교체·숙어 과다중복 분산·과학 오개념 방지·원문 배치 규칙 명문화). 기계 검증 - 200편·60/80/60·소재 완전중복 0·같은 숙어 3회 이상 0.
+- 잔여: (1) 실제 원문 출제는 확정본 v3 기준 배치(5~10편, 예 Daily Life Lv1 1~5)로 새 세션 진행 (2) 배포 미실행 승계 (3) 26~35 비교 파일은 incoming(비커밋).
