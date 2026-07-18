@@ -29,12 +29,13 @@ spec:
 
 | ID | 본질 | 마일스톤 ref | 우선순위 | 진입 trigger |
 |----|------|------|------|------|
-| T-101 | english-reading: chunkViolations가 절 안의 본동사 do/does/did를 조동사로 오인 → 예외 처리(reading-the-opponent "what an opponent does" 뒤 끊기가 막힘). 규칙 수정 후 해당 지문 chunks를 자연스러운 3분할로 되돌림 | english-reading 콘텐츠 | P1 | 다음 출제 전 |
+| (없음 - 신규 마일스톤은 ROADMAP 사용자 명시 영역) | | | | |
 
 ## completed (최근 완료, 최신 10건만 유지)
 
 | ID | 본질 | sealing commit | 완료일 |
 |----|------|------|------|
+| T-101 | english-reading chunkViolations do/does/did 조동사 오인 수정 + reading-the-opponent 3분할 복원 | 084a7f8 | 2026-07-19 |
 | T-001 | 도메인 진입 + 첫 cycle (M-1) | df913a6 | 2026-06-06 |
 | T-002 | search_roots 2곳에 game 루트 등록 (M-2) | 글로벌 인계 merged | 2026-06-06 |
 | T-003 | domain-map game-hub 정식 등록 (M-2) | 글로벌 인계 merged | 2026-06-06 |
