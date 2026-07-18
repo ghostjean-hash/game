@@ -30,3 +30,6 @@ npm-debug.log*
 **/*-handoff*.json
 **/contract.json
 
+# english-reading 출제 draft 임시 파일 (검증 전, 공식 원본 아님 - 반영 후 삭제)
+apps/english-reading/docs/ChatGPT/incoming/
+
