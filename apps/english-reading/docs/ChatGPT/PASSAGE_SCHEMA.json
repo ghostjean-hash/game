@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "english-reading-passage.schema.json",
+  "title": "English Reading Passage",
+  "description": "Passage-unit authoring schema. Cross-field checks such as chunk joining, boundary range, source-word presence, and existing-content comparison are performed by the project's Node validators.",
+  "type": "object",
+  "required": [
+    "id",
+    "level",
+    "topic",
+    "title",
+    "titleKr",
+    "sentences"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "topic": {
+      "type": "string",
+      "enum": [
+        "Critical Thinking",
+        "Daily Life",
+        "Games",
+        "Health",
+        "Language",
+        "Psychology",
+        "Relationships",
+        "Science",
+        "Self Development",
+        "Study",
+        "Technology",
+        "Travel"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "titleKr": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sentences": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "chunks",
+          "breakRules",
+          "naturalTranslation",
+          "wordOrderPoint",
+          "grammar",
+          "words"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "chunks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "en",
+                "kr"
+              ],
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "kr": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "breakRules": {
+            "type": "object",
+            "required": [
+              "allowed",
+              "discouraged"
+            ],
+            "properties": {
+              "allowed": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/boundaryRule"
+                }
+              },
+              "discouraged": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/boundaryRule"
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "naturalTranslation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "wordOrderPoint": {
+            "type": "object",
+            "required": [
+              "title",
+              "explanation"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          },
+          "grammar": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "label",
+                "note"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "note": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "words": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "word",
+                "meaning"
+              ],
+              "properties": {
+                "word": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "meaning": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "insight": {
+            "type": "object",
+            "required": [
+              "formula",
+              "why",
+              "wrong",
+              "natural"
+            ],
+            "properties": {
+              "formula": {
+                "type": "string",
+                "minLength": 1
+              },
+              "why": {
+                "type": "string",
+                "minLength": 1
+              },
+              "wrong": {
+                "type": "string",
+                "minLength": 1
+              },
+              "natural": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "boundaryRule": {
+      "type": "object",
+      "required": [
+        "boundary",
+        "reason"
+      ],
+      "properties": {
+        "boundary": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
