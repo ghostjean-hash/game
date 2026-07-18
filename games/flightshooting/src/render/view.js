@@ -3,6 +3,60 @@ import { COLORS } from '../data/colors.js';
 import { CFG } from '../data/numbers.js';
 import { COUNTRIES } from '../data/countries.js';
 import { SCENES } from '../data/scenes.js';
+import { BG_POOLS, COUNTRY_BG } from '../data/backgroundPools.js';
+
+// 공용 배경 풀 이미지 lazy 로더(asset 이름 → Image). 로드 완료 전/실패 시엔 기존 우주·하늘 배경으로 fallback.
+// 파일이 없으면(아직 미제작 풀) onerror로 ok=false 유지 → 조용히 fallback(테스트 중 나머지 풀 무영향).
+const bgImgCache = new Map();
+function getBgImage(asset) {
+  let e = bgImgCache.get(asset);
+  if (!e) {
+    e = { img: new Image(), ok: false };
+    e.img.onload = () => { e.ok = true; };
+    e.img.src = 'assets/backgrounds/' + asset + '.png';
+    bgImgCache.set(asset, e);
+  }
+  return e;
+}
+// view 지역 연출 상수(게임 로직 수치 아님, drawSeoul 선례): 배경 세로 스크롤 속도 px/s. 원경이라 별보다 느리게.
+const BG_SCROLL = 22;
+// 공용 배경 이미지를 화면 폭에 맞춰(가로 cover) 세로로 이어 붙여 무한 스크롤(seamless loop). 적·별과 같은 아래 방향.
+function drawScrollingBg(ctx, img, game, W, H) {
+  const scale = W / img.width;
+  const dh = img.height * scale;
+  let off = ((game.elapsed || 0) * BG_SCROLL) % dh;
+  for (let y = off - dh; y < H; y += dh) ctx.drawImage(img, 0, y, W, dh);
+}
+
+// ── 디오라마 배경(프리렌더 2.5D, 현재 1스테이지 한국만 테스트) ──
+// 단일 이미지 1장에 스테이지 여정 전체(하단 경복궁 출발 → 상단 항구 도착)를 담은 비스듬 조감도.
+// 화면 폭보다 세로로 살짝 크게(DIORAMA_ZOOM) 그려 세로 여백을 만들고, 그 여백을 시간에 걸쳐
+// 아래→위로 흘려 "전진하는 여정"을 만든다(A안의 무한 반복과 달리 1회 통과 - 도착 후 항구에서 정지).
+const dioramaCache = new Map(); // path → { img, ok }
+function getDiorama(path) {
+  let e = dioramaCache.get(path);
+  if (!e) {
+    e = { img: new Image(), ok: false };
+    e.img.onload = () => { e.ok = true; };
+    e.img.src = path;
+    dioramaCache.set(path, e);
+  }
+  return e;
+}
+// view 지역 연출 상수(게임 로직 수치 아님, BG_SCROLL·drawSeoul 선례. 테스트 확정 후 numbers.js로 이관 검토):
+const DIORAMA_ZOOM = 1.35;  // 화면 세로 대비 이미지 배율(>1이라야 세로 스크롤 여백이 생김)
+const DIORAMA_JOURNEY = 18; // 여정 시간(초): 경복궁 출발 → 항구 도착. 이후 항구서 정지(보스 무대).
+// 나라별 디오라마 이미지 경로(현재 한국 1스테이지만; 나머지 나라는 미제작 → 기존 배경 fallback).
+const DIORAMA_SRC = { '한국': 'assets/diorama/KR/KR-day-concept-v01.png' };
+function drawDiorama(ctx, img, game, W, H) {
+  const dh = H * DIORAMA_ZOOM;
+  const scale = dh / img.height;
+  const dw = img.width * scale;
+  const dx = (W - dw) / 2;                        // 가로 중앙(좌우 대칭 크롭)
+  const p = Math.min(1, (game.elapsed || 0) / DIORAMA_JOURNEY);
+  const dy = (H - dh) + p * (dh - H);             // (H-dh)<0 하단(경복궁) → 0 상단(항구)
+  ctx.drawImage(img, dx, dy, dw, dh);
+}
 
 export function render(ctx, game, W, H) {
   ctx.clearRect(0, 0, W, H);
@@ -144,6 +198,21 @@ let bgCache = null; // { key, W, H, sky, g1, g2 }
 function drawBackground(ctx, game, W, H) {
   const stage = game.stage || 1;
   const nation = COUNTRIES[game.tourIdx];
+  // 디오라마 배경(1스테이지 한국 테스트): 로드됐으면 여정 스크롤로 그리고 종료. 아래 나머지 배경 로직 무영향.
+  const dioSrc = nation && DIORAMA_SRC[nation.ko];
+  if (dioSrc) {
+    const de = getDiorama(dioSrc);
+    if (de.ok) { drawDiorama(ctx, de.img, game, W, H); return; }
+  }
+  // 공용 배경 풀 이미지(있고 로드됐으면 하늘·대기 레이어를 세로 스크롤 타일로 대체 - A안). 지평선 실루엣은 drawScenery가 별도.
+  const bg = nation && COUNTRY_BG[nation.ko];
+  if (bg) {
+    const pool = BG_POOLS.find((p) => p.id === bg.pool);
+    if (pool) {
+      const e = getBgImage(pool.asset);
+      if (e.ok) { drawScrollingBg(ctx, e.img, game, W, H); return; }
+    }
+  }
   const scene = nation && SCENES[nation.ko];
   const key = scene ? 'n:' + nation.ko : 's:' + stage;
   if (!bgCache || bgCache.key !== key || bgCache.W !== W || bgCache.H !== H) {
@@ -169,6 +238,13 @@ function drawBackground(ctx, game, W, H) {
 // 나라별 지평선 실루엣(게임 요소 뒤에 그려 가독성 보존). 현재 서울만, 나머지 나라는 점진 확장.
 function drawScenery(ctx, game, W, H) {
   const nation = COUNTRIES[game.tourIdx];
+  // 디오라마 배경이 뜬 나라는 지형·랜드마크가 이미지에 포함 → 옛 하드코딩 실루엣(서울 등)을 그리지 않는다.
+  const dioSrc = nation && DIORAMA_SRC[nation.ko];
+  if (dioSrc && getDiorama(dioSrc).ok) return;
+  // 공용 배경 이미지가 뜬 나라는 옛 하드코딩 실루엣(밤하늘 전제의 서울 등)을 그리지 않는다.
+  //   국가 지형·랜드마크는 A안대로 overlay png로 대체 예정. 지금은 하늘 배경 이미지만 깔끔하게.
+  const bg = nation && COUNTRY_BG[nation.ko];
+  if (bg) { const pool = BG_POOLS.find((p) => p.id === bg.pool); if (pool && getBgImage(pool.asset).ok) return; }
   const scene = nation && SCENES[nation.ko];
   if (!scene || !scene.silhouette) return;
   if (scene.silhouette === 'seoul') drawSeoul(ctx, scene, W, H);

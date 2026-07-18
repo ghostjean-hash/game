@@ -1,0 +1,105 @@
+<!doctype html>
+<!--
+  실제 배경 이미지 검수 (KOREA_DIORAMA_ART_SPEC). 독립 샌드박스 - 기존 game/A안/다른 prototype 무관.
+  실제 이미지 1장(assets/diorama/KR/KR-stage-reference-clean.webp)을 로드해 인트로 줌 / 플레이 / 세로 스크롤 /
+  중앙 보호 영역 / 전투 오버레이를 검수한다. 이미지가 없으면 IMAGE NOT FOUND 화면만 표시(placeholder 미생성).
+  화면 기준: 첨부 한국 스테이지 이미지 그대로(중앙 한강 축, 좌우 랜드마크, 비스듬한 항공 시점, 아래→위 진행).
+  Pitch 비교 기능 없음.
+  키: Z = 인트로2.4x/플레이1.0x · C = 중앙 보호 영역 · V = 전투 오버레이 · Space = 일시정지 · R = 인트로 재생
+-->
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Image Review - KR</title>
+<style>
+  html,body{margin:0;height:100%;background:#0a0e18;overflow:hidden;font-family:system-ui,sans-serif}
+  canvas{display:block;width:100%;height:100%}
+  #hud{position:fixed;left:8px;top:8px;color:#cfe0ff;font-size:13px;line-height:1.5;background:rgba(8,14,26,.55);padding:6px 9px;border-radius:6px;white-space:pre;pointer-events:none}
+  #keys{position:fixed;right:8px;bottom:8px;color:#93a7c9;font-size:11px;background:rgba(8,14,26,.5);padding:6px 9px;border-radius:6px;pointer-events:none}
+</style></head>
+<body><canvas id="c"></canvas><div id="hud"></div>
+<div id="keys">Z 인트로/플레이 · C 중앙보호 · V 전투오버레이 · Space 일시정지 · R 인트로재생</div>
+<script>
+'use strict';
+const IMG_SRC = '../assets/diorama/KR/KR-stage-reference-clean.webp'; // 실제 배경(없으면 NOT FOUND)
+const LOGICAL_W=720, LOGICAL_H=1280;
+const canvas=document.getElementById('c'), ctx=canvas.getContext('2d'), hud=document.getElementById('hud');
+let W=0,H=0,dpr=1;
+function resize(){const r=canvas.getBoundingClientRect();W=Math.max(1,Math.floor(r.width));H=Math.max(1,Math.floor(r.height));
+  dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.floor(W*dpr);canvas.height=Math.floor(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}
+addEventListener('resize',resize);
+const vs=()=>H/LOGICAL_H;
+
+// ── 이미지 로드 ──
+const img=new Image(); let imgState='loading'; // loading | ok | error
+img.onload=()=>{ imgState = (img.naturalWidth>0) ? 'ok' : 'error'; };
+img.onerror=()=>{ imgState='error'; };
+img.src=IMG_SRC;
+
+// ── 상태 ──
+let view='intro', showGuard=false, showCombat=false, paused=false, introT=0;
+const INTRO_START=2.4, PLAY=1.0, INTRO_DUR=1.8;
+const easeOutCubic=t=>1-Math.pow(1-t,3);
+// 인트로 포커스(첨부 기준 경복궁 = 이미지 좌상단 부근 비율). 플레이 시작 = 이미지 하단(부산 항만) 쪽.
+const FOCUS_RX=0.4, FOCUS_RY=0.08;   // 경복궁 대략 위치(이미지 비율)
+const PLAY_START_RY=0.86;            // 플레이 시작 카메라 세로(이미지 비율)
+let camRY=PLAY_START_RY, scale=PLAY;
+
+function frame(){
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  if(imgState!=='ok'){ drawStatus(); requestAnimationFrame(frame); return; }
+  const iw=img.naturalWidth, ih=img.naturalHeight;
+  if(!paused){
+    if(view==='intro'){
+      introT+=0.016; const p=Math.min(1,introT/INTRO_DUR), e=easeOutCubic(p);
+      scale=INTRO_START+(PLAY-INTRO_START)*e;
+      camRY=FOCUS_RY+(PLAY_START_RY-FOCUS_RY)*e;   // 경복궁 → 플레이 시작 위치 보간
+      if(p>=1) view='play';
+    } else {
+      scale=PLAY;
+      camRY-=0.05*0.016;                            // 세로 스크롤(아래→위 진행: 이미지 위쪽으로)
+      if(camRY<0.12) camRY=0.12;                     // 이미지 상단(경복궁) 클램프
+    }
+  }
+  // 이미지 배치: 폭 cover, camRY(이미지 세로 비율)를 화면 중앙(살짝 아래)에.
+  const baseScale=(W/iw)*scale;
+  const dw=iw*baseScale, dh=ih*baseScale;
+  const dx=(W-dw)/2;
+  const dy=H*0.6 - (camRY*ih)*baseScale;
+  ctx.drawImage(img,dx,dy,dw,dh);
+  if(showGuard) drawGuard();
+  if(showCombat) drawCombat();
+  hud.textContent=`img: OK ${iw}x${ih}\nview: ${view} ${scale.toFixed(2)}x  camRY:${camRY.toFixed(2)}\nguard(C):${showGuard} combat(V):${showCombat}${paused?'  [PAUSED]':''}`;
+  requestAnimationFrame(frame);
+}
+function drawStatus(){
+  ctx.fillStyle='#141c2e'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle= imgState==='error' ? '#ff6b5a' : '#7f93b5';
+  ctx.font='bold 22px system-ui'; ctx.textAlign='center';
+  ctx.fillText(imgState==='error' ? 'IMAGE NOT FOUND' : 'LOADING...', W/2, H/2-16);
+  ctx.fillStyle='#7f93b5'; ctx.font='13px system-ui';
+  ctx.fillText(IMG_SRC, W/2, H/2+14);
+  if(imgState==='error'){ ctx.fillText('실제 배경 이미지를 위 경로에 넣으면 자동으로 검수 화면이 뜹니다.', W/2, H/2+40); }
+  hud.textContent=`img: ${imgState}\n경로: ${IMG_SRC}`;
+}
+function drawGuard(){ // 중앙 전투 보호 영역(논리 X 144~576 = 중앙 60%)
+  const k=vs(); const x1=W/2+(144-LOGICAL_W/2)*k, x2=W/2+(576-LOGICAL_W/2)*k;
+  ctx.fillStyle='rgba(80,180,255,0.10)'; ctx.fillRect(x1,0,x2-x1,H);
+  ctx.strokeStyle='rgba(80,180,255,0.5)'; ctx.setLineDash([6,6]); ctx.strokeRect(x1,0,x2-x1,H); ctx.setLineDash([]);
+}
+function drawCombat(){ // 플레이어·적·탄환 오버레이(화면 고정, 실제 크기 근사)
+  const k=vs(); const L=(rx,ry)=>({x:W/2+(rx*LOGICAL_W-LOGICAL_W/2)*k, y:ry*LOGICAL_H*k});
+  ctx.fillStyle='#ff5a4a'; for(const e of [[0.42,0.16],[0.55,0.24],[0.6,0.1]]){const p=L(e[0],e[1]);ctx.beginPath();ctx.arc(p.x,p.y,16*k,0,7);ctx.fill();}
+  ctx.fillStyle='#3fe0ff'; for(let i=0;i<6;i++){const p=L(0.5,0.4+i*0.06);ctx.beginPath();ctx.arc(p.x,p.y,5*k,0,7);ctx.fill();}
+  ctx.fillStyle='#ffb020'; for(const e of [[0.46,0.42],[0.57,0.52]]){const p=L(e[0],e[1]);ctx.beginPath();ctx.arc(p.x,p.y,5*k,0,7);ctx.fill();}
+  const pp=L(0.5,0.82); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(pp.x,pp.y,14*k,0,7); ctx.fill();
+}
+addEventListener('keydown',e=>{const k=e.key.toLowerCase();
+  if(k==='z') view=(view==='intro'?'play':'intro'), (view==='intro'&&(introT=0));
+  else if(k==='c') showGuard=!showGuard;
+  else if(k==='v') showCombat=!showCombat;
+  else if(k===' ') { paused=!paused; e.preventDefault(); }
+  else if(k==='r') { view='intro'; introT=0; }
+});
+resize(); requestAnimationFrame(frame);
+</script>
+</body></html>

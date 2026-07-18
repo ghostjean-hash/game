@@ -16,8 +16,8 @@
 // variants 주석 = 같은 풀에 여러 나라가 몰릴 때 시각 단조로움을 줄이려 열어둔 변형 개념(구현 시 선택).
 export const BG_POOLS = [
   {
-    id: 'BG-01', nameKo: '동아시아 도시·산맥', promptKey: 'eastasia_city_mountain',
-    asset: 'bg_pool_BG-01_eastasia_city_mountain',
+    id: 'BG-01', nameKo: '동아시아 도시·산맥', promptKey: 'eastasia',
+    asset: 'bg_pool_BG-01_eastasia',
     visualTheme: '겹겹이 물러나는 산 능선 위로 낮게 깔린 동아시아 도시의 원경 스카이라인. 새벽/이른 밤의 차분한 하늘.',
     terrain: '완만한 산맥 능선이 여러 겹으로 원경에 겹침, 강줄기가 도시를 가로지름',
     vegetation: '소나무·대나무 실루엣, 도시 저층부의 흐린 불빛 점',
