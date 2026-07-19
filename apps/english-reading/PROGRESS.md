@@ -390,3 +390,13 @@
 - 문서: CLAUDE.md 4.5(lintPassage 신설)·WORKFLOW.md(lint 반영)·PROGRESS.
 - 배포 완료(봉합 후 처리): 13b840f push로 GitHub Pages에 20편 배포(코스 daily-life), a8f1182로 SW 캐시 v186→v187 bump해 PWA 재방문자 강제 갱신. 실제 URL browser-shot으로 Daily Life 20편·콘솔 0 확인. GitHub Pages는 main push 시 자동 배포이므로 파일 자체는 봉합 push 시점에 이미 배포됐고, SW bump만 후속 처리한 것.
 - 잔여: (1) deploy.json 정비 - deploy.paths·commitMessage가 아직 flightshooting을 향함. 향후 /web-deploy 스킬로 english-reading 자동 배포하려면 조정 필요(현재는 수동 push로 배포 가능) (2) 코스 구조 - 현재 Daily Life 단일, 다음 topic 추가 시 주제별/난이도별 결정 (3) 숙어 배정 대조 lint(커리큘럼 숙어표 데이터화 선행) (4) incoming draft/fix 임시 파일 정리(반영 완료분).
+
+## 2.46. 배포 완결 + deploy.json 정비 + Claude Code 일원화 (2026-07-19, 2.45 후속)
+
+2.45 봉합 직후 사용자 질문("커밋하면 배포되는 거 아냐?")에서 시작해 배포 개념을 바로잡고, 출제 체계를 Claude Code 단독으로 일원화한 후속 작업.
+
+- 배포 완결(a8f1182·02290a5): "배포 미실행"은 부정확한 표현이었다 - GitHub Pages는 main push 시 자동 배포라 2.45 봉합 push(13b840f)로 20편이 이미 배포됐다. 빠졌던 서비스워커 캐시만 v186→v187로 bump해 PWA 재방문자 강제 갱신, 실제 URL browser-shot으로 Daily Life 20편·콘솔 0 확인. 봉합 문서의 "배포 미실행" 오기재를 완료로 정정.
+- deploy.json english-reading 조정(cdec8df): /web-deploy 스킬로 english-reading을 자동 배포하려면 설정이 이전 게임(flightshooting)을 향해 있어 조정. deploy.paths games/flightshooting→apps/english-reading, commitMessage english-reading용, images.dirs를 []로([icons/rushhour]는 paths 밖 자산이라 최적화 시 잔여 유발). 허브가 deploy.json 하나를 공유하는 구조라 다른 게임 배포 시 되돌려야 함(images 주석 명시).
+- Claude Code 일원화(d1f0ef4, 사용자 "모든 작업 일원화" + "추천대로 진행 및 정리"): 출제·감수·검증을 전부 자비스 단독으로, 외부 LLM(ChatGPT/Gemini) 협업 폐지. (a) docs 재편 - CURRICULUM_REVIEW·PASSAGE_SCHEMA→docs/authoring/, ChatGPT 협업 문서(PROJECT_INSTRUCTIONS·WORKFLOW·AUTHORING_RULES.md 사본·CURRENT_CONTENT 미러)·incoming 제거, 날짜문서 4건→docs/archive/, docs/ChatGPT 폴더 삭제. (b) 앱 '출제 패키지' 화면(외부 챗봇 주문서 복사)+홈 버튼 제거(renderAuthor·officialPassages), authoring-index의 buildAuthoringPackage·extractAnchors·DEFAULT_ANCHORS 제거(검증용 analyzeContent·nextCurriculumHint·compareAgainstExisting·규칙 AUTHORING_RULES·CURRICULUM은 유지). (c) 죽은 author CSS·run-node 패키지 테스트 제거, CLAUDE.md 3.9 "출제 흐름(Claude Code 일원화)" 재작성. SW v187→v188. 새 출제 흐름 = 자비스가 docs/authoring/CURRICULUM_REVIEW.md 보고 직접 출제→validate-draft(validatePassage strict+compareAgainstExisting+lintPassage)→passages.json 반영→SW bump·push 배포.
+- 검증: 각 단계 run-node 전량 통과, browser 실제 배포 URL 2회(v187 20편·v188 출제패키지 버튼 사라짐) 콘솔 0, standalone 229→223KB(출제패키지 코드 제거로 감소).
+- 2.45 잔여 해소: (1) deploy.json 정비 완료 · (4) incoming 제거 완료. 남은 잔여: 코스 구조(다음 topic 추가 시 결정), 숙어 배정 대조 lint(커리큘럼 숙어표 데이터화 선행).
