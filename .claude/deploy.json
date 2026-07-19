@@ -5,7 +5,8 @@
     "timeoutSec": 300
   },
   "images": {
-    "dirs": ["icons", "games/rushhour/assets"],
+    "_comment": "english-reading은 최적화할 래스터 이미지가 없다(아이콘은 인라인 SVG). 다른 게임 배포 시 그 자산 경로로 되돌린다.",
+    "dirs": [],
     "quality": 80,
     "maxWidth": null
   },
@@ -16,8 +17,8 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(flightshooting): 자동 플레이 AI 몬테카를로 강화(회피 지평·도피처·빈공간 도피) + 세션 봉합",
-    "paths": ["games/flightshooting", "service-worker.js", ".claude/deploy.json"]
+    "commitMessage": "deploy(english-reading): 콘텐츠·UI 갱신",
+    "paths": ["apps/english-reading", "service-worker.js", ".claude/deploy.json"]
   },
   "smoke": {
     "urls": [
