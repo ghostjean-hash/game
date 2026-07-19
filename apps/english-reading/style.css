@@ -286,22 +286,26 @@ body {
 }
 .review-btn:hover { color: #fff; background: var(--er-accent); }
 
-/* 문장 끝 "해석" 왼쪽의 원문 복사 아이콘 버튼 (review-btn과 높이 통일) */
+/* 문장 끝 "해석" 왼쪽의 원문 복사 아이콘 버튼.
+   배경·테두리는 숨겨 아이콘만 보이게 하되(테두리는 1px 투명으로 높이 계산만 유지),
+   세로 padding 4px + border 1px로 옆 review-btn과 총높이를 맞춰 세로 중앙 정렬한다.
+   터치 영역은 padding으로 그대로 확보한다. */
 .sentence-copy-btn {
   float: right;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin: 2px 0 2px 6px;
-  padding: 3px 9px;
+  padding: 4px 8px;
   color: var(--er-accent);
-  background: var(--accent-weak, #eef2ff);
-  border: 1px solid var(--er-accent);
+  background: transparent;
+  border: 1px solid transparent;
   border-radius: 999px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.sentence-copy-btn:hover { color: #fff; background: var(--er-accent); }
+.sentence-copy-btn:hover { background: transparent; opacity: .65; }
+.sentence-copy-btn.copied { color: #16a34a; opacity: 1; }
 .sentence-copy-btn svg { width: 15px; height: 15px; }
 
 /* 덩어리별 "왜 여기서 끊는가" 이유 태그 */

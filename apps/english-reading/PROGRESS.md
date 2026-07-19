@@ -376,3 +376,16 @@
 - 26~35 출제 품질 비교(Claude vs ChatGPT, docs/ChatGPT/incoming 비교용 미커밋): 둘 다 검증 0오류. Claude가 앱 데이터(breakRules 오답 해설·과다구조 회피·숙어 수집)에서 우위, ChatGPT가 인물 서사 흥미에서 우위. 사용자 결정 - 출제는 Claude Code, 감수는 ChatGPT.
 - 200편 커리큘럼 확정본 v3(docs/ChatGPT/CURRICULUM_REVIEW.md): 난이도 3단계 60/80/60, 목표 중학~고1, 숙어 평균 지문당 1개(쉬운 단계는 적게). topic 12종×난이도 배분 확정, 소재 200편을 4갈래 병렬 생성. ChatGPT·Gemini·Claude 3차 감수로 63건 수정(중복 소재 교체·숙어 과다중복 분산·과학 오개념 방지·원문 배치 규칙 명문화). 기계 검증 - 200편·60/80/60·소재 완전중복 0·같은 숙어 3회 이상 0.
 - 잔여: (1) 실제 원문 출제는 확정본 v3 기준 배치(5~10편, 예 Daily Life Lv1 1~5)로 새 세션 진행 (2) 배포 미실행 승계 (3) 26~35 비교 파일은 incoming(비커밋).
+
+## 2.45. 20편 실출제 + 기존 25편 폐기(코스 재편) + 복사버튼 UI + 정성 lint 자동화 (2026-07-19)
+
+확정본 v3 커리큘럼을 기준으로 첫 실출제(Daily Life 1~20)를 하고, 3개 LLM 감수를 반영한 뒤 커리큘럼 이전 시험작 25편을 폐기해 코스를 재편한 세션. 이어 복사버튼 UI와 감수 규칙 자동화(lint)까지 처리.
+
+- 실출제 20편(Daily Life 1~20, Lv1 12 + Lv2 8): 4배치 병렬 위임으로 출제, 각 배치가 chunkViolations 4규칙·breakRules 0-based·words 표면형을 스스로 validate-draft로 통과. 재사용 검증도구 `tools/validate-draft.mjs` 신설(validatePassage strict + compareAgainstExisting + lint 경고 출력).
+- 3-LLM 감수(ChatGPT·Gemini·Claude) 반영: 하드 영문법 오류 0, 개선 반영 - 번역 정확성(by=기준시점, 원문에 없는 '병' 제거, need→"필요"), 서사 논리(달팽이 "I find it" 중복·간식 시제충돌·일반적 결론 구체화), Lv2 하한 미달 문장 12~14단어 확장, Lv1 to부정사 후치수식·Lv2 수동태 정리, 숙어 map 이탈(turn out=Travel 예정 슬롯·come over 미계상) 제거, 굽은 따옴표 52개 곧은 정규화. 4배치 병렬 위임(background)으로 반영.
+- 기존 25편 폐기(사용자 AskUserQuestion 명시 결정 "폐기하고 새로 시작"): 커리큘럼 이전 시험작 코스 word-order-foundations 제거, 커리큘럼 통번호 1~20만 코스 `daily-life`로 재구성(20편). **사고 대응** - 감수 반영 병렬 배치들이 검증하며 passages.json을 git checkout으로 baseline(25편)으로 되돌린 정황 포착(공유 파일 동시 조작). 취합을 자비스가 직접 수행해 안전 재구성(수정본은 incoming 별도 파일에 온전, 손실 0). 향후 파일 수정 위임은 worktree 격리 필요 교훈.
+- 복사버튼 UI(사용자 지시): 문장별 원문 복사버튼을 테두리·배경 제거해 아이콘만 보이게(터치영역 padding 유지) + 옆 [해석] 버튼과 총높이 25px 일치·세로 중앙정렬 + 복사 성공 시 초록 체크 아이콘 토글(1.5초 후 복원). ICON.check(Feather SVG) 신설(이모지 금지 §5.6 준수), copyText에 onOk 콜백 추가. browser-shot으로 아이콘만·높이 일치·.copied 전환 확인.
+- 정성 lint 자동화(사용자 "감수 내용 규칙으로 출제 때마다 체크"): `core/validate.js:lintPassage` 신설 - 형식 error와 별개 '경고'(강제 실패 아님)로 레벨별 단어수 이탈·문장 길이 리듬(길이 종류 2개 이하 단조)·굽은 따옴표·레벨 초과 문법 휴리스틱(수동태/과거완료/to부정사 후치)·시작어 4개 이상 반복을 잡음. validate-draft·run-node 연결(단위 테스트 6종 + 현 데이터 실측). 과탐 조정(리듬 mx-mn≤2→종류≤2, 시작어 3→4개)으로 24→12건. 의미 판단(번역 정확성·자연스러움·서사)은 코드 불가라 LLM 감수 유지, 숙어 배정 대조는 커리큘럼 숙어표 데이터화 후 별도 단계(미구현).
+- 검증: run-node strict+lint 전량 통과, validate-draft 20/20, browser-shot(daily-life 코스 20편 목록·읽기 전체해석 채점·복사 아이콘/체크, 콘솔 0), standalone 재빌드(228→229KB), CURRENT_CONTENT 20편 동기.
+- 문서: CLAUDE.md 4.5(lintPassage 신설)·WORKFLOW.md(lint 반영)·PROGRESS.
+- 잔여: (1) 배포(/web-deploy) 미실행 - 사용자 20편 로컬 테스트 후 판단 대기, deploy.json flightshooting 회피·코스 id 변경으로 SW 캐시 bump 필요 (2) 코스 구조 - 현재 Daily Life 단일, 다음 topic 추가 시 주제별/난이도별 결정 (3) 숙어 배정 대조 lint(커리큘럼 숙어표 데이터화 선행) (4) incoming draft/fix 임시 파일 정리(반영 완료분).

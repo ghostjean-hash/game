@@ -30,6 +30,7 @@ const ICON = {
   repeat: `<svg ${SVG_ATTR}><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>`,
   list: `<svg ${SVG_ATTR}><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
   copy: `<svg ${SVG_ATTR}><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+  check: `<svg ${SVG_ATTR}><polyline points="20 6 9 17 4 12"/></svg>`,
 };
 
 let course = null; // 현재 선택된 코스
@@ -116,9 +117,9 @@ function showToast(msg) {
 }
 function removeHint() { const h = document.getElementById("first-hint"); if (h) h.remove(); }
 // 텍스트를 클립보드로 복사(안 되는 환경이면 안내만)
-function copyText(text, okMsg) {
+function copyText(text, okMsg, onOk) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(() => showToast(okMsg)).catch(() => showToast("복사가 안 됩니다. 칸을 눌러 직접 선택·복사하세요."));
+    navigator.clipboard.writeText(text).then(() => { showToast(okMsg); if (onOk) onOk(); }).catch(() => showToast("복사가 안 됩니다. 칸을 눌러 직접 선택·복사하세요."));
   } else {
     showToast("복사가 안 됩니다. 칸을 눌러 직접 선택·복사하세요.");
   }
@@ -513,7 +514,14 @@ function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
     copyBtn.innerHTML = ICON.copy;
     copyBtn.title = "이 문장 원문 복사";
     copyBtn.setAttribute("aria-label", "이 문장 원문 복사");
-    copyBtn.onclick = (e) => { e.stopPropagation(); copyText(s.text, "문장을 복사했습니다."); };
+    copyBtn.onclick = (e) => {
+      e.stopPropagation();
+      copyText(s.text, "문장을 복사했습니다.", () => {
+        copyBtn.innerHTML = ICON.check;
+        copyBtn.classList.add("copied");
+        setTimeout(() => { copyBtn.innerHTML = ICON.copy; copyBtn.classList.remove("copied"); }, 1500);
+      });
+    };
     line.appendChild(copyBtn);
   }
 

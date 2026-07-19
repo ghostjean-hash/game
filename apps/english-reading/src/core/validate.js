@@ -124,3 +124,92 @@ export function validatePassage(p, opts = {}) {
 
   return { ok: errors.length === 0, errors };
 }
+
+// ── 정성 규칙 자동 경고(lint) ────────────────────────────────
+// 3개 LLM 감수가 반복 지적한 것 중 코드로 셀 수 있는 항목을 출제 때마다 자동으로 잡는다.
+// error(형식 실패)가 아니라 warning - 출제 규칙상 단어 수 등은 강제가 아니므로(AUTHORING_RULES 2장),
+// 걸려도 자비스가 판단해 넘길 수 있게 '실패'로 막지 않는다. 뜻·자연스러움 같은 의미 판단은
+// 코드가 못 잡으므로 lint 대상이 아니다(LLM 감수 유지).
+const WORD_RANGE = { 1: [7, 11], 2: [8, 14], 3: [9, 18] }; // 레벨별 권장 단어 수(AUTHORING_RULES 2장)
+const CURLY_QUOTE = /[“”‘’„‟″‶′‵❛❜❝❞]/;
+const BE_FORMS = new Set(["is", "are", "was", "were", "am", "be", "been", "being"]);
+// 흔한 불규칙 과거분사(수동태·과거완료 감지용, 대표만)
+const IRREGULAR_PP = new Set([
+  "brought", "taken", "given", "made", "done", "seen", "known", "shown", "found", "kept",
+  "left", "held", "told", "sold", "built", "sent", "spent", "lost", "won", "met", "paid",
+  "grown", "drawn", "thrown", "worn", "broken", "chosen", "spoken", "stolen", "frozen",
+  "driven", "written", "eaten", "beaten", "hidden", "forgotten", "bitten", "fallen", "gotten",
+]);
+// -ed로 끝나지만 형용사로 흔히 쓰여 수동태로 오인하기 쉬운 낱말(과탐 방지)
+const ED_ADJECTIVE = new Set([
+  "tired", "bored", "excited", "interested", "pleased", "surprised", "scared", "worried",
+  "confused", "relaxed", "amazed", "annoyed", "embarrassed", "satisfied", "crowded", "used",
+]);
+const NOUN_LEAD_TO = /^(something|anything|nothing|someone|anyone|everyone|way|place|time|thing|things|reason|chance)$/;
+
+function isPastParticiple(cleanWord) {
+  const c = String(cleanWord);
+  if (ED_ADJECTIVE.has(c)) return false;
+  return IRREGULAR_PP.has(c) || /ed$/.test(c);
+}
+
+// 반환: { warnings: [{ where, msg }] } - 형식 검증과 별개(passes/fails 아님, 참고 경고).
+export function lintPassage(p) {
+  const warnings = [];
+  const push = (where, msg) => warnings.push({ where, msg });
+  if (!p || !Array.isArray(p.sentences)) return { warnings };
+  const lv = p.level;
+  const range = WORD_RANGE[lv];
+  const lengths = [];
+  const firstWords = [];
+
+  p.sentences.forEach((s, i) => {
+    if (!s || !s.text) return;
+    const w = `${i + 1}번째 문장`;
+    const toks = tokenize(s.text);
+    const n = toks.length;
+    lengths.push(n);
+    firstWords.push(toks[0] ? toks[0].clean : "");
+
+    // 1. 레벨별 단어 수 이탈
+    if (range) {
+      if (n < range[0]) push(w, `단어 ${n}개 - Lv${lv} 권장 하한 ${range[0]} 미만(너무 짧음).`);
+      else if (n > range[1]) push(w, `단어 ${n}개 - Lv${lv} 권장 상한 ${range[1]} 초과(너무 김).`);
+    }
+
+    // 2. 굽은 따옴표 잔존(문장 데이터 전체 문자열 기준)
+    if (CURLY_QUOTE.test(JSON.stringify(s))) push(w, `굽은 따옴표가 있습니다 - 곧은 따옴표(' ")로 바꾸세요.`);
+
+    // 3. 레벨 초과 문법(휴리스틱 - 경고이므로 과탐 감수)
+    const cl = toks.map((t) => t.clean);
+    for (let k = 0; k < cl.length - 1; k++) {
+      const cur = cl[k], nxt = cl[k + 1];
+      if (lv < 3 && cur === "had" && isPastParticiple(nxt)) {
+        push(w, `과거완료(had ${nxt})는 Lv3 성격 - Lv${lv}엔 최소화(1회 이내) 권장.`);
+      } else if (lv < 3 && BE_FORMS.has(cur) && isPastParticiple(nxt)) {
+        push(w, `수동태 가능성(${cur} ${nxt}) - Lv3 성격이니 Lv${lv}에 맞는지 확인.`);
+      }
+      if (lv === 1 && nxt === "to" && k >= 0 && NOUN_LEAD_TO.test(cur) && cl[k + 2]) {
+        push(w, `to부정사 후치수식(${cur} to ...)은 Lv2 성격 - Lv1이면 순수 명사구 권장.`);
+      }
+    }
+  });
+
+  // 4. 문장 길이 리듬 - 길이 종류가 2개 이하로 단조로울 때만(7~9처럼 이미 변화가 있으면 통과).
+  if (lengths.length >= 4) {
+    const kinds = new Set(lengths).size;
+    if (kinds <= 2) {
+      const mx = Math.max(...lengths), mn = Math.min(...lengths);
+      push("전체", `문장 길이가 ${mn}~${mx}단어(종류 ${kinds}개)로 단조롭습니다 - 길이에 리듬을 주세요.`);
+    }
+  }
+
+  // 5. 같은 단어로 시작하는 문장 과다(5문장 중 4개 이상 - 3개는 1인칭 지문에 흔해 제외).
+  const leadCount = {};
+  firstWords.forEach((f) => { if (f) leadCount[f] = (leadCount[f] || 0) + 1; });
+  Object.entries(leadCount).forEach(([lead, c]) => {
+    if (c >= 4) push("전체", `${c}개 문장이 "${lead}"로 시작합니다 - 시작 단어를 다양하게.`);
+  });
+
+  return { warnings };
+}

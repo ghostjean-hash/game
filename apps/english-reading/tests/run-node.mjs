@@ -6,7 +6,7 @@ import { dirname, join } from "node:path";
 import { tokenize, resolveTargets, matchWordTargets } from "../src/core/tokenize.js";
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
 import { chunkBoundaries, gradeSlashes, gradeChunks, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
-import { validatePassage, normalizeSmartQuotes } from "../src/core/validate.js";
+import { validatePassage, normalizeSmartQuotes, lintPassage } from "../src/core/validate.js";
 import { analyzeContent, nextCurriculumHint, buildAuthoringPackage, compareAgainstExisting, RULES_VERSION } from "../src/core/authoring-index.js";
 import { normalizeSentence, boundarySet, reasonByBoundary } from "../src/core/normalize.js";
 
@@ -410,6 +410,39 @@ function check(name, cond, detail = "") {
   check("authoring: 기존 문장 완전동일 검출", sentDup.notes.some((n) => n.kind === "dup" && /문장/.test(n.msg)));
   const clean = compareAgainstExisting({ id: "totally-fresh-abc", title: "Fresh Title", titleKr: "완전히 새로운 제목 98765", level: hint.recommendedLevel, topic: "T", sentences: [{ text: "This is a brand new sentence never used before here." }] }, passages);
   check("authoring: 깨끗한 신규는 중복 note 0", clean.notes.filter((n) => n.kind === "dup").length === 0, clean.notes.map((n) => n.msg).join(" / "));
+}
+
+// ── lint(정성 자동 경고) ──────────────────────────────
+{
+  const short = { level: 1, sentences: [{ text: "I run home." }] };
+  check("lint: Lv1 단어수 하한 경고", lintPassage(short).warnings.some((w) => /하한/.test(w.msg)));
+
+  const rhythm = { level: 1, sentences: Array.from({ length: 5 }, () => ({ text: "I open the door now." })) };
+  check("lint: 길이 리듬 경고", lintPassage(rhythm).warnings.some((w) => /단조/.test(w.msg)));
+
+  const curly = { level: 2, sentences: [{ text: "I read the book slowly every night.", grammar: [{ label: "a", note: "‘읽다’라는 뜻" }] }] };
+  check("lint: 굽은 따옴표 경고", lintPassage(curly).warnings.some((w) => /따옴표/.test(w.msg)));
+
+  const passive = { level: 2, sentences: [{ text: "The old package was delivered here just before noon." }] };
+  check("lint: 수동태 경고", lintPassage(passive).warnings.some((w) => /수동태/.test(w.msg)));
+
+  const lead = { level: 1, sentences: [{ text: "I go to school." }, { text: "I eat my lunch." }, { text: "I read a book." }, { text: "I walk back home." }, { text: "We play together." }] };
+  check("lint: 시작어 반복 경고", lintPassage(lead).warnings.some((w) => /시작/.test(w.msg)));
+
+  const clean = { level: 2, sentences: [{ text: "The quiet cafe near my house stays open until late evening." }] };
+  check("lint: 정상 문장은 단어수 경고 없음", !lintPassage(clean).warnings.some((w) => /하한|초과/.test(w.msg)));
+
+  // 현 데이터 lint 실측(정보 출력, 실패 아님 - 경고는 참고용)
+  const data = JSON.parse(readFileSync(join(here, "../src/data/passages.json"), "utf8"));
+  const all = data.courses.flatMap((c) => c.passages);
+  let total = 0;
+  const flagged = [];
+  for (const p of all) {
+    const wn = lintPassage(p).warnings;
+    total += wn.length;
+    if (wn.length) flagged.push(`${p.id}(${wn.length})`);
+  }
+  console.log(`\ni - lint 경고 실측: 현 ${all.length}편 중 ${total}건` + (flagged.length ? ` :: ${flagged.join(", ")}` : " :: 경고 0"));
 }
 
 console.log(failures === 0 ? "\n모든 테스트 통과" : `\n실패 ${failures}건`);
