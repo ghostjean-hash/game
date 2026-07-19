@@ -7,7 +7,7 @@ import { tokenize, resolveTargets, matchWordTargets } from "../src/core/tokenize
 import { createCourse, courseProgress, passageText } from "../src/core/course.js";
 import { chunkBoundaries, gradeSlashes, gradeChunks, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
 import { validatePassage, normalizeSmartQuotes, lintPassage } from "../src/core/validate.js";
-import { analyzeContent, nextCurriculumHint, buildAuthoringPackage, compareAgainstExisting, RULES_VERSION } from "../src/core/authoring-index.js";
+import { analyzeContent, nextCurriculumHint, compareAgainstExisting } from "../src/core/authoring-index.js";
 import { normalizeSentence, boundarySet, reasonByBoundary } from "../src/core/normalize.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -396,12 +396,6 @@ function check(name, cond, detail = "") {
   const hint = nextCurriculumHint(passages, idx);
   check("authoring: 다음 지문 번호 = 지문수+1", hint.nextPassageNumber === passages.length + 1);
   check("authoring: 기존 id 목록 전달", hint.existingIds.length === passages.length);
-
-  const pkg = buildAuthoringPackage(passages, { batchSize: 1 });
-  check("authoring: 패키지에 규칙/스키마 버전 포함", pkg.includes(`rulesVersion=${RULES_VERSION}`));
-  check("authoring: 패키지에 작성 규칙·양식 포함", pkg.includes("[작성 규칙]") && pkg.includes("[양식]"));
-  check("authoring: 패키지에 현재 상태 포함", pkg.includes("현재 공식 콘텐츠 상태") && pkg.includes(`${idx.totalPassages}편`));
-  check("authoring: 패키지에 앵커 포함", pkg.includes("[레벨 앵커]"));
 
   const first = passages[0];
   const idDup = compareAgainstExisting({ id: first.id, title: "X", titleKr: "임시제목", level: hint.recommendedLevel, topic: "T", sentences: [] }, passages);

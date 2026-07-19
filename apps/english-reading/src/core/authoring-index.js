@@ -1,7 +1,7 @@
-// 출제 관리(authoring) 순수 로직 - 콘텐츠 상태 분석 · 커리큘럼 힌트 · 앵커 추출 · 출제 패키지 조립 · 기존 대조.
-// DOM 미의존. 정성 출제 규칙(AUTHORING_RULES)의 단일 권위 위치다.
+// 출제 관리(authoring) 순수 로직 - 콘텐츠 상태 분석 · 커리큘럼 힌트 · 기존 대조. DOM 미의존.
+// 정성 출제 규칙(AUTHORING_RULES)의 단일 권위 위치다 - 자비스가 직접 출제할 때 따르는 규칙.
 // 역할 분리: 자동 검증 규칙의 권위는 core/validate.js(코드로 판정), 정성 규칙(자연스러움·난이도·청킹 원칙 등)의
-// 권위는 이 파일의 AUTHORING_RULES(코드로 판정 불가). 출제 패키지는 이 둘 + 현재 상태를 조립한 파생물이다.
+// 권위는 이 파일의 AUTHORING_RULES(코드로 판정 불가). 외부 LLM용 출제 패키지 조립은 폐지(2026-07-19 Claude Code 일원화).
 
 // 규칙/스키마 버전 - 규칙 문구나 JSON 스키마가 바뀌면 올린다(패키지·산출물 추적용).
 export const RULES_VERSION = "1.0.0";
@@ -16,14 +16,6 @@ export const CURRICULUM = {
 
 const OVERUSE_THRESHOLD = 3; // grammar label이 이 횟수 이상이면 '과다 사용' 힌트로 표시
 const RECENT_COUNT = 5;      // '최근 지문'으로 보여줄 개수(데이터 배열 말미 기준)
-
-// level별 기본 앵커(자동 선정하지 않음, 사람이 조정 가능한 임시 최소값).
-// 근거: 각 level의 대표 지문 - level1 가장 쉬운 기준점 / level3 상한 기준점(마지막 지문).
-export const DEFAULT_ANCHORS = [
-  { level: 1, role: "standard", id: "slow-morning-start" },
-  { level: 2, role: "standard", id: "quiet-cafe" },
-  { level: 3, role: "standard", id: "choosing-good-information" },
-];
 
 // 정성 출제 규칙 = 이 상수가 단일 권위. main.js와 출제 패키지는 이걸 참조만 하고 따로 복사하지 않는다.
 // (역할 + 양식 + 규칙 + 올바른 예시. 실제 '무엇을 만들지'의 배치 지시는 buildAuthoringPackage가 현재 상태로 생성한다.)
@@ -195,64 +187,6 @@ export function nextCurriculumHint(passages, index) {
     existingIds: list.map((p) => p.id),
     recommendedBatchSize: 1,
   };
-}
-
-// 지정한 id의 지문을 앵커로 추출(없으면 그 항목은 안전하게 생략).
-export function extractAnchors(passages, specs) {
-  const byId = {};
-  (Array.isArray(passages) ? passages : []).forEach((p) => { byId[p.id] = p; });
-  return (specs || DEFAULT_ANCHORS)
-    .map((a) => (byId[a.id] ? { level: a.level, role: a.role, passage: byId[a.id] } : null))
-    .filter(Boolean);
-}
-
-// 어느 LLM에 줘도 동일한 출제 패키지 문자열을 만든다(규칙+양식+예시 + 현재상태 + 힌트 + 앵커 + 스키마버전 + 출력요구).
-export function buildAuthoringPackage(passages, opts = {}) {
-  const list = Array.isArray(passages) ? passages : [];
-  const index = analyzeContent(list);
-  const hint = nextCurriculumHint(list, index);
-  const anchors = extractAnchors(list, opts.anchorSpecs);
-  const batchSize = opts.batchSize || hint.recommendedBatchSize || 1;
-
-  const dist = (obj) => Object.entries(obj).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(" / ") || "(없음)";
-  const anchorBlock = anchors.length
-    ? anchors.map((a) => `- level ${a.level} (${a.role}) 앵커: ${a.passage.id}\n${JSON.stringify(a.passage, null, 2)}`).join("\n\n")
-    : "(앵커 없음)";
-
-  return [
-    `[역할]`,
-    `영어 독해 학습 앱의 문제 출제자.`,
-    ``,
-    `[중요 원칙]`,
-    `어떤 LLM(ChatGPT/Gemini/Claude 등)으로 만들든 아래 규칙·스키마·출력 형식을 동일하게 따른다. 학습자가 제작 모델이 바뀐 걸 느끼면 안 된다.`,
-    `rulesVersion=${RULES_VERSION} / schemaVersion=${SCHEMA_VERSION}`,
-    ``,
-    `[현재 공식 콘텐츠 상태]`,
-    `- 공식 지문 ${index.totalPassages}편 / 문장 ${index.totalSentences}개 (최종 목표 ${CURRICULUM.targetPassages}편 · ${CURRICULUM.targetSentences}문장)`,
-    `- level 분포: ${dist(index.levelDistribution)}`,
-    `- topic 분포: ${dist(index.topicDistribution)}`,
-    `- 자주 쓰인 문법(과다 주의): ${index.overusedStructures.join(" / ") || "(없음)"}`,
-    `- 최근 지문: ${index.recentPassages.map((p) => `${p.titleKr}(Lv${p.level})`).join(", ") || "(없음)"}`,
-    `- 제목/문장 중복 현황: 제목중복 ${index.titleDuplicates.length}건 · 문장 완전동일 ${index.exactSentenceDuplicates.length}건`,
-    ``,
-    `[다음 출제 힌트] (모두 목표값 - 영어 자연스러움과 지문 흐름이 우선, 억지로 맞추지 말 것)`,
-    `- 이번에 만들 지문 수: ${batchSize}편 (지문당 정확히 ${CURRICULUM.sentencesPerPassage}문장)`,
-    `- 권장 level: ${hint.recommendedLevel} (현재 최고 level ${hint.maxLevel}, 새 난이도가 필요하면 ${hint.maxLevel + 1}도 가능)`,
-    `- 권장 topic(부족한 쪽): ${hint.recommendedTopics.join(", ") || "(자유)"}`,
-    `- 피해야 할 과다 구조: ${hint.overusedStructures.join(" / ") || "(없음)"}`,
-    `- id는 아래 기존 id와 겹치지 않는 새 영문 slug로: ${hint.existingIds.join(", ")}`,
-    ``,
-    `[레벨 앵커] (이 레벨이 실제로 어느 정도인지 보여주는 기존 검수 지문 - 난이도·청킹의 기준으로 삼아라)`,
-    anchorBlock,
-    ``,
-    `[작성 규칙]`,
-    AUTHORING_RULES,
-    ``,
-    `[출력 요구]`,
-    `- 위 규칙과 양식을 지켜 지문 ${batchSize}편을 JSON으로만 출력한다(${batchSize > 1 ? "JSON 배열" : "JSON 객체 1개"}).`,
-    `- 설명·코드블록 없이 JSON만. 지문당 정확히 ${CURRICULUM.sentencesPerPassage}문장.`,
-    `- id는 기존과 중복 금지. topic도 채운다.`,
-  ].join("\n");
 }
 
 // 생성된 지문을 기존 공식 콘텐츠와 대조한다(validatePassage와 별개 - 형식이 아니라 '기존과의 관계').

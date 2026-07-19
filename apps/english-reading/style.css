@@ -713,64 +713,6 @@ body {
    끊기 틀림·단어 담음은 딤드 없이 상태 태그(끊기·완독 / 단어·완독)로만 구분한다. */
 .passage-card.done-perfect { opacity: 0.5; }
 
-/* ── 문제 출제 화면 ── */
-.author-intro {
-  font-size: 13.5px; line-height: 1.6; color: var(--accent-strong);
-  background: var(--accent-weak, #eef2ff); border: 1px dashed var(--er-accent);
-  border-radius: var(--r-2); padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-2);
-}
-.author-label { font-size: 13px; font-weight: 800; color: var(--fg); margin: var(--sp-4) 0 var(--sp-2); }
-.author-rule, .author-input {
-  width: 100%; box-sizing: border-box;
-  font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.5;
-  color: var(--fg); background: var(--bg-elev); border: 1px solid var(--line);
-  border-radius: var(--r-2); padding: var(--sp-3); resize: vertical;
-}
-.author-rule { background: var(--bg-elev-2); color: var(--fg-dim); }
-.author-btn { display: block; width: 100%; margin-top: var(--sp-2); padding: 11px; font-size: 14px; }
-.author-btn[hidden] { display: none; } /* hidden 속성이 display:block에 덮이지 않게(#190) */
-.author-check { background: var(--bg-elev-2); color: var(--fg); border: 1px solid var(--line); cursor: pointer; border-radius: var(--r-2); font-weight: 700; }
-.author-check:hover { border-color: var(--er-accent); color: var(--er-accent); }
-.author-btn-row { display: flex; gap: var(--sp-2); margin-top: var(--sp-2); }
-.author-btn-row .author-btn { margin-top: 0; }
-.author-btn-row .author-check { flex: 1; }
-.author-clear {
-  flex: 0 0 auto; width: auto; padding-left: 20px; padding-right: 20px;
-  background: var(--bg-elev-2); color: var(--fg-dim); border: 1px solid var(--line);
-  border-radius: var(--r-2); font-weight: 700; cursor: pointer;
-}
-.author-clear:hover { border-color: var(--er-accent); color: var(--er-accent); }
-.author-result { margin-top: var(--sp-3); padding: var(--sp-3) var(--sp-4); border-radius: var(--r-2); font-size: 13px; line-height: 1.55; }
-.author-result.ok { background: var(--ok-bg); border: 1px solid var(--ok); color: var(--ok); font-weight: 700; }
-.author-result.bad { background: #fef2f2; border: 1px solid #fca5a5; color: #b91c1c; }
-.ar-head { font-weight: 800; margin-bottom: 6px; }
-.ar-row { display: flex; gap: 8px; padding: 3px 0; }
-.ar-where { flex-shrink: 0; font-weight: 700; min-width: 76px; }
-.ar-msg { color: #7f1d1d; }
-/* 출제 현재 상태 요약 */
-.author-status { margin: var(--sp-2) 0 var(--sp-3); padding: var(--sp-3) var(--sp-4); background: var(--bg-elev-2); border: 1px solid var(--line); border-radius: var(--r-2); font-size: 13px; line-height: 1.6; }
-.as-row + .as-row { margin-top: 2px; }
-.as-mute { color: var(--fg-mute); font-size: 12.5px; }
-/* 검증 결과 구획 - 형식/중복(빨강, 고쳐야 함) vs 커리큘럼 참고(주황, 추가 가능) */
-.ar-head.ar-bad { color: #b91c1c; }
-.ar-head.ar-ref { color: #b45309; margin-top: 10px; }
-.author-result.ok .ar-msg { color: var(--fg-dim); }
-.author-result.ok .ar-where { color: var(--fg); }
-.ar-ok-line { margin-top: 10px; font-weight: 800; color: var(--ok); }
-.author-mine-list { display: flex; flex-direction: column; gap: var(--sp-2); }
-.author-mine-row {
-  display: flex; align-items: center; gap: var(--sp-2);
-  padding: var(--sp-3); background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--r-2);
-}
-.amr-title { flex: 1; min-width: 0; font-size: 14px; font-weight: 700; color: var(--fg); }
-.amr-btn {
-  flex-shrink: 0; font-size: 12px; font-weight: 600; color: var(--fg-dim);
-  background: var(--bg-elev-2); border: 1px solid var(--line); border-radius: var(--r-2);
-  padding: 6px 10px; cursor: pointer;
-}
-.amr-del { color: #b91c1c; }
-.amr-del:hover { background: #fef2f2; }
-
 /* 애니메이션 */
 @keyframes er-pop {
   from { opacity: 0; transform: translateY(-6px); }

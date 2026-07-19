@@ -3,7 +3,6 @@
 import { tokenize, matchWordTargets } from "./core/tokenize.js";
 import { createCourse, courseProgress } from "./core/course.js";
 import { chunkBoundaries, gradeChunks, chunkReasons } from "./core/chunking.js";
-import { analyzeContent, nextCurriculumHint, buildAuthoringPackage, RULES_VERSION, SCHEMA_VERSION, CURRICULUM } from "./core/authoring-index.js";
 import { normalizeSentence, boundarySet, reasonByBoundary } from "./core/normalize.js";
 import { createStorage } from "../../../shared/storage.js";
 import { registerServiceWorker } from "../../../shared/ui.js";
@@ -183,11 +182,9 @@ function renderCourseList() {
   actions.className = "list-actions";
   const setBtn = document.createElement("button");
   setBtn.type = "button"; setBtn.className = "text-btn settings-open"; setBtn.textContent = "환경설정"; setBtn.onclick = openSettings;
-  const authorBtn = document.createElement("button");
-  authorBtn.type = "button"; authorBtn.className = "text-btn"; authorBtn.textContent = "출제 패키지"; authorBtn.onclick = renderAuthor;
   const guideBtn = document.createElement("button");
   guideBtn.type = "button"; guideBtn.className = "text-btn"; guideBtn.textContent = "끊는 기준"; guideBtn.onclick = openGuide;
-  actions.append(guideBtn, setBtn, authorBtn);
+  actions.append(guideBtn, setBtn);
   stage.appendChild(actions);
 }
 
@@ -836,52 +833,6 @@ function showClearModal() {
   backdrop.appendChild(modal);
   backdrop.addEventListener("click", (e) => { if (e.target === backdrop) { backdrop.remove(); renderCourseList(); } });
   document.body.appendChild(backdrop);
-}
-
-// ── 출제 패키지 (챗봇에 줄 주문서 복사 전용) ──
-// 정성 출제 규칙·패키지 조립은 core/authoring-index.js가 단일 권위. 여기서는 화면 조립만 한다.
-// 공식 콘텐츠 = 기본 passages(baseData)만(모든 지문의 단일 소스).
-const officialPassages = () => (baseData ? baseData.courses.flatMap((c) => c.passages) : []);
-
-// 출제 패키지 화면 - 새 문제를 만들 때 챗봇에 줄 '주문서'를 복사한다.
-// 앱에서 직접 입력·저장하는 기능은 폐지(2026-07-16 사용자 결정). 챗봇이 만든 JSON은 자비스에게 전달해 passages.json에 커밋한다.
-function renderAuthor() {
-  currentPassage = null;
-  setTop({ title: "출제 패키지", onBack: renderCourseList, showVocab: false });
-  const stage = el.stage;
-  stage.className = "stage author-stage";
-  stage.innerHTML = "";
-
-  const official = officialPassages();
-  const index = analyzeContent(official);
-  const hint = nextCurriculumHint(official, index);
-
-  const intro = document.createElement("p");
-  intro.className = "author-intro";
-  intro.textContent = "새 문제를 만들 때 챗봇(ChatGPT·Gemini 등)에 그대로 붙여넣을 '주문서'입니다. 어느 챗봇에 줘도 같은 규칙·현재 상태·기준 예시가 전달됩니다. 챗봇이 만든 문제(JSON)는 자비스에게 전달하면 전체에 반영됩니다.";
-  stage.appendChild(intro);
-
-  // 현재 공식 콘텐츠 상태 + 다음 권장(모두 목표값, 강제 아님)
-  const distStr = (o) => Object.entries(o).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(" · ") || "(없음)";
-  const status = document.createElement("div");
-  status.className = "author-status";
-  status.innerHTML =
-    `<div class="as-row"><b>공식 지문 ${index.totalPassages}편 · 문장 ${index.totalSentences}개</b> <span class="as-mute">(목표 ${CURRICULUM.targetPassages}편 · ${CURRICULUM.targetSentences}문장)</span></div>` +
-    `<div class="as-row as-mute">level 분포 ${distStr(index.levelDistribution)}</div>` +
-    `<div class="as-row as-mute">주제 분포 ${distStr(index.topicDistribution)}</div>` +
-    `<div class="as-row">다음 권장: <b>${hint.nextPassageNumber}번째 지문</b> · level ${hint.recommendedLevel} · 주제 ${hint.recommendedTopics.join(" / ") || "자유"}</div>`;
-  stage.appendChild(status);
-
-  // 출제 패키지(규칙 + 현재 상태 + 힌트 + 앵커를 한 덩어리로) - 복사해서 챗봇에
-  const pkg = buildAuthoringPackage(official, { batchSize: 1 });
-  const rl = document.createElement("div"); rl.className = "author-label"; rl.textContent = `출제 패키지 - 챗봇에 통째로 붙여넣기 (규칙 v${RULES_VERSION} · 스키마 v${SCHEMA_VERSION})`;
-  const ruleTa = document.createElement("textarea");
-  ruleTa.className = "author-rule"; ruleTa.readOnly = true; ruleTa.rows = 10; ruleTa.value = pkg;
-  const ruleCopy = document.createElement("button");
-  ruleCopy.type = "button"; ruleCopy.className = "btn btn-primary author-btn";
-  ruleCopy.textContent = "출제 패키지 복사";
-  ruleCopy.onclick = () => copyText(pkg, "출제 패키지를 복사했습니다. 챗봇에 붙여넣으세요.");
-  stage.append(rl, ruleTa, ruleCopy);
 }
 
 // ── 내 단어장 ──
