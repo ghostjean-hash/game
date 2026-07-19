@@ -133,7 +133,7 @@
 // v186 (2026-07-15): english-reading 두 번째 코스 'Word Order Foundations'(20지문 100문장) 추가 + 코스 고르기 화면 신설(진입 시 코스 목록 → 코스 선택 → 지문 목록). 새 100문장은 신 스키마(breakRules/naturalTranslation/wordOrderPoint) 완비, 끊는 기준 위반 6건 경계 수정. insight 하한 0 완화(쉬운 코스 수용). PWA 옛 캐시 무효화.
 // v187 (2026-07-19): english-reading Daily Life 20편 실출제 + 기존 25편 폐기(코스 word-order-foundations→daily-life 재편) + 문장 복사버튼 아이콘화. 옛 v186 캐시(25편 시험작 word-order-foundations)를 강제 폐기해 재방문·PWA 사용자에게 새 20편 반영.
 // v188 (2026-07-19): english-reading Claude Code 일원화 - 앱 '출제 패키지' 화면(외부 챗봇 주문서 복사) 제거, 홈 버튼을 [끊는 기준]·[환경설정]만으로. 옛 v187 캐시 폐기.
-const CACHE_VERSION = "v188";
+const CACHE_VERSION = "v189";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

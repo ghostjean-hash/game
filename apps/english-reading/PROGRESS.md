@@ -400,3 +400,14 @@
 - Claude Code 일원화(d1f0ef4, 사용자 "모든 작업 일원화" + "추천대로 진행 및 정리"): 출제·감수·검증을 전부 자비스 단독으로, 외부 LLM(ChatGPT/Gemini) 협업 폐지. (a) docs 재편 - CURRICULUM_REVIEW·PASSAGE_SCHEMA→docs/authoring/, ChatGPT 협업 문서(PROJECT_INSTRUCTIONS·WORKFLOW·AUTHORING_RULES.md 사본·CURRENT_CONTENT 미러)·incoming 제거, 날짜문서 4건→docs/archive/, docs/ChatGPT 폴더 삭제. (b) 앱 '출제 패키지' 화면(외부 챗봇 주문서 복사)+홈 버튼 제거(renderAuthor·officialPassages), authoring-index의 buildAuthoringPackage·extractAnchors·DEFAULT_ANCHORS 제거(검증용 analyzeContent·nextCurriculumHint·compareAgainstExisting·규칙 AUTHORING_RULES·CURRICULUM은 유지). (c) 죽은 author CSS·run-node 패키지 테스트 제거, CLAUDE.md 3.9 "출제 흐름(Claude Code 일원화)" 재작성. SW v187→v188. 새 출제 흐름 = 자비스가 docs/authoring/CURRICULUM_REVIEW.md 보고 직접 출제→validate-draft(validatePassage strict+compareAgainstExisting+lintPassage)→passages.json 반영→SW bump·push 배포.
 - 검증: 각 단계 run-node 전량 통과, browser 실제 배포 URL 2회(v187 20편·v188 출제패키지 버튼 사라짐) 콘솔 0, standalone 229→223KB(출제패키지 코드 제거로 감소).
 - 2.45 잔여 해소: (1) deploy.json 정비 완료 · (4) incoming 제거 완료. 남은 잔여: 코스 구조(다음 topic 추가 시 결정), 숙어 배정 대조 lint(커리큘럼 숙어표 데이터화 선행).
+
+## 2.47. 지문 20편 추가 - Daily Life 28편 완성 + Relationships 코스 신설 (2026-07-19, 2.46 후속)
+
+Claude Code 일원화 체계(2.46)로 확정한 출제 흐름을 처음 그대로 밟아 커리큘럼 통번호 21~40번 20편을 만든 세션. 사용자가 먼저 "20문제 추가 시 어떤 프로세스로 만드나"를 설명 요청(실제 제작 없이)했고, "5편씩 쪼개나 한 번에 하나" 질문에 4배치 병렬 방식을 답한 뒤, "Daily Life 28편까지 채우고 Relationships 12편, 20편 만들어줘" 지시로 실제 제작에 들어갔다.
+
+- 코스 구조 결정(사용자 명시): Daily Life를 커리큘럼 정원 28편까지 채우고(21~28, 8편) Relationships 코스를 신설해 29~40(12편)을 넣는다. passages.json courses 배열에 relationships 코스(id "relationships", title "Relationships") 신설, daily-life는 20→28편.
+- 4배치 병렬 출제(worktree 불요 - 각 에이전트가 passages.json 무수정, scratchpad 전용 draft 파일에만 Write + 자체 validate-draft 통과): A) DL 21~24 Lv2(set up/air out/clear out/come up with) B) DL 25~28 Lv3(set the tone/pitch in/pile up/build up, insight 4문장) C) Rel 29~34 Lv1(숙어 없음) D) Rel 35~40 Lv2(make up/clear up/get along/cheer up/help out/count on). 2.45 세션의 공유 파일 동시 조작 사고를 draft-only 방식으로 원천 차단.
+- 취합·최종검증은 자비스 직접 수행: 4배치 합본 20편을 validate-draft로 재검증(배치 간 id·문장 중복 포함) 통과 20/0. passages.json 반영 후 run-node strict 전체 통과, 새 20편 정성 lint 경고 0(기존 20편 12건만 잔존). standalone 재빌드(223→358KB).
+- browser-shot 실경로 3종: 홈에 코스 2개(Daily Life 28편·Relationships 12편) 노출 / Relationships Lv1 첫 지문 열어 전체해석 채점(직독직해 덩어리·끊는 이유 태그·자연스러운 완역·핵심 어순·문법 토글·끊기 채점 마크) / Daily Life Lv3 마지막 지문(관계절·build up 숙어) 동일 확인, 3종 모두 콘솔 0.
+- 배포: 사용자가 "배포할까요?" 질문에 /jc(봉합=commit+push)로 응답 → push 승인으로 해석(2.46에서 확립: main push = GitHub Pages 자동 배포). 재방문 PWA 사용자 갱신 위해 SW 캐시 v188→v189 bump 동반.
+- 잔여: 코스 구조는 Daily Life·Relationships 2개로 확장됨, 다음은 커리큘럼 41번(Travel) 이후. 숙어 배정 대조 lint(커리큘럼 숙어표 데이터화 선행)는 미구현 유지.
