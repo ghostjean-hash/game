@@ -135,7 +135,8 @@
 // v188 (2026-07-19): english-reading Claude Code 일원화 - 앱 '출제 패키지' 화면(외부 챗봇 주문서 복사) 제거, 홈 버튼을 [끊는 기준]·[환경설정]만으로. 옛 v187 캐시 폐기.
 // v189 (2026-07-19): english-reading 지문 20편 추가 - Daily Life 28편 + Relationships 코스 신설(총 40편). 옛 v188 캐시 폐기.
 // v190 (2026-07-21): english-reading 난이도 우선 개편 - 코스 축을 주제→난이도(Level 1/2/3)로 전환. 레벨 선택 시 여러 주제의 같은 난이도 지문이 모임(createLevelCourses), 지문 카드에 주제 배지. 옛 v189 캐시 폐기.
-const CACHE_VERSION = "v190";
+// v191 (2026-07-21): english-reading 지문 40편 추가 - Relationships 18편 완성 + Travel 18편·Health 16편 코스 신설(총 80편). 옛 v190 캐시 폐기.
+const CACHE_VERSION = "v191";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
