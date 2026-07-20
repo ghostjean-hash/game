@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { tokenize, resolveTargets, matchWordTargets } from "../src/core/tokenize.js";
-import { createCourse, courseProgress, passageText } from "../src/core/course.js";
+import { createCourse, createLevelCourses, courseProgress, passageText } from "../src/core/course.js";
 import { chunkBoundaries, gradeSlashes, gradeChunks, boundaryReason, chunkReasons, chunkViolations } from "../src/core/chunking.js";
 import { validatePassage, normalizeSmartQuotes, lintPassage } from "../src/core/validate.js";
 import { analyzeContent, nextCurriculumHint, compareAgainstExisting } from "../src/core/authoring-index.js";
@@ -67,6 +67,34 @@ function check(name, cond, detail = "") {
   check("progress: 중복·미존재 id 무시", pDup.done === 1);
 
   check("passageText: 문장 이어붙임", passageText({ sentences: [{ text: "A B." }, { text: "C D." }] }) === "A B. C D.");
+}
+
+// ── createLevelCourses (난이도 우선 재그룹핑) ──────────────────────────────
+{
+  const courseList = [
+    { id: "topicA", title: "Topic A", passages: [
+      { id: "a1", level: 1, topic: "A", sentences: [{ text: "x" }] },
+      { id: "a2", level: 2, topic: "A", sentences: [{ text: "y" }] },
+      { id: "a3", level: 1, topic: "A", sentences: [{ text: "z" }] },
+    ] },
+    { id: "topicB", title: "Topic B", passages: [
+      { id: "b1", level: 2, topic: "B", sentences: [{ text: "p" }] },
+      { id: "b2", level: 1, topic: "B", sentences: [{ text: "q" }] },
+    ] },
+  ];
+  const levels = createLevelCourses(courseList);
+  check("levelCourses: level별 코스 생성(오름차순)", levels.map((c) => c.level).join(",") === "1,2");
+  check("levelCourses: 기본 제목 Level N", levels[0].title === "Level 1");
+  const lv1 = levels[0];
+  check("levelCourses: Lv1에 모든 주제의 Lv1 지문 취합", lv1.passageCount === 3);
+  // 레벨 안은 주제 등장 순서(A→B)로 묶고, 같은 주제는 원래 순서 유지
+  check("levelCourses: 주제별로 묶고 원래 순서 유지", lv1.passages.map((p) => p.id).join(",") === "a1,a3,b2");
+  check("levelCourses: passageById 동작", lv1.passageById("b2").topic === "B");
+  const labeled = createLevelCourses(courseList, { 1: "입문" });
+  check("levelCourses: labels로 제목 지정", labeled[0].title === "입문");
+  // courseProgress는 레벨 코스에도 그대로 동작
+  const pg = courseProgress(lv1, ["a1", "a3", "b2"]);
+  check("levelCourses: courseProgress 재사용(전체 완독 cleared)", pg.cleared === true);
 }
 
 // ── chunkBoundaries / gradeSlashes (끊어 읽기 채점) ──────────────────────────────

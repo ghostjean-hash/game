@@ -1,7 +1,7 @@
 // 하이브리드 독해 - 몰입 리딩 + 끊어 읽기 직접 긋기·채점 + 코스 진행·전체 클리어.
 // 순수 로직은 core(tokenize·course·chunking)에 위임하고, 여기서 DOM만 만진다.
 import { tokenize, matchWordTargets } from "./core/tokenize.js";
-import { createCourse, courseProgress } from "./core/course.js";
+import { createLevelCourses, courseProgress } from "./core/course.js";
 import { chunkBoundaries, gradeChunks, chunkReasons } from "./core/chunking.js";
 import { normalizeSentence, boundarySet, reasonByBoundary } from "./core/normalize.js";
 import { createStorage } from "../../../shared/storage.js";
@@ -60,8 +60,10 @@ const getSettings = () => ({ chunks: true, words: true, scope: true, ...(store.g
 
 // 모든 지문은 passages.json 단일 소스(앱에서 직접 입력·저장하는 기능은 폐지, 2026-07-16 사용자 결정).
 // 새 문제는 JSON을 자비스에게 주면 자비스가 passages.json에 커밋해 전체 배포한다.
+// 난이도 우선(2026-07-21): 주제별로 저장된 코스를 난이도(Level)별로 재편해 보여준다.
+const LEVEL_LABELS = { 1: "Level 1 · 입문", 2: "Level 2 · 기초", 3: "Level 3 · 중급" };
 function rebuildCourse() {
-  courses = baseData.courses.map((c) => createCourse(c));
+  courses = createLevelCourses(baseData.courses, LEVEL_LABELS);
   // 재빌드 후 현재 코스 참조 갱신(사라졌으면 해제)
   if (course) course = courses.find((c) => c.id === course.id) || null;
 }
@@ -158,19 +160,22 @@ function renderCourseList() {
 
   const summary = document.createElement("div");
   summary.className = "list-summary";
-  summary.innerHTML = `<b>코스 ${courses.length}개</b> · 수집 단어 ${getVocab().length}개`;
+  summary.innerHTML = `<b>난이도 ${courses.length}단계</b> · 수집 단어 ${getVocab().length}개`;
   stage.appendChild(summary);
 
   const list = document.createElement("div");
   list.className = "passage-list";
   courses.forEach((c) => {
     const prog = courseProgress(c, done);
+    // 이 레벨에 어떤 주제들이 섞여 있는지 부제로 보여준다(난이도 우선 - 한 레벨에 여러 주제).
+    const topics = [...new Set(c.passages.map((p) => p.topic).filter(Boolean))];
+    const sub = `${c.passageCount}개 지문${topics.length ? " · " + topics.join(" · ") : ""}`;
     const card = document.createElement("button");
     card.type = "button";
     card.className = "passage-card course-card";
     card.innerHTML =
       `<span class="pc-body"><span class="pc-title">${c.title}${prog.cleared ? ' <span class="mine-badge">완주 ✓</span>' : ""}</span>` +
-      `<span class="pc-en">${c.passageCount}개 지문</span></span>` +
+      `<span class="pc-en">${sub}</span></span>` +
       `<span class="pc-status${prog.cleared ? " done" : ""}">${prog.done} / ${prog.total}편</span>`;
     card.onclick = () => renderList(c);
     list.appendChild(card);
@@ -239,8 +244,9 @@ function renderList(c) {
       status = (r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음";
     }
     card.className = "passage-card" + (perfect ? " done-perfect" : "");
+    // 같은 레벨 안이라 Lv 배지 대신 주제(topic) 배지를 보여준다(난이도 우선).
     card.innerHTML =
-      `<span class="lv">Lv ${p.level}</span>` +
+      `<span class="lv topic">${p.topic || ""}</span>` +
       `<span class="pc-body"><span class="pc-title">${p.titleKr}</span><span class="pc-en">${p.title}</span></span>` +
       `<span class="pc-status${isDone ? " done" : ""}">${status}</span>`;
     card.onclick = () => renderReading(p);
