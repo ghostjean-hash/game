@@ -24,22 +24,22 @@ import { spawnFriend, stepFriend, gainFriendLevel, friendTakeHit, reviveFriend }
 import { CFG } from '../src/data/numbers.js';
 
 const mkGame = () => ({ front: 1, options: [], zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [], player: { x: 100, y: 100 } });
-// ── frontSpec: 메인 총알 1~8, 단계마다 탄 +1(개별 탄 균일, tier 0) ──
+// ── frontSpec: 메인 총알 1~6, 단계마다 탄 +1(개별 탄 균일, tier 0) ──
 test('frontSpec 1 = 1발 dmg1 tier0', () => { const s = frontSpec(1); eq(s.bullets.length, 1); eq(s.bullets[0].dmg, 1); eq(s.bullets[0].tier, 0); });
 test('frontSpec 2 = 2발 dmg1', () => { const s = frontSpec(2); eq(s.bullets.length, 2); eq(s.bullets[0].dmg, 1); });
 test('frontSpec 3 = 3발 dmg2', () => { const s = frontSpec(3); eq(s.bullets.length, 3); eq(s.bullets[0].dmg, 2); });
-test('frontSpec 8 = 8발 dmg4 전부 tier0', () => { const s = frontSpec(8); eq(s.bullets.length, 8); ok(s.bullets.every((b) => b.dmg === 4 && b.tier === 0)); });
-test('frontSpec 1~8 단계마다 탄 +1', () => {
-  for (let L = 2; L <= 8; L++) ok(frontSpec(L).bullets.length === frontSpec(L - 1).bullets.length + 1, `L${L} 탄 수 미증가`);
+test('frontSpec 6 = 6발 dmg3 전부 tier0', () => { const s = frontSpec(6); eq(s.bullets.length, 6); ok(s.bullets.every((b) => b.dmg === 3 && b.tier === 0)); });
+test('frontSpec 1~6 단계마다 탄 +1', () => {
+  for (let L = 2; L <= 6; L++) ok(frontSpec(L).bullets.length === frontSpec(L - 1).bullets.length + 1, `L${L} 탄 수 미증가`);
 });
-test('frontSpec 9단계 이상 탄 수 8 고정', () => { for (let f = 9; f <= 88; f++) eq(frontSpec(f).bullets.length, 8); });
-test('frontSpec 상한 clamp', () => { eq(frontSpec(999).bullets.length, 8); });
-// ── 발별 진화: 8발 채운 뒤 가운데 탄부터 한 발씩 티어 상승(사이드와 같은 공식, 8스텝마다 tier+1, 최대 10) ──
-test('frontSpec 9 = 가운데 1발만 tier1', () => { const t = frontSpec(9).bullets.map((b) => b.tier); eq(t.filter((x) => x === 1).length, 1); eq(t.filter((x) => x === 0).length, 7); });
-test('frontSpec 16 = 전원 tier1', () => { ok(frontSpec(16).bullets.every((b) => b.tier === 1)); });
-test('frontSpec 88 = 전원 tier10(최대)', () => { ok(frontSpec(88).bullets.every((b) => b.tier === 10)); });
-test('frontSpec 진화 탄 데미지 = 4 + 그 탄 tier', () => {
-  const s = frontSpec(50); for (const b of s.bullets) eq(b.dmg, 4 + b.tier); // 8발 baseDmg 4 + 발별 tier
+test('frontSpec 7단계 이상 탄 수 6 고정', () => { for (let f = 7; f <= 66; f++) eq(frontSpec(f).bullets.length, 6); });
+test('frontSpec 상한 clamp', () => { eq(frontSpec(999).bullets.length, 6); });
+// ── 발별 진화: 6발 채운 뒤 가운데 탄부터 한 발씩 티어 상승(사이드와 같은 공식, 6스텝마다 tier+1, 최대 10) ──
+test('frontSpec 7 = 가운데 1발만 tier1', () => { const t = frontSpec(7).bullets.map((b) => b.tier); eq(t.filter((x) => x === 1).length, 1); eq(t.filter((x) => x === 0).length, 5); });
+test('frontSpec 12 = 전원 tier1', () => { ok(frontSpec(12).bullets.every((b) => b.tier === 1)); });
+test('frontSpec 66 = 전원 tier10(최대)', () => { ok(frontSpec(66).bullets.every((b) => b.tier === 10)); });
+test('frontSpec 진화 탄 데미지 = 3 + 그 탄 tier', () => {
+  const s = frontSpec(50); for (const b of s.bullets) eq(b.dmg, 3 + b.tier); // 6발 baseDmg 3 + 발별 tier
 });
 // ── speedMul: 강화 3단계마다 속도 한 계단(1 + floor(tier/3)*0.15) ──
 const near = (a, b) => Math.abs(a - b) < 1e-9;
@@ -47,25 +47,25 @@ test('speedMul 0~2 = 1(계단 전)', () => { ok(near(speedMul(0), 1)); ok(near(s
 test('speedMul 3 = 1.15(첫 계단)', () => { ok(near(speedMul(3), 1.15)); });
 test('speedMul 9 = 1.45(세 계단)', () => { ok(near(speedMul(9), 1.45)); });
 
-// ── optionSlot: 좌우 번갈아, 안→밖, 8대 전부 레이저(미사일 없음) ──
+// ── optionSlot: 좌우 번갈아, 안→밖, 6대 전부 레이저(미사일 없음) ──
 test('optionSlot 0 = 왼쪽 slot0 레이저', () => { const s = optionSlot(0); eq(s.side, -1); eq(s.slot, 0); eq(s.type, 'laser'); });
 test('optionSlot 1 = 오른쪽 slot0 레이저', () => { const s = optionSlot(1); eq(s.side, 1); eq(s.slot, 0); eq(s.type, 'laser'); });
 test('optionSlot 4 = 왼쪽 slot2 레이저(미사일 아님)', () => { const s = optionSlot(4); eq(s.side, -1); eq(s.slot, 2); eq(s.type, 'laser'); });
-test('optionSlot 전부 laser', () => { for (let n = 0; n < 8; n++) eq(optionSlot(n).type, 'laser'); });
+test('optionSlot 전부 laser', () => { for (let n = 0; n < 6; n++) eq(optionSlot(n).type, 'laser'); });
 
 // ── 파츠 획득 상한 ──
-test('gainFront 88에서 상한(1~88)', () => {
+test('gainFront 66에서 상한(1~66)', () => {
   const g = mkGame(); let n = 0; while (gainFront(g)) n++;
-  eq(g.front, 88); eq(n, 87);
+  eq(g.front, 66); eq(n, 65);
 });
-test('gainOption 8대 채운 뒤 사이드 총알 80단계 발별 진화', () => {
+test('gainOption 6대 채운 뒤 사이드 총알 60단계 발별 진화', () => {
   const g = mkGame(); let n = 0; while (gainOption(g)) n++;
-  eq(g.options.length, 8); eq(g.optionEvo, 80); eq(n, 88); // 8대(+8) + 진화(+80)
+  eq(g.options.length, 6); eq(g.optionEvo, 60); eq(n, 66); // 6대(+6) + 진화(+60)
 });
 test('사이드 진화는 옵션 대수보다 먼저 역순 손실', () => {
-  const g = mkGame(); while (gainOption(g)) {} // 8대 + optionEvo 80
-  eq(loseLastPart(g), 'optionEvo'); eq(g.optionEvo, 79);
-  eq(loseLastPart(g), 'optionEvo'); eq(g.optionEvo, 78);
+  const g = mkGame(); while (gainOption(g)) {} // 6대 + optionEvo 60
+  eq(loseLastPart(g), 'optionEvo'); eq(g.optionEvo, 59);
+  eq(loseLastPart(g), 'optionEvo'); eq(g.optionEvo, 58);
 });
 test('gainZone 5레벨에서 상한 + pulses 준비', () => {
   const g = mkGame(); let n = 0; while (gainZone(g)) n++; eq(g.zone.level, 5); eq(n, 5); ok(Array.isArray(g.zone.pulses));

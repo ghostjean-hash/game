@@ -44,17 +44,17 @@ export const CFG = {
   enemyBullet: { speed: 250, r: 5 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
   parts: {
-    // 전방 화력(= 메인 총알): front 1~88 = 강화 단계. 사용자 확정 2026-07-10(발별 순차 - 총알 하나씩):
-    //   1~8단계 = 발 1개씩 추가(1→8발). 9단계~ = 8발 고정, 가운데 탄부터 한 발씩 모양 진화(8스텝마다 그 탄 tier +1).
-    //   tierMax = 모양 티어 최대(10), shapeDmg = 티어당 데미지 증가. rGrow=0(탄 크기 고정). vStagger = V자 대형.
-    //   88 = 8(탄수) + 80(8발×10티어). 빔 형태 패턴은 view가 각 탄 tier로 그린다.
-    front: { max: 88, rBase: 3.0, rGrow: 0, laneGap: 12, tierMax: 10, shapeDmg: 1, vStagger: 0.42 },
+    // 전방 화력(= 메인 총알): front 1~66 = 강화 단계. 사용자 확정 2026-07-10(발별 순차 - 총알 하나씩), 발 수 6으로 조정 2026-07-21:
+    //   1~6단계 = 발 1개씩 추가(1→6발). 7단계~ = 6발 고정, 가운데 탄부터 한 발씩 모양 진화(6스텝마다 그 탄 tier +1).
+    //   maxShots = 최대 탄 수(진화 한 바퀴 스텝 수와 동일). tierMax = 모양 티어 최대(10), shapeDmg = 티어당 데미지 증가. rGrow=0(탄 크기 고정). vStagger = V자 대형.
+    //   66 = 6(탄수) + 60(6발×10티어). 빔 형태 패턴은 view가 각 탄 tier로 그린다.
+    front: { max: 66, maxShots: 6, rBase: 3.0, rGrow: 0, laneGap: 12, tierMax: 10, shapeDmg: 1, vStagger: 0.42 },
     option: {
-      maxPerSide: 4,          // 좌우 각 4대 → 총 8대
+      maxPerSide: 3,          // 좌우 각 3대 → 총 6대
       baseX: 30, stepX: 15,   // 안쪽부터 바깥으로 x 간격
       baseY: 4, stepY: 14,    // 슬롯 뒤로 갈수록 약간 아래
       follow: 9,              // 플레이어 추종 속도(초당 비율)
-      // 8대 전부 레이저(= 사이드 총알). 8대 채운 뒤 안쪽(rank 0)부터 한 발씩 모양 진화(발별 순차, 8스텝마다 티어↑).
+      // 6대 전부 레이저(= 사이드 총알). 6대 채운 뒤 안쪽(rank 0)부터 한 발씩 모양 진화(발별 순차, 6스텝마다 티어↑).
       //   옵션 수↑ → 굵기(laserR)·데미지 상승. 진화 tier↑ → 데미지·형태·속도 상승. 부채: laserDiagBase + slot×laserDiagStep.
       //   laserSpeed는 각 탄 tier로 3단계마다↑(fire.speedMul). 진화 최대 단계는 색 배열 길이로 산출(parts).
       laserEvery: 0.176, laserDmg: 1, laserDmgGrow: 0.5, laserSpeed: 640,
@@ -182,7 +182,7 @@ export const CFG = {
   boss: { bobAmp: 0.32, bobFreq: 0.15, bobRamp: 7, spawnTop: 62 },
   // 보스 사망 연출: 즉시 사라지지 않고 dur초 동안 몸 전체에서 연쇄 폭발 + 화면 흔들림, 끝에 큰 폭발.
   //   burstEvery=연쇄 폭발 간격(초), burstN=폭발당 파티클, shake=화면 흔들림 최대 픽셀, dur/finalDur=중보스/최종보스 연출 길이.
-  bossDeath: { burstEvery: 0.1, burstN: 16, shake: 13, dur: 1.6, finalDur: 2.8, finalBurstN: 52 },
+  bossDeath: { burstEvery: 0.1, burstN: 16, shake: 13, dur: 2, finalDur: 2, finalBurstN: 52 }, // HP 0 후 2초간 폭발하고 사라짐(사용자 지시 2026-07-21)
   // 부위 파괴형 보스(docs/06). 스타일 = 코어 + 부위(weapon 포탑 / shield 방어구).
   //   총 hp(miniBoss/finalBoss 공식)를 coreRatio(코어) + 각 부위 hpRatio 합으로 나눈다(합 = 1).
   //   role weapon = 자기 발사 패턴 보유(부수면 그 패턴 영구 정지). role shield = 코어를 가림(다 부수면 코어 노출).

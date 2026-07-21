@@ -9,7 +9,7 @@ const OPT = CFG.parts.option;
 const ZONE = CFG.parts.zone;
 const TAIL = CFG.parts.tail;
 
-// n번째(0-based) 옵션 슬롯 정의: 좌우 번갈아, 안(0)→밖(3). 8대 전부 레이저(미사일은 꼬리 비행기로 이관).
+// n번째(0-based) 옵션 슬롯 정의: 좌우 번갈아, 안(0)→밖(2). 6대 전부 레이저(미사일은 꼬리 비행기로 이관).
 export function optionSlot(n) {
   const side = n % 2 === 0 ? -1 : 1;
   const slot = Math.floor(n / 2);
@@ -57,7 +57,7 @@ export function addTail(game) {
 }
 
 // ── 파츠 획득(P/S/E/T). 만렙이면 false(소리·history 없음) ──
-// 전방화력은 front 정수 하나(1~40)로 탄 수(1~8)와 발별 진화(9~40)를 모두 표현한다(docs/05 1.1.1).
+// 전방화력은 front 정수 하나(1~66)로 탄 수(1~6)와 발별 진화(7~66)를 모두 표현한다(docs/05 1.1.1).
 export function gainFront(game) {
   if (game.front < CFG.parts.front.max) {
     game.front++;
@@ -68,7 +68,7 @@ export function gainFront(game) {
 }
 export function gainOption(game) {
   if (addOption(game)) { game.partHistory.push('option'); return true; }
-  // 사이드 8대를 다 채운 뒤 S를 더 먹으면 안쪽(rank 0)부터 한 발씩 진화(발별 순차). 8대×10티어 = 80단계.
+  // 사이드 6대를 다 채운 뒤 S를 더 먹으면 안쪽(rank 0)부터 한 발씩 진화(발별 순차). 6대×10티어 = 60단계.
   const evoMax = (COLORS.bulletShapeTier.length - 1) * OPT.maxPerSide * 2;
   if ((game.optionEvo || 0) < evoMax) {
     game.optionEvo = (game.optionEvo || 0) + 1;
@@ -110,7 +110,7 @@ export function loseLastPart(game) {
   return part || null;
 }
 
-// 옵션 위치 추종 + 발사(8대 전부 레이저). 옵션 수↑ → 굵기·데미지 상승. 아군 탄은 game.bullets에 kind로 구분.
+// 옵션 위치 추종 + 발사(6대 전부 레이저). 옵션 수↑ → 굵기·데미지 상승. 아군 탄은 game.bullets에 kind로 구분.
 export function stepOptions(game, dt, canFire = true) {
   const p = game.player;
   if (!p) return;
@@ -131,8 +131,8 @@ export function stepOptions(game, dt, canFire = true) {
     // 사이드 총알은 부채로 퍼진다: 안쪽(slot 0) 살짝, 바깥으로 갈수록 크게. side로 좌/우.
     const deg = OPT.laserDiagBase + o.slot * OPT.laserDiagStep;
     const rad = (o.side * deg * Math.PI) / 180;
-    // 진화 tier: 8대 채운 뒤 안쪽(rank 0)부터 한 발씩 진화(발별 순차). 8스텝마다 티어 +1.
-    const tier = evo >= o.rank + 1 ? Math.min(Math.floor((evo - (o.rank + 1)) / 8) + 1, maxTier) : 0;
+    // 진화 tier: 사이드 전 대수(maxPerSide×2)를 채운 뒤 안쪽(rank 0)부터 한 발씩 진화(발별 순차). 그 대수 스텝마다 티어 +1.
+    const tier = evo >= o.rank + 1 ? Math.min(Math.floor((evo - (o.rank + 1)) / (OPT.maxPerSide * 2)) + 1, maxTier) : 0;
     const speed = OPT.laserSpeed * speedMul(tier);       // 진화한 탄일수록 속도↑
     game.bullets.push({ x: o.x, y: o.y - 6, vx: Math.sin(rad) * speed, vy: -Math.cos(rad) * speed, r: laserR, dmg: laserDmg + tier, kind: 'laser', tier });
   }

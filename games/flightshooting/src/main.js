@@ -27,7 +27,6 @@ const canvas = $('#board');
 const ctx = canvas.getContext('2d');
 const elScore = $('#score');
 const elStage = $('#stage');
-const elLoc = $('#hud-loc'); // 현재 여행 중인 나라·수도(HUD)
 const elFront = $('#front');
 const elOption = $('#option');
 const elZone = $('#zone');
@@ -204,15 +203,17 @@ function setPartHud(el, val, max) {
 // 발별 진화 계통(메인·사이드): 카운트 채우는 중이거나 진화 전이면 카운트 숫자, 진화 시작하면 로마·아라비아.
 //   완전 마스터(8발 전부 최고 티어 = evo가 tierMax*8)면 주황.
 function setEvoHud(el, count, countMax, evo, tierMax) {
+  // 진화 한 바퀴 스텝 = 발/대 수(countMax). 메인·사이드 모두 6.
   if (count < countMax || !evo) { el.textContent = count; el.classList.remove('mastered'); return; }
-  const tier = Math.min(Math.floor((evo - 1) / 8) + 1, tierMax);
-  const sub = ((evo - 1) % 8) + 1; // 1~8
+  const tier = Math.min(Math.floor((evo - 1) / countMax) + 1, tierMax);
+  const sub = ((evo - 1) % countMax) + 1; // 1~countMax
   el.textContent = tierText(tier, sub);
-  el.classList.toggle('mastered', evo >= tierMax * 8);
+  el.classList.toggle('mastered', evo >= tierMax * countMax);
 }
 function setFrontHud() {
-  // 메인 총알: front 1~7 = 탄 수, 8 = 탄수 만렙, 9~88 = 발별 진화(evo = front-8).
-  setEvoHud(elFront, game.front, 8, Math.max(0, game.front - 8), CFG.parts.front.tierMax);
+  // 메인 총알: front 1~5 = 탄 수, 6 = 탄수 만렙, 7~66 = 발별 진화(evo = front-maxShots).
+  const ms = CFG.parts.front.maxShots;
+  setEvoHud(elFront, game.front, ms, Math.max(0, game.front - ms), CFG.parts.front.tierMax);
 }
 // 꼬리기: 4대 미만이면 대수, 4대 후엔 무기 티어(최저 무기 단계 = 로마) + 서브스텝(다음 단계로 오른 대수). 완전 마스터면 주황.
 function setTailHud() {
@@ -231,8 +232,6 @@ function setTailHud() {
 function syncHud() {
   elScore.textContent = game.score;
   elStage.textContent = game.stage;
-  const c = COUNTRIES[game.tourIdx]; // 현재 여행 나라·수도(구역 이름 문자열 대신 표시)
-  if (c) elLoc.textContent = `${c.ko} · ${c.cap}`;
   setFrontHud();
   setEvoHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2, game.optionEvo || 0, COLORS.bulletShapeTier.length - 1);
   setPartHud(elZone, game.zone.level, CFG.parts.zone.levelMax);
@@ -245,7 +244,12 @@ function syncHud() {
 }
 
 function showBanner(big, sub, dur = 1.6) {
-  elBanner.innerHTML = `<span class="banner-big">${big}</span>` + (sub ? `<span class="banner-sub">${sub}</span>` : '');
+  // 나라\n도시 형태(여행 배너)면 나라(작게·하늘색)·도시 두 줄로 나눠 각각 외곽선 스타일을 준다. 그 외(구역 클리어 등)는 기본.
+  const nl = big.indexOf('\n');
+  const bigHtml = nl >= 0
+    ? `<span class="banner-country">${big.slice(0, nl)}</span><span class="banner-city">${big.slice(nl + 1)}</span>`
+    : `<span class="banner-big">${big}</span>`;
+  elBanner.innerHTML = bigHtml + (sub ? `<span class="banner-sub">${sub}</span>` : '');
   elBanner.hidden = false;
   bannerTimer = dur;
 }
@@ -360,7 +364,7 @@ async function gameOver() {
   const isBest = commitBest();
   const choice = await showModal({
     title: '격추당했다',
-    body: `점수 ${game.score}${isBest ? '\n★ 최고 기록 갱신!' : `\n최고 ${best}`}`,
+    body: `점수 ${game.score}${isBest ? '\n최고 기록 갱신!' : `\n최고 ${best}`}`,
     actions: [
       { label: '다시하기', primary: true, value: 'retry' },
       { label: '홈', value: 'home' },
@@ -378,7 +382,7 @@ async function gameWon() {
   const isBest = commitBest();
   const choice = await showModal({
     title: '전 구역 격파!',
-    body: `${CFG.stageCount}개 구역의 모든 보스를 쓰러뜨렸다.\n최종 점수 ${game.score}${isBest ? '\n★ 최고 기록 갱신!' : ''}`,
+    body: `${CFG.stageCount}개 구역의 모든 보스를 쓰러뜨렸다.\n최종 점수 ${game.score}${isBest ? '\n최고 기록 갱신!' : ''}`,
     actions: [
       { label: '다시하기', primary: true, value: 'retry' },
       { label: '홈', value: 'home' },
@@ -416,7 +420,7 @@ function showMap() {
   loop.pause();
   mapCard.hidden = true;
   mapHint.hidden = false;
-  mapTitle.textContent = '다음 목적지를 골라라';
+  mapTitle.textContent = '다음 목적지를 골라주세요';
   mapOverlay.hidden = false; // 먼저 표시해 map-viewport 실제 크기를 확보(화면 꽉 채우기)
   renderMap(cur, cands);
 }
@@ -468,8 +472,12 @@ function cityMark(i, mk, dotColor, s, clickable, faint) {
     capY = cy.toFixed(1);
     nameY = (cy - mk.cap * s * 0.92 - CFG.tour.mark.nameLift * s).toFixed(1); // 나라 - 수도 위 + 추가로 올림
   }
-  const nameEl = `<text x="${nameX}" y="${nameY}" text-anchor="${anchor}" font-size="${nameFs}" font-weight="600" fill="${COLORS.tour.countryLabel}">${C.ko}</text>`;
-  const capEl = `<text x="${capX}" y="${capY}" text-anchor="${anchor}" font-size="${capFs}" font-weight="700" fill="${dotColor}">${C.cap}</text>`;
+  // 여행지(발리·하와이)는 윗줄=소속국(cap)·아랫줄=여행지명(ko)으로 표기(사용자 지시: 인도네시아 → 발리 순).
+  //   일반 나라는 윗줄=나라(ko)·아랫줄=수도(cap) 유지.
+  const topLabel = C.type === 'travel' ? C.cap : C.ko;
+  const botLabel = C.type === 'travel' ? C.ko : C.cap;
+  const nameEl = `<text x="${nameX}" y="${nameY}" text-anchor="${anchor}" font-size="${nameFs}" font-weight="600" fill="${COLORS.tour.countryLabel}">${topLabel}</text>`;
+  const capEl = `<text x="${capX}" y="${capY}" text-anchor="${anchor}" font-size="${capFs}" font-weight="700" fill="${dotColor}">${botLabel}</text>`;
   return open + dotEl + nameEl + capEl + '</g>';
 }
 
@@ -557,10 +565,30 @@ function chooseDest(dest) {
     game.tourPath.push(dest);
     mapCard.innerHTML = `${COUNTRIES[dest].ko} 도착!<br>수도는 <b>${COUNTRIES[dest].cap}</b>`;
     mapCard.hidden = false;
+    placeCardOverCity(dest); // 화면 중앙 대신 도착한 도시 바로 위에 카드를 띄운다(사용자 지시)
     sound.play('start'); // 도착 효과음(기존 사운드 재사용)
     flyRaf = 0;
     setTimeout(closeMapAndAdvance, CFG.tour.cardTime * 1000);
   });
+}
+
+// 도착 카드를 dest 도시의 화면 위치 바로 위에 놓는다(SVG 좌표 → 화면 px는 getScreenCTM으로 정확 변환).
+function placeCardOverCity(dest) {
+  const svg = mapViewport.querySelector('svg');
+  if (!svg || !svg.getScreenCTM) return;
+  const m = svg.getScreenCTM();
+  if (!m) return;
+  const pt = svg.createSVGPoint();
+  pt.x = cityX(dest); pt.y = cityY(dest);
+  const scr = pt.matrixTransform(m);
+  const parent = (mapCard.offsetParent || document.body).getBoundingClientRect();
+  const cx = scr.x - parent.left, cyScr = scr.y - parent.top;
+  const cardH = mapCard.offsetHeight || 60;
+  const GAP = 38; // 핀·라벨을 가리지 않는 카드-도시 간격(화면 px)
+  let top = cyScr - GAP - cardH;   // 기본: 도시 핀 바로 위(카드 상단 y)
+  if (top < 8) top = cyScr + GAP;  // 위로 넘치면(상단 도시) 도시 아래에 표시
+  mapCard.style.left = `${cx.toFixed(1)}px`;
+  mapCard.style.top = `${Math.max(8, top).toFixed(1)}px`;
 }
 
 // 비행기 마커를 from→dest로 flyTime초에 걸쳐 이동시키고 노란 경로선을 그려나간다.
@@ -784,7 +812,7 @@ $('#cheat-kinds').addEventListener('change', (e) => {
 $('#cheat-fold').addEventListener('click', () => {
   const body = $('#cheat-body');
   body.hidden = !body.hidden;
-  $('#cheat-fold').textContent = body.hidden ? '+' : '−';
+  $('#cheat-fold').classList.toggle('folded', body.hidden); // 접힘 시 chevron 회전(SVG 아이콘)
 });
 // 지도 테스트: 게임 중 언제든 세계 여행 지도를 띄운다(전투를 다 거치지 않고 여행·경로 확인). 치트 전용.
 $('#cheat-map').addEventListener('click', () => { if (state === 'playing') showMap(); });

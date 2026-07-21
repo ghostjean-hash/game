@@ -16,26 +16,26 @@ function centerRanks(n) {
   return rankOf;
 }
 
-// 메인 총알 사양(내 비행기가 쏜다, 직진). front 1~88 = 강화 단계.
-//  - 1~8단계: 탄 수 1→8발(강화할 때마다 발 1개씩 추가), 개별 탄 균일. 데미지 완만(1,1,2,2,3,3,4,4).
-//  - 9단계~: 8발 고정, **가운데 탄부터 한 발씩** 모양 진화(발별 순차, 사용자 지시). 8스텝마다 그 탄의 tier +1(최대 10).
+// 메인 총알 사양(내 비행기가 쏜다, 직진). front 1~66 = 강화 단계.
+//  - 1~6단계: 탄 수 1→6발(강화할 때마다 발 1개씩 추가), 개별 탄 균일. 데미지 완만(1,1,2,2,3,3).
+//  - 7단계~: 6발 고정, **가운데 탄부터 한 발씩** 모양 진화(발별 순차, 사용자 지시). maxShots 스텝마다 그 탄의 tier +1(최대 10).
 //    진화한 탄만 형태·데미지·속도가 오르고, 아직 기본인 탄은 그대로다. 빔 형태 패턴은 view가 tier로 그린다.
 //  - 여러 발은 부채 없이 laneGap 간격으로 가로로 나란히 곧게 직진(xOff = 중앙 기준 가로 위치).
 // 반환: { bullets: [{xOff, tier(0~10), dmg}], r }.
 export function frontSpec(front) {
   const F = CFG.parts.front;
   front = Math.max(1, Math.min(front, F.max));
-  const shots = Math.min(front, 8);
-  const baseDmg = 1 + Math.floor((shots - 1) / 2);       // 1,1,2,2,3,3,4,4
+  const shots = Math.min(front, F.maxShots);
+  const baseDmg = 1 + Math.floor((shots - 1) / 2);       // 1,1,2,2,3,3
   const r = F.rBase + baseDmg * F.rGrow;                 // rGrow=0이라 개별 탄 크기 고정
-  const evoSteps = Math.max(0, front - 8);               // 진화에 투입된 P 수
+  const evoSteps = Math.max(0, front - F.maxShots);      // 진화에 투입된 P 수
   const rankOf = centerRanks(shots);
   const bullets = [];
   for (let i = 0; i < shots; i++) {
     const xOff = shots === 1 ? 0 : (-(shots - 1) / 2 + i) * F.laneGap; // 중앙 기준 나란히
     const rank = rankOf[i];
-    // rank번째로 안쪽인 탄은 evoSteps가 rank+1 이상일 때부터 진화. 8스텝마다 티어 +1.
-    const tier = evoSteps >= rank + 1 ? Math.min(Math.floor((evoSteps - (rank + 1)) / 8) + 1, F.tierMax) : 0;
+    // rank번째로 안쪽인 탄은 evoSteps가 rank+1 이상일 때부터 진화. maxShots 스텝마다 티어 +1.
+    const tier = evoSteps >= rank + 1 ? Math.min(Math.floor((evoSteps - (rank + 1)) / F.maxShots) + 1, F.tierMax) : 0;
     bullets.push({ xOff, tier, dmg: baseDmg + tier * F.shapeDmg });
   }
   return { bullets, r };

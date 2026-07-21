@@ -616,8 +616,8 @@ export function startStage(game) {
   game.transitioning = false; // 새 구역 웨이브 준비 완료 → 진행 판정 재개
   game.pendingTimer = null;
   game.introTimer = CFG.stageIntro; // 구역 시작 배너 표시 동안 적 스폰 정지
-  // 배너: 여행 중인 나라·수도를 크게(big), 구역 번호는 작게(sub) 보여준다(사용자 지시). 여행 꺼짐이면 기존 이름.
-  const place = CFG.tour.enabled ? `${COUNTRIES[game.tourIdx].ko} · ${COUNTRIES[game.tourIdx].cap}` : stageName(game.stage);
+  // 배너: 여행 중인 나라(윗줄)·도시(아랫줄)를 점 없이 줄바꿈으로 크게(big), 구역 번호는 작게(sub) 보여준다(사용자 지시). 여행 꺼짐이면 기존 이름.
+  const place = CFG.tour.enabled ? `${COUNTRIES[game.tourIdx].ko}\n${COUNTRIES[game.tourIdx].cap}` : stageName(game.stage);
   game.events.push({ type: 'banner', big: place, sub: `구역 ${game.stage}`, dur: CFG.stageIntro });
 }
 
