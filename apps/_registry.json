@@ -7,6 +7,14 @@
       "path": "apps/english-reading/",
       "status": "wip",
       "accent": "#5aa9ff"
+    },
+    {
+      "id": "english-vocabulary",
+      "title": "영어 단어장",
+      "subtitle": "200개에서 시작해 외운 단어를 지워가는 반복 암기",
+      "path": "apps/english-vocabulary/",
+      "status": "wip",
+      "accent": "#2563eb"
     }
   ]
 }
