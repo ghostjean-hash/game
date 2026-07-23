@@ -374,6 +374,17 @@ function renderComplete() {
   screen.appendChild(el("div", "complete-title", `SET ${s.setId.replace(/\D/g, "") || "01"} 완료`));
   screen.appendChild(el("div", "complete-sub", `${s.start}개 학습 완료 · 외운 단어 ${s.learned}개`));
 
+  // 마지막 단어를 실수로 처리해 완료됐을 때를 위한 되돌리기(안전장치 - 학습 화면과 동일).
+  if (deck.canUndo()) {
+    const undo = el("button", "undo-btn", `${ICON.undo}<span>방금 처리 되돌리기</span>`);
+    undo.onclick = () => {
+      deck.undo();
+      saveDeck();
+      go("study");
+    };
+    screen.appendChild(undo);
+  }
+
   const actions = el("div", "home-actions");
   const rb = el("button", "btn-xl btn-accent", "외운 단어 복습");
   rb.onclick = () => go("vault");
