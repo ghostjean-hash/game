@@ -331,3 +331,15 @@
 30.1. 사용자 지적("끊어 읽기 기준을 모든 문제마다 노출하냐, 별도 메뉴/버튼으로 빼라"): 29장(2.17)에서 읽기 화면 본문 상단에 매 지문 '끊는 기준 보기' 카드 버튼을 반복 배치한 것을 상단바 상시 버튼(단어장 옆)으로 이관했다. 누르면 노출 설정과 같은 오버레이 모달로 다섯 자리 원칙 카드가 열려 본문 흐름을 가리지 않는다 - 필요할 때만 꺼내 보는 공용 참고. setTop showGuide 플래그로 읽기 화면에서만 노출(목록·단어장 숨김), 노출 설정 chunks OFF면 버튼도 숨김. index·main(openGuide 신설·인바디 토글 제거)·style(.guide-open→guide-modal)·spec(3.2 서술 갱신)·service-worker(v156)·standalone 재빌드. 검증: 유닛+데이터 무결성 통과 + browser-shot 3분기(목록 숨김/읽기 노출/모달 5행) 콘솔 0. 상세 apps/english-reading/PROGRESS.md 2.18.
 
 30.2. 미해결: flightshooting은 이번 세션 무관(다른 세션이 feb0950·0e18acf로 봉합 완료). 후보 - 지문·코스 확대, 단어장 복습 심화, 읽기 통계(29장 유지).
+
+# 31. english-vocabulary 신규 앱 - 반복 암기 단어장 v0.1~v0.2 (2026-07-23, /jc sealing)
+
+31.1. 배경·판단: 사용자가 ChatGPT 작성 요청서로 "영어 단어장 html앱"을 신규 요청. /jarvis-init로 진입했으나 이 위치가 이미 game-hub 도메인이라 새 도메인 골격 대신 apps/의 두 번째 앱(english-reading 형제)으로 판단·진행했다. 핵심 경험 = 200개에서 시작해 외운 단어를 지워 0개로 만드는 반복 암기(시험·타이핑 없음). 착수 전 4개 결정 모두 사용자 승인 추천안 - 허브 표준 무빌드 바닐라+localStorage / 1차 필수만 / IPA 제외·SpeechSynthesis 음성만 / Undo·보관함 복습을 1차 포함.
+
+31.2. v0.1 구현(80c666c): deck.js 순수 학습 로직(active/learned·모름/외움·바퀴 셔플·Undo·보관함 복습·serialize) + 6화면(홈·학습·보관함·복습·완료·설정) + 발음(SpeechSynthesis)·키보드·글자크기 3단계·라이트 테마 큰 글자. 샘플 20단어. 테스트 57 PASS, browser-shot 4화면 콘솔 0. apps/_registry.json 등록으로 허브 홈 카드 노출.
+
+31.3. v0.2 8세트 구조 준비(43678e9, 사용자 후속 지시): 실제 콘텐츠(중학 8세트×200=1600) 대비 구조만. manifest.json+set-NNN.json 판단, ID 규칙 ev-sNN-NNNN·ev-set-NNN+level, 검증기 tools/validate-data.mjs 신설(필드·중복·형식·strict 200/1600, error 시 적용 차단). 앱 부팅부만 최소 수정(deck·UI 무변경). 실데이터는 임의 생성 금지(검증 자료 기반 별도 제작·검수 후 적용). 테스트 63 PASS, validate sample 통과·strict는 의도대로 실패(게이트 작동 확인).
+
+31.4. 자기 코드 리뷰 후 완료화면 되돌리기 보완(b5bd8c5): 마지막 단어를 실수로 처리해 완료돼도 되돌릴 수 있게 완료 화면에 되돌리기 추가. 예문 목표단어 검증은 불규칙 활용 오탐 방지로 warning 유지. 검증 - 유닛 63 PASS, validate-data sample/strict, browser-shot 홈·학습·Undo·설정·완료. 상세 apps/english-vocabulary/PROGRESS.md v0.1~v0.2.
+
+31.5. 미해결: (a) 실제 1600단어 - 검증 가능한 중학 어휘 자료 + 세트별 단어·뜻·예문·해석 목록을 입력받아 채우기(자비스 임의 생성 금지) → --strict 검증 → manifest available 전환 (b) 8세트 UI(세트 선택·잠금·진행률)는 데이터 준비 후 (c) 이번 /jc로 3커밋 push(GitHub Pages 자동 배포, 허브 홈에 wip 카드 노출) (d) flightshooting 미추적 2파일(AGENTS.md·diorama webp)은 타 세션 작업이라 이번 봉합 제외.

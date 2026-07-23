@@ -2,6 +2,12 @@
 
 > NEXT-SESSION.md 체인 3건 cap(§6.6) 초과분을 무수정 이동 보관(§3.4.4). 위가 최신.
 
+## 이동 2026-07-23 (english-vocabulary 신규 앱 세션 봉합 시 3건 cap 초과분)
+
+## 이전 작업 (2026-07-18~19, ChatGPT/Gemini 협업 출제 워크플로우 + 200편 커리큘럼 확정)
+
+여러 LLM으로 출제하되 기준이 안 흔들리게 하는 체계를 실제 가동하고 200편 설계를 확정한 세션. (1) 읽기 UX 2건(877999c) - 회독 완료 모달 후 지문 최상단 스크롤 리셋, 각 문장/지문 하단에 원문 복사 버튼. (2) ChatGPT 출제 워크플로우 정립(a2ec9f6·45a44c2·d0052f4) - 과설계 슬림화, insight/grammar/words 규칙 보완, 출제 착수 전 현황 9항목 전달 의무, 출제 단위 5편·incoming 폴더 규칙. (3) 지문 21~25 5편 반영(6ae75cd, 20→25편). (4) T-101(084a7f8) - chunkViolations의 본동사 do/does/did 조동사 오인 수정 + reading-the-opponent 3분할 복원 + 회귀 테스트. (5) 26~35 출제 품질 비교로 사용자 결정 = 출제는 Claude Code, 감수는 ChatGPT. (6) 200편 커리큘럼 확정본 v3(docs/authoring/CURRICULUM_REVIEW.md) - 3단계 60/80/60·중학~고1·숙어 평균1, ChatGPT·Gemini·Claude 3차 감수 63건 반영, 기계검증(200편·60/80/60·소재중복0·같은 숙어 3회+0). ※ 이 세션의 ChatGPT/Gemini 협업 전제는 이후 2026-07-19에 Claude Code 일원화로 폐지됨(커리큘럼 지도 자체는 docs/authoring/에서 계속 사용). 상세: apps/english-reading/PROGRESS.md 2.44.
+
 ## 이동 2026-07-19 (지문 20편 추가 세션 봉합 시 3건 cap 초과분)
 
 ## 이전 작업 (2026-07-16, english-reading UI 다듬기 + 출제 패키지 시스템 + 앱 입력 폐지)
