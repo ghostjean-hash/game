@@ -457,9 +457,18 @@ async function confirmReset() {
 }
 
 // --- 부팅 ---
+// manifest에서 학습 가능한(available) 세트를 찾아 그 세트 파일을 로드한다.
+// 1차는 단일 세트(set-001)만 available. 8세트 확장 시 여기서 세트 선택 UI를 얹으면 되고,
+// 세트 데이터 스키마·deck 로직은 그대로다(로드 대상 파일만 달라진다).
+const DATA_DIR = "./src/data/";
 applyFontScale();
-fetch("./src/data/words.json", { cache: "no-cache" })
+fetch(DATA_DIR + "manifest.json", { cache: "no-cache" })
   .then((r) => r.json())
+  .then((manifest) => {
+    const active = (manifest.sets || []).find((s) => s.available);
+    if (!active) throw new Error("no available set");
+    return fetch(DATA_DIR + active.file, { cache: "no-cache" }).then((r) => r.json());
+  })
   .then((data) => {
     DATA = data;
     buildDeck();

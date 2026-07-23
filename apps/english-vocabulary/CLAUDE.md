@@ -7,7 +7,8 @@
 1.1. **한 줄**: 200개에서 시작해 외운 단어를 하나씩 지워가며, 남은 단어만 계속 반복해 결국 0개로 만드는 반복 암기 단어장. 시험·타이핑 없이 "모름/외움" 두 버튼으로만 굴린다. 직장인·중장년 포함 대상이라 큰 글자·큰 버튼·라이트 테마.
 1.2. **상태**: v0.1 1차 필수 구현 완료(2026-07-23). 샘플 20단어(`set-001`)로 전 기능 검증. 실제 200단어 데이터는 words.json 교체로 반영(4장).
 1.3. **위치**: game-hub 허브의 두 번째 "app"(english-reading 형제). `apps/_registry.json` 등록, 별도 자비스 도메인 아님.
-1.4. **현행 스펙 SSOT**: 이 파일 + `src/core/deck.js`(학습 규칙 권위) + `src/data/words.json`(콘텐츠).
+1.4. **현행 스펙 SSOT**: 이 파일 + `src/core/deck.js`(학습 규칙 권위) + `src/data/manifest.json`(세트 구성) + `src/data/set-NNN.json`(콘텐츠).
+1.5. **전체 목표(콘텐츠)**: 중학 핵심 8세트 × 200단어 = 1,600단어. 난이도 흐름 SET01~02 초등 고학년+중1 연결(`middle-bridge`) → 03~05 중1~2 → 06~08 중2~3. **실제 단어는 검증 가능한 자료 기반으로 별도 제작·검수 후 적용하며, 임의 생성 금지**(요청서 2·5장). 현재는 기능 검증용 샘플 20단어(set-001)만 존재.
 
 # 2. 파일 구조
 
@@ -16,13 +17,15 @@ apps/english-vocabulary/
 ├── CLAUDE.md / PROGRESS.md
 ├── index.html            # 진입점 (topbar / stage 1개, 화면은 JS가 교체 렌더)
 ├── style.css             # 라이트 테마 + 큰 글자(글자크기 3단계 --fs 배율)
-└── src/
-    ├── main.js           # 화면 조립 + 이벤트(DOM). home/study/vault/review/complete/settings
-    ├── core/
-    │   └── deck.js       # 학습 순환 순수 로직 (DOM 미의존, rng 주입)
-    └── data/
-        └── words.json    # 단어 원본 (콘텐츠 단일 진실)
-└── tests/run-node.mjs    # deck 순수 로직 + words.json 무결성 (node 실행)
+├── src/
+│   ├── main.js           # 화면 조립 + 이벤트(DOM). home/study/vault/review/complete/settings
+│   ├── core/
+│   │   └── deck.js       # 학습 순환 순수 로직 (DOM 미의존, rng 주입)
+│   └── data/
+│       ├── manifest.json # 8세트 목록·메타(available=true인 세트만 로드/검증)
+│       └── set-001.json  # 세트 단어 원본 (샘플 20단어). set-002~008은 실데이터 준비 후 추가
+├── tests/run-node.mjs    # deck 순수 로직 + manifest/세트 무결성 (node 실행)
+└── tools/validate-data.mjs # 실데이터 적용 전 검증 게이트(요청서 9장). --strict로 200·1600 강제
 ```
 
 # 3. 핵심 결정 (작업 시 반드시 준수)
@@ -36,13 +39,14 @@ apps/english-vocabulary/
 3.7. **발음은 SpeechSynthesis**(요청서 13장). 단어 클릭·스페이스로 재생, `lang=en-US`. 자동 재생 기본 OFF. 미지원·실패해도 try/catch로 학습 흐름 안 막음(발음 버튼은 지원 시에만 노출).
 3.8. **버튼 아이콘은 인라인 SVG**(발음 스피커·Undo·뒤로·설정). 이모지·유니코드 문자를 버튼 아이콘으로 쓰지 않음(english-reading 5.6 규칙 준용). 완료 badge(✓)·토스트는 버튼 아님이라 예외.
 
-# 4. 데이터 규약 (words.json)
+# 4. 데이터 규약 (manifest + set-NNN.json)
 
-4.1. 구조: `{ setId, title, words:[...] }`. `word`: `{ id, word, meaningKr[], example, exampleKr }`.
-4.2. **id는 `ev-` 프리픽스 + 4자리**(예 `ev-0001`). english-reading 단어장(`vocab`)과의 향후 연동 시 id 충돌 방지(요청서 10장).
-4.3. `meaningKr`은 핵심 뜻 1~2개(요청서 6장 - 뜻 5개 이상·긴 문법·어원 금지). `example`은 짧은 예문 1개 + `exampleKr` 해석.
-4.4. **IPA 발음기호는 1차 제외**(요청서 확정) - 손 오타 위험 회피, 발음은 SpeechSynthesis가 담당. 향후 넣으려면 `pronunciation` 필드 추가 + 카드에 표시.
-4.5. **200단어 교체 방법**: 이 파일의 `words` 배열을 200개로 채우면 끝(로직·UI 무변경). 세트 크기는 데이터 길이가 곧 `startCount`. 교체 후 `node apps/english-vocabulary/tests/run-node.mjs`로 무결성(id 유일·ev- 프리픽스·필수 필드) 검증. 여러 세트(3차)는 setId를 나눠 별도 파일/구조로 확장.
+4.1. **manifest.json**: `{ app, totalTarget:1600, setSize:200, sets:[...] }`. `sets[]`: `{ setId, order, title, level, file, count, available }`. 앱·검증기는 `available:true`인 세트만 로드·검증하고, `false`(준비 중) 세트는 건너뛴다. `count`는 그 세트 파일의 기대 단어 수(샘플 20, 실데이터 200).
+4.2. **set-NNN.json**: `{ setId, order, title, level, words:[...] }`. `word`: `{ id, setId, level, word, meaningKr[], example, exampleKr }`(요청서 7장).
+4.3. **ID 규칙**(요청서 7장, 충돌 방지): 단어 id `ev-sNN-NNNN`(예 `ev-s01-0001`, s뒤 2자리=세트 order, 뒤 4자리=일련), 세트 id `ev-set-NNN`(예 `ev-set-001`). english-reading 단어장(`vocab`)과도 프리픽스가 달라 향후 연동 시 충돌 없음(요청서 10장).
+4.4. `meaningKr`은 핵심 뜻 1~2개(요청서 6장 - 뜻 5개 이상·긴 문법·어원 금지). `example`은 짧은 예문 1개(14단어 이하 권장) + `exampleKr` 해석. **IPA 발음기호는 제외**(손 오타 위험, 발음은 SpeechSynthesis 담당). 넣으려면 `pronunciation` 필드 + 카드 표시 추가.
+4.5. **실데이터 적용 절차**(요청서 2·10장, 임의 생성 금지): 검증 가능한 자료로 세트별 단어·뜻·예문을 별도 제작·검수 → `set-NNN.json` 채우고 manifest에서 그 세트 `count`=200·`available`=true 전환 → **`node apps/english-vocabulary/tools/validate-data.mjs --strict`로 검증 통과 후 적용**. 로직·UI 변경 불요(deck는 세트 데이터 스키마만 의존, 세트 크기는 데이터 길이가 곧 `startCount`).
+4.6. **검증기(tools/validate-data.mjs)**: manifest의 available 세트를 검사. error(적용 차단) = 필드 누락·빈 값·id/setId 형식·id·단어 중복(세트 내/간)·대소문자 중복·앞뒤 공백·meaningKr 비배열·(strict) 세트당 200·총 1600. warning(사람 검수 대상, 차단 아님) = 활용형 의심 중복·예문에 목표 단어(활용형) 미포함·예문 과길이. 품사 균형(요청서 6장)은 데이터에 품사 필드가 생기면 추가.
 
 # 5. 작업 시 주의
 

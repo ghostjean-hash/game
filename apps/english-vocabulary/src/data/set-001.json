@@ -1,0 +1,28 @@
+{
+  "setId": "ev-set-001",
+  "order": 1,
+  "title": "기초 다지기",
+  "level": "middle-bridge",
+  "words": [
+    { "id": "ev-s01-0001", "setId": "ev-set-001", "level": "middle-bridge", "word": "abandon", "meaningKr": ["버리다", "포기하다"], "example": "He abandoned the plan.", "exampleKr": "그는 그 계획을 포기했다." },
+    { "id": "ev-s01-0002", "setId": "ev-set-001", "level": "middle-bridge", "word": "achieve", "meaningKr": ["이루다", "달성하다"], "example": "She achieved her goal.", "exampleKr": "그녀는 자신의 목표를 이루었다." },
+    { "id": "ev-s01-0003", "setId": "ev-set-001", "level": "middle-bridge", "word": "benefit", "meaningKr": ["이익", "혜택"], "example": "Exercise has many benefits.", "exampleKr": "운동에는 많은 이점이 있다." },
+    { "id": "ev-s01-0004", "setId": "ev-set-001", "level": "middle-bridge", "word": "consider", "meaningKr": ["고려하다", "여기다"], "example": "Please consider my idea.", "exampleKr": "제 생각을 고려해 주세요." },
+    { "id": "ev-s01-0005", "setId": "ev-set-001", "level": "middle-bridge", "word": "decade", "meaningKr": ["10년"], "example": "The city changed over a decade.", "exampleKr": "그 도시는 10년에 걸쳐 변했다." },
+    { "id": "ev-s01-0006", "setId": "ev-set-001", "level": "middle-bridge", "word": "effort", "meaningKr": ["노력", "수고"], "example": "Success takes effort.", "exampleKr": "성공에는 노력이 필요하다." },
+    { "id": "ev-s01-0007", "setId": "ev-set-001", "level": "middle-bridge", "word": "generation", "meaningKr": ["세대"], "example": "Each generation faces new problems.", "exampleKr": "각 세대는 새로운 문제에 직면한다." },
+    { "id": "ev-s01-0008", "setId": "ev-set-001", "level": "middle-bridge", "word": "however", "meaningKr": ["그러나", "하지만"], "example": "It is small; however, it is strong.", "exampleKr": "그것은 작지만, 강하다." },
+    { "id": "ev-s01-0009", "setId": "ev-set-001", "level": "middle-bridge", "word": "immediately", "meaningKr": ["즉시", "곧바로"], "example": "Call me immediately.", "exampleKr": "즉시 나에게 전화해라." },
+    { "id": "ev-s01-0010", "setId": "ev-set-001", "level": "middle-bridge", "word": "journey", "meaningKr": ["여정", "여행"], "example": "Life is a long journey.", "exampleKr": "인생은 긴 여정이다." },
+    { "id": "ev-s01-0011", "setId": "ev-set-001", "level": "middle-bridge", "word": "knowledge", "meaningKr": ["지식"], "example": "Books give us knowledge.", "exampleKr": "책은 우리에게 지식을 준다." },
+    { "id": "ev-s01-0012", "setId": "ev-set-001", "level": "middle-bridge", "word": "maintain", "meaningKr": ["유지하다", "지키다"], "example": "We must maintain the road.", "exampleKr": "우리는 그 도로를 유지해야 한다." },
+    { "id": "ev-s01-0013", "setId": "ev-set-001", "level": "middle-bridge", "word": "necessary", "meaningKr": ["필요한", "필수의"], "example": "Water is necessary for life.", "exampleKr": "물은 생명에 필수적이다." },
+    { "id": "ev-s01-0014", "setId": "ev-set-001", "level": "middle-bridge", "word": "obvious", "meaningKr": ["명백한", "분명한"], "example": "The answer is obvious.", "exampleKr": "그 답은 명백하다." },
+    { "id": "ev-s01-0015", "setId": "ev-set-001", "level": "middle-bridge", "word": "participate", "meaningKr": ["참여하다"], "example": "Everyone can participate.", "exampleKr": "누구나 참여할 수 있다." },
+    { "id": "ev-s01-0016", "setId": "ev-set-001", "level": "middle-bridge", "word": "quality", "meaningKr": ["질", "품질"], "example": "This shop sells high quality tea.", "exampleKr": "이 가게는 품질 좋은 차를 판다." },
+    { "id": "ev-s01-0017", "setId": "ev-set-001", "level": "middle-bridge", "word": "recognize", "meaningKr": ["알아보다", "인정하다"], "example": "I recognized her voice.", "exampleKr": "나는 그녀의 목소리를 알아보았다." },
+    { "id": "ev-s01-0018", "setId": "ev-set-001", "level": "middle-bridge", "word": "satisfy", "meaningKr": ["만족시키다"], "example": "The meal satisfied everyone.", "exampleKr": "그 식사는 모두를 만족시켰다." },
+    { "id": "ev-s01-0019", "setId": "ev-set-001", "level": "middle-bridge", "word": "tradition", "meaningKr": ["전통"], "example": "This festival is an old tradition.", "exampleKr": "이 축제는 오래된 전통이다." },
+    { "id": "ev-s01-0020", "setId": "ev-set-001", "level": "middle-bridge", "word": "usual", "meaningKr": ["평소의", "보통의"], "example": "We met at the usual place.", "exampleKr": "우리는 평소의 장소에서 만났다." }
+  ]
+}

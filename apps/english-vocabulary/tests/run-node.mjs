@@ -7,7 +7,10 @@ import { dirname, join } from "node:path";
 import { createDeck } from "../src/core/deck.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const DATA = JSON.parse(readFileSync(join(here, "../src/data/words.json"), "utf8"));
+// manifest에서 첫 available 세트를 로드(앱 부팅부와 동일 경로).
+const MANIFEST = JSON.parse(readFileSync(join(here, "../src/data/manifest.json"), "utf8"));
+const ACTIVE = MANIFEST.sets.find((s) => s.available);
+const DATA = JSON.parse(readFileSync(join(here, "../src/data/", ACTIVE.file), "utf8"));
 
 let pass = 0;
 let fail = 0;
@@ -28,14 +31,21 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   while (deck.current() && guard++ < 10000) deck.mark(type, now);
 }
 
-// --- 1. words.json 무결성 ---
+// --- 1. 세트 데이터 + manifest 무결성 ---
 (() => {
   const ids = DATA.words.map((w) => w.id);
   ok(DATA.words.length >= 20, "샘플 단어 20개 이상");
   ok(new Set(ids).size === ids.length, "단어 id 유일");
-  ok(ids.every((id) => id.startsWith("ev-")), "id는 ev- 프리픽스(독해 앱과 충돌 방지)");
+  ok(ids.every((id) => /^ev-s\d{2}-\d{4}$/.test(id)), "id는 ev-sNN-NNNN 형식(독해 앱과 충돌 방지)");
+  ok(/^ev-set-\d{3}$/.test(DATA.setId), "setId는 ev-set-NNN 형식");
+  ok(DATA.words.every((w) => w.setId === DATA.setId), "단어 setId가 세트 setId와 일치");
   ok(DATA.words.every((w) => w.word && Array.isArray(w.meaningKr) && w.meaningKr.length >= 1), "word·meaningKr 필수");
   ok(DATA.words.every((w) => w.example && w.exampleKr), "예문·예문해석 필수");
+  // manifest 정합
+  eq(MANIFEST.sets.length, 8, "manifest에 8세트 슬롯");
+  eq(MANIFEST.setSize, 200, "세트 크기 200");
+  eq(MANIFEST.totalTarget, 1600, "전체 목표 1600");
+  ok(ACTIVE && ACTIVE.count === DATA.words.length, "manifest count가 실제 세트 단어 수와 일치");
 })();
 
 // --- 2. 외움/모름 기본 동작 ---
@@ -141,10 +151,10 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   const saved = deck.serialize();
   const learnedId = deck.learnedWords()[0].id;
   // 원본에 새 단어 추가된 상황 모사
-  const grown = { ...DATA, words: [...DATA.words, { id: "ev-9999", word: "extra", meaningKr: ["추가"], example: "An extra word.", exampleKr: "추가 단어." }] };
+  const grown = { ...DATA, words: [...DATA.words, { id: "ev-s01-9999", setId: DATA.setId, word: "extra", meaningKr: ["추가"], example: "An extra word.", exampleKr: "추가 단어." }] };
   const restored = createDeck(grown, saved, seededRng(13));
   eq(restored.serialize().progress[learnedId].status, "learned", "기존 외운 단어 진행 유지");
-  eq(restored.serialize().progress["ev-9999"].status, "active", "새 단어는 active로 합류");
+  eq(restored.serialize().progress["ev-s01-9999"].status, "active", "새 단어는 active로 합류");
   eq(restored.stats().start, grown.words.length, "시작 수는 새 원본 기준");
 })();
 
