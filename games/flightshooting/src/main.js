@@ -14,7 +14,7 @@ import { spawnBoss } from './core/spawn.js';
 import { autopilotStep } from './core/autopilot.js';
 import { gainFront, gainOption, gainZone, gainTail } from './core/parts.js';
 import { spawnFriend } from './core/friend.js';
-import { render } from './render/view.js';
+import { render, DIORAMA_READY } from './render/view.js';
 import { createControls } from './input/controls.js';
 
 registerServiceWorker('/service-worker.js');
@@ -407,14 +407,17 @@ const mapCard = $('#map-card');
 let flyRaf = 0; // 비행 애니메이션 rAF 핸들(정리용)
 let tourScale = 1; // 확대 배율 보정(핀·글자가 화면에서 일정 크기로 보이도록). renderMap이 갱신.
 let tourVB = null; // 현재 지도 viewBox {x,y,w,h} - 드래그·확대축소로 갱신
-let tourCands = []; // 현재 화면 후보 목록(홈 버튼 재중심용)
+let tourCands = []; // 클릭 가능한 후보 전체(안 간 나라 전부)
+let tourFrame = []; // 초기 확대 프레이밍용(현재+가까운 frameNear개) - 클릭 후보와 별개
 const cityX = (i) => lonToX(COUNTRIES[i].lon);
 const cityY = (i) => latToY(COUNTRIES[i].lat);
+const frameDist = (a, b) => { const dx = cityX(a) - cityX(b), dy = cityY(a) - cityY(b); return dx * dx + dy * dy; };
 
 function showMap() {
   const cur = game.tourIdx;
-  const cands = COUNTRIES[cur].next.filter((i) => !game.tourPath.includes(i));
-  // 갈 수 있는 이웃이 없으면(종착 호주 등) 지도를 생략하고 곧장 다음 구역으로.
+  // 안 간 나라 전부를 후보로 연다(순번 제한을 두면 못 가는 나라가 생긴다는 사용자 지시).
+  const cands = COUNTRIES.map((_, i) => i).filter((i) => i !== cur && !game.tourPath.includes(i));
+  // 갈 수 있는 곳이 없으면(전부 방문) 지도를 생략하고 곧장 다음 구역으로.
   if (!cands.length) { advanceStage(); return; }
   state = 'map';
   loop.pause();
@@ -448,7 +451,7 @@ function computeViewBox(cur, cands, vpW, vpH) {
 }
 
 // 도시 하나: 점 + 2줄 라벨(윗줄 나라이름 작게·다른 색, 아랫줄 수도 상태색). clickable이면 후보(맥동·클릭), faint면 흐리게.
-function cityMark(i, mk, dotColor, s, clickable, faint) {
+function cityMark(i, mk, dotColor, s, clickable, faint, hasBg) {
   const C = COUNTRIES[i];
   const x = cityX(i), yv = cityY(i);
   const dot = mk.dot * s;
@@ -457,6 +460,9 @@ function cityMark(i, mk, dotColor, s, clickable, faint) {
   const op = faint ? ' opacity="0.55"' : '';
   const open = clickable ? `<g class="map-pick" data-dest="${i}"${op}>` : `<g${op}>`;
   const dotEl = `<circle ${clickable ? 'class="pick-dot" ' : ''}cx="${x.toFixed(1)}" cy="${yv.toFixed(1)}" r="${dot.toFixed(1)}" fill="${dotColor}" stroke="#0b1020" stroke-width="${(1.5 * s).toFixed(2)}"/>`;
+  // 배경(디오라마) 이미지가 준비된 도시는 점 우상단에 금색 별(★)을 붙여 '배경 있음'을 구분 표시(사용자 선택).
+  //   색·모양이 후보 점(시안)과 완전히 달라 한눈에 구별된다. bgRing 값은 별을 점에서 띄우는 오프셋으로 재사용.
+  const bgStar = hasBg ? `<text x="${(x + dot + CFG.tour.mark.bgRing * s).toFixed(1)}" y="${(yv - dot).toFixed(1)}" font-size="${(mk.cap * s * 1.05).toFixed(1)}" fill="${COLORS.tour.bgReady}" text-anchor="middle" dominant-baseline="central">★</text>` : '';
   let nameX, nameY, capX, capY, anchor;
   if (C.labelDir === 'right' || C.labelDir === 'left') {
     // 붙어 있는 나라(싱가포르·말레이시아) 겹침 방지: 라벨을 점 옆(우/좌)에 나라(위)·수도(아래) 2줄로.
@@ -478,7 +484,7 @@ function cityMark(i, mk, dotColor, s, clickable, faint) {
   const botLabel = C.type === 'travel' ? C.ko : C.cap;
   const nameEl = `<text x="${nameX}" y="${nameY}" text-anchor="${anchor}" font-size="${nameFs}" font-weight="600" fill="${COLORS.tour.countryLabel}">${topLabel}</text>`;
   const capEl = `<text x="${capX}" y="${capY}" text-anchor="${anchor}" font-size="${capFs}" font-weight="700" fill="${dotColor}">${botLabel}</text>`;
-  return open + dotEl + nameEl + capEl + '</g>';
+  return open + bgStar + dotEl + nameEl + capEl + '</g>';
 }
 
 // 지도 SVG를 그린다. 모든 나라 수도 표시(현재/후보 크게, 방문 중간, 나머지 작고 흐리게) + 경로 점선 + 비행기.
@@ -487,8 +493,13 @@ function renderMap(cur, cands) {
   const fy = (i) => cityY(i).toFixed(1);
   const vpW = mapViewport.clientWidth || CFG.tour.zoomRefW;
   const vpH = mapViewport.clientHeight || (vpW / CFG.tour.aspect);
-  tourVB = computeViewBox(cur, cands, vpW, vpH);
+  // 후보 전부를 감싸면 세계 전체라 이름이 안 보인다 → 초기 확대는 현재+가장 가까운 frameNear개만 감싼다.
+  const frame = cands.length > CFG.tour.frameNear
+    ? [...cands].sort((a, b) => frameDist(cur, a) - frameDist(cur, b)).slice(0, CFG.tour.frameNear)
+    : cands;
+  tourVB = computeViewBox(cur, frame, vpW, vpH);
   tourCands = cands;
+  tourFrame = frame;
   tourScale = tourVB.w / vpW; // 화면 일정 픽셀 역보정
   const s = tourScale;
   const M = CFG.tour.mark;
@@ -501,10 +512,11 @@ function renderMap(cur, cands) {
   }
   let cities = '';
   for (let i = 0; i < COUNTRIES.length; i++) {
-    if (i === cur) cities += cityMark(i, M.cur, COLORS.tour.current, s, false, false);
-    else if (candSet.has(i)) cities += cityMark(i, M.cand, COLORS.tour.candidate, s, true, false);
-    else if (visitedSet.has(i)) cities += cityMark(i, M.visited, COLORS.tour.visited, s, false, false);
-    else cities += cityMark(i, M.other, COLORS.tour.dim, s, false, true);
+    const hasBg = DIORAMA_READY.has(COUNTRIES[i].ko);
+    if (i === cur) cities += cityMark(i, M.cur, COLORS.tour.current, s, false, false, hasBg);
+    else if (candSet.has(i)) cities += cityMark(i, M.cand, COLORS.tour.candidate, s, true, false, hasBg);
+    else if (visitedSet.has(i)) cities += cityMark(i, M.visited, COLORS.tour.visited, s, false, false, hasBg);
+    else cities += cityMark(i, M.other, COLORS.tour.dim, s, false, true, hasBg);
   }
   const plane = `<g id="tour-plane" transform="translate(${fx(cur)},${fy(cur)})"><circle r="${(7 * s).toFixed(1)}" fill="${COLORS.tour.current}" stroke="#0b1020" stroke-width="${(2 * s).toFixed(2)}"/></g>`;
   const vb = `${tourVB.x.toFixed(1)} ${tourVB.y.toFixed(1)} ${tourVB.w.toFixed(1)} ${tourVB.h.toFixed(1)}`;
@@ -549,7 +561,7 @@ function zoomMap(factor) {
 function recenterMap() {
   const vpW = mapViewport.clientWidth || CFG.tour.zoomRefW;
   const vpH = mapViewport.clientHeight || (vpW / CFG.tour.aspect);
-  tourVB = computeViewBox(game.tourIdx, tourCands, vpW, vpH);
+  tourVB = computeViewBox(game.tourIdx, tourFrame, vpW, vpH);
   setViewBox();
 }
 
@@ -634,14 +646,33 @@ function advanceStage() {
 
 // ── 지도 인터랙션(드래그 스크롤 + 확대축소 + 홈) - 모듈 로드 시 1회 바인딩 ──
 let mapDrag = null, mapDragMoved = false;
+// 지도 조작: 한 손가락=드래그 이동, 두 손가락=핀치 확대/축소(아이패드 등 터치기기).
+const mapPointers = new Map(); // 현재 눌린 포인터 pointerId → {x,y}
+let mapPinch = null;           // 두 손가락 시작 상태 { d0=시작 손가락 간격, w0=시작 viewBox 폭 }
 mapViewport.addEventListener('pointerdown', (e) => {
   if (!tourVB) return;
+  mapPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (mapPointers.size >= 2) {
+    // 두 손가락 감지: 핀치 확대 시작. 진행 중이던 한 손가락 드래그는 취소.
+    const p = [...mapPointers.values()];
+    mapPinch = { d0: Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y) || 1, w0: tourVB.w };
+    mapDrag = null;
+    return;
+  }
   mapDrag = { px: e.clientX, py: e.clientY, ox: tourVB.x, oy: tourVB.y, id: e.pointerId };
   mapDragMoved = false;
   // 여기서 포인터를 캡처하지 않는다 - 캡처하면 도시 핀(자식)의 click이 삼켜져 목적지 터치가 안 된다.
   //   실제로 움직임이 임계를 넘은 순간에만(아래 pointermove) 캡처해 드래그를 이어받는다.
 });
 mapViewport.addEventListener('pointermove', (e) => {
+  if (mapPointers.has(e.pointerId)) mapPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  // 두 손가락 핀치: 손가락 간격 비율로 확대(멀어지면 확대, 가까워지면 축소). 시작 폭(w0) 기준 절대 배율이라 안정적.
+  if (mapPinch && mapPointers.size >= 2 && tourVB) {
+    const p = [...mapPointers.values()];
+    const d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+    if (d > 0) zoomMap((mapPinch.w0 * (mapPinch.d0 / d)) / tourVB.w);
+    return;
+  }
   if (!mapDrag || !tourVB) return;
   const k = tourVB.w / (mapViewport.clientWidth || 1); // 화면px → 지도 단위
   if (!mapDragMoved && Math.abs(e.clientX - mapDrag.px) + Math.abs(e.clientY - mapDrag.py) > 5) {
@@ -653,7 +684,11 @@ mapViewport.addEventListener('pointermove', (e) => {
   tourVB.y = mapDrag.oy - (e.clientY - mapDrag.py) * k;
   setViewBox();
 });
-const endDrag = () => { mapDrag = null; };
+const endDrag = (e) => {
+  if (e && e.pointerId != null) mapPointers.delete(e.pointerId);
+  if (mapPointers.size < 2) mapPinch = null; // 손가락 하나라도 떼면 핀치 종료
+  mapDrag = null;
+};
 mapViewport.addEventListener('pointerup', endDrag);
 mapViewport.addEventListener('pointercancel', endDrag);
 mapViewport.addEventListener('wheel', (e) => {

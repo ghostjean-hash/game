@@ -17,6 +17,7 @@ export const COLORS = {
   enemyBullet: '#ff2d3a',
   enemyBulletCore: '#ffd24a',
   enemyBulletGlow: '#ff6b81',
+  enemyBulletEdge: '#2a0004', // 밝은 디오라마 배경에서 빨강 적탄이 묻히지 않게 두르는 어두운 윤곽(가벼운 단색)
   star: '#9fd8ff',
   hitSpark: '#ff9a4d',   // 아군 탄 명중 스파크 / 보스 피격
   clearSpark: '#ffd36b', // 격파 연출 보조 색
@@ -112,6 +113,7 @@ export const COLORS = {
   //   shot = 직선 레이저 단계별 색 - 회색 계열(사용자 지시). 냉색 빔·빨간 적탄과 회색으로 구분.
   friend: {
     body: '#9a6b43', glow: '#c99a6a', beak: '#d8a86a', eye: '#2a1c10', hpPip: '#ff6b81',
+    outline: '#241408', // 어두운 갈색 윤곽 - 몸보다 진하게 둘러 밝은 도시 배경에서 윤곽이 살되 키위답게(사용자 선택)
     // 발사체: 어두운 회색 몸 + 절제된 회색 코어(사용자 "너무 밝다" → 어둡게 눌러 눈부심 제거).
     //   강화해도 색은 변하지 않는다(단일 색, 사용자 지시).
     shot: '#4a4f55',    // 발사체 몸(어두운 회색, 강화 무관 고정)
@@ -125,6 +127,7 @@ export const COLORS = {
     route: '#ffd24a', visited: '#4ae0c8', current: '#ffd24a',
     candidate: '#7fe3ff', dim: '#7d8db0', plane: '#ffffff',
     countryLabel: '#9fb0cf', // 나라이름(윗줄) - 수도(아랫줄, 상태색)와 구분되는 흐린 회청색
+    bgReady: '#ffcf33', // 배경(디오라마) 이미지가 준비된 도시 표시 금색 별(★) - 후보/현재 상태색과 색·모양 모두 구분(사용자 선택)
     // 대륙별 채움색(밤하늘 톤에 맞춰 채도 낮춘 구분색). worldmap.js WORLD_PATHS의 c와 매칭.
     continent: {
       Asia: '#2f4a6b', Europe: '#43406e', Africa: '#5f4a2f',
@@ -136,4 +139,7 @@ export const COLORS = {
       'North America': '#458c6d', 'South America': '#8c5745', Oceania: '#8a457a', Other: '#415377',
     },
   },
+  // 디오라마 배경 위 게임 요소 후광색. 어두운 배경(한강 야경 등)에서 요소가 떠 보이게 밝은 크림 후광을 쓴다
+  //   (사용자 "배경 어두워 어두운 그림자가 안 보인다"). 밝은 배경에선 요소 자체 색·윤곽으로 대비된다.
+  entityShadow: 'rgba(255,246,224,0.85)',
 };

@@ -272,18 +272,25 @@ export const CFG = {
   tour: {
     enabled: true, flyTime: 1.4, cardTime: 1.6, zoomPad: 40, zoomMinW: 260, aspect: 1.35, zoomRefW: 560,
     mark: {
-      // name(나라이름) = 기존 값의 70%로 축소(사용자 지시). cap(수도)·dot은 유지.
-      cur: { dot: 8, name: 7.7, cap: 15 },
-      cand: { dot: 11, name: 7.7, cap: 15 },
-      visited: { dot: 5, name: 5.95, cap: 10 },
-      other: { dot: 3, name: 5.25, cap: 8 },
+      // name(나라이름) = 가독성 위해 키움(사용자 지시 "국가 이름 잘 안 보여 키워줘"). cap(수도)·dot은 유지.
+      cur: { dot: 8, name: 9.5, cap: 15 },
+      cand: { dot: 11, name: 9.5, cap: 15 },
+      visited: { dot: 5, name: 7.3, cap: 10 },
+      other: { dot: 3, name: 6.4, cap: 8 },
       labelGap: 4,
       nameLift: 5, // 나라이름(윗줄)을 수도 위로 추가로 올리는 화면 px(사용자 지시)
+      bgRing: 4, // 배경(디오라마) 완성 도시 표시: 점 바깥 링의 추가 반경(지도 좌표, s 곱)
     },
+    // 다음 목적지는 안 간 나라 전부 선택 가능하되(못 가는 나라 방지, 사용자 지시), 초기 지도 확대는
+    //   현재 위치+가장 가까운 이 개수만 감싼다(전부 감싸면 세계 전체라 이름이 안 보임). 나머지는 축소·드래그로.
+    frameNear: 6,
     zoomStep: 1.35, zoomWMin: 90, zoomWMax: 1400,
     bossDeathTime: 1.5, // 보스 격파 후 폭발 연출을 보여주고 이 시간 뒤에 지도를 띄운다(사용자 지시)
     borderW: 0.9, // 국가 경계선 굵기(지도 좌표, s 곱) - 잘 보이게 키움(사용자 지시)
   },
+  // 디오라마(사진) 배경 위에서 게임 요소(비행기·적)가 묻히지 않게 요소 둘레에 두르는 밝은 후광 번짐 반경(px).
+  //   배경 밝기는 그대로 두고 요소만 띄운다(사용자 지시 "맵 어두워지는 건 싫다"). 우주/성운 배경에선 미적용.
+  entityShadowBlur: 6,
 };
 
 // 구역 이름 (1~40). 11~ 미지의 심우주, 21~ 이질 기계 문명, 31~ 빛·에너지 생명체 - 구간마다 완전 다른 적들이 출현한다.

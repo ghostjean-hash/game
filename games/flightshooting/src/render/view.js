@@ -30,8 +30,9 @@ function drawScrollingBg(ctx, img, game, W, H) {
 
 // ── 디오라마 배경(프리렌더 2.5D, 현재 1스테이지 한국만 테스트) ──
 // 단일 이미지 1장에 스테이지 여정 전체(하단 경복궁 출발 → 상단 항구 도착)를 담은 비스듬 조감도.
-// 화면 폭보다 세로로 살짝 크게(DIORAMA_ZOOM) 그려 세로 여백을 만들고, 그 여백을 시간에 걸쳐
-// 아래→위로 흘려 "전진하는 여정"을 만든다(A안의 무한 반복과 달리 1회 통과 - 도착 후 항구에서 정지).
+// 이미지를 화면 좌우(가로)에 꽉 차게 그리고, 세로로 남는 여백을 시간에 걸쳐 아래→위로 흘려
+// "전진하는 여정"을 만든다(A안 무한 반복과 달리 1회 통과 - 도착 후 항구에서 정지).
+// 좌우 꽉 채움이라 아이패드처럼 폭이 넓은 화면일수록 이미지가 더 크게 확대된다.
 const dioramaCache = new Map(); // path → { img, ok }
 function getDiorama(path) {
   let e = dioramaCache.get(path);
@@ -44,36 +45,109 @@ function getDiorama(path) {
   return e;
 }
 // view 지역 연출 상수(게임 로직 수치 아님, BG_SCROLL·drawSeoul 선례. 테스트 확정 후 numbers.js로 이관 검토):
-const DIORAMA_ZOOM = 1.35;  // 화면 세로 대비 이미지 배율(>1이라야 세로 스크롤 여백이 생김)
-const DIORAMA_JOURNEY = 18; // 여정 시간(초): 경복궁 출발 → 항구 도착. 이후 항구서 정지(보스 무대).
-// 나라별 디오라마 이미지 경로(현재 한국 1스테이지만; 나머지 나라는 미제작 → 기존 배경 fallback).
-const DIORAMA_SRC = { '한국': 'assets/diorama/KR/KR-day-concept-v01.png' };
+const DIORAMA_JOURNEY = 18; // 여정 시간(초): 도시 출발 → 항구 도착. 이후 항구서 정지(보스 무대).
+// 나라별 디오라마 이미지 경로(countries.js의 ko가 키). 파일이 아직 없는 나라는 로드 실패 → ok=false →
+// 호출부에서 우주 배경으로 자동 fallback(리스트·파일명 규칙은 docs/14_diorama-city-list.md).
+const DIORAMA_SRC = {
+  '한국': 'assets/diorama/KR-seoul.png',
+  '일본': 'assets/diorama/JP-tokyo.png',
+  '중국': 'assets/diorama/CN-beijing.png',
+  '몽골': 'assets/diorama/MN-ulaanbaatar.png',
+  '대만': 'assets/diorama/TW-taipei.png',
+  '필리핀': 'assets/diorama/PH-manila.png',
+  '베트남': 'assets/diorama/VN-hanoi.png',
+  '태국': 'assets/diorama/TH-bangkok.png',
+  '말레이시아': 'assets/diorama/MY-kualalumpur.png',
+  '싱가포르': 'assets/diorama/SG-singapore.png',
+  '인도네시아': 'assets/diorama/ID-jakarta.png',
+  '발리': 'assets/diorama/ID-bali.png',
+  '인도': 'assets/diorama/IN-newdelhi.png',
+  '네팔': 'assets/diorama/NP-kathmandu.png',
+  '파키스탄': 'assets/diorama/PK-islamabad.png',
+  '방글라데시': 'assets/diorama/BD-dhaka.png',
+  '카자흐스탄': 'assets/diorama/KZ-astana.png',
+  '우즈베키스탄': 'assets/diorama/UZ-tashkent.png',
+  '이란': 'assets/diorama/IR-tehran.png',
+  '이라크': 'assets/diorama/IQ-baghdad.png',
+  '이스라엘': 'assets/diorama/IL-jerusalem.png',
+  '아랍에미리트': 'assets/diorama/AE-abudhabi.png',
+  '사우디아라비아': 'assets/diorama/SA-riyadh.png',
+  '튀르키예': 'assets/diorama/TR-ankara.png',
+  '이집트': 'assets/diorama/EG-cairo.png',
+  '케냐': 'assets/diorama/KE-nairobi.png',
+  '탄자니아': 'assets/diorama/TZ-dodoma.png',
+  '에티오피아': 'assets/diorama/ET-addisababa.png',
+  '남아프리카공화국': 'assets/diorama/ZA-pretoria.png',
+  '나이지리아': 'assets/diorama/NG-abuja.png',
+  '모로코': 'assets/diorama/MA-rabat.png',
+  '콩고민주공화국': 'assets/diorama/CD-kinshasa.png',
+  '그리스': 'assets/diorama/GR-athens.png',
+  '이탈리아': 'assets/diorama/IT-rome.png',
+  '독일': 'assets/diorama/DE-berlin.png',
+  '프랑스': 'assets/diorama/FR-paris.png',
+  '스페인': 'assets/diorama/ES-madrid.png',
+  '영국': 'assets/diorama/GB-london.png',
+  '네덜란드': 'assets/diorama/NL-amsterdam.png',
+  '노르웨이': 'assets/diorama/NO-oslo.png',
+  '핀란드': 'assets/diorama/FI-helsinki.png',
+  '벨기에': 'assets/diorama/BE-brussels.png',
+  '러시아': 'assets/diorama/RU-moscow.png',
+  '캐나다': 'assets/diorama/CA-ottawa.png',
+  '미국': 'assets/diorama/US-washington.png',
+  '멕시코': 'assets/diorama/MX-mexicocity.png',
+  '파나마': 'assets/diorama/PA-panamacity.png',
+  '하와이': 'assets/diorama/US-hawaii.png',
+  '브라질': 'assets/diorama/BR-brasilia.png',
+  '아르헨티나': 'assets/diorama/AR-buenosaires.png',
+  '칠레': 'assets/diorama/CL-santiago.png',
+  '페루': 'assets/diorama/PE-lima.png',
+  '콜롬비아': 'assets/diorama/CO-bogota.png',
+  '파푸아뉴기니': 'assets/diorama/PG-portmoresby.png',
+  '뉴질랜드': 'assets/diorama/NZ-wellington.png',
+  '호주': 'assets/diorama/AU-canberra.png',
+  '제주도': 'assets/diorama/KR-jeju.png',
+  '뉴욕': 'assets/diorama/US-newyork.png',
+};
+// 디오라마 배경 이미지가 실제로 준비된(파일 존재) 나라. 지도에서 '배경 있는 도시'로 구분 표시(main.js가 import).
+// 새 이미지를 assets/diorama/에 넣으면 그 나라 ko를 여기에 추가한다(파일 유무를 코드가 정적으로 알 수 없어 명시 관리).
+export const DIORAMA_READY = new Set([
+  '한국', '일본', '중국', '몽골', '대만', '베트남', '네팔', '이집트', '프랑스', '영국',
+  '러시아', '뉴질랜드', '호주', '브라질', '발리', '하와이', '뉴욕',
+]);
 function drawDiorama(ctx, img, game, W, H) {
-  const dh = H * DIORAMA_ZOOM;
-  const scale = dh / img.height;
-  const dw = img.width * scale;
-  const dx = (W - dw) / 2;                        // 가로 중앙(좌우 대칭 크롭)
+  const scale = W / img.width;                    // 좌우(가로) 꽉 채움 - 넓은 화면일수록 확대
+  const dw = W;
+  const dh = img.height * scale;
+  const dx = 0;
   const p = Math.min(1, (game.elapsed || 0) / DIORAMA_JOURNEY);
-  const dy = (H - dh) + p * (dh - H);             // (H-dh)<0 하단(경복궁) → 0 상단(항구)
+  const span = Math.max(0, dh - H);               // 세로로 남는 스크롤 여백(이미지가 화면보다 길 때만)
+  const dy = -span + p * span;                    // -span 하단(도시 출발) → 0 상단(항구 도착)
   ctx.drawImage(img, dx, dy, dw, dh);
 }
 
 export function render(ctx, game, W, H) {
   ctx.clearRect(0, 0, W, H);
-  drawBackground(ctx, game, W, H); // 나라 배경(하늘 그라데이션) 또는 구역별 성운
+  const dioBg = drawBackground(ctx, game, W, H); // true = 사진 디오라마 배경(밝음)
   drawStars(ctx, game);
   drawScenery(ctx, game, W, H);    // 나라별 지평선 실루엣(게임 요소 뒤 = 가독성 보존)
   drawZone(ctx, game);        // 플레이어 아래에 깔리는 에너지존 오라
+  // 디오라마(사진) 배경 위에서 요소가 묻히지 않게 대비를 준다. 성능을 위해 처리를 개수에 따라 나눈다:
+  //   개수 적은 요소(아이템·적·보스·비행기)는 그림자로 띄우고(비용 무시 가능), 개수 많은 총알은 그림자 대신
+  //   자체 윤곽선으로 대비한다(shadowBlur를 총알 수십 개에 걸면 버벅이므로 - 사용자 지적). 배경 밝기는 유지.
+  if (dioBg) { ctx.save(); ctx.shadowColor = COLORS.entityShadow; ctx.shadowBlur = CFG.entityShadowBlur; }
   drawPowerups(ctx, game);
   drawEnemies(ctx, game);
   drawBoss(ctx, game);
-  drawEnemyBullets(ctx, game);
+  if (dioBg) ctx.restore();
+  drawEnemyBullets(ctx, game); // 적탄: 그림자 대신 어두운 윤곽선(drawEnemyBullets 내부에서)
   drawBullets(ctx, game);
   drawShotMerge(ctx, game);   // 플레이어 메인 총알 + 친구 발사체 겹침 시 합체 발광(어린이 모드)
+  if (dioBg) { ctx.save(); ctx.shadowColor = COLORS.entityShadow; ctx.shadowBlur = CFG.entityShadowBlur; }
   drawTail(ctx, game);        // 뒤쪽 꼬리 비행기(플레이어보다 먼저 = 뒤에 깔림)
   drawOptions(ctx, game);     // 좌우 부속 비행기
   drawPlayer(ctx, game);
   drawFriend(ctx, game);      // 친구 비행기(어린이 모드) + hp 점 + 말풍선(맨 위)
+  if (dioBg) ctx.restore();
   drawParticles(ctx, game);
   drawBombFlash(ctx, game, W, H); // 봄 획득 시 화면 전체 은은한 폭발 섬광
 }
@@ -101,12 +175,13 @@ function drawFriend(ctx, game) {
   ctx.translate(f.x, f.y);
   ctx.shadowColor = c.glow;
   ctx.shadowBlur = 10;
-  // 작은 날개 2개(몸 양옆, 살짝 벌림)
+  // 작은 날개 2개(몸 양옆, 살짝 벌림). 갈색 몸이 갈색 도시 배경에 묻히지 않게 밝은 윤곽선을 두른다(사용자 지시).
   ctx.fillStyle = c.body;
-  ctx.beginPath(); ctx.ellipse(-r * 0.82, r * 0.2, r * 0.42, r * 0.62, -0.35, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(r * 0.82, r * 0.2, r * 0.42, r * 0.62, 0.35, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = c.outline; ctx.lineWidth = 2.4;
+  ctx.beginPath(); ctx.ellipse(-r * 0.82, r * 0.2, r * 0.42, r * 0.62, -0.35, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(r * 0.82, r * 0.2, r * 0.42, r * 0.62, 0.35, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
   // 통통한 몸통(키위새 - 아래로 볼록한 서양배꼴)
-  ctx.beginPath(); ctx.ellipse(0, r * 0.12, r * 0.92, r * 1.08, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(0, r * 0.12, r * 0.92, r * 1.08, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
   ctx.shadowBlur = 0;
   // 긴 부리(위로 뻗은 가느다란 삼각 - 키위새 특징)
   ctx.fillStyle = c.beak;
@@ -202,7 +277,7 @@ function drawBackground(ctx, game, W, H) {
   const dioSrc = nation && DIORAMA_SRC[nation.ko];
   if (dioSrc) {
     const de = getDiorama(dioSrc);
-    if (de.ok) { drawDiorama(ctx, de.img, game, W, H); return; }
+    if (de.ok) { drawDiorama(ctx, de.img, game, W, H); return true; } // true = 사진 디오라마(밝음) → render가 요소 그림자 켬
   }
   // 공용 배경 풀 이미지(있고 로드됐으면 하늘·대기 레이어를 세로 스크롤 타일로 대체 - A안). 지평선 실루엣은 drawScenery가 별도.
   const bg = nation && COUNTRY_BG[nation.ko];
@@ -210,7 +285,7 @@ function drawBackground(ctx, game, W, H) {
     const pool = BG_POOLS.find((p) => p.id === bg.pool);
     if (pool) {
       const e = getBgImage(pool.asset);
-      if (e.ok) { drawScrollingBg(ctx, e.img, game, W, H); return; }
+      if (e.ok) { drawScrollingBg(ctx, e.img, game, W, H); return false; }
     }
   }
   const scene = nation && SCENES[nation.ko];
@@ -233,6 +308,7 @@ function drawBackground(ctx, game, W, H) {
   if (bgCache.sky) { ctx.fillStyle = bgCache.sky; ctx.fillRect(0, 0, W, H); }
   ctx.fillStyle = bgCache.g1; ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = bgCache.g2; ctx.fillRect(0, 0, W, H);
+  return false; // 우주/성운 배경(어두움) - 요소 그림자 불필요
 }
 
 // 나라별 지평선 실루엣(게임 요소 뒤에 그려 가독성 보존). 현재 서울만, 나머지 나라는 점진 확장.
@@ -857,6 +933,7 @@ function drawEnemyBullets(ctx, game) {
     ctx.beginPath();
     ctx.arc(b.x, b.y, b.r + 0.5, 0, Math.PI * 2);
     ctx.fill();
+    ctx.lineWidth = 1.6; ctx.strokeStyle = COLORS.enemyBulletEdge; ctx.stroke(); // 밝은 배경 대비 어두운 윤곽(blur 없는 가벼운 단색)
     ctx.fillStyle = COLORS.enemyBulletCore;
     ctx.beginPath();
     ctx.arc(b.x, b.y, b.r * 0.45, 0, Math.PI * 2);
