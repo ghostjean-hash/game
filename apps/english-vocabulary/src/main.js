@@ -18,11 +18,11 @@ const now = () => new Date().toISOString();
 
 // --- 설정 ---
 const DEFAULT_SETTINGS = {
-  autoSpeak: false,     // 카드가 바뀔 때 자동 발음 (기본 OFF)
-  showExample: true,    // 예문 표시
-  showExampleKr: true,  // 예문 해석 표시
-  shuffle: true,        // 한 바퀴 끝나면 순서 섞기
-  fontScale: "normal",  // small | normal | large
+  autoSpeak: false,      // 카드가 바뀔 때 자동 발음 (기본 OFF)
+  showExample: true,     // 예문 표시 (기본 ON)
+  showExampleKr: false,  // 예문 해석 표시 (기본 OFF)
+  shuffle: false,        // 한 바퀴 끝나면 순서 섞기 (기본 OFF)
+  fontScale: "normal",   // small | normal | large
 };
 let settings = { ...DEFAULT_SETTINGS, ...(store.get("settings") || {}) };
 
