@@ -193,6 +193,10 @@ body[data-fs="large"] { --fs: 1.15; }
 .menu-set-bar { height: 8px; border-radius: 999px; background: var(--bg-elev-2); overflow: hidden; }
 .menu-set-bar-fill { height: 100%; background: var(--accent); border-radius: 999px; }
 .menu-set-pct { flex-shrink: 0; font-size: calc(15px * var(--fs)); font-weight: 800; color: var(--accent); }
+/* 못 외운 단어 모음 카드 - 세트 카드와 구분되게 강조. */
+.menu-remaining { border-color: var(--accent); background: var(--bg-elev); margin-bottom: var(--sp-2); }
+.menu-remaining .menu-set-title { color: var(--accent); }
+.menu-set-done { opacity: 0.5; cursor: default; }
 
 /* --- 학습 / 복습 카드 --- */
 .study, .review { gap: var(--sp-4); }

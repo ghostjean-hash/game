@@ -2,6 +2,14 @@
 
 append-only. 최신이 위.
 
+## 2026-07-24 · v0.9 목록 표시 설정(층 on/off·완료 숨김·못 외운 단어 모음)
+
+- **배경**: 사용자 요청 3가지 - (1) 초/중/고 목록을 설정에서 on/off (2) 다 외운 세트 자동 숨김 on/off (3) 층을 꺼도 아직 못 외운 단어는 묶어서 학습.
+- **설정 추가**: settings에 levels{elementary/middle/high}(중첩, 별도 병합으로 기본키 보존)·hideCompleted·showRemaining. 설정 화면 "단어 목록" 그룹 신설(초/중/고 표시 토글 + 다 외운 세트 숨기기 + 못 외운 단어 모음).
+- **메뉴 반영**: 층 off면 그 그룹 통째 숨김. hideCompleted면 100% 세트 제외. showRemaining이면 최상단에 "못 외운 단어 모음" 카드(모든 available 세트에서 learned 아닌 단어 합계, 층 on/off와 무관).
+- **못 외운 단어 모음(핵심)**: openRemaining이 모든 available 세트를 읽어 learned 아닌 단어를 통합해 한 덱으로 학습. 별도 저장 없이 열 때마다 원본 진도로 재구성. "알았음" 시 markLearnedInSource로 **원본 세트 진도에 learned 반영(단일 진도)**, undo 시 revertLearnedInSource로 되돌림. 모음에선 보관함·재시작·초기화 숨김/차단(원본이 진도 주인).
+- **검증**: test 264 PASS. browser-shot - (1)설정 새 토글 렌더 (2)초등 off+모음 on → 초등 목록 숨고 모음 785 카드만 (3)모음에서 1개 "알았음" → 모음 784 + SET001 1개 외움·1%(원본 반영 확인). 콘솔 0.
+
 ## 2026-07-24 · v0.8 세트 선택 메뉴(초/중/고 2단) + 세트별 진도 저장
 
 - **배경**: 사용자 "2단 메뉴로 진행"(제안 확정). 여러 세트가 생겨 세트 선택 UI 필요.
