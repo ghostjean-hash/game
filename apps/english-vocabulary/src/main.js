@@ -59,18 +59,22 @@ const ICON = {
 };
 
 // --- 상태 ---
-let deck = null;
-let DATA = null;
-let view = "home";
+let MANIFEST = null;     // 세트 목록·메타(메뉴 렌더용)
+let deck = null;         // 현재 선택된 세트의 학습 덱
+let DATA = null;         // 현재 선택된 세트의 단어 데이터
+let currentSetId = null; // 현재 선택된 세트 id
+let view = "menu";       // 첫 화면은 세트 선택 메뉴
 // 학습·복습 카드의 표시 단계(question=단어만 / answer=뜻 공개). 단어가 바뀔 때마다 question으로 초기화.
 // 새로고침 복원 시에도 기본값 question이라 정답 공개 상태는 이어지지 않는다(편법 방지).
 let cardView = initialCardView();
 
+// 진도는 세트마다 따로 저장한다(deck:<setId>). 한 세트를 하다 다른 세트를 가도 각각 유지.
+const deckKey = (setId) => `deck:${setId}`;
 function buildDeck() {
-  deck = createDeck(DATA, store.get("deck"), settings.shuffle ? Math.random : null);
+  deck = createDeck(DATA, store.get(deckKey(currentSetId)), settings.shuffle ? Math.random : null);
 }
 function saveDeck() {
-  store.set("deck", deck.serialize());
+  store.set(deckKey(currentSetId), deck.serialize());
 }
 
 // --- 라우팅 ---
@@ -91,7 +95,8 @@ settingsBtn.addEventListener("click", () => go("settings"));
 function render() {
   stage.innerHTML = "";
   document.onkeydown = null;
-  if (view === "home") renderHome();
+  if (view === "menu") renderMenu();
+  else if (view === "home") renderHome();
   else if (view === "study") renderStudy();
   else if (view === "vault") renderVault();
   else if (view === "review") renderReview();
@@ -116,10 +121,83 @@ function el(tag, className, html) {
   return e;
 }
 
-// --- 홈 ---
-function renderHome() {
-  // 앱 홈에서는 뒤로 버튼이 허브(게임/앱 목록)로 나간다.
+// --- 세트 선택 메뉴 (초등/중등/고등 2단) ---
+const LEVEL_ORDER = ["elementary", "middle", "high"];
+const LEVEL_LABEL = { elementary: "초등", middle: "중등", high: "고등" };
+const DATA_DIR = "./src/data/";
+
+// 세트별 진도를 저장된 덱 상태에서 가볍게 계산(덱을 새로 만들지 않고 요약만).
+function setProgress(setId, count) {
+  const st = store.get(deckKey(setId));
+  if (!st || !st.progress) return { learned: 0, percent: 0 };
+  let learned = 0;
+  for (const id in st.progress) if (st.progress[id].status === "learned") learned++;
+  return { learned, percent: count ? Math.round((learned / count) * 100) : 0 };
+}
+
+function renderMenu() {
   setTopbar("영어 단어장", true, () => { window.location.href = "../../"; });
+  const screen = el("div", "screen menu");
+
+  const sets = (MANIFEST && MANIFEST.sets) || [];
+  for (const level of LEVEL_ORDER) {
+    const group = sets.filter((s) => s.level === level);
+    if (group.length === 0) continue;
+    const avail = group.filter((s) => s.available);
+    const totalWords = avail.reduce((n, s) => n + (s.count || 0), 0);
+
+    const head = el("div", "menu-group-head");
+    head.appendChild(el("div", "menu-group-title", LEVEL_LABEL[level]));
+    head.appendChild(el("div", "menu-group-sub", avail.length
+      ? `${totalWords}단어 · ${avail.length}세트`
+      : "준비 중"));
+    screen.appendChild(head);
+
+    if (avail.length === 0) {
+      screen.appendChild(el("div", "menu-empty", "아직 준비 중입니다."));
+      continue;
+    }
+
+    for (const s of group) {
+      if (!s.available) continue;
+      const num = s.setId.replace(/\D/g, "");
+      const p = setProgress(s.setId, s.count);
+      const card = el("button", "menu-set");
+      const main = el("div", "menu-set-main");
+      main.appendChild(el("div", "menu-set-title", `SET ${num} · ${s.title}`));
+      main.appendChild(el("div", "menu-set-meta", `${s.count}단어 · ${p.learned}개 외움`));
+      const bar = el("div", "menu-set-bar");
+      bar.appendChild(el("div", "menu-set-bar-fill")).style.width = `${p.percent}%`;
+      main.appendChild(bar);
+      card.appendChild(main);
+      card.appendChild(el("div", "menu-set-pct", `${p.percent}%`));
+      card.onclick = () => openSet(s);
+      screen.appendChild(card);
+    }
+  }
+
+  stage.appendChild(screen);
+}
+
+// 세트를 열어 학습 화면으로. 세트 데이터는 이때 불러온다(메뉴는 manifest만으로 그린다).
+async function openSet(entry) {
+  try {
+    const data = await fetch(DATA_DIR + entry.file, { cache: "no-cache" }).then((r) => r.json());
+    DATA = data;
+    currentSetId = data.setId;
+    buildDeck();
+    saveDeck();
+    cardView = VIEW.QUESTION;
+    go("home");
+  } catch {
+    showToast("세트를 불러오지 못했습니다");
+  }
+}
+
+// --- 홈 (선택된 세트의 진행 화면) ---
+function renderHome() {
+  // 세트 홈에서는 뒤로 버튼이 세트 선택 메뉴로 간다.
+  setTopbar(DATA.title || "영어 단어장", true, () => go("menu"));
   const s = deck.stats();
 
   const home = el("div", "screen home");
@@ -444,7 +522,8 @@ function renderComplete() {
 
 // --- 설정 ---
 function renderSettings() {
-  setTopbar("설정", true);
+  // 설정은 메뉴/세트 홈 어디서든 들어올 수 있으니, 돌아갈 곳을 상황에 맞게 정한다.
+  setTopbar("설정", true, () => go(DATA ? "home" : "menu"));
   const screen = el("div", "screen settings");
 
   const toggle = (label, desc, key) => {
@@ -460,7 +539,7 @@ function renderSettings() {
       e.preventDefault();
       settings[key] = !settings[key];
       saveSettings();
-      if (key === "shuffle") buildDeck(); // 섞기 설정은 덱 재생성에 반영
+      if (key === "shuffle" && DATA) buildDeck(); // 섞기 설정은 현재 세트 덱 재생성에 반영(세트 선택된 경우만)
       render();
     };
     return row;
@@ -496,41 +575,36 @@ function renderSettings() {
 }
 
 async function confirmReset() {
+  if (!currentSetId || !DATA) {
+    showToast("세트를 먼저 선택하세요");
+    return;
+  }
   const r = await showModal({
     title: "데이터 초기화",
-    body: "외운 단어와 진행 상태가 모두 사라집니다. 계속할까요?",
+    body: `이 세트(${DATA.title || currentSetId})의 외운 단어와 진행 상태가 모두 사라집니다. 계속할까요?`,
     actions: [
       { label: "취소", value: "cancel" },
       { label: "초기화", value: "ok", primary: true },
     ],
   });
   if (r !== "ok") return;
-  store.remove("deck");
+  store.remove(deckKey(currentSetId));
   buildDeck();
   saveDeck();
-  showToast("초기화했습니다");
+  showToast("이 세트를 초기화했습니다");
   go("home");
 }
 
 // --- 부팅 ---
-// manifest에서 학습 가능한(available) 세트를 찾아 그 세트 파일을 로드한다.
-// 1차는 단일 세트(set-001)만 available. 8세트 확장 시 여기서 세트 선택 UI를 얹으면 되고,
-// 세트 데이터 스키마·deck 로직은 그대로다(로드 대상 파일만 달라진다).
-const DATA_DIR = "./src/data/";
+// manifest만 먼저 불러 세트 선택 메뉴(초/중/고 2단)를 그린다.
+// 세트 데이터(set-NNN.json)는 사용자가 세트를 고를 때 openSet에서 불러온다.
 applyFontScale();
 fetch(DATA_DIR + "manifest.json", { cache: "no-cache" })
   .then((r) => r.json())
   .then((manifest) => {
-    const active = (manifest.sets || []).find((s) => s.available);
-    if (!active) throw new Error("no available set");
-    return fetch(DATA_DIR + active.file, { cache: "no-cache" }).then((r) => r.json());
-  })
-  .then((data) => {
-    DATA = data;
-    buildDeck();
-    saveDeck();
-    render();
+    MANIFEST = manifest;
+    go("menu");
   })
   .catch(() => {
-    stage.innerHTML = '<div class="empty-note">단어 데이터를 불러오지 못했습니다.</div>';
+    stage.innerHTML = '<div class="empty-note">세트 목록을 불러오지 못했습니다.</div>';
   });

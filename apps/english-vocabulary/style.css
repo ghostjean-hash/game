@@ -167,6 +167,33 @@ body[data-fs="large"] { --fs: 1.15; }
   padding: var(--sp-3);
 }
 
+/* --- 세트 선택 메뉴 (초/중/고 2단) --- */
+.menu { gap: var(--sp-3); }
+.menu-group-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3);
+  margin-top: var(--sp-4);
+}
+.menu-group-head:first-child { margin-top: 0; }
+.menu-group-title { font-size: calc(20px * var(--fs)); font-weight: 900; }
+.menu-group-sub { font-size: calc(13px * var(--fs)); color: var(--fg-mute); font-weight: 700; }
+.menu-empty {
+  font-size: calc(14px * var(--fs)); color: var(--fg-mute);
+  background: var(--bg-elev-2); border-radius: var(--r-2);
+  padding: var(--sp-3) var(--sp-4);
+}
+.menu-set {
+  display: flex; align-items: center; gap: var(--sp-4); text-align: left;
+  background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--r-3);
+  padding: var(--sp-4); cursor: pointer; width: 100%;
+}
+.menu-set:active { transform: scale(0.99); }
+.menu-set-main { flex: 1; min-width: 0; }
+.menu-set-title { font-size: calc(17px * var(--fs)); font-weight: 800; }
+.menu-set-meta { font-size: calc(13px * var(--fs)); color: var(--fg-dim); margin: 2px 0 8px; }
+.menu-set-bar { height: 8px; border-radius: 999px; background: var(--bg-elev-2); overflow: hidden; }
+.menu-set-bar-fill { height: 100%; background: var(--accent); border-radius: 999px; }
+.menu-set-pct { flex-shrink: 0; font-size: calc(15px * var(--fs)); font-weight: 800; color: var(--accent); }
+
 /* --- 학습 / 복습 카드 --- */
 .study, .review { gap: var(--sp-4); }
 .study-info { display: flex; flex-direction: column; gap: var(--sp-2); }
