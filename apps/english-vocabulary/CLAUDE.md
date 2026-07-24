@@ -42,11 +42,11 @@ apps/english-vocabulary/
 # 4. 데이터 규약 (manifest + set-NNN.json)
 
 4.1. **manifest.json**: `{ app, totalTarget:1600, setSize:200, sets:[...] }`. `sets[]`: `{ setId, order, title, level, file, count, available }`. 앱·검증기는 `available:true`인 세트만 로드·검증하고, `false`(준비 중) 세트는 건너뛴다. `count`는 그 세트 파일의 기대 단어 수(샘플 20, 실데이터 200).
-4.2. **set-NNN.json**: `{ setId, order, title, level, words:[...] }`. `word`: `{ id, setId, level, word, meaningKr[], example, exampleKr }`(요청서 7장).
+4.2. **set-NNN.json**: `{ setId, order, title, level, words:[...] }`. `word`: `{ id, setId, level, word, pos, meaningKr[], example, exampleKr }`(요청서 7장). `pos`=품사(한국어 라벨, 허용: 명사/동사/형용사/부사/전치사/접속사/대명사/감탄사/한정사), ANSWER 카드에서 뜻 앞 배지로 표시.
 4.3. **ID 규칙**(요청서 7장, 충돌 방지): 단어 id `ev-sNN-NNNN`(예 `ev-s01-0001`, s뒤 2자리=세트 order, 뒤 4자리=일련), 세트 id `ev-set-NNN`(예 `ev-set-001`). english-reading 단어장(`vocab`)과도 프리픽스가 달라 향후 연동 시 충돌 없음(요청서 10장).
 4.4. `meaningKr`은 핵심 뜻 1~2개(요청서 6장 - 뜻 5개 이상·긴 문법·어원 금지). `example`은 짧은 예문 1개(14단어 이하 권장) + `exampleKr` 해석. **IPA 발음기호는 제외**(손 오타 위험, 발음은 SpeechSynthesis 담당). 넣으려면 `pronunciation` 필드 + 카드 표시 추가.
 4.5. **실데이터 적용 절차**(요청서 2·10장, 임의 생성 금지): 검증 가능한 자료로 세트별 단어·뜻·예문을 별도 제작·검수 → `set-NNN.json` 채우고 manifest에서 그 세트 `count`=200·`available`=true 전환 → **`node apps/english-vocabulary/tools/validate-data.mjs --strict`로 검증 통과 후 적용**. 로직·UI 변경 불요(deck는 세트 데이터 스키마만 의존, 세트 크기는 데이터 길이가 곧 `startCount`).
-4.6. **검증기(tools/validate-data.mjs)**: manifest의 available 세트를 검사. error(적용 차단) = 필드 누락·빈 값·id/setId 형식·id·단어 중복(세트 내/간)·대소문자 중복·앞뒤 공백·meaningKr 비배열·(strict) 세트당 200·총 1600. warning(사람 검수 대상, 차단 아님) = 활용형 의심 중복·예문에 목표 단어(활용형) 미포함·예문 과길이. 품사 균형(요청서 6장)은 데이터에 품사 필드가 생기면 추가.
+4.6. **검증기(tools/validate-data.mjs)**: manifest의 available 세트를 검사. error(적용 차단) = 필드 누락(pos 포함)·빈 값·허용 외 품사·id/setId 형식·id·단어 중복(세트 내/간)·대소문자 중복·앞뒤 공백·meaningKr 비배열·(strict) 세트당 200·총 1600. warning(사람 검수 대상, 차단 아님) = 활용형 의심 중복·예문에 목표 단어(활용형) 미포함·예문 과길이. 품사 균형(요청서 6장, 세트별 품사 분포)은 후속 과제.
 
 # 5. 작업 시 주의
 

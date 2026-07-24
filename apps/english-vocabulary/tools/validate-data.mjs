@@ -22,6 +22,7 @@ function warn(where, msg) { warnings.push(`[WARN]  ${where}\n  - ${msg}`); }
 const ID_RE = /^ev-s(\d{2})-(\d{4})$/;
 const SETID_RE = /^ev-set-(\d{3})$/;
 const EXAMPLE_MAX_WORDS = 14; // 짧은 예문 원칙(요청서 5·6장)
+const POS_ALLOWED = new Set(["명사", "동사", "형용사", "부사", "전치사", "접속사", "대명사", "감탄사", "한정사"]);
 
 // 활용형 어간 매칭: 예문에 목표 단어(또는 흔한 활용형)가 들어있는지 보수적으로 확인.
 // 불규칙 활용(go→went 등)은 여기서 못 잡으므로 error가 아니라 warning으로 둔다.
@@ -93,8 +94,11 @@ for (const entry of manifest.sets || []) {
     const where = `${entry.setId} / ${w.id || "(id없음)"}`;
 
     // 필수 필드
-    for (const f of ["id", "setId", "word", "meaningKr", "example", "exampleKr"]) {
+    for (const f of ["id", "setId", "word", "pos", "meaningKr", "example", "exampleKr"]) {
       if (w[f] === undefined || w[f] === null) err(where, `필수 필드 누락: ${f}`);
+    }
+    if (w.pos !== undefined && w.pos !== null && !POS_ALLOWED.has(w.pos)) {
+      err(where, `허용되지 않은 품사(pos): "${w.pos}" (허용: ${[...POS_ALLOWED].join("/")})`);
     }
     if (typeof w.word !== "string" || w.word.trim() === "") err(where, "빈 word");
     if (!Array.isArray(w.meaningKr)) err(where, "meaningKr는 배열이어야 함");

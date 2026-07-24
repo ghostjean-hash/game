@@ -23,7 +23,6 @@ const DEFAULT_SETTINGS = {
   showExampleKr: true,  // 예문 해석 표시
   shuffle: true,        // 한 바퀴 끝나면 순서 섞기
   fontScale: "normal",  // small | normal | large
-  introDone: false,     // 최초 1회 학습 안내를 봤는가
 };
 let settings = { ...DEFAULT_SETTINGS, ...(store.get("settings") || {}) };
 
@@ -173,18 +172,9 @@ function renderHome() {
 }
 
 // --- 학습 ---
-// 학습 진입 - 최초 1회만 회상 학습 안내를 보여주고, 카드는 항상 단어만 보이는 상태로 시작.
-async function enterStudy() {
+// 학습 진입 - 카드는 항상 단어만 보이는 상태(QUESTION)로 시작.
+function enterStudy() {
   cardView = VIEW.QUESTION;
-  if (!settings.introDone) {
-    await showModal({
-      title: "학습 방법",
-      body: "단어의 뜻을 먼저 머릿속으로 떠올린 뒤, “뜻 확인”을 눌러 정답을 확인하세요.\n뜻을 맞게 떠올렸으면 “알았음”, 아니면 “몰랐음”을 누릅니다.",
-      actions: [{ label: "시작하기", value: "ok", primary: true }],
-    });
-    settings.introDone = true;
-    saveSettings();
-  }
   go("study");
 }
 
@@ -197,7 +187,10 @@ function revealAnswer() {
 // 카드에 뜻·예문을 그린다(ANSWER 상태에서만 호출). QUESTION에서는 아예 DOM에 넣지 않아
 // 정답이 시각적으로도, 스크린리더로도 미리 노출되지 않게 한다.
 function appendAnswerBody(card, word) {
-  card.appendChild(el("div", "word-kr reveal-in", word.meaningKr.join(", ")));
+  const mean = el("div", "word-kr reveal-in");
+  if (word.pos) mean.appendChild(el("span", "word-pos", word.pos));
+  mean.appendChild(document.createTextNode(word.meaningKr.join(", ")));
+  card.appendChild(mean);
   if (settings.showExample && word.example) {
     const ex = el("div", "word-example reveal-in");
     ex.appendChild(el("div", "ex-en", word.example));
