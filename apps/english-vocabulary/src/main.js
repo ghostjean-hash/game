@@ -79,11 +79,14 @@ function go(next) {
   view = next;
   render();
 }
-function setTopbar(title, showBack) {
+// 뒤로 버튼은 화면마다 동작이 다르다(앱 홈에서는 허브로 나가고, 하위 화면에서는 앱 홈으로).
+let backHandler = () => go("home");
+function setTopbar(title, showBack, onBack) {
   titleEl.textContent = title;
   backBtn.hidden = !showBack;
+  backHandler = onBack || (() => go("home"));
 }
-backBtn.addEventListener("click", () => go("home"));
+backBtn.addEventListener("click", () => backHandler());
 settingsBtn.addEventListener("click", () => go("settings"));
 
 function render() {
@@ -116,7 +119,8 @@ function el(tag, className, html) {
 
 // --- 홈 ---
 function renderHome() {
-  setTopbar("영어 단어장", false);
+  // 앱 홈에서는 뒤로 버튼이 허브(게임/앱 목록)로 나간다.
+  setTopbar("영어 단어장", true, () => { window.location.href = "../../"; });
   const s = deck.stats();
 
   const home = el("div", "screen home");
