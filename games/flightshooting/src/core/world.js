@@ -10,11 +10,18 @@ import { stepFriend, friendTakeHit, gainFriendLevel, reviveFriend, notifyFriendK
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
 import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, spawnWispChild, dropItems, dropMaybe, burst, fieldBounds, syncBossParts } from './spawn.js';
+import { awardScore } from './score.js';
 
 export function hit(a, b) {
   const dx = a.x - b.x, dy = a.y - b.y;
   const rr = (a.r || a.rx) + (b.r || b.rx);
   return dx * dx + dy * dy <= rr * rr;
+}
+
+// 보통 난이도의 초반 연발 제한처럼, 난이도별로 지정된 구역까지만 조준 탄 수를 줄인다.
+function enemyShotCap(game) {
+  const early = game.earlyShots;
+  return early && game.stage <= early.throughStage ? early.max : (game.enemyShotsMax || 99);
 }
 
 // 점 p와 선분 a-b 사이 최단 거리(코일 아크 선 피격 판정용).
@@ -76,7 +83,7 @@ function reflectPrism(game, e) {
 export function updateEnemies(game, dt, W, H) {
   const p = game.player;
   const mul = game.enemyFireMul || 1; // 난이도: 어린이 모드면 발사 간격을 늘려 덜 쏘게
-  const shotsCap = game.enemyShotsMax || 99; // 난이도: 어린이 모드면 조준 연발을 정중앙 단발로 줄임
+  const shotsCap = enemyShotCap(game); // 난이도별 초반 조준 연발 상한
   const wispSpawns = []; // 도깨비불 분열은 루프 중 game.enemies를 늘리지 않도록 모았다가 루프 후 생성
   for (const e of game.enemies) {
     e.t += dt;
@@ -265,7 +272,7 @@ function destroyPart(game, part) {
   const boss = game.boss;
   const st = CFG.bossStyles[boss.style];
   part.dead = true;
-  game.score += st.partScore;
+  awardScore(game, st.partScore);
   burst(game, part.x, part.y, COLORS.boss.partDebris, 16);
   game.sfx.push('explode');
   if (!boss.core.exposed && boss.parts.every((p) => p.role !== 'shield' || p.dead)) {
@@ -280,7 +287,7 @@ export function updateBoss(game, dt, W, H) {
   if (boss.dying) { stepBossDeath(game, boss, dt); return; } // 사망 연출 중엔 보스 로직 정지
   const st = CFG.bossStyles[boss.style];
   const mul = game.enemyFireMul || 1;          // 어린이 모드 발사 간격 배수
-  const shotsCap = game.enemyShotsMax || 99;   // 어린이 모드 조준 연발 상한
+  const shotsCap = enemyShotCap(game);         // 난이도별 초반 조준 연발 상한
   boss.t += dt;
   if (boss.entering) {
     boss.y += 90 * dt;
@@ -413,7 +420,7 @@ function setHappy(game) {
 
 function grabItem(game, kind) {
   // 이미 최대치라 강화가 무의미하면 점수 보너스로 전환(수집 보람 유지).
-  const maxed = () => { game.score += CFG.maxedBonus; game.sfx.push('power'); };
+  const maxed = () => { awardScore(game, CFG.maxedBonus); game.sfx.push('power'); };
   const f = game.friend; // 어린이 모드 친구(있으면 아이템·회복 공유, docs/09)
   if (kind === 'H') {
     // 회복 공유: 친구가 기절했으면 부활, 아니면 나·친구 각각 hp 회복(상한 내).
@@ -438,7 +445,7 @@ function grabItem(game, kind) {
   if (kind === 'B') {
     for (const e of game.enemies) {
       burst(game, e.x, e.y, e.color, 12);
-      game.score += e.score;
+      awardScore(game, e.score);
       notifyFriendKill(game); // 어린이 모드: 연속 처치 칭찬 신호(친구 없으면 무시)
       // 봄으로 죽어도 보너스 기체는 파워업 확정 드롭(잡몹은 드롭 없음 - 봄이 과해지지 않게).
       if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount);
@@ -480,7 +487,7 @@ export function checkCollisions(game, W, H) {
         burst(game, b.x, b.y, e.color, 4);
         if (e.hp <= 0) {
           e.dead = true;
-          game.score += e.score;
+          awardScore(game, e.score);
           notifyFriendKill(game); // 어린이 모드: 연속 처치 칭찬 신호(친구 없으면 무시)
           burst(game, e.x, e.y, e.color, 14);
           if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체 확정 드롭
@@ -562,7 +569,7 @@ function defeatBoss(game) {
   //   update의 일괄 격파 판정(존 등)·코어 피격이 매 프레임 이 함수를 다시 부른다. 가드가 없으면 deathT 리셋 +
   //   드롭·점수·폭발이 매 프레임 반복되어 연출이 영원히 끝나지 않는다(무한 폭발·아이템 반복 버그).
   if (boss.dying) return;
-  game.score += boss.score;
+  awardScore(game, boss.score);
   const wasFinal = boss.kind === 'final';
   dropItems(game, boss.x, boss.y, wasFinal ? CFG.bossDrop.final : CFG.bossDrop.mini); // 보스 격파 확정 드롭
   game.bossPending = false;
@@ -577,31 +584,40 @@ function defeatBoss(game) {
   boss.deathT = 0;
   boss.burstT = 0;
   boss.deathDur = wasFinal ? CFG.bossDeath.finalDur : CFG.bossDeath.dur;
-  burst(game, boss.x, boss.y, COLORS.hitSpark, 24); // 첫 폭발
+  boss.deathFinalBurst = false;
+  burst(game, boss.x, boss.y, COLORS.hitSpark, 24, 'bossDeath'); // 첫 폭발
 }
 
-// 보스 사망 연출: 몸 전체에서 연쇄 폭발 + 화면 흔들림(감쇠), dur 후 큰 폭발과 함께 제거하고 다음 흐름을 튼다.
+// 보스 사망 연출: 주 연쇄 폭발(dur초) → 마지막 폭발 파티클이 전부 사라진 뒤에 다음 화면으로 넘긴다.
+// 파티클이 비정상적으로 남으면 maxDur초에 bossDeath 태그만 정리해 전환이 멈추지 않게 한다.
 function stepBossDeath(game, boss, dt) {
   const D = CFG.bossDeath;
   const rx = boss.rx || 40, ry = boss.ry || 34;
   boss.deathT += dt;
-  game.shake = D.shake * Math.max(0, 1 - boss.deathT / boss.deathDur);
-  boss.burstT -= dt;
-  if (boss.burstT <= 0) {
-    boss.burstT = D.burstEvery;
-    const ex = boss.x + (Math.random() - 0.5) * rx * 2.2;
-    const ey = boss.y + (Math.random() - 0.5) * ry * 2.2;
-    burst(game, ex, ey, Math.random() < 0.5 ? COLORS.hitSpark : COLORS.clearSpark, D.burstN);
-    game.bombFlash = Math.max(game.bombFlash || 0, CFG.bombFlash * 0.4);
-    game.sfx.push('explode');
+  if (!boss.deathFinalBurst) {
+    game.shake = D.shake * Math.max(0, 1 - boss.deathT / boss.deathDur);
+    boss.burstT -= dt;
+    if (boss.burstT <= 0 && boss.deathT < boss.deathDur) {
+      boss.burstT = D.burstEvery;
+      const ex = boss.x + (Math.random() - 0.5) * rx * 2.2;
+      const ey = boss.y + (Math.random() - 0.5) * ry * 2.2;
+      burst(game, ex, ey, Math.random() < 0.5 ? COLORS.hitSpark : COLORS.clearSpark, D.burstN, 'bossDeath');
+      game.bombFlash = Math.max(game.bombFlash || 0, CFG.bombFlash * 0.4);
+      game.sfx.push('explode');
+    }
+    if (boss.deathT < boss.deathDur) return;
+    boss.deathFinalBurst = true;
+    burst(game, boss.x, boss.y, COLORS.hitSpark, D.finalBurstN, 'bossDeath');
+    burst(game, boss.x, boss.y, COLORS.clearSpark, Math.floor(D.finalBurstN * 0.7), 'bossDeath');
+    game.bombFlash = CFG.bombFlash;
   }
-  if (boss.deathT < boss.deathDur) return;
-  // 종료: 큰 폭발 + 보스 제거 + 다음 흐름(승리 / 세계지도 / 다음 구역)
-  const wasFinal = boss.kind === 'final';
-  burst(game, boss.x, boss.y, COLORS.hitSpark, D.finalBurstN);
-  burst(game, boss.x, boss.y, COLORS.clearSpark, Math.floor(D.finalBurstN * 0.7));
-  game.bombFlash = CFG.bombFlash;
+
   game.shake = 0;
+  const particlesDone = !game.particles.some((p) => p.tag === 'bossDeath');
+  if (!particlesDone && boss.deathT < D.maxDur) return;
+  if (!particlesDone) game.particles = game.particles.filter((p) => p.tag !== 'bossDeath');
+  // 종료: 폭발 파티클 소멸(또는 3초 안전 종료) 후 보스 제거 + 다음 흐름(승리 / 세계지도 / 다음 구역)
+  const wasFinal = boss.kind === 'final';
   game.boss = null;
   if (wasFinal) { game.winTimer = 0.6; }
   else if (CFG.tour.enabled) { game.sfx.push('stageclear'); game.events.push({ type: 'show-map' }); }

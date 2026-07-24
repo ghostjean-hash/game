@@ -14,7 +14,7 @@ import { spawnBoss } from './core/spawn.js';
 import { autopilotStep } from './core/autopilot.js';
 import { gainFront, gainOption, gainZone, gainTail } from './core/parts.js';
 import { spawnFriend } from './core/friend.js';
-import { render, DIORAMA_READY } from './render/view.js';
+import { render, DIORAMA_READY, preloadDiorama } from './render/view.js';
 import { createControls } from './input/controls.js';
 
 registerServiceWorker('/service-worker.js');
@@ -57,7 +57,7 @@ const store = createStorage('flightshooting');
 
 // ── 상태 ──
 let W = 0, H = 0, dpr = 1;
-let state = 'menu'; // menu | playing | paused | dying | over | won | map(세계 여행 지도)
+let state = 'menu'; // menu | playing | paused | dying | over | won | map | map-loading(디오라마 로드 대기)
 let best = store.get('best', 0);
 let bannerTimer = 0;
 let deathTimer = 0; // 죽는 연출(dying) 남은 시간. 0이 되면 결과 팝업.
@@ -80,13 +80,13 @@ function saveCheat() { store.set('cheatCfg', { speed: cheatSpeed, invincible: ch
 function createGame() {
   return {
     player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
-    score: 0, lives: CFG.player.maxLives, maxLives: CFG.player.maxLives, stage: 1, fireTimer: 0, // maxLives는 난이도로 재설정
+    score: 0, scoreRemainder: 0, lives: CFG.player.maxLives, maxLives: CFG.player.maxLives, stage: 1, fireTimer: 0, // maxLives는 난이도로 재설정
     front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
     friend: null, // 어린이 모드에서만 생성(docs/09). 일반 모드는 null 유지.
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, apSkill: CFG.autopilot.default, cheat: null,
     // 자동 플레이(하이브리드): autoAssist 켜짐 + 손 안 댐(dragging=false) + 복귀 대기 끝(manualTimer<=0)일 때만 자동.
     autoAssist: false, dragging: false, manualTimer: 0,
-    difficulty: 'normal', enemyFireMul: 1, enemyHpMul: 1, enemyShotsMax: 99, radialMul: 1, // 난이도(startGame에서 세팅)
+    difficulty: 'normal', enemyFireMul: 1, enemyHpMul: 1, enemyShotsMax: 99, earlyShots: null, radialMul: 1, // 난이도(startGame에서 세팅)
     bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null, bossDeathTimer: null,
     shake: 0, // 화면 흔들림(보스 사망 연출 등, view/main render가 소비)
@@ -260,7 +260,7 @@ function resetGame() {
   game.bombFlash = 0;
   game.bullets = []; game.enemies = []; game.eBullets = [];
   game.powerups = []; game.particles = []; game.boss = null;
-  game.score = 0; game.maxLives = CFG.player.maxLives; game.lives = game.maxLives; // 난이도별 maxLives는 startGame에서 재설정
+  game.score = 0; game.scoreRemainder = 0; game.maxLives = CFG.player.maxLives; game.lives = game.maxLives; // 난이도별 maxLives는 startGame에서 재설정
   game.front = 1; game.options = []; game.optionEvo = 0; game.zone = { level: 0, timer: null }; game.tail = []; game.partHistory = [];
   game.friend = null; // 친구 동행 켜짐이면 startGame에서 다시 생성
   game.stage = 1; game.fireTimer = 0;
@@ -283,7 +283,7 @@ const GAIN_BY_PART = { front: gainFront, option: gainOption, optionEvo: gainOpti
 function saveProgress() {
   if (state !== 'playing') return; // 진행 중 상태만 저장(전환·연출 중 저장 방지)
   store.set(SAVE_KEY, {
-    stage: game.stage, score: game.score, lives: game.lives, maxLives: game.maxLives,
+    stage: game.stage, score: game.score, scoreRemainder: game.scoreRemainder, lives: game.lives, maxLives: game.maxLives,
     tourIdx: game.tourIdx, tourPath: game.tourPath.slice(),
     partHistory: game.partHistory.slice(),
     difficulty, friendOn, autoOn, apSkill,
@@ -311,6 +311,7 @@ function startGame(diff, saved) {
   game.enemyFireMul = diffCfg.enemyFireMul;
   game.enemyHpMul = diffCfg.enemyHpMul != null ? diffCfg.enemyHpMul : 1; // 난이도별 적 체력 배수
   game.enemyShotsMax = diffCfg.enemyShotsMax || 99;
+  game.earlyShots = diffCfg.earlyShots || null;
   game.radialMul = diffCfg.radialMul != null ? diffCfg.radialMul : 1; // 방사·자폭 탄 개수 배수(쉬움 감축)
   game.maxLives = diffCfg.maxLives || CFG.player.maxLives; // 난이도별 목숨 최대값(쉬움 5 ~ 어려움/매우 어려움 3, 최소 3)
   game.lives = game.maxLives;                             // 시작 목숨 = 최대값(resetGame 기본3 위로 재설정)
@@ -318,6 +319,7 @@ function startGame(diff, saved) {
     // 이어서 하기: 저장된 구역·점수·목숨·여행경로·화력을 되살린다.
     game.stage = saved.stage;
     game.score = saved.score;
+    game.scoreRemainder = saved.scoreRemainder || 0;
     game.maxLives = saved.maxLives || game.maxLives;
     game.lives = saved.lives != null ? saved.lives : game.lives;
     game.tourIdx = saved.tourIdx != null ? saved.tourIdx : game.tourIdx;
@@ -460,9 +462,9 @@ function cityMark(i, mk, dotColor, s, clickable, faint, hasBg) {
   const op = faint ? ' opacity="0.55"' : '';
   const open = clickable ? `<g class="map-pick" data-dest="${i}"${op}>` : `<g${op}>`;
   const dotEl = `<circle ${clickable ? 'class="pick-dot" ' : ''}cx="${x.toFixed(1)}" cy="${yv.toFixed(1)}" r="${dot.toFixed(1)}" fill="${dotColor}" stroke="#0b1020" stroke-width="${(1.5 * s).toFixed(2)}"/>`;
-  // 배경(디오라마) 이미지가 준비된 도시는 점 우상단에 금색 별(★)을 붙여 '배경 있음'을 구분 표시(사용자 선택).
-  //   색·모양이 후보 점(시안)과 완전히 달라 한눈에 구별된다. bgRing 값은 별을 점에서 띄우는 오프셋으로 재사용.
-  const bgStar = hasBg ? `<text x="${(x + dot + CFG.tour.mark.bgRing * s).toFixed(1)}" y="${(yv - dot).toFixed(1)}" font-size="${(mk.cap * s * 1.05).toFixed(1)}" fill="${COLORS.tour.bgReady}" text-anchor="middle" dominant-baseline="central">★</text>` : '';
+  // 배경(디오라마) 이미지가 준비된 미방문 도시는 도시 터치 원 안에 금색 별(★)을 겹쳐 표시한다.
+  //   별이 도시에서 떨어져 보이지 않고, 같은 그룹 안이라 별을 눌러도 목적지를 고를 수 있다.
+  const bgStar = hasBg ? `<text x="${x.toFixed(1)}" y="${yv.toFixed(1)}" font-size="${(dot * CFG.tour.mark.bgStarScale).toFixed(1)}" fill="${COLORS.tour.bgReady}" text-anchor="middle" dominant-baseline="central" pointer-events="none">★</text>` : '';
   let nameX, nameY, capX, capY, anchor;
   if (C.labelDir === 'right' || C.labelDir === 'left') {
     // 붙어 있는 나라(싱가포르·말레이시아) 겹침 방지: 라벨을 점 옆(우/좌)에 나라(위)·수도(아래) 2줄로.
@@ -484,7 +486,7 @@ function cityMark(i, mk, dotColor, s, clickable, faint, hasBg) {
   const botLabel = C.type === 'travel' ? C.ko : C.cap;
   const nameEl = `<text x="${nameX}" y="${nameY}" text-anchor="${anchor}" font-size="${nameFs}" font-weight="600" fill="${COLORS.tour.countryLabel}">${topLabel}</text>`;
   const capEl = `<text x="${capX}" y="${capY}" text-anchor="${anchor}" font-size="${capFs}" font-weight="700" fill="${dotColor}">${botLabel}</text>`;
-  return open + bgStar + dotEl + nameEl + capEl + '</g>';
+  return open + dotEl + bgStar + nameEl + capEl + '</g>';
 }
 
 // 지도 SVG를 그린다. 모든 나라 수도 표시(현재/후보 크게, 방문 중간, 나머지 작고 흐리게) + 경로 점선 + 비행기.
@@ -512,7 +514,8 @@ function renderMap(cur, cands) {
   }
   let cities = '';
   for (let i = 0; i < COUNTRIES.length; i++) {
-    const hasBg = DIORAMA_READY.has(COUNTRIES[i].ko);
+    // 여행 경로에 있는 도시는 이미 클리어했다. 배경이 준비돼도 별은 미방문 도시에만 보인다.
+    const hasBg = DIORAMA_READY.has(COUNTRIES[i].ko) && !visitedSet.has(i);
     if (i === cur) cities += cityMark(i, M.cur, COLORS.tour.current, s, false, false, hasBg);
     else if (candSet.has(i)) cities += cityMark(i, M.cand, COLORS.tour.candidate, s, true, false, hasBg);
     else if (visitedSet.has(i)) cities += cityMark(i, M.visited, COLORS.tour.visited, s, false, false, hasBg);
@@ -628,7 +631,16 @@ function flyTo(from, dest, done) {
   flyRaf = requestAnimationFrame(step);
 }
 
-function closeMapAndAdvance() {
+async function closeMapAndAdvance() {
+  // 도착 카드 다음에는 전투를 시작하지 않고 배경을 먼저 준비한다. map-loading 상태라 목적지를 다시
+  // 고르는 클릭도 막히며, loop은 이미 pause 상태여서 자동 발사·적 스폰도 일어나지 않는다.
+  if (state !== 'map') return;
+  state = 'map-loading';
+  mapCard.innerHTML = '배경을 불러오는 중…';
+  mapCard.hidden = false;
+  mapTitle.textContent = '잠시만 기다려주세요';
+  await preloadDiorama(COUNTRIES[game.tourIdx].ko);
+  if (state !== 'map-loading') return; // 화면 이탈 등으로 전환이 취소된 경우
   mapOverlay.hidden = true;
   mapCard.hidden = true;
   advanceStage();

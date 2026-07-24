@@ -2,6 +2,7 @@
 // 전방 화력(front)은 fire.js가, 옵션기·에너지존·파츠 손실은 이 모듈이 담당한다.
 import { CFG } from '../data/numbers.js';
 import { COLORS } from '../data/colors.js';
+import { awardScore } from './score.js';
 import { burst, dropItems, spawnShards } from './spawn.js';
 import { speedMul } from './fire.js';
 
@@ -242,7 +243,7 @@ export function tickZone(game, dt) {
       e.hp -= dmg; pulse.hit.add(e); hitAny = true;
       if (e.hp <= 0) {
         e.dead = true;
-        game.score += e.score;
+        awardScore(game, e.score);
         burst(game, e.x, e.y, e.color, 14);
         if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체만 드롭
         if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐

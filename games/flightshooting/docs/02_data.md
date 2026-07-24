@@ -6,14 +6,15 @@
 
 - `player`: r(반지름) / speed(키보드 이동 px/s) / fireEvery(발사 간격 s) / maxLives / invAfterHit(피격 무적 s) / yRatio(시작 세로 위치 비율).
 - `emote`: cry / happy / deathTime(피격 우는 표정 지속 / 획득 웃는 표정 지속 / 목숨 0 후 폭발 연출→팝업까지, 초). `bombFlash`: B 획득 화면 섬광 지속(초).
-- `difficulty`: {easy, normal, hard, insane}(홈 난이도 4단계). 각 항목 = enemyFireMul(적 발사 간격 배수, ↑=덜 쏨) / enemyHpMul(적 체력 배수) / startFront,startTail(시작 화력) / enemyShotsMax(조준 연발 상한, 1=정중앙 단발) / radialMul(방사·자폭 탄 개수 배수) / maxLives(목숨 최대, 쉬움5·보통3·어려움2·매우어려움1). '쉬움'만 옛 어린이 배려(단발·감축·시작 화력)를 갖는다.
+- `difficulty`: {easy, normal, hard, insane}(홈 난이도 4단계). 각 항목 = enemyFireMul(적 발사 간격 배수, ↑=덜 쏨) / enemyHpMul(적 체력 배수) / startFront,startTail(시작 화력) / enemyShotsMax(조준 연발 상한, 1=정중앙 단발) / earlyShots(초반 구역 조준 연발 상한과 적용 마지막 구역) / radialMul(방사·자폭 탄 개수 배수) / maxLives(목숨 최대, 쉬움5·보통3·어려움2·매우어려움1). 보통은 `earlyShots`로 1~10구역을 최대 2발로 제한한다. '쉬움'만 옛 어린이 배려(단발·감축·시작 화력)를 갖는다.
+- `score.aiDivisor`: 자동 플레이가 실제 조종 중일 때의 점수 나눗셈 값(3 = 1/3). 점수 지급은 `core/score.js`를 거쳐 처치·보너스·보스·최대 강화 보너스에 일관 적용한다.
 - `bullet`: speed(기본 상승속도) / speedPer3(강화 3단계마다 속도 배수 증가, 0.15) / mainLenBase,mainLenPer(메인 빔 길이 = tier 비례) / mainWBase,mainWPer(메인 빔 반폭 = tier 비례). 메인 빔·사이드·유도탄의 **형태 배열은 폐기**됐고(`shapes`/`mainBeams` 삭제), 형태는 `render/view.js`가 각 총알의 `tier`로 직접 그린다. `enemyBullet`(speed, r).
 - `parts.front`: max 66(= 6탄수 + 6발×10티어) / maxShots 6(진화 한 바퀴 스텝 수 = 최대 탄 수) / rBase / rGrow 0(개별 탄 크기 고정) / laneGap(나란히 간격) / tierMax 10(발별 진화 티어 최대) / shapeDmg(진화 1티어당 탄 데미지 증가, 1) / vStagger(V자 대형 세로 밀림 0.42). `parts.option`: maxPerSide 3 / baseX,stepX,baseY,stepY(배치) / follow(추종) / laserEvery,laserDmg,laserDmgGrow,laserSpeed,laserR,laserRGrow,laserDiagBase,laserDiagStep(6대 전부 레이저 + 발별 진화). `parts.tail`: maxCount 4 / weaponMax 11(무강화 + 10단계) / gap,r,follow(배치·추종) / missileEvery,missileSpeed,missileTurn,missileAccel / missileR 2.6,missileRGrow 0.16(0강화 가시성 확보 위해 base↑·grow↓로 만렙 크기는 유지) / missileDmgBase 3,missileDmgGrow 1.5. `parts.zone`: levelMax 5 / period[],maxRadius[],thick[](레벨 0~5 배열) / speed(파동 확장 px/s).
 - `enemy.{drone,weaver,gunner}`: r / hp(구역1 기준) / speed(낙하 px/s) / score / (weaver amp,freq) / (gunner fireEvery).
 - `enemyHpScale`: 0.28. 실제 hp = `ceil(base × (1 + (stage-1)×scale))` (spawn.js에서 구역별 적용).
 - `drop`: chance(드롭 확률) / weights{P,S,E,T,H,B}(6종 배분, 합 1 - T 꼬리기 아이템 신규).
-- `miniBoss`: rx,ry / baseHp / hpPerStage / score / escortEvery(호위 소환 간격) / escortInit(등장 시 호위 수).
-- `finalBoss`: rx,ry / hp / score.
+- `miniBoss`: rx,ry / baseHp / hpPerStage / score / escortEvery(호위 소환 간격) / escortInit(등장 시 호위 수). 보스 HP 예산은 5배로 설정한다.
+- `finalBoss`: rx,ry / hp / score. 최종 보스 HP도 5배로 설정한다.
 - `boss`: bobAmp / bobFreq(좌우 유영 폭·속도) / bobRamp / spawnTop.
 - `bossStyles`: 스타일별(battleship/bio/orbiter/sentinel) coreRatio·부위(parts) 정의 + `upgrade`(강화판 - 추가 부위 extraParts + 발사 주기 배수 fireMul, 코어 배수 coreMul). `bossStyleFrom`{bio,orbiter}: 스타일 구역 경계. `bossUpgradeFrom`: 5(10구역 묶음 안에서 이 위치부터 강화판 = 뒤 5개).
 - `autopilot`: default('pro' 기본 실력) / resumeDelay(0.5, 하이브리드 자동 복귀 지연 s) / tiers{beginner,intermediate,advanced,pro} 각 react·aimDeg·sim·threats(인간 실측 기준).

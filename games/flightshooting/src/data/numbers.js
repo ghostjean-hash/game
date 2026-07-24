@@ -8,6 +8,8 @@ export const CFG = {
   emote: { cry: 1.2, happy: 0.9, deathTime: 1.1 },
   // B(봄) 획득 시 화면 전체에 번지는 은은한 폭발 섬광 지속(초). 폭탄임을 눈에 알리는 연출.
   bombFlash: 0.55,
+  // 자동 플레이가 실제로 조종 중일 때의 점수 배수. 직접 조작·자동 켜짐 후 수동 조작 중에는 원점수.
+  score: { aiDivisor: 3 },
   // 적 출현 가로 영역: 화면(캔버스)이 넓어도 적 스폰 x를 중앙 고정폭 안으로 제한한다(사용자 지시 2026-07-10).
   //   width = 플레이필드 최대 가로폭(px). 화면이 이보다 좁으면 화면폭을 그대로 쓴다(min). 좌우 여백은 균등 분할.
   //   보너스 기체(화면 가로지르기)·보스(중앙 유영)는 예외 - 이 제한을 받지 않는다.
@@ -25,7 +27,7 @@ export const CFG = {
   //   maxLives     = 목숨 최대값(= 시작 목숨 + 회복 상한).
   difficulty: {
     easy:   { enemyFireMul: 2.2, enemyHpMul: 0.85, startFront: 2, startTail: 1, enemyShotsMax: 1,  radialMul: 0.4, maxLives: 5 },
-    normal: { enemyFireMul: 1,   enemyHpMul: 1,    startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
+    normal: { enemyFireMul: 1.15, enemyHpMul: 0.95, startFront: 1, startTail: 0, enemyShotsMax: 99, earlyShots: { throughStage: 10, max: 2 }, radialMul: 0.9, maxLives: 3 },
     hard:   { enemyFireMul: 0.7, enemyHpMul: 1.3,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
     insane: { enemyFireMul: 0.5, enemyHpMul: 1.6,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
   },
@@ -174,15 +176,15 @@ export const CFG = {
   bossDrop: { mini: 2, final: 4 },
   // 중보스(1~39구역): 작고 hp 낮음 + 호위 비행체 주기 소환. 최종보스(40구역): 크고 단단한 2패턴.
   // hp는 3계통 화력 성장에 맞춰 상향(중보스 baseHp 55→90·구역당 22→32, 최종 420→980).
-  miniBoss: { rx: 30, ry: 26, baseHp: 66, hpPerStage: 34, score: 900, escortEvery: 4.5, escortInit: 2 },
+  miniBoss: { rx: 30, ry: 26, baseHp: 330, hpPerStage: 170, score: 900, escortEvery: 4.5, escortInit: 2 },
   // 최종보스는 40구역. 그때까지 화력이 최대로 성장하므로 hp를 크게 상향.
-  finalBoss: { rx: 50, ry: 44, hp: 1500, score: 12000 },
+  finalBoss: { rx: 50, ry: 44, hp: 7500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
   // bobRamp = 등장 완료 후 좌우 유영이 0에서 최대 속도(bobFreq)까지 서서히 빨라지는 시간(초, 사용자 지시 2026-07-12).
   boss: { bobAmp: 0.32, bobFreq: 0.15, bobRamp: 7, spawnTop: 62 },
-  // 보스 사망 연출: 즉시 사라지지 않고 dur초 동안 몸 전체에서 연쇄 폭발 + 화면 흔들림, 끝에 큰 폭발.
-  //   burstEvery=연쇄 폭발 간격(초), burstN=폭발당 파티클, shake=화면 흔들림 최대 픽셀, dur/finalDur=중보스/최종보스 연출 길이.
-  bossDeath: { burstEvery: 0.1, burstN: 16, shake: 13, dur: 2, finalDur: 2, finalBurstN: 52 }, // HP 0 후 2초간 폭발하고 사라짐(사용자 지시 2026-07-21)
+  // 보스 사망 연출: 주 연쇄 폭발은 dur초, 마지막 폭발 파티클이 모두 사라지면 전환한다.
+  //   maxDur까지 남아 있으면 bossDeath 파티클만 정리해 전환을 보장한다.
+  bossDeath: { burstEvery: 0.1, burstN: 16, shake: 13, dur: 1, finalDur: 1, maxDur: 3, finalBurstN: 52 },
   // 부위 파괴형 보스(docs/06). 스타일 = 코어 + 부위(weapon 포탑 / shield 방어구).
   //   총 hp(miniBoss/finalBoss 공식)를 coreRatio(코어) + 각 부위 hpRatio 합으로 나눈다(합 = 1).
   //   role weapon = 자기 발사 패턴 보유(부수면 그 패턴 영구 정지). role shield = 코어를 가림(다 부수면 코어 노출).
@@ -279,13 +281,12 @@ export const CFG = {
       other: { dot: 3, name: 6.4, cap: 8 },
       labelGap: 4,
       nameLift: 5, // 나라이름(윗줄)을 수도 위로 추가로 올리는 화면 px(사용자 지시)
-      bgRing: 4, // 배경(디오라마) 완성 도시 표시: 점 바깥 링의 추가 반경(지도 좌표, s 곱)
+      bgStarScale: 1.25, // 배경(디오라마) 완성 도시 표시: 도시 터치 원 안 금색 별의 점 반경 대비 글자 크기
     },
     // 다음 목적지는 안 간 나라 전부 선택 가능하되(못 가는 나라 방지, 사용자 지시), 초기 지도 확대는
     //   현재 위치+가장 가까운 이 개수만 감싼다(전부 감싸면 세계 전체라 이름이 안 보임). 나머지는 축소·드래그로.
     frameNear: 6,
     zoomStep: 1.35, zoomWMin: 90, zoomWMax: 1400,
-    bossDeathTime: 1.5, // 보스 격파 후 폭발 연출을 보여주고 이 시간 뒤에 지도를 띄운다(사용자 지시)
     borderW: 0.9, // 국가 경계선 굵기(지도 좌표, s 곱) - 잘 보이게 키움(사용자 지시)
   },
   // 디오라마(사진) 배경 위에서 게임 요소(비행기·적)가 묻히지 않게 요소 둘레에 두르는 밝은 후광 번짐 반경(px).

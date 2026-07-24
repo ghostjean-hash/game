@@ -33,12 +33,14 @@ function drawScrollingBg(ctx, img, game, W, H) {
 // 이미지를 화면 좌우(가로)에 꽉 차게 그리고, 세로로 남는 여백을 시간에 걸쳐 아래→위로 흘려
 // "전진하는 여정"을 만든다(A안 무한 반복과 달리 1회 통과 - 도착 후 항구에서 정지).
 // 좌우 꽉 채움이라 아이패드처럼 폭이 넓은 화면일수록 이미지가 더 크게 확대된다.
-const dioramaCache = new Map(); // path → { img, ok }
+const dioramaCache = new Map(); // path → { img, ok, ready }
 function getDiorama(path) {
   let e = dioramaCache.get(path);
   if (!e) {
-    e = { img: new Image(), ok: false };
-    e.img.onload = () => { e.ok = true; };
+    let resolveReady;
+    e = { img: new Image(), ok: false, ready: new Promise((resolve) => { resolveReady = resolve; }) };
+    e.img.onload = () => { e.ok = true; resolveReady(true); };
+    e.img.onerror = () => { resolveReady(false); };
     e.img.src = path;
     dioramaCache.set(path, e);
   }
@@ -114,6 +116,14 @@ export const DIORAMA_READY = new Set([
   '한국', '일본', '중국', '몽골', '대만', '베트남', '네팔', '이집트', '프랑스', '영국',
   '러시아', '뉴질랜드', '호주', '브라질', '발리', '하와이', '뉴욕',
 ]);
+
+// 도시 선택 뒤 전투를 시작하기 전 디오라마를 사전 로드한다. 이미지가 없는 도시는 기존 배경 fallback이
+// 정상 상태이므로 기다리지 않는다. ready는 성공(true)과 실패(false) 모두에서 끝나 전환이 멈추지 않는다.
+export function preloadDiorama(ko) {
+  if (!DIORAMA_READY.has(ko)) return Promise.resolve(false);
+  const path = DIORAMA_SRC[ko];
+  return path ? getDiorama(path).ready : Promise.resolve(false);
+}
 function drawDiorama(ctx, img, game, W, H) {
   const scale = W / img.width;                    // 좌우(가로) 꽉 채움 - 넓은 화면일수록 확대
   const dw = W;

@@ -1009,3 +1009,19 @@
 ### 검증 / 미해결
 - 검증: browser-shot 다수 - 한국 배경 좌우 꽉참, 지도 금색 별 다국(몽골·중국·한국·일본·대만·베트남), 키위 어두운 윤곽, 제주 핀, 콘솔 에러 0. (core 순수함수 테스트는 이번이 렌더 전용 변경이라 대상 아님.)
 - 미해결(사용자 실측·후속): 핀치줌·밝은 후광 아이패드 실측 / 아군 총알(청록) 가독성 필요 시 이중 외곽선 / 총알 png·오프스크린 최적화(버벅일 때) / `backgroundPools` 코드 제거(디오라마 다 채운 뒤) / 나머지 41개국 배경 이미지 미제작(ChatGPT 제작 대기).
+
+## 2026-07-25 - 직전 세션 미커밋 flightshooting 작업 4건 봉합
+
+이번 세션 자비스 산출물은 없다. 사용자가 "AI 없이 서버 띄우고 커밋하는 스크립트"를 물어 더블클릭 배치 2개(서버켜기·저장하고올리기)를 제안했고, 커밋 메시지 방식(A 매번 물어보기 / B 날짜 자동)을 정하는 단계에서 사용자가 `/jc`를 호출했다. 즉 스크립트는 아직 안 만들었다(제안·미결정).
+
+`/jc` 진입 시 git에 flightshooting 변경 10개 파일 + 신규 `src/core/score.js`가 미커밋으로 떠 있었다. 이번 세션이 만든 게 아니라 **직전 flightshooting 세션에서 코드는 완성했으나 커밋 없이 종료된 작업**이다. diff 전체를 읽어 정체를 확정하고(아래 4건), 회귀 검증까지 마친 뒤 이번 봉합으로 정리했다. 봉합 정직성을 위해 이 사실을 사용자에게 먼저 고지했다.
+
+### 봉합한 작업 4건
+- 자동 플레이 점수 감산: `core/score.js` 신설(`awardScore`/`isAutoControlling`). 자동 플레이가 실제로 조종 중일 때만 획득 점수를 1/3로 낮추고(`CFG.score.aiDivisor` 3), 자동을 켜둔 채 손으로 조작 중이면 원점수를 준다. 정수 나눗셈 잔여를 `scoreRemainder`에 누적해 여러 번 획득의 합계가 정확히 1/3이 되도록(부동소수점 오차 없음). world.js·parts.js의 점수 가산 6곳(존 처치·부위 파괴·최대강화 보너스·봄 전멸·충돌 처치·보스 격파)을 전부 `awardScore`로 통일. main.js `createGame`/`resetGame`/`saveProgress`/`startGame`에 `scoreRemainder` 상태·저장·복원 추가.
+- 보통 난이도 재조정 + 초반 연발 제한: normal `enemyFireMul` 1→1.15·`enemyHpMul` 1→0.95·`radialMul` 1→0.9로 소폭 완화. `earlyShots`{throughStage 10, max 2}를 신설해 1~10구역에서만 적·보스 조준 연발을 최대 2발로 제한(초반 학습 배려). world.js `enemyShotCap(game)` 헬퍼로 updateEnemies·updateBoss가 공용, main.js에 `earlyShots` 상태 세팅.
+- 보스 사망 연출·목적지 전환 대기: 보스 폭발 파티클에 `tag:'bossDeath'`를 달아, 주 폭발(dur초) 후 마지막 폭발 파티클이 전부 사라진 뒤에만 다음 화면(승리/월드맵/다음 구역)으로 넘어간다. 파티클이 비정상적으로 남으면 `maxDur` 3초에 bossDeath 태그만 강제 정리해 전환이 멈추지 않게 함. `bossDeath.dur` 2→1, `maxDur` 3 신설, 옛 `tour.bossDeathTime` 고정 대기 제거. `stepBossDeath` 재작성, `spawn.burst`에 tag 파라미터 추가(기본 undefined = 기존 동작 유지). 도시 선택 → 비행 → 도착 카드 뒤에는 `map-loading` 상태로 들어가 다음 도시 디오라마 배경 로드가 끝날 때(파일 없으면 fallback 확정)까지 지도를 유지하고 전투·자동 발사를 시작하지 않는다. `closeMapAndAdvance`를 async로, `view.preloadDiorama`와 `getDiorama`의 ready Promise(onload/onerror 양쪽 resolve) 신설.
+- 월드맵 금색 별 위치: 배경 이미지가 준비된 도시 표시를 점 우상단 오프셋(`bgRing`)에서 도시 터치 원 안 중앙으로 겹쳐 표시(`bgStarScale`)하도록 바꿔 별이 도시에서 떨어져 보이지 않게 함. 이미 클리어해 경로에 들어간 도시는 별을 숨김(`visitedSet` 제외). 별에 `pointer-events:none`을 줘 별을 눌러도 그 도시를 목적지로 고를 수 있게 함.
+
+### 검증 / 미해결
+- 검증: dev-server(8123) + browser-shot으로 tests/test.html 실행 → core 124/124 PASS. 신규 `score.js`가 world.js·parts.js의 import 체인에 들어가므로 문법·경로 오류가 있으면 전체 테스트가 깨진다 - 통과는 곧 import 무결 + 기존 로직 회귀 0을 뜻한다.
+- 미해결: (1) 서버·커밋 더블클릭 배치 스크립트 - 사용자 커밋 메시지 방식 결정 대기(A 매번 물어보기 추천 / B 날짜 자동). (2) `AGENTS.md`(repo 루트, Codex용 지침 복제본) untracked - 이번 flightshooting 작업과 무관하고 정체 미확인이라 add하지 않고 남겨둠(사용자 결정 영역).

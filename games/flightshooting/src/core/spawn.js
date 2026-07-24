@@ -238,14 +238,15 @@ export function dropMaybe(game, x, y) {
   game.powerups.push({ x, y, r: 12, vy: 70, kind, t: 0 });
 }
 
-export function burst(game, x, y, color, n = 12) {
+// tag는 특정 연출의 완료 대기·강제 정리에만 쓴다. 일반 파티클은 undefined로 기존 동작을 유지한다.
+export function burst(game, x, y, color, n = 12, tag) {
   for (let i = 0; i < n; i++) {
     const a = Math.random() * Math.PI * 2;
     const sp = 40 + Math.random() * 180;
     game.particles.push({
       x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
       life: 0.4 + Math.random() * 0.3, age: 0, color,
-      r: 1.5 + Math.random() * 2.5,
+      r: 1.5 + Math.random() * 2.5, tag,
     });
   }
 }
