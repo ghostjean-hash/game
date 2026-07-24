@@ -306,7 +306,7 @@ function renderVault() {
   const screen = el("div", "screen vault");
 
   if (learned.length === 0) {
-    screen.appendChild(el("div", "empty-note", "아직 외운 단어가 없습니다.\n학습에서 “외움”을 누르면 여기 모입니다."));
+    screen.appendChild(el("div", "empty-note", "아직 외운 단어가 없습니다.\n학습에서 “알았음”을 누르면 여기 모입니다."));
     stage.appendChild(screen);
     return;
   }
