@@ -1,0 +1,29 @@
+{
+  "sourceTitle": "2022 개정 영어과 교육과정 별책 14",
+  "notification": "교육부 고시 제2022-33호",
+  "sourceType": "official",
+  "sourceUrl": "https://www.moe.go.kr/boardCnts/fileDown.do?m=040401&s=moe&fileSeq=1512facbda6c234a1641ac7e9c156ca2",
+  "sourceZip": "(붙임2) [별책5_14] ... 영어.zip (15.1MB)",
+  "sourceFile": "byeolchaek14_english.hwp (HWP 5.x OLE, 3762688 bytes)",
+  "vocabSection": "[별표 3] 어휘 - 기본 어휘 목록",
+  "totalWords": {
+    "representativeForms": 3000,
+    "wordsSlashSplit": 3045
+  },
+  "markerCounts": {
+    "note": "official counts are at representative-form (대표형) granularity",
+    "representativeForm": { "star1": 800, "star2": 1200, "none": 1000, "total": 3000 },
+    "wordLevelSlashSplit": { "star1": 819, "star2": 1215, "none": 1011, "total": 3045 }
+  },
+  "markerMapping": {
+    "star1_single_asterisk": "800개, 초등학교에서 사용하기를 권장",
+    "star2_double_asterisk": "1,200개, 중학교와 고등학교 공통과목에서 사용하기를 권장",
+    "none_no_mark": "1,000개, 그 외의 과목에서 사용하기를 권장"
+  },
+  "markerMappingConfirmed": true,
+  "markerMappingEvidence": "범례는 별도 이미지가 아니라 문서 내 표(table) 텍스트로 존재. HWP BodyText/Section0 레코드 파싱으로 원문 확보. embedded 이미지 9개는 전부 장식용(배너/배경/책 아이콘)이라 범례 아님.",
+  "evidenceImage": null,
+  "evidenceText": "legend_region.txt (기본 어휘 관련 지침 1~5항 전문)",
+  "markerSemanticNote": "[별표3] 어휘는 학교급별 '사용 권장'이며 [별표4]의 '학습 시작 권장 학교급(●)'과 다른 표기임. 별표는 대표형(단어군) 단위로 부여됨.",
+  "verifiedAt": null
+}
