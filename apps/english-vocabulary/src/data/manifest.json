@@ -2,9 +2,9 @@
   "app": "english-vocabulary",
   "totalTarget": 1600,
   "setSize": 200,
-  "note": "8세트 × 200단어 = 1,600. 실제 단어 데이터는 별도 검수 후 각 set-NNN.json에 채운다(임의 생성 금지). available=true인 세트만 앱이 로드하고 검증한다. 샘플 단계에서는 set-001만 available, count=20.",
+  "note": "8세트 × 200단어 = 1,600. available=true인 세트만 앱이 로드하고 검증한다. set-001은 200단어 채움(LLM 초안, 사람 검수 권장). set-002~008은 준비 중.",
   "sets": [
-    { "setId": "ev-set-001", "order": 1, "title": "기초 다지기", "level": "middle-bridge", "file": "set-001.json", "count": 20, "available": true },
+    { "setId": "ev-set-001", "order": 1, "title": "기초 다지기", "level": "middle-bridge", "file": "set-001.json", "count": 200, "available": true },
     { "setId": "ev-set-002", "order": 2, "title": "(준비 중)", "level": "middle-bridge", "file": "set-002.json", "count": 0, "available": false },
     { "setId": "ev-set-003", "order": 3, "title": "(준비 중)", "level": "middle-1-2", "file": "set-003.json", "count": 0, "available": false },
     { "setId": "ev-set-004", "order": 4, "title": "(준비 중)", "level": "middle-1-2", "file": "set-004.json", "count": 0, "available": false },
