@@ -15,6 +15,7 @@ const el = {
   back: document.getElementById("nav-back"),
   title: document.getElementById("topbar-title"),
   vocab: document.getElementById("nav-vocab"),
+  savedSentences: document.getElementById("nav-saved-sentences"),
   bar: document.getElementById("bar-fill"),
   stage: document.getElementById("stage"),
 };
@@ -28,6 +29,7 @@ const ICON = {
   next: `<svg ${SVG_ATTR}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
   repeat: `<svg ${SVG_ATTR}><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>`,
   list: `<svg ${SVG_ATTR}><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
+  more: `<svg ${SVG_ATTR}><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>`,
   copy: `<svg ${SVG_ATTR}><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
   check: `<svg ${SVG_ATTR}><polyline points="20 6 9 17 4 12"/></svg>`,
 };
@@ -50,12 +52,16 @@ function applyTouch() {
   }
 }
 let toastTimer = null; // 토스트 자동 닫힘 타이머
+let openSentenceMenu = null;
+let titleTranslationTimer = null;
 const TOAST_MS = 1600; // 토스트가 스스로 사라지기까지
+const TITLE_TRANSLATION_MS = 3000;
 
 // ── 상태 저장(기기 저장소) ──
 const getDone = () => store.get("done", []); // 완독한 지문 id 배열
 const getReads = () => store.get("reads", {}); // { passageId: 회독수 }
 const getVocab = () => store.get("vocab", []); // [{ wordKey, word, meaning, sentence, passageId, passageTitle }]
+const getSavedSentences = () => store.get("savedSentences", []); // [{ key, text, passageId, passageTitle, level, topic, sentenceIndex }]
 const getSettings = () => ({ chunks: true, words: true, scope: true, ...(store.get("settings", {}) || {}) });
 
 // 모든 지문은 passages.json 단일 소스(앱에서 직접 입력·저장하는 기능은 폐지, 2026-07-16 사용자 결정).
@@ -126,15 +132,36 @@ function copyText(text, okMsg, onOk) {
   }
 }
 
-function setTop({ title, onBack, showVocab }) {
+function setTop({ title, titleTranslation, onBack, showVocab, showSavedSentences }) {
+  if (titleTranslationTimer) { clearTimeout(titleTranslationTimer); titleTranslationTimer = null; }
   el.title.textContent = title;
+  el.title.classList.toggle("is-toggle", !!titleTranslation);
+  el.title.onclick = titleTranslation ? () => {
+    if (titleTranslationTimer) clearTimeout(titleTranslationTimer);
+    el.title.textContent = titleTranslation;
+    titleTranslationTimer = setTimeout(() => {
+      el.title.textContent = title;
+      titleTranslationTimer = null;
+    }, TITLE_TRANSLATION_MS);
+  } : null;
+  if (titleTranslation) el.title.setAttribute("aria-label", "한글 제목을 3초간 보기");
+  else el.title.removeAttribute("aria-label");
   el.back.innerHTML = ICON.back; // 유니코드 문자 대신 SVG 아이콘(글자 baseline 어긋남·폰트 편차 제거)
   // 화살표로 감싸 클릭 이벤트 객체가 onBack의 첫 인자로 새지 않게 한다.
   // (renderList(c)처럼 인자를 받는 함수를 직접 연결하면 MouseEvent가 c로 들어가 course를 덮어썼다.)
   el.back.onclick = () => onBack();
   el.vocab.style.display = showVocab ? "" : "none";
   el.vocab.onclick = renderVocab;
+  el.savedSentences.style.display = showSavedSentences ? "" : "none";
+  el.savedSentences.onclick = renderSavedSentences;
 }
+
+document.addEventListener("click", () => {
+  if (openSentenceMenu) {
+    openSentenceMenu.classList.remove("open");
+    openSentenceMenu = null;
+  }
+});
 
 function labeledBlock(label, text, mod) {
   const wrap = document.createElement("div"); wrap.className = "block";
@@ -152,7 +179,7 @@ function renderCourseList() {
   course = null;
   const done = getDone();
   setBar(0);
-  setTop({ title: "영어 독해", onBack: () => (window.location.href = "../../"), showVocab: true });
+  setTop({ title: "영어 독해", onBack: () => (window.location.href = "../../"), showVocab: true, showSavedSentences: true });
 
   const stage = el.stage;
   stage.className = "stage list-stage";
@@ -202,7 +229,7 @@ function renderList(c) {
   const reads = getReads();
   const prog = courseProgress(course, done);
   setBar(prog.ratio);
-  setTop({ title: course.title, onBack: renderCourseList, showVocab: true });
+  setTop({ title: course.title, onBack: renderCourseList, showVocab: true, showSavedSentences: true });
 
   const stage = el.stage;
   stage.className = "stage list-stage";
@@ -247,7 +274,7 @@ function renderList(c) {
     // 같은 레벨 안이라 Lv 배지 대신 주제(topic) 배지를 보여준다(난이도 우선).
     card.innerHTML =
       `<span class="lv topic">${p.topic || ""}</span>` +
-      `<span class="pc-body"><span class="pc-title">${p.titleKr}</span><span class="pc-en">${p.title}</span></span>` +
+      `<span class="pc-body"><span class="pc-title">${p.title}</span></span>` +
       `<span class="pc-status${isDone ? " done" : ""}">${status}</span>`;
     card.onclick = () => renderReading(p);
     list.appendChild(card);
@@ -260,7 +287,7 @@ function renderReading(p) {
   currentPassage = p; // 단어장에서 이 지문으로 돌아온다
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);
-  setTop({ title: p.titleKr, onBack: renderList, showVocab: true });
+  setTop({ title: p.title, titleTranslation: p.titleKr, onBack: renderList, showVocab: true, showSavedSentences: true });
 
   const stage = el.stage;
   stage.className = "stage reading-stage";
@@ -338,6 +365,7 @@ function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
   const s = normalizeSentence(rawS);
   const block = document.createElement("div");
   block.className = "sentence-block";
+  block.dataset.sentenceIndex = String(sIndex);
 
   const line = document.createElement("div");
   line.className = "sentence-line";
@@ -509,23 +537,92 @@ function renderSentence(rawS, sIndex, passage, settings, onReviewed) {
     };
     line.appendChild(reviewBtn);
 
-    // "해석" 왼쪽 복사 버튼 - 이 문장 원문만 복사(LLM에 물어볼 때 쓰도록, 끊기·설명 제외).
-    // float:right라 reviewBtn 뒤에 넣어야 화면상 왼쪽에 온다.
-    const copyBtn = document.createElement("button");
-    copyBtn.type = "button";
-    copyBtn.className = "sentence-copy-btn";
-    copyBtn.innerHTML = ICON.copy;
-    copyBtn.title = "이 문장 원문 복사";
-    copyBtn.setAttribute("aria-label", "이 문장 원문 복사");
-    copyBtn.onclick = (e) => {
-      e.stopPropagation();
-      copyText(s.text, "문장을 복사했습니다.", () => {
-        copyBtn.innerHTML = ICON.check;
-        copyBtn.classList.add("copied");
-        setTimeout(() => { copyBtn.innerHTML = ICON.copy; copyBtn.classList.remove("copied"); }, 1500);
-      });
+    // "해석" 왼쪽 메뉴 - 같은 위치에서 복사와 어려운 문장 저장을 고른다.
+    const tools = document.createElement("div");
+    tools.className = "sentence-tools";
+    const menuBtn = document.createElement("button");
+    menuBtn.type = "button";
+    menuBtn.className = "sentence-menu-btn";
+    menuBtn.innerHTML = ICON.more;
+    menuBtn.title = "문장 메뉴";
+    menuBtn.setAttribute("aria-label", "문장 메뉴");
+    menuBtn.setAttribute("aria-expanded", "false");
+
+    const menu = document.createElement("div");
+    menu.className = "sentence-menu-list";
+    menu.setAttribute("role", "menu");
+    const copyItem = document.createElement("button");
+    copyItem.type = "button";
+    copyItem.textContent = "복사";
+    copyItem.setAttribute("role", "menuitem");
+
+    const savedKey = `${passage.id}:${sIndex}`;
+    const saveItem = document.createElement("button");
+    saveItem.type = "button";
+    saveItem.setAttribute("role", "menuitem");
+    const syncSaveLabel = () => {
+      const saved = getSavedSentences().some((item) => item.key === savedKey);
+      saveItem.textContent = saved ? "문장 저장 해제" : "어려운 문장 저장";
     };
-    line.appendChild(copyBtn);
+    syncSaveLabel();
+
+    const closeMenu = () => {
+      tools.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded", "false");
+      if (openSentenceMenu === tools) openSentenceMenu = null;
+    };
+    menuBtn.onclick = (e) => {
+      e.stopPropagation();
+      const opening = !tools.classList.contains("open");
+      if (openSentenceMenu && openSentenceMenu !== tools) openSentenceMenu.classList.remove("open");
+      if (opening) {
+        const rect = menuBtn.getBoundingClientRect();
+        const openBelow = rect.top < 150;
+        menu.classList.toggle("below", openBelow);
+        menu.style.left = `${Math.max(8, rect.right - 154)}px`;
+        if (openBelow) {
+          menu.style.top = `${rect.bottom + 4}px`;
+          menu.style.bottom = "auto";
+        } else {
+          menu.style.top = "auto";
+          menu.style.bottom = `${window.innerHeight - rect.top + 4}px`;
+        }
+      }
+      tools.classList.toggle("open", opening);
+      menuBtn.setAttribute("aria-expanded", String(opening));
+      openSentenceMenu = opening ? tools : null;
+    };
+    copyItem.onclick = (e) => {
+      e.stopPropagation();
+      copyText(s.text, "문장을 복사했습니다.");
+      closeMenu();
+    };
+    saveItem.onclick = (e) => {
+      e.stopPropagation();
+      const saved = getSavedSentences();
+      if (saved.some((item) => item.key === savedKey)) {
+        store.set("savedSentences", saved.filter((item) => item.key !== savedKey));
+        showToast("어려운 문장에서 뺐습니다.");
+      } else {
+        saved.push({
+          key: savedKey,
+          text: s.text,
+          passageId: passage.id,
+          passageTitle: passage.titleKr,
+          level: passage.level,
+          topic: passage.topic || "",
+          sentenceIndex: sIndex,
+          translation: s.naturalTranslation,
+        });
+        store.set("savedSentences", saved);
+        showToast("어려운 문장에 저장했습니다.");
+      }
+      syncSaveLabel();
+      closeMenu();
+    };
+    menu.append(copyItem, saveItem);
+    tools.append(menuBtn, menu);
+    line.appendChild(tools);
   }
 
   block.appendChild(line);
@@ -572,6 +669,7 @@ function collectWord(target, s, passage) {
     word: target.word,
     meaning: target.meaning,
     sentence: s.text,
+    translation: s.naturalTranslation,
     passageId: passage.id,
     passageTitle: passage.titleKr,
   });
@@ -844,8 +942,8 @@ function showClearModal() {
 // ── 내 단어장 ──
 function renderVocab() {
   // 읽던 지문에서 왔으면 그 지문으로 복귀(진행 유지), 목록에서 왔으면 목록으로
-  const back = currentPassage ? () => renderReading(currentPassage) : () => renderList(course);
-  setTop({ title: "내 단어장", onBack: back, showVocab: false });
+  const back = currentPassage ? () => renderReading(currentPassage) : () => (course ? renderList(course) : renderCourseList());
+  setTop({ title: "내 단어장", onBack: back, showVocab: false, showSavedSentences: false });
   const stage = el.stage;
   stage.className = "stage vocab-stage";
   stage.innerHTML = "";
@@ -861,7 +959,7 @@ function renderVocab() {
 
   const head = document.createElement("div");
   head.className = "list-summary";
-  head.innerHTML = `<b>${vocab.length}개</b> 수집 · 뜻과 예문이 바로 보입니다`;
+  head.innerHTML = `<b>${vocab.length}개</b> 수집 · 뜻과 해석을 눌러 확인하세요`;
   stage.appendChild(head);
 
   const listEl = document.createElement("div");
@@ -878,13 +976,20 @@ function renderVocab() {
     del.type = "button"; del.className = "vocab-del"; del.innerHTML = ICON.close; del.setAttribute("aria-label", "단어 삭제");
     row.append(word, del);
 
-    // 뜻·예문·출처를 접지 않고 바로 표시(사용자 지시 2026-07-16). 삭제는 오른쪽 버튼으로 즉시.
+    // 뜻·해석은 먼저 감춘다. 원문 문장은 뜻과 해석을 잇는 기준점으로 항상 보인다.
     const detail = document.createElement("div");
-    detail.className = "vocab-detail";
-    detail.innerHTML =
-      `<div class="vd-mean${v.meaning ? "" : " vd-empty"}">${v.meaning || "뜻 미등록 - 직접 채워 보세요"}</div>` +
-      `<div class="vd-ex">${v.sentence}</div>` +
-      `<div class="vd-src">${v.passageTitle}</div>`;
+    detail.className = "vocab-detail vocab-study-detail";
+    const translation = vocabTranslation(v);
+    detail.append(
+      buildInlineToggle("뜻 보기", v.meaning || "뜻 미등록 - 직접 채워 보세요", !v.meaning),
+      (() => {
+        const sentence = document.createElement("div");
+        sentence.className = "vd-ex";
+        sentence.textContent = v.sentence;
+        return sentence;
+      })(),
+      buildInlineToggle("해석 보기", translation || "해석을 찾을 수 없습니다.", !translation),
+    );
 
     del.onclick = () => {
       store.set("vocab", getVocab().filter((x) => x.wordKey !== v.wordKey));
@@ -895,6 +1000,120 @@ function renderVocab() {
     listEl.appendChild(item);
   });
   stage.appendChild(listEl);
+}
+
+// 저장 당시의 해석을 우선 사용하고, 이전 버전의 저장 항목은 원본 지문에서 안전하게 찾아 보완한다.
+function savedSentenceTranslation(item) {
+  if (item.translation) return item.translation;
+  const passage = (baseData?.courses || []).flatMap((courseData) => courseData.passages || [])
+    .find((candidate) => candidate.id === item.passageId);
+  const sentence = (passage?.sentences || []).find((candidate) => normalizeSentence(candidate).text === item.sentence || normalizeSentence(candidate).text === item.text);
+  return sentence ? normalizeSentence(sentence).naturalTranslation : "";
+}
+
+function vocabTranslation(vocab) { return savedSentenceTranslation(vocab); }
+
+// 뜻·해석을 아래에 펼치지 않고, 보기 바 자체의 글자로 교체한다.
+function buildInlineToggle(label, value, isEmpty) {
+  const host = document.createElement("div");
+  host.className = "vocab-reveal";
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "vocab-reveal-toggle";
+  const labelText = document.createElement("span");
+  labelText.className = "vocab-toggle-label";
+  labelText.textContent = label;
+  const valueText = document.createElement("span");
+  valueText.className = "vocab-toggle-value";
+  valueText.textContent = value;
+  let revealed = false;
+  const paint = () => {
+    toggle.classList.toggle("is-revealed", revealed);
+    toggle.classList.toggle("vd-empty", revealed && isEmpty);
+    toggle.setAttribute("aria-expanded", String(revealed));
+    toggle.setAttribute("aria-label", revealed ? value : label);
+  };
+  toggle.onclick = () => {
+    revealed = !revealed;
+    paint();
+  };
+  paint();
+  toggle.append(labelText, valueText);
+  host.append(toggle);
+  return host;
+}
+
+// ── 어려운 문장 ──
+function renderSavedSentences() {
+  // 단어장과 동일하게, 읽던 지문이 있으면 그 자리로 돌아간다.
+  const back = currentPassage ? () => renderReading(currentPassage) : () => (course ? renderList(course) : renderCourseList());
+  setTop({ title: "어려운 문장", onBack: back, showVocab: false, showSavedSentences: false });
+  const stage = el.stage;
+  stage.className = "stage vocab-stage";
+  stage.innerHTML = "";
+
+  const saved = getSavedSentences();
+  if (saved.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "empty";
+    empty.textContent = "아직 저장한 문장이 없습니다. 문장 끝 메뉴에서 어려운 문장을 저장해 보세요.";
+    stage.appendChild(empty);
+    return;
+  }
+
+  const head = document.createElement("div");
+  head.className = "list-summary";
+  head.innerHTML = `<b>${saved.length}개</b> 저장 · 문장을 누르면 원래 지문에서 다시 읽습니다`;
+  stage.appendChild(head);
+
+  const listEl = document.createElement("div");
+  listEl.className = "vocab-list";
+  saved.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "vocab-item";
+    const row = document.createElement("div");
+    row.className = "vocab-row";
+    const open = document.createElement("button");
+    open.type = "button";
+    open.className = "saved-sentence-open";
+    open.textContent = item.text;
+    open.setAttribute("aria-label", "원래 지문에서 이 문장 다시 읽기");
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "vocab-del";
+    del.innerHTML = ICON.close;
+    del.setAttribute("aria-label", "어려운 문장 삭제");
+
+    const detail = document.createElement("div");
+    detail.className = "vocab-detail vocab-study-detail";
+    const translation = savedSentenceTranslation(item);
+    detail.append(buildInlineToggle("해석 보기", translation || "해석을 찾을 수 없습니다.", !translation));
+
+    open.onclick = () => openSavedSentence(item);
+    del.onclick = () => {
+      store.set("savedSentences", getSavedSentences().filter((savedItem) => savedItem.key !== item.key));
+      renderSavedSentences();
+    };
+    row.append(open, del);
+    card.append(row, detail);
+    listEl.appendChild(card);
+  });
+  stage.appendChild(listEl);
+}
+
+function openSavedSentence(item) {
+  const passage = (baseData?.courses || []).flatMap((dataCourse) => dataCourse.passages || [])
+    .find((candidate) => candidate.id === item.passageId);
+  if (!passage) {
+    showToast("원래 지문을 찾을 수 없습니다.");
+    return;
+  }
+  course = courses.find((candidate) => candidate.passageById(item.passageId)) || null;
+  renderReading(passage);
+  requestAnimationFrame(() => {
+    const target = el.stage.querySelector(`.sentence-block[data-sentence-index="${item.sentenceIndex}"]`);
+    if (target) target.scrollIntoView({ block: "center" });
+  });
 }
 
 // ── 노출 설정 ──
