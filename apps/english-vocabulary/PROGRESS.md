@@ -2,6 +2,16 @@
 
 append-only. 최신이 위.
 
+## 2026-07-24 · v0.7 초등 나머지 585단어(SET02~04) 추가
+
+- **배경**: 사용자 "초등영어 나머지 600개도 넣어줘".
+- **범위**: 초등 800에서 비어휘 15개 제외한 content 785개 중 SET01(200) 이후 585개를 SET02(200)·SET03(200)·SET04(185)로. 알파벳 순 유지(egg~zoo), 스크립트 분할(prep-remaining.mjs).
+- **enrich**: 60개씩 10묶음, 10개 에이전트 병렬로 품사·뜻·예문 부여(SET01과 동일 R2~R4). 원본 OCR 오타 교정: postato→potato, exellent→excellent(word·예문 동시 교정, assemble-rem.mjs의 FIX 맵). 뜻 오타 교정: 쌀찐→살찐, 시선한→신선한.
+- **조립·검증**: assemble-rem.mjs로 rem585 순서대로 병합(word 매칭)·품사/예문/누락 전수검사 0문제 후 3파일 생성. id ev-s0N-NNNN 자동. manifest SET02~04 available=true(count 200/200/185).
+- **검증 결과**: validate-data 오류 0(경고 9건 모두 find/fine·god/go 류 오탐, 서로 다른 실제 단어). test 264 PASS.
+- **현황**: 초등층(SET01~04) 785단어 available. 단 **앱은 첫 available 세트(SET01)만 로드** - 세트 선택 메뉴 미구현이라 SET02~04는 아직 화면에서 접근 불가. 다음 작업 = 세트 선택 메뉴(초/중/고 그룹) UI.
+- **예문 성격**: 자작(R4), 사람 검수 대상.
+
 ## 2026-07-24 · v0.6 Phase 1 - SET01 사실 근거 200단어 교체
 
 - **배경**: 사용자 "A" 선택(마스터 플랜 Phase 1). v0.4 임의 200단어를 폐기하고 확보된 교육부 초등 800 기반으로 SET01 재작성.

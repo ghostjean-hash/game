@@ -5,9 +5,9 @@
   "note": "초·중·고 3,000단어 = 15세트 × 200. 사실 근거(교육부 기본어휘목록 계열)로만 제작 - docs/vocab-master-plan.md 규칙 준수. available=true 세트만 앱이 로드/검증. SET01은 현재 임의 200단어(규칙 위반, Phase 1에서 초등 800 기반으로 교체 예정). 층: SET01~04 초급, 05~10 중급, 11~15 고급.",
   "sets": [
     { "setId": "ev-set-001", "order": 1, "title": "기초 다지기", "level": "elementary", "file": "set-001.json", "count": 200, "available": true },
-    { "setId": "ev-set-002", "order": 2, "title": "(준비 중)", "level": "elementary", "file": "set-002.json", "count": 0, "available": false },
-    { "setId": "ev-set-003", "order": 3, "title": "(준비 중)", "level": "elementary", "file": "set-003.json", "count": 0, "available": false },
-    { "setId": "ev-set-004", "order": 4, "title": "(준비 중)", "level": "elementary", "file": "set-004.json", "count": 0, "available": false },
+    { "setId": "ev-set-002", "order": 2, "title": "기초 다지기 2", "level": "elementary", "file": "set-002.json", "count": 200, "available": true },
+    { "setId": "ev-set-003", "order": 3, "title": "기초 다지기 3", "level": "elementary", "file": "set-003.json", "count": 200, "available": true },
+    { "setId": "ev-set-004", "order": 4, "title": "기초 다지기 4", "level": "elementary", "file": "set-004.json", "count": 185, "available": true },
     { "setId": "ev-set-005", "order": 5, "title": "(준비 중)", "level": "middle", "file": "set-005.json", "count": 0, "available": false },
     { "setId": "ev-set-006", "order": 6, "title": "(준비 중)", "level": "middle", "file": "set-006.json", "count": 0, "available": false },
     { "setId": "ev-set-007", "order": 7, "title": "(준비 중)", "level": "middle", "file": "set-007.json", "count": 0, "available": false },
