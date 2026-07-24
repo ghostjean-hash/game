@@ -4,6 +4,7 @@
 import { createStorage } from "../../../shared/storage.js";
 import { showModal, showToast, registerServiceWorker } from "../../../shared/ui.js";
 import { createDeck } from "./core/deck.js";
+import { VIEW, initialCardView, resolveKey } from "./core/viewstate.js";
 
 registerServiceWorker("/service-worker.js");
 
@@ -22,6 +23,7 @@ const DEFAULT_SETTINGS = {
   showExampleKr: true,  // 예문 해석 표시
   shuffle: true,        // 한 바퀴 끝나면 순서 섞기
   fontScale: "normal",  // small | normal | large
+  introDone: false,     // 최초 1회 학습 안내를 봤는가
 };
 let settings = { ...DEFAULT_SETTINGS, ...(store.get("settings") || {}) };
 
@@ -61,6 +63,9 @@ const ICON = {
 let deck = null;
 let DATA = null;
 let view = "home";
+// 학습·복습 카드의 표시 단계(question=단어만 / answer=뜻 공개). 단어가 바뀔 때마다 question으로 초기화.
+// 새로고침 복원 시에도 기본값 question이라 정답 공개 상태는 이어지지 않는다(편법 방지).
+let cardView = initialCardView();
 
 function buildDeck() {
   deck = createDeck(DATA, store.get("deck"), settings.shuffle ? Math.random : null);
@@ -150,7 +155,7 @@ function renderHome() {
     actions.appendChild(restart);
   } else {
     const cont = el("button", "btn-xl btn-accent", s.learned === 0 && s.round === 1 ? "학습 시작" : "이어서 학습");
-    cont.onclick = () => go("study");
+    cont.onclick = enterStudy;
     actions.appendChild(cont);
     if (s.learned > 0) {
       const vb = el("button", "btn-xl btn-ghost", `외운 단어 복습 (${s.learned})`);
@@ -164,6 +169,54 @@ function renderHome() {
 }
 
 // --- 학습 ---
+// 학습 진입 - 최초 1회만 회상 학습 안내를 보여주고, 카드는 항상 단어만 보이는 상태로 시작.
+async function enterStudy() {
+  cardView = VIEW.QUESTION;
+  if (!settings.introDone) {
+    await showModal({
+      title: "학습 방법",
+      body: "단어의 뜻을 먼저 머릿속으로 떠올린 뒤, “뜻 확인”을 눌러 정답을 확인하세요.\n뜻을 맞게 떠올렸으면 “알았음”, 아니면 “몰랐음”을 누릅니다.",
+      actions: [{ label: "시작하기", value: "ok", primary: true }],
+    });
+    settings.introDone = true;
+    saveSettings();
+  }
+  go("study");
+}
+
+// 정답 공개 - 같은 카드 안에서 QUESTION → ANSWER로 전환.
+function revealAnswer() {
+  cardView = VIEW.ANSWER;
+  render();
+}
+
+// 카드에 뜻·예문을 그린다(ANSWER 상태에서만 호출). QUESTION에서는 아예 DOM에 넣지 않아
+// 정답이 시각적으로도, 스크린리더로도 미리 노출되지 않게 한다.
+function appendAnswerBody(card, word) {
+  card.appendChild(el("div", "word-kr reveal-in", word.meaningKr.join(", ")));
+  if (settings.showExample && word.example) {
+    const ex = el("div", "word-example reveal-in");
+    ex.appendChild(el("div", "ex-en", word.example));
+    if (settings.showExampleKr && word.exampleKr) {
+      ex.appendChild(el("div", "ex-kr", word.exampleKr));
+    }
+    card.appendChild(ex);
+  }
+}
+
+// 단어 + 발음 버튼 행(학습·복습 공용).
+function buildWordRow(word) {
+  const wordRow = el("div", "word-row");
+  wordRow.appendChild(el("div", "word-en", word.word));
+  if (speechSupported()) {
+    const spk = el("button", "speak-btn", ICON.speaker);
+    spk.setAttribute("aria-label", "발음 듣기");
+    spk.onclick = () => speak(word.word);
+    wordRow.appendChild(spk);
+  }
+  return wordRow;
+}
+
 function renderStudy() {
   const s = deck.stats();
   if (s.completed) {
@@ -176,10 +229,11 @@ function renderStudy() {
     go("complete");
     return;
   }
+  const revealed = cardView === VIEW.ANSWER;
 
   const screen = el("div", "screen study");
 
-  // 진행 정보
+  // 진행 정보(QUESTION·ANSWER 공통)
   const info = el("div", "study-info");
   info.appendChild(el("div", "study-count", `${s.remaining} / ${s.start} 남음`));
   const bar = el("div", "study-bar");
@@ -187,67 +241,60 @@ function renderStudy() {
   info.appendChild(bar);
   screen.appendChild(info);
 
-  // 카드
-  const card = el("div", "word-card");
-  const wordRow = el("div", "word-row");
-  wordRow.appendChild(el("div", "word-en", word.word));
-  if (speechSupported()) {
-    const spk = el("button", "speak-btn", ICON.speaker);
-    spk.setAttribute("aria-label", "발음 듣기");
-    spk.onclick = () => speak(word.word);
-    wordRow.appendChild(spk);
-  }
-  card.appendChild(wordRow);
-
-  card.appendChild(el("div", "word-kr", word.meaningKr.join(", ")));
-
-  if (settings.showExample && word.example) {
-    const ex = el("div", "word-example");
-    ex.appendChild(el("div", "ex-en", word.example));
-    if (settings.showExampleKr && word.exampleKr) {
-      ex.appendChild(el("div", "ex-kr", word.exampleKr));
-    }
-    card.appendChild(ex);
-  }
+  // 카드 - QUESTION은 단어만, ANSWER는 뜻·예문 공개
+  const card = el("div", "word-card" + (revealed ? " revealed" : ""));
+  card.appendChild(buildWordRow(word));
+  if (revealed) appendAnswerBody(card, word);
   screen.appendChild(card);
 
-  // 되돌리기
+  // 하단 고정 영역(되돌리기 + 주 동작 + 안내)
+  const foot = el("div", "study-foot");
   if (deck.canUndo()) {
     const undo = el("button", "undo-btn", `${ICON.undo}<span>방금 처리 되돌리기</span>`);
     undo.onclick = () => {
       deck.undo();
       saveDeck();
+      cardView = VIEW.ANSWER; // 되돌린 단어는 다시 판정할 수 있게 공개 상태로 복원
       render();
     };
-    screen.appendChild(undo);
+    foot.appendChild(undo);
   }
 
-  // 처리 버튼
-  const btns = el("div", "study-actions");
-  const unknown = el("button", "choice-btn choice-unknown", "모름");
-  const known = el("button", "choice-btn choice-known", "외움");
-  unknown.onclick = () => handleMark("unknown");
-  known.onclick = () => handleMark("known");
-  btns.appendChild(unknown);
-  btns.appendChild(known);
-  screen.appendChild(btns);
-
-  screen.appendChild(el("div", "study-hint", "키보드: ← 또는 1 = 모름 · → 또는 2 = 외움 · 스페이스 = 발음"));
+  if (!revealed) {
+    const reveal = el("button", "btn-xl btn-accent reveal-btn", "뜻 확인");
+    reveal.onclick = revealAnswer;
+    foot.appendChild(reveal);
+    foot.appendChild(el("div", "study-hint", "스페이스 또는 Enter: 뜻 확인"));
+  } else {
+    const btns = el("div", "study-actions");
+    const unknown = el("button", "choice-btn choice-unknown", "몰랐음");
+    const known = el("button", "choice-btn choice-known", "알았음");
+    unknown.onclick = () => handleMark("unknown");
+    known.onclick = () => handleMark("known");
+    btns.appendChild(unknown);
+    btns.appendChild(known);
+    foot.appendChild(btns);
+    foot.appendChild(el("div", "study-hint", "← 또는 1: 몰랐음 · → 또는 2: 알았음"));
+  }
+  screen.appendChild(foot);
 
   stage.appendChild(screen);
 
-  if (settings.autoSpeak) speak(word.word);
+  if (!revealed && settings.autoSpeak) speak(word.word);
 
   document.onkeydown = (e) => {
-    if (e.key === "ArrowLeft" || e.key === "1") { e.preventDefault(); handleMark("unknown"); }
-    else if (e.key === "ArrowRight" || e.key === "2") { e.preventDefault(); handleMark("known"); }
-    else if (e.key === " ") { e.preventDefault(); speak(word.word); }
+    const action = resolveKey(cardView, e.key);
+    if (!action) return;
+    e.preventDefault();
+    if (action === "reveal") revealAnswer();
+    else handleMark(action);
   };
 }
 
 function handleMark(type) {
   deck.mark(type, now());
   saveDeck();
+  cardView = VIEW.QUESTION; // 다음 단어는 다시 단어만 보이는 상태로
   if (deck.stats().completed) go("complete");
   else render();
 }
@@ -300,6 +347,7 @@ function startReview() {
       [reviewQueue[i], reviewQueue[j]] = [reviewQueue[j], reviewQueue[i]];
     }
   }
+  cardView = VIEW.QUESTION; // 복습도 단어만 보이는 회상형으로 시작
   go("review");
 }
 function renderReview() {
@@ -316,45 +364,43 @@ function renderReview() {
     stage.appendChild(screen);
     return;
   }
+  const revealed = cardView === VIEW.ANSWER;
 
   screen.appendChild(el("div", "review-progress", `남은 복습 ${reviewQueue.length}개`));
 
-  const card = el("div", "word-card");
-  const wordRow = el("div", "word-row");
-  wordRow.appendChild(el("div", "word-en", word.word));
-  if (speechSupported()) {
-    const spk = el("button", "speak-btn", ICON.speaker);
-    spk.setAttribute("aria-label", "발음 듣기");
-    spk.onclick = () => speak(word.word);
-    wordRow.appendChild(spk);
-  }
-  card.appendChild(wordRow);
-  card.appendChild(el("div", "word-kr", word.meaningKr.join(", ")));
-  if (settings.showExample && word.example) {
-    const ex = el("div", "word-example");
-    ex.appendChild(el("div", "ex-en", word.example));
-    if (settings.showExampleKr && word.exampleKr) ex.appendChild(el("div", "ex-kr", word.exampleKr));
-    card.appendChild(ex);
-  }
+  const card = el("div", "word-card" + (revealed ? " revealed" : ""));
+  card.appendChild(buildWordRow(word));
+  if (revealed) appendAnswerBody(card, word);
   screen.appendChild(card);
 
-  const btns = el("div", "study-actions");
-  const forgot = el("button", "choice-btn choice-unknown", "모름");
-  const remember = el("button", "choice-btn choice-known", "기억남");
-  forgot.onclick = () => reviewNext(word.id, false);
-  remember.onclick = () => reviewNext(word.id, true);
-  btns.appendChild(forgot);
-  btns.appendChild(remember);
-  screen.appendChild(btns);
-  screen.appendChild(el("div", "study-hint", "“모름”이면 이 단어는 다시 학습 목록으로 돌아갑니다."));
+  const foot = el("div", "study-foot");
+  if (!revealed) {
+    const reveal = el("button", "btn-xl btn-accent reveal-btn", "뜻 확인");
+    reveal.onclick = revealAnswer;
+    foot.appendChild(reveal);
+    foot.appendChild(el("div", "study-hint", "스페이스 또는 Enter: 뜻 확인"));
+  } else {
+    const btns = el("div", "study-actions");
+    const forgot = el("button", "choice-btn choice-unknown", "몰랐음");
+    const remember = el("button", "choice-btn choice-known", "알았음");
+    forgot.onclick = () => reviewNext(word.id, false);
+    remember.onclick = () => reviewNext(word.id, true);
+    btns.appendChild(forgot);
+    btns.appendChild(remember);
+    foot.appendChild(btns);
+    foot.appendChild(el("div", "study-hint", "← 또는 1: 몰랐음(학습 목록으로 복귀) · → 또는 2: 알았음"));
+  }
+  screen.appendChild(foot);
 
   stage.appendChild(screen);
 
-  if (settings.autoSpeak) speak(word.word);
+  if (!revealed && settings.autoSpeak) speak(word.word);
   document.onkeydown = (e) => {
-    if (e.key === "ArrowLeft" || e.key === "1") { e.preventDefault(); reviewNext(word.id, false); }
-    else if (e.key === "ArrowRight" || e.key === "2") { e.preventDefault(); reviewNext(word.id, true); }
-    else if (e.key === " ") { e.preventDefault(); speak(word.word); }
+    const action = resolveKey(cardView, e.key);
+    if (!action) return;
+    e.preventDefault();
+    if (action === "reveal") revealAnswer();
+    else reviewNext(word.id, action === "known");
   };
 }
 function reviewNext(id, remembered) {
@@ -362,6 +408,7 @@ function reviewNext(id, remembered) {
   saveDeck();
   if (!remembered) showToast("학습 목록으로 되돌렸습니다");
   reviewQueue.shift();
+  cardView = VIEW.QUESTION; // 다음 복습 단어도 단어만 보이는 상태로
   render();
 }
 
@@ -380,6 +427,7 @@ function renderComplete() {
     undo.onclick = () => {
       deck.undo();
       saveDeck();
+      cardView = VIEW.ANSWER; // 되돌린 마지막 단어를 다시 판정할 수 있게 공개 상태로
       go("study");
     };
     screen.appendChild(undo);

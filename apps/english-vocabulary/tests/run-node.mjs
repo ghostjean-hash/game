@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { createDeck } from "../src/core/deck.js";
+import { VIEW, initialCardView, resolveKey } from "../src/core/viewstate.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 // manifest에서 첫 available 세트를 로드(앱 부팅부와 동일 경로).
@@ -156,6 +157,50 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   eq(restored.serialize().progress[learnedId].status, "learned", "기존 외운 단어 진행 유지");
   eq(restored.serialize().progress["ev-s01-9999"].status, "active", "새 단어는 active로 합류");
   eq(restored.stats().start, grown.words.length, "시작 수는 새 원본 기준");
+})();
+
+// --- 9. 카드 표시 단계(QUESTION/ANSWER) + 키 매핑: 회상 강제 규칙 ---
+(() => {
+  // 새 단어 진입 시 항상 QUESTION(단어만 보이는 상태).
+  eq(initialCardView(), VIEW.QUESTION, "새 단어 진입은 QUESTION 상태");
+
+  // QUESTION: 스페이스·Enter만 뜻 확인. 판정 키(1·2·←·→)는 무시되어 정답 공개 전 판정 불가.
+  eq(resolveKey(VIEW.QUESTION, " "), "reveal", "QUESTION에서 스페이스=뜻 확인");
+  eq(resolveKey(VIEW.QUESTION, "Enter"), "reveal", "QUESTION에서 Enter=뜻 확인");
+  eq(resolveKey(VIEW.QUESTION, "1"), null, "QUESTION에서 1은 판정 안 됨");
+  eq(resolveKey(VIEW.QUESTION, "2"), null, "QUESTION에서 2는 판정 안 됨");
+  eq(resolveKey(VIEW.QUESTION, "ArrowLeft"), null, "QUESTION에서 ←는 판정 안 됨");
+  eq(resolveKey(VIEW.QUESTION, "ArrowRight"), null, "QUESTION에서 →는 판정 안 됨");
+
+  // ANSWER: ←/1=몰랐음(unknown), →/2=알았음(known). 스페이스·Enter는 무시(자동 진행 방지).
+  eq(resolveKey(VIEW.ANSWER, "ArrowLeft"), "unknown", "ANSWER에서 ←=몰랐음");
+  eq(resolveKey(VIEW.ANSWER, "1"), "unknown", "ANSWER에서 1=몰랐음");
+  eq(resolveKey(VIEW.ANSWER, "ArrowRight"), "known", "ANSWER에서 →=알았음");
+  eq(resolveKey(VIEW.ANSWER, "2"), "known", "ANSWER에서 2=알았음");
+  eq(resolveKey(VIEW.ANSWER, " "), null, "ANSWER에서 스페이스는 자동 진행 안 함");
+  eq(resolveKey(VIEW.ANSWER, "Enter"), null, "ANSWER에서 Enter는 자동 진행 안 함");
+})();
+
+// --- 10. 판정 의미(회상 흐름이 의존): 알았음=learned, 몰랐음=active 유지 + Undo 복원 ---
+(() => {
+  const deck = createDeck(DATA, null, seededRng(21));
+  const f = deck.current();
+  // "알았음"(known) → learned로 이동, learnedAt 기록
+  deck.mark("known", "k1");
+  eq(deck.serialize().progress[f.id].status, "learned", "알았음 처리 시 learned로 이동");
+  ok(deck.serialize().progress[f.id].learnedAt === "k1", "알았음 처리 시 learnedAt 기록");
+
+  const g = deck.current();
+  // "몰랐음"(unknown) → active 유지, unknownCount 증가
+  deck.mark("unknown", "u1");
+  eq(deck.serialize().progress[g.id].status, "active", "몰랐음 처리 후에도 active 유지");
+  eq(deck.serialize().progress[g.id].unknownCount, 1, "몰랐음 처리 시 unknownCount 증가");
+
+  // Undo → 직전(몰랐음) 단어를 현재로 복원(공개 상태로 다시 판정 가능)
+  ok(deck.canUndo(), "판정 후 Undo 가능");
+  deck.undo();
+  eq(deck.current().id, g.id, "Undo 후 현재 단어가 직전 판정 단어로 복원");
+  eq(deck.serialize().progress[g.id].unknownCount, 0, "Undo로 unknownCount 원복");
 })();
 
 console.log(`\n[english-vocabulary] 테스트 완료: ${pass} PASS, ${fail} FAIL`);
