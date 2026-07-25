@@ -8,6 +8,7 @@ let muted = false;
 let unlocked = false;
 let master = null;   // 마스터 게인(→ destination)
 let reverb = null;   // 합성 리버브(convolver), 실패 시 null
+let compressor = null;
 
 export function setMuted(m) {
   muted = !!m;
@@ -40,8 +41,15 @@ function makeReverbIR(c, seconds = 1.1, decay = 3.2) {
 
 function setupGraph(c) {
   master = c.createGain();
-  master.gain.value = 0.85;
-  master.connect(c.destination);
+  master.gain.value = 0.78;
+  // 동시 발사·폭발이 겹쳐도 찢어지지 않게 부드럽게 눌러 게임 전체의 밀도를 높인다.
+  compressor = c.createDynamicsCompressor();
+  compressor.threshold.value = -18;
+  compressor.knee.value = 16;
+  compressor.ratio.value = 8;
+  compressor.attack.value = 0.004;
+  compressor.release.value = 0.16;
+  master.connect(compressor).connect(c.destination);
   try {
     reverb = c.createConvolver();
     reverb.buffer = makeReverbIR(c);
@@ -173,19 +181,26 @@ const SEMI = (base, s) => base * Math.pow(2, s / 12); // 반음 계산
 
 // 효과음별 합성 레시피. 우주 슈팅에 맞는 현대적 일렉트로닉 톤 - 부드럽고 공간감 있게.
 const SOUNDS = {
-  // 발사: 필터 스윕된 짧은 레이저 pew(자주 나므로 조용히).
-  shoot: (c) => voice(c, { type: 'sawtooth', freq: 1300, to: 420, dur: 0.11, gain: 0.045, filter: 2600, filterTo: 500, detune: 10, wet: 0.12 }),
-  // 적 피격(데미지만): 짧고 부드러운 틱.
-  hit: (c) => voice(c, { type: 'triangle', freq: 520, to: 300, dur: 0.06, gain: 0.05, filter: 3200, wet: 0.1 }),
+  // 발사: 밝은 코어 + 짧은 아래휙. 반복돼도 거칠지 않은 바푸리식 레이저.
+  shoot: (c) => {
+    voice(c, { type: 'triangle', freq: 1750, to: 980, dur: 0.075, gain: 0.06, filter: 5000, filterTo: 1800, detune: 7, wet: 0.08 });
+    voice(c, { type: 'sine', freq: 820, to: 520, dur: 0.09, gain: 0.026, delay: 0.008, filter: 2400, wet: 0.05 });
+  },
+  // 적 피격: 금속성 맑은 클릭 + 짧은 하강음으로 맞았다는 감각을 분명히.
+  hit: (c) => {
+    voice(c, { type: 'square', freq: 980, to: 560, dur: 0.055, gain: 0.042, filter: 4200, filterTo: 1300, wet: 0.07 });
+    voice(c, { type: 'sine', freq: 300, to: 190, dur: 0.08, gain: 0.026, delay: 0.008, wet: 0.04 });
+  },
   // 적 파괴: 노이즈 바람 + 저역 임팩트.
   explode: (c) => {
-    noiseHit(c, { dur: 0.32, gain: 0.16, lpFrom: 3000, lpTo: 220, wet: 0.3 });
-    subBoom(c, { freq: 130, to: 42, dur: 0.28, gain: 0.2 });
+    noiseHit(c, { dur: 0.38, gain: 0.19, lpFrom: 3600, lpTo: 180, wet: 0.34 });
+    subBoom(c, { freq: 150, to: 42, dur: 0.34, gain: 0.23 });
+    voice(c, { type: 'triangle', freq: 360, to: 105, dur: 0.18, gain: 0.07, filter: 1200, wet: 0.12 });
   },
   // 파워업 획득: 밝은 메이저 아르페지오 + 리버브 반짝.
   power: (c) => {
     [0, 4, 7, 12].forEach((s, i) =>
-      voice(c, { type: 'triangle', freq: SEMI(523, s), dur: 0.18, gain: 0.085, delay: i * 0.05, filter: 4200, detune: 6, wet: 0.4 }));
+      voice(c, { type: 'triangle', freq: SEMI(523, s), dur: 0.22, gain: 0.095, delay: i * 0.055, filter: 5000, detune: 6, wet: 0.44 }));
   },
   // 봄/화면 클리어: 큰 서브베이스 임팩트 + 긴 화이트아웃.
   bomb: (c) => {
@@ -215,9 +230,15 @@ const SOUNDS = {
       voice(c, { type: 'sine', freq: SEMI(440, s), dur: 0.5, gain: 0.13, delay: i * 0.16, filter: 2600, wet: 0.6 }));
   },
   // 게임 시작 / 보스 등장: 부드러운 상승 필터 스윕.
-  start: (c) => voice(c, { type: 'sawtooth', freq: 200, to: 760, dur: 0.3, gain: 0.11, filter: 500, filterTo: 3200, detune: 12, wet: 0.35 }),
+  start: (c) => {
+    voice(c, { type: 'triangle', freq: 250, to: 880, dur: 0.34, gain: 0.12, filter: 700, filterTo: 4200, detune: 9, wet: 0.38 });
+    voice(c, { type: 'sine', freq: 500, to: 1000, dur: 0.22, gain: 0.045, delay: 0.1, wet: 0.28 });
+  },
   // 유도 미사일 발사: 짧고 조용한 상승 휙(레이저는 무음, 시각만).
-  missile: (c) => voice(c, { type: 'sawtooth', freq: 680, to: 1500, dur: 0.13, gain: 0.038, filter: 1800, filterTo: 3200, detune: 8, wet: 0.15 }),
+  missile: (c) => {
+    voice(c, { type: 'sawtooth', freq: 540, to: 1650, dur: 0.16, gain: 0.05, filter: 1700, filterTo: 3800, detune: 7, wet: 0.16 });
+    voice(c, { type: 'sine', freq: 170, to: 260, dur: 0.13, gain: 0.03, wet: 0.08 });
+  },
   // 에너지존 피해 tick: 부드러운 저역 펄스(0.5초 주기라 조용히).
   zone: (c) => voice(c, { type: 'sine', freq: 190, to: 96, dur: 0.2, gain: 0.045, filter: 700, wet: 0.28 }),
 };

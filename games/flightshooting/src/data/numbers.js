@@ -44,6 +44,8 @@ export const CFG = {
     mainLenBase: 13, mainLenPer: 1.5, mainWBase: 1.3, mainWPer: 0.2,
   },
   enemyBullet: { speed: 250, r: 5 },
+  // 1스테이지는 첫 강화 전 생존·학습 구간. front 값으로 적탄 발사 간격을 추가로 늦춘다(↑=덜 쏨).
+  earlyStageFireMul: { stage: 1, front1: 3.2, front2: 2.1, front3Plus: 1.4 },
   // 4계통 파워 파츠 (docs/05_power-parts.md). 전방 화력 / 옵션기 / 에너지존 / 꼬리 비행기.
   parts: {
     // 전방 화력(= 메인 총알): front 1~66 = 강화 단계. 사용자 확정 2026-07-10(발별 순차 - 총알 하나씩), 발 수 6으로 조정 2026-07-21:
@@ -181,7 +183,7 @@ export const CFG = {
   finalBoss: { rx: 50, ry: 44, hp: 7500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
   // bobRamp = 등장 완료 후 좌우 유영이 0에서 최대 속도(bobFreq)까지 서서히 빨라지는 시간(초, 사용자 지시 2026-07-12).
-  boss: { bobAmp: 0.32, bobFreq: 0.15, bobRamp: 7, spawnTop: 62 },
+  boss: { bobAmp: 0.32, bobFreq: 0.15, bobRamp: 7, spawnTop: 62, partScale: 2.1, partHitFlash: 0.16, partScarSparkTime: 1.2 },
   // 보스 사망 연출: 주 연쇄 폭발은 dur초, 마지막 폭발 파티클이 모두 사라지면 전환한다.
   //   maxDur까지 남아 있으면 bossDeath 파티클만 정리해 전환을 보장한다.
   bossDeath: { burstEvery: 0.1, burstN: 16, shake: 13, dur: 1, finalDur: 1, maxDur: 3, finalBurstN: 52 },
@@ -201,6 +203,10 @@ export const CFG = {
       { id: 'gunR', role: 'weapon', pattern: 'aim3', ox:  42, oy: 8, r: 14, hpRatio: 0.25, fireEvery: 1.4, shape: 'turret' },
     ], upgrade: { fireMul: 0.7, extraParts: [
       { id: 'gunT', role: 'weapon', pattern: 'ring', ox: 0, oy: -34, r: 13, hpRatio: 0.22, fireEvery: 1.7, shape: 'turret' },
+      { id: 'gunBL', role: 'weapon', pattern: 'fan', ox: -52, oy: 30, r: 11, hpRatio: 0.16, fireEvery: 1.8, shape: 'turret' },
+      { id: 'gunBR', role: 'weapon', pattern: 'aim3', ox: 52, oy: 30, r: 11, hpRatio: 0.16, fireEvery: 1.7, shape: 'turret' },
+      { id: 'plateL', role: 'shield', ox: -28, oy: -22, r: 13, hpRatio: 0.16, shape: 'plate' },
+      { id: 'plateR', role: 'shield', ox: 28, oy: -22, r: 13, hpRatio: 0.16, shape: 'plate' },
     ] } },
     bio: { coreRatio: 0.34, partScore: 180, corePattern: 'aim3', coreEvery: 1.6, parts: [
       { id: 'armL', role: 'shield', ox: -38, oy: 4,   r: 13, hpRatio: 0.22, shape: 'tentacle' },
@@ -208,6 +214,10 @@ export const CFG = {
       { id: 'armT', role: 'shield', ox:   0, oy: -34, r: 12, hpRatio: 0.22, shape: 'tentacle' },
     ], upgrade: { fireMul: 0.7, coreMul: 0.7, extraParts: [
       { id: 'armW', role: 'weapon', pattern: 'fan', ox: 0, oy: 34, r: 12, hpRatio: 0.2, fireEvery: 1.5, shape: 'tentacle' },
+      { id: 'fangL', role: 'weapon', pattern: 'aim3', ox: -48, oy: 26, r: 11, hpRatio: 0.16, fireEvery: 1.7, shape: 'tentacle' },
+      { id: 'fangR', role: 'weapon', pattern: 'fan', ox: 48, oy: 26, r: 11, hpRatio: 0.16, fireEvery: 1.8, shape: 'tentacle' },
+      { id: 'armBL', role: 'shield', ox: -24, oy: 38, r: 11, hpRatio: 0.16, shape: 'tentacle' },
+      { id: 'armBR', role: 'shield', ox: 24, oy: 38, r: 11, hpRatio: 0.16, shape: 'tentacle' },
     ] } },
     orbiter: { coreRatio: 0.4, partScore: 160, corePattern: 'ring', coreEvery: 2.0, orbitR: 48, orbitSpeed: 1.3, parts: [
       { id: 'sh0', role: 'shield', orbit: true, angle: 0,      r: 12, hpRatio: 0.15, shape: 'shard' },
@@ -216,6 +226,10 @@ export const CFG = {
       { id: 'sh3', role: 'shield', orbit: true, angle: 4.7124, r: 12, hpRatio: 0.15, shape: 'shard' },
     ], upgrade: { fireMul: 0.7, coreMul: 0.7, extraParts: [
       { id: 'gunT', role: 'weapon', pattern: 'fan', ox: 0, oy: -44, r: 13, hpRatio: 0.2, fireEvery: 1.6, shape: 'turret' },
+      { id: 'sh4', role: 'shield', orbit: true, angle: 0.7854, r: 11, hpRatio: 0.12, shape: 'shard' },
+      { id: 'sh5', role: 'shield', orbit: true, angle: 2.3562, r: 11, hpRatio: 0.12, shape: 'shard' },
+      { id: 'sh6', role: 'shield', orbit: true, angle: 3.9270, r: 11, hpRatio: 0.12, shape: 'shard' },
+      { id: 'sh7', role: 'shield', orbit: true, angle: 5.4978, r: 11, hpRatio: 0.12, shape: 'shard' },
     ] } },
     sentinel: { coreRatio: 0.3, partScore: 400, enrage: 0.72, parts: [
       { id: 'head',  role: 'weapon', pattern: 'ring', ox:   0, oy: -44, r: 16, hpRatio: 0.18, fireEvery: 2.2, shape: 'turret' },
@@ -254,13 +268,16 @@ export const CFG = {
     // 자동 플레이(보조) 켠 상태에서 손으로 조작하면 그동안 수동, 손을 떼면 resumeDelay초 뒤 자동으로 복귀한다
     //   (하이브리드 조작, 사용자 지시 2026-07-16). 조작 중엔 계속 수동 유지, 마지막 조작 후 이 시간이 지나야 자동.
     resumeDelay: 0.5,
+    // 생존 우선 안전망: 실제 탄보다 넓게 피하고, 곧 발사할 탄도 미리 위험으로 본다.
+    // emergencyTime 안에 부딪힐 길이면 일반 사람형 반응 주기를 무시하고 emergencyReact마다 재계획한다.
+    safetyPad: 15, shotForecast: 0.9, emergencyTime: 0.52, emergencyReact: 0.04,
     tiers: {
       // 전반 상향(2026-07-14 사용자 지시 "초보도 똑똑하게"): 예측 시간 sim·동시 위협 threats↑, 반응 react↓.
       //   실력 차이(단조 증가)는 유지. sim은 2단계 빔서치에서 각 수 sim/2초 지평이 된다.
       beginner:     { react: 0.30, aimDeg: 8,   sim: 0.9, threats: 7 },
       intermediate: { react: 0.25, aimDeg: 4,   sim: 1.3, threats: 10 },
       advanced:     { react: 0.20, aimDeg: 2,   sim: 1.7, threats: 14 },
-      pro:          { react: 0.16, aimDeg: 0.8, sim: 2.1, threats: 999 },
+      pro:          { react: 0.12, aimDeg: 0.8, sim: 2.5, threats: 999 },
     },
   },
   // 세계 여행(docs/10): 구역 보스 격파 후 세계지도가 떠 다음 목적지(이웃 나라)를 고른다.

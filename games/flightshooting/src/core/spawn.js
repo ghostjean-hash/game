@@ -145,27 +145,31 @@ export function spawnBoss(game, W, H) {
   const sc = COLORS.boss.styles[style];
   const base = isFinal ? CFG.finalBoss : CFG.miniBoss;
   const totalHp = isFinal ? base.hp : base.baseHp + (game.stage - 1) * base.hpPerStage;
-  // 강화판: 후반 5구역(6~10·16~20·26~30, 최종 제외). 추가 부위 + 발사 주기 단축(사용자 지시 2026-07-16).
-  const upgraded = !isFinal && st.upgrade && ((game.stage - 1) % 10) >= CFG.bossUpgradeFrom;
-  const up = upgraded ? st.upgrade : null;
-  const fireMul = up ? up.fireMul : 1;
-  const coreMul = up && up.coreMul ? up.coreMul : 1;
-  const partDefs = up ? st.parts.concat(up.extraParts) : st.parts;
+  // 후반 5구역은 부위를 한 개씩 증설한다: 6→1개, 7→2개 … 10→5개(최종 제외).
+  const up = !isFinal ? st.upgrade : null;
+  const partLevel = up ? Math.max(0, ((game.stage - 1) % 10) - CFG.bossUpgradeFrom + 1) : 0;
+  const extraParts = up ? up.extraParts.slice(0, partLevel) : [];
+  const upgraded = extraParts.length > 0;
+  const upgradeRatio = up ? extraParts.length / up.extraParts.length : 0;
+  const fireMul = up ? 1 - (1 - up.fireMul) * upgradeRatio : 1;
+  const coreMul = up && up.coreMul ? 1 - (1 - up.coreMul) * upgradeRatio : 1;
+  const partDefs = st.parts.concat(extraParts);
+  const partScale = CFG.boss.partScale;
   // hp 정규화: 부위가 늘어도 (코어 + 전체 부위) 비율 합으로 나눠 총 hp가 일정하게 유지되도록.
   const ratioSum = st.coreRatio + partDefs.reduce((s, pp) => s + pp.hpRatio, 0);
   const coreHp = Math.max(1, Math.ceil((totalHp * st.coreRatio) / ratioSum));
   const parts = partDefs.map((pp) => {
     const php = Math.max(1, Math.ceil((totalHp * pp.hpRatio) / ratioSum));
     const fe = (pp.fireEvery || 0) * fireMul; // 강화판은 부위 발사 더 자주
-    return { ...pp, fireEvery: fe, hp: php, maxHp: php, dead: false, fireTimer: fe * Math.random(), x: 0, y: 0 };
+    return { ...pp, ox: (pp.ox || 0) * partScale, oy: (pp.oy || 0) * partScale, r: pp.r * partScale, fireEvery: fe, hp: php, maxHp: php, dead: false, hitFlash: 0, destroyAge: 0, destroySeed: Math.random() * Math.PI * 2, fireTimer: fe * Math.random(), x: 0, y: 0 };
   });
   const hasShield = parts.some((p) => p.role === 'shield');
   const coreEvery = (st.coreEvery || 1.4) * coreMul; // 강화판은 코어 공격도 더 자주
   game.boss = {
-    kind: isFinal ? 'final' : 'mini', style, upgraded,
+    kind: isFinal ? 'final' : 'mini', style, upgraded, partLevel, partScale,
     x: W / 2, y: -base.ry - 20, targetY: CFG.boss.spawnTop + base.ry,
     rx: base.rx, ry: base.ry, color: sc.core, colors: sc,
-    core: { hp: coreHp, maxHp: coreHp, exposed: !hasShield }, // 방어구 없으면 처음부터 노출
+    core: { hp: coreHp, maxHp: coreHp, exposed: !hasShield, hitFlash: 0 }, // 방어구 없으면 처음부터 노출
     parts, orbitAngle: 0, coreEvery, coreTimer: coreEvery * Math.random(),
     score: base.score, t: 0, entering: true,
     escortTimer: isFinal ? Infinity : CFG.miniBoss.escortEvery,
@@ -180,11 +184,10 @@ export function spawnBoss(game, W, H) {
 export function syncBossParts(boss) {
   const st = CFG.bossStyles[boss.style];
   for (const p of boss.parts) {
-    if (p.dead) continue;
     if (p.orbit) {
       const a = p.angle + boss.orbitAngle;
-      p.x = boss.x + Math.cos(a) * st.orbitR;
-      p.y = boss.y + Math.sin(a) * st.orbitR;
+      p.x = boss.x + Math.cos(a) * st.orbitR * boss.partScale;
+      p.y = boss.y + Math.sin(a) * st.orbitR * boss.partScale;
     } else {
       p.x = boss.x + p.ox;
       p.y = boss.y + p.oy;

@@ -52,14 +52,14 @@
 .mini-hud .mh.row { flex-direction: column; gap: 1px; }
 .mini-hud .pbadge {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 17px; height: 17px; border-radius: 5px;
-  font-size: 11px; font-weight: 800; font-style: normal;
-  color: #101420; border: 1.5px solid rgba(255, 255, 255, 0.9);
+  width: 19px; height: 19px; border-radius: 5px; font-style: normal;
+  border: 1px solid rgba(255, 255, 255, 0.72); overflow: hidden;
 }
-.mini-hud .pbadge.b-P { background: #f7c948; box-shadow: 0 0 6px rgba(247, 201, 72, 0.8); }
-.mini-hud .pbadge.b-S { background: #5fe8ff; box-shadow: 0 0 6px rgba(95, 232, 255, 0.8); }
-.mini-hud .pbadge.b-E { background: #a98bff; box-shadow: 0 0 6px rgba(169, 139, 255, 0.8); }
-.mini-hud .pbadge.b-T { background: #6ee7a8; box-shadow: 0 0 6px rgba(110, 231, 168, 0.8); }
+.mini-hud .pbadge img { width: 100%; height: 100%; object-fit: contain; }
+.mini-hud .pbadge.b-P { box-shadow: 0 0 6px rgba(247, 201, 72, 0.8); }
+.mini-hud .pbadge.b-S { box-shadow: 0 0 6px rgba(95, 232, 255, 0.8); }
+.mini-hud .pbadge.b-E { box-shadow: 0 0 6px rgba(169, 139, 255, 0.8); }
+.mini-hud .pbadge.b-T { box-shadow: 0 0 6px rgba(110, 231, 168, 0.8); }
 /* 마스터(최대 강화 단계): 단계 숫자를 주황색 + 글로우로 최고 도달을 표현(사용자 지시 2026-07-10) */
 .mini-hud .mh b.mastered { color: #ff8a3d; text-shadow: 0 0 8px rgba(255, 138, 61, 0.9); }
 .lives { display: flex; gap: 3px; align-items: center; }
@@ -142,8 +142,10 @@
   padding: clamp(6px, 2vh, 20px) var(--sp-4);
 }
 .menu-hero { display: flex; flex-direction: column; align-items: center; gap: clamp(4px, 1.2vh, 12px); text-align: center; }
-.hero-craft { filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.4)); animation: hover 2.4s ease-in-out infinite; }
-.hero-craft svg { width: clamp(48px, 11vh, 88px); height: auto; }
+.hero-craft { position: relative; filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.4)); animation: hover 2.4s ease-in-out infinite; }
+.hero-craft img { width: clamp(56px, 13vh, 104px); height: auto; display: block; object-fit: contain; }
+.hero-craft .hero-friend { position: absolute; width: 42%; height: 42%; right: -31%; bottom: 2%; object-fit: contain; filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.55)); }
+.hero-craft .hero-friend[hidden] { display: none; }
 @keyframes hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 .menu-tagline { max-width: 320px; color: var(--fg-dim); font-size: 14px; margin: 0; }
 .menu-best { display: flex; flex-direction: column; align-items: center; gap: 2px; }
@@ -313,6 +315,8 @@
 .map-viewport svg { width: 100%; height: 100%; display: block; }
 /* 확대·축소·홈 컨트롤: 지도 위 오른쪽 위에 겹쳐 놓는다. */
 .map-controls { position: absolute; top: 12px; right: 10px; display: flex; flex-direction: column; gap: 8px; z-index: 3; }
+.map-exit { position: absolute; top: 12px; left: 10px; z-index: 4; }
+.map-exit svg { width: 22px; height: 22px; display: block; }
 .map-ctrl {
   padding: 8px 12px; border: 1px solid #2f6b52; border-radius: 8px;
   background: rgba(16, 40, 30, 0.92); color: #8affc0; font-size: 14px; font-weight: 700; cursor: pointer;

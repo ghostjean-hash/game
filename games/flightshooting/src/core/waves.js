@@ -19,6 +19,19 @@ export function buildWaves(stage, waveMax = Infinity) {
 }
 
 function buildBaseWaves(stage) {
+  // 첫 구역은 아이템을 먹어 성장하는 법을 배우는 구간: 적 수·줄 수·등장 간격을 별도로 낮춘다.
+  if (stage === 1) {
+    const first = [];
+    let t = 1.4;
+    const add = (type, count) => { first.push({ t, enemies: cols(count).map((xr) => ({ type, xr })) }); };
+    add('drone', 3);
+    t += 2.8; add('weaver', 2);
+    t += 3.0; add('drone', 3);
+    t += 2.9; add('gunner', 1);
+    t += 3.1; add('weaver', 2);
+    t += 3.0; add('drone', 3);
+    return first;
+  }
   const s = Math.min(stage - 1, 6); // 난이도 가중(상한으로 후반 과밀 방지)
   const w = [];
   let t = 1.0;

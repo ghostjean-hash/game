@@ -20,7 +20,7 @@
    - 코어 hp가 0이 되면 보스 격파(기존 `defeatBoss`).
 3. **타격 우선순위**: 아군 발사체는 겹친 대상 중 **살아있는 부위 → (노출된) 코어** 순으로 1개에만 피해를 준다. 부위가 코어 앞을 가리므로, 방어구를 먼저 부수지 않으면 코어를 못 때린다.
    - 예외: 에너지존(범위기)·유도탄(측면 유도)은 부위와 무관하게 사거리 내 가장 가까운 대상을 때린다 - 기존 적(shielder) 공략과 일관. 정면 화력(메인/사이드)만 위 가림 규칙을 받는다.
-4. **부위 파괴 연출**: 부위 hp 0 → `dead=true` + 그 자리에 폭발 파티클 + 잔해가 잠깐 남는다. 부위는 사라지고 그 패턴은 멈춘다.
+4. **피격·파괴 연출**: 살아있는 부위가 맞을 때마다 원형 링이 아닌 **부위 PNG 실루엣 자체**가 짧게 백색으로 반짝여 피격 지점을 분명히 알린다. 코어 본체도 피해를 받으면 같은 백색 PNG 플래시가 난다. hp 0 → `dead=true` + 폭발 파티클, 그리고 그 자리에 부위 형상별 파괴 흔적 PNG(`assets/bosses/scars/`)가 남는다. 흔적은 파괴 순간의 화면 좌표에 고정하지 않고 보스의 부위 오프셋에 계속 붙어 유영·회전한다. 부위는 사라지고 그 패턴은 멈춘다.
 5. **hp 표시**: 상단 바는 **코어 hp**만 표시하되, 방어구가 남아 있으면 바를 "보호 중"으로 흐리게(또는 자물쇠 아이콘) 보여 "아직 코어를 못 때린다"를 알린다. 부위별 hp는 각 부위 위에 작은 게이지.
 
 ## 2. 데이터 구조 (구현 가이드)
@@ -33,7 +33,8 @@ boss = {
   entering: bool, targetY,           // 등장 이동(기존)
   core:  { hp, maxHp, exposed: bool },
   parts: [
-    { id, ox, oy, r, hp, maxHp, dead:false,
+    core: { hp, maxHp, exposed, hitFlash:0 },
+    { id, ox, oy, r, hp, maxHp, dead:false, hitFlash:0, destroyAge:0,
       role: 'weapon' | 'shield',
       pattern: 'fan' | 'aim3' | 'ring' | null,  // weapon만
       fireTimer, color, shape },      // shape = 렌더 형태(포탑/촉수/조각/날개)
@@ -42,6 +43,7 @@ boss = {
 ```
 
 - `parts`가 비거나 shield가 없으면 `core.exposed` 초기값 true.
+- `hitFlash`는 코어·부위 피격 직후의 백색 PNG 플래시 잔여 시간, `destroyAge`는 파괴 흔적의 불꽃 감쇠 시간에 사용한다. 둘은 연출 전용이며 충돌·공격 판정에는 영향을 주지 않는다.
 - 부위 위치는 코어 유영(`bob`)에 함께 딸려 움직인다(오프셋 고정, 절대 좌표는 매 프레임 `boss.x/y + ox/oy`).
 - 스타일별 부위 구성·패턴·색은 `data/bosses.js`(신설) 또는 `numbers.js`의 `bossStyles` 테이블에서 정의(매직넘버 0 원칙).
 

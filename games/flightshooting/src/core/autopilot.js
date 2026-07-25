@@ -13,7 +13,7 @@ const SIM_T = 1.5;       // 미래를 이 시간(초)까지 시뮬레이션해 �
 const SIM_DT = 0.04;     // 시뮬 시간 간격(초) - 작을수록 정밀, 클수록 빠름
 const DEPTH = 2;         // 몇 수 앞까지 계획하는가. 각 수는 seg=지평/DEPTH초를 굴린다(막다른 곳 회피의 핵심)
 const BEAM = 10;         // 빔서치 폭: 첫 수에서 완전 생존한 상위 후보 이만큼 두 번째 수까지 확장(연산 절감 vs 시야)
-const HIT_PAD = 9;       // 시뮬 충돌 반경에 더하는 여유(성긴 스텝의 빗나감 방어 + 안전 마진)
+const HIT_PAD = CFG.autopilot.safetyPad; // 시뮬 충돌 반경에 더하는 여유(성긴 스텝의 빗나감 방어 + 안전 마진)
 const AIM_BONUS = 0.30;  // 조준 정렬 목표의 이득(생존 동점 목표끼리 우선순위 가름)
 const PICK_BONUS = 0.42; // 파워업 획득 목표의 이득(성장 우선이라 조준보다 약간 높다)
 const AIM_MARGIN = 24;   // 표적이 이만큼 위에 있어야 조준 대상으로 삼는다
@@ -39,7 +39,7 @@ const OFFS = [
 
 // 시뮬레이션에 넣을 위협 목록. 각 위협의 미래 위치를 posAt로 정확히 재현할 수 있게 형태를 담는다.
 // k=0: 등속 직선(적탄·직하 적·보스). k=1: weaver(좌우 사인 흔들 + 낙하).
-export function collectThreats(game) {
+export function collectThreats(game, actor = game.player) {
   const out = [];
   const br = CFG.enemyBullet.r;
   for (const b of game.eBullets)
@@ -51,12 +51,36 @@ export function collectThreats(game) {
     else
       // rusher(돌진)·shard는 vx/vy로, 나머지는 세로 speed로 움직인다. bonus는 가로(vx)만.
       out.push({ k: 0, x: e.x, y: e.y, vx: e.vx || 0, vy: e.vy != null ? e.vy : (e.speed || 0), r });
+    // 화면에 탄이 생긴 뒤에야 피하면 늦는다. 발사 타이머가 예측 지평 안인 조준형 적은
+    // '발사 시점부터 날아오는 가상 탄'을 추가해, 아직 안전해 보이는 길도 미리 피한다.
+    if (CFG.enemy[e.type]?.fireEvery && e.fireTimer != null && e.fireTimer <= CFG.autopilot.shotForecast && e.y > 20)
+      addForecastShots(out, e, e.fireTimer, actor, e.type);
   }
   if (game.boss && !game.boss.entering) {
     const b = game.boss;
     out.push({ k: 0, x: b.x, y: b.y, vx: 0, vy: 0, r: (b.ry || b.rx || 30) + HIT_PAD });
+    for (const part of b.parts || []) {
+      if (part.dead) continue;
+      out.push({ k: 0, x: part.x, y: part.y, vx: 0, vy: 0, r: (part.r || 15) + HIT_PAD });
+      if (part.role === 'weapon' && part.fireTimer <= CFG.autopilot.shotForecast)
+        addForecastShots(out, part, part.fireTimer, actor, 'boss');
+    }
+    if (b.core && b.core.exposed && b.coreTimer <= CFG.autopilot.shotForecast)
+      addForecastShots(out, b, b.coreTimer, actor, 'boss');
   }
   return out;
+}
+
+// 적의 실제 enemyFireAt와 같은 속도로, 발사 예정 시점(delay)부터 플레이어의 현재 위치를 향하는
+// 가상 탄을 만든다. 다발 적·보스는 중앙선 바깥도 함께 막아 단발만 피하다 옆 탄에 맞지 않게 한다.
+function addForecastShots(out, source, delay, actor, type) {
+  if (!actor || delay < 0) return;
+  const spread = (type === 'gunner' || type === 'turret' || type === 'whale' || type === 'boss') ? [-54, 0, 54] : [0];
+  for (const xOff of spread) {
+    const dx = actor.x + xOff - source.x, dy = actor.y - source.y;
+    const d = Math.hypot(dx, dy) || 1;
+    out.push({ k: 2, x: source.x, y: source.y, vx: (dx / d) * CFG.enemyBullet.speed, vy: (dy / d) * CFG.enemyBullet.speed, delay, r: CFG.enemyBullet.r + HIT_PAD });
+  }
 }
 
 // 목표 tg로 최대 속도로 이동한다고 가정하고, 한 수(segT초) 동안 굴린다. tOff = 이 수가 시작되는
@@ -73,9 +97,10 @@ export function simulate(threats, tg, sx, sy, step, W, H, pr, segT, tOff) {
     if (x < pr) x = pr; else if (x > W - pr) x = W - pr;
     if (y < pr) y = pr; else if (y > H - pr) y = H - pr;
     for (const th of threats) {
+      if (th.k === 2 && at < th.delay) continue; // 아직 발사 전인 가상 탄
       let ox, oy;
       if (th.k === 1) { ox = th.baseX + th.amp * Math.sin((th.t0 + at) * th.freq); oy = th.y + th.vy * at; }
-      else { ox = th.x + th.vx * at; oy = th.y + th.vy * at; }
+      else { const flyT = th.k === 2 ? at - th.delay : at; ox = th.x + th.vx * flyT; oy = th.y + th.vy * flyT; }
       const rr = pr + th.r, ex = x - ox, ey = y - oy;
       if (ex * ex + ey * ey < rr * rr) return { t, x, y }; // 이 시각에 죽는다(충돌 지점 반환)
     }
@@ -119,13 +144,18 @@ export function decideTarget(game, W, H, pr, homeY, tier, actor, opts) {
   const simT = tier ? tier.sim : SIM_T;
   const aimDeg = tier ? tier.aimDeg : 0;
   const threatLim = tier ? tier.threats : Infinity;
-  let threats = collectThreats(game);
+  let threats = collectThreats(game, p);
   // 판 읽기 한계: 동시에 고려하는 위협을 가까운 것부터 threatLim개로 제한(사람 MOT 약 4~5개).
   if (Number.isFinite(threatLim) && threats.length > threatLim) {
     threats = threats
       .map((th) => { const tx = th.k === 1 ? th.baseX : th.x; const ddx = tx - p.x, ddy = th.y - p.y; return { th, d: ddx * ddx + ddy * ddy }; })
       .sort((a, b) => a.d - b.d).slice(0, threatLim).map((o) => o.th);
   }
+
+  const step = CFG.player.speed * SIM_DT;
+  const seg = simT / DEPTH;
+  // 현재 위치를 계속 유지했을 때의 충돌 여부가 아이템·조준보다 먼저 결정된다.
+  const inDanger = simulate(threats, { x: p.x, y: p.y }, p.x, p.y, step, W, H, pr, simT, 0).t < simT;
 
   // 후보 목표: 회피 지점(bonus 0, 세로·대각 포함) + 조준 지점 + 파워업 지점.
   const topY = H * TOP_LIM, botY = H - pr;
@@ -151,7 +181,7 @@ export function decideTarget(game, W, H, pr, homeY, tier, actor, opts) {
     }
   }
   if (!tgt && game.boss && !game.boss.entering) tgt = game.boss;
-  if (tgt) {
+  if (tgt && !inDanger) {
     // 예측 조준(lead): 총알이 표적에 닿을 시간만큼 표적의 가로 이동을 미리 겨냥한다(빠른 보너스 기체 명중률↑).
     const evx = tgt.vx || 0;
     const tof = Math.max(0, (p.y - tgt.y) / CFG.bullet.speed);
@@ -178,18 +208,14 @@ export function decideTarget(game, W, H, pr, homeY, tier, actor, opts) {
     const d = Math.hypot(it.x - p.x, it.y - p.y);
     if (d < pd) { pd = d; pu = it; }
   }
-  if (pu && pd < PICK_RANGE) targets.push({ x: clamp(pu.x, pr, W - pr), y: clamp(pu.y, topY, botY), bonus: PICK_BONUS });
+  if (!inDanger && pu && pd < PICK_RANGE) targets.push({ x: clamp(pu.x, pr, W - pr), y: clamp(pu.y, topY, botY), bonus: PICK_BONUS });
 
   // 여러 수 앞 계획(2단계 빔서치). 각 목표를 한 수(seg=simT/DEPTH초)만 굴려 '도착 지점'과 첫 수 생존을
   // 구하고, 첫 수를 완전히 산 상위 BEAM개만 그 도착 지점에서 두 번째 수까지 이어 굴려 미래 생존을 더한다.
   // 점수 = 두 수 총 생존 + 안전 시 이득(조준/획득) + 위험 시 여유 공간. 실제 이동은 계획의 첫 수만 따른다.
-  const step = CFG.player.speed * SIM_DT;
-  const seg = simT / DEPTH;
   const threatFactor = Math.min(1, threats.length / 6);
   // 제자리가 위험할 때만 여유 공간(빈 곳·위쪽) 도피 보너스를 켠다. 제자리가 안전하면 불필요한 이동을 막는다
   //   (안 맞을 탄에 괜히 움직이지 않게). 위험하면 넓은 빈 공간으로 도피 = 위쪽이 비면 위로 올라간다.
-  const inDanger = simulate(threats, { x: p.x, y: p.y }, p.x, p.y, step, W, H, pr, simT, 0).t < simT;
-
   // 1수: 각 후보로 seg초 이동해 생존 시간(_s1)과 도착 지점(_ex,_ey)을 구한다.
   for (const tg of targets) {
     const r1 = simulate(threats, tg, p.x, p.y, step, W, H, pr, seg, 0);
@@ -247,8 +273,12 @@ export function autopilotStep(game, dt, W, H) {
     game.apTarget = { x: p.x, y: homeY, safe: true };
   }
   game.apTimer -= dt;
-  if (game.apTimer <= 0) {
-    game.apTimer += react;
+  // 탄막이 코앞이면 0.12초(프로)조차 길다. 현재 자리에 멈춰 있을 때 emergencyTime 안에
+  // 충돌하는지 먼저 확인하고, 그렇다면 매 emergencyReact초마다 계획을 새로 세운다.
+  const imminent = simulate(collectThreats(game, p), { x: p.x, y: p.y }, p.x, p.y,
+    CFG.player.speed * SIM_DT, W, H, pr, CFG.autopilot.emergencyTime, 0).t < CFG.autopilot.emergencyTime;
+  if (game.apTimer <= 0 || imminent) {
+    game.apTimer = imminent ? CFG.autopilot.emergencyReact : react;
     game.apTarget = decideTarget(game, W, H, pr, homeY, tier);
   }
 

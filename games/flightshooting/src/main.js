@@ -412,6 +412,7 @@ let tourScale = 1; // 확대 배율 보정(핀·글자가 화면에서 일정 �
 let tourVB = null; // 현재 지도 viewBox {x,y,w,h} - 드래그·확대축소로 갱신
 let tourCands = []; // 클릭 가능한 후보 전체(안 간 나라 전부)
 let tourFrame = []; // 초기 확대 프레이밍용(현재+가까운 frameNear개) - 클릭 후보와 별개
+const PACIFIC_CENTER_X = MAP_W; // 반복된 지도에서 날짜변경선(태평양)을 화면 중앙으로 쓰는 기준 좌표.
 const cityX = (i) => lonToX(COUNTRIES[i].lon);
 const cityY = (i) => latToY(COUNTRIES[i].lat);
 const frameDist = (a, b) => { const dx = cityX(a) - cityX(b), dy = cityY(a) - cityY(b); return dx * dx + dy * dy; };
@@ -539,7 +540,12 @@ function renderMap(cur, cands) {
   // 나라별 path를 대륙 색으로 칠한다(COUNTRY_PATHS). data-ko로 선택 나라 하나만 하이라이트 가능.
   const sw = (CFG.tour.borderW * s).toFixed(2);
   const land = COUNTRY_PATHS.map((cp) => `<path data-ko="${cp.ko}" data-cont="${cp.cont}" d="${cp.d}" fill="${COLORS.tour.continent[cp.cont] || COLORS.tour.land}" stroke="${COLORS.tour.border}" stroke-width="${sw}"/>`).join('');
-  mapViewport.innerHTML = `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="${MAP_W}" height="${MAP_H}" fill="#0b1020"/>${land}${route}${cities}${plane}</svg>`;
+  // 경도 양 끝을 세 번 반복해 날짜변경선(태평양)을 넘어도 지도·도시가 끊기지 않게 한다.
+  const mapLayer = `${land}${route}${cities}`;
+  const repeated = [-MAP_W, 0, MAP_W].map((dx) => `<g transform="translate(${dx},0)">${mapLayer}</g>`).join('');
+  const sidePlane = plane.replace('id="tour-plane"', '');
+  const repeatedPlane = `<g transform="translate(${-MAP_W},0)">${sidePlane}</g>${plane}<g transform="translate(${MAP_W},0)">${sidePlane}</g>`;
+  mapViewport.innerHTML = `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><rect x="${-MAP_W}" y="0" width="${MAP_W * 3}" height="${MAP_H}" fill="#0b1020"/>${repeated}${repeatedPlane}</svg>`;
   mapViewport.querySelectorAll('.map-pick').forEach((g) => {
     g.addEventListener('click', () => { if (!mapDragMoved) chooseDest(Number(g.dataset.dest)); });
   });
@@ -559,7 +565,10 @@ function highlightCountry(ko) {
 // viewBox만 갱신(드래그·확대축소·홈 공용, 재렌더 없음).
 function setViewBox() {
   const svg = mapViewport.querySelector('svg');
-  if (svg && tourVB) svg.setAttribute('viewBox', `${tourVB.x.toFixed(1)} ${tourVB.y.toFixed(1)} ${tourVB.w.toFixed(1)} ${tourVB.h.toFixed(1)}`);
+  if (!svg || !tourVB) return;
+  // 수평만 순환: 드래그가 어느 쪽 끝을 지나도 같은 경도 좌표로 감겨 이어진다.
+  tourVB.x = ((tourVB.x % MAP_W) + MAP_W) % MAP_W;
+  svg.setAttribute('viewBox', `${tourVB.x.toFixed(1)} ${tourVB.y.toFixed(1)} ${tourVB.w.toFixed(1)} ${tourVB.h.toFixed(1)}`);
 }
 
 // 확대/축소(중심 유지). factor<1 확대, >1 축소.
@@ -570,6 +579,7 @@ function zoomMap(factor) {
   const nh = nw * (tourVB.h / tourVB.w);
   tourVB.x += (tourVB.w - nw) / 2; tourVB.y += (tourVB.h - nh) / 2;
   tourVB.w = nw; tourVB.h = nh;
+  if (nw >= MAP_W) tourVB.x = PACIFIC_CENTER_X - nw / 2;
   setViewBox();
 }
 
@@ -591,7 +601,10 @@ function chooseDest(dest) {
   flyTo(from, dest, () => {
     game.tourIdx = dest;
     game.tourPath.push(dest);
-    mapCard.innerHTML = `${COUNTRIES[dest].ko} 도착!<br>수도는 <b>${COUNTRIES[dest].cap}</b>`;
+    const target = COUNTRIES[dest];
+    mapCard.innerHTML = target.type === 'travel'
+      ? `${target.ko} 도착!<br><b>${target.parentCountry}</b>의 여행지`
+      : `${target.ko} 도착!<br>수도는 <b>${target.cap}</b>`;
     mapCard.hidden = false;
     placeCardOverCity(dest); // 화면 중앙 대신 도착한 도시 바로 위에 카드를 띄운다(사용자 지시)
     sound.play('start'); // 도착 효과음(기존 사운드 재사용)
@@ -723,6 +736,12 @@ mapViewport.addEventListener('wheel', (e) => {
 $('#map-zoom-in').addEventListener('click', () => zoomMap(1 / CFG.tour.zoomStep));
 $('#map-zoom-out').addEventListener('click', () => zoomMap(CFG.tour.zoomStep));
 $('#map-home').addEventListener('click', recenterMap);
+$('#map-exit').addEventListener('click', () => {
+  if (flyRaf) cancelAnimationFrame(flyRaf);
+  flyRaf = 0;
+  mapOverlay.hidden = true;
+  backToMenu();
+});
 
 // fromPop = popstate(폰 백버튼/화면 ← 경유)로 불린 경우. 그 외(게임오버 모달 '홈' 등) 직접 호출 시엔
 //   startGame에서 쌓은 game 히스토리 지점을 소비해, 다음 시작 때 push가 정상 동작하도록 정리한다.
@@ -806,7 +825,11 @@ diffSeg.addEventListener('click', (e) => {
 // 친구 동행 / 자동 플레이 아이콘 토글(난이도 무관, 눌러서 on/off). 선택 기억.
 const optFriend = $('#opt-friend');
 const optAuto = $('#opt-auto');
-function setOptIcon(btn, on) { btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', String(on)); }
+const heroFriend = $('#hero-friend');
+function setOptIcon(btn, on) {
+  btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', String(on));
+  if (btn === optFriend) heroFriend.hidden = !on;
+}
 setOptIcon(optFriend, friendOn);
 setOptIcon(optAuto, autoOn);
 optFriend.addEventListener('click', () => { friendOn = !friendOn; store.set('friendOn', friendOn); setOptIcon(optFriend, friendOn); });

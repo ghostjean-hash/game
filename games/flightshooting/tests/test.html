@@ -18,7 +18,7 @@ import { frontSpec, speedMul } from '../src/core/fire.js';
 import { optionSlot, gainFront, gainOption, gainZone, gainTail, loseLastPart, tickZone } from '../src/core/parts.js';
 import { buildWaves, stageName } from '../src/core/waves.js';
 import { spawnEnemy, spawnBonus, spawnShards, spawnWispChild, dropItems, fieldBounds, spawnBoss, bossStyleFor, syncBossParts } from '../src/core/spawn.js';
-import { autopilotStep } from '../src/core/autopilot.js';
+import { autopilotStep, collectThreats } from '../src/core/autopilot.js';
 import { hit, checkCollisions, updateEnemies, distToSegment, updateBoss, capBullets } from '../src/core/world.js';
 import { spawnFriend, stepFriend, gainFriendLevel, friendTakeHit, reviveFriend } from '../src/core/friend.js';
 import { CFG } from '../src/data/numbers.js';
@@ -300,6 +300,16 @@ test('autopilot 목숨 풀이면 하트 무시', () => { const g = apGame({ live
 // 안전 상황에서 조준 표적이 불감대(12px) 이내로 옆에 있으면 x를 미세 이동하지 않는다(떨림 방지).
 test('autopilot 안전 시 근접 표적엔 떨지 않음', () => { const g = apGame({ enemies: [{ x: 208, y: 500, r: 15, speed: 150 }] }); autopilotStep(g, 0.1, 500, 1000); eq(g.player.x, 200); });
 // 반대로 위협 회피 중엔 불감대 없이 정밀 이동해야 한다(위 '정면 충돌 코스 회피' 테스트가 이를 보장).
+// 아직 화면에 나오지 않은 발사 예정 탄도 위험 목록에 넣어, 발사 뒤에야 피하는 지연을 막는다.
+test('autopilot 발사 예정 gunner 탄 예측', () => {
+  const g = apGame({ enemies: [{ type: 'gunner', x: 200, y: 400, r: 18, speed: 0, fireTimer: 0.2 }] });
+  ok(collectThreats(g).some((t) => t.k === 2));
+});
+// 보스의 살아 있는 공격 파츠도 본체와 별도로 충돌 위협으로 취급한다.
+test('autopilot 보스 파츠 충돌 영역 반영', () => {
+  const g = apGame({ boss: { x: 250, y: 200, ry: 40, entering: false, parts: [{ x: 200, y: 620, r: 18, role: 'weapon', fireTimer: 2, dead: false }] } });
+  ok(collectThreats(g).some((t) => t.x === 200 && t.y === 620 && t.r >= 18));
+});
 
 // ── 어린이 모드: 조준 연발(gunner·turret 3발) → 정중앙 단발(enemyShotsMax) ──
 const shotGame = (type, cap) => ({

@@ -4,6 +4,233 @@ import { CFG } from '../data/numbers.js';
 import { COUNTRIES } from '../data/countries.js';
 import { SCENES } from '../data/scenes.js';
 import { BG_POOLS, COUNTRY_BG } from '../data/backgroundPools.js';
+import { FALLBACK_SCENE_SRC, FALLBACK_SCENE_BY_COUNTRY } from '../data/fallbackScenes.js';
+
+// 바푸리(와라와라) 원화. 충돌·조작 반지름과 독립된 렌더 전용 자산이며, 로드 실패 시 기존 캔버스 도형을 쓴다.
+const BAPURI_SPRITE_SRC = 'assets/characters/bapuri-sprite-v2.png';
+const BAPURI_SPRITE_CROP = { x: 140, y: 400, w: 745, h: 700 };
+const bapuriSprite = { img: new Image(), ok: false };
+bapuriSprite.img.onload = () => { bapuriSprite.ok = true; };
+bapuriSprite.img.src = BAPURI_SPRITE_SRC;
+const KIWI_SPRITE_SRC = 'assets/characters/kiwi-sprite-v2.png';
+const kiwiSprite = { img: new Image(), ok: false };
+kiwiSprite.img.onload = () => { kiwiSprite.ok = true; };
+kiwiSprite.img.src = KIWI_SPRITE_SRC;
+
+// 투사체 PNG는 처음 필요한 순간에만 불러온다. 이미지 로드 실패나 첫 프레임에는 기존 캔버스 도형을
+// 그대로 써서 게임 진행·충돌·발사 타이밍이 자산 상태에 영향을 받지 않게 한다.
+const projectileSpriteCache = new Map();
+const PROJECTILE_RENDER = {
+  main: { minHeight: 18, heightMul: 1.45, laneFill: 0.9 },
+  side: { sizeMul: 3.2 },
+  missile: { heightMul: 7, tierHeight: 0.3, widthMul: 4 },
+  friend: { widthMul: 2 },
+  enemy: { sizeMul: 2.8 },
+};
+function getProjectileSprite(name) {
+  let entry = projectileSpriteCache.get(name);
+  if (!entry) {
+    entry = { img: new Image(), ok: false };
+    entry.img.onload = () => { entry.ok = true; };
+    entry.img.src = 'assets/projectiles/' + name;
+    projectileSpriteCache.set(name, entry);
+  }
+  return entry;
+}
+function drawProjectileSprite(ctx, name, x, y, angle, maxW, maxH) {
+  const entry = getProjectileSprite(name);
+  if (!entry.ok) return false;
+  const scale = Math.min(maxW / entry.img.width, maxH / entry.img.height);
+  const w = entry.img.width * scale, h = entry.img.height * scale;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+  ctx.drawImage(entry.img, -w * 0.5, -h * 0.5, w, h);
+  ctx.restore();
+  return true;
+}
+
+// 파워업도 타입별 원화를 사용한다. 첫 프레임과 로드 실패에는 drawPowerups의 기존 도형이 대체한다.
+const POWERUP_SPRITE_FILES = Object.freeze({
+  P: 'front.png', S: 'side.png', E: 'zone.png', T: 'tail.png', H: 'heart.png', B: 'bomb.png',
+});
+const POWERUP_FRAME_FILES = Object.freeze({
+  P: 'hex-neon.png', S: 'oct-neon.png', E: 'hex-neon.png', T: 'oct-neon.png', H: null, B: null,
+});
+const powerupSpriteCache = new Map();
+const powerupFrameCache = new Map();
+function getPowerupFrame(name) {
+  let entry = powerupFrameCache.get(name);
+  if (!entry) {
+    entry = { img: new Image(), ok: false };
+    entry.img.onload = () => { entry.ok = true; };
+    entry.img.src = 'assets/powerups/frames/' + name;
+    powerupFrameCache.set(name, entry);
+  }
+  return entry;
+}
+function drawPowerupSprite(ctx, kind, radius, time) {
+  const name = POWERUP_SPRITE_FILES[kind];
+  let entry = powerupSpriteCache.get(name);
+  if (!entry) {
+    entry = { img: new Image(), ok: false };
+    entry.img.onload = () => { entry.ok = true; };
+    entry.img.src = 'assets/powerups/' + name;
+    powerupSpriteCache.set(name, entry);
+  }
+  if (!entry.ok) return false;
+  const frameName = POWERUP_FRAME_FILES[kind];
+  const frame = frameName ? getPowerupFrame(frameName) : null;
+  // 채운 배지 대신, 투명 PNG 네온 프레임만 아이템 뒤에서 작게 바운스한다. 원화는 고정해 선명도를 유지한다.
+  const bounce = 1 + Math.sin(time * 4.8 + radius) * 0.065;
+  if (frame && frame.ok) {
+    const frameSpan = radius * 3.7;
+    const frameScale = Math.min(frameSpan / frame.img.width, frameSpan / frame.img.height);
+    const fw = frame.img.width * frameScale, fh = frame.img.height * frameScale;
+    ctx.save();
+    ctx.scale(bounce, bounce);
+    ctx.rotate(Math.sin(time * 1.8 + radius) * 0.025);
+    // 같은 PNG를 안·밖으로 한 번 더 겹쳐 얇은 선이 아니라 단단한 네온 외곽으로 보이게 한다.
+    ctx.globalAlpha = 0.58;
+    ctx.drawImage(frame.img, -fw * 0.53, -fh * 0.53, fw * 1.06, fh * 1.06);
+    ctx.globalAlpha = 1;
+    ctx.drawImage(frame.img, -fw * 0.5, -fh * 0.5, fw, fh);
+    ctx.restore();
+  }
+  // 네온 프레임보다 원화가 작아지지 않도록, 프레임 도입 전의 표시 크기를 유지한다.
+  const span = radius * 2.8;
+  const scale = Math.min(span / entry.img.width, span / entry.img.height);
+  const w = entry.img.width * scale, h = entry.img.height * scale;
+  ctx.shadowBlur = 0;
+  ctx.drawImage(entry.img, -w * 0.5, -h * 0.5, w, h);
+  return true;
+}
+
+// 동행 비행기 원화. 옵션기(S)와 꼬리기(T)는 서로 다른 정령 실루엣을 쓰며, 로드 실패 시 기존 도형을 유지한다.
+const companionSpriteCache = new Map();
+function drawCompanionSprite(ctx, name, span) {
+  let entry = companionSpriteCache.get(name);
+  if (!entry) {
+    entry = { img: new Image(), ok: false };
+    entry.img.onload = () => { entry.ok = true; };
+    entry.img.src = 'assets/companions/' + name;
+    companionSpriteCache.set(name, entry);
+  }
+  if (!entry.ok) return false;
+  const scale = Math.min(span / entry.img.width, span / entry.img.height);
+  const w = entry.img.width * scale, h = entry.img.height * scale;
+  ctx.drawImage(entry.img, -w * 0.5, -h * 0.5, w, h);
+  return true;
+}
+
+// 적 본체 원화. 타입별 PNG가 준비되기 전·로드 실패 시에는 기존 도형 렌더가 자연스럽게 대체한다.
+const enemySpriteCache = new Map();
+const ENEMY_SPRITE_SIZE = 2.6;
+function enemySpriteFile(e) {
+  if (e.type === 'serpent') return e.seg === 'head' ? 'serpent-head.png' : 'serpent-body.png';
+  return `${e.type}.png`;
+}
+
+// 보스 원화는 스타일(10구역 단위 테마)에 맞춰 교체한다. 부위 파괴와 약점 코어는 별도로 계속 그린다.
+const bossSpriteCache = new Map();
+// 보스 전신을 억지로 화면에 맞추지 않는다. 크게 렌더해 후방은 상단에서 잘리고 전면 공격부만 내려오게 한다.
+const BOSS_SPRITE_SIZE = { widthMul: 7, heightMul: 11 };
+function drawWhiteSpriteFlash(ctx, img, w, h, flash) {
+  if (flash <= 0) return;
+  ctx.save();
+  ctx.globalAlpha = flash;
+  ctx.filter = 'brightness(0) invert(1)';
+  ctx.drawImage(img, -w * 0.5, -h * 0.5, w, h);
+  ctx.restore();
+}
+function drawBossSprite(ctx, boss, flash = 0) {
+  const name = `${boss.style}-core.png`;
+  let entry = bossSpriteCache.get(name);
+  if (!entry) {
+    entry = { img: new Image(), ok: false };
+    entry.img.onload = () => { entry.ok = true; };
+    entry.img.src = 'assets/bosses/' + name;
+    bossSpriteCache.set(name, entry);
+  }
+  if (!entry.ok) return false;
+  const maxW = boss.rx * BOSS_SPRITE_SIZE.widthMul;
+  const maxH = boss.ry * BOSS_SPRITE_SIZE.heightMul;
+  const scale = Math.min(maxW / entry.img.width, maxH / entry.img.height);
+  const w = entry.img.width * scale, h = entry.img.height * scale;
+  ctx.drawImage(entry.img, -w * 0.5, -h * 0.5, w, h);
+  drawWhiteSpriteFlash(ctx, entry.img, w, h, flash);
+  return true;
+}
+const bossPartSpriteCache = new Map();
+function drawBossPartSprite(ctx, part, flash = 0) {
+  const name = `part-${part.shape}.png`;
+  let entry = bossPartSpriteCache.get(name);
+  if (!entry) {
+    entry = { img: new Image(), ok: false };
+    entry.img.onload = () => { entry.ok = true; };
+    entry.img.src = 'assets/bosses/' + name;
+    bossPartSpriteCache.set(name, entry);
+  }
+  if (!entry.ok) return false;
+  const span = part.r * 2.45;
+  const scale = Math.min(span / entry.img.width, span / entry.img.height);
+  const w = entry.img.width * scale, h = entry.img.height * scale;
+  ctx.drawImage(entry.img, -w * 0.5, -h * 0.5, w, h);
+  drawWhiteSpriteFlash(ctx, entry.img, w, h, flash);
+  return true;
+}
+const bossScarSpriteCache = new Map();
+function drawBossScarSprite(ctx, part) {
+  const name = `${part.shape}.png`;
+  let entry = bossScarSpriteCache.get(name);
+  if (!entry) {
+    entry = { img: new Image(), ok: false };
+    entry.img.onload = () => { entry.ok = true; };
+    entry.img.src = 'assets/bosses/scars/' + name;
+    bossScarSpriteCache.set(name, entry);
+  }
+  if (!entry.ok) return false;
+  const span = part.r * 2.6;
+  const scale = Math.min(span / entry.img.width, span / entry.img.height);
+  const w = entry.img.width * scale, h = entry.img.height * scale;
+  ctx.drawImage(entry.img, -w * 0.5, -h * 0.5, w, h);
+  return true;
+}
+function drawEnemySprite(ctx, e) {
+  const name = enemySpriteFile(e);
+  let entry = enemySpriteCache.get(name);
+  if (!entry) {
+    entry = { img: new Image(), ok: false };
+    entry.img.onload = () => { entry.ok = true; };
+    entry.img.src = 'assets/enemies/' + name;
+    enemySpriteCache.set(name, entry);
+  }
+  if (!entry.ok) return false;
+  const span = e.r * ENEMY_SPRITE_SIZE;
+  const scale = Math.min(span / entry.img.width, span / entry.img.height);
+  const w = entry.img.width * scale, h = entry.img.height * scale;
+  const angle = e.type === 'rusher' && e.phase === 1 ? Math.atan2(e.vy, e.vx) - Math.PI / 2 : 0;
+  ctx.save();
+  ctx.rotate(angle);
+  ctx.drawImage(entry.img, -w * 0.5, -h * 0.5, w, h);
+  ctx.restore();
+  return true;
+}
+function drawEnemySpriteEffects(ctx, e, r) {
+  if (e.type === 'shielder') {
+    ctx.strokeStyle = COLORS.enemy.shielderShield; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(0, 0, r + 3, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+  }
+  if (e.type === 'warper' && e.vuln > 0) {
+    ctx.globalAlpha = 0.35; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(0, 0, r * 1.15, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1;
+  }
+  if (e.type === 'whale') {
+    const pulse = 0.7 + Math.sin(e.t * 4) * 0.3;
+    ctx.fillStyle = COLORS.enemy.whaleCore;
+    ctx.beginPath(); ctx.arc(0, r * 0.08, r * 0.18 * pulse, 0, Math.PI * 2); ctx.fill();
+  }
+}
 
 // 공용 배경 풀 이미지 lazy 로더(asset 이름 → Image). 로드 완료 전/실패 시엔 기존 우주·하늘 배경으로 fallback.
 // 파일이 없으면(아직 미제작 풀) onerror로 ok=false 유지 → 조용히 fallback(테스트 중 나머지 풀 무영향).
@@ -117,11 +344,17 @@ export const DIORAMA_READY = new Set([
   '러시아', '뉴질랜드', '호주', '브라질', '발리', '하와이', '뉴욕',
 ]);
 
+// 실제 도시 디오라마가 있으면 무조건 그것을 우선한다. 아직 없는 도시는 나라별 공용 테마로 자연스럽게
+// 대체하며, 두 목록 모두에 없는 경우에만 기존 우주·성운 fallback을 유지한다.
+function sceneImagePath(ko) {
+  if (DIORAMA_READY.has(ko)) return DIORAMA_SRC[ko];
+  return FALLBACK_SCENE_SRC[FALLBACK_SCENE_BY_COUNTRY[ko]] || null;
+}
+
 // 도시 선택 뒤 전투를 시작하기 전 디오라마를 사전 로드한다. 이미지가 없는 도시는 기존 배경 fallback이
 // 정상 상태이므로 기다리지 않는다. ready는 성공(true)과 실패(false) 모두에서 끝나 전환이 멈추지 않는다.
 export function preloadDiorama(ko) {
-  if (!DIORAMA_READY.has(ko)) return Promise.resolve(false);
-  const path = DIORAMA_SRC[ko];
+  const path = sceneImagePath(ko);
   return path ? getDiorama(path).ready : Promise.resolve(false);
 }
 function drawDiorama(ctx, img, game, W, H) {
@@ -183,6 +416,14 @@ function drawFriend(ctx, game) {
   if (f.inv > 0 && Math.floor(f.inv * 12) % 2 === 0) { drawFriendSpeech(ctx, f); return; } // 피격 깜빡(말풍선은 유지)
   ctx.save();
   ctx.translate(f.x, f.y);
+  if (kiwiSprite.ok) {
+    const h = r * 2.6, w = h * (kiwiSprite.img.width / kiwiSprite.img.height);
+    ctx.drawImage(kiwiSprite.img, -w * 0.5, -h * 0.5, w, h);
+    ctx.restore();
+    drawFriendHp(ctx, f);
+    drawFriendSpeech(ctx, f);
+    return;
+  }
   ctx.shadowColor = c.glow;
   ctx.shadowBlur = 10;
   // 작은 날개 2개(몸 양옆, 살짝 벌림). 갈색 몸이 갈색 도시 배경에 묻히지 않게 밝은 윤곽선을 두른다(사용자 지시).
@@ -239,6 +480,8 @@ function drawFriendSpeech(ctx, f) {
 function drawFriendShot(ctx, b) {
   const col = COLORS.friend.shot; // 단일 색(강화해도 외형 불변 - 사용자 지시)
   const w = b.r, len = b.len || w * 4;
+  const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+  if (drawProjectileSprite(ctx, 'friend-shot.png', b.x, b.y, ang, w * PROJECTILE_RENDER.friend.widthMul, len)) return;
   ctx.save();
   ctx.translate(b.x, b.y);
   // 부리 삼각(위로 뾰족)
@@ -283,8 +526,8 @@ let bgCache = null; // { key, W, H, sky, g1, g2 }
 function drawBackground(ctx, game, W, H) {
   const stage = game.stage || 1;
   const nation = COUNTRIES[game.tourIdx];
-  // 디오라마 배경(1스테이지 한국 테스트): 로드됐으면 여정 스크롤로 그리고 종료. 아래 나머지 배경 로직 무영향.
-  const dioSrc = nation && DIORAMA_SRC[nation.ko];
+  // 도시 디오라마 또는 미제작 도시의 공용 테마 배경: 로드됐으면 여정 스크롤로 그리고 종료.
+  const dioSrc = nation && sceneImagePath(nation.ko);
   if (dioSrc) {
     const de = getDiorama(dioSrc);
     if (de.ok) { drawDiorama(ctx, de.img, game, W, H); return true; } // true = 사진 디오라마(밝음) → render가 요소 그림자 켬
@@ -325,7 +568,7 @@ function drawBackground(ctx, game, W, H) {
 function drawScenery(ctx, game, W, H) {
   const nation = COUNTRIES[game.tourIdx];
   // 디오라마 배경이 뜬 나라는 지형·랜드마크가 이미지에 포함 → 옛 하드코딩 실루엣(서울 등)을 그리지 않는다.
-  const dioSrc = nation && DIORAMA_SRC[nation.ko];
+  const dioSrc = nation && sceneImagePath(nation.ko);
   if (dioSrc && getDiorama(dioSrc).ok) return;
   // 공용 배경 이미지가 뜬 나라는 옛 하드코딩 실루엣(밤하늘 전제의 서울 등)을 그리지 않는다.
   //   국가 지형·랜드마크는 A안대로 overlay png로 대체 예정. 지금은 하늘 배경 이미지만 깔끔하게.
@@ -420,6 +663,10 @@ function drawOptions(ctx, game) {
     const s = 6;
     ctx.save();
     ctx.translate(o.x, o.y);
+    if (drawCompanionSprite(ctx, 'side-totoro.png', s * 4.2)) {
+      ctx.restore();
+      continue;
+    }
     ctx.fillStyle = body;
     // 귀 2개(위 뾰족)
     ctx.beginPath(); ctx.moveTo(-s * 0.5, -s * 0.7); ctx.lineTo(-s * 0.8, -s * 1.5); ctx.lineTo(-s * 0.12, -s * 0.9); ctx.closePath(); ctx.fill();
@@ -450,6 +697,10 @@ function drawTail(ctx, game) {
     // 아래 노즐 불빛(무기 단계별 밝기·크기)
     ctx.fillStyle = COLORS.missileTrail;
     ctx.beginPath(); ctx.ellipse(0, s * 0.9, s * 0.4, s * (0.5 + w * 0.18), 0, 0, Math.PI * 2); ctx.fill();
+    if (drawCompanionSprite(ctx, 'tail-spirit.png', s * 4.8)) {
+      ctx.restore();
+      continue;
+    }
     // 몸통(둥근 캡슐)
     ctx.fillStyle = col;
     ctx.beginPath(); ctx.ellipse(0, 0, s * 0.85, s, 0, 0, Math.PI * 2); ctx.fill();
@@ -507,6 +758,23 @@ function drawPlayer(ctx, game) {
   ctx.translate(p.x, p.y);
   ctx.shadowColor = COLORS.warawaraGlow;
   ctx.shadowBlur = 12;
+  if (bapuriSprite.ok) {
+    const c = BAPURI_SPRITE_CROP;
+    const w = r * 2.7, h = r * 2.54;
+    ctx.drawImage(bapuriSprite.img, c.x, c.y, c.w, c.h, -w * 0.5, -h * 0.5, w, h);
+    ctx.shadowBlur = 0;
+    // PNG 원화는 기본 표정을 포함한다. 피격·획득 순간에는 기존 감정 연출을 위에 더한다.
+    if (p.emo === 'cry') {
+      ctx.fillStyle = COLORS.warawaraTear;
+      for (const sx of [-1, 1]) { ctx.beginPath(); ctx.ellipse(sx * r * 0.29, r * 0.17, r * 0.07, r * 0.12, 0, 0, Math.PI * 2); ctx.fill(); }
+    } else if (p.emo === 'happy') {
+      ctx.strokeStyle = COLORS.warawaraMouth;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath(); ctx.arc(0, r * 0.24, r * 0.2, Math.PI * 0.15, Math.PI * 0.85); ctx.stroke();
+    }
+    ctx.restore();
+    return;
+  }
   ctx.fillStyle = COLORS.warawara;
   // 손(좌우) + 발(아래)을 먼저 그려 몸통이 이음새를 덮게 한다(몸에 붙어 보이도록, 사용자 지시 2026-07-16)
   ctx.beginPath(); ctx.ellipse(-r * 0.72, r * 0.4, r * 0.2, r * 0.28, 0.4, 0, Math.PI * 2); ctx.fill();
@@ -568,6 +836,11 @@ function drawEnemies(ctx, game) {
     ctx.translate(e.x, e.y);
     ctx.fillStyle = e.color;
     const r = e.r;
+    if (drawEnemySprite(ctx, e)) {
+      drawEnemySpriteEffects(ctx, e, r);
+      ctx.restore();
+      continue;
+    }
     if (e.type === 'drone') {
       // 도깨비불 정령: 아래 흔들리는 꼬리불 + 둥근 몸 + 눈
       ctx.beginPath(); ctx.moveTo(-r * 0.5, r * 0.5); ctx.quadraticCurveTo(0, r * 1.5, r * 0.5, r * 0.5); ctx.closePath(); ctx.fill();
@@ -738,11 +1011,21 @@ function drawBoss(ctx, game) {
   ctx.save();
   ctx.globalAlpha = fade;
   ctx.translate(boss.x, boss.y);
-  ctx.shadowColor = sc.core;
-  ctx.shadowBlur = boss.kind === 'final' ? 20 : 14;
-  ctx.fillStyle = boss.core.exposed ? sc.core : COLORS.boss.coreDark;
-  ctx.beginPath(); ctx.ellipse(0, 0, boss.rx, boss.ry, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.shadowBlur = 0;
+  const coreFlash = Math.min(1, (boss.core.hitFlash || 0) / CFG.boss.partHitFlash);
+  const hasSprite = drawBossSprite(ctx, boss, coreFlash);
+  if (!hasSprite) {
+    ctx.shadowColor = sc.core;
+    ctx.shadowBlur = boss.kind === 'final' ? 20 : 14;
+    ctx.fillStyle = boss.core.exposed ? sc.core : COLORS.boss.coreDark;
+    ctx.beginPath(); ctx.ellipse(0, 0, boss.rx, boss.ry, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+    if (coreFlash > 0) {
+      ctx.globalAlpha = coreFlash;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.ellipse(0, 0, boss.rx, boss.ry, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = fade;
+    }
+  }
   if (boss.core.exposed) {
     ctx.fillStyle = COLORS.boss.coreLight; // 노출 코어 = 약점 발광
     ctx.beginPath(); ctx.arc(0, 0, boss.rx * 0.28, 0, Math.PI * 2); ctx.fill();
@@ -753,8 +1036,39 @@ function drawBoss(ctx, game) {
     ctx.beginPath(); ctx.arc(0, 0, boss.rx * 0.2, 0, Math.PI * 2); ctx.fill();
   }
   ctx.restore();
+  // 사라진 부위 자리는 보스에 남은 파괴 흔적으로 유지한다.
+  for (const part of boss.parts) { if (part.dead) drawBossPartScar(ctx, part, sc); }
   // 살아있는 부위
   for (const part of boss.parts) { if (!part.dead) drawBossPart(ctx, part, sc); }
+}
+
+// 파괴 부위의 그을림·균열·파편. dead 부위의 좌표를 보존해 보스에서 뜯겨 나간 자리가 보이게 한다.
+function drawBossPartScar(ctx, part, sc) {
+  const r = part.r, age = part.destroyAge || 0, seed = part.destroySeed || 0;
+  ctx.save();
+  ctx.translate(part.x, part.y);
+  const hasScarSprite = drawBossScarSprite(ctx, part);
+  if (!hasScarSprite) {
+    ctx.fillStyle = 'rgba(16,10,17,0.76)';
+    ctx.beginPath(); ctx.ellipse(0, r * 0.1, r * 0.82, r * 0.46, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.22)'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.ellipse(0, r * 0.1, r * 0.82, r * 0.46, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = sc.part; ctx.globalAlpha = 0.72; ctx.lineWidth = 2;
+    for (let i = 0; i < 3; i++) {
+      const a = seed + (i / 3) * Math.PI * 2;
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * r * 0.58, Math.sin(a) * r * 0.38); ctx.stroke();
+    }
+  }
+  if (age < CFG.boss.partScarSparkTime) {
+    const life = 1 - age / CFG.boss.partScarSparkTime;
+    ctx.globalAlpha = life * (0.55 + Math.sin(age * 28 + seed) * 0.2);
+    ctx.fillStyle = COLORS.boss.partDebris;
+    for (let i = 0; i < 4; i++) {
+      const a = seed + i * (Math.PI * 0.5);
+      ctx.beginPath(); ctx.arc(Math.cos(a) * r * 0.68, Math.sin(a) * r * 0.52, 1.7 * life, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  ctx.restore();
 }
 
 // 부위 하나 렌더 + 부위 위 작은 hp 게이지. shape = turret(포탑)/tentacle(촉수)/shard(조각)/plate(방어판).
@@ -763,20 +1077,34 @@ function drawBossPart(ctx, part, sc) {
   ctx.save();
   ctx.translate(part.x, part.y);
   ctx.fillStyle = isShield ? sc.shield : sc.weapon;
-  if (part.shape === 'turret') {
+  const flash = Math.min(1, (part.hitFlash || 0) / CFG.boss.partHitFlash);
+  const hasSprite = drawBossPartSprite(ctx, part, flash);
+  if (!hasSprite && part.shape === 'turret') {
     ctx.beginPath();
     for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; ctx[i ? 'lineTo' : 'moveTo'](Math.cos(a) * r, Math.sin(a) * r); }
     ctx.closePath(); ctx.fill();
     ctx.fillRect(-r * 0.2, r * 0.5, r * 0.4, r * 0.85); // 아래 포신
-  } else if (part.shape === 'tentacle') {
+  } else if (!hasSprite && part.shape === 'tentacle') {
     ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(0, 0, r * 0.6, 0, Math.PI * 2); ctx.stroke();
-  } else if (part.shape === 'shard') {
+  } else if (!hasSprite && part.shape === 'shard') {
     ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r * 0.7, 0); ctx.lineTo(0, r); ctx.lineTo(-r * 0.7, 0); ctx.closePath(); ctx.fill();
-  } else if (part.shape === 'plate') {
+  } else if (!hasSprite && part.shape === 'plate') {
     ctx.beginPath(); ctx.ellipse(0, 0, r, r * 0.7, 0, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 2; ctx.stroke();
+  }
+  // PNG가 없는 환경에서는 기존 도형 실루엣 자체를 백색으로 덧그려 피격을 보인다.
+  if (!hasSprite && flash > 0) {
+    ctx.save();
+    ctx.globalAlpha = flash;
+    ctx.fillStyle = '#ffffff';
+    if (part.shape === 'shard') {
+      ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r * 0.7, 0); ctx.lineTo(0, r); ctx.lineTo(-r * 0.7, 0); ctx.closePath(); ctx.fill();
+    } else {
+      ctx.beginPath(); ctx.ellipse(0, 0, r, part.shape === 'plate' ? r * 0.7 : r, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
   }
   if (part.hp < part.maxHp) { // 손상된 부위만 게이지 노출
     const bw = r * 1.7, bh = 3, by = -r - 7;
@@ -800,6 +1128,20 @@ function drawMainBeam(ctx, b) {
   const HALF = CFG.parts.front.laneGap / 2;      // 레인 반폭(가로 반경이 이걸 넘으면 옆칸 침범)
   const cap = (x) => Math.min(x, HALF);
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+  const mainFile = `player-main-tier-${Math.min(t, 10)}.png`;
+  const maxH = Math.max(PROJECTILE_RENDER.main.minHeight, len * PROJECTILE_RENDER.main.heightMul * (1 + t * 0.07));
+  const maxW = HALF * 2 * PROJECTILE_RENDER.main.laneFill;
+  if (drawProjectileSprite(ctx, mainFile, b.x, b.y, ang, maxW, maxH)) {
+    // 상위 강화는 PNG 뒤쪽 잔광도 길게 남겨, 발 수가 같아도 tier 상승이 확실히 느껴지게 한다.
+    if (t > 0) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(0.42, 0.08 + t * 0.035);
+      ctx.strokeStyle = col; ctx.lineWidth = Math.min(HALF * 1.4, 1.2 + t * 0.22);
+      ctx.beginPath(); ctx.moveTo(b.x, b.y + maxH * 0.35); ctx.lineTo(b.x, b.y + maxH * (0.7 + t * 0.06)); ctx.stroke();
+      ctx.restore();
+    }
+    return;
+  }
   ctx.save();
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
@@ -868,6 +1210,9 @@ function drawSideShape(ctx, b) {
   // 크기: b.r*3.2 = tier0 기본(유지), t*계수 = 단계 증가분. 계수 0.7→0.22로 낮춰 tier10을 이전의 약 2/3로 축소(사용자 지시 2026-07-12).
   const R = b.r * 3.2 + t * 0.22;
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+  const sideFile = `player-side-tier-${Math.min(t, 10)}.png`;
+  const size = R * PROJECTILE_RENDER.side.sizeMul;
+  if (drawProjectileSprite(ctx, sideFile, b.x, b.y, ang, size, size)) return;
   ctx.save();
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
@@ -897,6 +1242,10 @@ function drawMissile(ctx, b) {
   const col = COLORS.tailMissile[Math.min(t, COLORS.tailMissile.length - 1)];
   const r = b.r * 1.7, half = r * 1.85, bw = r * 0.82;
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
+  const missileFile = `player-missile-tier-${Math.min(t, 10)}.png`;
+  const missileH = b.r * (PROJECTILE_RENDER.missile.heightMul + t * PROJECTILE_RENDER.missile.tierHeight);
+  const missileW = b.r * PROJECTILE_RENDER.missile.widthMul;
+  if (drawProjectileSprite(ctx, missileFile, b.x, b.y, ang, missileW, missileH)) return;
   ctx.save();
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
@@ -939,6 +1288,8 @@ function drawBullets(ctx, game) {
 function drawEnemyBullets(ctx, game) {
   ctx.save();
   for (const b of game.eBullets) {
+    const size = (b.r + 0.5) * PROJECTILE_RENDER.enemy.sizeMul;
+    if (drawProjectileSprite(ctx, 'enemy-shot.png', b.x, b.y, 0, size, size)) continue;
     ctx.fillStyle = COLORS.enemyBullet;
     ctx.beginPath();
     ctx.arc(b.x, b.y, b.r + 0.5, 0, Math.PI * 2);
@@ -960,6 +1311,10 @@ function drawPowerups(ctx, game) {
     const col = COLORS.powerup[it.kind];
     ctx.save();
     ctx.translate(it.x, it.y);
+    if (drawPowerupSprite(ctx, it.kind, it.r, it.t)) {
+      ctx.restore();
+      continue;
+    }
     const pulse = 1 + Math.sin(it.t * 6) * 0.08;
     ctx.scale(pulse, pulse);
     ctx.shadowColor = col;

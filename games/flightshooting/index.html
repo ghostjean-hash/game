@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="../../shared/tokens.css" />
 <link rel="stylesheet" href="../../shared/base.css" />
 <link rel="stylesheet" href="styles/main.css" />
-<title>바푸리의 모험 - game_ghost</title>
+<title>Bapuri's Flight - game_ghost</title>
 </head>
 <body>
 <div class="page shooter">
@@ -19,8 +19,8 @@
   <div id="menu-screen" class="menu-screen">
     <div class="topbar">
       <a href="../../" class="home" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
-      <h1 class="sr-only">바푸리의 모험</h1>
-      <div class="menu-title">바푸리의 모험</div>
+      <h1 class="sr-only">Bapuri's Flight</h1>
+      <div class="menu-title">Bapuri's Flight</div>
       <span class="spacer"></span>
       <button id="btn-mute" class="icon-btn" type="button" aria-label="소리 끄기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>
       <button id="btn-fs" class="icon-btn" type="button" aria-label="전체화면" hidden>
@@ -29,21 +29,7 @@
     </div>
     <div class="menu-stage">
       <div class="menu-hero">
-        <div class="hero-craft" aria-hidden="true">
-          <svg viewBox="0 0 64 64" width="88" height="88">
-            <!-- 바푸리(게임 내 플레이어와 동일): 동그란 흰 몸통 + 몸에 붙은 손발 + 눈 2개 -->
-            <!-- 손발을 몸통보다 먼저 그려 몸통이 이음새를 덮게 한다(몸에 붙어 보이도록) -->
-            <ellipse cx="13" cy="40" rx="4.5" ry="6" fill="#f6f8ff" transform="rotate(20 13 40)"/>
-            <ellipse cx="51" cy="40" rx="4.5" ry="6" fill="#f6f8ff" transform="rotate(-20 51 40)"/>
-            <ellipse cx="25" cy="55" rx="5.5" ry="4" fill="#f6f8ff"/>
-            <ellipse cx="39" cy="55" rx="5.5" ry="4" fill="#f6f8ff"/>
-            <!-- 동그란 몸통(얼굴) + 작은 눈 + 붉은 'O' 입 -->
-            <ellipse cx="32" cy="32" rx="22" ry="24" fill="#f6f8ff"/>
-            <circle cx="25.5" cy="30" r="2.6" fill="#33343d"/>
-            <circle cx="38.5" cy="30" r="2.6" fill="#33343d"/>
-            <ellipse cx="32" cy="41" rx="2.5" ry="3.4" fill="#c8434d" stroke="#e0555f" stroke-width="2"/>
-          </svg>
-        </div>
+        <div class="hero-craft" aria-hidden="true"><img src="assets/characters/bapuri-sprite-v2.png" alt="" /><img id="hero-friend" class="hero-friend" src="assets/characters/kiwi-sprite-v2.png" alt="" hidden /></div>
         <div class="menu-best" aria-live="polite">
           <span class="best-label">최고 점수</span>
           <b id="menu-best">0</b>
@@ -61,7 +47,7 @@
         </div>
         <div class="opt-icons">
           <button id="opt-friend" class="opt-icon" type="button" aria-pressed="false" aria-label="친구 동행">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="10" cy="11.5" rx="7" ry="6"/><path d="M16 9c3 0 5.2 1 6 3.2"/><path d="M7 17.3v3"/><path d="M12 17.3v3"/><circle cx="8" cy="9.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 10.5c-1.5-3.3-4.2-4.8-6.7-4.5 1.3 2.5 2.5 4.4 5 5.5"/><path d="M21 10.5c1.5-3.3 4.2-4.8 6.7-4.5-1.3 2.5-2.5 4.4-5 5.5"/><ellipse cx="16" cy="17.5" rx="10" ry="8.5"/><path d="M13.2 17.8h5.6l-2.8 2.5z" fill="currentColor" stroke="none"/><circle cx="12.5" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="19.5" cy="15" r="1" fill="currentColor" stroke="none"/><path d="M11.5 25v2.4M20.5 25v2.4"/></svg>
             <span>친구</span>
           </button>
           <button id="opt-auto" class="opt-icon" type="button" aria-pressed="false" aria-label="자동 플레이">
@@ -105,17 +91,17 @@
   <div id="game-screen" class="game-screen" hidden>
     <div class="topbar">
       <a href="../../" id="game-home" class="home" aria-label="모드 선택으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
-      <h1 class="sr-only">바푸리의 모험</h1>
+      <h1 class="sr-only">Bapuri's Flight</h1>
       <div class="score-big" aria-live="polite" aria-label="점수">
         <b id="score">0</b>
       </div>
       <div class="mini-hud" aria-live="polite">
         <span class="mh mh-loc"><small>구역</small><b id="stage">1</b></span>
         <span class="mh sep">·</span>
-        <span class="mh row"><i class="pbadge b-P" aria-label="전방 화력">P</i><b id="front">1</b></span>
-        <span class="mh row"><i class="pbadge b-S" aria-label="옵션기">S</i><b id="option">0</b></span>
-        <span class="mh row"><i class="pbadge b-E" aria-label="에너지존">E</i><b id="zone">0</b></span>
-        <span class="mh row"><i class="pbadge b-T" aria-label="꼬리 비행기">T</i><b id="tail">0</b></span>
+        <span class="mh row"><i class="pbadge b-P" aria-label="전방 화력"><img src="assets/powerups/front.png" alt="" /></i><b id="front">1</b></span>
+        <span class="mh row"><i class="pbadge b-S" aria-label="옵션기"><img src="assets/powerups/side.png" alt="" /></i><b id="option">0</b></span>
+        <span class="mh row"><i class="pbadge b-E" aria-label="에너지존"><img src="assets/powerups/zone.png" alt="" /></i><b id="zone">0</b></span>
+        <span class="mh row"><i class="pbadge b-T" aria-label="꼬리 비행기"><img src="assets/powerups/tail.png" alt="" /></i><b id="tail">0</b></span>
       </div>
       <div class="lives" id="lives" aria-label="남은 목숨">
         <span class="life"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="life"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="life"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="life" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="life" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
@@ -188,6 +174,7 @@
   <!-- 세계 여행 지도(구역 클리어 후 다음 목적지 선택, docs/10). SVG·핀은 main.js가 채운다. -->
   <div id="map-overlay" class="map-overlay" hidden>
     <div class="map-panel" role="dialog" aria-label="세계 여행 지도">
+      <button type="button" id="map-exit" class="map-exit home" aria-label="게임 나가기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
       <div class="map-title" id="map-title">다음 목적지를 골라주세요</div>
       <div class="map-viewport" id="map-viewport"></div>
       <div class="map-controls">

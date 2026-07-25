@@ -82,7 +82,11 @@ function reflectPrism(game, e) {
 
 export function updateEnemies(game, dt, W, H) {
   const p = game.player;
-  const mul = game.enemyFireMul || 1; // 난이도: 어린이 모드면 발사 간격을 늘려 덜 쏘게
+  const early = CFG.earlyStageFireMul;
+  const growthMul = game.stage === early.stage
+    ? (game.front <= 1 ? early.front1 : game.front === 2 ? early.front2 : early.front3Plus)
+    : 1;
+  const mul = (game.enemyFireMul || 1) * growthMul; // 1구역은 아이템으로 성장하기 전 적탄을 크게 늦춘다.
   const shotsCap = enemyShotCap(game); // 난이도별 초반 조준 연발 상한
   const wispSpawns = []; // 도깨비불 분열은 루프 중 game.enemies를 늘리지 않도록 모았다가 루프 후 생성
   for (const e of game.enemies) {
@@ -263,6 +267,7 @@ function bossFire(game, src, pattern, shotsCap, speedMul = 1) {
 
 // 코어 피해(부위 뒤 본체). 0이면 격파.
 function damageCore(game, dmg) {
+  game.boss.core.hitFlash = CFG.boss.partHitFlash;
   game.boss.core.hp -= dmg;
   if (game.boss.core.hp <= 0) defeatBoss(game);
 }
@@ -272,6 +277,7 @@ function destroyPart(game, part) {
   const boss = game.boss;
   const st = CFG.bossStyles[boss.style];
   part.dead = true;
+  part.destroyAge = 0;
   awardScore(game, st.partScore);
   burst(game, part.x, part.y, COLORS.boss.partDebris, 16);
   game.sfx.push('explode');
@@ -289,6 +295,12 @@ export function updateBoss(game, dt, W, H) {
   const mul = game.enemyFireMul || 1;          // 어린이 모드 발사 간격 배수
   const shotsCap = enemyShotCap(game);         // 난이도별 초반 조준 연발 상한
   boss.t += dt;
+  boss.core.hitFlash = Math.max(0, (boss.core.hitFlash || 0) - dt);
+  // 부위 연출 타이머는 판정과 분리한다. dead 부위도 destroyAge를 유지해 파괴 흔적의 불꽃만 감쇠한다.
+  for (const part of boss.parts) {
+    part.hitFlash = Math.max(0, (part.hitFlash || 0) - dt);
+    if (part.dead) part.destroyAge = (part.destroyAge || 0) + dt;
+  }
   if (boss.entering) {
     boss.y += 90 * dt;
     // 등장 중엔 좌우 유영을 멈추고 중앙(W/2)에 고정한다. 등장 완료 순간 bob 시각을 0으로 리셋해야
@@ -514,6 +526,7 @@ export function checkCollisions(game, W, H) {
         if (hp) {
           b.dead = true;
           hp.hp -= b.dmg;
+          hp.hitFlash = CFG.boss.partHitFlash;
           burst(game, b.x, b.y, boss.color, 4);
           if (hp.hp <= 0) destroyPart(game, hp);
         } else if (boss.core.exposed && hit(b, boss)) {
