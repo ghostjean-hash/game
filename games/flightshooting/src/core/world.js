@@ -625,7 +625,7 @@ function stepBossDeath(game, boss, dt) {
 }
 
 export function startStage(game) {
-  game.waves = buildWaves(game.stage);
+  game.waves = buildWaves(game.stage, game.waveMax);
   game.waveIdx = 0;
   game.elapsed = 0;
   game.bossPending = false;

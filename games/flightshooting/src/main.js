@@ -86,7 +86,7 @@ function createGame() {
     waves: [], waveIdx: 0, elapsed: 0, introTimer: 0, apSkill: CFG.autopilot.default, cheat: null,
     // 자동 플레이(하이브리드): autoAssist 켜짐 + 손 안 댐(dragging=false) + 복귀 대기 끝(manualTimer<=0)일 때만 자동.
     autoAssist: false, dragging: false, manualTimer: 0,
-    difficulty: 'normal', enemyFireMul: 1, enemyHpMul: 1, enemyShotsMax: 99, earlyShots: null, radialMul: 1, // 난이도(startGame에서 세팅)
+    difficulty: 'normal', enemyFireMul: 1, enemyHpMul: 1, enemyShotsMax: 99, earlyShots: null, waveMax: Infinity, radialMul: 1, // 난이도(startGame에서 세팅)
     bonusTimer: CFG.bonusShip.every,
     bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null, bossDeathTimer: null,
     shake: 0, // 화면 흔들림(보스 사망 연출 등, view/main render가 소비)
@@ -312,6 +312,7 @@ function startGame(diff, saved) {
   game.enemyHpMul = diffCfg.enemyHpMul != null ? diffCfg.enemyHpMul : 1; // 난이도별 적 체력 배수
   game.enemyShotsMax = diffCfg.enemyShotsMax || 99;
   game.earlyShots = diffCfg.earlyShots || null;
+  game.waveMax = diffCfg.waveMax || Infinity;
   game.radialMul = diffCfg.radialMul != null ? diffCfg.radialMul : 1; // 방사·자폭 탄 개수 배수(쉬움 감축)
   game.maxLives = diffCfg.maxLives || CFG.player.maxLives; // 난이도별 목숨 최대값(쉬움 5 ~ 어려움/매우 어려움 3, 최소 3)
   game.lives = game.maxLives;                             // 시작 목숨 = 최대값(resetGame 기본3 위로 재설정)
@@ -452,6 +453,18 @@ function computeViewBox(cur, cands, vpW, vpH) {
   return { x, y, w, h };
 }
 
+// SVG 별은 글꼴별 세로 기준점 차이 없이 실제 도형 중심이 도시 터치 원 중심에 오도록 만든다.
+function mapStarPoints(x, y, outer, inner) {
+  const M = CFG.tour.mark;
+  const points = [];
+  for (let i = 0; i < M.bgStarPoints * 2; i++) {
+    const r = i % 2 ? inner : outer;
+    const a = -Math.PI / 2 + (Math.PI * i) / M.bgStarPoints;
+    points.push(`${(x + Math.cos(a) * r).toFixed(1)},${(y + Math.sin(a) * r).toFixed(1)}`);
+  }
+  return points.join(' ');
+}
+
 // 도시 하나: 점 + 2줄 라벨(윗줄 나라이름 작게·다른 색, 아랫줄 수도 상태색). clickable이면 후보(맥동·클릭), faint면 흐리게.
 function cityMark(i, mk, dotColor, s, clickable, faint, hasBg) {
   const C = COUNTRIES[i];
@@ -462,9 +475,9 @@ function cityMark(i, mk, dotColor, s, clickable, faint, hasBg) {
   const op = faint ? ' opacity="0.55"' : '';
   const open = clickable ? `<g class="map-pick" data-dest="${i}"${op}>` : `<g${op}>`;
   const dotEl = `<circle ${clickable ? 'class="pick-dot" ' : ''}cx="${x.toFixed(1)}" cy="${yv.toFixed(1)}" r="${dot.toFixed(1)}" fill="${dotColor}" stroke="#0b1020" stroke-width="${(1.5 * s).toFixed(2)}"/>`;
-  // 배경(디오라마) 이미지가 준비된 미방문 도시는 도시 터치 원 안에 금색 별(★)을 겹쳐 표시한다.
-  //   별이 도시에서 떨어져 보이지 않고, 같은 그룹 안이라 별을 눌러도 목적지를 고를 수 있다.
-  const bgStar = hasBg ? `<text x="${x.toFixed(1)}" y="${yv.toFixed(1)}" font-size="${(dot * CFG.tour.mark.bgStarScale).toFixed(1)}" fill="${COLORS.tour.bgReady}" text-anchor="middle" dominant-baseline="central" pointer-events="none">★</text>` : '';
+  // 배경(디오라마) 이미지가 준비된 미방문 도시는 도시 터치 원 안 중앙에 대비 높은 별 도형을 겹쳐 표시한다.
+  const M = CFG.tour.mark;
+  const bgStar = hasBg ? `<polygon points="${mapStarPoints(x, yv, dot * M.bgStarOuterScale, dot * M.bgStarInnerScale)}" fill="${COLORS.tour.bgReady}" stroke="${COLORS.tour.bgReadyStroke}" stroke-width="${(M.bgStarStroke * s).toFixed(1)}" stroke-linejoin="round" pointer-events="none"/>` : '';
   let nameX, nameY, capX, capY, anchor;
   if (C.labelDir === 'right' || C.labelDir === 'left') {
     // 붙어 있는 나라(싱가포르·말레이시아) 겹침 방지: 라벨을 점 옆(우/좌)에 나라(위)·수도(아래) 2줄로.

@@ -5,10 +5,20 @@ import { CFG, STAGE_NAMES } from '../data/numbers.js';
 // cols(n) = 화면 가로를 n등분한 위치 배열(적을 고르게 흩뿌린다).
 const cols = (n) => Array.from({ length: n }, (_, i) => (i + 1) / (n + 1));
 
-export function buildWaves(stage) {
-  if (stage >= CFG.aeonStage.from) return buildAeonWaves(stage); // 31구역~: 빛 생명체 구간
-  if (stage >= CFG.voidStage.from) return buildVoidWaves(stage); // 21구역~: 이질 기계 적 구간
-  if (stage >= CFG.hardStage.from) return buildHardWaves(stage); // 11구역~: 신규 적 구간
+export function buildWaves(stage, waveMax = Infinity) {
+  let waves;
+  if (stage >= CFG.aeonStage.from) waves = buildAeonWaves(stage); // 31구역~: 빛 생명체 구간
+  else if (stage >= CFG.voidStage.from) waves = buildVoidWaves(stage); // 21구역~: 이질 기계 적 구간
+  else if (stage >= CFG.hardStage.from) waves = buildHardWaves(stage); // 11구역~: 신규 적 구간
+  else waves = buildBaseWaves(stage);
+  // 제한 시에는 남긴 적을 가로로 다시 균등 배치해, 왼쪽만 비는 줄이 생기지 않게 한다.
+  return waves.map((wave) => {
+    if (wave.enemies.length <= waveMax) return wave;
+    return { ...wave, enemies: wave.enemies.slice(0, waveMax).map((e, i) => ({ ...e, xr: (i + 1) / (waveMax + 1) })) };
+  });
+}
+
+function buildBaseWaves(stage) {
   const s = Math.min(stage - 1, 6); // 난이도 가중(상한으로 후반 과밀 방지)
   const w = [];
   let t = 1.0;

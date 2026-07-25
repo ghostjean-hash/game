@@ -27,7 +27,7 @@ export const CFG = {
   //   maxLives     = 목숨 최대값(= 시작 목숨 + 회복 상한).
   difficulty: {
     easy:   { enemyFireMul: 2.2, enemyHpMul: 0.85, startFront: 2, startTail: 1, enemyShotsMax: 1,  radialMul: 0.4, maxLives: 5 },
-    normal: { enemyFireMul: 1.15, enemyHpMul: 0.95, startFront: 1, startTail: 0, enemyShotsMax: 99, earlyShots: { throughStage: 10, max: 2 }, radialMul: 0.9, maxLives: 3 },
+    normal: { enemyFireMul: 1.15, enemyHpMul: 0.95, startFront: 1, startTail: 0, enemyShotsMax: 99, earlyShots: { throughStage: 10, max: 2 }, waveMax: 5, radialMul: 0.9, maxLives: 3 },
     hard:   { enemyFireMul: 0.7, enemyHpMul: 1.3,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
     insane: { enemyFireMul: 0.5, enemyHpMul: 1.6,  startFront: 1, startTail: 0, enemyShotsMax: 99, radialMul: 1,   maxLives: 3 },
   },
@@ -281,7 +281,9 @@ export const CFG = {
       other: { dot: 3, name: 6.4, cap: 8 },
       labelGap: 4,
       nameLift: 5, // 나라이름(윗줄)을 수도 위로 추가로 올리는 화면 px(사용자 지시)
-      bgStarScale: 1.25, // 배경(디오라마) 완성 도시 표시: 도시 터치 원 안 금색 별의 점 반경 대비 글자 크기
+      bgStarOuterScale: 0.62, // 배경(디오라마) 완성 도시 표시: 터치 원 안 별 도형의 바깥 반경(점 반경 대비)
+      bgStarInnerScale: 0.28, // 같은 별 도형의 안쪽 반경(점 반경 대비)
+      bgStarPoints: 5, bgStarStroke: 1.2, // 별 꼭짓점 수와 윤곽선 굵기(지도 좌표, s 곱)
     },
     // 다음 목적지는 안 간 나라 전부 선택 가능하되(못 가는 나라 방지, 사용자 지시), 초기 지도 확대는
     //   현재 위치+가장 가까운 이 개수만 감싼다(전부 감싸면 세계 전체라 이름이 안 보임). 나머지는 축소·드래그로.

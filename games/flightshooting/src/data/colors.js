@@ -127,7 +127,7 @@ export const COLORS = {
     route: '#ffd24a', visited: '#4ae0c8', current: '#ffd24a',
     candidate: '#7fe3ff', dim: '#7d8db0', plane: '#ffffff',
     countryLabel: '#9fb0cf', // 나라이름(윗줄) - 수도(아랫줄, 상태색)와 구분되는 흐린 회청색
-    bgReady: '#ffcf33', // 배경(디오라마) 이미지가 준비된 도시 표시 금색 별(★) - 후보/현재 상태색과 색·모양 모두 구분(사용자 선택)
+    bgReady: '#142d4d', bgReadyStroke: '#e8fbff', // 배경 준비 도시: 시안·회청색 버튼 위에 보이는 짙은 남청 별 + 밝은 윤곽
     // 대륙별 채움색(밤하늘 톤에 맞춰 채도 낮춘 구분색). worldmap.js WORLD_PATHS의 c와 매칭.
     continent: {
       Asia: '#2f4a6b', Europe: '#43406e', Africa: '#5f4a2f',

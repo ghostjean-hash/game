@@ -1025,3 +1025,14 @@
 ### 검증 / 미해결
 - 검증: dev-server(8123) + browser-shot으로 tests/test.html 실행 → core 124/124 PASS. 신규 `score.js`가 world.js·parts.js의 import 체인에 들어가므로 문법·경로 오류가 있으면 전체 테스트가 깨진다 - 통과는 곧 import 무결 + 기존 로직 회귀 0을 뜻한다.
 - 미해결: (1) 서버·커밋 더블클릭 배치 스크립트 - 사용자 커밋 메시지 방식 결정 대기(A 매번 물어보기 추천 / B 날짜 자동). (2) `AGENTS.md`(repo 루트, Codex용 지침 복제본) untracked - 이번 flightshooting 작업과 무관하고 정체 미확인이라 add하지 않고 남겨둠(사용자 결정 영역).
+
+## 2026-07-25(후속) - 봉합 커밋 직후 나타난 잔여 2건 추가 봉합
+
+첫 봉합 커밋(e407a9e) 직후 사용자가 "커밋이 덜 된 것 같다"고 지적. 확인하니 커밋 시점엔 깨끗했는데 그 뒤 working tree에 8개 파일 변경이 새로 떠 있었다(waves.js·colors.js 신규 + 이미 커밋한 numbers·world·main 등이 다시 수정). diff를 보니 방금 봉합한 4건의 연속 확장 작업 2건이었다 - 커밋 이후 파일에 지연 반영된 것으로, IDE 지연 저장이나 다른 편집 도구(Codex 등, AGENTS.md 존재가 방증)와의 병렬 편집이 의심된다.
+
+- 보통 난이도 웨이브 크기 제한: normal에 `waveMax` 5 추가. `buildWaves(stage, waveMax=Infinity)`로 파라미터화하고 기존 분기를 `buildBaseWaves`로 분리, 한 줄 적이 waveMax를 넘으면 앞에서부터 잘라 남긴 적을 가로로 균등 재배치(왼쪽만 비는 줄 방지). world.startStage가 game.waveMax를 넘겨준다. 기존 `buildWaves(stage)` 호출은 waveMax 기본값 Infinity라 무제한 유지.
+- 월드맵 별 도형화: 배경 준비 도시 표시를 글꼴 문자(★ text)에서 SVG polygon으로 교체. 글꼴마다 다른 세로 기준점 탓에 별이 원 중심에서 살짝 어긋나던 문제를 없애고(`mapStarPoints`로 실제 도형 중심 배치), 색을 금색에서 시안·회청색 도시 버튼 위에서도 선명한 짙은 남청 + 밝은 윤곽으로 바꿔 대비를 높였다.
+
+검증: core 124/124 PASS(browser-shot). buildWaves 시그니처 확장이 기존 호출·테스트와 호환됨을 확인. docs 01·02·10 동기화.
+
+주의: 커밋 직후 파일이 또 바뀌는 현상이 관측됐으므로, 이 봉합 후에도 잔여가 다시 나타나면 다른 편집 도구가 이 폴더에서 동시에 작업 중일 가능성을 사용자와 확인해야 한다.
