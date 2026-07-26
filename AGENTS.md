@@ -1,0 +1,111 @@
+# game_ghost - 게임 허브
+
+PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트는 각 게임의 `AGENTS.md` / `PROGRESS.md` / `docs/` 참조.
+
+# 0. 주요 문서 지도 (헷갈릴 때 여기부터)
+
+같은 이름 문서가 여러 층에 있어 헷갈릴 수 있다. 이름은 같아도 **위치가 곧 역할**이다. 헷갈리면 아래 두 표만 보면 된다.
+
+## 0.1. AGENTS.md (5개 - 폴더 진입 시 Codex가 자동으로 읽는 지침)
+
+| 위치 | 역할 | 한 줄 |
+|---|---|---|
+| `~/.Codex/AGENTS.md` | 모든 프로젝트 공통 (자비스 본체) | "자비스가 누구고 어떻게 답하나" |
+| `./AGENTS.md` (이 파일) | 게임 허브 전체 개발 규칙 | "이 게임들을 어떻게 만드나" |
+| `./.Codex/AGENTS.md` | 자비스 도메인 표식 (`domain: game-hub`) | "이 폴더가 어느 자비스 도메인인가" |
+| `./games/<id>/AGENTS.md` | 게임별 세부 규칙 (lotto 등) | "이 게임 하나를 어떻게 만드나" |
+
+핵심: 도메인 여부를 정하는 건 `./.Codex/AGENTS.md`의 `domain:` 키 하나뿐. 이름 겹침은 Codex 도구 표준이라 못 바꾸지만, 역할은 위 표대로 갈린다.
+
+## 0.2. PROGRESS.md (4개 - 진행 로그)
+
+| 위치 | 역할 |
+|---|---|
+| `./PROGRESS.md` | 게임 허브 전체 메타 로그 + 자비스 도메인 self-critique 겸용 |
+| `./games/<id>/PROGRESS.md` | 그 게임 하나의 진행 로그 (lotto/sudoku/tetris 각각) |
+
+## 0.3. 도메인 골격 문서 (루트에 1개씩, 겹침 없음)
+
+`ROADMAP.md`(중장기 마일스톤) / `TASKS.md`(현재 작업 추적) / `NEXT-SESSION.md`(다음 세션 진입 컨텍스트). 자비스 도메인 운영용이고 게임 개발과 무관.
+
+# 1. 등록 게임
+
+| ID | 상태 | 설명 |
+|---|---|---|
+| `tetris` | playable | 라인을 지워라 |
+| `sudoku` | wip | 스마트 힌트로 배우는 스도쿠 (라이트 톤) |
+| `lotto` | wip | lotto 추천번호 - 캐릭터 시드 기반 11전략 추천 |
+| `rushhour` | playable | 막힌 차를 빼내는 슬라이딩 퍼즐 |
+| `nonogram` | wip | 숫자 힌트로 그리는 픽셀 퍼즐 (노노그램) |
+| `flightshooting` | playable | Sky Raider - 드래그 조작 캐주얼 세로 스크롤 비행 슈팅 |
+
+1.1. 게임 등록부: `games/_registry.json`. 카드 클릭으로 진입.
+1.2. 새 세션이 특정 게임 작업 시 `games/<id>/AGENTS.md` 자동 로드.
+1.3. 앱 등록부: `apps/_registry.json` (게임 아닌 학습·도구류). 현재 `english-reading`(영어 독해 사다리, wip) 1종. 세부는 `apps/<id>/AGENTS.md`.
+
+# 2. 표준 (html-game)
+
+| 자산 | 경로 |
+|---|---|
+| 표준 본체 | `standards/html-game/STANDARD.md` (현재 v0.3.2) |
+| 변경 이력 | `standards/html-game/CHANGELOG.md` |
+| 적용 프로젝트 | `standards/html-game/applications.md` |
+
+2.1. 적용 게임: **lotto만** (v0.2). sudoku / tetris는 후순위.
+2.2. 글로벌(`~/.Codex/rules/html-game/`) 미승격. 데이터 수집 단계 (v0.x).
+2.3. v1.0 승격 조건은 STANDARD.md 9.4 참조.
+
+# 3. 개발 환경
+
+## 3.1. 권장: 정적 dev 서버
+
+```
+node scripts/dev-server.mjs 8000
+```
+
+브라우저: `http://127.0.0.1:8000/`. Cache-Control no-store, SW 무관.
+
+## 3.2. Live Server (VS Code)
+
+포트 5500에서 동작하지만 SW / 캐시 충돌 가능. 개발 환경(localhost / 127.0.0.1)에서 SW는 `shared/ui.js`가 자동 unregister + 캐시 클리어 + 1회 자동 reload 처리.
+
+# 4. 자동화 (GitHub Actions)
+
+| 워크플로우 | 일정 | 작업 |
+|---|---|---|
+| `.github/workflows/fetch-lotto.yml` | 매주 일요일 03:00 KST | lotto 회차 증분 페치 + commit/push |
+| `.github/workflows/test-lotto.yml` | push/PR (lotto 경로 변경 시) | `node tests/run-node.js` 자동 회귀 검증 |
+
+# 5. 커밋 컨벤션
+
+Conventional Commits. `<type>(<scope>): <subject>`.
+
+5.1. type: `feat` / `fix` / `chore` / `docs` / `refactor` / `test`.
+5.2. scope: `lotto` / `sudoku` / `tetris` / `hub` / `scripts`.
+5.3. 예시:
+- `feat(lotto): Blessed Lotto - 캐릭터 시드 기반 11전략 추천 게임`
+- `fix(hub): _registry.json network-first + 개발환경 SW 차단`
+- `chore(scripts): fetch-lotto-draws + dev-server + GitHub Actions`
+
+# 6. 작업 우선순위
+
+6.1. **docs SSOT 우선**. 코드 변경 전 영향받는 docs 식별 → 수정 → 코드 → 테스트 순서. 충돌 시 docs가 진실.
+6.2. **매직 넘버 0개** (html-game 표준 적용 게임). 모든 수치는 정의 파일(`src/data/numbers.js` 등)에서.
+6.3. **사행성 / 도박성 표현 금지** (lotto 한정). "확률 향상" / "필승" 절대 금지. 추천은 "참고용".
+6.4. **개발자 짓 안 시키기**. 사용자에게 콘솔 명령 / dev tools 작업 시키지 말 것. 자비스가 직접 처리하거나 GUI / 더블클릭 방식 제공.
+6.5. **결제 가능 항목**(향후): 캐릭터 슬롯 / 스킨 / 이력 자산. **금지**: 추천 횟수 / 적중률 향상 옵션.
+
+# 7. 새 게임 추가 절차
+
+7.1. `standards/html-game/STANDARD.md` 6장 순서대로 폴더 셋업.
+7.2. `games/<id>/.standard`에 `html-game v<x.y>` 한 줄.
+7.3. `games/<id>/AGENTS.md` 작성 (sudoku 패턴 참고).
+7.4. `games/_registry.json`에 게임 등록 (id / title / subtitle / path / status / accent).
+7.5. `standards/html-game/applications.md`에 행 추가.
+7.6. 첫 진입 면책 / 윤리 카피 검토 (lotto 같은 사행성 도메인은 6.3 강제).
+
+# 8. 새 세션 안내
+
+8.1. 게임 루트(`D:\Codex\game`)에서 시작 시 본 파일 자동 로드.
+8.2. 특정 게임 작업 이어서 할 때: `games/<id>의 작업 이어서. PROGRESS.md / docs 읽고 현재 상태 파악`.
+8.3. 본 파일은 200줄 이내 유지. 게임별 세부는 각 게임 AGENTS.md / docs로 위임.
