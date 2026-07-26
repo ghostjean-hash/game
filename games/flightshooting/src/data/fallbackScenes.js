@@ -10,7 +10,7 @@ export const FALLBACK_SCENE_SRC = {
 
 export const FALLBACK_SCENE_BY_COUNTRY = {
   '필리핀': 'ocean', '태국': 'ocean', '말레이시아': 'ocean', '싱가포르': 'ocean', '인도네시아': 'ocean',
-  '파나마': 'ocean', '파푸아뉴기니': 'ocean', '제주도': 'ocean',
+  '파나마': 'ocean', '파푸아뉴기니': 'ocean', '제주도': 'ocean', '독도': 'ocean',
 
   '우즈베키스탄': 'desert', '이란': 'desert', '이라크': 'desert', '이스라엘': 'desert', '아랍에미리트': 'desert',
   '사우디아라비아': 'desert', '모로코': 'desert', '멕시코': 'desert',

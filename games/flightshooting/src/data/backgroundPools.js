@@ -209,6 +209,7 @@ export const BG_POOLS = [
 export const COUNTRY_BG = {
   // ── BG-01 동아시아 도시·산맥 ──
   '한국': { pool: 'BG-01', overlay: { landmark: '경복궁 기와지붕 처마 능선 + N서울타워', terrain: '한강 물줄기 + 남산 능선', vegetation: '소나무', pointColor: '#e84c5a', asset: 'overlay_korea_palace_roof' } },
+  '독도': { pool: 'BG-01', overlay: { landmark: '동도·서도 화산섬 절벽', terrain: '동해의 푸른 파도 + 해식 절벽', vegetation: '해국·억새', pointColor: '#4a8fb5', asset: 'overlay_dokdo_volcanic_islets' } },
   '중국': { pool: 'BG-01', overlay: { landmark: '만리장성 능선 + 전통 탑(파고다)', terrain: '겹산 능선', vegetation: '대나무', pointColor: '#c8352e', asset: 'overlay_china_greatwall' } },
   // ── BG-02 동아시아 화산·섬 ──
   '일본': { pool: 'BG-02', overlay: { landmark: '후지산 원뿔 + 도리이', terrain: '화산 봉우리 + 바다', vegetation: '벚꽃', pointColor: '#e05a70', asset: 'overlay_japan_fuji_torii' } },

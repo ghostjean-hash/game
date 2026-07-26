@@ -10,6 +10,7 @@ const F = CFG.friend;
 
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function approach(v, target, maxDelta) { return v < target ? Math.min(v + maxDelta, target) : Math.max(v - maxDelta, target); }
 
 // 어린이 모드 시작 시 친구 생성. 화면 왼쪽 밖에서 자기 세로 밴드로 날아 들어온다(등장 연출).
 export function spawnFriend(game, W, H) {
@@ -157,12 +158,25 @@ export function stepFriend(game, dt, W, H, canFire = true) {
     // mate: 플레이어와 좌우 분담(서로 다른 쪽 적·아이템). 보스전엔 null로 분담 해제(둘 다 보스 집중, 사용자 지시).
     const tier = { sim: F.aiSim, aimDeg: 0, threats: Infinity };
     const mate = game.boss ? null : game.player;
-    f.aiTarget = decideTarget(game, W, H, f.r, homeY, tier, f, { clearWhenSafe: false, mate });
+    f.aiTarget = decideTarget(game, W, H, f.r, homeY, tier, f, {
+      clearWhenSafe: false, mate,
+      // 보스전 밖: 플레이어가 맡지 않은 아이템을 먼저 먹고, 반대편 적을 맡으며, 일정 거리도 유지한다.
+      preferOtherSide: !game.boss, mateGap: F.mateGap, itemBonus: F.itemBonus, pickRange: 420,
+    });
   }
-  const move = CFG.player.speed * dt; // 이동 속도는 플레이어와 동일(빔서치 시뮬과 일치)
+  // 키위새도 목표 쪽으로 가속·감속한다. 판단 주기 사이 목표를 유지해 부드럽게 날고, 플레이어와
+  // 겹치지 않으려 새 목표가 와도 순간 방향 전환하지 않는다.
   const dxm = f.aiTarget.x - f.x, dym = f.aiTarget.y - f.y, safe = f.aiTarget.safe;
-  if (!safe || Math.abs(dxm) > F.aiDeadzone) f.x += clamp(dxm, -move, move);
-  if (!safe || Math.abs(dym) > F.aiDeadzone) f.y += clamp(dym, -move, move);
+  const goalX = safe && Math.abs(dxm) <= F.aiDeadzone ? f.x : f.aiTarget.x;
+  const goalY = safe && Math.abs(dym) <= F.aiDeadzone ? f.y : f.aiTarget.y;
+  const ax = goalX - f.x, ay = goalY - f.y, dist = Math.hypot(ax, ay);
+  const speed = dist > 1e-3 ? CFG.player.speed : 0;
+  const wantX = speed ? (ax / dist) * speed : 0, wantY = speed ? (ay / dist) * speed : 0;
+  const delta = F.moveAccel * dt;
+  f.vx = approach(f.vx || 0, wantX, delta); f.vy = approach(f.vy || 0, wantY, delta);
+  const mx = f.vx * dt, my = f.vy * dt;
+  if (Math.abs(mx) >= Math.abs(ax) && Math.sign(mx) === Math.sign(ax)) { f.x = goalX; f.vx = 0; } else f.x += mx;
+  if (Math.abs(my) >= Math.abs(ay) && Math.sign(my) === Math.sign(ay)) { f.y = goalY; f.vy = 0; } else f.y += my;
   f.x = clamp(f.x, f.r, W - f.r);
   f.y = clamp(f.y, f.r, H - f.r);
 

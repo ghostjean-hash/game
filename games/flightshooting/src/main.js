@@ -6,7 +6,7 @@ import { showModal, registerServiceWorker } from '../../../shared/ui.js';
 import { CFG } from './data/numbers.js';
 import { COLORS } from './data/colors.js';
 import { COUNTRIES, START_COUNTRY } from './data/countries.js';
-import { COUNTRY_PATHS, MAP_W, MAP_H, lonToX, latToY } from './data/worldmap.js';
+import { COUNTRY_PATHS, MAP_FEATURE_PATHS, MAP_W, MAP_H, lonToX, latToY } from './data/worldmap.js';
 import * as sound from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard, updateParticles } from './core/world.js';
@@ -26,6 +26,8 @@ const gameScreen = $('#game-screen');
 const canvas = $('#board');
 const ctx = canvas.getContext('2d');
 const elScore = $('#score');
+const elCityCountry = $('#city-country');
+const elCitySlots = $('#city-slots');
 const elStage = $('#stage');
 const elFront = $('#front');
 const elOption = $('#option');
@@ -60,6 +62,8 @@ let W = 0, H = 0, dpr = 1;
 let state = 'menu'; // menu | playing | paused | dying | over | won | map | map-loading(디오라마 로드 대기)
 let best = store.get('best', 0);
 let bannerTimer = 0;
+const CITY_HUD_TRANSFER_TIME = 2.46;
+let cityHudTransferTimer = 0; // 여행 시작 배너가 HUD로 흡수되기 전 대기 시간
 let deathTimer = 0; // 죽는 연출(dying) 남은 시간. 0이 되면 결과 팝업.
 // 환경설정(localStorage 저장) + 치트 상태(세션).
 let apSkill = store.get('apSkill', CFG.autopilot.default);
@@ -79,7 +83,7 @@ function saveCheat() { store.set('cheatCfg', { speed: cheatSpeed, invincible: ch
 
 function createGame() {
   return {
-    player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], stars: [], boss: null,
+    player: null, bullets: [], enemies: [], eBullets: [], powerups: [], particles: [], scoreFloats: [], stars: [], boss: null,
     score: 0, scoreRemainder: 0, lives: CFG.player.maxLives, maxLives: CFG.player.maxLives, stage: 1, fireTimer: 0, // maxLives는 난이도로 재설정
     front: 1, options: [], optionEvo: 0, zone: { level: 0, spawnTimer: 0, pulses: [] }, tail: [], partHistory: [],
     friend: null, // 어린이 모드에서만 생성(docs/09). 일반 모드는 null 유지.
@@ -88,7 +92,7 @@ function createGame() {
     autoAssist: false, dragging: false, manualTimer: 0,
     difficulty: 'normal', enemyFireMul: 1, enemyHpMul: 1, enemyShotsMax: 99, earlyShots: null, waveMax: Infinity, radialMul: 1, // 난이도(startGame에서 세팅)
     bonusTimer: CFG.bonusShip.every,
-    bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, winTimer: null, bossDeathTimer: null,
+    bossPending: false, transitioning: false, pendingTimer: null, transitionTimer: null, mapTransitionTimer: null, winTimer: null, bossDeathTimer: null,
     shake: 0, // 화면 흔들림(보스 사망 연출 등, view/main render가 소비)
     tourIdx: START_COUNTRY, tourPath: [START_COUNTRY], // 세계 여행: 현재 나라 + 지나온 경로(docs/10)
     sfx: [], events: [],
@@ -143,6 +147,16 @@ const loop = createLoop({
     for (const ev of game.events) handleEvent(ev);
     game.events.length = 0;
     // 배너 표시 시간(main 소관)
+    if (cityHudTransferTimer > 0) {
+      cityHudTransferTimer -= dt;
+      if (cityHudTransferTimer <= 0) {
+        game.cityHudReady = true;
+        elBanner.classList.add('is-travel-to-hud');
+        elCityCountry.classList.remove('is-arriving'); elCitySlots.classList.remove('is-arriving');
+        void elCityCountry.offsetWidth; // 같은 구역 재시작에도 HUD 착지 애니메이션을 다시 시작한다.
+        elCityCountry.classList.add('is-arriving'); elCitySlots.classList.add('is-arriving');
+      }
+    }
     if (bannerTimer > 0) { bannerTimer -= dt; if (bannerTimer <= 0) elBanner.hidden = true; }
     // 보스 체력바 실시간 반영(코어 hp). 방어구가 남아 코어가 안 열렸으면 '보호 중'으로 흐리게 표시.
     if (game.boss && !game.boss.entering) {
@@ -231,6 +245,16 @@ function setTailHud() {
 }
 function syncHud() {
   elScore.textContent = game.score;
+  const nation = COUNTRIES[game.tourIdx];
+  const cityHudReady = game.cityHudReady !== false;
+  elCityCountry.textContent = cityHudReady && nation ? (nation.type === 'travel' ? nation.parentCountry : nation.ko) : '';
+  // 실제 글자 칸: 빈 칸도 같은 크기의 회색 배경을 유지해 수도 글자 수를 즉시 읽을 수 있다.
+  elCitySlots.replaceChildren(...(cityHudReady ? game.citySlots || [] : []).map((slot) => {
+    const cell = document.createElement('span');
+    cell.className = `city-slot${slot.filled ? ' is-filled' : ''}`;
+    cell.textContent = slot.filled ? slot.letter : '';
+    return cell;
+  }));
   elStage.textContent = game.stage;
   setFrontHud();
   setEvoHud(elOption, game.options.length, CFG.parts.option.maxPerSide * 2, game.optionEvo || 0, COLORS.bulletShapeTier.length - 1);
@@ -250,6 +274,13 @@ function showBanner(big, sub, dur = 1.6) {
     ? `<span class="banner-country">${big.slice(0, nl)}</span><span class="banner-city">${big.slice(nl + 1)}</span>`
     : `<span class="banner-big">${big}</span>`;
   elBanner.innerHTML = bigHtml + (sub ? `<span class="banner-sub">${sub}</span>` : '');
+  elBanner.classList.remove('is-travel-to-hud');
+  if (nl >= 0) {
+    game.cityHudReady = false;
+    cityHudTransferTimer = Math.max(0.2, dur - CITY_HUD_TRANSFER_TIME);
+  } else {
+    cityHudTransferTimer = 0;
+  }
   elBanner.hidden = false;
   bannerTimer = dur;
 }
@@ -259,7 +290,7 @@ function resetGame() {
   game.player = { x: W * 0.5, y: H * CFG.player.yRatio, r: CFG.player.r, inv: 0, dead: false, emo: null, emoT: 0 };
   game.bombFlash = 0;
   game.bullets = []; game.enemies = []; game.eBullets = [];
-  game.powerups = []; game.particles = []; game.boss = null;
+  game.powerups = []; game.particles = []; game.scoreFloats = []; game.boss = null;
   game.score = 0; game.scoreRemainder = 0; game.maxLives = CFG.player.maxLives; game.lives = game.maxLives; // 난이도별 maxLives는 startGame에서 재설정
   game.front = 1; game.options = []; game.optionEvo = 0; game.zone = { level: 0, timer: null }; game.tail = []; game.partHistory = [];
   game.friend = null; // 친구 동행 켜짐이면 startGame에서 다시 생성
@@ -267,9 +298,11 @@ function resetGame() {
   game.tourIdx = START_COUNTRY; game.tourPath = [START_COUNTRY]; // 세계 여행 경로 초기화(한국 출발)
   game.dragging = false; game.manualTimer = 0; // 하이브리드 자동 상태 초기화
   game.bossPending = false; game.transitioning = false;
-  game.pendingTimer = null; game.transitionTimer = null; game.winTimer = null; game.bossDeathTimer = null;
+  game.pendingTimer = null; game.transitionTimer = null; game.mapTransitionTimer = null; game.winTimer = null; game.bossDeathTimer = null;
   game.shake = 0;
   game.sfx.length = 0; game.events.length = 0;
+  game.cityHudReady = false; // 시작 배너가 좌상단 HUD에 도착할 때까지 목적지 슬롯은 숨긴다.
+  cityHudTransferTimer = 0;
   elBossBar.hidden = true;
   initStars(game, W, H);
   startStage(game); // '구역 1' 배너 이벤트는 첫 프레임에 소비됨
@@ -408,10 +441,13 @@ const mapTitle = $('#map-title');
 const mapHint = $('#map-hint');
 const mapCard = $('#map-card');
 let flyRaf = 0; // 비행 애니메이션 rAF 핸들(정리용)
-let tourScale = 1; // 확대 배율 보정(핀·글자가 화면에서 일정 크기로 보이도록). renderMap이 갱신.
+let tourScale = 1; // 현재 핀 렌더용 지도 단위 배율. 확대 시 터치 핀을 역보정한다.
+let tourBaseScale = 1; // 최초 프레이밍의 핀 크기. 확대해도 이 화면상 크기를 넘지 않는다.
 let tourVB = null; // 현재 지도 viewBox {x,y,w,h} - 드래그·확대축소로 갱신
 let tourCands = []; // 클릭 가능한 후보 전체(안 간 나라 전부)
 let tourFrame = []; // 초기 확대 프레이밍용(현재+가까운 frameNear개) - 클릭 후보와 별개
+let tourSelected = null; // 핀을 한 번 눌러 정보 카드를 연 목적지. 플레이 버튼으로만 비행을 확정한다.
+let tourSelectedPin = null; // 반복 지도에서 실제로 누른 핀. 카드가 같은 복제 지도 좌표를 따라가게 한다.
 const PACIFIC_CENTER_X = MAP_W; // 반복된 지도에서 날짜변경선(태평양)을 화면 중앙으로 쓰는 기준 좌표.
 const cityX = (i) => lonToX(COUNTRIES[i].lon);
 const cityY = (i) => latToY(COUNTRIES[i].lat);
@@ -426,6 +462,8 @@ function showMap() {
   state = 'map';
   loop.pause();
   mapCard.hidden = true;
+  tourSelected = null;
+  tourSelectedPin = null;
   mapHint.hidden = false;
   mapTitle.textContent = '다음 목적지를 골라주세요';
   mapOverlay.hidden = false; // 먼저 표시해 map-viewport 실제 크기를 확보(화면 꽉 채우기)
@@ -466,41 +504,56 @@ function mapStarPoints(x, y, outer, inner) {
   return points.join(' ');
 }
 
-// 도시 하나: 점 + 2줄 라벨(윗줄 나라이름 작게·다른 색, 아랫줄 수도 상태색). clickable이면 후보(맥동·클릭), faint면 흐리게.
-function cityMark(i, mk, dotColor, s, clickable, faint, hasBg) {
+// 도시 하나: 후보는 핀만, 이미 클리어한 곳은 나라·목적지를 두 줄로 표시한다.
+function cityMark(i, mk, dotColor, s, clickable, faint, hasBg, showLabel = false, selected = false, current = false) {
   const C = COUNTRIES[i];
   const x = cityX(i), yv = cityY(i);
   const dot = mk.dot * s;
   const gap = CFG.tour.mark.labelGap * s;
-  const nameFs = (mk.name * s).toFixed(1), capFs = (mk.cap * s).toFixed(1);
+  const nameFs = (mk.name * s).toFixed(1), capFs = (Math.max(mk.cap, mk.name * 1.18) * s).toFixed(1);
   const op = faint ? ' opacity="0.55"' : '';
-  const open = clickable ? `<g class="map-pick" data-dest="${i}"${op}>` : `<g${op}>`;
-  const dotEl = `<circle ${clickable ? 'class="pick-dot" ' : ''}cx="${x.toFixed(1)}" cy="${yv.toFixed(1)}" r="${dot.toFixed(1)}" fill="${dotColor}" stroke="#0b1020" stroke-width="${(1.5 * s).toFixed(2)}"/>`;
+  const cls = `${clickable ? 'map-pick' : ''}${selected ? ' is-selected' : ''}${current ? ' map-current-mark' : ''}`.trim();
+  const open = clickable ? `<g class="${cls}" data-dest="${i}"${op}>` : cls ? `<g class="${cls}"${op}>` : `<g${op}>`;
+  // 선택 효과는 핀의 원래 색을 대체하지 않는다. 바깥 도넛 링만 별도 레이어로 얹는다.
+  const selectedRing = selected ? `<circle class="pick-focus-ring" cx="${x.toFixed(1)}" cy="${yv.toFixed(1)}" r="${(dot * 1.82).toFixed(1)}" fill="none" stroke="#ffd24a" stroke-width="${Math.max(1.5, 2.1 * s).toFixed(2)}" pointer-events="none"/>` : '';
+  const arrival = current ? `<circle class="map-current-arrival" cx="${x.toFixed(1)}" cy="${yv.toFixed(1)}" r="${(dot * 1.9).toFixed(1)}" fill="none" stroke="#a6ff4d" stroke-width="${Math.max(1.1, 1.7 * s).toFixed(2)}" pointer-events="none"/>` : '';
+  const dotEl = `<circle ${clickable ? 'class="pick-dot" ' : ''}data-dot="${mk.dot}" cx="${x.toFixed(1)}" cy="${yv.toFixed(1)}" r="${dot.toFixed(1)}" fill="${dotColor}" stroke="#0b1020" stroke-width="${(1.5 * s).toFixed(2)}"/>`;
   // 배경(디오라마) 이미지가 준비된 미방문 도시는 도시 터치 원 안 중앙에 대비 높은 별 도형을 겹쳐 표시한다.
   const M = CFG.tour.mark;
   const bgStar = hasBg ? `<polygon points="${mapStarPoints(x, yv, dot * M.bgStarOuterScale, dot * M.bgStarInnerScale)}" fill="${COLORS.tour.bgReady}" stroke="${COLORS.tour.bgReadyStroke}" stroke-width="${(M.bgStarStroke * s).toFixed(1)}" stroke-linejoin="round" pointer-events="none"/>` : '';
-  let nameX, nameY, capX, capY, anchor;
-  if (C.labelDir === 'right' || C.labelDir === 'left') {
-    // 붙어 있는 나라(싱가포르·말레이시아) 겹침 방지: 라벨을 점 옆(우/좌)에 나라(위)·수도(아래) 2줄로.
-    anchor = C.labelDir === 'right' ? 'start' : 'end';
-    nameX = capX = (C.labelDir === 'right' ? x + dot + gap : x - dot - gap).toFixed(1);
-    nameY = (yv - 1 * s).toFixed(1);            // 나라(윗줄)
-    capY = (yv + mk.cap * s * 0.95).toFixed(1); // 수도(아랫줄)
-  } else {
-    // 기본: 점 위에 나라(윗줄)·수도(아랫줄)
-    anchor = 'middle';
-    nameX = capX = x.toFixed(1);
-    const cy = yv - dot - gap;                   // 수도 - 점 바로 위
-    capY = cy.toFixed(1);
-    nameY = (cy - mk.cap * s * 0.92 - CFG.tour.mark.nameLift * s).toFixed(1); // 나라 - 수도 위 + 추가로 올림
+  if (!showLabel) return open + arrival + selectedRing + dotEl + bgStar + '</g>';
+  const anchor = C.labelDir === 'left' ? 'end' : C.labelDir === 'right' ? 'start' : 'middle';
+  const labelX = (C.labelDir === 'left' ? x - dot - gap : C.labelDir === 'right' ? x + dot + gap : x).toFixed(1);
+  const capSize = Math.max(mk.cap, mk.name * 1.18) * s;
+  const nameY = current ? yv + dot + gap + mk.name * s : yv - dot - gap - mk.cap * s * 0.95 - CFG.tour.mark.nameLift * s;
+  const capY = current ? nameY + capSize * 1.13 : yv - dot - gap;
+  const top = C.type === 'travel' ? C.parentCountry : C.ko;
+  const bottom = C.type === 'travel' ? `여행지 ${C.ko}` : C.cap;
+  const labelClass = current ? 'map-current-label' : 'map-visited-label';
+  const labels = `<text class="${labelClass}" x="${labelX}" y="${nameY.toFixed(1)}" text-anchor="${anchor}" font-size="${nameFs}" font-weight="600" fill="${COLORS.tour.countryLabel}">${top}</text><text class="${labelClass}" x="${labelX}" y="${capY.toFixed(1)}" text-anchor="${anchor}" font-size="${capFs}" font-weight="700" fill="${COLORS.tour.destinationLabel}">${bottom}</text>`;
+  return open + arrival + selectedRing + dotEl + bgStar + labels + '</g>';
+}
+
+function geoLabels(s) {
+  const fs = (45 * s).toFixed(1), small = (28 * s).toFixed(1);
+  const text = (x, y, value, size = fs) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}" font-weight="700" letter-spacing="1.2" fill="${COLORS.tour.countryLabel}" opacity="0.6" pointer-events="none">${value}</text>`;
+  const pole = (x, y, label, dy) => `<g pointer-events="none"><circle cx="${x}" cy="${y}" r="${(5 * s).toFixed(1)}" fill="${COLORS.tour.current}" stroke="#fff" stroke-width="${(1.2 * s).toFixed(1)}"/>${text(x, y + dy, label, small)}</g>`;
+  // x=55는 160°W(태평양 중앙), x=417은 30°W(대서양 중앙), y=250은 적도다.
+  return `<path d="M0 250H${MAP_W}" stroke="${COLORS.tour.border}" stroke-width="${(0.9 * s).toFixed(2)}" stroke-dasharray="${(5 * s).toFixed(1)} ${(5 * s).toFixed(1)}" opacity="0.7" pointer-events="none"/>${text(500, 244, '적도', small)}${text(55, 210, '태평양')}${text(417, 202, '대서양')}${text(722, 310, '인도양')}${text(548, 150, '지중해', small)}${text(610, 190, '홍해', small)}${text(505, 76, '북극해', small)}${text(505, 438, '남극해', small)}${pole(500, 0, '북극', 14)}${pole(500, MAP_H, '남극', -10)}`;
+}
+
+function unwrapX(fromX, toX) {
+  return toX + Math.round((fromX - toX) / MAP_W) * MAP_W;
+}
+
+function unwrappedRoute(path) {
+  if (!path.length) return [];
+  const points = [{ x: cityX(path[0]), y: cityY(path[0]) }];
+  for (let i = 1; i < path.length; i++) {
+    const prev = points[points.length - 1];
+    points.push({ x: unwrapX(prev.x, cityX(path[i])), y: cityY(path[i]) });
   }
-  // 여행지(발리·하와이)는 윗줄=소속국(cap)·아랫줄=여행지명(ko)으로 표기(사용자 지시: 인도네시아 → 발리 순).
-  //   일반 나라는 윗줄=나라(ko)·아랫줄=수도(cap) 유지.
-  const topLabel = C.type === 'travel' ? C.cap : C.ko;
-  const botLabel = C.type === 'travel' ? C.ko : C.cap;
-  const nameEl = `<text x="${nameX}" y="${nameY}" text-anchor="${anchor}" font-size="${nameFs}" font-weight="600" fill="${COLORS.tour.countryLabel}">${topLabel}</text>`;
-  const capEl = `<text x="${capX}" y="${capY}" text-anchor="${anchor}" font-size="${capFs}" font-weight="700" fill="${dotColor}">${botLabel}</text>`;
-  return open + dotEl + bgStar + nameEl + capEl + '</g>';
+  return points;
 }
 
 // 지도 SVG를 그린다. 모든 나라 수도 표시(현재/후보 크게, 방문 중간, 나머지 작고 흐리게) + 경로 점선 + 비행기.
@@ -516,7 +569,8 @@ function renderMap(cur, cands) {
   tourVB = computeViewBox(cur, frame, vpW, vpH);
   tourCands = cands;
   tourFrame = frame;
-  tourScale = tourVB.w / vpW; // 화면 일정 픽셀 역보정
+  tourBaseScale = tourVB.w / vpW;
+  tourScale = tourBaseScale;
   const s = tourScale;
   const M = CFG.tour.mark;
   const path = game.tourPath;
@@ -524,30 +578,36 @@ function renderMap(cur, cands) {
   const visitedSet = new Set(path);
   let route = '';
   if (path.length > 1) {
-    route = `<path d="${path.map((i, k) => (k ? 'L' : 'M') + fx(i) + ',' + fy(i)).join('')}" fill="none" stroke="${COLORS.tour.route}" stroke-width="${(2.5 * s).toFixed(2)}" stroke-dasharray="${(6 * s).toFixed(1)} ${(6 * s).toFixed(1)}" opacity="0.8"/>`;
+    const points = unwrappedRoute(path);
+    route = `<path d="${points.map((p, k) => (k ? 'L' : 'M') + p.x.toFixed(1) + ',' + p.y.toFixed(1)).join('')}" fill="none" stroke="${COLORS.tour.route}" stroke-width="${(2.5 * s).toFixed(2)}" stroke-dasharray="${(6 * s).toFixed(1)} ${(6 * s).toFixed(1)}" opacity="0.8"/>`;
   }
   let cities = '';
   for (let i = 0; i < COUNTRIES.length; i++) {
     // 여행 경로에 있는 도시는 이미 클리어했다. 배경이 준비돼도 별은 미방문 도시에만 보인다.
     const hasBg = DIORAMA_READY.has(COUNTRIES[i].ko) && !visitedSet.has(i);
-    if (i === cur) cities += cityMark(i, M.cur, COLORS.tour.current, s, false, false, hasBg);
-    else if (candSet.has(i)) cities += cityMark(i, M.cand, COLORS.tour.candidate, s, true, false, hasBg);
-    else if (visitedSet.has(i)) cities += cityMark(i, M.visited, COLORS.tour.visited, s, false, false, hasBg);
+    if (i === cur) cities += cityMark(i, M.cur, COLORS.tour.current, s, false, false, hasBg, true, false, true);
+    else if (candSet.has(i)) cities += cityMark(i, M.cand, COLORS.tour.candidate, s, true, false, hasBg, false, i === tourSelected);
+    else if (visitedSet.has(i)) cities += cityMark(i, M.visited, COLORS.tour.visited, s, false, false, hasBg, true);
     else cities += cityMark(i, M.other, COLORS.tour.dim, s, false, true, hasBg);
   }
-  const plane = `<g id="tour-plane" transform="translate(${fx(cur)},${fy(cur)})"><circle r="${(7 * s).toFixed(1)}" fill="${COLORS.tour.current}" stroke="#0b1020" stroke-width="${(2 * s).toFixed(2)}"/></g>`;
+  // 현재 위치는 어떤 마스크·크롭도 씌우지 않은 원본 PNG 전체다. 노란 현재점보다 화면상 10px 위에 분리한다.
+  const plane = `<g id="tour-plane" transform="translate(${fx(cur)},${fy(cur)})" pointer-events="none"><image href="assets/characters/bapuri-sprite-v2.png" x="${(-27 * s).toFixed(1)}" y="${(-49 * s).toFixed(1)}" width="${(54 * s).toFixed(1)}" height="${(54 * s).toFixed(1)}" preserveAspectRatio="xMidYMid meet"/></g>`;
   const vb = `${tourVB.x.toFixed(1)} ${tourVB.y.toFixed(1)} ${tourVB.w.toFixed(1)} ${tourVB.h.toFixed(1)}`;
   // 나라별 path를 대륙 색으로 칠한다(COUNTRY_PATHS). data-ko로 선택 나라 하나만 하이라이트 가능.
   const sw = (CFG.tour.borderW * s).toFixed(2);
-  const land = COUNTRY_PATHS.map((cp) => `<path data-ko="${cp.ko}" data-cont="${cp.cont}" d="${cp.d}" fill="${COLORS.tour.continent[cp.cont] || COLORS.tour.land}" stroke="${COLORS.tour.border}" stroke-width="${sw}"/>`).join('');
-  // 경도 양 끝을 세 번 반복해 날짜변경선(태평양)을 넘어도 지도·도시가 끊기지 않게 한다.
-  const mapLayer = `${land}${route}${cities}`;
-  const repeated = [-MAP_W, 0, MAP_W].map((dx) => `<g transform="translate(${dx},0)">${mapLayer}</g>`).join('');
+  const land = [...COUNTRY_PATHS, ...MAP_FEATURE_PATHS].map((cp) => `<path data-ko="${cp.ko}" data-cont="${cp.cont}" d="${cp.d}" fill="${COLORS.tour.continent[cp.cont] || COLORS.tour.land}" stroke="${COLORS.tour.border}" stroke-width="${sw}"/>`).join('');
+  // 반복된 각 세계의 대륙을 먼저 전부 그린 뒤, 지리명·경로·도시를 별도 최상위 레이어로 올린다.
+  // 그래야 하와이↔뉴욕처럼 복제 경계에 걸친 점선이 다른 복제본 대륙 뒤로 숨지 않는다.
+  const repeat = (content) => [-MAP_W, 0, MAP_W].map((dx) => `<g transform="translate(${dx},0)">${content}</g>`).join('');
+  const repeatedLand = repeat(land);
+  const repeatedGeo = repeat(geoLabels(s));
+  const repeatedRoute = repeat(route);
+  const repeatedCities = repeat(cities);
   const sidePlane = plane.replace('id="tour-plane"', '');
   const repeatedPlane = `<g transform="translate(${-MAP_W},0)">${sidePlane}</g>${plane}<g transform="translate(${MAP_W},0)">${sidePlane}</g>`;
-  mapViewport.innerHTML = `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><rect x="${-MAP_W}" y="0" width="${MAP_W * 3}" height="${MAP_H}" fill="#0b1020"/>${repeated}${repeatedPlane}</svg>`;
+  mapViewport.innerHTML = `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg"><rect x="${-MAP_W}" y="-500" width="${MAP_W * 3}" height="${MAP_H + 1000}" fill="#0b1020"/>${repeatedLand}${repeatedGeo}${repeatedRoute}${repeatedCities}${repeatedPlane}</svg>`;
   mapViewport.querySelectorAll('.map-pick').forEach((g) => {
-    g.addEventListener('click', () => { if (!mapDragMoved) chooseDest(Number(g.dataset.dest)); });
+    g.addEventListener('click', () => { if (!mapDragMoved) selectDest(Number(g.dataset.dest), g); });
   });
 }
 
@@ -568,7 +628,19 @@ function setViewBox() {
   if (!svg || !tourVB) return;
   // 수평만 순환: 드래그가 어느 쪽 끝을 지나도 같은 경도 좌표로 감겨 이어진다.
   tourVB.x = ((tourVB.x % MAP_W) + MAP_W) % MAP_W;
+  const pad = CFG.tour.verticalPanPad;
+  const maxY = MAP_H + pad - tourVB.h;
+  tourVB.y = Math.max(-pad, Math.min(maxY, tourVB.y));
   svg.setAttribute('viewBox', `${tourVB.x.toFixed(1)} ${tourVB.y.toFixed(1)} ${tourVB.w.toFixed(1)} ${tourVB.h.toFixed(1)}`);
+  const nowScale = Math.min(tourBaseScale, tourVB.w / (mapViewport.clientWidth || CFG.tour.zoomRefW));
+  tourScale = nowScale;
+  svg.querySelectorAll('circle[data-dot]').forEach((dot) => {
+    const base = Number(dot.dataset.dot);
+    dot.setAttribute('r', (base * nowScale).toFixed(1));
+    dot.setAttribute('stroke-width', ((base === 7 ? 2 : 1.5) * nowScale).toFixed(2));
+  });
+  // 선택 카드도 지도 좌표에 붙어 있으므로 드래그·확대·축소 때 같은 핀을 계속 따라간다.
+  if (state === 'map' && tourSelected != null && !mapCard.hidden) placeCardOverCity(tourSelected);
 }
 
 // 확대/축소(중심 유지). factor<1 확대, >1 축소.
@@ -591,11 +663,41 @@ function recenterMap() {
   setViewBox();
 }
 
-// 후보 클릭 → 비행기가 목적지로 날아가는 연출 → 도착 카드('나라-수도') → 다음 구역.
-function chooseDest(dest) {
-  if (state !== 'map' || flyRaf) return; // 연출 중 재클릭은 flyRaf 가드로 차단(핀·라벨을 지우지 않아 대상 이름이 유지됨)
+// 후보 핀은 정보를 여는 동작만 한다. 작은 화면에서는 이름을 지도에 전부 뿌리지 않고,
+// 선택 카드의 플레이 버튼으로 한 번 더 확정해 오터치 이동을 막는다.
+function selectDest(dest, pin = null) {
+  if (state !== 'map' || flyRaf) return;
+  const target = COUNTRIES[dest];
+  tourSelected = dest;
+  tourSelectedPin = pin;
+  mapViewport.querySelectorAll('.map-pick').forEach((pin) => pin.classList.toggle('is-selected', Number(pin.dataset.dest) === dest));
+  mapTitle.textContent = `${target.ko} 선택`;
   mapHint.hidden = true;
-  mapTitle.textContent = `${COUNTRIES[dest].ko}(으)로!`;
+  mapCard.innerHTML = target.type === 'travel'
+    ? `<span class="map-country-label">${target.parentCountry}</span><br><span class="map-destination-label">여행지 ${target.ko}</span><br><button type="button" id="map-play">플레이</button>`
+    : `<span class="map-country-label">${target.ko}</span><br><span class="map-destination-label">${target.cap}</span><br><button type="button" id="map-play">플레이</button>`;
+  mapCard.hidden = false;
+  placeCardOverCity(dest);
+  $('#map-play').addEventListener('click', () => chooseDest(dest), { once: true });
+}
+
+function clearMapSelection() {
+  if (tourSelected == null) return;
+  tourSelected = null;
+  tourSelectedPin = null;
+  mapViewport.querySelectorAll('.map-pick.is-selected').forEach((pin) => pin.classList.remove('is-selected'));
+  mapCard.hidden = true;
+  mapHint.hidden = false;
+  mapTitle.textContent = '다음 목적지를 골라주세요';
+}
+
+// 플레이 확정 → 비행기가 목적지로 날아가는 연출 → 도착 카드 → 다음 구역.
+function chooseDest(dest) {
+  if (state !== 'map' || flyRaf || tourSelected !== dest) return;
+  mapHint.hidden = true;
+  mapTitle.textContent = `${COUNTRIES[dest].ko} 나라로!`;
+  mapCard.innerHTML = '<b>이동하여 진입</b>';
+  mapCard.hidden = false;
   highlightCountry(COUNTRIES[dest].ko); // 선택한 나라 하나만 살짝 강조
   const from = game.tourIdx;
   flyTo(from, dest, () => {
@@ -603,8 +705,8 @@ function chooseDest(dest) {
     game.tourPath.push(dest);
     const target = COUNTRIES[dest];
     mapCard.innerHTML = target.type === 'travel'
-      ? `${target.ko} 도착!<br><b>${target.parentCountry}</b>의 여행지`
-      : `${target.ko} 도착!<br>수도는 <b>${target.cap}</b>`;
+      ? `<span class="map-country-label">${target.parentCountry}</span><br><span class="map-destination-label">여행지 ${target.ko} 도착!</span>`
+      : `<span class="map-country-label">${target.ko}</span><br><span class="map-destination-label">${target.cap} 도착!</span>`;
     mapCard.hidden = false;
     placeCardOverCity(dest); // 화면 중앙 대신 도착한 도시 바로 위에 카드를 띄운다(사용자 지시)
     sound.play('start'); // 도착 효과음(기존 사운드 재사용)
@@ -617,11 +719,17 @@ function chooseDest(dest) {
 function placeCardOverCity(dest) {
   const svg = mapViewport.querySelector('svg');
   if (!svg || !svg.getScreenCTM) return;
+  // 반복된 세계 지도에서는 같은 국가 핀이 세 번 존재한다. 선택한 실제 핀의 화면 사각형을 쓰면
+  // 어느 복제본을 눌렀어도 카드가 핀에 정확히 붙는다.
+  const pin = tourSelectedPin && tourSelectedPin.isConnected
+    ? tourSelectedPin
+    : svg.querySelector(`.map-pick[data-dest="${dest}"]`);
+  const dot = pin && pin.querySelector('circle[data-dot]');
+  const rect = dot && dot.getBoundingClientRect();
   const m = svg.getScreenCTM();
-  if (!m) return;
-  const pt = svg.createSVGPoint();
-  pt.x = cityX(dest); pt.y = cityY(dest);
-  const scr = pt.matrixTransform(m);
+  if (!m && !rect) return;
+  const pt = svg.createSVGPoint(); pt.x = cityX(dest); pt.y = cityY(dest);
+  const scr = rect ? { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 } : pt.matrixTransform(m);
   const parent = (mapCard.offsetParent || document.body).getBoundingClientRect();
   const cx = scr.x - parent.left, cyScr = scr.y - parent.top;
   const cardH = mapCard.offsetHeight || 60;
@@ -634,7 +742,7 @@ function placeCardOverCity(dest) {
 
 // 비행기 마커를 from→dest로 flyTime초에 걸쳐 이동시키고 노란 경로선을 그려나간다.
 function flyTo(from, dest, done) {
-  const x0 = cityX(from), y0 = cityY(from), x1 = cityX(dest), y1 = cityY(dest);
+  const x0 = cityX(from), y0 = cityY(from), x1 = unwrapX(x0, cityX(dest)), y1 = cityY(dest);
   const svg = mapViewport.querySelector('svg');
   const plane = mapViewport.querySelector('#tour-plane');
   if (!svg || !plane) { done(); return; }
@@ -643,7 +751,7 @@ function flyTo(from, dest, done) {
   fly.setAttribute('stroke', COLORS.tour.current);
   fly.setAttribute('stroke-width', (2.5 * tourScale).toFixed(2));
   fly.setAttribute('stroke-dasharray', `${(6 * tourScale).toFixed(1)} ${(6 * tourScale).toFixed(1)}`);
-  svg.insertBefore(fly, plane);
+  svg.append(fly); // 대륙·도시 복제 레이어보다 앞: 이동 점선이 아메리카 뒤로 숨지 않는다.
   const dur = Math.max(1, CFG.tour.flyTime * 1000);
   const t0 = performance.now();
   const step = (now) => {
@@ -723,12 +831,17 @@ mapViewport.addEventListener('pointermove', (e) => {
   setViewBox();
 });
 const endDrag = (e) => {
+  const tappedEmptyMap = state === 'map' && !mapDragMoved && !e?.target?.closest?.('.map-pick');
   if (e && e.pointerId != null) mapPointers.delete(e.pointerId);
   if (mapPointers.size < 2) mapPinch = null; // 손가락 하나라도 떼면 핀치 종료
   mapDrag = null;
+  if (tappedEmptyMap) clearMapSelection();
 };
 mapViewport.addEventListener('pointerup', endDrag);
 mapViewport.addEventListener('pointercancel', endDrag);
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && state === 'map' && tourSelected != null) { e.preventDefault(); clearMapSelection(); }
+});
 mapViewport.addEventListener('wheel', (e) => {
   e.preventDefault();
   zoomMap(e.deltaY > 0 ? CFG.tour.zoomStep : 1 / CFG.tour.zoomStep);

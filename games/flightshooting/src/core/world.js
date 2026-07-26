@@ -9,8 +9,8 @@ import { stepOptions, stepTail, homeMissiles, tickZone, gainFront, gainOption, g
 import { stepFriend, friendTakeHit, gainFriendLevel, reviveFriend, notifyFriendKill } from './friend.js';
 import { updateStars } from './stars.js';
 import { buildWaves, stageName } from './waves.js';
-import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, spawnWispChild, dropItems, dropMaybe, burst, fieldBounds, syncBossParts } from './spawn.js';
-import { awardScore } from './score.js';
+import { spawnEnemy, spawnBoss, spawnBonus, spawnShards, spawnWispChild, dropItems, dropMaybe, burst, fieldBounds, syncBossParts, scaledHp } from './spawn.js';
+import { awardScore, isAutoControlling } from './score.js';
 
 export function hit(a, b) {
   const dx = a.x - b.x, dy = a.y - b.y;
@@ -57,6 +57,59 @@ function spawnWaves(game, W) {
   }
 }
 
+function summonCityAlly(game, cityName, W, H) {
+  if (game.cityAlly) return;
+  const G = CFG.cityGuard;
+  game.cityAlly = { cityName, x: W * 0.23, y: H * 0.77, r: G.r, hp: G.allyHp, maxHp: G.allyHp, inv: 0, beamTimer: 0.18, beamTarget: null, msg: `난 ${cityName} 도시의 수호자야! 널 도울게 친구!`, msgTimer: 3.2 };
+}
+
+function summonCityRival(game, cityName, W) {
+  if (game.enemies.some((e) => e.cityRole === 'rival' && e.cityName === cityName)) return;
+  const G = CFG.cityGuard;
+  const left = Math.max(G.r + 24, W * 0.2), right = Math.min(W - G.r - 24, W * 0.8);
+  const hp = scaledHp(G.hp, game.stage || 1, game.enemyHpMul || 1);
+  game.enemies.push({ type: 'city-rival', cityRole: 'rival', cityName, x: left, rivalLeft: left, rivalRight: right, rivalDirection: 1, rivalLegs: 0, y: G.r + 24,
+    r: G.r, hp, maxHp: hp, speed: G.speed, score: 0, color: '#ff6f76', t: 0, fireTimer: 1.1, msg: `난 ${cityName} 도시의 수호자야! 쉽게 못 지나가!`, msgTimer: 3.2 });
+}
+
+function nearestCityGuardTarget(game, x, y) {
+  let target = null, best = Infinity;
+  for (const e of game.enemies) {
+    if (e.dead) continue;
+    const d = (e.x - x) ** 2 + (e.y - y) ** 2;
+    if (d < best) { best = d; target = e; }
+  }
+  if (game.boss && !game.boss.entering) {
+    const d = (game.boss.x - x) ** 2 + (game.boss.y - y) ** 2;
+    if (d < best) target = game.boss;
+  }
+  return target;
+}
+
+function stepCityAlly(game, dt, W, H) {
+  const a = game.cityAlly;
+  if (!a) return;
+  const G = CFG.cityGuard;
+  a.msgTimer = Math.max(0, a.msgTimer - dt);
+  a.inv = Math.max(0, a.inv - dt);
+  if (a.farewell) {
+    // 격파 즉시 작별을 말하고, 지도 전환 전까지 북쪽으로 빠르게 퇴장한다.
+    a.y -= G.farewellSpeed * dt;
+    a.beamTarget = null;
+    return;
+  }
+  const tx = Math.max(a.r, Math.min(W - a.r, game.player.x - 78));
+  const ty = Math.max(H * 0.56, game.player.y + 15);
+  a.x += (tx - a.x) * Math.min(1, dt * 3); a.y += (ty - a.y) * Math.min(1, dt * 3);
+  a.beamTarget = nearestCityGuardTarget(game, a.x, a.y);
+  a.beamTimer -= dt;
+  while (a.beamTarget && a.beamTimer <= 0) {
+    // 화면에서는 계속 이어지는 선이지만, 판정은 짧은 간격의 고정 타격으로 처리한다.
+    game.bullets.push({ x: a.beamTarget.x, y: a.beamTarget.y, vx: 0, vy: 0, r: 6, dmg: G.guideDmg, kind: 'cityGuide' });
+    a.beamTimer += G.guideTick;
+  }
+}
+
 // 기뢰 자폭: 중심에서 사방으로 파편 탄막을 방사한다(정면 돌파를 벌한다).
 function detonateMine(game, e) {
   const m = CFG.enemy.mine;
@@ -91,6 +144,23 @@ export function updateEnemies(game, dt, W, H) {
   const wispSpawns = []; // 도깨비불 분열은 루프 중 game.enemies를 늘리지 않도록 모았다가 루프 후 생성
   for (const e of game.enemies) {
     e.t += dt;
+    if (e.cityRole === 'rival') {
+      if (e.rivalLegs < CFG.cityGuard.rivalSweeps * 2) {
+        e.x += e.rivalDirection * CFG.cityGuard.rivalSweepSpeed * dt;
+        const reached = e.rivalDirection > 0 ? e.x >= e.rivalRight : e.x <= e.rivalLeft;
+        if (reached) {
+          e.x = e.rivalDirection > 0 ? e.rivalRight : e.rivalLeft;
+          e.rivalDirection *= -1;
+          e.rivalLegs++;
+        }
+      } else {
+        e.y += e.speed * dt;
+      }
+      e.msgTimer = Math.max(0, e.msgTimer - dt);
+      e.fireTimer -= dt;
+      if (e.fireTimer <= 0 && e.rivalLegs >= CFG.cityGuard.rivalSweeps * 2) { e.fireTimer += CFG.cityGuard.rivalFireEvery; enemyFireAt(game, e, p.x, p.y, CFG.cityGuard.rivalShotSpeed); }
+      continue;
+    }
     if (e.type === 'bonus') {
       e.x += e.vx * dt; // 보너스 기체는 가로로만 지나간다(세로 고정)
       continue;
@@ -397,6 +467,76 @@ function updatePowerups(game, dt, W, H) {
   retain(game.powerups, (it) => it.y < H + it.r + 10);
 }
 
+function addScoreFloat(game, x, y, value, good, big = false) {
+  if (!game.scoreFloats) game.scoreFloats = [];
+  game.scoreFloats.push({ x, y, value, good, big, age: 0, life: CFG.cityLetters.floatLife });
+  capArray(game.scoreFloats, CFG.limits.scoreFloats);
+}
+
+function updateScoreFloats(game, dt) {
+  if (!game.scoreFloats) return;
+  for (const f of game.scoreFloats) { f.age += dt; f.y -= (f.good ? 34 : 20) * dt; }
+  retain(game.scoreFloats, (f) => f.age < f.life);
+}
+
+function cityDisplayName(country) {
+  return country.type === 'travel' ? country.ko : country.cap;
+}
+
+// 목표 도시와 지리적으로 가까운 다른 도시 넷을 골라, 클로버 도시 이름 묶음의 방해 요소로 쓴다.
+function nearbyCityNames(game, targetName) {
+  const here = COUNTRIES[game.tourIdx];
+  if (!here) return [];
+  const seen = new Set([targetName]);
+  return COUNTRIES
+    .map((country) => {
+      const name = cityDisplayName(country);
+      const lon = Math.min(Math.abs(country.lon - here.lon), 360 - Math.abs(country.lon - here.lon));
+      const lat = country.lat - here.lat;
+      return { name, distance: lon * lon * Math.max(0.2, Math.cos((here.lat * Math.PI) / 180)) + lat * lat };
+    })
+    .sort((a, b) => a.distance - b.distance)
+    .filter(({ name }) => name && !seen.has(name) && (seen.add(name) || true))
+    .slice(0, 4)
+    .map(({ name }) => name);
+}
+
+// 목표 도시 1개와 주변 도시 4개를 대기열로 만든 뒤 하나씩 떨어뜨린다.
+function dropCityLetters(game, W) {
+  const targetName = game.cityWord || '';
+  if (!targetName) return;
+  if (!game.cityLetterQueue) game.cityLetterQueue = [];
+  if (!game.cityLetterQueue.length && game.cityDropBursts < CFG.cityLetters.bursts) {
+    const items = [{ cityName: targetName, answer: true }]
+      .concat(nearbyCityNames(game, targetName).map((cityName) => ({ cityName, answer: false })));
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)); [items[i], items[j]] = [items[j], items[i]];
+    }
+    game.cityLetterQueue.push(...items);
+    game.cityDropBursts++;
+  }
+  const collected = game.cityCollectedLetters || new Set();
+  let item = null;
+  while (game.cityLetterQueue.length && !item) {
+    const next = game.cityLetterQueue.shift();
+    if (!collected.has(next.cityName)) item = next;
+  }
+  if (!item) return;
+  game.powerups.push({ x: Math.max(18, Math.min(W - 18, W * (0.18 + Math.random() * 0.64))), y: -22 - Math.random() * 90,
+    vy: CFG.cityLetters.fallSpeed, r: 13, t: 0, kind: 'letter', ...item });
+}
+
+// 목표 단어 완성 뒤에는 남아 있던 정답·함정도 즉시 정리한다. 이미 완료한 글자로 점수를 더 얻거나
+// 화면에 불필요한 선택지를 남기지 않으며, 다음 묶음 타이머도 함께 멈춘다.
+function finishCityLetters(game) {
+  for (const item of game.powerups) {
+    if (item.kind === 'letter') item.dead = true;
+  }
+  game.cityDropBursts = CFG.cityLetters.bursts;
+  game.cityLetterQueue = [];
+  game.cityDropTimer = Infinity;
+}
+
 export function updateParticles(game, dt) {
   for (const pt of game.particles) {
     pt.age += dt; pt.x += pt.vx * dt; pt.y += pt.vy * dt;
@@ -430,10 +570,41 @@ function setHappy(game) {
   const f = game.friend; if (f && !f.down) { f.emo = 'happy'; f.emoT = CFG.emote.happy; }
 }
 
-function grabItem(game, kind) {
+function grabItem(game, kind, item) {
   // 이미 최대치라 강화가 무의미하면 점수 보너스로 전환(수집 보람 유지).
   const maxed = () => { awardScore(game, CFG.maxedBonus); game.sfx.push('power'); };
   const f = game.friend; // 어린이 모드 친구(있으면 아이템·회복 공유, docs/09)
+  if (kind === 'letter') {
+    const slots = game.citySlots || [];
+    if (!game.cityCollectedLetters) game.cityCollectedLetters = new Set();
+    const itemName = item.cityName || item.letter;
+    const isWholeCityItem = !!item.cityName;
+    // 아이템의 생성 플래그가 아니라 현재 목표 글자 자체로 판정한다. 따라서 같은 '도'는 언제나 정답이다.
+    const isTargetLetter = isWholeCityItem ? item.cityName === game.cityWord : slots.some((slot) => slot.letter === item.letter);
+    const idx = isTargetLetter ? slots.findIndex((slot) => slot.letter === item.letter && !slot.filled) : -1;
+    if (isTargetLetter) {
+      if (isWholeCityItem) for (const slot of slots) slot.filled = true;
+      else if (idx >= 0) for (const slot of slots) if (slot.letter === item.letter) slot.filled = true;
+      game.cityCollectedLetters.add(itemName);
+      for (const other of game.powerups) if (other.kind === 'letter' && (other.cityName || other.letter) === itemName) other.dead = true;
+      if (CFG.cityLetters.correctScore > 0) {
+        awardScore(game, CFG.cityLetters.correctScore);
+        addScoreFloat(game, item.x, item.y, `+${CFG.cityLetters.correctScore}`, true);
+      }
+      if (!game.cityComplete && slots.length && slots.every((slot) => slot.filled)) {
+        game.cityComplete = true;
+        summonCityAlly(game, item.cityName || game.cityWord || item.letter, game.fieldW || 500, game.fieldH || 900);
+        finishCityLetters(game);
+      }
+      game.sfx.push('power'); setHappy(game);
+    } else {
+      game.cityCollectedLetters.add(itemName);
+      for (const other of game.powerups) if (other.kind === 'letter' && (other.cityName || other.letter) === itemName) other.dead = true;
+      summonCityRival(game, itemName, game.fieldW || 500);
+      game.sfx.push('hit');
+    }
+    return;
+  }
   if (kind === 'H') {
     // 회복 공유: 친구가 기절했으면 부활, 아니면 나·친구 각각 hp 회복(상한 내).
     let healed = false;
@@ -503,7 +674,7 @@ export function checkCollisions(game, W, H) {
           notifyFriendKill(game); // 어린이 모드: 연속 처치 칭찬 신호(친구 없으면 무시)
           burst(game, e.x, e.y, e.color, 14);
           if (e.type === 'bonus') dropItems(game, e.x, e.y, CFG.bonusShip.dropCount); // 보너스 기체 확정 드롭
-          else dropMaybe(game, e.x, e.y); // 잡몹은 저확률 드롭(초반 성장 숨통)
+          else if (!e.cityRole) dropMaybe(game, e.x, e.y); // 도시 라이벌은 보상 드롭 없이 짧은 조우로 끝낸다.
           if (e.type === 'splitter') spawnShards(game, e.x, e.y); // 분열체는 조각으로 쪼개짐
           if (e.type === 'serpent') for (const s of e.body) s.dead = true; // 머리 격파 = 몸통 전멸
           game.sfx.push('explode');
@@ -540,10 +711,13 @@ export function checkCollisions(game, W, H) {
 
   // 파워업 획득은 피격 무적(깜박) 중에도 된다 - 피격 판정보다 먼저 처리한다.
   //   어린이 모드: 플레이어 또는 친구가 닿으면 1회 획득(grabItem이 양쪽 공유 강화 처리).
+  //   단어는 직접 조작의 선택 요소다. 자동 조종과 키위새가 우연히 스쳐도 먹지 않는다.
   for (const it of game.powerups) {
     if (it.dead) continue;
     const fr = game.friend;
-    if (hit(p, it) || (fr && !fr.down && hit(fr, it))) { it.dead = true; grabItem(game, it.kind); }
+    const playerCanGrab = hit(p, it) && (it.kind !== 'letter' || !isAutoControlling(game));
+    const friendCanGrab = it.kind !== 'letter' && fr && !fr.down && hit(fr, it);
+    if (playerCanGrab || friendCanGrab) { it.dead = true; grabItem(game, it.kind, it); }
   }
   retain(game.powerups, (it) => !it.dead);
 
@@ -556,6 +730,22 @@ export function checkCollisions(game, W, H) {
     if (!hitF && game.boss && !game.boss.entering && hit(fr, game.boss)) hitF = true;
     if (!hitF) for (const b of game.eBullets) { if (!b.dead && hit(fr, b)) { b.dead = true; hitF = true; break; } }
     if (hitF) { friendTakeHit(game); retain(game.eBullets, (b) => !b.dead); }
+  }
+
+  // 도시 수호자는 키위새처럼 3하트로 버틴다. 맞은 직후 짧은 무적으로 한꺼번에 하트를 잃지 않는다.
+  const ally = game.cityAlly;
+  if (ally && ally.inv <= 0) {
+    let hitAlly = false;
+    for (const e of game.enemies) { if (!e.dead && hit(ally, e)) { hitAlly = true; break; } }
+    if (!hitAlly) for (const b of game.eBullets) { if (!b.dead && hit(ally, b)) { b.dead = true; hitAlly = true; break; } }
+    if (hitAlly) {
+      ally.hp--;
+      ally.inv = 0.7;
+      burst(game, ally.x, ally.y, '#7afff1', 8);
+      game.sfx.push(ally.hp > 0 ? 'hit' : 'explode');
+      if (ally.hp <= 0) game.cityAlly = null;
+      retain(game.eBullets, (b) => !b.dead);
+    }
   }
 
   // 무적 중(피격 깜박) 또는 치트 무적이면 피격 판정 생략(아이템 획득은 위에서 이미 처리).
@@ -590,6 +780,13 @@ function defeatBoss(game) {
   game.enemies = [];
   game.eBullets = [];
   game.events.push({ type: 'boss-clear' });
+  if (game.cityAlly) {
+    game.cityAlly.msg = `또 보자, ${game.cityAlly.cityName} 친구!`;
+    game.cityAlly.msgTimer = CFG.cityGuard.farewellDuration;
+    game.cityAlly.farewell = true;
+    game.cityAlly.beamTarget = null;
+    if (!wasFinal && CFG.tour.enabled) game.mapTransitionTimer = CFG.cityGuard.farewellDuration;
+  }
   game.sfx.push('bossdown');
   // 보스를 즉시 지우지 않고 '사망 연출' 상태로 둔다. updateBoss가 dur초 동안 몸 전체에서 연쇄 폭발 +
   //   화면 흔들림을 진행하고, 끝에 큰 폭발과 함께 boss=null로 제거하며 다음 흐름(승리/지도/다음 구역)을 튼다.
@@ -628,12 +825,18 @@ function stepBossDeath(game, boss, dt) {
   game.shake = 0;
   const particlesDone = !game.particles.some((p) => p.tag === 'bossDeath');
   if (!particlesDone && boss.deathT < D.maxDur) return;
-  if (!particlesDone) game.particles = game.particles.filter((p) => p.tag !== 'bossDeath');
-  // 종료: 폭발 파티클 소멸(또는 3초 안전 종료) 후 보스 제거 + 다음 흐름(승리 / 세계지도 / 다음 구역)
+  // 보스 사망 직후 나온 어떤 잔상도 다음 화면으로 넘기지 않는다.
+  game.particles = [];
+  game.bombFlash = 0;
+  game.shake = 0;
+  // 종료: 폭발 파티클 소멸(또는 2초 안전 종료) 후 보스 제거 + 다음 흐름(승리 / 세계지도 / 다음 구역)
   const wasFinal = boss.kind === 'final';
   game.boss = null;
   if (wasFinal) { game.winTimer = 0.6; }
-  else if (CFG.tour.enabled) { game.sfx.push('stageclear'); game.events.push({ type: 'show-map' }); }
+  else if (CFG.tour.enabled) {
+    // 동행 알리콘의 5초 작별·상승 퇴장을 먼저 보장한다. 동행이 없으면 즉시 지도 이동.
+    if (game.mapTransitionTimer == null) { game.sfx.push('stageclear'); game.events.push({ type: 'show-map' }); }
+  }
   else { game.sfx.push('stageclear'); game.events.push({ type: 'banner', big: '구역 클리어', sub: `구역 ${game.stage + 1}로`, dur: 2.0 }); game.transitionTimer = 1.9; }
 }
 
@@ -644,9 +847,22 @@ export function startStage(game) {
   game.bossPending = false;
   game.transitioning = false; // 새 구역 웨이브 준비 완료 → 진행 판정 재개
   game.pendingTimer = null;
+  game.mapTransitionTimer = null;
   game.introTimer = CFG.stageIntro; // 구역 시작 배너 표시 동안 적 스폰 정지
-  // 배너: 여행 중인 나라(윗줄)·도시(아랫줄)를 점 없이 줄바꿈으로 크게(big), 구역 번호는 작게(sub) 보여준다(사용자 지시). 여행 꺼짐이면 기존 이름.
-  const place = CFG.tour.enabled ? `${COUNTRIES[game.tourIdx].ko}\n${COUNTRIES[game.tourIdx].cap}` : stageName(game.stage);
+  // 모든 화면에서 나라 / 목적지 규칙을 고정한다. 여행지는 소속 나라 / 여행지명이다.
+  const nation = COUNTRIES[game.tourIdx];
+  const destination = nation && nation.type === 'travel' ? nation.ko : nation && nation.cap;
+  game.cityWord = CFG.tour.enabled ? (destination || '') : '';
+  game.citySlots = [...game.cityWord].filter((ch) => ch.trim()).map((letter) => ({ letter, filled: false }));
+  game.cityDropBursts = 0;
+  game.cityDropTimer = CFG.cityLetters.firstAfter;
+  game.cityLetterQueue = [];
+  game.cityCollectedLetters = new Set();
+  game.cityComplete = false;
+  game.cityAlly = null;
+  if (!game.scoreFloats) game.scoreFloats = [];
+  // 배너: 여행 중인 나라(윗줄)·목적지(아랫줄)를 점 없이 줄바꿈으로 크게(big), 구역 번호는 작게(sub) 보여준다.
+  const place = CFG.tour.enabled ? `${nation.type === 'travel' ? nation.parentCountry : nation.ko}\n${nation.type === 'travel' ? `여행지 ${nation.ko}` : nation.cap}` : stageName(game.stage);
   game.events.push({ type: 'banner', big: place, sub: `구역 ${game.stage}`, dur: CFG.stageIntro });
 }
 
@@ -666,6 +882,14 @@ function checkProgress(game, dt, W, H) {
       game.winTimer -= dt;
       if (game.winTimer <= 0) { game.winTimer = null; game.events.push({ type: 'win' }); }
     }
+    if (game.mapTransitionTimer != null) {
+      game.mapTransitionTimer -= dt;
+      if (game.mapTransitionTimer <= 0 && !game.boss) {
+        game.mapTransitionTimer = null;
+        game.sfx.push('stageclear');
+        game.events.push({ type: 'show-map' });
+      }
+    }
     return;
   }
   if (game.pendingTimer != null) {
@@ -683,6 +907,7 @@ function checkProgress(game, dt, W, H) {
 }
 
 export function stepWorld(game, dt, W, H) {
+  game.fieldW = W; game.fieldH = H;
   // 구역 시작 인트로(다음 구역 배너 표시) 중에는 '적 스폰'과 '진행 판정'만 멈추고,
   // 나머지(발사·아이템 이동·획득·탄·존·충돌)는 평소처럼 진행한다(사용자 지시 2026-07-09).
   const intro = game.introTimer > 0;
@@ -699,6 +924,7 @@ export function stepWorld(game, dt, W, H) {
   stepOptions(game, dt, !game.transitioning); // 옵션기 추종 + 발사(보스 클리어 후 전환 대기 중엔 발사 쉼)
   stepTail(game, dt, !game.transitioning);    // 꼬리 비행기 추종 + 유도탄 발사
   stepFriend(game, dt, W, H, !game.transitioning); // 친구 비행기(어린이 모드) 유영 + 발사
+  stepCityAlly(game, dt, W, H);
   if (!intro) {
     spawnWaves(game, W);
     game.bonusTimer -= dt;           // 보너스 기체 주기 등장(파워업 공급원)
@@ -711,6 +937,14 @@ export function stepWorld(game, dt, W, H) {
   updateEnemyBullets(game, dt, W, H);
   updatePowerups(game, dt, W, H);  // 아이템 이동 - 인트로 중에도 진행
   updateParticles(game, dt);
+  updateScoreFloats(game, dt);
+  if (!game.cityComplete && (game.cityLetterQueue.length || game.cityDropBursts < CFG.cityLetters.bursts)) {
+    game.cityDropTimer -= dt;
+    if (game.cityDropTimer <= 0) {
+      dropCityLetters(game, W);
+      game.cityDropTimer += CFG.cityLetters.every;
+    }
+  }
   tickZone(game, dt);              // 에너지존 주기 피해(적 hp 선차감)
   checkCollisions(game, W, H);     // 아이템 획득 + 피격 - 인트로 중에도 진행
   // 존 등 총알 외 피해로 코어 hp<=0 되어도 일괄 격파 판정.

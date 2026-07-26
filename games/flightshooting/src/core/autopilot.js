@@ -141,6 +141,10 @@ export function decideTarget(game, W, H, pr, homeY, tier, actor, opts) {
   const p = actor || game.player;
   const clearWhenSafe = opts ? opts.clearWhenSafe !== false : true;
   const mate = opts ? opts.mate : null;
+  const preferOtherSide = !!(opts && opts.preferOtherSide && mate);
+  const mateGap = mate ? (opts.mateGap || 0) : 0;
+  const itemBonus = opts && mate ? (opts.itemBonus || 1) : 1;
+  const pickRange = opts && opts.pickRange ? opts.pickRange : PICK_RANGE;
   const simT = tier ? tier.sim : SIM_T;
   const aimDeg = tier ? tier.aimDeg : 0;
   const threatLim = tier ? tier.threats : Infinity;
@@ -176,7 +180,7 @@ export function decideTarget(game, W, H, pr, homeY, tier, actor, opts) {
       if (e.y >= p.y - AIM_MARGIN) continue;
       let sc = e.y; // 아래일수록(친구에 가까울수록) 우선
       // 분담: 상대(플레이어)와 화면 같은 반쪽에 있는 적은 후순위 → 반대쪽 적을 맡는다(반대쪽이 없으면 결국 선택).
-      if (mate && (e.x - W / 2) * (mate.x - W / 2) > 0) sc -= H;
+      if (mate && (e.x - W / 2) * (mate.x - W / 2) > 0) sc -= H * (preferOtherSide ? 2 : 1);
       if (sc > bestSc) { bestSc = sc; tgt = e; }
     }
   }
@@ -195,20 +199,25 @@ export function decideTarget(game, W, H, pr, homeY, tier, actor, opts) {
   let mateItem = null;
   if (mate && game.powerups.length > 1) {
     let md = Infinity;
-    for (const it of game.powerups) { const d = Math.hypot(it.x - mate.x, it.y - mate.y); if (d < md) { md = d; mateItem = it; } }
+    for (const it of game.powerups) {
+      if (it.kind === 'letter') continue;
+      const d = Math.hypot(it.x - mate.x, it.y - mate.y);
+      if (d < md) { md = d; mateItem = it; }
+    }
   }
   // 파워업: 목숨이 이미 최대면 회복 하트(H)는 무시(먹으러 갈 이유가 없다). 이미 아래로 지나친 것도 제외.
   // 남은 것 중 가장 가까운 하나를 실제 위치(세로 포함)로 향해 마중 나간다.
   let pu = null, pd = Infinity;
   const full = game.lives >= (game.maxLives || CFG.player.maxLives);
   for (const it of game.powerups) {
+    if (it.kind === 'letter') continue; // 도시 글자는 사람이 직접 고르는 수집 요소다.
     if (it === mateItem) continue; // 상대 몫 양보(분담) - 아이템이 하나뿐이면 양보 안 함(위 length>1 조건)
     if (it.kind === 'H' && full) continue;
     if (it.y > p.y + 40) continue;
     const d = Math.hypot(it.x - p.x, it.y - p.y);
     if (d < pd) { pd = d; pu = it; }
   }
-  if (!inDanger && pu && pd < PICK_RANGE) targets.push({ x: clamp(pu.x, pr, W - pr), y: clamp(pu.y, topY, botY), bonus: PICK_BONUS });
+  if (!inDanger && pu && pd < pickRange) targets.push({ x: clamp(pu.x, pr, W - pr), y: clamp(pu.y, topY, botY), bonus: PICK_BONUS * itemBonus });
 
   // 여러 수 앞 계획(2단계 빔서치). 각 목표를 한 수(seg=simT/DEPTH초)만 굴려 '도착 지점'과 첫 수 생존을
   // 구하고, 첫 수를 완전히 산 상위 BEAM개만 그 도착 지점에서 두 번째 수까지 이어 굴려 미래 생존을 더한다.
@@ -246,6 +255,11 @@ export function decideTarget(game, W, H, pr, homeY, tier, actor, opts) {
     } else {
       s = seg + (tg._s2 != null ? tg._s2 : seg); // 두 수 총 생존(미확장 안전 후보는 낙관)
       s += tg.bonus * (inDanger ? 0.25 : 1);      // 위험 시 조준·획득 억제(회피 우선), 안전 시 정상(진행)
+      // 보스가 아닐 때 키위새는 플레이어와 같은 자리에 붙지 않는다. 탄막 회피 중에는 제약을 풀어 생존 우선.
+      if (!inDanger && mateGap > 0) {
+        const d = Math.hypot(tg.x - mate.x, tg.y - mate.y);
+        if (d < mateGap) s -= ((mateGap - d) / mateGap) * 2;
+      }
       // 빈 공간 선호: 적·탄이 몰린 곳으로 조준하러 붙는 습성을 줄이고 넓은 공간에서 싸우게 한다. 위험할 땐
       //   강하게(도피 우선). 안전할 땐 약하게(×0.35) 반영하되 '위협이 여럿일 때만' - 탄 하나가 멀리
       //   있는 상황에서까지 미세 이동해 떨리지 않게 게이트를 둔다.
@@ -273,8 +287,8 @@ export function autopilotStep(game, dt, W, H) {
     game.apTarget = { x: p.x, y: homeY, safe: true };
   }
   game.apTimer -= dt;
-  // 탄막이 코앞이면 0.12초(프로)조차 길다. 현재 자리에 멈춰 있을 때 emergencyTime 안에
-  // 충돌하는지 먼저 확인하고, 그렇다면 매 emergencyReact초마다 계획을 새로 세운다.
+  // 탄막이 아주 코앞일 때만 일반 반응 주기를 깨고 반사 회피한다. 이 구간을 넓히거나 너무 자주
+  // 재계획하면, 사람형 지연을 둬도 결과적으로 매 프레임 최적해를 좇는 로봇 움직임이 된다.
   const imminent = simulate(collectThreats(game, p), { x: p.x, y: p.y }, p.x, p.y,
     CFG.player.speed * SIM_DT, W, H, pr, CFG.autopilot.emergencyTime, 0).t < CFG.autopilot.emergencyTime;
   if (game.apTimer <= 0 || imminent) {
@@ -282,15 +296,34 @@ export function autopilotStep(game, dt, W, H) {
     game.apTarget = decideTarget(game, W, H, pr, homeY, tier);
   }
 
-  // 이동: 정한 목표점으로 최고 속도로(관성 없음 - 사용자 지시). 목표 자체가 주기적으로만 바뀐다.
-  // 안전(위협 없음)할 땐 작은 편차를 무시해 떨림을 막는다.
-  const move = CFG.player.speed * dt;
+  // 이동: 목표 방향으로 속도를 서서히 꺾는다. 일반 상황의 가속은 짧은 회피선을 따라가는
+  // 사람다운 관성을 만들고, 충돌 직전만 더 큰 가속으로 탈출한다. apV*는 자동 모드 전용이라
+  // 수동 조작에는 영향을 주지 않는다.
   const bx = game.apTarget.x, by = game.apTarget.y, safe = game.apTarget.safe;
   const dxm = bx - p.x, dym = by - p.y;
-  if (!safe || Math.abs(dxm) > DEADZONE) p.x += clamp(dxm, -move, move);
-  if (!safe || Math.abs(dym) > DEADZONE) p.y += clamp(dym, -move, move);
+  // 안전한 조준의 작은 축별 편차는 고정한다. y 복귀 때문에 x까지 비스듬히 움직이며
+  // 8px짜리 조준 보정을 해 버리는 현상을 막아, 정지해 쏘는 사람다운 안정감을 준다.
+  const goalX = safe && Math.abs(dxm) <= DEADZONE ? p.x : bx;
+  const goalY = safe && Math.abs(dym) <= DEADZONE ? p.y : by;
+  const aimX = goalX - p.x, aimY = goalY - p.y;
+  const shouldMove = !safe || Math.abs(aimX) > 1e-3 || Math.abs(aimY) > 1e-3;
+  const dist = Math.hypot(aimX, aimY);
+  const desiredSpeed = shouldMove && dist > 1e-3 ? CFG.player.speed : 0;
+  const wantX = desiredSpeed ? (aimX / dist) * desiredSpeed : 0;
+  const wantY = desiredSpeed ? (aimY / dist) * desiredSpeed : 0;
+  const accel = imminent ? CFG.autopilot.emergencyAccel : CFG.autopilot.moveAccel;
+  const maxDelta = accel * dt;
+  p.apVx = approach(p.apVx || 0, wantX, maxDelta);
+  p.apVy = approach(p.apVy || 0, wantY, maxDelta);
+  // 목표를 지날 만큼 한 프레임 이동할 때는 그 지점에서 멈춰 방향 반전 진동을 막는다.
+  const moveX = p.apVx * dt, moveY = p.apVy * dt;
+  if (Math.abs(moveX) >= Math.abs(aimX) && Math.sign(moveX) === Math.sign(aimX)) { p.x = goalX; p.apVx = 0; }
+  else p.x += moveX;
+  if (Math.abs(moveY) >= Math.abs(aimY) && Math.sign(moveY) === Math.sign(aimY)) { p.y = goalY; p.apVy = 0; }
+  else p.y += moveY;
   p.x = clamp(p.x, pr, W - pr);
   p.y = clamp(p.y, pr, H - pr);
 }
 
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function approach(v, target, maxDelta) { return v < target ? Math.min(v + maxDelta, target) : Math.max(v - maxDelta, target); }

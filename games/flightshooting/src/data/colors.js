@@ -126,7 +126,8 @@ export const COLORS = {
     land: '#233a5e', border: '#7c9bc8', // border = 국가 경계선(더 밝게 - 잘 보이게, 사용자 지시)
     route: '#ffd24a', visited: '#4ae0c8', current: '#ffd24a',
     candidate: '#7fe3ff', dim: '#7d8db0', plane: '#ffffff',
-    countryLabel: '#9fb0cf', // 나라이름(윗줄) - 수도(아랫줄, 상태색)와 구분되는 흐린 회청색
+    countryLabel: '#ffffff', // 지도 나라명(윗줄): 상태와 무관하게 흰색
+    destinationLabel: '#a6ff4d', // 지도 수도·여행지명(아랫줄): 나라명보다 눈에 띄는 연두색
     bgReady: '#142d4d', bgReadyStroke: '#e8fbff', // 배경 준비 도시: 시안·회청색 버튼 위에 보이는 짙은 남청 별 + 밝은 윤곽
     // 대륙별 채움색(밤하늘 톤에 맞춰 채도 낮춘 구분색). worldmap.js WORLD_PATHS의 c와 매칭.
     continent: {

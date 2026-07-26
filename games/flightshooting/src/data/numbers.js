@@ -37,11 +37,10 @@ export const CFG = {
     // 사이드 총알·유도탄 속도는 강화 3단계마다 한 계단 빨라진다. 실제 = base * (1 + floor(tier/3) * speedPer3).
     //   메인 총알(전방화력)만 예외: 강화 단계와 무관하게 항상 speed 고정으로 발사한다(사용자 지시 2026-07-12).
     speed: 432, speedPer3: 0.15, // 메인 총알·키위새 총알 발사 속도(사이드·유도탄은 별도 값). 360→432(120%, 사용자 지시)
-    // 메인 빔 크기: 단계(tier 0~10)로 길이·굵기 증가. 빔 형태 패턴은 view.drawMainBeam이 tier로 그린다.
-    //   0강화·중간 단계 모두 절반으로 축소(사용자 지시 2026-07-10).
-    // 반폭 W = mainWBase + tier*mainWPer. 가로 폭은 view가 cap(laneGap/2)로 잘라 옆칸 침범을 막는다.
-    //   mainLenPer 1.5 = 단계가 오를수록 빔이 더 길어진다(물결 굽이 등 세로 무늬 여유, 뒤쪽 단계도 모두 그만큼 길게).
-    mainLenBase: 13, mainLenPer: 1.5, mainWBase: 1.3, mainWPer: 0.2,
+    // 메인 빔은 주력 무기: 발별 tier와 전체 전방 화력 모두 길이·폭에 반영한다.
+    // 가로 폭은 레인 안으로 제한하지만, tier 0→10의 차이가 확실히 보이게 성장 폭을 키운다.
+    mainLenBase: 15, mainLenPer: 2.8, mainWBase: 1.5, mainWPer: 0.36,
+    mainVisualAt: 30, mainGrowthLen: 0.48, mainGrowthWidth: 4.4, mainMinWidth: 4.0, mainWidthPerTier: 0.7,
   },
   enemyBullet: { speed: 250, r: 5 },
   // 1스테이지는 첫 강화 전 생존·학습 구간. front 값으로 적탄 발사 간격을 추가로 늦춘다(↑=덜 쏨).
@@ -96,6 +95,9 @@ export const CFG = {
     aiDeadzone: 12,    // 안전할 때 이 픽셀 이내 목표 편차는 무시(떨림 방지)
     aiSim: 0.7,        // 앞을 내다보는 시간(초). 플레이어(1.5)보다 짧게 = 먼 적은 위협으로 안 보고 조준 유지,
                        //   코앞 위협만 회피(hp 5개라 좀 더 대담하게 싸운다). 너무 짧으면 회피 늦어 잘 맞는다
+    moveAccel: 2100,   // 전용 이동 가속도(px/s²). 목표가 바뀌어도 즉시 최고 속도로 꺾지 않는다.
+    mateGap: 96,       // 보스전 밖에서 플레이어와 유지할 최소 거리(px). 같은 자리 겹침 방지.
+    itemBonus: 4,      // 플레이어 몫을 뺀 아이템 수집 우선도(기본 조준보다 적극적으로).
     enterTime: 1.2,    // 날아 들어오는 동안(이 시간 지나야 발사 시작)
     reEnterTime: 0.6,  // 부활 시 재정렬 시간
     inv: 1.2,          // 피격 후 무적(초)
@@ -183,10 +185,10 @@ export const CFG = {
   finalBoss: { rx: 50, ry: 44, hp: 7500, score: 12000 },
   // spawnTop = 보스가 멈춰 서는 중심 y(상단 체력 바와 겹치지 않게 바 아래로 내린다). targetY = spawnTop + ry.
   // bobRamp = 등장 완료 후 좌우 유영이 0에서 최대 속도(bobFreq)까지 서서히 빨라지는 시간(초, 사용자 지시 2026-07-12).
-  boss: { bobAmp: 0.32, bobFreq: 0.15, bobRamp: 7, spawnTop: 62, partScale: 2.1, partHitFlash: 0.16, partScarSparkTime: 1.2 },
+  boss: { bobAmp: 0.32, bobFreq: 0.15, bobRamp: 7, spawnTop: 62, partScale: 2.94, partHitFlash: 0.16, partScarSparkTime: 1.2 },
   // 보스 사망 연출: 주 연쇄 폭발은 dur초, 마지막 폭발 파티클이 모두 사라지면 전환한다.
-  //   maxDur까지 남아 있으면 bossDeath 파티클만 정리해 전환을 보장한다.
-  bossDeath: { burstEvery: 0.1, burstN: 16, shake: 13, dur: 1, finalDur: 1, maxDur: 3, finalBurstN: 52 },
+  //   maxDur(2초)를 넘기면 모든 잔상·폭발 파티클을 정리해 지도에 남지 않게 한다.
+  bossDeath: { burstEvery: 0.1, burstN: 16, shake: 13, dur: 1, finalDur: 1, maxDur: 2, finalBurstN: 52 },
   // 부위 파괴형 보스(docs/06). 스타일 = 코어 + 부위(weapon 포탑 / shield 방어구).
   //   총 hp(miniBoss/finalBoss 공식)를 coreRatio(코어) + 각 부위 hpRatio 합으로 나눈다(합 = 1).
   //   role weapon = 자기 발사 패턴 보유(부수면 그 패턴 영구 정지). role shield = 코어를 가림(다 부수면 코어 노출).
@@ -211,7 +213,9 @@ export const CFG = {
     bio: { coreRatio: 0.34, partScore: 180, corePattern: 'aim3', coreEvery: 1.6, parts: [
       { id: 'armL', role: 'shield', ox: -38, oy: 4,   r: 13, hpRatio: 0.22, shape: 'tentacle' },
       { id: 'armR', role: 'shield', ox:  38, oy: 4,   r: 13, hpRatio: 0.22, shape: 'tentacle' },
-      { id: 'armT', role: 'shield', ox:   0, oy: -34, r: 12, hpRatio: 0.22, shape: 'tentacle' },
+      // 11구역 첫 생체 보스부터 공격이 있어야 한다. 좌우 촉수는 코어를 가리고,
+      // 상단 촉수는 방어를 포기한 대신 링 탄막을 쏘는 명확한 공략 대상이다.
+      { id: 'armT', role: 'weapon', pattern: 'ring', ox: 0, oy: -34, r: 12, hpRatio: 0.22, fireEvery: 2.0, shape: 'tentacle' },
     ], upgrade: { fireMul: 0.7, coreMul: 0.7, extraParts: [
       { id: 'armW', role: 'weapon', pattern: 'fan', ox: 0, oy: 34, r: 12, hpRatio: 0.2, fireEvery: 1.5, shape: 'tentacle' },
       { id: 'fangL', role: 'weapon', pattern: 'aim3', ox: -48, oy: 26, r: 11, hpRatio: 0.16, fireEvery: 1.7, shape: 'tentacle' },
@@ -253,11 +257,14 @@ export const CFG = {
   voidStage: { from: 21, hpMul: 1.7, coilFrom: 26, serpentFrom: 28 },
   // 31구역 이후 추가 체력 배수(빛 생명체 구간 - 최종 10구역 난이도). voidStage 위에 곱해진다. dev 훅 실측 후 조정.
   aeonStage: { from: 31, hpMul: 1.3 },
-  stageIntro: 2.2, // 구역 시작 배너 표시 동안 적 스폰 정지(초)
+  stageIntro: 3.1, // 2.46초 나라/도시 배너가 HUD에 안착할 때까지 적 스폰 정지(초)
   maxedBonus: 300, // 파츠·목숨이 이미 최대일 때 파워업 획득 시 대신 주는 점수
   starCount: 70,
   // 발열/성능: 화면에 쌓이는 오브젝트 상한(초과분은 오래된 것부터 제거).
-  limits: { bullets: 160, eBullets: 140, particles: 240 },
+  limits: { bullets: 160, eBullets: 140, particles: 240, scoreFloats: 12 },
+  // 도시 글자 수집: 시작 직후부터 목표·함정을 하나씩 순차 드롭하고, 완성 전에는 보스전에도 계속 반복한다.
+  cityLetters: { bursts: Infinity, firstAfter: 0.45, every: 7.38, fallSpeed: 46, correctScore: 0, completeScore: 0, wrongScore: 0, floatLife: 1.15 },
+  cityGuard: { r: 23, hp: 36, speed: 100, allyHp: 3, guideTick: 0.18, guideDmg: 1, farewellDuration: 5, farewellSpeed: 190, rivalSweeps: 5, rivalSweepSpeed: 170, rivalFireEvery: 1.35, rivalShotSpeed: 210 },
   // 자동 플레이(autopilot) 실력 티어. 인간 실측 근거 → docs/plans/research-2026-07-09-human-like-game-ai.md.
   //   react = 조작 갱신 주기(초, 반응 지연). 사람은 초당 대여섯 번만 방향을 바꾼다(문헌 반응 250~410ms).
   //   aimDeg = 조준 각오차 표준편차(도). 사람은 프로도 완벽 조준 못 함(FPS 히트율 77~87%).
@@ -270,14 +277,17 @@ export const CFG = {
     resumeDelay: 0.5,
     // 생존 우선 안전망: 실제 탄보다 넓게 피하고, 곧 발사할 탄도 미리 위험으로 본다.
     // emergencyTime 안에 부딪힐 길이면 일반 사람형 반응 주기를 무시하고 emergencyReact마다 재계획한다.
-    safetyPad: 15, shotForecast: 0.9, emergencyTime: 0.52, emergencyReact: 0.04,
+    safetyPad: 15, shotForecast: 0.9,
+    // 일반 이동은 가속으로 방향을 잇고, 실제 충돌 직전만 더 큰 가속으로 반사 회피한다.
+    // emergencyTime을 짧게 두어 평상시에는 계획을 끝없이 고쳐 쓰지 않는다.
+    moveAccel: 2300, emergencyAccel: 6800, emergencyTime: 0.28, emergencyReact: 0.08,
     tiers: {
       // 전반 상향(2026-07-14 사용자 지시 "초보도 똑똑하게"): 예측 시간 sim·동시 위협 threats↑, 반응 react↓.
       //   실력 차이(단조 증가)는 유지. sim은 2단계 빔서치에서 각 수 sim/2초 지평이 된다.
       beginner:     { react: 0.30, aimDeg: 8,   sim: 0.9, threats: 7 },
       intermediate: { react: 0.25, aimDeg: 4,   sim: 1.3, threats: 10 },
       advanced:     { react: 0.20, aimDeg: 2,   sim: 1.7, threats: 14 },
-      pro:          { react: 0.12, aimDeg: 0.8, sim: 2.5, threats: 999 },
+      pro:          { react: 0.16, aimDeg: 0.8, sim: 2.5, threats: 22 },
     },
   },
   // 세계 여행(docs/10): 구역 보스 격파 후 세계지도가 떠 다음 목적지(이웃 나라)를 고른다.
@@ -307,6 +317,7 @@ export const CFG = {
     frameNear: 6,
     zoomStep: 1.35, zoomWMin: 90, zoomWMax: 1400,
     borderW: 0.9, // 국가 경계선 굵기(지도 좌표, s 곱) - 잘 보이게 키움(사용자 지시)
+    verticalPanPad: 500, // 북·남쪽 대륙 밖으로 허용할 지도 좌표 여백(사용자 지시 500px)
   },
   // 디오라마(사진) 배경 위에서 게임 요소(비행기·적)가 묻히지 않게 요소 둘레에 두르는 밝은 후광 번짐 반경(px).
   //   배경 밝기는 그대로 두고 요소만 띄운다(사용자 지시 "맵 어두워지는 건 싫다"). 우주/성운 배경에선 미적용.

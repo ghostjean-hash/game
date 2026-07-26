@@ -52,7 +52,7 @@ export function playerFire(game) {
     game.bullets.push({
       x: p.x + b.xOff, y: p.y - p.r + Math.abs(b.xOff) * vStag, // 바깥 탄일수록 살짝 뒤(아래) = V자 대형
       vx: 0, vy: -speed,
-      r: spec.r, dmg: b.dmg, kind: 'main', tier: b.tier, // tier로 view가 형태·색 분기
+      r: spec.r, dmg: b.dmg, kind: 'main', tier: b.tier, front: game.front, // tier·전방화력으로 view가 성장 연출
     });
   }
   game.sfx.push('shoot');

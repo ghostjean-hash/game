@@ -4,7 +4,7 @@ import { COLORS } from '../data/colors.js';
 
 // 구역 스케일 반영 체력: 기본 hp × 구역 배수, 11구역부터 추가 배수(hardStage) × 난이도 배수(diffMul).
 //   diffMul = 난이도별 적 체력 배수(game.enemyHpMul, 쉬움 0.85 ~ 매우 어려움 1.6). 미지정 시 1(보통).
-function scaledHp(base, stage, diffMul = 1) {
+export function scaledHp(base, stage, diffMul = 1) {
   let hp = Math.ceil((base || 1) * (1 + (stage - 1) * CFG.enemyHpScale));
   if (stage >= CFG.hardStage.from) hp = Math.ceil(hp * CFG.hardStage.hpMul);
   if (stage >= CFG.voidStage.from) hp = Math.ceil(hp * CFG.voidStage.hpMul); // 21~30 이질 적 구간 가속

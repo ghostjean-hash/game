@@ -30,7 +30,7 @@
 | 탄 수 데미지 | 1,1,2,2,3,3 | `1 + floor((shots-1)/2)` |
 | 발별 진화 | 7~66단계 = 가운데부터 순차 tier 1~10 | 6발 고정, 6스텝마다 그 탄 tier +1(최대 10). **발별 순차**(일괄 아님) |
 | 진화 데미지 | `front.shapeDmg` 1/티어 | 진화 탄만 티어당 +1 |
-| 빔 크기 | `mainLenBase` 13 + tier×`mainLenPer` 1.5(길이) / `mainWBase` 1.3 + tier×`mainWPer` 0.2(반폭) | tier↑ 길게. 무늬 가로 반경은 view가 cap(laneGap/2)로 잘라 침범 방지(맞닿음은 허용). 형태는 단계마다 다른 무늬(마디·실선·톱니·구슬·마름모·물결·이중·나선·화살촉·링·플라즈마, docs/05) |
+| 빔 크기 | `mainLenBase` 15 + tier×`mainLenPer` 2.8(길이) / 전체 전방 화력 성장 보정 | 전방 화력 전체 단계와 tier 모두 길이·폭에 반영한다. 메인 빔이 화면의 주력 무기로 먼저 읽히고, 무늬 가로 반경은 레인 안으로 제한한다. |
 | 나란히 간격 | `front.laneGap` 12 | 여러 발 가로 간격(부채 아님, 직진) |
 | V자 대형 | `front.vStagger` 0.42 | 바깥 탄일수록 뒤로 밀려 격자 뭉침 해소 |
 
@@ -55,7 +55,7 @@
 | 무기 단계 | `tail.weaponMax` 11 | 4대 후 앞(낮은 단계) 비행기부터 순차 무기 진화(`weapon` 1~11 = tier 0~10) |
 | 발사 쿨타임 | `tail.missileEvery` 2.7초 | 유도탄 발사 간격(느린 대신 단발 강함) |
 | 시각 | `view.drawMissile` + `tailMissile` 11색(단계별 다른 냉색) | 형태 진화(삼각→큰 삼각→화살표→화살표+꼬리깃→삼각로켓→로켓→미사일→다탄두). 로켓부터 꼬리불·노즈 발광 |
-| 크기 | `tail.missileR` 2.6 + 단계당 `missileRGrow` 0.16 | 무기 단계↑ 커짐. 0강화 가시성 확보 위해 base↑·grow↓, 만렙 크기는 유지(사용자 지시 2026-07-12) |
+| 크기 | `tail.missileR` 2.6 + 단계당 `missileRGrow` 0.16 | 무기 단계↑ 커짐. 본체는 짧게 유지하고 추진 불꽃을 분리해 빠른 화면에서도 본체·추진부가 혼동되지 않게 한다. |
 | 속도 | `tail.missileSpeed` 240 | 진화 3단계마다 계단 증가(speedMul) |
 | 데미지 | `tail.missileDmgBase` 3 + 단계당 `missileDmgGrow` 1.5 | 단발 위력 큼(방패병 공략) |
 | 유도 | `missileTurn` 3.2, `missileAccel` 520 | 가장 가까운 적 추적 |

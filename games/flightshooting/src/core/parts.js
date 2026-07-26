@@ -135,7 +135,9 @@ export function stepOptions(game, dt, canFire = true) {
     // 진화 tier: 사이드 전 대수(maxPerSide×2)를 채운 뒤 안쪽(rank 0)부터 한 발씩 진화(발별 순차). 그 대수 스텝마다 티어 +1.
     const tier = evo >= o.rank + 1 ? Math.min(Math.floor((evo - (o.rank + 1)) / (OPT.maxPerSide * 2)) + 1, maxTier) : 0;
     const speed = OPT.laserSpeed * speedMul(tier);       // 진화한 탄일수록 속도↑
-    game.bullets.push({ x: o.x, y: o.y - 6, vx: Math.sin(rad) * speed, vy: -Math.cos(rad) * speed, r: laserR, dmg: laserDmg + tier, kind: 'laser', tier });
+    // 개별 tier와 별개로 S 전체 진행도를 탄에 보낸다. 아직 차례가 오지 않은 탄도
+    // 작은 공통 표식으로 방금 얻은 강화 반응을 보여 준다(렌더 전용, 피해량 불변).
+    game.bullets.push({ x: o.x, y: o.y - 6, vx: Math.sin(rad) * speed, vy: -Math.cos(rad) * speed, r: laserR, dmg: laserDmg + tier, kind: 'laser', tier, evo, optionCount: n });
   }
 }
 
@@ -145,6 +147,9 @@ export function stepTail(game, dt, canFire = true) {
   const p = game.player;
   if (!p || !game.tail) return;
   const k = Math.min(1, TAIL.follow * dt);
+  // 대수 구간(1~4)과 이후 기체별 무기 상승을 한 줄의 편대 진화도로 합친다.
+  // 각 미사일의 weapon 실루엣은 그대로 두고, 이 값은 편대 공통의 작은 표식에만 쓴다.
+  const tailForm = game.tail.length + game.tail.reduce((sum, tail) => sum + Math.max(0, (tail.weapon || 1) - 1), 0);
   let fired = false;
   for (let idx = game.tail.length - 1; idx >= 0; idx--) {
     const o = game.tail[idx];
@@ -161,7 +166,7 @@ export function stepTail(game, dt, canFire = true) {
       x: o.x, y: o.y + 4, vx: (idx % 2 === 0 ? -1 : 1) * 50, vy: -sp0 * 0.4,
       r: TAIL.missileR + (w - 1) * TAIL.missileRGrow,
       dmg: TAIL.missileDmgBase + (w - 1) * TAIL.missileDmgGrow,
-      kind: 'missile', weapon: w,
+      kind: 'missile', weapon: w, tailForm,
     });
     fired = true;
   }
@@ -198,8 +203,9 @@ export function homeMissiles(game, dt) {
       dvy += (-1 - dvy) * Math.min(1, TAIL.missileTurn * dt); // 표적 없으면 위로
     }
     const nl = Math.hypot(dvx, dvy) || 1;
-    const maxSp = TAIL.missileSpeed * speedMul((b.weapon || 1) - 1); // 진화 단계로 최고 속도 상승
-    const sp = Math.min(maxSp, cur + TAIL.missileAccel * dt);
+    const maxSp = TAIL.missileSpeed * speedMul((b.weapon || 1) - 1);
+    const accel = TAIL.missileAccel;
+    const sp = Math.min(maxSp, cur + accel * dt);
     b.vx = (dvx / nl) * sp;
     b.vy = (dvy / nl) * sp;
   }

@@ -7,22 +7,29 @@ import { BG_POOLS, COUNTRY_BG } from '../data/backgroundPools.js';
 import { FALLBACK_SCENE_SRC, FALLBACK_SCENE_BY_COUNTRY } from '../data/fallbackScenes.js';
 
 // 바푸리(와라와라) 원화. 충돌·조작 반지름과 독립된 렌더 전용 자산이며, 로드 실패 시 기존 캔버스 도형을 쓴다.
+// 바푸리의 얼굴은 정면 원화로 유지한다. 공격 방향은 화면 위쪽 투사체와 추진 연출로 읽힌다.
 const BAPURI_SPRITE_SRC = 'assets/characters/bapuri-sprite-v2.png';
 const BAPURI_SPRITE_CROP = { x: 140, y: 400, w: 745, h: 700 };
 const bapuriSprite = { img: new Image(), ok: false };
 bapuriSprite.img.onload = () => { bapuriSprite.ok = true; };
 bapuriSprite.img.src = BAPURI_SPRITE_SRC;
-const KIWI_SPRITE_SRC = 'assets/characters/kiwi-sprite-v2.png';
+// 키위새도 적 방향(위)을 향해 부리를 겨누고 레이저를 쏘는 후방 비행 구도다.
+const KIWI_SPRITE_SRC = 'assets/characters/kiwi-upward-v3.png';
+const KIWI_RENDER_SCALE = 1.5;
 const kiwiSprite = { img: new Image(), ok: false };
 kiwiSprite.img.onload = () => { kiwiSprite.ok = true; };
 kiwiSprite.img.src = KIWI_SPRITE_SRC;
+// 도시 글자 아이템의 게임화 배경. HUD 슬롯이 아니라 실제로 화면에 떨어지는 단어에만 쓴다.
+const cityLetterClover = { img: new Image(), ok: false };
+cityLetterClover.img.onload = () => { cityLetterClover.ok = true; };
+cityLetterClover.img.src = 'assets/ui/city-letter-clover.png';
 
 // 투사체 PNG는 처음 필요한 순간에만 불러온다. 이미지 로드 실패나 첫 프레임에는 기존 캔버스 도형을
 // 그대로 써서 게임 진행·충돌·발사 타이밍이 자산 상태에 영향을 받지 않게 한다.
 const projectileSpriteCache = new Map();
 const PROJECTILE_RENDER = {
-  main: { minHeight: 18, heightMul: 1.45, laneFill: 0.9 },
-  side: { sizeMul: 3.2 },
+  main: { minHeight: 22, heightMul: 1.55, laneFill: 1 },
+  side: { sizeMul: 2.35 },
   missile: { heightMul: 7, tierHeight: 0.3, widthMul: 4 },
   friend: { widthMul: 2 },
   enemy: { sizeMul: 2.8 },
@@ -108,6 +115,19 @@ function drawPowerupSprite(ctx, kind, radius, time) {
 
 // 동행 비행기 원화. 옵션기(S)와 꼬리기(T)는 서로 다른 정령 실루엣을 쓰며, 로드 실패 시 기존 도형을 유지한다.
 const companionSpriteCache = new Map();
+function drawCityGuardianSprite(ctx, name, span) {
+  let entry = companionSpriteCache.get(name);
+  if (!entry) {
+    entry = { img: new Image(), ok: false };
+    entry.img.onload = () => { entry.ok = true; };
+    entry.img.src = 'assets/characters/' + name;
+    companionSpriteCache.set(name, entry);
+  }
+  if (!entry.ok) return false;
+  const scale = Math.min(span / entry.img.width, span / entry.img.height);
+  ctx.drawImage(entry.img, -entry.img.width * scale / 2, -entry.img.height * scale / 2, entry.img.width * scale, entry.img.height * scale);
+  return true;
+}
 function drawCompanionSprite(ctx, name, span) {
   let entry = companionSpriteCache.get(name);
   if (!entry) {
@@ -380,6 +400,7 @@ export function render(ctx, game, W, H) {
   if (dioBg) { ctx.save(); ctx.shadowColor = COLORS.entityShadow; ctx.shadowBlur = CFG.entityShadowBlur; }
   drawPowerups(ctx, game);
   drawEnemies(ctx, game);
+  drawCityAlly(ctx, game);
   drawBoss(ctx, game);
   if (dioBg) ctx.restore();
   drawEnemyBullets(ctx, game); // 적탄: 그림자 대신 어두운 윤곽선(drawEnemyBullets 내부에서)
@@ -392,6 +413,7 @@ export function render(ctx, game, W, H) {
   drawFriend(ctx, game);      // 친구 비행기(어린이 모드) + hp 점 + 말풍선(맨 위)
   if (dioBg) ctx.restore();
   drawParticles(ctx, game);
+  drawScoreFloats(ctx, game);
   drawBombFlash(ctx, game, W, H); // 봄 획득 시 화면 전체 은은한 폭발 섬광
 }
 
@@ -411,7 +433,7 @@ function drawBombFlash(ctx, game, W, H) {
 function drawFriend(ctx, game) {
   const f = game.friend;
   if (!f || f.down) return;
-  const r = f.r;
+  const r = f.r * KIWI_RENDER_SCALE;
   const c = COLORS.friend;
   if (f.inv > 0 && Math.floor(f.inv * 12) % 2 === 0) { drawFriendSpeech(ctx, f); return; } // 피격 깜빡(말풍선은 유지)
   ctx.save();
@@ -446,7 +468,7 @@ function drawFriend(ctx, game) {
 
 // 친구 hp 점(작은 하트 대신 점): 몸 아래 가로로. 채워진 = 남은 hp(핑크), 빈 = 잃음(흐림). HUD 아님(강화 정보 미표시).
 function drawFriendHp(ctx, f) {
-  const n = f.maxHp, gap = 6, y = f.y + f.r + 7;
+  const n = f.maxHp, gap = 6, y = f.y + f.r * KIWI_RENDER_SCALE + 7;
   const x0 = f.x - ((n - 1) * gap) / 2;
   ctx.save();
   for (let i = 0; i < n; i++) {
@@ -463,7 +485,7 @@ function drawFriendSpeech(ctx, f) {
   ctx.font = 'bold 12px ui-monospace, monospace';
   const tw = ctx.measureText(f.msg).width;
   const padX = 8, h = 20, w = tw + padX * 2;
-  const x = f.x - w / 2, y = f.y - f.r - 16 - h;
+  const x = f.x - w / 2, y = f.y - f.r * KIWI_RENDER_SCALE - 16 - h;
   ctx.fillStyle = 'rgba(18,22,32,0.92)';
   ctx.strokeStyle = COLORS.friend.glow;
   ctx.lineWidth = 1.5;
@@ -763,6 +785,10 @@ function drawPlayer(ctx, game) {
     const w = r * 2.7, h = r * 2.54;
     ctx.drawImage(bapuriSprite.img, c.x, c.y, c.w, c.h, -w * 0.5, -h * 0.5, w, h);
     ctx.shadowBlur = 0;
+    // 바푸리는 화면 위(북쪽)를 향해 난다. 원화의 정면 입은 북쪽 앞면에 가려지는 시점이므로
+    // 플레이 중에는 몸 색으로 덮어 눈만 윗면에서 살짝 보이게 한다.
+    ctx.fillStyle = COLORS.warawara;
+    ctx.beginPath(); ctx.ellipse(0, r * 0.2, r * 0.2, r * 0.26, 0, 0, Math.PI * 2); ctx.fill();
     // PNG 원화는 기본 표정을 포함한다. 피격·획득 순간에는 기존 감정 연출을 위에 더한다.
     if (p.emo === 'cry') {
       ctx.fillStyle = COLORS.warawaraTear;
@@ -828,6 +854,62 @@ function drawCoilArcs(ctx, game) {
   ctx.restore();
 }
 
+function drawCityGuardianTag(ctx, unit, color) {
+  ctx.save();
+  ctx.font = 'bold 11px ui-monospace, monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const label = unit.cityName || '';
+  const y = unit.tagY ?? unit.r + 16, w = ctx.measureText(label).width + 12;
+  ctx.fillStyle = 'rgba(10,16,28,0.9)'; ctx.strokeStyle = color; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.roundRect(-w / 2, y - 8, w, 16, 5); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.fillText(label, 0, y);
+  if (unit.msg && unit.msgTimer > 0) {
+    const tw = ctx.measureText(unit.msg).width + 16, by = -unit.r - 42;
+    ctx.beginPath(); ctx.roundRect(-tw / 2, by, tw, 22, 7); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#fff'; ctx.fillText(unit.msg, 0, by + 11);
+  }
+  ctx.restore();
+}
+
+function drawCityGuideBeam(ctx, ally) {
+  const target = ally.beamTarget;
+  if (!target || target.dead) return;
+  const sx = ally.x, sy = ally.y - ally.r * 0.72;
+  ctx.save();
+  // 유도선: 발사체가 날아가는 레이저가 아니라 현재 표적까지 계속 붙는 가는 에너지 끈.
+  ctx.strokeStyle = 'rgba(89, 255, 221, 0.34)'; ctx.lineWidth = 6;
+  ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(target.x, target.y); ctx.stroke();
+  ctx.strokeStyle = '#d8fff8'; ctx.lineWidth = 1.7;
+  ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(target.x, target.y); ctx.stroke();
+  ctx.restore();
+}
+
+function drawCityAllyHp(ctx, ally) {
+  const gap = 13, x0 = ally.x - ((ally.maxHp - 1) * gap) / 2, y = ally.y + ally.r + 8;
+  ctx.save();
+  for (let i = 0; i < ally.maxHp; i++) {
+    const x = x0 + i * gap;
+    ctx.beginPath();
+    ctx.moveTo(x, y + 4); ctx.bezierCurveTo(x - 8, y - 1, x - 4, y - 7, x, y - 3);
+    ctx.bezierCurveTo(x + 4, y - 7, x + 8, y - 1, x, y + 4); ctx.closePath();
+    ctx.fillStyle = i < ally.hp ? '#ff5978' : 'rgba(255,255,255,0.2)'; ctx.fill();
+    ctx.strokeStyle = i < ally.hp ? '#ffe7ed' : 'rgba(255,255,255,0.3)'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawCityAlly(ctx, game) {
+  const a = game.cityAlly;
+  if (!a) return;
+  drawCityGuideBeam(ctx, a);
+  ctx.save(); ctx.translate(a.x, a.y);
+  if (!drawCityGuardianSprite(ctx, 'city-guardian-ally-north-v5-short-horn.png', a.r * 2.8)) {
+    ctx.fillStyle = '#54e5d5'; ctx.beginPath(); ctx.arc(0, 0, a.r, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+  drawCityAllyHp(ctx, a);
+  drawCityGuardianTag(ctx, { ...a, tagY: a.r + 34 }, '#67ffe7');
+}
+
 // 적 = 요정·정령: 공통으로 둥근 몸 + 눈, 종류별 특징(꼬리불·날개·방패·균열·화살)을 얹는다.
 function drawEnemies(ctx, game) {
   drawCoilArcs(ctx, game); // 코일 아크는 노드 몸체 아래에 먼저
@@ -836,6 +918,12 @@ function drawEnemies(ctx, game) {
     ctx.translate(e.x, e.y);
     ctx.fillStyle = e.color;
     const r = e.r;
+    if (e.cityRole === 'rival') {
+      drawCityGuardianSprite(ctx, 'city-guardian-rival.png', r * 2.8);
+      drawCityGuardianTag(ctx, e, '#ff8790');
+      ctx.restore();
+      continue;
+    }
     if (drawEnemySprite(ctx, e)) {
       drawEnemySpriteEffects(ctx, e, r);
       ctx.restore();
@@ -1115,6 +1203,35 @@ function drawBossPart(ctx, part, sc) {
   ctx.restore();
 }
 
+// 계통 전체의 진행도는 발별 tier와 별도로 작은 선단 문양으로 보인다. 한 발의 tier가 오를
+// 차례를 기다리지 않아도 P를 먹은 직후 탄두가 바뀌었다는 피드백을 주되, 주력 빔의 실루엣을
+// 덮지 않도록 선단의 짧은 구조만 쓴다.
+function drawMainEvolutionMark(ctx, b, ang, maxW, maxH) {
+  const step = Math.max(0, (b.front || 1) - 1);
+  const phase = step % 6;
+  const era = Math.floor(step / 6);
+  const w = Math.max(2.2, Math.min(maxW * 0.34, 7));
+  const y = -maxH * 0.36;
+  ctx.save();
+  ctx.translate(b.x, b.y); ctx.rotate(ang);
+  ctx.globalAlpha = 0.8 + Math.min(0.16, era * 0.018);
+  ctx.fillStyle = '#f4ffff'; ctx.strokeStyle = '#f4ffff'; ctx.lineWidth = Math.max(1, w * 0.28);
+  if (phase === 0) { // 단일 창끝
+    ctx.beginPath(); ctx.moveTo(0, y - w * 1.5); ctx.lineTo(w, y + w * 0.7); ctx.lineTo(-w, y + w * 0.7); ctx.closePath(); ctx.fill();
+  } else if (phase === 1) { // 마름모 선단
+    ctx.beginPath(); ctx.moveTo(0, y - w * 1.45); ctx.lineTo(w, y); ctx.lineTo(0, y + w * 1.15); ctx.lineTo(-w, y); ctx.closePath(); ctx.fill();
+  } else if (phase === 2) { // 양날 창끝
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(0, y - w * 1.35); ctx.lineTo(s * w * 1.3, y + w * 0.9); ctx.lineTo(s * w * 0.26, y + w * 0.58); ctx.closePath(); ctx.fill(); }
+  } else if (phase === 3) { // 갈고리형 화살촉
+    ctx.beginPath(); ctx.moveTo(0, y - w * 1.55); ctx.lineTo(w * 1.35, y + w * 0.35); ctx.lineTo(w * 0.42, y + w * 0.18); ctx.lineTo(0, y + w * 1.1); ctx.lineTo(-w * 0.42, y + w * 0.18); ctx.lineTo(-w * 1.35, y + w * 0.35); ctx.closePath(); ctx.fill();
+  } else if (phase === 4) { // 선단 고리
+    ctx.lineWidth = Math.max(1, w * 0.32); ctx.beginPath(); ctx.arc(0, y, w * 0.92, 0, Math.PI * 2); ctx.stroke();
+  } else { // 세 갈래 관
+    for (const x of [-w * 0.72, 0, w * 0.72]) { ctx.beginPath(); ctx.moveTo(x, y + w * 0.72); ctx.lineTo(x, y - w * 1.25); ctx.lineTo(x + w * 0.28, y - w * 0.72); ctx.closePath(); ctx.fill(); }
+  }
+  ctx.restore();
+}
+
 // 메인 총알 = 레이저 빔. 강화 단계(tier 0~10)마다 '서로 다른 무늬 패턴'이 나온다(사용자 지시 2026-07-12 - 다양한 패턴 유지).
 //   0 가는 실선 / 1 마디 / 2 톱니 / 3 구슬 체인 / 4 마름모 체인 / 5 물결 / 6 이중 빔 / 7 나선 / 8 화살촉 체인 / 9 링 체인 / 10 플라즈마.
 //   (사용자 지정: 새 0·1·2 = 예전 0·2·6 무늬 = 실선·마디·톱니. 3~10은 서로 다른 패턴.)
@@ -1122,24 +1239,29 @@ function drawBossPart(ctx, part, sc) {
 function drawMainBeam(ctx, b) {
   const t = b.tier || 0;
   const col = COLORS.mainTier[Math.min(t, COLORS.mainTier.length - 1)];
-  const len = CFG.bullet.mainLenBase + t * CFG.bullet.mainLenPer;
-  const bw = CFG.bullet.mainWBase + t * CFG.bullet.mainWPer;
+  // 발별 진화뿐 아니라 전방 화력 전체 단계도 빔의 존재감을 키운다. 중앙 몇 발만 진화하던
+  // 구간에서도 플레이어는 P를 먹을 때마다 주력 무기가 자란다고 느낀다.
+  const growth = Math.min(1, Math.max(0, ((b.front || 1) - 1) / CFG.bullet.mainVisualAt));
+  const len = (CFG.bullet.mainLenBase + t * CFG.bullet.mainLenPer) * (1 + growth * CFG.bullet.mainGrowthLen);
+  const bw = CFG.bullet.mainWBase + t * CFG.bullet.mainWPer + growth * 0.55;
   const top = -len / 2, h = len;
   const HALF = CFG.parts.front.laneGap / 2;      // 레인 반폭(가로 반경이 이걸 넘으면 옆칸 침범)
   const cap = (x) => Math.min(x, HALF);
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
   const mainFile = `player-main-tier-${Math.min(t, 10)}.png`;
-  const maxH = Math.max(PROJECTILE_RENDER.main.minHeight, len * PROJECTILE_RENDER.main.heightMul * (1 + t * 0.07));
-  const maxW = HALF * 2 * PROJECTILE_RENDER.main.laneFill;
+  const maxH = Math.max(PROJECTILE_RENDER.main.minHeight, len * PROJECTILE_RENDER.main.heightMul * (1 + t * 0.09));
+  const maxW = Math.min(HALF * 2 * PROJECTILE_RENDER.main.laneFill,
+    CFG.bullet.mainMinWidth + t * CFG.bullet.mainWidthPerTier + growth * CFG.bullet.mainGrowthWidth);
   if (drawProjectileSprite(ctx, mainFile, b.x, b.y, ang, maxW, maxH)) {
     // 상위 강화는 PNG 뒤쪽 잔광도 길게 남겨, 발 수가 같아도 tier 상승이 확실히 느껴지게 한다.
     if (t > 0) {
       ctx.save();
-      ctx.globalAlpha = Math.min(0.42, 0.08 + t * 0.035);
-      ctx.strokeStyle = col; ctx.lineWidth = Math.min(HALF * 1.4, 1.2 + t * 0.22);
+      ctx.globalAlpha = Math.min(0.55, 0.1 + t * 0.04 + growth * 0.16);
+      ctx.strokeStyle = col; ctx.lineWidth = Math.min(HALF * 1.5, 1.4 + t * 0.28 + growth * 0.8);
       ctx.beginPath(); ctx.moveTo(b.x, b.y + maxH * 0.35); ctx.lineTo(b.x, b.y + maxH * (0.7 + t * 0.06)); ctx.stroke();
       ctx.restore();
     }
+    drawMainEvolutionMark(ctx, b, ang, maxW, maxH);
     return;
   }
   ctx.save();
@@ -1194,6 +1316,7 @@ function drawMainBeam(ctx, b) {
     ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.roundRect(-w * 0.35, top + h * 0.04, w * 0.7, h * 0.92, w * 0.35); ctx.fill();
   }
   ctx.restore();
+  drawMainEvolutionMark(ctx, b, ang, maxW, maxH);
 }
 
 // 별/스파클 헬퍼(사이드 총알 7~9단계용). 원점 기준, 위=진행방향.
@@ -1203,16 +1326,36 @@ function star(ctx, pts, outer, inner) {
   ctx.closePath(); ctx.fill();
 }
 
+function drawSideEvolutionMark(ctx, b, ang, R) {
+  const evo = b.evo || 0;
+  if (evo <= 0) return;
+  const phase = (evo - 1) % 6;
+  const r = Math.max(1.25, R * 0.32);
+  ctx.save();
+  ctx.translate(b.x, b.y); ctx.rotate(ang);
+  ctx.globalAlpha = 0.78; ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = Math.max(0.9, r * 0.55);
+  if (phase === 0) { ctx.beginPath(); ctx.arc(0, -R * 0.75, r, 0, Math.PI * 2); ctx.fill(); }
+  else if (phase === 1) { for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(0, -R * 0.28); ctx.lineTo(s * R * 0.72, -R * 0.8); ctx.stroke(); } }
+  else if (phase === 2) { ctx.beginPath(); ctx.moveTo(0, -R * 1.02); ctx.lineTo(r * 1.8, -R * 0.58); ctx.lineTo(0, -R * 0.16); ctx.lineTo(-r * 1.8, -R * 0.58); ctx.closePath(); ctx.fill(); }
+  else if (phase === 3) { ctx.beginPath(); ctx.moveTo(-R * 0.76, -R * 0.7); ctx.lineTo(0, -R * 1.08); ctx.lineTo(R * 0.76, -R * 0.7); ctx.stroke(); }
+  else if (phase === 4) { ctx.beginPath(); ctx.arc(0, -R * 0.56, r * 1.55, 0, Math.PI * 2); ctx.stroke(); }
+  else { for (const x of [-r * 1.15, 0, r * 1.15]) { ctx.fillRect(x - r * 0.28, -R * 1.02, r * 0.56, r * 1.55); } }
+  ctx.restore();
+}
+
 // 사이드 총알. 둥근 형태(이슬→구슬→방울→섬광)에서 고리→별→태양으로 진화(tier 0~10). 진행 방향으로 회전.
 function drawSideShape(ctx, b) {
   const t = b.tier || 0;
   const col = COLORS.bulletShapeTier[Math.min(t, COLORS.bulletShapeTier.length - 1)];
-  // 크기: b.r*3.2 = tier0 기본(유지), t*계수 = 단계 증가분. 계수 0.7→0.22로 낮춰 tier10을 이전의 약 2/3로 축소(사용자 지시 2026-07-12).
-  const R = b.r * 3.2 + t * 0.22;
+  // 사이드는 보조 무기다. 성장 형태는 유지하되 메인 빔을 가리지 않도록 렌더 반경을 낮춘다.
+  const R = b.r * 2.5 + t * 0.12;
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
   const sideFile = `player-side-tier-${Math.min(t, 10)}.png`;
   const size = R * PROJECTILE_RENDER.side.sizeMul;
-  if (drawProjectileSprite(ctx, sideFile, b.x, b.y, ang, size, size)) return;
+  if (drawProjectileSprite(ctx, sideFile, b.x, b.y, ang, size, size)) {
+    drawSideEvolutionMark(ctx, b, ang, R);
+    return;
+  }
   ctx.save();
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
@@ -1233,6 +1376,7 @@ function drawSideShape(ctx, b) {
     ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(0, 0, R * 0.3, 0, Math.PI * 2); ctx.fill();
   }
   ctx.restore();
+  drawSideEvolutionMark(ctx, b, ang, R);
 }
 
 // 유도탄. 형태가 진화하고 몸체 색은 단계마다 다르게(tailMissile 11색). tier = 무기단계(weapon 1~11) - 1. 진행 방향으로 회전.
@@ -1240,37 +1384,56 @@ function drawSideShape(ctx, b) {
 function drawMissile(ctx, b) {
   const t = Math.max(0, (b.weapon || 1) - 1);
   const col = COLORS.tailMissile[Math.min(t, COLORS.tailMissile.length - 1)];
-  const r = b.r * 1.7, half = r * 1.85, bw = r * 0.82;
+  // PNG에 붙어 있던 긴 추진 화염은 빠르게 움직이면 미사일 본체처럼 보였다. 본체는 짧고 선명한
+  // 실루엣만 그리며, 추진부는 뒤쪽의 작은 불꽃으로 완전히 분리한다.
+  const r = b.r * 1.32, half = r * (1.2 + Math.min(t, 6) * 0.07), bw = r * (0.7 + Math.min(t, 6) * 0.025);
   const ang = Math.atan2(b.vy, b.vx) + Math.PI / 2;
-  const missileFile = `player-missile-tier-${Math.min(t, 10)}.png`;
-  const missileH = b.r * (PROJECTILE_RENDER.missile.heightMul + t * PROJECTILE_RENDER.missile.tierHeight);
-  const missileW = b.r * PROJECTILE_RENDER.missile.widthMul;
-  if (drawProjectileSprite(ctx, missileFile, b.x, b.y, ang, missileW, missileH)) return;
   ctx.save();
   ctx.translate(b.x, b.y);
   ctx.rotate(ang);
-  if (t >= 6) { ctx.fillStyle = 'rgba(150,255,220,0.5)'; ctx.beginPath(); ctx.ellipse(0, half * 0.98, r * 0.5, r * (0.8 + t * 0.12), 0, 0, Math.PI * 2); ctx.fill(); } // 로켓부터 꼬리불
-  ctx.fillStyle = col; // 발열: 유도탄 글로우 제거
-  if (t <= 3) {                                   // 삼각형 → 큰 삼각형 → 화살표 → 화살표+꼬리깃
-    const s = t === 0 ? 0.8 : 1.2;                 // 0 작게 / 1~3 크게
-    // 삼각 머리
-    ctx.beginPath(); ctx.moveTo(0, -half * s); ctx.lineTo(bw * 1.45 * s, half * 0.6 * s); ctx.lineTo(-bw * 1.45 * s, half * 0.6 * s); ctx.closePath(); ctx.fill();
-    if (t >= 2) { ctx.fillRect(-bw * 0.32, half * 0.4, bw * 0.64, half * 0.95); } // 2+: 꼬리 막대(→ 화살표)
-    if (t >= 3) { // 3: 뒤 꼬리깃(양쪽 V)
-      ctx.beginPath(); ctx.moveTo(-bw * 0.32, half * 0.9); ctx.lineTo(-bw * 1.15, half * 1.5); ctx.lineTo(-bw * 0.32, half * 1.25); ctx.closePath(); ctx.fill();
-      ctx.beginPath(); ctx.moveTo(bw * 0.32, half * 0.9); ctx.lineTo(bw * 1.15, half * 1.5); ctx.lineTo(bw * 0.32, half * 1.25); ctx.closePath(); ctx.fill();
+  // 추진 불꽃: 본체보다 짧고 약하게, 항상 꼬리(+y) 밖에만 그린다.
+  const flame = Math.min(8, r * (0.65 + t * 0.035));
+  ctx.fillStyle = 'rgba(132,235,210,0.45)';
+  ctx.beginPath(); ctx.moveTo(-bw * 0.34, half * 0.78); ctx.lineTo(0, half * 0.78 + flame); ctx.lineTo(bw * 0.34, half * 0.78); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#effff8';
+  ctx.beginPath(); ctx.moveTo(-bw * 0.13, half * 0.76); ctx.lineTo(0, half * 0.76 + flame * 0.48); ctx.lineTo(bw * 0.13, half * 0.76); ctx.closePath(); ctx.fill();
+
+  ctx.fillStyle = col;
+  if (t === 0) { // 소형 다트
+    ctx.beginPath(); ctx.moveTo(0, -half); ctx.lineTo(bw, half * 0.7); ctx.lineTo(-bw, half * 0.7); ctx.closePath(); ctx.fill();
+  } else if (t === 1) { // 대형 다트
+    ctx.beginPath(); ctx.moveTo(0, -half * 1.22); ctx.lineTo(bw * 1.18, half * 0.74); ctx.lineTo(-bw * 1.18, half * 0.74); ctx.closePath(); ctx.fill();
+  } else if (t === 2) { // 화살표
+    ctx.beginPath(); ctx.moveTo(0, -half * 1.25); ctx.lineTo(bw * 1.25, half * 0.2); ctx.lineTo(bw * 0.4, half * 0.2); ctx.lineTo(bw * 0.4, half); ctx.lineTo(-bw * 0.4, half); ctx.lineTo(-bw * 0.4, half * 0.2); ctx.lineTo(-bw * 1.25, half * 0.2); ctx.closePath(); ctx.fill();
+  } else if (t === 3) { // 꼬리깃 화살
+    ctx.beginPath(); ctx.moveTo(0, -half * 1.3); ctx.lineTo(bw * 1.18, -half * 0.1); ctx.lineTo(bw * 0.42, half); ctx.lineTo(0, half * 0.72); ctx.lineTo(-bw * 0.42, half); ctx.lineTo(-bw * 1.18, -half * 0.1); ctx.closePath(); ctx.fill();
+  } else {
+    // 4단계부터는 짧은 원통 로켓. 핀·장갑·탄두를 단계별로 누적해 멀리서도 즉시 구별한다.
+    ctx.beginPath(); ctx.moveTo(0, -half * 1.28); ctx.quadraticCurveTo(bw, -half * 0.52, bw, half * 0.72); ctx.lineTo(-bw, half * 0.72); ctx.quadraticCurveTo(-bw, -half * 0.52, 0, -half * 1.28); ctx.closePath(); ctx.fill();
+    const fin = bw * (t >= 6 ? 1.18 : 0.82);
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(s * bw * 0.76, half * 0.08); ctx.lineTo(s * (bw + fin), half * 0.92); ctx.lineTo(s * bw * 0.76, half * 0.72); ctx.closePath(); ctx.fill(); }
+    if (t >= 7) { ctx.beginPath(); ctx.moveTo(-bw * 0.44, half * 0.38); ctx.lineTo(0, half * 1.16); ctx.lineTo(bw * 0.44, half * 0.38); ctx.closePath(); ctx.fill(); } // 등지느러미
+    if (t >= 8) { ctx.fillStyle = '#eefcff'; ctx.fillRect(-bw * 0.88, -half * 0.08, bw * 1.76, Math.max(1.4, half * 0.14)); ctx.fillStyle = col; } // 장갑 띠
+    if (t === 9) { // 양옆 보조 탄두
+      for (const ox of [-bw * 1.55, bw * 1.55]) { ctx.beginPath(); ctx.ellipse(ox, half * 0.12, bw * 0.48, half * 0.72, 0, 0, Math.PI * 2); ctx.fill(); }
     }
-  } else {                                        // 삼각로켓 → 로켓 → 미사일(몸통 + 핀)
-    const fin = bw * (0.6 + (t - 5) * 0.12);
-    ctx.beginPath(); ctx.moveTo(-bw, half * 0.2); ctx.lineTo(-bw - fin, half * 1.0); ctx.lineTo(-bw, half * 0.8); ctx.closePath(); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(bw, half * 0.2); ctx.lineTo(bw + fin, half * 1.0); ctx.lineTo(bw, half * 0.8); ctx.closePath(); ctx.fill();
-    if (t >= 7) { ctx.beginPath(); ctx.moveTo(-bw * 0.4, half * 0.6); ctx.lineTo(0, half * 1.2); ctx.lineTo(bw * 0.4, half * 0.6); ctx.closePath(); ctx.fill(); } // 중앙핀
-    if (t <= 5) { ctx.beginPath(); ctx.moveTo(0, -half * 1.3); ctx.lineTo(bw, half * 0.9); ctx.lineTo(-bw, half * 0.9); ctx.closePath(); ctx.fill(); } // 삼각로켓
-    else { ctx.beginPath(); ctx.moveTo(0, -half * 1.3); ctx.quadraticCurveTo(bw, -half * 0.5, bw, 0); ctx.lineTo(bw, half); ctx.lineTo(-bw, half); ctx.lineTo(-bw, 0); ctx.quadraticCurveTo(-bw, -half * 0.5, 0, -half * 1.3); ctx.closePath(); ctx.fill(); }
-    if (t >= 9) { for (const ox of [-bw * 1.7, bw * 1.7]) { ctx.beginPath(); ctx.moveTo(ox, -half * 0.1); ctx.quadraticCurveTo(ox + bw * 0.5, -half * 0.4, ox + bw * 0.5, half * 0.25); ctx.lineTo(ox - bw * 0.5, half * 0.25); ctx.quadraticCurveTo(ox - bw * 0.5, -half * 0.4, ox, -half * 0.1); ctx.closePath(); ctx.fill(); } } // 다탄두
+    if (t >= 10) { // 삼지창: 중앙과 양옆 독립 탄두가 앞으로 튀어나온 최종 실루엣
+      for (const ox of [-bw * 1.3, 0, bw * 1.3]) { ctx.beginPath(); ctx.moveTo(ox, -half * (ox ? 1.02 : 1.48)); ctx.lineTo(ox + bw * 0.46, -half * 0.08); ctx.lineTo(ox - bw * 0.46, -half * 0.08); ctx.closePath(); ctx.fill(); }
+    }
   }
-  ctx.shadowBlur = 0;
-  if (t >= 6) { ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(0, -half * 1.05, bw * 0.4, 0, Math.PI * 2); ctx.fill(); } // 노즈 발광
+  // T는 한 기체씩 순차 강화되지만, 편대 전체 진행도는 작은 탄두 장식으로 모두에게 반영한다.
+  // 이 표식은 weapon별 본체 실루엣보다 작아, 어떤 기체가 실제로 강해졌는지도 계속 읽힌다.
+  const form = Math.max(0, b.tailForm || 0);
+  if (form > 0) {
+    const phase = (form - 1) % 4;
+    ctx.save(); ctx.globalAlpha = 0.8; ctx.fillStyle = '#effff8'; ctx.strokeStyle = '#effff8'; ctx.lineWidth = Math.max(1, bw * 0.25);
+    if (phase === 0) { ctx.fillRect(-bw * 0.82, -half * 0.16, bw * 1.64, Math.max(1.2, half * 0.12)); }
+    else if (phase === 1) { ctx.beginPath(); ctx.moveTo(0, -half * 0.82); ctx.lineTo(bw * 0.44, -half * 0.48); ctx.lineTo(0, -half * 0.16); ctx.lineTo(-bw * 0.44, -half * 0.48); ctx.closePath(); ctx.fill(); }
+    else if (phase === 2) { for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(s * bw * 0.35, -half * 0.45); ctx.lineTo(s * bw * 1.08, -half * 0.12); ctx.stroke(); } }
+    else { ctx.beginPath(); ctx.moveTo(-bw * 0.72, -half * 0.18); ctx.lineTo(0, -half * 0.72); ctx.lineTo(bw * 0.72, -half * 0.18); ctx.stroke(); }
+    ctx.restore();
+  }
+  if (t >= 6) { ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(0, -half * 0.92, Math.max(1.4, bw * 0.3), 0, Math.PI * 2); ctx.fill(); }
   ctx.restore();
 }
 
@@ -1280,6 +1443,7 @@ function drawBullets(ctx, game) {
     if (b.kind === 'laser') drawSideShape(ctx, b);
     else if (b.kind === 'missile') drawMissile(ctx, b);
     else if (b.kind === 'fmain') drawFriendShot(ctx, b); // 친구 메인 총알(어린이 모드)
+    else if (b.kind === 'cityGuide') continue; // 유도선의 판정용 타격점은 따로 그리지 않는다.
     else drawMainBeam(ctx, b);
   }
 }
@@ -1308,9 +1472,32 @@ function drawEnemyBullets(ctx, game) {
 function drawPowerups(ctx, game) {
   const label = { P: 'P', S: 'S', E: 'E', T: 'T' };
   for (const it of game.powerups) {
-    const col = COLORS.powerup[it.kind];
+    // 글자는 정답 여부를 외형으로 드러내지 않는다. 직접 읽고 고르는 수집 요소다.
+    const col = it.kind === 'letter' ? '#f4c95d' : COLORS.powerup[it.kind];
     ctx.save();
     ctx.translate(it.x, it.y);
+    if (it.kind === 'letter') {
+      const pulse = 1 + Math.sin(it.t * 6) * 0.06;
+      ctx.scale(pulse, pulse);
+      const h = it.r * 2.85;
+      const w = h * (cityLetterClover.img.width || 396) / (cityLetterClover.img.height || 462);
+      ctx.shadowColor = 'rgba(86, 238, 145, 0.8)'; ctx.shadowBlur = 12;
+      if (cityLetterClover.ok) {
+        ctx.drawImage(cityLetterClover.img, -w * 0.5, -h * 0.5, w, h);
+      } else {
+        // PNG 로드 첫 프레임의 대체: 같은 녹색 네잎 실루엣으로 아이템 정체성을 유지한다.
+        ctx.fillStyle = '#79c887';
+        for (const [x, y] of [[-it.r * 0.42, -it.r * 0.42], [it.r * 0.42, -it.r * 0.42], [-it.r * 0.42, it.r * 0.42], [it.r * 0.42, it.r * 0.42]]) {
+          ctx.beginPath(); ctx.arc(x, y, it.r * 0.62, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      const cityName = it.cityName || it.letter;
+      ctx.shadowBlur = 0; ctx.font = '900 15px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.lineWidth = 3; ctx.strokeStyle = '#173d26'; ctx.strokeText(cityName, 0, -4);
+      ctx.fillStyle = '#ffffff'; ctx.fillText(cityName, 0, -4);
+      ctx.restore();
+      continue;
+    }
     if (drawPowerupSprite(ctx, it.kind, it.r, it.t)) {
       ctx.restore();
       continue;
@@ -1393,4 +1580,18 @@ function drawParticles(ctx, game) {
     ctx.fill();
   }
   ctx.globalAlpha = 1;
+}
+
+function drawScoreFloats(ctx, game) {
+  for (const f of game.scoreFloats || []) {
+    const alpha = Math.max(0, 1 - f.age / f.life);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = f.big ? '900 32px ui-monospace, monospace' : f.good ? '900 18px ui-monospace, monospace' : '800 14px ui-monospace, monospace';
+    ctx.lineWidth = f.big ? 5 : f.good ? 3 : 2; ctx.strokeStyle = 'rgba(5, 15, 28, 0.9)';
+    ctx.fillStyle = f.good ? '#fff36d' : '#ff9da9';
+    ctx.strokeText(f.value, f.x, f.y); ctx.fillText(f.value, f.x, f.y);
+    ctx.restore();
+  }
 }
