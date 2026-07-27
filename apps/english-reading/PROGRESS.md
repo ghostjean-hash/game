@@ -445,3 +445,16 @@ Claude Code 일원화 체계(2.46)로 확정한 출제 흐름을 처음 그대�
 - browser-shot 3종: 홈(난이도 3단계, 각 레벨 Daily Life·Relationships·Travel·Health 4주제) / Level 3 지문 채점(직독직해·이유 태그·자연스러운 해석·핵심 어순·문법 토글·끊기 마크) / 새 Health Lv3 "걷기와 달리기의 차이" 콘텐츠·채점, 3종 모두 콘솔 0.
 - 배포: /web-deploy 완주(commit addcf6e, smoke 2 URL 200·콘솔 0), SW v190→v191. CDN 전파 약 90초 후 배포 URL에서 80편 화면 확인. standalone 재빌드(360→675KB).
 - 잔여: 다음은 커리큘럼 81번 이후 Study(공부) 주제. 숙어 배정 대조 lint(커리큘럼 숙어표 데이터화 선행)는 미구현 유지.
+
+## 2.50. 지문 40편 추가(총 120편) - Study·Self Development·Language 코스 신설 + 목록 간소화 (2026-07-27)
+
+이 cycle의 실제 작업(출제 40편·목록 UI 손질)은 자비스 세션이 아니라 사용자가 외부 도구(Codex)로 돌린 결과로 작업 폴더에 미커밋 상태로 남아 있었고, 자비스는 그 결과물을 검증하고 문서·캐시 정합을 맞춰 봉합했다. 그래서 아래 결정 근거는 남은 산출물과 작업 메모(docs/archive/2026-07-27-authoring-checkpoint.md)에서 읽어낸 것이며, 사용자 지시 원문 대조는 이 세션에서 불가능했다.
+
+- 콘텐츠: 커리큘럼 통번호 81~120의 40편을 8개 배치(5편 단위) draft로 만들어 tools/merge-drafts.mjs --apply로 passages.json에 병합. courses가 [daily-life 28, relationships 18, travel 18, health 16, study 16, self-development 16, language 8] 7개 = 120편으로 늘었다. 난이도 분포는 Lv1 43편·Lv2 50편·Lv3 27편.
+- 지문 목록 카드 간소화: 주제(topic) 배지와 완독 표시 3종(완벽 딤드·끊기 태그·단어 태그)을 걷어내고 영어 제목 + 상태 한 줄(아직 안 읽음 / 읽는 중 / N회독)만 남겼다. 편수가 120편으로 늘어 목록을 훑는 속도를 우선한 판단으로 보인다. 2.40에서 세운 완독 표시 3종 사양은 이 변경으로 폐기됐다.
+- 목록 스크롤 위치 복원: 레벨별 목록의 스크롤 위치를 localStorage `listScroll`에 저장하고, 목록을 떠났다 돌아오면 그 자리를 복원한다. 그 코스 첫 진입에만 가장 최근 완료 지문을 화면 중앙에 놓는다. 읽기 화면 진입 시 스크롤 초기화가 저장값을 0으로 덮어쓰지 않게 리스너를 명시 해제한다(stopListScrollTracking).
+- 상단바: '어려운 문장' 버튼 이름을 '문장'으로 줄이고, 420px 이하 좁은 화면에서 상단 버튼 폭·글자를 줄여 제목 영역을 확보하는 미디어 쿼리를 추가했다.
+- 자비스 검증(봉합 시점 재실행): node tests/run-node.mjs 전량 통과(120편 strict), 정성 lint 경고는 16건으로 새 40편에서 4건 증가(patience-beats-talent·singing-along-to-a-song·talking-with-gestures·looking-up-new-words 각 1건, 길이 리듬·시작어 계열 참고 경고). draft 8개 파일의 40편 id가 passages.json에 전부 반영됨을 대조로 확인(미반영 0). standalone 재빌드(909KB). browser-shot 3종 - 홈(난이도 3단계·120편·7주제) / Level 1 목록(제목+상태 카드) / 새 Language 지문 "Making Sense of a Sign" 채점(직독직해·자연스러운 해석·핵심 어순·문법 토글·놓친 끊기 마크), 모두 콘솔 0. 목록 스크롤 복원은 playwright 재생으로 스크롤 900 → 지문 진입 → 뒤로 → 900 복원 확인.
+- 정리: 병합이 끝난 임시 draft 8개(docs/authoring/draft-081-085.json ~ draft-116-120.json)는 passages.json이 콘텐츠 단일 진실이라 삭제했다. 재사용 가치가 있는 tools/merge-drafts.mjs와 작업 메모 docs/archive/2026-07-27-authoring-checkpoint.md는 남겼다.
+- 배포: SW 캐시 v191→v192 bump 후 봉합 push(main push = GitHub Pages 자동 배포).
+- 잔여: 커리큘럼 121번 이후 지문. 숙어 배정 대조 lint(커리큘럼 숙어표 데이터화 선행)는 미구현 유지.

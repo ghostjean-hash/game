@@ -38,6 +38,11 @@ let course = null; // 현재 선택된 코스
 let courses = []; // 전체 코스 목록(코스 고르기 화면용)
 let baseData = null; // passages.json 원본(기본 지문)
 let currentPassage = null; // 지금 읽는 지문 - 단어장 등에서 돌아올 대상
+let removeListScrollListener = null;
+function stopListScrollTracking() {
+  if (removeListScrollListener) removeListScrollListener();
+  removeListScrollListener = null;
+}
 // 끊기/단어 터치 토글(각각 독립 on/off) - 둘이 본문에서 붙어 생기던 오터치를 사용자가 직접 조절.
 let touchChunk = true;   // 켜짐: 단어 사이 틈을 눌러 끊기 / 꺼짐: 틈 터치 무시
 let touchWord = false;   // 켜짐: 주요 단어를 눌러 수집 / 꺼짐: 단어 터치 무시
@@ -60,6 +65,12 @@ const TITLE_TRANSLATION_MS = 3000;
 // ── 상태 저장(기기 저장소) ──
 const getDone = () => store.get("done", []); // 완독한 지문 id 배열
 const getReads = () => store.get("reads", {}); // { passageId: 회독수 }
+const getListScroll = () => store.get("listScroll", {}); // { courseId: 목록의 스크롤 위치 }
+function saveListScroll(courseId, scrollTop) {
+  const positions = getListScroll();
+  positions[courseId] = scrollTop;
+  store.set("listScroll", positions);
+}
 const getVocab = () => store.get("vocab", []); // [{ wordKey, word, meaning, sentence, passageId, passageTitle }]
 const getSavedSentences = () => store.get("savedSentences", []); // [{ key, text, passageId, passageTitle, level, topic, sentenceIndex }]
 const getSettings = () => ({ chunks: true, words: true, scope: true, ...(store.get("settings", {}) || {}) });
@@ -222,6 +233,7 @@ function renderCourseList() {
 
 // ── 지문 목록 (선택한 코스 안) ──
 function renderList(c) {
+  stopListScrollTracking();
   if (c) course = c;
   if (!course) return renderCourseList();
   currentPassage = null; // 목록으로 나오면 '읽던 지문' 해제(단어장 백은 이 목록으로)
@@ -249,41 +261,57 @@ function renderList(c) {
   stage.appendChild(summary);
 
   const progress = getProgress();
-  const doneMeta = getDoneMeta();
   const list = document.createElement("div");
   list.className = "passage-list";
+  let lastDoneCard = null;
   course.passages.forEach((p) => {
     const card = document.createElement("button");
     card.type = "button";
     const r = reads[p.id] || 0;
     const isDone = done.includes(p.id);
     const inProgress = !!progress[p.id]; // 저장된 진행이 있으면 첫 회독 중이어도 '읽는 중'
-    const meta = doneMeta[p.id];
-    // 완독 표시 3종: 완벽(끊기 다 맞고 모르는 단어 없음)=카드 딤드 / 끊기 틀림=끊기 태그 / 단어 담음=단어 태그
-    let status, perfect = false;
+    let status;
     if (isDone) {
-      const tags = [];
-      if (meta && !meta.chunkOk) tags.push("끊기");
-      if (meta && meta.hadWords) tags.push("단어");
-      perfect = meta ? (meta.chunkOk && !meta.hadWords) : false;
-      status = `${tags.length ? tags.join(" · ") + " · " : ""}완독 ✓${r > 1 ? ` · ${r}회독` : ""}`;
+      status = `${Math.max(1, r)}회독`;
     } else {
       status = (r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음";
     }
-    card.className = "passage-card" + (perfect ? " done-perfect" : "");
-    // 같은 레벨 안이라 Lv 배지 대신 주제(topic) 배지를 보여준다(난이도 우선).
+    card.className = "passage-card";
     card.innerHTML =
-      `<span class="lv topic">${p.topic || ""}</span>` +
       `<span class="pc-body"><span class="pc-title">${p.title}</span></span>` +
       `<span class="pc-status${isDone ? " done" : ""}">${status}</span>`;
-    card.onclick = () => renderReading(p);
+    if (isDone) lastDoneCard = card;
+    card.onclick = () => {
+      saveListScroll(course.id, stage.scrollTop);
+      stopListScrollTracking();
+      renderReading(p);
+    };
     list.appendChild(card);
   });
   stage.appendChild(list);
+
+  // 목록을 떠난 뒤 돌아와도 마지막으로 보던 위치를 유지한다.
+  // 첫 진입에만 가장 최근 완료 지문을 화면 중앙으로 가져온다.
+  const savedScroll = getListScroll()[course.id];
+  const onListScroll = () => saveListScroll(course.id, stage.scrollTop);
+  stage.addEventListener("scroll", onListScroll, { passive: true });
+  removeListScrollListener = () => stage.removeEventListener("scroll", onListScroll);
+  requestAnimationFrame(() => {
+    if (Number.isFinite(savedScroll)) {
+      stage.scrollTop = savedScroll;
+      return;
+    }
+    if (lastDoneCard) {
+      const target = lastDoneCard.offsetTop - (stage.clientHeight - lastDoneCard.offsetHeight) / 2;
+      stage.scrollTop = Math.max(0, Math.min(target, stage.scrollHeight - stage.clientHeight));
+    }
+  });
 }
 
 // ── 읽기 화면 ──
 function renderReading(p) {
+  // 읽기 화면의 스크롤 초기화가 목록의 저장 위치를 0으로 덮어쓰지 않게 한다.
+  stopListScrollTracking();
   currentPassage = p; // 단어장에서 이 지문으로 돌아온다
   const settings = getSettings();
   setBar(courseProgress(course, getDone()).ratio);

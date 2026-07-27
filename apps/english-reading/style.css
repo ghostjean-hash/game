@@ -784,6 +784,13 @@ body {
    끊기 틀림·단어 담음은 딤드 없이 상태 태그(끊기·완독 / 단어·완독)로만 구분한다. */
 .passage-card.done-perfect { opacity: 0.5; }
 
+/* 좁은 화면에서는 상단 조작 버튼 폭을 줄여 제목 영역을 우선 확보한다. */
+@media (max-width: 420px) {
+  .topbar { gap: var(--sp-2); padding-inline: var(--sp-3); }
+  .nav-btn { padding-inline: 8px; font-size: 13px; }
+  .topbar-title { font-size: 15px; }
+}
+
 /* 애니메이션 */
 @keyframes er-pop {
   from { opacity: 0; transform: translateY(-6px); }
