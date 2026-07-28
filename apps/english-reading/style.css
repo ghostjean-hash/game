@@ -132,17 +132,6 @@ body {
   cursor: pointer;
 }
 .passage-card:active { transform: scale(0.99); }
-.passage-card .lv {
-  flex-shrink: 0;
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--er-accent);
-  background: var(--accent-weak, #eef2ff);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 3px 9px;
-  white-space: nowrap;
-}
 .pc-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .pc-title { font-size: 15.5px; font-weight: 700; color: var(--fg); }
 .pc-en { font-size: 12.5px; color: var(--fg-mute); }
@@ -779,10 +768,6 @@ body {
   font-size: 10px; font-weight: 700; color: #c2410c;
   background: #ffedd5; border-radius: 999px; padding: 1px 7px; vertical-align: 1px;
 }
-
-/* 완벽 완독(끊기 다 맞고 모르는 단어 없음) - 카드를 흐리게 딤드해 다시 볼 필요가 적음을 나타낸다.
-   끊기 틀림·단어 담음은 딤드 없이 상태 태그(끊기·완독 / 단어·완독)로만 구분한다. */
-.passage-card.done-perfect { opacity: 0.5; }
 
 /* 좁은 화면에서는 상단 조작 버튼 폭을 줄여 제목 영역을 우선 확보한다. */
 @media (max-width: 420px) {

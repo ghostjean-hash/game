@@ -137,7 +137,8 @@
 // v190 (2026-07-21): english-reading 난이도 우선 개편 - 코스 축을 주제→난이도(Level 1/2/3)로 전환. 레벨 선택 시 여러 주제의 같은 난이도 지문이 모임(createLevelCourses), 지문 카드에 주제 배지. 옛 v189 캐시 폐기.
 // v191 (2026-07-21): english-reading 지문 40편 추가 - Relationships 18편 완성 + Travel 18편·Health 16편 코스 신설(총 80편). 옛 v190 캐시 폐기.
 // v192 (2026-07-27): english-reading 지문 40편 추가 - Study 16편·Self Development 16편·Language 8편 코스 신설(총 120편). 지문 목록 카드 간소화(제목+회독 상태) + 목록 스크롤 위치 복원. 옛 v191 캐시 폐기.
-const CACHE_VERSION = "v192";
+// v193 (2026-07-28): english-reading 지문 81~120번 40편 전면 보강 - 끊기 허용·비추천 규칙 678항목(0→200문장 전부)·심화 카드 37개 신설, 끊기 조각 2등분 고정 해제, 커리큘럼 지정 숙어 9편 누락 반영, 틀린 문법 설명 2건 교정. 목록 스크롤 리스너 누수(콘솔 에러) 수정. 옛 v192 캐시 폐기.
+const CACHE_VERSION = "v193";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

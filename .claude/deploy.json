@@ -17,8 +17,9 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "deploy(english-reading): 콘텐츠·UI 갱신",
-    "paths": ["apps/english-reading", "service-worker.js", ".claude/deploy.json"]
+    "commitMessage": "fix(english-reading): 지문 81~120번 40편 전면 보강 + 목록 스크롤 리스너 누수 수정",
+    "_paths_comment": "봉합 문서(PROGRESS·NEXT-SESSION·archive)를 포함해 /jc 봉합과 배포가 한 커밋으로 끝나게 한다(2026-07-28).",
+    "paths": ["apps/english-reading", "service-worker.js", ".claude/deploy.json", "PROGRESS.md", "NEXT-SESSION.md", "archive"]
   },
   "smoke": {
     "urls": [

@@ -2,6 +2,12 @@
 
 > NEXT-SESSION.md 체인 3건 cap(§6.6) 초과분을 무수정 이동 보관(§3.4.4). 위가 최신.
 
+## 이동 2026-07-28 (지문 81~120번 전면 보강 세션 봉합 시 3건 cap 초과분)
+
+## 이전 작업 (2026-07-19, 20편 실출제 + 25편 폐기 + 복사버튼 + lint + 배포 + Claude Code 일원화)
+
+긴 세션 - 확정본 v3 첫 실출제부터 출제 체계 일원화까지. (1) 실출제 20편(Daily Life 1~20, Lv1 12+Lv2 8) 4배치 병렬 위임, 재사용 검증도구 tools/validate-draft.mjs 신설. (2) 3-LLM 감수(ChatGPT·Gemini·Claude) 반영 - 번역 정확성·Lv2 하한 확장·레벨 월경(수동태/to부정사)·숙어 map 이탈·굽은따옴표 정규화. (3) 기존 시험작 25편 폐기(사용자 AskUserQuestion 결정), 커리큘럼 1~20만 코스 daily-life로 재구성. (4) 문장 복사버튼 아이콘화(테두리·배경 제거+해석버튼과 높이 25px 세로중앙+복사 시 초록 체크 토글). (5) 정성 lint(core/validate.js:lintPassage) 신설 - 레벨 단어수·문장 길이 리듬·굽은따옴표·레벨 초과 문법·시작어 반복 '경고'(강제 아님), validate-draft·run-node 연결. (6) 배포 - GitHub Pages는 main push 시 자동 배포라 파일은 push 시점 배포됨, 빠진 SW 캐시만 v186→v188 bump해 PWA 갱신, 실제 URL 20편·콘솔0 확인. (7) deploy.json english-reading 조정(paths·commitMessage·images). (8) Claude Code 일원화(d1f0ef4, 사용자 "모든 작업 일원화") - 출제·감수·검증 자비스 단독, 외부 LLM 협업 폐지. docs/ChatGPT 폐지(커리큘럼·스키마→docs/authoring/, 협업문서·incoming 제거, 날짜문서→docs/archive/), 앱 '출제 패키지' 화면·buildAuthoringPackage·extractAnchors·DEFAULT_ANCHORS 제거(검증용 analyzeContent·nextCurriculumHint·compareAgainstExisting·AUTHORING_RULES·CURRICULUM 유지), CLAUDE.md 3.9 재작성. **다음 행동** = (1) 다음 배치 출제 - 자비스가 docs/authoring/CURRICULUM_REVIEW.md(200편 지도)를 직접 보고 출제→validate-draft→passages.json 반영→SW bump·push 배포. (2) 코스 구조 - 다음 topic 추가 시 주제별/난이도별 결정. (3) 숙어 배정 대조 lint - 커리큘럼 숙어표 데이터화 선행. 상세: apps/english-reading/PROGRESS.md 2.45~2.46.
+
 ## 이동 2026-07-23 (english-vocabulary 신규 앱 세션 봉합 시 3건 cap 초과분)
 
 ## 이전 작업 (2026-07-18~19, ChatGPT/Gemini 협업 출제 워크플로우 + 200편 커리큘럼 확정)

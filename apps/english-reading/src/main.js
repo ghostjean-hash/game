@@ -61,6 +61,7 @@ let openSentenceMenu = null;
 let titleTranslationTimer = null;
 const TOAST_MS = 1600; // 토스트가 스스로 사라지기까지
 const TITLE_TRANSLATION_MS = 3000;
+const LIST_SCROLL_RESTORE_FRAMES = 10; // 목록 스크롤 복원을 재시도할 최대 프레임 수
 
 // ── 상태 저장(기기 저장소) ──
 const getDone = () => store.get("done", []); // 완독한 지문 id 배열
@@ -94,8 +95,6 @@ function bootScreen() {
 // ── 읽기 진행 저장(기기 저장소) ── 지문별 문장 상태(그은 선·임시 단어·검토 여부)를 담아,
 // 단어장을 갔다 오거나 앱을 껐다 켜도 읽던 자리와 표시가 그대로 복원되게 한다.
 const getProgress = () => store.get("progress", {});
-// 완독 표시 구분용 - { pid: { chunkOk, hadWords } }. 끊기를 다 맞췄는지 + 모르는 단어를 담았는지.
-const getDoneMeta = () => store.get("doneMeta", {});
 function saveSentenceState(pid, si, st) {
   const prog = getProgress();
   if (!prog[pid]) prog[pid] = { sentences: [] };
@@ -144,6 +143,9 @@ function copyText(text, okMsg, onOk) {
 }
 
 function setTop({ title, titleTranslation, onBack, showVocab, showSavedSentences }) {
+  // 화면이 바뀌는 공통 지점 - 지문 목록에 붙였던 스크롤 저장 리스너를 여기서 반드시 뗀다.
+  // (안 떼면 단어장·홈에서 stage가 비워질 때 scrollTop 0이 목록 위치로 저장돼 복귀 시 맨 위로 튄다.)
+  stopListScrollTracking();
   if (titleTranslationTimer) { clearTimeout(titleTranslationTimer); titleTranslationTimer = null; }
   el.title.textContent = title;
   el.title.classList.toggle("is-toggle", !!titleTranslation);
@@ -293,19 +295,33 @@ function renderList(c) {
   // 목록을 떠난 뒤 돌아와도 마지막으로 보던 위치를 유지한다.
   // 첫 진입에만 가장 최근 완료 지문을 화면 중앙으로 가져온다.
   const savedScroll = getListScroll()[course.id];
-  const onListScroll = () => saveListScroll(course.id, stage.scrollTop);
-  stage.addEventListener("scroll", onListScroll, { passive: true });
-  removeListScrollListener = () => stage.removeEventListener("scroll", onListScroll);
-  requestAnimationFrame(() => {
-    if (Number.isFinite(savedScroll)) {
-      stage.scrollTop = savedScroll;
-      return;
+  const listCourseId = course.id; // 복원 도중 화면이 바뀌어도 엉뚱한 코스에 쓰지 않게 값으로 붙잡는다
+  let target = null;
+  if (Number.isFinite(savedScroll)) target = savedScroll;
+  else if (lastDoneCard) target = lastDoneCard.offsetTop - (stage.clientHeight - lastDoneCard.offsetHeight) / 2;
+
+  // 복원은 여러 프레임에 걸쳐 시도한다 - 카드 레이아웃이 잡히기 전에 한 번만 넣으면
+  // 그 시점의 짧은 scrollHeight에 잘려(900 요청 → 356 적용) 위치가 어긋난다.
+  // 저장 리스너는 복원이 끝난 뒤 붙인다(복원 중간값이 저장을 덮어쓰는 것을 막는다).
+  const startTracking = () => {
+    if (course !== null && course.id === listCourseId) {
+      const onListScroll = () => saveListScroll(listCourseId, stage.scrollTop);
+      stage.addEventListener("scroll", onListScroll, { passive: true });
+      removeListScrollListener = () => stage.removeEventListener("scroll", onListScroll);
     }
-    if (lastDoneCard) {
-      const target = lastDoneCard.offsetTop - (stage.clientHeight - lastDoneCard.offsetHeight) / 2;
-      stage.scrollTop = Math.max(0, Math.min(target, stage.scrollHeight - stage.clientHeight));
-    }
-  });
+  };
+  if (target === null) { startTracking(); return; }
+  const want = Math.max(0, target);
+  let tries = 0;
+  const applyScroll = () => {
+    if (course === null || course.id !== listCourseId) return; // 복원 도중 다른 화면으로 떠났다
+    const max = Math.max(0, stage.scrollHeight - stage.clientHeight);
+    stage.scrollTop = Math.min(want, max);
+    tries += 1;
+    if (stage.scrollTop < want && tries < LIST_SCROLL_RESTORE_FRAMES) requestAnimationFrame(applyScroll);
+    else startTracking();
+  };
+  requestAnimationFrame(applyScroll);
 }
 
 // ── 읽기 화면 ──
@@ -871,27 +887,6 @@ function nextPassageInCourse(p) {
   return idx >= 0 ? (course.passages[idx + 1] || null) : null;
 }
 
-// 이 지문에서 모르는 단어(수집)를 담았는지 - 완독 표시 구분용.
-function passageHasVocab(pid) {
-  return getVocab().some((v) => v.passageId === pid);
-}
-// 완독 시점 끊기 정확도 - 모든 문장에서 추천 경계를 정확히 긋고(놓침 0) 잘못 그은 곳(비추천·다른 분할)이 없으면 true.
-// 끊기 기능을 끈(chunks OFF) 경우엔 끊기 이슈 없음으로 본다.
-function computeChunkOk(p) {
-  if (!getSettings().chunks) return true;
-  const sents = (getProgress()[p.id] || {}).sentences || [];
-  for (let i = 0; i < p.sentences.length; i++) {
-    const s = normalizeSentence(p.sentences[i]);
-    const tokens = tokenize(s.text);
-    const boundaries = chunkBoundaries(tokens, s.chunks);
-    const allowedSet = boundarySet(s.breakRules, "allowed", tokens.length);
-    const discouragedSet = boundarySet(s.breakRules, "discouraged", tokens.length);
-    const slashes = (sents[i] && sents[i].slashes) || [];
-    const g = gradeChunks(boundaries, allowedSet, discouragedSet, slashes);
-    if (g.missed.length || g.neutral.length || g.discouraged.length) return false;
-  }
-  return true;
-}
 
 // 지문 완독 처리 - 회독수·완독 기록을 올리고 이 지문의 임시 진행(그은 선·임시 단어)을 비운다(영구 단어장은 유지).
 // 해석을 안 봐도 자유롭게 완독할 수 있다(흐름 우선). 다음에 뭘 할지는 완료 후 선택 창에서 사용자가 고른다.
@@ -903,10 +898,6 @@ function finishRound(p) {
   reads[p.id] = round;
   store.set("reads", reads);
   if (!done.includes(p.id)) { done.push(p.id); store.set("done", done); }
-  // 완독 품질 기록(진행 리셋 전) - 끊기를 다 맞췄는지 + 모르는 단어를 담았는지로 목록 표시를 나눈다.
-  const meta = getDoneMeta();
-  meta[p.id] = { chunkOk: computeChunkOk(p), hadWords: passageHasVocab(p.id) };
-  store.set("doneMeta", meta);
   clearPassageProgress(p.id);
   const prog = courseProgress(course, done);
   if (prog.cleared && !wasCleared) { showClearModal(); return; } // 코스 전체를 처음 완주하면 클리어 연출 우선
