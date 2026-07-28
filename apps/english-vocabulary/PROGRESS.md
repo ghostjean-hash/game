@@ -2,6 +2,18 @@
 
 append-only. 최신이 위.
 
+## 2026-07-28 · AUTHORING BATCH 01 제작 + 2회 검수 완료 (앱 무변경)
+
+- **사용자 결정 2건**: (1) BATCH 01 착수 (2) 기존 785와 겹치는 단어도 기존 뜻·예문을 초안으로 참고하지 않고 처음부터 새로 작성. (2)는 `docs/vocab-authoring-rules.md` §2.1로 규칙화.
+- **산출**: `docs/sources/moe-2022-english/authoring-batch-01.json` - 공식 초등 `*` 대표형 1~200번(`a`~`date`) 200 카드. 표제어·별표는 공식 원천 그대로(변경 0), 품사·대표 뜻·예문·번역은 자체 작성. relatedForms 4건(a→an, beauty→beautiful, compute→computer, cover→discover), irregularForms 12건. setId/learningOrder는 전부 null(학습 세트 미확정).
+- **검증기 신설**: `tools/validate-batch.mjs` - 배치 리치 스키마 전용(앱용 validate-data.mjs와 역할 분리). 공식 표제어 대조·id↔sourceOrder 일치·품사 허용값·뜻 개수·예문 길이·목표 단어 포함·배치 200 누락까지 검사. 최종 error 0 / warning 1(be 카드 `are` 활용형 휴리스틱 오탐, 실제 포함이라 수정 불요).
+- **1차 검수(사실·형식) 19건 수정**: 뜻↔예문 불일치(by/cold/comic/case), 초등 난이도 초과·모호(could/culture/chicken/congratulate), 예문 패턴 반복(`May I~` 3→2회, `Please~` 7→3회, `on the paper` 3→1회 등).
+- **2차 검수(품질·일관성·편중) 12건 수정**: 어려운 어휘 혼입 제거(fasten/campfire/swung/rowed/buried/sank/spread·toast/garage/folded·neatly/pot·lid/warns), 뜻 표기 중복 해소(ago·before 둘 다 "~전에" → before를 "~하기 전에"). 최종 뜻 중복 0건, 예문 시작 패턴 3회 이상 반복 0건, 예문 길이 4~7단어.
+- **화면 적합성**: 앱 CSS를 링크한 표본 미리보기(임시 폴더 생성, 앱 파일 무변경)로 browser-shot 확인. 표본 10개(불규칙형 6개·다품사·관련형·7단어 예문)에서 잘림 0, 콘솔 에러 0.
+- **앱 미변경 확인**: set-001~004 삭제·교체 0, manifest 변경 0, src/ 변경 0, 진도 초기화 0, 배포 0 (규칙 §10).
+- **정직한 한계**: 규칙 §2가 요구하는 `lexicalReference` 외부 공개자료(위키낱말사전·Wiktionary) **실조회 교차 대조 패스는 미수행**. 품사·뜻은 표준 사전 지식 기반. 필요 시 별도 대조 패스 추가.
+- **다음**: 사용자 승인 후 BATCH 02(201~400번, `daughter`~). 자동 진행 금지(규칙 §11).
+
 ## 2026-07-24 · 세션 봉합(/jarvis-checkpoint) - 회상형 전환 ~ 공식 어휘 기준 확립
 
 이 세션 한 일 통째 매듭(단계별 상세는 아래 개별 항목, 커밋 16건). 사용자 요청 전수 매핑 누락 0 확인:

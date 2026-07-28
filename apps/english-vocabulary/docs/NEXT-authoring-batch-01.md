@@ -1,5 +1,7 @@
 # 다음 착수: AUTHORING BATCH 01 (새 세션 진입점)
 
+> **BATCH 01 완료 (2026-07-28)**. 산출 `docs/sources/moe-2022-english/authoring-batch-01.json`(200 카드), 검수 기록 `authoring-batch-01-review.md`. 다음은 사용자 승인 후 BATCH 02(201~400번, `daughter`~). 아래 절차·규칙은 BATCH 02~04에도 그대로 적용한다(입력 범위와 산출 파일명만 바뀜).
+
 이 문서 하나만 읽고 바로 착수할 수 있게 정리한 것이다. 이전 대화 컨텍스트가 없어도 된다.
 
 ## 지금 상태 (2026-07-24 기준)
