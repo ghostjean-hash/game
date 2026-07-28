@@ -2,6 +2,12 @@
 
 > NEXT-SESSION.md 체인 3건 cap(§6.6) 초과분을 무수정 이동 보관(§3.4.4). 위가 최신.
 
+## 이동 2026-07-28 (english-vocabulary BATCH 01 제작 세션 봉합 시 3건 cap 초과분)
+
+## 이전 작업 (2026-07-19, 지문 20편 추가 - Daily Life 28편 완성 + Relationships 코스 신설)
+
+Claude Code 일원화 출제 흐름(2.46 확립)을 처음 그대로 밟아 커리큘럼 21~40번 20편을 만든 세션. 사용자가 먼저 "20문제 추가 프로세스"를 설명 요청(제작 없이)하고, "5편씩 쪼개나 한 번에 하나" 질문에 4배치 병렬 답변 뒤, "Daily Life 28편까지 채우고 Relationships 12편, 20편 만들어줘" 지시로 실제 제작. (1) 코스 구조(사용자 결정) - Daily Life 정원 28편 채우고(21~28) Relationships 코스 신설(id "relationships", 29~40 12편). daily-life 20→28편. (2) 4배치 병렬 출제 - A) DL 21~24 Lv2 B) DL 25~28 Lv3(insight 4문장) C) Rel 29~34 Lv1(숙어없음) D) Rel 35~40 Lv2. 각 에이전트가 passages.json 무수정·scratchpad draft만 Write + 자체 validate-draft 통과(2.45 공유파일 동시조작 사고를 draft-only로 차단). (3) 취합·최종검증 자비스 직접 - 합본 20편 validate-draft 20/0(배치간 중복 포함), run-node strict 전체 통과·새 20편 lint 경고 0, standalone 재빌드(358KB), browser-shot 3종(홈 코스2개·Rel Lv1 채점·DL Lv3 채점, 콘솔0). (4) 배포 - 사용자 "배포할까요?"에 /jc(봉합=push)로 응답=push 승인, SW v188→v189 bump 동반(main push=GitHub Pages 자동배포). **다음 행동** = (1) 다음 배치 출제 - CURRICULUM_REVIEW.md 통번호 41번(Travel) 이후 또는 미완 topic. 흐름은 동일(직접 출제→validate-draft→passages.json→SW bump·push). (2) 코스 구조 - 현재 Daily Life·Relationships 2개, 다음 topic 추가 시 코스 신설/편성 결정. (3) 숙어 배정 대조 lint - 커리큘럼 숙어표 데이터화 선행(미구현). 상세: apps/english-reading/PROGRESS.md 2.47.
+
 ## 이동 2026-07-28 (지문 81~120번 전면 보강 세션 봉합 시 3건 cap 초과분)
 
 ## 이전 작업 (2026-07-19, 20편 실출제 + 25편 폐기 + 복사버튼 + lint + 배포 + Claude Code 일원화)
