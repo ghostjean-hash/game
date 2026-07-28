@@ -2,6 +2,12 @@
 
 > NEXT-SESSION.md 체인 3건 cap(§6.6) 초과분을 무수정 이동 보관(§3.4.4). 위가 최신.
 
+## 이동 2026-07-28 (1~40편 보강 세션 봉합 시 3건 cap 초과분)
+
+## 이전 작업 (2026-07-23, english-vocabulary 신규 앱 - 반복 암기 단어장)
+
+ChatGPT 작성 요청서로 "영어 단어장 html앱"을 신규 요청받아 game-hub의 두 번째 앱(apps/english-vocabulary, english-reading 형제)으로 구현한 세션. /jarvis-init로 진입했으나 이 위치가 이미 game-hub 도메인이라 새 도메인 골격이 아니라 앱 추가로 판단. 핵심 경험 = 200개에서 시작해 외운 단어를 지워 0개로 만드는 반복 암기(시험·타이핑 없음, 큰 글자·큰 버튼·라이트 테마로 직장인·중장년 배려). 착수 전 4개 결정 모두 사용자 승인 추천안 - 허브 표준 무빌드 바닐라+localStorage / 1차 필수만 / IPA 제외·SpeechSynthesis 음성만 / Undo·보관함 복습을 1차 포함. (1) v0.1(80c666c) - deck.js 순수 학습 로직(active·learned/모름·외움/바퀴 셔플/Undo/보관함 복습/serialize) + 6화면(홈·학습·보관함·복습·완료·설정) + 발음·키보드·글자크기 3단계. 샘플 20단어. (2) v0.2 8세트 확장 구조(43678e9) - 실제 중학 8세트×200=1600 대비 manifest.json+set-NNN.json 구조, ID 규칙 ev-sNN-NNNN·ev-set-NNN+level, 검증기 tools/validate-data.mjs 신설(필드·중복·형식·strict 200/1600, error 시 적용 차단). 실데이터는 임의 생성 금지(검증 자료 기반 별도 제작·검수 후 적용). (3) 자기 리뷰 후 완료화면 되돌리기 보완(b5bd8c5). 검증 - 유닛 63 PASS, validate sample 통과·strict 의도대로 실패, browser-shot 5화면 콘솔0. **다음 행동** = (1) 실제 1600단어 - 검증 가능한 중학 어휘 자료 + 세트별 단어·뜻·예문·해석 목록을 입력받아 채우기(자비스 임의 생성 금지) → node apps/english-vocabulary/tools/validate-data.mjs --strict 검증 → manifest에서 그 세트 available:true·count:200 전환. (2) 8세트 UI(세트 선택·잠금·진행률)는 데이터 준비 후 추가(현재는 단일 세트). (3) 배포 - 이번 /jc로 3커밋 push(GitHub Pages 자동, 허브 홈에 wip 카드 노출). 상세: apps/english-vocabulary/PROGRESS.md v0.1~v0.2.
+
 ## 이동 2026-07-28 (english-vocabulary BATCH 01 제작 세션 봉합 시 3건 cap 초과분)
 
 ## 이전 작업 (2026-07-19, 지문 20편 추가 - Daily Life 28편 완성 + Relationships 코스 신설)
