@@ -118,6 +118,9 @@ export function validatePassage(p, opts = {}) {
         const discBs = checkList("discouraged");
         allowedBs.forEach((b) => { if (discBs.includes(b)) push(w, `boundary ${b}가 allowed와 discouraged에 동시에 등록됐습니다.`); });
         discBs.forEach((b) => { if (boundaries.has(b)) push(w, `boundary ${b}는 대표 추천 경계이므로 discouraged에 넣을 수 없습니다.`); });
+        // allowed도 대표 경계와 겹치면 안 된다 - gradeChunks가 recommended를 먼저 집어
+        // 그 항목이 화면에서 영구히 발동하지 않는 죽은 데이터가 된다(2026-07-28, 기존 데이터 2건 발견).
+        allowedBs.forEach((b) => { if (boundaries.has(b)) push(w, `boundary ${b}는 대표 추천 경계이므로 allowed에 넣어도 발동하지 않습니다.`); });
       }
     }
   });

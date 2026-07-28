@@ -22,6 +22,12 @@ const PREP = new Set(["on", "at", "in", "from", "with", "by", "about", "of", "fo
 const REL = new Set(["who", "whose", "whom", "which"]);
 const WH = new Set(["how", "what", "why", "where", "whether"]);
 const VERB_HEAD = new Set(["is", "are", "was", "were", "will", "would", "can", "could", "may", "might", "must"]);
+// that 뒤에 이 명사가 오면 접속사·관계사가 아니라 지시형용사다("that morning" = 그날 아침).
+// 화이트리스트로 보수 판정 - 목록에 없으면 종전대로 that절로 본다(안전측).
+const THAT_NOUN = new Set([
+  "morning", "afternoon", "evening", "night", "day", "week", "weekend", "month", "year",
+  "time", "moment", "summer", "winter", "spring", "fall", "season", "hour", "minute",
+]);
 
 export function boundaryReason(prevEn, nextEn) {
   const prev = String(prevEn).trim();
@@ -30,7 +36,7 @@ export function boundaryReason(prevEn, nextEn) {
   const w1 = words[1] || "";
   if (prev.endsWith(",")) return "콤마 뒤";
   if (w0 === "even" && w1 === "though") return "접속사 앞";
-  if (w0 === "that") return "that절 앞";
+  if (w0 === "that") return THAT_NOUN.has(w1) ? "시간 표현 앞" : "that절 앞";
   if (REL.has(w0)) return "관계대명사 앞";
   if (WH.has(w0)) return "의문사·whether절 앞";
   if (w0 === "to") return "to부정사 앞";
