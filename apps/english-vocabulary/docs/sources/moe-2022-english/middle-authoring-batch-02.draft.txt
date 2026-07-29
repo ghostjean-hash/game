@@ -121,7 +121,7 @@
 320|noun|혐오|His manners caused deep disgust.|그의 태도는 깊은 혐오를 일으켰다.
 321|noun|접시, 요리|Wash every dish after dinner.|저녁 후에 모든 접시를 씻어라.
 322|verb|전시하다|They display new books here.|그들은 여기에 새 책을 전시한다.
-323|noun|거리|The distance is only two kilometers.|그 거리는 겨우 이 킬로미터다.
+323|noun|거리(간격)|The distance is only two kilometers.|그 거리는 겨우 이 킬로미터다.
 324|noun|지역, 구역|This district has many shops.|이 지역에는 상점이 많다.
 325|verb|방해하다|Please do not disturb him.|그를 방해하지 말아 주세요.
 326|verb|뛰어들다|Boys dive into the lake.|소년들이 호수로 뛰어든다.

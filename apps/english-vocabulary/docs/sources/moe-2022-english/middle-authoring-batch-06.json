@@ -8,14 +8,14 @@
       "noun"
     ],
     "meaningKr": [
-      "종"
+      "생물 종"
     ],
     "relatedForms": [
       "special"
     ],
     "irregularForms": [],
     "example": "This forest protects rare species.",
-    "exampleKr": "이 숲은 희귀한 종을 보호한다.",
+    "exampleKr": "이 숲은 희귀한 생물 종을 보호한다.",
     "sourceOrder": 1001,
     "setId": null,
     "learningOrder": null
@@ -86,7 +86,7 @@
       "verb"
     ],
     "meaningKr": [
-      "쓰다"
+      "돈을 쓰다"
     ],
     "relatedForms": [],
     "irregularForms": [
@@ -185,12 +185,12 @@
       "noun"
     ],
     "meaningKr": [
-      "점"
+      "얼룩"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "A dark spot marked the wall.",
-    "exampleKr": "어두운 점이 벽에 나 있었다.",
+    "exampleKr": "어두운 얼룩이 벽에 나 있었다.",
     "sourceOrder": 1010,
     "setId": null,
     "learningOrder": null

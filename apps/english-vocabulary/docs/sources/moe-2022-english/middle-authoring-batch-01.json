@@ -2330,8 +2330,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Flowers bloom in spring.",
-    "exampleKr": "꽃은 봄에 핀다.",
+    "example": "Roses bloom in early June.",
+    "exampleKr": "장미는 6월 초에 핀다.",
     "sourceOrder": 123,
     "setId": null,
     "learningOrder": null
@@ -2896,12 +2896,12 @@
       "verb"
     ],
     "meaningKr": [
-      "묻다"
+      "땅에 묻다"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "They buried the box.",
-    "exampleKr": "그들은 상자를 묻었다.",
+    "exampleKr": "그들은 상자를 땅에 묻었다.",
     "sourceOrder": 153,
     "setId": null,
     "learningOrder": null
@@ -2953,7 +2953,7 @@
       "noun"
     ],
     "meaningKr": [
-      "우리"
+      "짐승 우리"
     ],
     "relatedForms": [],
     "irregularForms": [],

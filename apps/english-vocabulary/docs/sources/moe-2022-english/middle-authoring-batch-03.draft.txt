@@ -19,7 +19,7 @@
 418|noun|동료|My fellow told me the news.|내 동료가 그 소식을 말해 주었다.
 419|adjective|여성의|A female doctor treated my arm.|여성 의사가 내 팔을 치료했다.
 420|noun|울타리|A white fence surrounds the yard.|흰 울타리가 마당을 둘러싸고 있다.
-421|noun|열|The child had a high fever.|그 아이는 높은 열이 있었다.
+421|noun|열(체온)|The child had a high fever.|그 아이는 높은 열이 있었다.
 422|determiner|거의 없는|Few people came to the meeting.|회의에 온 사람이 거의 없었다.
 423|noun|수치|The sales figure rose last month.|매출 수치가 지난달에 올랐다.
 424|adjective|마지막의|This is our final chance today.|이것이 오늘 우리의 마지막 기회다.
@@ -73,7 +73,7 @@
 472|verb|흘끗 보다|He glanced at the clock.|그는 시계를 흘끗 보았다.
 473|noun|영광|The team won lasting glory.|그 팀은 오래가는 영광을 얻었다.
 474|noun|장갑|I lost my left glove.|나는 왼쪽 장갑을 잃어버렸다.
-475|noun|풀|Put some glue on the paper.|종이에 풀을 조금 발라라.
+475|noun|접착제|Put some glue on the paper.|종이에 접착제를 조금 발라라.
 476|noun|골프|My grandfather plays golf on Sunday.|할아버지는 일요일에 골프를 치신다.
 477|adjective|아주 멋진|The sunset looked gorgeous today.|오늘 노을이 아주 멋져 보였다.
 478|verb|다스리다|Wise leaders govern with patience.|현명한 지도자는 인내로 다스린다.|rel:government
@@ -95,8 +95,8 @@
 494|noun|복도|Students ran down the hall.|학생들이 복도를 따라 뛰었다.
 495|verb|처리하다|She handles hard problems calmly.|그녀는 어려운 문제를 침착하게 처리한다.
 496|adjective|잘생긴|A handsome young man smiled.|잘생긴 젊은 남자가 미소 지었다.
-497|verb|일어나다|Nothing strange happened last night.|어젯밤에 이상한 일은 일어나지 않았다.
-498|noun|해|Loud noise can cause harm.|큰 소음은 해를 끼칠 수 있다.
+497|verb|생기다|Nothing strange happened last night.|어젯밤에 이상한 일은 생기지 않았다.
+498|noun|해로움|Loud noise can cause harm.|큰 소음은 해로움을 끼칠 수 있다.
 499|noun|건강|Good sleep protects your health.|충분한 잠은 당신의 건강을 지킨다.|rel:healthy
 500|verb|듣다|Can you hear the bell now?|지금 종소리가 들리나요?|irr:heard
 501|noun|천국|They believed in a peaceful heaven.|그들은 평화로운 천국을 믿었다.
@@ -163,7 +163,7 @@
 562|noun|여정|Our journey took three days.|우리의 여정은 사흘이 걸렸다.
 563|noun|큰 기쁨|Her face was full of joy.|그녀의 얼굴은 큰 기쁨으로 가득했다.|rel:enjoy
 564|noun|판사|The judge listened to both sides.|판사는 양쪽 말을 들었다.
-565|noun|후배|He is my junior at school.|그는 학교에서 내 후배다.
+565|noun|손아래 사람|He is three years my junior.|그는 나보다 세 살 아래다.
 566|noun|정의|People marched for justice.|사람들이 정의를 위해 행진했다.
 567|noun|무릎|She put a book on her knee.|그녀는 무릎에 책을 올렸다.
 568|verb|두드리다|Someone knocked on the door.|누군가 문을 두드렸다.

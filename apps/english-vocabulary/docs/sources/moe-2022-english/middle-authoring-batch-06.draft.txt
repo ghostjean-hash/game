@@ -1,14 +1,14 @@
 # Middle AUTHORING BATCH 06 - official ** representative forms 1001-1200
-1001|noun|종|This forest protects rare species.|이 숲은 희귀한 종을 보호한다.|rel:special
+1001|noun|생물 종|This forest protects rare species.|이 숲은 희귀한 생물 종을 보호한다.|rel:special
 1002|adjective|구체적인|Give me a specific example.|구체적인 예를 하나 들어 줘.
 1003|noun|연설|His speech moved the crowd.|그의 연설이 군중을 감동시켰다.
 1004|verb|철자를 말하다|Can you spell your last name?|네 성의 철자를 말할 수 있니?
-1005|verb|쓰다|I spend little money weekly.|나는 매주 돈을 조금 쓴다.|irr:spent
+1005|verb|돈을 쓰다|I spend little money weekly.|나는 매주 돈을 조금 쓴다.|irr:spent
 1006|verb|돌다|The wheel spins very fast.|그 바퀴는 아주 빠르게 돈다.|irr:spun
 1007|noun|정신|The team showed fighting spirit.|그 팀은 투지 있는 정신을 보였다.
 1008|verb|상하게 하다|Heat will spoil this milk.|열이 이 우유를 상하게 할 것이다.
 1009|noun|후원자|A local shop became our sponsor.|지역 가게가 우리 후원자가 되었다.
-1010|noun|점|A dark spot marked the wall.|어두운 점이 벽에 나 있었다.
+1010|noun|얼룩|A dark spot marked the wall.|어두운 얼룩이 벽에 나 있었다.
 1011|verb|뿌리다|Spray water on the leaves.|잎에 물을 뿌려라.
 1012|verb|퍼지다|Good news spreads quickly here.|좋은 소식은 여기서 빠르게 퍼진다.|irr:spread
 1013|noun|첩자|The film follows a clever spy.|그 영화는 영리한 첩자를 따라간다.

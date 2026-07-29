@@ -390,7 +390,7 @@
       "noun"
     ],
     "meaningKr": [
-      "열"
+      "열(체온)"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -1426,12 +1426,12 @@
       "noun"
     ],
     "meaningKr": [
-      "풀"
+      "접착제"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "Put some glue on the paper.",
-    "exampleKr": "종이에 풀을 조금 발라라.",
+    "exampleKr": "종이에 접착제를 조금 발라라.",
     "sourceOrder": 475,
     "setId": null,
     "learningOrder": null
@@ -1852,12 +1852,12 @@
       "verb"
     ],
     "meaningKr": [
-      "일어나다"
+      "생기다"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "Nothing strange happened last night.",
-    "exampleKr": "어젯밤에 이상한 일은 일어나지 않았다.",
+    "exampleKr": "어젯밤에 이상한 일은 생기지 않았다.",
     "sourceOrder": 497,
     "setId": null,
     "learningOrder": null
@@ -1871,12 +1871,12 @@
       "noun"
     ],
     "meaningKr": [
-      "해"
+      "해로움"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "Loud noise can cause harm.",
-    "exampleKr": "큰 소음은 해를 끼칠 수 있다.",
+    "exampleKr": "큰 소음은 해로움을 끼칠 수 있다.",
     "sourceOrder": 498,
     "setId": null,
     "learningOrder": null
@@ -3165,12 +3165,12 @@
       "noun"
     ],
     "meaningKr": [
-      "후배"
+      "손아래 사람"
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "He is my junior at school.",
-    "exampleKr": "그는 학교에서 내 후배다.",
+    "example": "He is three years my junior.",
+    "exampleKr": "그는 나보다 세 살 아래다.",
     "sourceOrder": 565,
     "setId": null,
     "learningOrder": null

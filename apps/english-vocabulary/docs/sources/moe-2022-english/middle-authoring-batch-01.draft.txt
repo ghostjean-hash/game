@@ -121,7 +121,7 @@
 120|adjective|눈먼|The blind man used a cane.|눈먼 남자는 지팡이를 사용했다.
 121|noun|블록, 구역|Walk one block north.|북쪽으로 한 블록 걸어라.
 122|adjective|금발의|She has blonde hair.|그녀는 금발 머리이다.
-123|verb|피다|Flowers bloom in spring.|꽃은 봄에 핀다.
+123|verb|피다|Roses bloom in early June.|장미는 6월 초에 핀다.
 124|verb|불다|Wind can blow hard.|바람은 세게 불 수 있다.
 125|verb|끓이다|Boil water for tea.|차를 위해 물을 끓여라.
 126|noun|폭탄|The bomb caused fear.|그 폭탄은 공포를 일으켰다.
@@ -151,10 +151,10 @@
 150|noun|혹|He has a bump on his head.|그는 머리에 혹이 났다.
 151|noun|다발|She bought a bunch of flowers.|그녀는 꽃 한 다발을 샀다.
 152|verb|터지다|The balloon burst suddenly.|풍선이 갑자기 터졌다.
-153|verb|묻다|They buried the box.|그들은 상자를 묻었다.
+153|verb|땅에 묻다|They buried the box.|그들은 상자를 땅에 묻었다.
 154|noun|덤불|A rabbit hid in the bush.|토끼가 덤불에 숨었다.
 155|noun|케이블|The cable is under the desk.|케이블은 책상 아래에 있다.
-156|noun|우리|The bird stayed in its cage.|새는 우리 안에 있었다.
+156|noun|짐승 우리|The bird stayed in its cage.|새는 우리 안에 있었다.
 157|verb|계산하다|Calculate the total cost.|총비용을 계산해라.
 158|noun|달력|Mark the date on the calendar.|달력에 날짜를 표시해라.
 159|adjective|차분한|Stay calm during the test.|시험 중에는 차분히 있어라.
