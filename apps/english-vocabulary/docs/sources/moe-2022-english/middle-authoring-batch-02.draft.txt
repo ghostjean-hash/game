@@ -72,7 +72,7 @@
 271|adjective|잔인한|Hurting animals is very cruel.|동물을 해치는 것은 매우 잔인하다.
 272|verb|치료하다|This medicine cures the illness.|이 약은 그 병을 치료한다.
 273|adjective|궁금한|Children are curious about everything.|아이들은 모든 것에 궁금해한다.|rel:curiosity
-274|noun|곱슬머리|One curl fell on her forehead.|곱슬머리 한 가닥이 그녀의 이마에 내려왔다.
+274|noun|곱슬머리|One curl fell on her face.|곱슬머리 한 가닥이 그녀의 얼굴에 내려왔다.
 275|adjective|현재의|What is the current price?|현재 가격은 얼마인가요?
 276|adjective|귀여운|That puppy looks very cute.|그 강아지는 아주 귀여워 보인다.
 277|noun|순환, 주기|Water follows a natural cycle.|물은 자연의 순환을 따른다.|rel:recycle,cyclist
@@ -147,7 +147,7 @@
 346|noun|가장자리|Stay away from the edge.|가장자리에서 떨어져 있어라.
 347|verb|편집하다|Please edit this short video.|이 짧은 영상을 편집해 주세요.
 348|verb|교육하다|Schools educate future world leaders.|학교는 미래의 세계 지도자를 교육한다.
-349|noun|효과, 영향|The medicine had quick effect.|그 약은 빠른 효과가 있었다.|rel:effective
+349|noun|효과, 영향|The medicine had a quick effect.|그 약은 빠른 효과가 있었다.|rel:effective
 350|noun|노력|Your effort deserves real praise.|너의 노력은 진짜 칭찬을 받을 만하다.
 351|determiner|둘 중 하나의|Either answer is fully acceptable.|둘 중 어느 답이든 완전히 받아들일 수 있다.
 352|verb|선출하다|Students elect a class leader.|학생들이 학급 대표를 선출한다.
@@ -190,12 +190,12 @@
 389|noun|출구|The exit is behind you.|출구는 네 뒤에 있다.
 390|verb|확장되다|Metal expands in hot weather.|금속은 더운 날씨에 확장된다.
 391|verb|기대하다|We expect rain this evening.|우리는 오늘 저녁에 비를 예상한다.
-392|noun|비용|Travel expense rose this year.|올해 여행 비용이 올랐다.|rel:expensive
+392|noun|비용|Travel expenses rose this year.|올해 여행 비용이 올랐다.|rel:expensive
 393|noun|경험|This trip was a great experience.|이 여행은 훌륭한 경험이었다.
 394|noun|실험|Our science experiment finally succeeded.|우리 과학 실험이 마침내 성공했다.
 395|noun|전문가|Ask an expert about it.|그것에 대해 전문가에게 물어보라.
 396|verb|설명하다|Explain the rule once more.|그 규칙을 한 번 더 설명해 주세요.
 397|verb|노출시키다|Do not expose skin to sunlight.|피부를 햇빛에 노출시키지 마라.
 398|verb|표현하다|Express your opinion more clearly.|네 의견을 더 분명하게 표현해라.
-399|verb|연장하다|They extended the deadline again.|그들은 마감일을 다시 연장했다.
+399|verb|연장하다|They extended the school holiday.|그들은 학교 방학을 연장했다.
 400|adjective|추가의|I need extra time today.|나는 오늘 추가 시간이 필요하다.

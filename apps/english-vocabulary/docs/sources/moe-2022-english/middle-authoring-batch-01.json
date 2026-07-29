@@ -27,7 +27,7 @@
       "adjective"
     ],
     "meaningKr": [
-      "절대적인"
+      "절대적인, 완전한"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -146,7 +146,7 @@
     "relatedForms": [],
     "irregularForms": [],
     "example": "They accused him of lying.",
-    "exampleKr": "그들은 그가 거짓말했다고 비난했다.",
+    "exampleKr": "그들은 그가 거짓말했다며 혐의를 제기했다.",
     "sourceOrder": 8,
     "setId": null,
     "learningOrder": null
@@ -1058,7 +1058,7 @@
     "relatedForms": [],
     "irregularForms": [],
     "example": "Wear appropriate clothes today.",
-    "exampleKr": "오늘은 알맞은 옷을 입어라.",
+    "exampleKr": "오늘은 적절한 옷을 입어라.",
     "sourceOrder": 56,
     "setId": null,
     "learningOrder": null
@@ -1224,7 +1224,7 @@
       "verb"
     ],
     "meaningKr": [
-      "맡기다"
+      "맡기다, 내주다"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -1737,7 +1737,7 @@
       "adjective"
     ],
     "meaningKr": [
-      "맨몸의"
+      "맨-, 드러난"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -2027,7 +2027,7 @@
     "relatedForms": [],
     "irregularForms": [],
     "example": "Exercise has many benefits.",
-    "exampleKr": "운동은 많은 이점이 있다.",
+    "exampleKr": "운동은 많은 이익이 있다.",
     "sourceOrder": 107,
     "setId": null,
     "learningOrder": null
@@ -2839,12 +2839,12 @@
       "noun"
     ],
     "meaningKr": [
-      "부딪힘"
+      "혹"
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "The car has a small bump.",
-    "exampleKr": "그 차에는 작은 흠집이 있다.",
+    "example": "He has a bump on his head.",
+    "exampleKr": "그는 머리에 혹이 났다.",
     "sourceOrder": 150,
     "setId": null,
     "learningOrder": null
@@ -3090,8 +3090,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "The captain welcomed us aboard.",
-    "exampleKr": "선장은 우리를 배에 맞이했다.",
+    "example": "The captain welcomed us warmly.",
+    "exampleKr": "선장은 우리를 따뜻하게 맞이했다.",
     "sourceOrder": 163,
     "setId": null,
     "learningOrder": null
@@ -3300,7 +3300,7 @@
     "relatedForms": [],
     "irregularForms": [],
     "example": "This building is a century old.",
-    "exampleKr": "이 건물은 100년 되었다.",
+    "exampleKr": "이 건물은 한 세기나 되었다.",
     "sourceOrder": 174,
     "setId": null,
     "learningOrder": null
@@ -3618,7 +3618,7 @@
       "noun"
     ],
     "meaningKr": [
-      "주요한 사람"
+      "우두머리"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -3637,12 +3637,12 @@
       "noun"
     ],
     "meaningKr": [
-      "조각"
+      "부스러기"
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "The cup has a small chip.",
-    "exampleKr": "그 컵에는 작은 이가 나갔다.",
+    "example": "Wood chips covered the wet floor.",
+    "exampleKr": "나무 부스러기가 젖은 바닥을 덮었다.",
     "sourceOrder": 192,
     "setId": null,
     "learningOrder": null
