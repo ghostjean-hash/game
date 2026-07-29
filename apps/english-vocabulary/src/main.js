@@ -77,8 +77,10 @@ const REMAINING_ID = "__remaining__";
 // 새로고침 복원 시에도 기본값 question이라 정답 공개 상태는 이어지지 않는다(편법 방지).
 let cardView = initialCardView();
 
-// 진도는 세트마다 따로 저장한다(deck:<setId>). 한 세트를 하다 다른 세트를 가도 각각 유지.
-const deckKey = (setId) => `deck:${setId}`;
+// 2022 공식 초등 800 데이터는 이전 임시 세트와 단어 ID·순서가 달라 진도를 분리한다.
+// 기존 `deck:<setId>` 값은 보존하고, 새 공식 데이터만 이 버전 키를 사용한다.
+const DATA_PROGRESS_VERSION = "moe2022-v1";
+const deckKey = (setId) => `deck:${DATA_PROGRESS_VERSION}:${setId}`;
 function buildDeck() {
   deck = createDeck(DATA, store.get(deckKey(currentSetId)), settings.shuffle ? Math.random : null);
 }

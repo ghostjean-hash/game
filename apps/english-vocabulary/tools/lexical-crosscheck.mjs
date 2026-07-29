@@ -21,6 +21,7 @@ const APP = join(HERE, "..");
 const SRC = join(APP, "docs", "sources", "moe-2022-english");
 const CACHE_DIR = join(tmpdir(), "jarvis-vocab-lexical-cache");
 const UA = { "User-Agent": "jarvis-vocab-crosscheck/1.0 (educational vocabulary verification)" };
+const REQUEST_TIMEOUT_MS = 8_000;
 const sleep = (ms) => new Promise((s) => setTimeout(s, ms));
 // 위키 정의에는 태그 제거 후에도 파서 스타일 텍스트(.mw-parser-output …)가 꼬리로 남는다.
 const strip = (s) => s.replace(/<[^>]+>/g, "").replace(/\.mw-parser-output[\s\S]*$/, "").replace(/\s+/g, " ").trim();
@@ -28,6 +29,8 @@ const clean = (s) => s.replace(/\.mw-parser-output[\s\S]*$/, "").replace(/\s+/g,
 
 const batchNo = (process.argv[2] || "01").padStart(2, "0");
 const flags = new Set(process.argv.slice(3));
+const wordFlag = process.argv.find((arg) => arg.startsWith("--words="));
+const requestedWords = wordFlag ? new Set(wordFlag.slice("--words=".length).split(",").filter(Boolean)) : null;
 const cards = JSON.parse(readFileSync(join(SRC, `authoring-batch-${batchNo}.json`), "utf8"));
 if (!existsSync(CACHE_DIR)) mkdirSync(CACHE_DIR, { recursive: true });
 const cacheFile = (src) => join(CACHE_DIR, `batch-${batchNo}-${src}.json`);
@@ -51,7 +54,8 @@ const POS_MAP = {
 async function getJson(url, tries) {
   for (let i = 0; i < tries; i++) {
     try {
-      const r = await fetch(url, { headers: UA });
+      const signal = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
+      const r = await fetch(url, { headers: UA, signal });
       if (r.status === 404) return { status: 404 };
       if (r.status === 429 || r.status >= 500) { await sleep(1500 * 2 ** i); continue; }
       if (!r.ok) return { status: r.status };
@@ -65,7 +69,7 @@ async function getJson(url, tries) {
 }
 
 async function fetchA(word) {
-  const r = await getJson(`https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}`, 5);
+  const r = await getJson(`https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}`, 2);
   if (r.status !== 200) return { status: r.status, entries: [] };
   return {
     status: 200,
@@ -77,7 +81,7 @@ async function fetchA(word) {
 }
 
 async function fetchB(word) {
-  const r = await getJson(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`, 4);
+  const r = await getJson(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`, 2);
   if (r.status !== 200) return { status: r.status, entries: [] };
   if (!Array.isArray(r.json)) return { status: "SHAPE", entries: [] };
   const entries = [];
@@ -96,6 +100,7 @@ async function fetchB(word) {
 async function collect(src, fetcher, conc, gap) {
   const cache = new Map(loadCache(src).map((r) => [r.word, r]));
   const todo = cards.map((c) => c.word).filter((w) => {
+    if (requestedWords && !requestedWords.has(w)) return false;
     const p = cache.get(w);
     return !(p && (p.status === 200 || p.status === 404));
   });
@@ -108,9 +113,9 @@ async function collect(src, fetcher, conc, gap) {
     while (queue.length) {
       const word = queue.shift();
       cache.set(word, { word, ...(await fetcher(word)) });
+      writeFileSync(cacheFile(src), JSON.stringify([...cache.values()], null, 1), "utf8");
       if (++done % 25 === 0) {
         process.stderr.write(`[${src}] ${done}/${todo.length}\n`);
-        writeFileSync(cacheFile(src), JSON.stringify([...cache.values()], null, 1), "utf8");
       }
       await sleep(gap);
     }
@@ -123,8 +128,8 @@ async function collect(src, fetcher, conc, gap) {
 }
 
 if (flags.has("--fetch")) {
-  await collect("wiktionary", fetchA, 2, 400);
-  await collect("dictionaryapi", fetchB, 3, 200);
+  await collect("wiktionary", fetchA, 6, 250);
+  await collect("dictionaryapi", fetchB, 6, 150);
 }
 
 const A = new Map(loadCache("wiktionary").map((r) => [r.word, r]));

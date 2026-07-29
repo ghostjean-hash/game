@@ -5,7 +5,7 @@
 # 1. 앱 정의
 
 1.1. **한 줄**: 200개에서 시작해 외운 단어를 하나씩 지워가며, 남은 단어만 계속 반복해 결국 0개로 만드는 반복 암기 단어장. 시험·타이핑 없이 "모름/외움" 두 버튼으로만 굴린다. 직장인·중장년 포함 대상이라 큰 글자·큰 버튼·라이트 테마.
-1.2. **상태**: 앱 기능 완성(회상형 학습·세트 선택 메뉴·세트별 진도·목록 표시 설정·못 외운 단어 모음). 콘텐츠는 초등 4세트(playland/2015 기반, 임시)가 들어가 있으나, **공식 2022 개정 데이터로 교체 진행 중**. **AUTHORING BATCH 01(a~date 200개) 제작·2회 검수 완료**(2026-07-28, 산출 `docs/sources/moe-2022-english/authoring-batch-01.json`, 검수 기록 같은 폴더 `authoring-batch-01-review.md`). **다음 = 사용자 승인 후 BATCH 02**(daughter~, 201~400번). 앱 적용은 초등 800 전량 제작 후 별도 단계(규칙 §10·§11).
+1.2. **상태**: 앱 기능 완성(회상형 학습·세트 선택 메뉴·세트별 진도·목록 표시 설정·못 외운 단어 모음). 콘텐츠는 초등 4세트(playland/2015 기반, 임시)가 들어가 있으나, **공식 2022 개정 데이터로 교체 진행 중**. 제작 배치 산출물은 있으나 800개 전수 검증을 다시 진행 중이며, 아직 확정·앱 적용 상태가 아니다. **사용자 경고(2026-07-29): 800개가 끝나도 세트 설계·앱 반영·다음 콘텐츠로 자동 진행 금지. 완료 결과만 보고하고 이후 진행에 관한 질문·권장·추천도 금지. 사용자가 먼저 명시 지시할 때만 다음 단계 착수.**
 1.3. **위치**: game-hub 허브의 두 번째 "app"(english-reading 형제). `apps/_registry.json` 등록, 별도 자비스 도메인 아님.
 1.4. **현행 스펙 SSOT**: 이 파일 + `src/core/deck.js`(학습 규칙 권위) + `src/data/manifest.json`(세트 구성) + `src/data/set-NNN.json`(콘텐츠).
 1.5. **전체 목표(콘텐츠)**: 초·중·고 **3,000단어** = 15세트 × 200(사용자 지시 2026-07-24로 기존 1,600에서 확대). 층 - SET01~04 초급(초등), 05~10 중급(중학), 11~15 고급(고등). **전체 제작 계획·규칙의 단일 진실 source는 `docs/vocab-master-plan.md`**. 단어는 반드시 그 규칙(사실 근거·검증 가능 출처만)으로 만든다(§4.7). 현재 SET01의 200단어는 규칙 이전 임의 초안이라 Phase 1에서 교체 예정.
@@ -42,7 +42,7 @@ apps/english-vocabulary/
 # 4. 데이터 규약 (manifest + set-NNN.json)
 
 4.1. **manifest.json**: `{ app, totalTarget:1600, setSize:200, sets:[...] }`. `sets[]`: `{ setId, order, title, level, file, count, available }`. 앱·검증기는 `available:true`인 세트만 로드·검증하고, `false`(준비 중) 세트는 건너뛴다. `count`는 그 세트 파일의 기대 단어 수(샘플 20, 실데이터 200).
-4.2. **set-NNN.json**: `{ setId, order, title, level, words:[...] }`. `word`: `{ id, setId, level, word, pos, meaningKr[], example, exampleKr }`(요청서 7장). `pos`=품사(한국어 라벨, 허용: 명사/동사/형용사/부사/전치사/접속사/대명사/감탄사/한정사), ANSWER 카드에서 뜻 앞 배지로 표시.
+4.2. **set-NNN.json**: `{ setId, order, title, level, words:[...] }`. `word`: `{ id, setId, level, word, pos, meaningKr[], example, exampleKr }`(요청서 7장). `pos`=품사(한국어 라벨, 허용: 명사/동사/형용사/부사/전치사/접속사/대명사/감탄사/한정사/조동사/수사), ANSWER 카드에서 뜻 앞 배지로 표시.
 4.3. **ID 규칙**(요청서 7장, 충돌 방지): 단어 id `ev-sNN-NNNN`(예 `ev-s01-0001`, s뒤 2자리=세트 order, 뒤 4자리=일련), 세트 id `ev-set-NNN`(예 `ev-set-001`). english-reading 단어장(`vocab`)과도 프리픽스가 달라 향후 연동 시 충돌 없음(요청서 10장).
 4.4. `meaningKr`은 핵심 뜻 1~2개(요청서 6장 - 뜻 5개 이상·긴 문법·어원 금지). `example`은 짧은 예문 1개(14단어 이하 권장) + `exampleKr` 해석. **IPA 발음기호는 제외**(손 오타 위험, 발음은 SpeechSynthesis 담당). 넣으려면 `pronunciation` 필드 + 카드 표시 추가.
 4.5. **실데이터 적용 절차**(요청서 2·10장, 임의 생성 금지): 검증 가능한 자료로 세트별 단어·뜻·예문을 별도 제작·검수 → `set-NNN.json` 채우고 manifest에서 그 세트 `count`=200·`available`=true 전환 → **`node apps/english-vocabulary/tools/validate-data.mjs --strict`로 검증 통과 후 적용**. 로직·UI 변경 불요(deck는 세트 데이터 스키마만 의존, 세트 크기는 데이터 길이가 곧 `startCount`).

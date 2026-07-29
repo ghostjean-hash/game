@@ -1,0 +1,6617 @@
+{
+  "purpose": "800개 카드 재검토의 단일 진행 기록. 모든 카드는 pending에서 시작한다. 2026-07-29 전수 재검토로 68개 카드 수정(elementary-800-fix-01.json).",
+  "reviewChecklist": [
+    "officialWord",
+    "partOfSpeech",
+    "meaningExampleMatch",
+    "translation",
+    "elementaryFit",
+    "relatedAndIrregularForms"
+  ],
+  "rows": [
+    {
+      "id": "ev-moe2022-e-0001",
+      "sourceOrder": 1,
+      "word": "a",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0002",
+      "sourceOrder": 2,
+      "word": "about",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0003",
+      "sourceOrder": 3,
+      "word": "above",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0004",
+      "sourceOrder": 4,
+      "word": "across",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0005",
+      "sourceOrder": 5,
+      "word": "act",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0006",
+      "sourceOrder": 6,
+      "word": "add",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0007",
+      "sourceOrder": 7,
+      "word": "address",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0008",
+      "sourceOrder": 8,
+      "word": "adult",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0009",
+      "sourceOrder": 9,
+      "word": "afraid",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0010",
+      "sourceOrder": 10,
+      "word": "after",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0011",
+      "sourceOrder": 11,
+      "word": "afternoon",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0012",
+      "sourceOrder": 12,
+      "word": "again",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0013",
+      "sourceOrder": 13,
+      "word": "against",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0014",
+      "sourceOrder": 14,
+      "word": "age",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0015",
+      "sourceOrder": 15,
+      "word": "ago",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0016",
+      "sourceOrder": 16,
+      "word": "agree",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0017",
+      "sourceOrder": 17,
+      "word": "ahead",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0018",
+      "sourceOrder": 18,
+      "word": "air",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0019",
+      "sourceOrder": 19,
+      "word": "airplane",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0020",
+      "sourceOrder": 20,
+      "word": "album",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0021",
+      "sourceOrder": 21,
+      "word": "all",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0022",
+      "sourceOrder": 22,
+      "word": "almost",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0023",
+      "sourceOrder": 23,
+      "word": "alone",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0024",
+      "sourceOrder": 24,
+      "word": "along",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0025",
+      "sourceOrder": 25,
+      "word": "already",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0026",
+      "sourceOrder": 26,
+      "word": "alright",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0027",
+      "sourceOrder": 27,
+      "word": "also",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0028",
+      "sourceOrder": 28,
+      "word": "always",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0029",
+      "sourceOrder": 29,
+      "word": "and",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0030",
+      "sourceOrder": 30,
+      "word": "animal",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0031",
+      "sourceOrder": 31,
+      "word": "another",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0032",
+      "sourceOrder": 32,
+      "word": "answer",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0033",
+      "sourceOrder": 33,
+      "word": "any",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0034",
+      "sourceOrder": 34,
+      "word": "apartment",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0035",
+      "sourceOrder": 35,
+      "word": "apple",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0036",
+      "sourceOrder": 36,
+      "word": "area",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0037",
+      "sourceOrder": 37,
+      "word": "arm",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0038",
+      "sourceOrder": 38,
+      "word": "around",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0039",
+      "sourceOrder": 39,
+      "word": "arrive",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0040",
+      "sourceOrder": 40,
+      "word": "art",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0041",
+      "sourceOrder": 41,
+      "word": "as",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0042",
+      "sourceOrder": 42,
+      "word": "ask",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0043",
+      "sourceOrder": 43,
+      "word": "at",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0044",
+      "sourceOrder": 44,
+      "word": "aunt",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0045",
+      "sourceOrder": 45,
+      "word": "autumn",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0046",
+      "sourceOrder": 46,
+      "word": "away",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0047",
+      "sourceOrder": 47,
+      "word": "baby",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0048",
+      "sourceOrder": 48,
+      "word": "back",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0049",
+      "sourceOrder": 49,
+      "word": "bad",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0050",
+      "sourceOrder": 50,
+      "word": "badminton",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0051",
+      "sourceOrder": 51,
+      "word": "bag",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0052",
+      "sourceOrder": 52,
+      "word": "bake",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0053",
+      "sourceOrder": 53,
+      "word": "ball",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0054",
+      "sourceOrder": 54,
+      "word": "banana",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0055",
+      "sourceOrder": 55,
+      "word": "bank",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0056",
+      "sourceOrder": 56,
+      "word": "base",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0057",
+      "sourceOrder": 57,
+      "word": "baseball",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0058",
+      "sourceOrder": 58,
+      "word": "basket",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0059",
+      "sourceOrder": 59,
+      "word": "basketball",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0060",
+      "sourceOrder": 60,
+      "word": "bat",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0061",
+      "sourceOrder": 61,
+      "word": "bath",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0062",
+      "sourceOrder": 62,
+      "word": "be",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0063",
+      "sourceOrder": 63,
+      "word": "beach",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0064",
+      "sourceOrder": 64,
+      "word": "bear",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0065",
+      "sourceOrder": 65,
+      "word": "beauty",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0066",
+      "sourceOrder": 66,
+      "word": "because",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0067",
+      "sourceOrder": 67,
+      "word": "become",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0068",
+      "sourceOrder": 68,
+      "word": "bed",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0069",
+      "sourceOrder": 69,
+      "word": "bee",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0070",
+      "sourceOrder": 70,
+      "word": "beef",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0071",
+      "sourceOrder": 71,
+      "word": "before",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0072",
+      "sourceOrder": 72,
+      "word": "begin",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0073",
+      "sourceOrder": 73,
+      "word": "behind",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0074",
+      "sourceOrder": 74,
+      "word": "believe",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0075",
+      "sourceOrder": 75,
+      "word": "bell",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0076",
+      "sourceOrder": 76,
+      "word": "below",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0077",
+      "sourceOrder": 77,
+      "word": "belt",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0078",
+      "sourceOrder": 78,
+      "word": "beside",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0079",
+      "sourceOrder": 79,
+      "word": "between",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0080",
+      "sourceOrder": 80,
+      "word": "big",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0081",
+      "sourceOrder": 81,
+      "word": "bike",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0082",
+      "sourceOrder": 82,
+      "word": "bill",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0083",
+      "sourceOrder": 83,
+      "word": "bird",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0084",
+      "sourceOrder": 84,
+      "word": "birth",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0085",
+      "sourceOrder": 85,
+      "word": "biscuit",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0086",
+      "sourceOrder": 86,
+      "word": "black",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0087",
+      "sourceOrder": 87,
+      "word": "blood",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0088",
+      "sourceOrder": 88,
+      "word": "blue",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0089",
+      "sourceOrder": 89,
+      "word": "board",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0090",
+      "sourceOrder": 90,
+      "word": "boat",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0091",
+      "sourceOrder": 91,
+      "word": "body",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0092",
+      "sourceOrder": 92,
+      "word": "bone",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0093",
+      "sourceOrder": 93,
+      "word": "book",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0094",
+      "sourceOrder": 94,
+      "word": "borrow",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0095",
+      "sourceOrder": 95,
+      "word": "both",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0096",
+      "sourceOrder": 96,
+      "word": "bottle",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0097",
+      "sourceOrder": 97,
+      "word": "bottom",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0098",
+      "sourceOrder": 98,
+      "word": "box",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0099",
+      "sourceOrder": 99,
+      "word": "boy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0100",
+      "sourceOrder": 100,
+      "word": "brave",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0101",
+      "sourceOrder": 101,
+      "word": "bread",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0102",
+      "sourceOrder": 102,
+      "word": "break",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0103",
+      "sourceOrder": 103,
+      "word": "breakfast",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0104",
+      "sourceOrder": 104,
+      "word": "bridge",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0105",
+      "sourceOrder": 105,
+      "word": "bright",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0106",
+      "sourceOrder": 106,
+      "word": "bring",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0107",
+      "sourceOrder": 107,
+      "word": "brother",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0108",
+      "sourceOrder": 108,
+      "word": "brown",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0109",
+      "sourceOrder": 109,
+      "word": "brush",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0110",
+      "sourceOrder": 110,
+      "word": "build",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0111",
+      "sourceOrder": 111,
+      "word": "burn",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0112",
+      "sourceOrder": 112,
+      "word": "bus",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0113",
+      "sourceOrder": 113,
+      "word": "business",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0114",
+      "sourceOrder": 114,
+      "word": "busy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0115",
+      "sourceOrder": 115,
+      "word": "but",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0116",
+      "sourceOrder": 116,
+      "word": "butter",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0117",
+      "sourceOrder": 117,
+      "word": "button",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0118",
+      "sourceOrder": 118,
+      "word": "buy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0119",
+      "sourceOrder": 119,
+      "word": "by",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0120",
+      "sourceOrder": 120,
+      "word": "cake",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0121",
+      "sourceOrder": 121,
+      "word": "call",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0122",
+      "sourceOrder": 122,
+      "word": "camera",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0123",
+      "sourceOrder": 123,
+      "word": "camp",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0124",
+      "sourceOrder": 124,
+      "word": "campaign",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0125",
+      "sourceOrder": 125,
+      "word": "can",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0126",
+      "sourceOrder": 126,
+      "word": "candy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0127",
+      "sourceOrder": 127,
+      "word": "cap",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0128",
+      "sourceOrder": 128,
+      "word": "car",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0129",
+      "sourceOrder": 129,
+      "word": "card",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0130",
+      "sourceOrder": 130,
+      "word": "care",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0131",
+      "sourceOrder": 131,
+      "word": "carrot",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0132",
+      "sourceOrder": 132,
+      "word": "carry",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0133",
+      "sourceOrder": 133,
+      "word": "case",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0134",
+      "sourceOrder": 134,
+      "word": "cash",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0135",
+      "sourceOrder": 135,
+      "word": "cat",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0136",
+      "sourceOrder": 136,
+      "word": "catch",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0137",
+      "sourceOrder": 137,
+      "word": "center",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0138",
+      "sourceOrder": 138,
+      "word": "certain",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0139",
+      "sourceOrder": 139,
+      "word": "chair",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0140",
+      "sourceOrder": 140,
+      "word": "chance",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0141",
+      "sourceOrder": 141,
+      "word": "change",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0142",
+      "sourceOrder": 142,
+      "word": "cheap",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0143",
+      "sourceOrder": 143,
+      "word": "check",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0144",
+      "sourceOrder": 144,
+      "word": "cheese",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0145",
+      "sourceOrder": 145,
+      "word": "chicken",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0146",
+      "sourceOrder": 146,
+      "word": "child",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0147",
+      "sourceOrder": 147,
+      "word": "chocolate",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0148",
+      "sourceOrder": 148,
+      "word": "choose",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0149",
+      "sourceOrder": 149,
+      "word": "church",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0150",
+      "sourceOrder": 150,
+      "word": "circle",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0151",
+      "sourceOrder": 151,
+      "word": "city",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0152",
+      "sourceOrder": 152,
+      "word": "class",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0153",
+      "sourceOrder": 153,
+      "word": "clean",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0154",
+      "sourceOrder": 154,
+      "word": "clear",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0155",
+      "sourceOrder": 155,
+      "word": "clever",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0156",
+      "sourceOrder": 156,
+      "word": "climb",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0157",
+      "sourceOrder": 157,
+      "word": "clock",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0158",
+      "sourceOrder": 158,
+      "word": "close",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0159",
+      "sourceOrder": 159,
+      "word": "clothes",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0160",
+      "sourceOrder": 160,
+      "word": "cloud",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0161",
+      "sourceOrder": 161,
+      "word": "club",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0162",
+      "sourceOrder": 162,
+      "word": "coat",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0163",
+      "sourceOrder": 163,
+      "word": "coffee",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0164",
+      "sourceOrder": 164,
+      "word": "cold",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0165",
+      "sourceOrder": 165,
+      "word": "collect",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0166",
+      "sourceOrder": 166,
+      "word": "college",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0167",
+      "sourceOrder": 167,
+      "word": "color",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0168",
+      "sourceOrder": 168,
+      "word": "come",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0169",
+      "sourceOrder": 169,
+      "word": "comic",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0170",
+      "sourceOrder": 170,
+      "word": "company",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0171",
+      "sourceOrder": 171,
+      "word": "compute",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0172",
+      "sourceOrder": 172,
+      "word": "condition",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0173",
+      "sourceOrder": 173,
+      "word": "congratulate",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0174",
+      "sourceOrder": 174,
+      "word": "control",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0175",
+      "sourceOrder": 175,
+      "word": "cook",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0176",
+      "sourceOrder": 176,
+      "word": "cookie",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0177",
+      "sourceOrder": 177,
+      "word": "cool",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0178",
+      "sourceOrder": 178,
+      "word": "corner",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0179",
+      "sourceOrder": 179,
+      "word": "cost",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0180",
+      "sourceOrder": 180,
+      "word": "could",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0181",
+      "sourceOrder": 181,
+      "word": "country",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0182",
+      "sourceOrder": 182,
+      "word": "couple",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0183",
+      "sourceOrder": 183,
+      "word": "course",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0184",
+      "sourceOrder": 184,
+      "word": "court",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0185",
+      "sourceOrder": 185,
+      "word": "cousin",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0186",
+      "sourceOrder": 186,
+      "word": "cover",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0187",
+      "sourceOrder": 187,
+      "word": "cow",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0188",
+      "sourceOrder": 188,
+      "word": "crayon",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0189",
+      "sourceOrder": 189,
+      "word": "cream",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0190",
+      "sourceOrder": 190,
+      "word": "cross",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0191",
+      "sourceOrder": 191,
+      "word": "cry",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0192",
+      "sourceOrder": 192,
+      "word": "culture",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0193",
+      "sourceOrder": 193,
+      "word": "cup",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0194",
+      "sourceOrder": 194,
+      "word": "curtain",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0195",
+      "sourceOrder": 195,
+      "word": "customer",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0196",
+      "sourceOrder": 196,
+      "word": "cut",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0197",
+      "sourceOrder": 197,
+      "word": "dance",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0198",
+      "sourceOrder": 198,
+      "word": "danger",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0199",
+      "sourceOrder": 199,
+      "word": "dark",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0200",
+      "sourceOrder": 200,
+      "word": "date",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0201",
+      "sourceOrder": 201,
+      "word": "daughter",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0202",
+      "sourceOrder": 202,
+      "word": "day",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0203",
+      "sourceOrder": 203,
+      "word": "dead",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0204",
+      "sourceOrder": 204,
+      "word": "death",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0205",
+      "sourceOrder": 205,
+      "word": "decide",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0206",
+      "sourceOrder": 206,
+      "word": "deep",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0207",
+      "sourceOrder": 207,
+      "word": "delicious",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0208",
+      "sourceOrder": 208,
+      "word": "design",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0209",
+      "sourceOrder": 209,
+      "word": "desk",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0210",
+      "sourceOrder": 210,
+      "word": "dialogue",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0211",
+      "sourceOrder": 211,
+      "word": "die",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0212",
+      "sourceOrder": 212,
+      "word": "difficult",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0213",
+      "sourceOrder": 213,
+      "word": "dinner",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0214",
+      "sourceOrder": 214,
+      "word": "discuss",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0215",
+      "sourceOrder": 215,
+      "word": "do",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0216",
+      "sourceOrder": 216,
+      "word": "doctor",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0217",
+      "sourceOrder": 217,
+      "word": "dog",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0218",
+      "sourceOrder": 218,
+      "word": "doll",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0219",
+      "sourceOrder": 219,
+      "word": "door",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0220",
+      "sourceOrder": 220,
+      "word": "double",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0221",
+      "sourceOrder": 221,
+      "word": "doughnut",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0222",
+      "sourceOrder": 222,
+      "word": "down",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0223",
+      "sourceOrder": 223,
+      "word": "draw",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0224",
+      "sourceOrder": 224,
+      "word": "dream",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0225",
+      "sourceOrder": 225,
+      "word": "dress",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0226",
+      "sourceOrder": 226,
+      "word": "drink",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0227",
+      "sourceOrder": 227,
+      "word": "drive",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0228",
+      "sourceOrder": 228,
+      "word": "drop",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0229",
+      "sourceOrder": 229,
+      "word": "drum",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0230",
+      "sourceOrder": 230,
+      "word": "dry",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0231",
+      "sourceOrder": 231,
+      "word": "duck",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0232",
+      "sourceOrder": 232,
+      "word": "during",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0233",
+      "sourceOrder": 233,
+      "word": "ear",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0234",
+      "sourceOrder": 234,
+      "word": "early",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0235",
+      "sourceOrder": 235,
+      "word": "earth",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0236",
+      "sourceOrder": 236,
+      "word": "east",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0237",
+      "sourceOrder": 237,
+      "word": "eat",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0238",
+      "sourceOrder": 238,
+      "word": "egg",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0239",
+      "sourceOrder": 239,
+      "word": "eight",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0240",
+      "sourceOrder": 240,
+      "word": "elephant",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0241",
+      "sourceOrder": 241,
+      "word": "eleven",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0242",
+      "sourceOrder": 242,
+      "word": "end",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0243",
+      "sourceOrder": 243,
+      "word": "energy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0244",
+      "sourceOrder": 244,
+      "word": "enough",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0245",
+      "sourceOrder": 245,
+      "word": "enter",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0246",
+      "sourceOrder": 246,
+      "word": "evening",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0247",
+      "sourceOrder": 247,
+      "word": "every",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0248",
+      "sourceOrder": 248,
+      "word": "example",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0249",
+      "sourceOrder": 249,
+      "word": "exercise",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0250",
+      "sourceOrder": 250,
+      "word": "eye",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0251",
+      "sourceOrder": 251,
+      "word": "face",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0252",
+      "sourceOrder": 252,
+      "word": "fact",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0253",
+      "sourceOrder": 253,
+      "word": "fail",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0254",
+      "sourceOrder": 254,
+      "word": "fall",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0255",
+      "sourceOrder": 255,
+      "word": "family",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0256",
+      "sourceOrder": 256,
+      "word": "fan",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0257",
+      "sourceOrder": 257,
+      "word": "far",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0258",
+      "sourceOrder": 258,
+      "word": "farm",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0259",
+      "sourceOrder": 259,
+      "word": "fast",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0260",
+      "sourceOrder": 260,
+      "word": "fat",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0261",
+      "sourceOrder": 261,
+      "word": "father",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0262",
+      "sourceOrder": 262,
+      "word": "favorite",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0263",
+      "sourceOrder": 263,
+      "word": "feel",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0264",
+      "sourceOrder": 264,
+      "word": "festival",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0265",
+      "sourceOrder": 265,
+      "word": "field",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0266",
+      "sourceOrder": 266,
+      "word": "fight",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0267",
+      "sourceOrder": 267,
+      "word": "file",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0268",
+      "sourceOrder": 268,
+      "word": "fill",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0269",
+      "sourceOrder": 269,
+      "word": "film",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0270",
+      "sourceOrder": 270,
+      "word": "find",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0271",
+      "sourceOrder": 271,
+      "word": "fine",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0272",
+      "sourceOrder": 272,
+      "word": "finger",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0273",
+      "sourceOrder": 273,
+      "word": "finish",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0274",
+      "sourceOrder": 274,
+      "word": "fire",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0275",
+      "sourceOrder": 275,
+      "word": "first",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0276",
+      "sourceOrder": 276,
+      "word": "fish",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0277",
+      "sourceOrder": 277,
+      "word": "five",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0278",
+      "sourceOrder": 278,
+      "word": "fix",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0279",
+      "sourceOrder": 279,
+      "word": "floor",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0280",
+      "sourceOrder": 280,
+      "word": "flower",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0281",
+      "sourceOrder": 281,
+      "word": "fly",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0282",
+      "sourceOrder": 282,
+      "word": "focus",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0283",
+      "sourceOrder": 283,
+      "word": "food",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0284",
+      "sourceOrder": 284,
+      "word": "fool",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0285",
+      "sourceOrder": 285,
+      "word": "foot",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0286",
+      "sourceOrder": 286,
+      "word": "football",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0287",
+      "sourceOrder": 287,
+      "word": "for",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0288",
+      "sourceOrder": 288,
+      "word": "forest",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0289",
+      "sourceOrder": 289,
+      "word": "forget",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0290",
+      "sourceOrder": 290,
+      "word": "fork",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0291",
+      "sourceOrder": 291,
+      "word": "form",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0292",
+      "sourceOrder": 292,
+      "word": "four",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0293",
+      "sourceOrder": 293,
+      "word": "fox",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0294",
+      "sourceOrder": 294,
+      "word": "free",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0295",
+      "sourceOrder": 295,
+      "word": "fresh",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0296",
+      "sourceOrder": 296,
+      "word": "friend",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0297",
+      "sourceOrder": 297,
+      "word": "from",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0298",
+      "sourceOrder": 298,
+      "word": "front",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0299",
+      "sourceOrder": 299,
+      "word": "fruit",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0300",
+      "sourceOrder": 300,
+      "word": "full",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0301",
+      "sourceOrder": 301,
+      "word": "fun",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0302",
+      "sourceOrder": 302,
+      "word": "future",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0303",
+      "sourceOrder": 303,
+      "word": "game",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0304",
+      "sourceOrder": 304,
+      "word": "garden",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0305",
+      "sourceOrder": 305,
+      "word": "gas",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0306",
+      "sourceOrder": 306,
+      "word": "gentleman",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0307",
+      "sourceOrder": 307,
+      "word": "get",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0308",
+      "sourceOrder": 308,
+      "word": "girl",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0309",
+      "sourceOrder": 309,
+      "word": "give",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0310",
+      "sourceOrder": 310,
+      "word": "glad",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0311",
+      "sourceOrder": 311,
+      "word": "glass",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0312",
+      "sourceOrder": 312,
+      "word": "go",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0313",
+      "sourceOrder": 313,
+      "word": "goal",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0314",
+      "sourceOrder": 314,
+      "word": "god",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0315",
+      "sourceOrder": 315,
+      "word": "gold",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0316",
+      "sourceOrder": 316,
+      "word": "good",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0317",
+      "sourceOrder": 317,
+      "word": "goodbye",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0318",
+      "sourceOrder": 318,
+      "word": "grandfather",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0319",
+      "sourceOrder": 319,
+      "word": "grape",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0320",
+      "sourceOrder": 320,
+      "word": "grass",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0321",
+      "sourceOrder": 321,
+      "word": "gray",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0322",
+      "sourceOrder": 322,
+      "word": "great",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0323",
+      "sourceOrder": 323,
+      "word": "green",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0324",
+      "sourceOrder": 324,
+      "word": "ground",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0325",
+      "sourceOrder": 325,
+      "word": "group",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0326",
+      "sourceOrder": 326,
+      "word": "grow",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0327",
+      "sourceOrder": 327,
+      "word": "guess",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0328",
+      "sourceOrder": 328,
+      "word": "guitar",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0329",
+      "sourceOrder": 329,
+      "word": "gum",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0330",
+      "sourceOrder": 330,
+      "word": "guy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0331",
+      "sourceOrder": 331,
+      "word": "habit",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0332",
+      "sourceOrder": 332,
+      "word": "hair",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0333",
+      "sourceOrder": 333,
+      "word": "hamburger",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0334",
+      "sourceOrder": 334,
+      "word": "hand",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0335",
+      "sourceOrder": 335,
+      "word": "hang",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0336",
+      "sourceOrder": 336,
+      "word": "happy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0337",
+      "sourceOrder": 337,
+      "word": "hard",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0338",
+      "sourceOrder": 338,
+      "word": "hat",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0339",
+      "sourceOrder": 339,
+      "word": "hate",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0340",
+      "sourceOrder": 340,
+      "word": "have",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0341",
+      "sourceOrder": 341,
+      "word": "he",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0342",
+      "sourceOrder": 342,
+      "word": "head",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0343",
+      "sourceOrder": 343,
+      "word": "heart",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0344",
+      "sourceOrder": 344,
+      "word": "heat",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0345",
+      "sourceOrder": 345,
+      "word": "heavy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0346",
+      "sourceOrder": 346,
+      "word": "hello",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0347",
+      "sourceOrder": 347,
+      "word": "helmet",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0348",
+      "sourceOrder": 348,
+      "word": "help",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0349",
+      "sourceOrder": 349,
+      "word": "here",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0350",
+      "sourceOrder": 350,
+      "word": "hero",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0351",
+      "sourceOrder": 351,
+      "word": "high",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0352",
+      "sourceOrder": 352,
+      "word": "hike",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0353",
+      "sourceOrder": 353,
+      "word": "hill",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0354",
+      "sourceOrder": 354,
+      "word": "history",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0355",
+      "sourceOrder": 355,
+      "word": "hit",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0356",
+      "sourceOrder": 356,
+      "word": "hobby",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0357",
+      "sourceOrder": 357,
+      "word": "hold",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0358",
+      "sourceOrder": 358,
+      "word": "holiday",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0359",
+      "sourceOrder": 359,
+      "word": "home",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0360",
+      "sourceOrder": 360,
+      "word": "homework",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0361",
+      "sourceOrder": 361,
+      "word": "honest",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0362",
+      "sourceOrder": 362,
+      "word": "hope",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0363",
+      "sourceOrder": 363,
+      "word": "horse",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0364",
+      "sourceOrder": 364,
+      "word": "hospital",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0365",
+      "sourceOrder": 365,
+      "word": "hot",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0366",
+      "sourceOrder": 366,
+      "word": "hour",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0367",
+      "sourceOrder": 367,
+      "word": "house",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0368",
+      "sourceOrder": 368,
+      "word": "how",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0369",
+      "sourceOrder": 369,
+      "word": "however",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0370",
+      "sourceOrder": 370,
+      "word": "human",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0371",
+      "sourceOrder": 371,
+      "word": "hundred",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0372",
+      "sourceOrder": 372,
+      "word": "hunt",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0373",
+      "sourceOrder": 373,
+      "word": "hurry",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0374",
+      "sourceOrder": 374,
+      "word": "husband",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0375",
+      "sourceOrder": 375,
+      "word": "I",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0376",
+      "sourceOrder": 376,
+      "word": "ice",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0377",
+      "sourceOrder": 377,
+      "word": "idea",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0378",
+      "sourceOrder": 378,
+      "word": "if",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0379",
+      "sourceOrder": 379,
+      "word": "image",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0380",
+      "sourceOrder": 380,
+      "word": "in",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0381",
+      "sourceOrder": 381,
+      "word": "inside",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0382",
+      "sourceOrder": 382,
+      "word": "internet",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0383",
+      "sourceOrder": 383,
+      "word": "into",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0384",
+      "sourceOrder": 384,
+      "word": "introduce",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0385",
+      "sourceOrder": 385,
+      "word": "invite",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0386",
+      "sourceOrder": 386,
+      "word": "issue",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0387",
+      "sourceOrder": 387,
+      "word": "it",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0388",
+      "sourceOrder": 388,
+      "word": "jacket",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0389",
+      "sourceOrder": 389,
+      "word": "jam",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0390",
+      "sourceOrder": 390,
+      "word": "job",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0391",
+      "sourceOrder": 391,
+      "word": "join",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0392",
+      "sourceOrder": 392,
+      "word": "juice",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0393",
+      "sourceOrder": 393,
+      "word": "jump",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0394",
+      "sourceOrder": 394,
+      "word": "just",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0395",
+      "sourceOrder": 395,
+      "word": "keep",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0396",
+      "sourceOrder": 396,
+      "word": "key",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0397",
+      "sourceOrder": 397,
+      "word": "kick",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0398",
+      "sourceOrder": 398,
+      "word": "kid",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0399",
+      "sourceOrder": 399,
+      "word": "kill",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0400",
+      "sourceOrder": 400,
+      "word": "kind",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0401",
+      "sourceOrder": 401,
+      "word": "king",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0402",
+      "sourceOrder": 402,
+      "word": "kiss",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0403",
+      "sourceOrder": 403,
+      "word": "kitchen",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0404",
+      "sourceOrder": 404,
+      "word": "knife",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0405",
+      "sourceOrder": 405,
+      "word": "know",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0406",
+      "sourceOrder": 406,
+      "word": "lady",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0407",
+      "sourceOrder": 407,
+      "word": "lake",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0408",
+      "sourceOrder": 408,
+      "word": "land",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0409",
+      "sourceOrder": 409,
+      "word": "large",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0410",
+      "sourceOrder": 410,
+      "word": "laser",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0411",
+      "sourceOrder": 411,
+      "word": "last",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0412",
+      "sourceOrder": 412,
+      "word": "late",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0413",
+      "sourceOrder": 413,
+      "word": "lazy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0414",
+      "sourceOrder": 414,
+      "word": "learn",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0415",
+      "sourceOrder": 415,
+      "word": "left",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0416",
+      "sourceOrder": 416,
+      "word": "leg",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0417",
+      "sourceOrder": 417,
+      "word": "lesson",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0418",
+      "sourceOrder": 418,
+      "word": "letter",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0419",
+      "sourceOrder": 419,
+      "word": "library",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0420",
+      "sourceOrder": 420,
+      "word": "lie",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0421",
+      "sourceOrder": 421,
+      "word": "life",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0422",
+      "sourceOrder": 422,
+      "word": "light",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0423",
+      "sourceOrder": 423,
+      "word": "like",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0424",
+      "sourceOrder": 424,
+      "word": "line",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0425",
+      "sourceOrder": 425,
+      "word": "lion",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0426",
+      "sourceOrder": 426,
+      "word": "lip",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0427",
+      "sourceOrder": 427,
+      "word": "listen",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0428",
+      "sourceOrder": 428,
+      "word": "little",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0429",
+      "sourceOrder": 429,
+      "word": "live",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0430",
+      "sourceOrder": 430,
+      "word": "long",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0431",
+      "sourceOrder": 431,
+      "word": "look",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0432",
+      "sourceOrder": 432,
+      "word": "love",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0433",
+      "sourceOrder": 433,
+      "word": "low",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0434",
+      "sourceOrder": 434,
+      "word": "luck",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0435",
+      "sourceOrder": 435,
+      "word": "lunch",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0436",
+      "sourceOrder": 436,
+      "word": "mad",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0437",
+      "sourceOrder": 437,
+      "word": "mail",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0438",
+      "sourceOrder": 438,
+      "word": "make",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0439",
+      "sourceOrder": 439,
+      "word": "man",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0440",
+      "sourceOrder": 440,
+      "word": "many",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0441",
+      "sourceOrder": 441,
+      "word": "map",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0442",
+      "sourceOrder": 442,
+      "word": "marathon",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0443",
+      "sourceOrder": 443,
+      "word": "market",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0444",
+      "sourceOrder": 444,
+      "word": "marry",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0445",
+      "sourceOrder": 445,
+      "word": "mathematics",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0446",
+      "sourceOrder": 446,
+      "word": "may",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0447",
+      "sourceOrder": 447,
+      "word": "meat",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0448",
+      "sourceOrder": 448,
+      "word": "medal",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0449",
+      "sourceOrder": 449,
+      "word": "meet",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0450",
+      "sourceOrder": 450,
+      "word": "member",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0451",
+      "sourceOrder": 451,
+      "word": "memory",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0452",
+      "sourceOrder": 452,
+      "word": "middle",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0453",
+      "sourceOrder": 453,
+      "word": "might",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0454",
+      "sourceOrder": 454,
+      "word": "milk",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0455",
+      "sourceOrder": 455,
+      "word": "mind",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0456",
+      "sourceOrder": 456,
+      "word": "miss",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0457",
+      "sourceOrder": 457,
+      "word": "model",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0458",
+      "sourceOrder": 458,
+      "word": "money",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0459",
+      "sourceOrder": 459,
+      "word": "monkey",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0460",
+      "sourceOrder": 460,
+      "word": "month",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0461",
+      "sourceOrder": 461,
+      "word": "moon",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0462",
+      "sourceOrder": 462,
+      "word": "morning",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0463",
+      "sourceOrder": 463,
+      "word": "mother",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0464",
+      "sourceOrder": 464,
+      "word": "mountain",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0465",
+      "sourceOrder": 465,
+      "word": "mouse",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0466",
+      "sourceOrder": 466,
+      "word": "mouth",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0467",
+      "sourceOrder": 467,
+      "word": "move",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0468",
+      "sourceOrder": 468,
+      "word": "movie",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0469",
+      "sourceOrder": 469,
+      "word": "much",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0470",
+      "sourceOrder": 470,
+      "word": "music",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0471",
+      "sourceOrder": 471,
+      "word": "must",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0472",
+      "sourceOrder": 472,
+      "word": "name",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0473",
+      "sourceOrder": 473,
+      "word": "nation",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0474",
+      "sourceOrder": 474,
+      "word": "nature",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0475",
+      "sourceOrder": 475,
+      "word": "near",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0476",
+      "sourceOrder": 476,
+      "word": "neck",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0477",
+      "sourceOrder": 477,
+      "word": "need",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0478",
+      "sourceOrder": 478,
+      "word": "never",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0479",
+      "sourceOrder": 479,
+      "word": "new",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0480",
+      "sourceOrder": 480,
+      "word": "news",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0481",
+      "sourceOrder": 481,
+      "word": "newspaper",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0482",
+      "sourceOrder": 482,
+      "word": "next",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0483",
+      "sourceOrder": 483,
+      "word": "nice",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0484",
+      "sourceOrder": 484,
+      "word": "night",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0485",
+      "sourceOrder": 485,
+      "word": "nine",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0486",
+      "sourceOrder": 486,
+      "word": "no",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(partOfSpeech+example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0487",
+      "sourceOrder": 487,
+      "word": "north",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(partOfSpeech+meaningKr+example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0488",
+      "sourceOrder": 488,
+      "word": "nose",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0489",
+      "sourceOrder": 489,
+      "word": "not",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0490",
+      "sourceOrder": 490,
+      "word": "note",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0491",
+      "sourceOrder": 491,
+      "word": "notebook",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0492",
+      "sourceOrder": 492,
+      "word": "nothing",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0493",
+      "sourceOrder": 493,
+      "word": "now",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0494",
+      "sourceOrder": 494,
+      "word": "number",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0495",
+      "sourceOrder": 495,
+      "word": "nurse",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0496",
+      "sourceOrder": 496,
+      "word": "of",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0497",
+      "sourceOrder": 497,
+      "word": "off",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0498",
+      "sourceOrder": 498,
+      "word": "office",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0499",
+      "sourceOrder": 499,
+      "word": "often",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0500",
+      "sourceOrder": 500,
+      "word": "oil",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0501",
+      "sourceOrder": 501,
+      "word": "okay",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0502",
+      "sourceOrder": 502,
+      "word": "old",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0503",
+      "sourceOrder": 503,
+      "word": "on",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0504",
+      "sourceOrder": 504,
+      "word": "one",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0505",
+      "sourceOrder": 505,
+      "word": "only",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0506",
+      "sourceOrder": 506,
+      "word": "open",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0507",
+      "sourceOrder": 507,
+      "word": "or",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0508",
+      "sourceOrder": 508,
+      "word": "orange",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0509",
+      "sourceOrder": 509,
+      "word": "out",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0510",
+      "sourceOrder": 510,
+      "word": "over",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0511",
+      "sourceOrder": 511,
+      "word": "page",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0512",
+      "sourceOrder": 512,
+      "word": "paint",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0513",
+      "sourceOrder": 513,
+      "word": "pants",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0514",
+      "sourceOrder": 514,
+      "word": "paper",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0515",
+      "sourceOrder": 515,
+      "word": "parent",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0516",
+      "sourceOrder": 516,
+      "word": "park",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0517",
+      "sourceOrder": 517,
+      "word": "part",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0518",
+      "sourceOrder": 518,
+      "word": "partner",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0519",
+      "sourceOrder": 519,
+      "word": "party",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0520",
+      "sourceOrder": 520,
+      "word": "pass",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0521",
+      "sourceOrder": 521,
+      "word": "pay",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0522",
+      "sourceOrder": 522,
+      "word": "pen",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0523",
+      "sourceOrder": 523,
+      "word": "pencil",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0524",
+      "sourceOrder": 524,
+      "word": "people",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0525",
+      "sourceOrder": 525,
+      "word": "piano",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0526",
+      "sourceOrder": 526,
+      "word": "pick",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0527",
+      "sourceOrder": 527,
+      "word": "picture",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0528",
+      "sourceOrder": 528,
+      "word": "pig",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0529",
+      "sourceOrder": 529,
+      "word": "pilot",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0530",
+      "sourceOrder": 530,
+      "word": "pink",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0531",
+      "sourceOrder": 531,
+      "word": "pizza",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0532",
+      "sourceOrder": 532,
+      "word": "place",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0533",
+      "sourceOrder": 533,
+      "word": "plan",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0534",
+      "sourceOrder": 534,
+      "word": "plastic",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0535",
+      "sourceOrder": 535,
+      "word": "play",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0536",
+      "sourceOrder": 536,
+      "word": "please",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0537",
+      "sourceOrder": 537,
+      "word": "point",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0538",
+      "sourceOrder": 538,
+      "word": "police",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0539",
+      "sourceOrder": 539,
+      "word": "poor",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0540",
+      "sourceOrder": 540,
+      "word": "potato",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0541",
+      "sourceOrder": 541,
+      "word": "power",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0542",
+      "sourceOrder": 542,
+      "word": "present",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0543",
+      "sourceOrder": 543,
+      "word": "pretty",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0544",
+      "sourceOrder": 544,
+      "word": "prince",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0545",
+      "sourceOrder": 545,
+      "word": "print",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0546",
+      "sourceOrder": 546,
+      "word": "problem",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0547",
+      "sourceOrder": 547,
+      "word": "program",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0548",
+      "sourceOrder": 548,
+      "word": "project",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0549",
+      "sourceOrder": 549,
+      "word": "puppy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0550",
+      "sourceOrder": 550,
+      "word": "push",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0551",
+      "sourceOrder": 551,
+      "word": "put",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0552",
+      "sourceOrder": 552,
+      "word": "queen",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0553",
+      "sourceOrder": 553,
+      "word": "question",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0554",
+      "sourceOrder": 554,
+      "word": "quick",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0555",
+      "sourceOrder": 555,
+      "word": "quiet",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0556",
+      "sourceOrder": 556,
+      "word": "quiz",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0557",
+      "sourceOrder": 557,
+      "word": "rabbit",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0558",
+      "sourceOrder": 558,
+      "word": "race",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0559",
+      "sourceOrder": 559,
+      "word": "radio",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0560",
+      "sourceOrder": 560,
+      "word": "rain",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0561",
+      "sourceOrder": 561,
+      "word": "read",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0562",
+      "sourceOrder": 562,
+      "word": "ready",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0563",
+      "sourceOrder": 563,
+      "word": "recreation",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0564",
+      "sourceOrder": 564,
+      "word": "red",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0565",
+      "sourceOrder": 565,
+      "word": "remember",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0566",
+      "sourceOrder": 566,
+      "word": "restaurant",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0567",
+      "sourceOrder": 567,
+      "word": "restroom",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0568",
+      "sourceOrder": 568,
+      "word": "return",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0569",
+      "sourceOrder": 569,
+      "word": "ribbon",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0570",
+      "sourceOrder": 570,
+      "word": "rich",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0571",
+      "sourceOrder": 571,
+      "word": "right",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0572",
+      "sourceOrder": 572,
+      "word": "ring",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0573",
+      "sourceOrder": 573,
+      "word": "river",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0574",
+      "sourceOrder": 574,
+      "word": "road",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0575",
+      "sourceOrder": 575,
+      "word": "robot",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0576",
+      "sourceOrder": 576,
+      "word": "rock",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0577",
+      "sourceOrder": 577,
+      "word": "room",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0578",
+      "sourceOrder": 578,
+      "word": "rose",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0579",
+      "sourceOrder": 579,
+      "word": "run",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0580",
+      "sourceOrder": 580,
+      "word": "sad",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0581",
+      "sourceOrder": 581,
+      "word": "safe",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0582",
+      "sourceOrder": 582,
+      "word": "salad",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0583",
+      "sourceOrder": 583,
+      "word": "sale",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0584",
+      "sourceOrder": 584,
+      "word": "salt",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0585",
+      "sourceOrder": 585,
+      "word": "same",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0586",
+      "sourceOrder": 586,
+      "word": "sand",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0587",
+      "sourceOrder": 587,
+      "word": "sandwich",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0588",
+      "sourceOrder": 588,
+      "word": "save",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0589",
+      "sourceOrder": 589,
+      "word": "say",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0590",
+      "sourceOrder": 590,
+      "word": "school",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0591",
+      "sourceOrder": 591,
+      "word": "science",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0592",
+      "sourceOrder": 592,
+      "word": "scissors",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0593",
+      "sourceOrder": 593,
+      "word": "score",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0594",
+      "sourceOrder": 594,
+      "word": "sea",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0595",
+      "sourceOrder": 595,
+      "word": "season",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0596",
+      "sourceOrder": 596,
+      "word": "second",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(partOfSpeech+meaningKr+example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0597",
+      "sourceOrder": 597,
+      "word": "see",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0598",
+      "sourceOrder": 598,
+      "word": "sell",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0599",
+      "sourceOrder": 599,
+      "word": "send",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0600",
+      "sourceOrder": 600,
+      "word": "service",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0601",
+      "sourceOrder": 601,
+      "word": "set",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0602",
+      "sourceOrder": 602,
+      "word": "seven",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0603",
+      "sourceOrder": 603,
+      "word": "she",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0604",
+      "sourceOrder": 604,
+      "word": "ship",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0605",
+      "sourceOrder": 605,
+      "word": "shirt",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0606",
+      "sourceOrder": 606,
+      "word": "shoe",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0607",
+      "sourceOrder": 607,
+      "word": "shop",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0608",
+      "sourceOrder": 608,
+      "word": "short",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0609",
+      "sourceOrder": 609,
+      "word": "should",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0610",
+      "sourceOrder": 610,
+      "word": "show",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0611",
+      "sourceOrder": 611,
+      "word": "shy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0612",
+      "sourceOrder": 612,
+      "word": "sick",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0613",
+      "sourceOrder": 613,
+      "word": "side",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0614",
+      "sourceOrder": 614,
+      "word": "sing",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0615",
+      "sourceOrder": 615,
+      "word": "sister",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0616",
+      "sourceOrder": 616,
+      "word": "sit",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0617",
+      "sourceOrder": 617,
+      "word": "six",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0618",
+      "sourceOrder": 618,
+      "word": "size",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0619",
+      "sourceOrder": 619,
+      "word": "skate",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0620",
+      "sourceOrder": 620,
+      "word": "ski",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0621",
+      "sourceOrder": 621,
+      "word": "skin",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0622",
+      "sourceOrder": 622,
+      "word": "skirt",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0623",
+      "sourceOrder": 623,
+      "word": "sky",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0624",
+      "sourceOrder": 624,
+      "word": "sleep",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0625",
+      "sourceOrder": 625,
+      "word": "slow",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0626",
+      "sourceOrder": 626,
+      "word": "small",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0627",
+      "sourceOrder": 627,
+      "word": "smell",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0628",
+      "sourceOrder": 628,
+      "word": "smile",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0629",
+      "sourceOrder": 629,
+      "word": "snow",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0630",
+      "sourceOrder": 630,
+      "word": "so",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0631",
+      "sourceOrder": 631,
+      "word": "soccer",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0632",
+      "sourceOrder": 632,
+      "word": "sock",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0633",
+      "sourceOrder": 633,
+      "word": "soft",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0634",
+      "sourceOrder": 634,
+      "word": "software",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0635",
+      "sourceOrder": 635,
+      "word": "some",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0636",
+      "sourceOrder": 636,
+      "word": "son",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0637",
+      "sourceOrder": 637,
+      "word": "song",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0638",
+      "sourceOrder": 638,
+      "word": "sorry",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0639",
+      "sourceOrder": 639,
+      "word": "sound",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0640",
+      "sourceOrder": 640,
+      "word": "soup",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0641",
+      "sourceOrder": 641,
+      "word": "south",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(partOfSpeech+meaningKr+example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0642",
+      "sourceOrder": 642,
+      "word": "space",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0643",
+      "sourceOrder": 643,
+      "word": "spaghetti",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0644",
+      "sourceOrder": 644,
+      "word": "speak",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0645",
+      "sourceOrder": 645,
+      "word": "speed",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0646",
+      "sourceOrder": 646,
+      "word": "spoon",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0647",
+      "sourceOrder": 647,
+      "word": "sport",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0648",
+      "sourceOrder": 648,
+      "word": "spring",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0649",
+      "sourceOrder": 649,
+      "word": "staff",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0650",
+      "sourceOrder": 650,
+      "word": "stand",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0651",
+      "sourceOrder": 651,
+      "word": "star",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0652",
+      "sourceOrder": 652,
+      "word": "start",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0653",
+      "sourceOrder": 653,
+      "word": "stay",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0654",
+      "sourceOrder": 654,
+      "word": "steak",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0655",
+      "sourceOrder": 655,
+      "word": "stone",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0656",
+      "sourceOrder": 656,
+      "word": "stop",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0657",
+      "sourceOrder": 657,
+      "word": "store",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0658",
+      "sourceOrder": 658,
+      "word": "story",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0659",
+      "sourceOrder": 659,
+      "word": "street",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0660",
+      "sourceOrder": 660,
+      "word": "strong",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0661",
+      "sourceOrder": 661,
+      "word": "study",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0662",
+      "sourceOrder": 662,
+      "word": "style",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0663",
+      "sourceOrder": 663,
+      "word": "subway",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0664",
+      "sourceOrder": 664,
+      "word": "sugar",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0665",
+      "sourceOrder": 665,
+      "word": "summer",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0666",
+      "sourceOrder": 666,
+      "word": "sun",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0667",
+      "sourceOrder": 667,
+      "word": "sure",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0668",
+      "sourceOrder": 668,
+      "word": "swim",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0669",
+      "sourceOrder": 669,
+      "word": "table",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0670",
+      "sourceOrder": 670,
+      "word": "tail",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0671",
+      "sourceOrder": 671,
+      "word": "take",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0672",
+      "sourceOrder": 672,
+      "word": "talk",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0673",
+      "sourceOrder": 673,
+      "word": "tall",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0674",
+      "sourceOrder": 674,
+      "word": "tape",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0675",
+      "sourceOrder": 675,
+      "word": "taste",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0676",
+      "sourceOrder": 676,
+      "word": "taxi",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0677",
+      "sourceOrder": 677,
+      "word": "teach",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0678",
+      "sourceOrder": 678,
+      "word": "team",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0679",
+      "sourceOrder": 679,
+      "word": "telephone",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0680",
+      "sourceOrder": 680,
+      "word": "television",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0681",
+      "sourceOrder": 681,
+      "word": "tell",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0682",
+      "sourceOrder": 682,
+      "word": "ten",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0683",
+      "sourceOrder": 683,
+      "word": "tennis",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0684",
+      "sourceOrder": 684,
+      "word": "tent",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0685",
+      "sourceOrder": 685,
+      "word": "test",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0686",
+      "sourceOrder": 686,
+      "word": "textbook",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0687",
+      "sourceOrder": 687,
+      "word": "than",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0688",
+      "sourceOrder": 688,
+      "word": "thank",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0689",
+      "sourceOrder": 689,
+      "word": "that",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0690",
+      "sourceOrder": 690,
+      "word": "the",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0691",
+      "sourceOrder": 691,
+      "word": "there",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0692",
+      "sourceOrder": 692,
+      "word": "they",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0693",
+      "sourceOrder": 693,
+      "word": "thing",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0694",
+      "sourceOrder": 694,
+      "word": "think",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0695",
+      "sourceOrder": 695,
+      "word": "third",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0696",
+      "sourceOrder": 696,
+      "word": "thirst",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0697",
+      "sourceOrder": 697,
+      "word": "thirteen",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0698",
+      "sourceOrder": 698,
+      "word": "thirty",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0699",
+      "sourceOrder": 699,
+      "word": "this",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0700",
+      "sourceOrder": 700,
+      "word": "three",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0701",
+      "sourceOrder": 701,
+      "word": "ticket",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0702",
+      "sourceOrder": 702,
+      "word": "tiger",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0703",
+      "sourceOrder": 703,
+      "word": "time",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0704",
+      "sourceOrder": 704,
+      "word": "tire",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0705",
+      "sourceOrder": 705,
+      "word": "to",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0706",
+      "sourceOrder": 706,
+      "word": "today",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0707",
+      "sourceOrder": 707,
+      "word": "together",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0708",
+      "sourceOrder": 708,
+      "word": "tomato",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0709",
+      "sourceOrder": 709,
+      "word": "tomorrow",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0710",
+      "sourceOrder": 710,
+      "word": "tonight",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0711",
+      "sourceOrder": 711,
+      "word": "too",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0712",
+      "sourceOrder": 712,
+      "word": "tooth",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0713",
+      "sourceOrder": 713,
+      "word": "top",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0714",
+      "sourceOrder": 714,
+      "word": "touch",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0715",
+      "sourceOrder": 715,
+      "word": "town",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0716",
+      "sourceOrder": 716,
+      "word": "toy",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0717",
+      "sourceOrder": 717,
+      "word": "track",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0718",
+      "sourceOrder": 718,
+      "word": "train",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0719",
+      "sourceOrder": 719,
+      "word": "travel",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0720",
+      "sourceOrder": 720,
+      "word": "tree",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0721",
+      "sourceOrder": 721,
+      "word": "trip",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0722",
+      "sourceOrder": 722,
+      "word": "truck",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0723",
+      "sourceOrder": 723,
+      "word": "true",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0724",
+      "sourceOrder": 724,
+      "word": "try",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0725",
+      "sourceOrder": 725,
+      "word": "turn",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0726",
+      "sourceOrder": 726,
+      "word": "twelve",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0727",
+      "sourceOrder": 727,
+      "word": "twenty",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0728",
+      "sourceOrder": 728,
+      "word": "twenty-first",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0729",
+      "sourceOrder": 729,
+      "word": "twenty-second",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0730",
+      "sourceOrder": 730,
+      "word": "twenty-third",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0731",
+      "sourceOrder": 731,
+      "word": "twice",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0732",
+      "sourceOrder": 732,
+      "word": "two",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0733",
+      "sourceOrder": 733,
+      "word": "type",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0734",
+      "sourceOrder": 734,
+      "word": "ugly",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0735",
+      "sourceOrder": 735,
+      "word": "umbrella",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0736",
+      "sourceOrder": 736,
+      "word": "uncle",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0737",
+      "sourceOrder": 737,
+      "word": "under",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0738",
+      "sourceOrder": 738,
+      "word": "understand",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0739",
+      "sourceOrder": 739,
+      "word": "up",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0740",
+      "sourceOrder": 740,
+      "word": "use",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0741",
+      "sourceOrder": 741,
+      "word": "vegetable",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0742",
+      "sourceOrder": 742,
+      "word": "very",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0743",
+      "sourceOrder": 743,
+      "word": "video",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0744",
+      "sourceOrder": 744,
+      "word": "violin",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0745",
+      "sourceOrder": 745,
+      "word": "visit",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0746",
+      "sourceOrder": 746,
+      "word": "voice",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0747",
+      "sourceOrder": 747,
+      "word": "wait",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0748",
+      "sourceOrder": 748,
+      "word": "wake",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0749",
+      "sourceOrder": 749,
+      "word": "walk",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0750",
+      "sourceOrder": 750,
+      "word": "wall",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0751",
+      "sourceOrder": 751,
+      "word": "want",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0752",
+      "sourceOrder": 752,
+      "word": "war",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0753",
+      "sourceOrder": 753,
+      "word": "warm",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0754",
+      "sourceOrder": 754,
+      "word": "wash",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0755",
+      "sourceOrder": 755,
+      "word": "watch",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0756",
+      "sourceOrder": 756,
+      "word": "water",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0757",
+      "sourceOrder": 757,
+      "word": "watermelon",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0758",
+      "sourceOrder": 758,
+      "word": "way",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0759",
+      "sourceOrder": 759,
+      "word": "we",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0760",
+      "sourceOrder": 760,
+      "word": "wear",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0761",
+      "sourceOrder": 761,
+      "word": "weather",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0762",
+      "sourceOrder": 762,
+      "word": "website",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0763",
+      "sourceOrder": 763,
+      "word": "wedding",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0764",
+      "sourceOrder": 764,
+      "word": "week",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0765",
+      "sourceOrder": 765,
+      "word": "weekend",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0766",
+      "sourceOrder": 766,
+      "word": "weight",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0767",
+      "sourceOrder": 767,
+      "word": "welcome",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0768",
+      "sourceOrder": 768,
+      "word": "well",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0769",
+      "sourceOrder": 769,
+      "word": "west",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0770",
+      "sourceOrder": 770,
+      "word": "wet",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0771",
+      "sourceOrder": 771,
+      "word": "what",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0772",
+      "sourceOrder": 772,
+      "word": "when",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0773",
+      "sourceOrder": 773,
+      "word": "where",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0774",
+      "sourceOrder": 774,
+      "word": "white",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0775",
+      "sourceOrder": 775,
+      "word": "who",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0776",
+      "sourceOrder": 776,
+      "word": "why",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0777",
+      "sourceOrder": 777,
+      "word": "wife",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0778",
+      "sourceOrder": 778,
+      "word": "will",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0779",
+      "sourceOrder": 779,
+      "word": "win",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0780",
+      "sourceOrder": 780,
+      "word": "wind",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0781",
+      "sourceOrder": 781,
+      "word": "window",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0782",
+      "sourceOrder": 782,
+      "word": "wine",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0783",
+      "sourceOrder": 783,
+      "word": "winter",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0784",
+      "sourceOrder": 784,
+      "word": "wish",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0785",
+      "sourceOrder": 785,
+      "word": "with",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0786",
+      "sourceOrder": 786,
+      "word": "woman",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0787",
+      "sourceOrder": 787,
+      "word": "wood",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(meaningKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    },
+    {
+      "id": "ev-moe2022-e-0788",
+      "sourceOrder": 788,
+      "word": "word",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0789",
+      "sourceOrder": 789,
+      "word": "work",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0790",
+      "sourceOrder": 790,
+      "word": "world",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0791",
+      "sourceOrder": 791,
+      "word": "worry",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0792",
+      "sourceOrder": 792,
+      "word": "write",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0793",
+      "sourceOrder": 793,
+      "word": "wrong",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0794",
+      "sourceOrder": 794,
+      "word": "year",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0795",
+      "sourceOrder": 795,
+      "word": "yellow",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0796",
+      "sourceOrder": 796,
+      "word": "yes",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0797",
+      "sourceOrder": 797,
+      "word": "yesterday",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0798",
+      "sourceOrder": 798,
+      "word": "you",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0799",
+      "sourceOrder": 799,
+      "word": "young",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": []
+    },
+    {
+      "id": "ev-moe2022-e-0800",
+      "sourceOrder": 800,
+      "word": "zoo",
+      "status": "reviewed",
+      "reviewedAt": "2026-07-29",
+      "findings": [
+        "재검토 지적 수정(example+exampleKr) - fix-01"
+      ],
+      "recheckedAt": "2026-07-29"
+    }
+  ]
+}

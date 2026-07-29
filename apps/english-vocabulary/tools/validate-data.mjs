@@ -22,7 +22,7 @@ function warn(where, msg) { warnings.push(`[WARN]  ${where}\n  - ${msg}`); }
 const ID_RE = /^ev-s(\d{2})-(\d{4})$/;
 const SETID_RE = /^ev-set-(\d{3})$/;
 const EXAMPLE_MAX_WORDS = 14; // 짧은 예문 원칙(요청서 5·6장)
-const POS_ALLOWED = new Set(["명사", "동사", "형용사", "부사", "전치사", "접속사", "대명사", "감탄사", "한정사"]);
+const POS_ALLOWED = new Set(["명사", "동사", "형용사", "부사", "전치사", "접속사", "대명사", "감탄사", "한정사", "조동사", "수사"]);
 
 // 활용형 어간 매칭: 예문에 목표 단어(또는 흔한 활용형)가 들어있는지 보수적으로 확인.
 // 불규칙 활용(go→went 등)은 여기서 못 잡으므로 error가 아니라 warning으로 둔다.

@@ -1,0 +1,5898 @@
+{
+  "schemaVersion": 1,
+  "status": "editorial-draft",
+  "source": {
+    "vocabulary": "education ministry 2022 elementary starred representative forms",
+    "topicTags": "elementary-topic-tags-v1.json",
+    "frequency": "elementary-frequency-wordfreq-v3.1.1.json",
+    "orderingRule": "topic/context cluster first; frequency rank inside each cluster"
+  },
+  "sets": [
+    {
+      "id": "SET01",
+      "title": "나와 일상",
+      "focusTopics": [
+        "self_and_people",
+        "home_food_clothes",
+        "time_numbers_measure",
+        "core_function",
+        "action_change_description",
+        "communication_thinking_social",
+        "objects_and_materials",
+        "school_learning_media",
+        "play_sport_arts",
+        "nature_weather_animals",
+        "town_travel_places"
+      ],
+      "topicQuotas": {
+        "action_change_description": 24,
+        "communication_thinking_social": 8,
+        "core_function": 26,
+        "home_food_clothes": 55,
+        "nature_weather_animals": 6,
+        "objects_and_materials": 12,
+        "play_sport_arts": 4,
+        "school_learning_media": 8,
+        "self_and_people": 41,
+        "society_culture_work": 0,
+        "time_numbers_measure": 12,
+        "town_travel_places": 4
+      },
+      "cards": [
+        {
+          "id": "ev-moe2022-e-0524",
+          "word": "people",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 48,
+          "learningOrder": 1
+        },
+        {
+          "id": "ev-moe2022-e-0439",
+          "word": "man",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 98,
+          "learningOrder": 2
+        },
+        {
+          "id": "ev-moe2022-e-0255",
+          "word": "family",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 136,
+          "learningOrder": 3
+        },
+        {
+          "id": "ev-moe2022-e-0342",
+          "word": "head",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 181,
+          "learningOrder": 4
+        },
+        {
+          "id": "ev-moe2022-e-0251",
+          "word": "face",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 202,
+          "learningOrder": 5
+        },
+        {
+          "id": "ev-moe2022-e-0400",
+          "word": "kind",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 204,
+          "learningOrder": 6
+        },
+        {
+          "id": "ev-moe2022-e-0799",
+          "word": "young",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 212,
+          "learningOrder": 7
+        },
+        {
+          "id": "ev-moe2022-e-0334",
+          "word": "hand",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 217,
+          "learningOrder": 8
+        },
+        {
+          "id": "ev-moe2022-e-0091",
+          "word": "body",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 221,
+          "learningOrder": 9
+        },
+        {
+          "id": "ev-moe2022-e-0330",
+          "word": "guy",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 225,
+          "learningOrder": 10
+        },
+        {
+          "id": "ev-moe2022-e-0308",
+          "word": "girl",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 238,
+          "learningOrder": 11
+        },
+        {
+          "id": "ev-moe2022-e-0296",
+          "word": "friend",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 242,
+          "learningOrder": 12
+        },
+        {
+          "id": "ev-moe2022-e-0786",
+          "word": "woman",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 254,
+          "learningOrder": 13
+        },
+        {
+          "id": "ev-moe2022-e-0014",
+          "word": "age",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 266,
+          "learningOrder": 14
+        },
+        {
+          "id": "ev-moe2022-e-0343",
+          "word": "heart",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 273,
+          "learningOrder": 15
+        },
+        {
+          "id": "ev-moe2022-e-0146",
+          "word": "child",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 275,
+          "learningOrder": 16
+        },
+        {
+          "id": "ev-moe2022-e-0636",
+          "word": "son",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 287,
+          "learningOrder": 17
+        },
+        {
+          "id": "ev-moe2022-e-0047",
+          "word": "baby",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 295,
+          "learningOrder": 18
+        },
+        {
+          "id": "ev-moe2022-e-0261",
+          "word": "father",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 297,
+          "learningOrder": 19
+        },
+        {
+          "id": "ev-moe2022-e-0463",
+          "word": "mother",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 308,
+          "learningOrder": 20
+        },
+        {
+          "id": "ev-moe2022-e-0777",
+          "word": "wife",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 317,
+          "learningOrder": 21
+        },
+        {
+          "id": "ev-moe2022-e-0182",
+          "word": "couple",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 327,
+          "learningOrder": 22
+        },
+        {
+          "id": "ev-moe2022-e-0099",
+          "word": "boy",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 342,
+          "learningOrder": 23
+        },
+        {
+          "id": "ev-moe2022-e-0023",
+          "word": "alone",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 348,
+          "learningOrder": 24
+        },
+        {
+          "id": "ev-moe2022-e-0107",
+          "word": "brother",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 374,
+          "learningOrder": 25
+        },
+        {
+          "id": "ev-moe2022-e-0087",
+          "word": "blood",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 380,
+          "learningOrder": 26
+        },
+        {
+          "id": "ev-moe2022-e-0332",
+          "word": "hair",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 389,
+          "learningOrder": 27
+        },
+        {
+          "id": "ev-moe2022-e-0201",
+          "word": "daughter",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 396,
+          "learningOrder": 28
+        },
+        {
+          "id": "ev-moe2022-e-0250",
+          "word": "eye",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 434,
+          "learningOrder": 29
+        },
+        {
+          "id": "ev-moe2022-e-0374",
+          "word": "husband",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 447,
+          "learningOrder": 30
+        },
+        {
+          "id": "ev-moe2022-e-0398",
+          "word": "kid",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 453,
+          "learningOrder": 31
+        },
+        {
+          "id": "ev-moe2022-e-0406",
+          "word": "lady",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 465,
+          "learningOrder": 32
+        },
+        {
+          "id": "ev-moe2022-e-0615",
+          "word": "sister",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 467,
+          "learningOrder": 33
+        },
+        {
+          "id": "ev-moe2022-e-0621",
+          "word": "skin",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 485,
+          "learningOrder": 34
+        },
+        {
+          "id": "ev-moe2022-e-0216",
+          "word": "doctor",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 488,
+          "learningOrder": 35
+        },
+        {
+          "id": "ev-moe2022-e-0285",
+          "word": "foot",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 502,
+          "learningOrder": 36
+        },
+        {
+          "id": "ev-moe2022-e-0272",
+          "word": "finger",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 660,
+          "learningOrder": 37
+        },
+        {
+          "id": "ev-moe2022-e-0736",
+          "word": "uncle",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 670,
+          "learningOrder": 38
+        },
+        {
+          "id": "ev-moe2022-e-0233",
+          "word": "ear",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 676,
+          "learningOrder": 39
+        },
+        {
+          "id": "ev-moe2022-e-0185",
+          "word": "cousin",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 683,
+          "learningOrder": 40
+        },
+        {
+          "id": "ev-moe2022-e-0712",
+          "word": "tooth",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 751,
+          "learningOrder": 41
+        },
+        {
+          "id": "ev-moe2022-e-0359",
+          "word": "home",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 99,
+          "learningOrder": 42
+        },
+        {
+          "id": "ev-moe2022-e-0367",
+          "word": "house",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 123,
+          "learningOrder": 43
+        },
+        {
+          "id": "ev-moe2022-e-0283",
+          "word": "food",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 224,
+          "learningOrder": 44
+        },
+        {
+          "id": "ev-moe2022-e-0396",
+          "word": "key",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 371,
+          "learningOrder": 45
+        },
+        {
+          "id": "ev-moe2022-e-0193",
+          "word": "cup",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 375,
+          "learningOrder": 46
+        },
+        {
+          "id": "ev-moe2022-e-0500",
+          "word": "oil",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 382,
+          "learningOrder": 47
+        },
+        {
+          "id": "ev-moe2022-e-0219",
+          "word": "door",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 388,
+          "learningOrder": 48
+        },
+        {
+          "id": "ev-moe2022-e-0068",
+          "word": "bed",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 395,
+          "learningOrder": 49
+        },
+        {
+          "id": "ev-moe2022-e-0669",
+          "word": "table",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 415,
+          "learningOrder": 50
+        },
+        {
+          "id": "ev-moe2022-e-0098",
+          "word": "box",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 418,
+          "learningOrder": 51
+        },
+        {
+          "id": "ev-moe2022-e-0376",
+          "word": "ice",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 448,
+          "learningOrder": 52
+        },
+        {
+          "id": "ev-moe2022-e-0279",
+          "word": "floor",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 468,
+          "learningOrder": 53
+        },
+        {
+          "id": "ev-moe2022-e-0256",
+          "word": "fan",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 475,
+          "learningOrder": 54
+        },
+        {
+          "id": "ev-moe2022-e-0226",
+          "word": "drink",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 489,
+          "learningOrder": 55
+        },
+        {
+          "id": "ev-moe2022-e-0163",
+          "word": "coffee",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 505,
+          "learningOrder": 56
+        },
+        {
+          "id": "ev-moe2022-e-0311",
+          "word": "glass",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 512,
+          "learningOrder": 57
+        },
+        {
+          "id": "ev-moe2022-e-0051",
+          "word": "bag",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 540,
+          "learningOrder": 58
+        },
+        {
+          "id": "ev-moe2022-e-0213",
+          "word": "dinner",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 545,
+          "learningOrder": 59
+        },
+        {
+          "id": "ev-moe2022-e-0035",
+          "word": "apple",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 551,
+          "learningOrder": 60
+        },
+        {
+          "id": "ev-moe2022-e-0225",
+          "word": "dress",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 552,
+          "learningOrder": 61
+        },
+        {
+          "id": "ev-moe2022-e-0675",
+          "word": "taste",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 570,
+          "learningOrder": 62
+        },
+        {
+          "id": "ev-moe2022-e-0159",
+          "word": "clothes",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 572,
+          "learningOrder": 63
+        },
+        {
+          "id": "ev-moe2022-e-0139",
+          "word": "chair",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 588,
+          "learningOrder": 64
+        },
+        {
+          "id": "ev-moe2022-e-0664",
+          "word": "sugar",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 595,
+          "learningOrder": 65
+        },
+        {
+          "id": "ev-moe2022-e-0435",
+          "word": "lunch",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 601,
+          "learningOrder": 66
+        },
+        {
+          "id": "ev-moe2022-e-0454",
+          "word": "milk",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 602,
+          "learningOrder": 67
+        },
+        {
+          "id": "ev-moe2022-e-0034",
+          "word": "apartment",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 604,
+          "learningOrder": 68
+        },
+        {
+          "id": "ev-moe2022-e-0175",
+          "word": "cook",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 605,
+          "learningOrder": 69
+        },
+        {
+          "id": "ev-moe2022-e-0403",
+          "word": "kitchen",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 606,
+          "learningOrder": 70
+        },
+        {
+          "id": "ev-moe2022-e-0145",
+          "word": "chicken",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 614,
+          "learningOrder": 71
+        },
+        {
+          "id": "ev-moe2022-e-0447",
+          "word": "meat",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 615,
+          "learningOrder": 72
+        },
+        {
+          "id": "ev-moe2022-e-0605",
+          "word": "shirt",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 617,
+          "learningOrder": 73
+        },
+        {
+          "id": "ev-moe2022-e-0189",
+          "word": "cream",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 618,
+          "learningOrder": 74
+        },
+        {
+          "id": "ev-moe2022-e-0103",
+          "word": "breakfast",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 620,
+          "learningOrder": 75
+        },
+        {
+          "id": "ev-moe2022-e-0584",
+          "word": "salt",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 628,
+          "learningOrder": 76
+        },
+        {
+          "id": "ev-moe2022-e-0075",
+          "word": "bell",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 629,
+          "learningOrder": 77
+        },
+        {
+          "id": "ev-moe2022-e-0096",
+          "word": "bottle",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 633,
+          "learningOrder": 78
+        },
+        {
+          "id": "ev-moe2022-e-0144",
+          "word": "cheese",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 634,
+          "learningOrder": 79
+        },
+        {
+          "id": "ev-moe2022-e-0299",
+          "word": "fruit",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 635,
+          "learningOrder": 80
+        },
+        {
+          "id": "ev-moe2022-e-0117",
+          "word": "button",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 639,
+          "learningOrder": 81
+        },
+        {
+          "id": "ev-moe2022-e-0120",
+          "word": "cake",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 647,
+          "learningOrder": 82
+        },
+        {
+          "id": "ev-moe2022-e-0338",
+          "word": "hat",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 648,
+          "learningOrder": 83
+        },
+        {
+          "id": "ev-moe2022-e-0127",
+          "word": "cap",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 653,
+          "learningOrder": 84
+        },
+        {
+          "id": "ev-moe2022-e-0101",
+          "word": "bread",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 656,
+          "learningOrder": 85
+        },
+        {
+          "id": "ev-moe2022-e-0147",
+          "word": "chocolate",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 657,
+          "learningOrder": 86
+        },
+        {
+          "id": "ev-moe2022-e-0513",
+          "word": "pants",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 662,
+          "learningOrder": 87
+        },
+        {
+          "id": "ev-moe2022-e-0061",
+          "word": "bath",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 671,
+          "learningOrder": 88
+        },
+        {
+          "id": "ev-moe2022-e-0531",
+          "word": "pizza",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 677,
+          "learningOrder": 89
+        },
+        {
+          "id": "ev-moe2022-e-0077",
+          "word": "belt",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 679,
+          "learningOrder": 90
+        },
+        {
+          "id": "ev-moe2022-e-0404",
+          "word": "knife",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 684,
+          "learningOrder": 91
+        },
+        {
+          "id": "ev-moe2022-e-0116",
+          "word": "butter",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 686,
+          "learningOrder": 92
+        },
+        {
+          "id": "ev-moe2022-e-0162",
+          "word": "coat",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 696,
+          "learningOrder": 93
+        },
+        {
+          "id": "ev-moe2022-e-0392",
+          "word": "juice",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 697,
+          "learningOrder": 94
+        },
+        {
+          "id": "ev-moe2022-e-0054",
+          "word": "banana",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 763,
+          "learningOrder": 95
+        },
+        {
+          "id": "ev-moe2022-e-0131",
+          "word": "carrot",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 789,
+          "learningOrder": 96
+        },
+        {
+          "id": "ev-moe2022-e-0504",
+          "word": "one",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 30,
+          "learningOrder": 97
+        },
+        {
+          "id": "ev-moe2022-e-0703",
+          "word": "time",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 44,
+          "learningOrder": 98
+        },
+        {
+          "id": "ev-moe2022-e-0493",
+          "word": "now",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 52,
+          "learningOrder": 99
+        },
+        {
+          "id": "ev-moe2022-e-0275",
+          "word": "first",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 57,
+          "learningOrder": 100
+        },
+        {
+          "id": "ev-moe2022-e-0732",
+          "word": "two",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 61,
+          "learningOrder": 101
+        },
+        {
+          "id": "ev-moe2022-e-0794",
+          "word": "year",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 82,
+          "learningOrder": 102
+        },
+        {
+          "id": "ev-moe2022-e-0202",
+          "word": "day",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 83,
+          "learningOrder": 103
+        },
+        {
+          "id": "ev-moe2022-e-0411",
+          "word": "last",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 96,
+          "learningOrder": 104
+        },
+        {
+          "id": "ev-moe2022-e-0700",
+          "word": "three",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 108,
+          "learningOrder": 105
+        },
+        {
+          "id": "ev-moe2022-e-0482",
+          "word": "next",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 127,
+          "learningOrder": 106
+        },
+        {
+          "id": "ev-moe2022-e-0596",
+          "word": "second",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 143,
+          "learningOrder": 107
+        },
+        {
+          "id": "ev-moe2022-e-0494",
+          "word": "number",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 146,
+          "learningOrder": 108
+        },
+        {
+          "id": "ev-moe2022-e-0690",
+          "word": "the",
+          "primaryTopic": "core_function",
+          "frequencyRank": 1,
+          "learningOrder": 109
+        },
+        {
+          "id": "ev-moe2022-e-0705",
+          "word": "to",
+          "primaryTopic": "core_function",
+          "frequencyRank": 2,
+          "learningOrder": 110
+        },
+        {
+          "id": "ev-moe2022-e-0029",
+          "word": "and",
+          "primaryTopic": "core_function",
+          "frequencyRank": 3,
+          "learningOrder": 111
+        },
+        {
+          "id": "ev-moe2022-e-0496",
+          "word": "of",
+          "primaryTopic": "core_function",
+          "frequencyRank": 4,
+          "learningOrder": 112
+        },
+        {
+          "id": "ev-moe2022-e-0001",
+          "word": "a",
+          "primaryTopic": "core_function",
+          "frequencyRank": 5,
+          "learningOrder": 113
+        },
+        {
+          "id": "ev-moe2022-e-0380",
+          "word": "in",
+          "primaryTopic": "core_function",
+          "frequencyRank": 6,
+          "learningOrder": 114
+        },
+        {
+          "id": "ev-moe2022-e-0375",
+          "word": "I",
+          "primaryTopic": "core_function",
+          "frequencyRank": 7,
+          "learningOrder": 115
+        },
+        {
+          "id": "ev-moe2022-e-0287",
+          "word": "for",
+          "primaryTopic": "core_function",
+          "frequencyRank": 8,
+          "learningOrder": 116
+        },
+        {
+          "id": "ev-moe2022-e-0689",
+          "word": "that",
+          "primaryTopic": "core_function",
+          "frequencyRank": 9,
+          "learningOrder": 117
+        },
+        {
+          "id": "ev-moe2022-e-0798",
+          "word": "you",
+          "primaryTopic": "core_function",
+          "frequencyRank": 10,
+          "learningOrder": 118
+        },
+        {
+          "id": "ev-moe2022-e-0387",
+          "word": "it",
+          "primaryTopic": "core_function",
+          "frequencyRank": 11,
+          "learningOrder": 119
+        },
+        {
+          "id": "ev-moe2022-e-0503",
+          "word": "on",
+          "primaryTopic": "core_function",
+          "frequencyRank": 12,
+          "learningOrder": 120
+        },
+        {
+          "id": "ev-moe2022-e-0785",
+          "word": "with",
+          "primaryTopic": "core_function",
+          "frequencyRank": 13,
+          "learningOrder": 121
+        },
+        {
+          "id": "ev-moe2022-e-0699",
+          "word": "this",
+          "primaryTopic": "core_function",
+          "frequencyRank": 14,
+          "learningOrder": 122
+        },
+        {
+          "id": "ev-moe2022-e-0041",
+          "word": "as",
+          "primaryTopic": "core_function",
+          "frequencyRank": 16,
+          "learningOrder": 123
+        },
+        {
+          "id": "ev-moe2022-e-0043",
+          "word": "at",
+          "primaryTopic": "core_function",
+          "frequencyRank": 18,
+          "learningOrder": 124
+        },
+        {
+          "id": "ev-moe2022-e-0341",
+          "word": "he",
+          "primaryTopic": "core_function",
+          "frequencyRank": 19,
+          "learningOrder": 125
+        },
+        {
+          "id": "ev-moe2022-e-0489",
+          "word": "not",
+          "primaryTopic": "core_function",
+          "frequencyRank": 20,
+          "learningOrder": 126
+        },
+        {
+          "id": "ev-moe2022-e-0119",
+          "word": "by",
+          "primaryTopic": "core_function",
+          "frequencyRank": 21,
+          "learningOrder": 127
+        },
+        {
+          "id": "ev-moe2022-e-0115",
+          "word": "but",
+          "primaryTopic": "core_function",
+          "frequencyRank": 22,
+          "learningOrder": 128
+        },
+        {
+          "id": "ev-moe2022-e-0297",
+          "word": "from",
+          "primaryTopic": "core_function",
+          "frequencyRank": 23,
+          "learningOrder": 129
+        },
+        {
+          "id": "ev-moe2022-e-0507",
+          "word": "or",
+          "primaryTopic": "core_function",
+          "frequencyRank": 24,
+          "learningOrder": 130
+        },
+        {
+          "id": "ev-moe2022-e-0759",
+          "word": "we",
+          "primaryTopic": "core_function",
+          "frequencyRank": 25,
+          "learningOrder": 131
+        },
+        {
+          "id": "ev-moe2022-e-0021",
+          "word": "all",
+          "primaryTopic": "core_function",
+          "frequencyRank": 26,
+          "learningOrder": 132
+        },
+        {
+          "id": "ev-moe2022-e-0630",
+          "word": "so",
+          "primaryTopic": "core_function",
+          "frequencyRank": 27,
+          "learningOrder": 133
+        },
+        {
+          "id": "ev-moe2022-e-0692",
+          "word": "they",
+          "primaryTopic": "core_function",
+          "frequencyRank": 28,
+          "learningOrder": 134
+        },
+        {
+          "id": "ev-moe2022-e-0062",
+          "word": "be",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 15,
+          "learningOrder": 135
+        },
+        {
+          "id": "ev-moe2022-e-0340",
+          "word": "have",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 17,
+          "learningOrder": 136
+        },
+        {
+          "id": "ev-moe2022-e-0215",
+          "word": "do",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 40,
+          "learningOrder": 137
+        },
+        {
+          "id": "ev-moe2022-e-0307",
+          "word": "get",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 45,
+          "learningOrder": 138
+        },
+        {
+          "id": "ev-moe2022-e-0438",
+          "word": "make",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 62,
+          "learningOrder": 139
+        },
+        {
+          "id": "ev-moe2022-e-0751",
+          "word": "want",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 68,
+          "learningOrder": 140
+        },
+        {
+          "id": "ev-moe2022-e-0789",
+          "word": "work",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 81,
+          "learningOrder": 141
+        },
+        {
+          "id": "ev-moe2022-e-0671",
+          "word": "take",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 88,
+          "learningOrder": 142
+        },
+        {
+          "id": "ev-moe2022-e-0431",
+          "word": "look",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 101,
+          "learningOrder": 143
+        },
+        {
+          "id": "ev-moe2022-e-0740",
+          "word": "use",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 102,
+          "learningOrder": 144
+        },
+        {
+          "id": "ev-moe2022-e-0168",
+          "word": "come",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 106,
+          "learningOrder": 145
+        },
+        {
+          "id": "ev-moe2022-e-0270",
+          "word": "find",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 112,
+          "learningOrder": 146
+        },
+        {
+          "id": "ev-moe2022-e-0309",
+          "word": "give",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 122,
+          "learningOrder": 147
+        },
+        {
+          "id": "ev-moe2022-e-0242",
+          "word": "end",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 129,
+          "learningOrder": 148
+        },
+        {
+          "id": "ev-moe2022-e-0395",
+          "word": "keep",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 137,
+          "learningOrder": 149
+        },
+        {
+          "id": "ev-moe2022-e-0551",
+          "word": "put",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 140,
+          "learningOrder": 150
+        },
+        {
+          "id": "ev-moe2022-e-0535",
+          "word": "play",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 150,
+          "learningOrder": 151
+        },
+        {
+          "id": "ev-moe2022-e-0601",
+          "word": "set",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 152,
+          "learningOrder": 152
+        },
+        {
+          "id": "ev-moe2022-e-0652",
+          "word": "start",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 159,
+          "learningOrder": 153
+        },
+        {
+          "id": "ev-moe2022-e-0429",
+          "word": "live",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 168,
+          "learningOrder": 154
+        },
+        {
+          "id": "ev-moe2022-e-0656",
+          "word": "stop",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 177,
+          "learningOrder": 155
+        },
+        {
+          "id": "ev-moe2022-e-0724",
+          "word": "try",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 187,
+          "learningOrder": 156
+        },
+        {
+          "id": "ev-moe2022-e-0579",
+          "word": "run",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 191,
+          "learningOrder": 157
+        },
+        {
+          "id": "ev-moe2022-e-0506",
+          "word": "open",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 194,
+          "learningOrder": 158
+        },
+        {
+          "id": "ev-moe2022-e-0423",
+          "word": "like",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 34,
+          "learningOrder": 159
+        },
+        {
+          "id": "ev-moe2022-e-0405",
+          "word": "know",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 59,
+          "learningOrder": 160
+        },
+        {
+          "id": "ev-moe2022-e-0597",
+          "word": "see",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 60,
+          "learningOrder": 161
+        },
+        {
+          "id": "ev-moe2022-e-0694",
+          "word": "think",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 64,
+          "learningOrder": 162
+        },
+        {
+          "id": "ev-moe2022-e-0477",
+          "word": "need",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 79,
+          "learningOrder": 163
+        },
+        {
+          "id": "ev-moe2022-e-0589",
+          "word": "say",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 92,
+          "learningOrder": 164
+        },
+        {
+          "id": "ev-moe2022-e-0432",
+          "word": "love",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 97,
+          "learningOrder": 165
+        },
+        {
+          "id": "ev-moe2022-e-0348",
+          "word": "help",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 113,
+          "learningOrder": 166
+        },
+        {
+          "id": "ev-moe2022-e-0479",
+          "word": "new",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 47,
+          "learningOrder": 167
+        },
+        {
+          "id": "ev-moe2022-e-0316",
+          "word": "good",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 54,
+          "learningOrder": 168
+        },
+        {
+          "id": "ev-moe2022-e-0571",
+          "word": "right",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 80,
+          "learningOrder": 169
+        },
+        {
+          "id": "ev-moe2022-e-0440",
+          "word": "many",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 89,
+          "learningOrder": 170
+        },
+        {
+          "id": "ev-moe2022-e-0322",
+          "word": "great",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 95,
+          "learningOrder": 171
+        },
+        {
+          "id": "ev-moe2022-e-0430",
+          "word": "long",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 100,
+          "learningOrder": 172
+        },
+        {
+          "id": "ev-moe2022-e-0585",
+          "word": "same",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 103,
+          "learningOrder": 173
+        },
+        {
+          "id": "ev-moe2022-e-0351",
+          "word": "high",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 114,
+          "learningOrder": 174
+        },
+        {
+          "id": "ev-moe2022-e-0428",
+          "word": "little",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 115,
+          "learningOrder": 175
+        },
+        {
+          "id": "ev-moe2022-e-0502",
+          "word": "old",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 116,
+          "learningOrder": 176
+        },
+        {
+          "id": "ev-moe2022-e-0693",
+          "word": "thing",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 121,
+          "learningOrder": 177
+        },
+        {
+          "id": "ev-moe2022-e-0088",
+          "word": "blue",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 362,
+          "learningOrder": 178
+        },
+        {
+          "id": "ev-moe2022-e-0590",
+          "word": "school",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 125,
+          "learningOrder": 179
+        },
+        {
+          "id": "ev-moe2022-e-0561",
+          "word": "read",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 170,
+          "learningOrder": 180
+        },
+        {
+          "id": "ev-moe2022-e-0424",
+          "word": "line",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 189,
+          "learningOrder": 181
+        },
+        {
+          "id": "ev-moe2022-e-0093",
+          "word": "book",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 209,
+          "learningOrder": 182
+        },
+        {
+          "id": "ev-moe2022-e-0743",
+          "word": "video",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 211,
+          "learningOrder": 183
+        },
+        {
+          "id": "ev-moe2022-e-0152",
+          "word": "class",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 246,
+          "learningOrder": 184
+        },
+        {
+          "id": "ev-moe2022-e-0522",
+          "word": "pen",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 692,
+          "learningOrder": 185
+        },
+        {
+          "id": "ev-moe2022-e-0523",
+          "word": "pencil",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 769,
+          "learningOrder": 186
+        },
+        {
+          "id": "ev-moe2022-e-0303",
+          "word": "game",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 120,
+          "learningOrder": 187
+        },
+        {
+          "id": "ev-moe2022-e-0678",
+          "word": "team",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 135,
+          "learningOrder": 188
+        },
+        {
+          "id": "ev-moe2022-e-0470",
+          "word": "music",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 175,
+          "learningOrder": 189
+        },
+        {
+          "id": "ev-moe2022-e-0519",
+          "word": "party",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 190,
+          "learningOrder": 190
+        },
+        {
+          "id": "ev-moe2022-e-0756",
+          "word": "water",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 178,
+          "learningOrder": 191
+        },
+        {
+          "id": "ev-moe2022-e-0018",
+          "word": "air",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 241,
+          "learningOrder": 192
+        },
+        {
+          "id": "ev-moe2022-e-0274",
+          "word": "fire",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 276,
+          "learningOrder": 193
+        },
+        {
+          "id": "ev-moe2022-e-0265",
+          "word": "field",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 307,
+          "learningOrder": 194
+        },
+        {
+          "id": "ev-moe2022-e-0217",
+          "word": "dog",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 381,
+          "learningOrder": 195
+        },
+        {
+          "id": "ev-moe2022-e-0135",
+          "word": "cat",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 543,
+          "learningOrder": 196
+        },
+        {
+          "id": "ev-moe2022-e-0312",
+          "word": "go",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 70,
+          "learningOrder": 197
+        },
+        {
+          "id": "ev-moe2022-e-0758",
+          "word": "way",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 72,
+          "learningOrder": 198
+        },
+        {
+          "id": "ev-moe2022-e-0532",
+          "word": "place",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 124,
+          "learningOrder": 199
+        },
+        {
+          "id": "ev-moe2022-e-0151",
+          "word": "city",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 147,
+          "learningOrder": 200
+        }
+      ]
+    },
+    {
+      "id": "SET02",
+      "title": "학교와 즐거움",
+      "focusTopics": [
+        "school_learning_media",
+        "play_sport_arts",
+        "time_numbers_measure",
+        "core_function",
+        "communication_thinking_social",
+        "action_change_description",
+        "home_food_clothes",
+        "objects_and_materials",
+        "self_and_people",
+        "town_travel_places",
+        "nature_weather_animals",
+        "society_culture_work"
+      ],
+      "topicQuotas": {
+        "action_change_description": 15,
+        "communication_thinking_social": 14,
+        "core_function": 28,
+        "home_food_clothes": 17,
+        "nature_weather_animals": 4,
+        "objects_and_materials": 10,
+        "play_sport_arts": 30,
+        "school_learning_media": 42,
+        "self_and_people": 10,
+        "society_culture_work": 3,
+        "time_numbers_measure": 18,
+        "town_travel_places": 9
+      },
+      "cards": [
+        {
+          "id": "ev-moe2022-e-0553",
+          "word": "question",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 252,
+          "learningOrder": 1
+        },
+        {
+          "id": "ev-moe2022-e-0291",
+          "word": "form",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 272,
+          "learningOrder": 2
+        },
+        {
+          "id": "ev-moe2022-e-0040",
+          "word": "art",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 278,
+          "learningOrder": 3
+        },
+        {
+          "id": "ev-moe2022-e-0248",
+          "word": "example",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 291,
+          "learningOrder": 4
+        },
+        {
+          "id": "ev-moe2022-e-0733",
+          "word": "type",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 294,
+          "learningOrder": 5
+        },
+        {
+          "id": "ev-moe2022-e-0661",
+          "word": "study",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 299,
+          "learningOrder": 6
+        },
+        {
+          "id": "ev-moe2022-e-0788",
+          "word": "word",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 300,
+          "learningOrder": 7
+        },
+        {
+          "id": "ev-moe2022-e-0089",
+          "word": "board",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 304,
+          "learningOrder": 8
+        },
+        {
+          "id": "ev-moe2022-e-0269",
+          "word": "film",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 325,
+          "learningOrder": 9
+        },
+        {
+          "id": "ev-moe2022-e-0685",
+          "word": "test",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 333,
+          "learningOrder": 10
+        },
+        {
+          "id": "ev-moe2022-e-0457",
+          "word": "model",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 368,
+          "learningOrder": 11
+        },
+        {
+          "id": "ev-moe2022-e-0527",
+          "word": "picture",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 369,
+          "learningOrder": 12
+        },
+        {
+          "id": "ev-moe2022-e-0511",
+          "word": "page",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 372,
+          "learningOrder": 13
+        },
+        {
+          "id": "ev-moe2022-e-0591",
+          "word": "science",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 373,
+          "learningOrder": 14
+        },
+        {
+          "id": "ev-moe2022-e-0762",
+          "word": "website",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 386,
+          "learningOrder": 15
+        },
+        {
+          "id": "ev-moe2022-e-0514",
+          "word": "paper",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 400,
+          "learningOrder": 16
+        },
+        {
+          "id": "ev-moe2022-e-0382",
+          "word": "internet",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 406,
+          "learningOrder": 17
+        },
+        {
+          "id": "ev-moe2022-e-0129",
+          "word": "card",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 420,
+          "learningOrder": 18
+        },
+        {
+          "id": "ev-moe2022-e-0490",
+          "word": "note",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 422,
+          "learningOrder": 19
+        },
+        {
+          "id": "ev-moe2022-e-0792",
+          "word": "write",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 430,
+          "learningOrder": 20
+        },
+        {
+          "id": "ev-moe2022-e-0020",
+          "word": "album",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 431,
+          "learningOrder": 21
+        },
+        {
+          "id": "ev-moe2022-e-0418",
+          "word": "letter",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 466,
+          "learningOrder": 22
+        },
+        {
+          "id": "ev-moe2022-e-0379",
+          "word": "image",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 469,
+          "learningOrder": 23
+        },
+        {
+          "id": "ev-moe2022-e-0122",
+          "word": "camera",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 500,
+          "learningOrder": 24
+        },
+        {
+          "id": "ev-moe2022-e-0419",
+          "word": "library",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 509,
+          "learningOrder": 25
+        },
+        {
+          "id": "ev-moe2022-e-0223",
+          "word": "draw",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 533,
+          "learningOrder": 26
+        },
+        {
+          "id": "ev-moe2022-e-0680",
+          "word": "television",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 542,
+          "learningOrder": 27
+        },
+        {
+          "id": "ev-moe2022-e-0441",
+          "word": "map",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 554,
+          "learningOrder": 28
+        },
+        {
+          "id": "ev-moe2022-e-0267",
+          "word": "file",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 560,
+          "learningOrder": 29
+        },
+        {
+          "id": "ev-moe2022-e-0677",
+          "word": "teach",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 596,
+          "learningOrder": 30
+        },
+        {
+          "id": "ev-moe2022-e-0481",
+          "word": "newspaper",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 627,
+          "learningOrder": 31
+        },
+        {
+          "id": "ev-moe2022-e-0545",
+          "word": "print",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 642,
+          "learningOrder": 32
+        },
+        {
+          "id": "ev-moe2022-e-0512",
+          "word": "paint",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 649,
+          "learningOrder": 33
+        },
+        {
+          "id": "ev-moe2022-e-0417",
+          "word": "lesson",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 665,
+          "learningOrder": 34
+        },
+        {
+          "id": "ev-moe2022-e-0674",
+          "word": "tape",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 673,
+          "learningOrder": 35
+        },
+        {
+          "id": "ev-moe2022-e-0209",
+          "word": "desk",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 675,
+          "learningOrder": 36
+        },
+        {
+          "id": "ev-moe2022-e-0169",
+          "word": "comic",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 680,
+          "learningOrder": 37
+        },
+        {
+          "id": "ev-moe2022-e-0679",
+          "word": "telephone",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 685,
+          "learningOrder": 38
+        },
+        {
+          "id": "ev-moe2022-e-0556",
+          "word": "quiz",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 780,
+          "learningOrder": 39
+        },
+        {
+          "id": "ev-moe2022-e-0686",
+          "word": "textbook",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 782,
+          "learningOrder": 40
+        },
+        {
+          "id": "ev-moe2022-e-0491",
+          "word": "notebook",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 783,
+          "learningOrder": 41
+        },
+        {
+          "id": "ev-moe2022-e-0188",
+          "word": "crayon",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 800,
+          "learningOrder": 42
+        },
+        {
+          "id": "ev-moe2022-e-0184",
+          "word": "court",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 215,
+          "learningOrder": 43
+        },
+        {
+          "id": "ev-moe2022-e-0301",
+          "word": "fun",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 277,
+          "learningOrder": 44
+        },
+        {
+          "id": "ev-moe2022-e-0637",
+          "word": "song",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 298,
+          "learningOrder": 45
+        },
+        {
+          "id": "ev-moe2022-e-0161",
+          "word": "club",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 324,
+          "learningOrder": 46
+        },
+        {
+          "id": "ev-moe2022-e-0468",
+          "word": "movie",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 354,
+          "learningOrder": 47
+        },
+        {
+          "id": "ev-moe2022-e-0639",
+          "word": "sound",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 359,
+          "learningOrder": 48
+        },
+        {
+          "id": "ev-moe2022-e-0286",
+          "word": "football",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 376,
+          "learningOrder": 49
+        },
+        {
+          "id": "ev-moe2022-e-0558",
+          "word": "race",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 391,
+          "learningOrder": 50
+        },
+        {
+          "id": "ev-moe2022-e-0313",
+          "word": "goal",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 405,
+          "learningOrder": 51
+        },
+        {
+          "id": "ev-moe2022-e-0053",
+          "word": "ball",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 417,
+          "learningOrder": 52
+        },
+        {
+          "id": "ev-moe2022-e-0717",
+          "word": "track",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 437,
+          "learningOrder": 53
+        },
+        {
+          "id": "ev-moe2022-e-0559",
+          "word": "radio",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 443,
+          "learningOrder": 54
+        },
+        {
+          "id": "ev-moe2022-e-0197",
+          "word": "dance",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 470,
+          "learningOrder": 55
+        },
+        {
+          "id": "ev-moe2022-e-0593",
+          "word": "score",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 527,
+          "learningOrder": 56
+        },
+        {
+          "id": "ev-moe2022-e-0123",
+          "word": "camp",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 541,
+          "learningOrder": 57
+        },
+        {
+          "id": "ev-moe2022-e-0647",
+          "word": "sport",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 569,
+          "learningOrder": 58
+        },
+        {
+          "id": "ev-moe2022-e-0249",
+          "word": "exercise",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 591,
+          "learningOrder": 59
+        },
+        {
+          "id": "ev-moe2022-e-0358",
+          "word": "holiday",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 599,
+          "learningOrder": 60
+        },
+        {
+          "id": "ev-moe2022-e-0059",
+          "word": "basketball",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 638,
+          "learningOrder": 61
+        },
+        {
+          "id": "ev-moe2022-e-0057",
+          "word": "baseball",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 641,
+          "learningOrder": 62
+        },
+        {
+          "id": "ev-moe2022-e-0614",
+          "word": "sing",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 643,
+          "learningOrder": 63
+        },
+        {
+          "id": "ev-moe2022-e-0328",
+          "word": "guitar",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 661,
+          "learningOrder": 64
+        },
+        {
+          "id": "ev-moe2022-e-0631",
+          "word": "soccer",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 663,
+          "learningOrder": 65
+        },
+        {
+          "id": "ev-moe2022-e-0448",
+          "word": "medal",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 689,
+          "learningOrder": 66
+        },
+        {
+          "id": "ev-moe2022-e-0683",
+          "word": "tennis",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 698,
+          "learningOrder": 67
+        },
+        {
+          "id": "ev-moe2022-e-0525",
+          "word": "piano",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 705,
+          "learningOrder": 68
+        },
+        {
+          "id": "ev-moe2022-e-0060",
+          "word": "bat",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 706,
+          "learningOrder": 69
+        },
+        {
+          "id": "ev-moe2022-e-0668",
+          "word": "swim",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 726,
+          "learningOrder": 70
+        },
+        {
+          "id": "ev-moe2022-e-0442",
+          "word": "marathon",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 733,
+          "learningOrder": 71
+        },
+        {
+          "id": "ev-moe2022-e-0620",
+          "word": "ski",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 745,
+          "learningOrder": 72
+        },
+        {
+          "id": "ev-moe2022-e-0484",
+          "word": "night",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 149,
+          "learningOrder": 73
+        },
+        {
+          "id": "ev-moe2022-e-0764",
+          "word": "week",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 160,
+          "learningOrder": 74
+        },
+        {
+          "id": "ev-moe2022-e-0706",
+          "word": "today",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 164,
+          "learningOrder": 75
+        },
+        {
+          "id": "ev-moe2022-e-0292",
+          "word": "four",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 172,
+          "learningOrder": 76
+        },
+        {
+          "id": "ev-moe2022-e-0595",
+          "word": "season",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 195,
+          "learningOrder": 77
+        },
+        {
+          "id": "ev-moe2022-e-0277",
+          "word": "five",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 203,
+          "learningOrder": 78
+        },
+        {
+          "id": "ev-moe2022-e-0234",
+          "word": "early",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 210,
+          "learningOrder": 79
+        },
+        {
+          "id": "ev-moe2022-e-0412",
+          "word": "late",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 256,
+          "learningOrder": 80
+        },
+        {
+          "id": "ev-moe2022-e-0302",
+          "word": "future",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 259,
+          "learningOrder": 81
+        },
+        {
+          "id": "ev-moe2022-e-0462",
+          "word": "morning",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 262,
+          "learningOrder": 82
+        },
+        {
+          "id": "ev-moe2022-e-0695",
+          "word": "third",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 269,
+          "learningOrder": 83
+        },
+        {
+          "id": "ev-moe2022-e-0617",
+          "word": "six",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 283,
+          "learningOrder": 84
+        },
+        {
+          "id": "ev-moe2022-e-0460",
+          "word": "month",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 303,
+          "learningOrder": 85
+        },
+        {
+          "id": "ev-moe2022-e-0665",
+          "word": "summer",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 316,
+          "learningOrder": 86
+        },
+        {
+          "id": "ev-moe2022-e-0200",
+          "word": "date",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 318,
+          "learningOrder": 87
+        },
+        {
+          "id": "ev-moe2022-e-0366",
+          "word": "hour",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 335,
+          "learningOrder": 88
+        },
+        {
+          "id": "ev-moe2022-e-0602",
+          "word": "seven",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 392,
+          "learningOrder": 89
+        },
+        {
+          "id": "ev-moe2022-e-0682",
+          "word": "ten",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 416,
+          "learningOrder": 90
+        },
+        {
+          "id": "ev-moe2022-e-0378",
+          "word": "if",
+          "primaryTopic": "core_function",
+          "frequencyRank": 29,
+          "learningOrder": 91
+        },
+        {
+          "id": "ev-moe2022-e-0125",
+          "word": "can",
+          "primaryTopic": "core_function",
+          "frequencyRank": 31,
+          "learningOrder": 92
+        },
+        {
+          "id": "ev-moe2022-e-0778",
+          "word": "will",
+          "primaryTopic": "core_function",
+          "frequencyRank": 32,
+          "learningOrder": 93
+        },
+        {
+          "id": "ev-moe2022-e-0394",
+          "word": "just",
+          "primaryTopic": "core_function",
+          "frequencyRank": 33,
+          "learningOrder": 94
+        },
+        {
+          "id": "ev-moe2022-e-0002",
+          "word": "about",
+          "primaryTopic": "core_function",
+          "frequencyRank": 35,
+          "learningOrder": 95
+        },
+        {
+          "id": "ev-moe2022-e-0739",
+          "word": "up",
+          "primaryTopic": "core_function",
+          "frequencyRank": 36,
+          "learningOrder": 96
+        },
+        {
+          "id": "ev-moe2022-e-0509",
+          "word": "out",
+          "primaryTopic": "core_function",
+          "frequencyRank": 37,
+          "learningOrder": 97
+        },
+        {
+          "id": "ev-moe2022-e-0771",
+          "word": "what",
+          "primaryTopic": "core_function",
+          "frequencyRank": 38,
+          "learningOrder": 98
+        },
+        {
+          "id": "ev-moe2022-e-0772",
+          "word": "when",
+          "primaryTopic": "core_function",
+          "frequencyRank": 39,
+          "learningOrder": 99
+        },
+        {
+          "id": "ev-moe2022-e-0486",
+          "word": "no",
+          "primaryTopic": "core_function",
+          "frequencyRank": 41,
+          "learningOrder": 100
+        },
+        {
+          "id": "ev-moe2022-e-0775",
+          "word": "who",
+          "primaryTopic": "core_function",
+          "frequencyRank": 42,
+          "learningOrder": 101
+        },
+        {
+          "id": "ev-moe2022-e-0691",
+          "word": "there",
+          "primaryTopic": "core_function",
+          "frequencyRank": 43,
+          "learningOrder": 102
+        },
+        {
+          "id": "ev-moe2022-e-0603",
+          "word": "she",
+          "primaryTopic": "core_function",
+          "frequencyRank": 46,
+          "learningOrder": 103
+        },
+        {
+          "id": "ev-moe2022-e-0368",
+          "word": "how",
+          "primaryTopic": "core_function",
+          "frequencyRank": 49,
+          "learningOrder": 104
+        },
+        {
+          "id": "ev-moe2022-e-0635",
+          "word": "some",
+          "primaryTopic": "core_function",
+          "frequencyRank": 50,
+          "learningOrder": 105
+        },
+        {
+          "id": "ev-moe2022-e-0027",
+          "word": "also",
+          "primaryTopic": "core_function",
+          "frequencyRank": 51,
+          "learningOrder": 106
+        },
+        {
+          "id": "ev-moe2022-e-0687",
+          "word": "than",
+          "primaryTopic": "core_function",
+          "frequencyRank": 53,
+          "learningOrder": 107
+        },
+        {
+          "id": "ev-moe2022-e-0505",
+          "word": "only",
+          "primaryTopic": "core_function",
+          "frequencyRank": 55,
+          "learningOrder": 108
+        },
+        {
+          "id": "ev-moe2022-e-0010",
+          "word": "after",
+          "primaryTopic": "core_function",
+          "frequencyRank": 56,
+          "learningOrder": 109
+        },
+        {
+          "id": "ev-moe2022-e-0383",
+          "word": "into",
+          "primaryTopic": "core_function",
+          "frequencyRank": 58,
+          "learningOrder": 110
+        },
+        {
+          "id": "ev-moe2022-e-0510",
+          "word": "over",
+          "primaryTopic": "core_function",
+          "frequencyRank": 63,
+          "learningOrder": 111
+        },
+        {
+          "id": "ev-moe2022-e-0033",
+          "word": "any",
+          "primaryTopic": "core_function",
+          "frequencyRank": 65,
+          "learningOrder": 112
+        },
+        {
+          "id": "ev-moe2022-e-0180",
+          "word": "could",
+          "primaryTopic": "core_function",
+          "frequencyRank": 66,
+          "learningOrder": 113
+        },
+        {
+          "id": "ev-moe2022-e-0048",
+          "word": "back",
+          "primaryTopic": "core_function",
+          "frequencyRank": 67,
+          "learningOrder": 114
+        },
+        {
+          "id": "ev-moe2022-e-0066",
+          "word": "because",
+          "primaryTopic": "core_function",
+          "frequencyRank": 69,
+          "learningOrder": 115
+        },
+        {
+          "id": "ev-moe2022-e-0768",
+          "word": "well",
+          "primaryTopic": "core_function",
+          "frequencyRank": 71,
+          "learningOrder": 116
+        },
+        {
+          "id": "ev-moe2022-e-0469",
+          "word": "much",
+          "primaryTopic": "core_function",
+          "frequencyRank": 73,
+          "learningOrder": 117
+        },
+        {
+          "id": "ev-moe2022-e-0742",
+          "word": "very",
+          "primaryTopic": "core_function",
+          "frequencyRank": 74,
+          "learningOrder": 118
+        },
+        {
+          "id": "ev-moe2022-e-0610",
+          "word": "show",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 131,
+          "learningOrder": 119
+        },
+        {
+          "id": "ev-moe2022-e-0263",
+          "word": "feel",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 133,
+          "learningOrder": 120
+        },
+        {
+          "id": "ev-moe2022-e-0472",
+          "word": "name",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 148,
+          "learningOrder": 121
+        },
+        {
+          "id": "ev-moe2022-e-0130",
+          "word": "care",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 158,
+          "learningOrder": 122
+        },
+        {
+          "id": "ev-moe2022-e-0141",
+          "word": "change",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 165,
+          "learningOrder": 123
+        },
+        {
+          "id": "ev-moe2022-e-0681",
+          "word": "tell",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 174,
+          "learningOrder": 124
+        },
+        {
+          "id": "ev-moe2022-e-0074",
+          "word": "believe",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 179,
+          "learningOrder": 125
+        },
+        {
+          "id": "ev-moe2022-e-0121",
+          "word": "call",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 180,
+          "learningOrder": 126
+        },
+        {
+          "id": "ev-moe2022-e-0688",
+          "word": "thank",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 196,
+          "learningOrder": 127
+        },
+        {
+          "id": "ev-moe2022-e-0658",
+          "word": "story",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 205,
+          "learningOrder": 128
+        },
+        {
+          "id": "ev-moe2022-e-0362",
+          "word": "hope",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 207,
+          "learningOrder": 129
+        },
+        {
+          "id": "ev-moe2022-e-0672",
+          "word": "talk",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 214,
+          "learningOrder": 130
+        },
+        {
+          "id": "ev-moe2022-e-0455",
+          "word": "mind",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 218,
+          "learningOrder": 131
+        },
+        {
+          "id": "ev-moe2022-e-0346",
+          "word": "hello",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 574,
+          "learningOrder": 132
+        },
+        {
+          "id": "ev-moe2022-e-0067",
+          "word": "become",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 220,
+          "learningOrder": 133
+        },
+        {
+          "id": "ev-moe2022-e-0521",
+          "word": "pay",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 227,
+          "learningOrder": 134
+        },
+        {
+          "id": "ev-moe2022-e-0779",
+          "word": "win",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 235,
+          "learningOrder": 135
+        },
+        {
+          "id": "ev-moe2022-e-0355",
+          "word": "hit",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 243,
+          "learningOrder": 136
+        },
+        {
+          "id": "ev-moe2022-e-0467",
+          "word": "move",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 251,
+          "learningOrder": 137
+        },
+        {
+          "id": "ev-moe2022-e-0755",
+          "word": "watch",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 258,
+          "learningOrder": 138
+        },
+        {
+          "id": "ev-moe2022-e-0653",
+          "word": "stay",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 265,
+          "learningOrder": 139
+        },
+        {
+          "id": "ev-moe2022-e-0118",
+          "word": "buy",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 267,
+          "learningOrder": 140
+        },
+        {
+          "id": "ev-moe2022-e-0725",
+          "word": "turn",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 270,
+          "learningOrder": 141
+        },
+        {
+          "id": "ev-moe2022-e-0005",
+          "word": "act",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 274,
+          "learningOrder": 142
+        },
+        {
+          "id": "ev-moe2022-e-0106",
+          "word": "bring",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 289,
+          "learningOrder": 143
+        },
+        {
+          "id": "ev-moe2022-e-0179",
+          "word": "cost",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 305,
+          "learningOrder": 144
+        },
+        {
+          "id": "ev-moe2022-e-0196",
+          "word": "cut",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 306,
+          "learningOrder": 145
+        },
+        {
+          "id": "ev-moe2022-e-0266",
+          "word": "fight",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 312,
+          "learningOrder": 146
+        },
+        {
+          "id": "ev-moe2022-e-0357",
+          "word": "hold",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 329,
+          "learningOrder": 147
+        },
+        {
+          "id": "ev-moe2022-e-0388",
+          "word": "jacket",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 703,
+          "learningOrder": 148
+        },
+        {
+          "id": "ev-moe2022-e-0716",
+          "word": "toy",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 710,
+          "learningOrder": 149
+        },
+        {
+          "id": "ev-moe2022-e-0070",
+          "word": "beef",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 711,
+          "learningOrder": 150
+        },
+        {
+          "id": "ev-moe2022-e-0126",
+          "word": "candy",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 712,
+          "learningOrder": 151
+        },
+        {
+          "id": "ev-moe2022-e-0606",
+          "word": "shoe",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 721,
+          "learningOrder": 152
+        },
+        {
+          "id": "ev-moe2022-e-0109",
+          "word": "brush",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 722,
+          "learningOrder": 153
+        },
+        {
+          "id": "ev-moe2022-e-0389",
+          "word": "jam",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 730,
+          "learningOrder": 154
+        },
+        {
+          "id": "ev-moe2022-e-0582",
+          "word": "salad",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 736,
+          "learningOrder": 155
+        },
+        {
+          "id": "ev-moe2022-e-0640",
+          "word": "soup",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 737,
+          "learningOrder": 156
+        },
+        {
+          "id": "ev-moe2022-e-0587",
+          "word": "sandwich",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 744,
+          "learningOrder": 157
+        },
+        {
+          "id": "ev-moe2022-e-0540",
+          "word": "potato",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 748,
+          "learningOrder": 158
+        },
+        {
+          "id": "ev-moe2022-e-0176",
+          "word": "cookie",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 753,
+          "learningOrder": 159
+        },
+        {
+          "id": "ev-moe2022-e-0218",
+          "word": "doll",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 755,
+          "learningOrder": 160
+        },
+        {
+          "id": "ev-moe2022-e-0290",
+          "word": "fork",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 760,
+          "learningOrder": 161
+        },
+        {
+          "id": "ev-moe2022-e-0654",
+          "word": "steak",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 766,
+          "learningOrder": 162
+        },
+        {
+          "id": "ev-moe2022-e-0622",
+          "word": "skirt",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 767,
+          "learningOrder": 163
+        },
+        {
+          "id": "ev-moe2022-e-0085",
+          "word": "biscuit",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 793,
+          "learningOrder": 164
+        },
+        {
+          "id": "ev-moe2022-e-0080",
+          "word": "big",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 132,
+          "learningOrder": 165
+        },
+        {
+          "id": "ev-moe2022-e-0667",
+          "word": "sure",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 134,
+          "learningOrder": 166
+        },
+        {
+          "id": "ev-moe2022-e-0294",
+          "word": "free",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 142,
+          "learningOrder": 167
+        },
+        {
+          "id": "ev-moe2022-e-0415",
+          "word": "left",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 145,
+          "learningOrder": 168
+        },
+        {
+          "id": "ev-moe2022-e-0713",
+          "word": "top",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 156,
+          "learningOrder": 169
+        },
+        {
+          "id": "ev-moe2022-e-0300",
+          "word": "full",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 167,
+          "learningOrder": 170
+        },
+        {
+          "id": "ev-moe2022-e-0537",
+          "word": "point",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 169,
+          "learningOrder": 171
+        },
+        {
+          "id": "ev-moe2022-e-0049",
+          "word": "bad",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 171,
+          "learningOrder": 172
+        },
+        {
+          "id": "ev-moe2022-e-0337",
+          "word": "hard",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 173,
+          "learningOrder": 173
+        },
+        {
+          "id": "ev-moe2022-e-0626",
+          "word": "small",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 182,
+          "learningOrder": 174
+        },
+        {
+          "id": "ev-moe2022-e-0580",
+          "word": "sad",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 519,
+          "learningOrder": 175
+        },
+        {
+          "id": "ev-moe2022-e-0466",
+          "word": "mouth",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 526,
+          "learningOrder": 176
+        },
+        {
+          "id": "ev-moe2022-e-0008",
+          "word": "adult",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 537,
+          "learningOrder": 177
+        },
+        {
+          "id": "ev-moe2022-e-0084",
+          "word": "birth",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 547,
+          "learningOrder": 178
+        },
+        {
+          "id": "ev-moe2022-e-0436",
+          "word": "mad",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 564,
+          "learningOrder": 179
+        },
+        {
+          "id": "ev-moe2022-e-0037",
+          "word": "arm",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 566,
+          "learningOrder": 180
+        },
+        {
+          "id": "ev-moe2022-e-0361",
+          "word": "honest",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 567,
+          "learningOrder": 181
+        },
+        {
+          "id": "ev-moe2022-e-0009",
+          "word": "afraid",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 585,
+          "learningOrder": 182
+        },
+        {
+          "id": "ev-moe2022-e-0318",
+          "word": "grandfather",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 717,
+          "learningOrder": 183
+        },
+        {
+          "id": "ev-moe2022-e-0044",
+          "word": "aunt",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 731,
+          "learningOrder": 184
+        },
+        {
+          "id": "ev-moe2022-e-0613",
+          "word": "side",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 186,
+          "learningOrder": 185
+        },
+        {
+          "id": "ev-moe2022-e-0181",
+          "word": "country",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 193,
+          "learningOrder": 186
+        },
+        {
+          "id": "ev-moe2022-e-0036",
+          "word": "area",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 197,
+          "learningOrder": 187
+        },
+        {
+          "id": "ev-moe2022-e-0128",
+          "word": "car",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 201,
+          "learningOrder": 188
+        },
+        {
+          "id": "ev-moe2022-e-0498",
+          "word": "office",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 226,
+          "learningOrder": 189
+        },
+        {
+          "id": "ev-moe2022-e-0641",
+          "word": "south",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 229,
+          "learningOrder": 190
+        },
+        {
+          "id": "ev-moe2022-e-0577",
+          "word": "room",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 234,
+          "learningOrder": 191
+        },
+        {
+          "id": "ev-moe2022-e-0487",
+          "word": "north",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 257,
+          "learningOrder": 192
+        },
+        {
+          "id": "ev-moe2022-e-0538",
+          "word": "police",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 263,
+          "learningOrder": 193
+        },
+        {
+          "id": "ev-moe2022-e-0324",
+          "word": "ground",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 358,
+          "learningOrder": 194
+        },
+        {
+          "id": "ev-moe2022-e-0235",
+          "word": "earth",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 403,
+          "learningOrder": 195
+        },
+        {
+          "id": "ev-moe2022-e-0594",
+          "word": "sea",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 409,
+          "learningOrder": 196
+        },
+        {
+          "id": "ev-moe2022-e-0231",
+          "word": "duck",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 725,
+          "learningOrder": 197
+        },
+        {
+          "id": "ev-moe2022-e-0421",
+          "word": "life",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 91,
+          "learningOrder": 198
+        },
+        {
+          "id": "ev-moe2022-e-0790",
+          "word": "world",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 93,
+          "learningOrder": 199
+        },
+        {
+          "id": "ev-moe2022-e-0458",
+          "word": "money",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 141,
+          "learningOrder": 200
+        }
+      ]
+    },
+    {
+      "id": "SET03",
+      "title": "우리 동네와 자연",
+      "focusTopics": [
+        "town_travel_places",
+        "nature_weather_animals",
+        "core_function",
+        "action_change_description",
+        "objects_and_materials",
+        "communication_thinking_social",
+        "society_culture_work",
+        "time_numbers_measure",
+        "self_and_people",
+        "home_food_clothes",
+        "school_learning_media",
+        "play_sport_arts"
+      ],
+      "topicQuotas": {
+        "action_change_description": 18,
+        "communication_thinking_social": 12,
+        "core_function": 22,
+        "home_food_clothes": 7,
+        "nature_weather_animals": 42,
+        "objects_and_materials": 18,
+        "play_sport_arts": 7,
+        "school_learning_media": 6,
+        "self_and_people": 8,
+        "society_culture_work": 15,
+        "time_numbers_measure": 10,
+        "town_travel_places": 35
+      },
+      "cards": [
+        {
+          "id": "ev-moe2022-e-0443",
+          "word": "market",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 280,
+          "learningOrder": 1
+        },
+        {
+          "id": "ev-moe2022-e-0475",
+          "word": "near",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 281,
+          "learningOrder": 2
+        },
+        {
+          "id": "ev-moe2022-e-0769",
+          "word": "west",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 284,
+          "learningOrder": 3
+        },
+        {
+          "id": "ev-moe2022-e-0659",
+          "word": "street",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 288,
+          "learningOrder": 4
+        },
+        {
+          "id": "ev-moe2022-e-0574",
+          "word": "road",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 309,
+          "learningOrder": 5
+        },
+        {
+          "id": "ev-moe2022-e-0715",
+          "word": "town",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 310,
+          "learningOrder": 6
+        },
+        {
+          "id": "ev-moe2022-e-0408",
+          "word": "land",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 319,
+          "learningOrder": 7
+        },
+        {
+          "id": "ev-moe2022-e-0137",
+          "word": "center",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 326,
+          "learningOrder": 8
+        },
+        {
+          "id": "ev-moe2022-e-0055",
+          "word": "bank",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 349,
+          "learningOrder": 9
+        },
+        {
+          "id": "ev-moe2022-e-0516",
+          "word": "park",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 355,
+          "learningOrder": 10
+        },
+        {
+          "id": "ev-moe2022-e-0227",
+          "word": "drive",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 363,
+          "learningOrder": 11
+        },
+        {
+          "id": "ev-moe2022-e-0364",
+          "word": "hospital",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 399,
+          "learningOrder": 12
+        },
+        {
+          "id": "ev-moe2022-e-0745",
+          "word": "visit",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 423,
+          "learningOrder": 13
+        },
+        {
+          "id": "ev-moe2022-e-0657",
+          "word": "store",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 435,
+          "learningOrder": 14
+        },
+        {
+          "id": "ev-moe2022-e-0719",
+          "word": "travel",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 451,
+          "learningOrder": 15
+        },
+        {
+          "id": "ev-moe2022-e-0718",
+          "word": "train",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 464,
+          "learningOrder": 16
+        },
+        {
+          "id": "ev-moe2022-e-0604",
+          "word": "ship",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 471,
+          "learningOrder": 17
+        },
+        {
+          "id": "ev-moe2022-e-0721",
+          "word": "trip",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 494,
+          "learningOrder": 18
+        },
+        {
+          "id": "ev-moe2022-e-0607",
+          "word": "shop",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 498,
+          "learningOrder": 19
+        },
+        {
+          "id": "ev-moe2022-e-0112",
+          "word": "bus",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 523,
+          "learningOrder": 20
+        },
+        {
+          "id": "ev-moe2022-e-0245",
+          "word": "enter",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 534,
+          "learningOrder": 21
+        },
+        {
+          "id": "ev-moe2022-e-0104",
+          "word": "bridge",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 548,
+          "learningOrder": 22
+        },
+        {
+          "id": "ev-moe2022-e-0178",
+          "word": "corner",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 558,
+          "learningOrder": 23
+        },
+        {
+          "id": "ev-moe2022-e-0437",
+          "word": "mail",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 576,
+          "learningOrder": 24
+        },
+        {
+          "id": "ev-moe2022-e-0090",
+          "word": "boat",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 580,
+          "learningOrder": 25
+        },
+        {
+          "id": "ev-moe2022-e-0566",
+          "word": "restaurant",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 593,
+          "learningOrder": 26
+        },
+        {
+          "id": "ev-moe2022-e-0722",
+          "word": "truck",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 611,
+          "learningOrder": 27
+        },
+        {
+          "id": "ev-moe2022-e-0195",
+          "word": "customer",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 622,
+          "learningOrder": 28
+        },
+        {
+          "id": "ev-moe2022-e-0701",
+          "word": "ticket",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 624,
+          "learningOrder": 29
+        },
+        {
+          "id": "ev-moe2022-e-0081",
+          "word": "bike",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 645,
+          "learningOrder": 30
+        },
+        {
+          "id": "ev-moe2022-e-0529",
+          "word": "pilot",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 650,
+          "learningOrder": 31
+        },
+        {
+          "id": "ev-moe2022-e-0676",
+          "word": "taxi",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 729,
+          "learningOrder": 32
+        },
+        {
+          "id": "ev-moe2022-e-0663",
+          "word": "subway",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 757,
+          "learningOrder": 33
+        },
+        {
+          "id": "ev-moe2022-e-0019",
+          "word": "airplane",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 773,
+          "learningOrder": 34
+        },
+        {
+          "id": "ev-moe2022-e-0567",
+          "word": "restroom",
+          "primaryTopic": "town_travel_places",
+          "frequencyRank": 796,
+          "learningOrder": 35
+        },
+        {
+          "id": "ev-moe2022-e-0651",
+          "word": "star",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 332,
+          "learningOrder": 36
+        },
+        {
+          "id": "ev-moe2022-e-0573",
+          "word": "river",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 426,
+          "learningOrder": 37
+        },
+        {
+          "id": "ev-moe2022-e-0576",
+          "word": "rock",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 427,
+          "learningOrder": 38
+        },
+        {
+          "id": "ev-moe2022-e-0474",
+          "word": "nature",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 456,
+          "learningOrder": 39
+        },
+        {
+          "id": "ev-moe2022-e-0666",
+          "word": "sun",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 462,
+          "learningOrder": 40
+        },
+        {
+          "id": "ev-moe2022-e-0063",
+          "word": "beach",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 473,
+          "learningOrder": 41
+        },
+        {
+          "id": "ev-moe2022-e-0276",
+          "word": "fish",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 490,
+          "learningOrder": 42
+        },
+        {
+          "id": "ev-moe2022-e-0783",
+          "word": "winter",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 496,
+          "learningOrder": 43
+        },
+        {
+          "id": "ev-moe2022-e-0761",
+          "word": "weather",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 504,
+          "learningOrder": 44
+        },
+        {
+          "id": "ev-moe2022-e-0344",
+          "word": "heat",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 508,
+          "learningOrder": 45
+        },
+        {
+          "id": "ev-moe2022-e-0720",
+          "word": "tree",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 514,
+          "learningOrder": 46
+        },
+        {
+          "id": "ev-moe2022-e-0780",
+          "word": "wind",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 521,
+          "learningOrder": 47
+        },
+        {
+          "id": "ev-moe2022-e-0407",
+          "word": "lake",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 525,
+          "learningOrder": 48
+        },
+        {
+          "id": "ev-moe2022-e-0353",
+          "word": "hill",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 529,
+          "learningOrder": 49
+        },
+        {
+          "id": "ev-moe2022-e-0578",
+          "word": "rose",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 531,
+          "learningOrder": 50
+        },
+        {
+          "id": "ev-moe2022-e-0030",
+          "word": "animal",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 532,
+          "learningOrder": 51
+        },
+        {
+          "id": "ev-moe2022-e-0655",
+          "word": "stone",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 538,
+          "learningOrder": 52
+        },
+        {
+          "id": "ev-moe2022-e-0787",
+          "word": "wood",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 546,
+          "learningOrder": 53
+        },
+        {
+          "id": "ev-moe2022-e-0304",
+          "word": "garden",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 549,
+          "learningOrder": 54
+        },
+        {
+          "id": "ev-moe2022-e-0363",
+          "word": "horse",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 553,
+          "learningOrder": 55
+        },
+        {
+          "id": "ev-moe2022-e-0258",
+          "word": "farm",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 559,
+          "learningOrder": 56
+        },
+        {
+          "id": "ev-moe2022-e-0464",
+          "word": "mountain",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 568,
+          "learningOrder": 57
+        },
+        {
+          "id": "ev-moe2022-e-0623",
+          "word": "sky",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 578,
+          "learningOrder": 58
+        },
+        {
+          "id": "ev-moe2022-e-0064",
+          "word": "bear",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 579,
+          "learningOrder": 59
+        },
+        {
+          "id": "ev-moe2022-e-0560",
+          "word": "rain",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 583,
+          "learningOrder": 60
+        },
+        {
+          "id": "ev-moe2022-e-0288",
+          "word": "forest",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 586,
+          "learningOrder": 61
+        },
+        {
+          "id": "ev-moe2022-e-0461",
+          "word": "moon",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 587,
+          "learningOrder": 62
+        },
+        {
+          "id": "ev-moe2022-e-0293",
+          "word": "fox",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 598,
+          "learningOrder": 63
+        },
+        {
+          "id": "ev-moe2022-e-0629",
+          "word": "snow",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 603,
+          "learningOrder": 64
+        },
+        {
+          "id": "ev-moe2022-e-0083",
+          "word": "bird",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 613,
+          "learningOrder": 65
+        },
+        {
+          "id": "ev-moe2022-e-0372",
+          "word": "hunt",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 658,
+          "learningOrder": 66
+        },
+        {
+          "id": "ev-moe2022-e-0160",
+          "word": "cloud",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 666,
+          "learningOrder": 67
+        },
+        {
+          "id": "ev-moe2022-e-0238",
+          "word": "egg",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 667,
+          "learningOrder": 68
+        },
+        {
+          "id": "ev-moe2022-e-0586",
+          "word": "sand",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 672,
+          "learningOrder": 69
+        },
+        {
+          "id": "ev-moe2022-e-0280",
+          "word": "flower",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 681,
+          "learningOrder": 70
+        },
+        {
+          "id": "ev-moe2022-e-0320",
+          "word": "grass",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 691,
+          "learningOrder": 71
+        },
+        {
+          "id": "ev-moe2022-e-0670",
+          "word": "tail",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 701,
+          "learningOrder": 72
+        },
+        {
+          "id": "ev-moe2022-e-0465",
+          "word": "mouse",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 704,
+          "learningOrder": 73
+        },
+        {
+          "id": "ev-moe2022-e-0702",
+          "word": "tiger",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 709,
+          "learningOrder": 74
+        },
+        {
+          "id": "ev-moe2022-e-0045",
+          "word": "autumn",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 715,
+          "learningOrder": 75
+        },
+        {
+          "id": "ev-moe2022-e-0425",
+          "word": "lion",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 716,
+          "learningOrder": 76
+        },
+        {
+          "id": "ev-moe2022-e-0187",
+          "word": "cow",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 738,
+          "learningOrder": 77
+        },
+        {
+          "id": "ev-moe2022-e-0773",
+          "word": "where",
+          "primaryTopic": "core_function",
+          "frequencyRank": 75,
+          "learningOrder": 78
+        },
+        {
+          "id": "ev-moe2022-e-0609",
+          "word": "should",
+          "primaryTopic": "core_function",
+          "frequencyRank": 76,
+          "learningOrder": 79
+        },
+        {
+          "id": "ev-moe2022-e-0446",
+          "word": "may",
+          "primaryTopic": "core_function",
+          "frequencyRank": 77,
+          "learningOrder": 80
+        },
+        {
+          "id": "ev-moe2022-e-0349",
+          "word": "here",
+          "primaryTopic": "core_function",
+          "frequencyRank": 78,
+          "learningOrder": 81
+        },
+        {
+          "id": "ev-moe2022-e-0711",
+          "word": "too",
+          "primaryTopic": "core_function",
+          "frequencyRank": 84,
+          "learningOrder": 82
+        },
+        {
+          "id": "ev-moe2022-e-0071",
+          "word": "before",
+          "primaryTopic": "core_function",
+          "frequencyRank": 85,
+          "learningOrder": 83
+        },
+        {
+          "id": "ev-moe2022-e-0497",
+          "word": "off",
+          "primaryTopic": "core_function",
+          "frequencyRank": 86,
+          "learningOrder": 84
+        },
+        {
+          "id": "ev-moe2022-e-0776",
+          "word": "why",
+          "primaryTopic": "core_function",
+          "frequencyRank": 87,
+          "learningOrder": 85
+        },
+        {
+          "id": "ev-moe2022-e-0478",
+          "word": "never",
+          "primaryTopic": "core_function",
+          "frequencyRank": 90,
+          "learningOrder": 86
+        },
+        {
+          "id": "ev-moe2022-e-0222",
+          "word": "down",
+          "primaryTopic": "core_function",
+          "frequencyRank": 94,
+          "learningOrder": 87
+        },
+        {
+          "id": "ev-moe2022-e-0095",
+          "word": "both",
+          "primaryTopic": "core_function",
+          "frequencyRank": 104,
+          "learningOrder": 88
+        },
+        {
+          "id": "ev-moe2022-e-0247",
+          "word": "every",
+          "primaryTopic": "core_function",
+          "frequencyRank": 105,
+          "learningOrder": 89
+        },
+        {
+          "id": "ev-moe2022-e-0038",
+          "word": "around",
+          "primaryTopic": "core_function",
+          "frequencyRank": 109,
+          "learningOrder": 90
+        },
+        {
+          "id": "ev-moe2022-e-0079",
+          "word": "between",
+          "primaryTopic": "core_function",
+          "frequencyRank": 110,
+          "learningOrder": 91
+        },
+        {
+          "id": "ev-moe2022-e-0028",
+          "word": "always",
+          "primaryTopic": "core_function",
+          "frequencyRank": 111,
+          "learningOrder": 92
+        },
+        {
+          "id": "ev-moe2022-e-0031",
+          "word": "another",
+          "primaryTopic": "core_function",
+          "frequencyRank": 117,
+          "learningOrder": 93
+        },
+        {
+          "id": "ev-moe2022-e-0737",
+          "word": "under",
+          "primaryTopic": "core_function",
+          "frequencyRank": 118,
+          "learningOrder": 94
+        },
+        {
+          "id": "ev-moe2022-e-0232",
+          "word": "during",
+          "primaryTopic": "core_function",
+          "frequencyRank": 119,
+          "learningOrder": 95
+        },
+        {
+          "id": "ev-moe2022-e-0012",
+          "word": "again",
+          "primaryTopic": "core_function",
+          "frequencyRank": 126,
+          "learningOrder": 96
+        },
+        {
+          "id": "ev-moe2022-e-0013",
+          "word": "against",
+          "primaryTopic": "core_function",
+          "frequencyRank": 128,
+          "learningOrder": 97
+        },
+        {
+          "id": "ev-moe2022-e-0471",
+          "word": "must",
+          "primaryTopic": "core_function",
+          "frequencyRank": 130,
+          "learningOrder": 98
+        },
+        {
+          "id": "ev-moe2022-e-0453",
+          "word": "might",
+          "primaryTopic": "core_function",
+          "frequencyRank": 138,
+          "learningOrder": 99
+        },
+        {
+          "id": "ev-moe2022-e-0568",
+          "word": "return",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 331,
+          "learningOrder": 100
+        },
+        {
+          "id": "ev-moe2022-e-0102",
+          "word": "break",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 334,
+          "learningOrder": 101
+        },
+        {
+          "id": "ev-moe2022-e-0588",
+          "word": "save",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 360,
+          "learningOrder": 102
+        },
+        {
+          "id": "ev-moe2022-e-0650",
+          "word": "stand",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 361,
+          "learningOrder": 103
+        },
+        {
+          "id": "ev-moe2022-e-0237",
+          "word": "eat",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 364,
+          "learningOrder": 104
+        },
+        {
+          "id": "ev-moe2022-e-0254",
+          "word": "fall",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 365,
+          "learningOrder": 105
+        },
+        {
+          "id": "ev-moe2022-e-0599",
+          "word": "send",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 378,
+          "learningOrder": 106
+        },
+        {
+          "id": "ev-moe2022-e-0006",
+          "word": "add",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 383,
+          "learningOrder": 107
+        },
+        {
+          "id": "ev-moe2022-e-0186",
+          "word": "cover",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 387,
+          "learningOrder": 108
+        },
+        {
+          "id": "ev-moe2022-e-0526",
+          "word": "pick",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 390,
+          "learningOrder": 109
+        },
+        {
+          "id": "ev-moe2022-e-0749",
+          "word": "walk",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 394,
+          "learningOrder": 110
+        },
+        {
+          "id": "ev-moe2022-e-0211",
+          "word": "die",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 397,
+          "learningOrder": 111
+        },
+        {
+          "id": "ev-moe2022-e-0520",
+          "word": "pass",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 413,
+          "learningOrder": 112
+        },
+        {
+          "id": "ev-moe2022-e-0624",
+          "word": "sleep",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 414,
+          "learningOrder": 113
+        },
+        {
+          "id": "ev-moe2022-e-0110",
+          "word": "build",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 419,
+          "learningOrder": 114
+        },
+        {
+          "id": "ev-moe2022-e-0190",
+          "word": "cross",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 445,
+          "learningOrder": 115
+        },
+        {
+          "id": "ev-moe2022-e-0228",
+          "word": "drop",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 452,
+          "learningOrder": 116
+        },
+        {
+          "id": "ev-moe2022-e-0754",
+          "word": "wash",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 668,
+          "learningOrder": 117
+        },
+        {
+          "id": "ev-moe2022-e-0774",
+          "word": "white",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 183,
+          "learningOrder": 118
+        },
+        {
+          "id": "ev-moe2022-e-0257",
+          "word": "far",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 184,
+          "learningOrder": 119
+        },
+        {
+          "id": "ev-moe2022-e-0086",
+          "word": "black",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 198,
+          "learningOrder": 120
+        },
+        {
+          "id": "ev-moe2022-e-0723",
+          "word": "true",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 230,
+          "learningOrder": 121
+        },
+        {
+          "id": "ev-moe2022-e-0409",
+          "word": "large",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 233,
+          "learningOrder": 122
+        },
+        {
+          "id": "ev-moe2022-e-0793",
+          "word": "wrong",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 236,
+          "learningOrder": 123
+        },
+        {
+          "id": "ev-moe2022-e-0543",
+          "word": "pretty",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 239,
+          "learningOrder": 124
+        },
+        {
+          "id": "ev-moe2022-e-0483",
+          "word": "nice",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 244,
+          "learningOrder": 125
+        },
+        {
+          "id": "ev-moe2022-e-0422",
+          "word": "light",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 260,
+          "learningOrder": 126
+        },
+        {
+          "id": "ev-moe2022-e-0433",
+          "word": "low",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 261,
+          "learningOrder": 127
+        },
+        {
+          "id": "ev-moe2022-e-0608",
+          "word": "short",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 264,
+          "learningOrder": 128
+        },
+        {
+          "id": "ev-moe2022-e-0564",
+          "word": "red",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 268,
+          "learningOrder": 129
+        },
+        {
+          "id": "ev-moe2022-e-0562",
+          "word": "ready",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 286,
+          "learningOrder": 130
+        },
+        {
+          "id": "ev-moe2022-e-0154",
+          "word": "clear",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 302,
+          "learningOrder": 131
+        },
+        {
+          "id": "ev-moe2022-e-0660",
+          "word": "strong",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 322,
+          "learningOrder": 132
+        },
+        {
+          "id": "ev-moe2022-e-0452",
+          "word": "middle",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 337,
+          "learningOrder": 133
+        },
+        {
+          "id": "ev-moe2022-e-0365",
+          "word": "hot",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 353,
+          "learningOrder": 134
+        },
+        {
+          "id": "ev-moe2022-e-0177",
+          "word": "cool",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 357,
+          "learningOrder": 135
+        },
+        {
+          "id": "ev-moe2022-e-0174",
+          "word": "control",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 222,
+          "learningOrder": 136
+        },
+        {
+          "id": "ev-moe2022-e-0565",
+          "word": "remember",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 240,
+          "learningOrder": 137
+        },
+        {
+          "id": "ev-moe2022-e-0738",
+          "word": "understand",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 245,
+          "learningOrder": 138
+        },
+        {
+          "id": "ev-moe2022-e-0377",
+          "word": "idea",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 248,
+          "learningOrder": 139
+        },
+        {
+          "id": "ev-moe2022-e-0336",
+          "word": "happy",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 249,
+          "learningOrder": 140
+        },
+        {
+          "id": "ev-moe2022-e-0747",
+          "word": "wait",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 253,
+          "learningOrder": 141
+        },
+        {
+          "id": "ev-moe2022-e-0042",
+          "word": "ask",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 255,
+          "learningOrder": 142
+        },
+        {
+          "id": "ev-moe2022-e-0143",
+          "word": "check",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 271,
+          "learningOrder": 143
+        },
+        {
+          "id": "ev-moe2022-e-0449",
+          "word": "meet",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 292,
+          "learningOrder": 144
+        },
+        {
+          "id": "ev-moe2022-e-0271",
+          "word": "fine",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 313,
+          "learningOrder": 145
+        },
+        {
+          "id": "ev-moe2022-e-0456",
+          "word": "miss",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 320,
+          "learningOrder": 146
+        },
+        {
+          "id": "ev-moe2022-e-0638",
+          "word": "sorry",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 339,
+          "learningOrder": 147
+        },
+        {
+          "id": "ev-moe2022-e-0170",
+          "word": "company",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 151,
+          "learningOrder": 148
+        },
+        {
+          "id": "ev-moe2022-e-0325",
+          "word": "group",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 155,
+          "learningOrder": 149
+        },
+        {
+          "id": "ev-moe2022-e-0113",
+          "word": "business",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 157,
+          "learningOrder": 150
+        },
+        {
+          "id": "ev-moe2022-e-0541",
+          "word": "power",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 176,
+          "learningOrder": 151
+        },
+        {
+          "id": "ev-moe2022-e-0390",
+          "word": "job",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 185,
+          "learningOrder": 152
+        },
+        {
+          "id": "ev-moe2022-e-0600",
+          "word": "service",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 192,
+          "learningOrder": 153
+        },
+        {
+          "id": "ev-moe2022-e-0480",
+          "word": "news",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 208,
+          "learningOrder": 154
+        },
+        {
+          "id": "ev-moe2022-e-0252",
+          "word": "fact",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 216,
+          "learningOrder": 155
+        },
+        {
+          "id": "ev-moe2022-e-0354",
+          "word": "history",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 232,
+          "learningOrder": 156
+        },
+        {
+          "id": "ev-moe2022-e-0533",
+          "word": "plan",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 282,
+          "learningOrder": 157
+        },
+        {
+          "id": "ev-moe2022-e-0547",
+          "word": "program",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 293,
+          "learningOrder": 158
+        },
+        {
+          "id": "ev-moe2022-e-0140",
+          "word": "chance",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 296,
+          "learningOrder": 159
+        },
+        {
+          "id": "ev-moe2022-e-0243",
+          "word": "energy",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 311,
+          "learningOrder": 160
+        },
+        {
+          "id": "ev-moe2022-e-0763",
+          "word": "wedding",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 528,
+          "learningOrder": 161
+        },
+        {
+          "id": "ev-moe2022-e-0264",
+          "word": "festival",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 573,
+          "learningOrder": 162
+        },
+        {
+          "id": "ev-moe2022-e-0710",
+          "word": "tonight",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 429,
+          "learningOrder": 163
+        },
+        {
+          "id": "ev-moe2022-e-0239",
+          "word": "eight",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 433,
+          "learningOrder": 164
+        },
+        {
+          "id": "ev-moe2022-e-0709",
+          "word": "tomorrow",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 436,
+          "learningOrder": 165
+        },
+        {
+          "id": "ev-moe2022-e-0765",
+          "word": "weekend",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 472,
+          "learningOrder": 166
+        },
+        {
+          "id": "ev-moe2022-e-0648",
+          "word": "spring",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 476,
+          "learningOrder": 167
+        },
+        {
+          "id": "ev-moe2022-e-0797",
+          "word": "yesterday",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 487,
+          "learningOrder": 168
+        },
+        {
+          "id": "ev-moe2022-e-0485",
+          "word": "nine",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 503,
+          "learningOrder": 169
+        },
+        {
+          "id": "ev-moe2022-e-0246",
+          "word": "evening",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 507,
+          "learningOrder": 170
+        },
+        {
+          "id": "ev-moe2022-e-0731",
+          "word": "twice",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 520,
+          "learningOrder": 171
+        },
+        {
+          "id": "ev-moe2022-e-0114",
+          "word": "busy",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 557,
+          "learningOrder": 172
+        },
+        {
+          "id": "ev-moe2022-e-0007",
+          "word": "address",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 478,
+          "learningOrder": 173
+        },
+        {
+          "id": "ev-moe2022-e-0350",
+          "word": "hero",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 592,
+          "learningOrder": 174
+        },
+        {
+          "id": "ev-moe2022-e-0416",
+          "word": "leg",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 600,
+          "learningOrder": 175
+        },
+        {
+          "id": "ev-moe2022-e-0476",
+          "word": "neck",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 616,
+          "learningOrder": 176
+        },
+        {
+          "id": "ev-moe2022-e-0515",
+          "word": "parent",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 636,
+          "learningOrder": 177
+        },
+        {
+          "id": "ev-moe2022-e-0488",
+          "word": "nose",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 654,
+          "learningOrder": 178
+        },
+        {
+          "id": "ev-moe2022-e-0092",
+          "word": "bone",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 664,
+          "learningOrder": 179
+        },
+        {
+          "id": "ev-moe2022-e-0495",
+          "word": "nurse",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 688,
+          "learningOrder": 180
+        },
+        {
+          "id": "ev-moe2022-e-0329",
+          "word": "gum",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 770,
+          "learningOrder": 181
+        },
+        {
+          "id": "ev-moe2022-e-0741",
+          "word": "vegetable",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 772,
+          "learningOrder": 182
+        },
+        {
+          "id": "ev-moe2022-e-0052",
+          "word": "bake",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 774,
+          "learningOrder": 183
+        },
+        {
+          "id": "ev-moe2022-e-0646",
+          "word": "spoon",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 777,
+          "learningOrder": 184
+        },
+        {
+          "id": "ev-moe2022-e-0194",
+          "word": "curtain",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 778,
+          "learningOrder": 185
+        },
+        {
+          "id": "ev-moe2022-e-0708",
+          "word": "tomato",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 779,
+          "learningOrder": 186
+        },
+        {
+          "id": "ev-moe2022-e-0319",
+          "word": "grape",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 786,
+          "learningOrder": 187
+        },
+        {
+          "id": "ev-moe2022-e-0183",
+          "word": "course",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 206,
+          "learningOrder": 188
+        },
+        {
+          "id": "ev-moe2022-e-0546",
+          "word": "problem",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 228,
+          "learningOrder": 189
+        },
+        {
+          "id": "ev-moe2022-e-0210",
+          "word": "dialogue",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 713,
+          "learningOrder": 190
+        },
+        {
+          "id": "ev-moe2022-e-0575",
+          "word": "robot",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 720,
+          "learningOrder": 191
+        },
+        {
+          "id": "ev-moe2022-e-0445",
+          "word": "mathematics",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 735,
+          "learningOrder": 192
+        },
+        {
+          "id": "ev-moe2022-e-0360",
+          "word": "homework",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 742,
+          "learningOrder": 193
+        },
+        {
+          "id": "ev-moe2022-e-0229",
+          "word": "drum",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 747,
+          "learningOrder": 194
+        },
+        {
+          "id": "ev-moe2022-e-0058",
+          "word": "basket",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 752,
+          "learningOrder": 195
+        },
+        {
+          "id": "ev-moe2022-e-0684",
+          "word": "tent",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 758,
+          "learningOrder": 196
+        },
+        {
+          "id": "ev-moe2022-e-0563",
+          "word": "recreation",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 759,
+          "learningOrder": 197
+        },
+        {
+          "id": "ev-moe2022-e-0347",
+          "word": "helmet",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 761,
+          "learningOrder": 198
+        },
+        {
+          "id": "ev-moe2022-e-0352",
+          "word": "hike",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 768,
+          "learningOrder": 199
+        },
+        {
+          "id": "ev-moe2022-e-0356",
+          "word": "hobby",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 771,
+          "learningOrder": 200
+        }
+      ]
+    },
+    {
+      "id": "SET04",
+      "title": "표현과 넓은 세계",
+      "focusTopics": [
+        "society_culture_work",
+        "objects_and_materials",
+        "action_change_description",
+        "communication_thinking_social",
+        "core_function",
+        "self_and_people",
+        "time_numbers_measure",
+        "nature_weather_animals",
+        "home_food_clothes",
+        "school_learning_media",
+        "play_sport_arts"
+      ],
+      "topicQuotas": {
+        "action_change_description": 32,
+        "communication_thinking_social": 28,
+        "core_function": 24,
+        "home_food_clothes": 8,
+        "nature_weather_animals": 9,
+        "objects_and_materials": 49,
+        "play_sport_arts": 3,
+        "school_learning_media": 5,
+        "self_and_people": 12,
+        "society_culture_work": 20,
+        "time_numbers_measure": 10,
+        "town_travel_places": 0
+      },
+      "cards": [
+        {
+          "id": "ev-moe2022-e-0133",
+          "word": "case",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 162,
+          "learningOrder": 1
+        },
+        {
+          "id": "ev-moe2022-e-0752",
+          "word": "war",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 200,
+          "learningOrder": 2
+        },
+        {
+          "id": "ev-moe2022-e-0542",
+          "word": "present",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 338,
+          "learningOrder": 3
+        },
+        {
+          "id": "ev-moe2022-e-0208",
+          "word": "design",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 343,
+          "learningOrder": 4
+        },
+        {
+          "id": "ev-moe2022-e-0315",
+          "word": "gold",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 344,
+          "learningOrder": 5
+        },
+        {
+          "id": "ev-moe2022-e-0401",
+          "word": "king",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 346,
+          "learningOrder": 6
+        },
+        {
+          "id": "ev-moe2022-e-0149",
+          "word": "church",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 351,
+          "learningOrder": 7
+        },
+        {
+          "id": "ev-moe2022-e-0082",
+          "word": "bill",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 356,
+          "learningOrder": 8
+        },
+        {
+          "id": "ev-moe2022-e-0662",
+          "word": "style",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 379,
+          "learningOrder": 9
+        },
+        {
+          "id": "ev-moe2022-e-0649",
+          "word": "staff",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 393,
+          "learningOrder": 10
+        },
+        {
+          "id": "ev-moe2022-e-0056",
+          "word": "base",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 410,
+          "learningOrder": 11
+        },
+        {
+          "id": "ev-moe2022-e-0124",
+          "word": "campaign",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 444,
+          "learningOrder": 12
+        },
+        {
+          "id": "ev-moe2022-e-0583",
+          "word": "sale",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 454,
+          "learningOrder": 13
+        },
+        {
+          "id": "ev-moe2022-e-0473",
+          "word": "nation",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 497,
+          "learningOrder": 14
+        },
+        {
+          "id": "ev-moe2022-e-0172",
+          "word": "condition",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 506,
+          "learningOrder": 15
+        },
+        {
+          "id": "ev-moe2022-e-0552",
+          "word": "queen",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 510,
+          "learningOrder": 16
+        },
+        {
+          "id": "ev-moe2022-e-0065",
+          "word": "beauty",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 556,
+          "learningOrder": 17
+        },
+        {
+          "id": "ev-moe2022-e-0198",
+          "word": "danger",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 631,
+          "learningOrder": 18
+        },
+        {
+          "id": "ev-moe2022-e-0150",
+          "word": "circle",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 640,
+          "learningOrder": 19
+        },
+        {
+          "id": "ev-moe2022-e-0331",
+          "word": "habit",
+          "primaryTopic": "society_culture_work",
+          "frequencyRank": 718,
+          "learningOrder": 20
+        },
+        {
+          "id": "ev-moe2022-e-0517",
+          "word": "part",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 107,
+          "learningOrder": 21
+        },
+        {
+          "id": "ev-moe2022-e-0259",
+          "word": "fast",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 366,
+          "learningOrder": 22
+        },
+        {
+          "id": "ev-moe2022-e-0323",
+          "word": "green",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 367,
+          "learningOrder": 23
+        },
+        {
+          "id": "ev-moe2022-e-0618",
+          "word": "size",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 370,
+          "learningOrder": 24
+        },
+        {
+          "id": "ev-moe2022-e-0539",
+          "word": "poor",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 385,
+          "learningOrder": 25
+        },
+        {
+          "id": "ev-moe2022-e-0212",
+          "word": "difficult",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 398,
+          "learningOrder": 26
+        },
+        {
+          "id": "ev-moe2022-e-0581",
+          "word": "safe",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 401,
+          "learningOrder": 27
+        },
+        {
+          "id": "ev-moe2022-e-0501",
+          "word": "okay",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 408,
+          "learningOrder": 28
+        },
+        {
+          "id": "ev-moe2022-e-0206",
+          "word": "deep",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 412,
+          "learningOrder": 29
+        },
+        {
+          "id": "ev-moe2022-e-0199",
+          "word": "dark",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 421,
+          "learningOrder": 30
+        },
+        {
+          "id": "ev-moe2022-e-0750",
+          "word": "wall",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 424,
+          "learningOrder": 31
+        },
+        {
+          "id": "ev-moe2022-e-0164",
+          "word": "cold",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 432,
+          "learningOrder": 32
+        },
+        {
+          "id": "ev-moe2022-e-0766",
+          "word": "weight",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 438,
+          "learningOrder": 33
+        },
+        {
+          "id": "ev-moe2022-e-0108",
+          "word": "brown",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 440,
+          "learningOrder": 34
+        },
+        {
+          "id": "ev-moe2022-e-0220",
+          "word": "double",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 441,
+          "learningOrder": 35
+        },
+        {
+          "id": "ev-moe2022-e-0645",
+          "word": "speed",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 450,
+          "learningOrder": 36
+        },
+        {
+          "id": "ev-moe2022-e-0554",
+          "word": "quick",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 457,
+          "learningOrder": 37
+        },
+        {
+          "id": "ev-moe2022-e-0345",
+          "word": "heavy",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 463,
+          "learningOrder": 38
+        },
+        {
+          "id": "ev-moe2022-e-0134",
+          "word": "cash",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 474,
+          "learningOrder": 39
+        },
+        {
+          "id": "ev-moe2022-e-0167",
+          "word": "color",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 480,
+          "learningOrder": 40
+        },
+        {
+          "id": "ev-moe2022-e-0570",
+          "word": "rich",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 484,
+          "learningOrder": 41
+        },
+        {
+          "id": "ev-moe2022-e-0612",
+          "word": "sick",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 499,
+          "learningOrder": 42
+        },
+        {
+          "id": "ev-moe2022-e-0260",
+          "word": "fat",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 511,
+          "learningOrder": 43
+        },
+        {
+          "id": "ev-moe2022-e-0625",
+          "word": "slow",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 513,
+          "learningOrder": 44
+        },
+        {
+          "id": "ev-moe2022-e-0097",
+          "word": "bottom",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 516,
+          "learningOrder": 45
+        },
+        {
+          "id": "ev-moe2022-e-0295",
+          "word": "fresh",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 524,
+          "learningOrder": 46
+        },
+        {
+          "id": "ev-moe2022-e-0572",
+          "word": "ring",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 536,
+          "learningOrder": 47
+        },
+        {
+          "id": "ev-moe2022-e-0781",
+          "word": "window",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 539,
+          "learningOrder": 48
+        },
+        {
+          "id": "ev-moe2022-e-0230",
+          "word": "dry",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 563,
+          "learningOrder": 49
+        },
+        {
+          "id": "ev-moe2022-e-0142",
+          "word": "cheap",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 581,
+          "learningOrder": 50
+        },
+        {
+          "id": "ev-moe2022-e-0753",
+          "word": "warm",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 584,
+          "learningOrder": 51
+        },
+        {
+          "id": "ev-moe2022-e-0795",
+          "word": "yellow",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 590,
+          "learningOrder": 52
+        },
+        {
+          "id": "ev-moe2022-e-0633",
+          "word": "soft",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 594,
+          "learningOrder": 53
+        },
+        {
+          "id": "ev-moe2022-e-0555",
+          "word": "quiet",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 607,
+          "learningOrder": 54
+        },
+        {
+          "id": "ev-moe2022-e-0508",
+          "word": "orange",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 619,
+          "learningOrder": 55
+        },
+        {
+          "id": "ev-moe2022-e-0105",
+          "word": "bright",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 621,
+          "learningOrder": 56
+        },
+        {
+          "id": "ev-moe2022-e-0770",
+          "word": "wet",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 644,
+          "learningOrder": 57
+        },
+        {
+          "id": "ev-moe2022-e-0530",
+          "word": "pink",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 651,
+          "learningOrder": 58
+        },
+        {
+          "id": "ev-moe2022-e-0673",
+          "word": "tall",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 652,
+          "learningOrder": 59
+        },
+        {
+          "id": "ev-moe2022-e-0321",
+          "word": "gray",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 669,
+          "learningOrder": 60
+        },
+        {
+          "id": "ev-moe2022-e-0026",
+          "word": "alright",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 678,
+          "learningOrder": 61
+        },
+        {
+          "id": "ev-moe2022-e-0734",
+          "word": "ugly",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 682,
+          "learningOrder": 62
+        },
+        {
+          "id": "ev-moe2022-e-0207",
+          "word": "delicious",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 700,
+          "learningOrder": 63
+        },
+        {
+          "id": "ev-moe2022-e-0413",
+          "word": "lazy",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 719,
+          "learningOrder": 64
+        },
+        {
+          "id": "ev-moe2022-e-0410",
+          "word": "laser",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 727,
+          "learningOrder": 65
+        },
+        {
+          "id": "ev-moe2022-e-0704",
+          "word": "tire",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 762,
+          "learningOrder": 66
+        },
+        {
+          "id": "ev-moe2022-e-0735",
+          "word": "umbrella",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 776,
+          "learningOrder": 67
+        },
+        {
+          "id": "ev-moe2022-e-0569",
+          "word": "ribbon",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 781,
+          "learningOrder": 68
+        },
+        {
+          "id": "ev-moe2022-e-0696",
+          "word": "thirst",
+          "primaryTopic": "objects_and_materials",
+          "frequencyRank": 788,
+          "learningOrder": 69
+        },
+        {
+          "id": "ev-moe2022-e-0399",
+          "word": "kill",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 384,
+          "learningOrder": 70
+        },
+        {
+          "id": "ev-moe2022-e-0598",
+          "word": "sell",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 458,
+          "learningOrder": 71
+        },
+        {
+          "id": "ev-moe2022-e-0153",
+          "word": "clean",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 460,
+          "learningOrder": 72
+        },
+        {
+          "id": "ev-moe2022-e-0760",
+          "word": "wear",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 477,
+          "learningOrder": 73
+        },
+        {
+          "id": "ev-moe2022-e-0273",
+          "word": "finish",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 482,
+          "learningOrder": 74
+        },
+        {
+          "id": "ev-moe2022-e-0714",
+          "word": "touch",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 486,
+          "learningOrder": 75
+        },
+        {
+          "id": "ev-moe2022-e-0326",
+          "word": "grow",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 492,
+          "learningOrder": 76
+        },
+        {
+          "id": "ev-moe2022-e-0616",
+          "word": "sit",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 493,
+          "learningOrder": 77
+        },
+        {
+          "id": "ev-moe2022-e-0132",
+          "word": "carry",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 495,
+          "learningOrder": 78
+        },
+        {
+          "id": "ev-moe2022-e-0136",
+          "word": "catch",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 501,
+          "learningOrder": 79
+        },
+        {
+          "id": "ev-moe2022-e-0072",
+          "word": "begin",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 515,
+          "learningOrder": 80
+        },
+        {
+          "id": "ev-moe2022-e-0420",
+          "word": "lie",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 517,
+          "learningOrder": 81
+        },
+        {
+          "id": "ev-moe2022-e-0550",
+          "word": "push",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 530,
+          "learningOrder": 82
+        },
+        {
+          "id": "ev-moe2022-e-0748",
+          "word": "wake",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 555,
+          "learningOrder": 83
+        },
+        {
+          "id": "ev-moe2022-e-0278",
+          "word": "fix",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 561,
+          "learningOrder": 84
+        },
+        {
+          "id": "ev-moe2022-e-0281",
+          "word": "fly",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 562,
+          "learningOrder": 85
+        },
+        {
+          "id": "ev-moe2022-e-0397",
+          "word": "kick",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 575,
+          "learningOrder": 86
+        },
+        {
+          "id": "ev-moe2022-e-0393",
+          "word": "jump",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 589,
+          "learningOrder": 87
+        },
+        {
+          "id": "ev-moe2022-e-0268",
+          "word": "fill",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 609,
+          "learningOrder": 88
+        },
+        {
+          "id": "ev-moe2022-e-0628",
+          "word": "smile",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 610,
+          "learningOrder": 89
+        },
+        {
+          "id": "ev-moe2022-e-0253",
+          "word": "fail",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 623,
+          "learningOrder": 90
+        },
+        {
+          "id": "ev-moe2022-e-0335",
+          "word": "hang",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 626,
+          "learningOrder": 91
+        },
+        {
+          "id": "ev-moe2022-e-0191",
+          "word": "cry",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 630,
+          "learningOrder": 92
+        },
+        {
+          "id": "ev-moe2022-e-0402",
+          "word": "kiss",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 632,
+          "learningOrder": 93
+        },
+        {
+          "id": "ev-moe2022-e-0111",
+          "word": "burn",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 646,
+          "learningOrder": 94
+        },
+        {
+          "id": "ev-moe2022-e-0627",
+          "word": "smell",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 659,
+          "learningOrder": 95
+        },
+        {
+          "id": "ev-moe2022-e-0444",
+          "word": "marry",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 687,
+          "learningOrder": 96
+        },
+        {
+          "id": "ev-moe2022-e-0039",
+          "word": "arrive",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 690,
+          "learningOrder": 97
+        },
+        {
+          "id": "ev-moe2022-e-0165",
+          "word": "collect",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 694,
+          "learningOrder": 98
+        },
+        {
+          "id": "ev-moe2022-e-0156",
+          "word": "climb",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 723,
+          "learningOrder": 99
+        },
+        {
+          "id": "ev-moe2022-e-0373",
+          "word": "hurry",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 739,
+          "learningOrder": 100
+        },
+        {
+          "id": "ev-moe2022-e-0094",
+          "word": "borrow",
+          "primaryTopic": "action_change_description",
+          "frequencyRank": 764,
+          "learningOrder": 101
+        },
+        {
+          "id": "ev-moe2022-e-0314",
+          "word": "god",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 154,
+          "learningOrder": 102
+        },
+        {
+          "id": "ev-moe2022-e-0784",
+          "word": "wish",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 340,
+          "learningOrder": 103
+        },
+        {
+          "id": "ev-moe2022-e-0032",
+          "word": "answer",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 341,
+          "learningOrder": 104
+        },
+        {
+          "id": "ev-moe2022-e-0327",
+          "word": "guess",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 345,
+          "learningOrder": 105
+        },
+        {
+          "id": "ev-moe2022-e-0414",
+          "word": "learn",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 347,
+          "learningOrder": 106
+        },
+        {
+          "id": "ev-moe2022-e-0339",
+          "word": "hate",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 377,
+          "learningOrder": 107
+        },
+        {
+          "id": "ev-moe2022-e-0746",
+          "word": "voice",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 402,
+          "learningOrder": 108
+        },
+        {
+          "id": "ev-moe2022-e-0289",
+          "word": "forget",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 404,
+          "learningOrder": 109
+        },
+        {
+          "id": "ev-moe2022-e-0427",
+          "word": "listen",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 407,
+          "learningOrder": 110
+        },
+        {
+          "id": "ev-moe2022-e-0192",
+          "word": "culture",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 425,
+          "learningOrder": 111
+        },
+        {
+          "id": "ev-moe2022-e-0644",
+          "word": "speak",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 428,
+          "learningOrder": 112
+        },
+        {
+          "id": "ev-moe2022-e-0282",
+          "word": "focus",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 446,
+          "learningOrder": 113
+        },
+        {
+          "id": "ev-moe2022-e-0391",
+          "word": "join",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 449,
+          "learningOrder": 114
+        },
+        {
+          "id": "ev-moe2022-e-0767",
+          "word": "welcome",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 455,
+          "learningOrder": 115
+        },
+        {
+          "id": "ev-moe2022-e-0016",
+          "word": "agree",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 459,
+          "learningOrder": 116
+        },
+        {
+          "id": "ev-moe2022-e-0262",
+          "word": "favorite",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 461,
+          "learningOrder": 117
+        },
+        {
+          "id": "ev-moe2022-e-0148",
+          "word": "choose",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 479,
+          "learningOrder": 118
+        },
+        {
+          "id": "ev-moe2022-e-0224",
+          "word": "dream",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 481,
+          "learningOrder": 119
+        },
+        {
+          "id": "ev-moe2022-e-0434",
+          "word": "luck",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 483,
+          "learningOrder": 120
+        },
+        {
+          "id": "ev-moe2022-e-0310",
+          "word": "glad",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 491,
+          "learningOrder": 121
+        },
+        {
+          "id": "ev-moe2022-e-0791",
+          "word": "worry",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 522,
+          "learningOrder": 122
+        },
+        {
+          "id": "ev-moe2022-e-0451",
+          "word": "memory",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 535,
+          "learningOrder": 123
+        },
+        {
+          "id": "ev-moe2022-e-0205",
+          "word": "decide",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 544,
+          "learningOrder": 124
+        },
+        {
+          "id": "ev-moe2022-e-0214",
+          "word": "discuss",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 597,
+          "learningOrder": 125
+        },
+        {
+          "id": "ev-moe2022-e-0384",
+          "word": "introduce",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 695,
+          "learningOrder": 126
+        },
+        {
+          "id": "ev-moe2022-e-0317",
+          "word": "goodbye",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 707,
+          "learningOrder": 127
+        },
+        {
+          "id": "ev-moe2022-e-0385",
+          "word": "invite",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 708,
+          "learningOrder": 128
+        },
+        {
+          "id": "ev-moe2022-e-0173",
+          "word": "congratulate",
+          "primaryTopic": "communication_thinking_social",
+          "frequencyRank": 791,
+          "learningOrder": 129
+        },
+        {
+          "id": "ev-moe2022-e-0536",
+          "word": "please",
+          "primaryTopic": "core_function",
+          "frequencyRank": 139,
+          "learningOrder": 130
+        },
+        {
+          "id": "ev-moe2022-e-0046",
+          "word": "away",
+          "primaryTopic": "core_function",
+          "frequencyRank": 144,
+          "learningOrder": 131
+        },
+        {
+          "id": "ev-moe2022-e-0369",
+          "word": "however",
+          "primaryTopic": "core_function",
+          "frequencyRank": 153,
+          "learningOrder": 132
+        },
+        {
+          "id": "ev-moe2022-e-0025",
+          "word": "already",
+          "primaryTopic": "core_function",
+          "frequencyRank": 161,
+          "learningOrder": 133
+        },
+        {
+          "id": "ev-moe2022-e-0492",
+          "word": "nothing",
+          "primaryTopic": "core_function",
+          "frequencyRank": 163,
+          "learningOrder": 134
+        },
+        {
+          "id": "ev-moe2022-e-0244",
+          "word": "enough",
+          "primaryTopic": "core_function",
+          "frequencyRank": 166,
+          "learningOrder": 135
+        },
+        {
+          "id": "ev-moe2022-e-0796",
+          "word": "yes",
+          "primaryTopic": "core_function",
+          "frequencyRank": 188,
+          "learningOrder": 136
+        },
+        {
+          "id": "ev-moe2022-e-0707",
+          "word": "together",
+          "primaryTopic": "core_function",
+          "frequencyRank": 199,
+          "learningOrder": 137
+        },
+        {
+          "id": "ev-moe2022-e-0015",
+          "word": "ago",
+          "primaryTopic": "core_function",
+          "frequencyRank": 213,
+          "learningOrder": 138
+        },
+        {
+          "id": "ev-moe2022-e-0499",
+          "word": "often",
+          "primaryTopic": "core_function",
+          "frequencyRank": 219,
+          "learningOrder": 139
+        },
+        {
+          "id": "ev-moe2022-e-0022",
+          "word": "almost",
+          "primaryTopic": "core_function",
+          "frequencyRank": 231,
+          "learningOrder": 140
+        },
+        {
+          "id": "ev-moe2022-e-0024",
+          "word": "along",
+          "primaryTopic": "core_function",
+          "frequencyRank": 237,
+          "learningOrder": 141
+        },
+        {
+          "id": "ev-moe2022-e-0158",
+          "word": "close",
+          "primaryTopic": "core_function",
+          "frequencyRank": 247,
+          "learningOrder": 142
+        },
+        {
+          "id": "ev-moe2022-e-0073",
+          "word": "behind",
+          "primaryTopic": "core_function",
+          "frequencyRank": 279,
+          "learningOrder": 143
+        },
+        {
+          "id": "ev-moe2022-e-0298",
+          "word": "front",
+          "primaryTopic": "core_function",
+          "frequencyRank": 285,
+          "learningOrder": 144
+        },
+        {
+          "id": "ev-moe2022-e-0004",
+          "word": "across",
+          "primaryTopic": "core_function",
+          "frequencyRank": 301,
+          "learningOrder": 145
+        },
+        {
+          "id": "ev-moe2022-e-0003",
+          "word": "above",
+          "primaryTopic": "core_function",
+          "frequencyRank": 323,
+          "learningOrder": 146
+        },
+        {
+          "id": "ev-moe2022-e-0381",
+          "word": "inside",
+          "primaryTopic": "core_function",
+          "frequencyRank": 330,
+          "learningOrder": 147
+        },
+        {
+          "id": "ev-moe2022-e-0138",
+          "word": "certain",
+          "primaryTopic": "core_function",
+          "frequencyRank": 350,
+          "learningOrder": 148
+        },
+        {
+          "id": "ev-moe2022-e-0236",
+          "word": "east",
+          "primaryTopic": "core_function",
+          "frequencyRank": 352,
+          "learningOrder": 149
+        },
+        {
+          "id": "ev-moe2022-e-0076",
+          "word": "below",
+          "primaryTopic": "core_function",
+          "frequencyRank": 411,
+          "learningOrder": 150
+        },
+        {
+          "id": "ev-moe2022-e-0017",
+          "word": "ahead",
+          "primaryTopic": "core_function",
+          "frequencyRank": 439,
+          "learningOrder": 151
+        },
+        {
+          "id": "ev-moe2022-e-0371",
+          "word": "hundred",
+          "primaryTopic": "core_function",
+          "frequencyRank": 582,
+          "learningOrder": 152
+        },
+        {
+          "id": "ev-moe2022-e-0078",
+          "word": "beside",
+          "primaryTopic": "core_function",
+          "frequencyRank": 728,
+          "learningOrder": 153
+        },
+        {
+          "id": "ev-moe2022-e-0204",
+          "word": "death",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 223,
+          "learningOrder": 154
+        },
+        {
+          "id": "ev-moe2022-e-0370",
+          "word": "human",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 250,
+          "learningOrder": 155
+        },
+        {
+          "id": "ev-moe2022-e-0203",
+          "word": "dead",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 328,
+          "learningOrder": 156
+        },
+        {
+          "id": "ev-moe2022-e-0450",
+          "word": "member",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 336,
+          "learningOrder": 157
+        },
+        {
+          "id": "ev-moe2022-e-0518",
+          "word": "partner",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 518,
+          "learningOrder": 158
+        },
+        {
+          "id": "ev-moe2022-e-0544",
+          "word": "prince",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 577,
+          "learningOrder": 159
+        },
+        {
+          "id": "ev-moe2022-e-0100",
+          "word": "brave",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 702,
+          "learningOrder": 160
+        },
+        {
+          "id": "ev-moe2022-e-0284",
+          "word": "fool",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 714,
+          "learningOrder": 161
+        },
+        {
+          "id": "ev-moe2022-e-0155",
+          "word": "clever",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 724,
+          "learningOrder": 162
+        },
+        {
+          "id": "ev-moe2022-e-0306",
+          "word": "gentleman",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 732,
+          "learningOrder": 163
+        },
+        {
+          "id": "ev-moe2022-e-0611",
+          "word": "shy",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 734,
+          "learningOrder": 164
+        },
+        {
+          "id": "ev-moe2022-e-0426",
+          "word": "lip",
+          "primaryTopic": "self_and_people",
+          "frequencyRank": 743,
+          "learningOrder": 165
+        },
+        {
+          "id": "ev-moe2022-e-0011",
+          "word": "afternoon",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 571,
+          "learningOrder": 166
+        },
+        {
+          "id": "ev-moe2022-e-0727",
+          "word": "twenty",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 608,
+          "learningOrder": 167
+        },
+        {
+          "id": "ev-moe2022-e-0728",
+          "word": "twenty-first",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 612,
+          "learningOrder": 168
+        },
+        {
+          "id": "ev-moe2022-e-0729",
+          "word": "twenty-second",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 625,
+          "learningOrder": 169
+        },
+        {
+          "id": "ev-moe2022-e-0730",
+          "word": "twenty-third",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 637,
+          "learningOrder": 170
+        },
+        {
+          "id": "ev-moe2022-e-0157",
+          "word": "clock",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 674,
+          "learningOrder": 171
+        },
+        {
+          "id": "ev-moe2022-e-0698",
+          "word": "thirty",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 693,
+          "learningOrder": 172
+        },
+        {
+          "id": "ev-moe2022-e-0726",
+          "word": "twelve",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 699,
+          "learningOrder": 173
+        },
+        {
+          "id": "ev-moe2022-e-0241",
+          "word": "eleven",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 746,
+          "learningOrder": 174
+        },
+        {
+          "id": "ev-moe2022-e-0697",
+          "word": "thirteen",
+          "primaryTopic": "time_numbers_measure",
+          "frequencyRank": 775,
+          "learningOrder": 175
+        },
+        {
+          "id": "ev-moe2022-e-0642",
+          "word": "space",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 315,
+          "learningOrder": 176
+        },
+        {
+          "id": "ev-moe2022-e-0305",
+          "word": "gas",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 442,
+          "learningOrder": 177
+        },
+        {
+          "id": "ev-moe2022-e-0528",
+          "word": "pig",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 740,
+          "learningOrder": 178
+        },
+        {
+          "id": "ev-moe2022-e-0800",
+          "word": "zoo",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 741,
+          "learningOrder": 179
+        },
+        {
+          "id": "ev-moe2022-e-0069",
+          "word": "bee",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 749,
+          "learningOrder": 180
+        },
+        {
+          "id": "ev-moe2022-e-0240",
+          "word": "elephant",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 750,
+          "learningOrder": 181
+        },
+        {
+          "id": "ev-moe2022-e-0459",
+          "word": "monkey",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 754,
+          "learningOrder": 182
+        },
+        {
+          "id": "ev-moe2022-e-0557",
+          "word": "rabbit",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 756,
+          "learningOrder": 183
+        },
+        {
+          "id": "ev-moe2022-e-0549",
+          "word": "puppy",
+          "primaryTopic": "nature_weather_animals",
+          "frequencyRank": 765,
+          "learningOrder": 184
+        },
+        {
+          "id": "ev-moe2022-e-0782",
+          "word": "wine",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 565,
+          "learningOrder": 185
+        },
+        {
+          "id": "ev-moe2022-e-0534",
+          "word": "plastic",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 655,
+          "learningOrder": 186
+        },
+        {
+          "id": "ev-moe2022-e-0643",
+          "word": "spaghetti",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 787,
+          "learningOrder": 187
+        },
+        {
+          "id": "ev-moe2022-e-0632",
+          "word": "sock",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 790,
+          "learningOrder": 188
+        },
+        {
+          "id": "ev-moe2022-e-0592",
+          "word": "scissors",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 792,
+          "learningOrder": 189
+        },
+        {
+          "id": "ev-moe2022-e-0333",
+          "word": "hamburger",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 794,
+          "learningOrder": 190
+        },
+        {
+          "id": "ev-moe2022-e-0757",
+          "word": "watermelon",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 797,
+          "learningOrder": 191
+        },
+        {
+          "id": "ev-moe2022-e-0221",
+          "word": "doughnut",
+          "primaryTopic": "home_food_clothes",
+          "frequencyRank": 799,
+          "learningOrder": 192
+        },
+        {
+          "id": "ev-moe2022-e-0166",
+          "word": "college",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 290,
+          "learningOrder": 193
+        },
+        {
+          "id": "ev-moe2022-e-0386",
+          "word": "issue",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 314,
+          "learningOrder": 194
+        },
+        {
+          "id": "ev-moe2022-e-0548",
+          "word": "project",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 321,
+          "learningOrder": 195
+        },
+        {
+          "id": "ev-moe2022-e-0634",
+          "word": "software",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 550,
+          "learningOrder": 196
+        },
+        {
+          "id": "ev-moe2022-e-0171",
+          "word": "compute",
+          "primaryTopic": "school_learning_media",
+          "frequencyRank": 795,
+          "learningOrder": 197
+        },
+        {
+          "id": "ev-moe2022-e-0619",
+          "word": "skate",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 784,
+          "learningOrder": 198
+        },
+        {
+          "id": "ev-moe2022-e-0744",
+          "word": "violin",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 785,
+          "learningOrder": 199
+        },
+        {
+          "id": "ev-moe2022-e-0050",
+          "word": "badminton",
+          "primaryTopic": "play_sport_arts",
+          "frequencyRank": 798,
+          "learningOrder": 200
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "sourceCardCount": 800,
+    "assignedCardCount": 800,
+    "uniqueIds": 800,
+    "unassignedCards": 0,
+    "setSizes": {
+      "SET01": 200,
+      "SET02": 200,
+      "SET03": 200,
+      "SET04": 200
+    }
+  },
+  "editorialReview": {
+    "completedScopes": [
+      "SET01",
+      "SET02",
+      "SET03",
+      "SET04"
+    ],
+    "adjustments": [
+      {
+        "setId": "SET01",
+        "movedOut": "death",
+        "movedIn": "uncle"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "dead",
+        "movedIn": "ear"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "human",
+        "movedIn": "cousin"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "member",
+        "movedIn": "tooth"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "address",
+        "movedIn": "finger"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "course",
+        "movedIn": "pen"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "problem",
+        "movedIn": "pencil"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "wine",
+        "movedIn": "banana"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "plastic",
+        "movedIn": "carrot"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "space",
+        "movedIn": "dog"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "star",
+        "movedIn": "cat"
+      },
+      {
+        "setId": "SET01",
+        "movedOut": "part",
+        "movedIn": "blue"
+      },
+      {
+        "setId": "SET02",
+        "movedOut": "wine",
+        "movedIn": "biscuit"
+      },
+      {
+        "setId": "SET02",
+        "movedOut": "college",
+        "movedIn": "crayon"
+      },
+      {
+        "setId": "SET02",
+        "movedOut": "issue",
+        "movedIn": "notebook"
+      },
+      {
+        "setId": "SET02",
+        "movedOut": "project",
+        "movedIn": "quiz"
+      },
+      {
+        "setId": "SET02",
+        "movedOut": "software",
+        "movedIn": "textbook"
+      },
+      {
+        "setId": "SET02",
+        "movedOut": "partner",
+        "movedIn": "aunt"
+      },
+      {
+        "setId": "SET02",
+        "movedOut": "prince",
+        "movedIn": "grandfather"
+      },
+      {
+        "setId": "SET02",
+        "movedOut": "god",
+        "movedIn": "hello"
+      },
+      {
+        "setId": "SET02",
+        "movedOut": "space",
+        "movedIn": "duck"
+      },
+      {
+        "setId": "SET03",
+        "movedOut": "death",
+        "movedIn": "nurse"
+      },
+      {
+        "setId": "SET03",
+        "movedOut": "kill",
+        "movedIn": "wash"
+      },
+      {
+        "setId": "SET03",
+        "movedOut": "war",
+        "movedIn": "festival"
+      },
+      {
+        "setId": "SET03",
+        "movedOut": "case",
+        "movedIn": "wedding"
+      },
+      {
+        "setId": "SET03",
+        "movedOut": "gas",
+        "movedIn": "cow"
+      }
+    ]
+  }
+}

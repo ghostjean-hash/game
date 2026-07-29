@@ -1,0 +1,201 @@
+# 형식: 순번|품사|뜻|예문|번역|선택 rel:x;irr:x,y
+401|noun|왕|The king wears a crown.|왕은 왕관을 쓴다.
+402|verb|입맞추다|She kisses her baby goodnight.|그녀는 아기에게 잘 자라고 입맞춘다.
+403|noun|부엌|Mom cooks in the kitchen.|엄마는 부엌에서 요리한다.
+404|noun|칼|Use the knife carefully.|칼을 조심해서 사용해라.
+405|verb|알다|I know the answer now.|나는 이제 답을 안다.|irr:knew,known
+406|noun|여성|The lady opens the window.|그 여성은 창문을 연다.
+407|noun|호수|The lake is very calm.|호수는 아주 잔잔하다.
+408|noun|땅|The land is dry today.|오늘 땅은 마르다.
+409|adjective|큰|That is a large room.|저것은 큰 방이다.
+410|noun|레이저|The laser makes a red line.|레이저는 빨간 선을 만든다.
+411|adjective|마지막의|This is our last game.|이것은 우리의 마지막 게임이다.
+412|adjective|늦은|The bus is late again.|버스가 또 늦었다.
+413|adjective|게으른|The lazy cat sleeps all day.|게으른 고양이는 하루 종일 잔다.
+414|verb|배우다|We learn English at school.|우리는 학교에서 영어를 배운다.|irr:learned,learnt
+415|adjective|왼쪽의|Raise your left hand.|왼손을 들어라.
+416|noun|다리|My leg feels tired.|내 다리가 피곤하게 느껴진다.
+417|noun|수업|Today’s lesson is about animals.|오늘 수업은 동물에 관한 것이다.
+418|noun|편지|I got a letter yesterday.|나는 어제 편지를 받았다.
+419|noun|도서관|The library is quiet today.|도서관은 오늘 조용하다.
+420|verb|눕다|I lie on the grass.|나는 풀 위에 눕는다.|irr:lay,lain
+421|noun|삶|Life is full of change.|삶은 변화로 가득하다.
+422|noun|빛|Turn on the light, please.|불을 켜라.
+423|verb|좋아하다|I like this song.|나는 이 노래를 좋아한다.
+424|noun|선|Draw a straight line.|곧은 선을 그려라.
+425|noun|사자|The lion roars loudly.|사자는 크게 포효한다.
+426|noun|입술|Her lip is dry today.|그녀의 입술은 오늘 말랐다.
+427|verb|듣다|Listen to the teacher.|선생님 말씀을 들어라.
+428|adjective|작은|The little bird can fly.|그 작은 새는 날 수 있다.
+429|verb|살다|They live near the park.|그들은 공원 근처에 산다.
+430|adjective|긴|She has long hair.|그녀는 긴 머리카락을 가졌다.
+431|verb|보다|Look at the sky.|하늘을 보아라.
+432|noun|사랑|Love makes people smile.|사랑은 사람들을 웃게 한다.
+433|adjective|낮은|The table is low.|그 탁자는 낮다.
+434|noun|행운|Good luck on your test!|시험에서 행운을 빌게!
+435|noun|점심|We eat lunch together.|우리는 함께 점심을 먹는다.
+436|adjective|화난|He is mad at me.|그는 나에게 화가 났다.
+437|noun|우편|The mail comes every day.|우편은 매일 온다.
+438|verb|만들다|Make a paper airplane.|종이비행기를 만들어라.|irr:made
+439|noun|남자|That man is my uncle.|저 남자는 내 삼촌이다.
+440|determiner|많은|Many students are absent.|많은 학생이 결석했다.
+441|noun|지도|Find Korea on the map.|지도에서 한국을 찾아라.
+442|noun|마라톤|The marathon starts at nine.|마라톤은 아홉 시에 시작한다.
+443|noun|시장|We buy fruit at the market.|우리는 시장에서 과일을 산다.
+444|verb|결혼하다|They marry in spring.|그들은 봄에 결혼한다.
+445|noun|수학|Mathematics is fun for me.|수학은 나에게 재미있다.|rel:math
+446|auxiliary|~일지도 모른다|It may rain tonight.|오늘 밤 비가 올지도 모른다.
+447|noun|고기|We eat meat with rice.|우리는 밥과 고기를 먹는다.
+448|noun|메달|She won a gold medal.|그녀는 금메달을 땄다.
+449|verb|만나다|Meet me after class.|수업 후에 나를 만나.|irr:met
+450|noun|구성원|Every member has a job.|모든 구성원에게는 역할이 있다.
+451|noun|기억|That song brings back memories.|그 노래는 기억을 되살린다.
+452|noun|가운데|The ball is in the middle.|공은 가운데에 있다.
+453|auxiliary|~일지도 모른다|He might be at home.|그는 집에 있을지도 모른다.
+454|noun|우유|Milk is in the cup.|우유가 컵에 있다.
+455|noun|마음|Open your mind to ideas.|생각에 마음을 열어라.
+456|verb|놓치다|Do not miss the bus.|버스를 놓치지 마라.
+457|noun|모형|The model airplane is blue.|그 모형 비행기는 파랗다.
+458|noun|돈|Save your money for later.|나중을 위해 돈을 모아라.
+459|noun|원숭이|The monkey climbs a tree.|원숭이는 나무를 오른다.
+460|noun|달|January is the first month.|1월은 첫 번째 달이다.
+461|noun|달|The moon is bright tonight.|오늘 밤 달은 밝다.
+462|noun|아침|I walk in the morning.|나는 아침에 걷는다.
+463|noun|어머니|My mother reads with me.|우리 어머니는 나와 함께 읽는다.|rel:mom
+464|noun|산|We hike up the mountain.|우리는 산을 오른다.
+465|noun|쥐|A mouse is under the chair.|쥐가 의자 아래에 있다.|irr:mice
+466|noun|입|Open your mouth wide.|입을 크게 벌려라.
+467|verb|움직이다|The leaves move in the wind.|나뭇잎은 바람에 움직인다.
+468|noun|영화|This movie is very funny.|이 영화는 아주 재미있다.
+469|determiner|많은|There is much water here.|여기에는 물이 많다.
+470|noun|음악|Music fills the room.|음악이 방을 채운다.
+471|auxiliary|반드시 ~해야 한다|You must wear a helmet.|너는 헬멧을 반드시 써야 한다.
+472|noun|이름|Write your name here.|여기에 네 이름을 써라.
+473|noun|나라|Our nation loves this sport.|우리 나라는 이 스포츠를 좋아한다.
+474|noun|자연|We should protect nature.|우리는 자연을 보호해야 한다.
+475|adjective|가까운|The store is near home.|가게는 집 가까이에 있다.
+476|noun|목|My neck feels stiff.|내 목이 뻣뻣하게 느껴진다.
+477|verb|필요하다|Plants need water and light.|식물은 물과 빛이 필요하다.
+478|adverb|결코 ~않다|I never skip breakfast.|나는 결코 아침을 거르지 않는다.
+479|adjective|새로운|I have a new pencil.|나는 새 연필이 있다.
+480|noun|뉴스|The news is on TV.|뉴스가 텔레비전에 나온다.
+481|noun|신문|My dad reads the newspaper.|우리 아빠는 신문을 읽는다.
+482|adjective|다음의|See you next week.|다음 주에 보자.
+483|adjective|친절한|She is nice to everyone.|그녀는 모두에게 친절하다.
+484|noun|밤|The night is very dark.|밤은 아주 어둡다.
+485|number|아홉|Nine birds are flying.|아홉 마리 새가 날고 있다.
+486|noun|아니오|His answer was no.|그의 대답은 아니오였다.
+487|adverb|북쪽으로|The birds fly north.|새들은 북쪽으로 난다.
+488|noun|코|My nose is cold.|내 코가 차갑다.
+489|adverb|아니다|That is not my bag.|저것은 내 가방이 아니다.
+490|noun|메모|Write a note for Mom.|엄마에게 메모를 써라.
+491|noun|공책|My notebook is on the desk.|내 공책은 책상 위에 있다.
+492|pronoun|아무것도|Nothing is in the box.|상자 안에는 아무것도 없다.
+493|adverb|지금|Please come here now.|지금 여기로 와라.
+494|noun|숫자|Write the number clearly.|숫자를 또렷하게 써라.
+495|noun|간호사|The nurse helps the doctor.|간호사는 의사를 돕는다.
+496|preposition|~의|The color of the sky changes.|하늘의 색은 변한다.
+497|adverb|꺼져|The light is off now.|불은 지금 꺼져 있다.
+498|noun|사무실|Her office is downtown.|그녀의 사무실은 시내에 있다.
+499|adverb|자주|We often play outside.|우리는 자주 밖에서 논다.
+500|noun|기름|Oil floats on water.|기름은 물 위에 뜬다.
+501|interjection|좋아|Okay, let us begin.|좋아, 시작하자.
+502|adjective|오래된|This is an old book.|이것은 오래된 책이다.
+503|preposition|~위에|The cup is on the table.|컵은 탁자 위에 있다.
+504|number|하나|I have one question.|나는 질문이 하나 있다.
+505|adverb|오직|Only my sister knows the answer.|오직 내 여동생만 답을 안다.
+506|verb|열다|Open the window, please.|창문을 열어라.
+507|conjunction|또는|Tea or juice is fine.|차 또는 주스도 좋다.
+508|noun|오렌지|The orange is sweet.|그 오렌지는 달다.
+509|adverb|밖에|Go out and play.|밖에 나가 놀아라.
+510|preposition|~위로|The plane flies over us.|비행기는 우리 위로 난다.
+511|noun|쪽|Read page ten, please.|10쪽을 읽어라.
+512|verb|칠하다|Paint the wall blue.|벽을 파랗게 칠해라.
+513|noun|바지|These pants are too long.|이 바지는 너무 길다.
+514|noun|종이|Draw on this paper.|이 종이에 그려라.
+515|noun|부모|My parents are at work.|우리 부모님은 일하고 계신다.
+516|noun|공원|Children play in the park.|아이들은 공원에서 논다.
+517|noun|부분|This part is easy.|이 부분은 쉽다.
+518|noun|짝|My partner sits by me.|내 짝은 내 옆에 앉는다.
+519|noun|파티|The party is on Friday.|파티는 금요일에 있다.
+520|verb|지나가다|The bus passes our house.|버스는 우리 집을 지나간다.
+521|verb|지불하다|Pay for the ticket here.|여기에서 표 값을 내라.|irr:paid
+522|noun|펜|This pen writes well.|이 펜은 잘 써진다.
+523|noun|연필|Sharpen your pencil first.|먼저 연필을 깎아라.
+524|noun|사람들|People are waiting outside.|사람들은 밖에서 기다리고 있다.
+525|noun|피아노|She plays the piano daily.|그녀는 매일 피아노를 친다.
+526|verb|고르다|Pick a color you like.|네가 좋아하는 색을 골라라.
+527|noun|그림|The picture is on the wall.|그 그림은 벽에 있다.
+528|noun|돼지|The pig is eating corn.|돼지는 옥수수를 먹고 있다.
+529|noun|조종사|The pilot flies the plane.|조종사는 비행기를 몬다.
+530|adjective|분홍색의|Her pink bag is cute.|그녀의 분홍 가방은 귀엽다.
+531|noun|피자|We order pizza for dinner.|우리는 저녁으로 피자를 주문한다.
+532|noun|장소|This place is very clean.|이곳은 아주 깨끗하다.
+533|noun|계획|Our plan starts tomorrow.|우리 계획은 내일 시작한다.
+534|noun|플라스틱|Plastic is used for bottles.|플라스틱은 병을 만드는 데 쓰인다.
+535|verb|놀다|The children play outside.|아이들은 밖에서 논다.
+536|adverb|부디|Please sit down here.|여기에 앉아 주세요.
+537|noun|점|Put a point at the end.|끝에 점을 찍어라.
+538|noun|경찰|The police help lost children.|경찰은 길 잃은 아이들을 돕는다.
+539|adjective|가난한|The poor family needs help.|그 가난한 가족은 도움이 필요하다.
+540|noun|감자|Potatoes grow under the ground.|감자는 땅속에서 자란다.
+541|noun|힘|The wind has great power.|바람은 큰 힘을 가진다.
+542|noun|선물|This present is for you.|이 선물은 너를 위한 것이다.
+543|adjective|예쁜|What a pretty flower!|정말 예쁜 꽃이구나!
+544|noun|왕자|The prince rides a horse.|왕자는 말을 탄다.
+545|verb|인쇄하다|Print your name clearly.|네 이름을 또렷하게 인쇄해라.
+546|noun|문제|We solve the problem together.|우리는 함께 문제를 푼다.
+547|noun|프로그램|The program begins at noon.|프로그램은 정오에 시작한다.
+548|noun|프로젝트|Our project is about space.|우리 프로젝트는 우주에 관한 것이다.
+549|noun|강아지|The puppy follows its mother.|강아지는 엄마를 따른다.
+550|verb|밀다|Push the door slowly.|문을 천천히 밀어라.
+551|verb|놓다|Put your bag down.|가방을 내려놓아라.|irr:put
+552|noun|여왕|The queen wears a crown.|여왕은 왕관을 쓴다.
+553|noun|질문|Ask one question now.|지금 질문 하나를 해라.
+554|adjective|빠른|The rabbit is quick.|그 토끼는 빠르다.
+555|adjective|조용한|The room is quiet now.|방은 지금 조용하다.
+556|noun|퀴즈|We have a quiz today.|우리는 오늘 퀴즈가 있다.
+557|noun|토끼|A rabbit eats a carrot.|토끼는 당근을 먹는다.
+558|noun|경주|The race starts soon.|경주는 곧 시작한다.
+559|noun|라디오|The radio plays music.|라디오는 음악을 틀어 준다.
+560|noun|비|Rain falls from clouds.|비는 구름에서 내린다.
+561|verb|읽다|Read this book aloud.|이 책을 소리 내어 읽어라.|irr:read
+562|adjective|준비된|We are ready to go.|우리는 갈 준비가 되었다.
+563|noun|휴식과 놀이|The park is for recreation.|공원은 휴식과 놀이를 위한 곳이다.
+564|adjective|빨간|The apple is red.|사과는 빨갛다.
+565|verb|기억하다|Remember to close the door.|문 닫는 것을 기억해라.
+566|noun|식당|The restaurant serves noodles.|그 식당은 국수를 판다.
+567|noun|화장실|The restroom is near the door.|화장실은 문 근처에 있다.
+568|verb|돌아오다|We return home at five.|우리는 다섯 시에 집에 돌아온다.
+569|noun|리본|The ribbon is on the box.|리본은 상자 위에 있다.
+570|adjective|부유한|The rich man has a car.|그 부유한 남자는 차가 있다.
+571|adjective|오른쪽의|My right hand is raised.|내 오른손은 들려 있다.
+572|noun|반지|This ring is from Mom.|이 반지는 엄마가 주셨다.
+573|noun|강|The river flows to the sea.|강은 바다로 흐른다.
+574|noun|도로|Cars fill the road.|차들이 도로를 가득 메운다.
+575|noun|로봇|The robot can dance.|그 로봇은 춤출 수 있다.
+576|noun|바위|We sit on a rock.|우리는 바위 위에 앉는다.
+577|noun|방|My room has two windows.|내 방에는 창문이 두 개 있다.
+578|noun|장미|The rose smells sweet.|장미는 향기롭다.
+579|verb|달리다|I run in the park.|나는 공원에서 달린다.|irr:ran,run
+580|adjective|슬픈|The sad boy is crying.|슬픈 소년은 울고 있다.
+581|adjective|안전한|This road is safe.|이 도로는 안전하다.
+582|noun|샐러드|The salad has fresh vegetables.|샐러드에는 신선한 채소가 있다.
+583|noun|판매|The store has a sale.|그 가게는 세일 중이다.
+584|noun|소금|Add salt to the soup.|수프에 소금을 넣어라.
+585|adjective|같은|We wear the same shoes.|우리는 같은 신발을 신는다.
+586|noun|모래|The sand is warm today.|오늘 모래는 따뜻하다.
+587|noun|샌드위치|I made a sandwich today.|나는 오늘 샌드위치를 만들었다.
+588|verb|아끼다|Save water every day.|매일 물을 아껴라.
+589|verb|말하다|Say hello to your friend.|친구에게 안녕이라고 말해라.|irr:said
+590|noun|학교|The school opens at eight.|학교는 여덟 시에 문을 연다.
+591|noun|과학|Science explains many things.|과학은 많은 것을 설명한다.
+592|noun|가위|Scissors are on the desk.|가위는 책상 위에 있다.
+593|noun|점수|My score is very high.|내 점수는 아주 높다.
+594|noun|바다|The sea looks blue today.|바다는 오늘 파랗게 보인다.
+595|noun|계절|Spring is my favorite season.|봄은 내가 가장 좋아하는 계절이다.
+596|noun|두 번째|She is second in line.|그녀는 줄에서 두 번째이다.
+597|verb|보다|I can see the moon.|나는 달을 볼 수 있다.|irr:saw,seen
+598|verb|팔다|They sell fruit here.|그들은 여기서 과일을 판다.|irr:sold
+599|verb|보내다|Send me a message.|내게 메시지를 보내라.|irr:sent
+600|noun|서비스|The hotel offers good service.|그 호텔은 좋은 서비스를 제공한다.

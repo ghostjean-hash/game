@@ -42,7 +42,7 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   ok(DATA.words.every((w) => w.setId === DATA.setId), "단어 setId가 세트 setId와 일치");
   ok(DATA.words.every((w) => w.word && Array.isArray(w.meaningKr) && w.meaningKr.length >= 1), "word·meaningKr 필수");
   ok(DATA.words.every((w) => w.example && w.exampleKr), "예문·예문해석 필수");
-  const POS_OK = new Set(["명사", "동사", "형용사", "부사", "전치사", "접속사", "대명사", "감탄사", "한정사"]);
+  const POS_OK = new Set(["명사", "동사", "형용사", "부사", "전치사", "접속사", "대명사", "감탄사", "한정사", "조동사", "수사"]);
   ok(DATA.words.every((w) => typeof w.pos === "string" && POS_OK.has(w.pos)), "모든 단어에 허용 품사(pos) 존재");
   // manifest 정합 (초중고 3000 = 15세트 × 200, docs/vocab-master-plan.md)
   eq(MANIFEST.sets.length, 15, "manifest에 15세트 슬롯");

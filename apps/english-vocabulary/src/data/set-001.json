@@ -1,208 +1,2609 @@
 {
   "setId": "ev-set-001",
   "order": 1,
-  "title": "기초 다지기",
+  "title": "나와 일상",
   "level": "elementary",
+  "source": "교육부 2022 개정 별책 14 초등 * 대표형",
   "words": [
-    {"id":"ev-s01-0001","setId":"ev-set-001","level":"elementary","word":"about","pos":"전치사","meaningKr":["~에 관하여","~에 대하여"],"example":"This book is about animals.","exampleKr":"이 책은 동물에 관한 것이다."},
-    {"id":"ev-s01-0002","setId":"ev-set-001","level":"elementary","word":"across","pos":"전치사","meaningKr":["~을 가로질러","건너서"],"example":"We walked across the street.","exampleKr":"우리는 길을 가로질러 걸었다."},
-    {"id":"ev-s01-0003","setId":"ev-set-001","level":"elementary","word":"act","pos":"동사","meaningKr":["행동하다","연기하다"],"example":"You should act like a kind person.","exampleKr":"너는 친절한 사람처럼 행동해야 한다."},
-    {"id":"ev-s01-0004","setId":"ev-set-001","level":"elementary","word":"address","pos":"명사","meaningKr":["주소"],"example":"Please write your home address here.","exampleKr":"여기에 집 주소를 써 주세요."},
-    {"id":"ev-s01-0005","setId":"ev-set-001","level":"elementary","word":"afraid","pos":"형용사","meaningKr":["두려워하는","무서워하는"],"example":"I am afraid of big dogs.","exampleKr":"나는 큰 개를 무서워한다."},
-    {"id":"ev-s01-0006","setId":"ev-set-001","level":"elementary","word":"after","pos":"전치사","meaningKr":["~후에","~뒤에"],"example":"We play after school.","exampleKr":"우리는 방과 후에 논다."},
-    {"id":"ev-s01-0007","setId":"ev-set-001","level":"elementary","word":"afternoon","pos":"명사","meaningKr":["오후"],"example":"I take a nap in the afternoon.","exampleKr":"나는 오후에 낮잠을 잔다."},
-    {"id":"ev-s01-0008","setId":"ev-set-001","level":"elementary","word":"again","pos":"부사","meaningKr":["다시","또"],"example":"Please say it again.","exampleKr":"다시 말해 주세요."},
-    {"id":"ev-s01-0009","setId":"ev-set-001","level":"elementary","word":"age","pos":"명사","meaningKr":["나이","연령"],"example":"What is your age?","exampleKr":"너의 나이는 몇 살이니?"},
-    {"id":"ev-s01-0010","setId":"ev-set-001","level":"elementary","word":"ago","pos":"부사","meaningKr":["~전에"],"example":"I met her two days ago.","exampleKr":"나는 이틀 전에 그녀를 만났다."},
-    {"id":"ev-s01-0011","setId":"ev-set-001","level":"elementary","word":"air","pos":"명사","meaningKr":["공기","대기"],"example":"The mountain air is very fresh.","exampleKr":"산의 공기는 아주 상쾌하다."},
-    {"id":"ev-s01-0012","setId":"ev-set-001","level":"elementary","word":"airport","pos":"명사","meaningKr":["공항"],"example":"We arrived at the airport early.","exampleKr":"우리는 공항에 일찍 도착했다."},
-    {"id":"ev-s01-0013","setId":"ev-set-001","level":"elementary","word":"album","pos":"명사","meaningKr":["사진첩","앨범"],"example":"She keeps old photos in an album.","exampleKr":"그녀는 옛 사진들을 앨범에 보관한다."},
-    {"id":"ev-s01-0014","setId":"ev-set-001","level":"elementary","word":"all","pos":"한정사","meaningKr":["모두","모든"],"example":"All the children are happy.","exampleKr":"모든 아이들이 행복하다."},
-    {"id":"ev-s01-0015","setId":"ev-set-001","level":"elementary","word":"along","pos":"전치사","meaningKr":["~을 따라서"],"example":"We walked along the river.","exampleKr":"우리는 강을 따라 걸었다."},
-    {"id":"ev-s01-0016","setId":"ev-set-001","level":"elementary","word":"always","pos":"부사","meaningKr":["항상","언제나"],"example":"She always smiles at me.","exampleKr":"그녀는 항상 나에게 미소 짓는다."},
-    {"id":"ev-s01-0017","setId":"ev-set-001","level":"elementary","word":"among","pos":"전치사","meaningKr":["~사이에서"],"example":"He sat among his friends.","exampleKr":"그는 친구들 사이에 앉았다."},
-    {"id":"ev-s01-0018","setId":"ev-set-001","level":"elementary","word":"and","pos":"접속사","meaningKr":["그리고","~와"],"example":"I like cats and dogs.","exampleKr":"나는 고양이와 개를 좋아한다."},
-    {"id":"ev-s01-0019","setId":"ev-set-001","level":"elementary","word":"angry","pos":"형용사","meaningKr":["성난","화난"],"example":"My mom was angry at me.","exampleKr":"엄마는 나에게 화가 나셨다."},
-    {"id":"ev-s01-0020","setId":"ev-set-001","level":"elementary","word":"animal","pos":"명사","meaningKr":["동물"],"example":"A lion is a wild animal.","exampleKr":"사자는 야생 동물이다."},
-    {"id":"ev-s01-0021","setId":"ev-set-001","level":"elementary","word":"answer","pos":"명사","meaningKr":["대답","답"],"example":"Your answer is correct.","exampleKr":"너의 대답이 맞다."},
-    {"id":"ev-s01-0022","setId":"ev-set-001","level":"elementary","word":"any","pos":"한정사","meaningKr":["어떤","조금이라도"],"example":"Do you have any questions?","exampleKr":"질문이 있나요?"},
-    {"id":"ev-s01-0023","setId":"ev-set-001","level":"elementary","word":"apartment","pos":"명사","meaningKr":["아파트"],"example":"They live in a small apartment.","exampleKr":"그들은 작은 아파트에 산다."},
-    {"id":"ev-s01-0024","setId":"ev-set-001","level":"elementary","word":"apple","pos":"명사","meaningKr":["사과"],"example":"I eat an apple every morning.","exampleKr":"나는 매일 아침 사과를 먹는다."},
-    {"id":"ev-s01-0025","setId":"ev-set-001","level":"elementary","word":"arm","pos":"명사","meaningKr":["팔"],"example":"He raised his right arm.","exampleKr":"그는 오른팔을 들어 올렸다."},
-    {"id":"ev-s01-0026","setId":"ev-set-001","level":"elementary","word":"around","pos":"전치사","meaningKr":["~주위에","둘레에"],"example":"We sat around the table.","exampleKr":"우리는 탁자 주위에 앉았다."},
-    {"id":"ev-s01-0027","setId":"ev-set-001","level":"elementary","word":"arrive","pos":"동사","meaningKr":["도착하다"],"example":"They arrive at school at eight.","exampleKr":"그들은 여덟 시에 학교에 도착한다."},
-    {"id":"ev-s01-0028","setId":"ev-set-001","level":"elementary","word":"as","pos":"전치사","meaningKr":["~로서","~같이"],"example":"She works as a teacher.","exampleKr":"그녀는 교사로 일한다."},
-    {"id":"ev-s01-0029","setId":"ev-set-001","level":"elementary","word":"ask","pos":"동사","meaningKr":["묻다","물어보다"],"example":"May I ask a question?","exampleKr":"질문 하나 해도 될까요?"},
-    {"id":"ev-s01-0030","setId":"ev-set-001","level":"elementary","word":"at","pos":"전치사","meaningKr":["~에","~에서"],"example":"We meet at the park.","exampleKr":"우리는 공원에서 만난다."},
-    {"id":"ev-s01-0031","setId":"ev-set-001","level":"elementary","word":"aunt","pos":"명사","meaningKr":["이모","고모"],"example":"My aunt lives in Busan.","exampleKr":"우리 이모는 부산에 산다."},
-    {"id":"ev-s01-0032","setId":"ev-set-001","level":"elementary","word":"autumn","pos":"명사","meaningKr":["가을"],"example":"Leaves fall in autumn.","exampleKr":"가을에는 나뭇잎이 떨어진다."},
-    {"id":"ev-s01-0033","setId":"ev-set-001","level":"elementary","word":"away","pos":"부사","meaningKr":["떨어져","멀리"],"example":"The school is far away.","exampleKr":"학교는 멀리 떨어져 있다."},
-    {"id":"ev-s01-0034","setId":"ev-set-001","level":"elementary","word":"baby","pos":"명사","meaningKr":["아기"],"example":"The baby is sleeping now.","exampleKr":"아기가 지금 자고 있다."},
-    {"id":"ev-s01-0035","setId":"ev-set-001","level":"elementary","word":"back","pos":"명사","meaningKr":["등","뒤"],"example":"My back hurts a little.","exampleKr":"내 등이 조금 아프다."},
-    {"id":"ev-s01-0036","setId":"ev-set-001","level":"elementary","word":"bad","pos":"형용사","meaningKr":["나쁜","안 좋은"],"example":"The weather is bad today.","exampleKr":"오늘은 날씨가 안 좋다."},
-    {"id":"ev-s01-0037","setId":"ev-set-001","level":"elementary","word":"bag","pos":"명사","meaningKr":["가방","봉지"],"example":"My books are in the bag.","exampleKr":"내 책들은 가방 안에 있다."},
-    {"id":"ev-s01-0038","setId":"ev-set-001","level":"elementary","word":"ball","pos":"명사","meaningKr":["공"],"example":"He kicked the ball hard.","exampleKr":"그는 공을 세게 찼다."},
-    {"id":"ev-s01-0039","setId":"ev-set-001","level":"elementary","word":"balloon","pos":"명사","meaningKr":["풍선"],"example":"The red balloon flew away.","exampleKr":"빨간 풍선이 날아가 버렸다."},
-    {"id":"ev-s01-0040","setId":"ev-set-001","level":"elementary","word":"banana","pos":"명사","meaningKr":["바나나"],"example":"Monkeys love to eat bananas.","exampleKr":"원숭이는 바나나 먹는 것을 좋아한다."},
-    {"id":"ev-s01-0041","setId":"ev-set-001","level":"elementary","word":"band","pos":"명사","meaningKr":["악단","밴드"],"example":"He plays drums in a band.","exampleKr":"그는 밴드에서 드럼을 연주한다."},
-    {"id":"ev-s01-0042","setId":"ev-set-001","level":"elementary","word":"bank","pos":"명사","meaningKr":["은행"],"example":"My mother works at a bank.","exampleKr":"우리 엄마는 은행에서 일한다."},
-    {"id":"ev-s01-0043","setId":"ev-set-001","level":"elementary","word":"base","pos":"명사","meaningKr":["기초","바탕"],"example":"The base of the tower is wide.","exampleKr":"그 탑의 기초는 넓다."},
-    {"id":"ev-s01-0044","setId":"ev-set-001","level":"elementary","word":"basket","pos":"명사","meaningKr":["바구니"],"example":"She put apples in the basket.","exampleKr":"그녀는 바구니에 사과를 담았다."},
-    {"id":"ev-s01-0045","setId":"ev-set-001","level":"elementary","word":"bath","pos":"명사","meaningKr":["목욕"],"example":"I take a bath every night.","exampleKr":"나는 매일 밤 목욕을 한다."},
-    {"id":"ev-s01-0046","setId":"ev-set-001","level":"elementary","word":"be","pos":"동사","meaningKr":["~이다","~있다"],"example":"I want to be a doctor.","exampleKr":"나는 의사가 되고 싶다."},
-    {"id":"ev-s01-0047","setId":"ev-set-001","level":"elementary","word":"beach","pos":"명사","meaningKr":["해변","바닷가"],"example":"We played on the beach.","exampleKr":"우리는 해변에서 놀았다."},
-    {"id":"ev-s01-0048","setId":"ev-set-001","level":"elementary","word":"bear","pos":"명사","meaningKr":["곰"],"example":"A big bear lives in the forest.","exampleKr":"큰 곰 한 마리가 숲에 산다."},
-    {"id":"ev-s01-0049","setId":"ev-set-001","level":"elementary","word":"beautiful","pos":"형용사","meaningKr":["아름다운","예쁜"],"example":"The flowers are very beautiful.","exampleKr":"그 꽃들은 매우 아름답다."},
-    {"id":"ev-s01-0050","setId":"ev-set-001","level":"elementary","word":"because","pos":"접속사","meaningKr":["~때문에"],"example":"I stayed home because it rained.","exampleKr":"비가 왔기 때문에 나는 집에 있었다."},
-    {"id":"ev-s01-0051","setId":"ev-set-001","level":"elementary","word":"become","pos":"동사","meaningKr":["~이 되다"],"example":"I want to become a doctor.","exampleKr":"나는 의사가 되고 싶다."},
-    {"id":"ev-s01-0052","setId":"ev-set-001","level":"elementary","word":"bed","pos":"명사","meaningKr":["침대"],"example":"I sleep in my bed at night.","exampleKr":"나는 밤에 내 침대에서 잔다."},
-    {"id":"ev-s01-0053","setId":"ev-set-001","level":"elementary","word":"before","pos":"전치사","meaningKr":["~전에"],"example":"Wash your hands before lunch.","exampleKr":"점심 먹기 전에 손을 씻어라."},
-    {"id":"ev-s01-0054","setId":"ev-set-001","level":"elementary","word":"begin","pos":"동사","meaningKr":["시작하다"],"example":"The class will begin at nine.","exampleKr":"수업은 9시에 시작할 것이다."},
-    {"id":"ev-s01-0055","setId":"ev-set-001","level":"elementary","word":"behind","pos":"전치사","meaningKr":["~뒤에"],"example":"The cat is behind the door.","exampleKr":"고양이가 문 뒤에 있다."},
-    {"id":"ev-s01-0056","setId":"ev-set-001","level":"elementary","word":"bell","pos":"명사","meaningKr":["종","벨"],"example":"The school bell rings loudly.","exampleKr":"학교 종이 크게 울린다."},
-    {"id":"ev-s01-0057","setId":"ev-set-001","level":"elementary","word":"below","pos":"전치사","meaningKr":["~아래에"],"example":"The fish swim below the boat.","exampleKr":"물고기가 배 아래에서 헤엄친다."},
-    {"id":"ev-s01-0058","setId":"ev-set-001","level":"elementary","word":"bench","pos":"명사","meaningKr":["긴 의자","벤치"],"example":"We sat on the park bench.","exampleKr":"우리는 공원 벤치에 앉았다."},
-    {"id":"ev-s01-0059","setId":"ev-set-001","level":"elementary","word":"beside","pos":"전치사","meaningKr":["~곁에","~옆에"],"example":"She sat beside her mother.","exampleKr":"그녀는 엄마 곁에 앉았다."},
-    {"id":"ev-s01-0060","setId":"ev-set-001","level":"elementary","word":"between","pos":"전치사","meaningKr":["~사이에"],"example":"The ball is between the two boxes.","exampleKr":"공이 두 상자 사이에 있다."},
-    {"id":"ev-s01-0061","setId":"ev-set-001","level":"elementary","word":"bicycle","pos":"명사","meaningKr":["자전거"],"example":"I ride my bicycle to school.","exampleKr":"나는 자전거를 타고 학교에 간다."},
-    {"id":"ev-s01-0062","setId":"ev-set-001","level":"elementary","word":"big","pos":"형용사","meaningKr":["큰"],"example":"That is a very big dog.","exampleKr":"저것은 아주 큰 개다."},
-    {"id":"ev-s01-0063","setId":"ev-set-001","level":"elementary","word":"bird","pos":"명사","meaningKr":["새"],"example":"A bird is singing in the tree.","exampleKr":"새 한 마리가 나무에서 노래한다."},
-    {"id":"ev-s01-0064","setId":"ev-set-001","level":"elementary","word":"birthday","pos":"명사","meaningKr":["생일"],"example":"Today is my sister's birthday.","exampleKr":"오늘은 내 여동생의 생일이다."},
-    {"id":"ev-s01-0065","setId":"ev-set-001","level":"elementary","word":"black","pos":"형용사","meaningKr":["검은","검정색의"],"example":"She has long black hair.","exampleKr":"그녀는 길고 검은 머리카락을 가지고 있다."},
-    {"id":"ev-s01-0066","setId":"ev-set-001","level":"elementary","word":"blow","pos":"동사","meaningKr":["불다"],"example":"Blow out the candles now.","exampleKr":"이제 촛불을 불어서 꺼라."},
-    {"id":"ev-s01-0067","setId":"ev-set-001","level":"elementary","word":"blue","pos":"형용사","meaningKr":["파란","푸른"],"example":"The sky is very blue today.","exampleKr":"오늘 하늘이 아주 파랗다."},
-    {"id":"ev-s01-0068","setId":"ev-set-001","level":"elementary","word":"board","pos":"명사","meaningKr":["판자","칠판"],"example":"The teacher writes on the board.","exampleKr":"선생님이 칠판에 글을 쓴다."},
-    {"id":"ev-s01-0069","setId":"ev-set-001","level":"elementary","word":"boat","pos":"명사","meaningKr":["배","보트"],"example":"We rowed the boat across the lake.","exampleKr":"우리는 배를 저어 호수를 건넜다."},
-    {"id":"ev-s01-0070","setId":"ev-set-001","level":"elementary","word":"body","pos":"명사","meaningKr":["몸","신체"],"example":"Exercise is good for your body.","exampleKr":"운동은 네 몸에 좋다."},
-    {"id":"ev-s01-0071","setId":"ev-set-001","level":"elementary","word":"book","pos":"명사","meaningKr":["책"],"example":"I read a book every night.","exampleKr":"나는 매일 밤 책을 읽는다."},
-    {"id":"ev-s01-0072","setId":"ev-set-001","level":"elementary","word":"bottle","pos":"명사","meaningKr":["병"],"example":"She drank water from the bottle.","exampleKr":"그녀는 병에 든 물을 마셨다."},
-    {"id":"ev-s01-0073","setId":"ev-set-001","level":"elementary","word":"bowl","pos":"명사","meaningKr":["사발","그릇"],"example":"I ate a bowl of soup.","exampleKr":"나는 수프 한 그릇을 먹었다."},
-    {"id":"ev-s01-0074","setId":"ev-set-001","level":"elementary","word":"box","pos":"명사","meaningKr":["상자"],"example":"The toys are in the box.","exampleKr":"장난감들이 상자 안에 있다."},
-    {"id":"ev-s01-0075","setId":"ev-set-001","level":"elementary","word":"boy","pos":"명사","meaningKr":["소년"],"example":"The boy is playing soccer.","exampleKr":"그 소년은 축구를 하고 있다."},
-    {"id":"ev-s01-0076","setId":"ev-set-001","level":"elementary","word":"bread","pos":"명사","meaningKr":["빵"],"example":"I like bread with butter.","exampleKr":"나는 버터를 바른 빵을 좋아한다."},
-    {"id":"ev-s01-0077","setId":"ev-set-001","level":"elementary","word":"break","pos":"동사","meaningKr":["깨뜨리다","부수다"],"example":"Be careful not to break the glass.","exampleKr":"유리컵을 깨뜨리지 않게 조심해라."},
-    {"id":"ev-s01-0078","setId":"ev-set-001","level":"elementary","word":"breakfast","pos":"명사","meaningKr":["아침 식사"],"example":"I eat breakfast every morning.","exampleKr":"나는 매일 아침 식사를 한다."},
-    {"id":"ev-s01-0079","setId":"ev-set-001","level":"elementary","word":"bridge","pos":"명사","meaningKr":["다리"],"example":"We walked across the long bridge.","exampleKr":"우리는 긴 다리를 걸어서 건넜다."},
-    {"id":"ev-s01-0080","setId":"ev-set-001","level":"elementary","word":"bright","pos":"형용사","meaningKr":["밝은"],"example":"The sun is very bright today.","exampleKr":"오늘 해가 아주 밝다."},
-    {"id":"ev-s01-0081","setId":"ev-set-001","level":"elementary","word":"bring","pos":"동사","meaningKr":["가져오다","데려오다"],"example":"Please bring me a pencil.","exampleKr":"연필 하나만 가져다 줘."},
-    {"id":"ev-s01-0082","setId":"ev-set-001","level":"elementary","word":"brother","pos":"명사","meaningKr":["형제","형","남동생"],"example":"My brother is older than me.","exampleKr":"내 형은 나보다 나이가 많다."},
-    {"id":"ev-s01-0083","setId":"ev-set-001","level":"elementary","word":"brown","pos":"형용사","meaningKr":["갈색의"],"example":"The dog has soft brown fur.","exampleKr":"그 개는 부드러운 갈색 털을 가지고 있다."},
-    {"id":"ev-s01-0084","setId":"ev-set-001","level":"elementary","word":"brush","pos":"명사","meaningKr":["솔","붓"],"example":"I clean my shoes with a brush.","exampleKr":"나는 솔로 신발을 닦는다."},
-    {"id":"ev-s01-0085","setId":"ev-set-001","level":"elementary","word":"build","pos":"동사","meaningKr":["짓다","건설하다"],"example":"They will build a new house.","exampleKr":"그들은 새 집을 지을 것이다."},
-    {"id":"ev-s01-0086","setId":"ev-set-001","level":"elementary","word":"burn","pos":"동사","meaningKr":["타다","태우다"],"example":"The dry leaves burn quickly.","exampleKr":"마른 잎들은 빨리 탄다."},
-    {"id":"ev-s01-0087","setId":"ev-set-001","level":"elementary","word":"bus","pos":"명사","meaningKr":["버스"],"example":"I go to school by bus.","exampleKr":"나는 버스를 타고 학교에 간다."},
-    {"id":"ev-s01-0088","setId":"ev-set-001","level":"elementary","word":"busy","pos":"형용사","meaningKr":["바쁜"],"example":"My mom is very busy today.","exampleKr":"우리 엄마는 오늘 아주 바쁘다."},
-    {"id":"ev-s01-0089","setId":"ev-set-001","level":"elementary","word":"but","pos":"접속사","meaningKr":["그러나","하지만"],"example":"I am tired, but I am happy.","exampleKr":"나는 피곤하지만 행복하다."},
-    {"id":"ev-s01-0090","setId":"ev-set-001","level":"elementary","word":"butter","pos":"명사","meaningKr":["버터"],"example":"She spread butter on the bread.","exampleKr":"그녀는 빵에 버터를 발랐다."},
-    {"id":"ev-s01-0091","setId":"ev-set-001","level":"elementary","word":"button","pos":"명사","meaningKr":["단추","버튼"],"example":"Press the red button to start.","exampleKr":"시작하려면 빨간 버튼을 눌러라."},
-    {"id":"ev-s01-0092","setId":"ev-set-001","level":"elementary","word":"buy","pos":"동사","meaningKr":["사다"],"example":"I want to buy new shoes.","exampleKr":"나는 새 신발을 사고 싶다."},
-    {"id":"ev-s01-0093","setId":"ev-set-001","level":"elementary","word":"by","pos":"전치사","meaningKr":["~옆에","~에 의해"],"example":"She is standing by the window.","exampleKr":"그녀는 창문 옆에 서 있다."},
-    {"id":"ev-s01-0094","setId":"ev-set-001","level":"elementary","word":"calendar","pos":"명사","meaningKr":["달력"],"example":"I marked the date on the calendar.","exampleKr":"나는 달력에 그 날짜를 표시했다."},
-    {"id":"ev-s01-0095","setId":"ev-set-001","level":"elementary","word":"cake","pos":"명사","meaningKr":["케이크"],"example":"We ate a birthday cake.","exampleKr":"우리는 생일 케이크를 먹었다."},
-    {"id":"ev-s01-0096","setId":"ev-set-001","level":"elementary","word":"call","pos":"동사","meaningKr":["부르다","전화하다"],"example":"Please call me tonight.","exampleKr":"오늘 밤에 나에게 전화해 줘."},
-    {"id":"ev-s01-0097","setId":"ev-set-001","level":"elementary","word":"camera","pos":"명사","meaningKr":["사진기","카메라"],"example":"He took a photo with his camera.","exampleKr":"그는 카메라로 사진을 찍었다."},
-    {"id":"ev-s01-0098","setId":"ev-set-001","level":"elementary","word":"camp","pos":"명사","meaningKr":["야영지","캠프"],"example":"We stayed at a summer camp.","exampleKr":"우리는 여름 캠프에서 지냈다."},
-    {"id":"ev-s01-0099","setId":"ev-set-001","level":"elementary","word":"can","pos":"동사","meaningKr":["~할 수 있다"],"example":"I can swim very well.","exampleKr":"나는 수영을 아주 잘할 수 있다."},
-    {"id":"ev-s01-0100","setId":"ev-set-001","level":"elementary","word":"candle","pos":"명사","meaningKr":["양초"],"example":"She lit a candle in the dark.","exampleKr":"그녀는 어둠 속에서 양초에 불을 붙였다."},
-    {"id":"ev-s01-0101","setId":"ev-set-001","level":"elementary","word":"candy","pos":"명사","meaningKr":["사탕"],"example":"I like sweet candy.","exampleKr":"나는 달콤한 사탕을 좋아해."},
-    {"id":"ev-s01-0102","setId":"ev-set-001","level":"elementary","word":"cap","pos":"명사","meaningKr":["모자"],"example":"He wears a red cap.","exampleKr":"그는 빨간 모자를 쓴다."},
-    {"id":"ev-s01-0103","setId":"ev-set-001","level":"elementary","word":"capital","pos":"명사","meaningKr":["수도","대문자"],"example":"Seoul is the capital of Korea.","exampleKr":"서울은 한국의 수도이다."},
-    {"id":"ev-s01-0104","setId":"ev-set-001","level":"elementary","word":"captain","pos":"명사","meaningKr":["선장","우두머리"],"example":"The captain leads our team.","exampleKr":"그 주장이 우리 팀을 이끈다."},
-    {"id":"ev-s01-0105","setId":"ev-set-001","level":"elementary","word":"car","pos":"명사","meaningKr":["자동차"],"example":"My dad drives a blue car.","exampleKr":"우리 아빠는 파란 자동차를 운전한다."},
-    {"id":"ev-s01-0106","setId":"ev-set-001","level":"elementary","word":"card","pos":"명사","meaningKr":["카드"],"example":"I made a birthday card.","exampleKr":"나는 생일 카드를 만들었다."},
-    {"id":"ev-s01-0107","setId":"ev-set-001","level":"elementary","word":"care","pos":"동사","meaningKr":["돌보다","걱정하다"],"example":"I care for my little sister.","exampleKr":"나는 여동생을 돌본다."},
-    {"id":"ev-s01-0108","setId":"ev-set-001","level":"elementary","word":"carry","pos":"동사","meaningKr":["나르다","들고 가다"],"example":"Can you carry this bag?","exampleKr":"이 가방 좀 들어 줄래?"},
-    {"id":"ev-s01-0109","setId":"ev-set-001","level":"elementary","word":"case","pos":"명사","meaningKr":["경우","상자"],"example":"In this case, we should wait.","exampleKr":"이 경우에는 우리가 기다려야 한다."},
-    {"id":"ev-s01-0110","setId":"ev-set-001","level":"elementary","word":"cassette","pos":"명사","meaningKr":["카세트테이프"],"example":"My mom kept an old cassette.","exampleKr":"엄마는 오래된 카세트테이프를 간직했다."},
-    {"id":"ev-s01-0111","setId":"ev-set-001","level":"elementary","word":"cat","pos":"명사","meaningKr":["고양이"],"example":"The cat sleeps on the sofa.","exampleKr":"그 고양이는 소파에서 잔다."},
-    {"id":"ev-s01-0112","setId":"ev-set-001","level":"elementary","word":"catch","pos":"동사","meaningKr":["붙잡다","잡다"],"example":"Try to catch the ball.","exampleKr":"공을 잡아 봐."},
-    {"id":"ev-s01-0113","setId":"ev-set-001","level":"elementary","word":"ceiling","pos":"명사","meaningKr":["천장"],"example":"A light hangs from the ceiling.","exampleKr":"천장에 전등이 매달려 있다."},
-    {"id":"ev-s01-0114","setId":"ev-set-001","level":"elementary","word":"center","pos":"명사","meaningKr":["중앙","가운데"],"example":"Stand in the center of the room.","exampleKr":"방 가운데에 서라."},
-    {"id":"ev-s01-0115","setId":"ev-set-001","level":"elementary","word":"chair","pos":"명사","meaningKr":["의자"],"example":"Please sit on the chair.","exampleKr":"의자에 앉으세요."},
-    {"id":"ev-s01-0116","setId":"ev-set-001","level":"elementary","word":"chalk","pos":"명사","meaningKr":["분필"],"example":"She writes with white chalk.","exampleKr":"그녀는 흰 분필로 쓴다."},
-    {"id":"ev-s01-0117","setId":"ev-set-001","level":"elementary","word":"chance","pos":"명사","meaningKr":["기회"],"example":"This is your last chance.","exampleKr":"이것이 너의 마지막 기회야."},
-    {"id":"ev-s01-0118","setId":"ev-set-001","level":"elementary","word":"change","pos":"동사","meaningKr":["바꾸다","변하다"],"example":"Let's change the plan.","exampleKr":"계획을 바꾸자."},
-    {"id":"ev-s01-0119","setId":"ev-set-001","level":"elementary","word":"cheap","pos":"형용사","meaningKr":["값싼"],"example":"This pen is very cheap.","exampleKr":"이 펜은 아주 싸다."},
-    {"id":"ev-s01-0120","setId":"ev-set-001","level":"elementary","word":"cheese","pos":"명사","meaningKr":["치즈"],"example":"I put cheese on my bread.","exampleKr":"나는 빵에 치즈를 올렸다."},
-    {"id":"ev-s01-0121","setId":"ev-set-001","level":"elementary","word":"chicken","pos":"명사","meaningKr":["닭","닭고기"],"example":"We ate fried chicken for dinner.","exampleKr":"우리는 저녁으로 튀긴 닭고기를 먹었다."},
-    {"id":"ev-s01-0122","setId":"ev-set-001","level":"elementary","word":"child","pos":"명사","meaningKr":["어린이","아이"],"example":"The child is playing outside.","exampleKr":"그 아이는 밖에서 놀고 있다."},
-    {"id":"ev-s01-0123","setId":"ev-set-001","level":"elementary","word":"chopstick","pos":"명사","meaningKr":["젓가락"],"example":"I dropped one chopstick.","exampleKr":"나는 젓가락 하나를 떨어뜨렸다."},
-    {"id":"ev-s01-0124","setId":"ev-set-001","level":"elementary","word":"church","pos":"명사","meaningKr":["교회"],"example":"They go to church on Sunday.","exampleKr":"그들은 일요일에 교회에 간다."},
-    {"id":"ev-s01-0125","setId":"ev-set-001","level":"elementary","word":"circle","pos":"명사","meaningKr":["원","동그라미"],"example":"Draw a big circle here.","exampleKr":"여기에 큰 원을 그려라."},
-    {"id":"ev-s01-0126","setId":"ev-set-001","level":"elementary","word":"city","pos":"명사","meaningKr":["도시"],"example":"I live in a big city.","exampleKr":"나는 큰 도시에 산다."},
-    {"id":"ev-s01-0127","setId":"ev-set-001","level":"elementary","word":"class","pos":"명사","meaningKr":["학급","수업"],"example":"Our class has thirty students.","exampleKr":"우리 반에는 서른 명의 학생이 있다."},
-    {"id":"ev-s01-0128","setId":"ev-set-001","level":"elementary","word":"classmate","pos":"명사","meaningKr":["반 친구","동급생"],"example":"She is my classmate.","exampleKr":"그녀는 내 반 친구이다."},
-    {"id":"ev-s01-0129","setId":"ev-set-001","level":"elementary","word":"clean","pos":"형용사","meaningKr":["깨끗한"],"example":"My room is very clean.","exampleKr":"내 방은 아주 깨끗하다."},
-    {"id":"ev-s01-0130","setId":"ev-set-001","level":"elementary","word":"climb","pos":"동사","meaningKr":["오르다"],"example":"We climb the mountain together.","exampleKr":"우리는 함께 산을 오른다."},
-    {"id":"ev-s01-0131","setId":"ev-set-001","level":"elementary","word":"clock","pos":"명사","meaningKr":["시계"],"example":"The clock on the wall is slow.","exampleKr":"벽에 있는 시계가 느리다."},
-    {"id":"ev-s01-0132","setId":"ev-set-001","level":"elementary","word":"close","pos":"동사","meaningKr":["닫다"],"example":"Please close the door.","exampleKr":"문을 닫아 주세요."},
-    {"id":"ev-s01-0133","setId":"ev-set-001","level":"elementary","word":"clothes","pos":"명사","meaningKr":["옷"],"example":"I wash my clothes on Saturday.","exampleKr":"나는 토요일에 옷을 빤다."},
-    {"id":"ev-s01-0134","setId":"ev-set-001","level":"elementary","word":"cloud","pos":"명사","meaningKr":["구름"],"example":"A white cloud is in the sky.","exampleKr":"하늘에 흰 구름이 있다."},
-    {"id":"ev-s01-0135","setId":"ev-set-001","level":"elementary","word":"club","pos":"명사","meaningKr":["클럽","동아리"],"example":"I joined the soccer club.","exampleKr":"나는 축구 동아리에 가입했다."},
-    {"id":"ev-s01-0136","setId":"ev-set-001","level":"elementary","word":"coat","pos":"명사","meaningKr":["코트","외투"],"example":"Wear your coat in winter.","exampleKr":"겨울에는 외투를 입어라."},
-    {"id":"ev-s01-0137","setId":"ev-set-001","level":"elementary","word":"coffee","pos":"명사","meaningKr":["커피"],"example":"My mom drinks coffee every morning.","exampleKr":"엄마는 매일 아침 커피를 마신다."},
-    {"id":"ev-s01-0138","setId":"ev-set-001","level":"elementary","word":"coin","pos":"명사","meaningKr":["동전"],"example":"I found a gold coin.","exampleKr":"나는 금색 동전을 발견했다."},
-    {"id":"ev-s01-0139","setId":"ev-set-001","level":"elementary","word":"cold","pos":"형용사","meaningKr":["추운","차가운"],"example":"The water is very cold.","exampleKr":"그 물은 아주 차갑다."},
-    {"id":"ev-s01-0140","setId":"ev-set-001","level":"elementary","word":"color","pos":"명사","meaningKr":["색깔"],"example":"What is your favorite color?","exampleKr":"네가 가장 좋아하는 색깔은 뭐야?"},
-    {"id":"ev-s01-0141","setId":"ev-set-001","level":"elementary","word":"come","pos":"동사","meaningKr":["오다"],"example":"Please come to my house.","exampleKr":"우리 집에 와 줘."},
-    {"id":"ev-s01-0142","setId":"ev-set-001","level":"elementary","word":"computer","pos":"명사","meaningKr":["컴퓨터"],"example":"I play games on the computer.","exampleKr":"나는 컴퓨터로 게임을 한다."},
-    {"id":"ev-s01-0143","setId":"ev-set-001","level":"elementary","word":"cook","pos":"동사","meaningKr":["요리하다"],"example":"My dad can cook dinner.","exampleKr":"우리 아빠는 저녁을 요리할 수 있다."},
-    {"id":"ev-s01-0144","setId":"ev-set-001","level":"elementary","word":"cool","pos":"형용사","meaningKr":["시원한"],"example":"The wind feels cool today.","exampleKr":"오늘은 바람이 시원하게 느껴진다."},
-    {"id":"ev-s01-0145","setId":"ev-set-001","level":"elementary","word":"copy","pos":"동사","meaningKr":["베끼다","복사하다"],"example":"Don't copy my homework.","exampleKr":"내 숙제를 베끼지 마."},
-    {"id":"ev-s01-0146","setId":"ev-set-001","level":"elementary","word":"corner","pos":"명사","meaningKr":["모퉁이","구석"],"example":"The shop is on the corner.","exampleKr":"그 가게는 모퉁이에 있다."},
-    {"id":"ev-s01-0147","setId":"ev-set-001","level":"elementary","word":"count","pos":"동사","meaningKr":["세다"],"example":"Let's count to ten.","exampleKr":"열까지 세어 보자."},
-    {"id":"ev-s01-0148","setId":"ev-set-001","level":"elementary","word":"country","pos":"명사","meaningKr":["나라","시골"],"example":"Korea is a beautiful country.","exampleKr":"한국은 아름다운 나라이다."},
-    {"id":"ev-s01-0149","setId":"ev-set-001","level":"elementary","word":"course","pos":"명사","meaningKr":["과정","강좌"],"example":"I took an English course.","exampleKr":"나는 영어 강좌를 들었다."},
-    {"id":"ev-s01-0150","setId":"ev-set-001","level":"elementary","word":"cousin","pos":"명사","meaningKr":["사촌"],"example":"My cousin lives in Busan.","exampleKr":"내 사촌은 부산에 산다."},
-    {"id":"ev-s01-0151","setId":"ev-set-001","level":"elementary","word":"cover","pos":"동사","meaningKr":["덮다","가리다"],"example":"She covered the cake with a cloth.","exampleKr":"그녀는 케이크를 천으로 덮었다."},
-    {"id":"ev-s01-0152","setId":"ev-set-001","level":"elementary","word":"cow","pos":"명사","meaningKr":["암소","젖소"],"example":"The cow is eating grass.","exampleKr":"암소가 풀을 먹고 있다."},
-    {"id":"ev-s01-0153","setId":"ev-set-001","level":"elementary","word":"crayon","pos":"명사","meaningKr":["크레용"],"example":"I draw with a red crayon.","exampleKr":"나는 빨간 크레용으로 그림을 그린다."},
-    {"id":"ev-s01-0154","setId":"ev-set-001","level":"elementary","word":"cream","pos":"명사","meaningKr":["크림"],"example":"I like cream on my cake.","exampleKr":"나는 케이크 위의 크림을 좋아한다."},
-    {"id":"ev-s01-0155","setId":"ev-set-001","level":"elementary","word":"cross","pos":"동사","meaningKr":["가로지르다","건너다"],"example":"We cross the road carefully.","exampleKr":"우리는 조심스럽게 길을 건넌다."},
-    {"id":"ev-s01-0156","setId":"ev-set-001","level":"elementary","word":"cry","pos":"동사","meaningKr":["울다"],"example":"The baby began to cry.","exampleKr":"아기가 울기 시작했다."},
-    {"id":"ev-s01-0157","setId":"ev-set-001","level":"elementary","word":"cup","pos":"명사","meaningKr":["컵"],"example":"I drink water from a cup.","exampleKr":"나는 컵으로 물을 마신다."},
-    {"id":"ev-s01-0158","setId":"ev-set-001","level":"elementary","word":"curtain","pos":"명사","meaningKr":["커튼"],"example":"Please open the curtain.","exampleKr":"커튼을 열어 주세요."},
-    {"id":"ev-s01-0159","setId":"ev-set-001","level":"elementary","word":"cut","pos":"동사","meaningKr":["자르다","베다"],"example":"He cut the paper with scissors.","exampleKr":"그는 가위로 종이를 잘랐다."},
-    {"id":"ev-s01-0160","setId":"ev-set-001","level":"elementary","word":"dad","pos":"명사","meaningKr":["아빠"],"example":"My dad works at a bank.","exampleKr":"우리 아빠는 은행에서 일한다."},
-    {"id":"ev-s01-0161","setId":"ev-set-001","level":"elementary","word":"dance","pos":"동사","meaningKr":["춤추다"],"example":"They dance at the party.","exampleKr":"그들은 파티에서 춤춘다."},
-    {"id":"ev-s01-0162","setId":"ev-set-001","level":"elementary","word":"danger","pos":"명사","meaningKr":["위험"],"example":"The sign warns of danger.","exampleKr":"그 표지판은 위험을 경고한다."},
-    {"id":"ev-s01-0163","setId":"ev-set-001","level":"elementary","word":"dark","pos":"형용사","meaningKr":["어두운"],"example":"The room is very dark.","exampleKr":"방이 매우 어둡다."},
-    {"id":"ev-s01-0164","setId":"ev-set-001","level":"elementary","word":"date","pos":"명사","meaningKr":["날짜"],"example":"What is the date today?","exampleKr":"오늘 날짜가 며칠이니?"},
-    {"id":"ev-s01-0165","setId":"ev-set-001","level":"elementary","word":"daughter","pos":"명사","meaningKr":["딸"],"example":"Their daughter is ten years old.","exampleKr":"그들의 딸은 열 살이다."},
-    {"id":"ev-s01-0166","setId":"ev-set-001","level":"elementary","word":"day","pos":"명사","meaningKr":["낮","하루"],"example":"It was a sunny day.","exampleKr":"화창한 하루였다."},
-    {"id":"ev-s01-0167","setId":"ev-set-001","level":"elementary","word":"dead","pos":"형용사","meaningKr":["죽은"],"example":"The old tree is dead.","exampleKr":"그 오래된 나무는 죽었다."},
-    {"id":"ev-s01-0168","setId":"ev-set-001","level":"elementary","word":"deep","pos":"형용사","meaningKr":["깊은"],"example":"The river is very deep.","exampleKr":"그 강은 매우 깊다."},
-    {"id":"ev-s01-0169","setId":"ev-set-001","level":"elementary","word":"dear","pos":"형용사","meaningKr":["친애하는","소중한"],"example":"Dear Mom, I miss you.","exampleKr":"친애하는 엄마, 보고 싶어요."},
-    {"id":"ev-s01-0170","setId":"ev-set-001","level":"elementary","word":"desk","pos":"명사","meaningKr":["책상"],"example":"My books are on the desk.","exampleKr":"내 책들이 책상 위에 있다."},
-    {"id":"ev-s01-0171","setId":"ev-set-001","level":"elementary","word":"dial","pos":"동사","meaningKr":["전화를 걸다","다이얼을 돌리다"],"example":"Please dial the number now.","exampleKr":"지금 그 번호로 전화를 거세요."},
-    {"id":"ev-s01-0172","setId":"ev-set-001","level":"elementary","word":"diary","pos":"명사","meaningKr":["일기"],"example":"I write in my diary every night.","exampleKr":"나는 매일 밤 일기를 쓴다."},
-    {"id":"ev-s01-0173","setId":"ev-set-001","level":"elementary","word":"dictionary","pos":"명사","meaningKr":["사전"],"example":"I look up words in a dictionary.","exampleKr":"나는 사전에서 단어를 찾는다."},
-    {"id":"ev-s01-0174","setId":"ev-set-001","level":"elementary","word":"die","pos":"동사","meaningKr":["죽다"],"example":"Plants die without water.","exampleKr":"식물은 물이 없으면 죽는다."},
-    {"id":"ev-s01-0175","setId":"ev-set-001","level":"elementary","word":"dinner","pos":"명사","meaningKr":["저녁 식사"],"example":"We eat dinner at seven.","exampleKr":"우리는 일곱 시에 저녁을 먹는다."},
-    {"id":"ev-s01-0176","setId":"ev-set-001","level":"elementary","word":"dirty","pos":"형용사","meaningKr":["더러운"],"example":"His hands are very dirty.","exampleKr":"그의 손은 매우 더럽다."},
-    {"id":"ev-s01-0177","setId":"ev-set-001","level":"elementary","word":"dish","pos":"명사","meaningKr":["접시","요리"],"example":"She put the food on a dish.","exampleKr":"그녀는 음식을 접시에 담았다."},
-    {"id":"ev-s01-0178","setId":"ev-set-001","level":"elementary","word":"do","pos":"동사","meaningKr":["하다"],"example":"I do my homework after school.","exampleKr":"나는 방과 후에 숙제를 한다."},
-    {"id":"ev-s01-0179","setId":"ev-set-001","level":"elementary","word":"doctor","pos":"명사","meaningKr":["의사"],"example":"The doctor helps sick people.","exampleKr":"의사는 아픈 사람들을 돕는다."},
-    {"id":"ev-s01-0180","setId":"ev-set-001","level":"elementary","word":"dog","pos":"명사","meaningKr":["개"],"example":"My dog likes to run.","exampleKr":"우리 개는 뛰는 것을 좋아한다."},
-    {"id":"ev-s01-0181","setId":"ev-set-001","level":"elementary","word":"doll","pos":"명사","meaningKr":["인형"],"example":"The girl plays with her doll.","exampleKr":"그 소녀는 인형을 가지고 논다."},
-    {"id":"ev-s01-0182","setId":"ev-set-001","level":"elementary","word":"dollar","pos":"명사","meaningKr":["달러"],"example":"This book costs one dollar.","exampleKr":"이 책은 1달러이다."},
-    {"id":"ev-s01-0183","setId":"ev-set-001","level":"elementary","word":"dolphin","pos":"명사","meaningKr":["돌고래"],"example":"A dolphin swims in the sea.","exampleKr":"돌고래가 바다에서 헤엄친다."},
-    {"id":"ev-s01-0184","setId":"ev-set-001","level":"elementary","word":"door","pos":"명사","meaningKr":["문"],"example":"Please close the door.","exampleKr":"문을 닫아 주세요."},
-    {"id":"ev-s01-0185","setId":"ev-set-001","level":"elementary","word":"down","pos":"부사","meaningKr":["아래로","아래에"],"example":"Sit down, please.","exampleKr":"앉으세요."},
-    {"id":"ev-s01-0186","setId":"ev-set-001","level":"elementary","word":"draw","pos":"동사","meaningKr":["그리다"],"example":"I like to draw pictures.","exampleKr":"나는 그림 그리는 것을 좋아한다."},
-    {"id":"ev-s01-0187","setId":"ev-set-001","level":"elementary","word":"dream","pos":"명사","meaningKr":["꿈"],"example":"I had a happy dream last night.","exampleKr":"나는 어젯밤 행복한 꿈을 꾸었다."},
-    {"id":"ev-s01-0188","setId":"ev-set-001","level":"elementary","word":"dress","pos":"명사","meaningKr":["드레스","원피스"],"example":"She wears a pretty dress.","exampleKr":"그녀는 예쁜 드레스를 입는다."},
-    {"id":"ev-s01-0189","setId":"ev-set-001","level":"elementary","word":"drink","pos":"동사","meaningKr":["마시다"],"example":"I drink milk every morning.","exampleKr":"나는 매일 아침 우유를 마신다."},
-    {"id":"ev-s01-0190","setId":"ev-set-001","level":"elementary","word":"drive","pos":"동사","meaningKr":["운전하다"],"example":"My mother can drive a car.","exampleKr":"우리 엄마는 차를 운전할 수 있다."},
-    {"id":"ev-s01-0191","setId":"ev-set-001","level":"elementary","word":"drop","pos":"동사","meaningKr":["떨어뜨리다","떨어지다"],"example":"Do not drop the glass.","exampleKr":"유리잔을 떨어뜨리지 마라."},
-    {"id":"ev-s01-0192","setId":"ev-set-001","level":"elementary","word":"drum","pos":"명사","meaningKr":["북","드럼"],"example":"He plays the drum loudly.","exampleKr":"그는 북을 크게 친다."},
-    {"id":"ev-s01-0193","setId":"ev-set-001","level":"elementary","word":"dry","pos":"형용사","meaningKr":["마른","건조한"],"example":"The towel is now dry.","exampleKr":"수건이 이제 말랐다."},
-    {"id":"ev-s01-0194","setId":"ev-set-001","level":"elementary","word":"duck","pos":"명사","meaningKr":["오리"],"example":"A duck swims on the pond.","exampleKr":"오리가 연못에서 헤엄친다."},
-    {"id":"ev-s01-0195","setId":"ev-set-001","level":"elementary","word":"ear","pos":"명사","meaningKr":["귀"],"example":"We hear with our ears.","exampleKr":"우리는 귀로 듣는다."},
-    {"id":"ev-s01-0196","setId":"ev-set-001","level":"elementary","word":"early","pos":"부사","meaningKr":["일찍"],"example":"I wake up early every day.","exampleKr":"나는 매일 일찍 일어난다."},
-    {"id":"ev-s01-0197","setId":"ev-set-001","level":"elementary","word":"earth","pos":"명사","meaningKr":["지구","땅"],"example":"The earth is round.","exampleKr":"지구는 둥글다."},
-    {"id":"ev-s01-0198","setId":"ev-set-001","level":"elementary","word":"east","pos":"명사","meaningKr":["동쪽"],"example":"The sun rises in the east.","exampleKr":"해는 동쪽에서 뜬다."},
-    {"id":"ev-s01-0199","setId":"ev-set-001","level":"elementary","word":"easy","pos":"형용사","meaningKr":["쉬운"],"example":"This game is very easy.","exampleKr":"이 게임은 매우 쉽다."},
-    {"id":"ev-s01-0200","setId":"ev-set-001","level":"elementary","word":"eat","pos":"동사","meaningKr":["먹다"],"example":"We eat lunch at noon.","exampleKr":"우리는 정오에 점심을 먹는다."}
+    {
+      "id": "ev-s01-0001",
+      "sourceId": "ev-moe2022-e-0524",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "people",
+      "pos": "명사",
+      "meaningKr": [
+        "사람들"
+      ],
+      "example": "People are waiting outside.",
+      "exampleKr": "사람들은 밖에서 기다리고 있다."
+    },
+    {
+      "id": "ev-s01-0002",
+      "sourceId": "ev-moe2022-e-0439",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "man",
+      "pos": "명사",
+      "meaningKr": [
+        "남자"
+      ],
+      "example": "That man is my uncle.",
+      "exampleKr": "저 남자는 내 삼촌이다."
+    },
+    {
+      "id": "ev-s01-0003",
+      "sourceId": "ev-moe2022-e-0255",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "family",
+      "pos": "명사",
+      "meaningKr": [
+        "가족"
+      ],
+      "example": "My family eats together.",
+      "exampleKr": "우리 가족은 함께 식사한다."
+    },
+    {
+      "id": "ev-s01-0004",
+      "sourceId": "ev-moe2022-e-0342",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "head",
+      "pos": "명사",
+      "meaningKr": [
+        "머리"
+      ],
+      "example": "My head hurts today.",
+      "exampleKr": "오늘 내 머리가 아프다."
+    },
+    {
+      "id": "ev-s01-0005",
+      "sourceId": "ev-moe2022-e-0251",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "face",
+      "pos": "명사",
+      "meaningKr": [
+        "얼굴"
+      ],
+      "example": "Wash your face now.",
+      "exampleKr": "지금 얼굴을 씻어라."
+    },
+    {
+      "id": "ev-s01-0006",
+      "sourceId": "ev-moe2022-e-0400",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "kind",
+      "pos": "형용사",
+      "meaningKr": [
+        "친절한"
+      ],
+      "example": "Her kind words help me.",
+      "exampleKr": "그녀의 친절한 말은 나를 돕는다."
+    },
+    {
+      "id": "ev-s01-0007",
+      "sourceId": "ev-moe2022-e-0799",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "young",
+      "pos": "형용사",
+      "meaningKr": [
+        "어린"
+      ],
+      "example": "My young cousin is five.",
+      "exampleKr": "내 어린 사촌은 다섯 살이다."
+    },
+    {
+      "id": "ev-s01-0008",
+      "sourceId": "ev-moe2022-e-0334",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "hand",
+      "pos": "명사",
+      "meaningKr": [
+        "손"
+      ],
+      "example": "Raise your hand, please.",
+      "exampleKr": "손을 들어라."
+    },
+    {
+      "id": "ev-s01-0009",
+      "sourceId": "ev-moe2022-e-0091",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "body",
+      "pos": "명사",
+      "meaningKr": [
+        "몸"
+      ],
+      "example": "Exercise keeps your body strong.",
+      "exampleKr": "운동은 몸을 튼튼하게 해 준다."
+    },
+    {
+      "id": "ev-s01-0010",
+      "sourceId": "ev-moe2022-e-0330",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "guy",
+      "pos": "명사",
+      "meaningKr": [
+        "녀석"
+      ],
+      "example": "That guy is my cousin.",
+      "exampleKr": "저 녀석은 내 사촌이다."
+    },
+    {
+      "id": "ev-s01-0011",
+      "sourceId": "ev-moe2022-e-0308",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "girl",
+      "pos": "명사",
+      "meaningKr": [
+        "소녀"
+      ],
+      "example": "The girl has a kite.",
+      "exampleKr": "그 소녀는 연을 가지고 있다."
+    },
+    {
+      "id": "ev-s01-0012",
+      "sourceId": "ev-moe2022-e-0296",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "friend",
+      "pos": "명사",
+      "meaningKr": [
+        "친구"
+      ],
+      "example": "My friend lives nearby.",
+      "exampleKr": "내 친구는 가까이에 산다."
+    },
+    {
+      "id": "ev-s01-0013",
+      "sourceId": "ev-moe2022-e-0786",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "woman",
+      "pos": "명사",
+      "meaningKr": [
+        "여성"
+      ],
+      "example": "The woman reads a book.",
+      "exampleKr": "그 여성은 책을 읽는다."
+    },
+    {
+      "id": "ev-s01-0014",
+      "sourceId": "ev-moe2022-e-0014",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "age",
+      "pos": "명사",
+      "meaningKr": [
+        "나이"
+      ],
+      "example": "Children of any age can join.",
+      "exampleKr": "어느 나이의 아이든 참여할 수 있다."
+    },
+    {
+      "id": "ev-s01-0015",
+      "sourceId": "ev-moe2022-e-0343",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "heart",
+      "pos": "명사",
+      "meaningKr": [
+        "심장"
+      ],
+      "example": "Her heart beats fast.",
+      "exampleKr": "그녀의 심장은 빠르게 뛴다."
+    },
+    {
+      "id": "ev-s01-0016",
+      "sourceId": "ev-moe2022-e-0146",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "child",
+      "pos": "명사",
+      "meaningKr": [
+        "아이"
+      ],
+      "example": "Every child needs love.",
+      "exampleKr": "모든 아이는 사랑이 필요하다."
+    },
+    {
+      "id": "ev-s01-0017",
+      "sourceId": "ev-moe2022-e-0636",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "son",
+      "pos": "명사",
+      "meaningKr": [
+        "아들"
+      ],
+      "example": "Their son plays tennis.",
+      "exampleKr": "그들의 아들은 테니스를 친다."
+    },
+    {
+      "id": "ev-s01-0018",
+      "sourceId": "ev-moe2022-e-0047",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "baby",
+      "pos": "명사",
+      "meaningKr": [
+        "아기"
+      ],
+      "example": "The baby is sleeping now.",
+      "exampleKr": "아기가 지금 자고 있다."
+    },
+    {
+      "id": "ev-s01-0019",
+      "sourceId": "ev-moe2022-e-0261",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "father",
+      "pos": "명사",
+      "meaningKr": [
+        "아버지"
+      ],
+      "example": "My father makes dinner.",
+      "exampleKr": "우리 아버지는 저녁을 만든다."
+    },
+    {
+      "id": "ev-s01-0020",
+      "sourceId": "ev-moe2022-e-0463",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "mother",
+      "pos": "명사",
+      "meaningKr": [
+        "어머니"
+      ],
+      "example": "My mother reads with me.",
+      "exampleKr": "우리 어머니는 나와 함께 읽는다."
+    },
+    {
+      "id": "ev-s01-0021",
+      "sourceId": "ev-moe2022-e-0777",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "wife",
+      "pos": "명사",
+      "meaningKr": [
+        "아내"
+      ],
+      "example": "His wife is a doctor.",
+      "exampleKr": "그의 아내는 의사이다."
+    },
+    {
+      "id": "ev-s01-0022",
+      "sourceId": "ev-moe2022-e-0182",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "couple",
+      "pos": "명사",
+      "meaningKr": [
+        "두 사람"
+      ],
+      "example": "A couple sat on the bench.",
+      "exampleKr": "두 사람이 벤치에 앉아 있었다."
+    },
+    {
+      "id": "ev-s01-0023",
+      "sourceId": "ev-moe2022-e-0099",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "boy",
+      "pos": "명사",
+      "meaningKr": [
+        "소년"
+      ],
+      "example": "That boy is my cousin.",
+      "exampleKr": "저 소년은 내 사촌이다."
+    },
+    {
+      "id": "ev-s01-0024",
+      "sourceId": "ev-moe2022-e-0023",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "alone",
+      "pos": "부사",
+      "meaningKr": [
+        "혼자서"
+      ],
+      "example": "My uncle lives alone in Busan.",
+      "exampleKr": "삼촌은 부산에서 혼자 산다."
+    },
+    {
+      "id": "ev-s01-0025",
+      "sourceId": "ev-moe2022-e-0107",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "brother",
+      "pos": "명사",
+      "meaningKr": [
+        "형제"
+      ],
+      "example": "I have one brother.",
+      "exampleKr": "나는 형제가 한 명 있다."
+    },
+    {
+      "id": "ev-s01-0026",
+      "sourceId": "ev-moe2022-e-0087",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "blood",
+      "pos": "명사",
+      "meaningKr": [
+        "피"
+      ],
+      "example": "The doctor checked my blood.",
+      "exampleKr": "의사가 내 피를 검사했다."
+    },
+    {
+      "id": "ev-s01-0027",
+      "sourceId": "ev-moe2022-e-0332",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "hair",
+      "pos": "명사",
+      "meaningKr": [
+        "머리카락"
+      ],
+      "example": "Her hair is very long.",
+      "exampleKr": "그녀의 머리카락은 아주 길다."
+    },
+    {
+      "id": "ev-s01-0028",
+      "sourceId": "ev-moe2022-e-0201",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "daughter",
+      "pos": "명사",
+      "meaningKr": [
+        "딸"
+      ],
+      "example": "My daughter reads every night.",
+      "exampleKr": "내 딸은 매일 밤 책을 읽는다."
+    },
+    {
+      "id": "ev-s01-0029",
+      "sourceId": "ev-moe2022-e-0250",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "eye",
+      "pos": "명사",
+      "meaningKr": [
+        "눈"
+      ],
+      "example": "Her eye is brown.",
+      "exampleKr": "그녀의 눈은 갈색이다."
+    },
+    {
+      "id": "ev-s01-0030",
+      "sourceId": "ev-moe2022-e-0374",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "husband",
+      "pos": "명사",
+      "meaningKr": [
+        "남편"
+      ],
+      "example": "Her husband makes breakfast.",
+      "exampleKr": "그녀의 남편은 아침을 만든다."
+    },
+    {
+      "id": "ev-s01-0031",
+      "sourceId": "ev-moe2022-e-0398",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "kid",
+      "pos": "명사",
+      "meaningKr": [
+        "아이"
+      ],
+      "example": "The kid is reading quietly.",
+      "exampleKr": "그 아이는 조용히 읽고 있다."
+    },
+    {
+      "id": "ev-s01-0032",
+      "sourceId": "ev-moe2022-e-0406",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "lady",
+      "pos": "명사",
+      "meaningKr": [
+        "숙녀"
+      ],
+      "example": "The lady opens the window.",
+      "exampleKr": "그 숙녀는 창문을 연다."
+    },
+    {
+      "id": "ev-s01-0033",
+      "sourceId": "ev-moe2022-e-0615",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "sister",
+      "pos": "명사",
+      "meaningKr": [
+        "자매"
+      ],
+      "example": "My sister likes music.",
+      "exampleKr": "내 여동생은 음악을 좋아한다."
+    },
+    {
+      "id": "ev-s01-0034",
+      "sourceId": "ev-moe2022-e-0621",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "skin",
+      "pos": "명사",
+      "meaningKr": [
+        "피부"
+      ],
+      "example": "Cold air dries my skin.",
+      "exampleKr": "찬 공기는 내 피부를 말린다."
+    },
+    {
+      "id": "ev-s01-0035",
+      "sourceId": "ev-moe2022-e-0216",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "doctor",
+      "pos": "명사",
+      "meaningKr": [
+        "의사"
+      ],
+      "example": "The doctor helps my mother.",
+      "exampleKr": "의사는 우리 엄마를 돕는다."
+    },
+    {
+      "id": "ev-s01-0036",
+      "sourceId": "ev-moe2022-e-0285",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "foot",
+      "pos": "명사",
+      "meaningKr": [
+        "발"
+      ],
+      "example": "My foot is cold.",
+      "exampleKr": "내 발이 차갑다."
+    },
+    {
+      "id": "ev-s01-0037",
+      "sourceId": "ev-moe2022-e-0272",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "finger",
+      "pos": "명사",
+      "meaningKr": [
+        "손가락"
+      ],
+      "example": "I hurt my finger.",
+      "exampleKr": "나는 손가락을 다쳤다."
+    },
+    {
+      "id": "ev-s01-0038",
+      "sourceId": "ev-moe2022-e-0736",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "uncle",
+      "pos": "명사",
+      "meaningKr": [
+        "삼촌"
+      ],
+      "example": "My uncle drives a bus.",
+      "exampleKr": "내 삼촌은 버스를 운전한다."
+    },
+    {
+      "id": "ev-s01-0039",
+      "sourceId": "ev-moe2022-e-0233",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "ear",
+      "pos": "명사",
+      "meaningKr": [
+        "귀"
+      ],
+      "example": "My ear feels warm.",
+      "exampleKr": "내 귀가 따뜻하게 느껴진다."
+    },
+    {
+      "id": "ev-s01-0040",
+      "sourceId": "ev-moe2022-e-0185",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "cousin",
+      "pos": "명사",
+      "meaningKr": [
+        "사촌"
+      ],
+      "example": "My cousin visits every summer.",
+      "exampleKr": "내 사촌은 여름마다 방문한다."
+    },
+    {
+      "id": "ev-s01-0041",
+      "sourceId": "ev-moe2022-e-0712",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "tooth",
+      "pos": "명사",
+      "meaningKr": [
+        "이"
+      ],
+      "example": "Brush every tooth carefully.",
+      "exampleKr": "이를 하나하나 잘 닦아라."
+    },
+    {
+      "id": "ev-s01-0042",
+      "sourceId": "ev-moe2022-e-0359",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "home",
+      "pos": "명사",
+      "meaningKr": [
+        "집(가정)"
+      ],
+      "example": "My home is near school.",
+      "exampleKr": "내 집은 학교 근처에 있다."
+    },
+    {
+      "id": "ev-s01-0043",
+      "sourceId": "ev-moe2022-e-0367",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "house",
+      "pos": "명사",
+      "meaningKr": [
+        "집(건물)"
+      ],
+      "example": "Their house has a garden.",
+      "exampleKr": "그들의 집에는 정원이 있다."
+    },
+    {
+      "id": "ev-s01-0044",
+      "sourceId": "ev-moe2022-e-0283",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "food",
+      "pos": "명사",
+      "meaningKr": [
+        "음식"
+      ],
+      "example": "The food smells good.",
+      "exampleKr": "음식 냄새가 좋다."
+    },
+    {
+      "id": "ev-s01-0045",
+      "sourceId": "ev-moe2022-e-0396",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "key",
+      "pos": "명사",
+      "meaningKr": [
+        "열쇠"
+      ],
+      "example": "Where is my key?",
+      "exampleKr": "내 열쇠는 어디 있니?"
+    },
+    {
+      "id": "ev-s01-0046",
+      "sourceId": "ev-moe2022-e-0193",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "cup",
+      "pos": "명사",
+      "meaningKr": [
+        "컵"
+      ],
+      "example": "Fill the cup with milk.",
+      "exampleKr": "컵에 우유를 채워라."
+    },
+    {
+      "id": "ev-s01-0047",
+      "sourceId": "ev-moe2022-e-0500",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "oil",
+      "pos": "명사",
+      "meaningKr": [
+        "기름"
+      ],
+      "example": "Oil floats on water.",
+      "exampleKr": "기름은 물 위에 뜬다."
+    },
+    {
+      "id": "ev-s01-0048",
+      "sourceId": "ev-moe2022-e-0219",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "door",
+      "pos": "명사",
+      "meaningKr": [
+        "문"
+      ],
+      "example": "Close the door, please.",
+      "exampleKr": "문을 닫아라."
+    },
+    {
+      "id": "ev-s01-0049",
+      "sourceId": "ev-moe2022-e-0068",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "bed",
+      "pos": "명사",
+      "meaningKr": [
+        "침대"
+      ],
+      "example": "My cat sleeps on my bed.",
+      "exampleKr": "내 고양이는 내 침대에서 잔다."
+    },
+    {
+      "id": "ev-s01-0050",
+      "sourceId": "ev-moe2022-e-0669",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "table",
+      "pos": "명사",
+      "meaningKr": [
+        "탁자"
+      ],
+      "example": "The table is near the window.",
+      "exampleKr": "탁자는 창문 가까이에 있다."
+    },
+    {
+      "id": "ev-s01-0051",
+      "sourceId": "ev-moe2022-e-0098",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "box",
+      "pos": "명사",
+      "meaningKr": [
+        "상자"
+      ],
+      "example": "The toys are in the box.",
+      "exampleKr": "장난감은 상자 안에 있다."
+    },
+    {
+      "id": "ev-s01-0052",
+      "sourceId": "ev-moe2022-e-0376",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "ice",
+      "pos": "명사",
+      "meaningKr": [
+        "얼음"
+      ],
+      "example": "Put ice in the drink.",
+      "exampleKr": "음료에 얼음을 넣어라."
+    },
+    {
+      "id": "ev-s01-0053",
+      "sourceId": "ev-moe2022-e-0279",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "floor",
+      "pos": "명사",
+      "meaningKr": [
+        "바닥"
+      ],
+      "example": "The ball is on the floor.",
+      "exampleKr": "공은 바닥 위에 있다."
+    },
+    {
+      "id": "ev-s01-0054",
+      "sourceId": "ev-moe2022-e-0256",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "fan",
+      "pos": "명사",
+      "meaningKr": [
+        "선풍기"
+      ],
+      "example": "Turn on the fan.",
+      "exampleKr": "선풍기를 켜라."
+    },
+    {
+      "id": "ev-s01-0055",
+      "sourceId": "ev-moe2022-e-0226",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "drink",
+      "pos": "동사",
+      "meaningKr": [
+        "마시다"
+      ],
+      "example": "Drink some water now.",
+      "exampleKr": "지금 물을 좀 마셔라."
+    },
+    {
+      "id": "ev-s01-0056",
+      "sourceId": "ev-moe2022-e-0163",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "coffee",
+      "pos": "명사",
+      "meaningKr": [
+        "커피"
+      ],
+      "example": "Mom made coffee for us.",
+      "exampleKr": "엄마가 우리를 위해 커피를 만들었다."
+    },
+    {
+      "id": "ev-s01-0057",
+      "sourceId": "ev-moe2022-e-0311",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "glass",
+      "pos": "명사",
+      "meaningKr": [
+        "유리잔"
+      ],
+      "example": "The glass is on the table.",
+      "exampleKr": "유리잔은 탁자 위에 있다."
+    },
+    {
+      "id": "ev-s01-0058",
+      "sourceId": "ev-moe2022-e-0051",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "bag",
+      "pos": "명사",
+      "meaningKr": [
+        "가방"
+      ],
+      "example": "My bag is very heavy.",
+      "exampleKr": "내 가방은 아주 무겁다."
+    },
+    {
+      "id": "ev-s01-0059",
+      "sourceId": "ev-moe2022-e-0213",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "dinner",
+      "pos": "명사",
+      "meaningKr": [
+        "저녁 식사"
+      ],
+      "example": "Dinner is ready at six.",
+      "exampleKr": "저녁 식사는 여섯 시에 준비된다."
+    },
+    {
+      "id": "ev-s01-0060",
+      "sourceId": "ev-moe2022-e-0035",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "apple",
+      "pos": "명사",
+      "meaningKr": [
+        "사과"
+      ],
+      "example": "I eat an apple every morning.",
+      "exampleKr": "나는 매일 아침 사과를 먹는다."
+    },
+    {
+      "id": "ev-s01-0061",
+      "sourceId": "ev-moe2022-e-0225",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "dress",
+      "pos": "명사",
+      "meaningKr": [
+        "드레스"
+      ],
+      "example": "Her red dress is new.",
+      "exampleKr": "그녀의 빨간 드레스는 새것이다."
+    },
+    {
+      "id": "ev-s01-0062",
+      "sourceId": "ev-moe2022-e-0675",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "taste",
+      "pos": "명사",
+      "meaningKr": [
+        "맛"
+      ],
+      "example": "This juice has a sweet taste.",
+      "exampleKr": "이 주스는 달콤한 맛이 난다."
+    },
+    {
+      "id": "ev-s01-0063",
+      "sourceId": "ev-moe2022-e-0159",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "clothes",
+      "pos": "명사",
+      "meaningKr": [
+        "옷"
+      ],
+      "example": "I put my clothes on the bed.",
+      "exampleKr": "나는 옷을 침대에 놓았다."
+    },
+    {
+      "id": "ev-s01-0064",
+      "sourceId": "ev-moe2022-e-0139",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "chair",
+      "pos": "명사",
+      "meaningKr": [
+        "의자"
+      ],
+      "example": "This chair is too small.",
+      "exampleKr": "이 의자는 너무 작다."
+    },
+    {
+      "id": "ev-s01-0065",
+      "sourceId": "ev-moe2022-e-0664",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "sugar",
+      "pos": "명사",
+      "meaningKr": [
+        "설탕"
+      ],
+      "example": "Use only a little sugar.",
+      "exampleKr": "설탕을 조금만 사용해라."
+    },
+    {
+      "id": "ev-s01-0066",
+      "sourceId": "ev-moe2022-e-0435",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "lunch",
+      "pos": "명사",
+      "meaningKr": [
+        "점심"
+      ],
+      "example": "We eat lunch together.",
+      "exampleKr": "우리는 함께 점심을 먹는다."
+    },
+    {
+      "id": "ev-s01-0067",
+      "sourceId": "ev-moe2022-e-0454",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "milk",
+      "pos": "명사",
+      "meaningKr": [
+        "우유"
+      ],
+      "example": "Milk is in the cup.",
+      "exampleKr": "우유가 컵에 있다."
+    },
+    {
+      "id": "ev-s01-0068",
+      "sourceId": "ev-moe2022-e-0034",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "apartment",
+      "pos": "명사",
+      "meaningKr": [
+        "아파트"
+      ],
+      "example": "They live in a new apartment.",
+      "exampleKr": "그들은 새 아파트에 산다."
+    },
+    {
+      "id": "ev-s01-0069",
+      "sourceId": "ev-moe2022-e-0175",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "cook",
+      "pos": "동사",
+      "meaningKr": [
+        "요리하다"
+      ],
+      "example": "Dad cooks dinner on Fridays.",
+      "exampleKr": "아빠는 금요일에 저녁을 요리한다."
+    },
+    {
+      "id": "ev-s01-0070",
+      "sourceId": "ev-moe2022-e-0403",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "kitchen",
+      "pos": "명사",
+      "meaningKr": [
+        "부엌"
+      ],
+      "example": "Mom cooks in the kitchen.",
+      "exampleKr": "엄마는 부엌에서 요리한다."
+    },
+    {
+      "id": "ev-s01-0071",
+      "sourceId": "ev-moe2022-e-0145",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "chicken",
+      "pos": "명사",
+      "meaningKr": [
+        "닭"
+      ],
+      "example": "The chicken is in the yard.",
+      "exampleKr": "닭이 마당에 있다."
+    },
+    {
+      "id": "ev-s01-0072",
+      "sourceId": "ev-moe2022-e-0447",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "meat",
+      "pos": "명사",
+      "meaningKr": [
+        "고기"
+      ],
+      "example": "We eat meat with rice.",
+      "exampleKr": "우리는 밥과 고기를 먹는다."
+    },
+    {
+      "id": "ev-s01-0073",
+      "sourceId": "ev-moe2022-e-0605",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "shirt",
+      "pos": "명사",
+      "meaningKr": [
+        "셔츠"
+      ],
+      "example": "His shirt is clean today.",
+      "exampleKr": "그의 셔츠는 오늘 깨끗하다."
+    },
+    {
+      "id": "ev-s01-0074",
+      "sourceId": "ev-moe2022-e-0189",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "cream",
+      "pos": "명사",
+      "meaningKr": [
+        "크림"
+      ],
+      "example": "She put cream on the cake.",
+      "exampleKr": "그녀는 케이크에 크림을 얹었다."
+    },
+    {
+      "id": "ev-s01-0075",
+      "sourceId": "ev-moe2022-e-0103",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "breakfast",
+      "pos": "명사",
+      "meaningKr": [
+        "아침 식사"
+      ],
+      "example": "We eat breakfast at seven.",
+      "exampleKr": "우리는 7시에 아침을 먹는다."
+    },
+    {
+      "id": "ev-s01-0076",
+      "sourceId": "ev-moe2022-e-0584",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "salt",
+      "pos": "명사",
+      "meaningKr": [
+        "소금"
+      ],
+      "example": "Add salt to the soup.",
+      "exampleKr": "수프에 소금을 넣어라."
+    },
+    {
+      "id": "ev-s01-0077",
+      "sourceId": "ev-moe2022-e-0075",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "bell",
+      "pos": "명사",
+      "meaningKr": [
+        "종"
+      ],
+      "example": "The school bell rang loudly.",
+      "exampleKr": "학교 종이 크게 울렸다."
+    },
+    {
+      "id": "ev-s01-0078",
+      "sourceId": "ev-moe2022-e-0096",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "bottle",
+      "pos": "명사",
+      "meaningKr": [
+        "병"
+      ],
+      "example": "The water bottle is empty.",
+      "exampleKr": "물병이 비어 있다."
+    },
+    {
+      "id": "ev-s01-0079",
+      "sourceId": "ev-moe2022-e-0144",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "cheese",
+      "pos": "명사",
+      "meaningKr": [
+        "치즈"
+      ],
+      "example": "I like cheese on my pizza.",
+      "exampleKr": "나는 피자에 치즈를 얹는 것을 좋아한다."
+    },
+    {
+      "id": "ev-s01-0080",
+      "sourceId": "ev-moe2022-e-0299",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "fruit",
+      "pos": "명사",
+      "meaningKr": [
+        "과일"
+      ],
+      "example": "Fruit is good for you.",
+      "exampleKr": "과일은 너에게 좋다."
+    },
+    {
+      "id": "ev-s01-0081",
+      "sourceId": "ev-moe2022-e-0117",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "button",
+      "pos": "명사",
+      "meaningKr": [
+        "단추"
+      ],
+      "example": "One button fell off my coat.",
+      "exampleKr": "내 코트에서 단추 하나가 떨어졌다."
+    },
+    {
+      "id": "ev-s01-0082",
+      "sourceId": "ev-moe2022-e-0120",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "cake",
+      "pos": "명사",
+      "meaningKr": [
+        "케이크"
+      ],
+      "example": "We shared a birthday cake.",
+      "exampleKr": "우리는 생일 케이크를 나눠 먹었다."
+    },
+    {
+      "id": "ev-s01-0083",
+      "sourceId": "ev-moe2022-e-0338",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "hat",
+      "pos": "명사",
+      "meaningKr": [
+        "모자"
+      ],
+      "example": "His hat is black.",
+      "exampleKr": "그의 모자는 검다."
+    },
+    {
+      "id": "ev-s01-0084",
+      "sourceId": "ev-moe2022-e-0127",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "cap",
+      "pos": "명사",
+      "meaningKr": [
+        "야구모자"
+      ],
+      "example": "He wears a blue cap.",
+      "exampleKr": "그는 파란 모자를 쓴다."
+    },
+    {
+      "id": "ev-s01-0085",
+      "sourceId": "ev-moe2022-e-0101",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "bread",
+      "pos": "명사",
+      "meaningKr": [
+        "빵"
+      ],
+      "example": "The fresh bread smells good.",
+      "exampleKr": "갓 구운 빵은 냄새가 좋다."
+    },
+    {
+      "id": "ev-s01-0086",
+      "sourceId": "ev-moe2022-e-0147",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "chocolate",
+      "pos": "명사",
+      "meaningKr": [
+        "초콜릿"
+      ],
+      "example": "This chocolate tastes very sweet.",
+      "exampleKr": "이 초콜릿은 아주 달다."
+    },
+    {
+      "id": "ev-s01-0087",
+      "sourceId": "ev-moe2022-e-0513",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "pants",
+      "pos": "명사",
+      "meaningKr": [
+        "바지"
+      ],
+      "example": "These pants are too long.",
+      "exampleKr": "이 바지는 너무 길다."
+    },
+    {
+      "id": "ev-s01-0088",
+      "sourceId": "ev-moe2022-e-0061",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "bath",
+      "pos": "명사",
+      "meaningKr": [
+        "목욕"
+      ],
+      "example": "I take a bath every night.",
+      "exampleKr": "나는 매일 밤 목욕을 한다."
+    },
+    {
+      "id": "ev-s01-0089",
+      "sourceId": "ev-moe2022-e-0531",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "pizza",
+      "pos": "명사",
+      "meaningKr": [
+        "피자"
+      ],
+      "example": "We order pizza for dinner.",
+      "exampleKr": "우리는 저녁으로 피자를 주문한다."
+    },
+    {
+      "id": "ev-s01-0090",
+      "sourceId": "ev-moe2022-e-0077",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "belt",
+      "pos": "명사",
+      "meaningKr": [
+        "벨트"
+      ],
+      "example": "Put on your seat belt.",
+      "exampleKr": "안전벨트를 매라."
+    },
+    {
+      "id": "ev-s01-0091",
+      "sourceId": "ev-moe2022-e-0404",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "knife",
+      "pos": "명사",
+      "meaningKr": [
+        "칼"
+      ],
+      "example": "Use the knife carefully.",
+      "exampleKr": "칼을 조심해서 사용해라."
+    },
+    {
+      "id": "ev-s01-0092",
+      "sourceId": "ev-moe2022-e-0116",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "butter",
+      "pos": "명사",
+      "meaningKr": [
+        "버터"
+      ],
+      "example": "We need butter for the cake.",
+      "exampleKr": "케이크에 버터가 필요하다."
+    },
+    {
+      "id": "ev-s01-0093",
+      "sourceId": "ev-moe2022-e-0162",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "coat",
+      "pos": "명사",
+      "meaningKr": [
+        "외투"
+      ],
+      "example": "Wear your coat outside.",
+      "exampleKr": "밖에서는 외투를 입어라."
+    },
+    {
+      "id": "ev-s01-0094",
+      "sourceId": "ev-moe2022-e-0392",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "juice",
+      "pos": "명사",
+      "meaningKr": [
+        "주스"
+      ],
+      "example": "This juice is cold.",
+      "exampleKr": "이 주스는 차갑다."
+    },
+    {
+      "id": "ev-s01-0095",
+      "sourceId": "ev-moe2022-e-0054",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "banana",
+      "pos": "명사",
+      "meaningKr": [
+        "바나나"
+      ],
+      "example": "Monkeys love to eat bananas.",
+      "exampleKr": "원숭이는 바나나 먹기를 좋아한다."
+    },
+    {
+      "id": "ev-s01-0096",
+      "sourceId": "ev-moe2022-e-0131",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "carrot",
+      "pos": "명사",
+      "meaningKr": [
+        "당근"
+      ],
+      "example": "The carrot is orange and sweet.",
+      "exampleKr": "당근은 주황색이고 달다."
+    },
+    {
+      "id": "ev-s01-0097",
+      "sourceId": "ev-moe2022-e-0504",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "one",
+      "pos": "수사",
+      "meaningKr": [
+        "하나"
+      ],
+      "example": "I have one question.",
+      "exampleKr": "나는 질문이 하나 있다."
+    },
+    {
+      "id": "ev-s01-0098",
+      "sourceId": "ev-moe2022-e-0703",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "time",
+      "pos": "명사",
+      "meaningKr": [
+        "시간"
+      ],
+      "example": "Time goes very fast.",
+      "exampleKr": "시간은 아주 빨리 간다."
+    },
+    {
+      "id": "ev-s01-0099",
+      "sourceId": "ev-moe2022-e-0493",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "now",
+      "pos": "부사",
+      "meaningKr": [
+        "지금"
+      ],
+      "example": "Please come here now.",
+      "exampleKr": "지금 여기로 와라."
+    },
+    {
+      "id": "ev-s01-0100",
+      "sourceId": "ev-moe2022-e-0275",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "first",
+      "pos": "형용사",
+      "meaningKr": [
+        "첫 번째의"
+      ],
+      "example": "This is my first bike.",
+      "exampleKr": "이것은 내 첫 자전거이다."
+    },
+    {
+      "id": "ev-s01-0101",
+      "sourceId": "ev-moe2022-e-0732",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "two",
+      "pos": "수사",
+      "meaningKr": [
+        "둘"
+      ],
+      "example": "Two cats sleep here.",
+      "exampleKr": "고양이 두 마리가 여기서 잔다."
+    },
+    {
+      "id": "ev-s01-0102",
+      "sourceId": "ev-moe2022-e-0794",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "year",
+      "pos": "명사",
+      "meaningKr": [
+        "해"
+      ],
+      "example": "This year is special.",
+      "exampleKr": "올해는 특별하다."
+    },
+    {
+      "id": "ev-s01-0103",
+      "sourceId": "ev-moe2022-e-0202",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "day",
+      "pos": "명사",
+      "meaningKr": [
+        "날"
+      ],
+      "example": "Today is a sunny day.",
+      "exampleKr": "오늘은 화창한 날이다."
+    },
+    {
+      "id": "ev-s01-0104",
+      "sourceId": "ev-moe2022-e-0411",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "last",
+      "pos": "형용사",
+      "meaningKr": [
+        "마지막의"
+      ],
+      "example": "This is our last game.",
+      "exampleKr": "이것은 우리의 마지막 게임이다."
+    },
+    {
+      "id": "ev-s01-0105",
+      "sourceId": "ev-moe2022-e-0700",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "three",
+      "pos": "수사",
+      "meaningKr": [
+        "셋"
+      ],
+      "example": "Three birds are singing.",
+      "exampleKr": "새 세 마리가 노래한다."
+    },
+    {
+      "id": "ev-s01-0106",
+      "sourceId": "ev-moe2022-e-0482",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "next",
+      "pos": "형용사",
+      "meaningKr": [
+        "다음의"
+      ],
+      "example": "See you next week.",
+      "exampleKr": "다음 주에 보자."
+    },
+    {
+      "id": "ev-s01-0107",
+      "sourceId": "ev-moe2022-e-0596",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "second",
+      "pos": "형용사",
+      "meaningKr": [
+        "두 번째의"
+      ],
+      "example": "She won second place.",
+      "exampleKr": "그녀는 두 번째 자리를 차지했다."
+    },
+    {
+      "id": "ev-s01-0108",
+      "sourceId": "ev-moe2022-e-0494",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "number",
+      "pos": "명사",
+      "meaningKr": [
+        "숫자"
+      ],
+      "example": "Write the number clearly.",
+      "exampleKr": "숫자를 또렷하게 써라."
+    },
+    {
+      "id": "ev-s01-0109",
+      "sourceId": "ev-moe2022-e-0690",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "the",
+      "pos": "한정사",
+      "meaningKr": [
+        "그"
+      ],
+      "example": "The cat is under the chair.",
+      "exampleKr": "그 고양이는 의자 아래에 있다."
+    },
+    {
+      "id": "ev-s01-0110",
+      "sourceId": "ev-moe2022-e-0705",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "to",
+      "pos": "전치사",
+      "meaningKr": [
+        "~로"
+      ],
+      "example": "Go to the library.",
+      "exampleKr": "도서관으로 가라."
+    },
+    {
+      "id": "ev-s01-0111",
+      "sourceId": "ev-moe2022-e-0029",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "and",
+      "pos": "접속사",
+      "meaningKr": [
+        "그리고"
+      ],
+      "example": "I like apples and bananas.",
+      "exampleKr": "나는 사과와 바나나를 좋아한다."
+    },
+    {
+      "id": "ev-s01-0112",
+      "sourceId": "ev-moe2022-e-0496",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "of",
+      "pos": "전치사",
+      "meaningKr": [
+        "~의"
+      ],
+      "example": "The color of the sky changes.",
+      "exampleKr": "하늘의 색은 변한다."
+    },
+    {
+      "id": "ev-s01-0113",
+      "sourceId": "ev-moe2022-e-0001",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "a",
+      "pos": "한정사",
+      "meaningKr": [
+        "하나의"
+      ],
+      "example": "I have a small dog.",
+      "exampleKr": "나는 작은 개 한 마리를 키운다."
+    },
+    {
+      "id": "ev-s01-0114",
+      "sourceId": "ev-moe2022-e-0380",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "in",
+      "pos": "전치사",
+      "meaningKr": [
+        "~안에"
+      ],
+      "example": "The keys are in my bag.",
+      "exampleKr": "열쇠는 내 가방 안에 있다."
+    },
+    {
+      "id": "ev-s01-0115",
+      "sourceId": "ev-moe2022-e-0375",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "I",
+      "pos": "대명사",
+      "meaningKr": [
+        "나"
+      ],
+      "example": "I am ready for school.",
+      "exampleKr": "나는 학교 갈 준비가 되었다."
+    },
+    {
+      "id": "ev-s01-0116",
+      "sourceId": "ev-moe2022-e-0287",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "for",
+      "pos": "전치사",
+      "meaningKr": [
+        "~을 위하여"
+      ],
+      "example": "This gift is for you.",
+      "exampleKr": "이 선물은 너를 위한 것이다."
+    },
+    {
+      "id": "ev-s01-0117",
+      "sourceId": "ev-moe2022-e-0689",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "that",
+      "pos": "대명사",
+      "meaningKr": [
+        "저것"
+      ],
+      "example": "That is my favorite book.",
+      "exampleKr": "저것은 내가 가장 좋아하는 책이다."
+    },
+    {
+      "id": "ev-s01-0118",
+      "sourceId": "ev-moe2022-e-0798",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "you",
+      "pos": "대명사",
+      "meaningKr": [
+        "너"
+      ],
+      "example": "You are my friend.",
+      "exampleKr": "너는 내 친구이다."
+    },
+    {
+      "id": "ev-s01-0119",
+      "sourceId": "ev-moe2022-e-0387",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "it",
+      "pos": "대명사",
+      "meaningKr": [
+        "그것"
+      ],
+      "example": "It is my new bag.",
+      "exampleKr": "그것은 내 새 가방이다."
+    },
+    {
+      "id": "ev-s01-0120",
+      "sourceId": "ev-moe2022-e-0503",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "on",
+      "pos": "전치사",
+      "meaningKr": [
+        "~위에"
+      ],
+      "example": "The cup is on the table.",
+      "exampleKr": "컵은 탁자 위에 있다."
+    },
+    {
+      "id": "ev-s01-0121",
+      "sourceId": "ev-moe2022-e-0785",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "with",
+      "pos": "전치사",
+      "meaningKr": [
+        "~와 함께"
+      ],
+      "example": "Come with your friend.",
+      "exampleKr": "친구와 함께 와라."
+    },
+    {
+      "id": "ev-s01-0122",
+      "sourceId": "ev-moe2022-e-0699",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "this",
+      "pos": "대명사",
+      "meaningKr": [
+        "이것"
+      ],
+      "example": "This is my new pencil.",
+      "exampleKr": "이것은 내 새 연필이다."
+    },
+    {
+      "id": "ev-s01-0123",
+      "sourceId": "ev-moe2022-e-0041",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "as",
+      "pos": "전치사",
+      "meaningKr": [
+        "~로서"
+      ],
+      "example": "He works as a teacher.",
+      "exampleKr": "그는 교사로 일한다."
+    },
+    {
+      "id": "ev-s01-0124",
+      "sourceId": "ev-moe2022-e-0043",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "at",
+      "pos": "전치사",
+      "meaningKr": [
+        "~에"
+      ],
+      "example": "We meet at the library.",
+      "exampleKr": "우리는 도서관에서 만난다."
+    },
+    {
+      "id": "ev-s01-0125",
+      "sourceId": "ev-moe2022-e-0341",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "he",
+      "pos": "대명사",
+      "meaningKr": [
+        "그(남자)"
+      ],
+      "example": "He is my brother.",
+      "exampleKr": "그는 내 남동생이다."
+    },
+    {
+      "id": "ev-s01-0126",
+      "sourceId": "ev-moe2022-e-0489",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "not",
+      "pos": "부사",
+      "meaningKr": [
+        "아니다"
+      ],
+      "example": "That is not my bag.",
+      "exampleKr": "저것은 내 가방이 아니다."
+    },
+    {
+      "id": "ev-s01-0127",
+      "sourceId": "ev-moe2022-e-0119",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "by",
+      "pos": "전치사",
+      "meaningKr": [
+        "~로(수단)"
+      ],
+      "example": "We go to school by bus.",
+      "exampleKr": "우리는 버스로 학교에 간다."
+    },
+    {
+      "id": "ev-s01-0128",
+      "sourceId": "ev-moe2022-e-0115",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "but",
+      "pos": "접속사",
+      "meaningKr": [
+        "그러나"
+      ],
+      "example": "I am tired but happy.",
+      "exampleKr": "나는 피곤하지만 행복하다."
+    },
+    {
+      "id": "ev-s01-0129",
+      "sourceId": "ev-moe2022-e-0297",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "from",
+      "pos": "전치사",
+      "meaningKr": [
+        "~에서"
+      ],
+      "example": "I am from Korea.",
+      "exampleKr": "나는 한국에서 왔다."
+    },
+    {
+      "id": "ev-s01-0130",
+      "sourceId": "ev-moe2022-e-0507",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "or",
+      "pos": "접속사",
+      "meaningKr": [
+        "또는"
+      ],
+      "example": "Tea or juice is fine.",
+      "exampleKr": "차 또는 주스도 좋다."
+    },
+    {
+      "id": "ev-s01-0131",
+      "sourceId": "ev-moe2022-e-0759",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "we",
+      "pos": "대명사",
+      "meaningKr": [
+        "우리"
+      ],
+      "example": "We play after school.",
+      "exampleKr": "우리는 방과 후에 논다."
+    },
+    {
+      "id": "ev-s01-0132",
+      "sourceId": "ev-moe2022-e-0021",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "all",
+      "pos": "한정사",
+      "meaningKr": [
+        "모두의"
+      ],
+      "example": "All the children like ice cream.",
+      "exampleKr": "아이들 모두가 아이스크림을 좋아한다."
+    },
+    {
+      "id": "ev-s01-0133",
+      "sourceId": "ev-moe2022-e-0630",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "so",
+      "pos": "접속사",
+      "meaningKr": [
+        "그래서"
+      ],
+      "example": "It is late, so go home.",
+      "exampleKr": "늦었으니 집에 가라."
+    },
+    {
+      "id": "ev-s01-0134",
+      "sourceId": "ev-moe2022-e-0692",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "they",
+      "pos": "대명사",
+      "meaningKr": [
+        "그들"
+      ],
+      "example": "They walk to school.",
+      "exampleKr": "그들은 걸어서 학교에 간다."
+    },
+    {
+      "id": "ev-s01-0135",
+      "sourceId": "ev-moe2022-e-0062",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "be",
+      "pos": "동사",
+      "meaningKr": [
+        "~이다"
+      ],
+      "example": "Dogs are friendly animals.",
+      "exampleKr": "개는 친근한 동물이다."
+    },
+    {
+      "id": "ev-s01-0136",
+      "sourceId": "ev-moe2022-e-0340",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "have",
+      "pos": "동사",
+      "meaningKr": [
+        "가지다"
+      ],
+      "example": "We have two cats.",
+      "exampleKr": "우리는 고양이 두 마리가 있다."
+    },
+    {
+      "id": "ev-s01-0137",
+      "sourceId": "ev-moe2022-e-0215",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "do",
+      "pos": "동사",
+      "meaningKr": [
+        "하다"
+      ],
+      "example": "Please do your homework.",
+      "exampleKr": "숙제를 해라."
+    },
+    {
+      "id": "ev-s01-0138",
+      "sourceId": "ev-moe2022-e-0307",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "get",
+      "pos": "동사",
+      "meaningKr": [
+        "받다"
+      ],
+      "example": "I got a letter today.",
+      "exampleKr": "나는 오늘 편지를 받았다."
+    },
+    {
+      "id": "ev-s01-0139",
+      "sourceId": "ev-moe2022-e-0438",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "make",
+      "pos": "동사",
+      "meaningKr": [
+        "만들다"
+      ],
+      "example": "Make a paper airplane.",
+      "exampleKr": "종이비행기를 만들어라."
+    },
+    {
+      "id": "ev-s01-0140",
+      "sourceId": "ev-moe2022-e-0751",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "want",
+      "pos": "동사",
+      "meaningKr": [
+        "원하다"
+      ],
+      "example": "I want some water.",
+      "exampleKr": "나는 물을 좀 원한다."
+    },
+    {
+      "id": "ev-s01-0141",
+      "sourceId": "ev-moe2022-e-0789",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "work",
+      "pos": "명사",
+      "meaningKr": [
+        "일"
+      ],
+      "example": "My work is almost done.",
+      "exampleKr": "내 일은 거의 끝났다."
+    },
+    {
+      "id": "ev-s01-0142",
+      "sourceId": "ev-moe2022-e-0671",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "take",
+      "pos": "동사",
+      "meaningKr": [
+        "가지고 가다"
+      ],
+      "example": "Take your bag with you.",
+      "exampleKr": "가방을 가지고 가라."
+    },
+    {
+      "id": "ev-s01-0143",
+      "sourceId": "ev-moe2022-e-0431",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "look",
+      "pos": "동사",
+      "meaningKr": [
+        "쳐다보다"
+      ],
+      "example": "Look at the sky.",
+      "exampleKr": "하늘을 쳐다보아라."
+    },
+    {
+      "id": "ev-s01-0144",
+      "sourceId": "ev-moe2022-e-0740",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "use",
+      "pos": "동사",
+      "meaningKr": [
+        "사용하다"
+      ],
+      "example": "Use this pen, please.",
+      "exampleKr": "이 펜을 사용해라."
+    },
+    {
+      "id": "ev-s01-0145",
+      "sourceId": "ev-moe2022-e-0168",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "come",
+      "pos": "동사",
+      "meaningKr": [
+        "오다"
+      ],
+      "example": "Come here right now.",
+      "exampleKr": "지금 당장 여기로 와라."
+    },
+    {
+      "id": "ev-s01-0146",
+      "sourceId": "ev-moe2022-e-0270",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "find",
+      "pos": "동사",
+      "meaningKr": [
+        "찾다"
+      ],
+      "example": "Can you find my key?",
+      "exampleKr": "내 열쇠를 찾을 수 있니?"
+    },
+    {
+      "id": "ev-s01-0147",
+      "sourceId": "ev-moe2022-e-0309",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "give",
+      "pos": "동사",
+      "meaningKr": [
+        "주다"
+      ],
+      "example": "Give me your hand.",
+      "exampleKr": "내게 네 손을 줘."
+    },
+    {
+      "id": "ev-s01-0148",
+      "sourceId": "ev-moe2022-e-0242",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "end",
+      "pos": "명사",
+      "meaningKr": [
+        "끝"
+      ],
+      "example": "The end of the movie is sad.",
+      "exampleKr": "영화의 끝은 슬프다."
+    },
+    {
+      "id": "ev-s01-0149",
+      "sourceId": "ev-moe2022-e-0395",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "keep",
+      "pos": "동사",
+      "meaningKr": [
+        "유지하다"
+      ],
+      "example": "Keep the door closed, please.",
+      "exampleKr": "문을 닫아 두어라."
+    },
+    {
+      "id": "ev-s01-0150",
+      "sourceId": "ev-moe2022-e-0551",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "put",
+      "pos": "동사",
+      "meaningKr": [
+        "놓다"
+      ],
+      "example": "Put your bag down.",
+      "exampleKr": "가방을 내려놓아라."
+    },
+    {
+      "id": "ev-s01-0151",
+      "sourceId": "ev-moe2022-e-0535",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "play",
+      "pos": "동사",
+      "meaningKr": [
+        "놀다"
+      ],
+      "example": "The children play outside.",
+      "exampleKr": "아이들은 밖에서 논다."
+    },
+    {
+      "id": "ev-s01-0152",
+      "sourceId": "ev-moe2022-e-0601",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "set",
+      "pos": "명사",
+      "meaningKr": [
+        "세트"
+      ],
+      "example": "This set has four cups.",
+      "exampleKr": "이 세트에는 컵이 네 개 있다."
+    },
+    {
+      "id": "ev-s01-0153",
+      "sourceId": "ev-moe2022-e-0652",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "start",
+      "pos": "동사",
+      "meaningKr": [
+        "시작하다"
+      ],
+      "example": "Class starts at nine.",
+      "exampleKr": "수업은 아홉 시에 시작한다."
+    },
+    {
+      "id": "ev-s01-0154",
+      "sourceId": "ev-moe2022-e-0429",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "live",
+      "pos": "동사",
+      "meaningKr": [
+        "살다"
+      ],
+      "example": "They live near the park.",
+      "exampleKr": "그들은 공원 근처에 산다."
+    },
+    {
+      "id": "ev-s01-0155",
+      "sourceId": "ev-moe2022-e-0656",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "stop",
+      "pos": "동사",
+      "meaningKr": [
+        "멈추다"
+      ],
+      "example": "Stop the game now.",
+      "exampleKr": "지금 게임을 멈춰라."
+    },
+    {
+      "id": "ev-s01-0156",
+      "sourceId": "ev-moe2022-e-0724",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "try",
+      "pos": "동사",
+      "meaningKr": [
+        "시도하다"
+      ],
+      "example": "Try to solve this problem.",
+      "exampleKr": "이 문제를 풀어 보아라."
+    },
+    {
+      "id": "ev-s01-0157",
+      "sourceId": "ev-moe2022-e-0579",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "run",
+      "pos": "동사",
+      "meaningKr": [
+        "달리다"
+      ],
+      "example": "I run in the park.",
+      "exampleKr": "나는 공원에서 달린다."
+    },
+    {
+      "id": "ev-s01-0158",
+      "sourceId": "ev-moe2022-e-0506",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "open",
+      "pos": "동사",
+      "meaningKr": [
+        "열다"
+      ],
+      "example": "Open the window, please.",
+      "exampleKr": "창문을 열어라."
+    },
+    {
+      "id": "ev-s01-0159",
+      "sourceId": "ev-moe2022-e-0423",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "like",
+      "pos": "동사",
+      "meaningKr": [
+        "좋아하다"
+      ],
+      "example": "I like this song.",
+      "exampleKr": "나는 이 노래를 좋아한다."
+    },
+    {
+      "id": "ev-s01-0160",
+      "sourceId": "ev-moe2022-e-0405",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "know",
+      "pos": "동사",
+      "meaningKr": [
+        "알다"
+      ],
+      "example": "I know the answer now.",
+      "exampleKr": "나는 이제 답을 안다."
+    },
+    {
+      "id": "ev-s01-0161",
+      "sourceId": "ev-moe2022-e-0597",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "see",
+      "pos": "동사",
+      "meaningKr": [
+        "보다"
+      ],
+      "example": "I can see the moon.",
+      "exampleKr": "나는 달을 볼 수 있다."
+    },
+    {
+      "id": "ev-s01-0162",
+      "sourceId": "ev-moe2022-e-0694",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "think",
+      "pos": "동사",
+      "meaningKr": [
+        "생각하다"
+      ],
+      "example": "Think before you speak.",
+      "exampleKr": "말하기 전에 생각해라."
+    },
+    {
+      "id": "ev-s01-0163",
+      "sourceId": "ev-moe2022-e-0477",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "need",
+      "pos": "동사",
+      "meaningKr": [
+        "필요하다"
+      ],
+      "example": "Plants need water and light.",
+      "exampleKr": "식물은 물과 빛이 필요하다."
+    },
+    {
+      "id": "ev-s01-0164",
+      "sourceId": "ev-moe2022-e-0589",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "say",
+      "pos": "동사",
+      "meaningKr": [
+        "말하다"
+      ],
+      "example": "Say hello to your friend.",
+      "exampleKr": "친구에게 안녕이라고 말해라."
+    },
+    {
+      "id": "ev-s01-0165",
+      "sourceId": "ev-moe2022-e-0432",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "love",
+      "pos": "명사",
+      "meaningKr": [
+        "사랑"
+      ],
+      "example": "Love makes people smile.",
+      "exampleKr": "사랑은 사람들을 웃게 한다."
+    },
+    {
+      "id": "ev-s01-0166",
+      "sourceId": "ev-moe2022-e-0348",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "help",
+      "pos": "동사",
+      "meaningKr": [
+        "돕다"
+      ],
+      "example": "Please help your sister.",
+      "exampleKr": "여동생을 도와라."
+    },
+    {
+      "id": "ev-s01-0167",
+      "sourceId": "ev-moe2022-e-0479",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "new",
+      "pos": "형용사",
+      "meaningKr": [
+        "새로운"
+      ],
+      "example": "I have a new pencil.",
+      "exampleKr": "나는 새 연필이 있다."
+    },
+    {
+      "id": "ev-s01-0168",
+      "sourceId": "ev-moe2022-e-0316",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "good",
+      "pos": "형용사",
+      "meaningKr": [
+        "좋은"
+      ],
+      "example": "She is a good friend.",
+      "exampleKr": "그녀는 좋은 친구이다."
+    },
+    {
+      "id": "ev-s01-0169",
+      "sourceId": "ev-moe2022-e-0571",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "right",
+      "pos": "형용사",
+      "meaningKr": [
+        "오른쪽의"
+      ],
+      "example": "My right hand is raised.",
+      "exampleKr": "내 오른손은 들려 있다."
+    },
+    {
+      "id": "ev-s01-0170",
+      "sourceId": "ev-moe2022-e-0440",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "many",
+      "pos": "한정사",
+      "meaningKr": [
+        "많은(수)"
+      ],
+      "example": "Many birds live in this forest.",
+      "exampleKr": "많은 새가 이 숲에 산다."
+    },
+    {
+      "id": "ev-s01-0171",
+      "sourceId": "ev-moe2022-e-0322",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "great",
+      "pos": "형용사",
+      "meaningKr": [
+        "훌륭한"
+      ],
+      "example": "You did a great job.",
+      "exampleKr": "너는 훌륭하게 해냈다."
+    },
+    {
+      "id": "ev-s01-0172",
+      "sourceId": "ev-moe2022-e-0430",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "long",
+      "pos": "형용사",
+      "meaningKr": [
+        "긴"
+      ],
+      "example": "She has long hair.",
+      "exampleKr": "그녀는 긴 머리카락을 가졌다."
+    },
+    {
+      "id": "ev-s01-0173",
+      "sourceId": "ev-moe2022-e-0585",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "same",
+      "pos": "형용사",
+      "meaningKr": [
+        "같은"
+      ],
+      "example": "We wear the same shoes.",
+      "exampleKr": "우리는 같은 신발을 신는다."
+    },
+    {
+      "id": "ev-s01-0174",
+      "sourceId": "ev-moe2022-e-0351",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "high",
+      "pos": "형용사",
+      "meaningKr": [
+        "높은"
+      ],
+      "example": "That hill is high.",
+      "exampleKr": "저 언덕은 높다."
+    },
+    {
+      "id": "ev-s01-0175",
+      "sourceId": "ev-moe2022-e-0428",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "little",
+      "pos": "형용사",
+      "meaningKr": [
+        "작은"
+      ],
+      "example": "The little bird can fly.",
+      "exampleKr": "그 작은 새는 날 수 있다."
+    },
+    {
+      "id": "ev-s01-0176",
+      "sourceId": "ev-moe2022-e-0502",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "old",
+      "pos": "형용사",
+      "meaningKr": [
+        "오래된"
+      ],
+      "example": "This is an old book.",
+      "exampleKr": "이것은 오래된 책이다."
+    },
+    {
+      "id": "ev-s01-0177",
+      "sourceId": "ev-moe2022-e-0693",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "thing",
+      "pos": "명사",
+      "meaningKr": [
+        "물건/것"
+      ],
+      "example": "This thing is very useful.",
+      "exampleKr": "이 물건은 아주 유용하다."
+    },
+    {
+      "id": "ev-s01-0178",
+      "sourceId": "ev-moe2022-e-0088",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "blue",
+      "pos": "형용사",
+      "meaningKr": [
+        "파란"
+      ],
+      "example": "The sky looks blue today.",
+      "exampleKr": "오늘 하늘은 파랗게 보인다."
+    },
+    {
+      "id": "ev-s01-0179",
+      "sourceId": "ev-moe2022-e-0590",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "school",
+      "pos": "명사",
+      "meaningKr": [
+        "학교"
+      ],
+      "example": "The school opens at eight.",
+      "exampleKr": "학교는 여덟 시에 문을 연다."
+    },
+    {
+      "id": "ev-s01-0180",
+      "sourceId": "ev-moe2022-e-0561",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "read",
+      "pos": "동사",
+      "meaningKr": [
+        "읽다"
+      ],
+      "example": "Read this book aloud.",
+      "exampleKr": "이 책을 소리 내어 읽어라."
+    },
+    {
+      "id": "ev-s01-0181",
+      "sourceId": "ev-moe2022-e-0424",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "line",
+      "pos": "명사",
+      "meaningKr": [
+        "선"
+      ],
+      "example": "Draw a straight line.",
+      "exampleKr": "곧은 선을 그려라."
+    },
+    {
+      "id": "ev-s01-0182",
+      "sourceId": "ev-moe2022-e-0093",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "book",
+      "pos": "명사",
+      "meaningKr": [
+        "책"
+      ],
+      "example": "This book has many pictures.",
+      "exampleKr": "이 책에는 그림이 많다."
+    },
+    {
+      "id": "ev-s01-0183",
+      "sourceId": "ev-moe2022-e-0743",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "video",
+      "pos": "명사",
+      "meaningKr": [
+        "비디오"
+      ],
+      "example": "She made a short video.",
+      "exampleKr": "그녀는 짧은 영상을 만들었다."
+    },
+    {
+      "id": "ev-s01-0184",
+      "sourceId": "ev-moe2022-e-0152",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "class",
+      "pos": "명사",
+      "meaningKr": [
+        "반"
+      ],
+      "example": "Our class has twenty students.",
+      "exampleKr": "우리 반은 학생이 스무 명이다."
+    },
+    {
+      "id": "ev-s01-0185",
+      "sourceId": "ev-moe2022-e-0522",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "pen",
+      "pos": "명사",
+      "meaningKr": [
+        "펜"
+      ],
+      "example": "This pen writes well.",
+      "exampleKr": "이 펜은 잘 써진다."
+    },
+    {
+      "id": "ev-s01-0186",
+      "sourceId": "ev-moe2022-e-0523",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "pencil",
+      "pos": "명사",
+      "meaningKr": [
+        "연필"
+      ],
+      "example": "My pencil is short now.",
+      "exampleKr": "내 연필은 이제 짧다."
+    },
+    {
+      "id": "ev-s01-0187",
+      "sourceId": "ev-moe2022-e-0303",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "game",
+      "pos": "명사",
+      "meaningKr": [
+        "게임"
+      ],
+      "example": "Let us start the game.",
+      "exampleKr": "게임을 시작하자."
+    },
+    {
+      "id": "ev-s01-0188",
+      "sourceId": "ev-moe2022-e-0678",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "team",
+      "pos": "명사",
+      "meaningKr": [
+        "팀"
+      ],
+      "example": "Our team wins the game.",
+      "exampleKr": "우리 팀은 그 경기에서 이긴다."
+    },
+    {
+      "id": "ev-s01-0189",
+      "sourceId": "ev-moe2022-e-0470",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "music",
+      "pos": "명사",
+      "meaningKr": [
+        "음악"
+      ],
+      "example": "Music fills the room.",
+      "exampleKr": "음악이 방을 채운다."
+    },
+    {
+      "id": "ev-s01-0190",
+      "sourceId": "ev-moe2022-e-0519",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "party",
+      "pos": "명사",
+      "meaningKr": [
+        "파티"
+      ],
+      "example": "The party is on Friday.",
+      "exampleKr": "파티는 금요일에 있다."
+    },
+    {
+      "id": "ev-s01-0191",
+      "sourceId": "ev-moe2022-e-0756",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "water",
+      "pos": "명사",
+      "meaningKr": [
+        "물"
+      ],
+      "example": "Water is important for life.",
+      "exampleKr": "물은 삶에 중요하다."
+    },
+    {
+      "id": "ev-s01-0192",
+      "sourceId": "ev-moe2022-e-0018",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "air",
+      "pos": "명사",
+      "meaningKr": [
+        "공기"
+      ],
+      "example": "The mountain air is very fresh.",
+      "exampleKr": "산의 공기는 아주 맑다."
+    },
+    {
+      "id": "ev-s01-0193",
+      "sourceId": "ev-moe2022-e-0274",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "fire",
+      "pos": "명사",
+      "meaningKr": [
+        "불"
+      ],
+      "example": "The fire keeps us warm.",
+      "exampleKr": "불은 우리를 따뜻하게 해 준다."
+    },
+    {
+      "id": "ev-s01-0194",
+      "sourceId": "ev-moe2022-e-0265",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "field",
+      "pos": "명사",
+      "meaningKr": [
+        "들판"
+      ],
+      "example": "Cows eat grass in the field.",
+      "exampleKr": "소들은 들판에서 풀을 먹는다."
+    },
+    {
+      "id": "ev-s01-0195",
+      "sourceId": "ev-moe2022-e-0217",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "dog",
+      "pos": "명사",
+      "meaningKr": [
+        "개"
+      ],
+      "example": "The dog runs in the yard.",
+      "exampleKr": "그 개는 마당에서 달린다."
+    },
+    {
+      "id": "ev-s01-0196",
+      "sourceId": "ev-moe2022-e-0135",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "cat",
+      "pos": "명사",
+      "meaningKr": [
+        "고양이"
+      ],
+      "example": "The cat jumped onto the chair.",
+      "exampleKr": "고양이가 의자 위로 뛰어올랐다."
+    },
+    {
+      "id": "ev-s01-0197",
+      "sourceId": "ev-moe2022-e-0312",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "go",
+      "pos": "동사",
+      "meaningKr": [
+        "가다"
+      ],
+      "example": "We go to school early.",
+      "exampleKr": "우리는 일찍 학교에 간다."
+    },
+    {
+      "id": "ev-s01-0198",
+      "sourceId": "ev-moe2022-e-0758",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "way",
+      "pos": "명사",
+      "meaningKr": [
+        "방법"
+      ],
+      "example": "This is the best way.",
+      "exampleKr": "이것이 가장 좋은 방법이다."
+    },
+    {
+      "id": "ev-s01-0199",
+      "sourceId": "ev-moe2022-e-0532",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "place",
+      "pos": "명사",
+      "meaningKr": [
+        "장소"
+      ],
+      "example": "This place is very clean.",
+      "exampleKr": "이곳은 아주 깨끗하다."
+    },
+    {
+      "id": "ev-s01-0200",
+      "sourceId": "ev-moe2022-e-0151",
+      "setId": "ev-set-001",
+      "level": "elementary",
+      "word": "city",
+      "pos": "명사",
+      "meaningKr": [
+        "도시"
+      ],
+      "example": "Our city has a large park.",
+      "exampleKr": "우리 도시에는 큰 공원이 있다."
+    }
   ]
 }

@@ -1,0 +1,362 @@
+{
+  "purpose": "800개 전수 검토(2026-07-29) 지적사항 일괄 수정 패치. key=sourceOrder, 값은 교체할 필드만. 근거: 규칙 §3(대표 뜻)·§4(품사)·§6(예문)·§9.2(뜻 표현 일관성·중복·어려운 어휘).",
+  "fixes": {
+    "21": {
+      "meaningKr": [
+        "모두의"
+      ],
+      "exampleKr": "아이들 모두가 아이스크림을 좋아한다."
+    },
+    "90": {
+      "meaningKr": [
+        "작은 배"
+      ]
+    },
+    "97": {
+      "meaningKr": [
+        "맨 아래"
+      ]
+    },
+    "104": {
+      "meaningKr": [
+        "다리(강)"
+      ]
+    },
+    "115": {
+      "meaningKr": [
+        "그러나"
+      ]
+    },
+    "119": {
+      "meaningKr": [
+        "~로(수단)"
+      ]
+    },
+    "127": {
+      "meaningKr": [
+        "야구모자"
+      ]
+    },
+    "130": {
+      "example": "Baby animals need much care.",
+      "exampleKr": "새끼 동물들은 많은 돌봄이 필요하다."
+    },
+    "133": {
+      "meaningKr": [
+        "통/상자"
+      ],
+      "example": "Put the pens in the case.",
+      "exampleKr": "펜들을 통에 넣어라."
+    },
+    "205": {
+      "example": "We will decide after lunch.",
+      "exampleKr": "우리는 점심 후에 결정할 것이다."
+    },
+    "214": {
+      "example": "We will discuss the book today.",
+      "exampleKr": "우리는 오늘 그 책을 토론할 것이다."
+    },
+    "246": {
+      "example": "The evening sky is beautiful.",
+      "exampleKr": "저녁 하늘은 아름답다."
+    },
+    "258": {
+      "example": "We visited a farm last week.",
+      "exampleKr": "우리는 지난주에 농장을 방문했다."
+    },
+    "269": {
+      "example": "We will watch a film tonight.",
+      "exampleKr": "우리는 오늘 밤 영화를 볼 것이다."
+    },
+    "307": {
+      "example": "I got a letter today.",
+      "exampleKr": "나는 오늘 편지를 받았다."
+    },
+    "317": {
+      "meaningKr": [
+        "작별 인사"
+      ]
+    },
+    "324": {
+      "meaningKr": [
+        "땅바닥"
+      ],
+      "exampleKr": "땅바닥에 앉아라."
+    },
+    "330": {
+      "meaningKr": [
+        "녀석"
+      ],
+      "exampleKr": "저 녀석은 내 사촌이다."
+    },
+    "337": {
+      "meaningKr": [
+        "힘든"
+      ],
+      "exampleKr": "이 시험은 힘들다."
+    },
+    "339": {
+      "example": "Some children hate cold weather.",
+      "exampleKr": "어떤 아이들은 추운 날씨를 싫어한다."
+    },
+    "341": {
+      "meaningKr": [
+        "그(남자)"
+      ]
+    },
+    "344": {
+      "meaningKr": [
+        "열기"
+      ]
+    },
+    "357": {
+      "meaningKr": [
+        "쥐다"
+      ],
+      "exampleKr": "내 손을 꼭 쥐어라."
+    },
+    "359": {
+      "meaningKr": [
+        "집(가정)"
+      ]
+    },
+    "366": {
+      "meaningKr": [
+        "1시간"
+      ]
+    },
+    "367": {
+      "meaningKr": [
+        "집(건물)"
+      ]
+    },
+    "369": {
+      "meaningKr": [
+        "하지만"
+      ],
+      "example": "It was cold. However, we went outside.",
+      "exampleKr": "추웠다. 하지만 우리는 밖에 나갔다."
+    },
+    "386": {
+      "meaningKr": [
+        "문제점"
+      ],
+      "example": "We talked about the same issue.",
+      "exampleKr": "우리는 같은 문제점에 대해 이야기했다."
+    },
+    "390": {
+      "meaningKr": [
+        "직업"
+      ],
+      "exampleKr": "우리 엄마는 자신의 직업을 좋아한다."
+    },
+    "395": {
+      "example": "Keep the door closed, please.",
+      "exampleKr": "문을 닫아 두어라."
+    },
+    "399": {
+      "example": "Too much water can kill a plant.",
+      "exampleKr": "물을 너무 많이 주면 식물이 죽을 수 있다."
+    },
+    "406": {
+      "meaningKr": [
+        "숙녀"
+      ],
+      "exampleKr": "그 숙녀는 창문을 연다."
+    },
+    "416": {
+      "meaningKr": [
+        "다리(몸)"
+      ]
+    },
+    "431": {
+      "meaningKr": [
+        "쳐다보다"
+      ],
+      "exampleKr": "하늘을 쳐다보아라."
+    },
+    "440": {
+      "meaningKr": [
+        "많은(수)"
+      ],
+      "example": "Many birds live in this forest.",
+      "exampleKr": "많은 새가 이 숲에 산다."
+    },
+    "444": {
+      "example": "They will marry in spring.",
+      "exampleKr": "그들은 봄에 결혼할 것이다."
+    },
+    "460": {
+      "meaningKr": [
+        "달(개월)"
+      ]
+    },
+    "461": {
+      "meaningKr": [
+        "달(하늘)"
+      ]
+    },
+    "469": {
+      "meaningKr": [
+        "많은(양)"
+      ]
+    },
+    "473": {
+      "meaningKr": [
+        "국가"
+      ],
+      "example": "Many nations join the games.",
+      "exampleKr": "여러 국가가 그 경기에 참가한다."
+    },
+    "476": {
+      "example": "Turn your neck slowly to the left.",
+      "exampleKr": "목을 천천히 왼쪽으로 돌려라."
+    },
+    "483": {
+      "meaningKr": [
+        "다정한"
+      ],
+      "exampleKr": "그녀는 모두에게 다정하다."
+    },
+    "486": {
+      "partOfSpeech": [
+        "noun"
+      ],
+      "example": "His answer was no.",
+      "exampleKr": "그의 대답은 아니오였다.",
+      "note": "감탄사 품사 변경 시도 철회 - 사전 근거(A 없음/B noun,adverb,preposition)에 interjection 부재, 규칙 4.3에 따라 원표기 유지"
+    },
+    "487": {
+      "partOfSpeech": [
+        "noun"
+      ],
+      "meaningKr": [
+        "북쪽"
+      ],
+      "example": "The wind comes from the north.",
+      "exampleKr": "바람은 북쪽에서 불어온다."
+    },
+    "497": {
+      "meaningKr": [
+        "꺼진"
+      ]
+    },
+    "498": {
+      "example": "Her office is on the third floor.",
+      "exampleKr": "그녀의 사무실은 3층에 있다."
+    },
+    "511": {
+      "meaningKr": [
+        "페이지"
+      ],
+      "exampleKr": "10페이지를 읽어라."
+    },
+    "523": {
+      "example": "My pencil is short now.",
+      "exampleKr": "내 연필은 이제 짧다."
+    },
+    "596": {
+      "partOfSpeech": [
+        "adjective"
+      ],
+      "meaningKr": [
+        "두 번째의"
+      ],
+      "example": "She won second place.",
+      "exampleKr": "그녀는 두 번째 자리를 차지했다."
+    },
+    "604": {
+      "meaningKr": [
+        "큰 배"
+      ]
+    },
+    "613": {
+      "meaningKr": [
+        "쪽/옆"
+      ]
+    },
+    "617": {
+      "example": "Six friends came to my party.",
+      "exampleKr": "여섯 명의 친구가 내 파티에 왔다."
+    },
+    "629": {
+      "meaningKr": [
+        "눈(날씨)"
+      ]
+    },
+    "640": {
+      "example": "Mom makes soup for dinner.",
+      "exampleKr": "엄마는 저녁으로 수프를 만든다."
+    },
+    "641": {
+      "partOfSpeech": [
+        "noun"
+      ],
+      "meaningKr": [
+        "남쪽"
+      ],
+      "example": "Birds fly to the south in winter.",
+      "exampleKr": "새들은 겨울에 남쪽으로 난다."
+    },
+    "657": {
+      "meaningKr": [
+        "상점"
+      ],
+      "exampleKr": "그 상점은 열 시에 연다."
+    },
+    "693": {
+      "meaningKr": [
+        "물건/것"
+      ]
+    },
+    "705": {
+      "meaningKr": [
+        "~로"
+      ],
+      "exampleKr": "도서관으로 가라."
+    },
+    "727": {
+      "example": "Twenty chairs are in the room.",
+      "exampleKr": "의자 스무 개가 방에 있다."
+    },
+    "728": {
+      "example": "The twenty-first day is Sunday.",
+      "exampleKr": "스물한 번째 날은 일요일이다."
+    },
+    "729": {
+      "example": "Read the twenty-second word.",
+      "exampleKr": "스물두 번째 단어를 읽어라."
+    },
+    "730": {
+      "example": "We meet on the twenty-third day.",
+      "exampleKr": "우리는 스물세 번째 날에 만난다."
+    },
+    "743": {
+      "example": "She made a short video.",
+      "exampleKr": "그녀는 짧은 영상을 만들었다."
+    },
+    "755": {
+      "meaningKr": [
+        "지켜보다"
+      ],
+      "exampleKr": "새들이 나는 것을 지켜봐라."
+    },
+    "760": {
+      "example": "I wear a hat in summer.",
+      "exampleKr": "나는 여름에 모자를 쓴다."
+    },
+    "779": {
+      "example": "We want to win today.",
+      "exampleKr": "우리는 오늘 이기고 싶다."
+    },
+    "787": {
+      "meaningKr": [
+        "나무(재료)"
+      ]
+    },
+    "800": {
+      "example": "The zoo has two baby lions.",
+      "exampleKr": "그 동물원에는 새끼 사자 두 마리가 있다."
+    }
+  }
+}

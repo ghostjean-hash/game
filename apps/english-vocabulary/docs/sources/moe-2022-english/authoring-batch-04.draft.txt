@@ -1,0 +1,200 @@
+601|noun|세트|This set has four cups.|이 세트에는 컵이 네 개 있다.
+602|number|일곱|Seven birds sit on the wall.|일곱 마리 새가 벽에 앉아 있다.
+603|pronoun|그녀|She is my best friend.|그녀는 내 가장 친한 친구이다.
+604|noun|배|The ship crosses the sea.|배는 바다를 건넌다.
+605|noun|셔츠|His shirt is clean today.|그의 셔츠는 오늘 깨끗하다.
+606|noun|신발|My shoes are by the door.|내 신발은 문 옆에 있다.
+607|noun|가게|The shop sells fresh bread.|그 가게는 신선한 빵을 판다.
+608|adjective|짧은|Her hair is short now.|그녀의 머리카락은 이제 짧다.
+609|auxiliary|~해야 한다|You should drink more water.|너는 물을 더 마셔야 한다.
+610|verb|보여 주다|Show me your new picture.|네 새 그림을 보여 줘.
+611|adjective|수줍은|The shy girl looks down.|수줍은 소녀는 아래를 본다.
+612|adjective|아픈|He feels sick today.|그는 오늘 아프다.
+613|noun|쪽|Sit on this side.|이쪽에 앉아라.
+614|verb|노래하다|We sing after lunch.|우리는 점심 후에 노래한다.|irr:sang,sung
+615|noun|자매|My sister likes music.|내 여동생은 음악을 좋아한다.
+616|verb|앉다|Please sit near me.|내 곁에 앉아라.|irr:sat
+617|number|여섯|Six students are absent.|여섯 학생이 결석했다.
+618|noun|크기|What size do you need?|너는 어떤 크기가 필요하니?
+619|verb|스케이트를 타다|They skate on the ice.|그들은 얼음 위에서 스케이트를 탄다.
+620|verb|스키를 타다|We ski in winter.|우리는 겨울에 스키를 탄다.
+621|noun|피부|Cold air dries my skin.|찬 공기는 내 피부를 말린다.
+622|noun|치마|Her skirt is blue.|그녀의 치마는 파랗다.
+623|noun|하늘|The sky is clear today.|오늘 하늘은 맑다.
+624|verb|자다|I sleep for eight hours.|나는 여덟 시간 잔다.|irr:slept
+625|adjective|느린|The turtle is slow.|거북이는 느리다.
+626|adjective|작은|This box is small.|이 상자는 작다.
+627|verb|냄새가 나다|The soup smells good.|수프 냄새가 좋다.|irr:smelt
+628|verb|미소 짓다|She smiles at the baby.|그녀는 아기에게 미소 짓는다.
+629|noun|눈|Snow covers the road.|눈이 길을 덮는다.
+630|conjunction|그래서|It is late, so go home.|늦었으니 집에 가라.
+631|noun|축구|We play soccer on Saturday.|우리는 토요일에 축구를 한다.
+632|noun|양말|My socks are wet.|내 양말은 젖어 있다.
+633|adjective|부드러운|This pillow is soft.|이 베개는 부드럽다.
+634|noun|소프트웨어|The software is easy to use.|그 소프트웨어는 사용하기 쉽다.
+635|determiner|몇몇의|Some students like art.|몇몇 학생은 미술을 좋아한다.
+636|noun|아들|Their son plays tennis.|그들의 아들은 테니스를 친다.
+637|noun|노래|This song makes me smile.|이 노래는 나를 웃게 한다.
+638|interjection|미안해|Sorry, I am late.|미안해, 내가 늦었다.
+639|noun|소리|I hear a strange sound.|나는 이상한 소리를 듣는다.
+640|noun|수프|The soup is hot.|그 수프는 뜨겁다.
+641|adverb|남쪽으로|Birds fly south in winter.|새들은 겨울에 남쪽으로 난다.
+642|noun|공간|There is space for one more.|한 명 더 있을 공간이 있다.
+643|noun|스파게티|We eat spaghetti for dinner.|우리는 저녁으로 스파게티를 먹는다.
+644|verb|말을 하다|Speak to me slowly, please.|내게 천천히 말해라.
+645|noun|속도|The car has great speed.|그 차는 빠른 속도를 낸다.
+646|noun|숟가락|Use a spoon for soup.|수프에 숟가락을 사용해라.
+647|noun|스포츠|Basketball is my favorite sport.|농구는 내가 가장 좋아하는 스포츠이다.
+648|noun|봄|Flowers bloom in spring.|꽃은 봄에 핀다.
+649|noun|직원|The staff are very kind.|직원들은 아주 친절하다.
+650|verb|서다|Stand by the door.|문 옆에 서라.|irr:stood
+651|noun|별|The star shines at night.|별은 밤에 빛난다.
+652|verb|시작하다|Class starts at nine.|수업은 아홉 시에 시작한다.
+653|verb|머무르다|Please stay with us.|우리와 함께 있어라.
+654|noun|스테이크|He orders steak and salad.|그는 스테이크와 샐러드를 주문한다.
+655|noun|돌|The stone is very heavy.|그 돌은 아주 무겁다.
+656|verb|멈추다|Stop the game now.|지금 게임을 멈춰라.
+657|noun|가게|The store opens at ten.|그 가게는 열 시에 연다.
+658|noun|이야기|Tell me a story.|내게 이야기를 들려줘.
+659|noun|거리|Cars fill the street.|차들이 거리를 가득 메운다.
+660|adjective|강한|The wind is strong today.|오늘 바람은 강하다.
+661|verb|공부하다|We study science at school.|우리는 학교에서 과학을 공부한다.
+662|noun|스타일|Her style is simple and neat.|그녀의 스타일은 단순하고 깔끔하다.
+663|noun|지하철|The subway is very fast.|지하철은 아주 빠르다.
+664|noun|설탕|Use only a little sugar.|설탕을 조금만 사용해라.
+665|noun|여름|Summer is hot in Korea.|한국의 여름은 덥다.
+666|noun|태양|The sun is bright today.|오늘 태양은 밝다.
+667|adjective|확신하는|I am sure you can do it.|나는 네가 할 수 있다고 확신한다.
+668|verb|수영하다|Fish swim in the sea.|물고기는 바다에서 수영한다.|irr:swam,swum
+669|noun|탁자|The table is near the window.|탁자는 창문 가까이에 있다.
+670|noun|꼬리|The dog wags its tail.|개는 꼬리를 흔든다.
+671|verb|가지고 가다|Take your bag with you.|가방을 가지고 가라.|irr:took,taken
+672|verb|이야기하다|Talk to your teacher.|선생님과 이야기해라.
+673|adjective|키가 큰|My brother is tall.|내 남동생은 키가 크다.
+674|noun|테이프|The tape holds the paper.|테이프는 종이를 붙인다.
+675|noun|맛|This juice has a sweet taste.|이 주스는 달콤한 맛이 난다.
+676|noun|택시|We take a taxi home.|우리는 택시를 타고 집에 간다.
+677|verb|가르치다|They teach English here.|그들은 여기서 영어를 가르친다.|irr:taught
+678|noun|팀|Our team wins the game.|우리 팀은 그 경기에서 이긴다.
+679|noun|전화|Call me on the telephone.|전화로 내게 전화해라.|rel:phone
+680|noun|텔레비전|The television is off now.|텔레비전은 지금 꺼져 있다.
+681|verb|말해 주다|Tell me the truth.|내게 사실을 말해라.|irr:told
+682|number|열|Ten children are playing.|열 명의 아이들이 놀고 있다.
+683|noun|테니스|She plays tennis well.|그녀는 테니스를 잘 친다.
+684|noun|텐트|Our tent is near the river.|우리 텐트는 강 가까이에 있다.
+685|noun|시험|The test is not difficult.|그 시험은 어렵지 않다.
+686|noun|교과서|Open your textbook now.|지금 교과서를 펴라.
+687|conjunction|~보다|My bag is bigger than yours.|내 가방은 네 것보다 크다.
+688|verb|감사하다|Thank your parents today.|오늘 부모님께 감사해라.
+689|pronoun|저것|That is my favorite book.|저것은 내가 가장 좋아하는 책이다.
+690|determiner|그|The cat is under the chair.|그 고양이는 의자 아래에 있다.
+691|adverb|거기에|Put the bag there.|가방을 거기에 놓아라.
+692|pronoun|그들|They walk to school.|그들은 걸어서 학교에 간다.
+693|noun|것|This thing is very useful.|이 물건은 아주 유용하다.
+694|verb|생각하다|Think before you speak.|말하기 전에 생각해라.|irr:thought
+695|adjective|세 번째의|She is third in line.|그녀는 줄에서 세 번째이다.
+696|noun|갈증|Cold water stops my thirst.|찬물은 내 갈증을 없앤다.
+697|number|열셋|Thirteen books are on the desk.|열세 권의 책이 책상 위에 있다.
+698|number|서른|Thirty people came today.|서른 명이 오늘 왔다.
+699|pronoun|이것|This is my new pencil.|이것은 내 새 연필이다.
+700|number|셋|Three birds are singing.|새 세 마리가 노래한다.
+701|noun|표|Show your ticket, please.|표를 보여 줘.
+702|noun|호랑이|The tiger has sharp teeth.|호랑이는 날카로운 이빨이 있다.
+703|noun|시간|Time goes very fast.|시간은 아주 빨리 간다.
+704|noun|타이어|The tire is flat.|타이어 바람이 빠졌다.
+705|preposition|~에|Go to the library.|도서관에 가라.
+706|noun|오늘|Today is a special day.|오늘은 특별한 날이다.
+707|adverb|함께|We eat together every day.|우리는 매일 함께 먹는다.
+708|noun|토마토|The tomato is red.|그 토마토는 빨갛다.
+709|noun|내일|Tomorrow will be Sunday.|내일은 일요일일 것이다.
+710|adverb|오늘 밤에|Tonight we watch a movie.|오늘 밤에 우리는 영화를 본다.
+711|adverb|너무|This bag is too heavy.|이 가방은 너무 무겁다.
+712|noun|이|Brush every tooth carefully.|이를 하나하나 잘 닦아라.|irr:teeth
+713|noun|꼭대기|The bird sits on top of the tree.|새는 나무 꼭대기에 앉아 있다.
+714|verb|만지다|Do not touch the fire.|불을 만지지 마라.
+715|noun|마을|This town is very quiet.|이 마을은 아주 조용하다.
+716|noun|장난감|The toy is under the bed.|장난감은 침대 아래에 있다.
+717|noun|트랙|We run around the track.|우리는 트랙 주위를 달린다.
+718|noun|기차|The train arrives soon.|기차는 곧 도착한다.
+719|verb|여행하다|They travel by train.|그들은 기차로 여행한다.
+720|noun|나무|The tree is very tall.|그 나무는 아주 키가 크다.
+721|noun|여행|Our trip was exciting.|우리 여행은 신났다.
+722|noun|트럭|The truck carries boxes.|트럭은 상자를 나른다.
+723|adjective|사실인|That story is true.|그 이야기는 사실이다.
+724|verb|시도하다|Try to solve this problem.|이 문제를 풀어 보아라.
+725|verb|돌다|Turn left at the corner.|모퉁이에서 왼쪽으로 돌아라.|irr:turned
+726|number|열둘|Twelve eggs are in the box.|상자 안에 달걀이 열두 개 있다.
+727|number|스물|Twenty students are here.|스무 명의 학생이 여기 있다.
+728|adjective|스물한 번째의|The girl is twenty-first in line.|그 소녀는 줄에서 스물한 번째이다.
+729|adjective|스물두 번째의|He is twenty-second in line.|그는 줄에서 스물두 번째이다.
+730|adjective|스물세 번째의|The twenty-third page is missing.|스물세 번째 쪽이 없다.
+731|adverb|두 번|Read the word twice.|그 단어를 두 번 읽어라.
+732|number|둘|Two cats sleep here.|고양이 두 마리가 여기서 잔다.
+733|verb|타이핑하다|Type your name here.|여기에 네 이름을 입력해라.
+734|adjective|못생긴|The ugly duck becomes beautiful.|못생긴 오리는 아름다워진다.
+735|noun|우산|Take an umbrella today.|오늘 우산을 가져가라.
+736|noun|삼촌|My uncle drives a bus.|내 삼촌은 버스를 운전한다.
+737|preposition|~아래에|The ball is under the table.|공은 탁자 아래에 있다.
+738|verb|이해하다|I understand this question.|나는 이 문제를 이해한다.|irr:understood
+739|adverb|위로|Look up at the sky.|하늘을 올려다봐.
+740|verb|사용하다|Use this pen, please.|이 펜을 사용해라.
+741|noun|채소|Vegetables are good for you.|채소는 너에게 좋다.
+742|adverb|매우|This book is very good.|이 책은 매우 좋다.
+743|noun|비디오|We watch a video today.|우리는 오늘 비디오를 본다.
+744|noun|바이올린|She plays the violin.|그녀는 바이올린을 연주한다.
+745|verb|방문하다|We visit our aunt on Sunday.|우리는 일요일에 이모를 방문한다.
+746|noun|목소리|I hear your voice.|나는 네 목소리를 듣는다.
+747|verb|기다리다|Wait for me outside.|밖에서 나를 기다려라.
+748|verb|일어나다|Wake up at seven.|일곱 시에 일어나라.|irr:woke,woken
+749|verb|걷다|Walk slowly on ice.|얼음 위에서 천천히 걸어라.
+750|noun|벽|The wall is white.|벽은 하얗다.
+751|verb|원하다|I want some water.|나는 물을 좀 원한다.
+752|noun|전쟁|War hurts many people.|전쟁은 많은 사람을 다치게 한다.
+753|adjective|따뜻한|The room is warm now.|방은 지금 따뜻하다.
+754|verb|씻다|Wash your hands first.|먼저 손을 씻어라.
+755|verb|보다|Watch the birds fly.|새들이 나는 것을 봐라.
+756|noun|물|Water is important for life.|물은 삶에 중요하다.
+757|noun|수박|The watermelon is sweet.|그 수박은 달다.
+758|noun|방법|This is the best way.|이것이 가장 좋은 방법이다.
+759|pronoun|우리|We play after school.|우리는 방과 후에 논다.
+760|verb|입다|Wear your coat outside.|밖에서는 코트를 입어라.|irr:wore,worn
+761|noun|날씨|The weather is nice today.|오늘 날씨는 좋다.
+762|noun|웹사이트|Visit our website today.|오늘 우리 웹사이트를 방문해라.
+763|noun|결혼식|The wedding is in June.|결혼식은 6월에 있다.
+764|noun|주|A week has seven days.|한 주는 7일이다.
+765|noun|주말|We rest on weekends.|우리는 주말에 쉰다.
+766|noun|무게|What is the weight of this box?|이 상자의 무게는 얼마니?
+767|interjection|환영해|Welcome to our school.|우리 학교에 온 것을 환영해.
+768|adverb|잘|She sings very well.|그녀는 노래를 아주 잘한다.
+769|noun|서쪽|The sun sets in the west.|해는 서쪽으로 진다.
+770|adjective|젖은|My shoes are wet.|내 신발은 젖어 있다.
+771|pronoun|무엇|What is your name?|네 이름은 무엇이니?
+772|adverb|언제|When does class start?|수업은 언제 시작하니?
+773|adverb|어디에|Where is my pencil?|내 연필은 어디 있니?
+774|adjective|흰|The rabbit is white.|그 토끼는 하얗다.
+775|pronoun|누구|Who is at the door?|문 앞에 누가 있니?
+776|adverb|왜|Why are you sad?|너는 왜 슬프니?
+777|noun|아내|His wife is a doctor.|그의 아내는 의사이다.
+778|auxiliary|~할 것이다|I will call you later.|나는 나중에 너에게 전화할 것이다.
+779|verb|이기다|Our team wins the game.|우리 팀은 그 경기에서 이긴다.|irr:won
+780|noun|바람|The wind blows hard.|바람이 세게 분다.
+781|noun|창문|Open the window slowly.|창문을 천천히 열어라.
+782|noun|포도주|Wine is not for children.|포도주는 어린이용이 아니다.
+783|noun|겨울|Winter comes after autumn.|겨울은 가을 뒤에 온다.
+784|verb|바라다|I wish you good luck.|나는 네게 행운을 빈다.
+785|preposition|~와 함께|Come with your friend.|친구와 함께 와라.
+786|noun|여성|The woman reads a book.|그 여성은 책을 읽는다.
+787|noun|나무|The table is made of wood.|탁자는 나무로 만들어졌다.
+788|noun|단어|Write this word again.|이 단어를 다시 써라.
+789|noun|일|My work is almost done.|내 일은 거의 끝났다.
+790|noun|세계|The world is very big.|세계는 아주 크다.
+791|verb|걱정하다|You need not worry about me.|너는 나를 걱정할 필요가 없다.
+792|verb|쓰다|Write a letter to Dad.|아빠에게 편지를 써라.|irr:wrote,written
+793|adjective|틀린|Your answer is wrong.|네 답은 틀렸다.
+794|noun|해|This year is special.|올해는 특별하다.
+795|adjective|노란|The yellow flower is pretty.|노란 꽃은 예쁘다.
+796|interjection|네|Yes, that is correct.|네, 그것이 맞다.
+797|noun|어제|Yesterday was very cold.|어제는 매우 추웠다.
+798|pronoun|너|You are my friend.|너는 내 친구이다.
+799|adjective|어린|My young cousin is five.|내 어린 사촌은 다섯 살이다.
+800|noun|동물원|We visit the zoo today.|우리는 오늘 동물원에 간다.
