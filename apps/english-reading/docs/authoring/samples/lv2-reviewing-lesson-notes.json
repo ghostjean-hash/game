@@ -1,0 +1,318 @@
+{
+  "id": "reviewing-lesson-notes",
+  "level": 2,
+  "topic": "Study",
+  "title": "Going Over the Day's Notes",
+  "titleKr": "그날 필기를 다시 훑기",
+  "sentences": [
+    {
+      "text": "Sora goes over her class notes for ten minutes after dinner.",
+      "chunks": [
+        {
+          "en": "Sora goes over her class notes",
+          "kr": "소라는 자신의 수업 필기를 훑어본다"
+        },
+        {
+          "en": "for ten minutes",
+          "kr": "10분 동안"
+        },
+        {
+          "en": "after dinner.",
+          "kr": "저녁 식사 후에"
+        }
+      ],
+      "naturalTranslation": "소라는 저녁 식사 후 10분 동안 수업 필기를 훑어본다.",
+      "wordOrderPoint": {
+        "title": "동사구 + 목적어 + 시간 정보 순서",
+        "explanation": "goes over her class notes를 먼저 말하고, 얼마나(for ten minutes)와 언제(after dinner)를 뒤에 차례로 붙입니다."
+      },
+      "breakRules": {
+        "allowed": [],
+        "discouraged": [
+          {
+            "boundary": 0,
+            "reason": "짧은 주어 Sora와 동사 goes를 갈라놓지 않습니다."
+          },
+          {
+            "boundary": 1,
+            "reason": "go over는 두 낱말이 한 동사라 goes와 over를 붙여 읽습니다."
+          },
+          {
+            "boundary": 2,
+            "reason": "구동사 goes over와 목적어 her class notes를 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "구동사 go over",
+          "note": "go over는 '~을 처음부터 훑어보다, 복습하다'라는 뜻으로 over까지 한 덩어리입니다."
+        },
+        {
+          "label": "3인칭 단수 현재 -es",
+          "note": "주어 Sora가 3인칭 단수라 go에 -es를 붙여 goes로 씁니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "goes over",
+          "meaning": "~을 훑어본다, 복습한다"
+        }
+      ]
+    },
+    {
+      "text": "First she reads the examples that her teacher wrote on the board.",
+      "chunks": [
+        {
+          "en": "First she reads the examples",
+          "kr": "먼저 그녀는 예시들을 읽는다"
+        },
+        {
+          "en": "that her teacher wrote on the board.",
+          "kr": "선생님이 칠판에 쓴"
+        }
+      ],
+      "naturalTranslation": "먼저 그녀는 선생님이 칠판에 써 준 예시들을 읽는다.",
+      "wordOrderPoint": {
+        "title": "명사 뒤에서 꾸며 주는 관계절",
+        "explanation": "한국어와 달리 영어는 the examples를 먼저 말하고 that her teacher wrote를 뒤에 붙여 어떤 예시인지 좁힙니다."
+      },
+      "breakRules": {
+        "allowed": [
+          {
+            "boundary": 0,
+            "reason": "문두 부사 First 뒤에서 끊어 읽어도 자연스럽습니다."
+          },
+          {
+            "boundary": 8,
+            "reason": "문장 끝 전치사구 on the board 앞에서 끊어 읽어도 자연스럽습니다."
+          }
+        ],
+        "discouraged": [
+          {
+            "boundary": 1,
+            "reason": "짧은 주어 she와 동사 reads를 갈라놓지 않습니다."
+          },
+          {
+            "boundary": 2,
+            "reason": "동사 reads와 목적어 the examples를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 9,
+            "reason": "전치사 on과 목적어 the board를 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "목적격 관계대명사 that",
+          "note": "that은 뒤 절의 동사 wrote의 목적어 자리를 대신하므로 목적격이며, 통째로 생략할 수도 있습니다."
+        },
+        {
+          "label": "과거시제 wrote",
+          "note": "wrote는 write의 과거형으로 선생님이 이미 써 놓은 일을 나타냅니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "board",
+          "meaning": "칠판"
+        }
+      ]
+    },
+    {
+      "text": "Next she covers the answers and solves the problems again without help.",
+      "chunks": [
+        {
+          "en": "Next she covers the answers",
+          "kr": "다음으로 그녀는 답을 가린다"
+        },
+        {
+          "en": "and solves the problems again",
+          "kr": "그리고 문제들을 다시 푼다"
+        },
+        {
+          "en": "without help.",
+          "kr": "도움 없이"
+        }
+      ],
+      "naturalTranslation": "다음으로 그녀는 답을 가리고 문제들을 도움 없이 다시 푼다.",
+      "wordOrderPoint": {
+        "title": "동사 + 목적어 + 부사 again",
+        "explanation": "solves the problems 뒤에 again을 놓아 같은 문제를 한 번 더 푼다는 뜻을 더합니다."
+      },
+      "breakRules": {
+        "allowed": [
+          {
+            "boundary": 0,
+            "reason": "문두 부사 Next 뒤에서 끊어 읽어도 자연스럽습니다."
+          }
+        ],
+        "discouraged": [
+          {
+            "boundary": 1,
+            "reason": "짧은 주어 she와 동사 covers를 갈라놓지 않습니다."
+          },
+          {
+            "boundary": 2,
+            "reason": "동사 covers와 목적어 the answers를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 6,
+            "reason": "동사 solves와 목적어 the problems를 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "등위접속사 and로 이은 두 동사구",
+          "note": "covers와 solves가 같은 주어 she에 이어져 두 동작을 차례로 잇습니다."
+        },
+        {
+          "label": "빈도 부사 again의 위치",
+          "note": "again은 목적어 뒤에 놓여 같은 일을 되풀이함을 나타냅니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "covers",
+          "meaning": "가린다, 덮어 안 보이게 한다"
+        },
+        {
+          "word": "without help",
+          "meaning": "도움 없이, 혼자 힘으로"
+        }
+      ]
+    },
+    {
+      "text": "A single wrong answer shows her which part still needs more practice.",
+      "chunks": [
+        {
+          "en": "A single wrong answer shows her",
+          "kr": "틀린 답 하나가 그녀에게 보여 준다"
+        },
+        {
+          "en": "which part still needs more practice.",
+          "kr": "어느 부분이 아직 더 많은 연습을 필요로 하는지"
+        }
+      ],
+      "naturalTranslation": "틀린 답 하나가 어느 부분에 아직 연습이 더 필요한지를 그녀에게 알려 준다.",
+      "wordOrderPoint": {
+        "title": "4형식 어순 - 동사 + 사람 + 내용",
+        "explanation": "shows 뒤에 받는 사람 her를 먼저 놓고, 보여 주는 내용을 그다음에 통째로 이어 붙입니다."
+      },
+      "breakRules": {
+        "allowed": [
+          {
+            "boundary": 3,
+            "reason": "주어 A single wrong answer가 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+          }
+        ],
+        "discouraged": [
+          {
+            "boundary": 4,
+            "reason": "shows와 받는 사람 her를 갈라 읽으면 4형식 뼈대가 흩어집니다."
+          },
+          {
+            "boundary": 7,
+            "reason": "which part와 그 동사 needs 사이를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 9,
+            "reason": "동사 needs와 목적어 more practice를 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "4형식 show + 간접목적어 + 직접목적어",
+          "note": "shows her which part ...에서 her가 받는 사람, which 이하 절 전체가 보여 주는 내용입니다."
+        },
+        {
+          "label": "간접의문문(의문사절)이 목적어",
+          "note": "which part still needs more practice가 통째로 목적어 노릇을 하며 주어+동사 순서를 그대로 지킵니다."
+        },
+        {
+          "label": "more + 셀 수 없는 명사",
+          "note": "more practice는 '더 많은 연습'으로, more가 양을 늘리는 말로 쓰였습니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "single",
+          "meaning": "단 하나의"
+        }
+      ],
+      "insight": {
+        "formula": "[주어 A single wrong answer] + [동사 shows] + [사람 her] + [내용절 which part still needs more practice]",
+        "why": "shows 뒤에 받는 사람 her가 먼저 오고, 보여 주는 내용이 절 하나로 통째로 따라옵니다. 그 절은 질문이 아니라 목적어라 which part needs 순서를 뒤집지 않습니다.",
+        "wrong": "A single wrong answer shows to her which part still needs more practice. (4형식에서는 사람 앞에 to를 넣지 않습니다.)",
+        "natural": "틀린 답 하나가 어느 부분에 아직 연습이 더 필요한지 그녀에게 알려 준다."
+      }
+    },
+    {
+      "text": "By Friday, the same pages feel familiar, and the review takes only five minutes.",
+      "chunks": [
+        {
+          "en": "By Friday,",
+          "kr": "금요일쯤이면"
+        },
+        {
+          "en": "the same pages feel familiar,",
+          "kr": "같은 쪽들이 익숙하게 느껴진다"
+        },
+        {
+          "en": "and the review takes only five minutes.",
+          "kr": "그리고 복습은 5분밖에 걸리지 않는다"
+        }
+      ],
+      "naturalTranslation": "금요일쯤이면 같은 쪽들이 익숙해지고, 복습은 5분밖에 걸리지 않는다.",
+      "wordOrderPoint": {
+        "title": "콤마와 and로 이은 두 절",
+        "explanation": "앞 절 the same pages feel familiar와 뒤 절 the review takes only five minutes를 콤마와 and로 나란히 잇습니다."
+      },
+      "breakRules": {
+        "allowed": [
+          {
+            "boundary": 4,
+            "reason": "주어 the same pages 뒤 동사 앞에서 끊어 읽어도 자연스럽습니다."
+          }
+        ],
+        "discouraged": [
+          {
+            "boundary": 0,
+            "reason": "전치사 By와 목적어 Friday를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 5,
+            "reason": "feel과 보어 familiar를 갈라 읽으면 '익숙하게 느껴진다'가 끊깁니다."
+          },
+          {
+            "boundary": 10,
+            "reason": "동사 takes와 목적어 only five minutes를 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "감각동사 feel + 형용사 보어",
+          "note": "feel familiar는 '익숙하게 느껴지다'로, feel 뒤에는 부사가 아니라 형용사를 씁니다."
+        },
+        {
+          "label": "시간 전치사 by",
+          "note": "By Friday는 '금요일까지는, 금요일쯤이면'으로 그때까지 이루어진 상태를 가리킵니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "By Friday",
+          "meaning": "금요일쯤이면, 금요일까지는"
+        },
+        {
+          "word": "familiar",
+          "meaning": "익숙한"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,311 @@
+{
+  "id": "getting-ready-to-go-out",
+  "level": 1,
+  "topic": "Self Development",
+  "title": "The Basket by the Door",
+  "titleKr": "문 옆 바구니 한곳에 모으기",
+  "sentences": [
+    {
+      "text": "A small basket by the door solves a common problem.",
+      "chunks": [
+        {
+          "en": "A small basket by the door",
+          "kr": "문 옆의 작은 바구니 하나가"
+        },
+        {
+          "en": "solves a common problem.",
+          "kr": "흔한 문제를 해결한다"
+        }
+      ],
+      "naturalTranslation": "문 옆의 작은 바구니 하나가 흔한 문제를 해결한다.",
+      "wordOrderPoint": {
+        "title": "명사 뒤에 붙어 위치를 밝히는 전치사구",
+        "explanation": "A small basket 뒤에 by the door를 붙여 어떤 바구니인지 좁혀 줍니다."
+      },
+      "breakRules": {
+        "allowed": [
+          {
+            "boundary": 2,
+            "reason": "명사 basket 뒤 위치를 밝히는 by 구 앞에서 끊어 읽어도 자연스럽습니다."
+          }
+        ],
+        "discouraged": [
+          {
+            "boundary": 0,
+            "reason": "관사 A와 뒤따르는 small basket을 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 3,
+            "reason": "전치사 by와 그 목적어 the door를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 6,
+            "reason": "동사 solves와 목적어 a common problem을 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "3인칭 단수 현재 -s",
+          "note": "주어 A small basket이 3인칭 단수라 solve에 -s를 붙입니다."
+        },
+        {
+          "label": "부정관사 a",
+          "note": "a common problem - 특정하지 않은 하나를 가리킬 때 a를 씁니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "basket",
+          "meaning": "바구니"
+        },
+        {
+          "word": "common",
+          "meaning": "흔한"
+        }
+      ]
+    },
+    {
+      "text": "Keys, a phone, and a wallet go into it every night.",
+      "chunks": [
+        {
+          "en": "Keys, a phone, and a wallet",
+          "kr": "열쇠와 휴대전화와 지갑이"
+        },
+        {
+          "en": "go into it every night.",
+          "kr": "매일 밤 그 안으로 들어간다"
+        }
+      ],
+      "naturalTranslation": "열쇠와 휴대전화, 지갑이 매일 밤 그 바구니 안으로 들어간다.",
+      "wordOrderPoint": {
+        "title": "여러 개를 콤마와 and로 잇는 주어",
+        "explanation": "Keys, a phone, and a wallet 셋이 함께 하나의 주어를 이룹니다."
+      },
+      "breakRules": {
+        "allowed": [
+          {
+            "boundary": 0,
+            "reason": "콤마 뒤라 끊어 읽어도 자연스럽습니다."
+          },
+          {
+            "boundary": 2,
+            "reason": "콤마 뒤라 끊어 읽어도 자연스럽습니다."
+          },
+          {
+            "boundary": 8,
+            "reason": "문장 끝 시간 표현 every night 앞에서 끊어 읽어도 자연스럽습니다."
+          }
+        ],
+        "discouraged": [
+          {
+            "boundary": 4,
+            "reason": "and와 뒤에 오는 a wallet을 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 6,
+            "reason": "go into는 한 덩어리라 go 뒤에서 끊지 않습니다."
+          },
+          {
+            "boundary": 7,
+            "reason": "전치사 into와 그 목적어 it을 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "복수 주어와 동사원형",
+          "note": "주어가 셋이라 복수로 보고 go에 -s를 붙이지 않습니다."
+        },
+        {
+          "label": "전치사 into + 대명사",
+          "note": "into it - it이 앞 문장의 바구니를 가리킵니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "wallet",
+          "meaning": "지갑"
+        }
+      ]
+    },
+    {
+      "text": "On rainy days an umbrella joins them.",
+      "chunks": [
+        {
+          "en": "On rainy days",
+          "kr": "비 오는 날에는"
+        },
+        {
+          "en": "an umbrella joins them.",
+          "kr": "우산이 그 물건들에 더해진다"
+        }
+      ],
+      "naturalTranslation": "비 오는 날에는 우산이 그 물건들에 더해진다.",
+      "wordOrderPoint": {
+        "title": "때를 나타내는 전치사구를 문장 앞에 놓기",
+        "explanation": "On rainy days가 맨 앞에 와서 어떤 날의 이야기인지 먼저 밝힙니다."
+      },
+      "breakRules": {
+        "allowed": [],
+        "discouraged": [
+          {
+            "boundary": 0,
+            "reason": "전치사 On과 그 목적어 rainy days를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 3,
+            "reason": "관사 an과 명사 umbrella를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 4,
+            "reason": "짧은 주어 an umbrella와 동사 joins를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 5,
+            "reason": "동사 joins와 목적어 them을 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "날을 가리키는 전치사 on",
+          "note": "On rainy days - 특정한 날을 말할 때는 on을 씁니다."
+        },
+        {
+          "label": "목적격 대명사 them",
+          "note": "them이 앞 문장의 열쇠, 휴대전화, 지갑을 대신합니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "joins",
+          "meaning": "함께 놓이다, 합류하다"
+        }
+      ]
+    },
+    {
+      "text": "The table stays clear, and nothing hides under the sofa.",
+      "chunks": [
+        {
+          "en": "The table stays clear,",
+          "kr": "탁자는 깨끗한 채로 있다"
+        },
+        {
+          "en": "and nothing hides",
+          "kr": "그리고 아무것도 숨어 있지 않다"
+        },
+        {
+          "en": "under the sofa.",
+          "kr": "소파 밑에"
+        }
+      ],
+      "naturalTranslation": "탁자는 깨끗한 채로 있고, 소파 밑에 숨어 있는 것도 없다.",
+      "wordOrderPoint": {
+        "title": "stay + 형용사",
+        "explanation": "stays clear - stay 뒤에 형용사가 와서 그 상태로 남아 있음을 나타냅니다."
+      },
+      "breakRules": {
+        "allowed": [],
+        "discouraged": [
+          {
+            "boundary": 1,
+            "reason": "짧은 주어 The table과 동사 stays를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 2,
+            "reason": "stays와 그 보어 clear를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 5,
+            "reason": "짧은 주어 nothing과 동사 hides를 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 7,
+            "reason": "전치사 under와 그 목적어 the sofa를 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "부정 주어 nothing",
+          "note": "nothing이 주어라 문장 전체가 '아무것도 ~않다'가 됩니다."
+        },
+        {
+          "label": "전치사 under + 장소",
+          "note": "under the sofa - '소파 밑에'라는 위치를 나타냅니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "stays clear",
+          "meaning": "깨끗한 상태로 남다"
+        }
+      ]
+    },
+    {
+      "text": "Now anyone can pick up the basket and leave at once.",
+      "chunks": [
+        {
+          "en": "Now",
+          "kr": "이제"
+        },
+        {
+          "en": "anyone can pick up the basket",
+          "kr": "누구든 그 바구니를 집어 들 수 있다"
+        },
+        {
+          "en": "and leave at once.",
+          "kr": "그리고 곧바로 나갈 수 있다"
+        }
+      ],
+      "naturalTranslation": "이제 누구든 그 바구니를 집어 들고 곧바로 나갈 수 있다.",
+      "wordOrderPoint": {
+        "title": "조동사 하나가 거느리는 두 동사원형",
+        "explanation": "can 뒤에 pick up과 leave가 and로 나란히 이어집니다."
+      },
+      "breakRules": {
+        "allowed": [
+          {
+            "boundary": 8,
+            "reason": "문장 끝 부사구 at once 앞에서 끊어 읽어도 자연스럽습니다."
+          }
+        ],
+        "discouraged": [
+          {
+            "boundary": 2,
+            "reason": "조동사 can과 본동사 pick을 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 3,
+            "reason": "pick up은 하나의 구동사라 갈라 읽지 않습니다."
+          },
+          {
+            "boundary": 9,
+            "reason": "at once는 한 덩어리 표현이라 갈라 읽지 않습니다."
+          }
+        ]
+      },
+      "grammar": [
+        {
+          "label": "구동사 pick up",
+          "note": "pick과 up이 붙어 '집어 들다'라는 하나의 동사가 됩니다."
+        },
+        {
+          "label": "대명사 anyone",
+          "note": "anyone이 주어로 쓰여 '누구든'이라는 뜻이 됩니다."
+        }
+      ],
+      "words": [
+        {
+          "word": "pick up",
+          "meaning": "집어 들다"
+        },
+        {
+          "word": "at once",
+          "meaning": "곧바로"
+        }
+      ]
+    }
+  ]
+}
