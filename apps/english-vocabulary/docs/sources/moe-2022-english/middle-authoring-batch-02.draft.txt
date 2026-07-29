@@ -1,0 +1,201 @@
+# Middle AUTHORING BATCH 02 - official ** representative forms 201-400
+201|noun|점원, 사무원|The clerk helped me kindly.|그 점원은 나를 친절하게 도와주었다.
+202|verb|클릭하다|Please click the blue button.|파란 버튼을 클릭해 주세요.
+203|noun|고객, 의뢰인|Our client arrives at three.|우리 고객은 세 시에 도착한다.
+204|noun|절벽|Birds nest on the cliff.|새들이 절벽에 둥지를 짓는다.
+205|noun|기후|The climate here is very dry.|이곳의 기후는 매우 건조하다.
+206|noun|클립|She lost her hair clip.|그녀는 머리 클립을 잃어버렸다.
+207|noun|단서|Police found an important clue.|경찰이 중요한 단서를 찾았다.
+208|noun|코치|Our coach praised the team.|우리 코치가 팀을 칭찬했다.
+209|noun|석탄|They burned coal for heat.|그들은 난방을 위해 석탄을 태웠다.
+210|noun|해안|We walked along the coast.|우리는 해안을 따라 걸었다.
+211|noun|암호, 부호|He forgot the door code.|그는 문 암호를 잊어버렸다.
+212|noun|동전|I dropped a silver coin.|나는 은색 동전을 떨어뜨렸다.
+213|verb|결합하다|Combine the eggs and flour.|달걀과 밀가루를 섞어 합치세요.
+214|noun|코미디, 희극|This comedy made everyone laugh.|이 코미디는 모두를 웃게 만들었다.
+215|noun|위로, 편안함|Her words gave me comfort.|그녀의 말이 나에게 위로를 주었다.|rel:comfortable
+216|noun|명령|He gave a clear command.|그는 분명한 명령을 내렸다.
+217|noun|논평, 의견|She made a short comment.|그녀는 짧은 논평을 했다.
+218|noun|상업, 무역|Online commerce grows every year.|온라인 상업은 해마다 성장한다.
+219|noun|위원회|The committee meets every Monday.|그 위원회는 매주 월요일에 모인다.
+220|adjective|흔한, 공통의|Rain is common in July.|칠월에는 비가 흔하다.
+221|verb|의사소통하다|We communicate by email daily.|우리는 매일 이메일로 의사소통한다.|rel:communication
+222|noun|지역사회, 공동체|Our community shares one garden.|우리 지역사회는 정원 하나를 함께 쓴다.
+223|verb|비교하다|Compare these two pictures carefully.|이 두 그림을 주의 깊게 비교하세요.
+224|verb|불평하다|He complains about the noise.|그는 그 소음에 대해 불평한다.
+225|verb|완성하다|Please complete this form today.|오늘 이 양식을 완성해 주세요.
+226|adjective|복잡한|This problem is too complex.|이 문제는 너무 복잡하다.|rel:complexity
+227|verb|복잡하게 하다|Do not complicate the simple plan.|그 단순한 계획을 복잡하게 만들지 마라.
+228|verb|집중하다|I cannot concentrate in noise.|나는 소음 속에서 집중할 수 없다.
+229|noun|개념|The concept is easy to understand.|그 개념은 이해하기 쉽다.
+230|noun|걱정, 관심사|Safety is our main concern.|안전이 우리의 주된 걱정이다.
+231|noun|음악회|The concert starts at seven.|그 음악회는 일곱 시에 시작한다.
+232|verb|확인하다|Please confirm your seat now.|지금 좌석을 확인해 주세요.
+233|noun|갈등, 충돌|They solved the conflict peacefully.|그들은 그 갈등을 평화롭게 해결했다.
+234|verb|혼란시키다|These signs confuse many drivers.|이 표지판들은 많은 운전자를 혼란시킨다.
+235|verb|연결하다|Connect the cable to power.|그 케이블을 전원에 연결하세요.
+236|adjective|의식하는|She is conscious of danger.|그녀는 위험을 의식하고 있다.
+237|verb|고려하다|Consider my idea for a moment.|잠시 내 생각을 고려해 보세요.
+238|adjective|끊임없는|Constant noise disturbs my sleep.|끊임없는 소음이 내 잠을 방해한다.
+239|verb|소비하다|Cars consume a lot of fuel.|자동차는 많은 연료를 소비한다.|rel:consumer,consumption
+240|verb|연락하다|Contact me before you leave.|떠나기 전에 나에게 연락하세요.
+241|verb|포함하다|This box contains old letters.|이 상자는 오래된 편지들을 포함한다.
+242|noun|내용|I checked the box content.|나는 그 상자의 내용을 확인했다.
+243|noun|대회, 경연|She won the singing contest.|그녀는 노래 대회에서 우승했다.
+244|noun|문맥, 상황|Guess the word from context.|문맥으로 그 단어를 추측해 보세요.
+245|verb|계속하다|Continue reading to the end.|끝까지 계속 읽으세요.
+246|noun|계약|They signed a new contract.|그들은 새 계약에 서명했다.
+247|verb|기여하다|Everyone contributed to the project.|모두가 그 프로젝트에 기여했다.
+248|verb|대화하다|They converse in French together.|그들은 함께 프랑스어로 대화한다.|rel:conversation
+249|verb|설득하다|He convinced me to stay.|그는 내가 머물도록 설득했다.
+250|noun|경찰관|A cop stopped our car.|한 경찰관이 우리 차를 세웠다.
+251|verb|대처하다|She copes with stress well.|그녀는 스트레스에 잘 대처한다.
+252|verb|복사하다|Copy this page for me.|이 페이지를 나를 위해 복사해 주세요.
+253|adjective|옳은, 정확한|Your answer is completely correct.|네 답은 완전히 옳다.
+254|noun|시골집|They rented a small cottage.|그들은 작은 시골집을 빌렸다.
+255|noun|목화, 면|This shirt is pure cotton.|이 셔츠는 순수한 면이다.
+256|verb|기침하다|He coughed during the movie.|그는 영화를 보는 동안 기침했다.
+257|noun|의회, 협의회|The city council voted today.|시 의회가 오늘 표결했다.
+258|verb|세다|Count the apples in this basket.|이 바구니 안의 사과를 세어 보세요.|rel:counter,discount
+259|noun|시골, 전원|We cycled through the countryside.|우리는 시골을 자전거로 지나갔다.
+260|noun|군, 자치주|Our county has two libraries.|우리 군에는 도서관이 두 개 있다.
+261|noun|금, 틈|A crack appeared in the wall.|벽에 금이 생겼다.
+262|verb|충돌하다|Two cars crashed near school.|차 두 대가 학교 근처에서 충돌했다.
+263|verb|기어가다|The baby crawled to me.|그 아기는 내게로 기어왔다.
+264|verb|창조하다|Artists create beautiful new things.|예술가들은 아름다운 새것을 창조한다.|rel:creature
+265|noun|신용|She paid by credit card.|그녀는 신용카드로 결제했다.
+266|noun|범죄|Crime dropped in this city.|이 도시에서 범죄가 줄었다.|rel:criminal
+267|noun|위기|The country faced a crisis.|그 나라는 위기에 직면했다.
+268|adjective|바삭한|These cookies are still crisp.|이 쿠키들은 아직 바삭하다.
+269|noun|군중|A large crowd filled the square.|많은 군중이 광장을 가득 채웠다.
+270|noun|왕관|The queen wore a crown.|여왕은 왕관을 썼다.
+271|adjective|잔인한|Hurting animals is very cruel.|동물을 해치는 것은 매우 잔인하다.
+272|verb|치료하다|This medicine cures the illness.|이 약은 그 병을 치료한다.
+273|adjective|궁금한|Children are curious about everything.|아이들은 모든 것에 궁금해한다.|rel:curiosity
+274|noun|곱슬머리|One curl fell on her forehead.|곱슬머리 한 가닥이 그녀의 이마에 내려왔다.
+275|adjective|현재의|What is the current price?|현재 가격은 얼마인가요?
+276|adjective|귀여운|That puppy looks very cute.|그 강아지는 아주 귀여워 보인다.
+277|noun|순환, 주기|Water follows a natural cycle.|물은 자연의 순환을 따른다.|rel:recycle,cyclist
+278|noun|피해, 손상|The storm caused serious damage.|그 폭풍은 심각한 피해를 일으켰다.
+279|verb|감히 하다|I dare not open it.|나는 감히 그것을 열지 못한다.
+280|noun|사랑하는 사람|Good night, my little darling.|잘 자, 내 어린 사랑아.
+281|noun|새벽|We left home before dawn.|우리는 새벽 전에 집을 떠났다.
+282|verb|다루다|She deals with hard cases.|그녀는 어려운 사건들을 다룬다.|irr:dealt
+283|noun|토론|The class debate was lively.|그 학급 토론은 활기찼다.
+284|noun|빚|He paid his old debt.|그는 오래된 빚을 갚았다.
+285|noun|갑판|Passengers rested on the deck.|승객들은 갑판에서 쉬었다.
+286|verb|장식하다|We decorate the tree together.|우리는 함께 그 나무를 장식한다.
+287|noun|방어, 수비|Our team has strong defense.|우리 팀은 강한 수비를 갖고 있다.
+288|verb|정의하다|Define this word in Korean.|이 단어를 한국어로 정의해 보세요.
+289|adjective|명확한|Give me a definite answer.|나에게 명확한 답을 주세요.
+290|noun|도, 정도|The temperature rose one degree.|기온이 한 도 올랐다.
+291|verb|지연시키다|Rain delayed our morning flight.|비가 우리의 아침 비행을 지연시켰다.
+292|noun|기쁨|Her smile showed pure delight.|그녀의 미소는 순수한 기쁨을 보여주었다.
+293|verb|배달하다|They deliver bread every morning.|그들은 매일 아침 빵을 배달한다.
+294|verb|요구하다|Workers demanded better working conditions.|노동자들은 더 나은 근무 조건을 요구했다.
+295|verb|보여주다, 증명하다|Let me demonstrate the machine.|그 기계를 제가 보여드리겠습니다.
+296|noun|치과 의사|My dentist checked my teeth.|내 치과 의사가 내 이를 살펴보았다.
+297|verb|부인하다|He denied breaking the window.|그는 창문을 깼다는 것을 부인했다.
+298|verb|의존하다|Children depend on their parents.|아이들은 부모에게 의존한다.|rel:independent,dependence
+299|verb|우울하게 하다|Rainy days depress my mood.|비 오는 날은 내 기분을 우울하게 한다.
+300|verb|묘사하다|Describe your hometown in English.|네 고향을 영어로 묘사해 보세요.|rel:description
+301|noun|사막|The desert is extremely hot.|그 사막은 몹시 뜨겁다.
+302|verb|~할 자격이 있다|You deserve a long rest.|너는 긴 휴식을 누릴 자격이 있다.
+303|noun|욕망, 바람|Her desire to travel grew.|여행하고 싶은 그녀의 바람이 커졌다.
+304|adjective|절망적인|He made a desperate attempt.|그는 절망적인 시도를 했다.
+305|preposition|~에도 불구하고|We played despite heavy rain.|우리는 폭우에도 불구하고 경기를 했다.
+306|verb|파괴하다|Fire destroyed the old barn.|불이 그 오래된 헛간을 파괴했다.
+307|noun|세부 사항|Explain every detail once more.|모든 세부 사항을 한 번 더 설명해 주세요.
+308|verb|탐지하다|Dogs detect smells very well.|개는 냄새를 아주 잘 탐지한다.
+309|verb|결정하다|Weather determines our travel plan.|날씨가 우리의 여행 계획을 결정한다.
+310|verb|발전시키다|They develop new games yearly.|그들은 매년 새 게임을 개발한다.
+311|noun|일기|She writes her diary nightly.|그녀는 매일 밤 일기를 쓴다.
+312|noun|사전|Look it up in a dictionary.|그것을 사전에서 찾아보세요.
+313|noun|식사, 식습관|A balanced diet keeps you healthy.|균형 잡힌 식사는 너를 건강하게 유지한다.
+314|verb|파다|They dig holes for trees.|그들은 나무를 심을 구덩이를 판다.|irr:dug
+315|adjective|직접적인|Take the direct road home.|집으로 가는 직접적인 길로 가라.
+316|noun|흙, 먼지|His shoes were full of dirt.|그의 신발은 흙으로 가득했다.|rel:dirty
+317|verb|실망시키다|The ending disappointed many fans.|그 결말은 많은 팬을 실망시켰다.
+318|noun|원반, 디스크|He burned a music disc.|그는 음악 디스크를 구웠다.|rel:disk
+319|noun|규율, 훈련|Good discipline helps every student.|좋은 규율은 모든 학생에게 도움이 된다.
+320|noun|혐오|His manners caused deep disgust.|그의 태도는 깊은 혐오를 일으켰다.
+321|noun|접시, 요리|Wash every dish after dinner.|저녁 후에 모든 접시를 씻어라.
+322|verb|전시하다|They display new books here.|그들은 여기에 새 책을 전시한다.
+323|noun|거리|The distance is only two kilometers.|그 거리는 겨우 이 킬로미터다.
+324|noun|지역, 구역|This district has many shops.|이 지역에는 상점이 많다.
+325|verb|방해하다|Please do not disturb him.|그를 방해하지 말아 주세요.
+326|verb|뛰어들다|Boys dive into the lake.|소년들이 호수로 뛰어든다.
+327|verb|나누다|Divide the cake into six.|그 케이크를 여섯으로 나누세요.
+328|noun|이혼|Their divorce surprised many friends.|그들의 이혼은 많은 친구를 놀라게 했다.
+329|noun|문서|Sign this document with ink.|이 문서를 잉크로 서명하세요.
+330|noun|돌고래|A dolphin jumped beside us.|돌고래 한 마리가 우리 옆에서 뛰어올랐다.
+331|adjective|국내의, 가정의|Domestic flights are usually cheaper.|국내 항공편이 보통 더 싸다.
+332|verb|기부하다|They donate books to schools.|그들은 학교에 책을 기부한다.
+333|verb|의심하다|I doubt his strange story.|나는 그의 이상한 이야기를 의심한다.
+334|noun|다스, 12개|She bought a dozen eggs.|그녀는 달걀 열두 개를 샀다.
+335|verb|끌다|Do not drag that chair.|그 의자를 끌지 마라.
+336|noun|극, 드라마|This drama won many prizes.|이 드라마는 많은 상을 받았다.
+337|noun|약, 약물|This drug reduces bad pain.|이 약은 심한 통증을 줄여 준다.
+338|adjective|예정된|The report is due tomorrow.|그 보고서는 내일까지 제출 예정이다.
+339|verb|버리다|Never dump trash in rivers.|절대 강에 쓰레기를 버리지 마라.
+340|noun|먼지|Dust covered the old shelf.|먼지가 그 오래된 선반을 덮었다.
+341|noun|의무|Voting is an important duty.|투표는 중요한 의무다.
+342|determiner|각각의|Each student needs one book.|각 학생은 책 한 권이 필요하다.
+343|verb|벌다|He earns money after school.|그는 방과 후에 돈을 번다.
+344|noun|쉬움, 편안함|She won with surprising ease.|그녀는 놀랍도록 쉽게 이겼다.|rel:easy,disease
+345|noun|경제|The economy grew last year.|작년에 경제가 성장했다.
+346|noun|가장자리|Stay away from the edge.|가장자리에서 떨어져 있어라.
+347|verb|편집하다|Please edit this short video.|이 짧은 영상을 편집해 주세요.
+348|verb|교육하다|Schools educate future world leaders.|학교는 미래의 세계 지도자를 교육한다.
+349|noun|효과, 영향|The medicine had quick effect.|그 약은 빠른 효과가 있었다.|rel:effective
+350|noun|노력|Your effort deserves real praise.|너의 노력은 진짜 칭찬을 받을 만하다.
+351|determiner|둘 중 하나의|Either answer is fully acceptable.|둘 중 어느 답이든 완전히 받아들일 수 있다.
+352|verb|선출하다|Students elect a class leader.|학생들이 학급 대표를 선출한다.
+353|adjective|전기의|This electric fan works quietly.|이 전기 선풍기는 조용히 작동한다.
+354|noun|요소|Water is an important element.|물은 중요한 요소다.|rel:elementary
+355|adverb|그 밖에, 다른|Does anyone else want tea?|그 밖에 차를 원하는 사람 있나요?
+356|verb|당황시키다|His question embarrassed the teacher.|그의 질문은 선생님을 당황시켰다.
+357|noun|감정|Music can change our emotion.|음악은 우리의 감정을 바꿀 수 있다.
+358|verb|강조하다|Teachers emphasize daily reading habits.|선생님들은 매일 읽는 습관을 강조한다.
+359|noun|제국|The empire ruled many lands.|그 제국은 많은 땅을 지배했다.
+360|verb|고용하다|The shop employs five workers.|그 가게는 다섯 명의 직원을 고용한다.
+361|adjective|텅 빈|The bottle is already empty.|그 병은 이미 텅 비어 있다.
+362|noun|적|Fear is your worst enemy.|두려움이 너의 최악의 적이다.
+363|verb|참여하다|Students engage in group work.|학생들이 모둠 활동에 참여한다.
+364|noun|엔진|The engine makes strange sounds.|그 엔진은 이상한 소리를 낸다.
+365|noun|기술자|My uncle works as an engineer.|내 삼촌은 기술자로 일한다.
+366|adjective|거대한|They live in an enormous house.|그들은 거대한 집에서 산다.
+367|verb|즐겁게 해 주다, 접대하다|Clowns entertain children at parties.|광대들이 파티에서 아이들을 즐겁게 해 준다.
+368|adjective|전체의|She read the entire book.|그녀는 그 책 전체를 읽었다.
+369|noun|봉투|Put the letter in an envelope.|그 편지를 봉투에 넣으세요.
+370|adjective|동등한|All members have equal rights.|모든 회원은 동등한 권리를 가진다.
+371|verb|탈출하다|The cat escaped through the window.|그 고양이는 창문으로 탈출했다.
+372|adjective|특별한|This case needs especial care.|이 경우는 특별한 주의가 필요하다.|rel:especially
+373|noun|수필, 글|He wrote a short essay.|그는 짧은 수필을 썼다.
+374|verb|설립하다|They established the school long ago.|그들은 오래전에 그 학교를 설립했다.
+375|verb|추정하다|Estimate the total cost first.|먼저 전체 비용을 추정해 보세요.
+376|adverb|심지어, ~조차|Even children know that song.|심지어 아이들도 그 노래를 안다.
+377|noun|사건, 행사|The school event starts soon.|그 학교 행사는 곧 시작한다.|rel:eventually
+378|adverb|언제나, 한 번이라도|Have you ever seen snow?|너는 눈을 한 번이라도 본 적 있니?
+379|noun|증거|Police found clear evidence today.|경찰이 오늘 명확한 증거를 찾았다.
+380|adjective|악한|The story has an evil king.|그 이야기에는 악한 왕이 나온다.
+381|adjective|정확한|Tell me the exact time.|나에게 정확한 시간을 말해 줘.
+382|verb|검사하다|Doctors examine patients every morning.|의사들은 매일 아침 환자를 검사한다.|rel:exam,examination
+383|preposition|~을 제외하고|Everyone came except your brother.|네 형을 제외하고 모두 왔다.
+384|verb|교환하다|Let us exchange seats now.|이제 우리 자리를 바꾸자.
+385|verb|흥분시키다|The news excited the whole class.|그 소식은 학급 전체를 흥분시켰다.
+386|noun|변명|That excuse sounds quite weak.|그 변명은 꽤 빈약하게 들린다.
+387|verb|지치게 하다|Long walks exhaust little children.|긴 산책은 어린 아이들을 지치게 한다.
+388|verb|존재하다|Dinosaurs no longer exist today.|공룡은 오늘날 더는 존재하지 않는다.
+389|noun|출구|The exit is behind you.|출구는 네 뒤에 있다.
+390|verb|확장되다|Metal expands in hot weather.|금속은 더운 날씨에 확장된다.
+391|verb|기대하다|We expect rain this evening.|우리는 오늘 저녁에 비를 예상한다.
+392|noun|비용|Travel expense rose this year.|올해 여행 비용이 올랐다.|rel:expensive
+393|noun|경험|This trip was a great experience.|이 여행은 훌륭한 경험이었다.
+394|noun|실험|Our science experiment finally succeeded.|우리 과학 실험이 마침내 성공했다.
+395|noun|전문가|Ask an expert about it.|그것에 대해 전문가에게 물어보라.
+396|verb|설명하다|Explain the rule once more.|그 규칙을 한 번 더 설명해 주세요.
+397|verb|노출시키다|Do not expose skin to sunlight.|피부를 햇빛에 노출시키지 마라.
+398|verb|표현하다|Express your opinion more clearly.|네 의견을 더 분명하게 표현해라.
+399|verb|연장하다|They extended the deadline again.|그들은 마감일을 다시 연장했다.
+400|adjective|추가의|I need extra time today.|나는 오늘 추가 시간이 필요하다.

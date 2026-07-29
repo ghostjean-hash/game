@@ -1,0 +1,201 @@
+# Middle AUTHORING BATCH 01 — official ** representative forms 001–200
+1|adjective|~할 수 있는|She is able to solve it.|그녀는 그것을 해결할 수 있다.
+2|adjective|절대적인|We need absolute silence here.|우리는 여기서 완전한 침묵이 필요하다.
+3|noun|말투, 억양|Her accent sounds very familiar.|그녀의 말투는 아주 익숙하게 들린다.
+4|verb|받아들이다|Please accept my apology.|내 사과를 받아 주세요.
+5|noun|접근, 이용|Students have access to computers.|학생들은 컴퓨터를 이용할 수 있다.
+6|noun|사고|The accident blocked the road.|그 사고가 길을 막았다.
+7|noun|계좌, 기록|Check your account balance today.|오늘 계좌 잔액을 확인하세요.
+8|verb|혐의를 제기하다|They accused him of lying.|그들은 그가 거짓말했다고 비난했다.
+9|verb|이루다, 달성하다|She achieved her goal.|그녀는 자신의 목표를 이루었다.
+10|verb|적응하다|Plants adapt to dry weather.|식물은 건조한 날씨에 적응한다.
+11|verb|존경하다|I admire her courage.|나는 그녀의 용기를 존경한다.
+12|verb|인정하다|He admitted his mistake.|그는 자신의 실수를 인정했다.
+13|verb|입양하다|They adopted a small dog.|그들은 작은 개를 입양했다.
+14|verb|나아가다, 발전하다|Technology advances very quickly.|기술은 매우 빠르게 발전한다.
+15|noun|장점|This plan has one advantage.|이 계획에는 한 가지 장점이 있다.
+16|noun|모험|The trip was a real adventure.|그 여행은 진짜 모험이었다.
+17|verb|광고하다|They advertize new products.|그들은 새 제품을 광고한다.
+18|noun|조언|Thank you for your advice.|조언해 주셔서 고맙습니다.
+19|verb|조언하다|I advise you to rest.|나는 네가 쉬라고 조언한다.
+20|noun|일, 사건|It was a private affair.|그것은 사적인 일이었다.
+21|verb|영향을 주다|Rain affects our plans.|비는 우리의 계획에 영향을 준다.
+22|verb|할 여유가 있다|We cannot afford a car.|우리는 차를 살 여유가 없다.
+23|noun|대리인|The agent sold the house.|그 대리인은 그 집을 팔았다.
+24|noun|도움|First aid saved his life.|응급 처치가 그의 생명을 구했다.
+25|noun|목표|Our aim is clear.|우리의 목표는 분명하다.
+26|noun|항공사|The airline changed our flight.|그 항공사가 우리 비행편을 바꿨다.
+27|noun|공항|Meet me at the airport.|공항에서 나를 만나.
+28|noun|경보|The alarm woke everyone.|경보가 모두를 깨웠다.
+29|noun|알코올|This drink contains alcohol.|이 음료에는 알코올이 들어 있다.
+30|adjective|살아 있는|The fish is still alive.|그 물고기는 아직 살아 있다.
+31|verb|허락하다|My parents allow me to go.|부모님은 내가 가는 것을 허락하신다.
+32|adverb|소리 내어|Read the sentence aloud.|그 문장을 소리 내어 읽어라.
+33|verb|바꾸다|Heat can alter the shape.|열은 모양을 바꿀 수 있다.
+34|conjunction|비록 ~이지만|Although tired, she kept walking.|피곤했지만 그녀는 계속 걸었다.
+35|adverb|완전히|I am altogether ready now.|나는 이제 완전히 준비되었다.
+36|verb|놀라게 하다|The news amazed us.|그 소식은 우리를 놀라게 했다.
+37|noun|구급차|An ambulance arrived quickly.|구급차가 빨리 도착했다.
+38|preposition|~사이에|She stood among her friends.|그녀는 친구들 사이에 섰다.
+39|noun|양|Add a small amount of salt.|소금을 조금 넣어라.
+40|verb|즐겁게 하다|The clown amused the children.|그 광대는 아이들을 즐겁게 했다.
+41|noun|분석|The report needs careful analysis.|그 보고서는 신중한 분석이 필요하다.
+42|noun|천사|The child dressed as an angel.|그 아이는 천사 옷을 입었다.
+43|noun|분노|His anger soon faded.|그의 분노는 곧 사라졌다.
+44|verb|발표하다|They announced the winner.|그들은 우승자를 발표했다.
+45|verb|짜증 나게 하다|The noise annoys me.|그 소음은 나를 짜증 나게 한다.
+46|adjective|매년의|We hold an annual meeting.|우리는 매년 회의를 연다.
+47|noun|개미|An ant carried a leaf.|개미 한 마리가 잎을 옮겼다.
+48|adjective|불안한|She felt anxious before the test.|그녀는 시험 전에 불안했다.
+49|adverb|따로|They sat apart quietly.|그들은 조용히 떨어져 앉았다.
+50|noun|호소, 매력|The idea has wide appeal.|그 생각은 널리 매력이 있다.
+51|verb|나타나다|A rainbow appeared after rain.|비가 온 뒤 무지개가 나타났다.
+52|verb|신청하다|Please apply for the job.|그 일자리에 지원하세요.
+53|verb|임명하다|They appointed a new leader.|그들은 새 지도자를 임명했다.
+54|verb|고마워하다|I appreciate your help.|나는 네 도움에 고마워한다.
+55|noun|접근, 방법|Try a different approach.|다른 방법을 시도해 봐.
+56|adjective|적절한|Wear appropriate clothes today.|오늘은 알맞은 옷을 입어라.
+57|verb|논쟁하다|They argued about money.|그들은 돈 문제로 논쟁했다.
+58|noun|군대|He joined the army.|그는 군대에 들어갔다.
+59|verb|정리하다, 마련하다|We arranged the chairs.|우리는 의자를 정리했다.
+60|verb|체포하다|Police arrested the thief.|경찰이 그 도둑을 체포했다.
+61|noun|기사|I read an interesting article.|나는 흥미로운 기사를 읽었다.
+62|adverb|옆으로|Please step aside now.|이제 옆으로 비켜 주세요.
+63|adjective|잠든|The baby is asleep.|아기는 잠들어 있다.
+64|verb|평가하다|Teachers assess student work.|교사는 학생의 작업을 평가한다.
+65|verb|맡기다|The teacher assigned homework.|선생님은 숙제를 내주셨다.
+66|verb|돕다|Two nurses assisted the doctor.|두 간호사가 의사를 도왔다.
+67|verb|연관 짓다|We associate rain with clouds.|우리는 비를 구름과 연관 짓는다.
+68|verb|가정하다|Do not assume the answer.|답을 섣불리 가정하지 마라.
+69|noun|분위기|The room has a calm atmosphere.|그 방에는 차분한 분위기가 있다.
+70|verb|붙이다|Attach the label here.|여기에 라벨을 붙여라.
+71|noun|공격|The attack surprised everyone.|그 공격은 모두를 놀라게 했다.
+72|noun|시도|Her first attempt failed.|그녀의 첫 시도는 실패했다.
+73|verb|참석하다|I attended the meeting.|나는 그 회의에 참석했다.
+74|noun|주의|Please pay close attention.|주의를 기울여 주세요.
+75|noun|태도|His attitude was polite.|그의 태도는 공손했다.
+76|verb|끌어당기다|Bright flowers attract many bees.|밝은 꽃은 많은 벌을 끌어당긴다.
+77|noun|청중|The audience clapped loudly.|청중은 크게 박수 쳤다.
+78|adjective|자동의|This is an automatic door.|이것은 자동문이다.
+79|adjective|평균의|The average score was high.|평균 점수는 높았다.
+80|verb|피하다|Avoid touching the hot pan.|뜨거운 팬을 만지지 마라.
+81|adjective|깨어 있는|I was awake all night.|나는 밤새 깨어 있었다.
+82|noun|상|She won an award.|그녀는 상을 받았다.
+83|adjective|알고 있는|Be aware of the danger.|위험을 알고 있어라.
+84|adjective|어색한|It was an awkward moment.|그것은 어색한 순간이었다.
+85|noun|배경|Mountains filled the background.|산들이 배경을 채웠다.
+86|noun|베이컨|Bacon smells very delicious.|베이컨 냄새가 아주 맛있다.
+87|noun|균형|Keep your balance on ice.|얼음 위에서 균형을 유지해라.
+88|noun|풍선|The balloon flew away.|풍선이 날아가 버렸다.
+89|noun|밴드, 악단|The band played music.|그 악단은 음악을 연주했다.
+90|noun|쾅 하는 소리|We heard a loud bang.|우리는 큰 쾅 소리를 들었다.
+91|noun|막대, 술집|He sat at the bar.|그는 술집 바에 앉았다.
+92|adjective|맨몸의|His feet were bare.|그의 발은 맨발이었다.
+93|verb|짖다|The dog barked at me.|그 개는 나에게 짖었다.
+94|noun|기초|Trust is the basis of friendship.|신뢰는 우정의 기초이다.
+95|noun|배터리|The battery is dead.|배터리가 다 되었다.
+96|noun|전투|The battle lasted all day.|그 전투는 하루 종일 계속되었다.
+97|noun|만|The boat entered the bay.|배가 만으로 들어갔다.
+98|noun|콩|Add beans to the soup.|수프에 콩을 넣어라.
+99|verb|이기다|Our team beat them.|우리 팀이 그들을 이겼다.
+100|noun|맥주|He ordered a beer.|그는 맥주를 주문했다.
+101|verb|간청하다|He begged for another chance.|그는 한 번 더 기회를 간청했다.
+102|noun|믿음|Her belief gave her strength.|그녀의 믿음은 그녀에게 힘을 주었다.
+103|verb|속하다|This book belongs to me.|이 책은 내 것이다.
+104|noun|벤치|We sat on a bench.|우리는 벤치에 앉았다.
+105|verb|구부리다|Bend your knees slowly.|무릎을 천천히 구부려라.
+106|preposition|~아래에|The keys are beneath the pillow.|열쇠는 베개 아래에 있다.
+107|noun|이익|Exercise has many benefits.|운동은 많은 이점이 있다.
+108|verb|내기하다|I bet he will come.|나는 그가 올 거라고 장담한다.
+109|preposition|~너머에|The village lies beyond the hill.|그 마을은 언덕 너머에 있다.
+110|number|10억|The city has one billion people.|그 도시는 10억 명의 인구가 있다.
+111|noun|쓰레기통|Put it in the bin.|그것을 쓰레기통에 넣어라.
+112|verb|묶다|Bind the papers together.|서류를 함께 묶어라.
+113|noun|조금|Can I have a bit?|조금 먹어도 될까?
+114|verb|물다|The snake tried to bite.|그 뱀이 물려고 했다.
+115|adjective|쓴|The medicine tastes bitter.|그 약은 맛이 쓰다.
+116|verb|잘못을 탓하다|Do not blame yourself.|자신을 탓하지 마라.
+117|adjective|빈|Write on the blank page.|빈 쪽에 써라.
+118|noun|담요|Use a warm blanket.|따뜻한 담요를 사용해라.
+119|verb|축복하다|May peace bless your home.|평화가 당신의 집에 깃들기를 바란다.
+120|adjective|눈먼|The blind man used a cane.|눈먼 남자는 지팡이를 사용했다.
+121|noun|블록, 구역|Walk one block north.|북쪽으로 한 블록 걸어라.
+122|adjective|금발의|She has blonde hair.|그녀는 금발 머리이다.
+123|verb|피다|Flowers bloom in spring.|꽃은 봄에 핀다.
+124|verb|불다|Wind can blow hard.|바람은 세게 불 수 있다.
+125|verb|끓이다|Boil water for tea.|차를 위해 물을 끓여라.
+126|noun|폭탄|The bomb caused fear.|그 폭탄은 공포를 일으켰다.
+127|noun|유대, 결속|They share a strong bond.|그들은 강한 유대를 나눈다.
+128|noun|호황|The business saw a boom.|그 사업은 호황을 맞았다.
+129|noun|장화|My boots are muddy.|내 장화는 진흙투성이다.
+130|verb|지루하게 하다|The long speech bored us.|긴 연설은 우리를 지루하게 했다.
+131|noun|상사|My boss is kind.|내 상사는 친절하다.
+132|verb|괴롭히다|Do not bother your sister.|여동생을 괴롭히지 마라.
+133|verb|튀다|The ball bounced high.|공이 높이 튀었다.
+134|verb|절하다|They bowed to the king.|그들은 왕에게 절했다.
+135|noun|그릇|Put rice in the bowl.|그릇에 밥을 담아라.
+136|noun|뇌|The brain controls the body.|뇌는 몸을 조절한다.
+137|noun|브레이크|Press the brake slowly.|브레이크를 천천히 밟아라.
+138|noun|나뭇가지|A bird sat on a branch.|새가 나뭇가지에 앉았다.
+139|noun|상표|This brand is popular.|이 상표는 인기가 있다.
+140|noun|유방, 가슴|She held the baby to her breast.|그녀는 아기를 가슴에 안았다.
+141|noun|숨|Take a deep breath.|숨을 깊게 들이쉬어라.
+142|verb|숨 쉬다|Breathe slowly and relax.|천천히 숨 쉬며 긴장을 풀어라.
+143|noun|벽돌|The wall is made of brick.|그 벽은 벽돌로 만들어졌다.
+144|adjective|짧은|He gave a brief answer.|그는 짧게 대답했다.
+145|adjective|훌륭한|She had a brilliant idea.|그녀는 훌륭한 생각을 냈다.
+146|adjective|넓은|They crossed a broad river.|그들은 넓은 강을 건넜다.
+147|noun|거품|Bubbles rose in the water.|물속에서 거품이 올라왔다.
+148|noun|예산|Our budget is limited.|우리 예산은 한정되어 있다.
+149|noun|벌레|A bug landed on my hand.|벌레가 내 손에 앉았다.
+150|noun|부딪힘|The car has a small bump.|그 차에는 작은 흠집이 있다.
+151|noun|다발|She bought a bunch of flowers.|그녀는 꽃 한 다발을 샀다.
+152|verb|터지다|The balloon burst suddenly.|풍선이 갑자기 터졌다.
+153|verb|묻다|They buried the box.|그들은 상자를 묻었다.
+154|noun|덤불|A rabbit hid in the bush.|토끼가 덤불에 숨었다.
+155|noun|케이블|The cable is under the desk.|케이블은 책상 아래에 있다.
+156|noun|우리|The bird stayed in its cage.|새는 우리 안에 있었다.
+157|verb|계산하다|Calculate the total cost.|총비용을 계산해라.
+158|noun|달력|Mark the date on the calendar.|달력에 날짜를 표시해라.
+159|adjective|차분한|Stay calm during the test.|시험 중에는 차분히 있어라.
+160|adjective|능력 있는|She is capable of leading.|그녀는 이끌 능력이 있다.
+161|noun|곶|The cape reaches into the sea.|그 곶은 바다로 뻗어 있다.
+162|noun|수도|Seoul is the capital of Korea.|서울은 한국의 수도이다.
+163|noun|선장|The captain welcomed us aboard.|선장은 우리를 배에 맞이했다.
+164|noun|직업|She chose a medical career.|그녀는 의학 직업을 선택했다.
+165|noun|카펫|The carpet feels soft.|카펫은 부드럽게 느껴진다.
+166|noun|수레|Put the bags in the cart.|가방을 수레에 넣어라.
+167|verb|던지다|He cast the net wide.|그는 그물을 넓게 던졌다.
+168|noun|성|The castle stood on a hill.|그 성은 언덕 위에 있었다.
+169|noun|목록|The catalogue shows every item.|그 목록은 모든 물건을 보여 준다.
+170|noun|범주|Put each book in a category.|각 책을 범주에 넣어라.
+171|noun|원인|What caused the problem?|무엇이 그 문제를 일으켰니?
+172|noun|천장|A lamp hangs from the ceiling.|천장에 램프가 매달려 있다.
+173|noun|세포|Every cell needs water.|모든 세포에는 물이 필요하다.
+174|noun|세기|This building is a century old.|이 건물은 100년 되었다.
+175|noun|사슬|The dog pulled its chain.|개가 사슬을 당겼다.
+176|noun|의장|The chairman opened the meeting.|의장이 회의를 시작했다.
+177|noun|도전|The race is a real challenge.|그 경주는 진짜 도전이다.
+178|noun|우승자|The champion lifted the cup.|우승자가 컵을 들어 올렸다.
+179|noun|수로, 채널|The boat entered a narrow channel.|배가 좁은 수로로 들어갔다.
+180|noun|성격|He has a kind character.|그는 친절한 성격을 지녔다.
+181|noun|특징|Speed is its main characteristic.|속도는 그것의 주요 특징이다.
+182|verb|청구하다, 부과하다|They charged us extra.|그들은 우리에게 추가 요금을 청구했다.
+183|noun|매력|Her smile has charm.|그녀의 미소에는 매력이 있다.
+184|noun|도표|The chart shows the results.|그 도표는 결과를 보여 준다.
+185|verb|쫓다|The dog chased the ball.|개가 공을 쫓았다.
+186|verb|이야기하다|We chatted after class.|우리는 수업 후 이야기를 나눴다.
+187|noun|뺨|A tear ran down her cheek.|눈물이 그녀의 뺨을 타고 흘렀다.
+188|verb|환호하다|Fans cheered for the team.|팬들은 팀을 위해 환호했다.
+189|noun|흉부, 가슴|He felt pain in his chest.|그는 가슴에 통증을 느꼈다.
+190|verb|씹다|Chew your food slowly.|음식을 천천히 씹어라.
+191|noun|주요한 사람|The chief spoke first.|그 우두머리가 먼저 말했다.
+192|noun|조각|The cup has a small chip.|그 컵에는 작은 이가 나갔다.
+193|noun|선택|You have a choice.|너에게는 선택권이 있다.
+194|verb|자르다|Chop the onions finely.|양파를 잘게 썰어라.
+195|noun|담배|A cigarette is harmful.|담배 한 개비는 해롭다.
+196|noun|영화관|We met at the cinema.|우리는 영화관에서 만났다.
+197|noun|상황|We discussed the circumstance.|우리는 그 상황을 논의했다.
+198|noun|시민|Every citizen has rights.|모든 시민에게는 권리가 있다.
+199|adjective|시민의|They discussed civil rights.|그들은 시민권을 논의했다.
+200|verb|주장하다|He claimed the prize.|그는 그 상이 자기 것이라고 주장했다.

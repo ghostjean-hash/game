@@ -1,6 +1,11 @@
 # 다음 착수: AUTHORING BATCH 01 (새 세션 진입점)
 
-> **BATCH 01 완료 (2026-07-28)**. 산출 `docs/sources/moe-2022-english/authoring-batch-01.json`(200 카드), 검수 기록 `authoring-batch-01-review.md`. 다음은 사용자 승인 후 BATCH 02(201~400번, `daughter`~). 아래 절차·규칙은 BATCH 02~04에도 그대로 적용한다(입력 범위와 산출 파일명만 바뀜).
+> **현재 진행 상태 (2026-07-29 갱신)**
+>
+> - **초등 800 완료**: BATCH 01~04 제작 + 전수 재검토(결함 68건 수정) + 앱 세트 동기화까지 끝. 산출 `docs/sources/moe-2022-english/authoring-batch-0N.json`.
+> - **중등 400/1,200 진행 중**: 공식 `**` 대표형 기준 BATCH 01(001~200, `able`~`claim`)·BATCH 02(201~400, `clerk`~`extra`) 완료. 산출 `middle-authoring-batch-0N.json`, 검수 기록 `middle-authoring-batch-0N-review.md`, 사전 대조 `middle-lexical-crosscheck-batch-0N.md`.
+> - **다음은 중등 BATCH 03(401~600)이고 사용자 명시 지시 전까지 착수 금지**(앱 `CLAUDE.md` 1.2). 아래 절차·규칙은 중등 배치에도 그대로 적용한다 - 도구만 중등용으로 바꾼다: 조립 `node tools/assemble-middle-batch.mjs NN`, 검증 `node tools/validate-batch.mjs NN --middle`, 사전 대조 `node tools/lexical-crosscheck.mjs NN --middle --fetch --report`.
+> - **교차 중복 점검 추가(2026-07-29)**: 배치 내부 중복만 보지 말고 **먼저 만든 모든 배치와 단어·예문·뜻 완전 중복을 대조**한다. BATCH 02에서 `empty`/`entertain`이 BATCH 01의 `blank`/`amuse`와 뜻이 겹친 것을 이 점검이 잡았다.
 
 이 문서 하나만 읽고 바로 착수할 수 있게 정리한 것이다. 이전 대화 컨텍스트가 없어도 된다.
 

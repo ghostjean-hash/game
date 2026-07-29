@@ -2,6 +2,18 @@
 
 append-only. 최신이 위.
 
+## 2026-07-29 · 중등 AUTHORING BATCH 01·02 제작 (공식 대표형 400/1,200)
+
+- **배경**: 사용자가 "codex가 여기까지 작업했는데 이어서 작업할 수 있어? 검색하면서 토큰 소모를 많이 하면 안돼"로 맡겼다. 직전 codex 세션이 중등 배치 01(공식 `**` 대표형 001~200, `able`~`claim`)을 만들었으나 봉합·커밋 전이라 그 산출물도 이번 기재·커밋에 함께 포함한다.
+- **중등 범위 확정(직전 세션 사용자 승인 2026-07-29)**: 중등 출제 범위는 공식 `**` 대표형 1,200개 전체, 6배치 × 200. 고등은 무표시 대표형 1,000개 유지. `docs/vocab-master-plan.md` 6장에 반영됨.
+- **codex 산출(배치 01)**: `middle-1200-cards.json`(공식 원천 1,200), `middle-authoring-batch-01.json`(200 카드), 초안·검수 기록·사전 대조 기록. 신설 도구 `tools/extract-middle-source.mjs`(원천 추출), `tools/assemble-middle-batch.mjs`(압축 초안 → 정식 카드 조립), 기존 `validate-batch.mjs`·`lexical-crosscheck.mjs`에 중등(`--middle`) 지원 추가.
+- **이번 세션 산출(배치 02)**: 공식 순번 201~400(`clerk`~`extra`) 200 카드. `middle-authoring-batch-02.draft.txt`(압축 초안), `middle-authoring-batch-02.json`, `middle-authoring-batch-02-review.md`, `middle-lexical-crosscheck-batch-02.md`.
+- **작성 방식(토큰 절감안 그대로 적용)**: 카드당 압축 한 줄(`순번|품사|뜻|예문|번역|extra`)만 쓰고 표제어·ID·별표·학교급은 조립기가 공식 원천에서 채웠다(순번↔표제어 불일치 시 조립 중단). 40개씩 5묶음 순차 작성, 웹 검색 0회, 사전 정의 원문 통독 없이 스크립트 자동 대조에 맡겼다. 전수 목록 출력은 1회, 2차 검수는 기계 분석 요약만 봤다.
+- **검증**: `validate-batch.mjs 02 --middle` error 0 / warning 0. `lexical-crosscheck.mjs 02 --middle --fetch --report`로 Wiktionary Action API + Datamuse 실제 조회, 두 사전 근거 200건·근거 없음 0·품사 불일치 0. 예문 길이 5단어 178 / 6단어 22, 예문·번역 완전 중복 0.
+- **2차 검수 수정 4건**: `dentist` 예문이 번역과 어긋나 교체, `depress` 뜻을 "낙담시키다"→"우울하게 하다"로 교정, `empty`를 배치 01의 `blank`("빈")와 구별해 "텅 빈"으로, `entertain`을 배치 01의 `amuse`("즐겁게 하다")와 구별해 "즐겁게 해 주다, 접대하다"로.
+- **신설 점검 축**: 배치 내부 중복만 보던 codex 절차에 **직전 배치와의 교차 중복 점검**(단어·예문·뜻)을 더했다. 이번에 뜻 중복 2건을 그 점검이 잡았다. 배치 03 이후도 누적 배치 전체와 대조해야 한다.
+- **미완·경계**: 앱 자산(`src/`, `manifest.json`, `set-001~004.json`, 사용자 진도) 미변경. 제작 배치는 학습 세트가 아니라 `setId`·`learningOrder` 전부 null. 화면 적합성(browser-shot) 검수는 앱 적용 금지 단계라 미수행이고, 대신 뜻 길이(최대 11자)·예문 길이(최대 6단어)를 기계로 확인했다. `especial`은 현대 영어 사용 빈도가 낮아 예문이 격식적이지만 공식 대표형이라 유지하고 실빈출형 `especially`를 관련형에 넣었다.
+
 ## 2026-07-29 · 초등 800 전수 독립 재검토 + 결함 68건 수정 (앱 데이터까지 동기화)
 
 - **배경**: 사용자 요청("codex로 만든 800개 내용 검토, 토큰 소모 최소"). 감사 원장은 800개 전부 reviewed·지적 0으로 기록돼 있어 독립 재검사로 진행. 토큰은 `docs/NEXT-authoring-batch-01.md` 절감 방식대로 기계 검사 우선 + 전수 목록 1회 출력으로 통제.

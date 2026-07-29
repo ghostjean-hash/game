@@ -21,8 +21,9 @@ const EXAMPLE_MAX_ERR = 12; // 절대 상한
 const MEANING_MAX = 2;
 const RELATED_MAX = 2;
 
+const middle = process.argv.includes("--middle");
 const batchNo = (process.argv[2] || "01").padStart(2, "0");
-const batchFile = join(SRC, `authoring-batch-${batchNo}.json`);
+const batchFile = join(SRC, `${middle ? "middle-" : ""}authoring-batch-${batchNo}.json`);
 
 const errors = [];
 const warnings = [];
@@ -30,7 +31,7 @@ const err = (id, msg) => errors.push(`[${id}] ${msg}`);
 const warn = (id, msg) => warnings.push(`[${id}] ${msg}`);
 
 // 1. 공식 카드 풀 로드 (단어·별표의 유일 근거)
-const pool = JSON.parse(readFileSync(join(SRC, "elementary-800-cards.json"), "utf8"));
+const pool = JSON.parse(readFileSync(join(SRC, middle ? "middle-1200-cards.json" : "elementary-800-cards.json"), "utf8"));
 const poolByOrder = new Map(pool.map((c, i) => [i + 1, c]));
 const poolWords = new Set(pool.map((c) => c.word));
 
@@ -92,7 +93,8 @@ for (const card of batch) {
   const id = card.id || "(id 없음)";
 
   // id 형식·중복
-  if (!/^ev-moe2022-e-\d{4}$/.test(card.id || "")) err(id, `id 형식 위반 (ev-moe2022-e-NNNN 이어야 함)`);
+  const idPrefix = middle ? "ev-moe2022-m" : "ev-moe2022-e";
+  if (!new RegExp(`^${idPrefix}-\\d{4}$`).test(card.id || "")) err(id, `id 형식 위반 (${idPrefix}-NNNN 이어야 함)`);
   if (seenIds.has(card.id)) err(id, "id 중복");
   seenIds.add(card.id);
 
@@ -101,20 +103,20 @@ for (const card of batch) {
   if (!Number.isInteger(order) || order < 1 || order > pool.length) {
     err(id, `sourceOrder 범위 오류: ${order}`);
   } else {
-    const expectedId = `ev-moe2022-e-${String(order).padStart(4, "0")}`;
+    const expectedId = `${idPrefix}-${String(order).padStart(4, "0")}`;
     if (card.id !== expectedId) err(id, `id와 sourceOrder 불일치 (기대 ${expectedId})`);
     const official = poolByOrder.get(order);
     if (official && official.word !== card.word) {
       err(id, `공식 표제어 불일치: 배치 "${card.word}" vs 공식(order ${order}) "${official.word}"`);
     }
   }
-  if (!poolWords.has(card.word)) err(id, `공식 초등 카드 풀에 없는 단어: "${card.word}"`);
+  if (!poolWords.has(card.word)) err(id, `공식 ${middle ? "중등" : "초등"} 카드 풀에 없는 단어: "${card.word}"`);
   if (seenWords.has(card.word)) err(id, `단어 중복: "${card.word}"`);
   seenWords.add(card.word);
 
   // 고정 필드
-  if (card.sourceTier !== "elementary") err(id, `sourceTier는 "elementary" 고정`);
-  if (card.sourceMarker !== "*") err(id, `sourceMarker는 "*" 고정`);
+  if (card.sourceTier !== (middle ? "middle" : "elementary")) err(id, `sourceTier는 "${middle ? "middle" : "elementary"}" 고정`);
+  if (card.sourceMarker !== (middle ? "**" : "*")) err(id, `sourceMarker는 "${middle ? "**" : "*"}" 고정`);
   if (card.setId !== null) err(id, "setId는 이 단계에서 null 이어야 함 (학습 세트 미확정)");
   if (card.learningOrder !== null) err(id, "learningOrder는 이 단계에서 null 이어야 함");
 
