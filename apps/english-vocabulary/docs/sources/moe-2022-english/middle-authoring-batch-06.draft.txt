@@ -1,0 +1,201 @@
+# Middle AUTHORING BATCH 06 - official ** representative forms 1001-1200
+1001|noun|종|This forest protects rare species.|이 숲은 희귀한 종을 보호한다.|rel:special
+1002|adjective|구체적인|Give me a specific example.|구체적인 예를 하나 들어 줘.
+1003|noun|연설|His speech moved the crowd.|그의 연설이 군중을 감동시켰다.
+1004|verb|철자를 말하다|Can you spell your last name?|네 성의 철자를 말할 수 있니?
+1005|verb|쓰다|I spend little money weekly.|나는 매주 돈을 조금 쓴다.|irr:spent
+1006|verb|돌다|The wheel spins very fast.|그 바퀴는 아주 빠르게 돈다.|irr:spun
+1007|noun|정신|The team showed fighting spirit.|그 팀은 투지 있는 정신을 보였다.
+1008|verb|상하게 하다|Heat will spoil this milk.|열이 이 우유를 상하게 할 것이다.
+1009|noun|후원자|A local shop became our sponsor.|지역 가게가 우리 후원자가 되었다.
+1010|noun|점|A dark spot marked the wall.|어두운 점이 벽에 나 있었다.
+1011|verb|뿌리다|Spray water on the leaves.|잎에 물을 뿌려라.
+1012|verb|퍼지다|Good news spreads quickly here.|좋은 소식은 여기서 빠르게 퍼진다.|irr:spread
+1013|noun|첩자|The film follows a clever spy.|그 영화는 영리한 첩자를 따라간다.
+1014|noun|정사각형|Draw a small square here.|여기에 작은 정사각형을 그려라.
+1015|adjective|안정된|The patient is stable now.|그 환자는 이제 안정된 상태다.
+1016|noun|무대|Singers waited behind the stage.|가수들이 무대 뒤에서 기다렸다.
+1017|noun|계단|Climb these stairs slowly.|이 계단을 천천히 올라라.
+1018|noun|우표|Put a stamp on the letter.|편지에 우표를 붙여라.
+1019|noun|기준|This work meets our standard.|이 작업은 우리 기준을 충족한다.
+1020|verb|응시하다|Do not stare at strangers.|낯선 사람을 응시하지 마라.
+1021|noun|상태|The road is in a poor state.|그 도로는 나쁜 상태에 있다.
+1022|noun|역|The train left the station.|기차가 역을 떠났다.
+1023|adjective|꾸준한|Keep a steady pace today.|오늘은 꾸준한 속도를 유지해라.
+1024|verb|훔치다|Someone tried to steal bikes.|누군가 자전거를 훔치려 했다.|irr:stole,stolen
+1025|noun|증기|Hot steam rose from soup.|뜨거운 증기가 수프에서 올라왔다.
+1026|noun|강철|This bridge uses strong steel.|이 다리는 튼튼한 강철을 쓴다.
+1027|noun|걸음|Take one step to the left.|왼쪽으로 한 걸음 옮겨라.
+1028|noun|막대기|He drew lines with a stick.|그는 막대기로 선을 그렸다.
+1029|adverb|여전히|The shop is still open.|그 가게는 여전히 열려 있다.
+1030|verb|젓다|Stir the soup for a few minutes.|수프를 몇 분간 저어라.
+1031|noun|재고|The store checked its stock.|그 상점은 재고를 확인했다.
+1032|noun|위|My stomach hurts after lunch.|점심 후에 내 위가 아프다.
+1033|noun|폭풍|The storm broke two windows.|폭풍이 창문 두 개를 깼다.
+1034|adjective|곧은|Draw one straight line here.|여기에 곧은 선 하나를 그려라.
+1035|adjective|낯선|A strange sound woke me.|낯선 소리가 나를 깨웠다.
+1036|noun|전략|Our team needs a strategy.|우리 팀은 전략이 필요하다.
+1037|noun|딸기|She picked a red strawberry.|그녀는 빨간 딸기를 땄다.
+1038|noun|개울|A clear stream runs nearby.|맑은 개울이 근처에 흐른다.
+1039|noun|스트레스|Exams cause serious stress.|시험은 심각한 스트레스를 일으킨다.
+1040|verb|늘이다|Stretch your arms before running.|달리기 전에 팔을 늘여라.
+1041|verb|치다|Do not strike the glass.|유리를 치지 마라.|irr:struck
+1042|noun|끈|Tie the box with string.|끈으로 상자를 묶어라.
+1043|noun|구조|The building has a simple structure.|그 건물은 단순한 구조를 가진다.
+1044|verb|애쓰다|Young players struggle at first.|어린 선수들은 처음에 애쓴다.
+1045|noun|작업실|The artist rented a studio.|그 화가는 작업실을 빌렸다.
+1046|noun|물건|Put your stuff in boxes.|네 물건을 상자에 넣어라.
+1047|noun|과목|Math is my favorite subject.|수학은 내가 좋아하는 과목이다.|rel:subjective
+1048|verb|성공하다|She succeeded after many tries.|그녀는 여러 번 시도 끝에 성공했다.
+1049|noun|성공|Hard work brought him success.|노력이 그에게 성공을 가져왔다.
+1050|determiner|그런|I never heard such news.|나는 그런 소식을 들은 적이 없다.
+1051|adjective|갑작스러운|A sudden shower soaked us.|갑작스러운 소나기가 우리를 적셨다.
+1052|verb|고통받다|Many people suffer from noise.|많은 사람이 소음으로 고통받는다.
+1053|verb|권하다|He suggested an early start.|그는 이른 출발을 권했다.
+1054|noun|정장|He wore a dark suit.|그는 어두운 정장을 입었다.
+1055|noun|합계|The sum reached twenty dollars.|합계가 이십 달러에 이르렀다.|rel:summary
+1056|adjective|아주 좋은|The show was super today.|그 공연은 오늘 아주 좋았다.
+1057|noun|저녁 식사|We finished supper before eight.|우리는 여덟 시 전에 저녁 식사를 마쳤다.
+1058|verb|공급하다|The farm supplies fresh milk.|그 농장은 신선한 우유를 공급한다.
+1059|verb|지지하다|Most members support this plan.|대부분의 구성원이 이 계획을 지지한다.
+1060|verb|추측하다|I suppose she left early.|나는 그녀가 일찍 떠났다고 추측한다.
+1061|noun|표면|The table surface feels cold.|탁자 표면이 차갑게 느껴진다.
+1062|verb|깜짝 놀라게 하다|Her gift surprised the class.|그녀의 선물이 반을 깜짝 놀라게 했다.
+1063|verb|둘러싸다|Tall trees surround the pond.|큰 나무들이 연못을 둘러싼다.
+1064|noun|설문 조사|The survey asked five questions.|그 설문 조사는 다섯 질문을 했다.
+1065|verb|살아남다|Few plants survive the winter.|겨울을 살아남는 식물은 적다.
+1066|verb|혐의를 두다|Police suspect the second driver.|경찰은 두 번째 운전자에게 혐의를 둔다.
+1067|verb|삼키다|Swallow the medicine with water.|물과 함께 약을 삼켜라.
+1068|noun|스웨터|She bought a warm sweater.|그녀는 따뜻한 스웨터를 샀다.
+1069|verb|쓸다|Sweep the floor after dinner.|저녁 후에 바닥을 쓸어라.|irr:swept
+1070|adjective|달콤한|This tea tastes sweet.|이 차는 달콤한 맛이 난다.
+1071|verb|흔들리다|The old gate swings loudly.|낡은 문이 요란하게 흔들린다.|irr:swung
+1072|noun|스위치|Press the light switch there.|거기 조명 스위치를 눌러라.
+1073|noun|체계|Our school changed its system.|우리 학교는 체계를 바꿨다.
+1074|noun|이야기|Grandpa told an old tale.|할아버지가 옛 이야기를 들려주셨다.
+1075|noun|탱크|The water tank looks empty.|그 물탱크는 비어 보인다.
+1076|verb|톡톡 치다|She tapped my shoulder twice.|그녀가 내 어깨를 두 번 톡톡 쳤다.
+1077|noun|표적|The arrow hit the target.|화살이 표적을 맞혔다.
+1078|noun|세금|Everyone must pay some tax.|모두가 약간의 세금을 내야 한다.
+1079|noun|차|She drinks green tea daily.|그녀는 매일 녹차를 마신다.
+1080|noun|눈물|A single tear fell down.|눈물 한 방울이 떨어졌다.
+1081|noun|기법|This painting uses an old technique.|이 그림은 옛 기법을 쓴다.
+1082|noun|과학 기술|New technology changed our lives.|새 과학 기술이 우리 삶을 바꿨다.
+1083|adjective|십대의|Teenage students filled the hall.|십대 학생들이 강당을 채웠다.
+1084|noun|온도|The temperature dropped last night.|어젯밤 온도가 떨어졌다.
+1085|verb|~하는 경향이 있다|Prices tend to rise slowly.|가격은 천천히 오르는 경향이 있다.
+1086|adjective|긴장한|The players looked tense.|그 선수들은 긴장해 보였다.
+1087|noun|학기|The new term starts Monday.|새 학기가 월요일에 시작된다.
+1088|adjective|끔찍한|We had terrible weather yesterday.|우리는 어제 끔찍한 날씨를 겪었다.
+1089|noun|글|Read the text once more.|그 글을 한 번 더 읽어라.
+1090|noun|극장|The theater closed last year.|그 극장은 작년에 문을 닫았다.
+1091|adverb|그때|We were much younger then.|우리는 그때 훨씬 어렸다.
+1092|noun|이론|His theory explains the result.|그의 이론이 그 결과를 설명한다.
+1093|adverb|그러므로|It rained, therefore we stayed.|비가 왔고 그러므로 우리는 머물렀다.
+1094|adjective|두꺼운|A thick book lay open.|두꺼운 책이 펼쳐져 있었다.
+1095|noun|도둑|The thief escaped through windows.|그 도둑은 창문으로 달아났다.
+1096|adjective|얇은|Cut the bread very thin.|빵을 아주 얇게 잘라라.
+1097|conjunction|~이긴 하지만|Though tired, she kept working.|피곤하긴 했지만 그녀는 계속 일했다.
+1098|number|천|A thousand people joined us.|천 명이 우리와 함께했다.
+1099|noun|위협|Fire is a real threat.|불은 진짜 위협이다.
+1100|noun|목구멍|My throat feels dry today.|내 목구멍이 오늘 건조하다.
+1101|preposition|~을 통과하여|The train ran through tunnels.|기차가 터널을 통과하여 달렸다.
+1102|verb|던져 보내다|Throw the ball to me.|공을 내게 던져 보내라.|irr:threw,thrown
+1103|adverb|이리하여|Thus the long trip ended.|이리하여 긴 여행이 끝났다.
+1104|noun|조수|The tide covered the sand.|조수가 모래를 덮었다.|rel:tidy
+1105|verb|끈으로 매다|Tie your shoes before running.|달리기 전에 신발 끈을 매라.
+1106|adjective|꽉 끼는|These pants feel too tight.|이 바지는 너무 꽉 끼는 느낌이다.
+1107|preposition|~까지|Wait here till noon.|정오까지 여기서 기다려라.
+1108|noun|양철|The old tin box rusted.|낡은 양철 상자가 녹슬었다.
+1109|adjective|아주 작은|A tiny bird sat there.|아주 작은 새가 거기 앉아 있었다.
+1110|noun|요령|She gave me a useful tip.|그녀는 내게 유용한 요령을 알려 주었다.
+1111|noun|제목|Write the title on top.|맨 위에 제목을 써라.|rel:entitle
+1112|noun|토스트|He ate toast for breakfast.|그는 아침으로 토스트를 먹었다.
+1113|noun|발가락|I hurt my little toe.|나는 작은 발가락을 다쳤다.
+1114|noun|화장실|The toilet is down the hall.|화장실은 복도 끝에 있다.
+1115|noun|어조|His tone sounded quite serious.|그의 어조는 꽤 진지하게 들렸다.
+1116|noun|혀|The soup burned my tongue.|그 수프가 내 혀를 데게 했다.
+1117|noun|도구|A hammer is a simple tool.|망치는 단순한 도구다.
+1118|noun|주제|Choose one topic for writing.|글쓰기를 위한 주제 하나를 골라라.
+1119|noun|총계|The total came to fifty.|총계가 오십이 되었다.
+1120|adjective|힘든|That was a tough game.|그것은 힘든 경기였다.
+1121|noun|관광|We joined a city tour.|우리는 도시 관광에 참가했다.
+1122|preposition|~쪽으로|He walked toward the gate.|그는 문 쪽으로 걸어갔다.
+1123|noun|수건|Dry your hands with a towel.|수건으로 손을 말려라.
+1124|noun|탑|The stone tower stands alone.|그 돌탑은 홀로 서 있다.
+1125|noun|흔적|Snow kept a clear trace.|눈이 분명한 흔적을 남겼다.
+1126|noun|무역|Sea trade grew last year.|해상 무역이 작년에 성장했다.
+1127|noun|전통|This village keeps old tradition.|이 마을은 오랜 전통을 지킨다.
+1128|noun|교통|Morning traffic moved very slowly.|아침 교통이 아주 느리게 움직였다.
+1129|verb|옮기다|They transferred him to Seoul.|그들은 그를 서울로 옮겼다.
+1130|verb|수송하다|Trucks transport fresh fruit daily.|트럭이 매일 신선한 과일을 수송한다.|rel:transportation
+1131|noun|덫|A mouse escaped the trap.|쥐 한 마리가 덫을 빠져나갔다.
+1132|noun|쟁반|She carried a heavy tray.|그녀는 무거운 쟁반을 날랐다.
+1133|verb|대하다|Treat every guest kindly.|모든 손님을 친절하게 대해라.
+1134|noun|삼각형|Draw a blue triangle here.|여기에 파란 삼각형을 그려라.
+1135|noun|속임수|That card trick fooled everyone.|그 카드 속임수가 모두를 속였다.
+1136|noun|곤란|His answer caused some trouble.|그의 대답이 약간의 곤란을 일으켰다.
+1137|noun|나무 줄기|Birds sat on the wide trunk.|새들이 넓은 나무 줄기에 앉았다.
+1138|noun|신뢰감|Their trust grew over years.|그들의 신뢰감은 여러 해에 걸쳐 자랐다.
+1139|noun|진실|Tell me the whole truth.|내게 진실 전부를 말해라.
+1140|noun|곡조|She sang a soft tune.|그녀는 부드러운 곡조를 노래했다.
+1141|noun|쌍둥이|My twin lives in Busan.|내 쌍둥이는 부산에 산다.
+1142|verb|비틀다|Do not twist the cable.|그 전선을 비틀지 마라.
+1143|noun|제복|Every guard wears a uniform.|모든 경비원이 제복을 입는다.
+1144|noun|단위|Meter is a length unit.|미터는 길이 단위다.
+1145|verb|하나로 묶다|One goal united the team.|하나의 목표가 팀을 하나로 묶었다.|rel:union
+1146|noun|대학교|She entered a small university.|그녀는 작은 대학교에 입학했다.
+1147|conjunction|~하지 않으면|Unless it rains, we walk.|비가 오지 않으면 우리는 걷는다.
+1148|preposition|~할 때까지|Stay inside until the rain stops.|비가 그칠 때까지 안에 있어라.
+1149|preposition|~위에|A cat sat upon the roof.|고양이가 지붕 위에 앉아 있었다.
+1150|adjective|위쪽의|Books sit on the upper shelf.|책들이 위쪽 선반에 있다.
+1151|verb|속상하게 하다|The loss upset our players.|그 패배가 우리 선수들을 속상하게 했다.
+1152|noun|골짜기|A river runs through the valley.|강이 골짜기를 지나 흐른다.
+1153|noun|가치|This coin has little value.|이 동전은 가치가 거의 없다.
+1154|noun|승합차|Our van carried six people.|우리 승합차는 여섯 명을 태웠다.
+1155|adjective|다양한|The shop sells various hats.|그 가게는 다양한 모자를 판다.
+1156|verb|서로 다르다|Prices vary between the shops.|가격은 가게마다 서로 다르다.
+1157|noun|차량|One vehicle blocked our exit.|차량 한 대가 우리 출구를 막았다.
+1158|noun|판|This is the newest version.|이것은 가장 최신 판이다.
+1159|noun|피해자|The victim received quick help.|그 피해자는 빠른 도움을 받았다.
+1160|noun|경치|The room has a fine view.|그 방은 좋은 경치를 지녔다.|rel:interview,review
+1161|noun|별장|They rented a seaside villa.|그들은 바닷가 별장을 빌렸다.
+1162|noun|마을|Our village has one school.|우리 마을에는 학교가 하나 있다.
+1163|adjective|폭력적인|The film felt too violent.|그 영화는 너무 폭력적으로 느껴졌다.
+1164|noun|시력|Her vision improved with glasses.|그녀의 시력은 안경으로 좋아졌다.
+1165|noun|음량|Turn the volume down please.|음량을 줄여 주세요.
+1166|noun|자원봉사자|Every volunteer wore a badge.|모든 자원봉사자가 배지를 달았다.
+1167|verb|투표하다|Students voted for a leader.|학생들이 대표를 뽑으려 투표했다.
+1168|noun|임금|The daily wage rose this year.|일당 임금이 올해 올랐다.
+1169|verb|경고하다|The sign warns about ice.|그 표지판은 얼음을 경고한다.
+1170|verb|낭비하다|Do not waste clean water.|깨끗한 물을 낭비하지 마라.
+1171|noun|파도|A high wave hit the boat.|높은 파도가 배를 쳤다.
+1172|adjective|약한|The old dog looks weak.|그 늙은 개는 약해 보인다.
+1173|noun|무기|Guards carried no weapon inside.|경비원들은 안에서 무기를 지니지 않았다.
+1174|verb|무게가 나가다|This box weighs ten kilograms.|이 상자는 십 킬로그램 무게가 나간다.
+1175|noun|고래|A huge whale passed our boat.|거대한 고래가 우리 배를 지나갔다.
+1176|noun|바퀴|The front wheel came loose.|앞바퀴가 헐거워졌다.
+1177|conjunction|~인지 아닌지|Ask whether the shop opened.|그 가게가 열었는지 아닌지 물어봐라.
+1178|determiner|어느|Which color do you prefer?|어느 색을 선호하니?
+1179|conjunction|~하는 동안|Read while the soup cooks.|수프가 끓는 동안 책을 읽어라.
+1180|verb|속삭이다|She whispered a short answer.|그녀는 짧은 대답을 속삭였다.
+1181|noun|호루라기|The coach blew his whistle.|코치가 호루라기를 불었다.
+1182|adjective|온|The whole class stood up.|온 학급이 일어섰다.
+1183|adjective|폭이 넓은|We crossed a wide field.|우리는 폭이 넓은 들판을 건넜다.
+1184|adjective|야생의|Wild birds visit this lake.|야생 새들이 이 호수를 찾는다.
+1185|noun|날개|The bird hurt one wing.|그 새는 날개 하나를 다쳤다.
+1186|verb|닦다|Wipe the table before eating.|먹기 전에 탁자를 닦아라.
+1187|noun|철사|Thin wire held the sign.|가는 철사가 그 표지판을 붙들었다.
+1188|adjective|현명한|That was a wise choice.|그것은 현명한 선택이었다.
+1189|preposition|~이내에|Return the book within days.|며칠 이내에 그 책을 반납해라.
+1190|preposition|~없이|She left without a word.|그녀는 한마디 없이 떠났다.
+1191|verb|궁금해하다|I wonder about his plan.|나는 그의 계획이 궁금하다.
+1192|noun|양털|This blanket uses soft wool.|이 담요는 부드러운 양털을 쓴다.
+1193|adjective|~의 가치가 있는|This trip is worth trying.|이 여행은 해 볼 가치가 있다.
+1194|auxiliary|~하겠다|I would help you gladly.|나는 기꺼이 너를 돕겠다.
+1195|noun|상처|The deep wound healed slowly.|그 깊은 상처는 천천히 나았다.
+1196|verb|감싸다|Wrap the gift with paper.|종이로 선물을 감싸라.
+1197|verb|소리치다|Do not yell at children.|아이들에게 소리치지 마라.
+1198|adverb|아직|The bus has not come yet.|버스가 아직 오지 않았다.
+1199|noun|얼룩말|A zebra drank by the river.|얼룩말 한 마리가 강가에서 물을 마셨다.
+1200|number|영|The score stayed at zero.|점수는 영에 머물렀다.

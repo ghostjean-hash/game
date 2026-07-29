@@ -1,0 +1,3837 @@
+[
+  {
+    "id": "ev-moe2022-m-1001",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "species",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "종"
+    ],
+    "relatedForms": [
+      "special"
+    ],
+    "irregularForms": [],
+    "example": "This forest protects rare species.",
+    "exampleKr": "이 숲은 희귀한 종을 보호한다.",
+    "sourceOrder": 1001,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1002",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "specific",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "구체적인"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Give me a specific example.",
+    "exampleKr": "구체적인 예를 하나 들어 줘.",
+    "sourceOrder": 1002,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1003",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "speech",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "연설"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "His speech moved the crowd.",
+    "exampleKr": "그의 연설이 군중을 감동시켰다.",
+    "sourceOrder": 1003,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1004",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "spell",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "철자를 말하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Can you spell your last name?",
+    "exampleKr": "네 성의 철자를 말할 수 있니?",
+    "sourceOrder": 1004,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1005",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "spend",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "쓰다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [
+      "spent"
+    ],
+    "example": "I spend little money weekly.",
+    "exampleKr": "나는 매주 돈을 조금 쓴다.",
+    "sourceOrder": 1005,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1006",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "spin",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "돌다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [
+      "spun"
+    ],
+    "example": "The wheel spins very fast.",
+    "exampleKr": "그 바퀴는 아주 빠르게 돈다.",
+    "sourceOrder": 1006,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1007",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "spirit",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "정신"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The team showed fighting spirit.",
+    "exampleKr": "그 팀은 투지 있는 정신을 보였다.",
+    "sourceOrder": 1007,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1008",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "spoil",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "상하게 하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Heat will spoil this milk.",
+    "exampleKr": "열이 이 우유를 상하게 할 것이다.",
+    "sourceOrder": 1008,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1009",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "sponsor",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "후원자"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A local shop became our sponsor.",
+    "exampleKr": "지역 가게가 우리 후원자가 되었다.",
+    "sourceOrder": 1009,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1010",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "spot",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "점"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A dark spot marked the wall.",
+    "exampleKr": "어두운 점이 벽에 나 있었다.",
+    "sourceOrder": 1010,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1011",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "spray",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "뿌리다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Spray water on the leaves.",
+    "exampleKr": "잎에 물을 뿌려라.",
+    "sourceOrder": 1011,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1012",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "spread",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "퍼지다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [
+      "spread"
+    ],
+    "example": "Good news spreads quickly here.",
+    "exampleKr": "좋은 소식은 여기서 빠르게 퍼진다.",
+    "sourceOrder": 1012,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1013",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "spy",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "첩자"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The film follows a clever spy.",
+    "exampleKr": "그 영화는 영리한 첩자를 따라간다.",
+    "sourceOrder": 1013,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1014",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "square",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "정사각형"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Draw a small square here.",
+    "exampleKr": "여기에 작은 정사각형을 그려라.",
+    "sourceOrder": 1014,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1015",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stable",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "안정된"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The patient is stable now.",
+    "exampleKr": "그 환자는 이제 안정된 상태다.",
+    "sourceOrder": 1015,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1016",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stage",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "무대"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Singers waited behind the stage.",
+    "exampleKr": "가수들이 무대 뒤에서 기다렸다.",
+    "sourceOrder": 1016,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1017",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stairs",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "계단"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Climb these stairs slowly.",
+    "exampleKr": "이 계단을 천천히 올라라.",
+    "sourceOrder": 1017,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1018",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stamp",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "우표"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Put a stamp on the letter.",
+    "exampleKr": "편지에 우표를 붙여라.",
+    "sourceOrder": 1018,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1019",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "standard",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "기준"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This work meets our standard.",
+    "exampleKr": "이 작업은 우리 기준을 충족한다.",
+    "sourceOrder": 1019,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1020",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stare",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "응시하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Do not stare at strangers.",
+    "exampleKr": "낯선 사람을 응시하지 마라.",
+    "sourceOrder": 1020,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1021",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "state",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "상태"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The road is in a poor state.",
+    "exampleKr": "그 도로는 나쁜 상태에 있다.",
+    "sourceOrder": 1021,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1022",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "station",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "역"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The train left the station.",
+    "exampleKr": "기차가 역을 떠났다.",
+    "sourceOrder": 1022,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1023",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "steady",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "꾸준한"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Keep a steady pace today.",
+    "exampleKr": "오늘은 꾸준한 속도를 유지해라.",
+    "sourceOrder": 1023,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1024",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "steal",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "훔치다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [
+      "stole",
+      "stolen"
+    ],
+    "example": "Someone tried to steal bikes.",
+    "exampleKr": "누군가 자전거를 훔치려 했다.",
+    "sourceOrder": 1024,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1025",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "steam",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "증기"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Hot steam rose from soup.",
+    "exampleKr": "뜨거운 증기가 수프에서 올라왔다.",
+    "sourceOrder": 1025,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1026",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "steel",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "강철"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This bridge uses strong steel.",
+    "exampleKr": "이 다리는 튼튼한 강철을 쓴다.",
+    "sourceOrder": 1026,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1027",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "step",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "걸음"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Take one step to the left.",
+    "exampleKr": "왼쪽으로 한 걸음 옮겨라.",
+    "sourceOrder": 1027,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1028",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stick",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "막대기"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "He drew lines with a stick.",
+    "exampleKr": "그는 막대기로 선을 그렸다.",
+    "sourceOrder": 1028,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1029",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "still",
+    "partOfSpeech": [
+      "adverb"
+    ],
+    "meaningKr": [
+      "여전히"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The shop is still open.",
+    "exampleKr": "그 가게는 여전히 열려 있다.",
+    "sourceOrder": 1029,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1030",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stir",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "젓다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Stir the soup for a few minutes.",
+    "exampleKr": "수프를 몇 분간 저어라.",
+    "sourceOrder": 1030,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1031",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stock",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "재고"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The store checked its stock.",
+    "exampleKr": "그 상점은 재고를 확인했다.",
+    "sourceOrder": 1031,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1032",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stomach",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "위"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "My stomach hurts after lunch.",
+    "exampleKr": "점심 후에 내 위가 아프다.",
+    "sourceOrder": 1032,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1033",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "storm",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "폭풍"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The storm broke two windows.",
+    "exampleKr": "폭풍이 창문 두 개를 깼다.",
+    "sourceOrder": 1033,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1034",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "straight",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "곧은"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Draw one straight line here.",
+    "exampleKr": "여기에 곧은 선 하나를 그려라.",
+    "sourceOrder": 1034,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1035",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "strange",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "낯선"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A strange sound woke me.",
+    "exampleKr": "낯선 소리가 나를 깨웠다.",
+    "sourceOrder": 1035,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1036",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "strategy",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "전략"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Our team needs a strategy.",
+    "exampleKr": "우리 팀은 전략이 필요하다.",
+    "sourceOrder": 1036,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1037",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "strawberry",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "딸기"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She picked a red strawberry.",
+    "exampleKr": "그녀는 빨간 딸기를 땄다.",
+    "sourceOrder": 1037,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1038",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stream",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "개울"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A clear stream runs nearby.",
+    "exampleKr": "맑은 개울이 근처에 흐른다.",
+    "sourceOrder": 1038,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1039",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stress",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "스트레스"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Exams cause serious stress.",
+    "exampleKr": "시험은 심각한 스트레스를 일으킨다.",
+    "sourceOrder": 1039,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1040",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stretch",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "늘이다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Stretch your arms before running.",
+    "exampleKr": "달리기 전에 팔을 늘여라.",
+    "sourceOrder": 1040,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1041",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "strike",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "치다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [
+      "struck"
+    ],
+    "example": "Do not strike the glass.",
+    "exampleKr": "유리를 치지 마라.",
+    "sourceOrder": 1041,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1042",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "string",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "끈"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Tie the box with string.",
+    "exampleKr": "끈으로 상자를 묶어라.",
+    "sourceOrder": 1042,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1043",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "structure",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "구조"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The building has a simple structure.",
+    "exampleKr": "그 건물은 단순한 구조를 가진다.",
+    "sourceOrder": 1043,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1044",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "struggle",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "애쓰다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Young players struggle at first.",
+    "exampleKr": "어린 선수들은 처음에 애쓴다.",
+    "sourceOrder": 1044,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1045",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "studio",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "작업실"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The artist rented a studio.",
+    "exampleKr": "그 화가는 작업실을 빌렸다.",
+    "sourceOrder": 1045,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1046",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "stuff",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "물건"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Put your stuff in boxes.",
+    "exampleKr": "네 물건을 상자에 넣어라.",
+    "sourceOrder": 1046,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1047",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "subject",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "과목"
+    ],
+    "relatedForms": [
+      "subjective"
+    ],
+    "irregularForms": [],
+    "example": "Math is my favorite subject.",
+    "exampleKr": "수학은 내가 좋아하는 과목이다.",
+    "sourceOrder": 1047,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1048",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "succeed",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "성공하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She succeeded after many tries.",
+    "exampleKr": "그녀는 여러 번 시도 끝에 성공했다.",
+    "sourceOrder": 1048,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1049",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "success",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "성공"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Hard work brought him success.",
+    "exampleKr": "노력이 그에게 성공을 가져왔다.",
+    "sourceOrder": 1049,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1050",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "such",
+    "partOfSpeech": [
+      "determiner"
+    ],
+    "meaningKr": [
+      "그런"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "I never heard such news.",
+    "exampleKr": "나는 그런 소식을 들은 적이 없다.",
+    "sourceOrder": 1050,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1051",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "sudden",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "갑작스러운"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A sudden shower soaked us.",
+    "exampleKr": "갑작스러운 소나기가 우리를 적셨다.",
+    "sourceOrder": 1051,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1052",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "suffer",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "고통받다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Many people suffer from noise.",
+    "exampleKr": "많은 사람이 소음으로 고통받는다.",
+    "sourceOrder": 1052,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1053",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "suggest",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "권하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "He suggested an early start.",
+    "exampleKr": "그는 이른 출발을 권했다.",
+    "sourceOrder": 1053,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1054",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "suit",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "정장"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "He wore a dark suit.",
+    "exampleKr": "그는 어두운 정장을 입었다.",
+    "sourceOrder": 1054,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1055",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "sum",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "합계"
+    ],
+    "relatedForms": [
+      "summary"
+    ],
+    "irregularForms": [],
+    "example": "The sum reached twenty dollars.",
+    "exampleKr": "합계가 이십 달러에 이르렀다.",
+    "sourceOrder": 1055,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1056",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "super",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "아주 좋은"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The show was super today.",
+    "exampleKr": "그 공연은 오늘 아주 좋았다.",
+    "sourceOrder": 1056,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1057",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "supper",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "저녁 식사"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "We finished supper before eight.",
+    "exampleKr": "우리는 여덟 시 전에 저녁 식사를 마쳤다.",
+    "sourceOrder": 1057,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1058",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "supply",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "공급하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The farm supplies fresh milk.",
+    "exampleKr": "그 농장은 신선한 우유를 공급한다.",
+    "sourceOrder": 1058,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1059",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "support",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "지지하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Most members support this plan.",
+    "exampleKr": "대부분의 구성원이 이 계획을 지지한다.",
+    "sourceOrder": 1059,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1060",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "suppose",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "추측하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "I suppose she left early.",
+    "exampleKr": "나는 그녀가 일찍 떠났다고 추측한다.",
+    "sourceOrder": 1060,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1061",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "surface",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "표면"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The table surface feels cold.",
+    "exampleKr": "탁자 표면이 차갑게 느껴진다.",
+    "sourceOrder": 1061,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1062",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "surprise",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "깜짝 놀라게 하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Her gift surprised the class.",
+    "exampleKr": "그녀의 선물이 반을 깜짝 놀라게 했다.",
+    "sourceOrder": 1062,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1063",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "surround",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "둘러싸다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Tall trees surround the pond.",
+    "exampleKr": "큰 나무들이 연못을 둘러싼다.",
+    "sourceOrder": 1063,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1064",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "survey",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "설문 조사"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The survey asked five questions.",
+    "exampleKr": "그 설문 조사는 다섯 질문을 했다.",
+    "sourceOrder": 1064,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1065",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "survive",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "살아남다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Few plants survive the winter.",
+    "exampleKr": "겨울을 살아남는 식물은 적다.",
+    "sourceOrder": 1065,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1066",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "suspect",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "혐의를 두다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Police suspect the second driver.",
+    "exampleKr": "경찰은 두 번째 운전자에게 혐의를 둔다.",
+    "sourceOrder": 1066,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1067",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "swallow",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "삼키다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Swallow the medicine with water.",
+    "exampleKr": "물과 함께 약을 삼켜라.",
+    "sourceOrder": 1067,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1068",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "sweater",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "스웨터"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She bought a warm sweater.",
+    "exampleKr": "그녀는 따뜻한 스웨터를 샀다.",
+    "sourceOrder": 1068,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1069",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "sweep",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "쓸다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [
+      "swept"
+    ],
+    "example": "Sweep the floor after dinner.",
+    "exampleKr": "저녁 후에 바닥을 쓸어라.",
+    "sourceOrder": 1069,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1070",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "sweet",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "달콤한"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This tea tastes sweet.",
+    "exampleKr": "이 차는 달콤한 맛이 난다.",
+    "sourceOrder": 1070,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1071",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "swing",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "흔들리다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [
+      "swung"
+    ],
+    "example": "The old gate swings loudly.",
+    "exampleKr": "낡은 문이 요란하게 흔들린다.",
+    "sourceOrder": 1071,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1072",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "switch",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "스위치"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Press the light switch there.",
+    "exampleKr": "거기 조명 스위치를 눌러라.",
+    "sourceOrder": 1072,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1073",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "system",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "체계"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Our school changed its system.",
+    "exampleKr": "우리 학교는 체계를 바꿨다.",
+    "sourceOrder": 1073,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1074",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tale",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "이야기"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Grandpa told an old tale.",
+    "exampleKr": "할아버지가 옛 이야기를 들려주셨다.",
+    "sourceOrder": 1074,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1075",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tank",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "탱크"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The water tank looks empty.",
+    "exampleKr": "그 물탱크는 비어 보인다.",
+    "sourceOrder": 1075,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1076",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tap",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "톡톡 치다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She tapped my shoulder twice.",
+    "exampleKr": "그녀가 내 어깨를 두 번 톡톡 쳤다.",
+    "sourceOrder": 1076,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1077",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "target",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "표적"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The arrow hit the target.",
+    "exampleKr": "화살이 표적을 맞혔다.",
+    "sourceOrder": 1077,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1078",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tax",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "세금"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Everyone must pay some tax.",
+    "exampleKr": "모두가 약간의 세금을 내야 한다.",
+    "sourceOrder": 1078,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1079",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tea",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "차"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She drinks green tea daily.",
+    "exampleKr": "그녀는 매일 녹차를 마신다.",
+    "sourceOrder": 1079,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1080",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tear",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "눈물"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A single tear fell down.",
+    "exampleKr": "눈물 한 방울이 떨어졌다.",
+    "sourceOrder": 1080,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1081",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "technique",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "기법"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This painting uses an old technique.",
+    "exampleKr": "이 그림은 옛 기법을 쓴다.",
+    "sourceOrder": 1081,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1082",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "technology",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "과학 기술"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "New technology changed our lives.",
+    "exampleKr": "새 과학 기술이 우리 삶을 바꿨다.",
+    "sourceOrder": 1082,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1083",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "teenage",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "십대의"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Teenage students filled the hall.",
+    "exampleKr": "십대 학생들이 강당을 채웠다.",
+    "sourceOrder": 1083,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1084",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "temperature",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "온도"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The temperature dropped last night.",
+    "exampleKr": "어젯밤 온도가 떨어졌다.",
+    "sourceOrder": 1084,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1085",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tend",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "~하는 경향이 있다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Prices tend to rise slowly.",
+    "exampleKr": "가격은 천천히 오르는 경향이 있다.",
+    "sourceOrder": 1085,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1086",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tense",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "긴장한"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The players looked tense.",
+    "exampleKr": "그 선수들은 긴장해 보였다.",
+    "sourceOrder": 1086,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1087",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "term",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "학기"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The new term starts Monday.",
+    "exampleKr": "새 학기가 월요일에 시작된다.",
+    "sourceOrder": 1087,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1088",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "terrible",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "끔찍한"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "We had terrible weather yesterday.",
+    "exampleKr": "우리는 어제 끔찍한 날씨를 겪었다.",
+    "sourceOrder": 1088,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1089",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "text",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "글"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Read the text once more.",
+    "exampleKr": "그 글을 한 번 더 읽어라.",
+    "sourceOrder": 1089,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1090",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "theater",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "극장"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The theater closed last year.",
+    "exampleKr": "그 극장은 작년에 문을 닫았다.",
+    "sourceOrder": 1090,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1091",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "then",
+    "partOfSpeech": [
+      "adverb"
+    ],
+    "meaningKr": [
+      "그때"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "We were much younger then.",
+    "exampleKr": "우리는 그때 훨씬 어렸다.",
+    "sourceOrder": 1091,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1092",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "theory",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "이론"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "His theory explains the result.",
+    "exampleKr": "그의 이론이 그 결과를 설명한다.",
+    "sourceOrder": 1092,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1093",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "therefore",
+    "partOfSpeech": [
+      "adverb"
+    ],
+    "meaningKr": [
+      "그러므로"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "It rained, therefore we stayed.",
+    "exampleKr": "비가 왔고 그러므로 우리는 머물렀다.",
+    "sourceOrder": 1093,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1094",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "thick",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "두꺼운"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A thick book lay open.",
+    "exampleKr": "두꺼운 책이 펼쳐져 있었다.",
+    "sourceOrder": 1094,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1095",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "thief",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "도둑"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The thief escaped through windows.",
+    "exampleKr": "그 도둑은 창문으로 달아났다.",
+    "sourceOrder": 1095,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1096",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "thin",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "얇은"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Cut the bread very thin.",
+    "exampleKr": "빵을 아주 얇게 잘라라.",
+    "sourceOrder": 1096,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1097",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "though",
+    "partOfSpeech": [
+      "conjunction"
+    ],
+    "meaningKr": [
+      "~이긴 하지만"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Though tired, she kept working.",
+    "exampleKr": "피곤하긴 했지만 그녀는 계속 일했다.",
+    "sourceOrder": 1097,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1098",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "thousand",
+    "partOfSpeech": [
+      "number"
+    ],
+    "meaningKr": [
+      "천"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A thousand people joined us.",
+    "exampleKr": "천 명이 우리와 함께했다.",
+    "sourceOrder": 1098,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1099",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "threat",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "위협"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Fire is a real threat.",
+    "exampleKr": "불은 진짜 위협이다.",
+    "sourceOrder": 1099,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1100",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "throat",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "목구멍"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "My throat feels dry today.",
+    "exampleKr": "내 목구멍이 오늘 건조하다.",
+    "sourceOrder": 1100,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1101",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "through",
+    "partOfSpeech": [
+      "preposition"
+    ],
+    "meaningKr": [
+      "~을 통과하여"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The train ran through tunnels.",
+    "exampleKr": "기차가 터널을 통과하여 달렸다.",
+    "sourceOrder": 1101,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1102",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "throw",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "던져 보내다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [
+      "threw",
+      "thrown"
+    ],
+    "example": "Throw the ball to me.",
+    "exampleKr": "공을 내게 던져 보내라.",
+    "sourceOrder": 1102,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1103",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "thus",
+    "partOfSpeech": [
+      "adverb"
+    ],
+    "meaningKr": [
+      "이리하여"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Thus the long trip ended.",
+    "exampleKr": "이리하여 긴 여행이 끝났다.",
+    "sourceOrder": 1103,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1104",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tide",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "조수"
+    ],
+    "relatedForms": [
+      "tidy"
+    ],
+    "irregularForms": [],
+    "example": "The tide covered the sand.",
+    "exampleKr": "조수가 모래를 덮었다.",
+    "sourceOrder": 1104,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1105",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tie",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "끈으로 매다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Tie your shoes before running.",
+    "exampleKr": "달리기 전에 신발 끈을 매라.",
+    "sourceOrder": 1105,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1106",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tight",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "꽉 끼는"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "These pants feel too tight.",
+    "exampleKr": "이 바지는 너무 꽉 끼는 느낌이다.",
+    "sourceOrder": 1106,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1107",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "till",
+    "partOfSpeech": [
+      "preposition"
+    ],
+    "meaningKr": [
+      "~까지"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Wait here till noon.",
+    "exampleKr": "정오까지 여기서 기다려라.",
+    "sourceOrder": 1107,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1108",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tin",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "양철"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The old tin box rusted.",
+    "exampleKr": "낡은 양철 상자가 녹슬었다.",
+    "sourceOrder": 1108,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1109",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tiny",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "아주 작은"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A tiny bird sat there.",
+    "exampleKr": "아주 작은 새가 거기 앉아 있었다.",
+    "sourceOrder": 1109,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1110",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tip",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "요령"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She gave me a useful tip.",
+    "exampleKr": "그녀는 내게 유용한 요령을 알려 주었다.",
+    "sourceOrder": 1110,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1111",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "title",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "제목"
+    ],
+    "relatedForms": [
+      "entitle"
+    ],
+    "irregularForms": [],
+    "example": "Write the title on top.",
+    "exampleKr": "맨 위에 제목을 써라.",
+    "sourceOrder": 1111,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1112",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "toast",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "토스트"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "He ate toast for breakfast.",
+    "exampleKr": "그는 아침으로 토스트를 먹었다.",
+    "sourceOrder": 1112,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1113",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "toe",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "발가락"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "I hurt my little toe.",
+    "exampleKr": "나는 작은 발가락을 다쳤다.",
+    "sourceOrder": 1113,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1114",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "toilet",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "화장실"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The toilet is down the hall.",
+    "exampleKr": "화장실은 복도 끝에 있다.",
+    "sourceOrder": 1114,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1115",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tone",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "어조"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "His tone sounded quite serious.",
+    "exampleKr": "그의 어조는 꽤 진지하게 들렸다.",
+    "sourceOrder": 1115,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1116",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tongue",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "혀"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The soup burned my tongue.",
+    "exampleKr": "그 수프가 내 혀를 데게 했다.",
+    "sourceOrder": 1116,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1117",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tool",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "도구"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A hammer is a simple tool.",
+    "exampleKr": "망치는 단순한 도구다.",
+    "sourceOrder": 1117,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1118",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "topic",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "주제"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Choose one topic for writing.",
+    "exampleKr": "글쓰기를 위한 주제 하나를 골라라.",
+    "sourceOrder": 1118,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1119",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "total",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "총계"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The total came to fifty.",
+    "exampleKr": "총계가 오십이 되었다.",
+    "sourceOrder": 1119,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1120",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tough",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "힘든"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "That was a tough game.",
+    "exampleKr": "그것은 힘든 경기였다.",
+    "sourceOrder": 1120,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1121",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tour",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "관광"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "We joined a city tour.",
+    "exampleKr": "우리는 도시 관광에 참가했다.",
+    "sourceOrder": 1121,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1122",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "toward",
+    "partOfSpeech": [
+      "preposition"
+    ],
+    "meaningKr": [
+      "~쪽으로"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "He walked toward the gate.",
+    "exampleKr": "그는 문 쪽으로 걸어갔다.",
+    "sourceOrder": 1122,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1123",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "towel",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "수건"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Dry your hands with a towel.",
+    "exampleKr": "수건으로 손을 말려라.",
+    "sourceOrder": 1123,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1124",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tower",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "탑"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The stone tower stands alone.",
+    "exampleKr": "그 돌탑은 홀로 서 있다.",
+    "sourceOrder": 1124,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1125",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "trace",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "흔적"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Snow kept a clear trace.",
+    "exampleKr": "눈이 분명한 흔적을 남겼다.",
+    "sourceOrder": 1125,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1126",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "trade",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "무역"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Sea trade grew last year.",
+    "exampleKr": "해상 무역이 작년에 성장했다.",
+    "sourceOrder": 1126,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1127",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tradition",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "전통"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This village keeps old tradition.",
+    "exampleKr": "이 마을은 오랜 전통을 지킨다.",
+    "sourceOrder": 1127,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1128",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "traffic",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "교통"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Morning traffic moved very slowly.",
+    "exampleKr": "아침 교통이 아주 느리게 움직였다.",
+    "sourceOrder": 1128,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1129",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "transfer",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "옮기다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "They transferred him to Seoul.",
+    "exampleKr": "그들은 그를 서울로 옮겼다.",
+    "sourceOrder": 1129,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1130",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "transport",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "수송하다"
+    ],
+    "relatedForms": [
+      "transportation"
+    ],
+    "irregularForms": [],
+    "example": "Trucks transport fresh fruit daily.",
+    "exampleKr": "트럭이 매일 신선한 과일을 수송한다.",
+    "sourceOrder": 1130,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1131",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "trap",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "덫"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A mouse escaped the trap.",
+    "exampleKr": "쥐 한 마리가 덫을 빠져나갔다.",
+    "sourceOrder": 1131,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1132",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tray",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "쟁반"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She carried a heavy tray.",
+    "exampleKr": "그녀는 무거운 쟁반을 날랐다.",
+    "sourceOrder": 1132,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1133",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "treat",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "대하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Treat every guest kindly.",
+    "exampleKr": "모든 손님을 친절하게 대해라.",
+    "sourceOrder": 1133,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1134",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "triangle",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "삼각형"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Draw a blue triangle here.",
+    "exampleKr": "여기에 파란 삼각형을 그려라.",
+    "sourceOrder": 1134,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1135",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "trick",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "속임수"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "That card trick fooled everyone.",
+    "exampleKr": "그 카드 속임수가 모두를 속였다.",
+    "sourceOrder": 1135,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1136",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "trouble",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "곤란"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "His answer caused some trouble.",
+    "exampleKr": "그의 대답이 약간의 곤란을 일으켰다.",
+    "sourceOrder": 1136,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1137",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "trunk",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "나무 줄기"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Birds sat on the wide trunk.",
+    "exampleKr": "새들이 넓은 나무 줄기에 앉았다.",
+    "sourceOrder": 1137,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1138",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "trust",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "신뢰감"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Their trust grew over years.",
+    "exampleKr": "그들의 신뢰감은 여러 해에 걸쳐 자랐다.",
+    "sourceOrder": 1138,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1139",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "truth",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "진실"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Tell me the whole truth.",
+    "exampleKr": "내게 진실 전부를 말해라.",
+    "sourceOrder": 1139,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1140",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "tune",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "곡조"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She sang a soft tune.",
+    "exampleKr": "그녀는 부드러운 곡조를 노래했다.",
+    "sourceOrder": 1140,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1141",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "twin",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "쌍둥이"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "My twin lives in Busan.",
+    "exampleKr": "내 쌍둥이는 부산에 산다.",
+    "sourceOrder": 1141,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1142",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "twist",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "비틀다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Do not twist the cable.",
+    "exampleKr": "그 전선을 비틀지 마라.",
+    "sourceOrder": 1142,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1143",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "uniform",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "제복"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Every guard wears a uniform.",
+    "exampleKr": "모든 경비원이 제복을 입는다.",
+    "sourceOrder": 1143,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1144",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "unit",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "단위"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Meter is a length unit.",
+    "exampleKr": "미터는 길이 단위다.",
+    "sourceOrder": 1144,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1145",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "unite",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "하나로 묶다"
+    ],
+    "relatedForms": [
+      "union"
+    ],
+    "irregularForms": [],
+    "example": "One goal united the team.",
+    "exampleKr": "하나의 목표가 팀을 하나로 묶었다.",
+    "sourceOrder": 1145,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1146",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "university",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "대학교"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She entered a small university.",
+    "exampleKr": "그녀는 작은 대학교에 입학했다.",
+    "sourceOrder": 1146,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1147",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "unless",
+    "partOfSpeech": [
+      "conjunction"
+    ],
+    "meaningKr": [
+      "~하지 않으면"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Unless it rains, we walk.",
+    "exampleKr": "비가 오지 않으면 우리는 걷는다.",
+    "sourceOrder": 1147,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1148",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "until",
+    "partOfSpeech": [
+      "preposition"
+    ],
+    "meaningKr": [
+      "~할 때까지"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Stay inside until the rain stops.",
+    "exampleKr": "비가 그칠 때까지 안에 있어라.",
+    "sourceOrder": 1148,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1149",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "upon",
+    "partOfSpeech": [
+      "preposition"
+    ],
+    "meaningKr": [
+      "~위에"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A cat sat upon the roof.",
+    "exampleKr": "고양이가 지붕 위에 앉아 있었다.",
+    "sourceOrder": 1149,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1150",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "upper",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "위쪽의"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Books sit on the upper shelf.",
+    "exampleKr": "책들이 위쪽 선반에 있다.",
+    "sourceOrder": 1150,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1151",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "upset",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "속상하게 하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The loss upset our players.",
+    "exampleKr": "그 패배가 우리 선수들을 속상하게 했다.",
+    "sourceOrder": 1151,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1152",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "valley",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "골짜기"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A river runs through the valley.",
+    "exampleKr": "강이 골짜기를 지나 흐른다.",
+    "sourceOrder": 1152,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1153",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "value",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "가치"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This coin has little value.",
+    "exampleKr": "이 동전은 가치가 거의 없다.",
+    "sourceOrder": 1153,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1154",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "van",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "승합차"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Our van carried six people.",
+    "exampleKr": "우리 승합차는 여섯 명을 태웠다.",
+    "sourceOrder": 1154,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1155",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "various",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "다양한"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The shop sells various hats.",
+    "exampleKr": "그 가게는 다양한 모자를 판다.",
+    "sourceOrder": 1155,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1156",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "vary",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "서로 다르다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Prices vary between the shops.",
+    "exampleKr": "가격은 가게마다 서로 다르다.",
+    "sourceOrder": 1156,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1157",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "vehicle",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "차량"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "One vehicle blocked our exit.",
+    "exampleKr": "차량 한 대가 우리 출구를 막았다.",
+    "sourceOrder": 1157,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1158",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "version",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "판"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This is the newest version.",
+    "exampleKr": "이것은 가장 최신 판이다.",
+    "sourceOrder": 1158,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1159",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "victim",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "피해자"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The victim received quick help.",
+    "exampleKr": "그 피해자는 빠른 도움을 받았다.",
+    "sourceOrder": 1159,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1160",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "view",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "경치"
+    ],
+    "relatedForms": [
+      "interview",
+      "review"
+    ],
+    "irregularForms": [],
+    "example": "The room has a fine view.",
+    "exampleKr": "그 방은 좋은 경치를 지녔다.",
+    "sourceOrder": 1160,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1161",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "villa",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "별장"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "They rented a seaside villa.",
+    "exampleKr": "그들은 바닷가 별장을 빌렸다.",
+    "sourceOrder": 1161,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1162",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "village",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "마을"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Our village has one school.",
+    "exampleKr": "우리 마을에는 학교가 하나 있다.",
+    "sourceOrder": 1162,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1163",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "violent",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "폭력적인"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The film felt too violent.",
+    "exampleKr": "그 영화는 너무 폭력적으로 느껴졌다.",
+    "sourceOrder": 1163,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1164",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "vision",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "시력"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Her vision improved with glasses.",
+    "exampleKr": "그녀의 시력은 안경으로 좋아졌다.",
+    "sourceOrder": 1164,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1165",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "volume",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "음량"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Turn the volume down please.",
+    "exampleKr": "음량을 줄여 주세요.",
+    "sourceOrder": 1165,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1166",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "volunteer",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "자원봉사자"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Every volunteer wore a badge.",
+    "exampleKr": "모든 자원봉사자가 배지를 달았다.",
+    "sourceOrder": 1166,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1167",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "vote",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "투표하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Students voted for a leader.",
+    "exampleKr": "학생들이 대표를 뽑으려 투표했다.",
+    "sourceOrder": 1167,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1168",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wage",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "임금"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The daily wage rose this year.",
+    "exampleKr": "일당 임금이 올해 올랐다.",
+    "sourceOrder": 1168,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1169",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "warn",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "경고하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The sign warns about ice.",
+    "exampleKr": "그 표지판은 얼음을 경고한다.",
+    "sourceOrder": 1169,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1170",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "waste",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "낭비하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Do not waste clean water.",
+    "exampleKr": "깨끗한 물을 낭비하지 마라.",
+    "sourceOrder": 1170,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1171",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wave",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "파도"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A high wave hit the boat.",
+    "exampleKr": "높은 파도가 배를 쳤다.",
+    "sourceOrder": 1171,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1172",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "weak",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "약한"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The old dog looks weak.",
+    "exampleKr": "그 늙은 개는 약해 보인다.",
+    "sourceOrder": 1172,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1173",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "weapon",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "무기"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Guards carried no weapon inside.",
+    "exampleKr": "경비원들은 안에서 무기를 지니지 않았다.",
+    "sourceOrder": 1173,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1174",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "weigh",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "무게가 나가다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This box weighs ten kilograms.",
+    "exampleKr": "이 상자는 십 킬로그램 무게가 나간다.",
+    "sourceOrder": 1174,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1175",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "whale",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "고래"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A huge whale passed our boat.",
+    "exampleKr": "거대한 고래가 우리 배를 지나갔다.",
+    "sourceOrder": 1175,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1176",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wheel",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "바퀴"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The front wheel came loose.",
+    "exampleKr": "앞바퀴가 헐거워졌다.",
+    "sourceOrder": 1176,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1177",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "whether",
+    "partOfSpeech": [
+      "conjunction"
+    ],
+    "meaningKr": [
+      "~인지 아닌지"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Ask whether the shop opened.",
+    "exampleKr": "그 가게가 열었는지 아닌지 물어봐라.",
+    "sourceOrder": 1177,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1178",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "which",
+    "partOfSpeech": [
+      "determiner"
+    ],
+    "meaningKr": [
+      "어느"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Which color do you prefer?",
+    "exampleKr": "어느 색을 선호하니?",
+    "sourceOrder": 1178,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1179",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "while",
+    "partOfSpeech": [
+      "conjunction"
+    ],
+    "meaningKr": [
+      "~하는 동안"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Read while the soup cooks.",
+    "exampleKr": "수프가 끓는 동안 책을 읽어라.",
+    "sourceOrder": 1179,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1180",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "whisper",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "속삭이다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She whispered a short answer.",
+    "exampleKr": "그녀는 짧은 대답을 속삭였다.",
+    "sourceOrder": 1180,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1181",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "whistle",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "호루라기"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The coach blew his whistle.",
+    "exampleKr": "코치가 호루라기를 불었다.",
+    "sourceOrder": 1181,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1182",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "whole",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "온"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The whole class stood up.",
+    "exampleKr": "온 학급이 일어섰다.",
+    "sourceOrder": 1182,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1183",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wide",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "폭이 넓은"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "We crossed a wide field.",
+    "exampleKr": "우리는 폭이 넓은 들판을 건넜다.",
+    "sourceOrder": 1183,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1184",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wild",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "야생의"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Wild birds visit this lake.",
+    "exampleKr": "야생 새들이 이 호수를 찾는다.",
+    "sourceOrder": 1184,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1185",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wing",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "날개"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The bird hurt one wing.",
+    "exampleKr": "그 새는 날개 하나를 다쳤다.",
+    "sourceOrder": 1185,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1186",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wipe",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "닦다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Wipe the table before eating.",
+    "exampleKr": "먹기 전에 탁자를 닦아라.",
+    "sourceOrder": 1186,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1187",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wire",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "철사"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Thin wire held the sign.",
+    "exampleKr": "가는 철사가 그 표지판을 붙들었다.",
+    "sourceOrder": 1187,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1188",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wise",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "현명한"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "That was a wise choice.",
+    "exampleKr": "그것은 현명한 선택이었다.",
+    "sourceOrder": 1188,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1189",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "within",
+    "partOfSpeech": [
+      "preposition"
+    ],
+    "meaningKr": [
+      "~이내에"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Return the book within days.",
+    "exampleKr": "며칠 이내에 그 책을 반납해라.",
+    "sourceOrder": 1189,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1190",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "without",
+    "partOfSpeech": [
+      "preposition"
+    ],
+    "meaningKr": [
+      "~없이"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "She left without a word.",
+    "exampleKr": "그녀는 한마디 없이 떠났다.",
+    "sourceOrder": 1190,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1191",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wonder",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "궁금해하다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "I wonder about his plan.",
+    "exampleKr": "나는 그의 계획이 궁금하다.",
+    "sourceOrder": 1191,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1192",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wool",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "양털"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This blanket uses soft wool.",
+    "exampleKr": "이 담요는 부드러운 양털을 쓴다.",
+    "sourceOrder": 1192,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1193",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "worth",
+    "partOfSpeech": [
+      "adjective"
+    ],
+    "meaningKr": [
+      "~의 가치가 있는"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "This trip is worth trying.",
+    "exampleKr": "이 여행은 해 볼 가치가 있다.",
+    "sourceOrder": 1193,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1194",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "would",
+    "partOfSpeech": [
+      "auxiliary"
+    ],
+    "meaningKr": [
+      "~하겠다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "I would help you gladly.",
+    "exampleKr": "나는 기꺼이 너를 돕겠다.",
+    "sourceOrder": 1194,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1195",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wound",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "상처"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The deep wound healed slowly.",
+    "exampleKr": "그 깊은 상처는 천천히 나았다.",
+    "sourceOrder": 1195,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1196",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "wrap",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "감싸다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Wrap the gift with paper.",
+    "exampleKr": "종이로 선물을 감싸라.",
+    "sourceOrder": 1196,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1197",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "yell",
+    "partOfSpeech": [
+      "verb"
+    ],
+    "meaningKr": [
+      "소리치다"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "Do not yell at children.",
+    "exampleKr": "아이들에게 소리치지 마라.",
+    "sourceOrder": 1197,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1198",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "yet",
+    "partOfSpeech": [
+      "adverb"
+    ],
+    "meaningKr": [
+      "아직"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The bus has not come yet.",
+    "exampleKr": "버스가 아직 오지 않았다.",
+    "sourceOrder": 1198,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1199",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "zebra",
+    "partOfSpeech": [
+      "noun"
+    ],
+    "meaningKr": [
+      "얼룩말"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "A zebra drank by the river.",
+    "exampleKr": "얼룩말 한 마리가 강가에서 물을 마셨다.",
+    "sourceOrder": 1199,
+    "setId": null,
+    "learningOrder": null
+  },
+  {
+    "id": "ev-moe2022-m-1200",
+    "sourceTier": "middle",
+    "sourceMarker": "**",
+    "word": "zero",
+    "partOfSpeech": [
+      "number"
+    ],
+    "meaningKr": [
+      "영"
+    ],
+    "relatedForms": [],
+    "irregularForms": [],
+    "example": "The score stayed at zero.",
+    "exampleKr": "점수는 영에 머물렀다.",
+    "sourceOrder": 1200,
+    "setId": null,
+    "learningOrder": null
+  }
+]

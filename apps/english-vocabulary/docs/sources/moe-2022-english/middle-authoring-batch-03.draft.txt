@@ -1,0 +1,201 @@
+# Middle AUTHORING BATCH 03 - official ** representative forms 401-600
+401|adjective|극심한|The extreme heat made us tired.|극심한 더위가 우리를 지치게 했다.
+402|noun|요인|Price is an important factor here.|가격이 여기서 중요한 요인이다.
+403|noun|공장|My uncle works at a factory.|삼촌은 공장에서 일한다.
+404|verb|기절하다|She may faint in this heat.|그녀는 이 더위에 기절할지도 모른다.
+405|adjective|공정한|The judge made a fair decision.|그 판사는 공정한 결정을 내렸다.
+406|noun|신뢰|I have faith in my friend.|나는 내 친구에 대한 신뢰가 있다.
+407|adjective|익숙한|This song sounds familiar to me.|이 노래는 내게 익숙하게 들린다.
+408|adjective|화려한|She wore a fancy red dress.|그녀는 화려한 빨간 드레스를 입었다.
+409|adjective|환상적인|The mountain view was fantastic.|그 산 경치는 환상적이었다.
+410|verb|매혹하다|Old maps fascinate my little brother.|옛 지도는 내 남동생을 매혹한다.
+411|noun|유행|Short coats are in fashion now.|짧은 코트가 지금 유행이다.
+412|noun|잘못|The accident was not my fault.|그 사고는 내 잘못이 아니었다.
+413|noun|부탁|May I ask you a favor?|부탁 하나 해도 될까요?
+414|noun|두려움|He hid his fear from us.|그는 우리에게 두려움을 숨겼다.
+415|noun|특색|This phone has a new feature.|이 전화기에는 새로운 특색이 있다.
+416|noun|수수료|The bank charged a small fee.|은행이 적은 수수료를 청구했다.
+417|verb|먹이를 주다|I feed my dog every morning.|나는 매일 아침 개에게 먹이를 준다.|irr:fed
+418|noun|동료|My fellow told me the news.|내 동료가 그 소식을 말해 주었다.
+419|adjective|여성의|A female doctor treated my arm.|여성 의사가 내 팔을 치료했다.
+420|noun|울타리|A white fence surrounds the yard.|흰 울타리가 마당을 둘러싸고 있다.
+421|noun|열|The child had a high fever.|그 아이는 높은 열이 있었다.
+422|determiner|거의 없는|Few people came to the meeting.|회의에 온 사람이 거의 없었다.
+423|noun|수치|The sales figure rose last month.|매출 수치가 지난달에 올랐다.
+424|adjective|마지막의|This is our final chance today.|이것이 오늘 우리의 마지막 기회다.
+425|noun|재정|Our club needs better finance now.|우리 동아리는 이제 더 나은 재정이 필요하다.
+426|noun|회사|She joined a small law firm.|그녀는 작은 법률 회사에 들어갔다.
+427|verb|맞다|These shoes fit my feet well.|이 신발은 내 발에 잘 맞는다.
+428|noun|깃발|The flag moved in the wind.|깃발이 바람에 움직였다.
+429|noun|불꽃|A small flame lit the room.|작은 불꽃이 방을 밝혔다.
+430|noun|섬광|A bright flash filled the sky.|밝은 섬광이 하늘을 채웠다.
+431|adjective|평평한|We camped on flat dry ground.|우리는 평평하고 마른 땅에 야영했다.
+432|noun|항공편|Our flight leaves at six.|우리 항공편은 여섯 시에 떠난다.
+433|verb|뜨다|Dry leaves float on the water.|마른 잎들이 물 위에 뜬다.
+434|noun|홍수|The flood damaged many houses.|홍수가 많은 집을 손상시켰다.
+435|verb|흐르다|Clean water flows under the bridge.|맑은 물이 다리 아래로 흐른다.
+436|noun|안개|Thick fog covered the whole road.|짙은 안개가 도로 전체를 덮었다.
+437|verb|접다|Please fold your shirts neatly.|셔츠를 깔끔하게 접어 주세요.
+438|noun|사람들|The folk here speak very slowly.|이곳 사람들은 아주 천천히 말한다.
+439|verb|따라가다|Follow me to the front gate.|정문까지 나를 따라오세요.
+440|noun|힘|He pushed the door with force.|그는 힘을 주어 문을 밀었다.|rel:enforce
+441|adjective|외국의|She studies two foreign languages.|그녀는 두 개의 외국어를 공부한다.
+442|adverb|영원히|This bridge will not last forever.|이 다리가 영원히 남지는 않을 것이다.
+443|verb|용서하다|Please forgive my small mistake.|제 작은 실수를 용서해 주세요.|irr:forgave,forgiven
+444|adverb|앞으로|The old man walked forth slowly.|그 노인은 천천히 앞으로 걸어갔다.
+445|adjective|운이 좋은|We were fortunate to find seats.|우리는 운이 좋게 자리를 찾았다.
+446|noun|재산|He built a fortune from farming.|그는 농사로 재산을 모았다.
+447|adverb|앞쪽으로|Move forward two more steps.|앞쪽으로 두 걸음 더 움직여라.
+448|verb|세우다|They founded the school in 1950.|그들은 1950년에 그 학교를 세웠다.|rel:foundation
+449|noun|틀|A wooden frame holds the photo.|나무 틀이 그 사진을 잡고 있다.
+450|adverb|솔직히|Frankly, I do not agree.|솔직히 나는 동의하지 않는다.
+451|verb|얼다|The pond will freeze tonight.|연못이 오늘 밤 얼 것이다.|irr:froze,frozen
+452|noun|공포|She screamed in sudden fright.|그녀는 갑작스러운 공포에 비명을 질렀다.
+453|noun|개구리|A green frog jumped away.|초록 개구리가 뛰어 도망갔다.
+454|verb|좌절시키다|Slow trains frustrate many workers.|느린 기차는 많은 노동자를 좌절시킨다.
+455|verb|튀기다|Please fry the eggs quickly.|계란을 빨리 튀겨 주세요.
+456|noun|기능|This watch has a timer function.|이 시계에는 타이머 기능이 있다.
+457|noun|기금|Our class raised a small fund.|우리 반은 작은 기금을 모았다.
+458|noun|털|The cat has soft white fur.|그 고양이는 부드러운 흰 털을 가졌다.
+459|noun|가구|We moved the furniture upstairs.|우리는 가구를 위층으로 옮겼다.
+460|verb|얻다|You can gain skill by practice.|연습으로 기술을 얻을 수 있다.
+461|noun|차고|Dad parked inside the garage.|아빠가 차고 안에 주차했다.
+462|noun|문|The school gate opens at seven.|학교 문은 일곱 시에 열린다.
+463|verb|모이다|Students gather in the hall.|학생들이 강당에 모인다.
+464|noun|장비|We packed our camping gear.|우리는 캠핑 장비를 챙겼다.
+465|adjective|일반적인|This is a general rule here.|이것은 여기서 일반적인 규칙이다.
+466|adjective|온화한|A gentle wind touched my face.|온화한 바람이 내 얼굴에 닿았다.
+467|noun|몸짓|He made a friendly gesture.|그는 친근한 몸짓을 했다.
+468|noun|유령|The old house has a ghost.|그 낡은 집에는 유령이 있다.
+469|noun|거인|The giant lived in a stone castle.|그 거인은 돌로 만든 성에 살았다.
+470|noun|선물|She sent a small gift.|그녀는 작은 선물을 보냈다.
+471|noun|기린|The giraffe ate leaves slowly.|그 기린은 잎을 천천히 먹었다.
+472|verb|흘끗 보다|He glanced at the clock.|그는 시계를 흘끗 보았다.
+473|noun|영광|The team won lasting glory.|그 팀은 오래가는 영광을 얻었다.
+474|noun|장갑|I lost my left glove.|나는 왼쪽 장갑을 잃어버렸다.
+475|noun|풀|Put some glue on the paper.|종이에 풀을 조금 발라라.
+476|noun|골프|My grandfather plays golf on Sunday.|할아버지는 일요일에 골프를 치신다.
+477|adjective|아주 멋진|The sunset looked gorgeous today.|오늘 노을이 아주 멋져 보였다.
+478|verb|다스리다|Wise leaders govern with patience.|현명한 지도자는 인내로 다스린다.|rel:government
+479|verb|움켜잡다|He grabbed the rope tightly.|그는 밧줄을 단단히 움켜잡았다.
+480|noun|우아함|She dances with quiet grace.|그녀는 조용한 우아함으로 춤춘다.
+481|noun|성적|My grade improved this term.|내 성적이 이번 학기에 올랐다.|rel:gradual
+482|adjective|웅장한|They stayed in a grand hotel.|그들은 웅장한 호텔에 묵었다.
+483|verb|허가하다|The teacher granted us more time.|선생님이 우리에게 더 많은 시간을 허가해 주셨다.
+484|noun|그래프|The graph shows monthly sales.|그 그래프는 월별 매출을 보여 준다.|rel:graphic
+485|verb|인사하다|She greets every guest warmly.|그녀는 모든 손님에게 따뜻하게 인사한다.
+486|noun|식료품|We bought grocery items today.|우리는 오늘 식료품을 샀다.
+487|verb|보장하다|We guarantee safe fast delivery.|우리는 안전하고 빠른 배송을 보장한다.
+488|noun|경비원|A guard stands near the door.|경비원이 문 근처에 서 있다.
+489|noun|손님|Our guest arrived before noon.|우리 손님이 정오 전에 도착했다.
+490|noun|안내인|The guide showed us the temple.|그 안내인이 우리에게 절을 보여 주었다.
+491|noun|죄책감|He felt guilt after the lie.|그는 거짓말 후 죄책감을 느꼈다.|rel:guilty
+492|noun|총|The old gun hung on the wall.|낡은 총이 벽에 걸려 있었다.
+493|noun|절반|Half of the cake is gone.|케이크의 절반이 없어졌다.
+494|noun|복도|Students ran down the hall.|학생들이 복도를 따라 뛰었다.
+495|verb|처리하다|She handles hard problems calmly.|그녀는 어려운 문제를 침착하게 처리한다.
+496|adjective|잘생긴|A handsome young man smiled.|잘생긴 젊은 남자가 미소 지었다.
+497|verb|일어나다|Nothing strange happened last night.|어젯밤에 이상한 일은 일어나지 않았다.
+498|noun|해|Loud noise can cause harm.|큰 소음은 해를 끼칠 수 있다.
+499|noun|건강|Good sleep protects your health.|충분한 잠은 당신의 건강을 지킨다.|rel:healthy
+500|verb|듣다|Can you hear the bell now?|지금 종소리가 들리나요?|irr:heard
+501|noun|천국|They believed in a peaceful heaven.|그들은 평화로운 천국을 믿었다.
+502|noun|높이|The height of this wall surprised me.|이 벽의 높이가 나를 놀라게 했다.
+503|noun|헬리콥터|A helicopter landed on the field.|헬리콥터가 들판에 착륙했다.
+504|noun|지옥|The story described a dark hell.|그 이야기는 어두운 지옥을 묘사했다.
+505|verb|망설이다|Do not hesitate to ask questions.|질문하기를 망설이지 마라.
+506|verb|숨다|The cat hides under the bed.|고양이가 침대 밑에 숨는다.|irr:hid,hidden
+507|noun|고속도로|The highway was busy this morning.|고속도로가 오늘 아침 붐볐다.
+508|noun|힌트|Give me one more hint.|힌트를 하나만 더 주세요.
+509|verb|채용하다|The shop hired two students.|그 가게는 학생 두 명을 채용했다.
+510|noun|구멍|There is a hole in my sock.|내 양말에 구멍이 있다.
+511|noun|꿀|Add honey to your warm tea.|따뜻한 차에 꿀을 넣어라.
+512|noun|명예|He served with great honor.|그는 큰 명예를 지니고 복무했다.
+513|noun|호텔|We stayed at a small hotel.|우리는 작은 호텔에 묵었다.
+514|verb|껴안다|She hugged her little sister.|그녀는 여동생을 껴안았다.
+515|adjective|매우 큰|A huge rock blocked the path.|매우 큰 바위가 길을 막았다.
+516|noun|유머|His humor makes everyone laugh.|그의 유머는 모두를 웃게 한다.
+517|noun|배고픔|Hunger made the boy weak.|배고픔이 그 소년을 약하게 했다.|rel:hungry
+518|verb|다치게 하다|The fall hurt my right leg.|넘어져서 오른쪽 다리를 다쳤다.|irr:hurt
+519|noun|정체성|He hid his true identity.|그는 자신의 진짜 정체성을 숨겼다.|rel:identify
+520|verb|무시하다|Do not ignore the warning sign.|경고 표지판을 무시하지 마라.
+521|adjective|아픈|My uncle has been ill lately.|삼촌이 최근에 아프시다.
+522|verb|예를 들어 설명하다|The teacher illustrated the idea clearly.|선생님이 그 개념을 예를 들어 분명히 설명했다.
+523|verb|상상하다|Imagine a world without cars.|자동차 없는 세상을 상상해 보라.
+524|adjective|즉각적인|We need an immediate answer.|우리는 즉각적인 답이 필요하다.
+525|verb|감동시키다|Her speech impressed the whole class.|그녀의 연설은 반 전체를 감동시켰다.
+526|verb|향상시키다|Daily practice improves your writing.|매일의 연습이 글쓰기를 향상시킨다.
+527|verb|포함시키다|Please include my name in the list.|목록에 제 이름을 포함시켜 주세요.
+528|noun|수입|His monthly income rose slightly.|그의 월 수입이 조금 올랐다.
+529|verb|증가하다|Bus fares increased last week.|버스 요금이 지난주에 증가했다.
+530|adverb|정말로|The test was indeed difficult.|그 시험은 정말로 어려웠다.
+531|verb|나타내다|Red lights indicate serious danger.|빨간불은 심각한 위험을 나타낸다.
+532|noun|개인|Each individual has different tastes.|각 개인은 다른 취향을 가진다.
+533|noun|산업|The car industry grew quickly.|자동차 산업이 빠르게 성장했다.
+534|noun|영향|Friends have strong influence on us.|친구는 우리에게 강한 영향을 준다.
+535|verb|알리다|Please inform me of any change.|어떤 변경이든 제게 알려 주세요.
+536|verb|부상을 입히다|The crash injured three passengers.|그 충돌은 승객 세 명에게 부상을 입혔다.
+537|adjective|무죄의|The court found him innocent.|법원은 그가 무죄라고 판단했다.
+538|verb|고집하다|She insisted on paying the bill.|그녀는 계산을 하겠다고 고집했다.
+539|verb|점검하다|Workers inspect the bridge monthly.|작업자들이 매달 다리를 점검한다.
+540|noun|사례|Give me one clear instance.|분명한 사례 하나를 들어 주세요.
+541|noun|순간|The light went out in an instant.|불이 한순간에 꺼졌다.
+542|adverb|대신에|Drink water instead of soda.|탄산음료 대신에 물을 마셔라.
+543|verb|지시하다|The coach instructed us to rest.|코치가 우리에게 쉬라고 지시했다.
+544|noun|악기|She plays a string instrument.|그녀는 현악기를 연주한다.
+545|verb|보험에 들다|They insured the new car.|그들은 새 차에 보험을 들었다.|rel:insurance
+546|verb|의도하다|I intend to leave early.|나는 일찍 떠날 의도이다.
+547|adjective|강렬한|The intense light hurt my eyes.|강렬한 빛이 내 눈을 아프게 했다.
+548|noun|의도|His intent was clearly good.|그의 의도는 분명히 좋았다.|rel:intention
+549|noun|관심|She showed interest in science.|그녀는 과학에 관심을 보였다.
+550|adjective|내부의|The building has internal stairs.|그 건물에는 내부 계단이 있다.
+551|verb|말을 끊다|Please do not interrupt the teacher.|선생님의 말을 끊지 마세요.
+552|verb|발명하다|He invented a simple machine.|그는 간단한 기계를 발명했다.|rel:inventor
+553|verb|투자하다|They invested money in books.|그들은 책에 돈을 투자했다.
+554|verb|조사하다|Police investigated the strange noise.|경찰이 그 이상한 소음을 조사했다.
+555|verb|관련시키다|The project involves many students.|그 계획은 많은 학생을 관련시킨다.
+556|noun|철|This gate is made of iron.|이 문은 철로 만들어졌다.
+557|noun|섬|A small island lies ahead.|작은 섬이 앞에 있다.
+558|noun|품목|Check every item on the list.|목록의 모든 품목을 확인해라.
+559|noun|턱|The dog opened its wide jaw.|그 개가 넓은 턱을 벌렸다.
+560|noun|청바지|These blue jeans fit me well.|이 파란 청바지는 내게 잘 맞는다.
+561|noun|농담|His joke made us laugh.|그의 농담이 우리를 웃게 했다.
+562|noun|여정|Our journey took three days.|우리의 여정은 사흘이 걸렸다.
+563|noun|큰 기쁨|Her face was full of joy.|그녀의 얼굴은 큰 기쁨으로 가득했다.|rel:enjoy
+564|noun|판사|The judge listened to both sides.|판사는 양쪽 말을 들었다.
+565|noun|후배|He is my junior at school.|그는 학교에서 내 후배다.
+566|noun|정의|People marched for justice.|사람들이 정의를 위해 행진했다.
+567|noun|무릎|She put a book on her knee.|그녀는 무릎에 책을 올렸다.
+568|verb|두드리다|Someone knocked on the door.|누군가 문을 두드렸다.
+569|noun|지식|Books give us useful knowledge.|책은 우리에게 유용한 지식을 준다.
+570|noun|라벨|Read the label before use.|사용 전에 라벨을 읽어라.
+571|noun|노동|Farm labor starts before sunrise.|농장 노동은 해뜨기 전에 시작된다.
+572|noun|실험실|Students work in the laboratory.|학생들이 실험실에서 일한다.
+573|noun|부족|A lack of water killed plants.|물 부족이 식물을 죽였다.
+574|noun|새끼 양|The lamb followed its mother.|새끼 양이 어미를 따라갔다.
+575|noun|램프|Turn off the lamp before sleeping.|자기 전에 램프를 꺼라.
+576|noun|차선|Trucks use the right lane.|트럭은 오른쪽 차선을 이용한다.
+577|noun|언어|Korean is my first language.|한국어는 내 첫 언어다.
+578|verb|웃다|The children laughed together loudly.|아이들이 함께 크게 웃었다.
+579|noun|법|Every driver must obey the law.|모든 운전자는 법을 지켜야 한다.
+580|noun|잔디밭|Dad cut the lawn yesterday.|아빠가 어제 잔디밭을 깎았다.
+581|noun|변호사|A lawyer explained the contract.|변호사가 그 계약을 설명했다.
+582|verb|놓다|Lay the towel on the chair.|수건을 의자 위에 놓아라.|rel:layer;irr:laid
+583|verb|이끌다|She leads our small team.|그녀가 우리 작은 팀을 이끈다.|irr:led
+584|noun|잎|One yellow leaf fell down.|노란 잎 하나가 떨어졌다.
+585|noun|리그|Our team joined the school league.|우리 팀은 학교 리그에 참가했다.
+586|verb|기대다|Do not lean on that wall.|그 벽에 기대지 마라.
+587|verb|뛰어오르다|The frog leaped over the stone.|개구리가 돌 위로 뛰어올랐다.|irr:leapt
+588|verb|떠나다|We leave for Busan tomorrow.|우리는 내일 부산으로 떠난다.|irr:left
+589|adjective|법적인|He asked for legal advice.|그는 법적인 조언을 구했다.
+590|noun|레몬|Add lemon juice to the salad.|샐러드에 레몬즙을 넣어라.
+591|verb|빌려주다|Can you lend me your umbrella?|우산을 빌려줄 수 있니?|irr:lent
+592|verb|~하게 하다|Let me open the window.|내가 창문을 열게 해 줘.|irr:let
+593|noun|수준|His English level improved a lot.|그의 영어 수준이 많이 향상되었다.
+594|noun|면허|She showed her driving license.|그녀는 운전 면허를 보여 주었다.
+595|noun|뚜껑|Put the lid on the pot.|냄비에 뚜껑을 덮어라.
+596|verb|들어 올리다|Can you lift this heavy box?|이 무거운 상자를 들어 올릴 수 있니?
+597|noun|한계|Know your own limit well.|자기 한계를 잘 알아라.
+598|noun|연결|There is a link between them.|그것들 사이에는 연결이 있다.
+599|noun|명단|Write your name on the list.|명단에 이름을 적어라.
+600|noun|거실|Our livingroom has a wide window.|우리 거실에는 넓은 창문이 있다.

@@ -1,0 +1,201 @@
+# Middle AUTHORING BATCH 04 - official ** representative forms 601-800
+601|noun|짐|The truck carried a heavy load.|그 트럭은 무거운 짐을 실었다.
+602|noun|대출|He paid back the bank loan.|그는 은행 대출을 갚았다.
+603|adjective|지역의|We shop at a local market.|우리는 지역 시장에서 장을 본다.
+604|verb|위치를 찾다|Can you locate the nearest station?|가장 가까운 역의 위치를 찾을 수 있니?
+605|noun|자물쇠|The old lock was rusty.|그 낡은 자물쇠는 녹슬어 있었다.
+606|noun|통나무|We sat on a fallen log.|우리는 쓰러진 통나무에 앉았다.
+607|adjective|헐거운|This rope feels a bit loose.|이 밧줄은 조금 헐거운 느낌이다.
+608|verb|잃다|Do not lose your train ticket.|기차표를 잃어버리지 마라.|irr:lost
+609|noun|손실|The storm caused a big loss.|폭풍이 큰 손실을 일으켰다.
+610|noun|다수|A lot of people waited outside.|많은 사람들이 밖에서 기다렸다.
+611|adjective|시끄러운|The loud music woke the baby.|시끄러운 음악이 아기를 깨웠다.
+612|noun|기계|This machine prints color photos.|이 기계는 컬러 사진을 인쇄한다.
+613|noun|잡지|She reads a science magazine.|그녀는 과학 잡지를 읽는다.
+614|noun|마술|The magic show amazed children.|그 마술 공연은 아이들을 놀라게 했다.
+615|adjective|주된|The main road is closed today.|주된 도로가 오늘 폐쇄되었다.
+616|verb|유지하다|We maintain the garden every week.|우리는 매주 정원을 유지한다.
+617|adjective|주요한|Water is a major problem here.|물이 여기서 주요한 문제다.|rel:majority
+618|adjective|남성의|A male nurse helped the patient.|남성 간호사가 그 환자를 도왔다.
+619|verb|경영하다|She manages a small bakery.|그녀는 작은 빵집을 경영한다.
+620|noun|방식|His manner of speaking is calm.|그의 말하는 방식은 차분하다.
+621|verb|제조하다|The plant manufactures car parts.|그 공장은 자동차 부품을 제조한다.
+622|noun|표시|Put a mark beside your name.|이름 옆에 표시를 하세요.
+623|verb|경탄하다|Tourists marvel at the tall tower.|관광객들은 그 높은 탑에 경탄한다.
+624|noun|가면|The child wore a tiger mask.|그 아이는 호랑이 가면을 썼다.
+625|noun|덩어리|A mass of snow blocked us.|눈 덩어리가 우리를 막았다.
+626|noun|주인|The dog obeyed its master.|그 개는 주인에게 복종했다.
+627|noun|경기|Our soccer match starts at three.|우리 축구 경기는 세 시에 시작한다.
+628|noun|짝|The bird called to its mate.|그 새는 자기 짝을 불렀다.
+629|noun|문제|This matter needs quick attention.|이 문제는 빠른 관심이 필요하다.|rel:material
+630|noun|최대|The maximum is thirty people.|최대는 서른 명이다.
+631|adverb|아마|Maybe the train is late.|아마 기차가 늦는 것 같다.
+632|noun|식사|We share one meal each evening.|우리는 매일 저녁 한 끼 식사를 함께한다.
+633|verb|의미하다|What does this word mean?|이 단어는 무엇을 의미하니?|irr:meant
+634|verb|측정하다|Please measure the desk width.|책상 너비를 측정해 주세요.
+635|adjective|의학의|She read a medical report.|그녀는 의학 보고서를 읽었다.
+636|noun|약|Take this medicine after meals.|식후에 이 약을 드세요.
+637|noun|멜론|The melon tasted very sweet.|그 멜론은 아주 달았다.
+638|verb|녹다|Ice melts fast in summer.|얼음은 여름에 빨리 녹는다.
+639|adjective|정신의|Rest is good for mental health.|휴식은 정신 건강에 좋다.
+640|verb|언급하다|He mentioned your name twice.|그는 네 이름을 두 번 언급했다.
+641|noun|메뉴|The menu lists ten dishes.|그 메뉴에는 열 가지 요리가 있다.
+642|noun|엉망|Your desk is a real mess.|네 책상은 정말 엉망이다.
+643|noun|메시지|I left a short message.|나는 짧은 메시지를 남겼다.
+644|noun|금속|This box is made of metal.|이 상자는 금속으로 만들어졌다.
+645|noun|방법|Try a different study method.|다른 공부 방법을 시도해 보라.
+646|noun|전자레인지|Heat the soup in the microwave.|수프를 전자레인지에 데워라.
+647|adjective|군사의|The country cut military spending.|그 나라는 군사 지출을 줄였다.
+648|noun|방앗간|The old mill stands by the river.|낡은 방앗간이 강가에 서 있다.
+649|adjective|사소한|It was only a minor error.|그것은 사소한 실수일 뿐이었다.
+650|noun|분|Wait one more minute please.|일 분만 더 기다려 주세요.
+651|noun|거울|She looked into the mirror.|그녀는 거울을 들여다보았다.
+652|noun|임무|Our mission ends next month.|우리 임무는 다음 달에 끝난다.
+653|verb|섞다|Mix the flour with warm water.|밀가루를 따뜻한 물과 섞어라.
+654|adjective|현대의|Modern trains run very quietly.|현대의 기차는 아주 조용히 달린다.
+655|noun|잠깐|Wait a moment by the door.|문 옆에서 잠깐 기다려라.
+656|noun|모니터|The monitor screen went black.|모니터 화면이 까맣게 변했다.
+657|noun|기분|Her mood improved after lunch.|그녀의 기분은 점심 후에 나아졌다.
+658|adjective|도덕적인|We faced a moral choice.|우리는 도덕적인 선택에 직면했다.
+659|adverb|게다가|Moreover, the price is fair.|게다가 가격도 적당하다.
+660|noun|움직임|A slow motion caught my eye.|느린 움직임이 내 눈에 띄었다.
+661|noun|모터|The boat motor stopped suddenly.|배 모터가 갑자기 멈췄다.
+662|verb|올라타다|He mounted the brown horse.|그는 갈색 말에 올라탔다.
+663|noun|진흙|My boots were covered with mud.|내 장화는 진흙으로 덮여 있었다.
+664|noun|근육|Running builds leg muscle.|달리기는 다리 근육을 키운다.
+665|noun|박물관|The museum opens at ten.|박물관은 열 시에 문을 연다.
+666|noun|버섯|We picked mushrooms in the woods.|우리는 숲에서 버섯을 땄다.
+667|noun|수수께끼|The missing key remains a mystery.|사라진 열쇠는 수수께끼로 남아 있다.
+668|noun|못|He hit the nail with a hammer.|그는 망치로 못을 쳤다.
+669|adjective|좁은|A narrow path leads uphill.|좁은 길이 언덕 위로 이어진다.
+670|adjective|토박이의|She is a native speaker.|그녀는 토박이 화자다.
+671|noun|해군|His brother joined the navy.|그의 형은 해군에 입대했다.
+672|adjective|정돈된|Your room looks very neat.|네 방은 아주 정돈되어 보인다.
+673|adjective|필요한|Sleep is necessary for children.|잠은 아이들에게 필요하다.
+674|noun|이웃|Our neighbor keeps two cats.|우리 이웃은 고양이 두 마리를 기른다.
+675|determiner|둘 다 아닌|Neither answer was correct.|두 답 다 옳지 않았다.
+676|noun|신경|Cold air touched a tooth nerve.|찬 공기가 치아 신경에 닿았다.|rel:nervous
+677|noun|둥지|Two eggs lay in the nest.|알 두 개가 둥지에 있었다.
+678|noun|그물|The fisher pulled the wet net.|어부가 젖은 그물을 끌어당겼다.
+679|noun|소음|Street noise kept me awake.|거리 소음이 나를 깨어 있게 했다.
+680|pronoun|아무것도 없음|None of the seats were empty.|자리 중 아무것도 비어 있지 않았다.
+681|noun|정오|We meet at noon tomorrow.|우리는 내일 정오에 만난다.
+682|conjunction|~도 아니다|She likes neither tea nor coffee.|그녀는 차도 커피도 좋아하지 않는다.
+683|verb|알아차리다|Did you notice the new sign?|새 표지판을 알아차렸니?
+684|adverb|요즘|Nowadays many students ride bikes.|요즘 많은 학생들이 자전거를 탄다.
+685|adverb|아무데도|The lost dog was nowhere around.|잃어버린 개는 주변 아무데도 없었다.
+686|noun|견과|She ate a small nut.|그녀는 작은 견과를 먹었다.
+687|noun|참나무|A tall oak shades our yard.|큰 참나무가 우리 마당에 그늘을 준다.
+688|noun|물체|A round object floated nearby.|둥근 물체가 근처에 떠 있었다.|rel:objective
+689|verb|관찰하다|Scientists observe the night sky.|과학자들은 밤하늘을 관찰한다.
+690|adjective|명백한|The answer was quite obvious.|그 답은 꽤 명백했다.
+691|noun|경우|Wear this coat on special occasions.|특별한 경우에 이 코트를 입어라.
+692|verb|발생하다|Accidents occur near this corner.|사고가 이 모퉁이 근처에서 발생한다.|rel:occurrence
+693|noun|바다|The ocean looked calm today.|바다는 오늘 잔잔해 보였다.
+694|adjective|기이한|That was an odd question.|그것은 기이한 질문이었다.
+695|verb|제안하다|They offered me a free ticket.|그들은 내게 무료 표를 제안했다.
+696|noun|장교|An officer checked our passports.|한 장교가 우리 여권을 확인했다.
+697|adverb|한 번|I visit my aunt once monthly.|나는 이모를 한 달에 한 번 찾아뵌다.
+698|noun|오페라|We watched an Italian opera.|우리는 이탈리아 오페라를 보았다.
+699|verb|작동시키다|He operates a big machine.|그는 큰 기계를 작동시킨다.
+700|noun|의견|Your opinion matters to us.|당신의 의견은 우리에게 중요하다.
+701|verb|반대하다|Many parents opposed the plan.|많은 학부모가 그 계획에 반대했다.
+702|noun|순서|Please keep the correct order.|올바른 순서를 지켜 주세요.|rel:disorder
+703|adjective|평범한|It was an ordinary school day.|그것은 평범한 학교 날이었다.
+704|determiner|다른|Ask the other teacher instead.|대신 다른 선생님께 물어보라.
+705|adverb|그렇지 않으면|Hurry, otherwise we will be late.|서둘러라, 그렇지 않으면 늦을 것이다.
+706|auxiliary|~해야 한다|You ought to call her today.|너는 오늘 그녀에게 전화해야 한다.
+707|noun|오븐|The bread baked in the oven.|빵이 오븐에서 구워졌다.
+708|adjective|전반적인|The overall result was good.|전반적인 결과는 좋았다.
+709|verb|소유하다|They own two small shops.|그들은 작은 가게 두 개를 소유한다.
+710|verb|싸다|Pack your bag before dinner.|저녁 식사 전에 가방을 싸라.
+711|noun|고통|The medicine eased his pain.|그 약이 그의 고통을 덜어 주었다.
+712|noun|한 쌍|I bought a pair of socks.|나는 양말 한 쌍을 샀다.
+713|noun|궁전|The palace stands on a hill.|그 궁전은 언덕 위에 서 있다.
+714|noun|프라이팬|Heat the pan before cooking.|요리하기 전에 프라이팬을 데워라.
+715|noun|공황|Sudden panic spread through the crowd.|갑작스러운 공황이 군중에 퍼졌다.
+716|noun|행진|The parade passed our street.|그 행진은 우리 거리를 지나갔다.
+717|noun|문단|Read the first paragraph aloud.|첫 문단을 소리 내어 읽어라.
+718|verb|너그럽게 봐주다|Please pardon my poor English.|제 서툰 영어를 너그럽게 봐주세요.
+719|adjective|특정한|This particular book sells well.|이 특정한 책이 잘 팔린다.|rel:particularly
+720|noun|과거|We cannot change the past.|우리는 과거를 바꿀 수 없다.
+721|noun|오솔길|A stone path crosses the garden.|돌 오솔길이 정원을 가로지른다.
+722|noun|환자|The patient rested in bed.|그 환자는 침대에서 쉬었다.
+723|noun|무늬|Her scarf has a flower pattern.|그녀의 스카프에는 꽃무늬가 있다.
+724|verb|잠시 멈추다|He paused before answering me.|그는 내게 답하기 전에 잠시 멈췄다.
+725|noun|평화|The two towns kept peace.|그 두 마을은 평화를 지켰다.|rel:peaceful
+726|noun|배|This pear is soft and sweet.|이 배는 부드럽고 달다.
+727|noun|후추|Add salt and pepper now.|이제 소금과 후추를 넣어라.
+728|preposition|~당|The bus runs twice per hour.|그 버스는 시간당 두 번 다닌다.
+729|adjective|완벽한|Her drawing looks perfect.|그녀의 그림은 완벽해 보인다.
+730|verb|공연하다|The band performs every Friday.|그 밴드는 매주 금요일에 공연한다.
+731|adverb|어쩌면|Perhaps she forgot our meeting.|어쩌면 그녀가 우리 약속을 잊었다.
+732|noun|기간|The rainy period lasted long.|비 오는 기간이 오래 지속되었다.
+733|noun|사람|Only one person answered me.|오직 한 사람만 내게 답했다.|rel:personality
+734|noun|반려동물|My pet sleeps on the sofa.|내 반려동물은 소파에서 잔다.
+735|noun|사진|He framed an old photograph.|그는 오래된 사진을 액자에 넣었다.
+736|adjective|신체의|Physical exercise keeps us strong.|신체 운동은 우리를 튼튼하게 한다.
+737|noun|소풍|We had a picnic near water.|우리는 물가에서 소풍을 했다.
+738|noun|파이|Mom baked an apple pie.|엄마가 사과 파이를 구웠다.
+739|noun|한 조각|Cut one piece of cake.|케이크 한 조각을 잘라라.
+740|noun|더미|A pile of books fell.|책 더미가 무너졌다.
+741|noun|핀|She fixed it with a pin.|그녀는 핀으로 그것을 고정했다.
+742|noun|소나무|A pine grows behind our house.|소나무 한 그루가 우리 집 뒤에 자란다.
+743|noun|관|Water leaks from the old pipe.|낡은 관에서 물이 샌다.
+744|verb|공을 던지다|He pitched the ball hard.|그는 공을 세게 던졌다.
+745|noun|연민|She felt pity for the puppy.|그녀는 그 강아지에게 연민을 느꼈다.
+746|adjective|무늬 없는|He wore a plain gray shirt.|그는 무늬 없는 회색 셔츠를 입었다.
+747|noun|비행기|The plane landed on time.|그 비행기는 제시간에 착륙했다.
+748|noun|행성|Mars is a red planet.|화성은 붉은 행성이다.
+749|noun|식물|This plant needs more sunlight.|이 식물은 더 많은 햇빛이 필요하다.
+750|noun|접시|Put the plate on the table.|접시를 식탁 위에 놓아라.
+751|noun|풍부함|We have plenty of time.|우리에게는 시간이 풍부함이 있다.
+752|preposition|더하기|Two plus three equals five.|둘 더하기 셋은 다섯이다.
+753|noun|주머니|His pocket held two coins.|그의 주머니에는 동전 두 개가 있었다.
+754|noun|시|She wrote a short poem.|그녀는 짧은 시를 썼다.
+755|noun|시인|The poet read his work aloud.|그 시인은 자기 작품을 소리 내어 읽었다.
+756|noun|독|Some mushrooms contain poison.|어떤 버섯은 독을 품고 있다.
+757|noun|기둥|A flag hangs on the pole.|깃발이 기둥에 걸려 있다.|rel:polar
+758|noun|정책|The school changed its policy.|그 학교는 정책을 바꿨다.
+759|adjective|예의 바른|The clerk was very polite.|그 점원은 아주 예의 발랐다.
+760|noun|정치|He never discusses politics.|그는 결코 정치를 논하지 않는다.
+761|verb|오염시키다|Factories pollute the small river.|공장들이 그 작은 강을 오염시킨다.
+762|noun|수영장|The pool closes at seven.|수영장은 일곱 시에 닫는다.
+763|noun|대중음악|She loves Korean pop.|그녀는 한국 대중음악을 좋아한다.
+764|adjective|인기 있는|This song became popular quickly.|이 노래는 빠르게 인기 있게 되었다.
+765|noun|돼지고기|We grilled pork for dinner.|우리는 저녁으로 돼지고기를 구웠다.
+766|noun|항구|Ships wait inside the port.|배들이 항구 안에서 기다린다.
+767|verb|지니다|He possesses rare old coins.|그는 희귀한 옛 동전을 지니고 있다.
+768|adjective|가능한|An early start is possible.|이른 출발이 가능하다.
+769|noun|우편|Send the form by post.|그 서식을 우편으로 보내라.|rel:poster
+770|noun|냄비|Boil water in a large pot.|큰 냄비에 물을 끓여라.
+771|noun|잠재력|This student has great potential.|이 학생은 큰 잠재력이 있다.
+772|verb|붓다|Pour the milk into cups.|우유를 컵에 부어라.
+773|noun|가루|White powder covered the floor.|흰 가루가 바닥을 덮었다.
+774|adjective|실용적인|Her advice was very practical.|그녀의 조언은 아주 실용적이었다.
+775|noun|연습|Daily practice makes you better.|매일의 연습이 너를 낫게 만든다.
+776|verb|기도하다|They pray before every meal.|그들은 매 식사 전에 기도한다.
+777|verb|선호하다|I prefer tea to coffee.|나는 커피보다 차를 선호한다.
+778|adjective|임신한|My aunt is pregnant now.|우리 이모는 지금 임신 중이다.
+779|verb|준비하다|We prepared lunch together.|우리는 함께 점심을 준비했다.
+780|noun|존재|His presence calmed the class.|그의 존재가 반을 진정시켰다.
+781|verb|누르다|Press the green button firmly.|초록 단추를 꽉 눌러라.
+782|verb|~인 척하다|Do not pretend to sleep.|자는 척하지 마라.
+783|verb|막다|Masks prevent some illnesses.|마스크는 일부 질병을 막는다.
+784|adjective|이전의|Check the previous page again.|이전 페이지를 다시 확인해라.
+785|noun|가격|The price of rice rose.|쌀 가격이 올랐다.
+786|noun|자부심|He spoke with quiet pride.|그는 조용한 자부심으로 말했다.
+787|adjective|최고의|Beef of prime quality sells fast.|최고의 품질인 소고기는 빨리 팔린다.|rel:primary
+788|noun|원칙|She follows one simple principle.|그녀는 하나의 단순한 원칙을 따른다.
+789|noun|감옥|The thief left prison last year.|그 도둑은 작년에 감옥에서 나왔다.
+790|noun|사생활|Everyone deserves some privacy.|누구나 약간의 사생활을 누릴 자격이 있다.
+791|adjective|사적인|This is a private letter.|이것은 사적인 편지다.
+792|noun|상품|She won a prize at the contest.|그녀는 대회에서 상품을 받았다.
+793|adjective|있음 직한|Rain seems probable this evening.|오늘 저녁 비가 올 법하다.|rel:probably
+794|verb|진행하다|We proceeded with the plan.|우리는 그 계획을 진행했다.|rel:procedure
+795|noun|과정|The baking process takes hours.|굽는 과정은 몇 시간 걸린다.
+796|verb|생산하다|This farm produces fresh eggs.|이 농장은 신선한 달걀을 생산한다.
+797|noun|전문직|Teaching is a respected profession.|가르치는 일은 존경받는 전문직이다.
+798|noun|수익|The shop made a small profit.|그 가게는 적은 수익을 냈다.
+799|noun|진전|We made steady progress today.|우리는 오늘 꾸준한 진전을 이루었다.
+800|noun|약속|She kept her promise.|그녀는 자기 약속을 지켰다.
