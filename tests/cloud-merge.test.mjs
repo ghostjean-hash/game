@@ -436,11 +436,13 @@ test('같은 세트를 양쪽에서 공부하면 단어마다 더 많이 진행�
   assert.equal(r.apply.toLocal.length, 1);
 });
 
-test('살릴 대상으로 지정하지 않은 항목은 이긴 쪽 기준으로 정리된다', () => {
+test('이긴 쪽에 없는 항목도 버리지 않는다 (2026-07-29 유실 사고 이후 원칙)', () => {
   const local = doc({ 'gg.tetris': slot(T - 5000, { 'best.zen': 50, 'best.sprint': 12 }) });
   const remote = doc({ 'gg.tetris': slot(T - 100, { 'best.zen': 70 }) });
   const r = mergeDocuments(local, remote, { now: T });
-  assert.deepEqual(r.merged.slots['gg.tetris'].data, { 'best.zen': 70 });
+  // 겹치는 항목은 최신 값, 한쪽에만 있던 항목은 그대로 살아남는다.
+  assert.deepEqual(r.merged.slots['gg.tetris'].data, { 'best.zen': 70, 'best.sprint': 12 });
+  assert.ok(r.apply.toRemote.includes('gg.tetris'));
 });
 
 // --- 같은 기기가 올린 기록 (사용자 신고 2026-07-29: 이 기기에서 저장했는데 왜 묻나) ---

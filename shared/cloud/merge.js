@@ -115,6 +115,35 @@ function combineValues(rule, winnerValue, loserValue) {
   return undefined;
 }
 
+// 값 하나가 담고 있는 항목 수. 크기 비교로 "많이 잃는 병합"을 감지하는 데 쓴다.
+// 한 겹 안쪽까지 세어야 한다 - 학습 상태처럼 겉은 항목 하나여도 그 안에 수십 개가 들어 있다.
+function bulkOf(v, depth = 0) {
+  if (Array.isArray(v)) return v.length;
+  if (isPlainObject(v)) {
+    const keys = Object.keys(v);
+    if (depth >= 2) return keys.length;
+    return keys.reduce((n, k) => n + Math.max(1, bulkOf(v[k], depth + 1)), 0);
+  }
+  return v === undefined || v === null ? 0 : 1;
+}
+
+// 진 쪽이 이긴 쪽보다 눈에 띄게 많은 내용을 담고 있으면 자동으로 덮지 않는다.
+// 사용자 기대: "핸드폰 데이터가 훨씬 큰데 당연히 물어볼 줄 알았다"(2026-07-29).
+// 같은 항목의 값이 절반 이하로 줄어드는 경우를 손실 후보로 본다.
+const LOSS_RATIO = 0.5;
+
+function hasBigLoss(winnerData, loserData) {
+  if (!isPlainObject(winnerData) || !isPlainObject(loserData)) return false;
+  for (const key of Object.keys(loserData)) {
+    if (!(key in winnerData)) continue; // 한쪽에만 있는 항목은 위에서 살린다
+    const lose = bulkOf(loserData[key]);
+    if (lose < 2) continue; // 값 하나짜리는 크기 비교 대상이 아니다
+    const keep = bulkOf(winnerData[key]);
+    if (keep <= lose * LOSS_RATIO) return true;
+  }
+  return false;
+}
+
 function maxTs(a, b) {
   const x = isFiniteNumber(a) ? a : null;
   const y = isFiniteNumber(b) ? b : null;
@@ -177,10 +206,11 @@ function combineSlot(slotId, winner, loser) {
   const out = clone(winner);
   let changed = false;
 
-  // 이긴 쪽에 없는 항목 중 지우면 안 되는 것(학습 세트 등)을 살린다.
+  // 진 쪽에만 있는 항목은 무조건 살린다(2026-07-29 데이터 유실 사고 이후 원칙).
+  // 이긴 쪽에 없다는 이유로 버리면 그 기기·계정에만 있던 기록이 사라진다.
+  // 동기화는 더하는 방향만 자동으로 한다. 지우는 방향은 사람이 정한다.
   for (const key of Object.keys(loser.data)) {
     if (key in winner.data) continue;
-    if (!shouldKeepUnmatched(slotId, key)) continue;
     out.data[key] = clone(loser.data[key]);
     changed = true;
   }
@@ -367,13 +397,25 @@ export function mergeDocuments(localDoc, remoteDoc, { now = 0, skewToleranceMs =
       continue;
     }
 
-    // 양쪽 다 저장 시각을 모르는 옛 기록이다. "같은 시각"으로 볼 수 없으므로 묻지 않고
-    // 이 기기 것을 기준으로 삼는다(내 기기에서 쓰던 기록을 신뢰한다).
+    // 양쪽 다 저장 시각을 모르는 옛 기록이다. 묻지 않고 이 기기 것을 기준으로 삼되,
+    // 항목은 합쳐서 어느 쪽도 잃지 않는다.
     if (lt === 0 && rt === 0) {
       const { slot: won } = combineSlot(slotId, adopt(l, r), r);
       merged.slots[slotId] = won;
       if (!deepEqual(won.data, r.data)) toRemote.push(slotId);
       continue;
+    }
+
+    // 한쪽만 저장 시각을 모른다. 클라우드 저장을 붙이기 전부터 있던 기록이 이 경우다.
+    // 시각이 0이라는 이유로 자동으로 지게 두면 그 기기의 기록이 통째로 밀린다
+    // (2026-07-29 모바일 데이터 유실의 직접 원인). 내용이 있으면 사람에게 묻는다.
+    if ((lt === 0) !== (rt === 0)) {
+      const olderSide = lt === 0 ? l : r;
+      if (bulkOf(olderSide.data) > 0 && !deepEqual(l.data, r.data)) {
+        merged.slots[slotId] = adopt(l, r);
+        conflicts.push({ slot: slotId, reason: "unknown-time", local: clone(l), remote: clone(r) });
+        continue;
+      }
     }
 
     // 저장 시각이 현재보다 크게 미래면 그 시각을 믿을 수 없다. 어느 쪽도 자동 채택하지 않는다.
@@ -400,6 +442,15 @@ export function mergeDocuments(localDoc, remoteDoc, { now = 0, skewToleranceMs =
         merged.slots[slotId] = adopt(l, r);
         conflicts.push({ slot: slotId, reason: "same-time-diff-content", local: clone(l), remote: clone(r) });
       }
+      continue;
+    }
+
+    // 시각으로는 이길 쪽이 정해져도, 지는 쪽이 훨씬 많은 내용을 담고 있으면 묻는다.
+    const loserSide = lt > rt ? r : l;
+    const winnerSide = lt > rt ? l : r;
+    if (hasBigLoss(winnerSide.data, loserSide.data)) {
+      merged.slots[slotId] = adopt(l, r);
+      conflicts.push({ slot: slotId, reason: "big-loss", local: clone(l), remote: clone(r) });
       continue;
     }
 

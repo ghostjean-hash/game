@@ -249,13 +249,93 @@ test('기기 상태와 1회성 정리 표식은 계정에 올리지 않는다', 
 
 test('제외 항목은 클라우드 데이터를 받아써도 지워지지 않는다', async () => {
   const s = setup({
-    storageInit: { 'gg.tetris.muted': 'true', 'gg.tetris.best.marathon': '10' },
+    storageInit: {
+      'gg.tetris.muted': 'true',
+      'gg.tetris.best.marathon': '10',
+      [META_KEY]: JSON.stringify({ 'gg.tetris': T - 9000 }),
+    },
     remoteInit: remoteDoc({ 'gg.tetris': { updatedAt: T, data: { 'best.marathon': 5000 } } }),
     signedIn: true,
   });
   await s.sync.start();
   assert.equal(s.read('gg.tetris.best.marathon'), 5000);
   assert.equal(s.read('gg.tetris.muted'), true);
+});
+
+// --- 2026-07-29 모바일 데이터 유실 사고 재발 방지 ---
+test('저장 시각이 없는 기존 기기 데이터는 자동으로 밀리지 않고 사용자에게 묻는다', async () => {
+  // 사고 재현: 이 기기에는 클라우드 저장을 붙이기 전부터 있던 기록(시각 0),
+  // 클라우드에는 다른 기기가 올린 기록(실제 시각). 예전 코드는 조용히 덮었다.
+  let asked = null;
+  const s = setup({
+    storageInit: { 'gg.tetris.best.marathon': '999999' },
+    remoteInit: remoteDoc({ 'gg.tetris': { updatedAt: T - 100, data: { 'best.marathon': 10 } } }),
+    signedIn: true,
+  });
+  const sync = createSync({
+    auth: s.auth, remote: s.remote, local: s.local, scheduler: s.scheduler,
+    now: () => T, onConflicts: (c) => { asked = c; },
+  });
+  await sync.start();
+
+  assert.equal(sync.getStatus().state, STATUS.CONFLICT);
+  assert.equal(asked.length, 1);
+  assert.equal(asked[0].reason, 'unknown-time');
+  // 묻는 동안 기기 기록은 그대로다.
+  assert.equal(s.read('gg.tetris.best.marathon'), 999999);
+});
+
+test('지는 쪽이 훨씬 많은 내용을 담고 있으면 자동으로 덮지 않는다', async () => {
+  let asked = null;
+  const many = {};
+  for (let i = 0; i < 20; i += 1) many[`w${i}`] = { status: 'learned' };
+  const s = setup({
+    storageInit: {
+      'gg.english-vocabulary.deck:1:a': JSON.stringify({ progress: many }),
+      [META_KEY]: JSON.stringify({ 'gg.english-vocabulary': T - 9000 }),
+    },
+    remoteInit: remoteDoc({
+      'gg.english-vocabulary': { updatedAt: T - 100, data: { 'deck:1:a': { progress: { w0: { status: 'active' } } } } },
+    }),
+    signedIn: true,
+  });
+  const sync = createSync({
+    auth: s.auth, remote: s.remote, local: s.local, scheduler: s.scheduler,
+    now: () => T, onConflicts: (c) => { asked = c; },
+  });
+  await sync.start();
+
+  assert.equal(sync.getStatus().state, STATUS.CONFLICT);
+  assert.equal(asked[0].reason, 'big-loss');
+  assert.equal(Object.keys(s.read('gg.english-vocabulary.deck:1:a').progress).length, 20);
+});
+
+test('처음 동기화 직전 상태를 한 번 저장해 두고 되돌릴 수 있다', async () => {
+  const s = setup({
+    storageInit: { 'gg.tetris.best.marathon': '777', [META_KEY]: JSON.stringify({ 'gg.tetris': T - 9000 }) },
+    signedIn: true,
+  });
+  await s.sync.start();
+
+  const snap = s.local.readSnapshot();
+  assert.ok(snap, '첫 동기화 전 상태가 저장돼야 한다');
+  assert.equal(snap.slots['gg.tetris'].data['best.marathon'], 777);
+
+  // 이후 값이 바뀌어도 되돌리면 처음 값이 돌아온다.
+  s.storage.setItem('gg.tetris.best.marathon', '1');
+  assert.equal(s.local.restoreSnapshot(), 1);
+  assert.equal(s.read('gg.tetris.best.marathon'), 777);
+});
+
+test('되돌릴 상태는 한 번만 만들고 이후 덮어쓰지 않는다', async () => {
+  const s = setup({
+    storageInit: { 'gg.tetris.best.marathon': '777', [META_KEY]: JSON.stringify({ 'gg.tetris': T - 9000 }) },
+    signedIn: true,
+  });
+  await s.sync.start();
+  s.storage.setItem('gg.tetris.best.marathon', '1');
+  await s.sync.flushNow();
+  assert.equal(s.local.readSnapshot().slots['gg.tetris'].data['best.marathon'], 777);
 });
 
 // --- 5.3.6 로그아웃 ---
@@ -356,12 +436,13 @@ test('기기 저장 스캔은 두 가지 키 규칙을 모두 알아본다', asy
   assert.deepEqual(slots['gg.english-vocabulary'].data, { deck: { a: 1 } });
 });
 
-test('클라우드 데이터를 기기에 쓸 때 제외 대상은 지우지 않는다', async () => {
+test('클라우드 데이터를 기기에 써도 기기에 있던 항목을 지우지 않는다', async () => {
   const s = setup({ storageInit: { 'lotto_draws': '[1,2,3]', 'lotto_options': '{"old":true}' } });
   s.local.writeSlot('lotto', { characters: [{ id: 'c9' }] }, T);
 
-  assert.deepEqual(s.read('lotto_draws'), [1, 2, 3]); // 회차 캐시는 보존
-  assert.equal(s.read('lotto_options'), null);        // 클라우드에 없는 진행 데이터는 정리
+  // 2026-07-29 유실 사고 이후 원칙: 클라우드에 없다는 이유로 기기 저장을 지우지 않는다.
+  assert.deepEqual(s.read('lotto_draws'), [1, 2, 3]);
+  assert.deepEqual(s.read('lotto_options'), { old: true });
   assert.deepEqual(s.read('lotto_characters'), [{ id: 'c9' }]);
 });
 

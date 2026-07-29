@@ -106,6 +106,9 @@ export function createSync({
     inFlight = true;
     setStatus(STATUS.SYNCING);
 
+    // 이 기기가 처음 동기화하기 직전 상태를 한 번 남긴다. 무언가 잘못 덮였을 때의 마지막 수단.
+    try { local.snapshotOnce(now()); } catch {}
+
     try {
       let remoteDoc = null;
       try {

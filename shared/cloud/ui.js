@@ -162,6 +162,7 @@ export function mountCloudUI({ container, auth, sync, local, titles = {} }) {
         { label: "저장하기 (구글 드라이브)", value: "push", primary: true },
         { label: "불러오기 (구글 드라이브)", value: "pull" },
         { label: "내보내기 (JSON 파일)", value: "export" },
+        { label: "처음 상태로 되돌리기", value: "restore" },
         { label: "로그아웃", value: "signout" },
       ],
     });
@@ -174,6 +175,24 @@ export function mountCloudUI({ container, auth, sync, local, titles = {} }) {
       showToast(sync.getStatus().state === STATUS.SYNCED ? "불러왔습니다" : "불러오지 못했습니다");
     } else if (choice === "export") {
       exportToFile();
+    } else if (choice === "restore") {
+      const snap = local.readSnapshot();
+      if (!snap) {
+        showToast("되돌릴 기록이 없습니다");
+      } else {
+        const yes = await showModal({
+          title: `${absTime(snap.at)} 상태로 되돌립니다`,
+          stack: true,
+          actions: [
+            { label: "되돌리기", value: "go", primary: true },
+            { label: "취소", value: "no" },
+          ],
+        });
+        if (yes === "go") {
+          const n = local.restoreSnapshot();
+          showToast(n ? `${n}개 항목을 되돌렸습니다. 새로고침하세요` : "되돌리지 못했습니다");
+        }
+      }
     } else if (choice === "signout") {
       auth.signOut();
       showToast("로그아웃했습니다. 기기 기록은 그대로입니다");
@@ -242,10 +261,16 @@ export function mountCloudUI({ container, auth, sync, local, titles = {} }) {
       wrap.appendChild(group);
     }
 
-    // 줄기가 다르면 이어지는 기록이 아니라 무관한 두 기록이다. 제목으로 구분한다.
-    const unrelated = conflicts.every((c) => c.reason === "different-lineage");
+    // 무엇 때문에 묻는지 제목으로 구분한다.
+    const reasons = new Set(conflicts.map((c) => c.reason));
+    let title = "기록이 서로 다릅니다";
+    if (reasons.size === 1) {
+      if (reasons.has("different-lineage")) title = "서로 다른 기록입니다";
+      else if (reasons.has("big-loss")) title = "한쪽 기록이 훨씬 많습니다";
+      else if (reasons.has("unknown-time")) title = "어느 쪽이 최신인지 알 수 없습니다";
+    }
     const decision = await showModal({
-      title: unrelated ? "서로 다른 기록입니다" : "기록이 서로 다릅니다",
+      title,
       bodyEl: wrap,
       actions: [
         { label: "선택대로 진행", value: "apply", primary: true },

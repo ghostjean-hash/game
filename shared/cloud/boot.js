@@ -44,7 +44,7 @@ function demoConflicts(now) {
     },
     {
       slot: "gg.flightshooting",
-      reason: "different-lineage",
+      reason: "big-loss",
       local: { updatedAt: now - 2 * 3600000, createdAt: now - 3 * 86400000, lineage: "ln-demo-c", data: { best: 3200 } },
       remote: { updatedAt: now - 20 * 60 * 1000, createdAt: now - 40 * 86400000, lineage: "ln-demo-d", data: { best: 8700 } },
     },
