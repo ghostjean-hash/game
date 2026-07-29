@@ -34,7 +34,7 @@
 ## 3. 실행 방식
 
 1. draft-only 병렬. 각 배치 에이전트는 자기 draft 파일만 Write하고 `passages.json`은 아무도 건드리지 않는다(동시 조작 차단, 2026-07-28과 같은 방식).
-2. 에이전트 프롬프트 = `AUTHOR_BRIEF_121-200.md`를 읽으라는 지시 + 그 배치의 커리큘럼 행(번호·Lv·소재·영어 핵심어·숙어)을 표로 붙여 준다. 배정 레벨·topic은 바꾸지 못하게 못박는다.
+2. 에이전트 프롬프트 = `AUTHOR_BRIEF_121-200.md`를 읽으라는 지시 + 그 배치의 커리큘럼 행(번호·Lv·소재·영어 핵심어·숙어)을 표로 붙여 준다. 배정 레벨·topic은 바꾸지 못하게 고정한다.
 3. 각 에이전트가 `tools/validate-draft.mjs`로 자체 검증해 전 편 `ok` + 규칙 경고 0을 만든 뒤 보고한다.
 4. 자비스가 10개 draft를 취합해 (a) 배치 간 id·title·문장 중복 (b) 배정표 대조(80편 전수·레벨·topic 일치) (c) 숙어 반영 여부를 대조하고 `passages.json`에 병합한다.
 5. `node tests/run-node.mjs` strict 200편 전량 통과 확인 → `tools/build-standalone.mjs` 재빌드 → playwright 실경로 표본 검증 → `/web-deploy`.
