@@ -375,3 +375,7 @@ body[data-fs="large"] { --fs: 1.15; }
   font-size: calc(15px * var(--fs)); line-height: 1.6;
   white-space: pre-line; padding: var(--sp-7) var(--sp-4);
 }
+
+/* 홈(게임 허브)으로 돌아가기 (2026-07-29). 아이콘 전용이라 정사각. */
+.nav-home { padding: 0; text-decoration: none; color: var(--fg-dim); }
+.nav-home:hover { color: var(--fg); }

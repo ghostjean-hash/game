@@ -6,7 +6,7 @@
 ## 1. 플레이
 
 - 게임 허브 루트의 lotto 추천번호 카드 클릭.
-- 또는 직접 `games/lotto/`.
+- 또는 직접 `apps/lotto/`.
 - 첫 진입: 면책 안내 → 캐릭터 생성 폼 → 메인.
 
 ## 2. 조작
@@ -60,7 +60,7 @@
 node scripts/dev-server.mjs 8000
 ```
 
-브라우저: `http://127.0.0.1:8000/games/lotto/`
+브라우저: `http://127.0.0.1:8000/apps/lotto/`
 
 ### Live Server (VS Code)
 포트 5500. 동작하지만 캐시 / SW 충돌 가능. dev-server 권장.
@@ -86,7 +86,7 @@ GitHub Actions가 매주 일요일 03:00 KST에 자동 페치 + push.
 ## 6. 테스트
 
 ```
-http://127.0.0.1:8000/games/lotto/tests/test.html
+http://127.0.0.1:8000/apps/lotto/tests/test.html
 ```
 
 200+ 케이스 (seed / random / luck / stats / recommend / storage / fortune / match / zodiac / saju / schedule / history / wheeling).

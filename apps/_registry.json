@@ -15,6 +15,18 @@
       "path": "apps/english-vocabulary/",
       "status": "wip",
       "accent": "#2563eb"
+    },
+    {
+      "id": "lotto",
+      "title": "lotto 추천번호",
+      "subtitle": "축복받은 캐릭터의 번호 카드",
+      "path": "apps/lotto/",
+      "status": "wip",
+      "controls": [
+        "touch",
+        "keyboard"
+      ],
+      "accent": "#d4a657"
     }
   ]
 }

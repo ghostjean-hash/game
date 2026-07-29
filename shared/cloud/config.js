@@ -1,0 +1,16 @@
+// 구글 로그인 설정. SSOT: 설계 6.3 S5 + 8장.
+//
+// CLIENT_ID는 구글 클라우드 콘솔에서 발급받는 "웹 애플리케이션" 등록번호다.
+// 비밀키가 아니므로 공개 저장소에 그대로 두어도 안전하다(브라우저 방식은 비밀키를 쓰지 않는다).
+//
+// 비어 있는 동안에는 허브에 로그인 버튼이 나타나지 않는다.
+// 동작하지 않는 버튼을 사용자에게 보여주지 않기 위해서다.
+export const CLIENT_ID = "1088592833637-gf6qs4e84rqm6krnkvhncjtuukj1bh86.apps.googleusercontent.com";
+
+// 요청 권한. 이 웹사이트 전용 숨김 폴더 하나뿐이다.
+// 이 값을 넓히면 구글 심사 등급이 올라간다(설계 2.5 불변 조건).
+// tests/smoke.mjs 가 이 파일에 다른 드라이브 권한이 섞이지 않는지 검사한다.
+export const SCOPE = "https://www.googleapis.com/auth/drive.appdata";
+
+// 드라이브 숨김 폴더에 두는 세이브 파일 이름.
+export const FILE_NAME = "save-v1.json";

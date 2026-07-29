@@ -1,10 +1,22 @@
 // localStorage 입출력. SSOT: docs/02_data.md 3장.
 // data/만 localStorage 접근. core/에서는 직접 접근 금지.
 
+import { stampSlot } from '../../../../shared/cloud/stamp.js';
+
 const PREFIX = 'lotto_';
+
+// 클라우드 동기화에서 이 게임을 가리키는 이름(설계 6.3 S3).
+const CLOUD_SLOT = 'lotto';
 
 function key(name) {
   return `${PREFIX}${name}`;
+}
+
+// 변경 시각을 남기고, 허브에서 동기화가 돌고 있으면 업로드를 예약한다.
+// 되돌리기: 아래 notifyCloud 호출 2곳만 지우면 원래 동작으로 즉시 복귀한다.
+function notifyCloud() {
+  stampSlot(CLOUD_SLOT);
+  try { globalThis.__ggCloudNotify?.(CLOUD_SLOT); } catch {}
 }
 
 function read(name, fallback = null) {
@@ -19,6 +31,7 @@ function read(name, fallback = null) {
 
 function write(name, value) {
   localStorage.setItem(key(name), JSON.stringify(value));
+  notifyCloud();
 }
 
 // 회차 데이터
@@ -165,6 +178,7 @@ export function clearAll() {
     const k = localStorage.key(i);
     if (k && k.startsWith(PREFIX)) localStorage.removeItem(k);
   }
+  notifyCloud();
 }
 
 // 정적 draws.json 동기화 (M6).

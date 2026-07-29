@@ -80,6 +80,8 @@ a.btn-secondary,
 #app {
   min-height: 100%;
   padding: var(--space-4);
+  /* 좌상단 고정 홈 버튼(36px)이 본문 첫 줄을 가리지 않도록 자리를 비운다(2026-07-29). */
+  padding-top: calc(max(var(--space-4), env(safe-area-inset-top)) + 44px);
   padding-left: max(var(--space-4), env(safe-area-inset-left));
   padding-right: max(var(--space-4), env(safe-area-inset-right));
   padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
@@ -3096,6 +3098,8 @@ a.btn-secondary,
 @media (max-width: 480px) {
   #app {
     padding: var(--space-3);
+    /* 축약 padding이 위 규칙을 덮으므로 홈 버튼 자리를 여기서도 다시 확보한다. */
+    padding-top: calc(max(var(--space-3), env(safe-area-inset-top)) + 44px);
     padding-left: max(var(--space-3), env(safe-area-inset-left));
     padding-right: max(var(--space-3), env(safe-area-inset-right));
     /* S071 (2026-05-16): 하단 탭(--bottom-tab-h 56px) + 여유 + safe-area. Sprint 069에서 line 1199(데스크톱)와 360px↓만 토큰화하고 본 480~360 구간을 누락해 12+safe로 남아있던 결손 정정. */
@@ -3145,7 +3149,10 @@ a.btn-secondary,
 
 /* ===== 매우 좁은 폭 (360px 이하): 추가 보정 ===== */
 @media (max-width: 360px) {
-  #app { padding: var(--space-2); }
+  #app {
+    padding: var(--space-2);
+    padding-top: calc(max(var(--space-2), env(safe-area-inset-top)) + 44px);
+  }
   .app-title { font-size: 20px; }
   .num { width: 36px; height: 36px; font-size: 12px; }
   /* S097-후속 6 (2026-05-22): 360px↓ 기록 ball. 추천 탭 ball(24)과 시각 통일. */
@@ -3505,3 +3512,25 @@ a.btn-secondary,
   .char-toggle-meta { font-size: var(--font-size-xs); }
 }
 
+
+/* 홈(게임 허브)으로 돌아가기 (2026-07-29).
+   이 앱은 화면마다 상단 구조가 달라 상단바에 넣을 수 없다. 좌상단 고정으로 항상 노출한다. */
+.home-link {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + var(--space-2));
+  left: calc(env(safe-area-inset-left) + var(--space-2));
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dim);
+  text-decoration: none;
+}
+.home-link svg { width: 18px; height: 18px; }
+.home-link:hover { color: var(--color-text); background: var(--color-surface-soft); }
+.home-link:active { transform: scale(0.96); }

@@ -6,7 +6,7 @@
       "Bash(git -C \"D:/claude_code/game\" status)",
       "Bash(git -C \"D:/claude_code/game\" log --oneline -5)",
       "Bash(git -C \"D:/claude_code/game\" diff --stat HEAD)",
-      "Bash(git -C \"D:/claude_code/game\" add games/lotto/PROGRESS.md games/lotto/PROGRESS_ARCHIVE.md)",
+      "Bash(git -C \"D:/claude_code/game\" add apps/lotto/PROGRESS.md apps/lotto/PROGRESS_ARCHIVE.md)",
       "Bash(git -C D:/claude_code/game commit -m ' *)"
     ]
   }

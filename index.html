@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0e0f13" />
+<meta name="theme-color" content="#f5f6fa" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="ghost" />
@@ -13,6 +13,27 @@
 <link rel="stylesheet" href="shared/base.css" />
 <title>game_ghost</title>
 <style>
+  /* 홈화면만 라이트 테마(사용자 지시 2026-07-29). 게임·앱 화면은 기존 다크 유지.
+     tokens.css를 링크한 뒤에 선언해 이 값이 이긴다. */
+  :root {
+    --bg: #f5f6fa;
+    --bg-elev: #ffffff;
+    --bg-elev-2: #eceff5;
+    --fg: #1a1d26;
+    --fg-dim: #5a6273;
+    --fg-mute: #8b93a5;
+    --accent: #0f9d70;
+    --accent-strong: #0a7f5a;
+    --warn: #b0761a;
+    --danger: #d64560;
+    --line: #dee2ec;
+    --shadow-1: 0 1px 2px rgba(16,24,40,0.06), 0 2px 8px rgba(16,24,40,0.06);
+    --shadow-2: 0 8px 24px rgba(16,24,40,0.14);
+  }
+  /* 밝은 배경에서 대비를 잃는 하드코딩 값 보정 */
+  .modal-backdrop { background: rgba(26, 29, 38, 0.45); }
+  .btn-primary { color: #ffffff; }
+
   .launcher {
     flex: 1;
     overflow-y: auto;
@@ -21,6 +42,71 @@
   .launcher header {
     margin-bottom: var(--sp-5);
   }
+  .head-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sp-3);
+  }
+  /* 클라우드 저장 버튼 - 카드 배지와 같은 알약 모양·색 체계를 재사용한다. */
+  .cloud-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px 5px 5px;
+    border-radius: 999px;
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    color: var(--fg-dim);
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background var(--dur-1) var(--ease);
+  }
+  .cloud-btn:hover { background: var(--bg-elev-2); }
+  .cloud-btn:active { transform: scale(0.98); }
+  .cloud-btn-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-elev-2);
+    background-size: cover;
+    background-position: center;
+    font-size: 11px;
+    line-height: 1;
+  }
+  .cloud-btn[data-state="synced"] { color: var(--accent); border-color: rgba(15,157,112,0.35); }
+  .cloud-btn[data-state="offline"],
+  .cloud-btn[data-state="error"],
+  .cloud-btn[data-state="conflict"],
+  .cloud-btn[data-state="disabled"] { color: var(--warn); border-color: rgba(176,118,26,0.35); }
+  /* 충돌 선택 대화상자(설계 4.7.3) */
+  .cloud-conflict {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    text-align: left;
+    margin: var(--sp-2) 0 var(--sp-3);
+  }
+  .cloud-conflict-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .cloud-conflict-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 13px;
+    color: var(--fg-dim);
+    cursor: pointer;
+  }
+  .cloud-conflict-row input { margin-top: 3px; }
+  .cloud-conflict-row span { display: flex; flex-direction: column; gap: 2px; }
+  .cloud-conflict-row b { font-weight: 700; color: var(--fg); }
+  .cloud-conflict-when { font-size: 11px; color: var(--fg-mute); }
   .launcher h1 {
     margin: 0 0 var(--sp-2);
     font-size: 28px;
@@ -104,9 +190,11 @@
     color: var(--fg-dim);
     border: 1px solid var(--line);
   }
-  .badge.playable { color: var(--accent); border-color: rgba(124,243,196,0.3); }
-  .badge.polished { color: #0a0c10; background: var(--accent); border-color: transparent; }
-  .badge.wip { color: var(--warn); border-color: rgba(247,201,72,0.3); }
+  /* 배지는 카드마다 다른 강조색을 물려받으면 밝은 배경에서 흐려진다. 고정 색을 쓴다.
+     카드 위쪽 색 띠(accent-bar)만 게임별 색을 유지한다. */
+  .badge.playable { color: #0f9d70; border-color: rgba(15,157,112,0.35); background: rgba(15,157,112,0.08); }
+  .badge.polished { color: #ffffff; background: #0f9d70; border-color: transparent; }
+  .badge.wip { color: #9a6612; border-color: rgba(154,102,18,0.35); background: rgba(154,102,18,0.08); }
   .empty {
     text-align: center;
     color: var(--fg-mute);
@@ -124,8 +212,13 @@
 <div class="page">
   <main class="launcher">
     <header>
-      <h1>game_ghost</h1>
-      <div class="sub">미니 게임 · 앱 모음</div>
+      <div class="head-row">
+        <div>
+          <h1>game_ghost</h1>
+          <div class="sub">미니 게임 · 앱 모음</div>
+        </div>
+        <div id="cloud-slot"></div>
+      </div>
     </header>
 
     <section class="section" id="sec-games">
@@ -149,7 +242,12 @@
 </div>
 <script type="module">
 import { registerServiceWorker } from "./shared/ui.js";
+import { bootCloud } from "./shared/cloud/boot.js";
 registerServiceWorker("/service-worker.js");
+
+// 클라우드 저장 버튼. 준비되지 않았으면 아무것도 그리지 않는다(shared/cloud/boot.js).
+// 실패해도 허브 목록 렌더에 영향을 주지 않는다.
+bootCloud({ container: document.getElementById("cloud-slot") }).catch(() => {});
 
 // 게임과 앱 두 구역을 각자의 등록부에서 읽어 같은 카드 UI로 렌더한다.
 loadSection("./games/_registry.json", "games", "grid-games", "count-games", "sec-games");

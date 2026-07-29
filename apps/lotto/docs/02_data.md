@@ -1070,7 +1070,7 @@ S089-후속 변경(2026-05-17): UI 라벨 "행운 쌓기" → "당첨 기원" (�
   - `node scripts/fetch-lotto-draws.mjs` - 자동 (`all.json` bundle 한 방, 1초 미만)
   - `node scripts/fetch-lotto-draws.mjs 1100 1110` - 범위 지정 (단건 endpoint × N)
   - `node scripts/fetch-lotto-draws.mjs --full` - 자동과 동일 (호환용)
-- 출력: `games/lotto/src/data/draws.json`.
+- 출력: `apps/lotto/src/data/draws.json`.
 - 기본 모드는 항상 bundle 동기화. 미러는 매주 토 GitHub Actions로 갱신되므로 전수 재적재가 안전.
 
 ### 4.5. 미러 응답 → Draw 스키마 매핑

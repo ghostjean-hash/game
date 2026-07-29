@@ -47,9 +47,13 @@ if (!has('shared/base.css')) {
   }
 }
 
-// --- 2. 게임별 골격 링크 + viewport 규칙 ---
-const reg = JSON.parse(read('games/_registry.json'));
-for (const g of reg.games) {
+// --- 2. 게임·앱별 골격 링크 + viewport 규칙 ---
+// lotto가 apps/로 옮겨간 뒤(2026-07-29) 검사에서 빠지지 않도록 두 등록부를 모두 순회한다.
+const entries = [
+  ...JSON.parse(read('games/_registry.json')).games,
+  ...JSON.parse(read('apps/_registry.json')).apps,
+];
+for (const g of entries) {
   const idx = `${g.path}index.html`;
   if (!has(idx)) { fails.push(`${g.id}: index.html 없음`); continue; }
   const html = read(idx);
@@ -66,6 +70,52 @@ for (const g of reg.games) {
     }
   } else {
     warns.push(`${g.id}: base.css/mobile-shell.css 링크 없음 (자체 스타일 게임이면 정상, 추천기 lotto 등)`);
+  }
+}
+
+// --- 3. 클라우드 저장 규약 (설계 5.3.8 / 5.3.9 / 4.1) ---
+if (!has('service-worker.js')) {
+  fails.push('service-worker.js 없음');
+} else {
+  const sw = read('service-worker.js');
+  // 이 분기가 사라지면 서비스워커가 구글 로그인·드라이브 통신까지 가로채 로그인이 깨진다.
+  if (!/url\.origin\s*!==\s*self\.location\.origin/.test(sw)) {
+    fails.push('service-worker.js가 외부 출처 요청을 통과시키지 않음 → 구글 로그인이 깨진다');
+  } else {
+    oks.push('service-worker.js 외부 출처 통과 분기 유지 (구글 로그인 보호)');
+  }
+}
+
+if (has('shared/cloud/config.js')) {
+  // 권한을 넓히면 구글 심사 등급이 restricted로 올라가 매년 외부 보안 감사가 붙는다(설계 2.5).
+  const cloudFiles = ['config.js', 'merge.js', 'local.js', 'remote.js', 'auth.js', 'sync.js', 'ui.js', 'boot.js']
+    .map((f) => `shared/cloud/${f}`)
+    .filter(has);
+  const scopeRe = /auth\/drive[a-z.]*/g;
+  const found = new Set();
+  for (const f of cloudFiles) {
+    for (const m of read(f).match(scopeRe) || []) found.add(m);
+  }
+  const allowed = 'auth/drive.appdata';
+  const extra = [...found].filter((s) => s !== allowed);
+  if (extra.length) {
+    fails.push(`허용되지 않은 드라이브 권한 발견: ${extra.join(', ')} (설계 2.5 위반, drive.appdata만 허용)`);
+  } else {
+    oks.push(`클라우드 권한 범위 ${found.size ? '= drive.appdata 하나' : '미선언'}`);
+  }
+
+  // 순수 로직 층에는 브라우저·통신 API가 등장하지 않아야 자동 검증 100%가 유지된다(설계 4.1).
+  if (has('shared/cloud/merge.js')) {
+    // 주석은 검사 대상이 아니다(규율을 설명하는 문장 자체가 걸리면 안 된다).
+    const merge = read('shared/cloud/merge.js')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|\s)\/\/.*$/gm, '');
+    const banned = ['window', 'document', 'fetch(', 'localStorage'].filter((t) => merge.includes(t));
+    if (banned.length) {
+      fails.push(`merge.js에 브라우저 의존이 섞임: ${banned.join(', ')} (순수 로직 층 규율 위반)`);
+    } else {
+      oks.push('merge.js 순수 로직 유지 (브라우저·통신 의존 0)');
+    }
   }
 }
 

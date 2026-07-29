@@ -1,6 +1,10 @@
 // 공통 UI 헬퍼. 모달/토스트 같은 작은 부분을 일관되게.
 
-export function showModal({ title, body, actions = [{ label: "확인", primary: true }] }) {
+// bodyEl을 넘기면 문단 자리에 그 요소를 그대로 넣는다(선택지가 있는 대화상자용).
+// bodyEl 없이 body만 넘기면 기존과 동일하게 문자열 문단으로 그린다.
+// stack: true 면 선택 버튼을 가로가 아니라 세로로 쌓는다(항목이 셋 이상일 때 가로는 찌그러진다).
+// closeX: true 면 오른쪽 위에 X 버튼을 둔다(누르면 "__close"로 닫힌다).
+export function showModal({ title, body, bodyEl, stack = false, closeX = false, actions = [{ label: "확인", primary: true }] }) {
   return new Promise((resolve) => {
     const backdrop = document.createElement("div");
     backdrop.className = "modal-backdrop";
@@ -12,9 +16,16 @@ export function showModal({ title, body, actions = [{ label: "확인", primary: 
       <div class="modal-actions"></div>
     `;
     modal.querySelector("h2").textContent = title || "";
-    modal.querySelector("p").textContent = body || "";
+    const bodyP = modal.querySelector("p");
+    if (bodyEl) bodyP.replaceWith(bodyEl);
+    else if (body) bodyP.textContent = body;
+    else bodyP.remove(); // 설명 문장이 없으면 빈 여백을 남기지 않는다
 
     const actionsEl = modal.querySelector(".modal-actions");
+    if (stack) {
+      actionsEl.style.flexDirection = "column";
+      actionsEl.style.alignItems = "stretch";
+    }
     actions.forEach((a, i) => {
       const btn = document.createElement("button");
       btn.className = "btn" + (a.primary ? " btn-primary" : "");
@@ -25,6 +36,33 @@ export function showModal({ title, body, actions = [{ label: "확인", primary: 
       });
       actionsEl.appendChild(btn);
     });
+
+    if (closeX) {
+      modal.style.position = "relative";
+      const x = document.createElement("button");
+      x.type = "button";
+      x.textContent = "×";
+      x.setAttribute("aria-label", "닫기");
+      Object.assign(x.style, {
+        position: "absolute",
+        top: "10px",
+        right: "10px",
+        width: "32px",
+        height: "32px",
+        lineHeight: "1",
+        fontSize: "22px",
+        background: "transparent",
+        border: "0",
+        color: "var(--fg-dim)",
+        cursor: "pointer",
+        padding: "0",
+      });
+      x.addEventListener("click", () => {
+        document.body.removeChild(backdrop);
+        resolve("__close");
+      });
+      modal.appendChild(x);
+    }
 
     backdrop.appendChild(modal);
     document.body.appendChild(backdrop);

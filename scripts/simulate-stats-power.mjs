@@ -1,4 +1,4 @@
-// games/lotto STATS_POWER / GAP_POWER 보정 효과 시뮬레이션.
+// apps/lotto STATS_POWER / GAP_POWER 보정 효과 시뮬레이션.
 // 1222회 시점 본번호/보너스 통계로 가중치 분포 + 가중 추출 분포 측정.
 // SSOT: docs/02_data.md 1.7. PROGRESS 2.30 검증.
 
@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const drawsPath = resolve(__dirname, '../games/lotto/src/data/draws.json');
+const drawsPath = resolve(__dirname, '../apps/lotto/src/data/draws.json');
 const draws = JSON.parse(readFileSync(drawsPath, 'utf-8'));
 
 const NUMBER_MIN = 1;

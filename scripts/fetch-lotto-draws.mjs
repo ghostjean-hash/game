@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 로또 회차 데이터 페치 → games/lotto/src/data/draws.json.
+// 로또 회차 데이터 페치 → apps/lotto/src/data/draws.json.
 //
 // 데이터 출처: smok95/lotto GitHub Pages 미러 (https://github.com/smok95/lotto).
 //   동행복권 직접 페치 차단(2026-05 이후 외부 접근 불가)으로 미러 사용.
@@ -15,7 +15,7 @@
 //   - 자동 / --full: all.json 단일 GET, 1초 미만.
 //   - 범위 지정: 단건 endpoint × N, 1초당 ~3건.
 //
-// SSOT: games/lotto/docs/02_data.md 4장.
+// SSOT: apps/lotto/docs/02_data.md 4장.
 
 import fs from 'node:fs/promises';
 import path from 'node:path';

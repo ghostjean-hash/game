@@ -6,7 +6,10 @@
       "subtitle": "라인을 지워라",
       "path": "games/tetris/",
       "status": "playable",
-      "controls": ["touch", "keyboard"],
+      "controls": [
+        "touch",
+        "keyboard"
+      ],
       "accent": "#7cf3c4"
     },
     {
@@ -15,17 +18,11 @@
       "subtitle": "스마트 힌트로 배우는 스도쿠",
       "path": "games/sudoku/",
       "status": "wip",
-      "controls": ["touch", "keyboard"],
+      "controls": [
+        "touch",
+        "keyboard"
+      ],
       "accent": "#5aa9ff"
-    },
-    {
-      "id": "lotto",
-      "title": "lotto 추천번호",
-      "subtitle": "축복받은 캐릭터의 번호 카드",
-      "path": "games/lotto/",
-      "status": "wip",
-      "controls": ["touch", "keyboard"],
-      "accent": "#d4a657"
     },
     {
       "id": "rushhour",
@@ -33,7 +30,9 @@
       "subtitle": "막힌 차를 빼내는 슬라이딩 퍼즐",
       "path": "games/rushhour/",
       "status": "playable",
-      "controls": ["touch"],
+      "controls": [
+        "touch"
+      ],
       "accent": "#e5484d"
     },
     {
@@ -42,7 +41,10 @@
       "subtitle": "숫자 힌트로 그리는 픽셀 퍼즐",
       "path": "games/nonogram/",
       "status": "playable",
-      "controls": ["touch", "keyboard"],
+      "controls": [
+        "touch",
+        "keyboard"
+      ],
       "accent": "#a78bfa"
     },
     {
@@ -51,7 +53,10 @@
       "subtitle": "손끝으로 끄는 세로 스크롤 비행 슈팅",
       "path": "games/flightshooting/",
       "status": "playable",
-      "controls": ["touch", "keyboard"],
+      "controls": [
+        "touch",
+        "keyboard"
+      ],
       "accent": "#22d3ee"
     }
   ]

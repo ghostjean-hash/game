@@ -3,7 +3,7 @@
 ## 1. 폴더 구조
 
 ```
-games/lotto/
+apps/lotto/
 ├── CLAUDE.md            # 작업 컨텍스트 / 절대 규칙
 ├── PROGRESS.md          # 진행 로그
 ├── README.md            # 사람용 안내

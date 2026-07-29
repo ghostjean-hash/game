@@ -785,3 +785,7 @@ body {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* 홈(게임 허브)으로 돌아가기 (2026-07-29). 아이콘 전용이라 정사각. */
+.nav-home { padding: 0; text-decoration: none; color: var(--fg-dim); }
+.nav-home:hover { color: var(--fg); }

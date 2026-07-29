@@ -13,7 +13,7 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 | `~/.claude/CLAUDE.md` | 모든 프로젝트 공통 (자비스 본체) | "자비스가 누구고 어떻게 답하나" |
 | `./CLAUDE.md` (이 파일) | 게임 허브 전체 개발 규칙 | "이 게임들을 어떻게 만드나" |
 | `./.claude/CLAUDE.md` | 자비스 도메인 표식 (`domain: game-hub`) | "이 폴더가 어느 자비스 도메인인가" |
-| `./games/<id>/CLAUDE.md` | 게임별 세부 규칙 (lotto 등) | "이 게임 하나를 어떻게 만드나" |
+| `./games/<id>/CLAUDE.md` · `./apps/<id>/CLAUDE.md` | 게임·앱별 세부 규칙 | "이거 하나를 어떻게 만드나" |
 
 핵심: 도메인 여부를 정하는 건 `./.claude/CLAUDE.md`의 `domain:` 키 하나뿐. 이름 겹침은 Claude Code 도구 표준이라 못 바꾸지만, 역할은 위 표대로 갈린다.
 
@@ -22,7 +22,7 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 | 위치 | 역할 |
 |---|---|
 | `./PROGRESS.md` | 게임 허브 전체 메타 로그 + 자비스 도메인 self-critique 겸용 |
-| `./games/<id>/PROGRESS.md` | 그 게임 하나의 진행 로그 (lotto/sudoku/tetris 각각) |
+| `./games/<id>/PROGRESS.md` · `./apps/<id>/PROGRESS.md` | 그 게임·앱 하나의 진행 로그 |
 
 ## 0.3. 도메인 골격 문서 (루트에 1개씩, 겹침 없음)
 
@@ -34,14 +34,14 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 |---|---|---|
 | `tetris` | playable | 라인을 지워라 |
 | `sudoku` | wip | 스마트 힌트로 배우는 스도쿠 (라이트 톤) |
-| `lotto` | wip | lotto 추천번호 - 캐릭터 시드 기반 11전략 추천 |
 | `rushhour` | playable | 막힌 차를 빼내는 슬라이딩 퍼즐 |
 | `nonogram` | wip | 숫자 힌트로 그리는 픽셀 퍼즐 (노노그램) |
 | `flightshooting` | playable | Sky Raider - 드래그 조작 캐주얼 세로 스크롤 비행 슈팅 |
 
 1.1. 게임 등록부: `games/_registry.json`. 카드 클릭으로 진입.
 1.2. 새 세션이 특정 게임 작업 시 `games/<id>/CLAUDE.md` 자동 로드.
-1.3. 앱 등록부: `apps/_registry.json` (게임 아닌 학습·도구류). 현재 `english-reading`(영어 독해 사다리, wip) 1종. 세부는 `apps/<id>/CLAUDE.md`.
+1.3. 앱 등록부: `apps/_registry.json` (게임 아닌 학습·도구류). `english-reading`(영어 독해, wip) / `english-vocabulary`(영어 단어장, wip) / `lotto`(lotto 추천번호 - 캐릭터 시드 기반 11전략 추천, wip). 세부는 `apps/<id>/CLAUDE.md`.
+1.4. lotto는 2026-07-29 `games/` → `apps/` 이동(사용자 결정). 게임이 아니라 도구류라는 분류 정정. 저장 키 접두는 `lotto_` 그대로라 사용자 진행 데이터 영향 0.
 
 # 2. 표준 (html-game)
 
@@ -51,7 +51,7 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 | 변경 이력 | `standards/html-game/CHANGELOG.md` |
 | 적용 프로젝트 | `standards/html-game/applications.md` |
 
-2.1. 적용 게임: **lotto만** (v0.2). sudoku / tetris는 후순위.
+2.1. 적용 대상: **lotto만** (v0.2, 2026-07-29부터 `apps/lotto/`). sudoku / tetris는 후순위.
 2.2. 글로벌(`~/.claude/rules/html-game/`) 미승격. 데이터 수집 단계 (v0.x).
 2.3. v1.0 승격 조건은 STANDARD.md 9.4 참조.
 

@@ -34,7 +34,7 @@
 - 인라인 매직 값 금지
 
 ## 7. 실행
-- 로컬 dev 서버 (권장): 게임 허브 루트에서 `node scripts/dev-server.mjs 8000` → `http://127.0.0.1:8000/games/lotto/`. Cache-Control no-store, SW 무관.
+- 로컬 dev 서버 (권장): 게임 허브 루트에서 `node scripts/dev-server.mjs 8000` → `http://127.0.0.1:8000/apps/lotto/`. Cache-Control no-store, SW 무관.
 - Live Server (VS Code): 5500 포트로도 동작하나 SW / 캐시 충돌 가능. 개발환경 자동 SW 차단은 `shared/ui.js`가 처리.
 - 테스트:
   - 브라우저: `tests/test.html`을 열기 (DOM 결과 시각화).

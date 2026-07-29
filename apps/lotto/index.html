@@ -19,7 +19,12 @@
 </head>
 <body>
   <a href="#app" class="sr-only">본문으로 건너뛰기</a>
+  <!-- 홈(게임 허브)으로 돌아가기. 이 앱은 화면마다 상단 구조가 달라 고정 위치에 둔다. -->
+  <a href="../../" class="home-link" aria-label="홈으로">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+  </a>
   <main id="app" aria-live="polite"></main>
-  <script type="module" src="./src/main.js"></script>
+  <script type="module" src="../../shared/cloud/auto.js"></script>
+<script type="module" src="./src/main.js"></script>
 </body>
 </html>
