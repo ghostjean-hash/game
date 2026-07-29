@@ -1,0 +1,201 @@
+# High AUTHORING BATCH 01 - official unmarked representative forms 1-200
+1|verb|포기하고 떠나다|They abandoned the old house.|그들은 낡은 집을 포기하고 떠났다.
+2|adverb|탑승하여|All passengers are aboard now.|모든 승객이 지금 탑승해 있다.
+3|verb|중단하다|The team aborted the test flight.|그 팀은 시험 비행을 중단했다.|rel:abortion
+4|verb|풍부하다|Fish abound in this clean lake.|물고기가 이 맑은 호수에 풍부하다.|rel:abundant
+5|adverb|해외에|She studied abroad for two years.|그녀는 이 년간 해외에서 공부했다.
+6|adjective|결석한|Three students were absent today.|세 학생이 오늘 결석했다.
+7|verb|흡수하다|Dry soil absorbs rain quickly.|마른 흙은 비를 빠르게 흡수한다.
+8|adjective|추상적인|His paintings look very abstract.|그의 그림은 아주 추상적으로 보인다.
+9|adjective|터무니없는|That excuse sounds absurd.|그 변명은 터무니없게 들린다.
+10|noun|남용|Drug abuse harms young people.|약물 남용은 젊은이들을 해친다.
+11|noun|학원|He teaches at a music academy.|그는 음악 학원에서 가르친다.
+12|verb|가속하다|The car accelerated up the hill.|그 차는 언덕을 오르며 가속했다.
+13|verb|수용하다|This hall accommodates two hundred people.|이 강당은 이백 명을 수용한다.
+14|verb|동행하다|A guard accompanied the visitors.|경비원이 방문객들과 동행했다.
+15|verb|해내다|She accomplished the hard task.|그녀는 그 어려운 일을 해냈다.
+16|noun|합의|The two sides reached an accord.|양측은 합의에 이르렀다.
+17|verb|쌓이다|Dust accumulates behind the shelf.|먼지가 선반 뒤에 쌓인다.
+18|adjective|오차 없는|Her measurement was accurate.|그녀의 측정은 오차가 없었다.
+19|noun|쑤시는 통증|A dull ache filled my back.|둔하게 쑤시는 통증이 등에 퍼졌다.|rel:headache
+20|noun|산성 물질|This liquid contains strong acid.|이 액체는 강한 산성 물질을 함유한다.
+21|verb|시인하다|He acknowledged his own mistake.|그는 자기 실수를 시인했다.
+22|verb|획득하다|The museum acquired a rare coin.|박물관이 희귀한 동전을 획득했다.
+23|noun|취득|The acquisition took three months.|그 취득은 세 달이 걸렸다.
+24|noun|중독자|The clinic helps young addicts.|그 진료소는 젊은 중독자들을 돕는다.
+25|adjective|적당한|We had adequate time to finish.|우리는 끝낼 적당한 시간이 있었다.
+26|verb|조절하다|Please adjust the chair height.|의자 높이를 조절해 주세요.
+27|verb|관리하다|A small team administers the fund.|작은 팀이 그 기금을 관리한다.|rel:administration
+28|noun|청소년|Many adolescents lack sleep.|많은 청소년이 잠이 부족하다.
+29|adjective|불리한|Adverse weather delayed our flight.|불리한 날씨가 우리 항공편을 지연시켰다.
+30|verb|옹호하다|She advocates cleaner energy.|그녀는 더 깨끗한 에너지를 옹호한다.
+31|adjective|미적인|The building has aesthetic value.|그 건물은 미적인 가치가 있다.
+32|noun|대행사|A travel agency booked our hotel.|여행 대행사가 우리 호텔을 예약했다.
+33|noun|의제|The first agenda item is money.|첫 번째 의제 항목은 돈이다.
+34|verb|먼저 덤비다|Wild dogs may aggress without warning.|들개는 경고 없이 먼저 덤빌 수 있다.
+35|noun|농업|Agriculture feeds the whole nation.|농업이 온 나라를 먹여 살린다.
+36|adjective|경계하는|Stay alert near the road.|도로 근처에서 경계해라.
+37|noun|외계인|The film shows friendly aliens.|그 영화는 친근한 외계인을 보여 준다.
+38|adjective|똑 닮은|The twins look exactly alike.|그 쌍둥이는 정확히 똑 닮아 보인다.
+39|verb|배정하다|The school allocated new desks.|학교가 새 책상을 배정했다.
+40|noun|동맹국|Our ally sent food and water.|우리 동맹국이 식량과 물을 보냈다.
+41|preposition|~와 나란히|A boat waited alongside the ship.|배 한 척이 그 배와 나란히 기다렸다.
+42|adjective|번갈아 하는|We work on alternate days.|우리는 번갈아 하는 날에 일한다.|rel:alternative
+43|noun|대사|The ambassador visited our school.|대사가 우리 학교를 방문했다.
+44|noun|야망|His ambition drives him daily.|그의 야망이 그를 매일 밀어붙인다.|rel:ambitious
+45|verb|분석하다|Scientists analyzed the water sample.|과학자들이 물 표본을 분석했다.
+46|noun|닻|The ship dropped its anchor.|그 배는 닻을 내렸다.
+47|adjective|고대의|We visited an ancient temple.|우리는 고대 사원을 방문했다.
+48|noun|각도|Measure the angle with care.|각도를 주의해서 재라.
+49|noun|기념일|Today is their tenth anniversary.|오늘은 그들의 십 주년 기념일이다.
+50|verb|예상하다|We anticipate heavy traffic tonight.|우리는 오늘 밤 심한 교통 정체를 예상한다.
+51|noun|불안|Exam anxiety kept her awake.|시험 불안이 그녀를 깨어 있게 했다.
+52|noun|사과의 말|He offered a sincere apology.|그는 진심 어린 사과의 말을 했다.
+53|adjective|겉으로 드러난|The damage was apparent to all.|그 피해는 모두에게 겉으로 드러났다.
+54|verb|승인하다|The board approved our plan.|이사회가 우리 계획을 승인했다.
+55|adjective|대략의|Give me an approximate number.|대략의 숫자를 알려 줘.
+56|noun|건축가|The architect drew the plan.|그 건축가가 도면을 그렸다.|rel:architecture
+57|verb|생겨나다|New problems arise every week.|새로운 문제가 매주 생겨난다.|irr:arose,arisen
+58|noun|화살|He pulled the arrow from the tree.|그는 나무에서 화살을 뽑았다.
+59|noun|기교|The painting shows clever artifice.|그 그림은 영리한 기교를 보여 준다.|rel:artificial
+60|noun|측면|Consider every aspect of this job.|이 일의 모든 측면을 고려해라.
+61|verb|열망하다|Many students aspire to teach.|많은 학생이 가르치기를 열망한다.
+62|noun|폭행|The court punished the assault.|법원이 그 폭행을 처벌했다.
+63|verb|조립하다|Workers assemble bikes here.|노동자들이 여기서 자전거를 조립한다.
+64|verb|단언하다|She asserted her own view.|그녀는 자기 견해를 단언했다.
+65|noun|자산|Trust is our greatest asset.|신뢰가 우리의 가장 큰 자산이다.
+66|verb|장담하다|I assure you of our support.|우리의 지원을 장담합니다.
+67|verb|경악하게 하다|The result astonished every expert.|그 결과는 모든 전문가를 경악하게 했다.
+68|noun|운동선수|The athlete trains every morning.|그 운동선수는 매일 아침 훈련한다.
+69|noun|원자|An atom is extremely small.|원자는 극도로 작다.
+70|noun|속성|Patience is a useful attribute.|인내는 유용한 속성이다.
+71|noun|경매|The old chair sold at auction.|그 낡은 의자는 경매에서 팔렸다.
+72|adjective|진품인|This is an authentic old map.|이것은 진품인 옛 지도다.
+73|noun|저자|The author signed my book.|그 저자가 내 책에 서명했다.
+74|verb|이용하다|Students may avail themselves of free books.|학생들은 무료 책을 이용할 수 있다.|rel:available
+75|verb|고대하다|Fans await the new album.|팬들은 새 앨범을 고대한다.
+76|noun|경외감|The view filled us with awe.|그 경치는 우리를 경외감으로 채웠다.|rel:awful
+77|verb|금지하다|The city banned loud music.|시가 시끄러운 음악을 금지했다.
+78|adjective|파산한|The small shop went bankrupt.|그 작은 가게는 파산했다.
+79|noun|싼 물건|This coat was a real bargain.|이 코트는 정말 싼 물건이었다.
+80|noun|장벽|Language can be a barrier.|언어는 장벽이 될 수 있다.
+81|noun|빛줄기|A beam of light crossed the room.|빛줄기 하나가 방을 가로질렀다.
+82|noun|턱수염|His gray beard reached his chest.|그의 회색 턱수염이 가슴까지 닿았다.
+83|noun|짐승|A wild beast lived in the forest.|야생 짐승이 숲에 살았다.
+84|noun|대신|She spoke on behalf of us.|그녀가 우리를 대신해 말했다.
+85|verb|처신하다|Please behave well at dinner.|저녁 식사에서 잘 처신해라.|rel:behavior
+86|verb|배신하다|He never betrayed his friends.|그는 결코 친구를 배신하지 않았다.
+87|noun|편견|The report showed clear bias.|그 보고서는 분명한 편견을 보였다.
+88|noun|전기|I read a short biography.|나는 짧은 전기를 읽었다.
+89|noun|생물학|She teaches biology at school.|그녀는 학교에서 생물학을 가르친다.
+90|noun|폭발|The blast broke every window.|그 폭발이 모든 창문을 깨뜨렸다.
+91|verb|혼합하다|Blend the fruit with milk.|과일을 우유와 혼합해라.
+92|verb|눈을 깜박이다|She blinked in the bright sun.|그녀는 밝은 햇빛에 눈을 깜박였다.
+93|noun|활짝 핀 꽃|Spring blossom covered the tree.|봄에 활짝 핀 꽃이 나무를 덮었다.
+94|adjective|대담한|That was a bold decision.|그것은 대담한 결정이었다.
+95|verb|끌어올리다|Good sleep boosts your memory.|충분한 잠이 기억력을 끌어올린다.
+96|noun|국경|They crossed the border safely.|그들은 국경을 안전하게 건넜다.
+97|noun|경계선|A fence marks the boundary.|울타리가 경계선을 표시한다.
+98|verb|기르다|Farmers breed sheep on this hill.|농부들이 이 언덕에서 양을 기른다.|irr:bred
+99|noun|산들바람|A cool breeze crossed the yard.|시원한 산들바람이 마당을 지났다.
+100|verb|방송하다|They broadcast the game live.|그들은 그 경기를 생중계로 방송한다.|irr:broadcast
+101|adjective|짐승 같은|He used brute force again.|그는 다시 짐승 같은 힘을 썼다.|rel:brutal
+102|noun|대부분|The bulk of the work is done.|그 일의 대부분이 끝났다.
+103|noun|황소|An angry bull blocked the path.|성난 황소가 길을 막았다.
+104|verb|못살게 굴다|Do not bully smaller children.|더 작은 아이들을 못살게 굴지 마라.
+105|noun|묶음|She carried a bundle of sticks.|그녀는 막대기 묶음을 날랐다.
+106|noun|부담|Debt became a heavy burden.|빚이 무거운 부담이 되었다.
+107|noun|정육점 주인|The butcher cut the meat.|정육점 주인이 고기를 잘랐다.
+108|verb|윙윙거리다|Bees buzz around the flowers.|벌들이 꽃 주위를 윙윙거린다.
+109|verb|취소하다|They cancelled the evening class.|그들은 저녁 수업을 취소했다.
+110|noun|암|Early tests can find cancer.|조기 검사가 암을 찾아낼 수 있다.
+111|noun|후보자|Each candidate spoke for ten minutes.|각 후보자가 십 분씩 말했다.
+112|noun|캔버스 천|He painted on rough canvas.|그는 거친 캔버스 천에 그렸다.
+113|verb|붙잡다|Police captured the thief quickly.|경찰이 도둑을 빠르게 붙잡았다.
+114|verb|조각하다|He carved a bird from wood.|그는 나무로 새를 조각했다.
+115|verb|음식을 공급하다|That shop caters large parties.|그 가게는 큰 파티에 음식을 공급한다.
+116|noun|소 떼|The cattle ate grass on the hill.|소 떼가 언덕에서 풀을 먹었다.
+117|noun|조심|Handle the glass with caution.|유리를 조심해서 다뤄라.
+118|noun|동굴|Bats sleep inside the cave.|박쥐들이 동굴 안에서 잔다.
+119|verb|중단되다|The noise ceased at midnight.|그 소음은 자정에 중단되었다.
+120|verb|기념하다|We celebrated her first prize.|우리는 그녀의 일등을 기념했다.
+121|noun|유명인|A celebrity opened the new store.|유명인이 새 가게를 열었다.
+122|verb|검열하다|The state censored the news.|국가가 그 뉴스를 검열했다.
+123|noun|증명서|She received a training certificate.|그녀는 훈련 증명서를 받았다.
+124|noun|밀실|The hidden chamber held old books.|그 숨겨진 밀실에는 오래된 책이 있었다.
+125|noun|혼란|The sudden storm caused chaos.|갑작스러운 폭풍이 혼란을 일으켰다.
+126|noun|자선 단체|She gives money to charity.|그녀는 자선 단체에 돈을 준다.
+127|noun|요리사|The chef prepared fresh soup.|그 요리사가 신선한 수프를 준비했다.
+128|noun|화학 물질|This chemical burns the skin.|이 화학 물질은 피부를 태운다.
+129|noun|한기|A sudden chill filled the room.|갑작스러운 한기가 방을 채웠다.
+130|noun|턱끝|He rested his chin on his hand.|그는 턱끝을 손에 괴었다.
+131|noun|합창단|The school choir sang beautifully.|학교 합창단이 아름답게 노래했다.
+132|noun|후렴|Everyone sang the last chorus.|모두가 마지막 후렴을 불렀다.
+133|adjective|만성의|He suffers chronic back pain.|그는 만성 허리 통증을 앓는다.
+134|verb|순환하다|Warm air circulates through the room.|따뜻한 공기가 방을 순환한다.
+135|verb|출처를 밝히다|Always cite your original source.|항상 원래 출처를 밝혀라.
+136|verb|박수를 치다|The crowd clapped for her.|군중이 그녀에게 박수를 쳤다.
+137|noun|충돌|A clash broke out downtown.|충돌이 시내에서 일어났다.
+138|noun|조항|Read the last clause carefully.|마지막 조항을 주의 깊게 읽어라.
+139|noun|점토|Children shaped animals from clay.|아이들이 점토로 동물을 빚었다.
+140|verb|매달리다|Wet leaves cling to the window.|젖은 잎들이 창문에 매달린다.|irr:clung
+141|noun|진료소|The clinic opens on Saturday.|그 진료소는 토요일에 문을 연다.
+142|noun|무리|A cluster of stars appeared.|별 무리가 나타났다.
+143|verb|동시에 일어나다|Our holidays coincide this year.|우리 휴가가 올해 동시에 일어난다.
+144|verb|협력하다|Two schools collaborated on the project.|두 학교가 그 계획에 협력했다.
+145|verb|무너지다|The old wall collapsed suddenly.|그 낡은 벽이 갑자기 무너졌다.
+146|noun|옷깃|His shirt collar was dirty.|그의 셔츠 옷깃이 더러웠다.
+147|noun|직장 동료|My colleague fixed the report.|내 직장 동료가 그 보고서를 고쳤다.
+148|noun|식민지|The island was once a colony.|그 섬은 한때 식민지였다.
+149|noun|돌기둥|Stone columns support the roof.|돌기둥들이 지붕을 받친다.
+150|noun|싸움|The soldier trained for combat.|그 군인은 싸움을 위해 훈련했다.
+151|verb|저지르다|He committed a serious error.|그는 심각한 잘못을 저질렀다.|rel:commission
+152|noun|거래 물품|Rice is a basic commodity.|쌀은 기본 거래 물품이다.
+153|noun|공산주의자|The book describes early communists.|그 책은 초기 공산주의자들을 묘사한다.
+154|noun|동반자|A dog makes a loyal companion.|개는 충실한 동반자가 된다.
+155|adjective|호환되는|This cable is compatible with mine.|이 케이블은 내 것과 호환된다.
+156|verb|강요하다|Hunger compelled them to move.|배고픔이 그들을 움직이도록 강요했다.
+157|verb|보상하다|The shop compensated every customer.|그 가게는 모든 고객에게 보상했다.
+158|verb|경쟁하다|Ten teams compete this weekend.|열 팀이 이번 주말에 경쟁한다.|rel:competent
+159|verb|모아 엮다|She compiled a list of names.|그녀는 이름 목록을 모아 엮었다.
+160|noun|보완물|Bread is a good complement.|빵은 좋은 보완물이다.
+161|noun|부품|One component broke inside.|부품 하나가 안에서 부서졌다.
+162|verb|작곡하다|He composed a simple song.|그는 단순한 노래를 작곡했다.
+163|noun|화합물|Water is a simple compound.|물은 단순한 화합물이다.
+164|verb|완전히 이해하다|Few readers comprehend the whole text.|그 글 전체를 완전히 이해하는 독자는 적다.|rel:comprehensive
+165|verb|구성되다|The set comprises six plates.|그 세트는 접시 여섯 개로 구성된다.
+166|noun|타협|Both sides accepted a compromise.|양측이 타협을 받아들였다.
+167|verb|숨기다|She concealed the letter carefully.|그녀는 그 편지를 조심스럽게 숨겼다.
+168|verb|생각해 내다|He conceived a clever plan.|그는 영리한 계획을 생각해 냈다.
+169|verb|결론짓다|The judge concluded the trial.|판사가 그 재판을 결론지었다.
+170|adjective|실체가 있는|We need concrete evidence now.|우리는 이제 실체가 있는 증거가 필요하다.
+171|verb|규탄하다|Many leaders condemned the attack.|많은 지도자가 그 공격을 규탄했다.
+172|verb|수행하다|They conducted a short survey.|그들은 짧은 설문 조사를 수행했다.
+173|verb|상의하다|The doctors conferred for an hour.|의사들이 한 시간 동안 상의했다.
+174|verb|자백하다|The thief confessed everything.|그 도둑은 모든 것을 자백했다.
+175|verb|털어놓다|She confided in her old friend.|그녀는 오랜 친구에게 털어놓았다.|rel:confident
+176|verb|가두다|They confined the dog indoors.|그들은 개를 실내에 가두었다.
+177|verb|규칙을 따르다|All members must conform to rules.|모든 구성원이 규칙을 따라야 한다.
+178|verb|맞서다|She confronted her own fear.|그녀는 자기 두려움에 맞섰다.
+179|noun|의회|Congress passed the new law.|의회가 새 법을 통과시켰다.
+180|noun|양심|His conscience troubled him.|그의 양심이 그를 괴롭혔다.
+181|noun|동의|We need written consent first.|우리는 먼저 서면 동의가 필요하다.
+182|verb|보존하다|We must conserve clean water.|우리는 깨끗한 물을 보존해야 한다.
+183|verb|이루어지다|The team consists of five players.|그 팀은 선수 다섯 명으로 이루어진다.|rel:consistent
+184|verb|구성하다|Women constitute half the class.|여성이 그 반의 절반을 구성한다.|rel:constitution
+185|verb|제약하다|Cost constrains our final choice.|비용이 우리의 최종 선택을 제약한다.
+186|verb|건설하다|They constructed a new bridge.|그들은 새 다리를 건설했다.|rel:construction
+187|verb|상담하다|Consult a doctor before running.|달리기 전에 의사와 상담해라.
+188|adjective|동시대의|We studied contemporary art.|우리는 동시대의 미술을 공부했다.
+189|verb|다투다|Two players contend for first place.|두 선수가 일 위를 다툰다.
+190|noun|대륙|Africa is a large continent.|아프리카는 큰 대륙이다.
+191|verb|반박하다|His answer contradicted the report.|그의 답변은 그 보고서를 반박했다.
+192|adjective|반대의|She holds a contrary opinion.|그녀는 반대의 의견을 지닌다.
+193|noun|대조|The contrast was very clear.|그 대조는 아주 분명했다.
+194|noun|논란|The plan caused public controversy.|그 계획은 대중의 논란을 일으켰다.
+195|verb|소집하다|The chair convened a short meeting.|의장이 짧은 회의를 소집했다.|rel:convenient
+196|verb|전환하다|They converted the barn into a shop.|그들은 헛간을 가게로 전환했다.
+197|verb|전달하다|His face conveyed deep worry.|그의 얼굴이 깊은 걱정을 전달했다.
+198|verb|유죄를 선고하다|The court convicted the driver.|법원이 그 운전자에게 유죄를 선고했다.
+199|verb|협동하다|Both classes cooperated on cleaning.|두 반이 청소에 협동했다.
+200|verb|조율하다|She coordinates the whole event.|그녀가 행사 전체를 조율한다.

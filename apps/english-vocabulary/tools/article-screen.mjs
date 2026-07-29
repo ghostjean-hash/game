@@ -1,7 +1,7 @@
 // 예문 관사·수 누락 후보 추출 (기계로 좁히고 사람이 판정).
 // 목표 단어가 단수 명사인데 앞쪽에 한정사가 안 보이면 "a/an/the 누락" 의심 후보로 올린다.
 // 불가산 명사(water, advice …)와 복수는 정상이라 오탐이 섞인다 - 목록은 사람 확인용이다.
-// 사용: node tools/middle-article-screen.mjs 03 04 05 06
+// 사용: node tools/article-screen.mjs --middle 03 04 05 06   /   node tools/article-screen.mjs --high 01
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -28,10 +28,13 @@ const UNCOUNTABLE = new Set([
   "tradition", "transport", "value", "vision", "wage", "half", "sort", "past", "text", "total", "sum",
 ]);
 
-const batches = process.argv.slice(2).length ? process.argv.slice(2) : ["03", "04", "05", "06"];
+const high = process.argv.includes("--high");
+const PREFIX = high ? "high-" : "middle-";
+const argv = process.argv.slice(2).filter((x) => !x.startsWith("--"));
+const batches = argv.length ? argv : (high ? ["01","02","03","04","05"] : ["01","02","03","04","05","06"]);
 const rows = [];
 for (const n of batches) {
-  const f = join(SRC, `middle-authoring-batch-${n.padStart(2, "0")}.json`);
+  const f = join(SRC, `${PREFIX}authoring-batch-${n.padStart(2, "0")}.json`);
   if (!existsSync(f)) continue;
   for (const c of JSON.parse(readFileSync(f, "utf8"))) rows.push({ ...c, batch: n });
 }

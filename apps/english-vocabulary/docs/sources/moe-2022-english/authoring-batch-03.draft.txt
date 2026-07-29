@@ -6,8 +6,8 @@
 405|verb|알다|I know the answer now.|나는 이제 답을 안다.|irr:knew,known
 406|noun|여성|The lady opens the window.|그 여성은 창문을 연다.
 407|noun|호수|The lake is very calm.|호수는 아주 잔잔하다.
-408|noun|땅|The land is dry today.|오늘 땅은 마르다.
-409|adjective|큰|That is a large room.|저것은 큰 방이다.
+408|noun|육지|The land is dry today.|오늘 육지는 말라 있다.
+409|adjective|널찍한|That is a large room.|저것은 널찍한 방이다.
 410|noun|레이저|The laser makes a red line.|레이저는 빨간 선을 만든다.
 411|adjective|마지막의|This is our last game.|이것은 우리의 마지막 게임이다.
 412|adjective|늦은|The bus is late again.|버스가 또 늦었다.
@@ -29,7 +29,7 @@
 428|adjective|작은|The little bird can fly.|그 작은 새는 날 수 있다.
 429|verb|살다|They live near the park.|그들은 공원 근처에 산다.
 430|adjective|긴|She has long hair.|그녀는 긴 머리카락을 가졌다.
-431|verb|보다|Look at the sky.|하늘을 보아라.
+431|verb|쳐다보다|Look at the sky.|하늘을 쳐다보아라.
 432|noun|사랑|Love makes people smile.|사랑은 사람들을 웃게 한다.
 433|adjective|낮은|The table is low.|그 탁자는 낮다.
 434|noun|행운|Good luck on your test!|시험에서 행운을 빌게!
@@ -51,7 +51,7 @@
 450|noun|구성원|Every member has a job.|모든 구성원에게는 역할이 있다.
 451|noun|기억|That song brings back memories.|그 노래는 기억을 되살린다.
 452|noun|가운데|The ball is in the middle.|공은 가운데에 있다.
-453|auxiliary|~일지도 모른다|He might be at home.|그는 집에 있을지도 모른다.
+453|auxiliary|~일 수도 있다|He might be at home.|그는 집에 있을 수도 있다.
 454|noun|우유|Milk is in the cup.|우유가 컵에 있다.
 455|noun|마음|Open your mind to ideas.|생각에 마음을 열어라.
 456|verb|놓치다|Do not miss the bus.|버스를 놓치지 마라.
@@ -59,19 +59,19 @@
 458|noun|돈|Save your money for later.|나중을 위해 돈을 모아라.
 459|noun|원숭이|The monkey climbs a tree.|원숭이는 나무를 오른다.
 460|noun|달|January is the first month.|1월은 첫 번째 달이다.
-461|noun|달|The moon is bright tonight.|오늘 밤 달은 밝다.
+461|noun|달(위성)|The moon is bright tonight.|오늘 밤 달은 밝다.
 462|noun|아침|I walk in the morning.|나는 아침에 걷는다.
 463|noun|어머니|My mother reads with me.|우리 어머니는 나와 함께 읽는다.|rel:mom
 464|noun|산|We hike up the mountain.|우리는 산을 오른다.
 465|noun|쥐|A mouse is under the chair.|쥐가 의자 아래에 있다.|irr:mice
 466|noun|입|Open your mouth wide.|입을 크게 벌려라.
 467|verb|움직이다|The leaves move in the wind.|나뭇잎은 바람에 움직인다.
-468|noun|영화|This movie is very funny.|이 영화는 아주 재미있다.
-469|determiner|많은|There is much water here.|여기에는 물이 많다.
+468|noun|극장 영화|This movie is very funny.|이 극장 영화는 아주 재미있다.
+469|determiner|많은 양의|There is much water here.|여기에는 많은 양의 물이 있다.
 470|noun|음악|Music fills the room.|음악이 방을 채운다.
 471|auxiliary|반드시 ~해야 한다|You must wear a helmet.|너는 헬멧을 반드시 써야 한다.
 472|noun|이름|Write your name here.|여기에 네 이름을 써라.
-473|noun|나라|Our nation loves this sport.|우리 나라는 이 스포츠를 좋아한다.
+473|noun|국가|Our nation loves this sport.|우리 국가는 이 스포츠를 좋아한다.
 474|noun|자연|We should protect nature.|우리는 자연을 보호해야 한다.
 475|adjective|가까운|The store is near home.|가게는 집 가까이에 있다.
 476|noun|목|My neck feels stiff.|내 목이 뻣뻣하게 느껴진다.
@@ -81,7 +81,7 @@
 480|noun|뉴스|The news is on TV.|뉴스가 텔레비전에 나온다.
 481|noun|신문|My dad reads the newspaper.|우리 아빠는 신문을 읽는다.
 482|adjective|다음의|See you next week.|다음 주에 보자.
-483|adjective|친절한|She is nice to everyone.|그녀는 모두에게 친절하다.
+483|adjective|기분 좋은|Her voice is nice to hear.|그녀의 목소리는 듣기에 기분 좋다.
 484|noun|밤|The night is very dark.|밤은 아주 어둡다.
 485|number|아홉|Nine birds are flying.|아홉 마리 새가 날고 있다.
 486|noun|아니오|His answer was no.|그의 대답은 아니오였다.
@@ -140,7 +140,7 @@
 539|adjective|가난한|The poor family needs help.|그 가난한 가족은 도움이 필요하다.
 540|noun|감자|Potatoes grow under the ground.|감자는 땅속에서 자란다.
 541|noun|힘|The wind has great power.|바람은 큰 힘을 가진다.
-542|noun|선물|This present is for you.|이 선물은 너를 위한 것이다.
+542|noun|선물|She opened her birthday present.|그녀는 생일 선물을 열었다.
 543|adjective|예쁜|What a pretty flower!|정말 예쁜 꽃이구나!
 544|noun|왕자|The prince rides a horse.|왕자는 말을 탄다.
 545|verb|인쇄하다|Print your name clearly.|네 이름을 또렷하게 인쇄해라.
@@ -152,7 +152,7 @@
 551|verb|놓다|Put your bag down.|가방을 내려놓아라.|irr:put
 552|noun|여왕|The queen wears a crown.|여왕은 왕관을 쓴다.
 553|noun|질문|Ask one question now.|지금 질문 하나를 해라.
-554|adjective|빠른|The rabbit is quick.|그 토끼는 빠르다.
+554|adjective|잽싼|The rabbit is quick.|그 토끼는 잽싸다.
 555|adjective|조용한|The room is quiet now.|방은 지금 조용하다.
 556|noun|퀴즈|We have a quiz today.|우리는 오늘 퀴즈가 있다.
 557|noun|토끼|A rabbit eats a carrot.|토끼는 당근을 먹는다.

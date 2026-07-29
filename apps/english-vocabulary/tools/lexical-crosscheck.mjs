@@ -28,13 +28,16 @@ const strip = (s) => s.replace(/<[^>]+>/g, "").replace(/\.mw-parser-output[\s\S]
 const clean = (s) => s.replace(/\.mw-parser-output[\s\S]*$/, "").replace(/\s+/g, " ").trim();
 
 const middle = process.argv.includes("--middle");
+const high = process.argv.includes("--high");
+const PREFIX = high ? "high-" : middle ? "middle-" : "";
+const TIER_KR = high ? "고등 " : middle ? "중등 " : "";
 const batchNo = (process.argv[2] || "01").padStart(2, "0");
 const flags = new Set(process.argv.slice(3));
 const wordFlag = process.argv.find((arg) => arg.startsWith("--words="));
 const requestedWords = wordFlag ? new Set(wordFlag.slice("--words=".length).split(",").filter(Boolean)) : null;
-const cards = JSON.parse(readFileSync(join(SRC, `${middle ? "middle-" : ""}authoring-batch-${batchNo}.json`), "utf8"));
+const cards = JSON.parse(readFileSync(join(SRC, `${PREFIX}authoring-batch-${batchNo}.json`), "utf8"));
 if (!existsSync(CACHE_DIR)) mkdirSync(CACHE_DIR, { recursive: true });
-const cacheFile = (src) => join(CACHE_DIR, `${middle ? "middle-" : ""}batch-${batchNo}-${src}.json`);
+const cacheFile = (src) => join(CACHE_DIR, `${PREFIX}batch-${batchNo}-${src}.json`);
 const loadCache = (src) => (existsSync(cacheFile(src)) ? JSON.parse(readFileSync(cacheFile(src), "utf8")) : []);
 
 // 내 표기 -> 사전 표기(소문자). 조동사는 사전이 verb로, 한정사는 article/determiner/pronoun로 적는다.
@@ -226,9 +229,9 @@ if (flags.has("--all")) {
 }
 
 if (flags.has("--report")) {
-  const out = join(SRC, `${middle ? "middle-" : ""}lexical-crosscheck-batch-${batchNo}.md`);
+  const out = join(SRC, `${PREFIX}lexical-crosscheck-batch-${batchNo}.md`);
   const lines = [
-    `# 사전 교차 대조 근거 · ${middle ? "중등 " : ""}AUTHORING BATCH ${batchNo}`,
+    `# 사전 교차 대조 근거 · ${TIER_KR}AUTHORING BATCH ${batchNo}`,
     "",
     "규칙 `docs/vocab-authoring-rules.md` §2의 `lexicalReference` 실조회 대조 기록. 재현: `node tools/lexical-crosscheck.mjs " + batchNo + " --fetch --report`.",
     "",

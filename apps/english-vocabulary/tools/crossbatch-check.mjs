@@ -1,22 +1,27 @@
 // 중등 배치 간 내용 중복 점검 (validate-batch는 배치 내부 형식만 본다).
 // 뜻·예문·번역이 이미 만든 다른 배치와 겹치는지, 예문이 목표 단어 뜻과 어긋날 소지가 있는지 후보를 뽑는다.
-// 사용: node tools/middle-crossbatch-check.mjs 03            (03을 01·02와 대조)
-//       node tools/middle-crossbatch-check.mjs 03 01 02 04   (대조 대상 명시)
+// 사용: node tools/crossbatch-check.mjs --middle 03          (03을 같은 층 나머지 배치와 대조)
+//       node tools/crossbatch-check.mjs --high 02            (고등 층)
+//       추가 인자로 대조 대상 배치를 직접 지정할 수 있다.
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SRC = join(HERE, "..", "docs", "sources", "moe-2022-english");
+const high = process.argv.includes("--high");
+const PREFIX = high ? "high-" : "middle-";
+const ALL = high ? ["01","02","03","04","05"] : ["01","02","03","04","05","06"];
+const argv = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const load = (n) => {
-  const f = join(SRC, `middle-authoring-batch-${n}.json`);
+  const f = join(SRC, `${PREFIX}authoring-batch-${n}.json`);
   return existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : null;
 };
 
-const target = (process.argv[2] || "03").padStart(2, "0");
-const others = process.argv.slice(3).length
-  ? process.argv.slice(3).map((n) => n.padStart(2, "0"))
-  : ["01", "02", "03", "04", "05", "06"].filter((n) => n !== target);
+const target = (argv[0] || "01").padStart(2, "0");
+const others = argv.slice(1).length
+  ? argv.slice(1).map((n) => n.padStart(2, "0"))
+  : ALL.filter((n) => n !== target);
 
 const cards = load(target);
 if (!cards) { console.error(`배치 ${target} 없음`); process.exit(2); }

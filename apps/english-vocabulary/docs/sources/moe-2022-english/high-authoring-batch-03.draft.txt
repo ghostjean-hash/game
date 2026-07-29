@@ -1,0 +1,201 @@
+# High AUTHORING BATCH 03 - official unmarked representative forms 401-600
+401|noun|일부분|One fraction of the class left.|반의 일부분이 떠났다.
+402|noun|체계 틀|The plan needs a clear framework.|그 계획은 분명한 체계 틀이 필요하다.
+403|adjective|잦은|He makes frequent visits here.|그는 여기에 잦은 방문을 한다.
+404|noun|서리|Morning frost covered the grass.|아침 서리가 잔디를 덮었다.
+405|verb|찡그리다|She frowned at the noise.|그녀는 그 소음에 얼굴을 찡그렸다.
+406|noun|연료|The plane needs more fuel.|그 비행기는 연료가 더 필요하다.
+407|verb|이행하다|He fulfilled his early promise.|그는 자신의 이른 약속을 이행했다.
+408|adjective|근본적인|This is a fundamental rule.|이것은 근본적인 규칙이다.
+409|noun|장례식|Many people attended the funeral.|많은 사람이 그 장례식에 참석했다.
+410|verb|가구를 들이다|They furnished the empty room.|그들은 빈방에 가구를 들였다.
+411|adverb|더욱이|Furthermore, the price stays low.|더욱이 가격도 낮게 유지된다.
+412|noun|격노|His fury faded after an hour.|그의 격노는 한 시간 뒤 사라졌다.|rel:furious
+413|noun|퓨즈|The old fuse burned out.|그 낡은 퓨즈가 타 버렸다.
+414|noun|미술관|The gallery shows local artists.|그 미술관은 지역 화가들을 소개한다.
+415|verb|도박하다|Never gamble with borrowed money.|빌린 돈으로 절대 도박하지 마라.
+416|noun|패거리|A gang of boys ran past.|소년 패거리가 뛰어 지나갔다.
+417|noun|틈|A wide gap split the rock.|넓은 틈이 바위를 갈랐다.
+418|noun|휘발유|Gasoline prices rose again.|휘발유 가격이 다시 올랐다.
+419|verb|가만히 바라보다|He gazed at the night sky.|그는 밤하늘을 가만히 바라보았다.
+420|noun|사회적 성|The form asks about gender.|그 서식은 사회적 성을 묻는다.
+421|noun|유전자|One gene decides eye color.|유전자 하나가 눈 색을 정한다.|rel:genetic
+422|verb|만들어 내다|Windmills generate clean power.|풍차는 깨끗한 전력을 만들어 낸다.|rel:generation
+423|adjective|너그러운|Our host was very generous.|우리 주인은 아주 너그러웠다.
+424|noun|천재|The young genius solved it.|그 어린 천재가 그것을 풀었다.
+425|adjective|진심 어린|Her smile looked genuine.|그녀의 미소는 진심 어려 보였다.
+426|noun|지리학|We study geography on Monday.|우리는 월요일에 지리학을 공부한다.
+427|noun|지질학|Geology explains how rocks form.|지질학은 바위가 어떻게 생기는지 설명한다.
+428|verb|노려보다|The guard glared at us.|그 경비원이 우리를 노려보았다.
+429|noun|지구본|The globe hangs above his desk.|지구본이 그의 책상 위에 걸려 있다.|rel:global
+430|verb|은은히 빛나다|Coals glowed in the dark.|숯이 어둠 속에서 은은히 빛났다.
+431|noun|염소|A white goat ate the grass.|흰 염소가 풀을 먹었다.
+432|verb|졸업하다|She graduated with high marks.|그녀는 높은 점수로 졸업했다.
+433|noun|곡물|Farmers store grain for winter.|농부들은 겨울을 위해 곡물을 저장한다.
+434|verb|꽉 붙잡다|He grasped the wooden handle.|그는 나무 손잡이를 꽉 붙잡았다.
+435|adjective|고마워하는|We are grateful for your help.|우리는 당신의 도움에 고마워한다.
+436|noun|무덤|Flowers covered the quiet grave.|꽃들이 조용한 무덤을 덮었다.
+437|noun|탐욕|Greed ruined the whole plan.|탐욕이 그 계획 전체를 망쳤다.
+438|noun|슬픔|Deep grief filled her voice.|깊은 슬픔이 그녀의 목소리를 채웠다.
+439|noun|움켜쥠|He kept a firm grip.|그는 단단한 움켜쥠을 유지했다.
+440|adjective|총계의|The gross weight is ten kilograms.|총계 무게는 십 킬로그램이다.
+441|noun|보호자|A guardian signed the paper.|보호자가 그 서류에 서명했다.
+442|noun|지침|Follow the safety guideline.|안전 지침을 따라라.
+443|noun|큰 만|Ships crossed the wide gulf.|배들이 넓고 큰 만을 건넜다.
+444|noun|체육관|The gymnasium opens at seven.|그 체육관은 일곱 시에 문을 연다.
+445|noun|서식지|This forest is their habitat.|이 숲이 그들의 서식지다.
+446|verb|멈추게 하다|Police halted every truck.|경찰이 모든 트럭을 멈추게 했다.
+447|noun|망치|He fixed it with a hammer.|그는 망치로 그것을 고쳤다.
+448|noun|불리한 조건|Rain became a real handicap.|비가 진짜 불리한 조건이 되었다.
+449|noun|항만|The harbor holds many boats.|그 항만에는 많은 배가 있다.
+450|noun|조화|The colors are in harmony.|그 색들은 조화를 이룬다.|rel:harmonious
+451|adjective|가혹한|Winter here is very harsh.|이곳 겨울은 아주 가혹하다.
+452|noun|수확|The harvest ended last week.|그 수확은 지난주에 끝났다.
+453|verb|자주 떠오르다|That night still haunts him.|그날 밤이 여전히 그에게 자주 떠오른다.
+454|noun|위험 요소|Wet floors are a hazard.|젖은 바닥은 위험 요소다.
+455|noun|본부|Our headquarters moved downtown.|우리 본부가 시내로 옮겼다.
+456|verb|낫게 하다|Time heals most wounds.|시간이 대부분의 상처를 낫게 한다.
+457|noun|발뒤꿈치|My left heel hurts today.|내 왼쪽 발뒤꿈치가 오늘 아프다.
+458|noun|상속인|The heir received the old house.|상속인이 그 낡은 집을 받았다.
+459|adverb|그런 까닭에|The road closed, hence the delay.|도로가 막혔고 그런 까닭에 지연이 생겼다.
+460|noun|유산|We protect our cultural heritage.|우리는 문화 유산을 보호한다.
+461|noun|서열|The company has a strict hierarchy.|그 회사는 엄격한 서열이 있다.
+462|verb|강조해 표시하다|Highlight the key words first.|먼저 핵심 낱말을 강조해 표시해라.
+463|adjective|거룩한|They visited a holy place.|그들은 거룩한 장소를 방문했다.
+464|noun|갈고리|Hang your coat on the hook.|코트를 갈고리에 걸어라.
+465|noun|수평선|The sun sank below the horizon.|해가 수평선 아래로 가라앉았다.
+466|noun|공포심|The film filled us with horror.|그 영화는 우리를 공포심으로 채웠다.
+467|noun|주최자|The host welcomed every player.|주최자가 모든 선수를 맞이했다.
+468|adjective|적대적인|The crowd turned hostile.|군중이 적대적으로 변했다.
+469|noun|가정|Each household got one letter.|각 가정이 편지 한 통을 받았다.
+470|noun|오두막|They slept in a small hut.|그들은 작은 오두막에서 잤다.
+471|noun|가설|Data supported his hypothesis.|자료가 그의 가설을 뒷받침했다.
+472|adjective|이상적인|This is ideal weather for hiking.|이것은 등산에 이상적인 날씨다.
+473|adjective|똑같은|The two keys look identical.|그 두 열쇠는 똑같아 보인다.
+474|noun|사상|The book explains their ideology.|그 책은 그들의 사상을 설명한다.
+475|verb|착각하게 하다|Mirrors can illude the eye.|거울은 눈을 착각하게 할 수 있다.|rel:illusion
+476|verb|흉내 내다|Children imitate adult speech.|아이들은 어른의 말을 흉내 낸다.
+477|adjective|엄청난|An immense crowd filled the square.|엄청난 군중이 광장을 채웠다.
+478|verb|이주해 오다|Many families immigrated last year.|많은 가족이 작년에 이주해 왔다.
+479|adjective|면역이 있는|Most adults are immune now.|대부분의 성인은 이제 면역이 있다.
+480|noun|충돌 충격|The impact broke the front glass.|그 충돌 충격이 앞 유리를 깨뜨렸다.
+481|adjective|제국의|The imperial palace stands there.|그 제국의 궁전이 거기 서 있다.
+482|verb|실행하다|The school implemented new rules.|그 학교는 새 규칙을 실행했다.
+483|verb|넌지시 비치다|His silence implied refusal.|그의 침묵은 거절을 넌지시 비쳤다.
+484|verb|수입하다|We import wheat from abroad.|우리는 해외에서 밀을 수입한다.|rel:importance
+485|verb|부과하다|The city imposed a new tax.|시가 새 세금을 부과했다.
+486|noun|장려책|Prizes work as an incentive.|상은 장려책으로 작용한다.
+487|noun|사건|The incident happened at noon.|그 사건은 정오에 일어났다.
+488|verb|기울다|The old post inclines slightly.|그 낡은 기둥은 조금 기울어 있다.
+489|verb|포함시켜 합치다|They incorporated our idea.|그들은 우리 생각을 포함시켜 합쳤다.
+490|noun|색인|Check the index at the back.|뒤쪽 색인을 확인해라.
+491|verb|유도하다|Warm milk induces sleep.|따뜻한 우유는 잠을 유도한다.
+492|noun|유아|The infant slept all morning.|그 유아는 아침 내내 잤다.
+493|verb|감염시키다|Dirty water may infect people.|더러운 물은 사람을 감염시킬 수 있다.
+494|verb|추론하다|We inferred the answer quickly.|우리는 답을 빠르게 추론했다.|rel:inference
+495|verb|부풀리다|Inflate the ball before playing.|경기 전에 공을 부풀려라.
+496|noun|재료|List every ingredient here.|여기에 모든 재료를 적어라.
+497|verb|서식하다|Rare birds inhabit this island.|희귀한 새들이 이 섬에 서식한다.
+498|adjective|본래부터 있는|Curiosity is inherent in children.|호기심은 아이들에게 본래부터 있다.
+499|verb|억제하다|Cold weather inhibits plant growth.|추운 날씨는 식물 성장을 억제한다.
+500|adjective|처음의|My initial answer was wrong.|내 처음의 답은 틀렸다.
+501|verb|주사하다|The nurse injected the medicine.|간호사가 그 약을 주사했다.
+502|noun|여관|We stayed at a country inn.|우리는 시골 여관에 묵었다.
+503|verb|혁신하다|Small firms innovate faster.|작은 회사들이 더 빠르게 혁신한다.
+504|noun|입력|The machine needs clean input.|그 기계는 깨끗한 입력이 필요하다.
+505|verb|문의하다|She inquired about the price.|그녀는 가격에 대해 문의했다.
+506|noun|곤충|A tiny insect crossed the page.|아주 작은 곤충이 책장을 지났다.
+507|verb|끼워 넣다|Insert the card here.|여기에 카드를 끼워 넣어라.
+508|noun|통찰|Her essay shows real insight.|그녀의 글은 진짜 통찰을 보여 준다.
+509|verb|영감을 주다|Her story inspired many students.|그녀의 이야기는 많은 학생에게 영감을 주었다.
+510|verb|설치하다|They installed a new lamp.|그들은 새 램프를 설치했다.
+511|noun|본능|Birds follow their instinct.|새들은 자기 본능을 따른다.
+512|noun|기관|The institute studies clean energy.|그 기관은 청정 에너지를 연구한다.|rel:institution
+513|verb|모욕하다|Never insult your teammates.|절대 팀 동료를 모욕하지 마라.
+514|verb|통합하다|The city integrated two schools.|시가 두 학교를 통합했다.
+515|noun|지성|His intellect impressed everyone.|그의 지성이 모두를 감동시켰다.|rel:intellectual
+516|adjective|지능이 높은|Dolphins are highly intelligent.|돌고래는 매우 지능이 높다.
+517|verb|간섭하다|Do not interfere with their work.|그들의 일에 간섭하지 마라.
+518|noun|실내|The car interior smells new.|그 차 실내는 새것 냄새가 난다.
+519|adjective|중급의|She joined the intermediate class.|그녀는 중급 반에 들어갔다.
+520|verb|통역하다|He interpreted for the visitors.|그는 방문객들을 위해 통역했다.
+521|noun|간격|Take a break at short intervals.|짧은 간격으로 휴식해라.
+522|verb|개입하다|A teacher intervened at once.|교사 한 명이 즉시 개입했다.
+523|adjective|친밀한|They share an intimate friendship.|그들은 친밀한 우정을 나눈다.
+524|verb|호기심을 자극하다|The old map intrigued us.|그 옛 지도가 우리 호기심을 자극했다.
+525|verb|침략하다|The army invaded the small island.|그 군대가 작은 섬을 침략했다.
+526|noun|반어|His answer carried gentle irony.|그의 답변에는 부드러운 반어가 담겼다.
+527|verb|거슬리게 하다|Bright light irritates my eyes.|밝은 빛은 내 눈을 거슬리게 한다.
+528|verb|고립시키다|Snow isolated the small town.|눈이 그 작은 마을을 고립시켰다.
+529|noun|교도소|The thief left jail last year.|그 도둑은 작년에 교도소에서 나왔다.
+530|noun|단지|Store the honey in a jar.|꿀을 단지에 보관해라.
+531|verb|천천히 달리다|They jog every morning.|그들은 매일 아침 천천히 달린다.
+532|noun|관절|My knee joint feels stiff.|내 무릎 관절이 뻣뻣하게 느껴진다.
+533|noun|학술지|She published in a science journal.|그녀는 과학 학술지에 발표했다.
+534|noun|배심원단|The jury reached a decision.|배심원단이 결정에 이르렀다.
+535|adjective|열의가 있는|He is keen on old music.|그는 옛 음악에 열의가 있다.
+536|noun|도구 모음|Bring the repair kit please.|수리 도구 모음을 가져와 주세요.
+537|noun|중세 기사|The knight rode a brown horse.|그 중세 기사는 갈색 말을 탔다.
+538|noun|매듭|Tie a strong knot here.|여기에 튼튼한 매듭을 지어라.
+539|noun|사다리|He climbed the wooden ladder.|그는 나무 사다리를 올랐다.
+540|noun|풍경|The landscape changed after rain.|그 풍경은 비 온 뒤 달라졌다.
+541|noun|무릎 위|The cat slept on my lap.|고양이가 내 무릎 위에서 잤다.
+542|adjective|후자의|I prefer the latter plan.|나는 후자의 계획을 선호한다.
+543|verb|발사하다|They launched a small rocket.|그들은 작은 로켓을 발사했다.
+544|noun|세탁물|Fold the laundry after dinner.|저녁 후에 세탁물을 개라.
+545|verb|새다|Gas leaked from the old pipe.|가스가 낡은 관에서 샜다.
+546|noun|임대 계약|They signed a two year lease.|그들은 이 년 임대 계약에 서명했다.
+547|noun|가죽|This bag uses soft leather.|이 가방은 부드러운 가죽을 쓴다.
+548|noun|강의|The lecture lasted two hours.|그 강의는 두 시간 걸렸다.
+549|noun|전설|An old legend explains the name.|오래된 전설이 그 이름을 설명한다.
+550|verb|법을 만들다|Congress legislates every year.|의회는 매년 법을 만든다.
+551|adjective|정당한|She had a legitimate reason.|그녀에게는 정당한 이유가 있었다.
+552|noun|여가|He reads during his leisure.|그는 여가 동안 책을 읽는다.
+553|adjective|개방적인|The school has a liberal policy.|그 학교는 개방적인 정책을 지닌다.
+554|noun|자유|The country won its liberty.|그 나라는 자유를 얻었다.
+555|adverb|마찬가지로|Likewise, we must save water.|마찬가지로 우리는 물을 아껴야 한다.
+556|adjective|언어학의|She studies linguistic patterns.|그녀는 언어학의 유형을 연구한다.
+557|noun|액체|Pour the liquid into a bowl.|그 액체를 그릇에 부어라.
+558|noun|문학|He teaches English literature.|그는 영문학을 가르친다.
+559|noun|논리|Her argument follows clear logic.|그녀의 주장은 분명한 논리를 따른다.
+560|adjective|외로운|A lone tree stood there.|외로운 나무 한 그루가 거기 서 있었다.
+561|adjective|충실한|A loyal friend keeps promises.|충실한 친구는 약속을 지킨다.
+562|noun|덩이|Add one lump of sugar.|설탕 한 덩이를 넣어라.
+563|noun|사치|They live without luxury.|그들은 사치 없이 산다.
+564|noun|자석|A magnet pulls small nails.|자석은 작은 못들을 끌어당긴다.
+565|adjective|장엄한|The old church looks magnificent.|그 오래된 교회는 장엄해 보인다.
+566|adjective|뚜렷한|His talent became manifest.|그의 재능이 뚜렷해졌다.
+567|verb|교묘히 다루다|He manipulated the small switch.|그는 작은 스위치를 교묘히 다뤘다.
+568|noun|여백|Write notes in the margin.|여백에 메모를 써라.
+569|adjective|바다의|We studied marine animals.|우리는 바다 동물을 공부했다.
+570|adjective|성숙한|She gave a mature answer.|그녀는 성숙한 답을 했다.
+571|noun|시장(단체장)|The mayor opened the new park.|시장이 새 공원을 열었다.
+572|adverb|그동안|Meanwhile, the rain stopped.|그동안 비가 그쳤다.
+573|noun|정비공|A mechanic checked our engine.|정비공이 우리 엔진을 점검했다.
+574|noun|작동 원리|Explain the lock mechanism.|그 자물쇠의 작동 원리를 설명해라.
+575|verb|중재하다|A teacher mediated the argument.|교사 한 명이 그 논쟁을 중재했다.
+576|adjective|중세의|We visited a medieval castle.|우리는 중세 성을 방문했다.
+577|noun|매체|Radio is an old medium.|라디오는 오래된 매체다.|rel:media
+578|noun|상인|A merchant sold cloth here.|한 상인이 여기서 천을 팔았다.
+579|adjective|단지 ~에 불과한|It was a mere accident.|그것은 단지 사고에 불과했다.
+580|verb|합쳐지다|Two rivers merge near here.|두 강이 이 근처에서 합쳐진다.
+581|noun|훌륭한 점|The plan has real merit.|그 계획은 진짜 훌륭한 점이 있다.
+582|adjective|대도시의|He works in a metropolitan area.|그는 대도시 지역에서 일한다.
+583|noun|마이크|Speak into the microphone please.|마이크에 대고 말해 주세요.
+584|verb|이동하다|Birds migrate every autumn.|새들은 매년 가을 이동한다.|rel:migrant
+585|adjective|포근한|We had a mild winter.|우리는 포근한 겨울을 보냈다.
+586|number|백만|A million people live here.|백만 명이 여기 산다.
+587|noun|광산|The old mine closed long ago.|그 낡은 광산은 오래전에 닫혔다.|rel:miner
+588|noun|광물|This rock contains rare minerals.|이 바위는 희귀한 광물을 함유한다.
+589|adjective|최소한의|Make minimal noise here.|여기서는 최소한의 소음만 내라.
+590|noun|최솟값|The minimum is ten people.|최솟값은 열 명이다.
+591|noun|정부 부처|The ministry announced new rules.|그 정부 부처가 새 규칙을 발표했다.
+592|noun|기적|Her recovery seemed a miracle.|그녀의 회복은 기적처럼 보였다.
+593|noun|미사일|The missile missed its mark.|그 미사일은 목표를 빗나갔다.
+594|adjective|이동식의|We used a mobile clinic.|우리는 이동식 진료소를 이용했다.
+595|verb|비웃다|Do not mock his effort.|그의 노력을 비웃지 마라.
+596|noun|작동 방식|Choose a quiet mode.|조용한 작동 방식을 골라라.
+597|verb|수정하다|They modified the old design.|그들은 낡은 설계를 수정했다.
+598|adjective|알맞은|Keep a moderate speed.|알맞은 속도를 유지해라.
+599|adjective|겸손한|He stayed modest after winning.|그는 이긴 뒤에도 겸손했다.
+600|adjective|축축이 젖은|The soil felt moist.|그 흙은 축축이 젖은 느낌이었다.|rel:moisture

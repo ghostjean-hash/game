@@ -65,7 +65,7 @@
       "noun"
     ],
     "meaningKr": [
-      "큰 배"
+      "배"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -236,12 +236,12 @@
       "noun"
     ],
     "meaningKr": [
-      "쪽/옆"
+      "옆쪽"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "Sit on this side.",
-    "exampleKr": "이쪽에 앉아라.",
+    "exampleKr": "이 옆쪽에 앉아라.",
     "sourceOrder": 613,
     "setId": null,
     "learningOrder": null
@@ -321,8 +321,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Six friends came to my party.",
-    "exampleKr": "여섯 명의 친구가 내 파티에 왔다.",
+    "example": "Six students are absent.",
+    "exampleKr": "여섯 학생이 결석했다.",
     "sourceOrder": 617,
     "setId": null,
     "learningOrder": null
@@ -490,12 +490,12 @@
       "adjective"
     ],
     "meaningKr": [
-      "작은"
+      "크기가 작은"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "This box is small.",
-    "exampleKr": "이 상자는 작다.",
+    "exampleKr": "이 상자는 크기가 작다.",
     "sourceOrder": 626,
     "setId": null,
     "learningOrder": null
@@ -549,12 +549,12 @@
       "noun"
     ],
     "meaningKr": [
-      "눈(날씨)"
+      "흰 눈"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "Snow covers the road.",
-    "exampleKr": "눈이 길을 덮는다.",
+    "exampleKr": "흰 눈이 길을 덮는다.",
     "sourceOrder": 629,
     "setId": null,
     "learningOrder": null
@@ -587,12 +587,12 @@
       "noun"
     ],
     "meaningKr": [
-      "축구"
+      "축구 종목"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "We play soccer on Saturday.",
-    "exampleKr": "우리는 토요일에 축구를 한다.",
+    "exampleKr": "우리는 토요일에 축구 종목을 한다.",
     "sourceOrder": 631,
     "setId": null,
     "learningOrder": null
@@ -762,8 +762,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Mom makes soup for dinner.",
-    "exampleKr": "엄마는 저녁으로 수프를 만든다.",
+    "example": "I ate warm soup.",
+    "exampleKr": "나는 따뜻한 수프를 먹었다.",
     "sourceOrder": 640,
     "setId": null,
     "learningOrder": null
@@ -774,14 +774,14 @@
     "sourceMarker": "*",
     "word": "south",
     "partOfSpeech": [
-      "noun"
+      "adverb"
     ],
     "meaningKr": [
-      "남쪽"
+      "남쪽으로"
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Birds fly to the south in winter.",
+    "example": "Birds fly south in winter.",
     "exampleKr": "새들은 겨울에 남쪽으로 난다.",
     "sourceOrder": 641,
     "setId": null,
@@ -988,12 +988,12 @@
       "verb"
     ],
     "meaningKr": [
-      "시작하다"
+      "개시하다"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "Class starts at nine.",
-    "exampleKr": "수업은 아홉 시에 시작한다.",
+    "exampleKr": "수업은 아홉 시에 개시한다.",
     "sourceOrder": 652,
     "setId": null,
     "learningOrder": null
@@ -1779,7 +1779,7 @@
       "noun"
     ],
     "meaningKr": [
-      "물건/것"
+      "것"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -2435,8 +2435,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Twenty chairs are in the room.",
-    "exampleKr": "의자 스무 개가 방에 있다.",
+    "example": "Twenty students are here.",
+    "exampleKr": "스무 명의 학생이 여기 있다.",
     "sourceOrder": 727,
     "setId": null,
     "learningOrder": null
@@ -2454,8 +2454,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "The twenty-first day is Sunday.",
-    "exampleKr": "스물한 번째 날은 일요일이다.",
+    "example": "The girl is twenty-first in line.",
+    "exampleKr": "그 소녀는 줄에서 스물한 번째이다.",
     "sourceOrder": 728,
     "setId": null,
     "learningOrder": null
@@ -2473,8 +2473,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Read the twenty-second word.",
-    "exampleKr": "스물두 번째 단어를 읽어라.",
+    "example": "He is twenty-second in line.",
+    "exampleKr": "그는 줄에서 스물두 번째이다.",
     "sourceOrder": 729,
     "setId": null,
     "learningOrder": null
@@ -2492,8 +2492,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "We meet on the twenty-third day.",
-    "exampleKr": "우리는 스물세 번째 날에 만난다.",
+    "example": "The twenty-third page is missing.",
+    "exampleKr": "스물세 번째 쪽이 없다.",
     "sourceOrder": 730,
     "setId": null,
     "learningOrder": null
@@ -2741,8 +2741,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "She made a short video.",
-    "exampleKr": "그녀는 짧은 영상을 만들었다.",
+    "example": "We watch a video today.",
+    "exampleKr": "우리는 오늘 비디오를 본다.",
     "sourceOrder": 743,
     "setId": null,
     "learningOrder": null
@@ -3070,8 +3070,8 @@
       "wore",
       "worn"
     ],
-    "example": "I wear a hat in summer.",
-    "exampleKr": "나는 여름에 모자를 쓴다.",
+    "example": "Wear warm socks today.",
+    "exampleKr": "오늘 따뜻한 양말을 신어라.",
     "sourceOrder": 760,
     "setId": null,
     "learningOrder": null
@@ -3433,8 +3433,8 @@
     "irregularForms": [
       "won"
     ],
-    "example": "We want to win today.",
-    "exampleKr": "우리는 오늘 이기고 싶다.",
+    "example": "We win every home game.",
+    "exampleKr": "우리는 모든 홈 경기에서 이긴다.",
     "sourceOrder": 779,
     "setId": null,
     "learningOrder": null
@@ -3562,12 +3562,12 @@
       "noun"
     ],
     "meaningKr": [
-      "여성"
+      "여자"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "The woman reads a book.",
-    "exampleKr": "그 여성은 책을 읽는다.",
+    "exampleKr": "그 여자는 책을 읽는다.",
     "sourceOrder": 786,
     "setId": null,
     "learningOrder": null
@@ -3581,12 +3581,12 @@
       "noun"
     ],
     "meaningKr": [
-      "나무(재료)"
+      "나무 재료"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "The table is made of wood.",
-    "exampleKr": "탁자는 나무로 만들어졌다.",
+    "exampleKr": "탁자는 나무 재료로 만들어졌다.",
     "sourceOrder": 787,
     "setId": null,
     "learningOrder": null
@@ -3619,12 +3619,12 @@
       "noun"
     ],
     "meaningKr": [
-      "일"
+      "작업"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "My work is almost done.",
-    "exampleKr": "내 일은 거의 끝났다.",
+    "exampleKr": "내 작업은 거의 끝났다.",
     "sourceOrder": 789,
     "setId": null,
     "learningOrder": null
@@ -3835,8 +3835,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "The zoo has two baby lions.",
-    "exampleKr": "그 동물원에는 새끼 사자 두 마리가 있다.",
+    "example": "We visit the zoo today.",
+    "exampleKr": "우리는 오늘 동물원에 간다.",
     "sourceOrder": 800,
     "setId": null,
     "learningOrder": null

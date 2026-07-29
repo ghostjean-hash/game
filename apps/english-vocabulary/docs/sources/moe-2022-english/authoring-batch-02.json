@@ -88,8 +88,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "We will decide after lunch.",
-    "exampleKr": "우리는 점심 후에 결정할 것이다.",
+    "example": "We decide after lunch.",
+    "exampleKr": "우리는 점심 후에 결정한다.",
     "sourceOrder": 205,
     "setId": null,
     "learningOrder": null
@@ -259,8 +259,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "We will discuss the book today.",
-    "exampleKr": "우리는 오늘 그 책을 토론할 것이다.",
+    "example": "We discuss the book today.",
+    "exampleKr": "우리는 오늘 그 책을 토론한다.",
     "sourceOrder": 214,
     "setId": null,
     "learningOrder": null
@@ -882,8 +882,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "The evening sky is beautiful.",
-    "exampleKr": "저녁 하늘은 아름답다.",
+    "example": "Good evening, Mr. Kim.",
+    "exampleKr": "안녕하세요, 김 선생님.",
     "sourceOrder": 246,
     "setId": null,
     "learningOrder": null
@@ -1113,8 +1113,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "We visited a farm last week.",
-    "exampleKr": "우리는 지난주에 농장을 방문했다.",
+    "example": "We visit a farm today.",
+    "exampleKr": "우리는 오늘 농장을 방문한다.",
     "sourceOrder": 258,
     "setId": null,
     "learningOrder": null
@@ -1328,8 +1328,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "We will watch a film tonight.",
-    "exampleKr": "우리는 오늘 밤 영화를 볼 것이다.",
+    "example": "We watch a film tonight.",
+    "exampleKr": "우리는 오늘 밤 영화를 본다.",
     "sourceOrder": 269,
     "setId": null,
     "learningOrder": null
@@ -1364,12 +1364,12 @@
       "adjective"
     ],
     "meaningKr": [
-      "좋은"
+      "날씨가 좋은"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "The weather is fine today.",
-    "exampleKr": "오늘 날씨는 좋다.",
+    "exampleKr": "오늘은 날씨가 좋다.",
     "sourceOrder": 271,
     "setId": null,
     "learningOrder": null
@@ -2063,8 +2063,8 @@
       "got",
       "gotten"
     ],
-    "example": "I got a letter today.",
-    "exampleKr": "나는 오늘 편지를 받았다.",
+    "example": "I get a letter today.",
+    "exampleKr": "나는 오늘 편지를 받는다.",
     "sourceOrder": 307,
     "setId": null,
     "learningOrder": null
@@ -2392,12 +2392,12 @@
       "noun"
     ],
     "meaningKr": [
-      "땅바닥"
+      "땅"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "Sit on the ground.",
-    "exampleKr": "땅바닥에 앉아라.",
+    "exampleKr": "땅에 앉아라.",
     "sourceOrder": 324,
     "setId": null,
     "learningOrder": null
@@ -2644,12 +2644,12 @@
       "adjective"
     ],
     "meaningKr": [
-      "힘든"
+      "고된"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "This test is hard.",
-    "exampleKr": "이 시험은 힘들다.",
+    "exampleKr": "이 시험은 고되다.",
     "sourceOrder": 337,
     "setId": null,
     "learningOrder": null
@@ -2686,8 +2686,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Some children hate cold weather.",
-    "exampleKr": "어떤 아이들은 추운 날씨를 싫어한다.",
+    "example": "Cold weather makes me hate winter.",
+    "exampleKr": "추운 날씨는 내가 겨울을 싫어하게 한다.",
     "sourceOrder": 339,
     "setId": null,
     "learningOrder": null
@@ -2722,7 +2722,7 @@
       "pronoun"
     ],
     "meaningKr": [
-      "그(남자)"
+      "그는"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -3068,7 +3068,7 @@
       "noun"
     ],
     "meaningKr": [
-      "집(가정)"
+      "집"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -3201,7 +3201,7 @@
       "noun"
     ],
     "meaningKr": [
-      "1시간"
+      "한 시간"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -3220,12 +3220,12 @@
       "noun"
     ],
     "meaningKr": [
-      "집(건물)"
+      "주택"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "Their house has a garden.",
-    "exampleKr": "그들의 집에는 정원이 있다.",
+    "exampleKr": "그들의 주택에는 정원이 있다.",
     "sourceOrder": 367,
     "setId": null,
     "learningOrder": null
@@ -3262,8 +3262,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "It was cold. However, we went outside.",
-    "exampleKr": "추웠다. 하지만 우리는 밖에 나갔다.",
+    "example": "The box is small; however, it is useful.",
+    "exampleKr": "그 상자는 작지만 유용하다.",
     "sourceOrder": 369,
     "setId": null,
     "learningOrder": null
@@ -3581,12 +3581,12 @@
       "noun"
     ],
     "meaningKr": [
-      "문제점"
+      "사안"
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "We talked about the same issue.",
-    "exampleKr": "우리는 같은 문제점에 대해 이야기했다.",
+    "example": "This issue needs our help.",
+    "exampleKr": "이 사안은 우리의 도움이 필요하다.",
     "sourceOrder": 386,
     "setId": null,
     "learningOrder": null
@@ -3657,12 +3657,12 @@
       "noun"
     ],
     "meaningKr": [
-      "직업"
+      "일"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "My mother likes her job.",
-    "exampleKr": "우리 엄마는 자신의 직업을 좋아한다.",
+    "exampleKr": "우리 엄마는 자신의 일을 좋아한다.",
     "sourceOrder": 390,
     "setId": null,
     "learningOrder": null
@@ -3758,8 +3758,8 @@
     "irregularForms": [
       "kept"
     ],
-    "example": "Keep the door closed, please.",
-    "exampleKr": "문을 닫아 두어라.",
+    "example": "Keep the door open.",
+    "exampleKr": "문을 열린 채로 유지해라.",
     "sourceOrder": 395,
     "setId": null,
     "learningOrder": null
@@ -3811,12 +3811,12 @@
       "noun"
     ],
     "meaningKr": [
-      "아이"
+      "꼬마"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "The kid is reading quietly.",
-    "exampleKr": "그 아이는 조용히 읽고 있다.",
+    "exampleKr": "그 꼬마는 조용히 읽고 있다.",
     "sourceOrder": 398,
     "setId": null,
     "learningOrder": null
@@ -3834,8 +3834,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Too much water can kill a plant.",
-    "exampleKr": "물을 너무 많이 주면 식물이 죽을 수 있다.",
+    "example": "The poison can kill bugs.",
+    "exampleKr": "그 독은 벌레를 죽일 수 있다.",
     "sourceOrder": 399,
     "setId": null,
     "learningOrder": null

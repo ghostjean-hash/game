@@ -69,7 +69,7 @@
 268|verb|채우다|Fill the cup with water.|컵을 물로 채워라.
 269|noun|영화|We watch a film tonight.|우리는 오늘 밤 영화를 본다.
 270|verb|찾다|Can you find my key?|내 열쇠를 찾을 수 있니?|irr:found
-271|adjective|좋은|The weather is fine today.|오늘 날씨는 좋다.
+271|adjective|날씨가 좋은|The weather is fine today.|오늘은 날씨가 좋다.
 272|noun|손가락|I hurt my finger.|나는 손가락을 다쳤다.
 273|verb|끝내다|Finish your work before dinner.|저녁 전에 일을 끝내라.
 274|noun|불|The fire keeps us warm.|불은 우리를 따뜻하게 해 준다.
@@ -115,7 +115,7 @@
 314|noun|신|They read a story about a god.|그들은 신에 관한 이야기를 읽는다.
 315|noun|금|The ring is made of gold.|그 반지는 금으로 만들어졌다.
 316|adjective|좋은|She is a good friend.|그녀는 좋은 친구이다.
-317|interjection|안녕|Say goodbye to your friends.|친구들에게 작별 인사를 해라.|rel:bye
+317|interjection|작별 인사|Say goodbye to your friends.|친구들에게 작별 인사를 해라.|rel:bye
 318|noun|할아버지|My grandfather tells stories.|우리 할아버지는 이야기를 들려준다.
 319|noun|포도|These grapes are sweet.|이 포도들은 달다.
 320|noun|풀|The grass is wet today.|오늘 풀은 젖어 있다.
@@ -128,21 +128,21 @@
 327|verb|추측하다|Guess the answer now.|지금 답을 추측해 봐.
 328|noun|기타|He plays the guitar well.|그는 기타를 잘 친다.
 329|noun|껌|Chewing gum is not allowed.|껌을 씹는 것은 허용되지 않는다.
-330|noun|남자|That guy is my cousin.|저 남자는 내 사촌이다.
+330|noun|녀석|That guy is my cousin.|저 녀석은 내 사촌이다.
 331|noun|습관|Reading is a good habit.|독서는 좋은 습관이다.
 332|noun|머리카락|Her hair is very long.|그녀의 머리카락은 아주 길다.
 333|noun|햄버거|I want a hamburger.|나는 햄버거를 원한다.
 334|noun|손|Raise your hand, please.|손을 들어라.
 335|verb|걸다|Hang your coat here.|여기에 코트를 걸어라.|irr:hung
 336|adjective|행복한|The children are happy.|아이들은 행복하다.
-337|adjective|어려운|This test is hard.|이 시험은 어렵다.
+337|adjective|고된|This test is hard.|이 시험은 고되다.
 338|noun|모자|His hat is black.|그의 모자는 검다.
 339|verb|싫어하다|Cold weather makes me hate winter.|추운 날씨는 내가 겨울을 싫어하게 한다.
 340|verb|가지다|We have two cats.|우리는 고양이 두 마리가 있다.|irr:had
 341|pronoun|그는|He is my brother.|그는 내 남동생이다.
 342|noun|머리|My head hurts today.|오늘 내 머리가 아프다.
 343|noun|심장|Her heart beats fast.|그녀의 심장은 빠르게 뛴다.
-344|noun|열|The heat is very strong.|열기가 아주 강하다.
+344|noun|열기|The heat is very strong.|열기가 아주 강하다.
 345|adjective|무거운|This box is heavy.|이 상자는 무겁다.
 346|interjection|안녕|Say hello to the teacher.|선생님께 인사해라.
 347|noun|헬멧|Wear a helmet on your bike.|자전거를 탈 때 헬멧을 써라.
@@ -155,7 +155,7 @@
 354|noun|역사|We learn history at school.|우리는 학교에서 역사를 배운다.
 355|verb|치다|Hit the ball softly.|공을 부드럽게 쳐라.|irr:hit
 356|noun|취미|Drawing is my hobby.|그림 그리기는 내 취미이다.
-357|verb|잡다|Hold my hand tightly.|내 손을 꼭 잡아라.|irr:held
+357|verb|쥐다|Hold my hand tightly.|내 손을 꼭 쥐어라.|irr:held
 358|noun|휴일|School is closed on holidays.|학교는 휴일에 쉰다.
 359|noun|집|My home is near school.|내 집은 학교 근처에 있다.
 360|noun|숙제|Finish your homework tonight.|오늘 밤 숙제를 끝내라.
@@ -164,10 +164,10 @@
 363|noun|말|The horse runs fast.|그 말은 빠르게 달린다.
 364|noun|병원|The hospital is near here.|병원은 이 근처에 있다.
 365|adjective|뜨거운|The soup is hot.|그 수프는 뜨겁다.
-366|noun|시간|The class lasts an hour.|수업은 한 시간 동안 계속된다.
-367|noun|집|Their house has a garden.|그들의 집에는 정원이 있다.
+366|noun|한 시간|The class lasts an hour.|수업은 한 시간 동안 계속된다.
+367|noun|주택|Their house has a garden.|그들의 주택에는 정원이 있다.
 368|adverb|어떻게|How do you feel today?|오늘 기분이 어떠니?
-369|adverb|그러나|The box is small; however, it is useful.|그 상자는 작지만 유용하다.
+369|adverb|하지만|The box is small; however, it is useful.|그 상자는 작지만 유용하다.
 370|noun|인간|Every human needs water.|모든 인간은 물이 필요하다.
 371|number|백|One hundred people came.|백 명의 사람이 왔다.
 372|verb|사냥하다|Lions hunt for food.|사자는 먹이를 사냥한다.
@@ -184,7 +184,7 @@
 383|preposition|~안으로|Put the toy into the box.|장난감을 상자 안으로 넣어라.
 384|verb|소개하다|Let me introduce my friend.|내 친구를 소개할게.
 385|verb|초대하다|I invite my friend to my party.|나는 친구를 파티에 초대한다.
-386|noun|문제|This issue needs our help.|이 문제는 우리의 도움이 필요하다.
+386|noun|사안|This issue needs our help.|이 사안은 우리의 도움이 필요하다.
 387|pronoun|그것|It is my new bag.|그것은 내 새 가방이다.
 388|noun|재킷|His jacket is warm.|그의 재킷은 따뜻하다.
 389|noun|잼|I eat bread with jam.|나는 잼을 곁들인 빵을 먹는다.
@@ -193,9 +193,9 @@
 392|noun|주스|This juice is cold.|이 주스는 차갑다.
 393|verb|뛰다|Jump over the small puddle.|작은 웅덩이를 뛰어넘어라.
 394|adverb|방금|I just finished my work.|나는 방금 내 일을 끝냈다.
-395|verb|유지하다|Keep your room clean.|방을 깨끗하게 유지해라.|irr:kept
+395|verb|유지하다|Keep the door open.|문을 열린 채로 유지해라.|irr:kept
 396|noun|열쇠|Where is my key?|내 열쇠는 어디 있니?
 397|verb|차다|Kick the ball to me.|나에게 공을 차라.
-398|noun|아이|The kid is reading quietly.|그 아이는 조용히 읽고 있다.
+398|noun|꼬마|The kid is reading quietly.|그 꼬마는 조용히 읽고 있다.
 399|verb|죽이다|The poison can kill bugs.|그 독은 벌레를 죽일 수 있다.
 400|adjective|친절한|Her kind words help me.|그녀의 친절한 말은 나를 돕는다.

@@ -1,0 +1,201 @@
+# High AUTHORING BATCH 04 - official unmarked representative forms 601-800
+601|noun|분자|A water molecule holds three atoms.|물 분자는 원자 세 개를 지닌다.
+602|noun|괴물|The child feared a monster.|그 아이는 괴물을 무서워했다.
+603|noun|기념물|A stone monument stands here.|돌 기념물이 여기 서 있다.
+604|adjective|죽을 운명의|All people are mortal.|모든 사람은 죽을 운명이다.
+605|noun|동기|Police searched for a motive.|경찰이 동기를 찾았다.
+606|adjective|여러 개의|The test has multiple answers.|그 시험은 여러 개의 답이 있다.
+607|noun|살인|The novel describes a murder.|그 소설은 살인을 묘사한다.
+608|adjective|서로 간의|They share mutual respect.|그들은 서로 간의 존중을 나눈다.
+609|noun|신화|An old myth explains the star.|오래된 신화가 그 별을 설명한다.
+610|adjective|순진한|His question sounded naive.|그의 질문은 순진하게 들렸다.
+611|adjective|벌거벗은|The naked branch held no leaves.|벌거벗은 가지에는 잎이 없었다.
+612|verb|이야기를 들려주다|She narrates the whole story.|그녀가 이야기 전체를 들려준다.
+613|adjective|고약한|The medicine had a nasty taste.|그 약은 고약한 맛이 났다.
+614|noun|바늘|Thread the needle carefully.|바늘에 실을 조심스럽게 꿰어라.
+615|verb|부정하다|He negated every earlier claim.|그는 앞선 모든 주장을 부정했다.|rel:negative
+616|verb|소홀히 하다|Do not neglect your health.|건강을 소홀히 하지 마라.
+617|verb|협상하다|Both sides negotiated for hours.|양측이 몇 시간 동안 협상했다.
+618|noun|조카|My nephew visits every summer.|내 조카는 매년 여름 방문한다.
+619|noun|연결망|The train network covers the country.|그 기차 연결망은 나라 전체를 덮는다.
+620|adjective|중립의|The judge stayed neutral.|그 판사는 중립을 지켰다.
+621|adverb|그럼에도 불구하고|Nevertheless, we finished on time.|그럼에도 불구하고 우리는 제때 끝냈다.
+622|noun|악몽|She woke from a nightmare.|그녀는 악몽에서 깨어났다.
+623|adjective|고귀한|That was a noble choice.|그것은 고귀한 선택이었다.
+624|verb|고개를 끄덕이다|He nodded without speaking.|그는 말없이 고개를 끄덕였다.
+625|verb|지명하다|They nominated her as leader.|그들은 그녀를 대표로 지명했다.
+626|adverb|그렇더라도|Nonetheless, the plan worked.|그렇더라도 그 계획은 통했다.
+627|noun|일반 기준|This size is the norm.|이 크기가 일반 기준이다.|rel:normal
+628|noun|장편 소설|He wrote a short novel.|그는 짧은 장편 소설을 썼다.
+629|adjective|핵의|The country closed a nuclear plant.|그 나라는 핵 발전소를 닫았다.
+630|adjective|수많은|Numerous birds filled the sky.|수많은 새가 하늘을 채웠다.
+631|verb|복종하다|Soldiers must obey every order.|군인은 모든 명령에 복종해야 한다.
+632|verb|의무를 지우다|The law obliges drivers to stop.|그 법은 운전자에게 멈출 의무를 지운다.
+633|verb|사로잡다|One idea obsessed him.|한 가지 생각이 그를 사로잡았다.
+634|verb|얻어 내다|She obtained a free ticket.|그녀는 무료 표를 얻어 냈다.
+635|verb|차지하다|Boxes occupy half the room.|상자들이 방의 절반을 차지한다.|rel:occupation
+636|verb|기분을 상하게 하다|His joke offended some guests.|그의 농담이 몇몇 손님의 기분을 상하게 했다.
+637|adjective|시기적절한|That was an opportune moment.|그것은 시기적절한 순간이었다.|rel:opportunity
+638|verb|택하다|Many students opt for science.|많은 학생이 과학을 택한다.|rel:option
+639|noun|낙관하는 사람|An optimist expects good results.|낙관하는 사람은 좋은 결과를 기대한다.
+640|adjective|구두의|We took an oral test.|우리는 구두 시험을 봤다.
+641|noun|궤도|The moon follows a wide orbit.|달은 넓은 궤도를 따른다.
+642|noun|관현악단|The orchestra played all night.|그 관현악단은 밤새 연주했다.
+643|noun|장기|The heart is a vital organ.|심장은 중요한 장기다.|rel:organic,organize
+644|verb|방향을 잡다|Maps help us orient quickly.|지도는 우리가 빠르게 방향을 잡도록 돕는다.|rel:orientation
+645|noun|기원|Nobody knows the origin.|아무도 그 기원을 모른다.|rel:original
+646|noun|결말|The outcome surprised everyone.|그 결말은 모두를 놀라게 했다.
+647|noun|개요|Write a short outline first.|먼저 짧은 개요를 써라.
+648|noun|산출량|The factory raised its output.|그 공장은 산출량을 늘렸다.
+649|noun|격분|The news caused public outrage.|그 소식은 대중의 격분을 일으켰다.
+650|adjective|뛰어난|She gave an outstanding speech.|그녀는 뛰어난 연설을 했다.
+651|verb|극복하다|We must overcome this problem.|우리는 이 문제를 극복해야 한다.|irr:overcame,overcome
+652|adverb|머리 위로|A plane passed overhead.|비행기 한 대가 머리 위로 지나갔다.
+653|verb|겹치다|The two lines overlap here.|그 두 선은 여기서 겹친다.
+654|verb|못 보고 넘기다|Do not overlook small errors.|작은 오류를 못 보고 넘기지 마라.
+655|adverb|하룻밤 사이에|The snow melted overnight.|눈이 하룻밤 사이에 녹았다.
+656|adjective|해외의|They sell oversea goods.|그들은 해외의 상품을 판다.
+657|verb|압도하다|The crowd overwhelmed the small hall.|군중이 그 작은 강당을 압도했다.
+658|verb|빚지다|I owe you five dollars.|나는 네게 오 달러를 빚졌다.
+659|noun|걸음 속도|Keep a slow pace today.|오늘은 느린 걸음 속도를 유지해라.
+660|noun|덧대는 판|Put a soft pad here.|여기에 부드러운 덧대는 판을 놓아라.
+661|adjective|창백한|Her face looked pale.|그녀의 얼굴은 창백해 보였다.
+662|noun|손바닥|He held sand in his palm.|그는 손바닥에 모래를 쥐었다.
+663|noun|위원단|A panel judged the contest.|위원단이 그 대회를 심사했다.
+664|adjective|평행한|Draw two parallel lines.|평행한 선 두 개를 그려라.
+665|noun|국회|Parliament passed the new bill.|국회가 새 법안을 통과시켰다.
+666|verb|참가하다|Every student may participate.|모든 학생이 참가할 수 있다.
+667|noun|입자|Dust particles float in air.|먼지 입자들이 공기에 떠 있다.
+668|noun|구절|Read this passage aloud.|이 구절을 소리 내어 읽어라.
+669|noun|승객|One passenger left a bag.|승객 한 명이 가방을 두고 갔다.
+670|noun|열정|She works with great passion.|그녀는 큰 열정으로 일한다.
+671|noun|여권|Show your passport at the gate.|문에서 여권을 보여 줘라.
+672|verb|가볍게 두드리다|He patted the dog gently.|그는 개를 부드럽게 가볍게 두드렸다.
+673|noun|헝겊 조각|A patch covered the hole.|헝겊 조각이 구멍을 덮었다.
+674|noun|특허|The team filed a patent.|그 팀은 특허를 냈다.
+675|verb|포장하다|Workers paved the narrow road.|노동자들이 좁은 도로를 포장했다.
+676|noun|정상|We reached the peak at noon.|우리는 정오에 정상에 도달했다.
+677|noun|소작농|The peasant worked all day.|그 소작농은 하루 종일 일했다.
+678|verb|껍질을 벗기다|Peel the apple before eating.|먹기 전에 사과 껍질을 벗겨라.
+679|noun|또래|Her peers respect her a lot.|그녀의 또래들은 그녀를 많이 존중한다.
+680|noun|벌칙|The team received a penalty.|그 팀은 벌칙을 받았다.
+681|verb|감지하다|We perceive light through eyes.|우리는 눈을 통해 빛을 감지한다.|rel:perception
+682|adjective|영구적인|This is a permanent change.|이것은 영구적인 변화다.
+683|verb|허용하다|The rule permits one guest.|그 규칙은 손님 한 명을 허용한다.
+684|verb|끈질기게 계속하다|He persisted despite failure.|그는 실패에도 끈질기게 계속했다.
+685|noun|관점|Try a different perspective.|다른 관점을 시도해 봐라.
+686|verb|설득해 움직이다|She persuaded him to stay.|그녀는 그를 머물도록 설득해 움직였다.
+687|noun|단계|The first phase ends today.|첫 단계가 오늘 끝난다.
+688|noun|현상|Rainbows are a natural phenomenon.|무지개는 자연 현상이다.
+689|noun|철학|He studies ancient philosophy.|그는 고대 철학을 공부한다.
+690|noun|어구|Learn this useful phrase.|이 유용한 어구를 익혀라.
+691|noun|물리학|Physics explains moving objects.|물리학은 움직이는 물체를 설명한다.
+692|noun|알약|Take one pill after meals.|식후에 알약 하나를 먹어라.
+693|verb|꼬집다|She pinched my arm lightly.|그녀는 내 팔을 가볍게 꼬집었다.
+694|noun|개척자|He was a pioneer in medicine.|그는 의학의 개척자였다.
+695|noun|승강장|Wait on the second platform.|두 번째 승강장에서 기다려라.
+696|noun|줄거리|The plot moves very slowly.|그 줄거리는 아주 천천히 흘러간다.
+697|verb|윤을 내다|Polish the shoes before leaving.|떠나기 전에 신발에 윤을 내라.
+698|noun|여론 조사|The poll showed close results.|그 여론 조사는 접전 결과를 보였다.
+699|noun|연못|Ducks swim in the pond.|오리들이 연못에서 헤엄친다.
+700|verb|살게 하다|Few people populate this valley.|이 골짜기에 사는 사람은 적다.|rel:population
+701|noun|몫|Give each child one portion.|각 아이에게 한 몫을 줘라.
+702|noun|초상화|The portrait hangs above stairs.|그 초상화는 계단 위에 걸려 있다.
+703|verb|자세를 취하다|They posed for a photo.|그들은 사진을 위해 자세를 취했다.|rel:dispose
+704|verb|사실로 상정하다|Scientists posit a simple cause.|과학자들은 단순한 원인을 사실로 상정한다.|rel:position
+705|verb|칭찬하다|The coach praised our effort.|코치가 우리의 노력을 칭찬했다.
+706|verb|설교하다|The priest preached about kindness.|그 사제는 친절에 대해 설교했다.
+707|verb|앞서다|A short talk preceded the film.|짧은 강연이 그 영화에 앞섰다.
+708|adjective|정밀한|We need precise numbers.|우리는 정밀한 숫자가 필요하다.
+709|noun|포식자|The lion is a strong predator.|사자는 강한 포식자다.
+710|verb|예측하다|Nobody can predict the weather.|아무도 날씨를 예측할 수 없다.
+711|noun|선입견|Prejudice harms every community.|선입견은 모든 공동체를 해친다.
+712|noun|추가 요금|The seat costs a premium.|그 좌석은 추가 요금이 든다.
+713|verb|처방하다|The doctor prescribed rest.|의사는 휴식을 처방했다.
+714|verb|지켜 내다|We preserve old buildings here.|우리는 여기서 오래된 건물을 지켜 낸다.
+715|verb|주재하다|She presided over the meeting.|그녀가 그 회의를 주재했다.|rel:president
+716|verb|미루어 짐작하다|We presume he left early.|우리는 그가 일찍 떠났다고 미루어 짐작한다.
+717|verb|널리 퍼지다|Old customs still prevail here.|옛 관습이 여전히 여기 널리 퍼져 있다.
+718|noun|먹잇감|The bird hunted small prey.|그 새는 작은 먹잇감을 사냥했다.
+719|noun|사제|A young priest led the song.|젊은 사제가 그 노래를 이끌었다.
+720|adjective|원시적인|They used primitive tools.|그들은 원시적인 도구를 썼다.
+721|noun|교장|The principal greeted new students.|교장이 새 학생들을 맞이했다.
+722|adjective|사전의|Get prior approval first.|먼저 사전 승인을 받아라.
+723|noun|특권|Driving is not a privilege.|운전은 특권이 아니다.
+724|noun|교수|The professor answered my letter.|그 교수가 내 편지에 답했다.
+725|noun|인물 소개|The magazine printed her profile.|그 잡지는 그녀의 인물 소개를 실었다.
+726|adjective|깊이 있는|He made a profound remark.|그는 깊이 있는 발언을 했다.
+727|verb|법으로 금하다|The law prohibits open fires.|그 법은 노출된 불을 법으로 금한다.
+728|adjective|눈에 띄는|A prominent sign marked the door.|눈에 띄는 표시가 문을 나타냈다.
+729|adjective|지체 없는|We got a prompt reply.|우리는 지체 없는 답을 받았다.
+730|noun|입증 자료|Show me clear proof.|분명한 입증 자료를 보여 줘.
+731|noun|비례 몫|Mix them in equal proportion.|같은 비례 몫으로 그것들을 섞어라.
+732|noun|전망|The job has a good prospect.|그 일자리는 좋은 전망이 있다.
+733|verb|번영하다|Trade helped the port prosper.|무역이 그 항구를 번영하게 도왔다.
+734|noun|단백질|Beans contain useful protein.|콩은 유용한 단백질을 함유한다.
+735|noun|지방 행정 구역|This province grows apples.|이 지방 행정 구역은 사과를 재배한다.
+736|verb|자극하다|His words provoked an argument.|그의 말이 논쟁을 자극했다.
+737|noun|심리학|She teaches child psychology.|그녀는 아동 심리학을 가르친다.
+738|verb|출판하다|They publish two books yearly.|그들은 매년 책 두 권을 출판한다.|rel:publisher
+739|noun|학생|Each pupil got one card.|각 학생이 카드 한 장을 받았다.
+740|verb|추구하다|She pursues her own goal.|그녀는 자기 목표를 추구한다.
+741|noun|수량|Order a small quantity first.|먼저 적은 수량을 주문해라.
+742|noun|설문지|Fill in this short questionnaire.|이 짧은 설문지를 작성해라.
+743|noun|격렬한 분노|His rage frightened the class.|그의 격렬한 분노가 반을 겁먹게 했다.
+744|noun|집회|A peaceful rally filled the square.|평화로운 집회가 광장을 채웠다.
+745|adjective|무작위의|Pick a random number.|무작위의 숫자를 골라라.
+746|noun|순위|Her rank rose last month.|그녀의 순위가 지난달 올랐다.
+747|adjective|이성적인|Give me a rational reason.|이성적인 이유를 알려 줘.
+748|adjective|날것의|Never eat raw meat.|절대 날것의 고기를 먹지 마라.
+749|noun|뒤쪽|Sit at the rear please.|뒤쪽에 앉아 주세요.
+750|verb|반란을 일으키다|The people rebelled against the king.|백성들이 왕에게 반란을 일으켰다.
+751|noun|영수증|Keep the receipt safely.|영수증을 안전하게 보관해라.
+752|verb|모집하다|The club recruits new members.|그 동아리는 새 회원을 모집한다.
+753|verb|정제하다|They refine oil at this plant.|그들은 이 공장에서 기름을 정제한다.
+754|noun|개혁|The reform changed every school.|그 개혁은 모든 학교를 바꿨다.
+755|verb|냉장하다|Refrigerate the milk at once.|우유를 즉시 냉장해라.|rel:refrigerator
+756|verb|후회하다|He regretted his quick answer.|그는 자기 성급한 답을 후회했다.
+757|verb|규제하다|Laws regulate factory smoke.|법이 공장 연기를 규제한다.
+758|verb|강화하다|Steel bars reinforce the wall.|강철 막대가 그 벽을 강화한다.
+759|verb|거부하다|The board rejected our request.|이사회가 우리 요청을 거부했다.
+760|adjective|관련 있는|Bring only relevant papers.|관련 있는 서류만 가져와라.
+761|verb|덜어 주다|This tea relieves a sore throat.|이 차는 아픈 목을 덜어 준다.
+762|noun|종교|Every religion values kindness.|모든 종교는 친절을 중시한다.
+763|adjective|꺼리는|She looked reluctant to speak.|그녀는 말하기를 꺼리는 듯 보였다.
+764|noun|치료법|Rest is the best remedy.|휴식이 최고의 치료법이다.
+765|adjective|외딴|They live in a remote village.|그들은 외딴 마을에 산다.
+766|noun|공화국|The republic held free votes.|그 공화국은 자유로운 투표를 치렀다.
+767|noun|평판|The shop has a fine reputation.|그 가게는 좋은 평판을 지녔다.
+768|verb|구조하다|Firefighters rescued two cats.|소방관들이 고양이 두 마리를 구조했다.
+769|verb|닮다|She resembles her grandmother.|그녀는 할머니를 닮았다.
+770|verb|머물러 살다|Few families reside here now.|이제 여기 머물러 사는 가족은 적다.|rel:resident
+771|verb|사임하다|The manager resigned last week.|그 관리자는 지난주 사임했다.
+772|verb|해소하다|They resolved the long dispute.|그들은 오랜 분쟁을 해소했다.
+773|noun|휴양지|We booked a quiet resort.|우리는 조용한 휴양지를 예약했다.
+774|verb|복원하다|Workers restored the old wall.|노동자들이 낡은 벽을 복원했다.
+775|verb|억누르다|He restrained his own anger.|그는 자기 화를 억눌렀다.
+776|verb|제한하다|The rule restricts loud noise.|그 규칙은 시끄러운 소음을 제한한다.
+777|verb|다시 시작하다|We resumed work after lunch.|우리는 점심 후 일을 다시 시작했다.
+778|noun|소매|The shop moved into retail.|그 가게는 소매업으로 옮겼다.
+779|verb|간직하다|Plants retain water well.|식물은 물을 잘 간직한다.
+780|verb|물러나다|The army retreated at dawn.|그 군대는 새벽에 물러났다.
+781|verb|드러내다|The letter revealed the truth.|그 편지가 진실을 드러냈다.
+782|noun|복수|Revenge solves very little.|복수는 해결하는 것이 거의 없다.
+783|verb|거꾸로 하다|Reverse the last two steps.|마지막 두 단계를 거꾸로 해라.
+784|verb|고쳐 쓰다|She revised her whole essay.|그녀는 자기 글 전체를 고쳐 썼다.
+785|verb|되살리다|Rain revived the dry garden.|비가 마른 정원을 되살렸다.
+786|noun|혁명|The revolution changed the country.|그 혁명은 그 나라를 바꿨다.
+787|noun|보상|Hard work brings its reward.|노력은 그 보상을 가져온다.
+788|noun|박자|Clap along with the rhythm.|박자에 맞춰 손뼉을 쳐라.
+789|verb|치워 버리다|Get rid of the old boxes.|낡은 상자들을 치워 버려라.
+790|verb|비웃음거리로 만들다|Never ridicule a beginner.|초보자를 절대 비웃음거리로 만들지 마라.|rel:ridiculous
+791|noun|폭동|A small riot broke out.|작은 폭동이 일어났다.
+792|noun|경쟁자|His rival trains even harder.|그의 경쟁자는 더 열심히 훈련한다.
+793|verb|으르렁거리다|The lion roared at night.|그 사자는 밤에 으르렁거렸다.
+794|verb|구워 익히다|Roast the potatoes slowly.|감자를 천천히 구워 익혀라.
+795|noun|막대|A metal rod holds the shelf.|금속 막대가 선반을 받친다.
+796|adjective|낭만적인|They watched a romantic film.|그들은 낭만적인 영화를 봤다.
+797|verb|썩어 가다|Wet wood rots quickly.|젖은 나무는 빠르게 썩어 간다.
+798|noun|판에 박힌 일과|His morning routine keeps him calm.|그의 아침 판에 박힌 일과가 그를 차분하게 한다.
+799|noun|소문|A false rumor spread fast.|거짓 소문이 빠르게 퍼졌다.
+800|adjective|시골의|Rural life moves slowly.|시골의 삶은 천천히 흘러간다.

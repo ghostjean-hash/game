@@ -10,7 +10,7 @@
 610|verb|보여 주다|Show me your new picture.|네 새 그림을 보여 줘.
 611|adjective|수줍은|The shy girl looks down.|수줍은 소녀는 아래를 본다.
 612|adjective|아픈|He feels sick today.|그는 오늘 아프다.
-613|noun|쪽|Sit on this side.|이쪽에 앉아라.
+613|noun|옆쪽|Sit on this side.|이 옆쪽에 앉아라.
 614|verb|노래하다|We sing after lunch.|우리는 점심 후에 노래한다.|irr:sang,sung
 615|noun|자매|My sister likes music.|내 여동생은 음악을 좋아한다.
 616|verb|앉다|Please sit near me.|내 곁에 앉아라.|irr:sat
@@ -23,12 +23,12 @@
 623|noun|하늘|The sky is clear today.|오늘 하늘은 맑다.
 624|verb|자다|I sleep for eight hours.|나는 여덟 시간 잔다.|irr:slept
 625|adjective|느린|The turtle is slow.|거북이는 느리다.
-626|adjective|작은|This box is small.|이 상자는 작다.
+626|adjective|크기가 작은|This box is small.|이 상자는 크기가 작다.
 627|verb|냄새가 나다|The soup smells good.|수프 냄새가 좋다.|irr:smelt
 628|verb|미소 짓다|She smiles at the baby.|그녀는 아기에게 미소 짓는다.
-629|noun|눈|Snow covers the road.|눈이 길을 덮는다.
+629|noun|흰 눈|Snow covers the road.|흰 눈이 길을 덮는다.
 630|conjunction|그래서|It is late, so go home.|늦었으니 집에 가라.
-631|noun|축구|We play soccer on Saturday.|우리는 토요일에 축구를 한다.
+631|noun|축구 종목|We play soccer on Saturday.|우리는 토요일에 축구 종목을 한다.
 632|noun|양말|My socks are wet.|내 양말은 젖어 있다.
 633|adjective|부드러운|This pillow is soft.|이 베개는 부드럽다.
 634|noun|소프트웨어|The software is easy to use.|그 소프트웨어는 사용하기 쉽다.
@@ -37,7 +37,7 @@
 637|noun|노래|This song makes me smile.|이 노래는 나를 웃게 한다.
 638|interjection|미안해|Sorry, I am late.|미안해, 내가 늦었다.
 639|noun|소리|I hear a strange sound.|나는 이상한 소리를 듣는다.
-640|noun|수프|The soup is hot.|그 수프는 뜨겁다.
+640|noun|수프|I ate warm soup.|나는 따뜻한 수프를 먹었다.
 641|adverb|남쪽으로|Birds fly south in winter.|새들은 겨울에 남쪽으로 난다.
 642|noun|공간|There is space for one more.|한 명 더 있을 공간이 있다.
 643|noun|스파게티|We eat spaghetti for dinner.|우리는 저녁으로 스파게티를 먹는다.
@@ -49,12 +49,12 @@
 649|noun|직원|The staff are very kind.|직원들은 아주 친절하다.
 650|verb|서다|Stand by the door.|문 옆에 서라.|irr:stood
 651|noun|별|The star shines at night.|별은 밤에 빛난다.
-652|verb|시작하다|Class starts at nine.|수업은 아홉 시에 시작한다.
+652|verb|개시하다|Class starts at nine.|수업은 아홉 시에 개시한다.
 653|verb|머무르다|Please stay with us.|우리와 함께 있어라.
 654|noun|스테이크|He orders steak and salad.|그는 스테이크와 샐러드를 주문한다.
 655|noun|돌|The stone is very heavy.|그 돌은 아주 무겁다.
 656|verb|멈추다|Stop the game now.|지금 게임을 멈춰라.
-657|noun|가게|The store opens at ten.|그 가게는 열 시에 연다.
+657|noun|상점|The store opens at ten.|그 상점은 열 시에 연다.
 658|noun|이야기|Tell me a story.|내게 이야기를 들려줘.
 659|noun|거리|Cars fill the street.|차들이 거리를 가득 메운다.
 660|adjective|강한|The wind is strong today.|오늘 바람은 강하다.
@@ -102,7 +102,7 @@
 702|noun|호랑이|The tiger has sharp teeth.|호랑이는 날카로운 이빨이 있다.
 703|noun|시간|Time goes very fast.|시간은 아주 빨리 간다.
 704|noun|타이어|The tire is flat.|타이어 바람이 빠졌다.
-705|preposition|~에|Go to the library.|도서관에 가라.
+705|preposition|~로|Go to the library.|도서관으로 가라.
 706|noun|오늘|Today is a special day.|오늘은 특별한 날이다.
 707|adverb|함께|We eat together every day.|우리는 매일 함께 먹는다.
 708|noun|토마토|The tomato is red.|그 토마토는 빨갛다.
@@ -152,12 +152,12 @@
 752|noun|전쟁|War hurts many people.|전쟁은 많은 사람을 다치게 한다.
 753|adjective|따뜻한|The room is warm now.|방은 지금 따뜻하다.
 754|verb|씻다|Wash your hands first.|먼저 손을 씻어라.
-755|verb|보다|Watch the birds fly.|새들이 나는 것을 봐라.
+755|verb|지켜보다|Watch the birds fly.|새들이 나는 것을 지켜봐라.
 756|noun|물|Water is important for life.|물은 삶에 중요하다.
 757|noun|수박|The watermelon is sweet.|그 수박은 달다.
 758|noun|방법|This is the best way.|이것이 가장 좋은 방법이다.
 759|pronoun|우리|We play after school.|우리는 방과 후에 논다.
-760|verb|입다|Wear your coat outside.|밖에서는 코트를 입어라.|irr:wore,worn
+760|verb|입다|Wear warm socks today.|오늘 따뜻한 양말을 신어라.|irr:wore,worn
 761|noun|날씨|The weather is nice today.|오늘 날씨는 좋다.
 762|noun|웹사이트|Visit our website today.|오늘 우리 웹사이트를 방문해라.
 763|noun|결혼식|The wedding is in June.|결혼식은 6월에 있다.
@@ -176,17 +176,17 @@
 776|adverb|왜|Why are you sad?|너는 왜 슬프니?
 777|noun|아내|His wife is a doctor.|그의 아내는 의사이다.
 778|auxiliary|~할 것이다|I will call you later.|나는 나중에 너에게 전화할 것이다.
-779|verb|이기다|Our team wins the game.|우리 팀은 그 경기에서 이긴다.|irr:won
+779|verb|이기다|We win every home game.|우리는 모든 홈 경기에서 이긴다.|irr:won
 780|noun|바람|The wind blows hard.|바람이 세게 분다.
 781|noun|창문|Open the window slowly.|창문을 천천히 열어라.
 782|noun|포도주|Wine is not for children.|포도주는 어린이용이 아니다.
 783|noun|겨울|Winter comes after autumn.|겨울은 가을 뒤에 온다.
 784|verb|바라다|I wish you good luck.|나는 네게 행운을 빈다.
 785|preposition|~와 함께|Come with your friend.|친구와 함께 와라.
-786|noun|여성|The woman reads a book.|그 여성은 책을 읽는다.
-787|noun|나무|The table is made of wood.|탁자는 나무로 만들어졌다.
+786|noun|여자|The woman reads a book.|그 여자는 책을 읽는다.
+787|noun|나무 재료|The table is made of wood.|탁자는 나무 재료로 만들어졌다.
 788|noun|단어|Write this word again.|이 단어를 다시 써라.
-789|noun|일|My work is almost done.|내 일은 거의 끝났다.
+789|noun|작업|My work is almost done.|내 작업은 거의 끝났다.
 790|noun|세계|The world is very big.|세계는 아주 크다.
 791|verb|걱정하다|You need not worry about me.|너는 나를 걱정할 필요가 없다.
 792|verb|쓰다|Write a letter to Dad.|아빠에게 편지를 써라.|irr:wrote,written

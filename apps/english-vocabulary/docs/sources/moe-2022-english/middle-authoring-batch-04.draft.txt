@@ -124,7 +124,7 @@
 723|noun|무늬|Her scarf has a flower pattern.|그녀의 스카프에는 꽃무늬가 있다.
 724|verb|잠시 멈추다|He paused before answering me.|그는 내게 답하기 전에 잠시 멈췄다.
 725|noun|평화|The two towns kept peace.|그 두 마을은 평화를 지켰다.|rel:peaceful
-726|noun|배|This pear is soft and sweet.|이 배는 부드럽고 달다.
+726|noun|배(과일)|This pear is soft and sweet.|이 배는 부드럽고 달다.
 727|noun|후추|Add salt and pepper now.|이제 소금과 후추를 넣어라.
 728|preposition|~당|The bus runs twice per hour.|그 버스는 시간당 두 번 다닌다.
 729|adjective|완벽한|Her drawing looks perfect.|그녀의 그림은 완벽해 보인다.

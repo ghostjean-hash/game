@@ -106,12 +106,12 @@
       "noun"
     ],
     "meaningKr": [
-      "숙녀"
+      "여성"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "The lady opens the window.",
-    "exampleKr": "그 숙녀는 창문을 연다.",
+    "exampleKr": "그 여성은 창문을 연다.",
     "sourceOrder": 406,
     "setId": null,
     "learningOrder": null
@@ -144,12 +144,12 @@
       "noun"
     ],
     "meaningKr": [
-      "땅"
+      "육지"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "The land is dry today.",
-    "exampleKr": "오늘 땅은 마르다.",
+    "exampleKr": "오늘 육지는 말라 있다.",
     "sourceOrder": 408,
     "setId": null,
     "learningOrder": null
@@ -163,12 +163,12 @@
       "adjective"
     ],
     "meaningKr": [
-      "큰"
+      "널찍한"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "That is a large room.",
-    "exampleKr": "저것은 큰 방이다.",
+    "exampleKr": "저것은 널찍한 방이다.",
     "sourceOrder": 409,
     "setId": null,
     "learningOrder": null
@@ -299,7 +299,7 @@
       "noun"
     ],
     "meaningKr": [
-      "다리(몸)"
+      "다리"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -760,12 +760,12 @@
       "determiner"
     ],
     "meaningKr": [
-      "많은(수)"
+      "많은"
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Many birds live in this forest.",
-    "exampleKr": "많은 새가 이 숲에 산다.",
+    "example": "Many students are absent.",
+    "exampleKr": "많은 학생이 결석했다.",
     "sourceOrder": 440,
     "setId": null,
     "learningOrder": null
@@ -840,8 +840,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "They will marry in spring.",
-    "exampleKr": "그들은 봄에 결혼할 것이다.",
+    "example": "They marry in spring.",
+    "exampleKr": "그들은 봄에 결혼한다.",
     "sourceOrder": 444,
     "setId": null,
     "learningOrder": null
@@ -1011,12 +1011,12 @@
       "auxiliary"
     ],
     "meaningKr": [
-      "~일지도 모른다"
+      "~일 수도 있다"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "He might be at home.",
-    "exampleKr": "그는 집에 있을지도 모른다.",
+    "exampleKr": "그는 집에 있을 수도 있다.",
     "sourceOrder": 453,
     "setId": null,
     "learningOrder": null
@@ -1144,7 +1144,7 @@
       "noun"
     ],
     "meaningKr": [
-      "달(개월)"
+      "달"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -1163,7 +1163,7 @@
       "noun"
     ],
     "meaningKr": [
-      "달(하늘)"
+      "달(위성)"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -1300,12 +1300,12 @@
       "noun"
     ],
     "meaningKr": [
-      "영화"
+      "극장 영화"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "This movie is very funny.",
-    "exampleKr": "이 영화는 아주 재미있다.",
+    "exampleKr": "이 극장 영화는 아주 재미있다.",
     "sourceOrder": 468,
     "setId": null,
     "learningOrder": null
@@ -1319,12 +1319,12 @@
       "determiner"
     ],
     "meaningKr": [
-      "많은(양)"
+      "많은 양의"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "There is much water here.",
-    "exampleKr": "여기에는 물이 많다.",
+    "exampleKr": "여기에는 많은 양의 물이 있다.",
     "sourceOrder": 469,
     "setId": null,
     "learningOrder": null
@@ -1399,8 +1399,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Many nations join the games.",
-    "exampleKr": "여러 국가가 그 경기에 참가한다.",
+    "example": "Our nation loves this sport.",
+    "exampleKr": "우리 국가는 이 스포츠를 좋아한다.",
     "sourceOrder": 473,
     "setId": null,
     "learningOrder": null
@@ -1456,8 +1456,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Turn your neck slowly to the left.",
-    "exampleKr": "목을 천천히 왼쪽으로 돌려라.",
+    "example": "My neck feels stiff.",
+    "exampleKr": "내 목이 뻣뻣하게 느껴진다.",
     "sourceOrder": 476,
     "setId": null,
     "learningOrder": null
@@ -1585,12 +1585,12 @@
       "adjective"
     ],
     "meaningKr": [
-      "다정한"
+      "기분 좋은"
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "She is nice to everyone.",
-    "exampleKr": "그녀는 모두에게 다정하다.",
+    "example": "Her voice is nice to hear.",
+    "exampleKr": "그녀의 목소리는 듣기에 기분 좋다.",
     "sourceOrder": 483,
     "setId": null,
     "learningOrder": null
@@ -1658,15 +1658,15 @@
     "sourceMarker": "*",
     "word": "north",
     "partOfSpeech": [
-      "noun"
+      "adverb"
     ],
     "meaningKr": [
-      "북쪽"
+      "북쪽으로"
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "The wind comes from the north.",
-    "exampleKr": "바람은 북쪽에서 불어온다.",
+    "example": "The birds fly north.",
+    "exampleKr": "새들은 북쪽으로 난다.",
     "sourceOrder": 487,
     "setId": null,
     "learningOrder": null
@@ -1851,7 +1851,7 @@
       "adverb"
     ],
     "meaningKr": [
-      "꺼진"
+      "꺼져"
     ],
     "relatedForms": [],
     "irregularForms": [],
@@ -1874,8 +1874,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "Her office is on the third floor.",
-    "exampleKr": "그녀의 사무실은 3층에 있다.",
+    "example": "Her office is downtown.",
+    "exampleKr": "그녀의 사무실은 시내에 있다.",
     "sourceOrder": 498,
     "setId": null,
     "learningOrder": null
@@ -2117,12 +2117,12 @@
       "noun"
     ],
     "meaningKr": [
-      "페이지"
+      "쪽"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "Read page ten, please.",
-    "exampleKr": "10페이지를 읽어라.",
+    "exampleKr": "10쪽을 읽어라.",
     "sourceOrder": 511,
     "setId": null,
     "learningOrder": null
@@ -2351,8 +2351,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "My pencil is short now.",
-    "exampleKr": "내 연필은 이제 짧다.",
+    "example": "Sharpen your pencil first.",
+    "exampleKr": "먼저 연필을 깎아라.",
     "sourceOrder": 523,
     "setId": null,
     "learningOrder": null
@@ -2712,8 +2712,8 @@
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "This present is for you.",
-    "exampleKr": "이 선물은 너를 위한 것이다.",
+    "example": "She opened her birthday present.",
+    "exampleKr": "그녀는 생일 선물을 열었다.",
     "sourceOrder": 542,
     "setId": null,
     "learningOrder": null
@@ -2938,12 +2938,12 @@
       "adjective"
     ],
     "meaningKr": [
-      "빠른"
+      "잽싼"
     ],
     "relatedForms": [],
     "irregularForms": [],
     "example": "The rabbit is quick.",
-    "exampleKr": "그 토끼는 빠르다.",
+    "exampleKr": "그 토끼는 잽싸다.",
     "sourceOrder": 554,
     "setId": null,
     "learningOrder": null
@@ -3740,15 +3740,15 @@
     "sourceMarker": "*",
     "word": "second",
     "partOfSpeech": [
-      "adjective"
+      "noun"
     ],
     "meaningKr": [
-      "두 번째의"
+      "두 번째"
     ],
     "relatedForms": [],
     "irregularForms": [],
-    "example": "She won second place.",
-    "exampleKr": "그녀는 두 번째 자리를 차지했다.",
+    "example": "She is second in line.",
+    "exampleKr": "그녀는 줄에서 두 번째이다.",
     "sourceOrder": 596,
     "setId": null,
     "learningOrder": null
