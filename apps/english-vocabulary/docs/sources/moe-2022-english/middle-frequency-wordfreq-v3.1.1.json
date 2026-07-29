@@ -1,0 +1,8415 @@
+{
+  "source": {
+    "name": "wordfreq",
+    "version": "3.1.1",
+    "language": "en",
+    "measure": "zipf_frequency",
+    "rankRule": "descending zipfFrequency; alphabetic word tiebreak",
+    "license": "Apache-2.0 package; included data CC BY-SA 4.0",
+    "retrievedOn": "2026-07-30",
+    "url": "https://github.com/rspeer/wordfreq"
+  },
+  "input": "middle-1200-cards.json (official source order 1~1200)",
+  "rows": [
+    {
+      "id": "ev-moe2022-m-0001",
+      "sourceOrder": 1,
+      "word": "able",
+      "zipfFrequency": 5.43,
+      "frequencyRank": 38
+    },
+    {
+      "id": "ev-moe2022-m-0002",
+      "sourceOrder": 2,
+      "word": "absolute",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 621
+    },
+    {
+      "id": "ev-moe2022-m-0003",
+      "sourceOrder": 3,
+      "word": "accent",
+      "zipfFrequency": 4.14,
+      "frequencyRank": 967
+    },
+    {
+      "id": "ev-moe2022-m-0004",
+      "sourceOrder": 4,
+      "word": "accept",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 304
+    },
+    {
+      "id": "ev-moe2022-m-0005",
+      "sourceOrder": 5,
+      "word": "access",
+      "zipfFrequency": 5.05,
+      "frequencyRank": 171
+    },
+    {
+      "id": "ev-moe2022-m-0006",
+      "sourceOrder": 6,
+      "word": "accident",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 446
+    },
+    {
+      "id": "ev-moe2022-m-0007",
+      "sourceOrder": 7,
+      "word": "account",
+      "zipfFrequency": 5.21,
+      "frequencyRank": 85
+    },
+    {
+      "id": "ev-moe2022-m-0008",
+      "sourceOrder": 8,
+      "word": "accuse",
+      "zipfFrequency": 3.71,
+      "frequencyRank": 1153
+    },
+    {
+      "id": "ev-moe2022-m-0009",
+      "sourceOrder": 9,
+      "word": "achieve",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 572
+    },
+    {
+      "id": "ev-moe2022-m-0010",
+      "sourceOrder": 10,
+      "word": "adapt",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1064
+    },
+    {
+      "id": "ev-moe2022-m-0011",
+      "sourceOrder": 11,
+      "word": "admire",
+      "zipfFrequency": 3.97,
+      "frequencyRank": 1075
+    },
+    {
+      "id": "ev-moe2022-m-0012",
+      "sourceOrder": 12,
+      "word": "admit",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 559
+    },
+    {
+      "id": "ev-moe2022-m-0013",
+      "sourceOrder": 13,
+      "word": "adopt",
+      "zipfFrequency": 4.19,
+      "frequencyRank": 934
+    },
+    {
+      "id": "ev-moe2022-m-0014",
+      "sourceOrder": 14,
+      "word": "advance",
+      "zipfFrequency": 4.65,
+      "frequencyRank": 498
+    },
+    {
+      "id": "ev-moe2022-m-0015",
+      "sourceOrder": 15,
+      "word": "advantage",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 371
+    },
+    {
+      "id": "ev-moe2022-m-0016",
+      "sourceOrder": 16,
+      "word": "adventure",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 697
+    },
+    {
+      "id": "ev-moe2022-m-0017",
+      "sourceOrder": 17,
+      "word": "advertize",
+      "zipfFrequency": 1.3,
+      "frequencyRank": 1200
+    },
+    {
+      "id": "ev-moe2022-m-0018",
+      "sourceOrder": 18,
+      "word": "advice",
+      "zipfFrequency": 4.88,
+      "frequencyRank": 282
+    },
+    {
+      "id": "ev-moe2022-m-0019",
+      "sourceOrder": 19,
+      "word": "advise",
+      "zipfFrequency": 4.09,
+      "frequencyRank": 998
+    },
+    {
+      "id": "ev-moe2022-m-0020",
+      "sourceOrder": 20,
+      "word": "affair",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 848
+    },
+    {
+      "id": "ev-moe2022-m-0021",
+      "sourceOrder": 21,
+      "word": "affect",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 549
+    },
+    {
+      "id": "ev-moe2022-m-0022",
+      "sourceOrder": 22,
+      "word": "afford",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 573
+    },
+    {
+      "id": "ev-moe2022-m-0023",
+      "sourceOrder": 23,
+      "word": "agent",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 344
+    },
+    {
+      "id": "ev-moe2022-m-0024",
+      "sourceOrder": 24,
+      "word": "aid",
+      "zipfFrequency": 4.75,
+      "frequencyRank": 403
+    },
+    {
+      "id": "ev-moe2022-m-0025",
+      "sourceOrder": 25,
+      "word": "aim",
+      "zipfFrequency": 4.51,
+      "frequencyRank": 651
+    },
+    {
+      "id": "ev-moe2022-m-0026",
+      "sourceOrder": 26,
+      "word": "airline",
+      "zipfFrequency": 4.04,
+      "frequencyRank": 1035
+    },
+    {
+      "id": "ev-moe2022-m-0027",
+      "sourceOrder": 27,
+      "word": "airport",
+      "zipfFrequency": 4.84,
+      "frequencyRank": 318
+    },
+    {
+      "id": "ev-moe2022-m-0028",
+      "sourceOrder": 28,
+      "word": "alarm",
+      "zipfFrequency": 4.28,
+      "frequencyRank": 867
+    },
+    {
+      "id": "ev-moe2022-m-0029",
+      "sourceOrder": 29,
+      "word": "alcohol",
+      "zipfFrequency": 4.61,
+      "frequencyRank": 533
+    },
+    {
+      "id": "ev-moe2022-m-0030",
+      "sourceOrder": 30,
+      "word": "alive",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 393
+    },
+    {
+      "id": "ev-moe2022-m-0031",
+      "sourceOrder": 31,
+      "word": "allow",
+      "zipfFrequency": 5.01,
+      "frequencyRank": 192
+    },
+    {
+      "id": "ev-moe2022-m-0032",
+      "sourceOrder": 32,
+      "word": "aloud",
+      "zipfFrequency": 3.51,
+      "frequencyRank": 1175
+    },
+    {
+      "id": "ev-moe2022-m-0033",
+      "sourceOrder": 33,
+      "word": "alter",
+      "zipfFrequency": 4.05,
+      "frequencyRank": 1026
+    },
+    {
+      "id": "ev-moe2022-m-0034",
+      "sourceOrder": 34,
+      "word": "although",
+      "zipfFrequency": 5.3,
+      "frequencyRank": 66
+    },
+    {
+      "id": "ev-moe2022-m-0035",
+      "sourceOrder": 35,
+      "word": "altogether",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1009
+    },
+    {
+      "id": "ev-moe2022-m-0036",
+      "sourceOrder": 36,
+      "word": "amaze",
+      "zipfFrequency": 3.19,
+      "frequencyRank": 1191
+    },
+    {
+      "id": "ev-moe2022-m-0037",
+      "sourceOrder": 37,
+      "word": "ambulance",
+      "zipfFrequency": 4.06,
+      "frequencyRank": 1019
+    },
+    {
+      "id": "ev-moe2022-m-0038",
+      "sourceOrder": 38,
+      "word": "among",
+      "zipfFrequency": 5.31,
+      "frequencyRank": 65
+    },
+    {
+      "id": "ev-moe2022-m-0039",
+      "sourceOrder": 39,
+      "word": "amount",
+      "zipfFrequency": 5.13,
+      "frequencyRank": 121
+    },
+    {
+      "id": "ev-moe2022-m-0040",
+      "sourceOrder": 40,
+      "word": "amuse",
+      "zipfFrequency": 3.12,
+      "frequencyRank": 1192
+    },
+    {
+      "id": "ev-moe2022-m-0041",
+      "sourceOrder": 41,
+      "word": "analysis",
+      "zipfFrequency": 4.91,
+      "frequencyRank": 265
+    },
+    {
+      "id": "ev-moe2022-m-0042",
+      "sourceOrder": 42,
+      "word": "angel",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 710
+    },
+    {
+      "id": "ev-moe2022-m-0043",
+      "sourceOrder": 43,
+      "word": "anger",
+      "zipfFrequency": 4.42,
+      "frequencyRank": 733
+    },
+    {
+      "id": "ev-moe2022-m-0044",
+      "sourceOrder": 44,
+      "word": "announce",
+      "zipfFrequency": 4.26,
+      "frequencyRank": 879
+    },
+    {
+      "id": "ev-moe2022-m-0045",
+      "sourceOrder": 45,
+      "word": "annoy",
+      "zipfFrequency": 3.46,
+      "frequencyRank": 1178
+    },
+    {
+      "id": "ev-moe2022-m-0046",
+      "sourceOrder": 46,
+      "word": "annual",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 240
+    },
+    {
+      "id": "ev-moe2022-m-0047",
+      "sourceOrder": 47,
+      "word": "ant",
+      "zipfFrequency": 3.86,
+      "frequencyRank": 1122
+    },
+    {
+      "id": "ev-moe2022-m-0048",
+      "sourceOrder": 48,
+      "word": "anxious",
+      "zipfFrequency": 4.09,
+      "frequencyRank": 999
+    },
+    {
+      "id": "ev-moe2022-m-0049",
+      "sourceOrder": 49,
+      "word": "apart",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 372
+    },
+    {
+      "id": "ev-moe2022-m-0050",
+      "sourceOrder": 50,
+      "word": "appeal",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 477
+    },
+    {
+      "id": "ev-moe2022-m-0051",
+      "sourceOrder": 51,
+      "word": "appear",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 305
+    },
+    {
+      "id": "ev-moe2022-m-0052",
+      "sourceOrder": 52,
+      "word": "apply",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 345
+    },
+    {
+      "id": "ev-moe2022-m-0053",
+      "sourceOrder": 53,
+      "word": "appoint",
+      "zipfFrequency": 3.7,
+      "frequencyRank": 1155
+    },
+    {
+      "id": "ev-moe2022-m-0054",
+      "sourceOrder": 54,
+      "word": "appreciate",
+      "zipfFrequency": 4.74,
+      "frequencyRank": 412
+    },
+    {
+      "id": "ev-moe2022-m-0055",
+      "sourceOrder": 55,
+      "word": "approach",
+      "zipfFrequency": 4.93,
+      "frequencyRank": 251
+    },
+    {
+      "id": "ev-moe2022-m-0056",
+      "sourceOrder": 56,
+      "word": "appropriate",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 478
+    },
+    {
+      "id": "ev-moe2022-m-0057",
+      "sourceOrder": 57,
+      "word": "argue",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 698
+    },
+    {
+      "id": "ev-moe2022-m-0058",
+      "sourceOrder": 58,
+      "word": "army",
+      "zipfFrequency": 5.06,
+      "frequencyRank": 167
+    },
+    {
+      "id": "ev-moe2022-m-0059",
+      "sourceOrder": 59,
+      "word": "arrange",
+      "zipfFrequency": 4.0,
+      "frequencyRank": 1056
+    },
+    {
+      "id": "ev-moe2022-m-0060",
+      "sourceOrder": 60,
+      "word": "arrest",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 602
+    },
+    {
+      "id": "ev-moe2022-m-0061",
+      "sourceOrder": 61,
+      "word": "article",
+      "zipfFrequency": 5.09,
+      "frequencyRank": 143
+    },
+    {
+      "id": "ev-moe2022-m-0062",
+      "sourceOrder": 62,
+      "word": "aside",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 550
+    },
+    {
+      "id": "ev-moe2022-m-0063",
+      "sourceOrder": 63,
+      "word": "asleep",
+      "zipfFrequency": 4.36,
+      "frequencyRank": 791
+    },
+    {
+      "id": "ev-moe2022-m-0064",
+      "sourceOrder": 64,
+      "word": "assess",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1010
+    },
+    {
+      "id": "ev-moe2022-m-0065",
+      "sourceOrder": 65,
+      "word": "assign",
+      "zipfFrequency": 3.66,
+      "frequencyRank": 1163
+    },
+    {
+      "id": "ev-moe2022-m-0066",
+      "sourceOrder": 66,
+      "word": "assist",
+      "zipfFrequency": 4.42,
+      "frequencyRank": 734
+    },
+    {
+      "id": "ev-moe2022-m-0067",
+      "sourceOrder": 67,
+      "word": "associate",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 762
+    },
+    {
+      "id": "ev-moe2022-m-0068",
+      "sourceOrder": 68,
+      "word": "assume",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 574
+    },
+    {
+      "id": "ev-moe2022-m-0069",
+      "sourceOrder": 69,
+      "word": "atmosphere",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 699
+    },
+    {
+      "id": "ev-moe2022-m-0070",
+      "sourceOrder": 70,
+      "word": "attach",
+      "zipfFrequency": 3.75,
+      "frequencyRank": 1145
+    },
+    {
+      "id": "ev-moe2022-m-0071",
+      "sourceOrder": 71,
+      "word": "attack",
+      "zipfFrequency": 5.09,
+      "frequencyRank": 144
+    },
+    {
+      "id": "ev-moe2022-m-0072",
+      "sourceOrder": 72,
+      "word": "attempt",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 306
+    },
+    {
+      "id": "ev-moe2022-m-0073",
+      "sourceOrder": 73,
+      "word": "attend",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 603
+    },
+    {
+      "id": "ev-moe2022-m-0074",
+      "sourceOrder": 74,
+      "word": "attention",
+      "zipfFrequency": 5.11,
+      "frequencyRank": 131
+    },
+    {
+      "id": "ev-moe2022-m-0075",
+      "sourceOrder": 75,
+      "word": "attitude",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 560
+    },
+    {
+      "id": "ev-moe2022-m-0076",
+      "sourceOrder": 76,
+      "word": "attract",
+      "zipfFrequency": 4.2,
+      "frequencyRank": 926
+    },
+    {
+      "id": "ev-moe2022-m-0077",
+      "sourceOrder": 77,
+      "word": "audience",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 419
+    },
+    {
+      "id": "ev-moe2022-m-0078",
+      "sourceOrder": 78,
+      "word": "automatic",
+      "zipfFrequency": 4.36,
+      "frequencyRank": 792
+    },
+    {
+      "id": "ev-moe2022-m-0079",
+      "sourceOrder": 79,
+      "word": "average",
+      "zipfFrequency": 5.16,
+      "frequencyRank": 107
+    },
+    {
+      "id": "ev-moe2022-m-0080",
+      "sourceOrder": 80,
+      "word": "avoid",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 291
+    },
+    {
+      "id": "ev-moe2022-m-0081",
+      "sourceOrder": 81,
+      "word": "awake",
+      "zipfFrequency": 4.14,
+      "frequencyRank": 968
+    },
+    {
+      "id": "ev-moe2022-m-0082",
+      "sourceOrder": 82,
+      "word": "award",
+      "zipfFrequency": 4.88,
+      "frequencyRank": 283
+    },
+    {
+      "id": "ev-moe2022-m-0083",
+      "sourceOrder": 83,
+      "word": "aware",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 373
+    },
+    {
+      "id": "ev-moe2022-m-0084",
+      "sourceOrder": 84,
+      "word": "awkward",
+      "zipfFrequency": 4.29,
+      "frequencyRank": 858
+    },
+    {
+      "id": "ev-moe2022-m-0085",
+      "sourceOrder": 85,
+      "word": "background",
+      "zipfFrequency": 4.77,
+      "frequencyRank": 384
+    },
+    {
+      "id": "ev-moe2022-m-0086",
+      "sourceOrder": 86,
+      "word": "bacon",
+      "zipfFrequency": 4.15,
+      "frequencyRank": 964
+    },
+    {
+      "id": "ev-moe2022-m-0087",
+      "sourceOrder": 87,
+      "word": "balance",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 394
+    },
+    {
+      "id": "ev-moe2022-m-0088",
+      "sourceOrder": 88,
+      "word": "balloon",
+      "zipfFrequency": 3.9,
+      "frequencyRank": 1108
+    },
+    {
+      "id": "ev-moe2022-m-0089",
+      "sourceOrder": 89,
+      "word": "band",
+      "zipfFrequency": 4.92,
+      "frequencyRank": 258
+    },
+    {
+      "id": "ev-moe2022-m-0090",
+      "sourceOrder": 90,
+      "word": "bang",
+      "zipfFrequency": 4.32,
+      "frequencyRank": 830
+    },
+    {
+      "id": "ev-moe2022-m-0091",
+      "sourceOrder": 91,
+      "word": "bar",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 241
+    },
+    {
+      "id": "ev-moe2022-m-0092",
+      "sourceOrder": 92,
+      "word": "bare",
+      "zipfFrequency": 4.18,
+      "frequencyRank": 943
+    },
+    {
+      "id": "ev-moe2022-m-0093",
+      "sourceOrder": 93,
+      "word": "bark",
+      "zipfFrequency": 3.85,
+      "frequencyRank": 1125
+    },
+    {
+      "id": "ev-moe2022-m-0094",
+      "sourceOrder": 94,
+      "word": "basis",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 346
+    },
+    {
+      "id": "ev-moe2022-m-0095",
+      "sourceOrder": 95,
+      "word": "battery",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 639
+    },
+    {
+      "id": "ev-moe2022-m-0096",
+      "sourceOrder": 96,
+      "word": "battle",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 242
+    },
+    {
+      "id": "ev-moe2022-m-0097",
+      "sourceOrder": 97,
+      "word": "bay",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 420
+    },
+    {
+      "id": "ev-moe2022-m-0098",
+      "sourceOrder": 98,
+      "word": "bean",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1065
+    },
+    {
+      "id": "ev-moe2022-m-0099",
+      "sourceOrder": 99,
+      "word": "beat",
+      "zipfFrequency": 5.01,
+      "frequencyRank": 193
+    },
+    {
+      "id": "ev-moe2022-m-0100",
+      "sourceOrder": 100,
+      "word": "beer",
+      "zipfFrequency": 4.7,
+      "frequencyRank": 458
+    },
+    {
+      "id": "ev-moe2022-m-0101",
+      "sourceOrder": 101,
+      "word": "beg",
+      "zipfFrequency": 4.05,
+      "frequencyRank": 1027
+    },
+    {
+      "id": "ev-moe2022-m-0102",
+      "sourceOrder": 102,
+      "word": "belief",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 700
+    },
+    {
+      "id": "ev-moe2022-m-0103",
+      "sourceOrder": 103,
+      "word": "belong",
+      "zipfFrequency": 4.38,
+      "frequencyRank": 774
+    },
+    {
+      "id": "ev-moe2022-m-0104",
+      "sourceOrder": 104,
+      "word": "bench",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 763
+    },
+    {
+      "id": "ev-moe2022-m-0105",
+      "sourceOrder": 105,
+      "word": "bend",
+      "zipfFrequency": 4.13,
+      "frequencyRank": 976
+    },
+    {
+      "id": "ev-moe2022-m-0106",
+      "sourceOrder": 106,
+      "word": "beneath",
+      "zipfFrequency": 4.24,
+      "frequencyRank": 896
+    },
+    {
+      "id": "ev-moe2022-m-0107",
+      "sourceOrder": 107,
+      "word": "benefit",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 332
+    },
+    {
+      "id": "ev-moe2022-m-0108",
+      "sourceOrder": 108,
+      "word": "bet",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 360
+    },
+    {
+      "id": "ev-moe2022-m-0109",
+      "sourceOrder": 109,
+      "word": "beyond",
+      "zipfFrequency": 4.98,
+      "frequencyRank": 217
+    },
+    {
+      "id": "ev-moe2022-m-0110",
+      "sourceOrder": 110,
+      "word": "billion",
+      "zipfFrequency": 4.75,
+      "frequencyRank": 404
+    },
+    {
+      "id": "ev-moe2022-m-0111",
+      "sourceOrder": 111,
+      "word": "bin",
+      "zipfFrequency": 4.22,
+      "frequencyRank": 911
+    },
+    {
+      "id": "ev-moe2022-m-0112",
+      "sourceOrder": 112,
+      "word": "bind",
+      "zipfFrequency": 3.75,
+      "frequencyRank": 1146
+    },
+    {
+      "id": "ev-moe2022-m-0113",
+      "sourceOrder": 113,
+      "word": "bit",
+      "zipfFrequency": 5.37,
+      "frequencyRank": 50
+    },
+    {
+      "id": "ev-moe2022-m-0114",
+      "sourceOrder": 114,
+      "word": "bite",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 836
+    },
+    {
+      "id": "ev-moe2022-m-0115",
+      "sourceOrder": 115,
+      "word": "bitter",
+      "zipfFrequency": 4.21,
+      "frequencyRank": 919
+    },
+    {
+      "id": "ev-moe2022-m-0116",
+      "sourceOrder": 116,
+      "word": "blame",
+      "zipfFrequency": 4.63,
+      "frequencyRank": 517
+    },
+    {
+      "id": "ev-moe2022-m-0117",
+      "sourceOrder": 117,
+      "word": "blank",
+      "zipfFrequency": 4.14,
+      "frequencyRank": 969
+    },
+    {
+      "id": "ev-moe2022-m-0118",
+      "sourceOrder": 118,
+      "word": "blanket",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1011
+    },
+    {
+      "id": "ev-moe2022-m-0119",
+      "sourceOrder": 119,
+      "word": "bless",
+      "zipfFrequency": 4.17,
+      "frequencyRank": 952
+    },
+    {
+      "id": "ev-moe2022-m-0120",
+      "sourceOrder": 120,
+      "word": "blind",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 640
+    },
+    {
+      "id": "ev-moe2022-m-0121",
+      "sourceOrder": 121,
+      "word": "block",
+      "zipfFrequency": 4.88,
+      "frequencyRank": 284
+    },
+    {
+      "id": "ev-moe2022-m-0122",
+      "sourceOrder": 122,
+      "word": "blonde",
+      "zipfFrequency": 4.04,
+      "frequencyRank": 1036
+    },
+    {
+      "id": "ev-moe2022-m-0123",
+      "sourceOrder": 123,
+      "word": "bloom",
+      "zipfFrequency": 3.93,
+      "frequencyRank": 1096
+    },
+    {
+      "id": "ev-moe2022-m-0124",
+      "sourceOrder": 124,
+      "word": "blow",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 551
+    },
+    {
+      "id": "ev-moe2022-m-0125",
+      "sourceOrder": 125,
+      "word": "boil",
+      "zipfFrequency": 3.83,
+      "frequencyRank": 1127
+    },
+    {
+      "id": "ev-moe2022-m-0126",
+      "sourceOrder": 126,
+      "word": "bomb",
+      "zipfFrequency": 4.6,
+      "frequencyRank": 541
+    },
+    {
+      "id": "ev-moe2022-m-0127",
+      "sourceOrder": 127,
+      "word": "bond",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 552
+    },
+    {
+      "id": "ev-moe2022-m-0128",
+      "sourceOrder": 128,
+      "word": "boom",
+      "zipfFrequency": 4.33,
+      "frequencyRank": 823
+    },
+    {
+      "id": "ev-moe2022-m-0129",
+      "sourceOrder": 129,
+      "word": "boot",
+      "zipfFrequency": 4.19,
+      "frequencyRank": 935
+    },
+    {
+      "id": "ev-moe2022-m-0130",
+      "sourceOrder": 130,
+      "word": "bore",
+      "zipfFrequency": 3.93,
+      "frequencyRank": 1097
+    },
+    {
+      "id": "ev-moe2022-m-0131",
+      "sourceOrder": 131,
+      "word": "boss",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 395
+    },
+    {
+      "id": "ev-moe2022-m-0132",
+      "sourceOrder": 132,
+      "word": "bother",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 764
+    },
+    {
+      "id": "ev-moe2022-m-0133",
+      "sourceOrder": 133,
+      "word": "bounce",
+      "zipfFrequency": 4.02,
+      "frequencyRank": 1048
+    },
+    {
+      "id": "ev-moe2022-m-0134",
+      "sourceOrder": 134,
+      "word": "bow",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 849
+    },
+    {
+      "id": "ev-moe2022-m-0135",
+      "sourceOrder": 135,
+      "word": "bowl",
+      "zipfFrequency": 4.63,
+      "frequencyRank": 518
+    },
+    {
+      "id": "ev-moe2022-m-0136",
+      "sourceOrder": 136,
+      "word": "brain",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 243
+    },
+    {
+      "id": "ev-moe2022-m-0137",
+      "sourceOrder": 137,
+      "word": "brake",
+      "zipfFrequency": 3.95,
+      "frequencyRank": 1087
+    },
+    {
+      "id": "ev-moe2022-m-0138",
+      "sourceOrder": 138,
+      "word": "branch",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 561
+    },
+    {
+      "id": "ev-moe2022-m-0139",
+      "sourceOrder": 139,
+      "word": "brand",
+      "zipfFrequency": 4.83,
+      "frequencyRank": 323
+    },
+    {
+      "id": "ev-moe2022-m-0140",
+      "sourceOrder": 140,
+      "word": "breast",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 799
+    },
+    {
+      "id": "ev-moe2022-m-0141",
+      "sourceOrder": 141,
+      "word": "breath",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 641
+    },
+    {
+      "id": "ev-moe2022-m-0142",
+      "sourceOrder": 142,
+      "word": "breathe",
+      "zipfFrequency": 4.26,
+      "frequencyRank": 880
+    },
+    {
+      "id": "ev-moe2022-m-0143",
+      "sourceOrder": 143,
+      "word": "brick",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 886
+    },
+    {
+      "id": "ev-moe2022-m-0144",
+      "sourceOrder": 144,
+      "word": "brief",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 642
+    },
+    {
+      "id": "ev-moe2022-m-0145",
+      "sourceOrder": 145,
+      "word": "brilliant",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 604
+    },
+    {
+      "id": "ev-moe2022-m-0146",
+      "sourceOrder": 146,
+      "word": "broad",
+      "zipfFrequency": 4.53,
+      "frequencyRank": 632
+    },
+    {
+      "id": "ev-moe2022-m-0147",
+      "sourceOrder": 147,
+      "word": "bubble",
+      "zipfFrequency": 4.16,
+      "frequencyRank": 957
+    },
+    {
+      "id": "ev-moe2022-m-0148",
+      "sourceOrder": 148,
+      "word": "budget",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 333
+    },
+    {
+      "id": "ev-moe2022-m-0149",
+      "sourceOrder": 149,
+      "word": "bug",
+      "zipfFrequency": 4.2,
+      "frequencyRank": 927
+    },
+    {
+      "id": "ev-moe2022-m-0150",
+      "sourceOrder": 150,
+      "word": "bump",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1066
+    },
+    {
+      "id": "ev-moe2022-m-0151",
+      "sourceOrder": 151,
+      "word": "bunch",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 575
+    },
+    {
+      "id": "ev-moe2022-m-0152",
+      "sourceOrder": 152,
+      "word": "burst",
+      "zipfFrequency": 4.15,
+      "frequencyRank": 965
+    },
+    {
+      "id": "ev-moe2022-m-0153",
+      "sourceOrder": 153,
+      "word": "bury",
+      "zipfFrequency": 3.89,
+      "frequencyRank": 1113
+    },
+    {
+      "id": "ev-moe2022-m-0154",
+      "sourceOrder": 154,
+      "word": "bush",
+      "zipfFrequency": 4.49,
+      "frequencyRank": 671
+    },
+    {
+      "id": "ev-moe2022-m-0155",
+      "sourceOrder": 155,
+      "word": "cable",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 622
+    },
+    {
+      "id": "ev-moe2022-m-0156",
+      "sourceOrder": 156,
+      "word": "cage",
+      "zipfFrequency": 4.13,
+      "frequencyRank": 977
+    },
+    {
+      "id": "ev-moe2022-m-0157",
+      "sourceOrder": 157,
+      "word": "calculate",
+      "zipfFrequency": 3.87,
+      "frequencyRank": 1120
+    },
+    {
+      "id": "ev-moe2022-m-0158",
+      "sourceOrder": 158,
+      "word": "calendar",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 850
+    },
+    {
+      "id": "ev-moe2022-m-0159",
+      "sourceOrder": 159,
+      "word": "calm",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 623
+    },
+    {
+      "id": "ev-moe2022-m-0160",
+      "sourceOrder": 160,
+      "word": "capable",
+      "zipfFrequency": 4.61,
+      "frequencyRank": 534
+    },
+    {
+      "id": "ev-moe2022-m-0161",
+      "sourceOrder": 161,
+      "word": "cape",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 851
+    },
+    {
+      "id": "ev-moe2022-m-0162",
+      "sourceOrder": 162,
+      "word": "capital",
+      "zipfFrequency": 5.01,
+      "frequencyRank": 194
+    },
+    {
+      "id": "ev-moe2022-m-0163",
+      "sourceOrder": 163,
+      "word": "captain",
+      "zipfFrequency": 4.89,
+      "frequencyRank": 276
+    },
+    {
+      "id": "ev-moe2022-m-0164",
+      "sourceOrder": 164,
+      "word": "career",
+      "zipfFrequency": 5.07,
+      "frequencyRank": 161
+    },
+    {
+      "id": "ev-moe2022-m-0165",
+      "sourceOrder": 165,
+      "word": "carpet",
+      "zipfFrequency": 4.18,
+      "frequencyRank": 944
+    },
+    {
+      "id": "ev-moe2022-m-0166",
+      "sourceOrder": 166,
+      "word": "cart",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1067
+    },
+    {
+      "id": "ev-moe2022-m-0167",
+      "sourceOrder": 167,
+      "word": "cast",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 361
+    },
+    {
+      "id": "ev-moe2022-m-0168",
+      "sourceOrder": 168,
+      "word": "castle",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 711
+    },
+    {
+      "id": "ev-moe2022-m-0169",
+      "sourceOrder": 169,
+      "word": "catalogue",
+      "zipfFrequency": 3.91,
+      "frequencyRank": 1104
+    },
+    {
+      "id": "ev-moe2022-m-0170",
+      "sourceOrder": 170,
+      "word": "category",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 576
+    },
+    {
+      "id": "ev-moe2022-m-0171",
+      "sourceOrder": 171,
+      "word": "cause",
+      "zipfFrequency": 5.35,
+      "frequencyRank": 53
+    },
+    {
+      "id": "ev-moe2022-m-0172",
+      "sourceOrder": 172,
+      "word": "ceiling",
+      "zipfFrequency": 4.18,
+      "frequencyRank": 945
+    },
+    {
+      "id": "ev-moe2022-m-0173",
+      "sourceOrder": 173,
+      "word": "cell",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 292
+    },
+    {
+      "id": "ev-moe2022-m-0174",
+      "sourceOrder": 174,
+      "word": "century",
+      "zipfFrequency": 5.02,
+      "frequencyRank": 186
+    },
+    {
+      "id": "ev-moe2022-m-0175",
+      "sourceOrder": 175,
+      "word": "chain",
+      "zipfFrequency": 4.65,
+      "frequencyRank": 499
+    },
+    {
+      "id": "ev-moe2022-m-0176",
+      "sourceOrder": 176,
+      "word": "chairman",
+      "zipfFrequency": 4.8,
+      "frequencyRank": 355
+    },
+    {
+      "id": "ev-moe2022-m-0177",
+      "sourceOrder": 177,
+      "word": "challenge",
+      "zipfFrequency": 4.88,
+      "frequencyRank": 285
+    },
+    {
+      "id": "ev-moe2022-m-0178",
+      "sourceOrder": 178,
+      "word": "champion",
+      "zipfFrequency": 4.62,
+      "frequencyRank": 525
+    },
+    {
+      "id": "ev-moe2022-m-0179",
+      "sourceOrder": 179,
+      "word": "channel",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 307
+    },
+    {
+      "id": "ev-moe2022-m-0180",
+      "sourceOrder": 180,
+      "word": "character",
+      "zipfFrequency": 5.11,
+      "frequencyRank": 132
+    },
+    {
+      "id": "ev-moe2022-m-0181",
+      "sourceOrder": 181,
+      "word": "characteristic",
+      "zipfFrequency": 3.97,
+      "frequencyRank": 1076
+    },
+    {
+      "id": "ev-moe2022-m-0182",
+      "sourceOrder": 182,
+      "word": "charge",
+      "zipfFrequency": 5.02,
+      "frequencyRank": 187
+    },
+    {
+      "id": "ev-moe2022-m-0183",
+      "sourceOrder": 183,
+      "word": "charm",
+      "zipfFrequency": 4.12,
+      "frequencyRank": 984
+    },
+    {
+      "id": "ev-moe2022-m-0184",
+      "sourceOrder": 184,
+      "word": "chart",
+      "zipfFrequency": 4.47,
+      "frequencyRank": 689
+    },
+    {
+      "id": "ev-moe2022-m-0185",
+      "sourceOrder": 185,
+      "word": "chase",
+      "zipfFrequency": 4.44,
+      "frequencyRank": 723
+    },
+    {
+      "id": "ev-moe2022-m-0186",
+      "sourceOrder": 186,
+      "word": "chat",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 577
+    },
+    {
+      "id": "ev-moe2022-m-0187",
+      "sourceOrder": 187,
+      "word": "cheek",
+      "zipfFrequency": 3.96,
+      "frequencyRank": 1081
+    },
+    {
+      "id": "ev-moe2022-m-0188",
+      "sourceOrder": 188,
+      "word": "cheer",
+      "zipfFrequency": 4.06,
+      "frequencyRank": 1020
+    },
+    {
+      "id": "ev-moe2022-m-0189",
+      "sourceOrder": 189,
+      "word": "chest",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 643
+    },
+    {
+      "id": "ev-moe2022-m-0190",
+      "sourceOrder": 190,
+      "word": "chew",
+      "zipfFrequency": 3.66,
+      "frequencyRank": 1164
+    },
+    {
+      "id": "ev-moe2022-m-0191",
+      "sourceOrder": 191,
+      "word": "chief",
+      "zipfFrequency": 5.11,
+      "frequencyRank": 133
+    },
+    {
+      "id": "ev-moe2022-m-0192",
+      "sourceOrder": 192,
+      "word": "chip",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 837
+    },
+    {
+      "id": "ev-moe2022-m-0193",
+      "sourceOrder": 193,
+      "word": "choice",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 149
+    },
+    {
+      "id": "ev-moe2022-m-0194",
+      "sourceOrder": 194,
+      "word": "chop",
+      "zipfFrequency": 3.77,
+      "frequencyRank": 1143
+    },
+    {
+      "id": "ev-moe2022-m-0195",
+      "sourceOrder": 195,
+      "word": "cigarette",
+      "zipfFrequency": 4.06,
+      "frequencyRank": 1021
+    },
+    {
+      "id": "ev-moe2022-m-0196",
+      "sourceOrder": 196,
+      "word": "cinema",
+      "zipfFrequency": 4.17,
+      "frequencyRank": 953
+    },
+    {
+      "id": "ev-moe2022-m-0197",
+      "sourceOrder": 197,
+      "word": "circumstance",
+      "zipfFrequency": 3.66,
+      "frequencyRank": 1165
+    },
+    {
+      "id": "ev-moe2022-m-0198",
+      "sourceOrder": 198,
+      "word": "citizen",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 765
+    },
+    {
+      "id": "ev-moe2022-m-0199",
+      "sourceOrder": 199,
+      "word": "civil",
+      "zipfFrequency": 4.93,
+      "frequencyRank": 252
+    },
+    {
+      "id": "ev-moe2022-m-0200",
+      "sourceOrder": 200,
+      "word": "claim",
+      "zipfFrequency": 4.95,
+      "frequencyRank": 231
+    },
+    {
+      "id": "ev-moe2022-m-0201",
+      "sourceOrder": 201,
+      "word": "clerk",
+      "zipfFrequency": 4.0,
+      "frequencyRank": 1057
+    },
+    {
+      "id": "ev-moe2022-m-0202",
+      "sourceOrder": 202,
+      "word": "click",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 334
+    },
+    {
+      "id": "ev-moe2022-m-0203",
+      "sourceOrder": 203,
+      "word": "client",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 624
+    },
+    {
+      "id": "ev-moe2022-m-0204",
+      "sourceOrder": 204,
+      "word": "cliff",
+      "zipfFrequency": 4.1,
+      "frequencyRank": 993
+    },
+    {
+      "id": "ev-moe2022-m-0205",
+      "sourceOrder": 205,
+      "word": "climate",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 447
+    },
+    {
+      "id": "ev-moe2022-m-0206",
+      "sourceOrder": 206,
+      "word": "clip",
+      "zipfFrequency": 4.26,
+      "frequencyRank": 881
+    },
+    {
+      "id": "ev-moe2022-m-0207",
+      "sourceOrder": 207,
+      "word": "clue",
+      "zipfFrequency": 4.18,
+      "frequencyRank": 946
+    },
+    {
+      "id": "ev-moe2022-m-0208",
+      "sourceOrder": 208,
+      "word": "coach",
+      "zipfFrequency": 4.96,
+      "frequencyRank": 225
+    },
+    {
+      "id": "ev-moe2022-m-0209",
+      "sourceOrder": 209,
+      "word": "coal",
+      "zipfFrequency": 4.49,
+      "frequencyRank": 672
+    },
+    {
+      "id": "ev-moe2022-m-0210",
+      "sourceOrder": 210,
+      "word": "coast",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 293
+    },
+    {
+      "id": "ev-moe2022-m-0211",
+      "sourceOrder": 211,
+      "word": "code",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 150
+    },
+    {
+      "id": "ev-moe2022-m-0212",
+      "sourceOrder": 212,
+      "word": "coin",
+      "zipfFrequency": 4.19,
+      "frequencyRank": 936
+    },
+    {
+      "id": "ev-moe2022-m-0213",
+      "sourceOrder": 213,
+      "word": "combine",
+      "zipfFrequency": 4.13,
+      "frequencyRank": 978
+    },
+    {
+      "id": "ev-moe2022-m-0214",
+      "sourceOrder": 214,
+      "word": "comedy",
+      "zipfFrequency": 4.51,
+      "frequencyRank": 652
+    },
+    {
+      "id": "ev-moe2022-m-0215",
+      "sourceOrder": 215,
+      "word": "comfort",
+      "zipfFrequency": 4.41,
+      "frequencyRank": 742
+    },
+    {
+      "id": "ev-moe2022-m-0216",
+      "sourceOrder": 216,
+      "word": "command",
+      "zipfFrequency": 4.7,
+      "frequencyRank": 459
+    },
+    {
+      "id": "ev-moe2022-m-0217",
+      "sourceOrder": 217,
+      "word": "comment",
+      "zipfFrequency": 4.88,
+      "frequencyRank": 286
+    },
+    {
+      "id": "ev-moe2022-m-0218",
+      "sourceOrder": 218,
+      "word": "commerce",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 781
+    },
+    {
+      "id": "ev-moe2022-m-0219",
+      "sourceOrder": 219,
+      "word": "committee",
+      "zipfFrequency": 5.01,
+      "frequencyRank": 195
+    },
+    {
+      "id": "ev-moe2022-m-0220",
+      "sourceOrder": 220,
+      "word": "common",
+      "zipfFrequency": 5.2,
+      "frequencyRank": 91
+    },
+    {
+      "id": "ev-moe2022-m-0221",
+      "sourceOrder": 221,
+      "word": "communicate",
+      "zipfFrequency": 4.2,
+      "frequencyRank": 928
+    },
+    {
+      "id": "ev-moe2022-m-0222",
+      "sourceOrder": 222,
+      "word": "community",
+      "zipfFrequency": 5.34,
+      "frequencyRank": 56
+    },
+    {
+      "id": "ev-moe2022-m-0223",
+      "sourceOrder": 223,
+      "word": "compare",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 712
+    },
+    {
+      "id": "ev-moe2022-m-0224",
+      "sourceOrder": 224,
+      "word": "complain",
+      "zipfFrequency": 4.23,
+      "frequencyRank": 902
+    },
+    {
+      "id": "ev-moe2022-m-0225",
+      "sourceOrder": 225,
+      "word": "complete",
+      "zipfFrequency": 5.1,
+      "frequencyRank": 137
+    },
+    {
+      "id": "ev-moe2022-m-0226",
+      "sourceOrder": 226,
+      "word": "complex",
+      "zipfFrequency": 4.86,
+      "frequencyRank": 302
+    },
+    {
+      "id": "ev-moe2022-m-0227",
+      "sourceOrder": 227,
+      "word": "complicate",
+      "zipfFrequency": 3.26,
+      "frequencyRank": 1190
+    },
+    {
+      "id": "ev-moe2022-m-0228",
+      "sourceOrder": 228,
+      "word": "concentrate",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1012
+    },
+    {
+      "id": "ev-moe2022-m-0229",
+      "sourceOrder": 229,
+      "word": "concept",
+      "zipfFrequency": 4.77,
+      "frequencyRank": 385
+    },
+    {
+      "id": "ev-moe2022-m-0230",
+      "sourceOrder": 230,
+      "word": "concern",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 488
+    },
+    {
+      "id": "ev-moe2022-m-0231",
+      "sourceOrder": 231,
+      "word": "concert",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 605
+    },
+    {
+      "id": "ev-moe2022-m-0232",
+      "sourceOrder": 232,
+      "word": "confirm",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 750
+    },
+    {
+      "id": "ev-moe2022-m-0233",
+      "sourceOrder": 233,
+      "word": "conflict",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 507
+    },
+    {
+      "id": "ev-moe2022-m-0234",
+      "sourceOrder": 234,
+      "word": "confuse",
+      "zipfFrequency": 3.67,
+      "frequencyRank": 1159
+    },
+    {
+      "id": "ev-moe2022-m-0235",
+      "sourceOrder": 235,
+      "word": "connect",
+      "zipfFrequency": 4.38,
+      "frequencyRank": 775
+    },
+    {
+      "id": "ev-moe2022-m-0236",
+      "sourceOrder": 236,
+      "word": "conscious",
+      "zipfFrequency": 4.18,
+      "frequencyRank": 947
+    },
+    {
+      "id": "ev-moe2022-m-0237",
+      "sourceOrder": 237,
+      "word": "consider",
+      "zipfFrequency": 4.99,
+      "frequencyRank": 212
+    },
+    {
+      "id": "ev-moe2022-m-0238",
+      "sourceOrder": 238,
+      "word": "constant",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 625
+    },
+    {
+      "id": "ev-moe2022-m-0239",
+      "sourceOrder": 239,
+      "word": "consume",
+      "zipfFrequency": 3.88,
+      "frequencyRank": 1116
+    },
+    {
+      "id": "ev-moe2022-m-0240",
+      "sourceOrder": 240,
+      "word": "contact",
+      "zipfFrequency": 4.99,
+      "frequencyRank": 213
+    },
+    {
+      "id": "ev-moe2022-m-0241",
+      "sourceOrder": 241,
+      "word": "contain",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 660
+    },
+    {
+      "id": "ev-moe2022-m-0242",
+      "sourceOrder": 242,
+      "word": "content",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 201
+    },
+    {
+      "id": "ev-moe2022-m-0243",
+      "sourceOrder": 243,
+      "word": "contest",
+      "zipfFrequency": 4.53,
+      "frequencyRank": 633
+    },
+    {
+      "id": "ev-moe2022-m-0244",
+      "sourceOrder": 244,
+      "word": "context",
+      "zipfFrequency": 4.63,
+      "frequencyRank": 519
+    },
+    {
+      "id": "ev-moe2022-m-0245",
+      "sourceOrder": 245,
+      "word": "continue",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 151
+    },
+    {
+      "id": "ev-moe2022-m-0246",
+      "sourceOrder": 246,
+      "word": "contract",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 244
+    },
+    {
+      "id": "ev-moe2022-m-0247",
+      "sourceOrder": 247,
+      "word": "contribute",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 813
+    },
+    {
+      "id": "ev-moe2022-m-0248",
+      "sourceOrder": 248,
+      "word": "converse",
+      "zipfFrequency": 3.48,
+      "frequencyRank": 1176
+    },
+    {
+      "id": "ev-moe2022-m-0249",
+      "sourceOrder": 249,
+      "word": "convince",
+      "zipfFrequency": 4.26,
+      "frequencyRank": 882
+    },
+    {
+      "id": "ev-moe2022-m-0250",
+      "sourceOrder": 250,
+      "word": "cop",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 782
+    },
+    {
+      "id": "ev-moe2022-m-0251",
+      "sourceOrder": 251,
+      "word": "cope",
+      "zipfFrequency": 4.04,
+      "frequencyRank": 1037
+    },
+    {
+      "id": "ev-moe2022-m-0252",
+      "sourceOrder": 252,
+      "word": "copy",
+      "zipfFrequency": 4.77,
+      "frequencyRank": 386
+    },
+    {
+      "id": "ev-moe2022-m-0253",
+      "sourceOrder": 253,
+      "word": "correct",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 362
+    },
+    {
+      "id": "ev-moe2022-m-0254",
+      "sourceOrder": 254,
+      "word": "cottage",
+      "zipfFrequency": 4.0,
+      "frequencyRank": 1058
+    },
+    {
+      "id": "ev-moe2022-m-0255",
+      "sourceOrder": 255,
+      "word": "cotton",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 800
+    },
+    {
+      "id": "ev-moe2022-m-0256",
+      "sourceOrder": 256,
+      "word": "cough",
+      "zipfFrequency": 3.95,
+      "frequencyRank": 1088
+    },
+    {
+      "id": "ev-moe2022-m-0257",
+      "sourceOrder": 257,
+      "word": "council",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 152
+    },
+    {
+      "id": "ev-moe2022-m-0258",
+      "sourceOrder": 258,
+      "word": "count",
+      "zipfFrequency": 4.83,
+      "frequencyRank": 324
+    },
+    {
+      "id": "ev-moe2022-m-0259",
+      "sourceOrder": 259,
+      "word": "countryside",
+      "zipfFrequency": 3.92,
+      "frequencyRank": 1100
+    },
+    {
+      "id": "ev-moe2022-m-0260",
+      "sourceOrder": 260,
+      "word": "county",
+      "zipfFrequency": 5.19,
+      "frequencyRank": 96
+    },
+    {
+      "id": "ev-moe2022-m-0261",
+      "sourceOrder": 261,
+      "word": "crack",
+      "zipfFrequency": 4.41,
+      "frequencyRank": 743
+    },
+    {
+      "id": "ev-moe2022-m-0262",
+      "sourceOrder": 262,
+      "word": "crash",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 606
+    },
+    {
+      "id": "ev-moe2022-m-0263",
+      "sourceOrder": 263,
+      "word": "crawl",
+      "zipfFrequency": 3.77,
+      "frequencyRank": 1144
+    },
+    {
+      "id": "ev-moe2022-m-0264",
+      "sourceOrder": 264,
+      "word": "create",
+      "zipfFrequency": 5.02,
+      "frequencyRank": 188
+    },
+    {
+      "id": "ev-moe2022-m-0265",
+      "sourceOrder": 265,
+      "word": "credit",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 202
+    },
+    {
+      "id": "ev-moe2022-m-0266",
+      "sourceOrder": 266,
+      "word": "crime",
+      "zipfFrequency": 4.89,
+      "frequencyRank": 277
+    },
+    {
+      "id": "ev-moe2022-m-0267",
+      "sourceOrder": 267,
+      "word": "crisis",
+      "zipfFrequency": 4.62,
+      "frequencyRank": 526
+    },
+    {
+      "id": "ev-moe2022-m-0268",
+      "sourceOrder": 268,
+      "word": "crisp",
+      "zipfFrequency": 3.7,
+      "frequencyRank": 1156
+    },
+    {
+      "id": "ev-moe2022-m-0269",
+      "sourceOrder": 269,
+      "word": "crowd",
+      "zipfFrequency": 4.7,
+      "frequencyRank": 460
+    },
+    {
+      "id": "ev-moe2022-m-0270",
+      "sourceOrder": 270,
+      "word": "crown",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 589
+    },
+    {
+      "id": "ev-moe2022-m-0271",
+      "sourceOrder": 271,
+      "word": "cruel",
+      "zipfFrequency": 4.12,
+      "frequencyRank": 985
+    },
+    {
+      "id": "ev-moe2022-m-0272",
+      "sourceOrder": 272,
+      "word": "cure",
+      "zipfFrequency": 4.32,
+      "frequencyRank": 831
+    },
+    {
+      "id": "ev-moe2022-m-0273",
+      "sourceOrder": 273,
+      "word": "curious",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 713
+    },
+    {
+      "id": "ev-moe2022-m-0274",
+      "sourceOrder": 274,
+      "word": "curl",
+      "zipfFrequency": 3.52,
+      "frequencyRank": 1174
+    },
+    {
+      "id": "ev-moe2022-m-0275",
+      "sourceOrder": 275,
+      "word": "current",
+      "zipfFrequency": 5.27,
+      "frequencyRank": 71
+    },
+    {
+      "id": "ev-moe2022-m-0276",
+      "sourceOrder": 276,
+      "word": "cute",
+      "zipfFrequency": 4.65,
+      "frequencyRank": 500
+    },
+    {
+      "id": "ev-moe2022-m-0277",
+      "sourceOrder": 277,
+      "word": "cycle",
+      "zipfFrequency": 4.6,
+      "frequencyRank": 542
+    },
+    {
+      "id": "ev-moe2022-m-0278",
+      "sourceOrder": 278,
+      "word": "damage",
+      "zipfFrequency": 4.9,
+      "frequencyRank": 271
+    },
+    {
+      "id": "ev-moe2022-m-0279",
+      "sourceOrder": 279,
+      "word": "dare",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 838
+    },
+    {
+      "id": "ev-moe2022-m-0280",
+      "sourceOrder": 280,
+      "word": "darling",
+      "zipfFrequency": 4.09,
+      "frequencyRank": 1000
+    },
+    {
+      "id": "ev-moe2022-m-0281",
+      "sourceOrder": 281,
+      "word": "dawn",
+      "zipfFrequency": 4.27,
+      "frequencyRank": 876
+    },
+    {
+      "id": "ev-moe2022-m-0282",
+      "sourceOrder": 282,
+      "word": "deal",
+      "zipfFrequency": 5.32,
+      "frequencyRank": 59
+    },
+    {
+      "id": "ev-moe2022-m-0283",
+      "sourceOrder": 283,
+      "word": "debate",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 508
+    },
+    {
+      "id": "ev-moe2022-m-0284",
+      "sourceOrder": 284,
+      "word": "debt",
+      "zipfFrequency": 4.69,
+      "frequencyRank": 466
+    },
+    {
+      "id": "ev-moe2022-m-0285",
+      "sourceOrder": 285,
+      "word": "deck",
+      "zipfFrequency": 4.41,
+      "frequencyRank": 744
+    },
+    {
+      "id": "ev-moe2022-m-0286",
+      "sourceOrder": 286,
+      "word": "decorate",
+      "zipfFrequency": 3.36,
+      "frequencyRank": 1183
+    },
+    {
+      "id": "ev-moe2022-m-0287",
+      "sourceOrder": 287,
+      "word": "defense",
+      "zipfFrequency": 4.93,
+      "frequencyRank": 253
+    },
+    {
+      "id": "ev-moe2022-m-0288",
+      "sourceOrder": 288,
+      "word": "define",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 839
+    },
+    {
+      "id": "ev-moe2022-m-0289",
+      "sourceOrder": 289,
+      "word": "definite",
+      "zipfFrequency": 3.78,
+      "frequencyRank": 1140
+    },
+    {
+      "id": "ev-moe2022-m-0290",
+      "sourceOrder": 290,
+      "word": "degree",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 245
+    },
+    {
+      "id": "ev-moe2022-m-0291",
+      "sourceOrder": 291,
+      "word": "delay",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 751
+    },
+    {
+      "id": "ev-moe2022-m-0292",
+      "sourceOrder": 292,
+      "word": "delight",
+      "zipfFrequency": 3.97,
+      "frequencyRank": 1077
+    },
+    {
+      "id": "ev-moe2022-m-0293",
+      "sourceOrder": 293,
+      "word": "deliver",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 607
+    },
+    {
+      "id": "ev-moe2022-m-0294",
+      "sourceOrder": 294,
+      "word": "demand",
+      "zipfFrequency": 4.84,
+      "frequencyRank": 319
+    },
+    {
+      "id": "ev-moe2022-m-0295",
+      "sourceOrder": 295,
+      "word": "demonstrate",
+      "zipfFrequency": 4.2,
+      "frequencyRank": 929
+    },
+    {
+      "id": "ev-moe2022-m-0296",
+      "sourceOrder": 296,
+      "word": "dentist",
+      "zipfFrequency": 3.86,
+      "frequencyRank": 1123
+    },
+    {
+      "id": "ev-moe2022-m-0297",
+      "sourceOrder": 297,
+      "word": "deny",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 814
+    },
+    {
+      "id": "ev-moe2022-m-0298",
+      "sourceOrder": 298,
+      "word": "depend",
+      "zipfFrequency": 4.2,
+      "frequencyRank": 930
+    },
+    {
+      "id": "ev-moe2022-m-0299",
+      "sourceOrder": 299,
+      "word": "depress",
+      "zipfFrequency": 2.86,
+      "frequencyRank": 1194
+    },
+    {
+      "id": "ev-moe2022-m-0300",
+      "sourceOrder": 300,
+      "word": "describe",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 590
+    },
+    {
+      "id": "ev-moe2022-m-0301",
+      "sourceOrder": 301,
+      "word": "desert",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 752
+    },
+    {
+      "id": "ev-moe2022-m-0302",
+      "sourceOrder": 302,
+      "word": "deserve",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 553
+    },
+    {
+      "id": "ev-moe2022-m-0303",
+      "sourceOrder": 303,
+      "word": "desire",
+      "zipfFrequency": 4.61,
+      "frequencyRank": 535
+    },
+    {
+      "id": "ev-moe2022-m-0304",
+      "sourceOrder": 304,
+      "word": "desperate",
+      "zipfFrequency": 4.32,
+      "frequencyRank": 832
+    },
+    {
+      "id": "ev-moe2022-m-0305",
+      "sourceOrder": 305,
+      "word": "despite",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 203
+    },
+    {
+      "id": "ev-moe2022-m-0306",
+      "sourceOrder": 306,
+      "word": "destroy",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 644
+    },
+    {
+      "id": "ev-moe2022-m-0307",
+      "sourceOrder": 307,
+      "word": "detail",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 578
+    },
+    {
+      "id": "ev-moe2022-m-0308",
+      "sourceOrder": 308,
+      "word": "detect",
+      "zipfFrequency": 4.05,
+      "frequencyRank": 1028
+    },
+    {
+      "id": "ev-moe2022-m-0309",
+      "sourceOrder": 309,
+      "word": "determine",
+      "zipfFrequency": 4.63,
+      "frequencyRank": 520
+    },
+    {
+      "id": "ev-moe2022-m-0310",
+      "sourceOrder": 310,
+      "word": "develop",
+      "zipfFrequency": 4.75,
+      "frequencyRank": 405
+    },
+    {
+      "id": "ev-moe2022-m-0311",
+      "sourceOrder": 311,
+      "word": "diary",
+      "zipfFrequency": 4.09,
+      "frequencyRank": 1001
+    },
+    {
+      "id": "ev-moe2022-m-0312",
+      "sourceOrder": 312,
+      "word": "dictionary",
+      "zipfFrequency": 4.02,
+      "frequencyRank": 1049
+    },
+    {
+      "id": "ev-moe2022-m-0313",
+      "sourceOrder": 313,
+      "word": "diet",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 579
+    },
+    {
+      "id": "ev-moe2022-m-0314",
+      "sourceOrder": 314,
+      "word": "dig",
+      "zipfFrequency": 4.22,
+      "frequencyRank": 912
+    },
+    {
+      "id": "ev-moe2022-m-0315",
+      "sourceOrder": 315,
+      "word": "direct",
+      "zipfFrequency": 4.91,
+      "frequencyRank": 266
+    },
+    {
+      "id": "ev-moe2022-m-0316",
+      "sourceOrder": 316,
+      "word": "dirt",
+      "zipfFrequency": 4.24,
+      "frequencyRank": 897
+    },
+    {
+      "id": "ev-moe2022-m-0317",
+      "sourceOrder": 317,
+      "word": "disappoint",
+      "zipfFrequency": 3.67,
+      "frequencyRank": 1160
+    },
+    {
+      "id": "ev-moe2022-m-0318",
+      "sourceOrder": 318,
+      "word": "disc",
+      "zipfFrequency": 4.13,
+      "frequencyRank": 979
+    },
+    {
+      "id": "ev-moe2022-m-0319",
+      "sourceOrder": 319,
+      "word": "discipline",
+      "zipfFrequency": 4.23,
+      "frequencyRank": 903
+    },
+    {
+      "id": "ev-moe2022-m-0320",
+      "sourceOrder": 320,
+      "word": "disgust",
+      "zipfFrequency": 3.61,
+      "frequencyRank": 1170
+    },
+    {
+      "id": "ev-moe2022-m-0321",
+      "sourceOrder": 321,
+      "word": "dish",
+      "zipfFrequency": 4.21,
+      "frequencyRank": 920
+    },
+    {
+      "id": "ev-moe2022-m-0322",
+      "sourceOrder": 322,
+      "word": "display",
+      "zipfFrequency": 4.63,
+      "frequencyRank": 521
+    },
+    {
+      "id": "ev-moe2022-m-0323",
+      "sourceOrder": 323,
+      "word": "distance",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 308
+    },
+    {
+      "id": "ev-moe2022-m-0324",
+      "sourceOrder": 324,
+      "word": "district",
+      "zipfFrequency": 5.04,
+      "frequencyRank": 176
+    },
+    {
+      "id": "ev-moe2022-m-0325",
+      "sourceOrder": 325,
+      "word": "disturb",
+      "zipfFrequency": 3.56,
+      "frequencyRank": 1173
+    },
+    {
+      "id": "ev-moe2022-m-0326",
+      "sourceOrder": 326,
+      "word": "dive",
+      "zipfFrequency": 4.12,
+      "frequencyRank": 986
+    },
+    {
+      "id": "ev-moe2022-m-0327",
+      "sourceOrder": 327,
+      "word": "divide",
+      "zipfFrequency": 4.12,
+      "frequencyRank": 987
+    },
+    {
+      "id": "ev-moe2022-m-0328",
+      "sourceOrder": 328,
+      "word": "divorce",
+      "zipfFrequency": 4.36,
+      "frequencyRank": 793
+    },
+    {
+      "id": "ev-moe2022-m-0329",
+      "sourceOrder": 329,
+      "word": "document",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 661
+    },
+    {
+      "id": "ev-moe2022-m-0330",
+      "sourceOrder": 330,
+      "word": "dolphin",
+      "zipfFrequency": 3.67,
+      "frequencyRank": 1161
+    },
+    {
+      "id": "ev-moe2022-m-0331",
+      "sourceOrder": 331,
+      "word": "domestic",
+      "zipfFrequency": 4.69,
+      "frequencyRank": 467
+    },
+    {
+      "id": "ev-moe2022-m-0332",
+      "sourceOrder": 332,
+      "word": "donate",
+      "zipfFrequency": 4.04,
+      "frequencyRank": 1038
+    },
+    {
+      "id": "ev-moe2022-m-0333",
+      "sourceOrder": 333,
+      "word": "doubt",
+      "zipfFrequency": 4.9,
+      "frequencyRank": 272
+    },
+    {
+      "id": "ev-moe2022-m-0334",
+      "sourceOrder": 334,
+      "word": "dozen",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 801
+    },
+    {
+      "id": "ev-moe2022-m-0335",
+      "sourceOrder": 335,
+      "word": "drag",
+      "zipfFrequency": 4.29,
+      "frequencyRank": 859
+    },
+    {
+      "id": "ev-moe2022-m-0336",
+      "sourceOrder": 336,
+      "word": "drama",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 479
+    },
+    {
+      "id": "ev-moe2022-m-0337",
+      "sourceOrder": 337,
+      "word": "drug",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 294
+    },
+    {
+      "id": "ev-moe2022-m-0338",
+      "sourceOrder": 338,
+      "word": "due",
+      "zipfFrequency": 5.35,
+      "frequencyRank": 54
+    },
+    {
+      "id": "ev-moe2022-m-0339",
+      "sourceOrder": 339,
+      "word": "dump",
+      "zipfFrequency": 4.08,
+      "frequencyRank": 1006
+    },
+    {
+      "id": "ev-moe2022-m-0340",
+      "sourceOrder": 340,
+      "word": "dust",
+      "zipfFrequency": 4.41,
+      "frequencyRank": 745
+    },
+    {
+      "id": "ev-moe2022-m-0341",
+      "sourceOrder": 341,
+      "word": "duty",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 448
+    },
+    {
+      "id": "ev-moe2022-m-0342",
+      "sourceOrder": 342,
+      "word": "each",
+      "zipfFrequency": 5.69,
+      "frequencyRank": 13
+    },
+    {
+      "id": "ev-moe2022-m-0343",
+      "sourceOrder": 343,
+      "word": "earn",
+      "zipfFrequency": 4.48,
+      "frequencyRank": 680
+    },
+    {
+      "id": "ev-moe2022-m-0344",
+      "sourceOrder": 344,
+      "word": "ease",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 815
+    },
+    {
+      "id": "ev-moe2022-m-0345",
+      "sourceOrder": 345,
+      "word": "economy",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 295
+    },
+    {
+      "id": "ev-moe2022-m-0346",
+      "sourceOrder": 346,
+      "word": "edge",
+      "zipfFrequency": 4.74,
+      "frequencyRank": 413
+    },
+    {
+      "id": "ev-moe2022-m-0347",
+      "sourceOrder": 347,
+      "word": "edit",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 852
+    },
+    {
+      "id": "ev-moe2022-m-0348",
+      "sourceOrder": 348,
+      "word": "educate",
+      "zipfFrequency": 3.92,
+      "frequencyRank": 1101
+    },
+    {
+      "id": "ev-moe2022-m-0349",
+      "sourceOrder": 349,
+      "word": "effect",
+      "zipfFrequency": 5.02,
+      "frequencyRank": 189
+    },
+    {
+      "id": "ev-moe2022-m-0350",
+      "sourceOrder": 350,
+      "word": "effort",
+      "zipfFrequency": 4.92,
+      "frequencyRank": 259
+    },
+    {
+      "id": "ev-moe2022-m-0351",
+      "sourceOrder": 351,
+      "word": "either",
+      "zipfFrequency": 5.33,
+      "frequencyRank": 58
+    },
+    {
+      "id": "ev-moe2022-m-0352",
+      "sourceOrder": 352,
+      "word": "elect",
+      "zipfFrequency": 4.03,
+      "frequencyRank": 1041
+    },
+    {
+      "id": "ev-moe2022-m-0353",
+      "sourceOrder": 353,
+      "word": "electric",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 432
+    },
+    {
+      "id": "ev-moe2022-m-0354",
+      "sourceOrder": 354,
+      "word": "element",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 701
+    },
+    {
+      "id": "ev-moe2022-m-0355",
+      "sourceOrder": 355,
+      "word": "else",
+      "zipfFrequency": 5.38,
+      "frequencyRank": 48
+    },
+    {
+      "id": "ev-moe2022-m-0356",
+      "sourceOrder": 356,
+      "word": "embarrass",
+      "zipfFrequency": 3.41,
+      "frequencyRank": 1180
+    },
+    {
+      "id": "ev-moe2022-m-0357",
+      "sourceOrder": 357,
+      "word": "emotion",
+      "zipfFrequency": 4.19,
+      "frequencyRank": 937
+    },
+    {
+      "id": "ev-moe2022-m-0358",
+      "sourceOrder": 358,
+      "word": "emphasize",
+      "zipfFrequency": 3.69,
+      "frequencyRank": 1157
+    },
+    {
+      "id": "ev-moe2022-m-0359",
+      "sourceOrder": 359,
+      "word": "empire",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 626
+    },
+    {
+      "id": "ev-moe2022-m-0360",
+      "sourceOrder": 360,
+      "word": "employ",
+      "zipfFrequency": 3.96,
+      "frequencyRank": 1082
+    },
+    {
+      "id": "ev-moe2022-m-0361",
+      "sourceOrder": 361,
+      "word": "empty",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 554
+    },
+    {
+      "id": "ev-moe2022-m-0362",
+      "sourceOrder": 362,
+      "word": "enemy",
+      "zipfFrequency": 4.7,
+      "frequencyRank": 461
+    },
+    {
+      "id": "ev-moe2022-m-0363",
+      "sourceOrder": 363,
+      "word": "engage",
+      "zipfFrequency": 4.36,
+      "frequencyRank": 794
+    },
+    {
+      "id": "ev-moe2022-m-0364",
+      "sourceOrder": 364,
+      "word": "engine",
+      "zipfFrequency": 4.84,
+      "frequencyRank": 320
+    },
+    {
+      "id": "ev-moe2022-m-0365",
+      "sourceOrder": 365,
+      "word": "engineer",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 662
+    },
+    {
+      "id": "ev-moe2022-m-0366",
+      "sourceOrder": 366,
+      "word": "enormous",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 887
+    },
+    {
+      "id": "ev-moe2022-m-0367",
+      "sourceOrder": 367,
+      "word": "entertain",
+      "zipfFrequency": 3.83,
+      "frequencyRank": 1128
+    },
+    {
+      "id": "ev-moe2022-m-0368",
+      "sourceOrder": 368,
+      "word": "entire",
+      "zipfFrequency": 5.09,
+      "frequencyRank": 145
+    },
+    {
+      "id": "ev-moe2022-m-0369",
+      "sourceOrder": 369,
+      "word": "envelope",
+      "zipfFrequency": 3.86,
+      "frequencyRank": 1124
+    },
+    {
+      "id": "ev-moe2022-m-0370",
+      "sourceOrder": 370,
+      "word": "equal",
+      "zipfFrequency": 4.65,
+      "frequencyRank": 501
+    },
+    {
+      "id": "ev-moe2022-m-0371",
+      "sourceOrder": 371,
+      "word": "escape",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 509
+    },
+    {
+      "id": "ev-moe2022-m-0372",
+      "sourceOrder": 372,
+      "word": "especial",
+      "zipfFrequency": 2.73,
+      "frequencyRank": 1196
+    },
+    {
+      "id": "ev-moe2022-m-0373",
+      "sourceOrder": 373,
+      "word": "essay",
+      "zipfFrequency": 4.23,
+      "frequencyRank": 904
+    },
+    {
+      "id": "ev-moe2022-m-0374",
+      "sourceOrder": 374,
+      "word": "establish",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 702
+    },
+    {
+      "id": "ev-moe2022-m-0375",
+      "sourceOrder": 375,
+      "word": "estimate",
+      "zipfFrequency": 4.29,
+      "frequencyRank": 860
+    },
+    {
+      "id": "ev-moe2022-m-0376",
+      "sourceOrder": 376,
+      "word": "even",
+      "zipfFrequency": 5.99,
+      "frequencyRank": 5
+    },
+    {
+      "id": "ev-moe2022-m-0377",
+      "sourceOrder": 377,
+      "word": "event",
+      "zipfFrequency": 5.18,
+      "frequencyRank": 102
+    },
+    {
+      "id": "ev-moe2022-m-0378",
+      "sourceOrder": 378,
+      "word": "ever",
+      "zipfFrequency": 5.66,
+      "frequencyRank": 16
+    },
+    {
+      "id": "ev-moe2022-m-0379",
+      "sourceOrder": 379,
+      "word": "evidence",
+      "zipfFrequency": 5.14,
+      "frequencyRank": 115
+    },
+    {
+      "id": "ev-moe2022-m-0380",
+      "sourceOrder": 380,
+      "word": "evil",
+      "zipfFrequency": 4.74,
+      "frequencyRank": 414
+    },
+    {
+      "id": "ev-moe2022-m-0381",
+      "sourceOrder": 381,
+      "word": "exact",
+      "zipfFrequency": 4.51,
+      "frequencyRank": 653
+    },
+    {
+      "id": "ev-moe2022-m-0382",
+      "sourceOrder": 382,
+      "word": "examine",
+      "zipfFrequency": 4.18,
+      "frequencyRank": 948
+    },
+    {
+      "id": "ev-moe2022-m-0383",
+      "sourceOrder": 383,
+      "word": "except",
+      "zipfFrequency": 5.02,
+      "frequencyRank": 190
+    },
+    {
+      "id": "ev-moe2022-m-0384",
+      "sourceOrder": 384,
+      "word": "exchange",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 309
+    },
+    {
+      "id": "ev-moe2022-m-0385",
+      "sourceOrder": 385,
+      "word": "excite",
+      "zipfFrequency": 3.29,
+      "frequencyRank": 1188
+    },
+    {
+      "id": "ev-moe2022-m-0386",
+      "sourceOrder": 386,
+      "word": "excuse",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 591
+    },
+    {
+      "id": "ev-moe2022-m-0387",
+      "sourceOrder": 387,
+      "word": "exhaust",
+      "zipfFrequency": 3.81,
+      "frequencyRank": 1131
+    },
+    {
+      "id": "ev-moe2022-m-0388",
+      "sourceOrder": 388,
+      "word": "exist",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 421
+    },
+    {
+      "id": "ev-moe2022-m-0389",
+      "sourceOrder": 389,
+      "word": "exit",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 802
+    },
+    {
+      "id": "ev-moe2022-m-0390",
+      "sourceOrder": 390,
+      "word": "expand",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 803
+    },
+    {
+      "id": "ev-moe2022-m-0391",
+      "sourceOrder": 391,
+      "word": "expect",
+      "zipfFrequency": 5.01,
+      "frequencyRank": 196
+    },
+    {
+      "id": "ev-moe2022-m-0392",
+      "sourceOrder": 392,
+      "word": "expense",
+      "zipfFrequency": 4.23,
+      "frequencyRank": 905
+    },
+    {
+      "id": "ev-moe2022-m-0393",
+      "sourceOrder": 393,
+      "word": "experience",
+      "zipfFrequency": 5.27,
+      "frequencyRank": 72
+    },
+    {
+      "id": "ev-moe2022-m-0394",
+      "sourceOrder": 394,
+      "word": "experiment",
+      "zipfFrequency": 4.38,
+      "frequencyRank": 776
+    },
+    {
+      "id": "ev-moe2022-m-0395",
+      "sourceOrder": 395,
+      "word": "expert",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 592
+    },
+    {
+      "id": "ev-moe2022-m-0396",
+      "sourceOrder": 396,
+      "word": "explain",
+      "zipfFrequency": 4.89,
+      "frequencyRank": 278
+    },
+    {
+      "id": "ev-moe2022-m-0397",
+      "sourceOrder": 397,
+      "word": "expose",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1068
+    },
+    {
+      "id": "ev-moe2022-m-0398",
+      "sourceOrder": 398,
+      "word": "express",
+      "zipfFrequency": 4.68,
+      "frequencyRank": 471
+    },
+    {
+      "id": "ev-moe2022-m-0399",
+      "sourceOrder": 399,
+      "word": "extend",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 816
+    },
+    {
+      "id": "ev-moe2022-m-0400",
+      "sourceOrder": 400,
+      "word": "extra",
+      "zipfFrequency": 4.98,
+      "frequencyRank": 218
+    },
+    {
+      "id": "ev-moe2022-m-0401",
+      "sourceOrder": 401,
+      "word": "extreme",
+      "zipfFrequency": 4.6,
+      "frequencyRank": 543
+    },
+    {
+      "id": "ev-moe2022-m-0402",
+      "sourceOrder": 402,
+      "word": "factor",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 480
+    },
+    {
+      "id": "ev-moe2022-m-0403",
+      "sourceOrder": 403,
+      "word": "factory",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 608
+    },
+    {
+      "id": "ev-moe2022-m-0404",
+      "sourceOrder": 404,
+      "word": "faint",
+      "zipfFrequency": 3.78,
+      "frequencyRank": 1141
+    },
+    {
+      "id": "ev-moe2022-m-0405",
+      "sourceOrder": 405,
+      "word": "fair",
+      "zipfFrequency": 4.99,
+      "frequencyRank": 214
+    },
+    {
+      "id": "ev-moe2022-m-0406",
+      "sourceOrder": 406,
+      "word": "faith",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 335
+    },
+    {
+      "id": "ev-moe2022-m-0407",
+      "sourceOrder": 407,
+      "word": "familiar",
+      "zipfFrequency": 4.61,
+      "frequencyRank": 536
+    },
+    {
+      "id": "ev-moe2022-m-0408",
+      "sourceOrder": 408,
+      "word": "fancy",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 804
+    },
+    {
+      "id": "ev-moe2022-m-0409",
+      "sourceOrder": 409,
+      "word": "fantastic",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 449
+    },
+    {
+      "id": "ev-moe2022-m-0410",
+      "sourceOrder": 410,
+      "word": "fascinate",
+      "zipfFrequency": 2.51,
+      "frequencyRank": 1197
+    },
+    {
+      "id": "ev-moe2022-m-0411",
+      "sourceOrder": 411,
+      "word": "fashion",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 336
+    },
+    {
+      "id": "ev-moe2022-m-0412",
+      "sourceOrder": 412,
+      "word": "fault",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 510
+    },
+    {
+      "id": "ev-moe2022-m-0413",
+      "sourceOrder": 413,
+      "word": "favor",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 562
+    },
+    {
+      "id": "ev-moe2022-m-0414",
+      "sourceOrder": 414,
+      "word": "fear",
+      "zipfFrequency": 4.95,
+      "frequencyRank": 232
+    },
+    {
+      "id": "ev-moe2022-m-0415",
+      "sourceOrder": 415,
+      "word": "feature",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 337
+    },
+    {
+      "id": "ev-moe2022-m-0416",
+      "sourceOrder": 416,
+      "word": "fee",
+      "zipfFrequency": 4.51,
+      "frequencyRank": 654
+    },
+    {
+      "id": "ev-moe2022-m-0417",
+      "sourceOrder": 417,
+      "word": "feed",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 481
+    },
+    {
+      "id": "ev-moe2022-m-0418",
+      "sourceOrder": 418,
+      "word": "fellow",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 396
+    },
+    {
+      "id": "ev-moe2022-m-0419",
+      "sourceOrder": 419,
+      "word": "female",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 204
+    },
+    {
+      "id": "ev-moe2022-m-0420",
+      "sourceOrder": 420,
+      "word": "fence",
+      "zipfFrequency": 4.21,
+      "frequencyRank": 921
+    },
+    {
+      "id": "ev-moe2022-m-0421",
+      "sourceOrder": 421,
+      "word": "fever",
+      "zipfFrequency": 4.22,
+      "frequencyRank": 913
+    },
+    {
+      "id": "ev-moe2022-m-0422",
+      "sourceOrder": 422,
+      "word": "few",
+      "zipfFrequency": 5.6,
+      "frequencyRank": 19
+    },
+    {
+      "id": "ev-moe2022-m-0423",
+      "sourceOrder": 423,
+      "word": "figure",
+      "zipfFrequency": 5.07,
+      "frequencyRank": 162
+    },
+    {
+      "id": "ev-moe2022-m-0424",
+      "sourceOrder": 424,
+      "word": "final",
+      "zipfFrequency": 5.28,
+      "frequencyRank": 69
+    },
+    {
+      "id": "ev-moe2022-m-0425",
+      "sourceOrder": 425,
+      "word": "finance",
+      "zipfFrequency": 4.65,
+      "frequencyRank": 502
+    },
+    {
+      "id": "ev-moe2022-m-0426",
+      "sourceOrder": 426,
+      "word": "firm",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 363
+    },
+    {
+      "id": "ev-moe2022-m-0427",
+      "sourceOrder": 427,
+      "word": "fit",
+      "zipfFrequency": 4.95,
+      "frequencyRank": 233
+    },
+    {
+      "id": "ev-moe2022-m-0428",
+      "sourceOrder": 428,
+      "word": "flag",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 563
+    },
+    {
+      "id": "ev-moe2022-m-0429",
+      "sourceOrder": 429,
+      "word": "flame",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1013
+    },
+    {
+      "id": "ev-moe2022-m-0430",
+      "sourceOrder": 430,
+      "word": "flash",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 714
+    },
+    {
+      "id": "ev-moe2022-m-0431",
+      "sourceOrder": 431,
+      "word": "flat",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 433
+    },
+    {
+      "id": "ev-moe2022-m-0432",
+      "sourceOrder": 432,
+      "word": "flight",
+      "zipfFrequency": 4.86,
+      "frequencyRank": 303
+    },
+    {
+      "id": "ev-moe2022-m-0433",
+      "sourceOrder": 433,
+      "word": "float",
+      "zipfFrequency": 3.94,
+      "frequencyRank": 1091
+    },
+    {
+      "id": "ev-moe2022-m-0434",
+      "sourceOrder": 434,
+      "word": "flood",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 817
+    },
+    {
+      "id": "ev-moe2022-m-0435",
+      "sourceOrder": 435,
+      "word": "flow",
+      "zipfFrequency": 4.68,
+      "frequencyRank": 472
+    },
+    {
+      "id": "ev-moe2022-m-0436",
+      "sourceOrder": 436,
+      "word": "fog",
+      "zipfFrequency": 3.9,
+      "frequencyRank": 1109
+    },
+    {
+      "id": "ev-moe2022-m-0437",
+      "sourceOrder": 437,
+      "word": "fold",
+      "zipfFrequency": 4.08,
+      "frequencyRank": 1007
+    },
+    {
+      "id": "ev-moe2022-m-0438",
+      "sourceOrder": 438,
+      "word": "folk",
+      "zipfFrequency": 4.22,
+      "frequencyRank": 914
+    },
+    {
+      "id": "ev-moe2022-m-0439",
+      "sourceOrder": 439,
+      "word": "follow",
+      "zipfFrequency": 5.14,
+      "frequencyRank": 116
+    },
+    {
+      "id": "ev-moe2022-m-0440",
+      "sourceOrder": 440,
+      "word": "force",
+      "zipfFrequency": 5.23,
+      "frequencyRank": 78
+    },
+    {
+      "id": "ev-moe2022-m-0441",
+      "sourceOrder": 441,
+      "word": "foreign",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 153
+    },
+    {
+      "id": "ev-moe2022-m-0442",
+      "sourceOrder": 442,
+      "word": "forever",
+      "zipfFrequency": 4.74,
+      "frequencyRank": 415
+    },
+    {
+      "id": "ev-moe2022-m-0443",
+      "sourceOrder": 443,
+      "word": "forgive",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 888
+    },
+    {
+      "id": "ev-moe2022-m-0444",
+      "sourceOrder": 444,
+      "word": "forth",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 753
+    },
+    {
+      "id": "ev-moe2022-m-0445",
+      "sourceOrder": 445,
+      "word": "fortunate",
+      "zipfFrequency": 3.97,
+      "frequencyRank": 1078
+    },
+    {
+      "id": "ev-moe2022-m-0446",
+      "sourceOrder": 446,
+      "word": "fortune",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 853
+    },
+    {
+      "id": "ev-moe2022-m-0447",
+      "sourceOrder": 447,
+      "word": "forward",
+      "zipfFrequency": 5.12,
+      "frequencyRank": 126
+    },
+    {
+      "id": "ev-moe2022-m-0448",
+      "sourceOrder": 448,
+      "word": "found",
+      "zipfFrequency": 5.68,
+      "frequencyRank": 15
+    },
+    {
+      "id": "ev-moe2022-m-0449",
+      "sourceOrder": 449,
+      "word": "frame",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 564
+    },
+    {
+      "id": "ev-moe2022-m-0450",
+      "sourceOrder": 450,
+      "word": "frankly",
+      "zipfFrequency": 4.05,
+      "frequencyRank": 1029
+    },
+    {
+      "id": "ev-moe2022-m-0451",
+      "sourceOrder": 451,
+      "word": "freeze",
+      "zipfFrequency": 4.11,
+      "frequencyRank": 988
+    },
+    {
+      "id": "ev-moe2022-m-0452",
+      "sourceOrder": 452,
+      "word": "fright",
+      "zipfFrequency": 3.3,
+      "frequencyRank": 1187
+    },
+    {
+      "id": "ev-moe2022-m-0453",
+      "sourceOrder": 453,
+      "word": "frog",
+      "zipfFrequency": 3.89,
+      "frequencyRank": 1114
+    },
+    {
+      "id": "ev-moe2022-m-0454",
+      "sourceOrder": 454,
+      "word": "frustrate",
+      "zipfFrequency": 2.99,
+      "frequencyRank": 1193
+    },
+    {
+      "id": "ev-moe2022-m-0455",
+      "sourceOrder": 455,
+      "word": "fry",
+      "zipfFrequency": 3.89,
+      "frequencyRank": 1115
+    },
+    {
+      "id": "ev-moe2022-m-0456",
+      "sourceOrder": 456,
+      "word": "function",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 374
+    },
+    {
+      "id": "ev-moe2022-m-0457",
+      "sourceOrder": 457,
+      "word": "fund",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 338
+    },
+    {
+      "id": "ev-moe2022-m-0458",
+      "sourceOrder": 458,
+      "word": "fur",
+      "zipfFrequency": 4.03,
+      "frequencyRank": 1042
+    },
+    {
+      "id": "ev-moe2022-m-0459",
+      "sourceOrder": 459,
+      "word": "furniture",
+      "zipfFrequency": 4.29,
+      "frequencyRank": 861
+    },
+    {
+      "id": "ev-moe2022-m-0460",
+      "sourceOrder": 460,
+      "word": "gain",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 347
+    },
+    {
+      "id": "ev-moe2022-m-0461",
+      "sourceOrder": 461,
+      "word": "garage",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 889
+    },
+    {
+      "id": "ev-moe2022-m-0462",
+      "sourceOrder": 462,
+      "word": "gate",
+      "zipfFrequency": 4.47,
+      "frequencyRank": 690
+    },
+    {
+      "id": "ev-moe2022-m-0463",
+      "sourceOrder": 463,
+      "word": "gather",
+      "zipfFrequency": 4.24,
+      "frequencyRank": 898
+    },
+    {
+      "id": "ev-moe2022-m-0464",
+      "sourceOrder": 464,
+      "word": "gear",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 703
+    },
+    {
+      "id": "ev-moe2022-m-0465",
+      "sourceOrder": 465,
+      "word": "general",
+      "zipfFrequency": 5.47,
+      "frequencyRank": 31
+    },
+    {
+      "id": "ev-moe2022-m-0466",
+      "sourceOrder": 466,
+      "word": "gentle",
+      "zipfFrequency": 4.17,
+      "frequencyRank": 954
+    },
+    {
+      "id": "ev-moe2022-m-0467",
+      "sourceOrder": 467,
+      "word": "gesture",
+      "zipfFrequency": 3.9,
+      "frequencyRank": 1110
+    },
+    {
+      "id": "ev-moe2022-m-0468",
+      "sourceOrder": 468,
+      "word": "ghost",
+      "zipfFrequency": 4.42,
+      "frequencyRank": 735
+    },
+    {
+      "id": "ev-moe2022-m-0469",
+      "sourceOrder": 469,
+      "word": "giant",
+      "zipfFrequency": 4.62,
+      "frequencyRank": 527
+    },
+    {
+      "id": "ev-moe2022-m-0470",
+      "sourceOrder": 470,
+      "word": "gift",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 375
+    },
+    {
+      "id": "ev-moe2022-m-0471",
+      "sourceOrder": 471,
+      "word": "giraffe",
+      "zipfFrequency": 3.32,
+      "frequencyRank": 1184
+    },
+    {
+      "id": "ev-moe2022-m-0472",
+      "sourceOrder": 472,
+      "word": "glance",
+      "zipfFrequency": 3.91,
+      "frequencyRank": 1105
+    },
+    {
+      "id": "ev-moe2022-m-0473",
+      "sourceOrder": 473,
+      "word": "glory",
+      "zipfFrequency": 4.36,
+      "frequencyRank": 795
+    },
+    {
+      "id": "ev-moe2022-m-0474",
+      "sourceOrder": 474,
+      "word": "glove",
+      "zipfFrequency": 3.73,
+      "frequencyRank": 1150
+    },
+    {
+      "id": "ev-moe2022-m-0475",
+      "sourceOrder": 475,
+      "word": "glue",
+      "zipfFrequency": 3.8,
+      "frequencyRank": 1134
+    },
+    {
+      "id": "ev-moe2022-m-0476",
+      "sourceOrder": 476,
+      "word": "golf",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 593
+    },
+    {
+      "id": "ev-moe2022-m-0477",
+      "sourceOrder": 477,
+      "word": "gorgeous",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 805
+    },
+    {
+      "id": "ev-moe2022-m-0478",
+      "sourceOrder": 478,
+      "word": "govern",
+      "zipfFrequency": 3.67,
+      "frequencyRank": 1162
+    },
+    {
+      "id": "ev-moe2022-m-0479",
+      "sourceOrder": 479,
+      "word": "grab",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 645
+    },
+    {
+      "id": "ev-moe2022-m-0480",
+      "sourceOrder": 480,
+      "word": "grace",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 594
+    },
+    {
+      "id": "ev-moe2022-m-0481",
+      "sourceOrder": 481,
+      "word": "grade",
+      "zipfFrequency": 4.8,
+      "frequencyRank": 356
+    },
+    {
+      "id": "ev-moe2022-m-0482",
+      "sourceOrder": 482,
+      "word": "grand",
+      "zipfFrequency": 4.91,
+      "frequencyRank": 267
+    },
+    {
+      "id": "ev-moe2022-m-0483",
+      "sourceOrder": 483,
+      "word": "grant",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 482
+    },
+    {
+      "id": "ev-moe2022-m-0484",
+      "sourceOrder": 484,
+      "word": "graph",
+      "zipfFrequency": 4.05,
+      "frequencyRank": 1030
+    },
+    {
+      "id": "ev-moe2022-m-0485",
+      "sourceOrder": 485,
+      "word": "greet",
+      "zipfFrequency": 3.73,
+      "frequencyRank": 1151
+    },
+    {
+      "id": "ev-moe2022-m-0486",
+      "sourceOrder": 486,
+      "word": "grocery",
+      "zipfFrequency": 4.06,
+      "frequencyRank": 1022
+    },
+    {
+      "id": "ev-moe2022-m-0487",
+      "sourceOrder": 487,
+      "word": "guarantee",
+      "zipfFrequency": 4.44,
+      "frequencyRank": 724
+    },
+    {
+      "id": "ev-moe2022-m-0488",
+      "sourceOrder": 488,
+      "word": "guard",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 422
+    },
+    {
+      "id": "ev-moe2022-m-0489",
+      "sourceOrder": 489,
+      "word": "guest",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 565
+    },
+    {
+      "id": "ev-moe2022-m-0490",
+      "sourceOrder": 490,
+      "word": "guide",
+      "zipfFrequency": 4.75,
+      "frequencyRank": 406
+    },
+    {
+      "id": "ev-moe2022-m-0491",
+      "sourceOrder": 491,
+      "word": "guilt",
+      "zipfFrequency": 4.13,
+      "frequencyRank": 980
+    },
+    {
+      "id": "ev-moe2022-m-0492",
+      "sourceOrder": 492,
+      "word": "gun",
+      "zipfFrequency": 4.96,
+      "frequencyRank": 226
+    },
+    {
+      "id": "ev-moe2022-m-0493",
+      "sourceOrder": 493,
+      "word": "half",
+      "zipfFrequency": 5.41,
+      "frequencyRank": 42
+    },
+    {
+      "id": "ev-moe2022-m-0494",
+      "sourceOrder": 494,
+      "word": "hall",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 296
+    },
+    {
+      "id": "ev-moe2022-m-0495",
+      "sourceOrder": 495,
+      "word": "handle",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 364
+    },
+    {
+      "id": "ev-moe2022-m-0496",
+      "sourceOrder": 496,
+      "word": "handsome",
+      "zipfFrequency": 4.22,
+      "frequencyRank": 915
+    },
+    {
+      "id": "ev-moe2022-m-0497",
+      "sourceOrder": 497,
+      "word": "happen",
+      "zipfFrequency": 5.19,
+      "frequencyRank": 97
+    },
+    {
+      "id": "ev-moe2022-m-0498",
+      "sourceOrder": 498,
+      "word": "harm",
+      "zipfFrequency": 4.47,
+      "frequencyRank": 691
+    },
+    {
+      "id": "ev-moe2022-m-0499",
+      "sourceOrder": 499,
+      "word": "health",
+      "zipfFrequency": 5.44,
+      "frequencyRank": 36
+    },
+    {
+      "id": "ev-moe2022-m-0500",
+      "sourceOrder": 500,
+      "word": "hear",
+      "zipfFrequency": 5.23,
+      "frequencyRank": 79
+    },
+    {
+      "id": "ev-moe2022-m-0501",
+      "sourceOrder": 501,
+      "word": "heaven",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 566
+    },
+    {
+      "id": "ev-moe2022-m-0502",
+      "sourceOrder": 502,
+      "word": "height",
+      "zipfFrequency": 4.53,
+      "frequencyRank": 634
+    },
+    {
+      "id": "ev-moe2022-m-0503",
+      "sourceOrder": 503,
+      "word": "helicopter",
+      "zipfFrequency": 4.13,
+      "frequencyRank": 981
+    },
+    {
+      "id": "ev-moe2022-m-0504",
+      "sourceOrder": 504,
+      "word": "hell",
+      "zipfFrequency": 5.1,
+      "frequencyRank": 138
+    },
+    {
+      "id": "ev-moe2022-m-0505",
+      "sourceOrder": 505,
+      "word": "hesitate",
+      "zipfFrequency": 3.79,
+      "frequencyRank": 1137
+    },
+    {
+      "id": "ev-moe2022-m-0506",
+      "sourceOrder": 506,
+      "word": "hide",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 627
+    },
+    {
+      "id": "ev-moe2022-m-0507",
+      "sourceOrder": 507,
+      "word": "highway",
+      "zipfFrequency": 4.49,
+      "frequencyRank": 673
+    },
+    {
+      "id": "ev-moe2022-m-0508",
+      "sourceOrder": 508,
+      "word": "hint",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1014
+    },
+    {
+      "id": "ev-moe2022-m-0509",
+      "sourceOrder": 509,
+      "word": "hire",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 754
+    },
+    {
+      "id": "ev-moe2022-m-0510",
+      "sourceOrder": 510,
+      "word": "hole",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 489
+    },
+    {
+      "id": "ev-moe2022-m-0511",
+      "sourceOrder": 511,
+      "word": "honey",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 783
+    },
+    {
+      "id": "ev-moe2022-m-0512",
+      "sourceOrder": 512,
+      "word": "honor",
+      "zipfFrequency": 4.69,
+      "frequencyRank": 468
+    },
+    {
+      "id": "ev-moe2022-m-0513",
+      "sourceOrder": 513,
+      "word": "hotel",
+      "zipfFrequency": 4.95,
+      "frequencyRank": 234
+    },
+    {
+      "id": "ev-moe2022-m-0514",
+      "sourceOrder": 514,
+      "word": "hug",
+      "zipfFrequency": 4.09,
+      "frequencyRank": 1002
+    },
+    {
+      "id": "ev-moe2022-m-0515",
+      "sourceOrder": 515,
+      "word": "huge",
+      "zipfFrequency": 5.06,
+      "frequencyRank": 168
+    },
+    {
+      "id": "ev-moe2022-m-0516",
+      "sourceOrder": 516,
+      "word": "humor",
+      "zipfFrequency": 4.19,
+      "frequencyRank": 938
+    },
+    {
+      "id": "ev-moe2022-m-0517",
+      "sourceOrder": 517,
+      "word": "hunger",
+      "zipfFrequency": 4.1,
+      "frequencyRank": 994
+    },
+    {
+      "id": "ev-moe2022-m-0518",
+      "sourceOrder": 518,
+      "word": "hurt",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 246
+    },
+    {
+      "id": "ev-moe2022-m-0519",
+      "sourceOrder": 519,
+      "word": "identity",
+      "zipfFrequency": 4.65,
+      "frequencyRank": 503
+    },
+    {
+      "id": "ev-moe2022-m-0520",
+      "sourceOrder": 520,
+      "word": "ignore",
+      "zipfFrequency": 4.48,
+      "frequencyRank": 681
+    },
+    {
+      "id": "ev-moe2022-m-0521",
+      "sourceOrder": 521,
+      "word": "ill",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 434
+    },
+    {
+      "id": "ev-moe2022-m-0522",
+      "sourceOrder": 522,
+      "word": "illustrate",
+      "zipfFrequency": 3.71,
+      "frequencyRank": 1154
+    },
+    {
+      "id": "ev-moe2022-m-0523",
+      "sourceOrder": 523,
+      "word": "imagine",
+      "zipfFrequency": 4.92,
+      "frequencyRank": 260
+    },
+    {
+      "id": "ev-moe2022-m-0524",
+      "sourceOrder": 524,
+      "word": "immediate",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 646
+    },
+    {
+      "id": "ev-moe2022-m-0525",
+      "sourceOrder": 525,
+      "word": "impress",
+      "zipfFrequency": 3.93,
+      "frequencyRank": 1098
+    },
+    {
+      "id": "ev-moe2022-m-0526",
+      "sourceOrder": 526,
+      "word": "improve",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 365
+    },
+    {
+      "id": "ev-moe2022-m-0527",
+      "sourceOrder": 527,
+      "word": "include",
+      "zipfFrequency": 5.21,
+      "frequencyRank": 86
+    },
+    {
+      "id": "ev-moe2022-m-0528",
+      "sourceOrder": 528,
+      "word": "income",
+      "zipfFrequency": 4.97,
+      "frequencyRank": 221
+    },
+    {
+      "id": "ev-moe2022-m-0529",
+      "sourceOrder": 529,
+      "word": "increase",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 154
+    },
+    {
+      "id": "ev-moe2022-m-0530",
+      "sourceOrder": 530,
+      "word": "indeed",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 366
+    },
+    {
+      "id": "ev-moe2022-m-0531",
+      "sourceOrder": 531,
+      "word": "indicate",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 806
+    },
+    {
+      "id": "ev-moe2022-m-0532",
+      "sourceOrder": 532,
+      "word": "individual",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 205
+    },
+    {
+      "id": "ev-moe2022-m-0533",
+      "sourceOrder": 533,
+      "word": "industry",
+      "zipfFrequency": 5.19,
+      "frequencyRank": 98
+    },
+    {
+      "id": "ev-moe2022-m-0534",
+      "sourceOrder": 534,
+      "word": "influence",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 376
+    },
+    {
+      "id": "ev-moe2022-m-0535",
+      "sourceOrder": 535,
+      "word": "inform",
+      "zipfFrequency": 4.15,
+      "frequencyRank": 966
+    },
+    {
+      "id": "ev-moe2022-m-0536",
+      "sourceOrder": 536,
+      "word": "injure",
+      "zipfFrequency": 3.27,
+      "frequencyRank": 1189
+    },
+    {
+      "id": "ev-moe2022-m-0537",
+      "sourceOrder": 537,
+      "word": "innocent",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 715
+    },
+    {
+      "id": "ev-moe2022-m-0538",
+      "sourceOrder": 538,
+      "word": "insist",
+      "zipfFrequency": 4.03,
+      "frequencyRank": 1043
+    },
+    {
+      "id": "ev-moe2022-m-0539",
+      "sourceOrder": 539,
+      "word": "inspect",
+      "zipfFrequency": 3.63,
+      "frequencyRank": 1168
+    },
+    {
+      "id": "ev-moe2022-m-0540",
+      "sourceOrder": 540,
+      "word": "instance",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 555
+    },
+    {
+      "id": "ev-moe2022-m-0541",
+      "sourceOrder": 541,
+      "word": "instant",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 818
+    },
+    {
+      "id": "ev-moe2022-m-0542",
+      "sourceOrder": 542,
+      "word": "instead",
+      "zipfFrequency": 5.24,
+      "frequencyRank": 75
+    },
+    {
+      "id": "ev-moe2022-m-0543",
+      "sourceOrder": 543,
+      "word": "instruct",
+      "zipfFrequency": 3.31,
+      "frequencyRank": 1186
+    },
+    {
+      "id": "ev-moe2022-m-0544",
+      "sourceOrder": 544,
+      "word": "instrument",
+      "zipfFrequency": 4.26,
+      "frequencyRank": 883
+    },
+    {
+      "id": "ev-moe2022-m-0545",
+      "sourceOrder": 545,
+      "word": "insure",
+      "zipfFrequency": 3.4,
+      "frequencyRank": 1181
+    },
+    {
+      "id": "ev-moe2022-m-0546",
+      "sourceOrder": 546,
+      "word": "intend",
+      "zipfFrequency": 4.09,
+      "frequencyRank": 1003
+    },
+    {
+      "id": "ev-moe2022-m-0547",
+      "sourceOrder": 547,
+      "word": "intense",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 766
+    },
+    {
+      "id": "ev-moe2022-m-0548",
+      "sourceOrder": 548,
+      "word": "intent",
+      "zipfFrequency": 4.28,
+      "frequencyRank": 868
+    },
+    {
+      "id": "ev-moe2022-m-0549",
+      "sourceOrder": 549,
+      "word": "interest",
+      "zipfFrequency": 5.17,
+      "frequencyRank": 104
+    },
+    {
+      "id": "ev-moe2022-m-0550",
+      "sourceOrder": 550,
+      "word": "internal",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 490
+    },
+    {
+      "id": "ev-moe2022-m-0551",
+      "sourceOrder": 551,
+      "word": "interrupt",
+      "zipfFrequency": 3.61,
+      "frequencyRank": 1171
+    },
+    {
+      "id": "ev-moe2022-m-0552",
+      "sourceOrder": 552,
+      "word": "invent",
+      "zipfFrequency": 3.57,
+      "frequencyRank": 1172
+    },
+    {
+      "id": "ev-moe2022-m-0553",
+      "sourceOrder": 553,
+      "word": "invest",
+      "zipfFrequency": 4.32,
+      "frequencyRank": 833
+    },
+    {
+      "id": "ev-moe2022-m-0554",
+      "sourceOrder": 554,
+      "word": "investigate",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 840
+    },
+    {
+      "id": "ev-moe2022-m-0555",
+      "sourceOrder": 555,
+      "word": "involve",
+      "zipfFrequency": 4.28,
+      "frequencyRank": 869
+    },
+    {
+      "id": "ev-moe2022-m-0556",
+      "sourceOrder": 556,
+      "word": "iron",
+      "zipfFrequency": 4.74,
+      "frequencyRank": 416
+    },
+    {
+      "id": "ev-moe2022-m-0557",
+      "sourceOrder": 557,
+      "word": "island",
+      "zipfFrequency": 5.01,
+      "frequencyRank": 197
+    },
+    {
+      "id": "ev-moe2022-m-0558",
+      "sourceOrder": 558,
+      "word": "item",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 580
+    },
+    {
+      "id": "ev-moe2022-m-0559",
+      "sourceOrder": 559,
+      "word": "jaw",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1069
+    },
+    {
+      "id": "ev-moe2022-m-0560",
+      "sourceOrder": 560,
+      "word": "jeans",
+      "zipfFrequency": 4.09,
+      "frequencyRank": 1004
+    },
+    {
+      "id": "ev-moe2022-m-0561",
+      "sourceOrder": 561,
+      "word": "joke",
+      "zipfFrequency": 4.68,
+      "frequencyRank": 473
+    },
+    {
+      "id": "ev-moe2022-m-0562",
+      "sourceOrder": 562,
+      "word": "journey",
+      "zipfFrequency": 4.65,
+      "frequencyRank": 504
+    },
+    {
+      "id": "ev-moe2022-m-0563",
+      "sourceOrder": 563,
+      "word": "joy",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 609
+    },
+    {
+      "id": "ev-moe2022-m-0564",
+      "sourceOrder": 564,
+      "word": "judge",
+      "zipfFrequency": 4.95,
+      "frequencyRank": 235
+    },
+    {
+      "id": "ev-moe2022-m-0565",
+      "sourceOrder": 565,
+      "word": "junior",
+      "zipfFrequency": 4.49,
+      "frequencyRank": 674
+    },
+    {
+      "id": "ev-moe2022-m-0566",
+      "sourceOrder": 566,
+      "word": "justice",
+      "zipfFrequency": 4.97,
+      "frequencyRank": 222
+    },
+    {
+      "id": "ev-moe2022-m-0567",
+      "sourceOrder": 567,
+      "word": "knee",
+      "zipfFrequency": 4.33,
+      "frequencyRank": 824
+    },
+    {
+      "id": "ev-moe2022-m-0568",
+      "sourceOrder": 568,
+      "word": "knock",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 807
+    },
+    {
+      "id": "ev-moe2022-m-0569",
+      "sourceOrder": 569,
+      "word": "knowledge",
+      "zipfFrequency": 4.96,
+      "frequencyRank": 227
+    },
+    {
+      "id": "ev-moe2022-m-0570",
+      "sourceOrder": 570,
+      "word": "label",
+      "zipfFrequency": 4.43,
+      "frequencyRank": 729
+    },
+    {
+      "id": "ev-moe2022-m-0571",
+      "sourceOrder": 571,
+      "word": "labor",
+      "zipfFrequency": 4.77,
+      "frequencyRank": 387
+    },
+    {
+      "id": "ev-moe2022-m-0572",
+      "sourceOrder": 572,
+      "word": "laboratory",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 841
+    },
+    {
+      "id": "ev-moe2022-m-0573",
+      "sourceOrder": 573,
+      "word": "lack",
+      "zipfFrequency": 4.92,
+      "frequencyRank": 261
+    },
+    {
+      "id": "ev-moe2022-m-0574",
+      "sourceOrder": 574,
+      "word": "lamb",
+      "zipfFrequency": 4.02,
+      "frequencyRank": 1050
+    },
+    {
+      "id": "ev-moe2022-m-0575",
+      "sourceOrder": 575,
+      "word": "lamp",
+      "zipfFrequency": 4.05,
+      "frequencyRank": 1031
+    },
+    {
+      "id": "ev-moe2022-m-0576",
+      "sourceOrder": 576,
+      "word": "lane",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 581
+    },
+    {
+      "id": "ev-moe2022-m-0577",
+      "sourceOrder": 577,
+      "word": "language",
+      "zipfFrequency": 5.1,
+      "frequencyRank": 139
+    },
+    {
+      "id": "ev-moe2022-m-0578",
+      "sourceOrder": 578,
+      "word": "laugh",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 491
+    },
+    {
+      "id": "ev-moe2022-m-0579",
+      "sourceOrder": 579,
+      "word": "law",
+      "zipfFrequency": 5.46,
+      "frequencyRank": 32
+    },
+    {
+      "id": "ev-moe2022-m-0580",
+      "sourceOrder": 580,
+      "word": "lawn",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1070
+    },
+    {
+      "id": "ev-moe2022-m-0581",
+      "sourceOrder": 581,
+      "word": "lawyer",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 483
+    },
+    {
+      "id": "ev-moe2022-m-0582",
+      "sourceOrder": 582,
+      "word": "lay",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 511
+    },
+    {
+      "id": "ev-moe2022-m-0583",
+      "sourceOrder": 583,
+      "word": "lead",
+      "zipfFrequency": 5.2,
+      "frequencyRank": 92
+    },
+    {
+      "id": "ev-moe2022-m-0584",
+      "sourceOrder": 584,
+      "word": "leaf",
+      "zipfFrequency": 4.22,
+      "frequencyRank": 916
+    },
+    {
+      "id": "ev-moe2022-m-0585",
+      "sourceOrder": 585,
+      "word": "league",
+      "zipfFrequency": 5.13,
+      "frequencyRank": 122
+    },
+    {
+      "id": "ev-moe2022-m-0586",
+      "sourceOrder": 586,
+      "word": "lean",
+      "zipfFrequency": 4.14,
+      "frequencyRank": 970
+    },
+    {
+      "id": "ev-moe2022-m-0587",
+      "sourceOrder": 587,
+      "word": "leap",
+      "zipfFrequency": 3.94,
+      "frequencyRank": 1092
+    },
+    {
+      "id": "ev-moe2022-m-0588",
+      "sourceOrder": 588,
+      "word": "leave",
+      "zipfFrequency": 5.34,
+      "frequencyRank": 57
+    },
+    {
+      "id": "ev-moe2022-m-0589",
+      "sourceOrder": 589,
+      "word": "legal",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 155
+    },
+    {
+      "id": "ev-moe2022-m-0590",
+      "sourceOrder": 590,
+      "word": "lemon",
+      "zipfFrequency": 4.1,
+      "frequencyRank": 995
+    },
+    {
+      "id": "ev-moe2022-m-0591",
+      "sourceOrder": 591,
+      "word": "lend",
+      "zipfFrequency": 3.92,
+      "frequencyRank": 1102
+    },
+    {
+      "id": "ev-moe2022-m-0592",
+      "sourceOrder": 592,
+      "word": "let",
+      "zipfFrequency": 5.6,
+      "frequencyRank": 20
+    },
+    {
+      "id": "ev-moe2022-m-0593",
+      "sourceOrder": 593,
+      "word": "level",
+      "zipfFrequency": 5.41,
+      "frequencyRank": 43
+    },
+    {
+      "id": "ev-moe2022-m-0594",
+      "sourceOrder": 594,
+      "word": "license",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 647
+    },
+    {
+      "id": "ev-moe2022-m-0595",
+      "sourceOrder": 595,
+      "word": "lid",
+      "zipfFrequency": 3.81,
+      "frequencyRank": 1132
+    },
+    {
+      "id": "ev-moe2022-m-0596",
+      "sourceOrder": 596,
+      "word": "lift",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 663
+    },
+    {
+      "id": "ev-moe2022-m-0597",
+      "sourceOrder": 597,
+      "word": "limit",
+      "zipfFrequency": 4.7,
+      "frequencyRank": 462
+    },
+    {
+      "id": "ev-moe2022-m-0598",
+      "sourceOrder": 598,
+      "word": "link",
+      "zipfFrequency": 4.99,
+      "frequencyRank": 215
+    },
+    {
+      "id": "ev-moe2022-m-0599",
+      "sourceOrder": 599,
+      "word": "list",
+      "zipfFrequency": 5.28,
+      "frequencyRank": 70
+    },
+    {
+      "id": "ev-moe2022-m-0600",
+      "sourceOrder": 600,
+      "word": "livingroom",
+      "zipfFrequency": 2.14,
+      "frequencyRank": 1199
+    },
+    {
+      "id": "ev-moe2022-m-0601",
+      "sourceOrder": 601,
+      "word": "load",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 567
+    },
+    {
+      "id": "ev-moe2022-m-0602",
+      "sourceOrder": 602,
+      "word": "loan",
+      "zipfFrequency": 4.68,
+      "frequencyRank": 474
+    },
+    {
+      "id": "ev-moe2022-m-0603",
+      "sourceOrder": 603,
+      "word": "local",
+      "zipfFrequency": 5.43,
+      "frequencyRank": 39
+    },
+    {
+      "id": "ev-moe2022-m-0604",
+      "sourceOrder": 604,
+      "word": "locate",
+      "zipfFrequency": 3.94,
+      "frequencyRank": 1093
+    },
+    {
+      "id": "ev-moe2022-m-0605",
+      "sourceOrder": 605,
+      "word": "lock",
+      "zipfFrequency": 4.51,
+      "frequencyRank": 655
+    },
+    {
+      "id": "ev-moe2022-m-0606",
+      "sourceOrder": 606,
+      "word": "log",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 784
+    },
+    {
+      "id": "ev-moe2022-m-0607",
+      "sourceOrder": 607,
+      "word": "loose",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 704
+    },
+    {
+      "id": "ev-moe2022-m-0608",
+      "sourceOrder": 608,
+      "word": "lose",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 156
+    },
+    {
+      "id": "ev-moe2022-m-0609",
+      "sourceOrder": 609,
+      "word": "loss",
+      "zipfFrequency": 5.07,
+      "frequencyRank": 163
+    },
+    {
+      "id": "ev-moe2022-m-0610",
+      "sourceOrder": 610,
+      "word": "lot",
+      "zipfFrequency": 5.61,
+      "frequencyRank": 17
+    },
+    {
+      "id": "ev-moe2022-m-0611",
+      "sourceOrder": 611,
+      "word": "loud",
+      "zipfFrequency": 4.53,
+      "frequencyRank": 635
+    },
+    {
+      "id": "ev-moe2022-m-0612",
+      "sourceOrder": 612,
+      "word": "machine",
+      "zipfFrequency": 4.9,
+      "frequencyRank": 273
+    },
+    {
+      "id": "ev-moe2022-m-0613",
+      "sourceOrder": 613,
+      "word": "magazine",
+      "zipfFrequency": 4.74,
+      "frequencyRank": 417
+    },
+    {
+      "id": "ev-moe2022-m-0614",
+      "sourceOrder": 614,
+      "word": "magic",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 397
+    },
+    {
+      "id": "ev-moe2022-m-0615",
+      "sourceOrder": 615,
+      "word": "main",
+      "zipfFrequency": 5.24,
+      "frequencyRank": 76
+    },
+    {
+      "id": "ev-moe2022-m-0616",
+      "sourceOrder": 616,
+      "word": "maintain",
+      "zipfFrequency": 4.65,
+      "frequencyRank": 505
+    },
+    {
+      "id": "ev-moe2022-m-0617",
+      "sourceOrder": 617,
+      "word": "major",
+      "zipfFrequency": 5.3,
+      "frequencyRank": 67
+    },
+    {
+      "id": "ev-moe2022-m-0618",
+      "sourceOrder": 618,
+      "word": "male",
+      "zipfFrequency": 4.89,
+      "frequencyRank": 279
+    },
+    {
+      "id": "ev-moe2022-m-0619",
+      "sourceOrder": 619,
+      "word": "manage",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 628
+    },
+    {
+      "id": "ev-moe2022-m-0620",
+      "sourceOrder": 620,
+      "word": "manner",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 610
+    },
+    {
+      "id": "ev-moe2022-m-0621",
+      "sourceOrder": 621,
+      "word": "manufacture",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1071
+    },
+    {
+      "id": "ev-moe2022-m-0622",
+      "sourceOrder": 622,
+      "word": "mark",
+      "zipfFrequency": 5.05,
+      "frequencyRank": 172
+    },
+    {
+      "id": "ev-moe2022-m-0623",
+      "sourceOrder": 623,
+      "word": "marvel",
+      "zipfFrequency": 4.16,
+      "frequencyRank": 958
+    },
+    {
+      "id": "ev-moe2022-m-0624",
+      "sourceOrder": 624,
+      "word": "mask",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 842
+    },
+    {
+      "id": "ev-moe2022-m-0625",
+      "sourceOrder": 625,
+      "word": "mass",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 297
+    },
+    {
+      "id": "ev-moe2022-m-0626",
+      "sourceOrder": 626,
+      "word": "master",
+      "zipfFrequency": 4.93,
+      "frequencyRank": 254
+    },
+    {
+      "id": "ev-moe2022-m-0627",
+      "sourceOrder": 627,
+      "word": "match",
+      "zipfFrequency": 5.13,
+      "frequencyRank": 123
+    },
+    {
+      "id": "ev-moe2022-m-0628",
+      "sourceOrder": 628,
+      "word": "mate",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 611
+    },
+    {
+      "id": "ev-moe2022-m-0629",
+      "sourceOrder": 629,
+      "word": "matter",
+      "zipfFrequency": 5.38,
+      "frequencyRank": 49
+    },
+    {
+      "id": "ev-moe2022-m-0630",
+      "sourceOrder": 630,
+      "word": "maximum",
+      "zipfFrequency": 4.6,
+      "frequencyRank": 544
+    },
+    {
+      "id": "ev-moe2022-m-0631",
+      "sourceOrder": 631,
+      "word": "maybe",
+      "zipfFrequency": 5.45,
+      "frequencyRank": 34
+    },
+    {
+      "id": "ev-moe2022-m-0632",
+      "sourceOrder": 632,
+      "word": "meal",
+      "zipfFrequency": 4.48,
+      "frequencyRank": 682
+    },
+    {
+      "id": "ev-moe2022-m-0633",
+      "sourceOrder": 633,
+      "word": "mean",
+      "zipfFrequency": 5.53,
+      "frequencyRank": 26
+    },
+    {
+      "id": "ev-moe2022-m-0634",
+      "sourceOrder": 634,
+      "word": "measure",
+      "zipfFrequency": 4.65,
+      "frequencyRank": 506
+    },
+    {
+      "id": "ev-moe2022-m-0635",
+      "sourceOrder": 635,
+      "word": "medical",
+      "zipfFrequency": 5.16,
+      "frequencyRank": 108
+    },
+    {
+      "id": "ev-moe2022-m-0636",
+      "sourceOrder": 636,
+      "word": "medicine",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 423
+    },
+    {
+      "id": "ev-moe2022-m-0637",
+      "sourceOrder": 637,
+      "word": "melon",
+      "zipfFrequency": 3.32,
+      "frequencyRank": 1185
+    },
+    {
+      "id": "ev-moe2022-m-0638",
+      "sourceOrder": 638,
+      "word": "melt",
+      "zipfFrequency": 3.96,
+      "frequencyRank": 1083
+    },
+    {
+      "id": "ev-moe2022-m-0639",
+      "sourceOrder": 639,
+      "word": "mental",
+      "zipfFrequency": 4.83,
+      "frequencyRank": 325
+    },
+    {
+      "id": "ev-moe2022-m-0640",
+      "sourceOrder": 640,
+      "word": "mention",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 424
+    },
+    {
+      "id": "ev-moe2022-m-0641",
+      "sourceOrder": 641,
+      "word": "menu",
+      "zipfFrequency": 4.26,
+      "frequencyRank": 884
+    },
+    {
+      "id": "ev-moe2022-m-0642",
+      "sourceOrder": 642,
+      "word": "mess",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 582
+    },
+    {
+      "id": "ev-moe2022-m-0643",
+      "sourceOrder": 643,
+      "word": "message",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 206
+    },
+    {
+      "id": "ev-moe2022-m-0644",
+      "sourceOrder": 644,
+      "word": "metal",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 339
+    },
+    {
+      "id": "ev-moe2022-m-0645",
+      "sourceOrder": 645,
+      "word": "method",
+      "zipfFrequency": 4.8,
+      "frequencyRank": 357
+    },
+    {
+      "id": "ev-moe2022-m-0646",
+      "sourceOrder": 646,
+      "word": "microwave",
+      "zipfFrequency": 3.8,
+      "frequencyRank": 1135
+    },
+    {
+      "id": "ev-moe2022-m-0647",
+      "sourceOrder": 647,
+      "word": "military",
+      "zipfFrequency": 5.2,
+      "frequencyRank": 93
+    },
+    {
+      "id": "ev-moe2022-m-0648",
+      "sourceOrder": 648,
+      "word": "mill",
+      "zipfFrequency": 4.38,
+      "frequencyRank": 777
+    },
+    {
+      "id": "ev-moe2022-m-0649",
+      "sourceOrder": 649,
+      "word": "minor",
+      "zipfFrequency": 4.62,
+      "frequencyRank": 528
+    },
+    {
+      "id": "ev-moe2022-m-0650",
+      "sourceOrder": 650,
+      "word": "minute",
+      "zipfFrequency": 4.98,
+      "frequencyRank": 219
+    },
+    {
+      "id": "ev-moe2022-m-0651",
+      "sourceOrder": 651,
+      "word": "mirror",
+      "zipfFrequency": 4.47,
+      "frequencyRank": 692
+    },
+    {
+      "id": "ev-moe2022-m-0652",
+      "sourceOrder": 652,
+      "word": "mission",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 298
+    },
+    {
+      "id": "ev-moe2022-m-0653",
+      "sourceOrder": 653,
+      "word": "mix",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 450
+    },
+    {
+      "id": "ev-moe2022-m-0654",
+      "sourceOrder": 654,
+      "word": "modern",
+      "zipfFrequency": 5.07,
+      "frequencyRank": 164
+    },
+    {
+      "id": "ev-moe2022-m-0655",
+      "sourceOrder": 655,
+      "word": "moment",
+      "zipfFrequency": 5.24,
+      "frequencyRank": 77
+    },
+    {
+      "id": "ev-moe2022-m-0656",
+      "sourceOrder": 656,
+      "word": "monitor",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 785
+    },
+    {
+      "id": "ev-moe2022-m-0657",
+      "sourceOrder": 657,
+      "word": "mood",
+      "zipfFrequency": 4.44,
+      "frequencyRank": 725
+    },
+    {
+      "id": "ev-moe2022-m-0658",
+      "sourceOrder": 658,
+      "word": "moral",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 705
+    },
+    {
+      "id": "ev-moe2022-m-0659",
+      "sourceOrder": 659,
+      "word": "moreover",
+      "zipfFrequency": 4.16,
+      "frequencyRank": 959
+    },
+    {
+      "id": "ev-moe2022-m-0660",
+      "sourceOrder": 660,
+      "word": "motion",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 556
+    },
+    {
+      "id": "ev-moe2022-m-0661",
+      "sourceOrder": 661,
+      "word": "motor",
+      "zipfFrequency": 4.53,
+      "frequencyRank": 636
+    },
+    {
+      "id": "ev-moe2022-m-0662",
+      "sourceOrder": 662,
+      "word": "mount",
+      "zipfFrequency": 4.47,
+      "frequencyRank": 693
+    },
+    {
+      "id": "ev-moe2022-m-0663",
+      "sourceOrder": 663,
+      "word": "mud",
+      "zipfFrequency": 4.13,
+      "frequencyRank": 982
+    },
+    {
+      "id": "ev-moe2022-m-0664",
+      "sourceOrder": 664,
+      "word": "muscle",
+      "zipfFrequency": 4.44,
+      "frequencyRank": 726
+    },
+    {
+      "id": "ev-moe2022-m-0665",
+      "sourceOrder": 665,
+      "word": "museum",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 451
+    },
+    {
+      "id": "ev-moe2022-m-0666",
+      "sourceOrder": 666,
+      "word": "mushroom",
+      "zipfFrequency": 3.63,
+      "frequencyRank": 1169
+    },
+    {
+      "id": "ev-moe2022-m-0667",
+      "sourceOrder": 667,
+      "word": "mystery",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 716
+    },
+    {
+      "id": "ev-moe2022-m-0668",
+      "sourceOrder": 668,
+      "word": "nail",
+      "zipfFrequency": 4.21,
+      "frequencyRank": 922
+    },
+    {
+      "id": "ev-moe2022-m-0669",
+      "sourceOrder": 669,
+      "word": "narrow",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 767
+    },
+    {
+      "id": "ev-moe2022-m-0670",
+      "sourceOrder": 670,
+      "word": "native",
+      "zipfFrequency": 4.69,
+      "frequencyRank": 469
+    },
+    {
+      "id": "ev-moe2022-m-0671",
+      "sourceOrder": 671,
+      "word": "navy",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 583
+    },
+    {
+      "id": "ev-moe2022-m-0672",
+      "sourceOrder": 672,
+      "word": "neat",
+      "zipfFrequency": 3.99,
+      "frequencyRank": 1060
+    },
+    {
+      "id": "ev-moe2022-m-0673",
+      "sourceOrder": 673,
+      "word": "necessary",
+      "zipfFrequency": 4.91,
+      "frequencyRank": 268
+    },
+    {
+      "id": "ev-moe2022-m-0674",
+      "sourceOrder": 674,
+      "word": "neighbor",
+      "zipfFrequency": 4.11,
+      "frequencyRank": 989
+    },
+    {
+      "id": "ev-moe2022-m-0675",
+      "sourceOrder": 675,
+      "word": "neither",
+      "zipfFrequency": 4.77,
+      "frequencyRank": 388
+    },
+    {
+      "id": "ev-moe2022-m-0676",
+      "sourceOrder": 676,
+      "word": "nerve",
+      "zipfFrequency": 4.19,
+      "frequencyRank": 939
+    },
+    {
+      "id": "ev-moe2022-m-0677",
+      "sourceOrder": 677,
+      "word": "nest",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1015
+    },
+    {
+      "id": "ev-moe2022-m-0678",
+      "sourceOrder": 678,
+      "word": "net",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 398
+    },
+    {
+      "id": "ev-moe2022-m-0679",
+      "sourceOrder": 679,
+      "word": "noise",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 612
+    },
+    {
+      "id": "ev-moe2022-m-0680",
+      "sourceOrder": 680,
+      "word": "none",
+      "zipfFrequency": 4.93,
+      "frequencyRank": 255
+    },
+    {
+      "id": "ev-moe2022-m-0681",
+      "sourceOrder": 681,
+      "word": "noon",
+      "zipfFrequency": 4.11,
+      "frequencyRank": 990
+    },
+    {
+      "id": "ev-moe2022-m-0682",
+      "sourceOrder": 682,
+      "word": "nor",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 377
+    },
+    {
+      "id": "ev-moe2022-m-0683",
+      "sourceOrder": 683,
+      "word": "notice",
+      "zipfFrequency": 4.9,
+      "frequencyRank": 274
+    },
+    {
+      "id": "ev-moe2022-m-0684",
+      "sourceOrder": 684,
+      "word": "nowadays",
+      "zipfFrequency": 4.11,
+      "frequencyRank": 991
+    },
+    {
+      "id": "ev-moe2022-m-0685",
+      "sourceOrder": 685,
+      "word": "nowhere",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 755
+    },
+    {
+      "id": "ev-moe2022-m-0686",
+      "sourceOrder": 686,
+      "word": "nut",
+      "zipfFrequency": 4.04,
+      "frequencyRank": 1039
+    },
+    {
+      "id": "ev-moe2022-m-0687",
+      "sourceOrder": 687,
+      "word": "oak",
+      "zipfFrequency": 4.18,
+      "frequencyRank": 949
+    },
+    {
+      "id": "ev-moe2022-m-0688",
+      "sourceOrder": 688,
+      "word": "object",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 595
+    },
+    {
+      "id": "ev-moe2022-m-0689",
+      "sourceOrder": 689,
+      "word": "observe",
+      "zipfFrequency": 4.06,
+      "frequencyRank": 1023
+    },
+    {
+      "id": "ev-moe2022-m-0690",
+      "sourceOrder": 690,
+      "word": "obvious",
+      "zipfFrequency": 4.63,
+      "frequencyRank": 522
+    },
+    {
+      "id": "ev-moe2022-m-0691",
+      "sourceOrder": 691,
+      "word": "occasion",
+      "zipfFrequency": 4.38,
+      "frequencyRank": 778
+    },
+    {
+      "id": "ev-moe2022-m-0692",
+      "sourceOrder": 692,
+      "word": "occur",
+      "zipfFrequency": 4.47,
+      "frequencyRank": 694
+    },
+    {
+      "id": "ev-moe2022-m-0693",
+      "sourceOrder": 693,
+      "word": "ocean",
+      "zipfFrequency": 4.7,
+      "frequencyRank": 463
+    },
+    {
+      "id": "ev-moe2022-m-0694",
+      "sourceOrder": 694,
+      "word": "odd",
+      "zipfFrequency": 4.42,
+      "frequencyRank": 736
+    },
+    {
+      "id": "ev-moe2022-m-0695",
+      "sourceOrder": 695,
+      "word": "offer",
+      "zipfFrequency": 5.05,
+      "frequencyRank": 173
+    },
+    {
+      "id": "ev-moe2022-m-0696",
+      "sourceOrder": 696,
+      "word": "officer",
+      "zipfFrequency": 5.03,
+      "frequencyRank": 180
+    },
+    {
+      "id": "ev-moe2022-m-0697",
+      "sourceOrder": 697,
+      "word": "once",
+      "zipfFrequency": 5.53,
+      "frequencyRank": 27
+    },
+    {
+      "id": "ev-moe2022-m-0698",
+      "sourceOrder": 698,
+      "word": "opera",
+      "zipfFrequency": 4.27,
+      "frequencyRank": 877
+    },
+    {
+      "id": "ev-moe2022-m-0699",
+      "sourceOrder": 699,
+      "word": "operate",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 664
+    },
+    {
+      "id": "ev-moe2022-m-0700",
+      "sourceOrder": 700,
+      "word": "opinion",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 247
+    },
+    {
+      "id": "ev-moe2022-m-0701",
+      "sourceOrder": 701,
+      "word": "oppose",
+      "zipfFrequency": 3.94,
+      "frequencyRank": 1094
+    },
+    {
+      "id": "ev-moe2022-m-0702",
+      "sourceOrder": 702,
+      "word": "order",
+      "zipfFrequency": 5.49,
+      "frequencyRank": 30
+    },
+    {
+      "id": "ev-moe2022-m-0703",
+      "sourceOrder": 703,
+      "word": "ordinary",
+      "zipfFrequency": 4.42,
+      "frequencyRank": 737
+    },
+    {
+      "id": "ev-moe2022-m-0704",
+      "sourceOrder": 704,
+      "word": "other",
+      "zipfFrequency": 6.16,
+      "frequencyRank": 3
+    },
+    {
+      "id": "ev-moe2022-m-0705",
+      "sourceOrder": 705,
+      "word": "otherwise",
+      "zipfFrequency": 4.88,
+      "frequencyRank": 287
+    },
+    {
+      "id": "ev-moe2022-m-0706",
+      "sourceOrder": 706,
+      "word": "ought",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 808
+    },
+    {
+      "id": "ev-moe2022-m-0707",
+      "sourceOrder": 707,
+      "word": "oven",
+      "zipfFrequency": 4.05,
+      "frequencyRank": 1032
+    },
+    {
+      "id": "ev-moe2022-m-0708",
+      "sourceOrder": 708,
+      "word": "overall",
+      "zipfFrequency": 4.9,
+      "frequencyRank": 275
+    },
+    {
+      "id": "ev-moe2022-m-0709",
+      "sourceOrder": 709,
+      "word": "own",
+      "zipfFrequency": 5.74,
+      "frequencyRank": 12
+    },
+    {
+      "id": "ev-moe2022-m-0710",
+      "sourceOrder": 710,
+      "word": "pack",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 492
+    },
+    {
+      "id": "ev-moe2022-m-0711",
+      "sourceOrder": 711,
+      "word": "pain",
+      "zipfFrequency": 5.03,
+      "frequencyRank": 181
+    },
+    {
+      "id": "ev-moe2022-m-0712",
+      "sourceOrder": 712,
+      "word": "pair",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 435
+    },
+    {
+      "id": "ev-moe2022-m-0713",
+      "sourceOrder": 713,
+      "word": "palace",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 717
+    },
+    {
+      "id": "ev-moe2022-m-0714",
+      "sourceOrder": 714,
+      "word": "pan",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 768
+    },
+    {
+      "id": "ev-moe2022-m-0715",
+      "sourceOrder": 715,
+      "word": "panic",
+      "zipfFrequency": 4.26,
+      "frequencyRank": 885
+    },
+    {
+      "id": "ev-moe2022-m-0716",
+      "sourceOrder": 716,
+      "word": "parade",
+      "zipfFrequency": 4.16,
+      "frequencyRank": 960
+    },
+    {
+      "id": "ev-moe2022-m-0717",
+      "sourceOrder": 717,
+      "word": "paragraph",
+      "zipfFrequency": 4.03,
+      "frequencyRank": 1044
+    },
+    {
+      "id": "ev-moe2022-m-0718",
+      "sourceOrder": 718,
+      "word": "pardon",
+      "zipfFrequency": 3.82,
+      "frequencyRank": 1130
+    },
+    {
+      "id": "ev-moe2022-m-0719",
+      "sourceOrder": 719,
+      "word": "particular",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 207
+    },
+    {
+      "id": "ev-moe2022-m-0720",
+      "sourceOrder": 720,
+      "word": "past",
+      "zipfFrequency": 5.36,
+      "frequencyRank": 51
+    },
+    {
+      "id": "ev-moe2022-m-0721",
+      "sourceOrder": 721,
+      "word": "path",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 452
+    },
+    {
+      "id": "ev-moe2022-m-0722",
+      "sourceOrder": 722,
+      "word": "patient",
+      "zipfFrequency": 4.77,
+      "frequencyRank": 389
+    },
+    {
+      "id": "ev-moe2022-m-0723",
+      "sourceOrder": 723,
+      "word": "pattern",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 596
+    },
+    {
+      "id": "ev-moe2022-m-0724",
+      "sourceOrder": 724,
+      "word": "pause",
+      "zipfFrequency": 4.0,
+      "frequencyRank": 1059
+    },
+    {
+      "id": "ev-moe2022-m-0725",
+      "sourceOrder": 725,
+      "word": "peace",
+      "zipfFrequency": 5.02,
+      "frequencyRank": 191
+    },
+    {
+      "id": "ev-moe2022-m-0726",
+      "sourceOrder": 726,
+      "word": "pear",
+      "zipfFrequency": 3.47,
+      "frequencyRank": 1177
+    },
+    {
+      "id": "ev-moe2022-m-0727",
+      "sourceOrder": 727,
+      "word": "pepper",
+      "zipfFrequency": 4.14,
+      "frequencyRank": 971
+    },
+    {
+      "id": "ev-moe2022-m-0728",
+      "sourceOrder": 728,
+      "word": "per",
+      "zipfFrequency": 5.45,
+      "frequencyRank": 35
+    },
+    {
+      "id": "ev-moe2022-m-0729",
+      "sourceOrder": 729,
+      "word": "perfect",
+      "zipfFrequency": 5.2,
+      "frequencyRank": 94
+    },
+    {
+      "id": "ev-moe2022-m-0730",
+      "sourceOrder": 730,
+      "word": "perform",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 493
+    },
+    {
+      "id": "ev-moe2022-m-0731",
+      "sourceOrder": 731,
+      "word": "perhaps",
+      "zipfFrequency": 5.09,
+      "frequencyRank": 146
+    },
+    {
+      "id": "ev-moe2022-m-0732",
+      "sourceOrder": 732,
+      "word": "period",
+      "zipfFrequency": 5.21,
+      "frequencyRank": 87
+    },
+    {
+      "id": "ev-moe2022-m-0733",
+      "sourceOrder": 733,
+      "word": "person",
+      "zipfFrequency": 5.55,
+      "frequencyRank": 24
+    },
+    {
+      "id": "ev-moe2022-m-0734",
+      "sourceOrder": 734,
+      "word": "pet",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 718
+    },
+    {
+      "id": "ev-moe2022-m-0735",
+      "sourceOrder": 735,
+      "word": "photograph",
+      "zipfFrequency": 4.23,
+      "frequencyRank": 906
+    },
+    {
+      "id": "ev-moe2022-m-0736",
+      "sourceOrder": 736,
+      "word": "physical",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 248
+    },
+    {
+      "id": "ev-moe2022-m-0737",
+      "sourceOrder": 737,
+      "word": "picnic",
+      "zipfFrequency": 3.8,
+      "frequencyRank": 1136
+    },
+    {
+      "id": "ev-moe2022-m-0738",
+      "sourceOrder": 738,
+      "word": "pie",
+      "zipfFrequency": 4.19,
+      "frequencyRank": 940
+    },
+    {
+      "id": "ev-moe2022-m-0739",
+      "sourceOrder": 739,
+      "word": "piece",
+      "zipfFrequency": 5.04,
+      "frequencyRank": 177
+    },
+    {
+      "id": "ev-moe2022-m-0740",
+      "sourceOrder": 740,
+      "word": "pile",
+      "zipfFrequency": 4.14,
+      "frequencyRank": 972
+    },
+    {
+      "id": "ev-moe2022-m-0741",
+      "sourceOrder": 741,
+      "word": "pin",
+      "zipfFrequency": 4.28,
+      "frequencyRank": 870
+    },
+    {
+      "id": "ev-moe2022-m-0742",
+      "sourceOrder": 742,
+      "word": "pine",
+      "zipfFrequency": 4.1,
+      "frequencyRank": 996
+    },
+    {
+      "id": "ev-moe2022-m-0743",
+      "sourceOrder": 743,
+      "word": "pipe",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 890
+    },
+    {
+      "id": "ev-moe2022-m-0744",
+      "sourceOrder": 744,
+      "word": "pitch",
+      "zipfFrequency": 4.43,
+      "frequencyRank": 730
+    },
+    {
+      "id": "ev-moe2022-m-0745",
+      "sourceOrder": 745,
+      "word": "pity",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1072
+    },
+    {
+      "id": "ev-moe2022-m-0746",
+      "sourceOrder": 746,
+      "word": "plain",
+      "zipfFrequency": 4.43,
+      "frequencyRank": 731
+    },
+    {
+      "id": "ev-moe2022-m-0747",
+      "sourceOrder": 747,
+      "word": "plane",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 436
+    },
+    {
+      "id": "ev-moe2022-m-0748",
+      "sourceOrder": 748,
+      "word": "planet",
+      "zipfFrequency": 4.68,
+      "frequencyRank": 475
+    },
+    {
+      "id": "ev-moe2022-m-0749",
+      "sourceOrder": 749,
+      "word": "plant",
+      "zipfFrequency": 4.89,
+      "frequencyRank": 280
+    },
+    {
+      "id": "ev-moe2022-m-0750",
+      "sourceOrder": 750,
+      "word": "plate",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 613
+    },
+    {
+      "id": "ev-moe2022-m-0751",
+      "sourceOrder": 751,
+      "word": "plenty",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 437
+    },
+    {
+      "id": "ev-moe2022-m-0752",
+      "sourceOrder": 752,
+      "word": "plus",
+      "zipfFrequency": 4.95,
+      "frequencyRank": 236
+    },
+    {
+      "id": "ev-moe2022-m-0753",
+      "sourceOrder": 753,
+      "word": "pocket",
+      "zipfFrequency": 4.48,
+      "frequencyRank": 683
+    },
+    {
+      "id": "ev-moe2022-m-0754",
+      "sourceOrder": 754,
+      "word": "poem",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 891
+    },
+    {
+      "id": "ev-moe2022-m-0755",
+      "sourceOrder": 755,
+      "word": "poet",
+      "zipfFrequency": 4.21,
+      "frequencyRank": 923
+    },
+    {
+      "id": "ev-moe2022-m-0756",
+      "sourceOrder": 756,
+      "word": "poison",
+      "zipfFrequency": 4.08,
+      "frequencyRank": 1008
+    },
+    {
+      "id": "ev-moe2022-m-0757",
+      "sourceOrder": 757,
+      "word": "pole",
+      "zipfFrequency": 4.23,
+      "frequencyRank": 907
+    },
+    {
+      "id": "ev-moe2022-m-0758",
+      "sourceOrder": 758,
+      "word": "policy",
+      "zipfFrequency": 5.17,
+      "frequencyRank": 105
+    },
+    {
+      "id": "ev-moe2022-m-0759",
+      "sourceOrder": 759,
+      "word": "polite",
+      "zipfFrequency": 3.92,
+      "frequencyRank": 1103
+    },
+    {
+      "id": "ev-moe2022-m-0760",
+      "sourceOrder": 760,
+      "word": "politics",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 299
+    },
+    {
+      "id": "ev-moe2022-m-0761",
+      "sourceOrder": 761,
+      "word": "pollute",
+      "zipfFrequency": 2.86,
+      "frequencyRank": 1195
+    },
+    {
+      "id": "ev-moe2022-m-0762",
+      "sourceOrder": 762,
+      "word": "pool",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 484
+    },
+    {
+      "id": "ev-moe2022-m-0763",
+      "sourceOrder": 763,
+      "word": "pop",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 300
+    },
+    {
+      "id": "ev-moe2022-m-0764",
+      "sourceOrder": 764,
+      "word": "popular",
+      "zipfFrequency": 5.07,
+      "frequencyRank": 165
+    },
+    {
+      "id": "ev-moe2022-m-0765",
+      "sourceOrder": 765,
+      "word": "pork",
+      "zipfFrequency": 4.03,
+      "frequencyRank": 1045
+    },
+    {
+      "id": "ev-moe2022-m-0766",
+      "sourceOrder": 766,
+      "word": "port",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 425
+    },
+    {
+      "id": "ev-moe2022-m-0767",
+      "sourceOrder": 767,
+      "word": "possess",
+      "zipfFrequency": 4.02,
+      "frequencyRank": 1051
+    },
+    {
+      "id": "ev-moe2022-m-0768",
+      "sourceOrder": 768,
+      "word": "possible",
+      "zipfFrequency": 5.36,
+      "frequencyRank": 52
+    },
+    {
+      "id": "ev-moe2022-m-0769",
+      "sourceOrder": 769,
+      "word": "post",
+      "zipfFrequency": 5.43,
+      "frequencyRank": 40
+    },
+    {
+      "id": "ev-moe2022-m-0770",
+      "sourceOrder": 770,
+      "word": "pot",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 756
+    },
+    {
+      "id": "ev-moe2022-m-0771",
+      "sourceOrder": 771,
+      "word": "potential",
+      "zipfFrequency": 5.01,
+      "frequencyRank": 198
+    },
+    {
+      "id": "ev-moe2022-m-0772",
+      "sourceOrder": 772,
+      "word": "pour",
+      "zipfFrequency": 4.1,
+      "frequencyRank": 997
+    },
+    {
+      "id": "ev-moe2022-m-0773",
+      "sourceOrder": 773,
+      "word": "powder",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 892
+    },
+    {
+      "id": "ev-moe2022-m-0774",
+      "sourceOrder": 774,
+      "word": "practical",
+      "zipfFrequency": 4.48,
+      "frequencyRank": 684
+    },
+    {
+      "id": "ev-moe2022-m-0775",
+      "sourceOrder": 775,
+      "word": "practice",
+      "zipfFrequency": 5.06,
+      "frequencyRank": 169
+    },
+    {
+      "id": "ev-moe2022-m-0776",
+      "sourceOrder": 776,
+      "word": "pray",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 757
+    },
+    {
+      "id": "ev-moe2022-m-0777",
+      "sourceOrder": 777,
+      "word": "prefer",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 584
+    },
+    {
+      "id": "ev-moe2022-m-0778",
+      "sourceOrder": 778,
+      "word": "pregnant",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 597
+    },
+    {
+      "id": "ev-moe2022-m-0779",
+      "sourceOrder": 779,
+      "word": "prepare",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 614
+    },
+    {
+      "id": "ev-moe2022-m-0780",
+      "sourceOrder": 780,
+      "word": "presence",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 426
+    },
+    {
+      "id": "ev-moe2022-m-0781",
+      "sourceOrder": 781,
+      "word": "press",
+      "zipfFrequency": 5.16,
+      "frequencyRank": 109
+    },
+    {
+      "id": "ev-moe2022-m-0782",
+      "sourceOrder": 782,
+      "word": "pretend",
+      "zipfFrequency": 4.33,
+      "frequencyRank": 825
+    },
+    {
+      "id": "ev-moe2022-m-0783",
+      "sourceOrder": 783,
+      "word": "prevent",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 367
+    },
+    {
+      "id": "ev-moe2022-m-0784",
+      "sourceOrder": 784,
+      "word": "previous",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 208
+    },
+    {
+      "id": "ev-moe2022-m-0785",
+      "sourceOrder": 785,
+      "word": "price",
+      "zipfFrequency": 5.23,
+      "frequencyRank": 80
+    },
+    {
+      "id": "ev-moe2022-m-0786",
+      "sourceOrder": 786,
+      "word": "pride",
+      "zipfFrequency": 4.49,
+      "frequencyRank": 675
+    },
+    {
+      "id": "ev-moe2022-m-0787",
+      "sourceOrder": 787,
+      "word": "prime",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 348
+    },
+    {
+      "id": "ev-moe2022-m-0788",
+      "sourceOrder": 788,
+      "word": "principle",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 819
+    },
+    {
+      "id": "ev-moe2022-m-0789",
+      "sourceOrder": 789,
+      "word": "prison",
+      "zipfFrequency": 4.8,
+      "frequencyRank": 358
+    },
+    {
+      "id": "ev-moe2022-m-0790",
+      "sourceOrder": 790,
+      "word": "privacy",
+      "zipfFrequency": 4.36,
+      "frequencyRank": 796
+    },
+    {
+      "id": "ev-moe2022-m-0791",
+      "sourceOrder": 791,
+      "word": "private",
+      "zipfFrequency": 5.19,
+      "frequencyRank": 99
+    },
+    {
+      "id": "ev-moe2022-m-0792",
+      "sourceOrder": 792,
+      "word": "prize",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 557
+    },
+    {
+      "id": "ev-moe2022-m-0793",
+      "sourceOrder": 793,
+      "word": "probable",
+      "zipfFrequency": 3.79,
+      "frequencyRank": 1138
+    },
+    {
+      "id": "ev-moe2022-m-0794",
+      "sourceOrder": 794,
+      "word": "proceed",
+      "zipfFrequency": 4.18,
+      "frequencyRank": 950
+    },
+    {
+      "id": "ev-moe2022-m-0795",
+      "sourceOrder": 795,
+      "word": "process",
+      "zipfFrequency": 5.26,
+      "frequencyRank": 73
+    },
+    {
+      "id": "ev-moe2022-m-0796",
+      "sourceOrder": 796,
+      "word": "produce",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 378
+    },
+    {
+      "id": "ev-moe2022-m-0797",
+      "sourceOrder": 797,
+      "word": "profession",
+      "zipfFrequency": 4.13,
+      "frequencyRank": 983
+    },
+    {
+      "id": "ev-moe2022-m-0798",
+      "sourceOrder": 798,
+      "word": "profit",
+      "zipfFrequency": 4.7,
+      "frequencyRank": 464
+    },
+    {
+      "id": "ev-moe2022-m-0799",
+      "sourceOrder": 799,
+      "word": "progress",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 379
+    },
+    {
+      "id": "ev-moe2022-m-0800",
+      "sourceOrder": 800,
+      "word": "promise",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 453
+    },
+    {
+      "id": "ev-moe2022-m-0801",
+      "sourceOrder": 801,
+      "word": "promote",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 598
+    },
+    {
+      "id": "ev-moe2022-m-0802",
+      "sourceOrder": 802,
+      "word": "pronounce",
+      "zipfFrequency": 3.66,
+      "frequencyRank": 1166
+    },
+    {
+      "id": "ev-moe2022-m-0803",
+      "sourceOrder": 803,
+      "word": "proper",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 438
+    },
+    {
+      "id": "ev-moe2022-m-0804",
+      "sourceOrder": 804,
+      "word": "property",
+      "zipfFrequency": 5.11,
+      "frequencyRank": 134
+    },
+    {
+      "id": "ev-moe2022-m-0805",
+      "sourceOrder": 805,
+      "word": "propose",
+      "zipfFrequency": 3.99,
+      "frequencyRank": 1061
+    },
+    {
+      "id": "ev-moe2022-m-0806",
+      "sourceOrder": 806,
+      "word": "protect",
+      "zipfFrequency": 4.92,
+      "frequencyRank": 262
+    },
+    {
+      "id": "ev-moe2022-m-0807",
+      "sourceOrder": 807,
+      "word": "protest",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 719
+    },
+    {
+      "id": "ev-moe2022-m-0808",
+      "sourceOrder": 808,
+      "word": "proud",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 380
+    },
+    {
+      "id": "ev-moe2022-m-0809",
+      "sourceOrder": 809,
+      "word": "prove",
+      "zipfFrequency": 4.77,
+      "frequencyRank": 390
+    },
+    {
+      "id": "ev-moe2022-m-0810",
+      "sourceOrder": 810,
+      "word": "provide",
+      "zipfFrequency": 5.15,
+      "frequencyRank": 112
+    },
+    {
+      "id": "ev-moe2022-m-0811",
+      "sourceOrder": 811,
+      "word": "pub",
+      "zipfFrequency": 4.23,
+      "frequencyRank": 908
+    },
+    {
+      "id": "ev-moe2022-m-0812",
+      "sourceOrder": 812,
+      "word": "public",
+      "zipfFrequency": 5.57,
+      "frequencyRank": 22
+    },
+    {
+      "id": "ev-moe2022-m-0813",
+      "sourceOrder": 813,
+      "word": "pull",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 340
+    },
+    {
+      "id": "ev-moe2022-m-0814",
+      "sourceOrder": 814,
+      "word": "pump",
+      "zipfFrequency": 4.28,
+      "frequencyRank": 871
+    },
+    {
+      "id": "ev-moe2022-m-0815",
+      "sourceOrder": 815,
+      "word": "punch",
+      "zipfFrequency": 4.32,
+      "frequencyRank": 834
+    },
+    {
+      "id": "ev-moe2022-m-0816",
+      "sourceOrder": 816,
+      "word": "punish",
+      "zipfFrequency": 3.95,
+      "frequencyRank": 1089
+    },
+    {
+      "id": "ev-moe2022-m-0817",
+      "sourceOrder": 817,
+      "word": "purchase",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 454
+    },
+    {
+      "id": "ev-moe2022-m-0818",
+      "sourceOrder": 818,
+      "word": "pure",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 512
+    },
+    {
+      "id": "ev-moe2022-m-0819",
+      "sourceOrder": 819,
+      "word": "purple",
+      "zipfFrequency": 4.32,
+      "frequencyRank": 835
+    },
+    {
+      "id": "ev-moe2022-m-0820",
+      "sourceOrder": 820,
+      "word": "purpose",
+      "zipfFrequency": 4.88,
+      "frequencyRank": 288
+    },
+    {
+      "id": "ev-moe2022-m-0821",
+      "sourceOrder": 821,
+      "word": "puzzle",
+      "zipfFrequency": 3.96,
+      "frequencyRank": 1084
+    },
+    {
+      "id": "ev-moe2022-m-0822",
+      "sourceOrder": 822,
+      "word": "quality",
+      "zipfFrequency": 5.11,
+      "frequencyRank": 135
+    },
+    {
+      "id": "ev-moe2022-m-0823",
+      "sourceOrder": 823,
+      "word": "quarter",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 439
+    },
+    {
+      "id": "ev-moe2022-m-0824",
+      "sourceOrder": 824,
+      "word": "quit",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 629
+    },
+    {
+      "id": "ev-moe2022-m-0825",
+      "sourceOrder": 825,
+      "word": "quite",
+      "zipfFrequency": 5.29,
+      "frequencyRank": 68
+    },
+    {
+      "id": "ev-moe2022-m-0826",
+      "sourceOrder": 826,
+      "word": "quote",
+      "zipfFrequency": 4.51,
+      "frequencyRank": 656
+    },
+    {
+      "id": "ev-moe2022-m-0827",
+      "sourceOrder": 827,
+      "word": "rail",
+      "zipfFrequency": 4.41,
+      "frequencyRank": 746
+    },
+    {
+      "id": "ev-moe2022-m-0828",
+      "sourceOrder": 828,
+      "word": "rainbow",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1016
+    },
+    {
+      "id": "ev-moe2022-m-0829",
+      "sourceOrder": 829,
+      "word": "raise",
+      "zipfFrequency": 4.75,
+      "frequencyRank": 407
+    },
+    {
+      "id": "ev-moe2022-m-0830",
+      "sourceOrder": 830,
+      "word": "range",
+      "zipfFrequency": 5.12,
+      "frequencyRank": 127
+    },
+    {
+      "id": "ev-moe2022-m-0831",
+      "sourceOrder": 831,
+      "word": "rapid",
+      "zipfFrequency": 4.38,
+      "frequencyRank": 779
+    },
+    {
+      "id": "ev-moe2022-m-0832",
+      "sourceOrder": 832,
+      "word": "rare",
+      "zipfFrequency": 4.77,
+      "frequencyRank": 391
+    },
+    {
+      "id": "ev-moe2022-m-0833",
+      "sourceOrder": 833,
+      "word": "rat",
+      "zipfFrequency": 4.17,
+      "frequencyRank": 955
+    },
+    {
+      "id": "ev-moe2022-m-0834",
+      "sourceOrder": 834,
+      "word": "rate",
+      "zipfFrequency": 5.14,
+      "frequencyRank": 117
+    },
+    {
+      "id": "ev-moe2022-m-0835",
+      "sourceOrder": 835,
+      "word": "rather",
+      "zipfFrequency": 5.32,
+      "frequencyRank": 60
+    },
+    {
+      "id": "ev-moe2022-m-0836",
+      "sourceOrder": 836,
+      "word": "reach",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 249
+    },
+    {
+      "id": "ev-moe2022-m-0837",
+      "sourceOrder": 837,
+      "word": "react",
+      "zipfFrequency": 4.16,
+      "frequencyRank": 961
+    },
+    {
+      "id": "ev-moe2022-m-0838",
+      "sourceOrder": 838,
+      "word": "real",
+      "zipfFrequency": 5.6,
+      "frequencyRank": 21
+    },
+    {
+      "id": "ev-moe2022-m-0839",
+      "sourceOrder": 839,
+      "word": "reason",
+      "zipfFrequency": 5.32,
+      "frequencyRank": 61
+    },
+    {
+      "id": "ev-moe2022-m-0840",
+      "sourceOrder": 840,
+      "word": "receive",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 310
+    },
+    {
+      "id": "ev-moe2022-m-0841",
+      "sourceOrder": 841,
+      "word": "recent",
+      "zipfFrequency": 5.04,
+      "frequencyRank": 178
+    },
+    {
+      "id": "ev-moe2022-m-0842",
+      "sourceOrder": 842,
+      "word": "recipe",
+      "zipfFrequency": 4.23,
+      "frequencyRank": 909
+    },
+    {
+      "id": "ev-moe2022-m-0843",
+      "sourceOrder": 843,
+      "word": "recognize",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 648
+    },
+    {
+      "id": "ev-moe2022-m-0844",
+      "sourceOrder": 844,
+      "word": "recommend",
+      "zipfFrequency": 4.61,
+      "frequencyRank": 537
+    },
+    {
+      "id": "ev-moe2022-m-0845",
+      "sourceOrder": 845,
+      "word": "record",
+      "zipfFrequency": 5.21,
+      "frequencyRank": 88
+    },
+    {
+      "id": "ev-moe2022-m-0846",
+      "sourceOrder": 846,
+      "word": "recover",
+      "zipfFrequency": 4.29,
+      "frequencyRank": 862
+    },
+    {
+      "id": "ev-moe2022-m-0847",
+      "sourceOrder": 847,
+      "word": "reduce",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 427
+    },
+    {
+      "id": "ev-moe2022-m-0848",
+      "sourceOrder": 848,
+      "word": "refer",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 720
+    },
+    {
+      "id": "ev-moe2022-m-0849",
+      "sourceOrder": 849,
+      "word": "reflect",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 769
+    },
+    {
+      "id": "ev-moe2022-m-0850",
+      "sourceOrder": 850,
+      "word": "refuse",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 770
+    },
+    {
+      "id": "ev-moe2022-m-0851",
+      "sourceOrder": 851,
+      "word": "regard",
+      "zipfFrequency": 4.36,
+      "frequencyRank": 797
+    },
+    {
+      "id": "ev-moe2022-m-0852",
+      "sourceOrder": 852,
+      "word": "region",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 209
+    },
+    {
+      "id": "ev-moe2022-m-0853",
+      "sourceOrder": 853,
+      "word": "register",
+      "zipfFrequency": 4.59,
+      "frequencyRank": 558
+    },
+    {
+      "id": "ev-moe2022-m-0854",
+      "sourceOrder": 854,
+      "word": "regular",
+      "zipfFrequency": 4.95,
+      "frequencyRank": 237
+    },
+    {
+      "id": "ev-moe2022-m-0855",
+      "sourceOrder": 855,
+      "word": "relate",
+      "zipfFrequency": 4.24,
+      "frequencyRank": 899
+    },
+    {
+      "id": "ev-moe2022-m-0856",
+      "sourceOrder": 856,
+      "word": "relax",
+      "zipfFrequency": 4.29,
+      "frequencyRank": 863
+    },
+    {
+      "id": "ev-moe2022-m-0857",
+      "sourceOrder": 857,
+      "word": "release",
+      "zipfFrequency": 5.09,
+      "frequencyRank": 147
+    },
+    {
+      "id": "ev-moe2022-m-0858",
+      "sourceOrder": 858,
+      "word": "relief",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 615
+    },
+    {
+      "id": "ev-moe2022-m-0859",
+      "sourceOrder": 859,
+      "word": "rely",
+      "zipfFrequency": 4.29,
+      "frequencyRank": 864
+    },
+    {
+      "id": "ev-moe2022-m-0860",
+      "sourceOrder": 860,
+      "word": "remain",
+      "zipfFrequency": 4.83,
+      "frequencyRank": 326
+    },
+    {
+      "id": "ev-moe2022-m-0861",
+      "sourceOrder": 861,
+      "word": "remark",
+      "zipfFrequency": 3.66,
+      "frequencyRank": 1167
+    },
+    {
+      "id": "ev-moe2022-m-0862",
+      "sourceOrder": 862,
+      "word": "remind",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 786
+    },
+    {
+      "id": "ev-moe2022-m-0863",
+      "sourceOrder": 863,
+      "word": "remove",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 455
+    },
+    {
+      "id": "ev-moe2022-m-0864",
+      "sourceOrder": 864,
+      "word": "rent",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 568
+    },
+    {
+      "id": "ev-moe2022-m-0865",
+      "sourceOrder": 865,
+      "word": "repair",
+      "zipfFrequency": 4.41,
+      "frequencyRank": 747
+    },
+    {
+      "id": "ev-moe2022-m-0866",
+      "sourceOrder": 866,
+      "word": "repeat",
+      "zipfFrequency": 4.49,
+      "frequencyRank": 676
+    },
+    {
+      "id": "ev-moe2022-m-0867",
+      "sourceOrder": 867,
+      "word": "replace",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 569
+    },
+    {
+      "id": "ev-moe2022-m-0868",
+      "sourceOrder": 868,
+      "word": "reply",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 665
+    },
+    {
+      "id": "ev-moe2022-m-0869",
+      "sourceOrder": 869,
+      "word": "report",
+      "zipfFrequency": 5.32,
+      "frequencyRank": 62
+    },
+    {
+      "id": "ev-moe2022-m-0870",
+      "sourceOrder": 870,
+      "word": "represent",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 570
+    },
+    {
+      "id": "ev-moe2022-m-0871",
+      "sourceOrder": 871,
+      "word": "request",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 399
+    },
+    {
+      "id": "ev-moe2022-m-0872",
+      "sourceOrder": 872,
+      "word": "require",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 381
+    },
+    {
+      "id": "ev-moe2022-m-0873",
+      "sourceOrder": 873,
+      "word": "research",
+      "zipfFrequency": 5.39,
+      "frequencyRank": 45
+    },
+    {
+      "id": "ev-moe2022-m-0874",
+      "sourceOrder": 874,
+      "word": "reserve",
+      "zipfFrequency": 4.6,
+      "frequencyRank": 545
+    },
+    {
+      "id": "ev-moe2022-m-0875",
+      "sourceOrder": 875,
+      "word": "resist",
+      "zipfFrequency": 4.2,
+      "frequencyRank": 931
+    },
+    {
+      "id": "ev-moe2022-m-0876",
+      "sourceOrder": 876,
+      "word": "resource",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 771
+    },
+    {
+      "id": "ev-moe2022-m-0877",
+      "sourceOrder": 877,
+      "word": "respect",
+      "zipfFrequency": 5.03,
+      "frequencyRank": 182
+    },
+    {
+      "id": "ev-moe2022-m-0878",
+      "sourceOrder": 878,
+      "word": "respond",
+      "zipfFrequency": 4.53,
+      "frequencyRank": 637
+    },
+    {
+      "id": "ev-moe2022-m-0879",
+      "sourceOrder": 879,
+      "word": "responsible",
+      "zipfFrequency": 4.88,
+      "frequencyRank": 289
+    },
+    {
+      "id": "ev-moe2022-m-0880",
+      "sourceOrder": 880,
+      "word": "rest",
+      "zipfFrequency": 5.23,
+      "frequencyRank": 81
+    },
+    {
+      "id": "ev-moe2022-m-0881",
+      "sourceOrder": 881,
+      "word": "result",
+      "zipfFrequency": 5.18,
+      "frequencyRank": 103
+    },
+    {
+      "id": "ev-moe2022-m-0882",
+      "sourceOrder": 882,
+      "word": "retire",
+      "zipfFrequency": 4.05,
+      "frequencyRank": 1033
+    },
+    {
+      "id": "ev-moe2022-m-0883",
+      "sourceOrder": 883,
+      "word": "rice",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 616
+    },
+    {
+      "id": "ev-moe2022-m-0884",
+      "sourceOrder": 884,
+      "word": "ride",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 311
+    },
+    {
+      "id": "ev-moe2022-m-0885",
+      "sourceOrder": 885,
+      "word": "rise",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 349
+    },
+    {
+      "id": "ev-moe2022-m-0886",
+      "sourceOrder": 886,
+      "word": "risk",
+      "zipfFrequency": 5.05,
+      "frequencyRank": 174
+    },
+    {
+      "id": "ev-moe2022-m-0887",
+      "sourceOrder": 887,
+      "word": "rob",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 809
+    },
+    {
+      "id": "ev-moe2022-m-0888",
+      "sourceOrder": 888,
+      "word": "rocket",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 843
+    },
+    {
+      "id": "ev-moe2022-m-0889",
+      "sourceOrder": 889,
+      "word": "role",
+      "zipfFrequency": 5.16,
+      "frequencyRank": 110
+    },
+    {
+      "id": "ev-moe2022-m-0890",
+      "sourceOrder": 890,
+      "word": "roll",
+      "zipfFrequency": 4.75,
+      "frequencyRank": 408
+    },
+    {
+      "id": "ev-moe2022-m-0891",
+      "sourceOrder": 891,
+      "word": "roof",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 617
+    },
+    {
+      "id": "ev-moe2022-m-0892",
+      "sourceOrder": 892,
+      "word": "root",
+      "zipfFrequency": 4.41,
+      "frequencyRank": 748
+    },
+    {
+      "id": "ev-moe2022-m-0893",
+      "sourceOrder": 893,
+      "word": "rope",
+      "zipfFrequency": 4.06,
+      "frequencyRank": 1024
+    },
+    {
+      "id": "ev-moe2022-m-0894",
+      "sourceOrder": 894,
+      "word": "rough",
+      "zipfFrequency": 4.49,
+      "frequencyRank": 677
+    },
+    {
+      "id": "ev-moe2022-m-0895",
+      "sourceOrder": 895,
+      "word": "round",
+      "zipfFrequency": 5.14,
+      "frequencyRank": 118
+    },
+    {
+      "id": "ev-moe2022-m-0896",
+      "sourceOrder": 896,
+      "word": "route",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 485
+    },
+    {
+      "id": "ev-moe2022-m-0897",
+      "sourceOrder": 897,
+      "word": "row",
+      "zipfFrequency": 4.6,
+      "frequencyRank": 546
+    },
+    {
+      "id": "ev-moe2022-m-0898",
+      "sourceOrder": 898,
+      "word": "royal",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 312
+    },
+    {
+      "id": "ev-moe2022-m-0899",
+      "sourceOrder": 899,
+      "word": "rub",
+      "zipfFrequency": 3.97,
+      "frequencyRank": 1079
+    },
+    {
+      "id": "ev-moe2022-m-0900",
+      "sourceOrder": 900,
+      "word": "rude",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 893
+    },
+    {
+      "id": "ev-moe2022-m-0901",
+      "sourceOrder": 901,
+      "word": "ruin",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 844
+    },
+    {
+      "id": "ev-moe2022-m-0902",
+      "sourceOrder": 902,
+      "word": "rule",
+      "zipfFrequency": 4.94,
+      "frequencyRank": 250
+    },
+    {
+      "id": "ev-moe2022-m-0903",
+      "sourceOrder": 903,
+      "word": "rush",
+      "zipfFrequency": 4.48,
+      "frequencyRank": 685
+    },
+    {
+      "id": "ev-moe2022-m-0904",
+      "sourceOrder": 904,
+      "word": "sail",
+      "zipfFrequency": 4.01,
+      "frequencyRank": 1054
+    },
+    {
+      "id": "ev-moe2022-m-0905",
+      "sourceOrder": 905,
+      "word": "salary",
+      "zipfFrequency": 4.36,
+      "frequencyRank": 798
+    },
+    {
+      "id": "ev-moe2022-m-0906",
+      "sourceOrder": 906,
+      "word": "sample",
+      "zipfFrequency": 4.53,
+      "frequencyRank": 638
+    },
+    {
+      "id": "ev-moe2022-m-0907",
+      "sourceOrder": 907,
+      "word": "satisfy",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1073
+    },
+    {
+      "id": "ev-moe2022-m-0908",
+      "sourceOrder": 908,
+      "word": "sauce",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 854
+    },
+    {
+      "id": "ev-moe2022-m-0909",
+      "sourceOrder": 909,
+      "word": "scale",
+      "zipfFrequency": 4.83,
+      "frequencyRank": 327
+    },
+    {
+      "id": "ev-moe2022-m-0910",
+      "sourceOrder": 910,
+      "word": "scare",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1017
+    },
+    {
+      "id": "ev-moe2022-m-0911",
+      "sourceOrder": 911,
+      "word": "scarf",
+      "zipfFrequency": 3.68,
+      "frequencyRank": 1158
+    },
+    {
+      "id": "ev-moe2022-m-0912",
+      "sourceOrder": 912,
+      "word": "scene",
+      "zipfFrequency": 4.97,
+      "frequencyRank": 223
+    },
+    {
+      "id": "ev-moe2022-m-0913",
+      "sourceOrder": 913,
+      "word": "schedule",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 486
+    },
+    {
+      "id": "ev-moe2022-m-0914",
+      "sourceOrder": 914,
+      "word": "scratch",
+      "zipfFrequency": 4.16,
+      "frequencyRank": 962
+    },
+    {
+      "id": "ev-moe2022-m-0915",
+      "sourceOrder": 915,
+      "word": "scream",
+      "zipfFrequency": 4.14,
+      "frequencyRank": 973
+    },
+    {
+      "id": "ev-moe2022-m-0916",
+      "sourceOrder": 916,
+      "word": "screen",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 313
+    },
+    {
+      "id": "ev-moe2022-m-0917",
+      "sourceOrder": 917,
+      "word": "seal",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 855
+    },
+    {
+      "id": "ev-moe2022-m-0918",
+      "sourceOrder": 918,
+      "word": "search",
+      "zipfFrequency": 4.96,
+      "frequencyRank": 228
+    },
+    {
+      "id": "ev-moe2022-m-0919",
+      "sourceOrder": 919,
+      "word": "seat",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 341
+    },
+    {
+      "id": "ev-moe2022-m-0920",
+      "sourceOrder": 920,
+      "word": "secret",
+      "zipfFrequency": 4.92,
+      "frequencyRank": 263
+    },
+    {
+      "id": "ev-moe2022-m-0921",
+      "sourceOrder": 921,
+      "word": "secretary",
+      "zipfFrequency": 4.95,
+      "frequencyRank": 238
+    },
+    {
+      "id": "ev-moe2022-m-0922",
+      "sourceOrder": 922,
+      "word": "section",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 210
+    },
+    {
+      "id": "ev-moe2022-m-0923",
+      "sourceOrder": 923,
+      "word": "secure",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 513
+    },
+    {
+      "id": "ev-moe2022-m-0924",
+      "sourceOrder": 924,
+      "word": "seed",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 787
+    },
+    {
+      "id": "ev-moe2022-m-0925",
+      "sourceOrder": 925,
+      "word": "seek",
+      "zipfFrequency": 4.61,
+      "frequencyRank": 538
+    },
+    {
+      "id": "ev-moe2022-m-0926",
+      "sourceOrder": 926,
+      "word": "seem",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 157
+    },
+    {
+      "id": "ev-moe2022-m-0927",
+      "sourceOrder": 927,
+      "word": "select",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 721
+    },
+    {
+      "id": "ev-moe2022-m-0928",
+      "sourceOrder": 928,
+      "word": "self",
+      "zipfFrequency": 5.25,
+      "frequencyRank": 74
+    },
+    {
+      "id": "ev-moe2022-m-0929",
+      "sourceOrder": 929,
+      "word": "senior",
+      "zipfFrequency": 4.92,
+      "frequencyRank": 264
+    },
+    {
+      "id": "ev-moe2022-m-0930",
+      "sourceOrder": 930,
+      "word": "sense",
+      "zipfFrequency": 5.19,
+      "frequencyRank": 100
+    },
+    {
+      "id": "ev-moe2022-m-0931",
+      "sourceOrder": 931,
+      "word": "sentence",
+      "zipfFrequency": 4.58,
+      "frequencyRank": 571
+    },
+    {
+      "id": "ev-moe2022-m-0932",
+      "sourceOrder": 932,
+      "word": "separate",
+      "zipfFrequency": 4.83,
+      "frequencyRank": 328
+    },
+    {
+      "id": "ev-moe2022-m-0933",
+      "sourceOrder": 933,
+      "word": "series",
+      "zipfFrequency": 5.35,
+      "frequencyRank": 55
+    },
+    {
+      "id": "ev-moe2022-m-0934",
+      "sourceOrder": 934,
+      "word": "serious",
+      "zipfFrequency": 5.1,
+      "frequencyRank": 140
+    },
+    {
+      "id": "ev-moe2022-m-0935",
+      "sourceOrder": 935,
+      "word": "serve",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 314
+    },
+    {
+      "id": "ev-moe2022-m-0936",
+      "sourceOrder": 936,
+      "word": "session",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 440
+    },
+    {
+      "id": "ev-moe2022-m-0937",
+      "sourceOrder": 937,
+      "word": "settle",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 788
+    },
+    {
+      "id": "ev-moe2022-m-0938",
+      "sourceOrder": 938,
+      "word": "several",
+      "zipfFrequency": 5.39,
+      "frequencyRank": 46
+    },
+    {
+      "id": "ev-moe2022-m-0939",
+      "sourceOrder": 939,
+      "word": "sew",
+      "zipfFrequency": 3.45,
+      "frequencyRank": 1179
+    },
+    {
+      "id": "ev-moe2022-m-0940",
+      "sourceOrder": 940,
+      "word": "sex",
+      "zipfFrequency": 5.22,
+      "frequencyRank": 83
+    },
+    {
+      "id": "ev-moe2022-m-0941",
+      "sourceOrder": 941,
+      "word": "shade",
+      "zipfFrequency": 4.16,
+      "frequencyRank": 963
+    },
+    {
+      "id": "ev-moe2022-m-0942",
+      "sourceOrder": 942,
+      "word": "shadow",
+      "zipfFrequency": 4.44,
+      "frequencyRank": 727
+    },
+    {
+      "id": "ev-moe2022-m-0943",
+      "sourceOrder": 943,
+      "word": "shake",
+      "zipfFrequency": 4.33,
+      "frequencyRank": 826
+    },
+    {
+      "id": "ev-moe2022-m-0944",
+      "sourceOrder": 944,
+      "word": "shall",
+      "zipfFrequency": 5.03,
+      "frequencyRank": 183
+    },
+    {
+      "id": "ev-moe2022-m-0945",
+      "sourceOrder": 945,
+      "word": "shame",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 618
+    },
+    {
+      "id": "ev-moe2022-m-0946",
+      "sourceOrder": 946,
+      "word": "shape",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 441
+    },
+    {
+      "id": "ev-moe2022-m-0947",
+      "sourceOrder": 947,
+      "word": "share",
+      "zipfFrequency": 5.2,
+      "frequencyRank": 95
+    },
+    {
+      "id": "ev-moe2022-m-0948",
+      "sourceOrder": 948,
+      "word": "sharp",
+      "zipfFrequency": 4.48,
+      "frequencyRank": 686
+    },
+    {
+      "id": "ev-moe2022-m-0949",
+      "sourceOrder": 949,
+      "word": "shave",
+      "zipfFrequency": 3.83,
+      "frequencyRank": 1129
+    },
+    {
+      "id": "ev-moe2022-m-0950",
+      "sourceOrder": 950,
+      "word": "sheep",
+      "zipfFrequency": 4.19,
+      "frequencyRank": 941
+    },
+    {
+      "id": "ev-moe2022-m-0951",
+      "sourceOrder": 951,
+      "word": "sheet",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 758
+    },
+    {
+      "id": "ev-moe2022-m-0952",
+      "sourceOrder": 952,
+      "word": "shelf",
+      "zipfFrequency": 4.02,
+      "frequencyRank": 1052
+    },
+    {
+      "id": "ev-moe2022-m-0953",
+      "sourceOrder": 953,
+      "word": "shell",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 772
+    },
+    {
+      "id": "ev-moe2022-m-0954",
+      "sourceOrder": 954,
+      "word": "shelter",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 894
+    },
+    {
+      "id": "ev-moe2022-m-0955",
+      "sourceOrder": 955,
+      "word": "shift",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 585
+    },
+    {
+      "id": "ev-moe2022-m-0956",
+      "sourceOrder": 956,
+      "word": "shine",
+      "zipfFrequency": 4.17,
+      "frequencyRank": 956
+    },
+    {
+      "id": "ev-moe2022-m-0957",
+      "sourceOrder": 957,
+      "word": "shock",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 706
+    },
+    {
+      "id": "ev-moe2022-m-0958",
+      "sourceOrder": 958,
+      "word": "shoot",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 428
+    },
+    {
+      "id": "ev-moe2022-m-0959",
+      "sourceOrder": 959,
+      "word": "shore",
+      "zipfFrequency": 4.33,
+      "frequencyRank": 827
+    },
+    {
+      "id": "ev-moe2022-m-0960",
+      "sourceOrder": 960,
+      "word": "shoulder",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 666
+    },
+    {
+      "id": "ev-moe2022-m-0961",
+      "sourceOrder": 961,
+      "word": "shout",
+      "zipfFrequency": 4.06,
+      "frequencyRank": 1025
+    },
+    {
+      "id": "ev-moe2022-m-0962",
+      "sourceOrder": 962,
+      "word": "shower",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 667
+    },
+    {
+      "id": "ev-moe2022-m-0963",
+      "sourceOrder": 963,
+      "word": "shut",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 382
+    },
+    {
+      "id": "ev-moe2022-m-0964",
+      "sourceOrder": 964,
+      "word": "sight",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 630
+    },
+    {
+      "id": "ev-moe2022-m-0965",
+      "sourceOrder": 965,
+      "word": "sign",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 158
+    },
+    {
+      "id": "ev-moe2022-m-0966",
+      "sourceOrder": 966,
+      "word": "silly",
+      "zipfFrequency": 4.39,
+      "frequencyRank": 773
+    },
+    {
+      "id": "ev-moe2022-m-0967",
+      "sourceOrder": 967,
+      "word": "silver",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 350
+    },
+    {
+      "id": "ev-moe2022-m-0968",
+      "sourceOrder": 968,
+      "word": "similar",
+      "zipfFrequency": 5.21,
+      "frequencyRank": 89
+    },
+    {
+      "id": "ev-moe2022-m-0969",
+      "sourceOrder": 969,
+      "word": "simple",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 159
+    },
+    {
+      "id": "ev-moe2022-m-0970",
+      "sourceOrder": 970,
+      "word": "since",
+      "zipfFrequency": 5.75,
+      "frequencyRank": 11
+    },
+    {
+      "id": "ev-moe2022-m-0971",
+      "sourceOrder": 971,
+      "word": "single",
+      "zipfFrequency": 5.41,
+      "frequencyRank": 44
+    },
+    {
+      "id": "ev-moe2022-m-0972",
+      "sourceOrder": 972,
+      "word": "sink",
+      "zipfFrequency": 4.21,
+      "frequencyRank": 924
+    },
+    {
+      "id": "ev-moe2022-m-0973",
+      "sourceOrder": 973,
+      "word": "site",
+      "zipfFrequency": 5.22,
+      "frequencyRank": 84
+    },
+    {
+      "id": "ev-moe2022-m-0974",
+      "sourceOrder": 974,
+      "word": "situate",
+      "zipfFrequency": 2.41,
+      "frequencyRank": 1198
+    },
+    {
+      "id": "ev-moe2022-m-0975",
+      "sourceOrder": 975,
+      "word": "skill",
+      "zipfFrequency": 4.42,
+      "frequencyRank": 738
+    },
+    {
+      "id": "ev-moe2022-m-0976",
+      "sourceOrder": 976,
+      "word": "slave",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 845
+    },
+    {
+      "id": "ev-moe2022-m-0977",
+      "sourceOrder": 977,
+      "word": "slide",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 856
+    },
+    {
+      "id": "ev-moe2022-m-0978",
+      "sourceOrder": 978,
+      "word": "slight",
+      "zipfFrequency": 4.22,
+      "frequencyRank": 917
+    },
+    {
+      "id": "ev-moe2022-m-0979",
+      "sourceOrder": 979,
+      "word": "slip",
+      "zipfFrequency": 4.28,
+      "frequencyRank": 872
+    },
+    {
+      "id": "ev-moe2022-m-0980",
+      "sourceOrder": 980,
+      "word": "smart",
+      "zipfFrequency": 4.83,
+      "frequencyRank": 329
+    },
+    {
+      "id": "ev-moe2022-m-0981",
+      "sourceOrder": 981,
+      "word": "smash",
+      "zipfFrequency": 4.09,
+      "frequencyRank": 1005
+    },
+    {
+      "id": "ev-moe2022-m-0982",
+      "sourceOrder": 982,
+      "word": "smoke",
+      "zipfFrequency": 4.67,
+      "frequencyRank": 487
+    },
+    {
+      "id": "ev-moe2022-m-0983",
+      "sourceOrder": 983,
+      "word": "smooth",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 759
+    },
+    {
+      "id": "ev-moe2022-m-0984",
+      "sourceOrder": 984,
+      "word": "snack",
+      "zipfFrequency": 3.9,
+      "frequencyRank": 1111
+    },
+    {
+      "id": "ev-moe2022-m-0985",
+      "sourceOrder": 985,
+      "word": "snake",
+      "zipfFrequency": 4.23,
+      "frequencyRank": 910
+    },
+    {
+      "id": "ev-moe2022-m-0986",
+      "sourceOrder": 986,
+      "word": "snap",
+      "zipfFrequency": 4.21,
+      "frequencyRank": 925
+    },
+    {
+      "id": "ev-moe2022-m-0987",
+      "sourceOrder": 987,
+      "word": "social",
+      "zipfFrequency": 5.42,
+      "frequencyRank": 41
+    },
+    {
+      "id": "ev-moe2022-m-0988",
+      "sourceOrder": 988,
+      "word": "society",
+      "zipfFrequency": 5.17,
+      "frequencyRank": 106
+    },
+    {
+      "id": "ev-moe2022-m-0989",
+      "sourceOrder": 989,
+      "word": "soil",
+      "zipfFrequency": 4.42,
+      "frequencyRank": 739
+    },
+    {
+      "id": "ev-moe2022-m-0990",
+      "sourceOrder": 990,
+      "word": "soldier",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 707
+    },
+    {
+      "id": "ev-moe2022-m-0991",
+      "sourceOrder": 991,
+      "word": "solid",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 429
+    },
+    {
+      "id": "ev-moe2022-m-0992",
+      "sourceOrder": 992,
+      "word": "solve",
+      "zipfFrequency": 4.42,
+      "frequencyRank": 740
+    },
+    {
+      "id": "ev-moe2022-m-0993",
+      "sourceOrder": 993,
+      "word": "somewhat",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 619
+    },
+    {
+      "id": "ev-moe2022-m-0994",
+      "sourceOrder": 994,
+      "word": "soon",
+      "zipfFrequency": 5.32,
+      "frequencyRank": 63
+    },
+    {
+      "id": "ev-moe2022-m-0995",
+      "sourceOrder": 995,
+      "word": "sore",
+      "zipfFrequency": 3.99,
+      "frequencyRank": 1062
+    },
+    {
+      "id": "ev-moe2022-m-0996",
+      "sourceOrder": 996,
+      "word": "sort",
+      "zipfFrequency": 5.0,
+      "frequencyRank": 211
+    },
+    {
+      "id": "ev-moe2022-m-0997",
+      "sourceOrder": 997,
+      "word": "soul",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 351
+    },
+    {
+      "id": "ev-moe2022-m-0998",
+      "sourceOrder": 998,
+      "word": "sour",
+      "zipfFrequency": 3.88,
+      "frequencyRank": 1117
+    },
+    {
+      "id": "ev-moe2022-m-0999",
+      "sourceOrder": 999,
+      "word": "source",
+      "zipfFrequency": 5.15,
+      "frequencyRank": 113
+    },
+    {
+      "id": "ev-moe2022-m-1000",
+      "sourceOrder": 1000,
+      "word": "spare",
+      "zipfFrequency": 4.28,
+      "frequencyRank": 873
+    },
+    {
+      "id": "ev-moe2022-m-1001",
+      "sourceOrder": 1001,
+      "word": "species",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 315
+    },
+    {
+      "id": "ev-moe2022-m-1002",
+      "sourceOrder": 1002,
+      "word": "specific",
+      "zipfFrequency": 5.03,
+      "frequencyRank": 184
+    },
+    {
+      "id": "ev-moe2022-m-1003",
+      "sourceOrder": 1003,
+      "word": "speech",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 316
+    },
+    {
+      "id": "ev-moe2022-m-1004",
+      "sourceOrder": 1004,
+      "word": "spell",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 789
+    },
+    {
+      "id": "ev-moe2022-m-1005",
+      "sourceOrder": 1005,
+      "word": "spend",
+      "zipfFrequency": 4.97,
+      "frequencyRank": 224
+    },
+    {
+      "id": "ev-moe2022-m-1006",
+      "sourceOrder": 1006,
+      "word": "spin",
+      "zipfFrequency": 4.38,
+      "frequencyRank": 780
+    },
+    {
+      "id": "ev-moe2022-m-1007",
+      "sourceOrder": 1007,
+      "word": "spirit",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 368
+    },
+    {
+      "id": "ev-moe2022-m-1008",
+      "sourceOrder": 1008,
+      "word": "spoil",
+      "zipfFrequency": 3.81,
+      "frequencyRank": 1133
+    },
+    {
+      "id": "ev-moe2022-m-1009",
+      "sourceOrder": 1009,
+      "word": "sponsor",
+      "zipfFrequency": 4.04,
+      "frequencyRank": 1040
+    },
+    {
+      "id": "ev-moe2022-m-1010",
+      "sourceOrder": 1010,
+      "word": "spot",
+      "zipfFrequency": 4.89,
+      "frequencyRank": 281
+    },
+    {
+      "id": "ev-moe2022-m-1011",
+      "sourceOrder": 1011,
+      "word": "spray",
+      "zipfFrequency": 4.18,
+      "frequencyRank": 951
+    },
+    {
+      "id": "ev-moe2022-m-1012",
+      "sourceOrder": 1012,
+      "word": "spread",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 352
+    },
+    {
+      "id": "ev-moe2022-m-1013",
+      "sourceOrder": 1013,
+      "word": "spy",
+      "zipfFrequency": 4.24,
+      "frequencyRank": 900
+    },
+    {
+      "id": "ev-moe2022-m-1014",
+      "sourceOrder": 1014,
+      "word": "square",
+      "zipfFrequency": 4.84,
+      "frequencyRank": 321
+    },
+    {
+      "id": "ev-moe2022-m-1015",
+      "sourceOrder": 1015,
+      "word": "stable",
+      "zipfFrequency": 4.48,
+      "frequencyRank": 687
+    },
+    {
+      "id": "ev-moe2022-m-1016",
+      "sourceOrder": 1016,
+      "word": "stage",
+      "zipfFrequency": 5.1,
+      "frequencyRank": 141
+    },
+    {
+      "id": "ev-moe2022-m-1017",
+      "sourceOrder": 1017,
+      "word": "stairs",
+      "zipfFrequency": 4.14,
+      "frequencyRank": 974
+    },
+    {
+      "id": "ev-moe2022-m-1018",
+      "sourceOrder": 1018,
+      "word": "stamp",
+      "zipfFrequency": 4.11,
+      "frequencyRank": 992
+    },
+    {
+      "id": "ev-moe2022-m-1019",
+      "sourceOrder": 1019,
+      "word": "standard",
+      "zipfFrequency": 5.03,
+      "frequencyRank": 185
+    },
+    {
+      "id": "ev-moe2022-m-1020",
+      "sourceOrder": 1020,
+      "word": "stare",
+      "zipfFrequency": 3.91,
+      "frequencyRank": 1106
+    },
+    {
+      "id": "ev-moe2022-m-1021",
+      "sourceOrder": 1021,
+      "word": "state",
+      "zipfFrequency": 5.78,
+      "frequencyRank": 10
+    },
+    {
+      "id": "ev-moe2022-m-1022",
+      "sourceOrder": 1022,
+      "word": "station",
+      "zipfFrequency": 5.01,
+      "frequencyRank": 199
+    },
+    {
+      "id": "ev-moe2022-m-1023",
+      "sourceOrder": 1023,
+      "word": "steady",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 846
+    },
+    {
+      "id": "ev-moe2022-m-1024",
+      "sourceOrder": 1024,
+      "word": "steal",
+      "zipfFrequency": 4.41,
+      "frequencyRank": 749
+    },
+    {
+      "id": "ev-moe2022-m-1025",
+      "sourceOrder": 1025,
+      "word": "steam",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 649
+    },
+    {
+      "id": "ev-moe2022-m-1026",
+      "sourceOrder": 1026,
+      "word": "steel",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 456
+    },
+    {
+      "id": "ev-moe2022-m-1027",
+      "sourceOrder": 1027,
+      "word": "step",
+      "zipfFrequency": 5.13,
+      "frequencyRank": 124
+    },
+    {
+      "id": "ev-moe2022-m-1028",
+      "sourceOrder": 1028,
+      "word": "stick",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 400
+    },
+    {
+      "id": "ev-moe2022-m-1029",
+      "sourceOrder": 1029,
+      "word": "still",
+      "zipfFrequency": 5.92,
+      "frequencyRank": 6
+    },
+    {
+      "id": "ev-moe2022-m-1030",
+      "sourceOrder": 1030,
+      "word": "stir",
+      "zipfFrequency": 3.96,
+      "frequencyRank": 1085
+    },
+    {
+      "id": "ev-moe2022-m-1031",
+      "sourceOrder": 1031,
+      "word": "stock",
+      "zipfFrequency": 4.93,
+      "frequencyRank": 256
+    },
+    {
+      "id": "ev-moe2022-m-1032",
+      "sourceOrder": 1032,
+      "word": "stomach",
+      "zipfFrequency": 4.42,
+      "frequencyRank": 741
+    },
+    {
+      "id": "ev-moe2022-m-1033",
+      "sourceOrder": 1033,
+      "word": "storm",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 494
+    },
+    {
+      "id": "ev-moe2022-m-1034",
+      "sourceOrder": 1034,
+      "word": "straight",
+      "zipfFrequency": 5.04,
+      "frequencyRank": 179
+    },
+    {
+      "id": "ev-moe2022-m-1035",
+      "sourceOrder": 1035,
+      "word": "strange",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 514
+    },
+    {
+      "id": "ev-moe2022-m-1036",
+      "sourceOrder": 1036,
+      "word": "strategy",
+      "zipfFrequency": 4.74,
+      "frequencyRank": 418
+    },
+    {
+      "id": "ev-moe2022-m-1037",
+      "sourceOrder": 1037,
+      "word": "strawberry",
+      "zipfFrequency": 3.72,
+      "frequencyRank": 1152
+    },
+    {
+      "id": "ev-moe2022-m-1038",
+      "sourceOrder": 1038,
+      "word": "stream",
+      "zipfFrequency": 4.62,
+      "frequencyRank": 529
+    },
+    {
+      "id": "ev-moe2022-m-1039",
+      "sourceOrder": 1039,
+      "word": "stress",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 430
+    },
+    {
+      "id": "ev-moe2022-m-1040",
+      "sourceOrder": 1040,
+      "word": "stretch",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 810
+    },
+    {
+      "id": "ev-moe2022-m-1041",
+      "sourceOrder": 1041,
+      "word": "strike",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 495
+    },
+    {
+      "id": "ev-moe2022-m-1042",
+      "sourceOrder": 1042,
+      "word": "string",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 760
+    },
+    {
+      "id": "ev-moe2022-m-1043",
+      "sourceOrder": 1043,
+      "word": "structure",
+      "zipfFrequency": 4.84,
+      "frequencyRank": 322
+    },
+    {
+      "id": "ev-moe2022-m-1044",
+      "sourceOrder": 1044,
+      "word": "struggle",
+      "zipfFrequency": 4.62,
+      "frequencyRank": 530
+    },
+    {
+      "id": "ev-moe2022-m-1045",
+      "sourceOrder": 1045,
+      "word": "studio",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 496
+    },
+    {
+      "id": "ev-moe2022-m-1046",
+      "sourceOrder": 1046,
+      "word": "stuff",
+      "zipfFrequency": 5.14,
+      "frequencyRank": 119
+    },
+    {
+      "id": "ev-moe2022-m-1047",
+      "sourceOrder": 1047,
+      "word": "subject",
+      "zipfFrequency": 4.96,
+      "frequencyRank": 229
+    },
+    {
+      "id": "ev-moe2022-m-1048",
+      "sourceOrder": 1048,
+      "word": "succeed",
+      "zipfFrequency": 4.29,
+      "frequencyRank": 865
+    },
+    {
+      "id": "ev-moe2022-m-1049",
+      "sourceOrder": 1049,
+      "word": "success",
+      "zipfFrequency": 5.06,
+      "frequencyRank": 170
+    },
+    {
+      "id": "ev-moe2022-m-1050",
+      "sourceOrder": 1050,
+      "word": "such",
+      "zipfFrequency": 5.84,
+      "frequencyRank": 9
+    },
+    {
+      "id": "ev-moe2022-m-1051",
+      "sourceOrder": 1051,
+      "word": "sudden",
+      "zipfFrequency": 4.4,
+      "frequencyRank": 761
+    },
+    {
+      "id": "ev-moe2022-m-1052",
+      "sourceOrder": 1052,
+      "word": "suffer",
+      "zipfFrequency": 4.45,
+      "frequencyRank": 722
+    },
+    {
+      "id": "ev-moe2022-m-1053",
+      "sourceOrder": 1053,
+      "word": "suggest",
+      "zipfFrequency": 4.75,
+      "frequencyRank": 409
+    },
+    {
+      "id": "ev-moe2022-m-1054",
+      "sourceOrder": 1054,
+      "word": "suit",
+      "zipfFrequency": 4.7,
+      "frequencyRank": 465
+    },
+    {
+      "id": "ev-moe2022-m-1055",
+      "sourceOrder": 1055,
+      "word": "sum",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 820
+    },
+    {
+      "id": "ev-moe2022-m-1056",
+      "sourceOrder": 1056,
+      "word": "super",
+      "zipfFrequency": 5.08,
+      "frequencyRank": 160
+    },
+    {
+      "id": "ev-moe2022-m-1057",
+      "sourceOrder": 1057,
+      "word": "supper",
+      "zipfFrequency": 3.74,
+      "frequencyRank": 1148
+    },
+    {
+      "id": "ev-moe2022-m-1058",
+      "sourceOrder": 1058,
+      "word": "supply",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 353
+    },
+    {
+      "id": "ev-moe2022-m-1059",
+      "sourceOrder": 1059,
+      "word": "support",
+      "zipfFrequency": 5.53,
+      "frequencyRank": 28
+    },
+    {
+      "id": "ev-moe2022-m-1060",
+      "sourceOrder": 1060,
+      "word": "suppose",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 599
+    },
+    {
+      "id": "ev-moe2022-m-1061",
+      "sourceOrder": 1061,
+      "word": "surface",
+      "zipfFrequency": 4.83,
+      "frequencyRank": 330
+    },
+    {
+      "id": "ev-moe2022-m-1062",
+      "sourceOrder": 1062,
+      "word": "surprise",
+      "zipfFrequency": 4.75,
+      "frequencyRank": 410
+    },
+    {
+      "id": "ev-moe2022-m-1063",
+      "sourceOrder": 1063,
+      "word": "surround",
+      "zipfFrequency": 3.79,
+      "frequencyRank": 1139
+    },
+    {
+      "id": "ev-moe2022-m-1064",
+      "sourceOrder": 1064,
+      "word": "survey",
+      "zipfFrequency": 4.69,
+      "frequencyRank": 470
+    },
+    {
+      "id": "ev-moe2022-m-1065",
+      "sourceOrder": 1065,
+      "word": "survive",
+      "zipfFrequency": 4.52,
+      "frequencyRank": 650
+    },
+    {
+      "id": "ev-moe2022-m-1066",
+      "sourceOrder": 1066,
+      "word": "suspect",
+      "zipfFrequency": 4.51,
+      "frequencyRank": 657
+    },
+    {
+      "id": "ev-moe2022-m-1067",
+      "sourceOrder": 1067,
+      "word": "swallow",
+      "zipfFrequency": 3.87,
+      "frequencyRank": 1121
+    },
+    {
+      "id": "ev-moe2022-m-1068",
+      "sourceOrder": 1068,
+      "word": "sweater",
+      "zipfFrequency": 3.78,
+      "frequencyRank": 1142
+    },
+    {
+      "id": "ev-moe2022-m-1069",
+      "sourceOrder": 1069,
+      "word": "sweep",
+      "zipfFrequency": 3.97,
+      "frequencyRank": 1080
+    },
+    {
+      "id": "ev-moe2022-m-1070",
+      "sourceOrder": 1070,
+      "word": "sweet",
+      "zipfFrequency": 4.91,
+      "frequencyRank": 269
+    },
+    {
+      "id": "ev-moe2022-m-1071",
+      "sourceOrder": 1071,
+      "word": "swing",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 821
+    },
+    {
+      "id": "ev-moe2022-m-1072",
+      "sourceOrder": 1072,
+      "word": "switch",
+      "zipfFrequency": 4.6,
+      "frequencyRank": 547
+    },
+    {
+      "id": "ev-moe2022-m-1073",
+      "sourceOrder": 1073,
+      "word": "system",
+      "zipfFrequency": 5.56,
+      "frequencyRank": 23
+    },
+    {
+      "id": "ev-moe2022-m-1074",
+      "sourceOrder": 1074,
+      "word": "tale",
+      "zipfFrequency": 4.29,
+      "frequencyRank": 866
+    },
+    {
+      "id": "ev-moe2022-m-1075",
+      "sourceOrder": 1075,
+      "word": "tank",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 586
+    },
+    {
+      "id": "ev-moe2022-m-1076",
+      "sourceOrder": 1076,
+      "word": "tap",
+      "zipfFrequency": 4.28,
+      "frequencyRank": 874
+    },
+    {
+      "id": "ev-moe2022-m-1077",
+      "sourceOrder": 1077,
+      "word": "target",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 342
+    },
+    {
+      "id": "ev-moe2022-m-1078",
+      "sourceOrder": 1078,
+      "word": "tax",
+      "zipfFrequency": 5.14,
+      "frequencyRank": 120
+    },
+    {
+      "id": "ev-moe2022-m-1079",
+      "sourceOrder": 1079,
+      "word": "tea",
+      "zipfFrequency": 4.73,
+      "frequencyRank": 431
+    },
+    {
+      "id": "ev-moe2022-m-1080",
+      "sourceOrder": 1080,
+      "word": "tear",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 811
+    },
+    {
+      "id": "ev-moe2022-m-1081",
+      "sourceOrder": 1081,
+      "word": "technique",
+      "zipfFrequency": 4.47,
+      "frequencyRank": 695
+    },
+    {
+      "id": "ev-moe2022-m-1082",
+      "sourceOrder": 1082,
+      "word": "technology",
+      "zipfFrequency": 5.09,
+      "frequencyRank": 148
+    },
+    {
+      "id": "ev-moe2022-m-1083",
+      "sourceOrder": 1083,
+      "word": "teenage",
+      "zipfFrequency": 4.14,
+      "frequencyRank": 975
+    },
+    {
+      "id": "ev-moe2022-m-1084",
+      "sourceOrder": 1084,
+      "word": "temperature",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 515
+    },
+    {
+      "id": "ev-moe2022-m-1085",
+      "sourceOrder": 1085,
+      "word": "tend",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 587
+    },
+    {
+      "id": "ev-moe2022-m-1086",
+      "sourceOrder": 1086,
+      "word": "tense",
+      "zipfFrequency": 3.95,
+      "frequencyRank": 1090
+    },
+    {
+      "id": "ev-moe2022-m-1087",
+      "sourceOrder": 1087,
+      "word": "term",
+      "zipfFrequency": 5.23,
+      "frequencyRank": 82
+    },
+    {
+      "id": "ev-moe2022-m-1088",
+      "sourceOrder": 1088,
+      "word": "terrible",
+      "zipfFrequency": 4.71,
+      "frequencyRank": 457
+    },
+    {
+      "id": "ev-moe2022-m-1089",
+      "sourceOrder": 1089,
+      "word": "text",
+      "zipfFrequency": 5.01,
+      "frequencyRank": 200
+    },
+    {
+      "id": "ev-moe2022-m-1090",
+      "sourceOrder": 1090,
+      "word": "theater",
+      "zipfFrequency": 4.35,
+      "frequencyRank": 812
+    },
+    {
+      "id": "ev-moe2022-m-1091",
+      "sourceOrder": 1091,
+      "word": "then",
+      "zipfFrequency": 6.07,
+      "frequencyRank": 4
+    },
+    {
+      "id": "ev-moe2022-m-1092",
+      "sourceOrder": 1092,
+      "word": "theory",
+      "zipfFrequency": 4.88,
+      "frequencyRank": 290
+    },
+    {
+      "id": "ev-moe2022-m-1093",
+      "sourceOrder": 1093,
+      "word": "therefore",
+      "zipfFrequency": 4.87,
+      "frequencyRank": 301
+    },
+    {
+      "id": "ev-moe2022-m-1094",
+      "sourceOrder": 1094,
+      "word": "thick",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 708
+    },
+    {
+      "id": "ev-moe2022-m-1095",
+      "sourceOrder": 1095,
+      "word": "thief",
+      "zipfFrequency": 3.88,
+      "frequencyRank": 1118
+    },
+    {
+      "id": "ev-moe2022-m-1096",
+      "sourceOrder": 1096,
+      "word": "thin",
+      "zipfFrequency": 4.47,
+      "frequencyRank": 696
+    },
+    {
+      "id": "ev-moe2022-m-1097",
+      "sourceOrder": 1097,
+      "word": "though",
+      "zipfFrequency": 5.5,
+      "frequencyRank": 29
+    },
+    {
+      "id": "ev-moe2022-m-1098",
+      "sourceOrder": 1098,
+      "word": "thousand",
+      "zipfFrequency": 4.64,
+      "frequencyRank": 516
+    },
+    {
+      "id": "ev-moe2022-m-1099",
+      "sourceOrder": 1099,
+      "word": "threat",
+      "zipfFrequency": 4.6,
+      "frequencyRank": 548
+    },
+    {
+      "id": "ev-moe2022-m-1100",
+      "sourceOrder": 1100,
+      "word": "throat",
+      "zipfFrequency": 4.3,
+      "frequencyRank": 857
+    },
+    {
+      "id": "ev-moe2022-m-1101",
+      "sourceOrder": 1101,
+      "word": "through",
+      "zipfFrequency": 5.87,
+      "frequencyRank": 7
+    },
+    {
+      "id": "ev-moe2022-m-1102",
+      "sourceOrder": 1102,
+      "word": "throw",
+      "zipfFrequency": 4.83,
+      "frequencyRank": 331
+    },
+    {
+      "id": "ev-moe2022-m-1103",
+      "sourceOrder": 1103,
+      "word": "thus",
+      "zipfFrequency": 4.91,
+      "frequencyRank": 270
+    },
+    {
+      "id": "ev-moe2022-m-1104",
+      "sourceOrder": 1104,
+      "word": "tide",
+      "zipfFrequency": 4.05,
+      "frequencyRank": 1034
+    },
+    {
+      "id": "ev-moe2022-m-1105",
+      "sourceOrder": 1105,
+      "word": "tie",
+      "zipfFrequency": 4.51,
+      "frequencyRank": 658
+    },
+    {
+      "id": "ev-moe2022-m-1106",
+      "sourceOrder": 1106,
+      "word": "tight",
+      "zipfFrequency": 4.57,
+      "frequencyRank": 588
+    },
+    {
+      "id": "ev-moe2022-m-1107",
+      "sourceOrder": 1107,
+      "word": "till",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 369
+    },
+    {
+      "id": "ev-moe2022-m-1108",
+      "sourceOrder": 1108,
+      "word": "tin",
+      "zipfFrequency": 4.03,
+      "frequencyRank": 1046
+    },
+    {
+      "id": "ev-moe2022-m-1109",
+      "sourceOrder": 1109,
+      "word": "tiny",
+      "zipfFrequency": 4.62,
+      "frequencyRank": 531
+    },
+    {
+      "id": "ev-moe2022-m-1110",
+      "sourceOrder": 1110,
+      "word": "tip",
+      "zipfFrequency": 4.55,
+      "frequencyRank": 620
+    },
+    {
+      "id": "ev-moe2022-m-1111",
+      "sourceOrder": 1111,
+      "word": "title",
+      "zipfFrequency": 5.1,
+      "frequencyRank": 142
+    },
+    {
+      "id": "ev-moe2022-m-1112",
+      "sourceOrder": 1112,
+      "word": "toast",
+      "zipfFrequency": 3.96,
+      "frequencyRank": 1086
+    },
+    {
+      "id": "ev-moe2022-m-1113",
+      "sourceOrder": 1113,
+      "word": "toe",
+      "zipfFrequency": 4.07,
+      "frequencyRank": 1018
+    },
+    {
+      "id": "ev-moe2022-m-1114",
+      "sourceOrder": 1114,
+      "word": "toilet",
+      "zipfFrequency": 4.31,
+      "frequencyRank": 847
+    },
+    {
+      "id": "ev-moe2022-m-1115",
+      "sourceOrder": 1115,
+      "word": "tone",
+      "zipfFrequency": 4.49,
+      "frequencyRank": 678
+    },
+    {
+      "id": "ev-moe2022-m-1116",
+      "sourceOrder": 1116,
+      "word": "tongue",
+      "zipfFrequency": 4.37,
+      "frequencyRank": 790
+    },
+    {
+      "id": "ev-moe2022-m-1117",
+      "sourceOrder": 1117,
+      "word": "tool",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 600
+    },
+    {
+      "id": "ev-moe2022-m-1118",
+      "sourceOrder": 1118,
+      "word": "topic",
+      "zipfFrequency": 4.49,
+      "frequencyRank": 679
+    },
+    {
+      "id": "ev-moe2022-m-1119",
+      "sourceOrder": 1119,
+      "word": "total",
+      "zipfFrequency": 5.21,
+      "frequencyRank": 90
+    },
+    {
+      "id": "ev-moe2022-m-1120",
+      "sourceOrder": 1120,
+      "word": "tough",
+      "zipfFrequency": 4.77,
+      "frequencyRank": 392
+    },
+    {
+      "id": "ev-moe2022-m-1121",
+      "sourceOrder": 1121,
+      "word": "tour",
+      "zipfFrequency": 4.99,
+      "frequencyRank": 216
+    },
+    {
+      "id": "ev-moe2022-m-1122",
+      "sourceOrder": 1122,
+      "word": "toward",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 442
+    },
+    {
+      "id": "ev-moe2022-m-1123",
+      "sourceOrder": 1123,
+      "word": "towel",
+      "zipfFrequency": 3.94,
+      "frequencyRank": 1095
+    },
+    {
+      "id": "ev-moe2022-m-1124",
+      "sourceOrder": 1124,
+      "word": "tower",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 668
+    },
+    {
+      "id": "ev-moe2022-m-1125",
+      "sourceOrder": 1125,
+      "word": "trace",
+      "zipfFrequency": 4.19,
+      "frequencyRank": 942
+    },
+    {
+      "id": "ev-moe2022-m-1126",
+      "sourceOrder": 1126,
+      "word": "trade",
+      "zipfFrequency": 5.12,
+      "frequencyRank": 128
+    },
+    {
+      "id": "ev-moe2022-m-1127",
+      "sourceOrder": 1127,
+      "word": "tradition",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 669
+    },
+    {
+      "id": "ev-moe2022-m-1128",
+      "sourceOrder": 1128,
+      "word": "traffic",
+      "zipfFrequency": 4.85,
+      "frequencyRank": 317
+    },
+    {
+      "id": "ev-moe2022-m-1129",
+      "sourceOrder": 1129,
+      "word": "transfer",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 443
+    },
+    {
+      "id": "ev-moe2022-m-1130",
+      "sourceOrder": 1130,
+      "word": "transport",
+      "zipfFrequency": 4.68,
+      "frequencyRank": 476
+    },
+    {
+      "id": "ev-moe2022-m-1131",
+      "sourceOrder": 1131,
+      "word": "trap",
+      "zipfFrequency": 4.33,
+      "frequencyRank": 828
+    },
+    {
+      "id": "ev-moe2022-m-1132",
+      "sourceOrder": 1132,
+      "word": "tray",
+      "zipfFrequency": 3.75,
+      "frequencyRank": 1147
+    },
+    {
+      "id": "ev-moe2022-m-1133",
+      "sourceOrder": 1133,
+      "word": "treat",
+      "zipfFrequency": 4.75,
+      "frequencyRank": 411
+    },
+    {
+      "id": "ev-moe2022-m-1134",
+      "sourceOrder": 1134,
+      "word": "triangle",
+      "zipfFrequency": 3.93,
+      "frequencyRank": 1099
+    },
+    {
+      "id": "ev-moe2022-m-1135",
+      "sourceOrder": 1135,
+      "word": "trick",
+      "zipfFrequency": 4.48,
+      "frequencyRank": 688
+    },
+    {
+      "id": "ev-moe2022-m-1136",
+      "sourceOrder": 1136,
+      "word": "trouble",
+      "zipfFrequency": 4.79,
+      "frequencyRank": 370
+    },
+    {
+      "id": "ev-moe2022-m-1137",
+      "sourceOrder": 1137,
+      "word": "trunk",
+      "zipfFrequency": 4.03,
+      "frequencyRank": 1047
+    },
+    {
+      "id": "ev-moe2022-m-1138",
+      "sourceOrder": 1138,
+      "word": "trust",
+      "zipfFrequency": 5.13,
+      "frequencyRank": 125
+    },
+    {
+      "id": "ev-moe2022-m-1139",
+      "sourceOrder": 1139,
+      "word": "truth",
+      "zipfFrequency": 5.05,
+      "frequencyRank": 175
+    },
+    {
+      "id": "ev-moe2022-m-1140",
+      "sourceOrder": 1140,
+      "word": "tune",
+      "zipfFrequency": 4.27,
+      "frequencyRank": 878
+    },
+    {
+      "id": "ev-moe2022-m-1141",
+      "sourceOrder": 1141,
+      "word": "twin",
+      "zipfFrequency": 4.34,
+      "frequencyRank": 822
+    },
+    {
+      "id": "ev-moe2022-m-1142",
+      "sourceOrder": 1142,
+      "word": "twist",
+      "zipfFrequency": 4.22,
+      "frequencyRank": 918
+    },
+    {
+      "id": "ev-moe2022-m-1143",
+      "sourceOrder": 1143,
+      "word": "uniform",
+      "zipfFrequency": 4.33,
+      "frequencyRank": 829
+    },
+    {
+      "id": "ev-moe2022-m-1144",
+      "sourceOrder": 1144,
+      "word": "unit",
+      "zipfFrequency": 4.95,
+      "frequencyRank": 239
+    },
+    {
+      "id": "ev-moe2022-m-1145",
+      "sourceOrder": 1145,
+      "word": "unite",
+      "zipfFrequency": 3.9,
+      "frequencyRank": 1112
+    },
+    {
+      "id": "ev-moe2022-m-1146",
+      "sourceOrder": 1146,
+      "word": "university",
+      "zipfFrequency": 5.39,
+      "frequencyRank": 47
+    },
+    {
+      "id": "ev-moe2022-m-1147",
+      "sourceOrder": 1147,
+      "word": "unless",
+      "zipfFrequency": 4.98,
+      "frequencyRank": 220
+    },
+    {
+      "id": "ev-moe2022-m-1148",
+      "sourceOrder": 1148,
+      "word": "until",
+      "zipfFrequency": 5.61,
+      "frequencyRank": 18
+    },
+    {
+      "id": "ev-moe2022-m-1149",
+      "sourceOrder": 1149,
+      "word": "upon",
+      "zipfFrequency": 5.12,
+      "frequencyRank": 129
+    },
+    {
+      "id": "ev-moe2022-m-1150",
+      "sourceOrder": 1150,
+      "word": "upper",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 444
+    },
+    {
+      "id": "ev-moe2022-m-1151",
+      "sourceOrder": 1151,
+      "word": "upset",
+      "zipfFrequency": 4.61,
+      "frequencyRank": 539
+    },
+    {
+      "id": "ev-moe2022-m-1152",
+      "sourceOrder": 1152,
+      "word": "valley",
+      "zipfFrequency": 4.72,
+      "frequencyRank": 445
+    },
+    {
+      "id": "ev-moe2022-m-1153",
+      "sourceOrder": 1153,
+      "word": "value",
+      "zipfFrequency": 5.15,
+      "frequencyRank": 114
+    },
+    {
+      "id": "ev-moe2022-m-1154",
+      "sourceOrder": 1154,
+      "word": "van",
+      "zipfFrequency": 4.78,
+      "frequencyRank": 383
+    },
+    {
+      "id": "ev-moe2022-m-1155",
+      "sourceOrder": 1155,
+      "word": "various",
+      "zipfFrequency": 5.12,
+      "frequencyRank": 130
+    },
+    {
+      "id": "ev-moe2022-m-1156",
+      "sourceOrder": 1156,
+      "word": "vary",
+      "zipfFrequency": 4.25,
+      "frequencyRank": 895
+    },
+    {
+      "id": "ev-moe2022-m-1157",
+      "sourceOrder": 1157,
+      "word": "vehicle",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 401
+    },
+    {
+      "id": "ev-moe2022-m-1158",
+      "sourceOrder": 1158,
+      "word": "version",
+      "zipfFrequency": 5.07,
+      "frequencyRank": 166
+    },
+    {
+      "id": "ev-moe2022-m-1159",
+      "sourceOrder": 1159,
+      "word": "victim",
+      "zipfFrequency": 4.56,
+      "frequencyRank": 601
+    },
+    {
+      "id": "ev-moe2022-m-1160",
+      "sourceOrder": 1160,
+      "word": "view",
+      "zipfFrequency": 5.19,
+      "frequencyRank": 101
+    },
+    {
+      "id": "ev-moe2022-m-1161",
+      "sourceOrder": 1161,
+      "word": "villa",
+      "zipfFrequency": 4.2,
+      "frequencyRank": 932
+    },
+    {
+      "id": "ev-moe2022-m-1162",
+      "sourceOrder": 1162,
+      "word": "village",
+      "zipfFrequency": 4.82,
+      "frequencyRank": 343
+    },
+    {
+      "id": "ev-moe2022-m-1163",
+      "sourceOrder": 1163,
+      "word": "violent",
+      "zipfFrequency": 4.46,
+      "frequencyRank": 709
+    },
+    {
+      "id": "ev-moe2022-m-1164",
+      "sourceOrder": 1164,
+      "word": "vision",
+      "zipfFrequency": 4.63,
+      "frequencyRank": 523
+    },
+    {
+      "id": "ev-moe2022-m-1165",
+      "sourceOrder": 1165,
+      "word": "volume",
+      "zipfFrequency": 4.76,
+      "frequencyRank": 402
+    },
+    {
+      "id": "ev-moe2022-m-1166",
+      "sourceOrder": 1166,
+      "word": "volunteer",
+      "zipfFrequency": 4.28,
+      "frequencyRank": 875
+    },
+    {
+      "id": "ev-moe2022-m-1167",
+      "sourceOrder": 1167,
+      "word": "vote",
+      "zipfFrequency": 5.11,
+      "frequencyRank": 136
+    },
+    {
+      "id": "ev-moe2022-m-1168",
+      "sourceOrder": 1168,
+      "word": "wage",
+      "zipfFrequency": 4.44,
+      "frequencyRank": 728
+    },
+    {
+      "id": "ev-moe2022-m-1169",
+      "sourceOrder": 1169,
+      "word": "warn",
+      "zipfFrequency": 4.02,
+      "frequencyRank": 1053
+    },
+    {
+      "id": "ev-moe2022-m-1170",
+      "sourceOrder": 1170,
+      "word": "waste",
+      "zipfFrequency": 4.81,
+      "frequencyRank": 354
+    },
+    {
+      "id": "ev-moe2022-m-1171",
+      "sourceOrder": 1171,
+      "word": "wave",
+      "zipfFrequency": 4.62,
+      "frequencyRank": 532
+    },
+    {
+      "id": "ev-moe2022-m-1172",
+      "sourceOrder": 1172,
+      "word": "weak",
+      "zipfFrequency": 4.66,
+      "frequencyRank": 497
+    },
+    {
+      "id": "ev-moe2022-m-1173",
+      "sourceOrder": 1173,
+      "word": "weapon",
+      "zipfFrequency": 4.54,
+      "frequencyRank": 631
+    },
+    {
+      "id": "ev-moe2022-m-1174",
+      "sourceOrder": 1174,
+      "word": "weigh",
+      "zipfFrequency": 3.99,
+      "frequencyRank": 1063
+    },
+    {
+      "id": "ev-moe2022-m-1175",
+      "sourceOrder": 1175,
+      "word": "whale",
+      "zipfFrequency": 3.98,
+      "frequencyRank": 1074
+    },
+    {
+      "id": "ev-moe2022-m-1176",
+      "sourceOrder": 1176,
+      "word": "wheel",
+      "zipfFrequency": 4.5,
+      "frequencyRank": 670
+    },
+    {
+      "id": "ev-moe2022-m-1177",
+      "sourceOrder": 1177,
+      "word": "whether",
+      "zipfFrequency": 5.32,
+      "frequencyRank": 64
+    },
+    {
+      "id": "ev-moe2022-m-1178",
+      "sourceOrder": 1178,
+      "word": "which",
+      "zipfFrequency": 6.3,
+      "frequencyRank": 1
+    },
+    {
+      "id": "ev-moe2022-m-1179",
+      "sourceOrder": 1179,
+      "word": "while",
+      "zipfFrequency": 5.86,
+      "frequencyRank": 8
+    },
+    {
+      "id": "ev-moe2022-m-1180",
+      "sourceOrder": 1180,
+      "word": "whisper",
+      "zipfFrequency": 3.74,
+      "frequencyRank": 1149
+    },
+    {
+      "id": "ev-moe2022-m-1181",
+      "sourceOrder": 1181,
+      "word": "whistle",
+      "zipfFrequency": 3.88,
+      "frequencyRank": 1119
+    },
+    {
+      "id": "ev-moe2022-m-1182",
+      "sourceOrder": 1182,
+      "word": "whole",
+      "zipfFrequency": 5.46,
+      "frequencyRank": 33
+    },
+    {
+      "id": "ev-moe2022-m-1183",
+      "sourceOrder": 1183,
+      "word": "wide",
+      "zipfFrequency": 4.96,
+      "frequencyRank": 230
+    },
+    {
+      "id": "ev-moe2022-m-1184",
+      "sourceOrder": 1184,
+      "word": "wild",
+      "zipfFrequency": 4.8,
+      "frequencyRank": 359
+    },
+    {
+      "id": "ev-moe2022-m-1185",
+      "sourceOrder": 1185,
+      "word": "wing",
+      "zipfFrequency": 4.61,
+      "frequencyRank": 540
+    },
+    {
+      "id": "ev-moe2022-m-1186",
+      "sourceOrder": 1186,
+      "word": "wipe",
+      "zipfFrequency": 4.01,
+      "frequencyRank": 1055
+    },
+    {
+      "id": "ev-moe2022-m-1187",
+      "sourceOrder": 1187,
+      "word": "wire",
+      "zipfFrequency": 4.43,
+      "frequencyRank": 732
+    },
+    {
+      "id": "ev-moe2022-m-1188",
+      "sourceOrder": 1188,
+      "word": "wise",
+      "zipfFrequency": 4.51,
+      "frequencyRank": 659
+    },
+    {
+      "id": "ev-moe2022-m-1189",
+      "sourceOrder": 1189,
+      "word": "within",
+      "zipfFrequency": 5.44,
+      "frequencyRank": 37
+    },
+    {
+      "id": "ev-moe2022-m-1190",
+      "sourceOrder": 1190,
+      "word": "without",
+      "zipfFrequency": 5.69,
+      "frequencyRank": 14
+    },
+    {
+      "id": "ev-moe2022-m-1191",
+      "sourceOrder": 1191,
+      "word": "wonder",
+      "zipfFrequency": 4.93,
+      "frequencyRank": 257
+    },
+    {
+      "id": "ev-moe2022-m-1192",
+      "sourceOrder": 1192,
+      "word": "wool",
+      "zipfFrequency": 3.91,
+      "frequencyRank": 1107
+    },
+    {
+      "id": "ev-moe2022-m-1193",
+      "sourceOrder": 1193,
+      "word": "worth",
+      "zipfFrequency": 5.16,
+      "frequencyRank": 111
+    },
+    {
+      "id": "ev-moe2022-m-1194",
+      "sourceOrder": 1194,
+      "word": "would",
+      "zipfFrequency": 6.27,
+      "frequencyRank": 2
+    },
+    {
+      "id": "ev-moe2022-m-1195",
+      "sourceOrder": 1195,
+      "word": "wound",
+      "zipfFrequency": 4.24,
+      "frequencyRank": 901
+    },
+    {
+      "id": "ev-moe2022-m-1196",
+      "sourceOrder": 1196,
+      "word": "wrap",
+      "zipfFrequency": 4.2,
+      "frequencyRank": 933
+    },
+    {
+      "id": "ev-moe2022-m-1197",
+      "sourceOrder": 1197,
+      "word": "yell",
+      "zipfFrequency": 3.85,
+      "frequencyRank": 1126
+    },
+    {
+      "id": "ev-moe2022-m-1198",
+      "sourceOrder": 1198,
+      "word": "yet",
+      "zipfFrequency": 5.54,
+      "frequencyRank": 25
+    },
+    {
+      "id": "ev-moe2022-m-1199",
+      "sourceOrder": 1199,
+      "word": "zebra",
+      "zipfFrequency": 3.4,
+      "frequencyRank": 1182
+    },
+    {
+      "id": "ev-moe2022-m-1200",
+      "sourceOrder": 1200,
+      "word": "zero",
+      "zipfFrequency": 4.63,
+      "frequencyRank": 524
+    }
+  ]
+}

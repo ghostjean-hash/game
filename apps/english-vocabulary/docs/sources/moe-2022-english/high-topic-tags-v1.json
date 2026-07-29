@@ -1,0 +1,6025 @@
+{
+  "schemaVersion": 1,
+  "status": "editorial-draft",
+  "source": {
+    "cardSource": "high-authoring-batch-01.json~high-authoring-batch-05.json",
+    "classificationBasis": "reviewed Korean gloss and example sentence",
+    "orderingBasis": "commercial ELT topic/context organization; not alphabetic, POS balance, or frequency alone"
+  },
+  "topics": [
+    "action_change_description",
+    "communication_thinking_social",
+    "core_function",
+    "home_food_clothes",
+    "nature_weather_animals",
+    "objects_and_materials",
+    "play_sport_arts",
+    "school_learning_media",
+    "self_and_people",
+    "society_culture_work",
+    "time_numbers_measure",
+    "town_travel_places"
+  ],
+  "cards": [
+    {
+      "id": "ev-moe2022-h-0001",
+      "word": "abandon",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0002",
+      "word": "aboard",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0003",
+      "word": "abort",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0004",
+      "word": "abound",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0005",
+      "word": "abroad",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0006",
+      "word": "absent",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0007",
+      "word": "absorb",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0008",
+      "word": "abstract",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0009",
+      "word": "absurd",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0010",
+      "word": "abuse",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0011",
+      "word": "academy",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0012",
+      "word": "accelerate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0013",
+      "word": "accommodate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0014",
+      "word": "accompany",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0015",
+      "word": "accomplish",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0016",
+      "word": "accord",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0017",
+      "word": "accumulate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0018",
+      "word": "accurate",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0019",
+      "word": "ache",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0020",
+      "word": "acid",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0021",
+      "word": "acknowledge",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0022",
+      "word": "acquire",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0023",
+      "word": "acquisition",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0024",
+      "word": "addict",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0025",
+      "word": "adequate",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0026",
+      "word": "adjust",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0027",
+      "word": "administer",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0028",
+      "word": "adolescent",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0029",
+      "word": "adverse",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0030",
+      "word": "advocate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0031",
+      "word": "aesthetic",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0032",
+      "word": "agency",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0033",
+      "word": "agenda",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0034",
+      "word": "aggress",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0035",
+      "word": "agriculture",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0036",
+      "word": "alert",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0037",
+      "word": "alien",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0038",
+      "word": "alike",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0039",
+      "word": "allocate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0040",
+      "word": "ally",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0041",
+      "word": "alongside",
+      "primaryTopic": "core_function",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0042",
+      "word": "alternate",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0043",
+      "word": "ambassador",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0044",
+      "word": "ambition",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0045",
+      "word": "analyze",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0046",
+      "word": "anchor",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0047",
+      "word": "ancient",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0048",
+      "word": "angle",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0049",
+      "word": "anniversary",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0050",
+      "word": "anticipate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0051",
+      "word": "anxiety",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0052",
+      "word": "apology",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0053",
+      "word": "apparent",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0054",
+      "word": "approve",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0055",
+      "word": "approximate",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0056",
+      "word": "architect",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0057",
+      "word": "arise",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0058",
+      "word": "arrow",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0059",
+      "word": "artifice",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0060",
+      "word": "aspect",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0061",
+      "word": "aspire",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0062",
+      "word": "assault",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0063",
+      "word": "assemble",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0064",
+      "word": "assert",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0065",
+      "word": "asset",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0066",
+      "word": "assure",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0067",
+      "word": "astonish",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0068",
+      "word": "athlete",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0069",
+      "word": "atom",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0070",
+      "word": "attribute",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0071",
+      "word": "auction",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0072",
+      "word": "authentic",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0073",
+      "word": "author",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0074",
+      "word": "avail",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0075",
+      "word": "await",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0076",
+      "word": "awe",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0077",
+      "word": "ban",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0078",
+      "word": "bankrupt",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0079",
+      "word": "bargain",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0080",
+      "word": "barrier",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0081",
+      "word": "beam",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0082",
+      "word": "beard",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0083",
+      "word": "beast",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0084",
+      "word": "behalf",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0085",
+      "word": "behave",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0086",
+      "word": "betray",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0087",
+      "word": "bias",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0088",
+      "word": "biography",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0089",
+      "word": "biology",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0090",
+      "word": "blast",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0091",
+      "word": "blend",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0092",
+      "word": "blink",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0093",
+      "word": "blossom",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0094",
+      "word": "bold",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0095",
+      "word": "boost",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0096",
+      "word": "border",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0097",
+      "word": "boundary",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0098",
+      "word": "breed",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0099",
+      "word": "breeze",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0100",
+      "word": "broadcast",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0101",
+      "word": "brute",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0102",
+      "word": "bulk",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0103",
+      "word": "bull",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0104",
+      "word": "bully",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0105",
+      "word": "bundle",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0106",
+      "word": "burden",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0107",
+      "word": "butcher",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0108",
+      "word": "buzz",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0109",
+      "word": "cancel",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0110",
+      "word": "cancer",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0111",
+      "word": "candidate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0112",
+      "word": "canvas",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0113",
+      "word": "capture",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0114",
+      "word": "carve",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0115",
+      "word": "cater",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0116",
+      "word": "cattle",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0117",
+      "word": "caution",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0118",
+      "word": "cave",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0119",
+      "word": "cease",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0120",
+      "word": "celebrate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0121",
+      "word": "celebrity",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0122",
+      "word": "censor",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0123",
+      "word": "certificate",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0124",
+      "word": "chamber",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0125",
+      "word": "chaos",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0126",
+      "word": "charity",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0127",
+      "word": "chef",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0128",
+      "word": "chemical",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0129",
+      "word": "chill",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0130",
+      "word": "chin",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0131",
+      "word": "choir",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0132",
+      "word": "chorus",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0133",
+      "word": "chronic",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0134",
+      "word": "circulate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0135",
+      "word": "cite",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0136",
+      "word": "clap",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0137",
+      "word": "clash",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0138",
+      "word": "clause",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0139",
+      "word": "clay",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0140",
+      "word": "cling",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0141",
+      "word": "clinic",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0142",
+      "word": "cluster",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0143",
+      "word": "coincide",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0144",
+      "word": "collaborate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0145",
+      "word": "collapse",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0146",
+      "word": "collar",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0147",
+      "word": "colleague",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0148",
+      "word": "colony",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0149",
+      "word": "column",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0150",
+      "word": "combat",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0151",
+      "word": "commit",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0152",
+      "word": "commodity",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0153",
+      "word": "communist",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0154",
+      "word": "companion",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0155",
+      "word": "compatible",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0156",
+      "word": "compel",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0157",
+      "word": "compensate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0158",
+      "word": "compete",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0159",
+      "word": "compile",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0160",
+      "word": "complement",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0161",
+      "word": "component",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0162",
+      "word": "compose",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0163",
+      "word": "compound",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0164",
+      "word": "comprehend",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0165",
+      "word": "comprise",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0166",
+      "word": "compromise",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0167",
+      "word": "conceal",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0168",
+      "word": "conceive",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0169",
+      "word": "conclude",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0170",
+      "word": "concrete",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0171",
+      "word": "condemn",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0172",
+      "word": "conduct",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0173",
+      "word": "confer",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0174",
+      "word": "confess",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0175",
+      "word": "confide",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0176",
+      "word": "confine",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0177",
+      "word": "conform",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0178",
+      "word": "confront",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0179",
+      "word": "congress",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0180",
+      "word": "conscience",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0181",
+      "word": "consent",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0182",
+      "word": "conserve",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0183",
+      "word": "consist",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0184",
+      "word": "constitute",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0185",
+      "word": "constrain",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0186",
+      "word": "construct",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0187",
+      "word": "consult",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0188",
+      "word": "contemporary",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0189",
+      "word": "contend",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0190",
+      "word": "continent",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0191",
+      "word": "contradict",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0192",
+      "word": "contrary",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0193",
+      "word": "contrast",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0194",
+      "word": "controversy",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0195",
+      "word": "convene",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0196",
+      "word": "convert",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0197",
+      "word": "convey",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0198",
+      "word": "convict",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0199",
+      "word": "cooperate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0200",
+      "word": "coordinate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0201",
+      "word": "copyright",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0202",
+      "word": "cord",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0203",
+      "word": "core",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0204",
+      "word": "corn",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0205",
+      "word": "corporate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0206",
+      "word": "correspond",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0207",
+      "word": "corridor",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0208",
+      "word": "corrupt",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0209",
+      "word": "costume",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0210",
+      "word": "counsel",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0211",
+      "word": "counterpart",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0212",
+      "word": "coupon",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0213",
+      "word": "courage",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0214",
+      "word": "craft",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0215",
+      "word": "craze",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0216",
+      "word": "credible",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0217",
+      "word": "creep",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0218",
+      "word": "crew",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0219",
+      "word": "criterion",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0220",
+      "word": "critic",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0221",
+      "word": "crop",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0222",
+      "word": "crucial",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0223",
+      "word": "cruise",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0224",
+      "word": "crush",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0225",
+      "word": "crystal",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0226",
+      "word": "cultivate",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0227",
+      "word": "currency",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0228",
+      "word": "curriculum",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0229",
+      "word": "curry",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0230",
+      "word": "curse",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0231",
+      "word": "curve",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0232",
+      "word": "custody",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0233",
+      "word": "custom",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0234",
+      "word": "cynical",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0235",
+      "word": "dairy",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0236",
+      "word": "damp",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0237",
+      "word": "dash",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0238",
+      "word": "database",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0239",
+      "word": "datum",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0240",
+      "word": "decade",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0241",
+      "word": "decay",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0242",
+      "word": "decent",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0243",
+      "word": "declare",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0244",
+      "word": "decline",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0245",
+      "word": "decrease",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0246",
+      "word": "dedicate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0247",
+      "word": "defeat",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0248",
+      "word": "defend",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0249",
+      "word": "deficiency",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0250",
+      "word": "deficit",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0251",
+      "word": "delegate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0252",
+      "word": "delete",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0253",
+      "word": "deliberate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0254",
+      "word": "delicate",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0255",
+      "word": "democracy",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0256",
+      "word": "democrat",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0257",
+      "word": "demon",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0258",
+      "word": "dense",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0259",
+      "word": "depart",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0260",
+      "word": "depict",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0261",
+      "word": "deposit",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0262",
+      "word": "deprive",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0263",
+      "word": "derive",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0264",
+      "word": "descend",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0265",
+      "word": "designate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0266",
+      "word": "despair",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0267",
+      "word": "destine",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0268",
+      "word": "destiny",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0269",
+      "word": "destruct",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0270",
+      "word": "detach",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0271",
+      "word": "device",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0272",
+      "word": "devil",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0273",
+      "word": "devise",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0274",
+      "word": "devote",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0275",
+      "word": "diabetes",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0276",
+      "word": "dictate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0277",
+      "word": "differ",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0278",
+      "word": "dignity",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0279",
+      "word": "dimension",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0280",
+      "word": "diminish",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0281",
+      "word": "dine",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0282",
+      "word": "dip",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0283",
+      "word": "diplomat",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0284",
+      "word": "disaster",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0285",
+      "word": "discourse",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0286",
+      "word": "discriminate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0287",
+      "word": "dismiss",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0288",
+      "word": "dispute",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0289",
+      "word": "disrupt",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0290",
+      "word": "distinct",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0291",
+      "word": "distinguish",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0292",
+      "word": "distort",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0293",
+      "word": "distract",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0294",
+      "word": "distribute",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0295",
+      "word": "diverse",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0296",
+      "word": "divine",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0297",
+      "word": "domain",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0298",
+      "word": "dominate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0299",
+      "word": "dose",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0300",
+      "word": "dot",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0301",
+      "word": "draft",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0302",
+      "word": "drain",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0303",
+      "word": "dread",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0304",
+      "word": "drill",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0305",
+      "word": "drown",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0306",
+      "word": "dual",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0307",
+      "word": "dull",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0308",
+      "word": "dwell",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0309",
+      "word": "dynamic",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0310",
+      "word": "eager",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0311",
+      "word": "efficient",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0312",
+      "word": "elaborate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0313",
+      "word": "electronic",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0314",
+      "word": "elegant",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0315",
+      "word": "elevate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0316",
+      "word": "eliminate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0317",
+      "word": "elite",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0318",
+      "word": "embassy",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0319",
+      "word": "embrace",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0320",
+      "word": "emerge",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0321",
+      "word": "emergency",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0322",
+      "word": "emit",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0323",
+      "word": "emphasis",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0324",
+      "word": "encounter",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0325",
+      "word": "endure",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0326",
+      "word": "enhance",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0327",
+      "word": "enterprise",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0328",
+      "word": "enthusiastic",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0329",
+      "word": "entry",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0330",
+      "word": "environ",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0331",
+      "word": "envy",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0332",
+      "word": "equip",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0333",
+      "word": "era",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0334",
+      "word": "erase",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0335",
+      "word": "erect",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0336",
+      "word": "err",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0337",
+      "word": "essence",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0338",
+      "word": "estate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0339",
+      "word": "ethic",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0340",
+      "word": "ethnic",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0341",
+      "word": "evacuate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0342",
+      "word": "evaluate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0343",
+      "word": "evitable",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0344",
+      "word": "evolution",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0345",
+      "word": "evolve",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0346",
+      "word": "exaggerate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0347",
+      "word": "exceed",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0348",
+      "word": "excel",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0349",
+      "word": "excess",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0350",
+      "word": "exclude",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0351",
+      "word": "executive",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0352",
+      "word": "exhibit",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0353",
+      "word": "exotic",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0354",
+      "word": "expertise",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0355",
+      "word": "explicit",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0356",
+      "word": "explode",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0357",
+      "word": "explore",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0358",
+      "word": "export",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0359",
+      "word": "extent",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0360",
+      "word": "external",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0361",
+      "word": "extinct",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0362",
+      "word": "extract",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0363",
+      "word": "extraordinary",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0364",
+      "word": "eyebrow",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0365",
+      "word": "fabric",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0366",
+      "word": "facilitate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0367",
+      "word": "facility",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0368",
+      "word": "faculty",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0369",
+      "word": "fade",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0370",
+      "word": "false",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0371",
+      "word": "fame",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0372",
+      "word": "fare",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0373",
+      "word": "fasten",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0374",
+      "word": "fate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0375",
+      "word": "federal",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0376",
+      "word": "ferry",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0377",
+      "word": "fertile",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0378",
+      "word": "fiber",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0379",
+      "word": "fiction",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0380",
+      "word": "fierce",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0381",
+      "word": "filter",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0382",
+      "word": "finite",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0383",
+      "word": "flavor",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0384",
+      "word": "flaw",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0385",
+      "word": "flee",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0386",
+      "word": "flesh",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0387",
+      "word": "flexible",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0388",
+      "word": "flip",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0389",
+      "word": "flock",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0390",
+      "word": "flourish",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0391",
+      "word": "flush",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0392",
+      "word": "fond",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0393",
+      "word": "forbid",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0394",
+      "word": "forecast",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0395",
+      "word": "forehead",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0396",
+      "word": "format",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0397",
+      "word": "former",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0398",
+      "word": "formula",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0399",
+      "word": "foster",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0400",
+      "word": "fountain",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0401",
+      "word": "fraction",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0402",
+      "word": "framework",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0403",
+      "word": "frequent",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0404",
+      "word": "frost",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0405",
+      "word": "frown",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0406",
+      "word": "fuel",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0407",
+      "word": "fulfil",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0408",
+      "word": "fundamental",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0409",
+      "word": "funeral",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0410",
+      "word": "furnish",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0411",
+      "word": "furthermore",
+      "primaryTopic": "core_function",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0412",
+      "word": "fury",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0413",
+      "word": "fuse",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0414",
+      "word": "gallery",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0415",
+      "word": "gamble",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0416",
+      "word": "gang",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0417",
+      "word": "gap",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0418",
+      "word": "gasoline",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0419",
+      "word": "gaze",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0420",
+      "word": "gender",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0421",
+      "word": "gene",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0422",
+      "word": "generate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0423",
+      "word": "generous",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0424",
+      "word": "genius",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0425",
+      "word": "genuine",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0426",
+      "word": "geography",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0427",
+      "word": "geology",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0428",
+      "word": "glare",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0429",
+      "word": "globe",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0430",
+      "word": "glow",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0431",
+      "word": "goat",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0432",
+      "word": "graduate",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0433",
+      "word": "grain",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0434",
+      "word": "grasp",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0435",
+      "word": "grateful",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0436",
+      "word": "grave",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0437",
+      "word": "greed",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0438",
+      "word": "grief",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0439",
+      "word": "grip",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0440",
+      "word": "gross",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0441",
+      "word": "guardian",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0442",
+      "word": "guideline",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0443",
+      "word": "gulf",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0444",
+      "word": "gymnasium",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0445",
+      "word": "habitat",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0446",
+      "word": "halt",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0447",
+      "word": "hammer",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0448",
+      "word": "handicap",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0449",
+      "word": "harbor",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0450",
+      "word": "harmony",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0451",
+      "word": "harsh",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0452",
+      "word": "harvest",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0453",
+      "word": "haunt",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0454",
+      "word": "hazard",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0455",
+      "word": "headquarters",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0456",
+      "word": "heal",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0457",
+      "word": "heel",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0458",
+      "word": "heir",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0459",
+      "word": "hence",
+      "primaryTopic": "core_function",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0460",
+      "word": "heritage",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0461",
+      "word": "hierarchy",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0462",
+      "word": "highlight",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0463",
+      "word": "holy",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0464",
+      "word": "hook",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0465",
+      "word": "horizon",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0466",
+      "word": "horror",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0467",
+      "word": "host",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0468",
+      "word": "hostile",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0469",
+      "word": "household",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0470",
+      "word": "hut",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0471",
+      "word": "hypothesis",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0472",
+      "word": "ideal",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0473",
+      "word": "identical",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0474",
+      "word": "ideology",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0475",
+      "word": "illude",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0476",
+      "word": "imitate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0477",
+      "word": "immense",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0478",
+      "word": "immigrate",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0479",
+      "word": "immune",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0480",
+      "word": "impact",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0481",
+      "word": "imperial",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0482",
+      "word": "implement",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0483",
+      "word": "imply",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0484",
+      "word": "import",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0485",
+      "word": "impose",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0486",
+      "word": "incentive",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0487",
+      "word": "incident",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0488",
+      "word": "incline",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0489",
+      "word": "incorporate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0490",
+      "word": "index",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0491",
+      "word": "induce",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0492",
+      "word": "infant",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0493",
+      "word": "infect",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0494",
+      "word": "infer",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0495",
+      "word": "inflate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0496",
+      "word": "ingredient",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0497",
+      "word": "inhabit",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0498",
+      "word": "inherent",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0499",
+      "word": "inhibit",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0500",
+      "word": "initial",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0501",
+      "word": "inject",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0502",
+      "word": "inn",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0503",
+      "word": "innovate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0504",
+      "word": "input",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0505",
+      "word": "inquire",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0506",
+      "word": "insect",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0507",
+      "word": "insert",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0508",
+      "word": "insight",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0509",
+      "word": "inspire",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0510",
+      "word": "install",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0511",
+      "word": "instinct",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0512",
+      "word": "institute",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0513",
+      "word": "insult",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0514",
+      "word": "integrate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0515",
+      "word": "intellect",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0516",
+      "word": "intelligent",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0517",
+      "word": "interfere",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0518",
+      "word": "interior",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0519",
+      "word": "intermediate",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0520",
+      "word": "interpret",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0521",
+      "word": "interval",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0522",
+      "word": "intervene",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0523",
+      "word": "intimate",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0524",
+      "word": "intrigue",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0525",
+      "word": "invade",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0526",
+      "word": "irony",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0527",
+      "word": "irritate",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0528",
+      "word": "isolate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0529",
+      "word": "jail",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0530",
+      "word": "jar",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0531",
+      "word": "jog",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0532",
+      "word": "joint",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0533",
+      "word": "journal",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0534",
+      "word": "jury",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0535",
+      "word": "keen",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0536",
+      "word": "kit",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0537",
+      "word": "knight",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0538",
+      "word": "knot",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0539",
+      "word": "ladder",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0540",
+      "word": "landscape",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0541",
+      "word": "lap",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0542",
+      "word": "latter",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0543",
+      "word": "launch",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0544",
+      "word": "laundry",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0545",
+      "word": "leak",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0546",
+      "word": "lease",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0547",
+      "word": "leather",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0548",
+      "word": "lecture",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0549",
+      "word": "legend",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0550",
+      "word": "legislate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0551",
+      "word": "legitimate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0552",
+      "word": "leisure",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0553",
+      "word": "liberal",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0554",
+      "word": "liberty",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0555",
+      "word": "likewise",
+      "primaryTopic": "core_function",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0556",
+      "word": "linguistic",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0557",
+      "word": "liquid",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0558",
+      "word": "literature",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0559",
+      "word": "logic",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0560",
+      "word": "lone",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0561",
+      "word": "loyal",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0562",
+      "word": "lump",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0563",
+      "word": "luxury",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0564",
+      "word": "magnet",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0565",
+      "word": "magnificent",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0566",
+      "word": "manifest",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0567",
+      "word": "manipulate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0568",
+      "word": "margin",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0569",
+      "word": "marine",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0570",
+      "word": "mature",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0571",
+      "word": "mayor",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0572",
+      "word": "meanwhile",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0573",
+      "word": "mechanic",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0574",
+      "word": "mechanism",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0575",
+      "word": "mediate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0576",
+      "word": "medieval",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0577",
+      "word": "medium",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0578",
+      "word": "merchant",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0579",
+      "word": "mere",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0580",
+      "word": "merge",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0581",
+      "word": "merit",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0582",
+      "word": "metropolitan",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0583",
+      "word": "microphone",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0584",
+      "word": "migrate",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0585",
+      "word": "mild",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0586",
+      "word": "million",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0587",
+      "word": "mine",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0588",
+      "word": "mineral",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0589",
+      "word": "minimal",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0590",
+      "word": "minimum",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0591",
+      "word": "ministry",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0592",
+      "word": "miracle",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0593",
+      "word": "missile",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0594",
+      "word": "mobile",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0595",
+      "word": "mock",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0596",
+      "word": "mode",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0597",
+      "word": "modify",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0598",
+      "word": "moderate",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0599",
+      "word": "modest",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0600",
+      "word": "moist",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0601",
+      "word": "molecule",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0602",
+      "word": "monster",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0603",
+      "word": "monument",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0604",
+      "word": "mortal",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0605",
+      "word": "motive",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0606",
+      "word": "multiple",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0607",
+      "word": "murder",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0608",
+      "word": "mutual",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0609",
+      "word": "myth",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0610",
+      "word": "naive",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0611",
+      "word": "naked",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0612",
+      "word": "narrate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0613",
+      "word": "nasty",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0614",
+      "word": "needle",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0615",
+      "word": "negate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0616",
+      "word": "neglect",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0617",
+      "word": "negotiate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0618",
+      "word": "nephew",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0619",
+      "word": "network",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0620",
+      "word": "neutral",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0621",
+      "word": "nevertheless",
+      "primaryTopic": "core_function",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0622",
+      "word": "nightmare",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0623",
+      "word": "noble",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0624",
+      "word": "nod",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0625",
+      "word": "nominate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0626",
+      "word": "nonetheless",
+      "primaryTopic": "core_function",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0627",
+      "word": "norm",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0628",
+      "word": "novel",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0629",
+      "word": "nuclear",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0630",
+      "word": "numerous",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0631",
+      "word": "obey",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0632",
+      "word": "oblige",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0633",
+      "word": "obsess",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0634",
+      "word": "obtain",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0635",
+      "word": "occupy",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0636",
+      "word": "offend",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0637",
+      "word": "opportune",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0638",
+      "word": "opt",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0639",
+      "word": "optimist",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0640",
+      "word": "oral",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0641",
+      "word": "orbit",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0642",
+      "word": "orchestra",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0643",
+      "word": "organ",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0644",
+      "word": "orient",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0645",
+      "word": "origin",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0646",
+      "word": "outcome",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0647",
+      "word": "outline",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0648",
+      "word": "output",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0649",
+      "word": "outrage",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0650",
+      "word": "outstanding",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0651",
+      "word": "overcome",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0652",
+      "word": "overhead",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0653",
+      "word": "overlap",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0654",
+      "word": "overlook",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0655",
+      "word": "overnight",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0656",
+      "word": "oversea",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0657",
+      "word": "overwhelm",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0658",
+      "word": "owe",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0659",
+      "word": "pace",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0660",
+      "word": "pad",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0661",
+      "word": "pale",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0662",
+      "word": "palm",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0663",
+      "word": "panel",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0664",
+      "word": "parallel",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0665",
+      "word": "parliament",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0666",
+      "word": "participate",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0667",
+      "word": "particle",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0668",
+      "word": "passage",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0669",
+      "word": "passenger",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0670",
+      "word": "passion",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0671",
+      "word": "passport",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0672",
+      "word": "pat",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0673",
+      "word": "patch",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0674",
+      "word": "patent",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0675",
+      "word": "pave",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0676",
+      "word": "peak",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0677",
+      "word": "peasant",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0678",
+      "word": "peel",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0679",
+      "word": "peer",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0680",
+      "word": "penalty",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0681",
+      "word": "perceive",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0682",
+      "word": "permanent",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0683",
+      "word": "permit",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0684",
+      "word": "persist",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0685",
+      "word": "perspective",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0686",
+      "word": "persuade",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0687",
+      "word": "phase",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0688",
+      "word": "phenomenon",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0689",
+      "word": "philosophy",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0690",
+      "word": "phrase",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0691",
+      "word": "physics",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0692",
+      "word": "pill",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0693",
+      "word": "pinch",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0694",
+      "word": "pioneer",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0695",
+      "word": "platform",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0696",
+      "word": "plot",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0697",
+      "word": "polish",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0698",
+      "word": "poll",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0699",
+      "word": "pond",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0700",
+      "word": "populate",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0701",
+      "word": "portion",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0702",
+      "word": "portrait",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0703",
+      "word": "pose",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0704",
+      "word": "posit",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0705",
+      "word": "praise",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0706",
+      "word": "preach",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0707",
+      "word": "precede",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0708",
+      "word": "precise",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0709",
+      "word": "predator",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0710",
+      "word": "predict",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0711",
+      "word": "prejudice",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0712",
+      "word": "premium",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0713",
+      "word": "prescribe",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0714",
+      "word": "preserve",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0715",
+      "word": "preside",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0716",
+      "word": "presume",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0717",
+      "word": "prevail",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0718",
+      "word": "prey",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0719",
+      "word": "priest",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0720",
+      "word": "primitive",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0721",
+      "word": "principal",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0722",
+      "word": "prior",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0723",
+      "word": "privilege",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0724",
+      "word": "professor",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0725",
+      "word": "profile",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0726",
+      "word": "profound",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0727",
+      "word": "prohibit",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0728",
+      "word": "prominent",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0729",
+      "word": "prompt",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0730",
+      "word": "proof",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0731",
+      "word": "proportion",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0732",
+      "word": "prospect",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0733",
+      "word": "prosper",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0734",
+      "word": "protein",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0735",
+      "word": "province",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0736",
+      "word": "provoke",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0737",
+      "word": "psychology",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0738",
+      "word": "publish",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0739",
+      "word": "pupil",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0740",
+      "word": "pursue",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0741",
+      "word": "quantity",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0742",
+      "word": "questionnaire",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0743",
+      "word": "rage",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0744",
+      "word": "rally",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0745",
+      "word": "random",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0746",
+      "word": "rank",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0747",
+      "word": "rational",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0748",
+      "word": "raw",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0749",
+      "word": "rear",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0750",
+      "word": "rebel",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0751",
+      "word": "receipt",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0752",
+      "word": "recruit",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0753",
+      "word": "refine",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0754",
+      "word": "reform",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0755",
+      "word": "refrigerate",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0756",
+      "word": "regret",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0757",
+      "word": "regulate",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0758",
+      "word": "reinforce",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0759",
+      "word": "reject",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0760",
+      "word": "relevant",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0761",
+      "word": "relieve",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0762",
+      "word": "religion",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0763",
+      "word": "reluctant",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0764",
+      "word": "remedy",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0765",
+      "word": "remote",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0766",
+      "word": "republic",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0767",
+      "word": "reputation",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0768",
+      "word": "rescue",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0769",
+      "word": "resemble",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0770",
+      "word": "reside",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0771",
+      "word": "resign",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0772",
+      "word": "resolve",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0773",
+      "word": "resort",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0774",
+      "word": "restore",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0775",
+      "word": "restrain",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0776",
+      "word": "restrict",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0777",
+      "word": "resume",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0778",
+      "word": "retail",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0779",
+      "word": "retain",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0780",
+      "word": "retreat",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0781",
+      "word": "reveal",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0782",
+      "word": "revenge",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0783",
+      "word": "reverse",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0784",
+      "word": "revise",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0785",
+      "word": "revive",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0786",
+      "word": "revolution",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0787",
+      "word": "reward",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0788",
+      "word": "rhythm",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0789",
+      "word": "rid",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0790",
+      "word": "ridicule",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0791",
+      "word": "riot",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0792",
+      "word": "rival",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0793",
+      "word": "roar",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0794",
+      "word": "roast",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0795",
+      "word": "rod",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0796",
+      "word": "romantic",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0797",
+      "word": "rot",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0798",
+      "word": "routine",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0799",
+      "word": "rumor",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0800",
+      "word": "rural",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0801",
+      "word": "sack",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0802",
+      "word": "sacred",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0803",
+      "word": "sacrifice",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0804",
+      "word": "satellite",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0805",
+      "word": "scan",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0806",
+      "word": "scandal",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0807",
+      "word": "scarce",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0808",
+      "word": "scatter",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0809",
+      "word": "scheme",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0810",
+      "word": "scholar",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0811",
+      "word": "scope",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0812",
+      "word": "scramble",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0813",
+      "word": "screw",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0814",
+      "word": "sculpt",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0815",
+      "word": "sector",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0816",
+      "word": "seize",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0817",
+      "word": "sensible",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0818",
+      "word": "sentiment",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0819",
+      "word": "sequence",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0820",
+      "word": "severe",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0821",
+      "word": "shallow",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0822",
+      "word": "sigh",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0823",
+      "word": "silent",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0824",
+      "word": "simulate",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0825",
+      "word": "simultaneous",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0826",
+      "word": "sin",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0827",
+      "word": "skip",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0828",
+      "word": "slice",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0829",
+      "word": "slim",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0830",
+      "word": "slope",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0831",
+      "word": "sneak",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0832",
+      "word": "soak",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0833",
+      "word": "soap",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0834",
+      "word": "sociology",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0835",
+      "word": "sole",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0836",
+      "word": "sophisticate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0837",
+      "word": "span",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0838",
+      "word": "spark",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0839",
+      "word": "spectacle",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0840",
+      "word": "spectrum",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0841",
+      "word": "sphere",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0842",
+      "word": "spill",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0843",
+      "word": "spit",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0844",
+      "word": "splash",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0845",
+      "word": "split",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0846",
+      "word": "spouse",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0847",
+      "word": "squeeze",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0848",
+      "word": "stack",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0849",
+      "word": "stain",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0850",
+      "word": "starve",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0851",
+      "word": "statistic",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0852",
+      "word": "statue",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0853",
+      "word": "status",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0854",
+      "word": "steep",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0855",
+      "word": "stem",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0856",
+      "word": "stiff",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0857",
+      "word": "stimulate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0858",
+      "word": "stitch",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0859",
+      "word": "stove",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0860",
+      "word": "strain",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0861",
+      "word": "strict",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0862",
+      "word": "strip",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0863",
+      "word": "stripe",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0864",
+      "word": "stroke",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0865",
+      "word": "submarine",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0866",
+      "word": "submit",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0867",
+      "word": "subscribe",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0868",
+      "word": "substance",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0869",
+      "word": "substitute",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0870",
+      "word": "subtle",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0871",
+      "word": "suburb",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0872",
+      "word": "suck",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0873",
+      "word": "suffice",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0874",
+      "word": "suicide",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0875",
+      "word": "suite",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0876",
+      "word": "summit",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0877",
+      "word": "superb",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0878",
+      "word": "superior",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0879",
+      "word": "supervise",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0880",
+      "word": "supplement",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0881",
+      "word": "surgery",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0882",
+      "word": "surrender",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0883",
+      "word": "suspend",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0884",
+      "word": "sustain",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0885",
+      "word": "swear",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0886",
+      "word": "sweat",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0887",
+      "word": "swell",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0888",
+      "word": "swift",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0889",
+      "word": "symbol",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0890",
+      "word": "sympathy",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0891",
+      "word": "symphony",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0892",
+      "word": "symptom",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0893",
+      "word": "tackle",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0894",
+      "word": "tag",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0895",
+      "word": "talent",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0896",
+      "word": "task",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0897",
+      "word": "tease",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0898",
+      "word": "telegraph",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0899",
+      "word": "temple",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0900",
+      "word": "temporary",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0901",
+      "word": "tempt",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0902",
+      "word": "tenant",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0903",
+      "word": "tender",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0904",
+      "word": "terminal",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0905",
+      "word": "terminate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0906",
+      "word": "terrace",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0907",
+      "word": "terrific",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0908",
+      "word": "territory",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0909",
+      "word": "terror",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0910",
+      "word": "theme",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0911",
+      "word": "therapy",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0912",
+      "word": "thorough",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0913",
+      "word": "thread",
+      "primaryTopic": "home_food_clothes",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0914",
+      "word": "thrill",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0915",
+      "word": "thumb",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0916",
+      "word": "tick",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0917",
+      "word": "timber",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0918",
+      "word": "tissue",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0919",
+      "word": "torture",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0920",
+      "word": "toss",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0921",
+      "word": "toxic",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0922",
+      "word": "tragic",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0923",
+      "word": "trail",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0924",
+      "word": "transact",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0925",
+      "word": "transform",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0926",
+      "word": "transition",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0927",
+      "word": "translate",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0928",
+      "word": "transmit",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0929",
+      "word": "treasure",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0930",
+      "word": "treaty",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0931",
+      "word": "tremendous",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0932",
+      "word": "trend",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0933",
+      "word": "tribe",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0934",
+      "word": "trigger",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0935",
+      "word": "trim",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0936",
+      "word": "triumph",
+      "primaryTopic": "play_sport_arts",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0937",
+      "word": "troop",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0938",
+      "word": "tube",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0939",
+      "word": "tunnel",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0940",
+      "word": "turnover",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0941",
+      "word": "ultimate",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0942",
+      "word": "undergo",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0943",
+      "word": "underlie",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0944",
+      "word": "undermine",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0945",
+      "word": "undertake",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0946",
+      "word": "unify",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0947",
+      "word": "unique",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0948",
+      "word": "universe",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0949",
+      "word": "update",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0950",
+      "word": "upward",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0951",
+      "word": "urban",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0952",
+      "word": "urge",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0953",
+      "word": "utilize",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0954",
+      "word": "utter",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0955",
+      "word": "vacate",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0956",
+      "word": "vaccine",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0957",
+      "word": "vacuum",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0958",
+      "word": "vague",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0959",
+      "word": "valid",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0960",
+      "word": "vanish",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0961",
+      "word": "vast",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0962",
+      "word": "venture",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0963",
+      "word": "verb",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0964",
+      "word": "verse",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0965",
+      "word": "versus",
+      "primaryTopic": "core_function",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0966",
+      "word": "vertical",
+      "primaryTopic": "time_numbers_measure",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0967",
+      "word": "vessel",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0968",
+      "word": "veterinarian",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0969",
+      "word": "via",
+      "primaryTopic": "core_function",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0970",
+      "word": "vice",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0971",
+      "word": "victory",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0972",
+      "word": "vigor",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0973",
+      "word": "virgin",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0974",
+      "word": "virtue",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0975",
+      "word": "virus",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0976",
+      "word": "visible",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0977",
+      "word": "visual",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0978",
+      "word": "vital",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0979",
+      "word": "vivid",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0980",
+      "word": "vocabulary",
+      "primaryTopic": "school_learning_media",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0981",
+      "word": "vocation",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0982",
+      "word": "wander",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0983",
+      "word": "warehouse",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0984",
+      "word": "warrant",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0985",
+      "word": "wealth",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0986",
+      "word": "weave",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0987",
+      "word": "weed",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0988",
+      "word": "weird",
+      "primaryTopic": "action_change_description",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0989",
+      "word": "welfare",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0990",
+      "word": "wheat",
+      "primaryTopic": "nature_weather_animals",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0991",
+      "word": "whereas",
+      "primaryTopic": "core_function",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0992",
+      "word": "whip",
+      "primaryTopic": "objects_and_materials",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0993",
+      "word": "wicked",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0994",
+      "word": "wit",
+      "primaryTopic": "self_and_people",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0995",
+      "word": "withdraw",
+      "primaryTopic": "communication_thinking_social",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0996",
+      "word": "witness",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0997",
+      "word": "worship",
+      "primaryTopic": "society_culture_work",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0998",
+      "word": "wreck",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-0999",
+      "word": "yield",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    },
+    {
+      "id": "ev-moe2022-h-1000",
+      "word": "zone",
+      "primaryTopic": "town_travel_places",
+      "reviewStatus": "editorial-draft"
+    }
+  ]
+}
