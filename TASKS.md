@@ -23,7 +23,7 @@ spec:
 
 | ID | 본질 | 마일스톤 ref | cycle ref | 진행률 |
 |----|------|------|------|------|
-| T-102 | english-vocabulary 중등·고등 2,200단어 앱 반영 (세트 설계 → 데이터 변환 → 배포) | - | 2026-07-30 | 설계·검증 완료, 앱 데이터 변환·배포 미실행 |
+| (없음) | | | | |
 
 ## pending (대기 중)
 
@@ -35,6 +35,7 @@ spec:
 
 | ID | 본질 | sealing commit | 완료일 |
 |----|------|------|------|
+| T-102 | english-vocabulary 중등·고등 2,200단어 앱 반영 (15세트 3,000 전량 가동, 배포는 사용자 결정 대기) | 860337f | 2026-07-30 |
 | T-101 | english-reading chunkViolations do/does/did 조동사 오인 수정 + reading-the-opponent 3분할 복원 | 084a7f8 | 2026-07-19 |
 | T-001 | 도메인 진입 + 첫 cycle (M-1) | df913a6 | 2026-06-06 |
 | T-002 | search_roots 2곳에 game 루트 등록 (M-2) | 글로벌 인계 merged | 2026-06-06 |
