@@ -1,0 +1,2609 @@
+{
+  "setId": "ev-set-015",
+  "order": 15,
+  "title": "사회와 사고",
+  "level": "high",
+  "source": "교육부 2022 개정 별책 14 무표시 대표형(고등 범위)",
+  "words": [
+    {
+      "id": "ev-s15-0001",
+      "sourceId": "ev-moe2022-h-0375",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "federal",
+      "pos": "형용사",
+      "meaningKr": [
+        "연방의"
+      ],
+      "example": "The federal law changed.",
+      "exampleKr": "그 연방 법이 바뀌었다."
+    },
+    {
+      "id": "ev-s15-0002",
+      "sourceId": "ev-moe2022-h-0587",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "mine",
+      "pos": "명사",
+      "meaningKr": [
+        "광산"
+      ],
+      "example": "The old mine closed long ago.",
+      "exampleKr": "그 낡은 광산은 오래전에 닫혔다."
+    },
+    {
+      "id": "ev-s15-0003",
+      "sourceId": "ev-moe2022-h-0179",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "congress",
+      "pos": "명사",
+      "meaningKr": [
+        "의회"
+      ],
+      "example": "Congress passed the new law.",
+      "exampleKr": "의회가 새 법을 통과시켰다."
+    },
+    {
+      "id": "ev-s15-0004",
+      "sourceId": "ev-moe2022-h-0463",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "holy",
+      "pos": "형용사",
+      "meaningKr": [
+        "거룩한"
+      ],
+      "example": "They visited a holy place.",
+      "exampleKr": "그들은 거룩한 장소를 방문했다."
+    },
+    {
+      "id": "ev-s15-0005",
+      "sourceId": "ev-moe2022-h-0032",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "agency",
+      "pos": "명사",
+      "meaningKr": [
+        "대행사"
+      ],
+      "example": "A travel agency booked our hotel.",
+      "exampleKr": "여행 대행사가 우리 호텔을 예약했다."
+    },
+    {
+      "id": "ev-s15-0006",
+      "sourceId": "ev-moe2022-h-0351",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "executive",
+      "pos": "명사",
+      "meaningKr": [
+        "경영진"
+      ],
+      "example": "One executive answered our letter.",
+      "exampleKr": "경영진 한 명이 우리 편지에 답했다."
+    },
+    {
+      "id": "ev-s15-0007",
+      "sourceId": "ev-moe2022-h-0853",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "status",
+      "pos": "명사",
+      "meaningKr": [
+        "지위"
+      ],
+      "example": "Her status changed last year.",
+      "exampleKr": "그녀의 지위는 작년에 바뀌었다."
+    },
+    {
+      "id": "ev-s15-0008",
+      "sourceId": "ev-moe2022-h-0607",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "murder",
+      "pos": "명사",
+      "meaningKr": [
+        "살인"
+      ],
+      "example": "The novel describes a murder.",
+      "exampleKr": "그 소설은 살인을 묘사한다."
+    },
+    {
+      "id": "ev-s15-0009",
+      "sourceId": "ev-moe2022-h-0338",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "estate",
+      "pos": "명사",
+      "meaningKr": [
+        "부동산"
+      ],
+      "example": "He sold the family estate.",
+      "exampleKr": "그는 집안 부동산을 팔았다."
+    },
+    {
+      "id": "ev-s15-0010",
+      "sourceId": "ev-moe2022-h-0512",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "institute",
+      "pos": "명사",
+      "meaningKr": [
+        "기관"
+      ],
+      "example": "The institute studies clean energy.",
+      "exampleKr": "그 기관은 청정 에너지를 연구한다."
+    },
+    {
+      "id": "ev-s15-0011",
+      "sourceId": "ev-moe2022-h-0665",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "parliament",
+      "pos": "명사",
+      "meaningKr": [
+        "국회"
+      ],
+      "example": "Parliament passed the new bill.",
+      "exampleKr": "국회가 새 법안을 통과시켰다."
+    },
+    {
+      "id": "ev-s15-0012",
+      "sourceId": "ev-moe2022-h-0762",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "religion",
+      "pos": "명사",
+      "meaningKr": [
+        "종교"
+      ],
+      "example": "Every religion values kindness.",
+      "exampleKr": "모든 종교는 친절을 중시한다."
+    },
+    {
+      "id": "ev-s15-0013",
+      "sourceId": "ev-moe2022-h-0971",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "victory",
+      "pos": "명사",
+      "meaningKr": [
+        "승리를 거둠"
+      ],
+      "example": "Their victory came at dawn.",
+      "exampleKr": "그들의 승리를 거둠은 새벽에 왔다."
+    },
+    {
+      "id": "ev-s15-0014",
+      "sourceId": "ev-moe2022-h-0321",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "emergency",
+      "pos": "명사",
+      "meaningKr": [
+        "비상 상황"
+      ],
+      "example": "Call this number in an emergency.",
+      "exampleKr": "비상 상황에는 이 번호로 전화해라."
+    },
+    {
+      "id": "ev-s15-0015",
+      "sourceId": "ev-moe2022-h-0970",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "vice",
+      "pos": "명사",
+      "meaningKr": [
+        "악덕"
+      ],
+      "example": "The book warns against vice.",
+      "exampleKr": "그 책은 악덕을 경계하라고 경고한다."
+    },
+    {
+      "id": "ev-s15-0016",
+      "sourceId": "ev-moe2022-h-0218",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "crew",
+      "pos": "명사",
+      "meaningKr": [
+        "승무원"
+      ],
+      "example": "The crew welcomed every guest.",
+      "exampleKr": "승무원들이 모든 손님을 맞이했다."
+    },
+    {
+      "id": "ev-s15-0017",
+      "sourceId": "ev-moe2022-h-0047",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "ancient",
+      "pos": "형용사",
+      "meaningKr": [
+        "고대의"
+      ],
+      "example": "We visited an ancient temple.",
+      "exampleKr": "우리는 고대 사원을 방문했다."
+    },
+    {
+      "id": "ev-s15-0018",
+      "sourceId": "ev-moe2022-h-0010",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "abuse",
+      "pos": "명사",
+      "meaningKr": [
+        "남용"
+      ],
+      "example": "Drug abuse harms young people.",
+      "exampleKr": "약물 남용은 젊은이들을 해친다."
+    },
+    {
+      "id": "ev-s15-0019",
+      "sourceId": "ev-moe2022-h-0111",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "candidate",
+      "pos": "명사",
+      "meaningKr": [
+        "후보자"
+      ],
+      "example": "Each candidate spoke for ten minutes.",
+      "exampleKr": "각 후보자가 십 분씩 말했다."
+    },
+    {
+      "id": "ev-s15-0020",
+      "sourceId": "ev-moe2022-h-0553",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "liberal",
+      "pos": "형용사",
+      "meaningKr": [
+        "개방적인"
+      ],
+      "example": "The school has a liberal policy.",
+      "exampleKr": "그 학교는 개방적인 정책을 지닌다."
+    },
+    {
+      "id": "ev-s15-0021",
+      "sourceId": "ev-moe2022-h-0815",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "sector",
+      "pos": "명사",
+      "meaningKr": [
+        "부문"
+      ],
+      "example": "The farming sector grew fast.",
+      "exampleKr": "농업 부문이 빠르게 성장했다."
+    },
+    {
+      "id": "ev-s15-0022",
+      "sourceId": "ev-moe2022-h-0896",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "task",
+      "pos": "명사",
+      "meaningKr": [
+        "과업"
+      ],
+      "example": "Finish this small task today.",
+      "exampleKr": "오늘 이 작은 과업을 끝내라."
+    },
+    {
+      "id": "ev-s15-0023",
+      "sourceId": "ev-moe2022-h-0205",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "corporate",
+      "pos": "형용사",
+      "meaningKr": [
+        "기업의"
+      ],
+      "example": "She joined a corporate team.",
+      "exampleKr": "그녀는 기업 팀에 합류했다."
+    },
+    {
+      "id": "ev-s15-0024",
+      "sourceId": "ev-moe2022-h-0591",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "ministry",
+      "pos": "명사",
+      "meaningKr": [
+        "정부 부처"
+      ],
+      "example": "The ministry announced new rules.",
+      "exampleKr": "그 정부 부처가 새 규칙을 발표했다."
+    },
+    {
+      "id": "ev-s15-0025",
+      "sourceId": "ev-moe2022-h-0529",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "jail",
+      "pos": "명사",
+      "meaningKr": [
+        "교도소"
+      ],
+      "example": "The thief left jail last year.",
+      "exampleKr": "그 도둑은 작년에 교도소에서 나왔다."
+    },
+    {
+      "id": "ev-s15-0026",
+      "sourceId": "ev-moe2022-h-0571",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "mayor",
+      "pos": "명사",
+      "meaningKr": [
+        "시장(단체장)"
+      ],
+      "example": "The mayor opened the new park.",
+      "exampleKr": "시장이 새 공원을 열었다."
+    },
+    {
+      "id": "ev-s15-0027",
+      "sourceId": "ev-moe2022-h-0766",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "republic",
+      "pos": "명사",
+      "meaningKr": [
+        "공화국"
+      ],
+      "example": "The republic held free votes.",
+      "exampleKr": "그 공화국은 자유로운 투표를 치렀다."
+    },
+    {
+      "id": "ev-s15-0028",
+      "sourceId": "ev-moe2022-h-0420",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "gender",
+      "pos": "명사",
+      "meaningKr": [
+        "사회적 성"
+      ],
+      "example": "The form asks about gender.",
+      "exampleKr": "그 서식은 사회적 성을 묻는다."
+    },
+    {
+      "id": "ev-s15-0029",
+      "sourceId": "ev-moe2022-h-0150",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "combat",
+      "pos": "명사",
+      "meaningKr": [
+        "싸움"
+      ],
+      "example": "The soldier trained for combat.",
+      "exampleKr": "그 군인은 싸움을 위해 훈련했다."
+    },
+    {
+      "id": "ev-s15-0030",
+      "sourceId": "ev-moe2022-h-0786",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "revolution",
+      "pos": "명사",
+      "meaningKr": [
+        "혁명"
+      ],
+      "example": "The revolution changed the country.",
+      "exampleKr": "그 혁명은 그 나라를 바꿨다."
+    },
+    {
+      "id": "ev-s15-0031",
+      "sourceId": "ev-moe2022-h-0077",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "ban",
+      "pos": "동사",
+      "meaningKr": [
+        "금지하다"
+      ],
+      "example": "The city banned loud music.",
+      "exampleKr": "시가 시끄러운 음악을 금지했다."
+    },
+    {
+      "id": "ev-s15-0032",
+      "sourceId": "ev-moe2022-h-0663",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "panel",
+      "pos": "명사",
+      "meaningKr": [
+        "위원단"
+      ],
+      "example": "A panel judged the contest.",
+      "exampleKr": "위원단이 그 대회를 심사했다."
+    },
+    {
+      "id": "ev-s15-0033",
+      "sourceId": "ev-moe2022-h-0778",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "retail",
+      "pos": "명사",
+      "meaningKr": [
+        "소매"
+      ],
+      "example": "The shop moved into retail.",
+      "exampleKr": "그 가게는 소매업으로 옮겼다."
+    },
+    {
+      "id": "ev-s15-0034",
+      "sourceId": "ev-moe2022-h-0754",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "reform",
+      "pos": "명사",
+      "meaningKr": [
+        "개혁"
+      ],
+      "example": "The reform changed every school.",
+      "exampleKr": "그 개혁은 모든 학교를 바꿨다."
+    },
+    {
+      "id": "ev-s15-0035",
+      "sourceId": "ev-moe2022-h-0996",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "witness",
+      "pos": "명사",
+      "meaningKr": [
+        "목격자"
+      ],
+      "example": "One witness told the truth.",
+      "exampleKr": "목격자 한 명이 진실을 말했다."
+    },
+    {
+      "id": "ev-s15-0036",
+      "sourceId": "ev-moe2022-h-0255",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "democracy",
+      "pos": "명사",
+      "meaningKr": [
+        "민주주의"
+      ],
+      "example": "Democracy needs free speech.",
+      "exampleKr": "민주주의는 자유로운 연설이 필요하다."
+    },
+    {
+      "id": "ev-s15-0037",
+      "sourceId": "ev-moe2022-h-0932",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "trend",
+      "pos": "명사",
+      "meaningKr": [
+        "추세"
+      ],
+      "example": "The trend changed last month.",
+      "exampleKr": "그 추세는 지난달에 바뀌었다."
+    },
+    {
+      "id": "ev-s15-0038",
+      "sourceId": "ev-moe2022-h-0985",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "wealth",
+      "pos": "명사",
+      "meaningKr": [
+        "부"
+      ],
+      "example": "Health matters more than wealth.",
+      "exampleKr": "건강이 부보다 더 중요하다."
+    },
+    {
+      "id": "ev-s15-0039",
+      "sourceId": "ev-moe2022-h-0534",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "jury",
+      "pos": "명사",
+      "meaningKr": [
+        "배심원단"
+      ],
+      "example": "The jury reached a decision.",
+      "exampleKr": "배심원단이 결정에 이르렀다."
+    },
+    {
+      "id": "ev-s15-0040",
+      "sourceId": "ev-moe2022-h-0126",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "charity",
+      "pos": "명사",
+      "meaningKr": [
+        "자선 단체"
+      ],
+      "example": "She gives money to charity.",
+      "exampleKr": "그녀는 자선 단체에 돈을 준다."
+    },
+    {
+      "id": "ev-s15-0041",
+      "sourceId": "ev-moe2022-h-0062",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "assault",
+      "pos": "명사",
+      "meaningKr": [
+        "폭행"
+      ],
+      "example": "The court punished the assault.",
+      "exampleKr": "법원이 그 폭행을 처벌했다."
+    },
+    {
+      "id": "ev-s15-0042",
+      "sourceId": "ev-moe2022-h-0549",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "legend",
+      "pos": "명사",
+      "meaningKr": [
+        "전설"
+      ],
+      "example": "An old legend explains the name.",
+      "exampleKr": "오래된 전설이 그 이름을 설명한다."
+    },
+    {
+      "id": "ev-s15-0043",
+      "sourceId": "ev-moe2022-h-0233",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "custom",
+      "pos": "명사",
+      "meaningKr": [
+        "관습"
+      ],
+      "example": "This village keeps an old custom.",
+      "exampleKr": "이 마을은 오래된 관습을 지킨다."
+    },
+    {
+      "id": "ev-s15-0044",
+      "sourceId": "ev-moe2022-h-0648",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "output",
+      "pos": "명사",
+      "meaningKr": [
+        "산출량"
+      ],
+      "example": "The factory raised its output.",
+      "exampleKr": "그 공장은 산출량을 늘렸다."
+    },
+    {
+      "id": "ev-s15-0045",
+      "sourceId": "ev-moe2022-h-0989",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "welfare",
+      "pos": "명사",
+      "meaningKr": [
+        "복지"
+      ],
+      "example": "The city improved child welfare.",
+      "exampleKr": "시가 아동 복지를 개선했다."
+    },
+    {
+      "id": "ev-s15-0046",
+      "sourceId": "ev-moe2022-h-0317",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "elite",
+      "pos": "명사",
+      "meaningKr": [
+        "엘리트 집단"
+      ],
+      "example": "A small elite ruled the city.",
+      "exampleKr": "소수 엘리트 집단이 그 도시를 다스렸다."
+    },
+    {
+      "id": "ev-s15-0047",
+      "sourceId": "ev-moe2022-h-0327",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "enterprise",
+      "pos": "명사",
+      "meaningKr": [
+        "기업"
+      ],
+      "example": "A local enterprise hired us.",
+      "exampleKr": "지역 기업이 우리를 고용했다."
+    },
+    {
+      "id": "ev-s15-0048",
+      "sourceId": "ev-moe2022-h-0035",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "agriculture",
+      "pos": "명사",
+      "meaningKr": [
+        "농업"
+      ],
+      "example": "Agriculture feeds the whole nation.",
+      "exampleKr": "농업이 온 나라를 먹여 살린다."
+    },
+    {
+      "id": "ev-s15-0049",
+      "sourceId": "ev-moe2022-h-0227",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "currency",
+      "pos": "명사",
+      "meaningKr": [
+        "통화"
+      ],
+      "example": "Each country has its own currency.",
+      "exampleKr": "각 나라는 자기 통화가 있다."
+    },
+    {
+      "id": "ev-s15-0050",
+      "sourceId": "ev-moe2022-h-0409",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "funeral",
+      "pos": "명사",
+      "meaningKr": [
+        "장례식"
+      ],
+      "example": "Many people attended the funeral.",
+      "exampleKr": "많은 사람이 그 장례식에 참석했다."
+    },
+    {
+      "id": "ev-s15-0051",
+      "sourceId": "ev-moe2022-h-0826",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "sin",
+      "pos": "명사",
+      "meaningKr": [
+        "죄"
+      ],
+      "example": "The story warns against sin.",
+      "exampleKr": "그 이야기는 죄를 경계하라고 경고한다."
+    },
+    {
+      "id": "ev-s15-0052",
+      "sourceId": "ev-moe2022-h-0374",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "fate",
+      "pos": "명사",
+      "meaningKr": [
+        "숙명"
+      ],
+      "example": "He accepted his own fate.",
+      "exampleKr": "그는 자기 숙명을 받아들였다."
+    },
+    {
+      "id": "ev-s15-0053",
+      "sourceId": "ev-moe2022-h-0455",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "headquarters",
+      "pos": "명사",
+      "meaningKr": [
+        "본부"
+      ],
+      "example": "Our headquarters moved downtown.",
+      "exampleKr": "우리 본부가 시내로 옮겼다."
+    },
+    {
+      "id": "ev-s15-0054",
+      "sourceId": "ev-moe2022-h-0460",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "heritage",
+      "pos": "명사",
+      "meaningKr": [
+        "유산"
+      ],
+      "example": "We protect our cultural heritage.",
+      "exampleKr": "우리는 문화 유산을 보호한다."
+    },
+    {
+      "id": "ev-s15-0055",
+      "sourceId": "ev-moe2022-h-0043",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "ambassador",
+      "pos": "명사",
+      "meaningKr": [
+        "대사"
+      ],
+      "example": "The ambassador visited our school.",
+      "exampleKr": "대사가 우리 학교를 방문했다."
+    },
+    {
+      "id": "ev-s15-0056",
+      "sourceId": "ev-moe2022-h-0563",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "luxury",
+      "pos": "명사",
+      "meaningKr": [
+        "사치"
+      ],
+      "example": "They live without luxury.",
+      "exampleKr": "그들은 사치 없이 산다."
+    },
+    {
+      "id": "ev-s15-0057",
+      "sourceId": "ev-moe2022-h-0698",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "poll",
+      "pos": "명사",
+      "meaningKr": [
+        "여론 조사"
+      ],
+      "example": "The poll showed close results.",
+      "exampleKr": "그 여론 조사는 접전 결과를 보였다."
+    },
+    {
+      "id": "ev-s15-0058",
+      "sourceId": "ev-moe2022-h-0371",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "fame",
+      "pos": "명사",
+      "meaningKr": [
+        "명성"
+      ],
+      "example": "Her fame grew very fast.",
+      "exampleKr": "그녀의 명성은 아주 빠르게 자랐다."
+    },
+    {
+      "id": "ev-s15-0059",
+      "sourceId": "ev-moe2022-h-0554",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "liberty",
+      "pos": "명사",
+      "meaningKr": [
+        "자유"
+      ],
+      "example": "The country won its liberty.",
+      "exampleKr": "그 나라는 자유를 얻었다."
+    },
+    {
+      "id": "ev-s15-0060",
+      "sourceId": "ev-moe2022-h-0744",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "rally",
+      "pos": "명사",
+      "meaningKr": [
+        "집회"
+      ],
+      "example": "A peaceful rally filled the square.",
+      "exampleKr": "평화로운 집회가 광장을 채웠다."
+    },
+    {
+      "id": "ev-s15-0061",
+      "sourceId": "ev-moe2022-h-0340",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "ethnic",
+      "pos": "형용사",
+      "meaningKr": [
+        "민족의"
+      ],
+      "example": "The city holds ethnic festivals.",
+      "exampleKr": "그 도시는 민족 축제를 연다."
+    },
+    {
+      "id": "ev-s15-0062",
+      "sourceId": "ev-moe2022-h-0712",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "premium",
+      "pos": "명사",
+      "meaningKr": [
+        "추가 요금"
+      ],
+      "example": "The seat costs a premium.",
+      "exampleKr": "그 좌석은 추가 요금이 든다."
+    },
+    {
+      "id": "ev-s15-0063",
+      "sourceId": "ev-moe2022-h-0719",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "priest",
+      "pos": "명사",
+      "meaningKr": [
+        "사제"
+      ],
+      "example": "A young priest led the song.",
+      "exampleKr": "젊은 사제가 그 노래를 이끌었다."
+    },
+    {
+      "id": "ev-s15-0064",
+      "sourceId": "ev-moe2022-h-0787",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "reward",
+      "pos": "명사",
+      "meaningKr": [
+        "보상"
+      ],
+      "example": "Hard work brings its reward.",
+      "exampleKr": "노력은 그 보상을 가져온다."
+    },
+    {
+      "id": "ev-s15-0065",
+      "sourceId": "ev-moe2022-h-0153",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "communist",
+      "pos": "명사",
+      "meaningKr": [
+        "공산주의자"
+      ],
+      "example": "The book describes early communists.",
+      "exampleKr": "그 책은 초기 공산주의자들을 묘사한다."
+    },
+    {
+      "id": "ev-s15-0066",
+      "sourceId": "ev-moe2022-h-0436",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "grave",
+      "pos": "명사",
+      "meaningKr": [
+        "무덤"
+      ],
+      "example": "Flowers covered the quiet grave.",
+      "exampleKr": "꽃들이 조용한 무덤을 덮었다."
+    },
+    {
+      "id": "ev-s15-0067",
+      "sourceId": "ev-moe2022-h-0930",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "treaty",
+      "pos": "명사",
+      "meaningKr": [
+        "조약"
+      ],
+      "example": "Both countries signed the treaty.",
+      "exampleKr": "두 나라가 그 조약에 서명했다."
+    },
+    {
+      "id": "ev-s15-0068",
+      "sourceId": "ev-moe2022-h-0272",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "devil",
+      "pos": "명사",
+      "meaningKr": [
+        "악마 같은 존재"
+      ],
+      "example": "The play shows a laughing devil.",
+      "exampleKr": "그 연극은 웃는 악마 같은 존재를 보여 준다."
+    },
+    {
+      "id": "ev-s15-0069",
+      "sourceId": "ev-moe2022-h-0121",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "celebrity",
+      "pos": "명사",
+      "meaningKr": [
+        "유명인"
+      ],
+      "example": "A celebrity opened the new store.",
+      "exampleKr": "유명인이 새 가게를 열었다."
+    },
+    {
+      "id": "ev-s15-0070",
+      "sourceId": "ev-moe2022-h-0997",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "worship",
+      "pos": "동사",
+      "meaningKr": [
+        "숭배하다"
+      ],
+      "example": "They worship an old god.",
+      "exampleKr": "그들은 오래된 신을 숭배한다."
+    },
+    {
+      "id": "ev-s15-0071",
+      "sourceId": "ev-moe2022-h-0537",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "knight",
+      "pos": "명사",
+      "meaningKr": [
+        "중세 기사"
+      ],
+      "example": "The knight rode a brown horse.",
+      "exampleKr": "그 중세 기사는 갈색 말을 탔다."
+    },
+    {
+      "id": "ev-s15-0072",
+      "sourceId": "ev-moe2022-h-0071",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "auction",
+      "pos": "명사",
+      "meaningKr": [
+        "경매"
+      ],
+      "example": "The old chair sold at auction.",
+      "exampleKr": "그 낡은 의자는 경매에서 팔렸다."
+    },
+    {
+      "id": "ev-s15-0073",
+      "sourceId": "ev-moe2022-h-0288",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "dispute",
+      "pos": "명사",
+      "meaningKr": [
+        "분쟁"
+      ],
+      "example": "The land dispute lasted years.",
+      "exampleKr": "그 토지 분쟁은 수년간 이어졌다."
+    },
+    {
+      "id": "ev-s15-0074",
+      "sourceId": "ev-moe2022-h-0962",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "venture",
+      "pos": "명사",
+      "meaningKr": [
+        "모험적 사업"
+      ],
+      "example": "They started a small venture.",
+      "exampleKr": "그들은 작은 모험적 사업을 시작했다."
+    },
+    {
+      "id": "ev-s15-0075",
+      "sourceId": "ev-moe2022-h-0201",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "copyright",
+      "pos": "명사",
+      "meaningKr": [
+        "저작권"
+      ],
+      "example": "The song is under copyright.",
+      "exampleKr": "그 노래는 저작권의 보호를 받는다."
+    },
+    {
+      "id": "ev-s15-0076",
+      "sourceId": "ev-moe2022-h-0256",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "democrat",
+      "pos": "명사",
+      "meaningKr": [
+        "민주주의자"
+      ],
+      "example": "Every democrat defended the vote.",
+      "exampleKr": "모든 민주주의자가 그 투표를 옹호했다."
+    },
+    {
+      "id": "ev-s15-0077",
+      "sourceId": "ev-moe2022-h-0261",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "deposit",
+      "pos": "명사",
+      "meaningKr": [
+        "보증금"
+      ],
+      "example": "We paid a small deposit.",
+      "exampleKr": "우리는 적은 보증금을 냈다."
+    },
+    {
+      "id": "ev-s15-0078",
+      "sourceId": "ev-moe2022-h-0296",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "divine",
+      "pos": "형용사",
+      "meaningKr": [
+        "신성한"
+      ],
+      "example": "The song sounds almost divine.",
+      "exampleKr": "그 노래는 거의 신성하게 들린다."
+    },
+    {
+      "id": "ev-s15-0079",
+      "sourceId": "ev-moe2022-h-0358",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "export",
+      "pos": "동사",
+      "meaningKr": [
+        "수출하다"
+      ],
+      "example": "This country exports fresh fruit.",
+      "exampleKr": "이 나라는 신선한 과일을 수출한다."
+    },
+    {
+      "id": "ev-s15-0080",
+      "sourceId": "ev-moe2022-h-0802",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "sacred",
+      "pos": "형용사",
+      "meaningKr": [
+        "신성시되는"
+      ],
+      "example": "This hill is a sacred place.",
+      "exampleKr": "이 언덕은 신성시되는 장소다."
+    },
+    {
+      "id": "ev-s15-0081",
+      "sourceId": "ev-moe2022-h-0984",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "warrant",
+      "pos": "명사",
+      "meaningKr": [
+        "영장"
+      ],
+      "example": "Police showed a search warrant.",
+      "exampleKr": "경찰이 수색 영장을 보여 주었다."
+    },
+    {
+      "id": "ev-s15-0082",
+      "sourceId": "ev-moe2022-h-0065",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "asset",
+      "pos": "명사",
+      "meaningKr": [
+        "자산"
+      ],
+      "example": "Trust is our greatest asset.",
+      "exampleKr": "신뢰가 우리의 가장 큰 자산이다."
+    },
+    {
+      "id": "ev-s15-0083",
+      "sourceId": "ev-moe2022-h-0232",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "custody",
+      "pos": "명사",
+      "meaningKr": [
+        "보호 관리"
+      ],
+      "example": "The child stayed in her custody.",
+      "exampleKr": "그 아이는 그녀의 보호 관리 아래 있었다."
+    },
+    {
+      "id": "ev-s15-0084",
+      "sourceId": "ev-moe2022-h-0683",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "permit",
+      "pos": "동사",
+      "meaningKr": [
+        "허용하다"
+      ],
+      "example": "The rule permits one guest.",
+      "exampleKr": "그 규칙은 손님 한 명을 허용한다."
+    },
+    {
+      "id": "ev-s15-0085",
+      "sourceId": "ev-moe2022-h-0481",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "imperial",
+      "pos": "형용사",
+      "meaningKr": [
+        "제국의"
+      ],
+      "example": "The imperial palace stands there.",
+      "exampleKr": "그 제국의 궁전이 거기 서 있다."
+    },
+    {
+      "id": "ev-s15-0086",
+      "sourceId": "ev-moe2022-h-0723",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "privilege",
+      "pos": "명사",
+      "meaningKr": [
+        "특권"
+      ],
+      "example": "Driving is not a privilege.",
+      "exampleKr": "운전은 특권이 아니다."
+    },
+    {
+      "id": "ev-s15-0087",
+      "sourceId": "ev-moe2022-h-0268",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "destiny",
+      "pos": "명사",
+      "meaningKr": [
+        "운명"
+      ],
+      "example": "Destiny brought them together.",
+      "exampleKr": "운명이 그들을 함께 있게 했다."
+    },
+    {
+      "id": "ev-s15-0088",
+      "sourceId": "ev-moe2022-h-0674",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "patent",
+      "pos": "명사",
+      "meaningKr": [
+        "특허"
+      ],
+      "example": "The team filed a patent.",
+      "exampleKr": "그 팀은 특허를 냈다."
+    },
+    {
+      "id": "ev-s15-0089",
+      "sourceId": "ev-moe2022-h-0546",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "lease",
+      "pos": "명사",
+      "meaningKr": [
+        "임대 계약"
+      ],
+      "example": "They signed a two year lease.",
+      "exampleKr": "그들은 이 년 임대 계약에 서명했다."
+    },
+    {
+      "id": "ev-s15-0090",
+      "sourceId": "ev-moe2022-h-0806",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "scandal",
+      "pos": "명사",
+      "meaningKr": [
+        "추문"
+      ],
+      "example": "The scandal shocked the town.",
+      "exampleKr": "그 추문은 마을에 충격을 주었다."
+    },
+    {
+      "id": "ev-s15-0091",
+      "sourceId": "ev-moe2022-h-0919",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "torture",
+      "pos": "명사",
+      "meaningKr": [
+        "고문"
+      ],
+      "example": "The law forbids torture.",
+      "exampleKr": "그 법은 고문을 금한다."
+    },
+    {
+      "id": "ev-s15-0092",
+      "sourceId": "ev-moe2022-h-0208",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "corrupt",
+      "pos": "형용사",
+      "meaningKr": [
+        "부패한"
+      ],
+      "example": "The corrupt officer lost his job.",
+      "exampleKr": "그 부패한 관리는 일자리를 잃었다."
+    },
+    {
+      "id": "ev-s15-0093",
+      "sourceId": "ev-moe2022-h-0318",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "embassy",
+      "pos": "명사",
+      "meaningKr": [
+        "대사관"
+      ],
+      "example": "The embassy opens at nine.",
+      "exampleKr": "그 대사관은 아홉 시에 문을 연다."
+    },
+    {
+      "id": "ev-s15-0094",
+      "sourceId": "ev-moe2022-h-0592",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "miracle",
+      "pos": "명사",
+      "meaningKr": [
+        "기적"
+      ],
+      "example": "Her recovery seemed a miracle.",
+      "exampleKr": "그녀의 회복은 기적처럼 보였다."
+    },
+    {
+      "id": "ev-s15-0095",
+      "sourceId": "ev-moe2022-h-0658",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "owe",
+      "pos": "동사",
+      "meaningKr": [
+        "빚지다"
+      ],
+      "example": "I owe you five dollars.",
+      "exampleKr": "나는 네게 오 달러를 빚졌다."
+    },
+    {
+      "id": "ev-s15-0096",
+      "sourceId": "ev-moe2022-h-0148",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "colony",
+      "pos": "명사",
+      "meaningKr": [
+        "식민지"
+      ],
+      "example": "The island was once a colony.",
+      "exampleKr": "그 섬은 한때 식민지였다."
+    },
+    {
+      "id": "ev-s15-0097",
+      "sourceId": "ev-moe2022-h-0933",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "tribe",
+      "pos": "명사",
+      "meaningKr": [
+        "부족 집단"
+      ],
+      "example": "The tribe kept old songs.",
+      "exampleKr": "그 부족 집단은 옛 노래를 지켰다."
+    },
+    {
+      "id": "ev-s15-0098",
+      "sourceId": "ev-moe2022-h-0040",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "ally",
+      "pos": "명사",
+      "meaningKr": [
+        "동맹국"
+      ],
+      "example": "Our ally sent food and water.",
+      "exampleKr": "우리 동맹국이 식량과 물을 보냈다."
+    },
+    {
+      "id": "ev-s15-0099",
+      "sourceId": "ev-moe2022-h-0484",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "import",
+      "pos": "동사",
+      "meaningKr": [
+        "수입하다"
+      ],
+      "example": "We import wheat from abroad.",
+      "exampleKr": "우리는 해외에서 밀을 수입한다."
+    },
+    {
+      "id": "ev-s15-0100",
+      "sourceId": "ev-moe2022-h-0791",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "riot",
+      "pos": "명사",
+      "meaningKr": [
+        "폭동"
+      ],
+      "example": "A small riot broke out.",
+      "exampleKr": "작은 폭동이 일어났다."
+    },
+    {
+      "id": "ev-s15-0101",
+      "sourceId": "ev-moe2022-h-0882",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "surrender",
+      "pos": "동사",
+      "meaningKr": [
+        "항복하다"
+      ],
+      "example": "The small army surrendered.",
+      "exampleKr": "그 작은 군대는 항복했다."
+    },
+    {
+      "id": "ev-s15-0102",
+      "sourceId": "ev-moe2022-h-0056",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "architect",
+      "pos": "명사",
+      "meaningKr": [
+        "건축가"
+      ],
+      "example": "The architect drew the plan.",
+      "exampleKr": "그 건축가가 도면을 그렸다."
+    },
+    {
+      "id": "ev-s15-0103",
+      "sourceId": "ev-moe2022-h-0578",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "merchant",
+      "pos": "명사",
+      "meaningKr": [
+        "상인"
+      ],
+      "example": "A merchant sold cloth here.",
+      "exampleKr": "한 상인이 여기서 천을 팔았다."
+    },
+    {
+      "id": "ev-s15-0104",
+      "sourceId": "ev-moe2022-h-0609",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "myth",
+      "pos": "명사",
+      "meaningKr": [
+        "신화"
+      ],
+      "example": "An old myth explains the star.",
+      "exampleKr": "오래된 신화가 그 별을 설명한다."
+    },
+    {
+      "id": "ev-s15-0105",
+      "sourceId": "ev-moe2022-h-0750",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "rebel",
+      "pos": "동사",
+      "meaningKr": [
+        "반란을 일으키다"
+      ],
+      "example": "The people rebelled against the king.",
+      "exampleKr": "백성들이 왕에게 반란을 일으켰다."
+    },
+    {
+      "id": "ev-s15-0106",
+      "sourceId": "ev-moe2022-h-0230",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "curse",
+      "pos": "명사",
+      "meaningKr": [
+        "저주"
+      ],
+      "example": "The old tale describes a curse.",
+      "exampleKr": "그 옛이야기는 저주를 묘사한다."
+    },
+    {
+      "id": "ev-s15-0107",
+      "sourceId": "ev-moe2022-h-0250",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "deficit",
+      "pos": "명사",
+      "meaningKr": [
+        "적자"
+      ],
+      "example": "The city reported a deficit.",
+      "exampleKr": "시가 적자를 발표했다."
+    },
+    {
+      "id": "ev-s15-0108",
+      "sourceId": "ev-moe2022-h-0257",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "demon",
+      "pos": "명사",
+      "meaningKr": [
+        "악마"
+      ],
+      "example": "The story features a clever demon.",
+      "exampleKr": "그 이야기는 영리한 악마를 다룬다."
+    },
+    {
+      "id": "ev-s15-0109",
+      "sourceId": "ev-moe2022-h-0576",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "medieval",
+      "pos": "형용사",
+      "meaningKr": [
+        "중세의"
+      ],
+      "example": "We visited a medieval castle.",
+      "exampleKr": "우리는 중세 성을 방문했다."
+    },
+    {
+      "id": "ev-s15-0110",
+      "sourceId": "ev-moe2022-h-0474",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "ideology",
+      "pos": "명사",
+      "meaningKr": [
+        "사상"
+      ],
+      "example": "The book explains their ideology.",
+      "exampleKr": "그 책은 그들의 사상을 설명한다."
+    },
+    {
+      "id": "ev-s15-0111",
+      "sourceId": "ev-moe2022-h-0138",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "clause",
+      "pos": "명사",
+      "meaningKr": [
+        "조항"
+      ],
+      "example": "Read the last clause carefully.",
+      "exampleKr": "마지막 조항을 주의 깊게 읽어라."
+    },
+    {
+      "id": "ev-s15-0112",
+      "sourceId": "ev-moe2022-h-0147",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "colleague",
+      "pos": "명사",
+      "meaningKr": [
+        "직장 동료"
+      ],
+      "example": "My colleague fixed the report.",
+      "exampleKr": "내 직장 동료가 그 보고서를 고쳤다."
+    },
+    {
+      "id": "ev-s15-0113",
+      "sourceId": "ev-moe2022-h-0486",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "incentive",
+      "pos": "명사",
+      "meaningKr": [
+        "장려책"
+      ],
+      "example": "Prizes work as an incentive.",
+      "exampleKr": "상은 장려책으로 작용한다."
+    },
+    {
+      "id": "ev-s15-0114",
+      "sourceId": "ev-moe2022-h-0771",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "resign",
+      "pos": "동사",
+      "meaningKr": [
+        "사임하다"
+      ],
+      "example": "The manager resigned last week.",
+      "exampleKr": "그 관리자는 지난주 사임했다."
+    },
+    {
+      "id": "ev-s15-0115",
+      "sourceId": "ev-moe2022-h-0220",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "critic",
+      "pos": "명사",
+      "meaningKr": [
+        "비평가"
+      ],
+      "example": "One critic praised the film.",
+      "exampleKr": "한 비평가가 그 영화를 칭찬했다."
+    },
+    {
+      "id": "ev-s15-0116",
+      "sourceId": "ev-moe2022-h-0974",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "virtue",
+      "pos": "명사",
+      "meaningKr": [
+        "미덕"
+      ],
+      "example": "Patience is a quiet virtue.",
+      "exampleKr": "인내는 조용한 미덕이다."
+    },
+    {
+      "id": "ev-s15-0117",
+      "sourceId": "ev-moe2022-h-0485",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "impose",
+      "pos": "동사",
+      "meaningKr": [
+        "부과하다"
+      ],
+      "example": "The city imposed a new tax.",
+      "exampleKr": "시가 새 세금을 부과했다."
+    },
+    {
+      "id": "ev-s15-0118",
+      "sourceId": "ev-moe2022-h-0751",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "receipt",
+      "pos": "명사",
+      "meaningKr": [
+        "영수증"
+      ],
+      "example": "Keep the receipt safely.",
+      "exampleKr": "영수증을 안전하게 보관해라."
+    },
+    {
+      "id": "ev-s15-0119",
+      "sourceId": "ev-moe2022-h-0694",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "pioneer",
+      "pos": "명사",
+      "meaningKr": [
+        "개척자"
+      ],
+      "example": "He was a pioneer in medicine.",
+      "exampleKr": "그는 의학의 개척자였다."
+    },
+    {
+      "id": "ev-s15-0120",
+      "sourceId": "ev-moe2022-h-0458",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "heir",
+      "pos": "명사",
+      "meaningKr": [
+        "상속인"
+      ],
+      "example": "The heir received the old house.",
+      "exampleKr": "상속인이 그 낡은 집을 받았다."
+    },
+    {
+      "id": "ev-s15-0121",
+      "sourceId": "ev-moe2022-h-0752",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "recruit",
+      "pos": "동사",
+      "meaningKr": [
+        "모집하다"
+      ],
+      "example": "The club recruits new members.",
+      "exampleKr": "그 동아리는 새 회원을 모집한다."
+    },
+    {
+      "id": "ev-s15-0122",
+      "sourceId": "ev-moe2022-h-0757",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "regulate",
+      "pos": "동사",
+      "meaningKr": [
+        "규제하다"
+      ],
+      "example": "Laws regulate factory smoke.",
+      "exampleKr": "법이 공장 연기를 규제한다."
+    },
+    {
+      "id": "ev-s15-0123",
+      "sourceId": "ev-moe2022-h-0152",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "commodity",
+      "pos": "명사",
+      "meaningKr": [
+        "거래 물품"
+      ],
+      "example": "Rice is a basic commodity.",
+      "exampleKr": "쌀은 기본 거래 물품이다."
+    },
+    {
+      "id": "ev-s15-0124",
+      "sourceId": "ev-moe2022-h-0212",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "coupon",
+      "pos": "명사",
+      "meaningKr": [
+        "할인권"
+      ],
+      "example": "Use this coupon before Friday.",
+      "exampleKr": "금요일 전에 이 할인권을 써라."
+    },
+    {
+      "id": "ev-s15-0125",
+      "sourceId": "ev-moe2022-h-0287",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "dismiss",
+      "pos": "동사",
+      "meaningKr": [
+        "해고하다"
+      ],
+      "example": "The firm dismissed two workers.",
+      "exampleKr": "그 회사는 노동자 두 명을 해고했다."
+    },
+    {
+      "id": "ev-s15-0126",
+      "sourceId": "ev-moe2022-h-0720",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "primitive",
+      "pos": "형용사",
+      "meaningKr": [
+        "원시적인"
+      ],
+      "example": "They used primitive tools.",
+      "exampleKr": "그들은 원시적인 도구를 썼다."
+    },
+    {
+      "id": "ev-s15-0127",
+      "sourceId": "ev-moe2022-h-0573",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "mechanic",
+      "pos": "명사",
+      "meaningKr": [
+        "정비공"
+      ],
+      "example": "A mechanic checked our engine.",
+      "exampleKr": "정비공이 우리 엔진을 점검했다."
+    },
+    {
+      "id": "ev-s15-0128",
+      "sourceId": "ev-moe2022-h-0157",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "compensate",
+      "pos": "동사",
+      "meaningKr": [
+        "보상하다"
+      ],
+      "example": "The shop compensated every customer.",
+      "exampleKr": "그 가게는 모든 고객에게 보상했다."
+    },
+    {
+      "id": "ev-s15-0129",
+      "sourceId": "ev-moe2022-h-0461",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "hierarchy",
+      "pos": "명사",
+      "meaningKr": [
+        "서열"
+      ],
+      "example": "The company has a strict hierarchy.",
+      "exampleKr": "그 회사는 엄격한 서열이 있다."
+    },
+    {
+      "id": "ev-s15-0130",
+      "sourceId": "ev-moe2022-h-0902",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "tenant",
+      "pos": "명사",
+      "meaningKr": [
+        "세입자"
+      ],
+      "example": "The tenant paid on time.",
+      "exampleKr": "그 세입자는 제때 냈다."
+    },
+    {
+      "id": "ev-s15-0131",
+      "sourceId": "ev-moe2022-h-0940",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "turnover",
+      "pos": "명사",
+      "meaningKr": [
+        "매출액"
+      ],
+      "example": "The shop reported low turnover.",
+      "exampleKr": "그 가게는 낮은 매출액을 보고했다."
+    },
+    {
+      "id": "ev-s15-0132",
+      "sourceId": "ev-moe2022-h-0078",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "bankrupt",
+      "pos": "형용사",
+      "meaningKr": [
+        "파산한"
+      ],
+      "example": "The small shop went bankrupt.",
+      "exampleKr": "그 작은 가게는 파산했다."
+    },
+    {
+      "id": "ev-s15-0133",
+      "sourceId": "ev-moe2022-h-0211",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "counterpart",
+      "pos": "명사",
+      "meaningKr": [
+        "대응 상대"
+      ],
+      "example": "Our counterpart arrived from Japan.",
+      "exampleKr": "우리 대응 상대가 일본에서 도착했다."
+    },
+    {
+      "id": "ev-s15-0134",
+      "sourceId": "ev-moe2022-h-0251",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "delegate",
+      "pos": "명사",
+      "meaningKr": [
+        "대표단원"
+      ],
+      "example": "Each delegate spoke briefly.",
+      "exampleKr": "각 대표단원이 짧게 말했다."
+    },
+    {
+      "id": "ev-s15-0135",
+      "sourceId": "ev-moe2022-h-0283",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "diplomat",
+      "pos": "명사",
+      "meaningKr": [
+        "외교관"
+      ],
+      "example": "A young diplomat spoke first.",
+      "exampleKr": "젊은 외교관이 먼저 말했다."
+    },
+    {
+      "id": "ev-s15-0136",
+      "sourceId": "ev-moe2022-h-0706",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "preach",
+      "pos": "동사",
+      "meaningKr": [
+        "설교하다"
+      ],
+      "example": "The priest preached about kindness.",
+      "exampleKr": "그 사제는 친절에 대해 설교했다."
+    },
+    {
+      "id": "ev-s15-0137",
+      "sourceId": "ev-moe2022-h-0937",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "troop",
+      "pos": "명사",
+      "meaningKr": [
+        "군대 병력"
+      ],
+      "example": "Fresh troops arrived at dawn.",
+      "exampleKr": "새 군대 병력이 새벽에 도착했다."
+    },
+    {
+      "id": "ev-s15-0138",
+      "sourceId": "ev-moe2022-h-0393",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "forbid",
+      "pos": "동사",
+      "meaningKr": [
+        "금하다"
+      ],
+      "example": "The law forbids loud noise.",
+      "exampleKr": "그 법은 시끄러운 소음을 금한다."
+    },
+    {
+      "id": "ev-s15-0139",
+      "sourceId": "ev-moe2022-h-0677",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "peasant",
+      "pos": "명사",
+      "meaningKr": [
+        "소작농"
+      ],
+      "example": "The peasant worked all day.",
+      "exampleKr": "그 소작농은 하루 종일 일했다."
+    },
+    {
+      "id": "ev-s15-0140",
+      "sourceId": "ev-moe2022-h-0525",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "invade",
+      "pos": "동사",
+      "meaningKr": [
+        "침략하다"
+      ],
+      "example": "The army invaded the small island.",
+      "exampleKr": "그 군대가 작은 섬을 침략했다."
+    },
+    {
+      "id": "ev-s15-0141",
+      "sourceId": "ev-moe2022-h-0625",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "nominate",
+      "pos": "동사",
+      "meaningKr": [
+        "지명하다"
+      ],
+      "example": "They nominated her as leader.",
+      "exampleKr": "그들은 그녀를 대표로 지명했다."
+    },
+    {
+      "id": "ev-s15-0142",
+      "sourceId": "ev-moe2022-h-0198",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "convict",
+      "pos": "동사",
+      "meaningKr": [
+        "유죄를 선고하다"
+      ],
+      "example": "The court convicted the driver.",
+      "exampleKr": "법원이 그 운전자에게 유죄를 선고했다."
+    },
+    {
+      "id": "ev-s15-0143",
+      "sourceId": "ev-moe2022-h-0027",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "administer",
+      "pos": "동사",
+      "meaningKr": [
+        "관리하다"
+      ],
+      "example": "A small team administers the fund.",
+      "exampleKr": "작은 팀이 그 기금을 관리한다."
+    },
+    {
+      "id": "ev-s15-0144",
+      "sourceId": "ev-moe2022-h-0339",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "ethic",
+      "pos": "명사",
+      "meaningKr": [
+        "윤리"
+      ],
+      "example": "Every doctor follows a strict ethic.",
+      "exampleKr": "모든 의사는 엄격한 윤리를 따른다."
+    },
+    {
+      "id": "ev-s15-0145",
+      "sourceId": "ev-moe2022-h-0286",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "discriminate",
+      "pos": "동사",
+      "meaningKr": [
+        "차별하다"
+      ],
+      "example": "No school may discriminate.",
+      "exampleKr": "어떤 학교도 차별해서는 안 된다."
+    },
+    {
+      "id": "ev-s15-0146",
+      "sourceId": "ev-moe2022-h-0727",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "prohibit",
+      "pos": "동사",
+      "meaningKr": [
+        "법으로 금하다"
+      ],
+      "example": "The law prohibits open fires.",
+      "exampleKr": "그 법은 노출된 불을 법으로 금한다."
+    },
+    {
+      "id": "ev-s15-0147",
+      "sourceId": "ev-moe2022-h-0733",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "prosper",
+      "pos": "동사",
+      "meaningKr": [
+        "번영하다"
+      ],
+      "example": "Trade helped the port prosper.",
+      "exampleKr": "무역이 그 항구를 번영하게 도왔다."
+    },
+    {
+      "id": "ev-s15-0148",
+      "sourceId": "ev-moe2022-h-0122",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "censor",
+      "pos": "동사",
+      "meaningKr": [
+        "검열하다"
+      ],
+      "example": "The state censored the news.",
+      "exampleKr": "국가가 그 뉴스를 검열했다."
+    },
+    {
+      "id": "ev-s15-0149",
+      "sourceId": "ev-moe2022-h-0215",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "craze",
+      "pos": "명사",
+      "meaningKr": [
+        "열풍"
+      ],
+      "example": "A dance craze swept the school.",
+      "exampleKr": "춤 열풍이 학교를 휩쓸었다."
+    },
+    {
+      "id": "ev-s15-0150",
+      "sourceId": "ev-moe2022-h-0879",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "supervise",
+      "pos": "동사",
+      "meaningKr": [
+        "감독하다"
+      ],
+      "example": "A teacher supervises the test.",
+      "exampleKr": "교사 한 명이 그 시험을 감독한다."
+    },
+    {
+      "id": "ev-s15-0151",
+      "sourceId": "ev-moe2022-h-0981",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "vocation",
+      "pos": "명사",
+      "meaningKr": [
+        "천직"
+      ],
+      "example": "Teaching became her vocation.",
+      "exampleKr": "가르치는 일이 그녀의 천직이 되었다."
+    },
+    {
+      "id": "ev-s15-0152",
+      "sourceId": "ev-moe2022-h-0968",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "veterinarian",
+      "pos": "명사",
+      "meaningKr": [
+        "수의사"
+      ],
+      "example": "The veterinarian treated our dog.",
+      "exampleKr": "수의사가 우리 개를 치료했다."
+    },
+    {
+      "id": "ev-s15-0153",
+      "sourceId": "ev-moe2022-h-0503",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "innovate",
+      "pos": "동사",
+      "meaningKr": [
+        "혁신하다"
+      ],
+      "example": "Small firms innovate faster.",
+      "exampleKr": "작은 회사들이 더 빠르게 혁신한다."
+    },
+    {
+      "id": "ev-s15-0154",
+      "sourceId": "ev-moe2022-h-0632",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "oblige",
+      "pos": "동사",
+      "meaningKr": [
+        "의무를 지우다"
+      ],
+      "example": "The law obliges drivers to stop.",
+      "exampleKr": "그 법은 운전자에게 멈출 의무를 지운다."
+    },
+    {
+      "id": "ev-s15-0155",
+      "sourceId": "ev-moe2022-h-0550",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "legislate",
+      "pos": "동사",
+      "meaningKr": [
+        "법을 만들다"
+      ],
+      "example": "Congress legislates every year.",
+      "exampleKr": "의회는 매년 법을 만든다."
+    },
+    {
+      "id": "ev-s15-0156",
+      "sourceId": "ev-moe2022-h-0715",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "preside",
+      "pos": "동사",
+      "meaningKr": [
+        "주재하다"
+      ],
+      "example": "She presided over the meeting.",
+      "exampleKr": "그녀가 그 회의를 주재했다."
+    },
+    {
+      "id": "ev-s15-0157",
+      "sourceId": "ev-moe2022-h-0924",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "transact",
+      "pos": "동사",
+      "meaningKr": [
+        "거래하다"
+      ],
+      "example": "They transact business online.",
+      "exampleKr": "그들은 온라인으로 사업을 거래한다."
+    },
+    {
+      "id": "ev-s15-0158",
+      "sourceId": "ev-moe2022-h-0267",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "destine",
+      "pos": "동사",
+      "meaningKr": [
+        "운명 짓다"
+      ],
+      "example": "He was destined to lead.",
+      "exampleKr": "그는 이끌도록 운명 지어졌다."
+    },
+    {
+      "id": "ev-s15-0159",
+      "sourceId": "ev-moe2022-h-0401",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "fraction",
+      "pos": "명사",
+      "meaningKr": [
+        "일부분"
+      ],
+      "example": "One fraction of the class left.",
+      "exampleKr": "반의 일부분이 떠났다."
+    },
+    {
+      "id": "ev-s15-0160",
+      "sourceId": "ev-moe2022-h-0183",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "consist",
+      "pos": "동사",
+      "meaningKr": [
+        "이루어지다"
+      ],
+      "example": "The team consists of five players.",
+      "exampleKr": "그 팀은 선수 다섯 명으로 이루어진다."
+    },
+    {
+      "id": "ev-s15-0161",
+      "sourceId": "ev-moe2022-h-0057",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "arise",
+      "pos": "동사",
+      "meaningKr": [
+        "생겨나다"
+      ],
+      "example": "New problems arise every week.",
+      "exampleKr": "새로운 문제가 매주 생겨난다."
+    },
+    {
+      "id": "ev-s15-0162",
+      "sourceId": "ev-moe2022-h-0347",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "exceed",
+      "pos": "동사",
+      "meaningKr": [
+        "넘어서다"
+      ],
+      "example": "Costs exceeded our first plan.",
+      "exampleKr": "비용이 우리 첫 계획을 넘어섰다."
+    },
+    {
+      "id": "ev-s15-0163",
+      "sourceId": "ev-moe2022-h-0638",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "opt",
+      "pos": "동사",
+      "meaningKr": [
+        "택하다"
+      ],
+      "example": "Many students opt for science.",
+      "exampleKr": "많은 학생이 과학을 택한다."
+    },
+    {
+      "id": "ev-s15-0164",
+      "sourceId": "ev-moe2022-h-0477",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "immense",
+      "pos": "형용사",
+      "meaningKr": [
+        "엄청난"
+      ],
+      "example": "An immense crowd filled the square.",
+      "exampleKr": "엄청난 군중이 광장을 채웠다."
+    },
+    {
+      "id": "ev-s15-0165",
+      "sourceId": "ev-moe2022-h-0471",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "hypothesis",
+      "pos": "명사",
+      "meaningKr": [
+        "가설"
+      ],
+      "example": "Data supported his hypothesis.",
+      "exampleKr": "자료가 그의 가설을 뒷받침했다."
+    },
+    {
+      "id": "ev-s15-0166",
+      "sourceId": "ev-moe2022-h-0184",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "constitute",
+      "pos": "동사",
+      "meaningKr": [
+        "구성하다"
+      ],
+      "example": "Women constitute half the class.",
+      "exampleKr": "여성이 그 반의 절반을 구성한다."
+    },
+    {
+      "id": "ev-s15-0167",
+      "sourceId": "ev-moe2022-h-0954",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "utter",
+      "pos": "동사",
+      "meaningKr": [
+        "입 밖에 내다"
+      ],
+      "example": "He uttered a single word.",
+      "exampleKr": "그는 한 마디를 입 밖에 냈다."
+    },
+    {
+      "id": "ev-s15-0168",
+      "sourceId": "ev-moe2022-h-0285",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "discourse",
+      "pos": "명사",
+      "meaningKr": [
+        "담론"
+      ],
+      "example": "The book studies public discourse.",
+      "exampleKr": "그 책은 공적 담론을 연구한다."
+    },
+    {
+      "id": "ev-s15-0169",
+      "sourceId": "ev-moe2022-h-0200",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "coordinate",
+      "pos": "동사",
+      "meaningKr": [
+        "조율하다"
+      ],
+      "example": "She coordinates the whole event.",
+      "exampleKr": "그녀가 행사 전체를 조율한다."
+    },
+    {
+      "id": "ev-s15-0170",
+      "sourceId": "ev-moe2022-h-0014",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "accompany",
+      "pos": "동사",
+      "meaningKr": [
+        "동행하다"
+      ],
+      "example": "A guard accompanied the visitors.",
+      "exampleKr": "경비원이 방문객들과 동행했다."
+    },
+    {
+      "id": "ev-s15-0171",
+      "sourceId": "ev-moe2022-h-0356",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "explode",
+      "pos": "동사",
+      "meaningKr": [
+        "폭발하다"
+      ],
+      "example": "The old tank exploded loudly.",
+      "exampleKr": "그 낡은 탱크가 요란하게 폭발했다."
+    },
+    {
+      "id": "ev-s15-0172",
+      "sourceId": "ev-moe2022-h-0597",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "modify",
+      "pos": "동사",
+      "meaningKr": [
+        "수정하다"
+      ],
+      "example": "They modified the old design.",
+      "exampleKr": "그들은 낡은 설계를 수정했다."
+    },
+    {
+      "id": "ev-s15-0173",
+      "sourceId": "ev-moe2022-h-0160",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "complement",
+      "pos": "명사",
+      "meaningKr": [
+        "보완물"
+      ],
+      "example": "Bread is a good complement.",
+      "exampleKr": "빵은 좋은 보완물이다."
+    },
+    {
+      "id": "ev-s15-0174",
+      "sourceId": "ev-moe2022-h-0580",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "merge",
+      "pos": "동사",
+      "meaningKr": [
+        "합쳐지다"
+      ],
+      "example": "Two rivers merge near here.",
+      "exampleKr": "두 강이 이 근처에서 합쳐진다."
+    },
+    {
+      "id": "ev-s15-0175",
+      "sourceId": "ev-moe2022-h-0348",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "excel",
+      "pos": "동사",
+      "meaningKr": [
+        "뛰어나다"
+      ],
+      "example": "She excels at long races.",
+      "exampleKr": "그녀는 장거리 경주에 뛰어나다."
+    },
+    {
+      "id": "ev-s15-0176",
+      "sourceId": "ev-moe2022-h-0514",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "integrate",
+      "pos": "동사",
+      "meaningKr": [
+        "통합하다"
+      ],
+      "example": "The city integrated two schools.",
+      "exampleKr": "시가 두 학교를 통합했다."
+    },
+    {
+      "id": "ev-s15-0177",
+      "sourceId": "ev-moe2022-h-0653",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "overlap",
+      "pos": "동사",
+      "meaningKr": [
+        "겹치다"
+      ],
+      "example": "The two lines overlap here.",
+      "exampleKr": "그 두 선은 여기서 겹친다."
+    },
+    {
+      "id": "ev-s15-0178",
+      "sourceId": "ev-moe2022-h-0758",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "reinforce",
+      "pos": "동사",
+      "meaningKr": [
+        "강화하다"
+      ],
+      "example": "Steel bars reinforce the wall.",
+      "exampleKr": "강철 막대가 그 벽을 강화한다."
+    },
+    {
+      "id": "ev-s15-0179",
+      "sourceId": "ev-moe2022-h-0012",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "accelerate",
+      "pos": "동사",
+      "meaningKr": [
+        "가속하다"
+      ],
+      "example": "The car accelerated up the hill.",
+      "exampleKr": "그 차는 언덕을 오르며 가속했다."
+    },
+    {
+      "id": "ev-s15-0180",
+      "sourceId": "ev-moe2022-h-0063",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "assemble",
+      "pos": "동사",
+      "meaningKr": [
+        "조립하다"
+      ],
+      "example": "Workers assemble bikes here.",
+      "exampleKr": "노동자들이 여기서 자전거를 조립한다."
+    },
+    {
+      "id": "ev-s15-0181",
+      "sourceId": "ev-moe2022-h-0236",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "damp",
+      "pos": "형용사",
+      "meaningKr": [
+        "축축한"
+      ],
+      "example": "The towel still feels damp.",
+      "exampleKr": "그 수건은 여전히 축축하게 느껴진다."
+    },
+    {
+      "id": "ev-s15-0182",
+      "sourceId": "ev-moe2022-h-0384",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "flaw",
+      "pos": "명사",
+      "meaningKr": [
+        "흠"
+      ],
+      "example": "The plan has one flaw.",
+      "exampleKr": "그 계획에는 흠이 하나 있다."
+    },
+    {
+      "id": "ev-s15-0183",
+      "sourceId": "ev-moe2022-h-0276",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "dictate",
+      "pos": "동사",
+      "meaningKr": [
+        "받아쓰게 하다"
+      ],
+      "example": "The boss dictated a short letter.",
+      "exampleKr": "상사가 짧은 편지를 받아쓰게 했다."
+    },
+    {
+      "id": "ev-s15-0184",
+      "sourceId": "ev-moe2022-h-0453",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "haunt",
+      "pos": "동사",
+      "meaningKr": [
+        "자주 떠오르다"
+      ],
+      "example": "That night still haunts him.",
+      "exampleKr": "그날 밤이 여전히 그에게 자주 떠오른다."
+    },
+    {
+      "id": "ev-s15-0185",
+      "sourceId": "ev-moe2022-h-0654",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "overlook",
+      "pos": "동사",
+      "meaningKr": [
+        "못 보고 넘기다"
+      ],
+      "example": "Do not overlook small errors.",
+      "exampleKr": "작은 오류를 못 보고 넘기지 마라."
+    },
+    {
+      "id": "ev-s15-0186",
+      "sourceId": "ev-moe2022-h-0335",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "erect",
+      "pos": "동사",
+      "meaningKr": [
+        "똑바로 세우다"
+      ],
+      "example": "Workers erected a tall pole.",
+      "exampleKr": "노동자들이 긴 기둥을 똑바로 세웠다."
+    },
+    {
+      "id": "ev-s15-0187",
+      "sourceId": "ev-moe2022-h-0206",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "correspond",
+      "pos": "동사",
+      "meaningKr": [
+        "일치하다"
+      ],
+      "example": "His story corresponds with mine.",
+      "exampleKr": "그의 이야기는 내 것과 일치한다."
+    },
+    {
+      "id": "ev-s15-0188",
+      "sourceId": "ev-moe2022-h-0017",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "accumulate",
+      "pos": "동사",
+      "meaningKr": [
+        "쌓이다"
+      ],
+      "example": "Dust accumulates behind the shelf.",
+      "exampleKr": "먼지가 선반 뒤에 쌓인다."
+    },
+    {
+      "id": "ev-s15-0189",
+      "sourceId": "ev-moe2022-h-0742",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "questionnaire",
+      "pos": "명사",
+      "meaningKr": [
+        "설문지"
+      ],
+      "example": "Fill in this short questionnaire.",
+      "exampleKr": "이 짧은 설문지를 작성해라."
+    },
+    {
+      "id": "ev-s15-0190",
+      "sourceId": "ev-moe2022-h-0812",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "scramble",
+      "pos": "동사",
+      "meaningKr": [
+        "허둥지둥 움직이다"
+      ],
+      "example": "Students scrambled for the last seat.",
+      "exampleKr": "학생들이 마지막 자리를 두고 허둥지둥 움직였다."
+    },
+    {
+      "id": "ev-s15-0191",
+      "sourceId": "ev-moe2022-h-0265",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "designate",
+      "pos": "동사",
+      "meaningKr": [
+        "지정하다"
+      ],
+      "example": "They designated a safe area.",
+      "exampleKr": "그들은 안전 구역을 지정했다."
+    },
+    {
+      "id": "ev-s15-0192",
+      "sourceId": "ev-moe2022-h-0039",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "allocate",
+      "pos": "동사",
+      "meaningKr": [
+        "배정하다"
+      ],
+      "example": "The school allocated new desks.",
+      "exampleKr": "학교가 새 책상을 배정했다."
+    },
+    {
+      "id": "ev-s15-0193",
+      "sourceId": "ev-moe2022-h-0775",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "restrain",
+      "pos": "동사",
+      "meaningKr": [
+        "억누르다"
+      ],
+      "example": "He restrained his own anger.",
+      "exampleKr": "그는 자기 화를 억눌렀다."
+    },
+    {
+      "id": "ev-s15-0194",
+      "sourceId": "ev-moe2022-h-0262",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "deprive",
+      "pos": "동사",
+      "meaningKr": [
+        "빼앗다"
+      ],
+      "example": "War deprived them of homes.",
+      "exampleKr": "전쟁이 그들에게서 집을 빼앗았다."
+    },
+    {
+      "id": "ev-s15-0195",
+      "sourceId": "ev-moe2022-h-0488",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "incline",
+      "pos": "동사",
+      "meaningKr": [
+        "기울다"
+      ],
+      "example": "The old post inclines slightly.",
+      "exampleKr": "그 낡은 기둥은 조금 기울어 있다."
+    },
+    {
+      "id": "ev-s15-0196",
+      "sourceId": "ev-moe2022-h-0946",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "unify",
+      "pos": "동사",
+      "meaningKr": [
+        "하나로 만들다"
+      ],
+      "example": "One song unified the crowd.",
+      "exampleKr": "노래 한 곡이 군중을 하나로 만들었다."
+    },
+    {
+      "id": "ev-s15-0197",
+      "sourceId": "ev-moe2022-h-0615",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "negate",
+      "pos": "동사",
+      "meaningKr": [
+        "부정하다"
+      ],
+      "example": "He negated every earlier claim.",
+      "exampleKr": "그는 앞선 모든 주장을 부정했다."
+    },
+    {
+      "id": "ev-s15-0198",
+      "sourceId": "ev-moe2022-h-0707",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "precede",
+      "pos": "동사",
+      "meaningKr": [
+        "앞서다"
+      ],
+      "example": "A short talk preceded the film.",
+      "exampleKr": "짧은 강연이 그 영화에 앞섰다."
+    },
+    {
+      "id": "ev-s15-0199",
+      "sourceId": "ev-moe2022-h-0943",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "underlie",
+      "pos": "동사",
+      "meaningKr": [
+        "기초를 이루다"
+      ],
+      "example": "Trust underlies every friendship.",
+      "exampleKr": "신뢰가 모든 우정의 기초를 이룬다."
+    },
+    {
+      "id": "ev-s15-0200",
+      "sourceId": "ev-moe2022-h-0475",
+      "setId": "ev-set-015",
+      "level": "high",
+      "word": "illude",
+      "pos": "동사",
+      "meaningKr": [
+        "착각하게 하다"
+      ],
+      "example": "Mirrors can illude the eye.",
+      "exampleKr": "거울은 눈을 착각하게 할 수 있다."
+    }
+  ]
+}

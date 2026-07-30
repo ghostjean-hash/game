@@ -1,0 +1,2609 @@
+{
+  "setId": "ev-set-005",
+  "order": 5,
+  "title": "나와 사람들",
+  "level": "middle",
+  "source": "교육부 2022 개정 별책 14 ** 대표형(중등 범위)",
+  "words": [
+    {
+      "id": "ev-s05-0001",
+      "sourceId": "ev-moe2022-m-0733",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "person",
+      "pos": "명사",
+      "meaningKr": [
+        "사람"
+      ],
+      "example": "Only one person answered me.",
+      "exampleKr": "오직 한 사람만 내게 답했다."
+    },
+    {
+      "id": "ev-s05-0002",
+      "sourceId": "ev-moe2022-m-0499",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "health",
+      "pos": "명사",
+      "meaningKr": [
+        "건강"
+      ],
+      "example": "Good sleep protects your health.",
+      "exampleKr": "충분한 잠은 당신의 건강을 지킨다."
+    },
+    {
+      "id": "ev-s05-0003",
+      "sourceId": "ev-moe2022-m-0928",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "self",
+      "pos": "명사",
+      "meaningKr": [
+        "자아"
+      ],
+      "example": "He wrote about the self.",
+      "exampleKr": "그는 자아에 대해 썼다."
+    },
+    {
+      "id": "ev-s05-0004",
+      "sourceId": "ev-moe2022-m-0880",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "rest",
+      "pos": "명사",
+      "meaningKr": [
+        "휴식"
+      ],
+      "example": "Take a short rest now.",
+      "exampleKr": "이제 짧은 휴식을 취해라."
+    },
+    {
+      "id": "ev-s05-0005",
+      "sourceId": "ev-moe2022-m-0940",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "sex",
+      "pos": "명사",
+      "meaningKr": [
+        "성별"
+      ],
+      "example": "The form asks your sex.",
+      "exampleKr": "그 서식은 당신의 성별을 묻는다."
+    },
+    {
+      "id": "ev-s05-0006",
+      "sourceId": "ev-moe2022-m-0791",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "private",
+      "pos": "형용사",
+      "meaningKr": [
+        "사적인"
+      ],
+      "example": "This is a private letter.",
+      "exampleKr": "이것은 사적인 편지다."
+    },
+    {
+      "id": "ev-s05-0007",
+      "sourceId": "ev-moe2022-m-0930",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "sense",
+      "pos": "명사",
+      "meaningKr": [
+        "감각"
+      ],
+      "example": "Dogs have a sharp sense.",
+      "exampleKr": "개는 예민한 감각을 지닌다."
+    },
+    {
+      "id": "ev-s05-0008",
+      "sourceId": "ev-moe2022-m-0549",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "interest",
+      "pos": "명사",
+      "meaningKr": [
+        "관심"
+      ],
+      "example": "She showed interest in science.",
+      "exampleKr": "그녀는 과학에 관심을 보였다."
+    },
+    {
+      "id": "ev-s05-0009",
+      "sourceId": "ev-moe2022-m-0635",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "medical",
+      "pos": "형용사",
+      "meaningKr": [
+        "의학의"
+      ],
+      "example": "She read a medical report.",
+      "exampleKr": "그녀는 의학 보고서를 읽었다."
+    },
+    {
+      "id": "ev-s05-0010",
+      "sourceId": "ev-moe2022-m-1138",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "trust",
+      "pos": "명사",
+      "meaningKr": [
+        "신뢰감"
+      ],
+      "example": "Their trust grew over years.",
+      "exampleKr": "그들의 신뢰감은 여러 해에 걸쳐 자랐다."
+    },
+    {
+      "id": "ev-s05-0011",
+      "sourceId": "ev-moe2022-m-0180",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "character",
+      "pos": "명사",
+      "meaningKr": [
+        "성격"
+      ],
+      "example": "He has a kind character.",
+      "exampleKr": "그는 친절한 성격을 지녔다."
+    },
+    {
+      "id": "ev-s05-0012",
+      "sourceId": "ev-moe2022-m-0711",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "pain",
+      "pos": "명사",
+      "meaningKr": [
+        "고통"
+      ],
+      "example": "The medicine eased his pain.",
+      "exampleKr": "그 약이 그의 고통을 덜어 주었다."
+    },
+    {
+      "id": "ev-s05-0013",
+      "sourceId": "ev-moe2022-m-0877",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "respect",
+      "pos": "명사",
+      "meaningKr": [
+        "존경"
+      ],
+      "example": "He earned deep respect here.",
+      "exampleKr": "그는 여기서 깊은 존경을 얻었다."
+    },
+    {
+      "id": "ev-s05-0014",
+      "sourceId": "ev-moe2022-m-0419",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "female",
+      "pos": "형용사",
+      "meaningKr": [
+        "여성의"
+      ],
+      "example": "A female doctor treated my arm.",
+      "exampleKr": "여성 의사가 내 팔을 치료했다."
+    },
+    {
+      "id": "ev-s05-0015",
+      "sourceId": "ev-moe2022-m-0532",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "individual",
+      "pos": "명사",
+      "meaningKr": [
+        "개인"
+      ],
+      "example": "Each individual has different tastes.",
+      "exampleKr": "각 개인은 다른 취향을 가진다."
+    },
+    {
+      "id": "ev-s05-0016",
+      "sourceId": "ev-moe2022-m-0414",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "fear",
+      "pos": "명사",
+      "meaningKr": [
+        "두려움"
+      ],
+      "example": "He hid his fear from us.",
+      "exampleKr": "그는 우리에게 두려움을 숨겼다."
+    },
+    {
+      "id": "ev-s05-0017",
+      "sourceId": "ev-moe2022-m-0136",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "brain",
+      "pos": "명사",
+      "meaningKr": [
+        "뇌"
+      ],
+      "example": "The brain controls the body.",
+      "exampleKr": "뇌는 몸을 조절한다."
+    },
+    {
+      "id": "ev-s05-0018",
+      "sourceId": "ev-moe2022-m-0518",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "hurt",
+      "pos": "동사",
+      "meaningKr": [
+        "다치게 하다"
+      ],
+      "example": "The fall hurt my right leg.",
+      "exampleKr": "넘어져서 오른쪽 다리를 다쳤다."
+    },
+    {
+      "id": "ev-s05-0019",
+      "sourceId": "ev-moe2022-m-0736",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "physical",
+      "pos": "형용사",
+      "meaningKr": [
+        "신체의"
+      ],
+      "example": "Physical exercise keeps us strong.",
+      "exampleKr": "신체 운동은 우리를 튼튼하게 한다."
+    },
+    {
+      "id": "ev-s05-0020",
+      "sourceId": "ev-moe2022-m-0626",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "master",
+      "pos": "명사",
+      "meaningKr": [
+        "주인"
+      ],
+      "example": "The dog obeyed its master.",
+      "exampleKr": "그 개는 주인에게 복종했다."
+    },
+    {
+      "id": "ev-s05-0021",
+      "sourceId": "ev-moe2022-m-0929",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "senior",
+      "pos": "명사",
+      "meaningKr": [
+        "손위 사람"
+      ],
+      "example": "She is two years my senior.",
+      "exampleKr": "그녀는 나보다 두 살 위다."
+    },
+    {
+      "id": "ev-s05-0022",
+      "sourceId": "ev-moe2022-m-0618",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "male",
+      "pos": "형용사",
+      "meaningKr": [
+        "남성의"
+      ],
+      "example": "A male nurse helped the patient.",
+      "exampleKr": "남성 간호사가 그 환자를 도왔다."
+    },
+    {
+      "id": "ev-s05-0023",
+      "sourceId": "ev-moe2022-m-0879",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "responsible",
+      "pos": "형용사",
+      "meaningKr": [
+        "책임 있는"
+      ],
+      "example": "She is a responsible leader.",
+      "exampleKr": "그녀는 책임 있는 지도자다."
+    },
+    {
+      "id": "ev-s05-0024",
+      "sourceId": "ev-moe2022-m-0337",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "drug",
+      "pos": "명사",
+      "meaningKr": [
+        "약, 약물"
+      ],
+      "example": "This drug reduces bad pain.",
+      "exampleKr": "이 약은 심한 통증을 줄여 준다."
+    },
+    {
+      "id": "ev-s05-0025",
+      "sourceId": "ev-moe2022-m-0639",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "mental",
+      "pos": "형용사",
+      "meaningKr": [
+        "정신의"
+      ],
+      "example": "Rest is good for mental health.",
+      "exampleKr": "휴식은 정신 건강에 좋다."
+    },
+    {
+      "id": "ev-s05-0026",
+      "sourceId": "ev-moe2022-m-0980",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "smart",
+      "pos": "형용사",
+      "meaningKr": [
+        "영리한"
+      ],
+      "example": "That was a smart choice.",
+      "exampleKr": "그것은 영리한 선택이었다."
+    },
+    {
+      "id": "ev-s05-0027",
+      "sourceId": "ev-moe2022-m-0406",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "faith",
+      "pos": "명사",
+      "meaningKr": [
+        "신뢰"
+      ],
+      "example": "I have faith in my friend.",
+      "exampleKr": "나는 내 친구에 대한 신뢰가 있다."
+    },
+    {
+      "id": "ev-s05-0028",
+      "sourceId": "ev-moe2022-m-0997",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "soul",
+      "pos": "명사",
+      "meaningKr": [
+        "영혼"
+      ],
+      "example": "Music touched my whole soul.",
+      "exampleKr": "음악이 내 영혼 전체를 어루만졌다."
+    },
+    {
+      "id": "ev-s05-0029",
+      "sourceId": "ev-moe2022-m-1007",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "spirit",
+      "pos": "명사",
+      "meaningKr": [
+        "정신"
+      ],
+      "example": "The team showed fighting spirit.",
+      "exampleKr": "그 팀은 투지 있는 정신을 보였다."
+    },
+    {
+      "id": "ev-s05-0030",
+      "sourceId": "ev-moe2022-m-0808",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "proud",
+      "pos": "형용사",
+      "meaningKr": [
+        "자랑스러운"
+      ],
+      "example": "My parents felt proud today.",
+      "exampleKr": "우리 부모님은 오늘 자랑스러워하셨다."
+    },
+    {
+      "id": "ev-s05-0031",
+      "sourceId": "ev-moe2022-m-0722",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "patient",
+      "pos": "명사",
+      "meaningKr": [
+        "환자"
+      ],
+      "example": "The patient rested in bed.",
+      "exampleKr": "그 환자는 침대에서 쉬었다."
+    },
+    {
+      "id": "ev-s05-0032",
+      "sourceId": "ev-moe2022-m-0418",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "fellow",
+      "pos": "명사",
+      "meaningKr": [
+        "동료"
+      ],
+      "example": "My fellow told me the news.",
+      "exampleKr": "내 동료가 그 소식을 말해 주었다."
+    },
+    {
+      "id": "ev-s05-0033",
+      "sourceId": "ev-moe2022-m-1062",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "surprise",
+      "pos": "동사",
+      "meaningKr": [
+        "깜짝 놀라게 하다"
+      ],
+      "example": "Her gift surprised the class.",
+      "exampleKr": "그녀의 선물이 반을 깜짝 놀라게 했다."
+    },
+    {
+      "id": "ev-s05-0034",
+      "sourceId": "ev-moe2022-m-0380",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "evil",
+      "pos": "형용사",
+      "meaningKr": [
+        "악한"
+      ],
+      "example": "The story has an evil king.",
+      "exampleKr": "그 이야기에는 악한 왕이 나온다."
+    },
+    {
+      "id": "ev-s05-0035",
+      "sourceId": "ev-moe2022-m-0636",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "medicine",
+      "pos": "명사",
+      "meaningKr": [
+        "약"
+      ],
+      "example": "Take this medicine after meals.",
+      "exampleKr": "식후에 이 약을 드세요."
+    },
+    {
+      "id": "ev-s05-0036",
+      "sourceId": "ev-moe2022-m-1039",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "stress",
+      "pos": "명사",
+      "meaningKr": [
+        "스트레스"
+      ],
+      "example": "Exams cause serious stress.",
+      "exampleKr": "시험은 심각한 스트레스를 일으킨다."
+    },
+    {
+      "id": "ev-s05-0037",
+      "sourceId": "ev-moe2022-m-0521",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "ill",
+      "pos": "형용사",
+      "meaningKr": [
+        "아픈"
+      ],
+      "example": "My uncle has been ill lately.",
+      "exampleKr": "삼촌이 최근에 아프시다."
+    },
+    {
+      "id": "ev-s05-0038",
+      "sourceId": "ev-moe2022-m-0269",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "crowd",
+      "pos": "명사",
+      "meaningKr": [
+        "군중"
+      ],
+      "example": "A large crowd filled the square.",
+      "exampleKr": "많은 군중이 광장을 가득 채웠다."
+    },
+    {
+      "id": "ev-s05-0039",
+      "sourceId": "ev-moe2022-m-0362",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "enemy",
+      "pos": "명사",
+      "meaningKr": [
+        "적"
+      ],
+      "example": "Fear is your worst enemy.",
+      "exampleKr": "두려움이 너의 최악의 적이다."
+    },
+    {
+      "id": "ev-s05-0040",
+      "sourceId": "ev-moe2022-m-0670",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "native",
+      "pos": "형용사",
+      "meaningKr": [
+        "토박이의"
+      ],
+      "example": "She is a native speaker.",
+      "exampleKr": "그녀는 토박이 화자다."
+    },
+    {
+      "id": "ev-s05-0041",
+      "sourceId": "ev-moe2022-m-0230",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "concern",
+      "pos": "명사",
+      "meaningKr": [
+        "걱정, 관심사"
+      ],
+      "example": "Safety is our main concern.",
+      "exampleKr": "안전이 우리의 주된 걱정이다."
+    },
+    {
+      "id": "ev-s05-0042",
+      "sourceId": "ev-moe2022-m-0578",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "laugh",
+      "pos": "동사",
+      "meaningKr": [
+        "웃다"
+      ],
+      "example": "The children laughed together loudly.",
+      "exampleKr": "아이들이 함께 크게 웃었다."
+    },
+    {
+      "id": "ev-s05-0043",
+      "sourceId": "ev-moe2022-m-0276",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "cute",
+      "pos": "형용사",
+      "meaningKr": [
+        "귀여운"
+      ],
+      "example": "That puppy looks very cute.",
+      "exampleKr": "그 강아지는 아주 귀여워 보인다."
+    },
+    {
+      "id": "ev-s05-0044",
+      "sourceId": "ev-moe2022-m-0519",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "identity",
+      "pos": "명사",
+      "meaningKr": [
+        "정체성"
+      ],
+      "example": "He hid his true identity.",
+      "exampleKr": "그는 자신의 진짜 정체성을 숨겼다."
+    },
+    {
+      "id": "ev-s05-0045",
+      "sourceId": "ev-moe2022-m-1164",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "vision",
+      "pos": "명사",
+      "meaningKr": [
+        "시력"
+      ],
+      "example": "Her vision improved with glasses.",
+      "exampleKr": "그녀의 시력은 안경으로 좋아졌다."
+    },
+    {
+      "id": "ev-s05-0046",
+      "sourceId": "ev-moe2022-m-0303",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "desire",
+      "pos": "명사",
+      "meaningKr": [
+        "욕망, 바람"
+      ],
+      "example": "Her desire to travel grew.",
+      "exampleKr": "여행하고 싶은 그녀의 바람이 커졌다."
+    },
+    {
+      "id": "ev-s05-0047",
+      "sourceId": "ev-moe2022-m-1151",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "upset",
+      "pos": "동사",
+      "meaningKr": [
+        "속상하게 하다"
+      ],
+      "example": "The loss upset our players.",
+      "exampleKr": "그 패배가 우리 선수들을 속상하게 했다."
+    },
+    {
+      "id": "ev-s05-0048",
+      "sourceId": "ev-moe2022-m-0127",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "bond",
+      "pos": "명사",
+      "meaningKr": [
+        "유대, 결속"
+      ],
+      "example": "They share a strong bond.",
+      "exampleKr": "그들은 강한 유대를 나눈다."
+    },
+    {
+      "id": "ev-s05-0049",
+      "sourceId": "ev-moe2022-m-0075",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "attitude",
+      "pos": "명사",
+      "meaningKr": [
+        "태도"
+      ],
+      "example": "His attitude was polite.",
+      "exampleKr": "그의 태도는 공손했다."
+    },
+    {
+      "id": "ev-s05-0050",
+      "sourceId": "ev-moe2022-m-0489",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "guest",
+      "pos": "명사",
+      "meaningKr": [
+        "손님"
+      ],
+      "example": "Our guest arrived before noon.",
+      "exampleKr": "우리 손님이 정오 전에 도착했다."
+    },
+    {
+      "id": "ev-s05-0051",
+      "sourceId": "ev-moe2022-m-0480",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "grace",
+      "pos": "명사",
+      "meaningKr": [
+        "우아함"
+      ],
+      "example": "She dances with quiet grace.",
+      "exampleKr": "그녀는 조용한 우아함으로 춤춘다."
+    },
+    {
+      "id": "ev-s05-0052",
+      "sourceId": "ev-moe2022-m-0778",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "pregnant",
+      "pos": "형용사",
+      "meaningKr": [
+        "임신한"
+      ],
+      "example": "My aunt is pregnant now.",
+      "exampleKr": "우리 이모는 지금 임신 중이다."
+    },
+    {
+      "id": "ev-s05-0053",
+      "sourceId": "ev-moe2022-m-0563",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "joy",
+      "pos": "명사",
+      "meaningKr": [
+        "큰 기쁨"
+      ],
+      "example": "Her face was full of joy.",
+      "exampleKr": "그녀의 얼굴은 큰 기쁨으로 가득했다."
+    },
+    {
+      "id": "ev-s05-0054",
+      "sourceId": "ev-moe2022-m-0628",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "mate",
+      "pos": "명사",
+      "meaningKr": [
+        "짝"
+      ],
+      "example": "The bird called to its mate.",
+      "exampleKr": "그 새는 자기 짝을 불렀다."
+    },
+    {
+      "id": "ev-s05-0055",
+      "sourceId": "ev-moe2022-m-0858",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "relief",
+      "pos": "명사",
+      "meaningKr": [
+        "안도"
+      ],
+      "example": "Her smile showed clear relief.",
+      "exampleKr": "그녀의 미소는 분명한 안도를 보여 주었다."
+    },
+    {
+      "id": "ev-s05-0056",
+      "sourceId": "ev-moe2022-m-0945",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "shame",
+      "pos": "명사",
+      "meaningKr": [
+        "수치심"
+      ],
+      "example": "He felt shame after lying.",
+      "exampleKr": "그는 거짓말한 후 수치심을 느꼈다."
+    },
+    {
+      "id": "ev-s05-0057",
+      "sourceId": "ev-moe2022-m-0159",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "calm",
+      "pos": "형용사",
+      "meaningKr": [
+        "차분한"
+      ],
+      "example": "Stay calm during the test.",
+      "exampleKr": "시험 중에는 차분히 있어라."
+    },
+    {
+      "id": "ev-s05-0058",
+      "sourceId": "ev-moe2022-m-0964",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "sight",
+      "pos": "명사",
+      "meaningKr": [
+        "시야"
+      ],
+      "example": "The tower left my sight.",
+      "exampleKr": "그 탑이 내 시야에서 벗어났다."
+    },
+    {
+      "id": "ev-s05-0059",
+      "sourceId": "ev-moe2022-m-0120",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "blind",
+      "pos": "형용사",
+      "meaningKr": [
+        "눈먼"
+      ],
+      "example": "The blind man used a cane.",
+      "exampleKr": "눈먼 남자는 지팡이를 사용했다."
+    },
+    {
+      "id": "ev-s05-0060",
+      "sourceId": "ev-moe2022-m-0141",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "breath",
+      "pos": "명사",
+      "meaningKr": [
+        "숨"
+      ],
+      "example": "Take a deep breath.",
+      "exampleKr": "숨을 깊게 들이쉬어라."
+    },
+    {
+      "id": "ev-s05-0061",
+      "sourceId": "ev-moe2022-m-0189",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "chest",
+      "pos": "명사",
+      "meaningKr": [
+        "흉부, 가슴"
+      ],
+      "example": "He felt pain in his chest.",
+      "exampleKr": "그는 가슴에 통증을 느꼈다."
+    },
+    {
+      "id": "ev-s05-0062",
+      "sourceId": "ev-moe2022-m-1188",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "wise",
+      "pos": "형용사",
+      "meaningKr": [
+        "현명한"
+      ],
+      "example": "That was a wise choice.",
+      "exampleKr": "그것은 현명한 선택이었다."
+    },
+    {
+      "id": "ev-s05-0063",
+      "sourceId": "ev-moe2022-m-0960",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "shoulder",
+      "pos": "명사",
+      "meaningKr": [
+        "어깨"
+      ],
+      "example": "My left shoulder hurts today.",
+      "exampleKr": "내 왼쪽 어깨가 오늘 아프다."
+    },
+    {
+      "id": "ev-s05-0064",
+      "sourceId": "ev-moe2022-m-0565",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "junior",
+      "pos": "명사",
+      "meaningKr": [
+        "손아래 사람"
+      ],
+      "example": "He is three years my junior.",
+      "exampleKr": "그는 나보다 세 살 아래다."
+    },
+    {
+      "id": "ev-s05-0065",
+      "sourceId": "ev-moe2022-m-0786",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "pride",
+      "pos": "명사",
+      "meaningKr": [
+        "자부심"
+      ],
+      "example": "He spoke with quiet pride.",
+      "exampleKr": "그는 조용한 자부심으로 말했다."
+    },
+    {
+      "id": "ev-s05-0066",
+      "sourceId": "ev-moe2022-m-0957",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "shock",
+      "pos": "명사",
+      "meaningKr": [
+        "충격"
+      ],
+      "example": "The news gave me a shock.",
+      "exampleKr": "그 소식은 내게 충격을 주었다."
+    },
+    {
+      "id": "ev-s05-0067",
+      "sourceId": "ev-moe2022-m-0273",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "curious",
+      "pos": "형용사",
+      "meaningKr": [
+        "궁금한"
+      ],
+      "example": "Children are curious about everything.",
+      "exampleKr": "아이들은 모든 것에 궁금해한다."
+    },
+    {
+      "id": "ev-s05-0068",
+      "sourceId": "ev-moe2022-m-1052",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "suffer",
+      "pos": "동사",
+      "meaningKr": [
+        "고통받다"
+      ],
+      "example": "Many people suffer from noise.",
+      "exampleKr": "많은 사람이 소음으로 고통받는다."
+    },
+    {
+      "id": "ev-s05-0069",
+      "sourceId": "ev-moe2022-m-0657",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "mood",
+      "pos": "명사",
+      "meaningKr": [
+        "기분"
+      ],
+      "example": "Her mood improved after lunch.",
+      "exampleKr": "그녀의 기분은 점심 후에 나아졌다."
+    },
+    {
+      "id": "ev-s05-0070",
+      "sourceId": "ev-moe2022-m-0664",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "muscle",
+      "pos": "명사",
+      "meaningKr": [
+        "근육"
+      ],
+      "example": "Running builds leg muscle.",
+      "exampleKr": "달리기는 다리 근육을 키운다."
+    },
+    {
+      "id": "ev-s05-0071",
+      "sourceId": "ev-moe2022-m-0043",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "anger",
+      "pos": "명사",
+      "meaningKr": [
+        "분노"
+      ],
+      "example": "His anger soon faded.",
+      "exampleKr": "그의 분노는 곧 사라졌다."
+    },
+    {
+      "id": "ev-s05-0072",
+      "sourceId": "ev-moe2022-m-1032",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "stomach",
+      "pos": "명사",
+      "meaningKr": [
+        "위"
+      ],
+      "example": "My stomach hurts after lunch.",
+      "exampleKr": "점심 후에 내 위가 아프다."
+    },
+    {
+      "id": "ev-s05-0073",
+      "sourceId": "ev-moe2022-m-0215",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "comfort",
+      "pos": "명사",
+      "meaningKr": [
+        "위로, 편안함"
+      ],
+      "example": "Her words gave me comfort.",
+      "exampleKr": "그녀의 말이 나에게 위로를 주었다."
+    },
+    {
+      "id": "ev-s05-0074",
+      "sourceId": "ev-moe2022-m-0132",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "bother",
+      "pos": "동사",
+      "meaningKr": [
+        "괴롭히다"
+      ],
+      "example": "Do not bother your sister.",
+      "exampleKr": "여동생을 괴롭히지 마라."
+    },
+    {
+      "id": "ev-s05-0075",
+      "sourceId": "ev-moe2022-m-0966",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "silly",
+      "pos": "형용사",
+      "meaningKr": [
+        "어리석은"
+      ],
+      "example": "That was a silly mistake.",
+      "exampleKr": "그것은 어리석은 실수였다."
+    },
+    {
+      "id": "ev-s05-0076",
+      "sourceId": "ev-moe2022-m-1116",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "tongue",
+      "pos": "명사",
+      "meaningKr": [
+        "혀"
+      ],
+      "example": "The soup burned my tongue.",
+      "exampleKr": "그 수프가 내 혀를 데게 했다."
+    },
+    {
+      "id": "ev-s05-0077",
+      "sourceId": "ev-moe2022-m-0063",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "asleep",
+      "pos": "형용사",
+      "meaningKr": [
+        "잠든"
+      ],
+      "example": "The baby is asleep.",
+      "exampleKr": "아기는 잠들어 있다."
+    },
+    {
+      "id": "ev-s05-0078",
+      "sourceId": "ev-moe2022-m-0328",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "divorce",
+      "pos": "명사",
+      "meaningKr": [
+        "이혼"
+      ],
+      "example": "Their divorce surprised many friends.",
+      "exampleKr": "그들의 이혼은 많은 친구를 놀라게 했다."
+    },
+    {
+      "id": "ev-s05-0079",
+      "sourceId": "ev-moe2022-m-0790",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "privacy",
+      "pos": "명사",
+      "meaningKr": [
+        "사생활"
+      ],
+      "example": "Everyone deserves some privacy.",
+      "exampleKr": "누구나 약간의 사생활을 누릴 자격이 있다."
+    },
+    {
+      "id": "ev-s05-0080",
+      "sourceId": "ev-moe2022-m-0140",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "breast",
+      "pos": "명사",
+      "meaningKr": [
+        "유방, 가슴"
+      ],
+      "example": "She held the baby to her breast.",
+      "exampleKr": "그녀는 아기를 가슴에 안았다."
+    },
+    {
+      "id": "ev-s05-0081",
+      "sourceId": "ev-moe2022-m-1080",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "tear",
+      "pos": "명사",
+      "meaningKr": [
+        "눈물"
+      ],
+      "example": "A single tear fell down.",
+      "exampleKr": "눈물 한 방울이 떨어졌다."
+    },
+    {
+      "id": "ev-s05-0082",
+      "sourceId": "ev-moe2022-m-1141",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "twin",
+      "pos": "명사",
+      "meaningKr": [
+        "쌍둥이"
+      ],
+      "example": "My twin lives in Busan.",
+      "exampleKr": "내 쌍둥이는 부산에 산다."
+    },
+    {
+      "id": "ev-s05-0083",
+      "sourceId": "ev-moe2022-m-0567",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "knee",
+      "pos": "명사",
+      "meaningKr": [
+        "무릎"
+      ],
+      "example": "She put a book on her knee.",
+      "exampleKr": "그녀는 무릎에 책을 올렸다."
+    },
+    {
+      "id": "ev-s05-0084",
+      "sourceId": "ev-moe2022-m-0272",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "cure",
+      "pos": "동사",
+      "meaningKr": [
+        "치료하다"
+      ],
+      "example": "This medicine cures the illness.",
+      "exampleKr": "이 약은 그 병을 치료한다."
+    },
+    {
+      "id": "ev-s05-0085",
+      "sourceId": "ev-moe2022-m-0304",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "desperate",
+      "pos": "형용사",
+      "meaningKr": [
+        "절망적인"
+      ],
+      "example": "He made a desperate attempt.",
+      "exampleKr": "그는 절망적인 시도를 했다."
+    },
+    {
+      "id": "ev-s05-0086",
+      "sourceId": "ev-moe2022-m-1100",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "throat",
+      "pos": "명사",
+      "meaningKr": [
+        "목구멍"
+      ],
+      "example": "My throat feels dry today.",
+      "exampleKr": "내 목구멍이 오늘 건조하다."
+    },
+    {
+      "id": "ev-s05-0087",
+      "sourceId": "ev-moe2022-m-0084",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "awkward",
+      "pos": "형용사",
+      "meaningKr": [
+        "어색한"
+      ],
+      "example": "It was an awkward moment.",
+      "exampleKr": "그것은 어색한 순간이었다."
+    },
+    {
+      "id": "ev-s05-0088",
+      "sourceId": "ev-moe2022-m-0846",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "recover",
+      "pos": "동사",
+      "meaningKr": [
+        "회복하다"
+      ],
+      "example": "She recovered after two weeks.",
+      "exampleKr": "그녀는 이 주 후에 회복했다."
+    },
+    {
+      "id": "ev-s05-0089",
+      "sourceId": "ev-moe2022-m-0856",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "relax",
+      "pos": "동사",
+      "meaningKr": [
+        "긴장을 풀다"
+      ],
+      "example": "Relax and breathe deeply now.",
+      "exampleKr": "이제 긴장을 풀고 깊게 숨 쉬어라."
+    },
+    {
+      "id": "ev-s05-0090",
+      "sourceId": "ev-moe2022-m-0142",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "breathe",
+      "pos": "동사",
+      "meaningKr": [
+        "숨 쉬다"
+      ],
+      "example": "Breathe slowly and relax.",
+      "exampleKr": "천천히 숨 쉬며 긴장을 풀어라."
+    },
+    {
+      "id": "ev-s05-0091",
+      "sourceId": "ev-moe2022-m-0715",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "panic",
+      "pos": "명사",
+      "meaningKr": [
+        "공황"
+      ],
+      "example": "Sudden panic spread through the crowd.",
+      "exampleKr": "갑작스러운 공황이 군중에 퍼졌다."
+    },
+    {
+      "id": "ev-s05-0092",
+      "sourceId": "ev-moe2022-m-0900",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "rude",
+      "pos": "형용사",
+      "meaningKr": [
+        "무례한"
+      ],
+      "example": "That was a rude answer.",
+      "exampleKr": "그것은 무례한 대답이었다."
+    },
+    {
+      "id": "ev-s05-0093",
+      "sourceId": "ev-moe2022-m-1195",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "wound",
+      "pos": "명사",
+      "meaningKr": [
+        "상처"
+      ],
+      "example": "The deep wound healed slowly.",
+      "exampleKr": "그 깊은 상처는 천천히 나았다."
+    },
+    {
+      "id": "ev-s05-0094",
+      "sourceId": "ev-moe2022-m-0421",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "fever",
+      "pos": "명사",
+      "meaningKr": [
+        "열(체온)"
+      ],
+      "example": "The child had a high fever.",
+      "exampleKr": "그 아이는 높은 열이 있었다."
+    },
+    {
+      "id": "ev-s05-0095",
+      "sourceId": "ev-moe2022-m-0438",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "folk",
+      "pos": "명사",
+      "meaningKr": [
+        "사람들"
+      ],
+      "example": "The folk here speak very slowly.",
+      "exampleKr": "이곳 사람들은 아주 천천히 말한다."
+    },
+    {
+      "id": "ev-s05-0096",
+      "sourceId": "ev-moe2022-m-0496",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "handsome",
+      "pos": "형용사",
+      "meaningKr": [
+        "잘생긴"
+      ],
+      "example": "A handsome young man smiled.",
+      "exampleKr": "잘생긴 젊은 남자가 미소 지었다."
+    },
+    {
+      "id": "ev-s05-0097",
+      "sourceId": "ev-moe2022-m-0013",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "adopt",
+      "pos": "동사",
+      "meaningKr": [
+        "입양하다"
+      ],
+      "example": "They adopted a small dog.",
+      "exampleKr": "그들은 작은 개를 입양했다."
+    },
+    {
+      "id": "ev-s05-0098",
+      "sourceId": "ev-moe2022-m-0357",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "emotion",
+      "pos": "명사",
+      "meaningKr": [
+        "감정"
+      ],
+      "example": "Music can change our emotion.",
+      "exampleKr": "음악은 우리의 감정을 바꿀 수 있다."
+    },
+    {
+      "id": "ev-s05-0099",
+      "sourceId": "ev-moe2022-m-0516",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "humor",
+      "pos": "명사",
+      "meaningKr": [
+        "유머"
+      ],
+      "example": "His humor makes everyone laugh.",
+      "exampleKr": "그의 유머는 모두를 웃게 한다."
+    },
+    {
+      "id": "ev-s05-0100",
+      "sourceId": "ev-moe2022-m-0676",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "nerve",
+      "pos": "명사",
+      "meaningKr": [
+        "신경"
+      ],
+      "example": "Cold air touched a tooth nerve.",
+      "exampleKr": "찬 공기가 치아 신경에 닿았다."
+    },
+    {
+      "id": "ev-s05-0101",
+      "sourceId": "ev-moe2022-m-0623",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "marvel",
+      "pos": "동사",
+      "meaningKr": [
+        "경탄하다"
+      ],
+      "example": "Tourists marvel at the tall tower.",
+      "exampleKr": "관광객들은 그 높은 탑에 경탄한다."
+    },
+    {
+      "id": "ev-s05-0102",
+      "sourceId": "ev-moe2022-m-0081",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "awake",
+      "pos": "형용사",
+      "meaningKr": [
+        "깨어 있는"
+      ],
+      "example": "I was awake all night.",
+      "exampleKr": "나는 밤새 깨어 있었다."
+    },
+    {
+      "id": "ev-s05-0103",
+      "sourceId": "ev-moe2022-m-1083",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "teenage",
+      "pos": "형용사",
+      "meaningKr": [
+        "십대의"
+      ],
+      "example": "Teenage students filled the hall.",
+      "exampleKr": "십대 학생들이 강당을 채웠다."
+    },
+    {
+      "id": "ev-s05-0104",
+      "sourceId": "ev-moe2022-m-0491",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "guilt",
+      "pos": "명사",
+      "meaningKr": [
+        "죄책감"
+      ],
+      "example": "He felt guilt after the lie.",
+      "exampleKr": "그는 거짓말 후 죄책감을 느꼈다."
+    },
+    {
+      "id": "ev-s05-0105",
+      "sourceId": "ev-moe2022-m-0183",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "charm",
+      "pos": "명사",
+      "meaningKr": [
+        "매력"
+      ],
+      "example": "Her smile has charm.",
+      "exampleKr": "그녀의 미소에는 매력이 있다."
+    },
+    {
+      "id": "ev-s05-0106",
+      "sourceId": "ev-moe2022-m-0271",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "cruel",
+      "pos": "형용사",
+      "meaningKr": [
+        "잔인한"
+      ],
+      "example": "Hurting animals is very cruel.",
+      "exampleKr": "동물을 해치는 것은 매우 잔인하다."
+    },
+    {
+      "id": "ev-s05-0107",
+      "sourceId": "ev-moe2022-m-0674",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "neighbor",
+      "pos": "명사",
+      "meaningKr": [
+        "이웃"
+      ],
+      "example": "Our neighbor keeps two cats.",
+      "exampleKr": "우리 이웃은 고양이 두 마리를 기른다."
+    },
+    {
+      "id": "ev-s05-0108",
+      "sourceId": "ev-moe2022-m-0517",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "hunger",
+      "pos": "명사",
+      "meaningKr": [
+        "배고픔"
+      ],
+      "example": "Hunger made the boy weak.",
+      "exampleKr": "배고픔이 그 소년을 약하게 했다."
+    },
+    {
+      "id": "ev-s05-0109",
+      "sourceId": "ev-moe2022-m-0048",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "anxious",
+      "pos": "형용사",
+      "meaningKr": [
+        "불안한"
+      ],
+      "example": "She felt anxious before the test.",
+      "exampleKr": "그녀는 시험 전에 불안했다."
+    },
+    {
+      "id": "ev-s05-0110",
+      "sourceId": "ev-moe2022-m-0280",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "darling",
+      "pos": "명사",
+      "meaningKr": [
+        "사랑하는 사람"
+      ],
+      "example": "Good night, my little darling.",
+      "exampleKr": "잘 자, 내 어린 사랑아."
+    },
+    {
+      "id": "ev-s05-0111",
+      "sourceId": "ev-moe2022-m-0514",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "hug",
+      "pos": "동사",
+      "meaningKr": [
+        "껴안다"
+      ],
+      "example": "She hugged her little sister.",
+      "exampleKr": "그녀는 여동생을 껴안았다."
+    },
+    {
+      "id": "ev-s05-0112",
+      "sourceId": "ev-moe2022-m-0910",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "scare",
+      "pos": "동사",
+      "meaningKr": [
+        "겁주다"
+      ],
+      "example": "Loud thunder scared the puppy.",
+      "exampleKr": "큰 천둥이 강아지를 겁주었다."
+    },
+    {
+      "id": "ev-s05-0113",
+      "sourceId": "ev-moe2022-m-1113",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "toe",
+      "pos": "명사",
+      "meaningKr": [
+        "발가락"
+      ],
+      "example": "I hurt my little toe.",
+      "exampleKr": "나는 작은 발가락을 다쳤다."
+    },
+    {
+      "id": "ev-s05-0114",
+      "sourceId": "ev-moe2022-m-0122",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "blonde",
+      "pos": "형용사",
+      "meaningKr": [
+        "금발의"
+      ],
+      "example": "She has blonde hair.",
+      "exampleKr": "그녀는 금발 머리이다."
+    },
+    {
+      "id": "ev-s05-0115",
+      "sourceId": "ev-moe2022-m-0995",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "sore",
+      "pos": "형용사",
+      "meaningKr": [
+        "쓰라린"
+      ],
+      "example": "My throat felt sore today.",
+      "exampleKr": "내 목이 오늘 쓰라렸다."
+    },
+    {
+      "id": "ev-s05-0116",
+      "sourceId": "ev-moe2022-m-0150",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "bump",
+      "pos": "명사",
+      "meaningKr": [
+        "혹"
+      ],
+      "example": "He has a bump on his head.",
+      "exampleKr": "그는 머리에 혹이 났다."
+    },
+    {
+      "id": "ev-s05-0117",
+      "sourceId": "ev-moe2022-m-0559",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "jaw",
+      "pos": "명사",
+      "meaningKr": [
+        "턱"
+      ],
+      "example": "The dog opened its wide jaw.",
+      "exampleKr": "그 개가 넓은 턱을 벌렸다."
+    },
+    {
+      "id": "ev-s05-0118",
+      "sourceId": "ev-moe2022-m-0745",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "pity",
+      "pos": "명사",
+      "meaningKr": [
+        "연민"
+      ],
+      "example": "She felt pity for the puppy.",
+      "exampleKr": "그녀는 그 강아지에게 연민을 느꼈다."
+    },
+    {
+      "id": "ev-s05-0119",
+      "sourceId": "ev-moe2022-m-0907",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "satisfy",
+      "pos": "동사",
+      "meaningKr": [
+        "만족시키다"
+      ],
+      "example": "The meal satisfied every guest.",
+      "exampleKr": "그 식사는 모든 손님을 만족시켰다."
+    },
+    {
+      "id": "ev-s05-0120",
+      "sourceId": "ev-moe2022-m-0011",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "admire",
+      "pos": "동사",
+      "meaningKr": [
+        "존경하다"
+      ],
+      "example": "I admire her courage.",
+      "exampleKr": "나는 그녀의 용기를 존경한다."
+    },
+    {
+      "id": "ev-s05-0121",
+      "sourceId": "ev-moe2022-m-0292",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "delight",
+      "pos": "명사",
+      "meaningKr": [
+        "기쁨"
+      ],
+      "example": "Her smile showed pure delight.",
+      "exampleKr": "그녀의 미소는 순수한 기쁨을 보여주었다."
+    },
+    {
+      "id": "ev-s05-0122",
+      "sourceId": "ev-moe2022-m-0187",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "cheek",
+      "pos": "명사",
+      "meaningKr": [
+        "뺨"
+      ],
+      "example": "A tear ran down her cheek.",
+      "exampleKr": "눈물이 그녀의 뺨을 타고 흘렀다."
+    },
+    {
+      "id": "ev-s05-0123",
+      "sourceId": "ev-moe2022-m-0256",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "cough",
+      "pos": "동사",
+      "meaningKr": [
+        "기침하다"
+      ],
+      "example": "He coughed during the movie.",
+      "exampleKr": "그는 영화를 보는 동안 기침했다."
+    },
+    {
+      "id": "ev-s05-0124",
+      "sourceId": "ev-moe2022-m-1086",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "tense",
+      "pos": "형용사",
+      "meaningKr": [
+        "긴장한"
+      ],
+      "example": "The players looked tense.",
+      "exampleKr": "그 선수들은 긴장해 보였다."
+    },
+    {
+      "id": "ev-s05-0125",
+      "sourceId": "ev-moe2022-m-0130",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "bore",
+      "pos": "동사",
+      "meaningKr": [
+        "지루하게 하다"
+      ],
+      "example": "The long speech bored us.",
+      "exampleKr": "긴 연설은 우리를 지루하게 했다."
+    },
+    {
+      "id": "ev-s05-0126",
+      "sourceId": "ev-moe2022-m-0525",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "impress",
+      "pos": "동사",
+      "meaningKr": [
+        "감동시키다"
+      ],
+      "example": "Her speech impressed the whole class.",
+      "exampleKr": "그녀의 연설은 반 전체를 감동시켰다."
+    },
+    {
+      "id": "ev-s05-0127",
+      "sourceId": "ev-moe2022-m-0759",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "polite",
+      "pos": "형용사",
+      "meaningKr": [
+        "예의 바른"
+      ],
+      "example": "The clerk was very polite.",
+      "exampleKr": "그 점원은 아주 예의 발랐다."
+    },
+    {
+      "id": "ev-s05-0128",
+      "sourceId": "ev-moe2022-m-0387",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "exhaust",
+      "pos": "동사",
+      "meaningKr": [
+        "지치게 하다"
+      ],
+      "example": "Long walks exhaust little children.",
+      "exampleKr": "긴 산책은 어린 아이들을 지치게 한다."
+    },
+    {
+      "id": "ev-s05-0129",
+      "sourceId": "ev-moe2022-m-0404",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "faint",
+      "pos": "동사",
+      "meaningKr": [
+        "기절하다"
+      ],
+      "example": "She may faint in this heat.",
+      "exampleKr": "그녀는 이 더위에 기절할지도 모른다."
+    },
+    {
+      "id": "ev-s05-0130",
+      "sourceId": "ev-moe2022-m-0317",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "disappoint",
+      "pos": "동사",
+      "meaningKr": [
+        "실망시키다"
+      ],
+      "example": "The ending disappointed many fans.",
+      "exampleKr": "그 결말은 많은 팬을 실망시켰다."
+    },
+    {
+      "id": "ev-s05-0131",
+      "sourceId": "ev-moe2022-m-0320",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "disgust",
+      "pos": "명사",
+      "meaningKr": [
+        "혐오"
+      ],
+      "example": "His manners caused deep disgust.",
+      "exampleKr": "그의 태도는 깊은 혐오를 일으켰다."
+    },
+    {
+      "id": "ev-s05-0132",
+      "sourceId": "ev-moe2022-m-0274",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "curl",
+      "pos": "명사",
+      "meaningKr": [
+        "곱슬머리"
+      ],
+      "example": "One curl fell on her face.",
+      "exampleKr": "곱슬머리 한 가닥이 그녀의 얼굴에 내려왔다."
+    },
+    {
+      "id": "ev-s05-0133",
+      "sourceId": "ev-moe2022-m-0045",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "annoy",
+      "pos": "동사",
+      "meaningKr": [
+        "짜증 나게 하다"
+      ],
+      "example": "The noise annoys me.",
+      "exampleKr": "그 소음은 나를 짜증 나게 한다."
+    },
+    {
+      "id": "ev-s05-0134",
+      "sourceId": "ev-moe2022-m-0356",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "embarrass",
+      "pos": "동사",
+      "meaningKr": [
+        "당황시키다"
+      ],
+      "example": "His question embarrassed the teacher.",
+      "exampleKr": "그의 질문은 선생님을 당황시켰다."
+    },
+    {
+      "id": "ev-s05-0135",
+      "sourceId": "ev-moe2022-m-0452",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "fright",
+      "pos": "명사",
+      "meaningKr": [
+        "공포"
+      ],
+      "example": "She screamed in sudden fright.",
+      "exampleKr": "그녀는 갑작스러운 공포에 비명을 질렀다."
+    },
+    {
+      "id": "ev-s05-0136",
+      "sourceId": "ev-moe2022-m-0385",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "excite",
+      "pos": "동사",
+      "meaningKr": [
+        "흥분시키다"
+      ],
+      "example": "The news excited the whole class.",
+      "exampleKr": "그 소식은 학급 전체를 흥분시켰다."
+    },
+    {
+      "id": "ev-s05-0137",
+      "sourceId": "ev-moe2022-m-0536",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "injure",
+      "pos": "동사",
+      "meaningKr": [
+        "부상을 입히다"
+      ],
+      "example": "The crash injured three passengers.",
+      "exampleKr": "그 충돌은 승객 세 명에게 부상을 입혔다."
+    },
+    {
+      "id": "ev-s05-0138",
+      "sourceId": "ev-moe2022-m-0036",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "amaze",
+      "pos": "동사",
+      "meaningKr": [
+        "놀라게 하다"
+      ],
+      "example": "The news amazed us.",
+      "exampleKr": "그 소식은 우리를 놀라게 했다."
+    },
+    {
+      "id": "ev-s05-0139",
+      "sourceId": "ev-moe2022-m-0040",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "amuse",
+      "pos": "동사",
+      "meaningKr": [
+        "즐겁게 하다"
+      ],
+      "example": "The clown amused the children.",
+      "exampleKr": "그 광대는 아이들을 즐겁게 했다."
+    },
+    {
+      "id": "ev-s05-0140",
+      "sourceId": "ev-moe2022-m-0454",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "frustrate",
+      "pos": "동사",
+      "meaningKr": [
+        "좌절시키다"
+      ],
+      "example": "Slow trains frustrate many workers.",
+      "exampleKr": "느린 기차는 많은 노동자를 좌절시킨다."
+    },
+    {
+      "id": "ev-s05-0141",
+      "sourceId": "ev-moe2022-m-0299",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "depress",
+      "pos": "동사",
+      "meaningKr": [
+        "우울하게 하다"
+      ],
+      "example": "Rainy days depress my mood.",
+      "exampleKr": "비 오는 날은 내 기분을 우울하게 한다."
+    },
+    {
+      "id": "ev-s05-0142",
+      "sourceId": "ev-moe2022-m-0410",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "fascinate",
+      "pos": "동사",
+      "meaningKr": [
+        "매혹하다"
+      ],
+      "example": "Old maps fascinate my little brother.",
+      "exampleKr": "옛 지도는 내 남동생을 매혹한다."
+    },
+    {
+      "id": "ev-s05-0143",
+      "sourceId": "ev-moe2022-m-0310",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "develop",
+      "pos": "동사",
+      "meaningKr": [
+        "발전시키다"
+      ],
+      "example": "They develop new games yearly.",
+      "exampleKr": "그들은 매년 새 게임을 개발한다."
+    },
+    {
+      "id": "ev-s05-0144",
+      "sourceId": "ev-moe2022-m-0054",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "appreciate",
+      "pos": "동사",
+      "meaningKr": [
+        "고마워하다"
+      ],
+      "example": "I appreciate your help.",
+      "exampleKr": "나는 네 도움에 고마워한다."
+    },
+    {
+      "id": "ev-s05-0145",
+      "sourceId": "ev-moe2022-m-0780",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "presence",
+      "pos": "명사",
+      "meaningKr": [
+        "존재"
+      ],
+      "example": "His presence calmed the class.",
+      "exampleKr": "그의 존재가 반을 진정시켰다."
+    },
+    {
+      "id": "ev-s05-0146",
+      "sourceId": "ev-moe2022-m-0803",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "proper",
+      "pos": "형용사",
+      "meaningKr": [
+        "제대로 된"
+      ],
+      "example": "Wear proper shoes for hiking.",
+      "exampleKr": "등산에는 제대로 된 신발을 신어라."
+    },
+    {
+      "id": "ev-s05-0147",
+      "sourceId": "ev-moe2022-m-0653",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "mix",
+      "pos": "동사",
+      "meaningKr": [
+        "섞다"
+      ],
+      "example": "Mix the flour with warm water.",
+      "exampleKr": "밀가루를 따뜻한 물과 섞어라."
+    },
+    {
+      "id": "ev-s05-0148",
+      "sourceId": "ev-moe2022-m-0597",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "limit",
+      "pos": "명사",
+      "meaningKr": [
+        "한계"
+      ],
+      "example": "Know your own limit well.",
+      "exampleKr": "자기 한계를 잘 알아라."
+    },
+    {
+      "id": "ev-s05-0149",
+      "sourceId": "ev-moe2022-m-0050",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "appeal",
+      "pos": "명사",
+      "meaningKr": [
+        "호소, 매력"
+      ],
+      "example": "The idea has wide appeal.",
+      "exampleKr": "그 생각은 널리 매력이 있다."
+    },
+    {
+      "id": "ev-s05-0150",
+      "sourceId": "ev-moe2022-m-0710",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "pack",
+      "pos": "동사",
+      "meaningKr": [
+        "싸다"
+      ],
+      "example": "Pack your bag before dinner.",
+      "exampleKr": "저녁 식사 전에 가방을 싸라."
+    },
+    {
+      "id": "ev-s05-0151",
+      "sourceId": "ev-moe2022-m-0616",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "maintain",
+      "pos": "동사",
+      "meaningKr": [
+        "유지하다"
+      ],
+      "example": "We maintain the garden every week.",
+      "exampleKr": "우리는 매주 정원을 유지한다."
+    },
+    {
+      "id": "ev-s05-0152",
+      "sourceId": "ev-moe2022-m-0412",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "fault",
+      "pos": "명사",
+      "meaningKr": [
+        "잘못"
+      ],
+      "example": "The accident was not my fault.",
+      "exampleKr": "그 사고는 내 잘못이 아니었다."
+    },
+    {
+      "id": "ev-s05-0153",
+      "sourceId": "ev-moe2022-m-0116",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "blame",
+      "pos": "동사",
+      "meaningKr": [
+        "잘못을 탓하다"
+      ],
+      "example": "Do not blame yourself.",
+      "exampleKr": "자신을 탓하지 마라."
+    },
+    {
+      "id": "ev-s05-0154",
+      "sourceId": "ev-moe2022-m-0649",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "minor",
+      "pos": "형용사",
+      "meaningKr": [
+        "사소한"
+      ],
+      "example": "It was only a minor error.",
+      "exampleKr": "그것은 사소한 실수일 뿐이었다."
+    },
+    {
+      "id": "ev-s05-0155",
+      "sourceId": "ev-moe2022-m-0844",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "recommend",
+      "pos": "동사",
+      "meaningKr": [
+        "추천하다"
+      ],
+      "example": "The doctor recommended more rest.",
+      "exampleKr": "의사는 더 많은 휴식을 추천했다."
+    },
+    {
+      "id": "ev-s05-0156",
+      "sourceId": "ev-moe2022-m-0897",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "row",
+      "pos": "명사",
+      "meaningKr": [
+        "줄"
+      ],
+      "example": "Sit in the front row.",
+      "exampleKr": "앞줄에 앉아라."
+    },
+    {
+      "id": "ev-s05-0157",
+      "sourceId": "ev-moe2022-m-0540",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "instance",
+      "pos": "명사",
+      "meaningKr": [
+        "사례"
+      ],
+      "example": "Give me one clear instance.",
+      "exampleKr": "분명한 사례 하나를 들어 주세요."
+    },
+    {
+      "id": "ev-s05-0158",
+      "sourceId": "ev-moe2022-m-0870",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "represent",
+      "pos": "동사",
+      "meaningKr": [
+        "대표하다"
+      ],
+      "example": "She represents our whole class.",
+      "exampleKr": "그녀는 우리 반 전체를 대표한다."
+    },
+    {
+      "id": "ev-s05-0159",
+      "sourceId": "ev-moe2022-m-0186",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "chat",
+      "pos": "동사",
+      "meaningKr": [
+        "이야기하다"
+      ],
+      "example": "We chatted after class.",
+      "exampleKr": "우리는 수업 후 이야기를 나눴다."
+    },
+    {
+      "id": "ev-s05-0160",
+      "sourceId": "ev-moe2022-m-0300",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "describe",
+      "pos": "동사",
+      "meaningKr": [
+        "묘사하다"
+      ],
+      "example": "Describe your hometown in English.",
+      "exampleKr": "네 고향을 영어로 묘사해 보세요."
+    },
+    {
+      "id": "ev-s05-0161",
+      "sourceId": "ev-moe2022-m-0145",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "brilliant",
+      "pos": "형용사",
+      "meaningKr": [
+        "훌륭한"
+      ],
+      "example": "She had a brilliant idea.",
+      "exampleKr": "그녀는 훌륭한 생각을 냈다."
+    },
+    {
+      "id": "ev-s05-0162",
+      "sourceId": "ev-moe2022-m-0779",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "prepare",
+      "pos": "동사",
+      "meaningKr": [
+        "준비하다"
+      ],
+      "example": "We prepared lunch together.",
+      "exampleKr": "우리는 함께 점심을 준비했다."
+    },
+    {
+      "id": "ev-s05-0163",
+      "sourceId": "ev-moe2022-m-0506",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "hide",
+      "pos": "동사",
+      "meaningKr": [
+        "숨다"
+      ],
+      "example": "The cat hides under the bed.",
+      "exampleKr": "고양이가 침대 밑에 숨는다."
+    },
+    {
+      "id": "ev-s05-0164",
+      "sourceId": "ev-moe2022-m-0878",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "respond",
+      "pos": "동사",
+      "meaningKr": [
+        "응답하다"
+      ],
+      "example": "Nobody responded to my call.",
+      "exampleKr": "아무도 내 전화에 응답하지 않았다."
+    },
+    {
+      "id": "ev-s05-0165",
+      "sourceId": "ev-moe2022-m-0843",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "recognize",
+      "pos": "동사",
+      "meaningKr": [
+        "알아보다"
+      ],
+      "example": "I recognized her old voice.",
+      "exampleKr": "나는 그녀의 옛 목소리를 알아보았다."
+    },
+    {
+      "id": "ev-s05-0166",
+      "sourceId": "ev-moe2022-m-1066",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "suspect",
+      "pos": "동사",
+      "meaningKr": [
+        "혐의를 두다"
+      ],
+      "example": "Police suspect the second driver.",
+      "exampleKr": "경찰은 두 번째 운전자에게 혐의를 둔다."
+    },
+    {
+      "id": "ev-s05-0167",
+      "sourceId": "ev-moe2022-m-0868",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "reply",
+      "pos": "동사",
+      "meaningKr": [
+        "답장하다"
+      ],
+      "example": "She replied to my email.",
+      "exampleKr": "그녀는 내 이메일에 답장했다."
+    },
+    {
+      "id": "ev-s05-0168",
+      "sourceId": "ev-moe2022-m-0903",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "rush",
+      "pos": "동사",
+      "meaningKr": [
+        "서두르다"
+      ],
+      "example": "Do not rush your homework.",
+      "exampleKr": "숙제를 서두르지 마라."
+    },
+    {
+      "id": "ev-s05-0169",
+      "sourceId": "ev-moe2022-m-0692",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "occur",
+      "pos": "동사",
+      "meaningKr": [
+        "발생하다"
+      ],
+      "example": "Accidents occur near this corner.",
+      "exampleKr": "사고가 이 모퉁이 근처에서 발생한다."
+    },
+    {
+      "id": "ev-s05-0170",
+      "sourceId": "ev-moe2022-m-0607",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "loose",
+      "pos": "형용사",
+      "meaningKr": [
+        "헐거운"
+      ],
+      "example": "This rope feels a bit loose.",
+      "exampleKr": "이 밧줄은 조금 헐거운 느낌이다."
+    },
+    {
+      "id": "ev-s05-0171",
+      "sourceId": "ev-moe2022-m-0848",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "refer",
+      "pos": "동사",
+      "meaningKr": [
+        "가리키다"
+      ],
+      "example": "This number refers to page ten.",
+      "exampleKr": "이 숫자는 십 페이지를 가리킨다."
+    },
+    {
+      "id": "ev-s05-0172",
+      "sourceId": "ev-moe2022-m-0694",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "odd",
+      "pos": "형용사",
+      "meaningKr": [
+        "기이한"
+      ],
+      "example": "That was an odd question.",
+      "exampleKr": "그것은 기이한 질문이었다."
+    },
+    {
+      "id": "ev-s05-0173",
+      "sourceId": "ev-moe2022-m-0951",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "sheet",
+      "pos": "명사",
+      "meaningKr": [
+        "한 장"
+      ],
+      "example": "Bring me a sheet of paper.",
+      "exampleKr": "종이 한 장을 가져다 줘."
+    },
+    {
+      "id": "ev-s05-0174",
+      "sourceId": "ev-moe2022-m-0103",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "belong",
+      "pos": "동사",
+      "meaningKr": [
+        "속하다"
+      ],
+      "example": "This book belongs to me.",
+      "exampleKr": "이 책은 내 것이다."
+    },
+    {
+      "id": "ev-s05-0175",
+      "sourceId": "ev-moe2022-m-0937",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "settle",
+      "pos": "동사",
+      "meaningKr": [
+        "자리 잡다"
+      ],
+      "example": "They settled in a quiet town.",
+      "exampleKr": "그들은 조용한 마을에 자리 잡았다."
+    },
+    {
+      "id": "ev-s05-0176",
+      "sourceId": "ev-moe2022-m-0477",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "gorgeous",
+      "pos": "형용사",
+      "meaningKr": [
+        "아주 멋진"
+      ],
+      "example": "The sunset looked gorgeous today.",
+      "exampleKr": "오늘 노을이 아주 멋져 보였다."
+    },
+    {
+      "id": "ev-s05-0177",
+      "sourceId": "ev-moe2022-m-0297",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "deny",
+      "pos": "동사",
+      "meaningKr": [
+        "부인하다"
+      ],
+      "example": "He denied breaking the window.",
+      "exampleKr": "그는 창문을 깼다는 것을 부인했다."
+    },
+    {
+      "id": "ev-s05-0178",
+      "sourceId": "ev-moe2022-m-1071",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "swing",
+      "pos": "동사",
+      "meaningKr": [
+        "흔들리다"
+      ],
+      "example": "The old gate swings loudly.",
+      "exampleKr": "낡은 문이 요란하게 흔들린다."
+    },
+    {
+      "id": "ev-s05-0179",
+      "sourceId": "ev-moe2022-m-0279",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "dare",
+      "pos": "동사",
+      "meaningKr": [
+        "감히 하다"
+      ],
+      "example": "I dare not open it.",
+      "exampleKr": "나는 감히 그것을 열지 못한다."
+    },
+    {
+      "id": "ev-s05-0180",
+      "sourceId": "ev-moe2022-m-0158",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "calendar",
+      "pos": "명사",
+      "meaningKr": [
+        "달력"
+      ],
+      "example": "Mark the date on the calendar.",
+      "exampleKr": "달력에 날짜를 표시해라."
+    },
+    {
+      "id": "ev-s05-0181",
+      "sourceId": "ev-moe2022-m-1048",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "succeed",
+      "pos": "동사",
+      "meaningKr": [
+        "성공하다"
+      ],
+      "example": "She succeeded after many tries.",
+      "exampleKr": "그녀는 여러 번 시도 끝에 성공했다."
+    },
+    {
+      "id": "ev-s05-0182",
+      "sourceId": "ev-moe2022-m-0281",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "dawn",
+      "pos": "명사",
+      "meaningKr": [
+        "새벽"
+      ],
+      "example": "We left home before dawn.",
+      "exampleKr": "우리는 새벽 전에 집을 떠났다."
+    },
+    {
+      "id": "ev-s05-0183",
+      "sourceId": "ev-moe2022-m-0106",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "beneath",
+      "pos": "전치사",
+      "meaningKr": [
+        "~아래에"
+      ],
+      "example": "The keys are beneath the pillow.",
+      "exampleKr": "열쇠는 베개 아래에 있다."
+    },
+    {
+      "id": "ev-s05-0184",
+      "sourceId": "ev-moe2022-m-1142",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "twist",
+      "pos": "동사",
+      "meaningKr": [
+        "비틀다"
+      ],
+      "example": "Do not twist the cable.",
+      "exampleKr": "그 전선을 비틀지 마라."
+    },
+    {
+      "id": "ev-s05-0185",
+      "sourceId": "ev-moe2022-m-0298",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "depend",
+      "pos": "동사",
+      "meaningKr": [
+        "의존하다"
+      ],
+      "example": "Children depend on their parents.",
+      "exampleKr": "아이들은 부모에게 의존한다."
+    },
+    {
+      "id": "ev-s05-0186",
+      "sourceId": "ev-moe2022-m-0382",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "examine",
+      "pos": "동사",
+      "meaningKr": [
+        "검사하다"
+      ],
+      "example": "Doctors examine patients every morning.",
+      "exampleKr": "의사들은 매일 아침 환자를 검사한다."
+    },
+    {
+      "id": "ev-s05-0187",
+      "sourceId": "ev-moe2022-m-0914",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "scratch",
+      "pos": "동사",
+      "meaningKr": [
+        "긁다"
+      ],
+      "example": "The cat scratched my arm.",
+      "exampleKr": "그 고양이가 내 팔을 긁었다."
+    },
+    {
+      "id": "ev-s05-0188",
+      "sourceId": "ev-moe2022-m-0915",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "scream",
+      "pos": "동사",
+      "meaningKr": [
+        "비명을 지르다"
+      ],
+      "example": "She screamed at the spider.",
+      "exampleKr": "그녀는 거미를 보고 비명을 질렀다."
+    },
+    {
+      "id": "ev-s05-0189",
+      "sourceId": "ev-moe2022-m-0684",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "nowadays",
+      "pos": "부사",
+      "meaningKr": [
+        "요즘"
+      ],
+      "example": "Nowadays many students ride bikes.",
+      "exampleKr": "요즘 많은 학생들이 자전거를 탄다."
+    },
+    {
+      "id": "ev-s05-0190",
+      "sourceId": "ev-moe2022-m-0437",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "fold",
+      "pos": "동사",
+      "meaningKr": [
+        "접다"
+      ],
+      "example": "Please fold your shirts neatly.",
+      "exampleKr": "셔츠를 깔끔하게 접어 주세요."
+    },
+    {
+      "id": "ev-s05-0191",
+      "sourceId": "ev-moe2022-m-0689",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "observe",
+      "pos": "동사",
+      "meaningKr": [
+        "관찰하다"
+      ],
+      "example": "Scientists observe the night sky.",
+      "exampleKr": "과학자들은 밤하늘을 관찰한다."
+    },
+    {
+      "id": "ev-s05-0192",
+      "sourceId": "ev-moe2022-m-0251",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "cope",
+      "pos": "동사",
+      "meaningKr": [
+        "대처하다"
+      ],
+      "example": "She copes with stress well.",
+      "exampleKr": "그녀는 스트레스에 잘 대처한다."
+    },
+    {
+      "id": "ev-s05-0193",
+      "sourceId": "ev-moe2022-m-0724",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "pause",
+      "pos": "동사",
+      "meaningKr": [
+        "잠시 멈추다"
+      ],
+      "example": "He paused before answering me.",
+      "exampleKr": "그는 내게 답하기 전에 잠시 멈췄다."
+    },
+    {
+      "id": "ev-s05-0194",
+      "sourceId": "ev-moe2022-m-0181",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "characteristic",
+      "pos": "명사",
+      "meaningKr": [
+        "특징"
+      ],
+      "example": "Speed is its main characteristic.",
+      "exampleKr": "속도는 그것의 주요 특징이다."
+    },
+    {
+      "id": "ev-s05-0195",
+      "sourceId": "ev-moe2022-m-0701",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "oppose",
+      "pos": "동사",
+      "meaningKr": [
+        "반대하다"
+      ],
+      "example": "Many parents opposed the plan.",
+      "exampleKr": "많은 학부모가 그 계획에 반대했다."
+    },
+    {
+      "id": "ev-s05-0196",
+      "sourceId": "ev-moe2022-m-0153",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "bury",
+      "pos": "동사",
+      "meaningKr": [
+        "땅에 묻다"
+      ],
+      "example": "They buried the box.",
+      "exampleKr": "그들은 상자를 땅에 묻었다."
+    },
+    {
+      "id": "ev-s05-0197",
+      "sourceId": "ev-moe2022-m-1008",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "spoil",
+      "pos": "동사",
+      "meaningKr": [
+        "상하게 하다"
+      ],
+      "example": "Heat will spoil this milk.",
+      "exampleKr": "열이 이 우유를 상하게 할 것이다."
+    },
+    {
+      "id": "ev-s05-0198",
+      "sourceId": "ev-moe2022-m-0070",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "attach",
+      "pos": "동사",
+      "meaningKr": [
+        "붙이다"
+      ],
+      "example": "Attach the label here.",
+      "exampleKr": "여기에 라벨을 붙여라."
+    },
+    {
+      "id": "ev-s05-0199",
+      "sourceId": "ev-moe2022-m-0234",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "confuse",
+      "pos": "동사",
+      "meaningKr": [
+        "혼란시키다"
+      ],
+      "example": "These signs confuse many drivers.",
+      "exampleKr": "이 표지판들은 많은 운전자를 혼란시킨다."
+    },
+    {
+      "id": "ev-s05-0200",
+      "sourceId": "ev-moe2022-m-0032",
+      "setId": "ev-set-005",
+      "level": "middle",
+      "word": "aloud",
+      "pos": "부사",
+      "meaningKr": [
+        "소리 내어"
+      ],
+      "example": "Read the sentence aloud.",
+      "exampleKr": "그 문장을 소리 내어 읽어라."
+    }
+  ]
+}

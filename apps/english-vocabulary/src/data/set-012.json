@@ -1,0 +1,2609 @@
+{
+  "setId": "ev-set-012",
+  "order": 12,
+  "title": "생활과 사물",
+  "level": "high",
+  "source": "교육부 2022 개정 별책 14 무표시 대표형(고등 범위)",
+  "words": [
+    {
+      "id": "ev-s12-0001",
+      "sourceId": "ev-moe2022-h-0734",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "protein",
+      "pos": "명사",
+      "meaningKr": [
+        "단백질"
+      ],
+      "example": "Beans contain useful protein.",
+      "exampleKr": "콩은 유용한 단백질을 함유한다."
+    },
+    {
+      "id": "ev-s12-0002",
+      "sourceId": "ev-moe2022-h-0748",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "raw",
+      "pos": "형용사",
+      "meaningKr": [
+        "날것의"
+      ],
+      "example": "Never eat raw meat.",
+      "exampleKr": "절대 날것의 고기를 먹지 마라."
+    },
+    {
+      "id": "ev-s12-0003",
+      "sourceId": "ev-moe2022-h-0469",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "household",
+      "pos": "명사",
+      "meaningKr": [
+        "가정"
+      ],
+      "example": "Each household got one letter.",
+      "exampleKr": "각 가정이 편지 한 통을 받았다."
+    },
+    {
+      "id": "ev-s12-0004",
+      "sourceId": "ev-moe2022-h-0913",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "thread",
+      "pos": "명사",
+      "meaningKr": [
+        "실"
+      ],
+      "example": "Cut the thread with scissors.",
+      "exampleKr": "가위로 실을 잘라라."
+    },
+    {
+      "id": "ev-s12-0005",
+      "sourceId": "ev-moe2022-h-0697",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "polish",
+      "pos": "동사",
+      "meaningKr": [
+        "윤을 내다"
+      ],
+      "example": "Polish the shoes before leaving.",
+      "exampleKr": "떠나기 전에 신발에 윤을 내라."
+    },
+    {
+      "id": "ev-s12-0006",
+      "sourceId": "ev-moe2022-h-0127",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "chef",
+      "pos": "명사",
+      "meaningKr": [
+        "요리사"
+      ],
+      "example": "The chef prepared fresh soup.",
+      "exampleKr": "그 요리사가 신선한 수프를 준비했다."
+    },
+    {
+      "id": "ev-s12-0007",
+      "sourceId": "ev-moe2022-h-0386",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "flesh",
+      "pos": "명사",
+      "meaningKr": [
+        "살"
+      ],
+      "example": "The fruit has soft flesh.",
+      "exampleKr": "그 과일은 부드러운 살을 가졌다."
+    },
+    {
+      "id": "ev-s12-0008",
+      "sourceId": "ev-moe2022-h-0204",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "corn",
+      "pos": "명사",
+      "meaningKr": [
+        "옥수수"
+      ],
+      "example": "Farmers grow corn on this field.",
+      "exampleKr": "농부들이 이 밭에서 옥수수를 기른다."
+    },
+    {
+      "id": "ev-s12-0009",
+      "sourceId": "ev-moe2022-h-0209",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "costume",
+      "pos": "명사",
+      "meaningKr": [
+        "의상"
+      ],
+      "example": "She sewed her own costume.",
+      "exampleKr": "그녀는 자기 의상을 직접 바느질했다."
+    },
+    {
+      "id": "ev-s12-0010",
+      "sourceId": "ev-moe2022-h-0433",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "grain",
+      "pos": "명사",
+      "meaningKr": [
+        "곡물"
+      ],
+      "example": "Farmers store grain for winter.",
+      "exampleKr": "농부들은 겨울을 위해 곡물을 저장한다."
+    },
+    {
+      "id": "ev-s12-0011",
+      "sourceId": "ev-moe2022-h-0833",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "soap",
+      "pos": "명사",
+      "meaningKr": [
+        "비누"
+      ],
+      "example": "Wash your hands with soap.",
+      "exampleKr": "비누로 손을 씻어라."
+    },
+    {
+      "id": "ev-s12-0012",
+      "sourceId": "ev-moe2022-h-0235",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "dairy",
+      "pos": "명사",
+      "meaningKr": [
+        "유제품"
+      ],
+      "example": "The shop sells fresh dairy.",
+      "exampleKr": "그 가게는 신선한 유제품을 판다."
+    },
+    {
+      "id": "ev-s12-0013",
+      "sourceId": "ev-moe2022-h-0302",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "drain",
+      "pos": "동사",
+      "meaningKr": [
+        "물을 빼다"
+      ],
+      "example": "Drain the pot before cooking.",
+      "exampleKr": "요리 전에 냄비의 물을 빼라."
+    },
+    {
+      "id": "ev-s12-0014",
+      "sourceId": "ev-moe2022-h-0544",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "laundry",
+      "pos": "명사",
+      "meaningKr": [
+        "세탁물"
+      ],
+      "example": "Fold the laundry after dinner.",
+      "exampleKr": "저녁 후에 세탁물을 개라."
+    },
+    {
+      "id": "ev-s12-0015",
+      "sourceId": "ev-moe2022-h-0146",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "collar",
+      "pos": "명사",
+      "meaningKr": [
+        "옷깃"
+      ],
+      "example": "His shirt collar was dirty.",
+      "exampleKr": "그의 셔츠 옷깃이 더러웠다."
+    },
+    {
+      "id": "ev-s12-0016",
+      "sourceId": "ev-moe2022-h-0383",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "flavor",
+      "pos": "명사",
+      "meaningKr": [
+        "풍미"
+      ],
+      "example": "This soup has a rich flavor.",
+      "exampleKr": "이 수프는 진한 풍미가 난다."
+    },
+    {
+      "id": "ev-s12-0017",
+      "sourceId": "ev-moe2022-h-0880",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "supplement",
+      "pos": "명사",
+      "meaningKr": [
+        "보충물"
+      ],
+      "example": "She takes a vitamin supplement.",
+      "exampleKr": "그녀는 비타민 보충물을 먹는다."
+    },
+    {
+      "id": "ev-s12-0018",
+      "sourceId": "ev-moe2022-h-0828",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "slice",
+      "pos": "명사",
+      "meaningKr": [
+        "얇은 조각"
+      ],
+      "example": "Cut one slice of bread.",
+      "exampleKr": "빵 한 얇은 조각을 잘라라."
+    },
+    {
+      "id": "ev-s12-0019",
+      "sourceId": "ev-moe2022-h-0229",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "curry",
+      "pos": "명사",
+      "meaningKr": [
+        "카레"
+      ],
+      "example": "We ate curry for lunch.",
+      "exampleKr": "우리는 점심으로 카레를 먹었다."
+    },
+    {
+      "id": "ev-s12-0020",
+      "sourceId": "ev-moe2022-h-0079",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "bargain",
+      "pos": "명사",
+      "meaningKr": [
+        "싼 물건"
+      ],
+      "example": "This coat was a real bargain.",
+      "exampleKr": "이 코트는 정말 싼 물건이었다."
+    },
+    {
+      "id": "ev-s12-0021",
+      "sourceId": "ev-moe2022-h-0530",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "jar",
+      "pos": "명사",
+      "meaningKr": [
+        "단지"
+      ],
+      "example": "Store the honey in a jar.",
+      "exampleKr": "꿀을 단지에 보관해라."
+    },
+    {
+      "id": "ev-s12-0022",
+      "sourceId": "ev-moe2022-h-0906",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "terrace",
+      "pos": "명사",
+      "meaningKr": [
+        "테라스"
+      ],
+      "example": "We ate on the sunny terrace.",
+      "exampleKr": "우리는 볕 좋은 테라스에서 먹었다."
+    },
+    {
+      "id": "ev-s12-0023",
+      "sourceId": "ev-moe2022-h-0794",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "roast",
+      "pos": "동사",
+      "meaningKr": [
+        "구워 익히다"
+      ],
+      "example": "Roast the potatoes slowly.",
+      "exampleKr": "감자를 천천히 구워 익혀라."
+    },
+    {
+      "id": "ev-s12-0024",
+      "sourceId": "ev-moe2022-h-0470",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "hut",
+      "pos": "명사",
+      "meaningKr": [
+        "오두막"
+      ],
+      "example": "They slept in a small hut.",
+      "exampleKr": "그들은 작은 오두막에서 잤다."
+    },
+    {
+      "id": "ev-s12-0025",
+      "sourceId": "ev-moe2022-h-0391",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "flush",
+      "pos": "동사",
+      "meaningKr": [
+        "물을 내리다"
+      ],
+      "example": "Please flush the toilet.",
+      "exampleKr": "화장실 물을 내려 주세요."
+    },
+    {
+      "id": "ev-s12-0026",
+      "sourceId": "ev-moe2022-h-0678",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "peel",
+      "pos": "동사",
+      "meaningKr": [
+        "껍질을 벗기다"
+      ],
+      "example": "Peel the apple before eating.",
+      "exampleKr": "먹기 전에 사과 껍질을 벗겨라."
+    },
+    {
+      "id": "ev-s12-0027",
+      "sourceId": "ev-moe2022-h-0107",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "butcher",
+      "pos": "명사",
+      "meaningKr": [
+        "정육점 주인"
+      ],
+      "example": "The butcher cut the meat.",
+      "exampleKr": "정육점 주인이 고기를 잘랐다."
+    },
+    {
+      "id": "ev-s12-0028",
+      "sourceId": "ev-moe2022-h-0496",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "ingredient",
+      "pos": "명사",
+      "meaningKr": [
+        "재료"
+      ],
+      "example": "List every ingredient here.",
+      "exampleKr": "여기에 모든 재료를 적어라."
+    },
+    {
+      "id": "ev-s12-0029",
+      "sourceId": "ev-moe2022-h-0859",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "stove",
+      "pos": "명사",
+      "meaningKr": [
+        "난로"
+      ],
+      "example": "A warm stove heated the hut.",
+      "exampleKr": "따뜻한 난로가 오두막을 데웠다."
+    },
+    {
+      "id": "ev-s12-0030",
+      "sourceId": "ev-moe2022-h-0849",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "stain",
+      "pos": "명사",
+      "meaningKr": [
+        "얼룩 자국"
+      ],
+      "example": "A coffee stain marked the cloth.",
+      "exampleKr": "커피 얼룩 자국이 천에 남았다."
+    },
+    {
+      "id": "ev-s12-0031",
+      "sourceId": "ev-moe2022-h-0858",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "stitch",
+      "pos": "명사",
+      "meaningKr": [
+        "바느질 한 땀"
+      ],
+      "example": "One stitch held the tear.",
+      "exampleKr": "바느질 한 땀이 찢어진 곳을 붙들었다."
+    },
+    {
+      "id": "ev-s12-0032",
+      "sourceId": "ev-moe2022-h-0115",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "cater",
+      "pos": "동사",
+      "meaningKr": [
+        "음식을 공급하다"
+      ],
+      "example": "That shop caters large parties.",
+      "exampleKr": "그 가게는 큰 파티에 음식을 공급한다."
+    },
+    {
+      "id": "ev-s12-0033",
+      "sourceId": "ev-moe2022-h-0850",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "starve",
+      "pos": "동사",
+      "meaningKr": [
+        "굶주리다"
+      ],
+      "example": "No child should starve here.",
+      "exampleKr": "어떤 아이도 여기서 굶주려서는 안 된다."
+    },
+    {
+      "id": "ev-s12-0034",
+      "sourceId": "ev-moe2022-h-0863",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "stripe",
+      "pos": "명사",
+      "meaningKr": [
+        "줄무늬"
+      ],
+      "example": "The shirt has blue stripes.",
+      "exampleKr": "그 셔츠에는 파란 줄무늬가 있다."
+    },
+    {
+      "id": "ev-s12-0035",
+      "sourceId": "ev-moe2022-h-0281",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "dine",
+      "pos": "동사",
+      "meaningKr": [
+        "식사하다"
+      ],
+      "example": "They dined at a quiet place.",
+      "exampleKr": "그들은 조용한 곳에서 식사했다."
+    },
+    {
+      "id": "ev-s12-0036",
+      "sourceId": "ev-moe2022-h-0410",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "furnish",
+      "pos": "동사",
+      "meaningKr": [
+        "가구를 들이다"
+      ],
+      "example": "They furnished the empty room.",
+      "exampleKr": "그들은 빈방에 가구를 들였다."
+    },
+    {
+      "id": "ev-s12-0037",
+      "sourceId": "ev-moe2022-h-0755",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "refrigerate",
+      "pos": "동사",
+      "meaningKr": [
+        "냉장하다"
+      ],
+      "example": "Refrigerate the milk at once.",
+      "exampleKr": "우유를 즉시 냉장해라."
+    },
+    {
+      "id": "ev-s12-0038",
+      "sourceId": "ev-moe2022-h-0406",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "fuel",
+      "pos": "명사",
+      "meaningKr": [
+        "연료"
+      ],
+      "example": "The plane needs more fuel.",
+      "exampleKr": "그 비행기는 연료가 더 필요하다."
+    },
+    {
+      "id": "ev-s12-0039",
+      "sourceId": "ev-moe2022-h-0271",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "device",
+      "pos": "명사",
+      "meaningKr": [
+        "장치"
+      ],
+      "example": "This device measures heat.",
+      "exampleKr": "이 장치는 열을 측정한다."
+    },
+    {
+      "id": "ev-s12-0040",
+      "sourceId": "ev-moe2022-h-0596",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "mode",
+      "pos": "명사",
+      "meaningKr": [
+        "작동 방식"
+      ],
+      "example": "Choose a quiet mode.",
+      "exampleKr": "조용한 작동 방식을 골라라."
+    },
+    {
+      "id": "ev-s12-0041",
+      "sourceId": "ev-moe2022-h-0128",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "chemical",
+      "pos": "명사",
+      "meaningKr": [
+        "화학 물질"
+      ],
+      "example": "This chemical burns the skin.",
+      "exampleKr": "이 화학 물질은 피부를 태운다."
+    },
+    {
+      "id": "ev-s12-0042",
+      "sourceId": "ev-moe2022-h-0417",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "gap",
+      "pos": "명사",
+      "meaningKr": [
+        "틈"
+      ],
+      "example": "A wide gap split the rock.",
+      "exampleKr": "넓은 틈이 바위를 갈랐다."
+    },
+    {
+      "id": "ev-s12-0043",
+      "sourceId": "ev-moe2022-h-0020",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "acid",
+      "pos": "명사",
+      "meaningKr": [
+        "산성 물질"
+      ],
+      "example": "This liquid contains strong acid.",
+      "exampleKr": "이 액체는 강한 산성 물질을 함유한다."
+    },
+    {
+      "id": "ev-s12-0044",
+      "sourceId": "ev-moe2022-h-0894",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "tag",
+      "pos": "명사",
+      "meaningKr": [
+        "꼬리표"
+      ],
+      "example": "Read the price tag first.",
+      "exampleKr": "먼저 가격 꼬리표를 읽어라."
+    },
+    {
+      "id": "ev-s12-0045",
+      "sourceId": "ev-moe2022-h-0536",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "kit",
+      "pos": "명사",
+      "meaningKr": [
+        "도구 모음"
+      ],
+      "example": "Bring the repair kit please.",
+      "exampleKr": "수리 도구 모음을 가져와 주세요."
+    },
+    {
+      "id": "ev-s12-0046",
+      "sourceId": "ev-moe2022-h-0225",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "crystal",
+      "pos": "명사",
+      "meaningKr": [
+        "수정"
+      ],
+      "example": "The ring holds a clear crystal.",
+      "exampleKr": "그 반지에는 맑은 수정이 박혀 있다."
+    },
+    {
+      "id": "ev-s12-0047",
+      "sourceId": "ev-moe2022-h-0557",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "liquid",
+      "pos": "명사",
+      "meaningKr": [
+        "액체"
+      ],
+      "example": "Pour the liquid into a bowl.",
+      "exampleKr": "그 액체를 그릇에 부어라."
+    },
+    {
+      "id": "ev-s12-0048",
+      "sourceId": "ev-moe2022-h-0464",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "hook",
+      "pos": "명사",
+      "meaningKr": [
+        "갈고리"
+      ],
+      "example": "Hang your coat on the hook.",
+      "exampleKr": "코트를 갈고리에 걸어라."
+    },
+    {
+      "id": "ev-s12-0049",
+      "sourceId": "ev-moe2022-h-0938",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "tube",
+      "pos": "명사",
+      "meaningKr": [
+        "속이 빈 관"
+      ],
+      "example": "Water flows through this tube.",
+      "exampleKr": "물이 속이 빈 이 관을 통해 흐른다."
+    },
+    {
+      "id": "ev-s12-0050",
+      "sourceId": "ev-moe2022-h-0547",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "leather",
+      "pos": "명사",
+      "meaningKr": [
+        "가죽"
+      ],
+      "example": "This bag uses soft leather.",
+      "exampleKr": "이 가방은 부드러운 가죽을 쓴다."
+    },
+    {
+      "id": "ev-s12-0051",
+      "sourceId": "ev-moe2022-h-0149",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "column",
+      "pos": "명사",
+      "meaningKr": [
+        "돌기둥"
+      ],
+      "example": "Stone columns support the roof.",
+      "exampleKr": "돌기둥들이 지붕을 받친다."
+    },
+    {
+      "id": "ev-s12-0052",
+      "sourceId": "ev-moe2022-h-0161",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "component",
+      "pos": "명사",
+      "meaningKr": [
+        "부품"
+      ],
+      "example": "One component broke inside.",
+      "exampleKr": "부품 하나가 안에서 부서졌다."
+    },
+    {
+      "id": "ev-s12-0053",
+      "sourceId": "ev-moe2022-h-0139",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "clay",
+      "pos": "명사",
+      "meaningKr": [
+        "점토"
+      ],
+      "example": "Children shaped animals from clay.",
+      "exampleKr": "아이들이 점토로 동물을 빚었다."
+    },
+    {
+      "id": "ev-s12-0054",
+      "sourceId": "ev-moe2022-h-0381",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "filter",
+      "pos": "명사",
+      "meaningKr": [
+        "여과기"
+      ],
+      "example": "Change the water filter monthly.",
+      "exampleKr": "물 여과기를 매달 갈아라."
+    },
+    {
+      "id": "ev-s12-0055",
+      "sourceId": "ev-moe2022-h-0429",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "globe",
+      "pos": "명사",
+      "meaningKr": [
+        "지구본"
+      ],
+      "example": "The globe hangs above his desk.",
+      "exampleKr": "지구본이 그의 책상 위에 걸려 있다."
+    },
+    {
+      "id": "ev-s12-0056",
+      "sourceId": "ev-moe2022-h-0574",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "mechanism",
+      "pos": "명사",
+      "meaningKr": [
+        "작동 원리"
+      ],
+      "example": "Explain the lock mechanism.",
+      "exampleKr": "그 자물쇠의 작동 원리를 설명해라."
+    },
+    {
+      "id": "ev-s12-0057",
+      "sourceId": "ev-moe2022-h-0813",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "screw",
+      "pos": "명사",
+      "meaningKr": [
+        "나사"
+      ],
+      "example": "Tighten this loose screw.",
+      "exampleKr": "이 헐거운 나사를 조여라."
+    },
+    {
+      "id": "ev-s12-0058",
+      "sourceId": "ev-moe2022-h-0934",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "trigger",
+      "pos": "명사",
+      "meaningKr": [
+        "방아쇠"
+      ],
+      "example": "He never touched the trigger.",
+      "exampleKr": "그는 방아쇠를 결코 건드리지 않았다."
+    },
+    {
+      "id": "ev-s12-0059",
+      "sourceId": "ev-moe2022-h-0868",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "substance",
+      "pos": "명사",
+      "meaningKr": [
+        "물질"
+      ],
+      "example": "This substance melts in water.",
+      "exampleKr": "이 물질은 물에 녹는다."
+    },
+    {
+      "id": "ev-s12-0060",
+      "sourceId": "ev-moe2022-h-0673",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "patch",
+      "pos": "명사",
+      "meaningKr": [
+        "헝겊 조각"
+      ],
+      "example": "A patch covered the hole.",
+      "exampleKr": "헝겊 조각이 구멍을 덮었다."
+    },
+    {
+      "id": "ev-s12-0061",
+      "sourceId": "ev-moe2022-h-0163",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "compound",
+      "pos": "명사",
+      "meaningKr": [
+        "화합물"
+      ],
+      "example": "Water is a simple compound.",
+      "exampleKr": "물은 단순한 화합물이다."
+    },
+    {
+      "id": "ev-s12-0062",
+      "sourceId": "ev-moe2022-h-0869",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "substitute",
+      "pos": "명사",
+      "meaningKr": [
+        "대체품"
+      ],
+      "example": "Honey works as a substitute.",
+      "exampleKr": "꿀이 대체품으로 쓰인다."
+    },
+    {
+      "id": "ev-s12-0063",
+      "sourceId": "ev-moe2022-h-0929",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "treasure",
+      "pos": "명사",
+      "meaningKr": [
+        "보물"
+      ],
+      "example": "Divers found buried treasure.",
+      "exampleKr": "잠수부들이 묻힌 보물을 찾았다."
+    },
+    {
+      "id": "ev-s12-0064",
+      "sourceId": "ev-moe2022-h-0447",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "hammer",
+      "pos": "명사",
+      "meaningKr": [
+        "망치"
+      ],
+      "example": "He fixed it with a hammer.",
+      "exampleKr": "그는 망치로 그것을 고쳤다."
+    },
+    {
+      "id": "ev-s12-0065",
+      "sourceId": "ev-moe2022-h-0080",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "barrier",
+      "pos": "명사",
+      "meaningKr": [
+        "장벽"
+      ],
+      "example": "Language can be a barrier.",
+      "exampleKr": "언어는 장벽이 될 수 있다."
+    },
+    {
+      "id": "ev-s12-0066",
+      "sourceId": "ev-moe2022-h-0231",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "curve",
+      "pos": "명사",
+      "meaningKr": [
+        "곡선"
+      ],
+      "example": "Draw a gentle curve here.",
+      "exampleKr": "여기에 완만한 곡선을 그려라."
+    },
+    {
+      "id": "ev-s12-0067",
+      "sourceId": "ev-moe2022-h-0593",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "missile",
+      "pos": "명사",
+      "meaningKr": [
+        "미사일"
+      ],
+      "example": "The missile missed its mark.",
+      "exampleKr": "그 미사일은 목표를 빗나갔다."
+    },
+    {
+      "id": "ev-s12-0068",
+      "sourceId": "ev-moe2022-h-0795",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "rod",
+      "pos": "명사",
+      "meaningKr": [
+        "막대"
+      ],
+      "example": "A metal rod holds the shelf.",
+      "exampleKr": "금속 막대가 선반을 받친다."
+    },
+    {
+      "id": "ev-s12-0069",
+      "sourceId": "ev-moe2022-h-0058",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "arrow",
+      "pos": "명사",
+      "meaningKr": [
+        "화살"
+      ],
+      "example": "He pulled the arrow from the tree.",
+      "exampleKr": "그는 나무에서 화살을 뽑았다."
+    },
+    {
+      "id": "ev-s12-0070",
+      "sourceId": "ev-moe2022-h-0387",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "flexible",
+      "pos": "형용사",
+      "meaningKr": [
+        "유연한"
+      ],
+      "example": "This rubber tube is flexible.",
+      "exampleKr": "이 고무관은 유연하다."
+    },
+    {
+      "id": "ev-s12-0071",
+      "sourceId": "ev-moe2022-h-0365",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "fabric",
+      "pos": "명사",
+      "meaningKr": [
+        "직물"
+      ],
+      "example": "This fabric feels rough.",
+      "exampleKr": "이 직물은 거칠게 느껴진다."
+    },
+    {
+      "id": "ev-s12-0072",
+      "sourceId": "ev-moe2022-h-0378",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "fiber",
+      "pos": "명사",
+      "meaningKr": [
+        "섬유"
+      ],
+      "example": "This shirt uses natural fiber.",
+      "exampleKr": "이 셔츠는 천연 섬유를 쓴다."
+    },
+    {
+      "id": "ev-s12-0073",
+      "sourceId": "ev-moe2022-h-0300",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "dot",
+      "pos": "명사",
+      "meaningKr": [
+        "점 하나"
+      ],
+      "example": "A red dot marked the spot.",
+      "exampleKr": "빨간 점 하나가 그 자리를 표시했다."
+    },
+    {
+      "id": "ev-s12-0074",
+      "sourceId": "ev-moe2022-h-0848",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "stack",
+      "pos": "명사",
+      "meaningKr": [
+        "더미로 쌓은 것"
+      ],
+      "example": "A stack of plates fell.",
+      "exampleKr": "접시를 더미로 쌓은 것이 무너졌다."
+    },
+    {
+      "id": "ev-s12-0075",
+      "sourceId": "ev-moe2022-h-0072",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "authentic",
+      "pos": "형용사",
+      "meaningKr": [
+        "진품인"
+      ],
+      "example": "This is an authentic old map.",
+      "exampleKr": "이것은 진품인 옛 지도다."
+    },
+    {
+      "id": "ev-s12-0076",
+      "sourceId": "ev-moe2022-h-0539",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "ladder",
+      "pos": "명사",
+      "meaningKr": [
+        "사다리"
+      ],
+      "example": "He climbed the wooden ladder.",
+      "exampleKr": "그는 나무 사다리를 올랐다."
+    },
+    {
+      "id": "ev-s12-0077",
+      "sourceId": "ev-moe2022-h-0588",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "mineral",
+      "pos": "명사",
+      "meaningKr": [
+        "광물"
+      ],
+      "example": "This rock contains rare minerals.",
+      "exampleKr": "이 바위는 희귀한 광물을 함유한다."
+    },
+    {
+      "id": "ev-s12-0078",
+      "sourceId": "ev-moe2022-h-0046",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "anchor",
+      "pos": "명사",
+      "meaningKr": [
+        "닻"
+      ],
+      "example": "The ship dropped its anchor.",
+      "exampleKr": "그 배는 닻을 내렸다."
+    },
+    {
+      "id": "ev-s12-0079",
+      "sourceId": "ev-moe2022-h-0254",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "delicate",
+      "pos": "형용사",
+      "meaningKr": [
+        "섬세한"
+      ],
+      "example": "This glass is very delicate.",
+      "exampleKr": "이 유리는 아주 섬세하다."
+    },
+    {
+      "id": "ev-s12-0080",
+      "sourceId": "ev-moe2022-h-0660",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "pad",
+      "pos": "명사",
+      "meaningKr": [
+        "덧대는 판"
+      ],
+      "example": "Put a soft pad here.",
+      "exampleKr": "여기에 부드러운 덧대는 판을 놓아라."
+    },
+    {
+      "id": "ev-s12-0081",
+      "sourceId": "ev-moe2022-h-0917",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "timber",
+      "pos": "명사",
+      "meaningKr": [
+        "목재"
+      ],
+      "example": "The house uses local timber.",
+      "exampleKr": "그 집은 지역 목재를 쓴다."
+    },
+    {
+      "id": "ev-s12-0082",
+      "sourceId": "ev-moe2022-h-0992",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "whip",
+      "pos": "명사",
+      "meaningKr": [
+        "채찍"
+      ],
+      "example": "The rider dropped his whip.",
+      "exampleKr": "그 기수는 채찍을 떨어뜨렸다."
+    },
+    {
+      "id": "ev-s12-0083",
+      "sourceId": "ev-moe2022-h-0202",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "cord",
+      "pos": "명사",
+      "meaningKr": [
+        "굵은 끈"
+      ],
+      "example": "A thick cord held the gate.",
+      "exampleKr": "굵은 끈이 문을 붙들었다."
+    },
+    {
+      "id": "ev-s12-0084",
+      "sourceId": "ev-moe2022-h-0614",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "needle",
+      "pos": "명사",
+      "meaningKr": [
+        "바늘"
+      ],
+      "example": "Thread the needle carefully.",
+      "exampleKr": "바늘에 실을 조심스럽게 꿰어라."
+    },
+    {
+      "id": "ev-s12-0085",
+      "sourceId": "ev-moe2022-h-0112",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "canvas",
+      "pos": "명사",
+      "meaningKr": [
+        "캔버스 천"
+      ],
+      "example": "He painted on rough canvas.",
+      "exampleKr": "그는 거친 캔버스 천에 그렸다."
+    },
+    {
+      "id": "ev-s12-0086",
+      "sourceId": "ev-moe2022-h-0105",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "bundle",
+      "pos": "명사",
+      "meaningKr": [
+        "묶음"
+      ],
+      "example": "She carried a bundle of sticks.",
+      "exampleKr": "그녀는 막대기 묶음을 날랐다."
+    },
+    {
+      "id": "ev-s12-0087",
+      "sourceId": "ev-moe2022-h-0801",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "sack",
+      "pos": "명사",
+      "meaningKr": [
+        "자루"
+      ],
+      "example": "He filled one sack with rice.",
+      "exampleKr": "그는 자루 하나를 쌀로 채웠다."
+    },
+    {
+      "id": "ev-s12-0088",
+      "sourceId": "ev-moe2022-h-0841",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "sphere",
+      "pos": "명사",
+      "meaningKr": [
+        "구"
+      ],
+      "example": "Draw a small sphere here.",
+      "exampleKr": "여기에 작은 구를 그려라."
+    },
+    {
+      "id": "ev-s12-0089",
+      "sourceId": "ev-moe2022-h-0856",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "stiff",
+      "pos": "형용사",
+      "meaningKr": [
+        "뻣뻣한"
+      ],
+      "example": "My new shoes feel stiff.",
+      "exampleKr": "내 새 신발은 뻣뻣하게 느껴진다."
+    },
+    {
+      "id": "ev-s12-0090",
+      "sourceId": "ev-moe2022-h-0418",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "gasoline",
+      "pos": "명사",
+      "meaningKr": [
+        "휘발유"
+      ],
+      "example": "Gasoline prices rose again.",
+      "exampleKr": "휘발유 가격이 다시 올랐다."
+    },
+    {
+      "id": "ev-s12-0091",
+      "sourceId": "ev-moe2022-h-0564",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "magnet",
+      "pos": "명사",
+      "meaningKr": [
+        "자석"
+      ],
+      "example": "A magnet pulls small nails.",
+      "exampleKr": "자석은 작은 못들을 끌어당긴다."
+    },
+    {
+      "id": "ev-s12-0092",
+      "sourceId": "ev-moe2022-h-0069",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "atom",
+      "pos": "명사",
+      "meaningKr": [
+        "원자"
+      ],
+      "example": "An atom is extremely small.",
+      "exampleKr": "원자는 극도로 작다."
+    },
+    {
+      "id": "ev-s12-0093",
+      "sourceId": "ev-moe2022-h-0538",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "knot",
+      "pos": "명사",
+      "meaningKr": [
+        "매듭"
+      ],
+      "example": "Tie a strong knot here.",
+      "exampleKr": "여기에 튼튼한 매듭을 지어라."
+    },
+    {
+      "id": "ev-s12-0094",
+      "sourceId": "ev-moe2022-h-0583",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "microphone",
+      "pos": "명사",
+      "meaningKr": [
+        "마이크"
+      ],
+      "example": "Speak into the microphone please.",
+      "exampleKr": "마이크에 대고 말해 주세요."
+    },
+    {
+      "id": "ev-s12-0095",
+      "sourceId": "ev-moe2022-h-0562",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "lump",
+      "pos": "명사",
+      "meaningKr": [
+        "덩이"
+      ],
+      "example": "Add one lump of sugar.",
+      "exampleKr": "설탕 한 덩이를 넣어라."
+    },
+    {
+      "id": "ev-s12-0096",
+      "sourceId": "ev-moe2022-h-0600",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "moist",
+      "pos": "형용사",
+      "meaningKr": [
+        "축축이 젖은"
+      ],
+      "example": "The soil felt moist.",
+      "exampleKr": "그 흙은 축축이 젖은 느낌이었다."
+    },
+    {
+      "id": "ev-s12-0097",
+      "sourceId": "ev-moe2022-h-0413",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "fuse",
+      "pos": "명사",
+      "meaningKr": [
+        "퓨즈"
+      ],
+      "example": "The old fuse burned out.",
+      "exampleKr": "그 낡은 퓨즈가 타 버렸다."
+    },
+    {
+      "id": "ev-s12-0098",
+      "sourceId": "ev-moe2022-h-0332",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "equip",
+      "pos": "동사",
+      "meaningKr": [
+        "장비를 갖추다"
+      ],
+      "example": "They equipped the boat well.",
+      "exampleKr": "그들은 그 배에 장비를 잘 갖췄다."
+    },
+    {
+      "id": "ev-s12-0099",
+      "sourceId": "ev-moe2022-h-0753",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "refine",
+      "pos": "동사",
+      "meaningKr": [
+        "정제하다"
+      ],
+      "example": "They refine oil at this plant.",
+      "exampleKr": "그들은 이 공장에서 기름을 정제한다."
+    },
+    {
+      "id": "ev-s12-0100",
+      "sourceId": "ev-moe2022-h-0594",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "mobile",
+      "pos": "형용사",
+      "meaningKr": [
+        "이동식의"
+      ],
+      "example": "We used a mobile clinic.",
+      "exampleKr": "우리는 이동식 진료소를 이용했다."
+    },
+    {
+      "id": "ev-s12-0101",
+      "sourceId": "ev-moe2022-h-0988",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "weird",
+      "pos": "형용사",
+      "meaningKr": [
+        "기묘한"
+      ],
+      "example": "The room made a weird sound.",
+      "exampleKr": "그 방은 기묘한 소리를 냈다."
+    },
+    {
+      "id": "ev-s12-0102",
+      "sourceId": "ev-moe2022-h-0203",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "core",
+      "pos": "명사",
+      "meaningKr": [
+        "핵심"
+      ],
+      "example": "Honesty lies at the core.",
+      "exampleKr": "정직이 핵심에 놓여 있다."
+    },
+    {
+      "id": "ev-s12-0103",
+      "sourceId": "ev-moe2022-h-0730",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "proof",
+      "pos": "명사",
+      "meaningKr": [
+        "입증 자료"
+      ],
+      "example": "Show me clear proof.",
+      "exampleKr": "분명한 입증 자료를 보여 줘."
+    },
+    {
+      "id": "ev-s12-0104",
+      "sourceId": "ev-moe2022-h-0590",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "minimum",
+      "pos": "명사",
+      "meaningKr": [
+        "최솟값"
+      ],
+      "example": "The minimum is ten people.",
+      "exampleKr": "최솟값은 열 명이다."
+    },
+    {
+      "id": "ev-s12-0105",
+      "sourceId": "ev-moe2022-h-0333",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "era",
+      "pos": "명사",
+      "meaningKr": [
+        "시대"
+      ],
+      "example": "A new era began then.",
+      "exampleKr": "새 시대가 그때 시작되었다."
+    },
+    {
+      "id": "ev-s12-0106",
+      "sourceId": "ev-moe2022-h-0845",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "split",
+      "pos": "동사",
+      "meaningKr": [
+        "쪼개다"
+      ],
+      "example": "Split the log into two pieces.",
+      "exampleKr": "통나무를 두 조각으로 쪼개라."
+    },
+    {
+      "id": "ev-s12-0107",
+      "sourceId": "ev-moe2022-h-0370",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "false",
+      "pos": "형용사",
+      "meaningKr": [
+        "거짓의"
+      ],
+      "example": "He gave a false name.",
+      "exampleKr": "그는 거짓의 이름을 댔다."
+    },
+    {
+      "id": "ev-s12-0108",
+      "sourceId": "ev-moe2022-h-0745",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "random",
+      "pos": "형용사",
+      "meaningKr": [
+        "무작위의"
+      ],
+      "example": "Pick a random number.",
+      "exampleKr": "무작위의 숫자를 골라라."
+    },
+    {
+      "id": "ev-s12-0109",
+      "sourceId": "ev-moe2022-h-0682",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "permanent",
+      "pos": "형용사",
+      "meaningKr": [
+        "영구적인"
+      ],
+      "example": "This is a permanent change.",
+      "exampleKr": "이것은 영구적인 변화다."
+    },
+    {
+      "id": "ev-s12-0110",
+      "sourceId": "ev-moe2022-h-0685",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "perspective",
+      "pos": "명사",
+      "meaningKr": [
+        "관점"
+      ],
+      "example": "Try a different perspective.",
+      "exampleKr": "다른 관점을 시도해 봐라."
+    },
+    {
+      "id": "ev-s12-0111",
+      "sourceId": "ev-moe2022-h-0487",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "incident",
+      "pos": "명사",
+      "meaningKr": [
+        "사건"
+      ],
+      "example": "The incident happened at noon.",
+      "exampleKr": "그 사건은 정오에 일어났다."
+    },
+    {
+      "id": "ev-s12-0112",
+      "sourceId": "ev-moe2022-h-0941",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "ultimate",
+      "pos": "형용사",
+      "meaningKr": [
+        "궁극적인"
+      ],
+      "example": "Peace is our ultimate goal.",
+      "exampleKr": "평화가 우리의 궁극적인 목표다."
+    },
+    {
+      "id": "ev-s12-0113",
+      "sourceId": "ev-moe2022-h-0360",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "external",
+      "pos": "형용사",
+      "meaningKr": [
+        "외부의"
+      ],
+      "example": "The external wall needs paint.",
+      "exampleKr": "그 외부 벽은 페인트가 필요하다."
+    },
+    {
+      "id": "ev-s12-0114",
+      "sourceId": "ev-moe2022-h-0120",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "celebrate",
+      "pos": "동사",
+      "meaningKr": [
+        "기념하다"
+      ],
+      "example": "We celebrated her first prize.",
+      "exampleKr": "우리는 그녀의 일등을 기념했다."
+    },
+    {
+      "id": "ev-s12-0115",
+      "sourceId": "ev-moe2022-h-0768",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "rescue",
+      "pos": "동사",
+      "meaningKr": [
+        "구조하다"
+      ],
+      "example": "Firefighters rescued two cats.",
+      "exampleKr": "소방관들이 고양이 두 마리를 구조했다."
+    },
+    {
+      "id": "ev-s12-0116",
+      "sourceId": "ev-moe2022-h-0767",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "reputation",
+      "pos": "명사",
+      "meaningKr": [
+        "평판"
+      ],
+      "example": "The shop has a fine reputation.",
+      "exampleKr": "그 가게는 좋은 평판을 지녔다."
+    },
+    {
+      "id": "ev-s12-0117",
+      "sourceId": "ev-moe2022-h-0041",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "alongside",
+      "pos": "전치사",
+      "meaningKr": [
+        "~와 나란히"
+      ],
+      "example": "A boat waited alongside the ship.",
+      "exampleKr": "배 한 척이 그 배와 나란히 기다렸다."
+    },
+    {
+      "id": "ev-s12-0118",
+      "sourceId": "ev-moe2022-h-0472",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "ideal",
+      "pos": "형용사",
+      "meaningKr": [
+        "이상적인"
+      ],
+      "example": "This is ideal weather for hiking.",
+      "exampleKr": "이것은 등산에 이상적인 날씨다."
+    },
+    {
+      "id": "ev-s12-0119",
+      "sourceId": "ev-moe2022-h-0084",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "behalf",
+      "pos": "명사",
+      "meaningKr": [
+        "대신"
+      ],
+      "example": "She spoke on behalf of us.",
+      "exampleKr": "그녀가 우리를 대신해 말했다."
+    },
+    {
+      "id": "ev-s12-0120",
+      "sourceId": "ev-moe2022-h-0872",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "suck",
+      "pos": "동사",
+      "meaningKr": [
+        "빨아들이다"
+      ],
+      "example": "The pump sucks water quickly.",
+      "exampleKr": "그 펌프는 물을 빠르게 빨아들인다."
+    },
+    {
+      "id": "ev-s12-0121",
+      "sourceId": "ev-moe2022-h-0242",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "decent",
+      "pos": "형용사",
+      "meaningKr": [
+        "제법 좋은"
+      ],
+      "example": "He found a decent room.",
+      "exampleKr": "그는 제법 좋은 방을 찾았다."
+    },
+    {
+      "id": "ev-s12-0122",
+      "sourceId": "ev-moe2022-h-0048",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "angle",
+      "pos": "명사",
+      "meaningKr": [
+        "각도"
+      ],
+      "example": "Measure the angle with care.",
+      "exampleKr": "각도를 주의해서 재라."
+    },
+    {
+      "id": "ev-s12-0123",
+      "sourceId": "ev-moe2022-h-0978",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "vital",
+      "pos": "형용사",
+      "meaningKr": [
+        "필수적인"
+      ],
+      "example": "Water is vital for plants.",
+      "exampleKr": "물은 식물에 필수적이다."
+    },
+    {
+      "id": "ev-s12-0124",
+      "sourceId": "ev-moe2022-h-0363",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "extraordinary",
+      "pos": "형용사",
+      "meaningKr": [
+        "비범한"
+      ],
+      "example": "She has extraordinary talent.",
+      "exampleKr": "그녀는 비범한 재능이 있다."
+    },
+    {
+      "id": "ev-s12-0125",
+      "sourceId": "ev-moe2022-h-0819",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "sequence",
+      "pos": "명사",
+      "meaningKr": [
+        "차례"
+      ],
+      "example": "Follow the correct sequence.",
+      "exampleKr": "올바른 차례를 따라라."
+    },
+    {
+      "id": "ev-s12-0126",
+      "sourceId": "ev-moe2022-h-0399",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "foster",
+      "pos": "동사",
+      "meaningKr": [
+        "길러 주다"
+      ],
+      "example": "Good teachers foster curiosity.",
+      "exampleKr": "좋은 교사는 호기심을 길러 준다."
+    },
+    {
+      "id": "ev-s12-0127",
+      "sourceId": "ev-moe2022-h-0090",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "blast",
+      "pos": "명사",
+      "meaningKr": [
+        "폭발"
+      ],
+      "example": "The blast broke every window.",
+      "exampleKr": "그 폭발이 모든 창문을 깨뜨렸다."
+    },
+    {
+      "id": "ev-s12-0128",
+      "sourceId": "ev-moe2022-h-0889",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "symbol",
+      "pos": "명사",
+      "meaningKr": [
+        "상징"
+      ],
+      "example": "The white bird is a peace symbol.",
+      "exampleKr": "그 흰 새는 평화의 상징이다."
+    },
+    {
+      "id": "ev-s12-0129",
+      "sourceId": "ev-moe2022-h-0516",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "intelligent",
+      "pos": "형용사",
+      "meaningKr": [
+        "지능이 높은"
+      ],
+      "example": "Dolphins are highly intelligent.",
+      "exampleKr": "돌고래는 매우 지능이 높다."
+    },
+    {
+      "id": "ev-s12-0130",
+      "sourceId": "ev-moe2022-h-0306",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "dual",
+      "pos": "형용사",
+      "meaningKr": [
+        "두 부분의"
+      ],
+      "example": "This tool has a dual purpose.",
+      "exampleKr": "이 도구는 두 부분의 목적을 지닌다."
+    },
+    {
+      "id": "ev-s12-0131",
+      "sourceId": "ev-moe2022-h-0651",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "overcome",
+      "pos": "동사",
+      "meaningKr": [
+        "극복하다"
+      ],
+      "example": "We must overcome this problem.",
+      "exampleKr": "우리는 이 문제를 극복해야 한다."
+    },
+    {
+      "id": "ev-s12-0132",
+      "sourceId": "ev-moe2022-h-0194",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "controversy",
+      "pos": "명사",
+      "meaningKr": [
+        "논란"
+      ],
+      "example": "The plan caused public controversy.",
+      "exampleKr": "그 계획은 대중의 논란을 일으켰다."
+    },
+    {
+      "id": "ev-s12-0133",
+      "sourceId": "ev-moe2022-h-0811",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "scope",
+      "pos": "명사",
+      "meaningKr": [
+        "다루는 범위"
+      ],
+      "example": "Widen the scope of your study.",
+      "exampleKr": "공부에서 다루는 범위를 넓혀라."
+    },
+    {
+      "id": "ev-s12-0134",
+      "sourceId": "ev-moe2022-h-0620",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "neutral",
+      "pos": "형용사",
+      "meaningKr": [
+        "중립의"
+      ],
+      "example": "The judge stayed neutral.",
+      "exampleKr": "그 판사는 중립을 지켰다."
+    },
+    {
+      "id": "ev-s12-0135",
+      "sourceId": "ev-moe2022-h-0422",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "generate",
+      "pos": "동사",
+      "meaningKr": [
+        "만들어 내다"
+      ],
+      "example": "Windmills generate clean power.",
+      "exampleKr": "풍차는 깨끗한 전력을 만들어 낸다."
+    },
+    {
+      "id": "ev-s12-0136",
+      "sourceId": "ev-moe2022-h-0349",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "excess",
+      "pos": "명사",
+      "meaningKr": [
+        "초과분"
+      ],
+      "example": "Pour the excess into a cup.",
+      "exampleKr": "초과분을 컵에 부어라."
+    },
+    {
+      "id": "ev-s12-0137",
+      "sourceId": "ev-moe2022-h-0482",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "implement",
+      "pos": "동사",
+      "meaningKr": [
+        "실행하다"
+      ],
+      "example": "The school implemented new rules.",
+      "exampleKr": "그 학교는 새 규칙을 실행했다."
+    },
+    {
+      "id": "ev-s12-0138",
+      "sourceId": "ev-moe2022-h-0655",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "overnight",
+      "pos": "부사",
+      "meaningKr": [
+        "하룻밤 사이에"
+      ],
+      "example": "The snow melted overnight.",
+      "exampleKr": "눈이 하룻밤 사이에 녹았다."
+    },
+    {
+      "id": "ev-s12-0139",
+      "sourceId": "ev-moe2022-h-0109",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "cancel",
+      "pos": "동사",
+      "meaningKr": [
+        "취소하다"
+      ],
+      "example": "They cancelled the evening class.",
+      "exampleKr": "그들은 저녁 수업을 취소했다."
+    },
+    {
+      "id": "ev-s12-0140",
+      "sourceId": "ev-moe2022-h-0224",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "crush",
+      "pos": "동사",
+      "meaningKr": [
+        "으깨다"
+      ],
+      "example": "Crush the ice with a spoon.",
+      "exampleKr": "숟가락으로 얼음을 으깨라."
+    },
+    {
+      "id": "ev-s12-0141",
+      "sourceId": "ev-moe2022-h-0779",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "retain",
+      "pos": "동사",
+      "meaningKr": [
+        "간직하다"
+      ],
+      "example": "Plants retain water well.",
+      "exampleKr": "식물은 물을 잘 간직한다."
+    },
+    {
+      "id": "ev-s12-0142",
+      "sourceId": "ev-moe2022-h-0966",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "vertical",
+      "pos": "형용사",
+      "meaningKr": [
+        "수직의"
+      ],
+      "example": "Draw a vertical line here.",
+      "exampleKr": "여기에 수직의 선을 그려라."
+    },
+    {
+      "id": "ev-s12-0143",
+      "sourceId": "ev-moe2022-h-0022",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "acquire",
+      "pos": "동사",
+      "meaningKr": [
+        "획득하다"
+      ],
+      "example": "The museum acquired a rare coin.",
+      "exampleKr": "박물관이 희귀한 동전을 획득했다."
+    },
+    {
+      "id": "ev-s12-0144",
+      "sourceId": "ev-moe2022-h-0732",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "prospect",
+      "pos": "명사",
+      "meaningKr": [
+        "전망"
+      ],
+      "example": "The job has a good prospect.",
+      "exampleKr": "그 일자리는 좋은 전망이 있다."
+    },
+    {
+      "id": "ev-s12-0145",
+      "sourceId": "ev-moe2022-h-0196",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "convert",
+      "pos": "동사",
+      "meaningKr": [
+        "전환하다"
+      ],
+      "example": "They converted the barn into a shop.",
+      "exampleKr": "그들은 헛간을 가게로 전환했다."
+    },
+    {
+      "id": "ev-s12-0146",
+      "sourceId": "ev-moe2022-h-0731",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "proportion",
+      "pos": "명사",
+      "meaningKr": [
+        "비례 몫"
+      ],
+      "example": "Mix them in equal proportion.",
+      "exampleKr": "같은 비례 몫으로 그것들을 섞어라."
+    },
+    {
+      "id": "ev-s12-0147",
+      "sourceId": "ev-moe2022-h-0054",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "approve",
+      "pos": "동사",
+      "meaningKr": [
+        "승인하다"
+      ],
+      "example": "The board approved our plan.",
+      "exampleKr": "이사회가 우리 계획을 승인했다."
+    },
+    {
+      "id": "ev-s12-0148",
+      "sourceId": "ev-moe2022-h-0026",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "adjust",
+      "pos": "동사",
+      "meaningKr": [
+        "조절하다"
+      ],
+      "example": "Please adjust the chair height.",
+      "exampleKr": "의자 높이를 조절해 주세요."
+    },
+    {
+      "id": "ev-s12-0149",
+      "sourceId": "ev-moe2022-h-0931",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "tremendous",
+      "pos": "형용사",
+      "meaningKr": [
+        "엄청나게 큰"
+      ],
+      "example": "A tremendous wave hit the shore.",
+      "exampleKr": "엄청나게 큰 파도가 해안을 쳤다."
+    },
+    {
+      "id": "ev-s12-0150",
+      "sourceId": "ev-moe2022-h-0015",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "accomplish",
+      "pos": "동사",
+      "meaningKr": [
+        "해내다"
+      ],
+      "example": "She accomplished the hard task.",
+      "exampleKr": "그녀는 그 어려운 일을 해냈다."
+    },
+    {
+      "id": "ev-s12-0151",
+      "sourceId": "ev-moe2022-h-0282",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "dip",
+      "pos": "동사",
+      "meaningKr": [
+        "살짝 담그다"
+      ],
+      "example": "Dip the brush in water.",
+      "exampleKr": "붓을 물에 살짝 담가라."
+    },
+    {
+      "id": "ev-s12-0152",
+      "sourceId": "ev-moe2022-h-0565",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "magnificent",
+      "pos": "형용사",
+      "meaningKr": [
+        "장엄한"
+      ],
+      "example": "The old church looks magnificent.",
+      "exampleKr": "그 오래된 교회는 장엄해 보인다."
+    },
+    {
+      "id": "ev-s12-0153",
+      "sourceId": "ev-moe2022-h-0119",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "cease",
+      "pos": "동사",
+      "meaningKr": [
+        "중단되다"
+      ],
+      "example": "The noise ceased at midnight.",
+      "exampleKr": "그 소음은 자정에 중단되었다."
+    },
+    {
+      "id": "ev-s12-0154",
+      "sourceId": "ev-moe2022-h-0001",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "abandon",
+      "pos": "동사",
+      "meaningKr": [
+        "포기하고 떠나다"
+      ],
+      "example": "They abandoned the old house.",
+      "exampleKr": "그들은 낡은 집을 포기하고 떠났다."
+    },
+    {
+      "id": "ev-s12-0155",
+      "sourceId": "ev-moe2022-h-0342",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "evaluate",
+      "pos": "동사",
+      "meaningKr": [
+        "심사하다"
+      ],
+      "example": "Teachers evaluate every project.",
+      "exampleKr": "교사들이 모든 과제를 심사한다."
+    },
+    {
+      "id": "ev-s12-0156",
+      "sourceId": "ev-moe2022-h-0509",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "inspire",
+      "pos": "동사",
+      "meaningKr": [
+        "영감을 주다"
+      ],
+      "example": "Her story inspired many students.",
+      "exampleKr": "그녀의 이야기는 많은 학생에게 영감을 주었다."
+    },
+    {
+      "id": "ev-s12-0157",
+      "sourceId": "ev-moe2022-h-0617",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "negotiate",
+      "pos": "동사",
+      "meaningKr": [
+        "협상하다"
+      ],
+      "example": "Both sides negotiated for hours.",
+      "exampleKr": "양측이 몇 시간 동안 협상했다."
+    },
+    {
+      "id": "ev-s12-0158",
+      "sourceId": "ev-moe2022-h-0454",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "hazard",
+      "pos": "명사",
+      "meaningKr": [
+        "위험 요소"
+      ],
+      "example": "Wet floors are a hazard.",
+      "exampleKr": "젖은 바닥은 위험 요소다."
+    },
+    {
+      "id": "ev-s12-0159",
+      "sourceId": "ev-moe2022-h-0434",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "grasp",
+      "pos": "동사",
+      "meaningKr": [
+        "꽉 붙잡다"
+      ],
+      "example": "He grasped the wooden handle.",
+      "exampleKr": "그는 나무 손잡이를 꽉 붙잡았다."
+    },
+    {
+      "id": "ev-s12-0160",
+      "sourceId": "ev-moe2022-h-0009",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "absurd",
+      "pos": "형용사",
+      "meaningKr": [
+        "터무니없는"
+      ],
+      "example": "That excuse sounds absurd.",
+      "exampleKr": "그 변명은 터무니없게 들린다."
+    },
+    {
+      "id": "ev-s12-0161",
+      "sourceId": "ev-moe2022-h-0605",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "motive",
+      "pos": "명사",
+      "meaningKr": [
+        "동기"
+      ],
+      "example": "Police searched for a motive.",
+      "exampleKr": "경찰이 동기를 찾았다."
+    },
+    {
+      "id": "ev-s12-0162",
+      "sourceId": "ev-moe2022-h-0627",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "norm",
+      "pos": "명사",
+      "meaningKr": [
+        "일반 기준"
+      ],
+      "example": "This size is the norm.",
+      "exampleKr": "이 크기가 일반 기준이다."
+    },
+    {
+      "id": "ev-s12-0163",
+      "sourceId": "ev-moe2022-h-0430",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "glow",
+      "pos": "동사",
+      "meaningKr": [
+        "은은히 빛나다"
+      ],
+      "example": "Coals glowed in the dark.",
+      "exampleKr": "숯이 어둠 속에서 은은히 빛났다."
+    },
+    {
+      "id": "ev-s12-0164",
+      "sourceId": "ev-moe2022-h-0029",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "adverse",
+      "pos": "형용사",
+      "meaningKr": [
+        "불리한"
+      ],
+      "example": "Adverse weather delayed our flight.",
+      "exampleKr": "불리한 날씨가 우리 항공편을 지연시켰다."
+    },
+    {
+      "id": "ev-s12-0165",
+      "sourceId": "ev-moe2022-h-0187",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "consult",
+      "pos": "동사",
+      "meaningKr": [
+        "상담하다"
+      ],
+      "example": "Consult a doctor before running.",
+      "exampleKr": "달리기 전에 의사와 상담해라."
+    },
+    {
+      "id": "ev-s12-0166",
+      "sourceId": "ev-moe2022-h-0369",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "fade",
+      "pos": "동사",
+      "meaningKr": [
+        "바래다"
+      ],
+      "example": "The old curtain faded slowly.",
+      "exampleKr": "그 낡은 커튼은 천천히 바랬다."
+    },
+    {
+      "id": "ev-s12-0167",
+      "sourceId": "ev-moe2022-h-0595",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "mock",
+      "pos": "동사",
+      "meaningKr": [
+        "비웃다"
+      ],
+      "example": "Do not mock his effort.",
+      "exampleKr": "그의 노력을 비웃지 마라."
+    },
+    {
+      "id": "ev-s12-0168",
+      "sourceId": "ev-moe2022-h-0217",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "creep",
+      "pos": "동사",
+      "meaningKr": [
+        "살금살금 기어가다"
+      ],
+      "example": "Cats creep quietly at night.",
+      "exampleKr": "고양이는 밤에 살금살금 기어간다."
+    },
+    {
+      "id": "ev-s12-0169",
+      "sourceId": "ev-moe2022-h-0498",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "inherent",
+      "pos": "형용사",
+      "meaningKr": [
+        "본래부터 있는"
+      ],
+      "example": "Curiosity is inherent in children.",
+      "exampleKr": "호기심은 아이들에게 본래부터 있다."
+    },
+    {
+      "id": "ev-s12-0170",
+      "sourceId": "ev-moe2022-h-0325",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "endure",
+      "pos": "동사",
+      "meaningKr": [
+        "견디다"
+      ],
+      "example": "The wall endured heavy wind.",
+      "exampleKr": "그 벽은 강한 바람을 견뎠다."
+    },
+    {
+      "id": "ev-s12-0171",
+      "sourceId": "ev-moe2022-h-0385",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "flee",
+      "pos": "동사",
+      "meaningKr": [
+        "달아나다"
+      ],
+      "example": "Deer flee when they hear noise.",
+      "exampleKr": "사슴은 소리를 들으면 달아난다."
+    },
+    {
+      "id": "ev-s12-0172",
+      "sourceId": "ev-moe2022-h-0816",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "seize",
+      "pos": "동사",
+      "meaningKr": [
+        "붙들다"
+      ],
+      "example": "Police seized the stolen bag.",
+      "exampleKr": "경찰이 도난당한 가방을 붙들었다."
+    },
+    {
+      "id": "ev-s12-0173",
+      "sourceId": "ev-moe2022-h-0711",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "prejudice",
+      "pos": "명사",
+      "meaningKr": [
+        "선입견"
+      ],
+      "example": "Prejudice harms every community.",
+      "exampleKr": "선입견은 모든 공동체를 해친다."
+    },
+    {
+      "id": "ev-s12-0174",
+      "sourceId": "ev-moe2022-h-0521",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "interval",
+      "pos": "명사",
+      "meaningKr": [
+        "간격"
+      ],
+      "example": "Take a break at short intervals.",
+      "exampleKr": "짧은 간격으로 휴식해라."
+    },
+    {
+      "id": "ev-s12-0175",
+      "sourceId": "ev-moe2022-h-0979",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "vivid",
+      "pos": "형용사",
+      "meaningKr": [
+        "생생한"
+      ],
+      "example": "She has vivid childhood memories.",
+      "exampleKr": "그녀는 생생한 어린 시절 기억이 있다."
+    },
+    {
+      "id": "ev-s12-0176",
+      "sourceId": "ev-moe2022-h-0799",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "rumor",
+      "pos": "명사",
+      "meaningKr": [
+        "소문"
+      ],
+      "example": "A false rumor spread fast.",
+      "exampleKr": "거짓 소문이 빠르게 퍼졌다."
+    },
+    {
+      "id": "ev-s12-0177",
+      "sourceId": "ev-moe2022-h-0293",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "distract",
+      "pos": "동사",
+      "meaningKr": [
+        "주의를 흩뜨리다"
+      ],
+      "example": "Loud music distracts young readers.",
+      "exampleKr": "시끄러운 음악은 어린 독자의 주의를 흩뜨린다."
+    },
+    {
+      "id": "ev-s12-0178",
+      "sourceId": "ev-moe2022-h-0567",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "manipulate",
+      "pos": "동사",
+      "meaningKr": [
+        "교묘히 다루다"
+      ],
+      "example": "He manipulated the small switch.",
+      "exampleKr": "그는 작은 스위치를 교묘히 다뤘다."
+    },
+    {
+      "id": "ev-s12-0179",
+      "sourceId": "ev-moe2022-h-0883",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "suspend",
+      "pos": "동사",
+      "meaningKr": [
+        "매달다"
+      ],
+      "example": "They suspended a lamp there.",
+      "exampleKr": "그들은 거기에 램프를 매달았다."
+    },
+    {
+      "id": "ev-s12-0180",
+      "sourceId": "ev-moe2022-h-0905",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "terminate",
+      "pos": "동사",
+      "meaningKr": [
+        "종료시키다"
+      ],
+      "example": "They terminated the old contract.",
+      "exampleKr": "그들은 낡은 계약을 종료시켰다."
+    },
+    {
+      "id": "ev-s12-0181",
+      "sourceId": "ev-moe2022-h-0075",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "await",
+      "pos": "동사",
+      "meaningKr": [
+        "고대하다"
+      ],
+      "example": "Fans await the new album.",
+      "exampleKr": "팬들은 새 앨범을 고대한다."
+    },
+    {
+      "id": "ev-s12-0182",
+      "sourceId": "ev-moe2022-h-0448",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "handicap",
+      "pos": "명사",
+      "meaningKr": [
+        "불리한 조건"
+      ],
+      "example": "Rain became a real handicap.",
+      "exampleKr": "비가 진짜 불리한 조건이 되었다."
+    },
+    {
+      "id": "ev-s12-0183",
+      "sourceId": "ev-moe2022-h-0074",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "avail",
+      "pos": "동사",
+      "meaningKr": [
+        "이용하다"
+      ],
+      "example": "Students may avail themselves of free books.",
+      "exampleKr": "학생들은 무료 책을 이용할 수 있다."
+    },
+    {
+      "id": "ev-s12-0184",
+      "sourceId": "ev-moe2022-h-0407",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "fulfil",
+      "pos": "동사",
+      "meaningKr": [
+        "이행하다"
+      ],
+      "example": "He fulfilled his early promise.",
+      "exampleKr": "그는 자신의 이른 약속을 이행했다."
+    },
+    {
+      "id": "ev-s12-0185",
+      "sourceId": "ev-moe2022-h-0274",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "devote",
+      "pos": "동사",
+      "meaningKr": [
+        "헌신하다"
+      ],
+      "example": "She devotes weekends to study.",
+      "exampleKr": "그녀는 주말을 공부에 헌신한다."
+    },
+    {
+      "id": "ev-s12-0186",
+      "sourceId": "ev-moe2022-h-0825",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "simultaneous",
+      "pos": "형용사",
+      "meaningKr": [
+        "동시에 일어나는"
+      ],
+      "example": "Two simultaneous events confused us.",
+      "exampleKr": "동시에 일어나는 두 사건이 우리를 혼란스럽게 했다."
+    },
+    {
+      "id": "ev-s12-0187",
+      "sourceId": "ev-moe2022-h-0246",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "dedicate",
+      "pos": "동사",
+      "meaningKr": [
+        "바치다"
+      ],
+      "example": "She dedicated her life to teaching.",
+      "exampleKr": "그녀는 인생을 가르치는 일에 바쳤다."
+    },
+    {
+      "id": "ev-s12-0188",
+      "sourceId": "ev-moe2022-h-0140",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "cling",
+      "pos": "동사",
+      "meaningKr": [
+        "매달리다"
+      ],
+      "example": "Wet leaves cling to the window.",
+      "exampleKr": "젖은 잎들이 창문에 매달린다."
+    },
+    {
+      "id": "ev-s12-0189",
+      "sourceId": "ev-moe2022-h-0280",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "diminish",
+      "pos": "동사",
+      "meaningKr": [
+        "차츰 줄이다"
+      ],
+      "example": "Rest diminishes the pain.",
+      "exampleKr": "휴식이 그 통증을 차츰 줄인다."
+    },
+    {
+      "id": "ev-s12-0190",
+      "sourceId": "ev-moe2022-h-0168",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "conceive",
+      "pos": "동사",
+      "meaningKr": [
+        "생각해 내다"
+      ],
+      "example": "He conceived a clever plan.",
+      "exampleKr": "그는 영리한 계획을 생각해 냈다."
+    },
+    {
+      "id": "ev-s12-0191",
+      "sourceId": "ev-moe2022-h-0159",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "compile",
+      "pos": "동사",
+      "meaningKr": [
+        "모아 엮다"
+      ],
+      "example": "She compiled a list of names.",
+      "exampleKr": "그녀는 이름 목록을 모아 엮었다."
+    },
+    {
+      "id": "ev-s12-0192",
+      "sourceId": "ev-moe2022-h-0191",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "contradict",
+      "pos": "동사",
+      "meaningKr": [
+        "반박하다"
+      ],
+      "example": "His answer contradicted the report.",
+      "exampleKr": "그의 답변은 그 보고서를 반박했다."
+    },
+    {
+      "id": "ev-s12-0193",
+      "sourceId": "ev-moe2022-h-0156",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "compel",
+      "pos": "동사",
+      "meaningKr": [
+        "강요하다"
+      ],
+      "example": "Hunger compelled them to move.",
+      "exampleKr": "배고픔이 그들을 움직이도록 강요했다."
+    },
+    {
+      "id": "ev-s12-0194",
+      "sourceId": "ev-moe2022-h-0442",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "guideline",
+      "pos": "명사",
+      "meaningKr": [
+        "지침"
+      ],
+      "example": "Follow the safety guideline.",
+      "exampleKr": "안전 지침을 따라라."
+    },
+    {
+      "id": "ev-s12-0195",
+      "sourceId": "ev-moe2022-h-0346",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "exaggerate",
+      "pos": "동사",
+      "meaningKr": [
+        "과장하다"
+      ],
+      "example": "Do not exaggerate the danger.",
+      "exampleKr": "위험을 과장하지 마라."
+    },
+    {
+      "id": "ev-s12-0196",
+      "sourceId": "ev-moe2022-h-0955",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "vacate",
+      "pos": "동사",
+      "meaningKr": [
+        "비우다"
+      ],
+      "example": "Vacate the room by noon.",
+      "exampleKr": "정오까지 방을 비워라."
+    },
+    {
+      "id": "ev-s12-0197",
+      "sourceId": "ev-moe2022-h-0495",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "inflate",
+      "pos": "동사",
+      "meaningKr": [
+        "부풀리다"
+      ],
+      "example": "Inflate the ball before playing.",
+      "exampleKr": "경기 전에 공을 부풀려라."
+    },
+    {
+      "id": "ev-s12-0198",
+      "sourceId": "ev-moe2022-h-0175",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "confide",
+      "pos": "동사",
+      "meaningKr": [
+        "털어놓다"
+      ],
+      "example": "She confided in her old friend.",
+      "exampleKr": "그녀는 오랜 친구에게 털어놓았다."
+    },
+    {
+      "id": "ev-s12-0199",
+      "sourceId": "ev-moe2022-h-0612",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "narrate",
+      "pos": "동사",
+      "meaningKr": [
+        "이야기를 들려주다"
+      ],
+      "example": "She narrates the whole story.",
+      "exampleKr": "그녀가 이야기 전체를 들려준다."
+    },
+    {
+      "id": "ev-s12-0200",
+      "sourceId": "ev-moe2022-h-0836",
+      "setId": "ev-set-012",
+      "level": "high",
+      "word": "sophisticate",
+      "pos": "동사",
+      "meaningKr": [
+        "세련되게 만들다"
+      ],
+      "example": "Experience sophisticates young writers.",
+      "exampleKr": "경험은 젊은 작가를 세련되게 만든다."
+    }
+  ]
+}

@@ -1,0 +1,2609 @@
+{
+  "setId": "ev-set-011",
+  "order": 11,
+  "title": "사람과 마음",
+  "level": "high",
+  "source": "교육부 2022 개정 별책 14 무표시 대표형(고등 범위)",
+  "words": [
+    {
+      "id": "ev-s11-0001",
+      "sourceId": "ev-moe2022-h-0110",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "cancer",
+      "pos": "명사",
+      "meaningKr": [
+        "암"
+      ],
+      "example": "Early tests can find cancer.",
+      "exampleKr": "조기 검사가 암을 찾아낼 수 있다."
+    },
+    {
+      "id": "ev-s11-0002",
+      "sourceId": "ev-moe2022-h-0467",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "host",
+      "pos": "명사",
+      "meaningKr": [
+        "주최자"
+      ],
+      "example": "The host welcomed every player.",
+      "exampleKr": "주최자가 모든 선수를 맞이했다."
+    },
+    {
+      "id": "ev-s11-0003",
+      "sourceId": "ev-moe2022-h-0532",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "joint",
+      "pos": "명사",
+      "meaningKr": [
+        "관절"
+      ],
+      "example": "My knee joint feels stiff.",
+      "exampleKr": "내 무릎 관절이 뻣뻣하게 느껴진다."
+    },
+    {
+      "id": "ev-s11-0004",
+      "sourceId": "ev-moe2022-h-0895",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "talent",
+      "pos": "명사",
+      "meaningKr": [
+        "재능"
+      ],
+      "example": "The boy shows musical talent.",
+      "exampleKr": "그 소년은 음악 재능을 보인다."
+    },
+    {
+      "id": "ev-s11-0005",
+      "sourceId": "ev-moe2022-h-0881",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "surgery",
+      "pos": "명사",
+      "meaningKr": [
+        "수술"
+      ],
+      "example": "The surgery lasted two hours.",
+      "exampleKr": "그 수술은 두 시간 걸렸다."
+    },
+    {
+      "id": "ev-s11-0006",
+      "sourceId": "ev-moe2022-h-0874",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "suicide",
+      "pos": "명사",
+      "meaningKr": [
+        "자살"
+      ],
+      "example": "The clinic prevents suicide.",
+      "exampleKr": "그 진료소는 자살을 막는다."
+    },
+    {
+      "id": "ev-s11-0007",
+      "sourceId": "ev-moe2022-h-0911",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "therapy",
+      "pos": "명사",
+      "meaningKr": [
+        "치료 요법"
+      ],
+      "example": "Speech therapy helped the child.",
+      "exampleKr": "말하기 치료 요법이 그 아이를 도왔다."
+    },
+    {
+      "id": "ev-s11-0008",
+      "sourceId": "ev-moe2022-h-0416",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "gang",
+      "pos": "명사",
+      "meaningKr": [
+        "패거리"
+      ],
+      "example": "A gang of boys ran past.",
+      "exampleKr": "소년 패거리가 뛰어 지나갔다."
+    },
+    {
+      "id": "ev-s11-0009",
+      "sourceId": "ev-moe2022-h-0051",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "anxiety",
+      "pos": "명사",
+      "meaningKr": [
+        "불안"
+      ],
+      "example": "Exam anxiety kept her awake.",
+      "exampleKr": "시험 불안이 그녀를 깨어 있게 했다."
+    },
+    {
+      "id": "ev-s11-0010",
+      "sourceId": "ev-moe2022-h-0670",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "passion",
+      "pos": "명사",
+      "meaningKr": [
+        "열정"
+      ],
+      "example": "She works with great passion.",
+      "exampleKr": "그녀는 큰 열정으로 일한다."
+    },
+    {
+      "id": "ev-s11-0011",
+      "sourceId": "ev-moe2022-h-0466",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "horror",
+      "pos": "명사",
+      "meaningKr": [
+        "공포심"
+      ],
+      "example": "The film filled us with horror.",
+      "exampleKr": "그 영화는 우리를 공포심으로 채웠다."
+    },
+    {
+      "id": "ev-s11-0012",
+      "sourceId": "ev-moe2022-h-0796",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "romantic",
+      "pos": "형용사",
+      "meaningKr": [
+        "낭만적인"
+      ],
+      "example": "They watched a romantic film.",
+      "exampleKr": "그들은 낭만적인 영화를 봤다."
+    },
+    {
+      "id": "ev-s11-0013",
+      "sourceId": "ev-moe2022-h-0425",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "genuine",
+      "pos": "형용사",
+      "meaningKr": [
+        "진심 어린"
+      ],
+      "example": "Her smile looked genuine.",
+      "exampleKr": "그녀의 미소는 진심 어려 보였다."
+    },
+    {
+      "id": "ev-s11-0014",
+      "sourceId": "ev-moe2022-h-0756",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "regret",
+      "pos": "동사",
+      "meaningKr": [
+        "후회하다"
+      ],
+      "example": "He regretted his quick answer.",
+      "exampleKr": "그는 자기 성급한 답을 후회했다."
+    },
+    {
+      "id": "ev-s11-0015",
+      "sourceId": "ev-moe2022-h-0435",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "grateful",
+      "pos": "형용사",
+      "meaningKr": [
+        "고마워하는"
+      ],
+      "example": "We are grateful for your help.",
+      "exampleKr": "우리는 당신의 도움에 고마워한다."
+    },
+    {
+      "id": "ev-s11-0016",
+      "sourceId": "ev-moe2022-h-0424",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "genius",
+      "pos": "명사",
+      "meaningKr": [
+        "천재"
+      ],
+      "example": "The young genius solved it.",
+      "exampleKr": "그 어린 천재가 그것을 풀었다."
+    },
+    {
+      "id": "ev-s11-0017",
+      "sourceId": "ev-moe2022-h-0213",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "courage",
+      "pos": "명사",
+      "meaningKr": [
+        "용기"
+      ],
+      "example": "The boy showed real courage.",
+      "exampleKr": "그 소년은 진짜 용기를 보였다."
+    },
+    {
+      "id": "ev-s11-0018",
+      "sourceId": "ev-moe2022-h-0918",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "tissue",
+      "pos": "명사",
+      "meaningKr": [
+        "조직"
+      ],
+      "example": "This tissue heals very slowly.",
+      "exampleKr": "이 조직은 아주 천천히 낫는다."
+    },
+    {
+      "id": "ev-s11-0019",
+      "sourceId": "ev-moe2022-h-0570",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "mature",
+      "pos": "형용사",
+      "meaningKr": [
+        "성숙한"
+      ],
+      "example": "She gave a mature answer.",
+      "exampleKr": "그녀는 성숙한 답을 했다."
+    },
+    {
+      "id": "ev-s11-0020",
+      "sourceId": "ev-moe2022-h-0782",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "revenge",
+      "pos": "명사",
+      "meaningKr": [
+        "복수"
+      ],
+      "example": "Revenge solves very little.",
+      "exampleKr": "복수는 해결하는 것이 거의 없다."
+    },
+    {
+      "id": "ev-s11-0021",
+      "sourceId": "ev-moe2022-h-0094",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "bold",
+      "pos": "형용사",
+      "meaningKr": [
+        "대담한"
+      ],
+      "example": "That was a bold decision.",
+      "exampleKr": "그것은 대담한 결정이었다."
+    },
+    {
+      "id": "ev-s11-0022",
+      "sourceId": "ev-moe2022-h-0441",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "guardian",
+      "pos": "명사",
+      "meaningKr": [
+        "보호자"
+      ],
+      "example": "A guardian signed the paper.",
+      "exampleKr": "보호자가 그 서류에 서명했다."
+    },
+    {
+      "id": "ev-s11-0023",
+      "sourceId": "ev-moe2022-h-0608",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "mutual",
+      "pos": "형용사",
+      "meaningKr": [
+        "서로 간의"
+      ],
+      "example": "They share mutual respect.",
+      "exampleKr": "그들은 서로 간의 존중을 나눈다."
+    },
+    {
+      "id": "ev-s11-0024",
+      "sourceId": "ev-moe2022-h-0909",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "terror",
+      "pos": "명사",
+      "meaningKr": [
+        "극심한 두려움"
+      ],
+      "example": "Terror filled the dark street.",
+      "exampleKr": "극심한 두려움이 어두운 거리를 채웠다."
+    },
+    {
+      "id": "ev-s11-0025",
+      "sourceId": "ev-moe2022-h-0623",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "noble",
+      "pos": "형용사",
+      "meaningKr": [
+        "고귀한"
+      ],
+      "example": "That was a noble choice.",
+      "exampleKr": "그것은 고귀한 선택이었다."
+    },
+    {
+      "id": "ev-s11-0026",
+      "sourceId": "ev-moe2022-h-0662",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "palm",
+      "pos": "명사",
+      "meaningKr": [
+        "손바닥"
+      ],
+      "example": "He held sand in his palm.",
+      "exampleKr": "그는 손바닥에 모래를 쥐었다."
+    },
+    {
+      "id": "ev-s11-0027",
+      "sourceId": "ev-moe2022-h-0861",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "strict",
+      "pos": "형용사",
+      "meaningKr": [
+        "엄격한"
+      ],
+      "example": "Our school has strict rules.",
+      "exampleKr": "우리 학교는 엄격한 규칙이 있다."
+    },
+    {
+      "id": "ev-s11-0028",
+      "sourceId": "ev-moe2022-h-0133",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "chronic",
+      "pos": "형용사",
+      "meaningKr": [
+        "만성의"
+      ],
+      "example": "He suffers chronic back pain.",
+      "exampleKr": "그는 만성 허리 통증을 앓는다."
+    },
+    {
+      "id": "ev-s11-0029",
+      "sourceId": "ev-moe2022-h-0299",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "dose",
+      "pos": "명사",
+      "meaningKr": [
+        "복용량"
+      ],
+      "example": "Take a small dose tonight.",
+      "exampleKr": "오늘 밤 적은 복용량을 먹어라."
+    },
+    {
+      "id": "ev-s11-0030",
+      "sourceId": "ev-moe2022-h-0423",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "generous",
+      "pos": "형용사",
+      "meaningKr": [
+        "너그러운"
+      ],
+      "example": "Our host was very generous.",
+      "exampleKr": "우리 주인은 아주 너그러웠다."
+    },
+    {
+      "id": "ev-s11-0031",
+      "sourceId": "ev-moe2022-h-0561",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "loyal",
+      "pos": "형용사",
+      "meaningKr": [
+        "충실한"
+      ],
+      "example": "A loyal friend keeps promises.",
+      "exampleKr": "충실한 친구는 약속을 지킨다."
+    },
+    {
+      "id": "ev-s11-0032",
+      "sourceId": "ev-moe2022-h-0622",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "nightmare",
+      "pos": "명사",
+      "meaningKr": [
+        "악몽"
+      ],
+      "example": "She woke from a nightmare.",
+      "exampleKr": "그녀는 악몽에서 깨어났다."
+    },
+    {
+      "id": "ev-s11-0033",
+      "sourceId": "ev-moe2022-h-0541",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "lap",
+      "pos": "명사",
+      "meaningKr": [
+        "무릎 위"
+      ],
+      "example": "The cat slept on my lap.",
+      "exampleKr": "고양이가 내 무릎 위에서 잤다."
+    },
+    {
+      "id": "ev-s11-0034",
+      "sourceId": "ev-moe2022-h-0792",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "rival",
+      "pos": "명사",
+      "meaningKr": [
+        "경쟁자"
+      ],
+      "example": "His rival trains even harder.",
+      "exampleKr": "그의 경쟁자는 더 열심히 훈련한다."
+    },
+    {
+      "id": "ev-s11-0035",
+      "sourceId": "ev-moe2022-h-0275",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "diabetes",
+      "pos": "명사",
+      "meaningKr": [
+        "당뇨병"
+      ],
+      "example": "Diet helps control diabetes.",
+      "exampleKr": "식단이 당뇨병 조절에 도움이 된다."
+    },
+    {
+      "id": "ev-s11-0036",
+      "sourceId": "ev-moe2022-h-0319",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "embrace",
+      "pos": "동사",
+      "meaningKr": [
+        "품에 안다"
+      ],
+      "example": "She embraced her old teacher.",
+      "exampleKr": "그녀는 옛 스승을 품에 안았다."
+    },
+    {
+      "id": "ev-s11-0037",
+      "sourceId": "ev-moe2022-h-0860",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "strain",
+      "pos": "명사",
+      "meaningKr": [
+        "부담감"
+      ],
+      "example": "Long hours cause great strain.",
+      "exampleKr": "긴 근무 시간이 큰 부담감을 준다."
+    },
+    {
+      "id": "ev-s11-0038",
+      "sourceId": "ev-moe2022-h-0479",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "immune",
+      "pos": "형용사",
+      "meaningKr": [
+        "면역이 있는"
+      ],
+      "example": "Most adults are immune now.",
+      "exampleKr": "대부분의 성인은 이제 면역이 있다."
+    },
+    {
+      "id": "ev-s11-0039",
+      "sourceId": "ev-moe2022-h-0643",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "organ",
+      "pos": "명사",
+      "meaningKr": [
+        "장기"
+      ],
+      "example": "The heart is a vital organ.",
+      "exampleKr": "심장은 중요한 장기다."
+    },
+    {
+      "id": "ev-s11-0040",
+      "sourceId": "ev-moe2022-h-0679",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "peer",
+      "pos": "명사",
+      "meaningKr": [
+        "또래"
+      ],
+      "example": "Her peers respect her a lot.",
+      "exampleKr": "그녀의 또래들은 그녀를 많이 존중한다."
+    },
+    {
+      "id": "ev-s11-0041",
+      "sourceId": "ev-moe2022-h-0886",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "sweat",
+      "pos": "명사",
+      "meaningKr": [
+        "땀"
+      ],
+      "example": "Sweat covered his tired face.",
+      "exampleKr": "땀이 그의 지친 얼굴을 덮었다."
+    },
+    {
+      "id": "ev-s11-0042",
+      "sourceId": "ev-moe2022-h-0154",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "companion",
+      "pos": "명사",
+      "meaningKr": [
+        "동반자"
+      ],
+      "example": "A dog makes a loyal companion.",
+      "exampleKr": "개는 충실한 동반자가 된다."
+    },
+    {
+      "id": "ev-s11-0043",
+      "sourceId": "ev-moe2022-h-0535",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "keen",
+      "pos": "형용사",
+      "meaningKr": [
+        "열의가 있는"
+      ],
+      "example": "He is keen on old music.",
+      "exampleKr": "그는 옛 음악에 열의가 있다."
+    },
+    {
+      "id": "ev-s11-0044",
+      "sourceId": "ev-moe2022-h-0456",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "heal",
+      "pos": "동사",
+      "meaningKr": [
+        "낫게 하다"
+      ],
+      "example": "Time heals most wounds.",
+      "exampleKr": "시간이 대부분의 상처를 낫게 한다."
+    },
+    {
+      "id": "ev-s11-0045",
+      "sourceId": "ev-moe2022-h-0743",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "rage",
+      "pos": "명사",
+      "meaningKr": [
+        "격렬한 분노"
+      ],
+      "example": "His rage frightened the class.",
+      "exampleKr": "그의 격렬한 분노가 반을 겁먹게 했다."
+    },
+    {
+      "id": "ev-s11-0046",
+      "sourceId": "ev-moe2022-h-0903",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "tender",
+      "pos": "형용사",
+      "meaningKr": [
+        "상냥한"
+      ],
+      "example": "She gave a tender smile.",
+      "exampleKr": "그녀는 상냥한 미소를 지었다."
+    },
+    {
+      "id": "ev-s11-0047",
+      "sourceId": "ev-moe2022-h-0438",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "grief",
+      "pos": "명사",
+      "meaningKr": [
+        "슬픔"
+      ],
+      "example": "Deep grief filled her voice.",
+      "exampleKr": "깊은 슬픔이 그녀의 목소리를 채웠다."
+    },
+    {
+      "id": "ev-s11-0048",
+      "sourceId": "ev-moe2022-h-0661",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "pale",
+      "pos": "형용사",
+      "meaningKr": [
+        "창백한"
+      ],
+      "example": "Her face looked pale.",
+      "exampleKr": "그녀의 얼굴은 창백해 보였다."
+    },
+    {
+      "id": "ev-s11-0049",
+      "sourceId": "ev-moe2022-h-0922",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "tragic",
+      "pos": "형용사",
+      "meaningKr": [
+        "비극적인"
+      ],
+      "example": "The film has a tragic ending.",
+      "exampleKr": "그 영화는 비극적인 결말을 지닌다."
+    },
+    {
+      "id": "ev-s11-0050",
+      "sourceId": "ev-moe2022-h-0082",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "beard",
+      "pos": "명사",
+      "meaningKr": [
+        "턱수염"
+      ],
+      "example": "His gray beard reached his chest.",
+      "exampleKr": "그의 회색 턱수염이 가슴까지 닿았다."
+    },
+    {
+      "id": "ev-s11-0051",
+      "sourceId": "ev-moe2022-h-0468",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "hostile",
+      "pos": "형용사",
+      "meaningKr": [
+        "적대적인"
+      ],
+      "example": "The crowd turned hostile.",
+      "exampleKr": "군중이 적대적으로 변했다."
+    },
+    {
+      "id": "ev-s11-0052",
+      "sourceId": "ev-moe2022-h-0523",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "intimate",
+      "pos": "형용사",
+      "meaningKr": [
+        "친밀한"
+      ],
+      "example": "They share an intimate friendship.",
+      "exampleKr": "그들은 친밀한 우정을 나눈다."
+    },
+    {
+      "id": "ev-s11-0053",
+      "sourceId": "ev-moe2022-h-0829",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "slim",
+      "pos": "형용사",
+      "meaningKr": [
+        "호리호리한"
+      ],
+      "example": "He looks slim and tall.",
+      "exampleKr": "그는 호리호리하고 커 보인다."
+    },
+    {
+      "id": "ev-s11-0054",
+      "sourceId": "ev-moe2022-h-0310",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "eager",
+      "pos": "형용사",
+      "meaningKr": [
+        "간절히 바라는"
+      ],
+      "example": "The children were eager to play.",
+      "exampleKr": "아이들은 놀기를 간절히 바랐다."
+    },
+    {
+      "id": "ev-s11-0055",
+      "sourceId": "ev-moe2022-h-0599",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "modest",
+      "pos": "형용사",
+      "meaningKr": [
+        "겸손한"
+      ],
+      "example": "He stayed modest after winning.",
+      "exampleKr": "그는 이긴 뒤에도 겸손했다."
+    },
+    {
+      "id": "ev-s11-0056",
+      "sourceId": "ev-moe2022-h-0692",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "pill",
+      "pos": "명사",
+      "meaningKr": [
+        "알약"
+      ],
+      "example": "Take one pill after meals.",
+      "exampleKr": "식후에 알약 하나를 먹어라."
+    },
+    {
+      "id": "ev-s11-0057",
+      "sourceId": "ev-moe2022-h-0818",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "sentiment",
+      "pos": "명사",
+      "meaningKr": [
+        "정서"
+      ],
+      "example": "The song carries warm sentiment.",
+      "exampleKr": "그 노래는 따뜻한 정서를 담고 있다."
+    },
+    {
+      "id": "ev-s11-0058",
+      "sourceId": "ev-moe2022-h-0278",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "dignity",
+      "pos": "명사",
+      "meaningKr": [
+        "존엄성"
+      ],
+      "example": "Treat every person with dignity.",
+      "exampleKr": "모든 사람을 존엄성 있게 대해라."
+    },
+    {
+      "id": "ev-s11-0059",
+      "sourceId": "ev-moe2022-h-0618",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "nephew",
+      "pos": "명사",
+      "meaningKr": [
+        "조카"
+      ],
+      "example": "My nephew visits every summer.",
+      "exampleKr": "내 조카는 매년 여름 방문한다."
+    },
+    {
+      "id": "ev-s11-0060",
+      "sourceId": "ev-moe2022-h-0890",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "sympathy",
+      "pos": "명사",
+      "meaningKr": [
+        "공감"
+      ],
+      "example": "Her words showed deep sympathy.",
+      "exampleKr": "그녀의 말은 깊은 공감을 보였다."
+    },
+    {
+      "id": "ev-s11-0061",
+      "sourceId": "ev-moe2022-h-0915",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "thumb",
+      "pos": "명사",
+      "meaningKr": [
+        "엄지손가락"
+      ],
+      "example": "He hurt his right thumb.",
+      "exampleKr": "그는 오른쪽 엄지손가락을 다쳤다."
+    },
+    {
+      "id": "ev-s11-0062",
+      "sourceId": "ev-moe2022-h-0130",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "chin",
+      "pos": "명사",
+      "meaningKr": [
+        "턱끝"
+      ],
+      "example": "He rested his chin on his hand.",
+      "exampleKr": "그는 턱끝을 손에 괴었다."
+    },
+    {
+      "id": "ev-s11-0063",
+      "sourceId": "ev-moe2022-h-0956",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "vaccine",
+      "pos": "명사",
+      "meaningKr": [
+        "백신"
+      ],
+      "example": "The vaccine reached every village.",
+      "exampleKr": "그 백신은 모든 마을에 닿았다."
+    },
+    {
+      "id": "ev-s11-0064",
+      "sourceId": "ev-moe2022-h-0492",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "infant",
+      "pos": "명사",
+      "meaningKr": [
+        "유아"
+      ],
+      "example": "The infant slept all morning.",
+      "exampleKr": "그 유아는 아침 내내 잤다."
+    },
+    {
+      "id": "ev-s11-0065",
+      "sourceId": "ev-moe2022-h-0993",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "wicked",
+      "pos": "형용사",
+      "meaningKr": [
+        "사악한"
+      ],
+      "example": "The tale has a wicked queen.",
+      "exampleKr": "그 이야기에는 사악한 여왕이 있다."
+    },
+    {
+      "id": "ev-s11-0066",
+      "sourceId": "ev-moe2022-h-0180",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "conscience",
+      "pos": "명사",
+      "meaningKr": [
+        "양심"
+      ],
+      "example": "His conscience troubled him.",
+      "exampleKr": "그의 양심이 그를 괴롭혔다."
+    },
+    {
+      "id": "ev-s11-0067",
+      "sourceId": "ev-moe2022-h-0994",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "wit",
+      "pos": "명사",
+      "meaningKr": [
+        "재치"
+      ],
+      "example": "Her wit made everyone smile.",
+      "exampleKr": "그녀의 재치가 모두를 미소 짓게 했다."
+    },
+    {
+      "id": "ev-s11-0068",
+      "sourceId": "ev-moe2022-h-0822",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "sigh",
+      "pos": "동사",
+      "meaningKr": [
+        "한숨 쉬다"
+      ],
+      "example": "She sighed and closed the book.",
+      "exampleKr": "그녀는 한숨 쉬며 책을 덮었다."
+    },
+    {
+      "id": "ev-s11-0069",
+      "sourceId": "ev-moe2022-h-0846",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "spouse",
+      "pos": "명사",
+      "meaningKr": [
+        "배우자"
+      ],
+      "example": "His spouse waited outside.",
+      "exampleKr": "그의 배우자가 밖에서 기다렸다."
+    },
+    {
+      "id": "ev-s11-0070",
+      "sourceId": "ev-moe2022-h-0044",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "ambition",
+      "pos": "명사",
+      "meaningKr": [
+        "야망"
+      ],
+      "example": "His ambition drives him daily.",
+      "exampleKr": "그의 야망이 그를 매일 밀어붙인다."
+    },
+    {
+      "id": "ev-s11-0071",
+      "sourceId": "ev-moe2022-h-0412",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "fury",
+      "pos": "명사",
+      "meaningKr": [
+        "격노"
+      ],
+      "example": "His fury faded after an hour.",
+      "exampleKr": "그의 격노는 한 시간 뒤 사라졌다."
+    },
+    {
+      "id": "ev-s11-0072",
+      "sourceId": "ev-moe2022-h-0560",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "lone",
+      "pos": "형용사",
+      "meaningKr": [
+        "외로운"
+      ],
+      "example": "A lone tree stood there.",
+      "exampleKr": "외로운 나무 한 그루가 거기 서 있었다."
+    },
+    {
+      "id": "ev-s11-0073",
+      "sourceId": "ev-moe2022-h-0392",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "fond",
+      "pos": "형용사",
+      "meaningKr": [
+        "좋아하는"
+      ],
+      "example": "She is fond of old films.",
+      "exampleKr": "그녀는 옛 영화를 좋아한다."
+    },
+    {
+      "id": "ev-s11-0074",
+      "sourceId": "ev-moe2022-h-0104",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "bully",
+      "pos": "동사",
+      "meaningKr": [
+        "못살게 굴다"
+      ],
+      "example": "Do not bully smaller children.",
+      "exampleKr": "더 작은 아이들을 못살게 굴지 마라."
+    },
+    {
+      "id": "ev-s11-0075",
+      "sourceId": "ev-moe2022-h-0395",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "forehead",
+      "pos": "명사",
+      "meaningKr": [
+        "이마"
+      ],
+      "example": "Sweat covered his wide forehead.",
+      "exampleKr": "땀이 그의 넓은 이마를 덮었다."
+    },
+    {
+      "id": "ev-s11-0076",
+      "sourceId": "ev-moe2022-h-0604",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "mortal",
+      "pos": "형용사",
+      "meaningKr": [
+        "죽을 운명의"
+      ],
+      "example": "All people are mortal.",
+      "exampleKr": "모든 사람은 죽을 운명이다."
+    },
+    {
+      "id": "ev-s11-0077",
+      "sourceId": "ev-moe2022-h-0328",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "enthusiastic",
+      "pos": "형용사",
+      "meaningKr": [
+        "열정적인"
+      ],
+      "example": "The fans were enthusiastic.",
+      "exampleKr": "그 팬들은 열정적이었다."
+    },
+    {
+      "id": "ev-s11-0078",
+      "sourceId": "ev-moe2022-h-0331",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "envy",
+      "pos": "명사",
+      "meaningKr": [
+        "부러움"
+      ],
+      "example": "Her success caused some envy.",
+      "exampleKr": "그녀의 성공은 약간의 부러움을 일으켰다."
+    },
+    {
+      "id": "ev-s11-0079",
+      "sourceId": "ev-moe2022-h-0457",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "heel",
+      "pos": "명사",
+      "meaningKr": [
+        "발뒤꿈치"
+      ],
+      "example": "My left heel hurts today.",
+      "exampleKr": "내 왼쪽 발뒤꿈치가 오늘 아프다."
+    },
+    {
+      "id": "ev-s11-0080",
+      "sourceId": "ev-moe2022-h-0649",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "outrage",
+      "pos": "명사",
+      "meaningKr": [
+        "격분"
+      ],
+      "example": "The news caused public outrage.",
+      "exampleKr": "그 소식은 대중의 격분을 일으켰다."
+    },
+    {
+      "id": "ev-s11-0081",
+      "sourceId": "ev-moe2022-h-0266",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "despair",
+      "pos": "명사",
+      "meaningKr": [
+        "절망"
+      ],
+      "example": "Her voice showed deep despair.",
+      "exampleKr": "그녀의 목소리는 깊은 절망을 드러냈다."
+    },
+    {
+      "id": "ev-s11-0082",
+      "sourceId": "ev-moe2022-h-0764",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "remedy",
+      "pos": "명사",
+      "meaningKr": [
+        "치료법"
+      ],
+      "example": "Rest is the best remedy.",
+      "exampleKr": "휴식이 최고의 치료법이다."
+    },
+    {
+      "id": "ev-s11-0083",
+      "sourceId": "ev-moe2022-h-0763",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "reluctant",
+      "pos": "형용사",
+      "meaningKr": [
+        "꺼리는"
+      ],
+      "example": "She looked reluctant to speak.",
+      "exampleKr": "그녀는 말하기를 꺼리는 듯 보였다."
+    },
+    {
+      "id": "ev-s11-0084",
+      "sourceId": "ev-moe2022-h-0076",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "awe",
+      "pos": "명사",
+      "meaningKr": [
+        "경외감"
+      ],
+      "example": "The view filled us with awe.",
+      "exampleKr": "그 경치는 우리를 경외감으로 채웠다."
+    },
+    {
+      "id": "ev-s11-0085",
+      "sourceId": "ev-moe2022-h-0761",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "relieve",
+      "pos": "동사",
+      "meaningKr": [
+        "덜어 주다"
+      ],
+      "example": "This tea relieves a sore throat.",
+      "exampleKr": "이 차는 아픈 목을 덜어 준다."
+    },
+    {
+      "id": "ev-s11-0086",
+      "sourceId": "ev-moe2022-h-0610",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "naive",
+      "pos": "형용사",
+      "meaningKr": [
+        "순진한"
+      ],
+      "example": "His question sounded naive.",
+      "exampleKr": "그의 질문은 순진하게 들렸다."
+    },
+    {
+      "id": "ev-s11-0087",
+      "sourceId": "ev-moe2022-h-0092",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "blink",
+      "pos": "동사",
+      "meaningKr": [
+        "눈을 깜박이다"
+      ],
+      "example": "She blinked in the bright sun.",
+      "exampleKr": "그녀는 밝은 햇빛에 눈을 깜박였다."
+    },
+    {
+      "id": "ev-s11-0088",
+      "sourceId": "ev-moe2022-h-0437",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "greed",
+      "pos": "명사",
+      "meaningKr": [
+        "탐욕"
+      ],
+      "example": "Greed ruined the whole plan.",
+      "exampleKr": "탐욕이 그 계획 전체를 망쳤다."
+    },
+    {
+      "id": "ev-s11-0089",
+      "sourceId": "ev-moe2022-h-0914",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "thrill",
+      "pos": "명사",
+      "meaningKr": [
+        "짜릿함"
+      ],
+      "example": "The ride gave a real thrill.",
+      "exampleKr": "그 놀이기구는 진짜 짜릿함을 주었다."
+    },
+    {
+      "id": "ev-s11-0090",
+      "sourceId": "ev-moe2022-h-0024",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "addict",
+      "pos": "명사",
+      "meaningKr": [
+        "중독자"
+      ],
+      "example": "The clinic helps young addicts.",
+      "exampleKr": "그 진료소는 젊은 중독자들을 돕는다."
+    },
+    {
+      "id": "ev-s11-0091",
+      "sourceId": "ev-moe2022-h-0249",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "deficiency",
+      "pos": "명사",
+      "meaningKr": [
+        "결핍"
+      ],
+      "example": "Vitamin deficiency causes weakness.",
+      "exampleKr": "비타민 결핍은 쇠약을 일으킨다."
+    },
+    {
+      "id": "ev-s11-0092",
+      "sourceId": "ev-moe2022-h-0303",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "dread",
+      "pos": "명사",
+      "meaningKr": [
+        "겁"
+      ],
+      "example": "He faced the test with dread.",
+      "exampleKr": "그는 겁을 안고 시험을 마주했다."
+    },
+    {
+      "id": "ev-s11-0093",
+      "sourceId": "ev-moe2022-h-0892",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "symptom",
+      "pos": "명사",
+      "meaningKr": [
+        "증상"
+      ],
+      "example": "Fever is one common symptom.",
+      "exampleKr": "열은 흔한 증상 하나다."
+    },
+    {
+      "id": "ev-s11-0094",
+      "sourceId": "ev-moe2022-h-0234",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "cynical",
+      "pos": "형용사",
+      "meaningKr": [
+        "냉소적인"
+      ],
+      "example": "His cynical remark hurt me.",
+      "exampleKr": "그의 냉소적인 말이 나를 아프게 했다."
+    },
+    {
+      "id": "ev-s11-0095",
+      "sourceId": "ev-moe2022-h-0028",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "adolescent",
+      "pos": "명사",
+      "meaningKr": [
+        "청소년"
+      ],
+      "example": "Many adolescents lack sleep.",
+      "exampleKr": "많은 청소년이 잠이 부족하다."
+    },
+    {
+      "id": "ev-s11-0096",
+      "sourceId": "ev-moe2022-h-0636",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "offend",
+      "pos": "동사",
+      "meaningKr": [
+        "기분을 상하게 하다"
+      ],
+      "example": "His joke offended some guests.",
+      "exampleKr": "그의 농담이 몇몇 손님의 기분을 상하게 했다."
+    },
+    {
+      "id": "ev-s11-0097",
+      "sourceId": "ev-moe2022-h-0061",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "aspire",
+      "pos": "동사",
+      "meaningKr": [
+        "열망하다"
+      ],
+      "example": "Many students aspire to teach.",
+      "exampleKr": "많은 학생이 가르치기를 열망한다."
+    },
+    {
+      "id": "ev-s11-0098",
+      "sourceId": "ev-moe2022-h-0501",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "inject",
+      "pos": "동사",
+      "meaningKr": [
+        "주사하다"
+      ],
+      "example": "The nurse injected the medicine.",
+      "exampleKr": "간호사가 그 약을 주사했다."
+    },
+    {
+      "id": "ev-s11-0099",
+      "sourceId": "ev-moe2022-h-0019",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "ache",
+      "pos": "명사",
+      "meaningKr": [
+        "쑤시는 통증"
+      ],
+      "example": "A dull ache filled my back.",
+      "exampleKr": "둔하게 쑤시는 통증이 등에 퍼졌다."
+    },
+    {
+      "id": "ev-s11-0100",
+      "sourceId": "ev-moe2022-h-0086",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "betray",
+      "pos": "동사",
+      "meaningKr": [
+        "배신하다"
+      ],
+      "example": "He never betrayed his friends.",
+      "exampleKr": "그는 결코 친구를 배신하지 않았다."
+    },
+    {
+      "id": "ev-s11-0101",
+      "sourceId": "ev-moe2022-h-0713",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "prescribe",
+      "pos": "동사",
+      "meaningKr": [
+        "처방하다"
+      ],
+      "example": "The doctor prescribed rest.",
+      "exampleKr": "의사는 휴식을 처방했다."
+    },
+    {
+      "id": "ev-s11-0102",
+      "sourceId": "ev-moe2022-h-0364",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "eyebrow",
+      "pos": "명사",
+      "meaningKr": [
+        "눈썹"
+      ],
+      "example": "He raised one thick eyebrow.",
+      "exampleKr": "그는 두꺼운 눈썹 하나를 치켜올렸다."
+    },
+    {
+      "id": "ev-s11-0103",
+      "sourceId": "ev-moe2022-h-0428",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "glare",
+      "pos": "동사",
+      "meaningKr": [
+        "노려보다"
+      ],
+      "example": "The guard glared at us.",
+      "exampleKr": "그 경비원이 우리를 노려보았다."
+    },
+    {
+      "id": "ev-s11-0104",
+      "sourceId": "ev-moe2022-h-0493",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "infect",
+      "pos": "동사",
+      "meaningKr": [
+        "감염시키다"
+      ],
+      "example": "Dirty water may infect people.",
+      "exampleKr": "더러운 물은 사람을 감염시킬 수 있다."
+    },
+    {
+      "id": "ev-s11-0105",
+      "sourceId": "ev-moe2022-h-0405",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "frown",
+      "pos": "동사",
+      "meaningKr": [
+        "찡그리다"
+      ],
+      "example": "She frowned at the noise.",
+      "exampleKr": "그녀는 그 소음에 얼굴을 찡그렸다."
+    },
+    {
+      "id": "ev-s11-0106",
+      "sourceId": "ev-moe2022-h-0527",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "irritate",
+      "pos": "동사",
+      "meaningKr": [
+        "거슬리게 하다"
+      ],
+      "example": "Bright light irritates my eyes.",
+      "exampleKr": "밝은 빛은 내 눈을 거슬리게 한다."
+    },
+    {
+      "id": "ev-s11-0107",
+      "sourceId": "ev-moe2022-h-0972",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "vigor",
+      "pos": "명사",
+      "meaningKr": [
+        "활력"
+      ],
+      "example": "The old man kept his vigor.",
+      "exampleKr": "그 노인은 활력을 유지했다."
+    },
+    {
+      "id": "ev-s11-0108",
+      "sourceId": "ev-moe2022-h-0639",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "optimist",
+      "pos": "명사",
+      "meaningKr": [
+        "낙관하는 사람"
+      ],
+      "example": "An optimist expects good results.",
+      "exampleKr": "낙관하는 사람은 좋은 결과를 기대한다."
+    },
+    {
+      "id": "ev-s11-0109",
+      "sourceId": "ev-moe2022-h-0067",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "astonish",
+      "pos": "동사",
+      "meaningKr": [
+        "경악하게 하다"
+      ],
+      "example": "The result astonished every expert.",
+      "exampleKr": "그 결과는 모든 전문가를 경악하게 했다."
+    },
+    {
+      "id": "ev-s11-0110",
+      "sourceId": "ev-moe2022-h-0542",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "latter",
+      "pos": "형용사",
+      "meaningKr": [
+        "후자의"
+      ],
+      "example": "I prefer the latter plan.",
+      "exampleKr": "나는 후자의 계획을 선호한다."
+    },
+    {
+      "id": "ev-s11-0111",
+      "sourceId": "ev-moe2022-h-0645",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "origin",
+      "pos": "명사",
+      "meaningKr": [
+        "기원"
+      ],
+      "example": "Nobody knows the origin.",
+      "exampleKr": "아무도 그 기원을 모른다."
+    },
+    {
+      "id": "ev-s11-0112",
+      "sourceId": "ev-moe2022-h-0701",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "portion",
+      "pos": "명사",
+      "meaningKr": [
+        "몫"
+      ],
+      "example": "Give each child one portion.",
+      "exampleKr": "각 아이에게 한 몫을 줘라."
+    },
+    {
+      "id": "ev-s11-0113",
+      "sourceId": "ev-moe2022-h-0240",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "decade",
+      "pos": "명사",
+      "meaningKr": [
+        "십 년"
+      ],
+      "example": "The bridge lasted one decade.",
+      "exampleKr": "그 다리는 십 년을 버텼다."
+    },
+    {
+      "id": "ev-s11-0114",
+      "sourceId": "ev-moe2022-h-0789",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "rid",
+      "pos": "동사",
+      "meaningKr": [
+        "치워 버리다"
+      ],
+      "example": "Get rid of the old boxes.",
+      "exampleKr": "낡은 상자들을 치워 버려라."
+    },
+    {
+      "id": "ev-s11-0115",
+      "sourceId": "ev-moe2022-h-0572",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "meanwhile",
+      "pos": "부사",
+      "meaningKr": [
+        "그동안"
+      ],
+      "example": "Meanwhile, the rain stopped.",
+      "exampleKr": "그동안 비가 그쳤다."
+    },
+    {
+      "id": "ev-s11-0116",
+      "sourceId": "ev-moe2022-h-0359",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "extent",
+      "pos": "명사",
+      "meaningKr": [
+        "정도"
+      ],
+      "example": "Check the extent of damage.",
+      "exampleKr": "피해의 정도를 확인해라."
+    },
+    {
+      "id": "ev-s11-0117",
+      "sourceId": "ev-moe2022-h-0926",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "transition",
+      "pos": "명사",
+      "meaningKr": [
+        "이행"
+      ],
+      "example": "The transition took two years.",
+      "exampleKr": "그 이행은 이 년이 걸렸다."
+    },
+    {
+      "id": "ev-s11-0118",
+      "sourceId": "ev-moe2022-h-0170",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "concrete",
+      "pos": "형용사",
+      "meaningKr": [
+        "실체가 있는"
+      ],
+      "example": "We need concrete evidence now.",
+      "exampleKr": "우리는 이제 실체가 있는 증거가 필요하다."
+    },
+    {
+      "id": "ev-s11-0119",
+      "sourceId": "ev-moe2022-h-0781",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "reveal",
+      "pos": "동사",
+      "meaningKr": [
+        "드러내다"
+      ],
+      "example": "The letter revealed the truth.",
+      "exampleKr": "그 편지가 진실을 드러냈다."
+    },
+    {
+      "id": "ev-s11-0120",
+      "sourceId": "ev-moe2022-h-0666",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "participate",
+      "pos": "동사",
+      "meaningKr": [
+        "참가하다"
+      ],
+      "example": "Every student may participate.",
+      "exampleKr": "모든 학생이 참가할 수 있다."
+    },
+    {
+      "id": "ev-s11-0121",
+      "sourceId": "ev-moe2022-h-0991",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "whereas",
+      "pos": "접속사",
+      "meaningKr": [
+        "~인 반면에"
+      ],
+      "example": "He walks, whereas she runs.",
+      "exampleKr": "그는 걷는 반면에 그녀는 뛴다."
+    },
+    {
+      "id": "ev-s11-0122",
+      "sourceId": "ev-moe2022-h-0976",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "visible",
+      "pos": "형용사",
+      "meaningKr": [
+        "눈에 보이는"
+      ],
+      "example": "The star is barely visible.",
+      "exampleKr": "그 별은 거의 눈에 보이지 않는다."
+    },
+    {
+      "id": "ev-s11-0123",
+      "sourceId": "ev-moe2022-h-0959",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "valid",
+      "pos": "형용사",
+      "meaningKr": [
+        "유효한"
+      ],
+      "example": "Your ticket is still valid.",
+      "exampleKr": "네 표는 여전히 유효하다."
+    },
+    {
+      "id": "ev-s11-0124",
+      "sourceId": "ev-moe2022-h-0181",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "consent",
+      "pos": "명사",
+      "meaningKr": [
+        "동의"
+      ],
+      "example": "We need written consent first.",
+      "exampleKr": "우리는 먼저 서면 동의가 필요하다."
+    },
+    {
+      "id": "ev-s11-0125",
+      "sourceId": "ev-moe2022-h-0646",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "outcome",
+      "pos": "명사",
+      "meaningKr": [
+        "결말"
+      ],
+      "example": "The outcome surprised everyone.",
+      "exampleKr": "그 결말은 모두를 놀라게 했다."
+    },
+    {
+      "id": "ev-s11-0126",
+      "sourceId": "ev-moe2022-h-0151",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "commit",
+      "pos": "동사",
+      "meaningKr": [
+        "저지르다"
+      ],
+      "example": "He committed a serious error.",
+      "exampleKr": "그는 심각한 잘못을 저질렀다."
+    },
+    {
+      "id": "ev-s11-0127",
+      "sourceId": "ev-moe2022-h-0053",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "apparent",
+      "pos": "형용사",
+      "meaningKr": [
+        "겉으로 드러난"
+      ],
+      "example": "The damage was apparent to all.",
+      "exampleKr": "그 피해는 모두에게 겉으로 드러났다."
+    },
+    {
+      "id": "ev-s11-0128",
+      "sourceId": "ev-moe2022-h-0705",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "praise",
+      "pos": "동사",
+      "meaningKr": [
+        "칭찬하다"
+      ],
+      "example": "The coach praised our effort.",
+      "exampleKr": "코치가 우리의 노력을 칭찬했다."
+    },
+    {
+      "id": "ev-s11-0129",
+      "sourceId": "ev-moe2022-h-0402",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "framework",
+      "pos": "명사",
+      "meaningKr": [
+        "체계 틀"
+      ],
+      "example": "The plan needs a clear framework.",
+      "exampleKr": "그 계획은 분명한 체계 틀이 필요하다."
+    },
+    {
+      "id": "ev-s11-0130",
+      "sourceId": "ev-moe2022-h-0222",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "crucial",
+      "pos": "형용사",
+      "meaningKr": [
+        "결정적인"
+      ],
+      "example": "Water is crucial for life.",
+      "exampleKr": "물은 생명에 결정적이다."
+    },
+    {
+      "id": "ev-s11-0131",
+      "sourceId": "ev-moe2022-h-0598",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "moderate",
+      "pos": "형용사",
+      "meaningKr": [
+        "알맞은"
+      ],
+      "example": "Keep a moderate speed.",
+      "exampleKr": "알맞은 속도를 유지해라."
+    },
+    {
+      "id": "ev-s11-0132",
+      "sourceId": "ev-moe2022-h-0023",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "acquisition",
+      "pos": "명사",
+      "meaningKr": [
+        "취득"
+      ],
+      "example": "The acquisition took three months.",
+      "exampleKr": "그 취득은 세 달이 걸렸다."
+    },
+    {
+      "id": "ev-s11-0133",
+      "sourceId": "ev-moe2022-h-0740",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "pursue",
+      "pos": "동사",
+      "meaningKr": [
+        "추구하다"
+      ],
+      "example": "She pursues her own goal.",
+      "exampleKr": "그녀는 자기 목표를 추구한다."
+    },
+    {
+      "id": "ev-s11-0134",
+      "sourceId": "ev-moe2022-h-0295",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "diverse",
+      "pos": "형용사",
+      "meaningKr": [
+        "여러 종류의"
+      ],
+      "example": "The class has diverse students.",
+      "exampleKr": "그 반에는 여러 종류의 학생이 있다."
+    },
+    {
+      "id": "ev-s11-0135",
+      "sourceId": "ev-moe2022-h-0411",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "furthermore",
+      "pos": "부사",
+      "meaningKr": [
+        "더욱이"
+      ],
+      "example": "Furthermore, the price stays low.",
+      "exampleKr": "더욱이 가격도 낮게 유지된다."
+    },
+    {
+      "id": "ev-s11-0136",
+      "sourceId": "ev-moe2022-h-0030",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "advocate",
+      "pos": "동사",
+      "meaningKr": [
+        "옹호하다"
+      ],
+      "example": "She advocates cleaner energy.",
+      "exampleKr": "그녀는 더 깨끗한 에너지를 옹호한다."
+    },
+    {
+      "id": "ev-s11-0137",
+      "sourceId": "ev-moe2022-h-0388",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "flip",
+      "pos": "동사",
+      "meaningKr": [
+        "뒤집다"
+      ],
+      "example": "Flip the pancake carefully.",
+      "exampleKr": "팬케이크를 조심스럽게 뒤집어라."
+    },
+    {
+      "id": "ev-s11-0138",
+      "sourceId": "ev-moe2022-h-0508",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "insight",
+      "pos": "명사",
+      "meaningKr": [
+        "통찰"
+      ],
+      "example": "Her essay shows real insight.",
+      "exampleKr": "그녀의 글은 진짜 통찰을 보여 준다."
+    },
+    {
+      "id": "ev-s11-0139",
+      "sourceId": "ev-moe2022-h-0087",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "bias",
+      "pos": "명사",
+      "meaningKr": [
+        "편견"
+      ],
+      "example": "The report showed clear bias.",
+      "exampleKr": "그 보고서는 분명한 편견을 보였다."
+    },
+    {
+      "id": "ev-s11-0140",
+      "sourceId": "ev-moe2022-h-0192",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "contrary",
+      "pos": "형용사",
+      "meaningKr": [
+        "반대의"
+      ],
+      "example": "She holds a contrary opinion.",
+      "exampleKr": "그녀는 반대의 의견을 지닌다."
+    },
+    {
+      "id": "ev-s11-0141",
+      "sourceId": "ev-moe2022-h-0210",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "counsel",
+      "pos": "명사",
+      "meaningKr": [
+        "충고"
+      ],
+      "example": "The teacher gave wise counsel.",
+      "exampleKr": "선생님이 현명한 충고를 주셨다."
+    },
+    {
+      "id": "ev-s11-0142",
+      "sourceId": "ev-moe2022-h-0888",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "swift",
+      "pos": "형용사",
+      "meaningKr": [
+        "재빠른"
+      ],
+      "example": "She gave a swift reply.",
+      "exampleKr": "그녀는 재빠른 답을 했다."
+    },
+    {
+      "id": "ev-s11-0143",
+      "sourceId": "ev-moe2022-h-0510",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "install",
+      "pos": "동사",
+      "meaningKr": [
+        "설치하다"
+      ],
+      "example": "They installed a new lamp.",
+      "exampleKr": "그들은 새 램프를 설치했다."
+    },
+    {
+      "id": "ev-s11-0144",
+      "sourceId": "ev-moe2022-h-0708",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "precise",
+      "pos": "형용사",
+      "meaningKr": [
+        "정밀한"
+      ],
+      "example": "We need precise numbers.",
+      "exampleKr": "우리는 정밀한 숫자가 필요하다."
+    },
+    {
+      "id": "ev-s11-0145",
+      "sourceId": "ev-moe2022-h-0042",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "alternate",
+      "pos": "형용사",
+      "meaningKr": [
+        "번갈아 하는"
+      ],
+      "example": "We work on alternate days.",
+      "exampleKr": "우리는 번갈아 하는 날에 일한다."
+    },
+    {
+      "id": "ev-s11-0146",
+      "sourceId": "ev-moe2022-h-0589",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "minimal",
+      "pos": "형용사",
+      "meaningKr": [
+        "최소한의"
+      ],
+      "example": "Make minimal noise here.",
+      "exampleKr": "여기서는 최소한의 소음만 내라."
+    },
+    {
+      "id": "ev-s11-0147",
+      "sourceId": "ev-moe2022-h-0545",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "leak",
+      "pos": "동사",
+      "meaningKr": [
+        "새다"
+      ],
+      "example": "Gas leaked from the old pipe.",
+      "exampleKr": "가스가 낡은 관에서 샜다."
+    },
+    {
+      "id": "ev-s11-0148",
+      "sourceId": "ev-moe2022-h-0870",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "subtle",
+      "pos": "형용사",
+      "meaningKr": [
+        "미묘한"
+      ],
+      "example": "The color shows a subtle change.",
+      "exampleKr": "그 색은 미묘한 변화를 보인다."
+    },
+    {
+      "id": "ev-s11-0149",
+      "sourceId": "ev-moe2022-h-0837",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "span",
+      "pos": "명사",
+      "meaningKr": [
+        "걸치는 기간"
+      ],
+      "example": "The project covers a short span.",
+      "exampleKr": "그 계획은 짧게 걸치는 기간을 다룬다."
+    },
+    {
+      "id": "ev-s11-0150",
+      "sourceId": "ev-moe2022-h-0747",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "rational",
+      "pos": "형용사",
+      "meaningKr": [
+        "이성적인"
+      ],
+      "example": "Give me a rational reason.",
+      "exampleKr": "이성적인 이유를 알려 줘."
+    },
+    {
+      "id": "ev-s11-0151",
+      "sourceId": "ev-moe2022-h-0243",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "declare",
+      "pos": "동사",
+      "meaningKr": [
+        "선언하다"
+      ],
+      "example": "The mayor declared a holiday.",
+      "exampleKr": "시장이 휴일을 선언했다."
+    },
+    {
+      "id": "ev-s11-0152",
+      "sourceId": "ev-moe2022-h-0555",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "likewise",
+      "pos": "부사",
+      "meaningKr": [
+        "마찬가지로"
+      ],
+      "example": "Likewise, we must save water.",
+      "exampleKr": "마찬가지로 우리는 물을 아껴야 한다."
+    },
+    {
+      "id": "ev-s11-0153",
+      "sourceId": "ev-moe2022-h-0925",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "transform",
+      "pos": "동사",
+      "meaningKr": [
+        "탈바꿈시키다"
+      ],
+      "example": "Paint transformed the old room.",
+      "exampleKr": "페인트가 그 낡은 방을 탈바꿈시켰다."
+    },
+    {
+      "id": "ev-s11-0154",
+      "sourceId": "ev-moe2022-h-0759",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "reject",
+      "pos": "동사",
+      "meaningKr": [
+        "거부하다"
+      ],
+      "example": "The board rejected our request.",
+      "exampleKr": "이사회가 우리 요청을 거부했다."
+    },
+    {
+      "id": "ev-s11-0155",
+      "sourceId": "ev-moe2022-h-0362",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "extract",
+      "pos": "동사",
+      "meaningKr": [
+        "뽑아내다"
+      ],
+      "example": "Dentists extract bad teeth.",
+      "exampleKr": "치과 의사는 상한 이를 뽑아낸다."
+    },
+    {
+      "id": "ev-s11-0156",
+      "sourceId": "ev-moe2022-h-0237",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "dash",
+      "pos": "동사",
+      "meaningKr": [
+        "급히 달리다"
+      ],
+      "example": "He dashed across the wet street.",
+      "exampleKr": "그는 젖은 거리를 급히 달려 건넜다."
+    },
+    {
+      "id": "ev-s11-0157",
+      "sourceId": "ev-moe2022-h-0513",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "insult",
+      "pos": "동사",
+      "meaningKr": [
+        "모욕하다"
+      ],
+      "example": "Never insult your teammates.",
+      "exampleKr": "절대 팀 동료를 모욕하지 마라."
+    },
+    {
+      "id": "ev-s11-0158",
+      "sourceId": "ev-moe2022-h-0258",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "dense",
+      "pos": "형용사",
+      "meaningKr": [
+        "빽빽한"
+      ],
+      "example": "A dense forest covered the hill.",
+      "exampleKr": "빽빽한 숲이 언덕을 덮었다."
+    },
+    {
+      "id": "ev-s11-0159",
+      "sourceId": "ev-moe2022-h-0137",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "clash",
+      "pos": "명사",
+      "meaningKr": [
+        "충돌"
+      ],
+      "example": "A clash broke out downtown.",
+      "exampleKr": "충돌이 시내에서 일어났다."
+    },
+    {
+      "id": "ev-s11-0160",
+      "sourceId": "ev-moe2022-h-0877",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "superb",
+      "pos": "형용사",
+      "meaningKr": [
+        "최상의"
+      ],
+      "example": "The band gave a superb show.",
+      "exampleKr": "그 밴드는 최상의 공연을 했다."
+    },
+    {
+      "id": "ev-s11-0161",
+      "sourceId": "ev-moe2022-h-0307",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "dull",
+      "pos": "형용사",
+      "meaningKr": [
+        "따분한"
+      ],
+      "example": "The long speech was dull.",
+      "exampleKr": "그 긴 연설은 따분했다."
+    },
+    {
+      "id": "ev-s11-0162",
+      "sourceId": "ev-moe2022-h-0446",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "halt",
+      "pos": "동사",
+      "meaningKr": [
+        "멈추게 하다"
+      ],
+      "example": "Police halted every truck.",
+      "exampleKr": "경찰이 모든 트럭을 멈추게 했다."
+    },
+    {
+      "id": "ev-s11-0163",
+      "sourceId": "ev-moe2022-h-0380",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "fierce",
+      "pos": "형용사",
+      "meaningKr": [
+        "사나운"
+      ],
+      "example": "A fierce wind shook the tent.",
+      "exampleKr": "사나운 바람이 텐트를 흔들었다."
+    },
+    {
+      "id": "ev-s11-0164",
+      "sourceId": "ev-moe2022-h-0907",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "terrific",
+      "pos": "형용사",
+      "meaningKr": [
+        "아주 훌륭한"
+      ],
+      "example": "That was a terrific idea.",
+      "exampleKr": "그것은 아주 훌륭한 생각이었다."
+    },
+    {
+      "id": "ev-s11-0165",
+      "sourceId": "ev-moe2022-h-0517",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "interfere",
+      "pos": "동사",
+      "meaningKr": [
+        "간섭하다"
+      ],
+      "example": "Do not interfere with their work.",
+      "exampleKr": "그들의 일에 간섭하지 마라."
+    },
+    {
+      "id": "ev-s11-0166",
+      "sourceId": "ev-moe2022-h-0958",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "vague",
+      "pos": "형용사",
+      "meaningKr": [
+        "막연한"
+      ],
+      "example": "His answer stayed vague.",
+      "exampleKr": "그의 답은 막연한 채였다."
+    },
+    {
+      "id": "ev-s11-0167",
+      "sourceId": "ev-moe2022-h-0489",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "incorporate",
+      "pos": "동사",
+      "meaningKr": [
+        "포함시켜 합치다"
+      ],
+      "example": "They incorporated our idea.",
+      "exampleKr": "그들은 우리 생각을 포함시켜 합쳤다."
+    },
+    {
+      "id": "ev-s11-0168",
+      "sourceId": "ev-moe2022-h-0045",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "analyze",
+      "pos": "동사",
+      "meaningKr": [
+        "분석하다"
+      ],
+      "example": "Scientists analyzed the water sample.",
+      "exampleKr": "과학자들이 물 표본을 분석했다."
+    },
+    {
+      "id": "ev-s11-0169",
+      "sourceId": "ev-moe2022-h-0483",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "imply",
+      "pos": "동사",
+      "meaningKr": [
+        "넌지시 비치다"
+      ],
+      "example": "His silence implied refusal.",
+      "exampleKr": "그의 침묵은 거절을 넌지시 비쳤다."
+    },
+    {
+      "id": "ev-s11-0170",
+      "sourceId": "ev-moe2022-h-0253",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "deliberate",
+      "pos": "형용사",
+      "meaningKr": [
+        "고의의"
+      ],
+      "example": "That was a deliberate choice.",
+      "exampleKr": "그것은 고의의 선택이었다."
+    },
+    {
+      "id": "ev-s11-0171",
+      "sourceId": "ev-moe2022-h-0016",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "accord",
+      "pos": "명사",
+      "meaningKr": [
+        "합의"
+      ],
+      "example": "The two sides reached an accord.",
+      "exampleKr": "양측은 합의에 이르렀다."
+    },
+    {
+      "id": "ev-s11-0172",
+      "sourceId": "ev-moe2022-h-0776",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "restrict",
+      "pos": "동사",
+      "meaningKr": [
+        "제한하다"
+      ],
+      "example": "The rule restricts loud noise.",
+      "exampleKr": "그 규칙은 시끄러운 소음을 제한한다."
+    },
+    {
+      "id": "ev-s11-0173",
+      "sourceId": "ev-moe2022-h-0616",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "neglect",
+      "pos": "동사",
+      "meaningKr": [
+        "소홀히 하다"
+      ],
+      "example": "Do not neglect your health.",
+      "exampleKr": "건강을 소홀히 하지 마라."
+    },
+    {
+      "id": "ev-s11-0174",
+      "sourceId": "ev-moe2022-h-0216",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "credible",
+      "pos": "형용사",
+      "meaningKr": [
+        "믿을 만한"
+      ],
+      "example": "The witness seemed credible.",
+      "exampleKr": "그 목격자는 믿을 만해 보였다."
+    },
+    {
+      "id": "ev-s11-0175",
+      "sourceId": "ev-moe2022-h-0953",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "utilize",
+      "pos": "동사",
+      "meaningKr": [
+        "활용하다"
+      ],
+      "example": "We utilize every free room.",
+      "exampleKr": "우리는 모든 빈방을 활용한다."
+    },
+    {
+      "id": "ev-s11-0176",
+      "sourceId": "ev-moe2022-h-0769",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "resemble",
+      "pos": "동사",
+      "meaningKr": [
+        "닮다"
+      ],
+      "example": "She resembles her grandmother.",
+      "exampleKr": "그녀는 할머니를 닮았다."
+    },
+    {
+      "id": "ev-s11-0177",
+      "sourceId": "ev-moe2022-h-0681",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "perceive",
+      "pos": "동사",
+      "meaningKr": [
+        "감지하다"
+      ],
+      "example": "We perceive light through eyes.",
+      "exampleKr": "우리는 눈을 통해 빛을 감지한다."
+    },
+    {
+      "id": "ev-s11-0178",
+      "sourceId": "ev-moe2022-h-0797",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "rot",
+      "pos": "동사",
+      "meaningKr": [
+        "썩어 가다"
+      ],
+      "example": "Wet wood rots quickly.",
+      "exampleKr": "젖은 나무는 빠르게 썩어 간다."
+    },
+    {
+      "id": "ev-s11-0179",
+      "sourceId": "ev-moe2022-h-0785",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "revive",
+      "pos": "동사",
+      "meaningKr": [
+        "되살리다"
+      ],
+      "example": "Rain revived the dry garden.",
+      "exampleKr": "비가 마른 정원을 되살렸다."
+    },
+    {
+      "id": "ev-s11-0180",
+      "sourceId": "ev-moe2022-h-0522",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "intervene",
+      "pos": "동사",
+      "meaningKr": [
+        "개입하다"
+      ],
+      "example": "A teacher intervened at once.",
+      "exampleKr": "교사 한 명이 즉시 개입했다."
+    },
+    {
+      "id": "ev-s11-0181",
+      "sourceId": "ev-moe2022-h-0887",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "swell",
+      "pos": "동사",
+      "meaningKr": [
+        "부풀어 오르다"
+      ],
+      "example": "My ankle swelled after the fall.",
+      "exampleKr": "넘어진 뒤 내 발목이 부풀어 올랐다."
+    },
+    {
+      "id": "ev-s11-0182",
+      "sourceId": "ev-moe2022-h-0716",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "presume",
+      "pos": "동사",
+      "meaningKr": [
+        "미루어 짐작하다"
+      ],
+      "example": "We presume he left early.",
+      "exampleKr": "우리는 그가 일찍 떠났다고 미루어 짐작한다."
+    },
+    {
+      "id": "ev-s11-0183",
+      "sourceId": "ev-moe2022-h-0528",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "isolate",
+      "pos": "동사",
+      "meaningKr": [
+        "고립시키다"
+      ],
+      "example": "Snow isolated the small town.",
+      "exampleKr": "눈이 그 작은 마을을 고립시켰다."
+    },
+    {
+      "id": "ev-s11-0184",
+      "sourceId": "ev-moe2022-h-0491",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "induce",
+      "pos": "동사",
+      "meaningKr": [
+        "유도하다"
+      ],
+      "example": "Warm milk induces sleep.",
+      "exampleKr": "따뜻한 우유는 잠을 유도한다."
+    },
+    {
+      "id": "ev-s11-0185",
+      "sourceId": "ev-moe2022-h-0177",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "conform",
+      "pos": "동사",
+      "meaningKr": [
+        "규칙을 따르다"
+      ],
+      "example": "All members must conform to rules.",
+      "exampleKr": "모든 구성원이 규칙을 따라야 한다."
+    },
+    {
+      "id": "ev-s11-0186",
+      "sourceId": "ev-moe2022-h-0684",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "persist",
+      "pos": "동사",
+      "meaningKr": [
+        "끈질기게 계속하다"
+      ],
+      "example": "He persisted despite failure.",
+      "exampleKr": "그는 실패에도 끈질기게 계속했다."
+    },
+    {
+      "id": "ev-s11-0187",
+      "sourceId": "ev-moe2022-h-0144",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "collaborate",
+      "pos": "동사",
+      "meaningKr": [
+        "협력하다"
+      ],
+      "example": "Two schools collaborated on the project.",
+      "exampleKr": "두 학교가 그 계획에 협력했다."
+    },
+    {
+      "id": "ev-s11-0188",
+      "sourceId": "ev-moe2022-h-0736",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "provoke",
+      "pos": "동사",
+      "meaningKr": [
+        "자극하다"
+      ],
+      "example": "His words provoked an argument.",
+      "exampleKr": "그의 말이 논쟁을 자극했다."
+    },
+    {
+      "id": "ev-s11-0189",
+      "sourceId": "ev-moe2022-h-0219",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "criterion",
+      "pos": "명사",
+      "meaningKr": [
+        "판단 기준"
+      ],
+      "example": "Price is not the only criterion.",
+      "exampleKr": "가격이 유일한 판단 기준은 아니다."
+    },
+    {
+      "id": "ev-s11-0190",
+      "sourceId": "ev-moe2022-h-0101",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "brute",
+      "pos": "형용사",
+      "meaningKr": [
+        "짐승 같은"
+      ],
+      "example": "He used brute force again.",
+      "exampleKr": "그는 다시 짐승 같은 힘을 썼다."
+    },
+    {
+      "id": "ev-s11-0191",
+      "sourceId": "ev-moe2022-h-0960",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "vanish",
+      "pos": "동사",
+      "meaningKr": [
+        "사라지다"
+      ],
+      "example": "The bird vanished into clouds.",
+      "exampleKr": "그 새는 구름 속으로 사라졌다."
+    },
+    {
+      "id": "ev-s11-0192",
+      "sourceId": "ev-moe2022-h-0524",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "intrigue",
+      "pos": "동사",
+      "meaningKr": [
+        "호기심을 자극하다"
+      ],
+      "example": "The old map intrigued us.",
+      "exampleKr": "그 옛 지도가 우리 호기심을 자극했다."
+    },
+    {
+      "id": "ev-s11-0193",
+      "sourceId": "ev-moe2022-h-0476",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "imitate",
+      "pos": "동사",
+      "meaningKr": [
+        "흉내 내다"
+      ],
+      "example": "Children imitate adult speech.",
+      "exampleKr": "아이들은 어른의 말을 흉내 낸다."
+    },
+    {
+      "id": "ev-s11-0194",
+      "sourceId": "ev-moe2022-h-0322",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "emit",
+      "pos": "동사",
+      "meaningKr": [
+        "내뿜다"
+      ],
+      "example": "Old cars emit dirty smoke.",
+      "exampleKr": "낡은 차는 더러운 연기를 내뿜는다."
+    },
+    {
+      "id": "ev-s11-0195",
+      "sourceId": "ev-moe2022-h-0273",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "devise",
+      "pos": "동사",
+      "meaningKr": [
+        "고안하다"
+      ],
+      "example": "Engineers devised a simple fix.",
+      "exampleKr": "기술자들이 간단한 해결책을 고안했다."
+    },
+    {
+      "id": "ev-s11-0196",
+      "sourceId": "ev-moe2022-h-0657",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "overwhelm",
+      "pos": "동사",
+      "meaningKr": [
+        "압도하다"
+      ],
+      "example": "The crowd overwhelmed the small hall.",
+      "exampleKr": "군중이 그 작은 강당을 압도했다."
+    },
+    {
+      "id": "ev-s11-0197",
+      "sourceId": "ev-moe2022-h-0195",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "convene",
+      "pos": "동사",
+      "meaningKr": [
+        "소집하다"
+      ],
+      "example": "The chair convened a short meeting.",
+      "exampleKr": "의장이 짧은 회의를 소집했다."
+    },
+    {
+      "id": "ev-s11-0198",
+      "sourceId": "ev-moe2022-h-0176",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "confine",
+      "pos": "동사",
+      "meaningKr": [
+        "가두다"
+      ],
+      "example": "They confined the dog indoors.",
+      "exampleKr": "그들은 개를 실내에 가두었다."
+    },
+    {
+      "id": "ev-s11-0199",
+      "sourceId": "ev-moe2022-h-0185",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "constrain",
+      "pos": "동사",
+      "meaningKr": [
+        "제약하다"
+      ],
+      "example": "Cost constrains our final choice.",
+      "exampleKr": "비용이 우리의 최종 선택을 제약한다."
+    },
+    {
+      "id": "ev-s11-0200",
+      "sourceId": "ev-moe2022-h-0330",
+      "setId": "ev-set-011",
+      "level": "high",
+      "word": "environ",
+      "pos": "동사",
+      "meaningKr": [
+        "에워싸다"
+      ],
+      "example": "Tall walls environ the garden.",
+      "exampleKr": "높은 벽이 정원을 에워싼다."
+    }
+  ]
+}

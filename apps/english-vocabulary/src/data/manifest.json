@@ -2,7 +2,7 @@
   "app": "english-vocabulary",
   "totalTarget": 3000,
   "setSize": 200,
-  "note": "초등 SET01~04는 교육부 2022 개정 별책 14의 초등 * 대표형 800개를 주제·상황 기반으로 배정한 데이터다. 중등·고등 세트는 준비 중이며, available=true 세트만 앱이 로드한다.",
+  "note": "SET01~15는 교육부 2022 개정 별책 14 대표형 3,000개(초등 * 800 / 중등 ** 1,200 / 고등 무표시 1,000)를 주제·상황 기반으로 배정한 데이터다.",
   "sets": [
     {
       "setId": "ev-set-001",
@@ -43,102 +43,102 @@
     {
       "setId": "ev-set-005",
       "order": 5,
-      "title": "(준비 중)",
+      "title": "나와 사람들",
       "level": "middle",
       "file": "set-005.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-006",
       "order": 6,
-      "title": "(준비 중)",
+      "title": "집과 먹고 입기",
       "level": "middle",
       "file": "set-006.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-007",
       "order": 7,
-      "title": "(준비 중)",
+      "title": "학교와 배움",
       "level": "middle",
       "file": "set-007.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-008",
       "order": 8,
-      "title": "(준비 중)",
+      "title": "동네와 이동",
       "level": "middle",
       "file": "set-008.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-009",
       "order": 9,
-      "title": "(준비 중)",
+      "title": "자연과 환경",
       "level": "middle",
       "file": "set-009.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-010",
       "order": 10,
-      "title": "(준비 중)",
+      "title": "사회와 일",
       "level": "middle",
       "file": "set-010.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-011",
       "order": 11,
-      "title": "(준비 중)",
+      "title": "사람과 마음",
       "level": "high",
       "file": "set-011.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-012",
       "order": 12,
-      "title": "(준비 중)",
+      "title": "생활과 사물",
       "level": "high",
       "file": "set-012.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-013",
       "order": 13,
-      "title": "(준비 중)",
+      "title": "학문과 표현",
       "level": "high",
       "file": "set-013.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-014",
       "order": 14,
-      "title": "(준비 중)",
+      "title": "자연과 세계",
       "level": "high",
       "file": "set-014.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     },
     {
       "setId": "ev-set-015",
       "order": 15,
-      "title": "(준비 중)",
+      "title": "사회와 사고",
       "level": "high",
       "file": "set-015.json",
-      "count": 0,
-      "available": false
+      "count": 200,
+      "available": true
     }
   ],
-  "dataVersion": "moe-2022-elementary-v1"
+  "dataVersion": "moe-2022-full-v1"
 }

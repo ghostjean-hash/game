@@ -1,0 +1,2609 @@
+{
+  "setId": "ev-set-014",
+  "order": 14,
+  "title": "자연과 세계",
+  "level": "high",
+  "source": "교육부 2022 개정 별책 14 무표시 대표형(고등 범위)",
+  "words": [
+    {
+      "id": "ev-s14-0001",
+      "sourceId": "ev-moe2022-h-0629",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "nuclear",
+      "pos": "형용사",
+      "meaningKr": [
+        "핵의"
+      ],
+      "example": "The country closed a nuclear plant.",
+      "exampleKr": "그 나라는 핵 발전소를 닫았다."
+    },
+    {
+      "id": "ev-s14-0002",
+      "sourceId": "ev-moe2022-h-0908",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "territory",
+      "pos": "명사",
+      "meaningKr": [
+        "영역 땅"
+      ],
+      "example": "The wolf guards its territory.",
+      "exampleKr": "늑대는 자기 영역 땅을 지킨다."
+    },
+    {
+      "id": "ev-s14-0003",
+      "sourceId": "ev-moe2022-h-0948",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "universe",
+      "pos": "명사",
+      "meaningKr": [
+        "우주"
+      ],
+      "example": "The universe keeps expanding.",
+      "exampleKr": "우주는 계속 팽창한다."
+    },
+    {
+      "id": "ev-s14-0004",
+      "sourceId": "ev-moe2022-h-0569",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "marine",
+      "pos": "형용사",
+      "meaningKr": [
+        "바다의"
+      ],
+      "example": "We studied marine animals.",
+      "exampleKr": "우리는 바다 동물을 공부했다."
+    },
+    {
+      "id": "ev-s14-0005",
+      "sourceId": "ev-moe2022-h-0676",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "peak",
+      "pos": "명사",
+      "meaningKr": [
+        "정상"
+      ],
+      "example": "We reached the peak at noon.",
+      "exampleKr": "우리는 정오에 정상에 도달했다."
+    },
+    {
+      "id": "ev-s14-0006",
+      "sourceId": "ev-moe2022-h-0602",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "monster",
+      "pos": "명사",
+      "meaningKr": [
+        "괴물"
+      ],
+      "example": "The child feared a monster.",
+      "exampleKr": "그 아이는 괴물을 무서워했다."
+    },
+    {
+      "id": "ev-s14-0007",
+      "sourceId": "ev-moe2022-h-0923",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "trail",
+      "pos": "명사",
+      "meaningKr": [
+        "자취"
+      ],
+      "example": "We followed the animal trail.",
+      "exampleKr": "우리는 동물의 자취를 따라갔다."
+    },
+    {
+      "id": "ev-s14-0008",
+      "sourceId": "ev-moe2022-h-0975",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "virus",
+      "pos": "명사",
+      "meaningKr": [
+        "바이러스"
+      ],
+      "example": "A new virus spread fast.",
+      "exampleKr": "새 바이러스가 빠르게 퍼졌다."
+    },
+    {
+      "id": "ev-s14-0009",
+      "sourceId": "ev-moe2022-h-0344",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "evolution",
+      "pos": "명사",
+      "meaningKr": [
+        "진화"
+      ],
+      "example": "Evolution takes a long time.",
+      "exampleKr": "진화는 오랜 시간이 걸린다."
+    },
+    {
+      "id": "ev-s14-0010",
+      "sourceId": "ev-moe2022-h-0284",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "disaster",
+      "pos": "명사",
+      "meaningKr": [
+        "재난"
+      ],
+      "example": "The flood became a disaster.",
+      "exampleKr": "그 홍수는 재난이 되었다."
+    },
+    {
+      "id": "ev-s14-0011",
+      "sourceId": "ev-moe2022-h-0421",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "gene",
+      "pos": "명사",
+      "meaningKr": [
+        "유전자"
+      ],
+      "example": "One gene decides eye color.",
+      "exampleKr": "유전자 하나가 눈 색을 정한다."
+    },
+    {
+      "id": "ev-s14-0012",
+      "sourceId": "ev-moe2022-h-0540",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "landscape",
+      "pos": "명사",
+      "meaningKr": [
+        "풍경"
+      ],
+      "example": "The landscape changed after rain.",
+      "exampleKr": "그 풍경은 비 온 뒤 달라졌다."
+    },
+    {
+      "id": "ev-s14-0013",
+      "sourceId": "ev-moe2022-h-0103",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "bull",
+      "pos": "명사",
+      "meaningKr": [
+        "황소"
+      ],
+      "example": "An angry bull blocked the path.",
+      "exampleKr": "성난 황소가 길을 막았다."
+    },
+    {
+      "id": "ev-s14-0014",
+      "sourceId": "ev-moe2022-h-0855",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "stem",
+      "pos": "명사",
+      "meaningKr": [
+        "줄기"
+      ],
+      "example": "Cut the flower stem short.",
+      "exampleKr": "꽃줄기를 짧게 잘라라."
+    },
+    {
+      "id": "ev-s14-0015",
+      "sourceId": "ev-moe2022-h-0876",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "summit",
+      "pos": "명사",
+      "meaningKr": [
+        "산꼭대기"
+      ],
+      "example": "Clouds covered the summit.",
+      "exampleKr": "구름이 산꼭대기를 덮었다."
+    },
+    {
+      "id": "ev-s14-0016",
+      "sourceId": "ev-moe2022-h-0037",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "alien",
+      "pos": "명사",
+      "meaningKr": [
+        "외계인"
+      ],
+      "example": "The film shows friendly aliens.",
+      "exampleKr": "그 영화는 친근한 외계인을 보여 준다."
+    },
+    {
+      "id": "ev-s14-0017",
+      "sourceId": "ev-moe2022-h-0083",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "beast",
+      "pos": "명사",
+      "meaningKr": [
+        "짐승"
+      ],
+      "example": "A wild beast lived in the forest.",
+      "exampleKr": "야생 짐승이 숲에 살았다."
+    },
+    {
+      "id": "ev-s14-0018",
+      "sourceId": "ev-moe2022-h-0443",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "gulf",
+      "pos": "명사",
+      "meaningKr": [
+        "큰 만"
+      ],
+      "example": "Ships crossed the wide gulf.",
+      "exampleKr": "배들이 넓고 큰 만을 건넜다."
+    },
+    {
+      "id": "ev-s14-0019",
+      "sourceId": "ev-moe2022-h-0987",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "weed",
+      "pos": "명사",
+      "meaningKr": [
+        "잡초"
+      ],
+      "example": "Pull the weeds after rain.",
+      "exampleKr": "비 온 뒤 잡초를 뽑아라."
+    },
+    {
+      "id": "ev-s14-0020",
+      "sourceId": "ev-moe2022-h-0921",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "toxic",
+      "pos": "형용사",
+      "meaningKr": [
+        "독성의"
+      ],
+      "example": "This plant is highly toxic.",
+      "exampleKr": "이 식물은 독성이 매우 강하다."
+    },
+    {
+      "id": "ev-s14-0021",
+      "sourceId": "ev-moe2022-h-0118",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "cave",
+      "pos": "명사",
+      "meaningKr": [
+        "동굴"
+      ],
+      "example": "Bats sleep inside the cave.",
+      "exampleKr": "박쥐들이 동굴 안에서 잔다."
+    },
+    {
+      "id": "ev-s14-0022",
+      "sourceId": "ev-moe2022-h-0129",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "chill",
+      "pos": "명사",
+      "meaningKr": [
+        "한기"
+      ],
+      "example": "A sudden chill filled the room.",
+      "exampleKr": "갑작스러운 한기가 방을 채웠다."
+    },
+    {
+      "id": "ev-s14-0023",
+      "sourceId": "ev-moe2022-h-0116",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "cattle",
+      "pos": "명사",
+      "meaningKr": [
+        "소 떼"
+      ],
+      "example": "The cattle ate grass on the hill.",
+      "exampleKr": "소 떼가 언덕에서 풀을 먹었다."
+    },
+    {
+      "id": "ev-s14-0024",
+      "sourceId": "ev-moe2022-h-0221",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "crop",
+      "pos": "명사",
+      "meaningKr": [
+        "농작물"
+      ],
+      "example": "Heavy rain ruined the crop.",
+      "exampleKr": "폭우가 그 농작물을 망쳤다."
+    },
+    {
+      "id": "ev-s14-0025",
+      "sourceId": "ev-moe2022-h-0081",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "beam",
+      "pos": "명사",
+      "meaningKr": [
+        "빛줄기"
+      ],
+      "example": "A beam of light crossed the room.",
+      "exampleKr": "빛줄기 하나가 방을 가로질렀다."
+    },
+    {
+      "id": "ev-s14-0026",
+      "sourceId": "ev-moe2022-h-0688",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "phenomenon",
+      "pos": "명사",
+      "meaningKr": [
+        "현상"
+      ],
+      "example": "Rainbows are a natural phenomenon.",
+      "exampleKr": "무지개는 자연 현상이다."
+    },
+    {
+      "id": "ev-s14-0027",
+      "sourceId": "ev-moe2022-h-0585",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "mild",
+      "pos": "형용사",
+      "meaningKr": [
+        "포근한"
+      ],
+      "example": "We had a mild winter.",
+      "exampleKr": "우리는 포근한 겨울을 보냈다."
+    },
+    {
+      "id": "ev-s14-0028",
+      "sourceId": "ev-moe2022-h-0394",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "forecast",
+      "pos": "명사",
+      "meaningKr": [
+        "예보"
+      ],
+      "example": "The weather forecast was wrong.",
+      "exampleKr": "그 날씨 예보는 틀렸다."
+    },
+    {
+      "id": "ev-s14-0029",
+      "sourceId": "ev-moe2022-h-0957",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "vacuum",
+      "pos": "명사",
+      "meaningKr": [
+        "진공"
+      ],
+      "example": "Sound cannot travel in a vacuum.",
+      "exampleKr": "소리는 진공에서 이동할 수 없다."
+    },
+    {
+      "id": "ev-s14-0030",
+      "sourceId": "ev-moe2022-h-0098",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "breed",
+      "pos": "동사",
+      "meaningKr": [
+        "기르다"
+      ],
+      "example": "Farmers breed sheep on this hill.",
+      "exampleKr": "농부들이 이 언덕에서 양을 기른다."
+    },
+    {
+      "id": "ev-s14-0031",
+      "sourceId": "ev-moe2022-h-0465",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "horizon",
+      "pos": "명사",
+      "meaningKr": [
+        "수평선"
+      ],
+      "example": "The sun sank below the horizon.",
+      "exampleKr": "해가 수평선 아래로 가라앉았다."
+    },
+    {
+      "id": "ev-s14-0032",
+      "sourceId": "ev-moe2022-h-0108",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "buzz",
+      "pos": "동사",
+      "meaningKr": [
+        "윙윙거리다"
+      ],
+      "example": "Bees buzz around the flowers.",
+      "exampleKr": "벌들이 꽃 주위를 윙윙거린다."
+    },
+    {
+      "id": "ev-s14-0033",
+      "sourceId": "ev-moe2022-h-0452",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "harvest",
+      "pos": "명사",
+      "meaningKr": [
+        "수확"
+      ],
+      "example": "The harvest ended last week.",
+      "exampleKr": "그 수확은 지난주에 끝났다."
+    },
+    {
+      "id": "ev-s14-0034",
+      "sourceId": "ev-moe2022-h-0641",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "orbit",
+      "pos": "명사",
+      "meaningKr": [
+        "궤도"
+      ],
+      "example": "The moon follows a wide orbit.",
+      "exampleKr": "달은 넓은 궤도를 따른다."
+    },
+    {
+      "id": "ev-s14-0035",
+      "sourceId": "ev-moe2022-h-0431",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "goat",
+      "pos": "명사",
+      "meaningKr": [
+        "염소"
+      ],
+      "example": "A white goat ate the grass.",
+      "exampleKr": "흰 염소가 풀을 먹었다."
+    },
+    {
+      "id": "ev-s14-0036",
+      "sourceId": "ev-moe2022-h-0990",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "wheat",
+      "pos": "명사",
+      "meaningKr": [
+        "밀"
+      ],
+      "example": "Farmers harvest wheat in July.",
+      "exampleKr": "농부들은 칠월에 밀을 수확한다."
+    },
+    {
+      "id": "ev-s14-0037",
+      "sourceId": "ev-moe2022-h-0838",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "spark",
+      "pos": "명사",
+      "meaningKr": [
+        "불꽃 하나"
+      ],
+      "example": "A spark started the whole fire.",
+      "exampleKr": "불꽃 하나가 그 화재 전체를 일으켰다."
+    },
+    {
+      "id": "ev-s14-0038",
+      "sourceId": "ev-moe2022-h-0445",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "habitat",
+      "pos": "명사",
+      "meaningKr": [
+        "서식지"
+      ],
+      "example": "This forest is their habitat.",
+      "exampleKr": "이 숲이 그들의 서식지다."
+    },
+    {
+      "id": "ev-s14-0039",
+      "sourceId": "ev-moe2022-h-0699",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "pond",
+      "pos": "명사",
+      "meaningKr": [
+        "연못"
+      ],
+      "example": "Ducks swim in the pond.",
+      "exampleKr": "오리들이 연못에서 헤엄친다."
+    },
+    {
+      "id": "ev-s14-0040",
+      "sourceId": "ev-moe2022-h-0718",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "prey",
+      "pos": "명사",
+      "meaningKr": [
+        "먹잇감"
+      ],
+      "example": "The bird hunted small prey.",
+      "exampleKr": "그 새는 작은 먹잇감을 사냥했다."
+    },
+    {
+      "id": "ev-s14-0041",
+      "sourceId": "ev-moe2022-h-0404",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "frost",
+      "pos": "명사",
+      "meaningKr": [
+        "서리"
+      ],
+      "example": "Morning frost covered the grass.",
+      "exampleKr": "아침 서리가 잔디를 덮었다."
+    },
+    {
+      "id": "ev-s14-0042",
+      "sourceId": "ev-moe2022-h-0667",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "particle",
+      "pos": "명사",
+      "meaningKr": [
+        "입자"
+      ],
+      "example": "Dust particles float in air.",
+      "exampleKr": "먼지 입자들이 공기에 떠 있다."
+    },
+    {
+      "id": "ev-s14-0043",
+      "sourceId": "ev-moe2022-h-0830",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "slope",
+      "pos": "명사",
+      "meaningKr": [
+        "비탈"
+      ],
+      "example": "Snow covered the steep slope.",
+      "exampleKr": "눈이 가파른 비탈을 덮었다."
+    },
+    {
+      "id": "ev-s14-0044",
+      "sourceId": "ev-moe2022-h-0099",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "breeze",
+      "pos": "명사",
+      "meaningKr": [
+        "산들바람"
+      ],
+      "example": "A cool breeze crossed the yard.",
+      "exampleKr": "시원한 산들바람이 마당을 지났다."
+    },
+    {
+      "id": "ev-s14-0045",
+      "sourceId": "ev-moe2022-h-0511",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "instinct",
+      "pos": "명사",
+      "meaningKr": [
+        "본능"
+      ],
+      "example": "Birds follow their instinct.",
+      "exampleKr": "새들은 자기 본능을 따른다."
+    },
+    {
+      "id": "ev-s14-0046",
+      "sourceId": "ev-moe2022-h-0241",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "decay",
+      "pos": "동사",
+      "meaningKr": [
+        "썩다"
+      ],
+      "example": "Fallen fruit decays quickly.",
+      "exampleKr": "떨어진 과일은 빠르게 썩는다."
+    },
+    {
+      "id": "ev-s14-0047",
+      "sourceId": "ev-moe2022-h-0345",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "evolve",
+      "pos": "동사",
+      "meaningKr": [
+        "진화하다"
+      ],
+      "example": "Birds evolved from older animals.",
+      "exampleKr": "새는 더 오래된 동물에서 진화했다."
+    },
+    {
+      "id": "ev-s14-0048",
+      "sourceId": "ev-moe2022-h-0506",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "insect",
+      "pos": "명사",
+      "meaningKr": [
+        "곤충"
+      ],
+      "example": "A tiny insect crossed the page.",
+      "exampleKr": "아주 작은 곤충이 책장을 지났다."
+    },
+    {
+      "id": "ev-s14-0049",
+      "sourceId": "ev-moe2022-h-0709",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "predator",
+      "pos": "명사",
+      "meaningKr": [
+        "포식자"
+      ],
+      "example": "The lion is a strong predator.",
+      "exampleKr": "사자는 강한 포식자다."
+    },
+    {
+      "id": "ev-s14-0050",
+      "sourceId": "ev-moe2022-h-0793",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "roar",
+      "pos": "동사",
+      "meaningKr": [
+        "으르렁거리다"
+      ],
+      "example": "The lion roared at night.",
+      "exampleKr": "그 사자는 밤에 으르렁거렸다."
+    },
+    {
+      "id": "ev-s14-0051",
+      "sourceId": "ev-moe2022-h-0389",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "flock",
+      "pos": "명사",
+      "meaningKr": [
+        "떼"
+      ],
+      "example": "A flock of birds passed.",
+      "exampleKr": "새 떼가 지나갔다."
+    },
+    {
+      "id": "ev-s14-0052",
+      "sourceId": "ev-moe2022-h-0601",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "molecule",
+      "pos": "명사",
+      "meaningKr": [
+        "분자"
+      ],
+      "example": "A water molecule holds three atoms.",
+      "exampleKr": "물 분자는 원자 세 개를 지닌다."
+    },
+    {
+      "id": "ev-s14-0053",
+      "sourceId": "ev-moe2022-h-0361",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "extinct",
+      "pos": "형용사",
+      "meaningKr": [
+        "멸종된"
+      ],
+      "example": "That bird is now extinct.",
+      "exampleKr": "그 새는 이제 멸종되었다."
+    },
+    {
+      "id": "ev-s14-0054",
+      "sourceId": "ev-moe2022-h-0093",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "blossom",
+      "pos": "명사",
+      "meaningKr": [
+        "활짝 핀 꽃"
+      ],
+      "example": "Spring blossom covered the tree.",
+      "exampleKr": "봄에 활짝 핀 꽃이 나무를 덮었다."
+    },
+    {
+      "id": "ev-s14-0055",
+      "sourceId": "ev-moe2022-h-0377",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "fertile",
+      "pos": "형용사",
+      "meaningKr": [
+        "비옥한"
+      ],
+      "example": "Fertile land grows good crops.",
+      "exampleKr": "비옥한 땅은 좋은 농작물을 기른다."
+    },
+    {
+      "id": "ev-s14-0056",
+      "sourceId": "ev-moe2022-h-0584",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "migrate",
+      "pos": "동사",
+      "meaningKr": [
+        "이동하다"
+      ],
+      "example": "Birds migrate every autumn.",
+      "exampleKr": "새들은 매년 가을 이동한다."
+    },
+    {
+      "id": "ev-s14-0057",
+      "sourceId": "ev-moe2022-h-0226",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "cultivate",
+      "pos": "동사",
+      "meaningKr": [
+        "경작하다"
+      ],
+      "example": "They cultivate rice every spring.",
+      "exampleKr": "그들은 매년 봄에 벼를 경작한다."
+    },
+    {
+      "id": "ev-s14-0058",
+      "sourceId": "ev-moe2022-h-0182",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "conserve",
+      "pos": "동사",
+      "meaningKr": [
+        "보존하다"
+      ],
+      "example": "We must conserve clean water.",
+      "exampleKr": "우리는 깨끗한 물을 보존해야 한다."
+    },
+    {
+      "id": "ev-s14-0059",
+      "sourceId": "ev-moe2022-h-0497",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "inhabit",
+      "pos": "동사",
+      "meaningKr": [
+        "서식하다"
+      ],
+      "example": "Rare birds inhabit this island.",
+      "exampleKr": "희귀한 새들이 이 섬에 서식한다."
+    },
+    {
+      "id": "ev-s14-0060",
+      "sourceId": "ev-moe2022-h-0619",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "network",
+      "pos": "명사",
+      "meaningKr": [
+        "연결망"
+      ],
+      "example": "The train network covers the country.",
+      "exampleKr": "그 기차 연결망은 나라 전체를 덮는다."
+    },
+    {
+      "id": "ev-s14-0061",
+      "sourceId": "ev-moe2022-h-1000",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "zone",
+      "pos": "명사",
+      "meaningKr": [
+        "구역 지대"
+      ],
+      "example": "Park inside the blue zone.",
+      "exampleKr": "파란 구역 지대 안에 주차해라."
+    },
+    {
+      "id": "ev-s14-0062",
+      "sourceId": "ev-moe2022-h-0096",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "border",
+      "pos": "명사",
+      "meaningKr": [
+        "국경"
+      ],
+      "example": "They crossed the border safely.",
+      "exampleKr": "그들은 국경을 안전하게 건넜다."
+    },
+    {
+      "id": "ev-s14-0063",
+      "sourceId": "ev-moe2022-h-0329",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "entry",
+      "pos": "명사",
+      "meaningKr": [
+        "입장"
+      ],
+      "example": "Entry costs five dollars.",
+      "exampleKr": "입장은 오 달러가 든다."
+    },
+    {
+      "id": "ev-s14-0064",
+      "sourceId": "ev-moe2022-h-0695",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "platform",
+      "pos": "명사",
+      "meaningKr": [
+        "승강장"
+      ],
+      "example": "Wait on the second platform.",
+      "exampleKr": "두 번째 승강장에서 기다려라."
+    },
+    {
+      "id": "ev-s14-0065",
+      "sourceId": "ev-moe2022-h-0951",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "urban",
+      "pos": "형용사",
+      "meaningKr": [
+        "도시의"
+      ],
+      "example": "Urban traffic grows every year.",
+      "exampleKr": "도시의 교통량이 매년 늘어난다."
+    },
+    {
+      "id": "ev-s14-0066",
+      "sourceId": "ev-moe2022-h-0367",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "facility",
+      "pos": "명사",
+      "meaningKr": [
+        "시설"
+      ],
+      "example": "The sports facility opened today.",
+      "exampleKr": "그 운동 시설이 오늘 문을 열었다."
+    },
+    {
+      "id": "ev-s14-0067",
+      "sourceId": "ev-moe2022-h-0800",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "rural",
+      "pos": "형용사",
+      "meaningKr": [
+        "시골의"
+      ],
+      "example": "Rural life moves slowly.",
+      "exampleKr": "시골의 삶은 천천히 흘러간다."
+    },
+    {
+      "id": "ev-s14-0068",
+      "sourceId": "ev-moe2022-h-0518",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "interior",
+      "pos": "명사",
+      "meaningKr": [
+        "실내"
+      ],
+      "example": "The car interior smells new.",
+      "exampleKr": "그 차 실내는 새것 냄새가 난다."
+    },
+    {
+      "id": "ev-s14-0069",
+      "sourceId": "ev-moe2022-h-0124",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "chamber",
+      "pos": "명사",
+      "meaningKr": [
+        "밀실"
+      ],
+      "example": "The hidden chamber held old books.",
+      "exampleKr": "그 숨겨진 밀실에는 오래된 책이 있었다."
+    },
+    {
+      "id": "ev-s14-0070",
+      "sourceId": "ev-moe2022-h-0735",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "province",
+      "pos": "명사",
+      "meaningKr": [
+        "지방 행정 구역"
+      ],
+      "example": "This province grows apples.",
+      "exampleKr": "이 지방 행정 구역은 사과를 재배한다."
+    },
+    {
+      "id": "ev-s14-0071",
+      "sourceId": "ev-moe2022-h-0899",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "temple",
+      "pos": "명사",
+      "meaningKr": [
+        "사원"
+      ],
+      "example": "An old temple stands nearby.",
+      "exampleKr": "오래된 사원이 근처에 서 있다."
+    },
+    {
+      "id": "ev-s14-0072",
+      "sourceId": "ev-moe2022-h-0749",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "rear",
+      "pos": "명사",
+      "meaningKr": [
+        "뒤쪽"
+      ],
+      "example": "Sit at the rear please.",
+      "exampleKr": "뒤쪽에 앉아 주세요."
+    },
+    {
+      "id": "ev-s14-0073",
+      "sourceId": "ev-moe2022-h-0765",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "remote",
+      "pos": "형용사",
+      "meaningKr": [
+        "외딴"
+      ],
+      "example": "They live in a remote village.",
+      "exampleKr": "그들은 외딴 마을에 산다."
+    },
+    {
+      "id": "ev-s14-0074",
+      "sourceId": "ev-moe2022-h-0005",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "abroad",
+      "pos": "부사",
+      "meaningKr": [
+        "해외에"
+      ],
+      "example": "She studied abroad for two years.",
+      "exampleKr": "그녀는 이 년간 해외에서 공부했다."
+    },
+    {
+      "id": "ev-s14-0075",
+      "sourceId": "ev-moe2022-h-0669",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "passenger",
+      "pos": "명사",
+      "meaningKr": [
+        "승객"
+      ],
+      "example": "One passenger left a bag.",
+      "exampleKr": "승객 한 명이 가방을 두고 갔다."
+    },
+    {
+      "id": "ev-s14-0076",
+      "sourceId": "ev-moe2022-h-0773",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "resort",
+      "pos": "명사",
+      "meaningKr": [
+        "휴양지"
+      ],
+      "example": "We booked a quiet resort.",
+      "exampleKr": "우리는 조용한 휴양지를 예약했다."
+    },
+    {
+      "id": "ev-s14-0077",
+      "sourceId": "ev-moe2022-h-0357",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "explore",
+      "pos": "동사",
+      "meaningKr": [
+        "탐험하다"
+      ],
+      "example": "They explored a dark cave.",
+      "exampleKr": "그들은 어두운 동굴을 탐험했다."
+    },
+    {
+      "id": "ev-s14-0078",
+      "sourceId": "ev-moe2022-h-0904",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "terminal",
+      "pos": "명사",
+      "meaningKr": [
+        "터미널"
+      ],
+      "example": "Buses leave from this terminal.",
+      "exampleKr": "버스들이 이 터미널에서 떠난다."
+    },
+    {
+      "id": "ev-s14-0079",
+      "sourceId": "ev-moe2022-h-0967",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "vessel",
+      "pos": "명사",
+      "meaningKr": [
+        "선박"
+      ],
+      "example": "A large vessel entered the port.",
+      "exampleKr": "큰 선박이 항구로 들어왔다."
+    },
+    {
+      "id": "ev-s14-0080",
+      "sourceId": "ev-moe2022-h-0939",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "tunnel",
+      "pos": "명사",
+      "meaningKr": [
+        "터널"
+      ],
+      "example": "The train entered a long tunnel.",
+      "exampleKr": "그 기차는 긴 터널로 들어갔다."
+    },
+    {
+      "id": "ev-s14-0081",
+      "sourceId": "ev-moe2022-h-0223",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "cruise",
+      "pos": "명사",
+      "meaningKr": [
+        "유람선 여행"
+      ],
+      "example": "They booked a short cruise.",
+      "exampleKr": "그들은 짧은 유람선 여행을 예약했다."
+    },
+    {
+      "id": "ev-s14-0082",
+      "sourceId": "ev-moe2022-h-0141",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "clinic",
+      "pos": "명사",
+      "meaningKr": [
+        "진료소"
+      ],
+      "example": "The clinic opens on Saturday.",
+      "exampleKr": "그 진료소는 토요일에 문을 연다."
+    },
+    {
+      "id": "ev-s14-0083",
+      "sourceId": "ev-moe2022-h-0582",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "metropolitan",
+      "pos": "형용사",
+      "meaningKr": [
+        "대도시의"
+      ],
+      "example": "He works in a metropolitan area.",
+      "exampleKr": "그는 대도시 지역에서 일한다."
+    },
+    {
+      "id": "ev-s14-0084",
+      "sourceId": "ev-moe2022-h-0875",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "suite",
+      "pos": "명사",
+      "meaningKr": [
+        "객실 한 벌"
+      ],
+      "example": "They booked a small suite.",
+      "exampleKr": "그들은 작은 객실 한 벌을 예약했다."
+    },
+    {
+      "id": "ev-s14-0085",
+      "sourceId": "ev-moe2022-h-0999",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "yield",
+      "pos": "동사",
+      "meaningKr": [
+        "양보하다"
+      ],
+      "example": "Drivers must yield here.",
+      "exampleKr": "운전자들은 여기서 양보해야 한다."
+    },
+    {
+      "id": "ev-s14-0086",
+      "sourceId": "ev-moe2022-h-0449",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "harbor",
+      "pos": "명사",
+      "meaningKr": [
+        "항만"
+      ],
+      "example": "The harbor holds many boats.",
+      "exampleKr": "그 항만에는 많은 배가 있다."
+    },
+    {
+      "id": "ev-s14-0087",
+      "sourceId": "ev-moe2022-h-0002",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "aboard",
+      "pos": "부사",
+      "meaningKr": [
+        "탑승하여"
+      ],
+      "example": "All passengers are aboard now.",
+      "exampleKr": "모든 승객이 지금 탑승해 있다."
+    },
+    {
+      "id": "ev-s14-0088",
+      "sourceId": "ev-moe2022-h-0097",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "boundary",
+      "pos": "명사",
+      "meaningKr": [
+        "경계선"
+      ],
+      "example": "A fence marks the boundary.",
+      "exampleKr": "울타리가 경계선을 표시한다."
+    },
+    {
+      "id": "ev-s14-0089",
+      "sourceId": "ev-moe2022-h-0983",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "warehouse",
+      "pos": "명사",
+      "meaningKr": [
+        "창고"
+      ],
+      "example": "The warehouse holds old furniture.",
+      "exampleKr": "그 창고에는 오래된 가구가 있다."
+    },
+    {
+      "id": "ev-s14-0090",
+      "sourceId": "ev-moe2022-h-0190",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "continent",
+      "pos": "명사",
+      "meaningKr": [
+        "대륙"
+      ],
+      "example": "Africa is a large continent.",
+      "exampleKr": "아프리카는 큰 대륙이다."
+    },
+    {
+      "id": "ev-s14-0091",
+      "sourceId": "ev-moe2022-h-0502",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "inn",
+      "pos": "명사",
+      "meaningKr": [
+        "여관"
+      ],
+      "example": "We stayed at a country inn.",
+      "exampleKr": "우리는 시골 여관에 묵었다."
+    },
+    {
+      "id": "ev-s14-0092",
+      "sourceId": "ev-moe2022-h-0671",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "passport",
+      "pos": "명사",
+      "meaningKr": [
+        "여권"
+      ],
+      "example": "Show your passport at the gate.",
+      "exampleKr": "문에서 여권을 보여 줘라."
+    },
+    {
+      "id": "ev-s14-0093",
+      "sourceId": "ev-moe2022-h-0376",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "ferry",
+      "pos": "명사",
+      "meaningKr": [
+        "여객선"
+      ],
+      "example": "The ferry crosses every hour.",
+      "exampleKr": "그 여객선은 매시간 건넌다."
+    },
+    {
+      "id": "ev-s14-0094",
+      "sourceId": "ev-moe2022-h-0186",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "construct",
+      "pos": "동사",
+      "meaningKr": [
+        "건설하다"
+      ],
+      "example": "They constructed a new bridge.",
+      "exampleKr": "그들은 새 다리를 건설했다."
+    },
+    {
+      "id": "ev-s14-0095",
+      "sourceId": "ev-moe2022-h-0998",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "wreck",
+      "pos": "명사",
+      "meaningKr": [
+        "난파선"
+      ],
+      "example": "Divers explored the old wreck.",
+      "exampleKr": "잠수부들이 오래된 난파선을 탐사했다."
+    },
+    {
+      "id": "ev-s14-0096",
+      "sourceId": "ev-moe2022-h-0372",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "fare",
+      "pos": "명사",
+      "meaningKr": [
+        "요금"
+      ],
+      "example": "The bus fare rose again.",
+      "exampleKr": "버스 요금이 다시 올랐다."
+    },
+    {
+      "id": "ev-s14-0097",
+      "sourceId": "ev-moe2022-h-0652",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "overhead",
+      "pos": "부사",
+      "meaningKr": [
+        "머리 위로"
+      ],
+      "example": "A plane passed overhead.",
+      "exampleKr": "비행기 한 대가 머리 위로 지나갔다."
+    },
+    {
+      "id": "ev-s14-0098",
+      "sourceId": "ev-moe2022-h-0353",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "exotic",
+      "pos": "형용사",
+      "meaningKr": [
+        "이국적인"
+      ],
+      "example": "They tasted exotic fruit.",
+      "exampleKr": "그들은 이국적인 과일을 맛보았다."
+    },
+    {
+      "id": "ev-s14-0099",
+      "sourceId": "ev-moe2022-h-0400",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "fountain",
+      "pos": "명사",
+      "meaningKr": [
+        "분수"
+      ],
+      "example": "Coins shone in the fountain.",
+      "exampleKr": "동전들이 분수에서 빛났다."
+    },
+    {
+      "id": "ev-s14-0100",
+      "sourceId": "ev-moe2022-h-0603",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "monument",
+      "pos": "명사",
+      "meaningKr": [
+        "기념물"
+      ],
+      "example": "A stone monument stands here.",
+      "exampleKr": "돌 기념물이 여기 서 있다."
+    },
+    {
+      "id": "ev-s14-0101",
+      "sourceId": "ev-moe2022-h-0207",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "corridor",
+      "pos": "명사",
+      "meaningKr": [
+        "통로"
+      ],
+      "example": "A long corridor links two rooms.",
+      "exampleKr": "긴 통로가 두 방을 잇는다."
+    },
+    {
+      "id": "ev-s14-0102",
+      "sourceId": "ev-moe2022-h-0865",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "submarine",
+      "pos": "명사",
+      "meaningKr": [
+        "잠수함"
+      ],
+      "example": "The submarine sank very deep.",
+      "exampleKr": "그 잠수함은 아주 깊이 가라앉았다."
+    },
+    {
+      "id": "ev-s14-0103",
+      "sourceId": "ev-moe2022-h-0871",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "suburb",
+      "pos": "명사",
+      "meaningKr": [
+        "교외"
+      ],
+      "example": "They moved to a quiet suburb.",
+      "exampleKr": "그들은 조용한 교외로 이사했다."
+    },
+    {
+      "id": "ev-s14-0104",
+      "sourceId": "ev-moe2022-h-0950",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "upward",
+      "pos": "부사",
+      "meaningKr": [
+        "위쪽으로"
+      ],
+      "example": "The smoke rose upward.",
+      "exampleKr": "연기가 위쪽으로 올라갔다."
+    },
+    {
+      "id": "ev-s14-0105",
+      "sourceId": "ev-moe2022-h-0259",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "depart",
+      "pos": "동사",
+      "meaningKr": [
+        "출발하다"
+      ],
+      "example": "The train departs at seven.",
+      "exampleKr": "그 기차는 일곱 시에 출발한다."
+    },
+    {
+      "id": "ev-s14-0106",
+      "sourceId": "ev-moe2022-h-0770",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "reside",
+      "pos": "동사",
+      "meaningKr": [
+        "머물러 살다"
+      ],
+      "example": "Few families reside here now.",
+      "exampleKr": "이제 여기 머물러 사는 가족은 적다."
+    },
+    {
+      "id": "ev-s14-0107",
+      "sourceId": "ev-moe2022-h-0308",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "dwell",
+      "pos": "동사",
+      "meaningKr": [
+        "거주하다"
+      ],
+      "example": "Few people dwell on this island.",
+      "exampleKr": "이 섬에 거주하는 사람은 적다."
+    },
+    {
+      "id": "ev-s14-0108",
+      "sourceId": "ev-moe2022-h-0644",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "orient",
+      "pos": "동사",
+      "meaningKr": [
+        "방향을 잡다"
+      ],
+      "example": "Maps help us orient quickly.",
+      "exampleKr": "지도는 우리가 빠르게 방향을 잡도록 돕는다."
+    },
+    {
+      "id": "ev-s14-0109",
+      "sourceId": "ev-moe2022-h-0675",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "pave",
+      "pos": "동사",
+      "meaningKr": [
+        "포장하다"
+      ],
+      "example": "Workers paved the narrow road.",
+      "exampleKr": "노동자들이 좁은 도로를 포장했다."
+    },
+    {
+      "id": "ev-s14-0110",
+      "sourceId": "ev-moe2022-h-0700",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "populate",
+      "pos": "동사",
+      "meaningKr": [
+        "살게 하다"
+      ],
+      "example": "Few people populate this valley.",
+      "exampleKr": "이 골짜기에 사는 사람은 적다."
+    },
+    {
+      "id": "ev-s14-0111",
+      "sourceId": "ev-moe2022-h-0478",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "immigrate",
+      "pos": "동사",
+      "meaningKr": [
+        "이주해 오다"
+      ],
+      "example": "Many families immigrated last year.",
+      "exampleKr": "많은 가족이 작년에 이주해 왔다."
+    },
+    {
+      "id": "ev-s14-0112",
+      "sourceId": "ev-moe2022-h-0656",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "oversea",
+      "pos": "형용사",
+      "meaningKr": [
+        "해외의"
+      ],
+      "example": "They sell oversea goods.",
+      "exampleKr": "그들은 해외의 상품을 판다."
+    },
+    {
+      "id": "ev-s14-0113",
+      "sourceId": "ev-moe2022-h-0650",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "outstanding",
+      "pos": "형용사",
+      "meaningKr": [
+        "뛰어난"
+      ],
+      "example": "She gave an outstanding speech.",
+      "exampleKr": "그녀는 뛰어난 연설을 했다."
+    },
+    {
+      "id": "ev-s14-0114",
+      "sourceId": "ev-moe2022-h-0961",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "vast",
+      "pos": "형용사",
+      "meaningKr": [
+        "광대한"
+      ],
+      "example": "A vast desert lay ahead.",
+      "exampleKr": "광대한 사막이 앞에 놓여 있었다."
+    },
+    {
+      "id": "ev-s14-0115",
+      "sourceId": "ev-moe2022-h-0248",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "defend",
+      "pos": "동사",
+      "meaningKr": [
+        "방어하다"
+      ],
+      "example": "Soldiers defended the narrow bridge.",
+      "exampleKr": "군인들이 좁은 다리를 방어했다."
+    },
+    {
+      "id": "ev-s14-0116",
+      "sourceId": "ev-moe2022-h-0878",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "superior",
+      "pos": "형용사",
+      "meaningKr": [
+        "우월한"
+      ],
+      "example": "This tool is clearly superior.",
+      "exampleKr": "이 도구는 분명히 우월하다."
+    },
+    {
+      "id": "ev-s14-0117",
+      "sourceId": "ev-moe2022-h-0823",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "silent",
+      "pos": "형용사",
+      "meaningKr": [
+        "말이 없는"
+      ],
+      "example": "The class stayed silent.",
+      "exampleKr": "그 반은 말이 없었다."
+    },
+    {
+      "id": "ev-s14-0118",
+      "sourceId": "ev-moe2022-h-0611",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "naked",
+      "pos": "형용사",
+      "meaningKr": [
+        "벌거벗은"
+      ],
+      "example": "The naked branch held no leaves.",
+      "exampleKr": "벌거벗은 가지에는 잎이 없었다."
+    },
+    {
+      "id": "ev-s14-0119",
+      "sourceId": "ev-moe2022-h-0311",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "efficient",
+      "pos": "형용사",
+      "meaningKr": [
+        "효율적인"
+      ],
+      "example": "This engine is very efficient.",
+      "exampleKr": "이 엔진은 아주 효율적이다."
+    },
+    {
+      "id": "ev-s14-0120",
+      "sourceId": "ev-moe2022-h-0095",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "boost",
+      "pos": "동사",
+      "meaningKr": [
+        "끌어올리다"
+      ],
+      "example": "Good sleep boosts your memory.",
+      "exampleKr": "충분한 잠이 기억력을 끌어올린다."
+    },
+    {
+      "id": "ev-s14-0121",
+      "sourceId": "ev-moe2022-h-0634",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "obtain",
+      "pos": "동사",
+      "meaningKr": [
+        "얻어 내다"
+      ],
+      "example": "She obtained a free ticket.",
+      "exampleKr": "그녀는 무료 표를 얻어 냈다."
+    },
+    {
+      "id": "ev-s14-0122",
+      "sourceId": "ev-moe2022-h-0659",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "pace",
+      "pos": "명사",
+      "meaningKr": [
+        "걸음 속도"
+      ],
+      "example": "Keep a slow pace today.",
+      "exampleKr": "오늘은 느린 걸음 속도를 유지해라."
+    },
+    {
+      "id": "ev-s14-0123",
+      "sourceId": "ev-moe2022-h-0798",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "routine",
+      "pos": "명사",
+      "meaningKr": [
+        "판에 박힌 일과"
+      ],
+      "example": "His morning routine keeps him calm.",
+      "exampleKr": "그의 아침 판에 박힌 일과가 그를 차분하게 한다."
+    },
+    {
+      "id": "ev-s14-0124",
+      "sourceId": "ev-moe2022-h-0862",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "strip",
+      "pos": "동사",
+      "meaningKr": [
+        "벗겨 내다"
+      ],
+      "example": "Strip the old paint first.",
+      "exampleKr": "먼저 낡은 페인트를 벗겨 내라."
+    },
+    {
+      "id": "ev-s14-0125",
+      "sourceId": "ev-moe2022-h-0036",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "alert",
+      "pos": "형용사",
+      "meaningKr": [
+        "경계하는"
+      ],
+      "example": "Stay alert near the road.",
+      "exampleKr": "도로 근처에서 경계해라."
+    },
+    {
+      "id": "ev-s14-0126",
+      "sourceId": "ev-moe2022-h-0728",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "prominent",
+      "pos": "형용사",
+      "meaningKr": [
+        "눈에 띄는"
+      ],
+      "example": "A prominent sign marked the door.",
+      "exampleKr": "눈에 띄는 표시가 문을 나타냈다."
+    },
+    {
+      "id": "ev-s14-0127",
+      "sourceId": "ev-moe2022-h-0309",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "dynamic",
+      "pos": "형용사",
+      "meaningKr": [
+        "역동적인"
+      ],
+      "example": "She gave a dynamic performance.",
+      "exampleKr": "그녀는 역동적인 공연을 했다."
+    },
+    {
+      "id": "ev-s14-0128",
+      "sourceId": "ev-moe2022-h-0290",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "distinct",
+      "pos": "형용사",
+      "meaningKr": [
+        "뚜렷이 구별되는"
+      ],
+      "example": "The two sounds are distinct.",
+      "exampleKr": "그 두 소리는 뚜렷이 구별된다."
+    },
+    {
+      "id": "ev-s14-0129",
+      "sourceId": "ev-moe2022-h-0835",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "sole",
+      "pos": "형용사",
+      "meaningKr": [
+        "유일한"
+      ],
+      "example": "That was our sole choice.",
+      "exampleKr": "그것이 우리의 유일한 선택이었다."
+    },
+    {
+      "id": "ev-s14-0130",
+      "sourceId": "ev-moe2022-h-0403",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "frequent",
+      "pos": "형용사",
+      "meaningKr": [
+        "잦은"
+      ],
+      "example": "He makes frequent visits here.",
+      "exampleKr": "그는 여기에 잦은 방문을 한다."
+    },
+    {
+      "id": "ev-s14-0131",
+      "sourceId": "ev-moe2022-h-0864",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "stroke",
+      "pos": "명사",
+      "meaningKr": [
+        "쓰다듬기"
+      ],
+      "example": "One gentle stroke calmed the cat.",
+      "exampleKr": "부드러운 쓰다듬기 한 번이 고양이를 진정시켰다."
+    },
+    {
+      "id": "ev-s14-0132",
+      "sourceId": "ev-moe2022-h-0640",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "oral",
+      "pos": "형용사",
+      "meaningKr": [
+        "구두의"
+      ],
+      "example": "We took an oral test.",
+      "exampleKr": "우리는 구두 시험을 봤다."
+    },
+    {
+      "id": "ev-s14-0133",
+      "sourceId": "ev-moe2022-h-0621",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "nevertheless",
+      "pos": "부사",
+      "meaningKr": [
+        "그럼에도 불구하고"
+      ],
+      "example": "Nevertheless, we finished on time.",
+      "exampleKr": "그럼에도 불구하고 우리는 제때 끝냈다."
+    },
+    {
+      "id": "ev-s14-0134",
+      "sourceId": "ev-moe2022-h-0106",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "burden",
+      "pos": "명사",
+      "meaningKr": [
+        "부담"
+      ],
+      "example": "Debt became a heavy burden.",
+      "exampleKr": "빚이 무거운 부담이 되었다."
+    },
+    {
+      "id": "ev-s14-0135",
+      "sourceId": "ev-moe2022-h-0613",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "nasty",
+      "pos": "형용사",
+      "meaningKr": [
+        "고약한"
+      ],
+      "example": "The medicine had a nasty taste.",
+      "exampleKr": "그 약은 고약한 맛이 났다."
+    },
+    {
+      "id": "ev-s14-0136",
+      "sourceId": "ev-moe2022-h-0827",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "skip",
+      "pos": "동사",
+      "meaningKr": [
+        "건너뛰다"
+      ],
+      "example": "Never skip your breakfast.",
+      "exampleKr": "절대 아침 식사를 건너뛰지 마라."
+    },
+    {
+      "id": "ev-s14-0137",
+      "sourceId": "ev-moe2022-h-0323",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "emphasis",
+      "pos": "명사",
+      "meaningKr": [
+        "강조"
+      ],
+      "example": "He placed emphasis on safety.",
+      "exampleKr": "그는 안전에 강조를 두었다."
+    },
+    {
+      "id": "ev-s14-0138",
+      "sourceId": "ev-moe2022-h-0021",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "acknowledge",
+      "pos": "동사",
+      "meaningKr": [
+        "시인하다"
+      ],
+      "example": "He acknowledged his own mistake.",
+      "exampleKr": "그는 자기 실수를 시인했다."
+    },
+    {
+      "id": "ev-s14-0139",
+      "sourceId": "ev-moe2022-h-0774",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "restore",
+      "pos": "동사",
+      "meaningKr": [
+        "복원하다"
+      ],
+      "example": "Workers restored the old wall.",
+      "exampleKr": "노동자들이 낡은 벽을 복원했다."
+    },
+    {
+      "id": "ev-s14-0140",
+      "sourceId": "ev-moe2022-h-0772",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "resolve",
+      "pos": "동사",
+      "meaningKr": [
+        "해소하다"
+      ],
+      "example": "They resolved the long dispute.",
+      "exampleKr": "그들은 오랜 분쟁을 해소했다."
+    },
+    {
+      "id": "ev-s14-0141",
+      "sourceId": "ev-moe2022-h-0316",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "eliminate",
+      "pos": "동사",
+      "meaningKr": [
+        "없애다"
+      ],
+      "example": "We must eliminate every error.",
+      "exampleKr": "우리는 모든 오류를 없애야 한다."
+    },
+    {
+      "id": "ev-s14-0142",
+      "sourceId": "ev-moe2022-h-0451",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "harsh",
+      "pos": "형용사",
+      "meaningKr": [
+        "가혹한"
+      ],
+      "example": "Winter here is very harsh.",
+      "exampleKr": "이곳 겨울은 아주 가혹하다."
+    },
+    {
+      "id": "ev-s14-0143",
+      "sourceId": "ev-moe2022-h-0579",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "mere",
+      "pos": "형용사",
+      "meaningKr": [
+        "단지 ~에 불과한"
+      ],
+      "example": "It was a mere accident.",
+      "exampleKr": "그것은 단지 사고에 불과했다."
+    },
+    {
+      "id": "ev-s14-0144",
+      "sourceId": "ev-moe2022-h-0777",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "resume",
+      "pos": "동사",
+      "meaningKr": [
+        "다시 시작하다"
+      ],
+      "example": "We resumed work after lunch.",
+      "exampleKr": "우리는 점심 후 일을 다시 시작했다."
+    },
+    {
+      "id": "ev-s14-0145",
+      "sourceId": "ev-moe2022-h-0450",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "harmony",
+      "pos": "명사",
+      "meaningKr": [
+        "조화"
+      ],
+      "example": "The colors are in harmony.",
+      "exampleKr": "그 색들은 조화를 이룬다."
+    },
+    {
+      "id": "ev-s14-0146",
+      "sourceId": "ev-moe2022-h-0703",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "pose",
+      "pos": "동사",
+      "meaningKr": [
+        "자세를 취하다"
+      ],
+      "example": "They posed for a photo.",
+      "exampleKr": "그들은 사진을 위해 자세를 취했다."
+    },
+    {
+      "id": "ev-s14-0147",
+      "sourceId": "ev-moe2022-h-0710",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "predict",
+      "pos": "동사",
+      "meaningKr": [
+        "예측하다"
+      ],
+      "example": "Nobody can predict the weather.",
+      "exampleKr": "아무도 날씨를 예측할 수 없다."
+    },
+    {
+      "id": "ev-s14-0148",
+      "sourceId": "ev-moe2022-h-0805",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "scan",
+      "pos": "동사",
+      "meaningKr": [
+        "훑어보다"
+      ],
+      "example": "Scan the page for names.",
+      "exampleKr": "이름을 찾아 그 쪽을 훑어봐라."
+    },
+    {
+      "id": "ev-s14-0149",
+      "sourceId": "ev-moe2022-h-0312",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "elaborate",
+      "pos": "형용사",
+      "meaningKr": [
+        "정교한"
+      ],
+      "example": "The dress has elaborate patterns.",
+      "exampleKr": "그 드레스에는 정교한 무늬가 있다."
+    },
+    {
+      "id": "ev-s14-0150",
+      "sourceId": "ev-moe2022-h-0052",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "apology",
+      "pos": "명사",
+      "meaningKr": [
+        "사과의 말"
+      ],
+      "example": "He offered a sincere apology.",
+      "exampleKr": "그는 진심 어린 사과의 말을 했다."
+    },
+    {
+      "id": "ev-s14-0151",
+      "sourceId": "ev-moe2022-h-0326",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "enhance",
+      "pos": "동사",
+      "meaningKr": [
+        "높이다"
+      ],
+      "example": "Practice enhances your skill.",
+      "exampleKr": "연습이 네 실력을 높인다."
+    },
+    {
+      "id": "ev-s14-0152",
+      "sourceId": "ev-moe2022-h-0821",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "shallow",
+      "pos": "형용사",
+      "meaningKr": [
+        "얕은"
+      ],
+      "example": "Children play in shallow water.",
+      "exampleKr": "아이들이 얕은 물에서 논다."
+    },
+    {
+      "id": "ev-s14-0153",
+      "sourceId": "ev-moe2022-h-0337",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "essence",
+      "pos": "명사",
+      "meaningKr": [
+        "본질"
+      ],
+      "example": "Kindness is the essence here.",
+      "exampleKr": "친절이 여기서 본질이다."
+    },
+    {
+      "id": "ev-s14-0154",
+      "sourceId": "ev-moe2022-h-0279",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "dimension",
+      "pos": "명사",
+      "meaningKr": [
+        "차원"
+      ],
+      "example": "The box has three dimensions.",
+      "exampleKr": "그 상자는 세 차원을 가진다."
+    },
+    {
+      "id": "ev-s14-0155",
+      "sourceId": "ev-moe2022-h-0085",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "behave",
+      "pos": "동사",
+      "meaningKr": [
+        "처신하다"
+      ],
+      "example": "Please behave well at dinner.",
+      "exampleKr": "저녁 식사에서 잘 처신해라."
+    },
+    {
+      "id": "ev-s14-0156",
+      "sourceId": "ev-moe2022-h-0366",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "facilitate",
+      "pos": "동사",
+      "meaningKr": [
+        "수월하게 하다"
+      ],
+      "example": "Good tools facilitate fast work.",
+      "exampleKr": "좋은 도구가 빠른 작업을 수월하게 한다."
+    },
+    {
+      "id": "ev-s14-0157",
+      "sourceId": "ev-moe2022-h-0854",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "steep",
+      "pos": "형용사",
+      "meaningKr": [
+        "가파른"
+      ],
+      "example": "The steep path tired us.",
+      "exampleKr": "그 가파른 길이 우리를 지치게 했다."
+    },
+    {
+      "id": "ev-s14-0158",
+      "sourceId": "ev-moe2022-h-0117",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "caution",
+      "pos": "명사",
+      "meaningKr": [
+        "조심"
+      ],
+      "example": "Handle the glass with caution.",
+      "exampleKr": "유리를 조심해서 다뤄라."
+    },
+    {
+      "id": "ev-s14-0159",
+      "sourceId": "ev-moe2022-h-0355",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "explicit",
+      "pos": "형용사",
+      "meaningKr": [
+        "분명히 밝힌"
+      ],
+      "example": "Give explicit instructions please.",
+      "exampleKr": "분명히 밝힌 지시를 주세요."
+    },
+    {
+      "id": "ev-s14-0160",
+      "sourceId": "ev-moe2022-h-0314",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "elegant",
+      "pos": "형용사",
+      "meaningKr": [
+        "우아한"
+      ],
+      "example": "She wore an elegant coat.",
+      "exampleKr": "그녀는 우아한 코트를 입었다."
+    },
+    {
+      "id": "ev-s14-0161",
+      "sourceId": "ev-moe2022-h-0847",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "squeeze",
+      "pos": "동사",
+      "meaningKr": [
+        "짜내다"
+      ],
+      "example": "Squeeze the lemon into water.",
+      "exampleKr": "레몬을 물에 짜내라."
+    },
+    {
+      "id": "ev-s14-0162",
+      "sourceId": "ev-moe2022-h-0884",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "sustain",
+      "pos": "동사",
+      "meaningKr": [
+        "지탱하다"
+      ],
+      "example": "Thin poles sustain the roof.",
+      "exampleKr": "얇은 기둥들이 지붕을 지탱한다."
+    },
+    {
+      "id": "ev-s14-0163",
+      "sourceId": "ev-moe2022-h-0169",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "conclude",
+      "pos": "동사",
+      "meaningKr": [
+        "결론짓다"
+      ],
+      "example": "The judge concluded the trial.",
+      "exampleKr": "판사가 그 재판을 결론지었다."
+    },
+    {
+      "id": "ev-s14-0164",
+      "sourceId": "ev-moe2022-h-0935",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "trim",
+      "pos": "동사",
+      "meaningKr": [
+        "다듬다"
+      ],
+      "example": "Trim the long grass today.",
+      "exampleKr": "오늘 긴 풀을 다듬어라."
+    },
+    {
+      "id": "ev-s14-0165",
+      "sourceId": "ev-moe2022-h-0298",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "dominate",
+      "pos": "동사",
+      "meaningKr": [
+        "지배하다"
+      ],
+      "example": "One team dominated the match.",
+      "exampleKr": "한 팀이 그 경기를 지배했다."
+    },
+    {
+      "id": "ev-s14-0166",
+      "sourceId": "ev-moe2022-h-0729",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "prompt",
+      "pos": "형용사",
+      "meaningKr": [
+        "지체 없는"
+      ],
+      "example": "We got a prompt reply.",
+      "exampleKr": "우리는 지체 없는 답을 받았다."
+    },
+    {
+      "id": "ev-s14-0167",
+      "sourceId": "ev-moe2022-h-0844",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "splash",
+      "pos": "동사",
+      "meaningKr": [
+        "첨벙 튀기다"
+      ],
+      "example": "Children splashed cold water.",
+      "exampleKr": "아이들이 찬물을 첨벙 튀겼다."
+    },
+    {
+      "id": "ev-s14-0168",
+      "sourceId": "ev-moe2022-h-0197",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "convey",
+      "pos": "동사",
+      "meaningKr": [
+        "전달하다"
+      ],
+      "example": "His face conveyed deep worry.",
+      "exampleKr": "그의 얼굴이 깊은 걱정을 전달했다."
+    },
+    {
+      "id": "ev-s14-0169",
+      "sourceId": "ev-moe2022-h-0174",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "confess",
+      "pos": "동사",
+      "meaningKr": [
+        "자백하다"
+      ],
+      "example": "The thief confessed everything.",
+      "exampleKr": "그 도둑은 모든 것을 자백했다."
+    },
+    {
+      "id": "ev-s14-0170",
+      "sourceId": "ev-moe2022-h-0007",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "absorb",
+      "pos": "동사",
+      "meaningKr": [
+        "흡수하다"
+      ],
+      "example": "Dry soil absorbs rain quickly.",
+      "exampleKr": "마른 흙은 비를 빠르게 흡수한다."
+    },
+    {
+      "id": "ev-s14-0171",
+      "sourceId": "ev-moe2022-h-0178",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "confront",
+      "pos": "동사",
+      "meaningKr": [
+        "맞서다"
+      ],
+      "example": "She confronted her own fear.",
+      "exampleKr": "그녀는 자기 두려움에 맞섰다."
+    },
+    {
+      "id": "ev-s14-0172",
+      "sourceId": "ev-moe2022-h-0294",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "distribute",
+      "pos": "동사",
+      "meaningKr": [
+        "나누어 주다"
+      ],
+      "example": "They distributed free water.",
+      "exampleKr": "그들은 무료 물을 나누어 주었다."
+    },
+    {
+      "id": "ev-s14-0173",
+      "sourceId": "ev-moe2022-h-0070",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "attribute",
+      "pos": "명사",
+      "meaningKr": [
+        "속성"
+      ],
+      "example": "Patience is a useful attribute.",
+      "exampleKr": "인내는 유용한 속성이다."
+    },
+    {
+      "id": "ev-s14-0174",
+      "sourceId": "ev-moe2022-h-0382",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "finite",
+      "pos": "형용사",
+      "meaningKr": [
+        "한정된"
+      ],
+      "example": "We have finite time today.",
+      "exampleKr": "우리는 오늘 한정된 시간이 있다."
+    },
+    {
+      "id": "ev-s14-0175",
+      "sourceId": "ev-moe2022-h-0050",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "anticipate",
+      "pos": "동사",
+      "meaningKr": [
+        "예상하다"
+      ],
+      "example": "We anticipate heavy traffic tonight.",
+      "exampleKr": "우리는 오늘 밤 심한 교통 정체를 예상한다."
+    },
+    {
+      "id": "ev-s14-0176",
+      "sourceId": "ev-moe2022-h-0171",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "condemn",
+      "pos": "동사",
+      "meaningKr": [
+        "규탄하다"
+      ],
+      "example": "Many leaders condemned the attack.",
+      "exampleKr": "많은 지도자가 그 공격을 규탄했다."
+    },
+    {
+      "id": "ev-s14-0177",
+      "sourceId": "ev-moe2022-h-0419",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "gaze",
+      "pos": "동사",
+      "meaningKr": [
+        "가만히 바라보다"
+      ],
+      "example": "He gazed at the night sky.",
+      "exampleKr": "그는 밤하늘을 가만히 바라보았다."
+    },
+    {
+      "id": "ev-s14-0178",
+      "sourceId": "ev-moe2022-h-0566",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "manifest",
+      "pos": "형용사",
+      "meaningKr": [
+        "뚜렷한"
+      ],
+      "example": "His talent became manifest.",
+      "exampleKr": "그의 재능이 뚜렷해졌다."
+    },
+    {
+      "id": "ev-s14-0179",
+      "sourceId": "ev-moe2022-h-0982",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "wander",
+      "pos": "동사",
+      "meaningKr": [
+        "거닐다"
+      ],
+      "example": "We wandered through the market.",
+      "exampleKr": "우리는 시장을 거닐었다."
+    },
+    {
+      "id": "ev-s14-0180",
+      "sourceId": "ev-moe2022-h-0055",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "approximate",
+      "pos": "형용사",
+      "meaningKr": [
+        "대략의"
+      ],
+      "example": "Give me an approximate number.",
+      "exampleKr": "대략의 숫자를 알려 줘."
+    },
+    {
+      "id": "ev-s14-0181",
+      "sourceId": "ev-moe2022-h-0165",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "comprise",
+      "pos": "동사",
+      "meaningKr": [
+        "구성되다"
+      ],
+      "example": "The set comprises six plates.",
+      "exampleKr": "그 세트는 접시 여섯 개로 구성된다."
+    },
+    {
+      "id": "ev-s14-0182",
+      "sourceId": "ev-moe2022-h-0832",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "soak",
+      "pos": "동사",
+      "meaningKr": [
+        "흠뻑 적시다"
+      ],
+      "example": "Rain soaked our thin coats.",
+      "exampleKr": "비가 우리의 얇은 코트를 흠뻑 적셨다."
+    },
+    {
+      "id": "ev-s14-0183",
+      "sourceId": "ev-moe2022-h-0897",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "tease",
+      "pos": "동사",
+      "meaningKr": [
+        "놀리다"
+      ],
+      "example": "Do not tease your sister.",
+      "exampleKr": "여동생을 놀리지 마라."
+    },
+    {
+      "id": "ev-s14-0184",
+      "sourceId": "ev-moe2022-h-0136",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "clap",
+      "pos": "동사",
+      "meaningKr": [
+        "박수를 치다"
+      ],
+      "example": "The crowd clapped for her.",
+      "exampleKr": "군중이 그녀에게 박수를 쳤다."
+    },
+    {
+      "id": "ev-s14-0185",
+      "sourceId": "ev-moe2022-h-0390",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "flourish",
+      "pos": "동사",
+      "meaningKr": [
+        "번창하다"
+      ],
+      "example": "Small shops flourish downtown.",
+      "exampleKr": "작은 가게들이 시내에서 번창한다."
+    },
+    {
+      "id": "ev-s14-0186",
+      "sourceId": "ev-moe2022-h-0167",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "conceal",
+      "pos": "동사",
+      "meaningKr": [
+        "숨기다"
+      ],
+      "example": "She concealed the letter carefully.",
+      "exampleKr": "그녀는 그 편지를 조심스럽게 숨겼다."
+    },
+    {
+      "id": "ev-s14-0187",
+      "sourceId": "ev-moe2022-h-0264",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "descend",
+      "pos": "동사",
+      "meaningKr": [
+        "내려가다"
+      ],
+      "example": "The path descends to the river.",
+      "exampleKr": "그 길은 강으로 내려간다."
+    },
+    {
+      "id": "ev-s14-0188",
+      "sourceId": "ev-moe2022-h-0515",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "intellect",
+      "pos": "명사",
+      "meaningKr": [
+        "지성"
+      ],
+      "example": "His intellect impressed everyone.",
+      "exampleKr": "그의 지성이 모두를 감동시켰다."
+    },
+    {
+      "id": "ev-s14-0189",
+      "sourceId": "ev-moe2022-h-0851",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "statistic",
+      "pos": "명사",
+      "meaningKr": [
+        "통계 수치"
+      ],
+      "example": "One statistic surprised the class.",
+      "exampleKr": "통계 수치 하나가 반을 놀라게 했다."
+    },
+    {
+      "id": "ev-s14-0190",
+      "sourceId": "ev-moe2022-h-0808",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "scatter",
+      "pos": "동사",
+      "meaningKr": [
+        "흩뿌리다"
+      ],
+      "example": "Wind scattered the dry leaves.",
+      "exampleKr": "바람이 마른 잎들을 흩뿌렸다."
+    },
+    {
+      "id": "ev-s14-0191",
+      "sourceId": "ev-moe2022-h-0505",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "inquire",
+      "pos": "동사",
+      "meaningKr": [
+        "문의하다"
+      ],
+      "example": "She inquired about the price.",
+      "exampleKr": "그녀는 가격에 대해 문의했다."
+    },
+    {
+      "id": "ev-s14-0192",
+      "sourceId": "ev-moe2022-h-0790",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "ridicule",
+      "pos": "동사",
+      "meaningKr": [
+        "비웃음거리로 만들다"
+      ],
+      "example": "Never ridicule a beginner.",
+      "exampleKr": "초보자를 절대 비웃음거리로 만들지 마라."
+    },
+    {
+      "id": "ev-s14-0193",
+      "sourceId": "ev-moe2022-h-0004",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "abound",
+      "pos": "동사",
+      "meaningKr": [
+        "풍부하다"
+      ],
+      "example": "Fish abound in this clean lake.",
+      "exampleKr": "물고기가 이 맑은 호수에 풍부하다."
+    },
+    {
+      "id": "ev-s14-0194",
+      "sourceId": "ev-moe2022-h-0173",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "confer",
+      "pos": "동사",
+      "meaningKr": [
+        "상의하다"
+      ],
+      "example": "The doctors conferred for an hour.",
+      "exampleKr": "의사들이 한 시간 동안 상의했다."
+    },
+    {
+      "id": "ev-s14-0195",
+      "sourceId": "ev-moe2022-h-0494",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "infer",
+      "pos": "동사",
+      "meaningKr": [
+        "추론하다"
+      ],
+      "example": "We inferred the answer quickly.",
+      "exampleKr": "우리는 답을 빠르게 추론했다."
+    },
+    {
+      "id": "ev-s14-0196",
+      "sourceId": "ev-moe2022-h-0292",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "distort",
+      "pos": "동사",
+      "meaningKr": [
+        "왜곡하다"
+      ],
+      "example": "The report distorted her words.",
+      "exampleKr": "그 보고서는 그녀의 말을 왜곡했다."
+    },
+    {
+      "id": "ev-s14-0197",
+      "sourceId": "ev-moe2022-h-0373",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "fasten",
+      "pos": "동사",
+      "meaningKr": [
+        "단단히 매다"
+      ],
+      "example": "Fasten your seat belt now.",
+      "exampleKr": "이제 안전벨트를 단단히 매라."
+    },
+    {
+      "id": "ev-s14-0198",
+      "sourceId": "ev-moe2022-h-0633",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "obsess",
+      "pos": "동사",
+      "meaningKr": [
+        "사로잡다"
+      ],
+      "example": "One idea obsessed him.",
+      "exampleKr": "한 가지 생각이 그를 사로잡았다."
+    },
+    {
+      "id": "ev-s14-0199",
+      "sourceId": "ev-moe2022-h-0637",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "opportune",
+      "pos": "형용사",
+      "meaningKr": [
+        "시기적절한"
+      ],
+      "example": "That was an opportune moment.",
+      "exampleKr": "그것은 시기적절한 순간이었다."
+    },
+    {
+      "id": "ev-s14-0200",
+      "sourceId": "ev-moe2022-h-0343",
+      "setId": "ev-set-014",
+      "level": "high",
+      "word": "evitable",
+      "pos": "형용사",
+      "meaningKr": [
+        "피할 수 있는"
+      ],
+      "example": "The loss was hardly evitable.",
+      "exampleKr": "그 손실은 거의 피할 수 없었다."
+    }
+  ]
+}
