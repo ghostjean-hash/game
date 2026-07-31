@@ -243,7 +243,13 @@
 <script type="module">
 import { registerServiceWorker } from "./shared/ui.js";
 import { bootCloud } from "./shared/cloud/boot.js";
+import { isFullscreenSupported, isStandaloneDisplay, showHomeScreenHint } from "./shared/fullscreen.js";
 registerServiceWorker("/service-worker.js");
+
+// 아이폰은 애플이 동영상 외 전체화면을 열지 않아 게임 화면의 전체화면 버튼이 통하지 않는다.
+// 그 기기에서 유일하게 통하는 길(홈 화면에 추가)을 첫 방문 1회 알려준다. 닫으면 다시 뜨지 않고,
+// 게임 화면에서는 전체화면 버튼을 눌러 언제든 다시 볼 수 있다.
+if (!isStandaloneDisplay() && !isFullscreenSupported()) showHomeScreenHint({ once: true });
 
 // 클라우드 저장 버튼. 준비되지 않았으면 아무것도 그리지 않는다(shared/cloud/boot.js).
 // 실패해도 허브 목록 렌더에 영향을 주지 않는다.
