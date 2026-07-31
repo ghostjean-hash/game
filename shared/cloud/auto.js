@@ -19,7 +19,10 @@ async function boot() {
   if (!auth.isSignedIn()) return;
 
   const local = createLocal();
-  const remote = createDriveRemote({ getToken: (opts) => auth.getToken(opts) });
+  const remote = createDriveRemote({
+    getToken: (opts) => auth.getToken(opts),
+    invalidateToken: () => auth.invalidateToken(),
+  });
   const sync = createSync({
     auth,
     remote,

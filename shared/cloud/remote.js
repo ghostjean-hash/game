@@ -12,7 +12,7 @@ const UPLOAD = "https://www.googleapis.com/upload/drive/v3";
  * 사용자 드라이브의 이 웹사이트 전용 숨김 폴더(appDataFolder)에 파일 하나를 두고 읽고 쓴다.
  * 사용자의 기존 드라이브 파일은 목록조차 볼 수 없는 권한이다(설계 2.1).
  */
-export function createDriveRemote({ getToken, fileName = FILE_NAME, fetchImpl = globalThis.fetch }) {
+export function createDriveRemote({ getToken, invalidateToken = null, fileName = FILE_NAME, fetchImpl = globalThis.fetch }) {
   let fileId = null;
 
   async function call(url, init = {}, retry = true) {
@@ -23,8 +23,14 @@ export function createDriveRemote({ getToken, fileName = FILE_NAME, fetchImpl = 
       headers: { ...(init.headers || {}), Authorization: `Bearer ${token}` },
     });
     // 유효기간이 끝난 직후일 수 있으므로 한 번만 다시 받아 재시도한다.
+    // 이때 로그인 창은 띄우지 않는다(설계 4.4.5). 게임 화면의 자동 저장도 이 통로를 쓰기 때문에
+    // 여기서 창을 띄우면 "게임 중간에 묻지 않는다"는 규정이 무너진다.
     if (res.status === 401 && retry) {
-      const fresh = await getToken({ silent: false });
+      // 거절당한 토큰을 버려야 재발급이 실제로 일어난다(버리지 않으면 같은 토큰을 다시 돌려받는다).
+      if (invalidateToken) {
+        try { invalidateToken(); } catch {}
+      }
+      const fresh = await getToken({ silent: true });
       if (!fresh) throw new Error("no-token");
       return call(url, init, false);
     }

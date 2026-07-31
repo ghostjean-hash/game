@@ -61,7 +61,10 @@ export async function bootCloud({ container }) {
   const auth = mock ? createMockAuth() : createGoogleAuth({ clientId: CLIENT_ID, scope: SCOPE });
   const remote = mock
     ? createMemoryRemote()
-    : createDriveRemote({ getToken: (opts) => auth.getToken(opts) });
+    : createDriveRemote({
+        getToken: (opts) => auth.getToken(opts),
+        invalidateToken: () => auth.invalidateToken(),
+      });
   const titles = await loadTitles();
 
   let ui = null;

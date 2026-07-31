@@ -117,6 +117,19 @@ if (has('shared/cloud/config.js')) {
       oks.push('merge.js 순수 로직 유지 (브라우저·통신 의존 0)');
     }
   }
+
+  // 게임 화면에서도 도는 통로에는 로그인 창을 띄우는 재발급이 없어야 한다(설계 4.4.5).
+  // 이 규정이 무너지면 자동 저장이 돌다가 게임 도중에 창이 뜬다(2026-07-31 수정 회귀 방지).
+  for (const f of ['shared/cloud/remote.js', 'shared/cloud/auto.js'].filter(has)) {
+    const src = read(f)
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|\s)\/\/.*$/gm, '');
+    if (/silent\s*:\s*false/.test(src)) {
+      fails.push(`${f}에 로그인 창을 띄우는 재발급이 섞임 (설계 4.4.5 위반)`);
+    } else {
+      oks.push(`${f.replace('shared/cloud/', '')} 로그인 창 호출 0 (게임 중 묻지 않음)`);
+    }
+  }
 }
 
 // --- 출력 ---
