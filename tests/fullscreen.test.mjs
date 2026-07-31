@@ -118,11 +118,17 @@ function makeEnv({ standalone = false, supported = true, grant = true, userAgent
     state,
     fire,
     body,
-    /** 안내 띠의 닫기 버튼을 누른다. */
+    /** 안내 카드의 닫기(×) 버튼을 누른다. 카드가 중첩 구조라 재귀로 찾는다. */
     closeHint() {
-      const box = body._children[0];
-      const close = box?._children.find((c) => c.tagName === 'button');
-      close?.click();
+      const find = (node) => {
+        for (const c of node._children) {
+          if (c.className === 'gg-fs-close') return c;
+          const hit = find(c);
+          if (hit) return hit;
+        }
+        return null;
+      };
+      find(body)?.click();
     },
     /** 브라우저가 사용자 의사와 무관하게 전체화면을 끝낸 상황(아이패드 스와이프 등). */
     forceExit() {
@@ -279,20 +285,50 @@ test('전체화면이 막힌 기기(아이폰)에서는 버튼을 감추지 않�
   assert.equal(globalThis.document.body._children.length, 1, '누르면 안내가 뜬다');
 });
 
-test('안내 문구는 기기·브라우저에 맞게 갈린다', async () => {
+test('안내는 기기·브라우저에 맞는 3단계로 갈린다', async () => {
   makeEnv({ supported: false, userAgent: IPHONE_SAFARI_UA });
-  const iphoneSafari = (await loadModule()).homeScreenHintText();
-  assert.match(iphoneSafari.body, /아이폰/);
-  assert.match(iphoneSafari.body, /공유 버튼/);
+  const safari = (await loadModule()).homeScreenHintGuide();
+  assert.equal(safari.steps.length, 3);
+  assert.match(safari.steps[0].label, /공유 버튼/);
+  assert.equal(safari.pointer, 'bottom', '사파리 공유 버튼은 화면 아래에 있다');
 
   makeEnv({ supported: false, userAgent: IPHONE_CHROME_UA });
-  const iphoneChrome = (await loadModule()).homeScreenHintText();
-  assert.match(iphoneChrome.body, /메뉴/);
-  assert.match(iphoneChrome.body, /사파리/, '아이폰 크롬에는 더 확실한 경로를 함께 알린다');
+  const chrome = (await loadModule()).homeScreenHintGuide();
+  assert.equal(chrome.steps.length, 3);
+  assert.match(chrome.steps[0].label, /메뉴/);
+  assert.equal(chrome.pointer, 'top', '아이폰 크롬 메뉴는 주소창 쪽(위)에 있다');
+  assert.match(chrome.note, /사파리/, '더 간단한 경로를 함께 알린다');
 
   makeEnv({ supported: false, userAgent: 'Mozilla/5.0 (Windows NT 10.0) OldBrowser/1' });
-  const other = (await loadModule()).homeScreenHintText();
-  assert.match(other.body, /앱 설치|홈 화면에 추가/);
+  const other = (await loadModule()).homeScreenHintGuide();
+  assert.equal(other.steps.length, 3);
+  assert.equal(other.pointer, null, '버튼 위치를 특정할 수 없으면 화살표를 그리지 않는다');
+});
+
+test('안내 카드에 단계 그림과 가리킴 화살표가 들어간다', async () => {
+  const env = makeEnv({ supported: false, userAgent: IPHONE_SAFARI_UA });
+  const { showHomeScreenHint } = await loadModule();
+  showHomeScreenHint();
+  const box = env.body._children[0];
+  assert.equal(box.attrs['role'], 'dialog');
+  assert.equal(box.className, 'at-bottom', '아래 도구 모음을 가리키므로 카드도 아래에 붙는다');
+  const list = box._children.find((c) => c.tagName === 'ol');
+  assert.equal(list._children.length, 3, '단계 3컷');
+  const icons = list._children.map((li) => li._children.find((c) => c.className === 'gg-fs-icon'));
+  assert.equal(icons.filter(Boolean).length, 3, '단계마다 버튼 그림이 있다');
+  assert.ok(icons[0].innerHTML.includes('<svg'), '그림은 인라인 SVG(외부 파일 의존 0)');
+  assert.ok(box._children.some((c) => c.className === 'gg-fs-arrow'), '눌러야 할 방향을 가리키는 화살표');
+  assert.ok(box._children.some((c) => c.className === 'gg-fs-ok'), '닫기 버튼 외에 "알겠습니다"도 둔다');
+});
+
+test('알겠습니다 버튼으로도 닫히고 다시 뜨지 않는다', async () => {
+  const env = makeEnv({ supported: false, userAgent: IPHONE_SAFARI_UA });
+  const { showHomeScreenHint } = await loadModule();
+  showHomeScreenHint({ once: true });
+  const ok = env.body._children[0]._children.find((c) => c.className === 'gg-fs-ok');
+  ok.click();
+  assert.equal(env.body._children.length, 0);
+  assert.equal(showHomeScreenHint({ once: true }), false);
 });
 
 test('안내는 첫 방문 1회만 자동으로 뜬다', async () => {

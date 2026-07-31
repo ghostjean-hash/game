@@ -17,7 +17,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "feat(hub): 아이폰 전체화면 막힘 안내 - 버튼 감춤 대신 홈 화면 추가 안내(허브 1회 + 게임 버튼)",
+    "commitMessage": "feat(hub): 아이폰 홈 화면 추가 안내를 3단계 그림 카드로 - 버튼 그림 + 가리킴 화살표(브라우저별 방향)",
     "_paths_comment": "봉합 문서(PROGRESS·NEXT-SESSION·archive)를 포함해 /jc 봉합과 배포가 한 커밋으로 끝나게 한다(2026-07-28).",
     "paths": ["index.html", "shared", "games", "apps", "tests", "standards", "service-worker.js", "CLAUDE.md", ".claude/deploy.json", "PROGRESS.md", "NEXT-SESSION.md", "archive"]
   },

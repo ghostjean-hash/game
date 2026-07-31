@@ -47,7 +47,7 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 
 | 자산 | 경로 |
 |---|---|
-| 표준 본체 | `standards/html-game/STANDARD.md` (현재 v0.3.4) |
+| 표준 본체 | `standards/html-game/STANDARD.md` (현재 v0.3.5) |
 | 변경 이력 | `standards/html-game/CHANGELOG.md` |
 | 적용 프로젝트 | `standards/html-game/applications.md` |
 

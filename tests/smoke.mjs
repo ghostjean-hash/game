@@ -146,7 +146,10 @@ if (!has('shared/fullscreen.js')) {
     ['조작 순간 복귀(pointerup)', /pointerup/],
     // 아이폰은 전체화면 자체가 막혀 있다 - 버튼을 조용히 감추면 사용자가 이유를 알 수 없다.
     ['막힌 기기용 홈 화면 추가 안내(showHomeScreenHint)', /export function showHomeScreenHint/],
-    ['기기별 안내 문구(homeScreenHintText)', /export function homeScreenHintText/],
+    ['기기별 3단계 안내(homeScreenHintGuide)', /export function homeScreenHintGuide/],
+    // 글만 있으면 일반 사용자가 어느 버튼인지 못 찾는다 - 버튼 그림과 가리킴 화살표를 함께 둔다.
+    ['단계 그림(인라인 SVG 아이콘)', /HINT_ICONS/],
+    ['가리킴 화살표(pointer 방향)', /gg-fs-arrow/],
   ];
   for (const [name, re] of rules) {
     if (!re.test(fs)) fails.push(`shared/fullscreen.js에 ${name} 처리가 없음`);
