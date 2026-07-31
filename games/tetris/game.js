@@ -2,6 +2,7 @@ import { createInput } from "../../shared/input.js";
 import { createStorage } from "../../shared/storage.js";
 import { createLoop } from "../../shared/loop.js";
 import { showModal, showToast, registerServiceWorker } from "../../shared/ui.js";
+import { setupFullscreen } from "../../shared/fullscreen.js";
 import * as sound from "./sound.js";
 
 registerServiceWorker("/service-worker.js");
@@ -1147,14 +1148,9 @@ function init() {
     if (document.hidden) sound.suspendAudio();
     else sound.resumeAudio();
   });
-  // 전체화면 토글(STANDARD 4.7 규칙 6). 미지원 기기(iOS Safari 등)는 버튼을 숨긴다.
-  if (document.documentElement.requestFullscreen) {
-    fsBtn.hidden = false;
-    fsBtn.addEventListener("click", () => {
-      if (document.fullscreenElement) document.exitFullscreen?.();
-      else document.documentElement.requestFullscreen?.();
-    });
-  }
+  // 전체화면 토글(STANDARD 4.7 규칙 6). 미지원 기기·홈 화면 앱은 버튼을 숨기고,
+  // 조작 중 브라우저가 임의로 전체화면을 끝내면 다음 조작에 되돌린다(shared/fullscreen.js).
+  setupFullscreen({ button: fsBtn });
 
   loop = createLoop({
     update: (dt) => { update(dt); tickHud(); },

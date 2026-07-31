@@ -17,6 +17,7 @@ import {
 } from './data/shop.js';
 import { PONY_STYLES, DEFAULT_STYLE } from './data/styles.js';
 import { createStorage } from '../../../shared/storage.js';
+import { setupFullscreen } from '../../../shared/fullscreen.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
 
@@ -630,14 +631,9 @@ function onShopClick(e) {
 el.shopThemes.addEventListener('click', onShopClick);
 el.shopAccessories.addEventListener('click', onShopClick);
 el.muteBtn.addEventListener('click', toggleMute);
-// 전체화면 토글(STANDARD 4.7 규칙 6). iOS Safari 등 미지원 기기는 버튼을 숨긴다.
-if (document.documentElement.requestFullscreen) {
-  el.fsBtn.hidden = false;
-  el.fsBtn.addEventListener('click', () => {
-    if (document.fullscreenElement) document.exitFullscreen?.();
-    else document.documentElement.requestFullscreen?.();
-  });
-}
+// 전체화면 토글(STANDARD 4.7 규칙 6). 미지원 기기·홈 화면 앱은 버튼을 숨기고,
+// 조작 중 브라우저가 임의로 전체화면을 끝내면 다음 조작에 되돌린다(shared/fullscreen.js).
+setupFullscreen({ button: el.fsBtn });
 el.mapBtn.addEventListener('click', openMap);
 el.mapClose.addEventListener('click', () => closePanel(el.map));
 // 모드 탭: 보고 있는 모드만 바꿔 미리 본다(아직 전환 확정 아님).

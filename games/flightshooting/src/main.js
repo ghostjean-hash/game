@@ -3,6 +3,7 @@
 import { createLoop } from '../../../shared/loop.js';
 import { createStorage } from '../../../shared/storage.js';
 import { showModal, registerServiceWorker } from '../../../shared/ui.js';
+import { setupFullscreen } from '../../../shared/fullscreen.js';
 import { CFG } from './data/numbers.js';
 import { COLORS } from './data/colors.js';
 import { COUNTRIES, START_COUNTRY } from './data/countries.js';
@@ -887,14 +888,11 @@ function syncCheatUI() {
 }
 
 // ── 전체화면 (4.7-6: 지원 기기만 버튼 노출) ──
-function setupFullscreen() {
+// 미지원 기기·홈 화면 앱은 버튼을 숨기고, 조작 중 브라우저가 임의로 전체화면을 끝내면
+// 다음 조작에 되돌린다. 공용 구현은 shared/fullscreen.js.
+function initFullscreen() {
   if (!btnFs) return;
-  if (!document.fullscreenEnabled) { btnFs.hidden = true; return; }
-  btnFs.hidden = false;
-  btnFs.addEventListener('click', () => {
-    if (document.fullscreenElement) document.exitFullscreen?.();
-    else document.documentElement.requestFullscreen?.();
-  });
+  setupFullscreen({ button: btnFs });
 }
 
 // ── 버튼 / 초기화 ──
@@ -1041,5 +1039,5 @@ cheatHead.addEventListener('pointermove', (e) => {
 cheatHead.addEventListener('pointerup', () => { cheatDrag = null; });
 
 elMenuBest.textContent = best;
-setupFullscreen();
+initFullscreen();
 resize();

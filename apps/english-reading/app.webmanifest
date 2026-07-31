@@ -1,0 +1,35 @@
+{
+  "name": "영어 독해 - game_ghost",
+  "short_name": "영어독해",
+  "id": "./",
+  "start_url": "./",
+  "scope": "../../",
+  "display": "fullscreen",
+  "display_override": [
+    "fullscreen",
+    "standalone"
+  ],
+  "orientation": "any",
+  "background_color": "#f6f8fc",
+  "theme_color": "#f6f8fc",
+  "icons": [
+    {
+      "src": "../../icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "../../icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "../../icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

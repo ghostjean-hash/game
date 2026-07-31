@@ -140,7 +140,8 @@
 // v193 (2026-07-28): english-reading 지문 81~120번 40편 전면 보강 - 끊기 허용·비추천 규칙 678항목(0→200문장 전부)·심화 카드 37개 신설, 끊기 조각 2등분 고정 해제, 커리큘럼 지정 숙어 9편 누락 반영, 틀린 문법 설명 2건 교정. 목록 스크롤 리스너 누수(콘솔 에러) 수정. 옛 v192 캐시 폐기.
 // v194 (2026-07-28): english-reading 기존 지문 1~40번 보강 - 끊기 규칙 710항목(200문장 전부)·심화 카드 26개, 끊기 조각 2등분 해제, 레벨 이탈·번역 불일치·어색한 영어 교정. 끊기 이유 오표시(that+시간명사) 수정 + allowed 대표경계 검증 규칙 추가. 정성 경고 12건→0. 옛 v193 캐시 폐기.
 // v199 (2026-07-30): english-vocabulary 중등·고등 2,200단어 반영(15세트 3,000 전량 가동) + 세트 목록(manifest.json) network-first 등재. manifest가 cache-first(stale-while-revalidate)라 새 세트를 열어도 재방문자 첫 화면이 '중등·고등 준비 중' 옛 목록으로 남던 문제 제거(라이브 파일은 15세트인데 화면은 4세트로 보인 실측 사례). 옛 v198 캐시 폐기.
-const CACHE_VERSION = "v199";
+// v200 (2026-07-31): 전체화면 유지 개선 - 공용 shared/fullscreen.js 신설(브라우저가 조작 중 임의로 전체화면을 끝내면 다음 조작에 자동 복귀, 홈 화면 앱이면 버튼 자동 숨김) + 게임·앱 8곳에 홈 화면 앱 설정(app.webmanifest) 연결. 아이패드 Safari·Chrome 공통 대응. 옛 v199 캐시 폐기.
+const CACHE_VERSION = "v200";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
@@ -171,6 +172,7 @@ const PRECACHE = [
   "./shared/cloud/policy.js",
   "./shared/loop.js",
   "./shared/ui.js",
+  "./shared/fullscreen.js",
   "./games/_registry.json",
   "./games/tetris/index.html",
   "./games/tetris/style.css",

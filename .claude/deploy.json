@@ -1,7 +1,7 @@
 {
   "_comment": "web-deploy 파이프라인 설정 (글로벌 skills/web-deploy). 테스트 → 이미지 최적화 → PWA 점검 → push → smoke.",
   "test": {
-    "command": "node tests/cloud-merge.test.mjs && node tests/cloud-sync.test.mjs && node tests/cloud-auth.test.mjs && node tests/smoke.mjs && node apps/english-reading/tests/run-node.mjs && cd apps/lotto && node tests/run-node.js",
+    "command": "node tests/cloud-merge.test.mjs && node tests/cloud-sync.test.mjs && node tests/cloud-auth.test.mjs && node tests/fullscreen.test.mjs && node tests/smoke.mjs && node apps/english-reading/tests/run-node.mjs && cd apps/lotto && node tests/run-node.js",
     "timeoutSec": 300
   },
   "images": {
@@ -17,14 +17,15 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "fix(english-reading): 기존 지문 1~40번 보강 + 끊기 이유 오표시·allowed 검증 구멍 수정",
+    "commitMessage": "fix(hub): 아이패드 전체화면 조작 중 풀림 수정 - 자동 복귀 공용 모듈 + 화면별 홈 화면 앱 설정",
     "_paths_comment": "봉합 문서(PROGRESS·NEXT-SESSION·archive)를 포함해 /jc 봉합과 배포가 한 커밋으로 끝나게 한다(2026-07-28).",
-    "paths": ["apps/english-reading", "service-worker.js", ".claude/deploy.json", "PROGRESS.md", "NEXT-SESSION.md", "archive"]
+    "paths": ["shared", "games", "apps", "tests", "standards", "service-worker.js", "CLAUDE.md", ".claude/deploy.json", "PROGRESS.md", "NEXT-SESSION.md", "archive"]
   },
   "smoke": {
     "urls": [
       { "url": "https://ghostjean-hash.github.io/game/", "selector": "#grid-games .card", "mustContain": null },
-      { "url": "https://ghostjean-hash.github.io/game/apps/english-reading/", "selector": ".passage-card", "mustContain": null }
+      { "url": "https://ghostjean-hash.github.io/game/apps/english-reading/", "selector": ".passage-card", "mustContain": null },
+      { "url": "https://ghostjean-hash.github.io/game/games/tetris/", "selector": ".mode-card", "mustContain": null }
     ],
     "timeoutSec": 180,
     "intervalSec": 15,

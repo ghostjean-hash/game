@@ -1,6 +1,7 @@
 // 진입점: 화면 전환 오케스트레이션 + 저장 연결. core를 조립하고 render/input에 위임한다.
 
 import { createStorage } from '../../../shared/storage.js';
+import { setupFullscreen } from '../../../shared/fullscreen.js';
 import { CELL, MODE, MAX_STARS, ANIM, PRAISE, PRAISE_STREAK, CELL_FIT } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
 import { makeClues } from './core/hints.js';
@@ -500,25 +501,6 @@ function toggleMute() {
   updateMuteBtn();
 }
 
-// --- 전체화면 ---
-// iOS Safari/일부 브라우저는 requestFullscreen 미지원 - 그럴 땐 버튼을 숨긴다.
-function fsSupported() {
-  const d = document.documentElement;
-  return !!(d.requestFullscreen || d.webkitRequestFullscreen);
-}
-function toggleFullscreen() {
-  const d = document;
-  const root = d.documentElement;
-  const isFs = d.fullscreenElement || d.webkitFullscreenElement;
-  if (!isFs) {
-    const req = root.requestFullscreen || root.webkitRequestFullscreen;
-    if (req) req.call(root);
-  } else {
-    const exit = d.exitFullscreen || d.webkitExitFullscreen;
-    if (exit) exit.call(d);
-  }
-}
-
 // --- 배선 ---
 function init() {
   attachBoardInput(boardEl, { onStart: onPaintStart, onMove: onPaintMove, onEnd: onPaintEnd });
@@ -539,8 +521,9 @@ function init() {
     const line = e.target.closest('.clue-col');
     if (line) fillLineMarks('col', [...el('col-clues').children].indexOf(line));
   });
-  el('fs-toggle').addEventListener('click', toggleFullscreen);
-  if (fsSupported()) el('fs-toggle').hidden = false; // 지원 기기에서만 노출
+  // 전체화면. 미지원 기기·홈 화면 앱은 버튼을 숨기고, 조작 중 브라우저가 임의로 끝내면
+  // 다음 조작에 되돌린다(shared/fullscreen.js).
+  setupFullscreen({ button: el('fs-toggle') });
   document.addEventListener('keydown', onKey);
   // 창 크기·방향(가로/세로 회전)·전체화면 전환이 바뀌면 격자를 다시 화면에 맞춘다.
   window.addEventListener('resize', () => { fitBoard(); updateFinger(); });
