@@ -4,17 +4,24 @@
  *   Safari·Chrome 모두 조작 중 화면 가장자리 스와이프·여러 손가락 제스처·회전만으로도 해제된다.
  *   기존 구현은 해제를 알아채지 못해 한 번 풀리면 사용자가 버튼을 다시 눌러야 했다.
  *
- * 처방 둘:
+ * 처방 셋:
  *   1) 홈 화면 앱으로 실행 중이면 브라우저 껍데기가 애초에 없다 - 버튼을 감춘다(눌러봐야 의미 없음).
  *   2) 사용자가 켠 상태를 기억해 두고, 브라우저가 임의로 해제하면 다음 조작(손 뗌·키 입력) 때 조용히 되돌린다.
  *      전체화면 진입은 사용자 조작 안에서만 허용되는 브라우저 규격이라 조작 없는 즉시 복귀는 불가능하다.
  *      "한 번 더 만지면 알아서 돌아온다"가 규격상 상한이다.
+ *   3) 전체화면 자체가 막힌 기기(아이폰 - 애플이 동영상 외 전체화면을 열지 않았고, 아이폰의 모든
+ *      브라우저는 Safari 엔진을 쓰도록 강제돼 Chrome으로 바꿔도 같다)에서는 버튼을 조용히 감추지 않는다.
+ *      감추면 사용자는 "왜 없지"로 끝난다 - 유일하게 통하는 길(홈 화면에 추가)을 화면에서 알려준다.
  *
  * 아이패드 Chrome은 내부 엔진이 Safari와 같아 동작·한계가 동일하다. 접두사(webkit) 계열 API도 함께 다룬다.
  */
 
 // 복귀 시도가 계속 거절당하면 조작을 방해하지 않도록 포기한다. 한 번이라도 성공하면 예산을 되돌린다.
 const RESTORE_ATTEMPT_LIMIT = 3;
+
+// 안내를 본 사실은 기기에 남긴다(매 방문 반복 노출 금지). 버튼을 누르면 언제든 다시 볼 수 있다.
+const HINT_SEEN_KEY = 'gg.fullscreen-hint-seen';
+const HINT_ELEMENT_ID = 'gg-fullscreen-hint';
 
 const root = document.documentElement;
 
@@ -52,6 +59,106 @@ function leaveFullscreen() {
   try { exit.call(document); } catch { /* 이미 해제된 상태 */ }
 }
 
+// ── 홈 화면 추가 안내 (전체화면이 막힌 기기용) ──
+
+function seenHint() {
+  try { return window.localStorage.getItem(HINT_SEEN_KEY) === '1'; } catch { return false; }
+}
+function markHintSeen() {
+  try { window.localStorage.setItem(HINT_SEEN_KEY, '1'); } catch { /* 저장 거부 브라우저 - 매번 보여도 닫으면 된다 */ }
+}
+
+/** 기기·브라우저에 맞는 안내 문구. 경로가 브라우저마다 달라 그대로 읽고 따라할 수 있게 나눈다. */
+export function homeScreenHintText() {
+  const ua = window.navigator.userAgent || '';
+  const isIOS = /iPhone|iPod|iPad/.test(ua) || (/Macintosh/.test(ua) && (window.navigator.maxTouchPoints || 0) > 1);
+  if (isIOS) {
+    // 아이폰의 Chrome·Firefox·Edge는 겉모습만 다르고 엔진이 Safari라 전체화면 제약도 같다.
+    if (/CriOS|FxiOS|EdgiOS/.test(ua)) {
+      return {
+        title: '전체화면으로 놀기',
+        body: '아이폰에서는 브라우저가 전체화면을 막아둡니다. 주소창 옆 메뉴에서 공유 → "홈 화면에 추가"로 아이콘을 만들면, 그 아이콘으로 열 때는 주소창 없이 꽉 찬 화면이 됩니다. 사파리에서 열면 더 확실합니다.',
+      };
+    }
+    return {
+      title: '전체화면으로 놀기',
+      body: '아이폰에서는 브라우저가 전체화면을 막아둡니다. 화면 아래 공유 버튼 → "홈 화면에 추가"로 아이콘을 만들면, 그 아이콘으로 열 때는 주소창 없이 꽉 찬 화면이 됩니다.',
+    };
+  }
+  return {
+    title: '전체화면으로 놀기',
+    body: '이 브라우저는 전체화면 전환을 지원하지 않습니다. 브라우저 메뉴에서 "홈 화면에 추가"(또는 "앱 설치")를 하면 주소창 없이 꽉 찬 화면으로 실행됩니다.',
+  };
+}
+
+function injectHintStyle() {
+  if (document.getElementById(HINT_ELEMENT_ID + '-style')) return;
+  const style = document.createElement('style');
+  style.id = HINT_ELEMENT_ID + '-style';
+  // 게임마다 테마가 달라(다크·파스텔) 공용 토큰에 기대지 않고 자체 색으로 어디서나 읽히게 한다.
+  style.textContent = `
+#${HINT_ELEMENT_ID} {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 9999; width: min(420px, calc(100vw - 24px));
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 12px 14px; border-radius: 14px;
+  background: rgba(16, 18, 26, 0.94); color: #f2f4f8;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  font: 400 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  animation: gg-fs-hint-in 220ms ease;
+}
+#${HINT_ELEMENT_ID} .gg-fs-hint-text { flex: 1; }
+#${HINT_ELEMENT_ID} strong { display: block; margin-bottom: 3px; font-size: 14px; font-weight: 700; }
+#${HINT_ELEMENT_ID} button {
+  flex: none; width: 28px; height: 28px; border-radius: 8px; cursor: pointer;
+  background: rgba(255, 255, 255, 0.12); color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 15px; line-height: 1;
+}
+@keyframes gg-fs-hint-in { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+`;
+  document.head.appendChild(style);
+}
+
+/**
+ * 홈 화면 추가 안내를 화면 아래 띠로 띄운다. 조작을 가리지 않도록 작게, 닫을 때까지 유지한다.
+ * @param {object} [options]
+ * @param {boolean} [options.once] 이미 본 사용자에게는 띄우지 않는다(첫 방문 안내용).
+ */
+export function showHomeScreenHint(options = {}) {
+  const { once = false } = options;
+  if (once && seenHint()) return false;
+  if (document.getElementById(HINT_ELEMENT_ID)) return false;
+  if (!document.body) return false;
+
+  injectHintStyle();
+  const { title, body } = homeScreenHintText();
+  const box = document.createElement('div');
+  box.id = HINT_ELEMENT_ID;
+  box.setAttribute('role', 'status');
+
+  const text = document.createElement('div');
+  text.className = 'gg-fs-hint-text';
+  const strong = document.createElement('strong');
+  strong.textContent = title;
+  text.appendChild(strong);
+  text.appendChild(document.createTextNode(body));
+
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.setAttribute('aria-label', '안내 닫기');
+  close.textContent = '×';
+  close.addEventListener('click', () => { markHintSeen(); box.remove(); });
+
+  box.appendChild(text);
+  box.appendChild(close);
+  document.body.appendChild(box);
+  markHintSeen();
+  return true;
+}
+
 /**
  * 전체화면 버튼을 배선하고 자동 복귀를 켠다.
  * @param {object} options
@@ -63,11 +170,27 @@ export function setupFullscreen(options = {}) {
   const standalone = isStandaloneDisplay();
   const supported = isFullscreenSupported();
 
-  // 홈 화면 앱은 이미 껍데기가 없고, 미지원 브라우저는 눌러도 아무 일이 없다 - 둘 다 버튼을 감춘다.
-  if (standalone || !supported) {
+  // 홈 화면 앱은 껍데기가 없어 버튼이 의미 없다.
+  if (standalone) {
     if (button) button.hidden = true;
-    if (onChange) onChange(standalone);
-    return { isActive: () => standalone, destroy() {} };
+    if (onChange) onChange(true);
+    return { isActive: () => true, destroy() {} };
+  }
+
+  // 전체화면이 막힌 기기(아이폰 등). 버튼을 감추면 사용자는 이유를 알 수 없다 -
+  // 버튼을 남겨 누르면 유일하게 통하는 길(홈 화면에 추가)을 안내한다.
+  if (!supported) {
+    const openHint = () => showHomeScreenHint();
+    if (button) {
+      button.hidden = false;
+      button.setAttribute('aria-label', '전체화면으로 놀기');
+      button.addEventListener('click', openHint);
+    }
+    if (onChange) onChange(false);
+    return {
+      isActive: () => false,
+      destroy() { button?.removeEventListener('click', openHint); },
+    };
   }
 
   let wanted = false;         // 사용자가 전체화면을 원하는 상태인가

@@ -13,9 +13,42 @@ function test(name, fn) {
   results.push({ name, fn });
 }
 
+const IPHONE_SAFARI_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1';
+const IPHONE_CHROME_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/126.0 Mobile/15E148 Safari/604.1';
+
 // --- 브라우저 스텁 ---
+// 안내 띠가 실제로 화면에 붙는지 보려면 최소한의 DOM이 필요하다(붙였다·지웠다만 추적).
+function makeElement(tag) {
+  const el = {
+    tagName: tag, id: '', className: '', type: '', textContent: '',
+    _children: [], _listeners: {}, attrs: {}, parent: null,
+    appendChild(c) { c.parent = el; el._children.push(c); return c; },
+    removeChild(c) { const i = el._children.indexOf(c); if (i >= 0) el._children.splice(i, 1); },
+    remove() { el.parent?.removeChild(el); el.parent = null; },
+    setAttribute(k, v) { el.attrs[k] = v; },
+    getAttribute(k) { return k in el.attrs ? el.attrs[k] : null; },
+    addEventListener(t, fn) { (el._listeners[t] = el._listeners[t] || []).push(fn); },
+    removeEventListener(t, fn) {
+      const a = el._listeners[t] || [];
+      const i = a.indexOf(fn);
+      if (i >= 0) a.splice(i, 1);
+    },
+    click() { for (const fn of [...(el._listeners.click || [])]) fn({}); },
+  };
+  return el;
+}
+
+function findById(node, id) {
+  for (const c of node._children) {
+    if (c.id === id) return c;
+    const hit = findById(c, id);
+    if (hit) return hit;
+  }
+  return null;
+}
+
 // 전체화면 상태·이벤트 배선을 손으로 조작할 수 있는 최소 document/window.
-function makeEnv({ standalone = false, supported = true, grant = true } = {}) {
+function makeEnv({ standalone = false, supported = true, grant = true, userAgent = 'node-test' } = {}) {
   const listeners = new Map();
   const add = (target, type, fn) => {
     const key = `${target}:${type}`;
@@ -42,8 +75,13 @@ function makeEnv({ standalone = false, supported = true, grant = true } = {}) {
       : undefined,
   };
 
+  const body = makeElement('body');
+  const head = makeElement('head');
+
   const document = {
     documentElement: root,
+    body,
+    head,
     get fullscreenElement() { return state.active ? root : null; },
     exitFullscreen() {
       state.exits += 1;
@@ -51,13 +89,22 @@ function makeEnv({ standalone = false, supported = true, grant = true } = {}) {
       fire('document', 'fullscreenchange');
       return Promise.resolve();
     },
+    createElement: (tag) => makeElement(tag),
+    createTextNode: (t) => ({ tagName: '#text', textContent: t, _children: [] }),
+    getElementById: (id) => findById(head, id) || findById(body, id),
     addEventListener: (t, fn) => add('document', t, fn),
     removeEventListener: (t, fn) => remove('document', t, fn),
   };
 
+  const storage = new Map();
   const window = {
     document,
-    navigator: { standalone },
+    navigator: { standalone, userAgent, maxTouchPoints: /iPhone|iPad/.test(userAgent) ? 5 : 0 },
+    localStorage: {
+      getItem: (k) => (storage.has(k) ? storage.get(k) : null),
+      setItem: (k, v) => storage.set(k, String(v)),
+      removeItem: (k) => storage.delete(k),
+    },
     matchMedia: (q) => ({ matches: standalone && /display-mode/.test(q) && /fullscreen|standalone/.test(q) }),
     addEventListener: (t, fn) => add('window', t, fn),
     removeEventListener: (t, fn) => remove('window', t, fn),
@@ -70,6 +117,13 @@ function makeEnv({ standalone = false, supported = true, grant = true } = {}) {
   return {
     state,
     fire,
+    body,
+    /** 안내 띠의 닫기 버튼을 누른다. */
+    closeHint() {
+      const box = body._children[0];
+      const close = box?._children.find((c) => c.tagName === 'button');
+      close?.click();
+    },
     /** 브라우저가 사용자 의사와 무관하게 전체화면을 끝낸 상황(아이패드 스와이프 등). */
     forceExit() {
       state.active = false;
@@ -211,13 +265,61 @@ test('홈 화면 앱으로 실행 중이면 버튼을 감춘다', async () => {
   assert.equal(btn.hidden, true, '껍데기가 없는 실행에서는 버튼이 의미 없다');
 });
 
-test('전체화면을 지원하지 않는 브라우저면 버튼을 감춘다', async () => {
-  makeEnv({ supported: false });
+test('전체화면이 막힌 기기(아이폰)에서는 버튼을 감추지 않고 안내로 연결한다', async () => {
+  makeEnv({ supported: false, userAgent: IPHONE_SAFARI_UA });
   const { setupFullscreen, isFullscreenSupported } = await loadModule();
   const btn = makeButton();
   setupFullscreen({ button: btn });
   assert.equal(isFullscreenSupported(), false);
-  assert.equal(btn.hidden, true);
+  // 버튼을 감추면 사용자는 이유를 모른 채 끝난다 - 남겨서 안내로 잇는다.
+  assert.equal(btn.hidden, false);
+  assert.equal(btn.attrs['aria-label'], '전체화면으로 놀기');
+  assert.equal(globalThis.document.body._children.length, 0, '누르기 전에는 안내가 뜨지 않는다');
+  btn.click();
+  assert.equal(globalThis.document.body._children.length, 1, '누르면 안내가 뜬다');
+});
+
+test('안내 문구는 기기·브라우저에 맞게 갈린다', async () => {
+  makeEnv({ supported: false, userAgent: IPHONE_SAFARI_UA });
+  const iphoneSafari = (await loadModule()).homeScreenHintText();
+  assert.match(iphoneSafari.body, /아이폰/);
+  assert.match(iphoneSafari.body, /공유 버튼/);
+
+  makeEnv({ supported: false, userAgent: IPHONE_CHROME_UA });
+  const iphoneChrome = (await loadModule()).homeScreenHintText();
+  assert.match(iphoneChrome.body, /메뉴/);
+  assert.match(iphoneChrome.body, /사파리/, '아이폰 크롬에는 더 확실한 경로를 함께 알린다');
+
+  makeEnv({ supported: false, userAgent: 'Mozilla/5.0 (Windows NT 10.0) OldBrowser/1' });
+  const other = (await loadModule()).homeScreenHintText();
+  assert.match(other.body, /앱 설치|홈 화면에 추가/);
+});
+
+test('안내는 첫 방문 1회만 자동으로 뜬다', async () => {
+  const env = makeEnv({ supported: false, userAgent: IPHONE_SAFARI_UA });
+  const { showHomeScreenHint } = await loadModule();
+  assert.equal(showHomeScreenHint({ once: true }), true);
+  env.closeHint();
+  assert.equal(showHomeScreenHint({ once: true }), false, '이미 본 사용자에게 반복 노출하지 않는다');
+  // 버튼으로 직접 부르면 다시 볼 수 있다.
+  assert.equal(showHomeScreenHint(), true);
+});
+
+test('안내가 이미 떠 있으면 겹쳐 쌓지 않는다', async () => {
+  makeEnv({ supported: false, userAgent: IPHONE_SAFARI_UA });
+  const { showHomeScreenHint } = await loadModule();
+  showHomeScreenHint();
+  assert.equal(showHomeScreenHint(), false);
+  assert.equal(globalThis.document.body._children.length, 1);
+});
+
+test('홈 화면 앱으로 실행 중이면 안내하지 않는다', async () => {
+  makeEnv({ standalone: true, supported: false, userAgent: IPHONE_SAFARI_UA });
+  const { setupFullscreen } = await loadModule();
+  const btn = makeButton();
+  setupFullscreen({ button: btn });
+  assert.equal(btn.hidden, true, '이미 껍데기 없이 실행 중이다');
+  assert.equal(globalThis.document.body._children.length, 0);
 });
 
 test('구형 접두 API(webkit)만 있는 브라우저에서도 동작한다', async () => {

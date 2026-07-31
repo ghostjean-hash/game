@@ -17,7 +17,7 @@
     "type": "git-push",
     "remote": "origin",
     "branch": "main",
-    "commitMessage": "fix(hub): 아이패드 전체화면 조작 중 풀림 수정 - 자동 복귀 공용 모듈 + 화면별 홈 화면 앱 설정",
+    "commitMessage": "feat(hub): 아이폰 전체화면 막힘 안내 - 버튼 감춤 대신 홈 화면 추가 안내(허브 1회 + 게임 버튼)",
     "_paths_comment": "봉합 문서(PROGRESS·NEXT-SESSION·archive)를 포함해 /jc 봉합과 배포가 한 커밋으로 끝나게 한다(2026-07-28).",
     "paths": ["shared", "games", "apps", "tests", "standards", "service-worker.js", "CLAUDE.md", ".claude/deploy.json", "PROGRESS.md", "NEXT-SESSION.md", "archive"]
   },

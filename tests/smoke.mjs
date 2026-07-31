@@ -144,6 +144,9 @@ if (!has('shared/fullscreen.js')) {
     ['구형 접두 API 대응(webkitRequestFullscreen)', /webkitRequestFullscreen/],
     ['해제 감지(fullscreenchange)', /fullscreenchange/],
     ['조작 순간 복귀(pointerup)', /pointerup/],
+    // 아이폰은 전체화면 자체가 막혀 있다 - 버튼을 조용히 감추면 사용자가 이유를 알 수 없다.
+    ['막힌 기기용 홈 화면 추가 안내(showHomeScreenHint)', /export function showHomeScreenHint/],
+    ['기기별 안내 문구(homeScreenHintText)', /export function homeScreenHintText/],
   ];
   for (const [name, re] of rules) {
     if (!re.test(fs)) fails.push(`shared/fullscreen.js에 ${name} 처리가 없음`);
@@ -170,6 +173,16 @@ for (const [id, file] of fsGames) {
     fails.push(`${id}: 옛 인라인 전체화면 구현이 남아 있음 (공용 모듈과 이중 배선)`);
   } else {
     oks.push(`${id}: 전체화면 공용 모듈 사용`);
+  }
+}
+
+// 허브 첫 화면이 안내를 배선하지 않으면 아이폰 사용자는 방법을 모른 채 끝난다.
+if (has('index.html')) {
+  const hub = read('index.html');
+  if (!/showHomeScreenHint/.test(hub)) {
+    fails.push('index.html이 홈 화면 추가 안내를 배선하지 않음 (아이폰에서 전체화면 방법을 알 길이 없다)');
+  } else {
+    oks.push('허브 첫 화면: 전체화면 막힌 기기에 홈 화면 추가 안내 배선');
   }
 }
 
