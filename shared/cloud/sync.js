@@ -228,7 +228,11 @@ export function createSync({
         const choice = choices[c.slot] === "remote" ? "remote" : "local";
         if (choice === "remote") {
           // 클라우드 기록을 택했으면 그쪽 줄기를 물려받는다.
-          local.writeSlot(c.slot, c.remote.data, c.remote.updatedAt, {
+          // 저장 시각은 클라우드 값이 아니라 지금으로 올린다. 클라우드 시각을 그대로 쓰면
+          // 이 기기에만 있던 항목이 남아 있는 한 다음 병합에서 "시각은 같은데 내용이 다르다"가
+          // 다시 성립해 같은 선택 창이 영원히 반복된다(2026-08-01 신고). 지금 시각으로 올리면
+          // 다음 병합에서 이 기기가 이겨 합친 결과가 올라가고, 양쪽이 같아지며 끝난다.
+          local.writeSlot(c.slot, c.remote.data, now(), {
             createdAt: c.remote.createdAt,
             lineage: c.remote.lineage,
           });

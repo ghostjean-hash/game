@@ -406,6 +406,34 @@ test('충돌에서 클라우드를 고르면 기기에 반영되고 올라간다
   assert.equal(s.sync.getStatus().state, STATUS.SYNCED);
 });
 
+test('클라우드를 고르면 같은 선택 창이 다시 뜨지 않는다 (2026-08-01 반복 신고)', async () => {
+  // 이 기기에만 있는 항목(hintsUsed)이 남아 있으면, 클라우드 시각을 그대로 물려받는 순간
+  // 다음 병합에서 "시각은 같은데 내용이 다르다"가 다시 성립해 같은 질문이 영원히 반복됐다.
+  const s = setup({
+    storageInit: {
+      'gg.rushhour.progress': '{"p1":1}',
+      'gg.rushhour.hintsUsed': '4',
+      [META_KEY]: JSON.stringify({ 'gg.rushhour': { updatedAt: T - 100, createdAt: T - 90000, lineage: 'ln-a' } }),
+    },
+    remoteInit: remoteDoc({
+      'gg.rushhour': { updatedAt: T - 100, createdAt: T - 90000, lineage: 'ln-a', device: 'other', data: { progress: { p9: 1 } } },
+    }),
+    signedIn: true,
+  });
+  await s.sync.start();
+  assert.equal(s.sync.getStatus().state, STATUS.CONFLICT);
+
+  await s.sync.resolveConflicts({ 'gg.rushhour': 'remote' });
+  assert.equal(s.sync.getStatus().state, STATUS.SYNCED);
+  assert.deepEqual(s.read('gg.rushhour.progress'), { p9: 1 }); // 클라우드 값이 반영됐다
+  assert.equal(s.read('gg.rushhour.hintsUsed'), 4);            // 이 기기 것도 지워지지 않았다
+
+  // 한 번 더 동기화해도 다시 묻지 않는다.
+  await s.sync.pullNow();
+  assert.equal(s.sync.getStatus().state, STATUS.SYNCED);
+  assert.equal(s.sync.getPendingConflicts().length, 0);
+});
+
 test('충돌에서 이 기기를 고르면 기기 기록이 살아남는다', async () => {
   const s = setup({
     storageInit: { 'gg.tetris.highscore': '500', [META_KEY]: JSON.stringify({ 'gg.tetris': T - 100 }) },

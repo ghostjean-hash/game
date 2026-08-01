@@ -144,6 +144,17 @@ function hasBigLoss(winnerData, loserData) {
   return false;
 }
 
+// 겹치는 항목의 값이 전부 같고, 한쪽에만 더 있는 항목이 있을 뿐인가.
+// 이 경우 사람이 고를 것이 없다. 합치면 어느 쪽도 잃지 않는다.
+function onlyExtraKeys(a, b) {
+  if (!isPlainObject(a) || !isPlainObject(b)) return false;
+  for (const key of Object.keys(a)) {
+    if (!(key in b)) continue;
+    if (!deepEqual(a[key], b[key])) return false;
+  }
+  return true;
+}
+
 function maxTs(a, b) {
   const x = isFiniteNumber(a) ? a : null;
   const y = isFiniteNumber(b) ? b : null;
@@ -437,6 +448,16 @@ export function mergeDocuments(localDoc, remoteDoc, { now = 0, skewToleranceMs =
       if (deepEqual(l.data, r.data)) {
         // 완전히 같다. 아무것도 하지 않는다(불필요한 업로드 0).
         merged.slots[slotId] = adopt(l, r);
+      } else if (onlyExtraKeys(l.data, r.data)) {
+        // 겹치는 항목의 값은 전부 같고 한쪽에만 더 있는 항목이 있을 뿐이다.
+        // 화면에 보이는 기록이 양쪽 똑같은데도 물어보는 원인이 이 경우였다
+        // (2026-08-01 신고: 같은 선택 창이 계속 다시 뜬다). 묻지 않고 합친다.
+        const { slot: won, changed } = combineSlot(slotId, adopt(l, r), r);
+        merged.slots[slotId] = won;
+        if (!deepEqual(won.data, r.data)) toRemote.push(slotId);
+        if (changed) {
+          toLocal.push({ slot: slotId, updatedAt: won.updatedAt, createdAt: won.createdAt, lineage: won.lineage, data: clone(won.data) });
+        }
       } else {
         // 시각이 같은데 내용이 다르다. 어느 쪽이 최신인지 기계가 정할 수 없다.
         merged.slots[slotId] = adopt(l, r);

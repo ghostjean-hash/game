@@ -105,6 +105,27 @@ test('5.2.6 시각이 같은데 내용이 다르면 자동으로 덮지 않고 �
   assert.deepEqual(r.apply.toRemote, []);
 });
 
+test('5.2.6b 시각이 같아도 겹치는 항목의 값이 같으면 묻지 않고 합친다 (2026-08-01 반복 신고)', () => {
+  // 이 기기에만 있는 항목(hintsUsed) 하나 때문에 "내용이 다르다"가 성립하던 경우.
+  // 화면에는 양쪽 기록이 똑같아 보이는데 선택 창이 떠서 고를 것이 없었다.
+  const local = doc({ 'gg.rushhour': slot(T - 100, { progress: { p1: 1 }, hintsUsed: 4 }) });
+  const remote = doc({ 'gg.rushhour': slot(T - 100, { progress: { p1: 1 } }) });
+  const r = mergeDocuments(local, remote, { now: T });
+  assert.equal(r.conflicts.length, 0);
+  assert.equal(r.blockUpload, false);
+  // 합친 결과에는 양쪽 항목이 모두 있고, 클라우드에도 올라간다.
+  assert.deepEqual(r.merged.slots['gg.rushhour'].data, { progress: { p1: 1 }, hintsUsed: 4 });
+  assert.deepEqual(r.apply.toRemote, ['gg.rushhour']);
+});
+
+test('5.2.6c 겹치는 항목의 값이 실제로 다르면 종전대로 묻는다', () => {
+  const local = doc({ 'gg.rushhour': slot(T - 100, { progress: { p1: 1 }, hintsUsed: 4 }) });
+  const remote = doc({ 'gg.rushhour': slot(T - 100, { progress: { p9: 1 } }) });
+  const r = mergeDocuments(local, remote, { now: T });
+  assert.equal(r.conflicts.length, 1);
+  assert.equal(r.conflicts[0].reason, 'same-time-diff-content');
+});
+
 // --- 5.2.7 기기 시계 오류 ---
 test('5.2.7 저장 시각이 현재보다 크게 미래면 자동 판정을 포기한다 (기기 시계 오류)', () => {
   const local = doc({ 'gg.tetris': slot(T + 60 * 60 * 1000, { highscore: 1 }) });
