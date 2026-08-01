@@ -11,30 +11,19 @@
 <link rel="manifest" href="app.webmanifest" />
 <link rel="stylesheet" href="../../shared/tokens.css" />
 <link rel="stylesheet" href="../../shared/base.css" />
+<link rel="stylesheet" href="../../shared/frame/frame.css" />
 <link rel="stylesheet" href="style.css" />
 <title>Rush Hour - game_ghost</title>
 </head>
 <body>
-<div class="page rushhour">
+<!-- 시작 화면·상단 띠·잠깐 멈춤·결과 카드는 공용 프레임이 만든다(html-game 표준 4.8).
+     예전에는 열면 곧바로 퍼즐이 떴고 상점·진행 맵·소리·설정이 위쪽 아이콘 줄에 있었다.
+     지금은 시작 화면이 앞에 서고, 진행 맵은 그 다음 칸, 상점은 시작 화면 조작단 맨 아래 줄이다. -->
+<div class="page rushhour" id="app">
+ <div id="screen-play">
   <div class="topbar">
-    <a href="../../" class="home" aria-label="홈으로">←</a>
-    <button class="home" id="btn-shop" type="button" aria-label="상점">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l1 13H5z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
-    </button>
-    <button class="home" id="btn-map" type="button" aria-label="진행 맵">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>
-    </button>
-    <button class="home" id="btn-mute" type="button" aria-label="소리 끄기">
-      <svg class="icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 8.5a5 5 0 0 1 0 7"/></svg>
-      <svg class="icon-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l4 6M21 9l-4 6"/></svg>
-    </button>
-    <button class="home" id="btn-settings" type="button" aria-label="설정">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2.4"/><circle cx="15" cy="17" r="2.4"/></svg>
-    </button>
-    <button class="home" id="btn-fs" type="button" aria-label="전체화면" hidden>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-    </button>
-    <div class="spacer"></div>
+    <!-- 되돌아가기·소리·설정·전체화면은 공용 상단 띠가 갖는다. 이 줄에는 놀이 중에 계속
+         보고 있어야 하는 값(골드·이동 수)만 남긴다. -->
     <div class="stat"><span class="stat-icon">🪙</span><span class="stat-value" id="gold">0</span></div>
     <div class="stat"><span class="stat-label">이동</span><span class="stat-value" id="moves">0</span></div>
   </div>
@@ -59,6 +48,7 @@
     <button class="btn" id="btn-reset" type="button">리셋</button>
     <button class="btn" id="btn-next" type="button">다음 ›</button>
   </div>
+ </div>
 
   <div class="modal-backdrop" id="shop" hidden>
     <div class="modal shop-modal">
@@ -74,7 +64,9 @@
     </div>
   </div>
 
-  <div class="modal-backdrop" id="map" hidden>
+  <!-- 진행 맵. 퍼즐이 수백 개라 시작 다음 칸에서 고른다(규격 4.8-1 '골라 들어가는 형').
+       화면 전환은 공용 프레임이 맡으므로 hidden 속성을 쓰지 않는다. -->
+  <div class="modal-backdrop" id="map">
     <div class="modal map-modal">
       <button class="modal-x" id="btn-map-close" type="button" aria-label="닫기"><svg class="x-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       <h2><svg class="title-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>진행 맵</h2>
@@ -94,19 +86,16 @@
     </div>
   </div>
 
-  <div class="modal-backdrop" id="overlay" hidden>
-    <div class="modal overlay-modal">
-      <button class="modal-x" id="btn-overlay-close" type="button" aria-label="닫기"><svg class="x-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      <h2 id="result-title">클리어!</h2>
+  <!-- 결과는 플레이를 덮는 공용 카드가 담는다(규격 4.8-8). 별·수·콤보·골드는 글자만이 아니라
+       이 게임의 표현이라 카드 본문에 이 조각을 그대로 넣는다(규격 4.8-13). -->
+  <template id="result-body">
+    <div class="rush-result">
       <div id="result-stars" class="result-stars"></div>
       <p id="result-text" class="result-sub"></p>
       <p id="result-combo" class="result-combo" hidden></p>
       <div id="result-gold" class="result-gold"></div>
-      <div class="modal-actions">
-        <button class="btn btn-primary" id="btn-overlay-next" type="button">다음 퍼즐</button>
-      </div>
     </div>
-  </div>
+  </template>
 </div>
 <script type="module" src="../../shared/cloud/auto.js"></script>
 <script type="module" src="src/main.js"></script>

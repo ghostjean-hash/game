@@ -47,11 +47,11 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 
 | 자산 | 경로 |
 |---|---|
-| 표준 본체 | `standards/html-game/STANDARD.md` (현재 v0.4.0) |
+| 표준 본체 | `standards/html-game/STANDARD.md` (현재 v0.4.2) |
 | 변경 이력 | `standards/html-game/CHANGELOG.md` |
 | 적용 프로젝트 | `standards/html-game/applications.md` |
 
-2.1. 적용 대상: **lotto만** (v0.2, 2026-07-29부터 `apps/lotto/`). sudoku / tetris는 후순위.
+2.1. 적용 대상: 게임 다섯(tetris / sudoku / rushhour / nonogram / flightshooting)이 v0.4.2로 4.8 시작 흐름 공용 프레임을 함께 쓴다(2026-08-01, 세 단계 적용 완료). lotto는 v0.2(`apps/lotto/`).
 2.2. 글로벌(`~/.claude/rules/html-game/`) 미승격. 데이터 수집 단계 (v0.x).
 2.3. v1.0 승격 조건은 STANDARD.md 9.4 참조.
 

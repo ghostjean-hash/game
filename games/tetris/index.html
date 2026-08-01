@@ -11,48 +11,19 @@
 <link rel="manifest" href="app.webmanifest" />
 <link rel="stylesheet" href="../../shared/tokens.css" />
 <link rel="stylesheet" href="../../shared/base.css" />
+<link rel="stylesheet" href="../../shared/frame/frame.css" />
 <link rel="stylesheet" href="style.css" />
 <title>Tetris - game_ghost</title>
 </head>
 <body>
-<div class="page tetris">
-  <!-- 메뉴 화면 (URL ?mode 쿼리 없을 때만 표시) -->
-  <div id="menu-screen" class="menu-screen" hidden>
+<!-- 화면 골격·시작 화면·상단 띠·결과 카드는 공용 프레임이 만든다(html-game 표준 4.8).
+     여기에는 플레이 화면만 둔다 - 모드 고르기는 시작 화면의 고르는 칸으로 접혔다. -->
+<div class="page tetris" id="app">
+  <!-- 플레이 화면. 이 게임은 HUD를 상단 띠에 인라인 흡수해 보드 면적을 지키므로,
+       플레이에서만 공용 띠를 감추고 이 띠의 버튼을 프레임에 연결한다(규격 4.8-11). -->
+  <div id="game-screen" class="game-screen">
     <div class="topbar">
-      <a href="../../" class="home" aria-label="홈으로">←</a>
-      <h1 class="sr-only">Tetris</h1>
-      <div class="menu-title">Tetris</div>
-    </div>
-    <div class="menu-stage">
-      <div class="mode-cards">
-        <button class="mode-card" type="button" data-mode="kids">
-          <span class="mode-card-name">배움 <span class="mode-badge">어린이</span></span>
-          <span class="mode-card-copy">천천히. 몇 칸 더 채울까?</span>
-          <span class="mode-card-best" data-best="kids">★ —</span>
-        </button>
-        <button class="mode-card" type="button" data-mode="marathon">
-          <span class="mode-card-name">마라톤</span>
-          <span class="mode-card-copy">라인을 지워라. 끝까지.</span>
-          <span class="mode-card-best" data-best="marathon">★ —</span>
-        </button>
-        <button class="mode-card" type="button" data-mode="zen">
-          <span class="mode-card-name">젠 <span class="mode-badge" data-zen-badge hidden>추천</span></span>
-          <span class="mode-card-copy">가속 없음. 호흡대로.</span>
-          <span class="mode-card-best" data-best="zen">★ —</span>
-        </button>
-        <button class="mode-card" type="button" data-mode="sprint">
-          <span class="mode-card-name">스프린트</span>
-          <span class="mode-card-copy">40라인. 최단 시간.</span>
-          <span class="mode-card-best" data-best="sprint">⏱ —</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 게임 화면 (URL ?mode=... 일 때만 표시) -->
-  <div id="game-screen" class="game-screen" hidden>
-    <div class="topbar">
-      <a href="../../" class="home" aria-label="홈으로">←</a>
+      <button id="btn-back" class="home" type="button" aria-label="되돌아가기">←</button>
       <h1 class="sr-only">Tetris</h1>
       <div class="score-big" aria-live="polite" aria-label="점수">
         <b id="score">0</b>

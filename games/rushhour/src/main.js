@@ -11,13 +11,14 @@ import { parseGrid, moveCar, isSolved } from './core/board.js';
 import { solve, solveStep } from './core/solver.js';
 import { buildBoard, syncPositions, playClear, updateTargetFace, setTargetAccessory, setBoardMood, showHint } from './render/render.js';
 import { attachDrag } from './input/drag.js';
-import { play, setMuted, isMuted, unlockAudio, suspendAudio, resumeAudio } from './audio/sound.js';
+import { SOUNDS } from './audio/sound.js';
 import {
   BOARD_THEMES, DEFAULT_THEME, ACCESSORY_ITEMS, DEFAULT_ACCESSORY,
 } from './data/shop.js';
 import { PONY_STYLES, DEFAULT_STYLE } from './data/styles.js';
 import { createStorage } from '../../../shared/storage.js';
 import { setupFullscreen } from '../../../shared/fullscreen.js';
+import { createGameFrame, SCREEN } from '../../../shared/frame/index.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
 
@@ -46,29 +47,18 @@ const el = {
   hint: document.getElementById('btn-hint'),
   prev: document.getElementById('btn-prev'),
   next: document.getElementById('btn-next'),
-  overlay: document.getElementById('overlay'),
-  resultTitle: document.getElementById('result-title'),
-  result: document.getElementById('result-text'),
-  resultStars: document.getElementById('result-stars'),
-  resultCombo: document.getElementById('result-combo'),
-  resultGold: document.getElementById('result-gold'),
-  overlayNext: document.getElementById('btn-overlay-next'),
-  overlayClose: document.getElementById('btn-overlay-close'),
-  shopBtn: document.getElementById('btn-shop'),
+  resultBody: document.getElementById('result-body'),
   shop: document.getElementById('shop'),
   shopGold: document.getElementById('shop-gold'),
   shopThemes: document.getElementById('shop-themes'),
   shopAccessories: document.getElementById('shop-accessories'),
   shopClose: document.getElementById('btn-shop-close'),
-  mapBtn: document.getElementById('btn-map'),
   map: document.getElementById('map'),
   mapTabs: document.getElementById('map-tabs'),
   mapCredit: document.getElementById('map-credit'),
   mapSummary: document.getElementById('map-summary'),
   mapGrid: document.getElementById('map-grid'),
   mapClose: document.getElementById('btn-map-close'),
-  muteBtn: document.getElementById('btn-mute'),
-  settingsBtn: document.getElementById('btn-settings'),
   settings: document.getElementById('settings'),
   settingList: document.getElementById('setting-list'),
   settingsClose: document.getElementById('btn-settings-close'),
@@ -183,6 +173,30 @@ function puzzleById(id) {
   return modePuzzles().find((p) => p.id === id);
 }
 
+// 시작 화면 배경. 배경 그림이 없는 게임이라 이 게임의 얼굴인 크림 판과 오른쪽 출구 길을
+// 그대로 배경으로 쓴다(규격 4.8-5, 기획서 Ⅰ권 6.6). 배치는 실제 48번 문제이고
+// 붉은 테두리가 빼내야 할 주인공이다. 열 때마다 달라지면 같은 화면이 아니게 되므로 고정한다.
+const TITLE_PUZZLE_ID = 48;
+function titleBackdrop() {
+  const wrap = document.createElement('div');
+  wrap.className = 'title-board';
+  const grid = document.createElement('div');
+  grid.className = 'tb-grid';
+  wrap.appendChild(grid);
+  const p = PUZZLES.find((x) => x.id === TITLE_PUZZLE_ID) || PUZZLES[0];
+  const cell = 100 / 6;
+  for (const car of parseGrid(p.grid)) {
+    const d = document.createElement('i');
+    d.className = car.id === 'X' ? 'tb-car is-target' : 'tb-car';
+    d.style.left = `${car.col * cell}%`;
+    d.style.top = `${car.row * cell}%`;
+    d.style.width = `${(car.orient === 'h' ? car.len : 1) * cell}%`;
+    d.style.height = `${(car.orient === 'v' ? car.len : 1) * cell}%`;
+    grid.appendChild(d);
+  }
+  return wrap;
+}
+
 function loadPuzzle(id) {
   stopTimer();
   const list = modePuzzles();
@@ -202,7 +216,6 @@ function loadPuzzle(id) {
   const pr = progress();
   pr.modes[pr.activeMode].current = p.id;
   saveProgress(pr);
-  hideOverlay();
   render();
   startTimer();
 }
@@ -283,7 +296,7 @@ function onCommit(id, pos) {
   syncPositions(state.els, state.cars);
   render();
   if (isSolved(state.cars)) onSolved();
-  else play('move');
+  else frame.audio.play('move');
 }
 
 function starsFor(moves, optimal) {
@@ -295,7 +308,7 @@ function starsFor(moves, optimal) {
 function onSolved() {
   state.solved = true;
   stopTimer();
-  play('clear');
+  frame.audio.play('clear');
   state.face = 'happy';
   updateTargetFace(state.els, 'happy');
   setBoardMood('happy'); // 주인공이 빠져나가면 남은 블록들도 전부 신난 표정
@@ -328,23 +341,31 @@ function onSolved() {
   const idx = list.findIndex((p) => p.id === state.puzzleId);
   const isLast = idx >= list.length - 1;
   // 핵심만: 상태(제목) + 별 + 수/최소 + (콤보) + 획득 골드.
-  el.resultTitle.textContent = isLast ? '완주! 🎉' : (state.moves <= state.optimal ? '완벽!' : '클리어!');
-  el.resultStars.textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
-  el.result.textContent = `${state.moves}수 · 최소 ${state.optimal}수`;
+  // 별·수·콤보·골드는 글자 목록으로 담기지 않는 이 게임의 표현이라 카드 본문 조각을
+  // 그대로 만들어 넣는다(규격 4.8-13). 버튼은 공용 카드의 다시 하기·그만하기를 쓴다.
+  const body = el.resultBody.content.cloneNode(true).firstElementChild;
+  body.querySelector('#result-stars').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  body.querySelector('#result-text').textContent = `${state.moves}수 · 최소 ${state.optimal}수`;
+  const comboEl = body.querySelector('#result-combo');
   if (combo >= 2) {
-    el.resultCombo.textContent = `🔥 ${combo}연속`;
-    el.resultCombo.hidden = false;
-  } else {
-    el.resultCombo.hidden = true;
+    comboEl.textContent = `🔥 ${combo}연속`;
+    comboEl.hidden = false;
   }
-  el.resultGold.textContent = `+${gold} 🪙`;
-  el.overlayNext.textContent = isLast ? '처음부터 다시' : '다음 퍼즐';
+  body.querySelector('#result-gold').textContent = `+${gold} 🪙`;
+  // 이 게임의 '다시 하기'는 같은 문제를 또 푸는 것이 아니라 다음 문제로 넘어가는 흐름이라
+  // 그 자리 문구만 바꾼다(규격 4.8-6 고정 문구의 예외 통로).
+  frame.result.setActionLabel('retry', isLast ? '처음부터 다시' : '다음 퍼즐');
   render();
-  // 토끼가 출구 길로 빠져나가는 연출 + 축하 파티클 후 결과 오버레이.
+  // 주인공이 출구 길로 빠져나가는 연출 + 축하 파티클 후 결과 카드.
   playClear(state.els, el.board, () => {
-    el.overlay.hidden = false;
-    // 결과 팝업에서 얻은 별 개수만큼 반짝 효과음을 계단식으로 낸다.
-    for (let i = 0; i < stars; i += 1) setTimeout(() => play('star'), i * STAR_SOUND_GAP_MS);
+    frame.result.show({
+      title: isLast ? '완주! 🎉' : (state.moves <= state.optimal ? '완벽!' : '클리어!'),
+      bodyEl: body,
+      newRecord: stars === 3,
+    });
+    frame.screens.go(SCREEN.RESULT);
+    // 얻은 별 개수만큼 반짝 효과음을 계단식으로 낸다.
+    for (let i = 0; i < stars; i += 1) setTimeout(() => frame.audio.play('star'), i * STAR_SOUND_GAP_MS);
   });
 }
 
@@ -374,7 +395,7 @@ function hint() {
   // 고난도(Fogleman 보통·어려움)는 실시간 BFS가 무거워 힌트를 막는다(멈춤 방지).
   if (state.optimal > HINT_MAX_OPTIMAL) {
     shake(el.hint);
-    play('deny');
+    frame.audio.play('deny');
     return;
   }
   const move = solveStep(state.cars);
@@ -382,31 +403,20 @@ function hint() {
   const pr = progress();
   if ((pr.gold || 0) < HINT_COST) {
     shake(el.gold.closest('.stat'));
-    play('deny');
+    frame.audio.play('deny');
     return;
   }
   pr.gold -= HINT_COST;
   saveProgress(pr);
   render();
   showHint(state.els, move);
-  play('hint');
+  frame.audio.play('hint');
 }
 
-// 음소거 토글(🔊/🔇). 설정은 progress.muted에 저장한다.
-function toggleMute() {
-  const pr = progress();
-  const next = !isMuted();
-  pr.muted = next;
-  saveProgress(pr);
-  setMuted(next);
-  updateMuteBtn();
-  if (!next) play('move'); // 켤 때 들리는지 확인음
-}
+// 음소거는 공용 프레임이 맡는다(상단 띠 버튼 + 저장 + 아이콘 갱신).
+// 예전에는 이 게임이 progress.muted에 따로 담고 아이콘도 직접 바꿨다.
 
-function updateMuteBtn() {
-  el.muteBtn.classList.toggle('muted', isMuted()); // SVG 스피커 on/off 아이콘 전환(CSS)
-  el.muteBtn.setAttribute('aria-label', isMuted() ? '소리 켜기' : '소리 끄기');
-}
+
 
 function go(delta) {
   const list = modePuzzles();
@@ -415,9 +425,6 @@ function go(delta) {
   if (next) loadPuzzle(next.id);
 }
 
-function hideOverlay() {
-  el.overlay.hidden = true;
-}
 
 // --- 게임 모드(오리지널 / Fogleman): 진행 맵 안의 탭으로 고른다 ---
 // 상단에서 바로 전환하지 않는다. 맵을 열면 현재 모드 탭이 선택돼 있고, 탭으로 다른 모드의
@@ -472,7 +479,7 @@ function buyOrEquip(kind, id) {
   if (item.price > 0 && !owned.includes(id)) {
     if ((pr.gold || 0) < item.price) {
       shake(el.shopGold.parentElement);
-      play('deny');
+      frame.audio.play('deny');
       return;
     }
     pr.gold -= item.price;
@@ -489,7 +496,7 @@ function buyOrEquip(kind, id) {
   }
   renderShop();
   render();
-  play('buy');
+  frame.audio.play('buy');
 }
 
 // 패널(상점/맵) 열고 닫기. 열 때 해당 렌더를 먼저 돌린다.
@@ -505,11 +512,12 @@ function closePanel(panel) {
 
 const DIFF_ORDER = ['beginner', 'easy', 'medium', 'hard'];
 
-// 맵 열기: 현재 활성 모드를 보기 모드로 잡고 렌더.
+// 맵 열기: 현재 활성 모드를 보기 모드로 잡고 렌더. 진행 맵은 시작 다음 칸이라
+// 화면 이동으로 연다(규격 4.8-1 '골라 들어가는 형'). 닫기는 계단을 따라 한 칸 위로.
 function openMap() {
   mapViewMode = progress().activeMode;
   renderMap();
-  el.map.hidden = false;
+  frame.screens.go(SCREEN.SELECT);
 }
 
 function renderMap() {
@@ -588,7 +596,7 @@ function setStyle(id) {
   saveProgress(pr);
   redrawBlocks();
   renderSettings();
-  play('buy');
+  frame.audio.play('buy');
 }
 
 // 배경/테두리 표시 토글(스타일 또는 주인공별).
@@ -600,7 +608,7 @@ function toggleBlockOpt(key, opt) {
   saveProgress(pr);
   redrawBlocks();
   renderSettings();
-  play('buy');
+  frame.audio.play('buy');
 }
 
 // 드래그는 보드에 한 번만 붙인다. 현재 상태는 getCars로 읽는다.
@@ -615,14 +623,6 @@ el.reset.addEventListener('click', reset);
 el.hint.addEventListener('click', hint);
 el.prev.addEventListener('click', () => go(-1));
 el.next.addEventListener('click', () => go(1));
-el.overlayNext.addEventListener('click', () => {
-  const list = modePuzzles();
-  const idx = list.findIndex((p) => p.id === state.puzzleId);
-  if (idx < list.length - 1) go(1);
-  else loadPuzzle(list[0].id); // 마지막 퍼즐 완주 후 처음으로
-});
-el.overlayClose.addEventListener('click', hideOverlay);
-el.shopBtn.addEventListener('click', () => openPanel(el.shop, renderShop));
 el.shopClose.addEventListener('click', () => closePanel(el.shop));
 function onShopClick(e) {
   const btn = e.target.closest('.shop-item');
@@ -630,12 +630,9 @@ function onShopClick(e) {
 }
 el.shopThemes.addEventListener('click', onShopClick);
 el.shopAccessories.addEventListener('click', onShopClick);
-el.muteBtn.addEventListener('click', toggleMute);
-// 전체화면 토글(STANDARD 4.7 규칙 6). 미지원 기기·홈 화면 앱은 버튼을 숨기고,
-// 조작 중 브라우저가 임의로 전체화면을 끝내면 다음 조작에 되돌린다(shared/fullscreen.js).
-setupFullscreen({ button: el.fsBtn });
-el.mapBtn.addEventListener('click', openMap);
-el.mapClose.addEventListener('click', () => closePanel(el.map));
+// 소리·전체화면 버튼은 공용 상단 띠가 갖는다(프레임이 만들 때 함께 걸린다).
+// 진행 맵 닫기는 계단을 따라 한 칸 위(시작 화면)로 간다.
+el.mapClose.addEventListener('click', () => frame.screens.back());
 // 모드 탭: 보고 있는 모드만 바꿔 미리 본다(아직 전환 확정 아님).
 el.mapTabs.addEventListener('click', (e) => {
   const tab = e.target.closest('.map-tab');
@@ -650,10 +647,9 @@ el.mapGrid.addEventListener('click', (e) => {
     pr.activeMode = mapViewMode;
     saveProgress(pr);
   }
-  closePanel(el.map);
   loadPuzzle(Number(chip.dataset.id));
+  frame.screens.go(SCREEN.PLAY);
 });
-el.settingsBtn.addEventListener('click', () => openPanel(el.settings, renderSettings));
 el.settingsClose.addEventListener('click', () => closePanel(el.settings));
 el.settingList.addEventListener('click', (e) => {
   const pick = e.target.closest('.set-pick');
@@ -662,27 +658,92 @@ el.settingList.addEventListener('click', (e) => {
   if (tog) toggleBlockOpt(tog.dataset.key, tog.dataset.opt);
 });
 
-// iOS 오디오 잠금 해제: 첫 사용자 제스처 한 번에 AudioContext를 깨운다(둘 다 once라 각 1회).
-window.addEventListener('pointerdown', unlockAudio, { once: true });
-window.addEventListener('touchend', unlockAudio, { once: true });
-
-// 절전: 탭이 백그라운드로 가면 게임 타이머·오디오(무음 keep-alive 포함)를 재우고,
-// 돌아오면 되살린다(§01 spec 6.4·10.5). 자리 비운 시간은 경과에 넣지 않는다(페널티 없음).
+// 절전: 탭이 백그라운드로 가면 게임 타이머를 재우고 돌아오면 되살린다(§01 spec 6.4·10.5).
+// 자리 비운 시간은 경과에 넣지 않는다(페널티 없음). 오디오 재우기·깨우기는 공용 프레임이 맡는다.
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     stopTimer();
-    suspendAudio();
-  } else {
-    resumeAudio();
+  } else if (frame.screens.current() === SCREEN.PLAY) {
     // 클리어 후·시간 초과 확정 후에는 잴 것이 없어 다시 돌리지 않는다.
     if (!state.solved && state.elapsed <= state.limit) startTimer();
   }
 });
 
+// ── 공용 프레임(html-game 표준 4.8) ──
+// 시작 화면·상단 띠·결과 카드·되돌아가기 계단·소리를 여기서 한 번에 받는다.
+// 이 게임은 퍼즐이 586개(두 모드 합계)라 '골라 들어가는 형'이다 - 시작 화면과 플레이 사이에
+// 진행 맵 한 칸이 들어간다. 상점은 새 칸을 만들지 않고 조작단 맨 아래 줄에 둔다(규격 4.8-5).
+const frame = createGameFrame({
+  root: document.getElementById('app'),
+  gameId: STORAGE_NS,
+  title: '밥풀이와 포니',
+  // 판은 크림이지만 페이지 배경은 저녁 플럼(어두운 쪽)이라 밝은 톤으로 뒤집지 않는다.
+  hasSelect: true,
+  background: { className: 'title-deco', el: titleBackdrop() },
+  character: { src: 'assets/ponies/a_v2.png', width: 76 },
+  buttons: ['settings', 'sound', 'fullscreen'],
+  sounds: SOUNDS,
+  pauseOnHide: false,                // 시간은 흐르지만 실패로 죽는 게임이 아니라 카드를 띄우지 않는다
+  resume: { enabled: false, detail: '' },
+  startHint: '누르면 모드와 퍼즐 고르는 진행 맵으로 감',
+  extras: [{ id: 'shop', label: '상점' }],
+  onStart: () => openMap(),
+  onResume: () => resumeLast(),
+  onExtra: (id) => { if (id === 'shop') openPanel(el.shop, renderShop); },
+  onSettings: () => openPanel(el.settings, renderSettings),
+});
+
+// 이 게임의 화면 둘을 프레임에 등록한다. 표시는 프레임이 화면 이름으로 가른다.
+frame.screens.register(SCREEN.PLAY, document.getElementById('screen-play'));
+frame.screens.register(SCREEN.SELECT, el.map);
+
+// 결과 카드 버튼. 다시 하기는 다음 퍼즐로, 그만하기는 진행 맵으로 돌아간다.
+frame.result.on('retry', () => {
+  const list = modePuzzles();
+  const idx = list.findIndex((p) => p.id === state.puzzleId);
+  if (idx < list.length - 1) go(1);
+  else loadPuzzle(list[0].id); // 마지막 퍼즐 완주 후 처음으로
+  frame.screens.go(SCREEN.PLAY);
+});
+frame.result.on('quit', () => openMap());
+
+frame.screens.onChange((now) => {
+  if (now === SCREEN.TITLE) refreshTitle();
+  if (now === SCREEN.SELECT) renderMap();
+  if (now === SCREEN.PLAY && !state.solved && state.elapsed <= state.limit) startTimer();
+  else if (now !== SCREEN.PLAY) stopTimer();
+});
+
+// 시작 화면 기록 줄과 이어서 하기 칸을 지금 상태로 맞춘다.
+// 골드·꾸미기는 모드와 무관한 공용 재산이고 진행은 모드마다 따로 쌓이므로 한 줄에 셋을 담는다.
+function refreshTitle() {
+  const pr = progress();
+  const mp = modeProg(pr);
+  const totalStars = Object.values(mp.stars || {}).reduce((a, b) => a + (b || 0), 0);
+  const cleared = (mp.cleared || []).length;
+  const mode = modeDef(pr.activeMode);
+  frame.title.setRecord(`모은 별 ${totalStars} · 골드 ${(pr.gold || 0).toLocaleString()} · ${mode.name} ${cleared} / ${mode.puzzles.length}`);
+  const cur = mp.current;
+  frame.title.setResume({
+    enabled: cur != null,
+    detail: cur != null ? `${mode.name} ${cur}번` : '풀던 문제 없음',
+  });
+}
+
+// 시작 화면 '이어서 하기': 마지막에 보던 문제로 곧장 들어간다.
+function resumeLast() {
+  const mp = modeProg();
+  if (mp.current == null) { openMap(); return; }
+  loadPuzzle(mp.current);
+  frame.screens.go(SCREEN.PLAY);
+}
+
 el.hint.textContent = `💡 힌트 (${HINT_COST}🪙)`;
-setMuted(progress().muted);
-updateMuteBtn();
 setTargetAccessory(currentAccessory().acc);
 applyTheme(currentTheme());
+// 첫 화면은 시작 화면이다(규격 4.8-1). 예전에는 열면 곧바로 퍼즐이 떴다.
+// 보드는 미리 만들어 두어 시작 다음 흐름이 매끄럽게 이어지게 한다.
 const startProg = modeProg();
 loadPuzzle(startProg.current != null ? startProg.current : modePuzzles()[0].id);
+stopTimer();
+refreshTitle();

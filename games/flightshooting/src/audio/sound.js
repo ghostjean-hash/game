@@ -1,29 +1,17 @@
-// Web Audio 효과음 합성. 음원 파일 없이 합성으로 "현대적" 사운드를 만든다(vanilla, 자산 0).
+// 비행 슈팅 효과음 음색표 + 이 게임 전용 후처리 그래프.
+//
+// 소리를 내는 그릇(오디오 열기·음소거·절전·재생)은 공용 자산 shared/frame/audio.js가 맡는다
+// (html-game 표준 4.8-9). 이 파일에 남은 것은 두 가지다 -
+//   1. 이 게임만의 후처리 그래프(컴프레서 + 합성 리버브). 다른 넷은 쓰지 않는다.
+//   2. 효과음 레시피.
 // 8비트 탈피 기법: (1) 유니즌 오실레이터(살짝 디튠해 겹침)로 두꺼운 음색,
 // (2) lowpass 필터 스윕으로 부드러운 감쇠, (3) 합성 리버브(convolver)로 공간감,
 // (4) 서브베이스 sine 임팩트로 묵직한 타격. 모든 파라미터는 이 모듈의 디자인 상수(매직넘버 규칙 예외).
 
-let ctx = null;
-let muted = false;
-let unlocked = false;
+let graphCtx = null; // 그래프를 만들어 둔 오디오 컨텍스트(공용 그릇이 소유)
 let master = null;   // 마스터 게인(→ destination)
 let reverb = null;   // 합성 리버브(convolver), 실패 시 null
 let compressor = null;
-
-export function setMuted(m) {
-  muted = !!m;
-  if (!ctx) return;
-  if (muted) ctx.suspend();
-  else if (unlocked) ctx.resume();
-}
-export function isMuted() { return muted; }
-
-export function suspendAudio() {
-  if (ctx && ctx.state === 'running') ctx.suspend();
-}
-export function resumeAudio() {
-  if (unlocked && !muted && ctx && ctx.state === 'suspended') ctx.resume();
-}
 
 // 짧은 합성 임펄스 응답(지수 감쇠 스테레오 노이즈) - 가벼운 리버브 공간감.
 function makeReverbIR(c, seconds = 1.1, decay = 3.2) {
@@ -61,46 +49,21 @@ function setupGraph(c) {
   }
 }
 
-function audioCtx() {
-  if (!ctx) {
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if (AC) { ctx = new AC({ latencyHint: 'interactive' }); setupGraph(ctx); }
-  }
-  if (ctx && ctx.state === 'suspended') ctx.resume();
-  return ctx;
-}
-
-let keepAlive = null;
-export function unlockAudio() {
-  if (unlocked) return;
-  const c = audioCtx();
-  if (!c) return;
-  unlocked = true;
-  try {
-    keepAlive = c.createOscillator();
-    const g = c.createGain();
-    g.gain.value = 0.0001;
-    keepAlive.connect(g).connect(c.destination);
-    keepAlive.start();
-  } catch { /* 실패해도 게임 진행 무관 */ }
-  if (muted) c.suspend();
+// 공용 그릇이 만든 컨텍스트 위에 이 게임 그래프를 한 번만 세운다.
+// 예전에는 이 파일이 컨텍스트까지 직접 만들었다 - 지금은 받아 쓴다.
+function ensureGraph(c) {
+  if (graphCtx === c && master) return;
+  graphCtx = c;
+  setupGraph(c);
 }
 
 const SCHEDULE_AHEAD = 0.015;
-const IDLE_MS = 4000;
-let idleTimer = null;
-function scheduleIdleSuspend() {
-  clearTimeout(idleTimer);
-  idleTimer = setTimeout(() => {
-    if (ctx && ctx.state === 'running' && !muted) ctx.suspend();
-  }, IDLE_MS);
-}
 
 // dry(master) + wet(reverb send) 동시 연결.
 function output(node, wet = 0.2) {
   node.connect(master);
   if (reverb && wet > 0) {
-    const s = ctx.createGain();
+    const s = graphCtx.createGain();
     s.gain.value = wet;
     node.connect(s);
     s.connect(reverb);
@@ -109,6 +72,7 @@ function output(node, wet = 0.2) {
 
 // 음정 하나: 유니즌 디튠 + lowpass 필터 스윕 + 부드러운 게인 엔벨로프.
 function voice(c, { freq, to, dur, type = 'sine', gain = 0.12, delay = 0, filter, filterTo, detune = 0, wet = 0.2, attack = 0.008 }) {
+  ensureGraph(c);
   const t0 = c.currentTime + SCHEDULE_AHEAD + delay;
   const g = c.createGain();
   let head = g;
@@ -140,6 +104,7 @@ function voice(c, { freq, to, dur, type = 'sine', gain = 0.12, delay = 0, filter
 
 // 노이즈 버스트 + lowpass 스윕(폭발·타격의 바람 성분).
 function noiseHit(c, { dur, gain = 0.15, delay = 0, lpFrom = 2200, lpTo = 200, wet = 0.25 }) {
+  ensureGraph(c);
   const t0 = c.currentTime + SCHEDULE_AHEAD + delay;
   const frames = Math.floor(c.sampleRate * dur);
   const buf = c.createBuffer(1, frames, c.sampleRate);
@@ -162,6 +127,7 @@ function noiseHit(c, { dur, gain = 0.15, delay = 0, lpFrom = 2200, lpTo = 200, w
 
 // 저역 sine 임팩트(폭발의 묵직한 몸통).
 function subBoom(c, { freq = 120, to = 38, dur = 0.4, gain = 0.26, delay = 0 }) {
+  ensureGraph(c);
   const t0 = c.currentTime + SCHEDULE_AHEAD + delay;
   const o = c.createOscillator();
   o.type = 'sine';
@@ -180,7 +146,7 @@ function subBoom(c, { freq = 120, to = 38, dur = 0.4, gain = 0.26, delay = 0 }) 
 const SEMI = (base, s) => base * Math.pow(2, s / 12); // 반음 계산
 
 // 효과음별 합성 레시피. 우주 슈팅에 맞는 현대적 일렉트로닉 톤 - 부드럽고 공간감 있게.
-const SOUNDS = {
+export const SOUNDS = {
   // 발사: 밝은 코어 + 짧은 아래휙. 반복돼도 거칠지 않은 바푸리식 레이저.
   shoot: (c) => {
     voice(c, { type: 'triangle', freq: 1750, to: 980, dur: 0.075, gain: 0.06, filter: 5000, filterTo: 1800, detune: 7, wet: 0.08 });
@@ -242,15 +208,3 @@ const SOUNDS = {
   // 에너지존 피해 tick: 부드러운 저역 펄스(0.5초 주기라 조용히).
   zone: (c) => voice(c, { type: 'sine', freq: 190, to: 96, dur: 0.2, gain: 0.045, filter: 700, wet: 0.28 }),
 };
-
-export function play(name) {
-  if (muted) return;
-  const c = audioCtx();
-  if (!c) return;
-  const fn = SOUNDS[name];
-  if (!fn) return;
-  const run = () => { try { fn(c); } catch { /* 오디오 실패는 게임에 영향 없음 */ } };
-  if (c.state === 'running') run();
-  else c.resume().then(run).catch(() => {});
-  scheduleIdleSuspend();
-}

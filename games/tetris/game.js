@@ -3,13 +3,14 @@ import { createStorage } from "../../shared/storage.js";
 import { createLoop } from "../../shared/loop.js";
 import { showModal, showToast, registerServiceWorker } from "../../shared/ui.js";
 import { setupFullscreen } from "../../shared/fullscreen.js";
-import * as sound from "./sound.js";
+import { createGameFrame, SCREEN } from "../../shared/frame/index.js";
+import { SOUNDS } from "./sound.js";
 
 registerServiceWorker("/service-worker.js");
 
 const CONTROLS_HELP =
   "터치: 좌우 드래그 이동 · 탭 회전 · 아래 드래그 빨리 내리기 · 위 스와이프 즉시 내리기\n" +
-  "키보드: ←→ 이동 · ↑/X 회전 · Z 반대회전 · ↓ 소프트드롭 · Space 하드드롭 · Shift/C 홀드 · P 일시정지";
+  "키보드: ←→ 이동 · ↑/X 회전 · Z 반대회전 · ↓ 소프트드롭 · Space 하드드롭 · Shift/C 홀드 · P 잠깐 멈춤";
 
 const COLS = 10;
 const ROWS = 20;
@@ -153,8 +154,6 @@ const nextCtx = nextEl?.getContext("2d") || null;
 const holdEl = document.getElementById("hold");
 const holdCtx = holdEl?.getContext("2d") || null;
 
-const store = createStorage("tetris");
-
 let state;
 
 function newState(mode = getCurrentMode()) {
@@ -270,9 +269,94 @@ const MODES = {
   },
 };
 
+// 저장. 프레임을 만들기 전에 열어 둔다 - 시작 화면의 고르는 칸 기본값(지난번 고른 모드)을
+// 프레임에 넘겨야 하기 때문이다. 키·네임스페이스는 예전과 같아 기존 기록이 그대로 보인다.
+const store = createStorage("tetris");
+
+// 시작 화면 배경. 이 게임은 배경 그림이 없어 게임 자체 요소로 대신한다(규격 4.8-5) -
+// 조각 일곱 종이 쌓인 열 칸 판을 흐리게 깐다(기획서 Ⅰ권 6장 시안과 같은 방식).
+// 무작위로 만들지 않는다. 열 때마다 배경이 달라 보이면 같은 화면이 아니게 된다.
+// 열 칸 × 스무 줄, 실제 판과 같은 비율이다. 위쪽에 T 조각 하나가 떠 있고
+// 아래쪽에 일곱 종이 섞여 쌓인 모습. 점은 빈 칸이고 글자는 그 조각의 색이 온다.
+const TITLE_STACK = [
+  "..........",
+  "..........",
+  "..........",
+  "...TTT....",
+  "....T.....",
+  "..........",
+  "..........",
+  "..........",
+  "..........",
+  "..........",
+  "..........",
+  "..........",
+  "........OO",
+  "IIII....OO",
+  "......SS..",
+  ".....SS...",
+  "..LL...ZZ.",
+  "..L.....ZZ",
+  "..L.JJJ..T",
+  "LL....J.TT",
+];
+
+function titleBackdrop() {
+  const wrap = document.createElement("div");
+  wrap.className = "title-grid";
+  TITLE_STACK.forEach((row) => {
+    for (const ch of row) {
+      const cell = document.createElement("i");
+      if (COLORS[ch]) {
+        cell.className = "on";
+        cell.style.background = COLORS[ch];
+      }
+      wrap.appendChild(cell);
+    }
+  });
+  return wrap;
+}
+
+// --- 공용 프레임(html-game 표준 4.8) ---
+// 시작 화면·상단 띠·잠깐 멈춤·결과 카드·되돌아가기 계단·소리·저장을 여기서 한 번에 받는다.
+// 모드 넷은 카드로 펼치지 않고 고르는 칸 하나로 접는다(규격 4.8-5) - 첫 화면 높이가
+// 모드 수에 흔들리지 않게 하는 것이 그 규칙의 목적이다.
+// 이어서 하기 칸은 두지 않는다. 떨어지던 판을 되살리려면 보드 전체를 저장해야 해 이번 범위를
+// 넘는다(칸을 주지 않으면 조작단에 아예 나타나지 않아 자리가 어색해지지 않는다).
+const frame = createGameFrame({
+  root: document.getElementById("app"),
+  gameId: "tetris",
+  title: "Tetris",
+  tagline: "라인을 지워라",
+  background: { className: "title-deco", el: titleBackdrop() },
+  buttons: ["sound", "fullscreen"],   // 환경설정 항목이 없는 게임이라 그 자리를 만들지 않는다
+  sounds: SOUNDS,
+  choices: {
+    label: "모드",
+    selectedId: store.get("lastMode", MODE_MARATHON),
+    items: [
+      { id: MODE_KIDS, name: "배움", note: "천천히. 몇 칸 더 채울까?" },
+      { id: MODE_MARATHON, name: "마라톤", note: "라인을 지워라. 끝까지." },
+      { id: MODE_ZEN, name: "젠", note: "가속 없음. 호흡대로." },
+      { id: MODE_SPRINT, name: "스프린트", note: "40라인. 최단 시간." },
+    ],
+  },
+  onStart: (sel) => startGame(sel.choiceId),
+  onChoice: (id) => { pickedMode = id; },
+  onMuted: (m) => updateMuteBtn(m),
+});
+const sound = frame.audio;      // 예전 sound.js와 같은 이름들을 그대로 쓴다
+
+// 이 게임의 플레이 화면을 프레임에 등록한다. 등록하지 않으면 표시를 가르는 기준이 없어
+// 시작 화면 위에 게임 띠와 보드가 그대로 겹쳐 보인다.
+frame.screens.register(SCREEN.PLAY, document.getElementById("game-screen"));
+
+// 지금 고른 모드. 예전에는 주소의 ?mode= 를 읽었지만, 규격이 주소를 바꿔 페이지를 다시 읽는
+// 방식을 금지해(4.8-2) 시작 화면의 고르는 칸이 정한 값을 여기에 담는다.
+let pickedMode = MODE_MARATHON;
+
 function getCurrentMode() {
-  const m = new URL(location.href).searchParams.get("mode");
-  return VALID_MODES.includes(m) ? m : MODE_MARATHON;
+  return VALID_MODES.includes(pickedMode) ? pickedMode : MODE_MARATHON;
 }
 
 function formatTime(sec) {
@@ -723,6 +807,7 @@ function drawKidsHints() {
 }
 
 function render() {
+  if (!state) return;   // 시작 화면에서는 그릴 판이 없다
   // 직전 프레임과 그릴 거리가 같으면 캔버스 재그리기를 건너뛴다(idle 발열의 본질 해결).
   const key = renderKey();
   if (key === lastRenderKey) return;
@@ -855,22 +940,25 @@ function canPlay() {
   return state && !state.over && !state.paused && !state.flashRows;
 }
 
-function updateMuteBtn() {
+// 플레이 화면 띠의 소리 버튼. 상태는 프레임이 알려주는 대로 따라간다.
+// 인자를 받는 이유 - 프레임이 만들어지는 도중에 지난 음소거 상태를 되살리며 이 함수를 부르는데,
+// 그때는 아직 아래 sound 변수가 준비되지 않았다(노노그램 적용에서 겪은 순서 사고).
+function updateMuteBtn(muted) {
   if (!muteBtn) return;
-  const m = sound.isMuted();
+  const m = muted === undefined ? frame.audio.isMuted() : muted;
   muteBtn.textContent = m ? "🔇" : "🔊";
   muteBtn.setAttribute("aria-label", m ? "소리 켜기" : "소리 끄기");
 }
 
 function toggleMute() {
-  const next = !sound.isMuted();
-  sound.setMuted(next);
-  store.set("muted", next);
-  updateMuteBtn();
-  if (!next) sound.play("move"); // 켜는 순간 짧은 확인음
+  const next = !frame.audio.isMuted();
+  frame.audio.setMuted(next);     // 저장·아이콘 갱신은 프레임이 함께 한다
+  if (!next) frame.audio.play("move"); // 켜는 순간 짧은 확인음
 }
 
 function update(dt) {
+  // 시작 화면에서는 판이 아직 없다(예전에는 페이지를 열면 곧바로 판이 만들어졌다).
+  if (!state) return;
   if (state.paused || state.over) return;
   state.elapsed += dt; // 활성 게임 시간 누적 (스프린트 시간 / 젠 플레이 시간 표기)
   if (state.flashRows) {
@@ -1017,92 +1105,69 @@ function drawHold() {
   drawPieceMini(holdEl, holdCtx, t, dim);
 }
 
-async function gameOver() {
+// 판이 끝났을 때. 알림창이 아니라 플레이를 덮는 결과 카드다(규격 4.8-8).
+// 버튼은 다시 하기 / 그만하기 둘이고, 허브로 곧장 나가는 문은 두지 않는다(규격 4.8-3) -
+// 그만하기로 시작 화면까지 올라간 뒤 거기서 한 번 더 되돌아가면 허브로 나간다.
+function gameOver() {
   sound.play("gameover");
   let title;
-  let body;
+  const lines = [];
   let isNewBest = false;
   if (state.mode === MODE_SPRINT && state.finished) {
     // 스프린트 클리어: 시간(ms) 짧을수록 베스트
     const ms = Math.round(state.elapsed * 1000);
     isNewBest = maybeSaveModeBest(MODE_SPRINT, ms);
-    title = "Sprint Clear";
-    body = [
-      `시간 ${formatTime(state.elapsed)}${isNewBest ? "  (신기록!)" : ""}`,
-      `최고 ${formatModeBest(MODE_SPRINT)}`,
-    ].join("\n");
+    title = "40라인 완주";
+    lines.push({ label: "시간", value: formatTime(state.elapsed), highlight: isNewBest });
+    lines.push({ label: "최고", value: formatModeBest(MODE_SPRINT) });
   } else if (state.mode === MODE_SPRINT) {
     // 스프린트 토핑아웃 (실패): 베스트 갱신 없음
-    title = "Game Over";
-    body = [
-      `${state.lines} / ${SPRINT_TARGET_LINES} 라인에서 종료`,
-      `시간 ${formatTime(state.elapsed)}`,
-      `최고 ${formatModeBest(MODE_SPRINT)}`,
-    ].join("\n");
+    title = "게임 끝";
+    lines.push({ label: "지운 줄", value: `${state.lines} / ${SPRINT_TARGET_LINES}` });
+    lines.push({ label: "시간", value: formatTime(state.elapsed) });
+    lines.push({ label: "최고", value: formatModeBest(MODE_SPRINT) });
   } else if (state.mode === MODE_ZEN) {
     isNewBest = maybeSaveModeBest(MODE_ZEN, state.score);
     title = "젠 종료";
-    body = [
-      `점수 ${state.score}${isNewBest ? "  (신기록!)" : ""}`,
-      `라인 ${state.lines} · 시간 ${formatTime(state.elapsed)}`,
-      `최고 ${formatModeBest(MODE_ZEN)}`,
-    ].join("\n");
+    lines.push({ label: "점수", value: state.score, highlight: isNewBest });
+    lines.push({ label: "지운 줄", value: state.lines });
+    lines.push({ label: "시간", value: formatTime(state.elapsed) });
+    lines.push({ label: "최고", value: formatModeBest(MODE_ZEN) });
   } else if (state.mode === MODE_KIDS) {
     isNewBest = maybeSaveModeBest(MODE_KIDS, state.score);
     title = "잘했어! 🎉";
-    body = [
-      `지운 줄 ${state.lines}`,
-      `점수 ${state.score}${isNewBest ? "  (새 기록!)" : ""}`,
-      `최고 ${formatModeBest(MODE_KIDS)}`,
-      "다시 해볼까?",
-    ].join("\n");
+    lines.push({ label: "지운 줄", value: state.lines });
+    lines.push({ label: "점수", value: state.score, highlight: isNewBest });
+    lines.push({ label: "최고", value: formatModeBest(MODE_KIDS) });
   } else {
     // 마라톤 토핑아웃
     isNewBest = maybeSaveModeBest(MODE_MARATHON, state.score);
-    title = "Game Over";
-    body = [
-      `점수 ${state.score}${isNewBest ? "  (신기록!)" : ""}`,
-      `라인 ${state.lines} · 레벨 ${state.level}`,
-      `최고 ${formatModeBest(MODE_MARATHON)}`,
-    ].join("\n");
+    title = "게임 끝";
+    lines.push({ label: "점수", value: state.score, highlight: isNewBest });
+    lines.push({ label: "지운 줄", value: state.lines });
+    lines.push({ label: "레벨", value: state.level });
+    lines.push({ label: "최고", value: formatModeBest(MODE_MARATHON) });
   }
   updateHud();
-  // 배움 모드는 좌절 없이 바로 재도전할 수 있게 "다시 하기"를 기본 버튼으로.
-  const actions = state.mode === MODE_KIDS
-    ? [
-        { label: "다시 하기", primary: true, value: "restart" },
-        { label: "모드 선택", value: "menu" },
-        { label: "홈으로", value: "home" },
-      ]
-    : [
-        { label: "모드 선택", primary: true, value: "menu" },
-        { label: "홈으로", value: "home" },
-      ];
-  const choice = await showModal({ title, body, actions });
-  if (choice === "restart") restart();
-  else if (choice === "menu") goToMenu();
-  else location.href = "../../";
+  refreshTitleRecords();
+  frame.result.show({ title, lines, newRecord: isNewBest });
+  frame.screens.go(SCREEN.RESULT);
 }
 
-async function togglePause() {
+// 잠깐 멈춤. 카드는 프레임이 갖고 있고 여기서는 화면만 옮긴다.
+// 조작 안내는 카드 본문에 담아 예전 알림창이 하던 역할을 그대로 잇는다.
+function togglePause() {
   if (state.over) return;
-  state.paused = true;
-  pauseBtn.textContent = "▶";
-  const choice = await showModal({
-    title: "일시정지",
-    body: CONTROLS_HELP,
-    actions: [
-      { label: "재개", primary: true, value: "resume" },
-      { label: "다시 시작", value: "restart" },
-      { label: "모드 선택", value: "menu" },
-      { label: "홈으로", value: "home" },
-    ],
-  });
-  if (choice === "home") { location.href = "../../"; return; }
-  if (choice === "menu") { goToMenu(); return; }
-  if (choice === "restart") { restart(); return; }
-  state.paused = false;
-  pauseBtn.textContent = "⏸";
+  if (frame.screens.current() === SCREEN.PAUSE) { frame.screens.back(); return; }
+  frame.screens.go(SCREEN.PAUSE);
+}
+
+// 화면이 잠깐 멈춤으로 갈 때·나올 때 게임 상태를 맞춘다.
+// 화면을 벗어나 자동으로 멈춤이 된 경우와 버튼으로 멈춘 경우가 같은 자리를 지나게 하는 것이 목적이다.
+function applyPauseState(paused) {
+  if (!state) return;
+  state.paused = paused;
+  if (pauseBtn) pauseBtn.textContent = paused ? "▶" : "⏸";
 }
 
 function restart() {
@@ -1116,79 +1181,81 @@ function restart() {
 }
 
 function tickHud() {
+  if (!state) return;   // 시작 화면에서는 채울 HUD가 없다
   updateHud();
-  // 게임 오버 모달은 단 한 번만 띄운다(매 프레임 호출 방지)
+  // 결과 카드는 단 한 번만 띄운다(매 프레임 호출 방지)
   if (state.over && !state.overHandled) {
     state.overHandled = true;
     gameOver();
   }
 }
 
-function init() {
-  state = newState();
-  ensureBag();
-  spawn();
-  setupHudLabels();
-  updateHud();
+// 페이지를 열 때 한 번만 하는 배선. 예전에는 이 안에서 판까지 시작했는데,
+// 이제는 시작 화면에서 모드를 고른 뒤 startGame이 판을 만든다(그래서 둘로 갈랐다).
+function setupOnce() {
   setupInput();
-  resize();
   window.addEventListener("resize", resize);
   window.addEventListener("orientationchange", () => setTimeout(resize, 100));
   pauseBtn.addEventListener("click", togglePause);
-
-  // 사운드: 저장된 음소거 설정 반영 + 첫 사용자 제스처에서 오디오 잠금 해제(브라우저 자동재생 정책).
-  sound.setMuted(store.get("muted", false));
-  updateMuteBtn();
-  const unlockOnce = () => { sound.unlockAudio(); };
-  window.addEventListener("pointerdown", unlockOnce, { once: true });
-  window.addEventListener("keydown", unlockOnce, { once: true });
+  // 플레이 화면 왼쪽 위 화살표도 계단을 따른다 - 한 칸 위(시작 화면)로만 간다.
+  document.getElementById("btn-back")?.addEventListener("click", () => frame.screens.back());
   if (muteBtn) muteBtn.addEventListener("click", toggleMute);
-  // 탭이 백그라운드로 가면 오디오를 재우고 복귀 시 되살린다(발열·배터리).
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) sound.suspendAudio();
-    else sound.resumeAudio();
-  });
-  // 전체화면 토글(STANDARD 4.7 규칙 6). 미지원 기기·홈 화면 앱은 버튼을 숨기고,
-  // 조작 중 브라우저가 임의로 전체화면을 끝내면 다음 조작에 되돌린다(shared/fullscreen.js).
+  updateMuteBtn();
+  // 오디오 열기·음소거 저장·화면 이탈 시 재우기·자동 잠깐 멈춤은 공용 프레임이 맡는다.
+  // 플레이 화면 전용 전체화면 버튼만 여기서 같은 공용 모듈에 건다.
   setupFullscreen({ button: fsBtn });
+
+  // 잠깐 멈춤 카드. 조작 안내를 본문에 담아 예전 알림창이 하던 역할을 잇는다.
+  frame.pause.setLines(CONTROLS_HELP.split("\n"));
+  frame.pause.on("continue", () => frame.screens.back());
+  frame.pause.on("restart", () => { restart(); frame.screens.go(SCREEN.PLAY); });
+  frame.pause.on("quit", () => frame.screens.go(SCREEN.TITLE));
+  frame.result.on("retry", () => { restart(); frame.screens.go(SCREEN.PLAY); });
+  frame.result.on("quit", () => frame.screens.go(SCREEN.TITLE));
+
+  // 화면이 바뀔 때 게임 상태를 맞춘다. 버튼으로 멈춘 경우와 화면을 벗어나 자동으로
+  // 멈춤이 된 경우가 같은 자리를 지나게 한다.
+  frame.screens.onChange((now) => {
+    if (now === SCREEN.PAUSE) applyPauseState(true);
+    else if (now === SCREEN.PLAY) applyPauseState(false);
+    if (now === SCREEN.PLAY) requestAnimationFrame(() => resize());
+    if (now === SCREEN.TITLE) refreshTitleRecords();
+  });
 
   loop = createLoop({
     update: (dt) => { update(dt); tickHud(); },
     render: () => render(),
   });
   loop.start();
+}
 
-  // 마라톤 외 모드는 진입 시 모드명 안내 (URL 쿼리로 진입한 사용자가 모드 진입을 즉시 인지하도록)
-  if (state.mode !== MODE_MARATHON) {
-    showToast(`${MODES[state.mode].label} 모드`, 1800);
+// 시작 화면의 고르는 칸에 모드별 최고 기록을 채운다.
+// 아직 기록이 없는 모드는 빈 값으로 넘겨 프레임이 '기록 없음'을 쓰게 한다 -
+// 0점이나 줄표를 기록처럼 적으면 한 번 해 본 것으로 읽힌다.
+function refreshTitleRecords() {
+  VALID_MODES.forEach((m) => {
+    const best = getModeBest(m);
+    const empty = best === null || best === 0;
+    frame.title.setChoiceRecord(m, empty ? "" : `최고 ${formatModeBest(m)}`);
+  });
+}
+
+// 고른 모드로 한 판 시작. 예전에는 주소를 바꿔 페이지를 다시 읽었다.
+function startGame(mode) {
+  pickedMode = VALID_MODES.includes(mode) ? mode : MODE_MARATHON;
+  store.set("lastMode", pickedMode);
+  restart();
+  frame.screens.go(SCREEN.PLAY);
+  requestAnimationFrame(() => resize());
+
+  if (pickedMode !== MODE_MARATHON) {
+    showToast(`${MODES[pickedMode].label} 모드`, 1800);
   }
   // 첫 방문 안내 토스트(한 번만)
   if (!store.get("seen-help", false)) {
-    showToast("일시정지 버튼 ⏸ 에서 컨트롤 가이드 확인", 2800);
+    showToast("잠깐 멈춤 버튼 ⏸ 에서 조작 안내 확인", 2800);
     store.set("seen-help", true);
   }
-}
-
-// === 라우팅 + 메뉴 (2차 2단계, docs/difficulty-redesign.md 4.4) ===
-const menuScreenEl = document.getElementById("menu-screen");
-const gameScreenEl = document.getElementById("game-screen");
-
-function isMenuRoute() {
-  return !new URL(location.href).searchParams.get("mode");
-}
-
-function showMenuScreen() {
-  if (menuScreenEl) menuScreenEl.hidden = false;
-  if (gameScreenEl) gameScreenEl.hidden = true;
-}
-function showGameScreen() {
-  if (menuScreenEl) menuScreenEl.hidden = true;
-  if (gameScreenEl) gameScreenEl.hidden = false;
-}
-
-function goToMenu() {
-  // 쿼리 제거 → 메뉴 라우트로 복귀
-  location.href = location.pathname;
 }
 
 async function maybeShowBestPurgeNotice() {
@@ -1211,42 +1278,16 @@ async function maybeShowBestPurgeNotice() {
   store.set("bestNoticeShown", true);
 }
 
-async function setupMenu() {
-  showMenuScreen();
-  await maybeShowBestPurgeNotice();
+// 첫 화면은 시작 화면이다(규격 4.8-1). 예전에는 주소에 ?mode= 가 없을 때만 메뉴가 떴다.
+async function bootstrap() {
+  setupOnce();
+  // 지난번 고른 모드를 되살린다(고르는 칸에 보이는 값은 프레임을 만들 때 이미 맞춰 뒀다).
   const last = store.get("lastMode", MODE_MARATHON);
-  const cards = document.querySelectorAll(".mode-card");
-  cards.forEach((card) => {
-    const mode = card.dataset.mode;
-    if (mode === last) card.classList.add("active");
-    const bestCell = card.querySelector("[data-best]");
-    if (bestCell) {
-      if (mode === MODE_SPRINT) {
-        const ms = store.get("best.sprint", null);
-        bestCell.textContent = ms === null ? "⏱ —" : `⏱ ${formatTime(ms / 1000)}`;
-      } else {
-        bestCell.textContent = `★ ${store.get(`best.${mode}`, 0)}`;
-      }
-    }
-    card.addEventListener("click", () => {
-      store.set("lastMode", mode);
-      location.href = `?mode=${mode}`;
-    });
-  });
-  // 모바일 젠 [추천] 뱃지 (기획서 4.2.4)
-  if (isCoarsePointer()) {
-    const badge = document.querySelector("[data-zen-badge]");
-    if (badge) badge.hidden = false;
-  }
-}
-
-function bootstrap() {
-  if (isMenuRoute()) {
-    setupMenu();
-  } else {
-    showGameScreen();
-    init();
-  }
+  if (VALID_MODES.includes(last)) pickedMode = last;
+  refreshTitleRecords();
+  // 아직 판이 없는 상태에서도 보드 캔버스 크기를 잡아 둔다(첫 시작이 매끄럽게 보이도록).
+  resize();
+  await maybeShowBestPurgeNotice();
 }
 
 bootstrap();

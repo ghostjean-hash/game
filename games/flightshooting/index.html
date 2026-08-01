@@ -12,61 +12,15 @@
 <link rel="manifest" href="app.webmanifest" />
 <link rel="stylesheet" href="../../shared/tokens.css" />
 <link rel="stylesheet" href="../../shared/base.css" />
+<link rel="stylesheet" href="../../shared/frame/frame.css" />
 <link rel="stylesheet" href="styles/main.css" />
 <title>Bapuri's Flight - game_ghost</title>
 </head>
 <body>
-<div class="page shooter">
-  <!-- 메뉴 화면 -->
-  <div id="menu-screen" class="menu-screen">
-    <div class="topbar">
-      <a href="../../" class="home" aria-label="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
-      <h1 class="sr-only">Bapuri's Flight</h1>
-      <div class="menu-title">Bapuri's Flight</div>
-      <span class="spacer"></span>
-      <button id="btn-mute" class="icon-btn" type="button" aria-label="소리 끄기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>
-      <button id="btn-fs" class="icon-btn" type="button" aria-label="전체화면" hidden>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-      </button>
-    </div>
-    <div class="menu-stage">
-      <div class="menu-hero">
-        <div class="hero-craft" aria-hidden="true"><img src="assets/characters/bapuri-sprite-v2.png" alt="" /><img id="hero-friend" class="hero-friend" src="assets/characters/kiwi-sprite-v2.png" alt="" hidden /></div>
-        <div class="menu-best" aria-live="polite">
-          <span class="best-label">최고 점수</span>
-          <b id="menu-best">0</b>
-        </div>
-      </div>
-      <div class="menu-actions">
-        <div class="diff-select">
-          <span class="opt-label">난이도</span>
-          <div class="seg seg-vert" id="diff-seg" role="radiogroup" aria-label="난이도 선택">
-            <button type="button" class="seg-btn" data-diff="easy" role="radio" aria-checked="false">쉬움</button>
-            <button type="button" class="seg-btn on" data-diff="normal" role="radio" aria-checked="true">보통</button>
-            <button type="button" class="seg-btn" data-diff="hard" role="radio" aria-checked="false">어려움</button>
-            <button type="button" class="seg-btn" data-diff="insane" role="radio" aria-checked="false">매우 어려움</button>
-          </div>
-        </div>
-        <div class="opt-icons">
-          <button id="opt-friend" class="opt-icon" type="button" aria-pressed="false" aria-label="친구 동행">
-            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 10.5c-1.5-3.3-4.2-4.8-6.7-4.5 1.3 2.5 2.5 4.4 5 5.5"/><path d="M21 10.5c1.5-3.3 4.2-4.8 6.7-4.5-1.3 2.5-2.5 4.4-5 5.5"/><ellipse cx="16" cy="17.5" rx="10" ry="8.5"/><path d="M13.2 17.8h5.6l-2.8 2.5z" fill="currentColor" stroke="none"/><circle cx="12.5" cy="15" r="1" fill="currentColor" stroke="none"/><circle cx="19.5" cy="15" r="1" fill="currentColor" stroke="none"/><path d="M11.5 25v2.4M20.5 25v2.4"/></svg>
-            <span>친구</span>
-          </button>
-          <button id="opt-auto" class="opt-icon" type="button" aria-pressed="false" aria-label="자동 플레이">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-            <span>자동</span>
-          </button>
-        </div>
-        <button id="btn-resume" class="btn btn-primary btn-play btn-resume" type="button" disabled>
-          <span>이어서 하기</span>
-          <span class="resume-sub"></span>
-        </button>
-        <button id="btn-start" class="btn btn-primary btn-play" type="button">시작</button>
-        <button id="btn-settings" class="btn btn-how" type="button">환경설정</button>
-      </div>
-    </div>
-  </div>
-
+<!-- 시작 화면·상단 띠·잠깐 멈춤·결과 카드는 공용 프레임이 만든다(html-game 표준 4.8).
+     예전에는 이 자리에 이 게임 전용 메뉴 화면이 있었다 - 캐릭터·최고 점수·난이도 세그·
+     친구/자동 토글·이어서 하기·시작·환경설정이 모두 공용 시작 화면의 같은 자리로 옮겨졌다. -->
+<div class="page shooter" id="app">
   <!-- 환경설정 모달 -->
   <div id="settings-modal" class="settings-modal" hidden>
     <div class="settings-panel" role="dialog" aria-label="환경설정">
@@ -89,10 +43,11 @@
     </div>
   </div>
 
-  <!-- 게임 화면 -->
-  <div id="game-screen" class="game-screen" hidden>
+  <!-- 게임 화면. HUD를 캔버스 위에 겹쳐 놓은 구조라 이 화면에서는 공용 상단 띠를 감추고
+       이 HUD의 버튼을 프레임에 연결한다(규격 4.8-17). -->
+  <div id="game-screen" class="game-screen">
     <div class="topbar">
-      <a href="../../" id="game-home" class="home" aria-label="모드 선택으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+      <button id="game-home" class="home" type="button" aria-label="되돌아가기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></button>
       <h1 class="sr-only">Bapuri's Flight</h1>
       <div class="score-big" aria-live="polite" aria-label="점수">
         <b id="score">0</b>
@@ -111,7 +66,11 @@
         <span class="life"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="life"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="life"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="life" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="life" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
       </div>
       <button id="btn-auto" class="icon-btn" type="button" aria-label="자동 플레이 켜기" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></button>
-      <button id="btn-pause" class="icon-btn" type="button" aria-label="일시정지"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg></button>
+      <!-- 소리 버튼은 어느 화면에서든 있어야 한다(규격 4.8-4). 시작 화면에서는 공용 상단 띠가 갖고,
+           플레이 화면은 그 띠를 감추므로(4.8-17) 같은 버튼을 여기에 둔다. 동작은 공용 프레임에 연결된다.
+           전체화면은 시작 화면에만 둔다 - 플레이 중에 바꿀 일이 드물고, 이 HUD는 이미 가로가 빽빽하다. -->
+      <button id="btn-mute" class="icon-btn" type="button" aria-label="소리 끄기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>
+      <button id="btn-pause" class="icon-btn" type="button" aria-label="잠깐 멈춤"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg></button>
     </div>
     <div class="stage">
       <canvas id="board"></canvas>

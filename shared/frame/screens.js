@@ -101,8 +101,14 @@ export function createScreens({ root, hubHref = '../../', hasSelect = false, use
     depth(name) { return stack.depth(name); },
     onChange(fn) { if (typeof fn === 'function') listeners.push(fn); },
     // 게임이 자기 화면 요소를 프레임에 등록할 때 쓴다(이름을 붙여 두면 표시는 CSS가 가른다).
+    // 같은 이름으로 이미 등록된 다른 요소가 있으면 그 이름표를 뗀다 - 프레임이 미리 만들어 둔
+    // 빈 자리를 게임이 자기 화면으로 갈아끼우는 경우다. 떼지 않으면 빈 자리도 함께 표시되어
+    // 화면 높이를 반씩 나눠 갖는다(비행 슈팅 적용에서 실측으로 드러난 사고 - 보드가 절반 크기).
     register(name, el) {
       if (!el) return null;
+      root.querySelectorAll(`[${ATTR_SCREEN}="${name}"]`).forEach((prev) => {
+        if (prev !== el) prev.removeAttribute(ATTR_SCREEN);
+      });
       el.setAttribute(ATTR_SCREEN, name);
       if (el.parentElement !== root) root.appendChild(el);
       return el;

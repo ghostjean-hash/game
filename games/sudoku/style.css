@@ -22,12 +22,69 @@
 .sudoku {
   flex: 1;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr;
   gap: 0;
   padding: 0;
   min-height: 0;
   touch-action: none;
 }
+
+/* ── 화면 전환(공용 프레임, html-game 표준 4.8) ──
+   지금 어느 화면인지는 프레임이 #app의 data-screen에 적고 표시는 shared/frame/frame.css가
+   가른다. 프레임 기본값은 display:block인데 이 게임의 플레이 화면은 세 줄 격자
+   (난이도·시계 줄 / 보드 / 숫자 패드)라 그 값을 여기서 되돌려 준다. */
+.sudoku.gg-frame[data-screen='play'] > [data-gg-screen='play'],
+.sudoku.gg-frame[data-covered='play'] > [data-gg-screen='play'] {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 0;
+}
+
+/* 플레이 화면에서는 공용 상단 띠를 감춘다. 이 게임은 보드를 정사각으로 최대한 키우려고
+   위·아래 줄을 최소로 눌러 놓은 구조라 띠를 얹으면 보드가 줄어든다(규격 4.8-11). */
+.sudoku.gg-frame[data-screen='play'] .gg-topbar,
+.sudoku.gg-frame[data-screen='pause'] .gg-topbar,
+.sudoku.gg-frame[data-screen='result'] .gg-topbar { display: none; }
+
+/* 흰 바탕 게임이라 프레임에 밝은 톤을 쓴다(light: true). 강조 버튼 위 글자만 이어 준다. */
+.sudoku.gg-frame { --accent-fg: #ffffff; }
+
+/* 시작 화면 배경: 실제로 들어 있는 입문 문제의 9칸 판.
+   배경 그림도 캐릭터도 없는 게임이라 판 자체가 배경이 된다(규격 4.8-5). */
+.sudoku .title-deco { overflow: hidden; }
+.sudoku .title-grid {
+  position: absolute;
+  left: 50%;
+  top: 30dvh;                /* 제목·부제 아래. %로 주면 CSS가 폭 기준으로 계산해 위로 붙는다 */
+  transform: translateX(-50%);
+  width: min(76vw, 320px);
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  background: #ffffff;
+  border: 2px solid var(--fg);
+  border-radius: 10px;
+  overflow: hidden;
+  opacity: 0.5;
+}
+.sudoku .title-grid i {
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 2.6vw, 14px);
+  font-weight: 700;
+  color: var(--fg);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+/* 사람이 채운 자리는 파랗고 흐리게 - 처음부터 있던 단서와 구분한다. */
+.sudoku .title-grid i.filled { color: var(--accent); font-weight: 500; }
+.sudoku .title-grid i:nth-child(9n) { border-right: none; }
+.sudoku .title-grid i:nth-child(3n):not(:nth-child(9n)) { border-right: 2px solid var(--fg); }
+/* 3x3 묶음 굵은 가로선 - 3행 끝(19~27번 칸)과 6행 끝(46~54번 칸). */
+.sudoku .title-grid i:nth-child(n+19):nth-child(-n+27),
+.sudoku .title-grid i:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid var(--fg); }
+.sudoku .title-grid i:nth-child(n+73) { border-bottom: none; }
 
 .sudoku .topbar {
   padding: 6px 10px;

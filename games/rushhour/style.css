@@ -86,6 +86,79 @@ body:has(.rushhour) { background: #3a2d40; }
 }
 
 /* 보드 영역: 화면에 맞춰 정사각형으로. */
+/* ── 화면 전환(공용 프레임, html-game 표준 4.8) ──
+   지금 어느 화면인지는 프레임이 #app의 data-screen에 적고 표시는 shared/frame/frame.css가
+   가른다. 프레임 기본값은 display:block인데 이 게임의 플레이 화면은 세로 flex 세 줄
+   (골드·이동 줄 / 보드 / 조작 버튼)이라 그 값을 여기서 되돌려 준다. */
+.rushhour.gg-frame[data-screen='play'] > [data-gg-screen='play'],
+.rushhour.gg-frame[data-covered='play'] > [data-gg-screen='play'] {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* 진행 맵은 시작 다음 칸이다. 예전 팝업 모양을 그대로 쓰되 위쪽에 공용 상단 띠 자리를 비워
+   되돌아가기 화살표가 가리지 않게 한다(규격 4.8-4는 고르는 화면에서도 띠를 쓰게 한다). */
+.rushhour.gg-frame[data-screen='select'] > [data-gg-screen='select'] {
+  display: grid;
+  place-items: center;
+  padding-top: 52px;
+}
+
+/* 진행 맵은 예전 팝업 스타일(화면을 덮는 어두운 막, z-index 100)을 그대로 쓰기 때문에
+   그대로 두면 공용 상단 띠가 그 막 뒤로 깔려 되돌아가기 화살표가 흐려진다. 띠를 위로 올린다. */
+.rushhour.gg-frame[data-screen='select'] .gg-topbar { z-index: 101; }
+
+/* 플레이 화면에서는 공용 상단 띠를 감춘다. 이 게임은 보드를 화면 가득 키우려고
+   위·아래 줄을 최소로 눌러 놓은 구조라 띠를 얹으면 보드가 줄어든다(규격 4.8-11). */
+.rushhour.gg-frame[data-screen='play'] .gg-topbar,
+.rushhour.gg-frame[data-screen='result'] .gg-topbar { display: none; }
+
+/* 프레임이 쓰는 색 이름을 이 게임 크림 팔레트로 이어 준다. */
+.rushhour.gg-frame {
+  --accent-fg: #3a2e3a;
+}
+
+/* 시작 화면 배경: 실제 크림 판과 오른쪽 출구 길 + 48번 문제의 차 배치. */
+.rushhour .title-deco { overflow: hidden; }
+.rushhour .title-board {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: start center;
+  /* 제목·기록 줄 아래로 완전히 내린다(겹치면 흰 글자가 크림 판에 묻힌다).
+     화면 높이 기준이어야 한다 - %로 주면 CSS가 폭 기준으로 계산해 훨씬 위에 붙는다. */
+  padding-top: 34dvh;
+  opacity: 0.44;
+}
+.rushhour .tb-grid {
+  position: relative;
+  width: min(64vw, 264px);
+  aspect-ratio: 1;
+  background:
+    /* 오른쪽 세 번째 줄의 출구 길(이 게임의 얼굴). 6칸 중 3번째 줄 = 세로 41.67% 자리. */
+    linear-gradient(var(--rh-exit), var(--rh-exit)) no-repeat 100% 41.67% / 14% calc(100% / 6),
+    repeating-linear-gradient(90deg, var(--rh-line) 0 1px, transparent 1px calc(100% / 6)),
+    repeating-linear-gradient(180deg, var(--rh-line) 0 1px, transparent 1px calc(100% / 6)),
+    var(--rh-board);
+  border-radius: 14px;
+}
+.rushhour .tb-car {
+  position: absolute;
+  border-radius: 8px;
+  background: #cdb0ff;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .5);
+  transform: scale(.9);
+}
+.rushhour .tb-car:nth-child(3n) { background: #a6d3ff; }
+.rushhour .tb-car:nth-child(3n+1) { background: #a8e6b8; }
+.rushhour .tb-car:nth-child(4n) { background: #ffd873; }
+.rushhour .tb-car.is-target {
+  background: #ffb0c8;
+  border: 2px solid #e8577f;
+}
+
 .rushhour .stage {
   flex: 1;
   display: grid;

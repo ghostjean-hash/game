@@ -201,6 +201,15 @@
 .gg-row { display: flex; gap: 8px; }
 .gg-row > * { flex: 1; }
 
+/* 켜고 끄는 버튼(친구 동행·자동 플레이처럼 서로 배타가 아닌 것). 켜지면 강조색 테두리가 붙어
+   꺼진 것과 한눈에 갈린다 - 아이콘 색만 바꾸면 켜졌는지 알기 어렵다는 지적이 있었다. */
+.gg-btn-ghost.is-on {
+  color: var(--fg, #fff);
+  border-color: var(--accent, #7cf3c4);
+  box-shadow: 0 0 0 1px var(--accent, #7cf3c4) inset;
+  background: color-mix(in srgb, var(--accent, #7cf3c4) 14%, transparent);
+}
+
 /* ── 고르는 칸과 펼침 목록 ─────────────────────────────── */
 .gg-pick {
   display: flex;

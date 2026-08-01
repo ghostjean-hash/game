@@ -2,13 +2,14 @@
 // core(순수 로직)가 game.sfx/game.events에 담은 신호를 여기서 소비(사운드 재생·화면 전환).
 import { createLoop } from '../../../shared/loop.js';
 import { createStorage } from '../../../shared/storage.js';
-import { showModal, registerServiceWorker } from '../../../shared/ui.js';
+import { registerServiceWorker } from '../../../shared/ui.js';
 import { setupFullscreen } from '../../../shared/fullscreen.js';
+import { createGameFrame, SCREEN } from '../../../shared/frame/index.js';
 import { CFG } from './data/numbers.js';
 import { COLORS } from './data/colors.js';
 import { COUNTRIES, START_COUNTRY } from './data/countries.js';
 import { COUNTRY_PATHS, MAP_FEATURE_PATHS, MAP_W, MAP_H, lonToX, latToY } from './data/worldmap.js';
-import * as sound from './audio/sound.js';
+import { SOUNDS } from './audio/sound.js';
 import { initStars } from './core/stars.js';
 import { stepWorld, startStage, applyKeyboard, updateParticles } from './core/world.js';
 import { spawnBoss } from './core/spawn.js';
@@ -22,7 +23,6 @@ registerServiceWorker('/service-worker.js');
 
 // ── DOM 참조 ──
 const $ = (sel) => document.querySelector(sel);
-const menuScreen = $('#menu-screen');
 const gameScreen = $('#game-screen');
 const canvas = $('#board');
 const ctx = canvas.getContext('2d');
@@ -36,13 +36,10 @@ const elZone = $('#zone');
 const elTail = $('#tail');
 const elLives = $('#lives');
 const lifeEls = elLives.querySelectorAll('.life'); // 하트 노드는 고정 → 1회만 조회(매 프레임 재쿼리 제거)
-const elMenuBest = $('#menu-best');
 const elBossBar = $('#boss-bar');
 const elBossName = $('#boss-name');
 const elBossFill = $('#boss-hp-fill');
 const elBanner = $('#banner');
-const btnStart = $('#btn-start');
-const btnMute = $('#btn-mute');
 const btnPause = $('#btn-pause');
 const btnAuto = $('#btn-auto');
 const btnFs = $('#btn-fs');
@@ -81,6 +78,44 @@ const cheatSaved = { ...CHEAT_DEFAULT, ...store.get('cheatCfg', {}) };
 let cheatSpeed = cheatSaved.speed;
 const cheatState = { invincible: cheatSaved.invincible, dropChance: cheatSaved.dropChance, dropKinds: { ...CHEAT_DEFAULT.dropKinds, ...cheatSaved.dropKinds } };
 function saveCheat() { store.set('cheatCfg', { speed: cheatSpeed, invincible: cheatState.invincible, dropChance: cheatState.dropChance, dropKinds: cheatState.dropKinds }); }
+
+// ── 공용 프레임(html-game 표준 4.8) ──
+// 시작 화면·상단 띠·잠깐 멈춤·결과 카드·되돌아가기 계단·소리를 여기서 한 번에 받는다.
+// 예전 전용 메뉴 화면의 항목이 규격이 정한 같은 자리로 그대로 옮겨졌다 -
+// 난이도 넷은 한 줄 세그(options), 친구 동행·자동 플레이는 시작 바로 위 켜고 끄는 줄(toggles),
+// 이어서 하기는 그 위 칸, 환경설정은 상단 띠의 톱니로 간다(기획서 Ⅰ권 6.2 시안).
+const DIFF_NAMES = { easy: '쉬움', normal: '보통', hard: '어려움', insane: '매우 어려움' };
+const frame = createGameFrame({
+  root: document.getElementById('app'),
+  gameId: 'flightshooting',
+  title: '바푸리의 모험',
+  character: { src: 'assets/characters/bapuri-upward-v5.png', width: 138 },
+  background: { image: 'assets/diorama/KR-seoul.png' },
+  buttons: ['settings', 'sound', 'fullscreen'],
+  sounds: SOUNDS,
+  resume: { enabled: false, detail: '' },
+  options: {
+    selectedId: difficulty,
+    items: Object.entries(DIFF_NAMES).map(([id, name]) => ({ id, name })),
+  },
+  toggles: [
+    { id: 'friend', label: '친구 동행', on: friendOn },
+    { id: 'auto', label: '자동 플레이', on: autoOn },
+  ],
+  onStart: (sel) => {
+    if (sel.optionId) difficulty = sel.optionId;
+    startGame(difficulty);
+  },
+  onResume: () => resumeSaved(),
+  onOption: (id) => { difficulty = id; store.set('difficulty', id); },
+  onToggle: (id, on) => {
+    if (id === 'friend') { friendOn = on; store.set('friendOn', on); }
+    else if (id === 'auto') { autoOn = on; store.set('autoOn', on); }
+  },
+  onSettings: () => { settingsModal.hidden = false; },
+  onMuted: (m) => syncMuteBtn(m),
+});
+const sound = frame.audio;   // 예전 sound.js와 같은 이름들을 그대로 쓴다
 
 function createGame() {
   return {
@@ -330,11 +365,10 @@ function loadProgress() { return store.get(SAVE_KEY, null); }
 function startGame(diff, saved) {
   if (diff) { difficulty = diff; store.set('difficulty', diff); } // 모드 버튼으로 시작하면 선택 기억
   sound.unlockAudio();
-  // 뒤로가기(화면 ← / 폰 백버튼)로 게임 밖 이탈 대신 모드 선택으로 돌아가게 히스토리 지점을 하나 쌓는다.
-  //   재시작(retry) 경로는 이미 game 지점이라 중복 push하지 않는다.
-  if (!history.state || history.state.screen !== 'game') history.pushState({ screen: 'game' }, '');
-  menuScreen.hidden = true;
-  gameScreen.hidden = false;
+  // 되돌아갈 자리를 쌓는 일과 기기 뒤로가기를 받는 일은 이제 공용 계단이 맡는다(규격 4.8-3/4.8-18).
+  // 예전에는 이 게임이 직접 history를 쌓고 popstate를 가로챘는데, 그 상태로 공용 계단을 얹으면
+  // 뒤로가기 한 번에 두 칸이 물러난다.
+  frame.screens.go(SCREEN.PLAY);
   resize();
   resetGame();
   if (friendOn) spawnFriend(game, W, H); // 친구 동행 토글(난이도 무관, docs/09)
@@ -378,13 +412,23 @@ function startGame(diff, saved) {
   saveProgress(); // 진행 저장(홈 '이어서 하기'가 이 상태로 재개)
 }
 
+// 잠깐 멈춤. 카드는 공용 프레임이 갖고 있고 여기서는 화면만 옮긴다(규격 4.8-8).
+// 예전에는 배너에 '일시정지'를 띄우고 화면을 탭해 풀었다.
 function togglePause() {
-  if (state === 'playing') {
+  if (state === 'playing') frame.screens.go(SCREEN.PAUSE);
+  else if (state === 'paused') frame.screens.back();
+}
+
+// 화면이 잠깐 멈춤으로 갈 때·나올 때 게임 상태를 맞춘다. 버튼으로 멈춘 경우와
+// 화면을 벗어나 자동으로 멈춤이 된 경우가 같은 자리를 지난다.
+function applyPauseState(paused) {
+  if (paused) {
+    if (state !== 'playing') return;
     state = 'paused';
     loop.pause();
-    showBanner('일시정지', '탭하여 계속', 999);
     btnPause.innerHTML = ICON.play;
-  } else if (state === 'paused') {
+  } else {
+    if (state !== 'paused') return;
     state = 'playing';
     elBanner.hidden = true;
     bannerTimer = 0;
@@ -393,40 +437,34 @@ function togglePause() {
   }
 }
 
-async function gameOver() {
+function gameOver() {
   state = 'over';
   loop.pause();
   clearProgress(); // 격추 = 저장 무효화(이어하기 불가)
   sound.play('gameover');
   const isBest = commitBest();
-  const choice = await showModal({
-    title: '격추당했다',
-    body: `점수 ${game.score}${isBest ? '\n최고 기록 갱신!' : `\n최고 ${best}`}`,
-    actions: [
-      { label: '다시하기', primary: true, value: 'retry' },
-      { label: '홈', value: 'home' },
-    ],
-  });
-  if (choice === 'retry') startGame();
-  else backToMenu();
+  showResult('격추당했다', isBest);
 }
 
-async function gameWon() {
+function gameWon() {
   state = 'won';
   loop.pause();
   clearProgress(); // 완주 = 저장 무효화
   sound.play('stageclear');
   const isBest = commitBest();
-  const choice = await showModal({
-    title: '전 구역 격파!',
-    body: `${CFG.stageCount}개 구역의 모든 보스를 쓰러뜨렸다.\n최종 점수 ${game.score}${isBest ? '\n최고 기록 갱신!' : ''}`,
-    actions: [
-      { label: '다시하기', primary: true, value: 'retry' },
-      { label: '홈', value: 'home' },
-    ],
-  });
-  if (choice === 'retry') startGame();
-  else backToMenu();
+  showResult('전 구역 격파!', isBest, `${CFG.stageCount}개 구역의 모든 보스를 쓰러뜨렸다`);
+}
+
+// 결과는 알림창이 아니라 플레이를 덮는 카드다(규격 4.8-8).
+// 버튼은 다시 하기 / 그만하기 둘이고 허브로 곧장 나가는 문은 두지 않는다(4.8-3).
+function showResult(title, isBest, note = '') {
+  const lines = [];
+  if (note) lines.push(note);
+  lines.push({ label: '점수', value: game.score.toLocaleString(), highlight: isBest });
+  lines.push({ label: '최고', value: best.toLocaleString() });
+  lines.push({ label: '간 곳', value: `구역 ${game.stage}` });
+  frame.result.show({ title, lines, newRecord: isBest });
+  frame.screens.go(SCREEN.RESULT);
 }
 
 function commitBest() {
@@ -857,17 +895,44 @@ $('#map-exit').addEventListener('click', () => {
   backToMenu();
 });
 
-// fromPop = popstate(폰 백버튼/화면 ← 경유)로 불린 경우. 그 외(게임오버 모달 '홈' 등) 직접 호출 시엔
-//   startGame에서 쌓은 game 히스토리 지점을 소비해, 다음 시작 때 push가 정상 동작하도록 정리한다.
-function backToMenu(fromPop) {
+// 시작 화면으로 돌아간다. 화면 이동과 되돌아갈 자리 정리는 공용 계단이 맡으므로
+// 여기서는 게임 쪽 상태만 끝낸다(예전에는 history 지점을 직접 소비했다).
+function backToMenu() {
   state = 'menu';
   loop.stop();
-  gameScreen.hidden = true;
-  menuScreen.hidden = false;
-  elMenuBest.textContent = best;
   updateCheatVisible();
-  syncResumeBtn(); // 저장이 있으면 '이어서 하기' 버튼 표시/갱신
-  if (!fromPop && history.state && history.state.screen === 'game') history.back();
+  refreshTitle();  // 최고 점수·이어서 하기 칸을 지금 상태로
+  if (frame.screens.current() !== SCREEN.TITLE) frame.screens.go(SCREEN.TITLE);
+}
+
+// 시작 화면의 기록 줄과 이어서 하기 칸을 지금 상태로 맞춘다.
+// 기록 줄은 제목 아래 한 줄이 규격이라(4.8-5) 최고 점수와 가장 멀리 간 곳을 한 줄에 담는다.
+function refreshTitle() {
+  const s = loadProgress();
+  const far = s && COUNTRIES[s.tourIdx] ? COUNTRIES[s.tourIdx].ko : null;
+  frame.title.setRecord(best > 0
+    ? `최고 점수 ${best.toLocaleString()}${far ? ` · 가장 멀리 간 곳 ${far}` : ''}`
+    : '');
+  frame.title.setResume({
+    enabled: !!(s && s.stage),
+    detail: s && s.stage ? `${far ? `${far} · ` : ''}구역 ${s.stage}` : '저장된 게임 없음',
+  });
+}
+
+// 시작 화면 '이어서 하기': 저장된 진행을 그대로 재개한다.
+function resumeSaved() {
+  const s = loadProgress();
+  if (!s) return;
+  if (s.difficulty && CFG.difficulty[s.difficulty]) {
+    difficulty = s.difficulty;
+    store.set('difficulty', difficulty);
+  }
+  friendOn = !!s.friendOn;
+  autoOn = !!s.autoOn;
+  apSkill = s.apSkill || apSkill;
+  frame.title.setToggle('friend', friendOn);
+  frame.title.setToggle('auto', autoOn);
+  startGame(difficulty, s);
 }
 
 // 치트 박스 표시: 치트 켜짐 + 게임 진행/일시정지 중일 때만.
@@ -890,73 +955,33 @@ function syncCheatUI() {
 // ── 전체화면 (4.7-6: 지원 기기만 버튼 노출) ──
 // 미지원 기기·홈 화면 앱은 버튼을 숨기고, 조작 중 브라우저가 임의로 전체화면을 끝내면
 // 다음 조작에 되돌린다. 공용 구현은 shared/fullscreen.js.
+// 전체화면 버튼은 공용 상단 띠(시작 화면)에 있고 프레임이 이 모듈에 이미 걸어 두었다.
+// 이 게임 HUD에는 두지 않으므로 여기서 다시 걸 것이 없다.
 function initFullscreen() {
-  if (!btnFs) return;
-  setupFullscreen({ button: btnFs });
+  if (btnFs) setupFullscreen({ button: btnFs });
 }
 
 // ── 버튼 / 초기화 ──
-btnStart.addEventListener('click', () => startGame(difficulty));
+// 시작·이어서 하기·난이도·친구·자동·환경설정 버튼은 모두 공용 시작 화면이 갖고 있고,
+// 눌렀을 때 할 일은 프레임을 만들 때 넘겼다. 여기 남은 것은 플레이 화면의 버튼들이다.
 
-// '이어서 하기': 저장된 진행을 그대로 재개. 저장이 있을 때만 홈에 표시한다.
-const btnResume = $('#btn-resume');
-function syncResumeBtn() {
-  const s = loadProgress();
-  const has = !!(s && s.stage);
-  btnResume.disabled = !has; // 저장 없으면 비활성(회색), 있을 때만 활성
-  const sub = btnResume.querySelector('.resume-sub');
-  if (sub) {
-    const c = has ? COUNTRIES[s.tourIdx] : null;
-    sub.textContent = has ? `${c ? c.ko : ''} · 구역 ${s.stage}` : '저장된 게임 없음';
-  }
-}
-btnResume.addEventListener('click', () => {
-  const s = loadProgress();
-  if (!s) return;
-  if (s.difficulty) { difficulty = s.difficulty; store.set('difficulty', difficulty); syncDiffSeg(); }
-  friendOn = !!s.friendOn; autoOn = !!s.autoOn; apSkill = s.apSkill || apSkill;
-  setOptIcon(optFriend, friendOn); setOptIcon(optAuto, autoOn);
-  startGame(s.difficulty, s);
-});
-syncResumeBtn(); // 초기 홈 진입 시 저장 여부 반영
-// 난이도 세그먼트: 버튼 하나를 켜고 나머지 끈다. 선택은 localStorage에 기억.
-const diffSeg = $('#diff-seg');
-function syncDiffSeg() {
-  diffSeg.querySelectorAll('.seg-btn').forEach((b) => {
-    const on = b.dataset.diff === difficulty;
-    b.classList.toggle('on', on);
-    b.setAttribute('aria-checked', String(on));
-  });
-}
-diffSeg.addEventListener('click', (e) => {
-  const b = e.target.closest('.seg-btn'); if (!b) return;
-  difficulty = b.dataset.diff; store.set('difficulty', difficulty);
-  syncDiffSeg();
-});
-// 친구 동행 / 자동 플레이 아이콘 토글(난이도 무관, 눌러서 on/off). 선택 기억.
-const optFriend = $('#opt-friend');
-const optAuto = $('#opt-auto');
-const heroFriend = $('#hero-friend');
-function setOptIcon(btn, on) {
-  btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', String(on));
-  if (btn === optFriend) heroFriend.hidden = !on;
-}
-setOptIcon(optFriend, friendOn);
-setOptIcon(optAuto, autoOn);
-optFriend.addEventListener('click', () => { friendOn = !friendOn; store.set('friendOn', friendOn); setOptIcon(optFriend, friendOn); });
-optAuto.addEventListener('click', () => { autoOn = !autoOn; store.set('autoOn', autoOn); setOptIcon(optAuto, autoOn); });
-syncDiffSeg();
-// 게임 화면 ← : 허브로 직행하지 않고 뒤로가기(→ popstate → backToMenu)로 모드 선택 화면에 돌아간다.
-$('#game-home').addEventListener('click', (e) => { e.preventDefault(); history.back(); });
-// 폰/브라우저 자체 뒤로가기: 플레이/일시정지 중이면 게임 밖 이탈 대신 모드 선택으로. 메뉴에선 그대로 허브로 나간다.
-window.addEventListener('popstate', () => { if (state === 'playing' || state === 'paused') backToMenu(true); });
+// 이 게임의 플레이 화면을 프레임에 등록한다. 등록하지 않으면 시작 화면 위에 겹쳐 보인다.
+frame.screens.register(SCREEN.PLAY, gameScreen);
+
+// 플레이 화면 왼쪽 위 화살표도 계단을 따른다 - 한 칸 위(시작 화면)로만 간다.
+$('#game-home').addEventListener('click', () => frame.screens.back());
 btnPause.addEventListener('click', togglePause);
-btnMute.addEventListener('click', () => {
-  const m = !sound.isMuted();
-  sound.setMuted(m);
-  btnMute.innerHTML = m ? ICON.volumeOff : ICON.volumeOn;
-  btnMute.setAttribute('aria-label', m ? '소리 켜기' : '소리 끄기');
-});
+
+// 플레이 화면 HUD의 소리 버튼(캔버스 위 오버레이). 상태는 프레임이 알려주는 대로 따라간다.
+// 프레임을 만드는 도중에도 불리므로 지난 음소거 값을 인자로 받는다.
+function syncMuteBtn(muted) {
+  const b = $('#btn-mute');
+  if (!b) return;
+  const m = muted === undefined ? frame.audio.isMuted() : muted;
+  b.innerHTML = m ? ICON.volumeOff : ICON.volumeOn;
+  b.setAttribute('aria-label', m ? '소리 켜기' : '소리 끄기');
+}
+$('#btn-mute')?.addEventListener('click', () => frame.audio.setMuted(!frame.audio.isMuted()));
 // 자동 보조(하이브리드) 켜기/끄기. 켜져 있으면 손 안 댈 때 AI가 몰고, 손대면 내 조작이 우선한다.
 function setAutoAssist(on) {
   game.autoAssist = on;
@@ -974,7 +999,7 @@ const setSkill = $('#set-skill');
 const setCheat = $('#set-cheat');
 setSkill.value = apSkill;
 setCheat.checked = cheatEnabled;
-$('#btn-settings').addEventListener('click', () => { settingsModal.hidden = false; });
+// 환경설정을 여는 버튼은 이제 공용 상단 띠의 톱니다(프레임 onSettings에서 이 창을 연다).
 $('#set-close').addEventListener('click', () => { settingsModal.hidden = true; });
 setSkill.addEventListener('change', () => { apSkill = setSkill.value; store.set('apSkill', apSkill); game.apSkill = apSkill; });
 setCheat.addEventListener('change', () => {
@@ -1038,6 +1063,21 @@ cheatHead.addEventListener('pointermove', (e) => {
 });
 cheatHead.addEventListener('pointerup', () => { cheatDrag = null; });
 
-elMenuBest.textContent = best;
+// ── 첫 진입 ──
+// 잠깐 멈춤·결과 카드 버튼과 화면 이동을 잇는다. 카드는 공용 프레임이 갖고 있다.
+frame.pause.on('continue', () => frame.screens.back());
+frame.pause.on('restart', () => { frame.screens.go(SCREEN.PLAY); startGame(difficulty); });
+frame.pause.on('quit', () => backToMenu());
+frame.result.on('retry', () => { frame.screens.go(SCREEN.PLAY); startGame(difficulty); });
+frame.result.on('quit', () => backToMenu());
+frame.screens.onChange((now) => {
+  if (now === SCREEN.PAUSE) applyPauseState(true);
+  else if (now === SCREEN.PLAY) applyPauseState(false);
+  if (now === SCREEN.TITLE && state !== 'menu') backToMenu();
+  if (now === SCREEN.PLAY) requestAnimationFrame(() => resize());
+});
+
+refreshTitle();
+syncMuteBtn();
 initFullscreen();
 resize();

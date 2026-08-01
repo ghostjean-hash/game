@@ -42,12 +42,14 @@ export function createGameFrame({
   resume = null,
   choices = null,
   options = null,
+  toggles = [],
   extras = [],
   startHint = '',
   onStart = null,
   onResume = null,
   onChoice = null,
   onOption = null,
+  onToggle = null,
   onExtra = null,
   onSettings = null,
   onScreenChange = null,
@@ -112,6 +114,7 @@ export function createGameFrame({
     resume,
     choices,
     options,
+    toggles,
     extras,
     onStart: (sel) => {
       audio.play('start');
@@ -123,6 +126,7 @@ export function createGameFrame({
     },
     onChoice,
     onOption,
+    onToggle,
     onExtra,
   });
   if (startHint) titleScreen.setStartHint(startHint);

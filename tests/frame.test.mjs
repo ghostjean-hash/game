@@ -229,6 +229,61 @@ test('새 공용 파일이 서비스 워커 미리 담기 목록에 있다', () 
     .forEach((f) => assert.ok(sw.includes(f), `${f}가 PRECACHE에 없다(오프라인 첫 진입 실패)`));
 });
 
+// ── 3단계(나머지 넷 적용)에서 드러난 규격 항목 ───────────
+
+test('같은 이름으로 화면을 다시 등록하면 앞의 빈 자리 이름표를 뗀다', () => {
+  const src = read('shared/frame/screens.js');
+  assert.ok(/querySelectorAll\(`\[\$\{ATTR_SCREEN\}="\$\{name\}"\]`\)/.test(src),
+    '프레임이 미리 만든 빈 자리가 남으면 게임 화면과 높이를 반씩 나눠 갖는다(비행 슈팅 실측 사고)');
+});
+
+test('켜고 끄는 줄(toggles)이 고르는 줄(options)과 따로 있다', () => {
+  const src = read('shared/frame/titlescreen.js');
+  assert.ok(/toggles\s*=\s*\[\]/.test(src), '켜고 끄는 줄이 없다(규격 4.8-16)');
+  assert.ok(/data-gg-toggle/.test(src), '켜고 끄는 버튼 표식이 없다');
+  assert.ok(/gg-seg-item/.test(src), '고르는 줄이 사라졌다 - 둘은 서로 다른 자리다');
+  const css = read('shared/frame/frame.css');
+  assert.ok(/\.gg-btn-ghost\.is-on/.test(css), '켜진 상태를 눈으로 알 수 있는 규칙이 없다');
+});
+
+test('공용 프레임이 다섯 게임 모두에 연결돼 있다', () => {
+  const entries = {
+    tetris: 'games/tetris/game.js',
+    sudoku: 'games/sudoku/game.js',
+    nonogram: 'games/nonogram/src/main.js',
+    rushhour: 'games/rushhour/src/main.js',
+    flightshooting: 'games/flightshooting/src/main.js',
+  };
+  for (const [id, file] of Object.entries(entries)) {
+    const src = read(file);
+    assert.ok(/createGameFrame/.test(src), `${id}가 공용 프레임을 쓰지 않는다(규격 4.8-10 3단계)`);
+    assert.ok(/shared\/frame\/index\.js/.test(src), `${id}의 공용 프레임 경로가 없다`);
+  }
+});
+
+test('다섯 게임이 각자 소리 그릇을 다시 만들지 않는다', () => {
+  // 그릇(오디오 열기·음소거·절전·재생)은 공용 하나뿐이어야 한다(규격 4.8-9).
+  ['games/tetris/sound.js', 'games/nonogram/src/audio/sound.js',
+   'games/rushhour/src/audio/sound.js', 'games/flightshooting/src/audio/sound.js']
+    .forEach((f) => {
+      const src = read(f).replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '');
+      assert.ok(!/export function play\b/.test(src), `${f}에 자기 재생 함수가 남아 있다`);
+      assert.ok(!/export function setMuted\b/.test(src), `${f}에 자기 음소거 함수가 남아 있다`);
+      assert.ok(/export const SOUNDS/.test(src), `${f}가 음색표를 내보내지 않는다`);
+    });
+});
+
+test('플레이 중 허브로 곧장 나가는 문이 없다', () => {
+  // 게임을 닫는 지점은 시작 화면 하나뿐이다(규격 4.8-3).
+  ['games/tetris/index.html', 'games/sudoku/index.html', 'games/rushhour/index.html',
+   'games/flightshooting/index.html', 'games/nonogram/index.html']
+    .forEach((f) => {
+      const html = read(f);
+      assert.ok(!/<a[^>]+href="\.\.\/\.\.\/"/.test(html),
+        `${f}에 허브로 곧장 나가는 링크가 남아 있다`);
+    });
+});
+
 // ── 결과 ─────────────────────────────────────────────────
 
 let pass = 0;

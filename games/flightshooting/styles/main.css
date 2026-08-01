@@ -22,16 +22,15 @@
   position: absolute; top: 0; left: 0; right: 0; z-index: 3;
   background: transparent; border-bottom: 0;
 }
-/* 홈 상단바: 우상단 아이콘 버튼(스피커·전체화면)이 높이를 키우므로 세로 여백을 줄여 홈 fit 예산 회수. */
-.shooter .menu-screen .topbar { padding-top: 6px; padding-bottom: 6px; }
 .shooter .home {
   color: var(--fg-dim);
   width: 32px; height: 24px; flex: none;
   display: grid; place-items: center;
 }
 .shooter .home svg { width: 22px; height: 22px; display: block; }
-.shooter .menu-title {
-  font-weight: 800; letter-spacing: 3px; font-size: 17px;
+/* 시작 화면 제목 - 옛 홈에서 쓰던 시안 발광을 공용 제목에 그대로 이어 준다. */
+.shooter .gg-title-name {
+  letter-spacing: 3px;
   color: var(--sky-accent);
   text-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
 }
@@ -143,89 +142,38 @@
 .banner.is-travel-to-hud { animation: bannerToHud 2460ms var(--ease) forwards; }
 @keyframes bannerToHud { to { top: 18px; left: 74px; opacity: 0; transform: translate(-50%, -50%) scale(0.48); } }
 
-/* ── 메뉴 화면 ── */
-/* [hidden] 속성이 확실히 우선하도록(display 지정이 기본 [hidden]{display:none}을 덮는 #190 버그 방지) */
-.menu-screen[hidden], .game-screen[hidden] { display: none !important; }
-.menu-screen { display: flex; flex-direction: column; height: 100dvh; }
-.game-screen { display: flex; flex-direction: column; height: 100dvh; position: relative; }
-/* 게임 홈은 스크롤 없이 모든 비율(9:16·3:4·4:3·16:9)에서 한 화면에 담아야 한다.
-   세로 모드: 1열 스택 + 간격·크기를 화면 높이(vh) 비례로 압축(세로 짧아지면 자동으로 촘촘·작아짐).
-   가로 모드: 좌우 2열(아래 @media orientation:landscape). */
-.menu-stage {
-  flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: clamp(8px, 2.2vh, 22px);
-  padding: clamp(6px, 2vh, 20px) var(--sp-4);
+/* ── 화면 골격 ── */
+/* 옛 전용 메뉴 화면(캐릭터·최고점수·난이도 세그·친구/자동 토글·시작·환경설정)의 스타일은
+   제거했다. 그 항목은 전부 공용 시작 화면의 같은 자리로 옮겨졌고(html-game 표준 4.8),
+   생김새는 shared/frame/frame.css가 갖는다. 여기 남은 것은 플레이 화면과 그 위 요소들이다. */
+
+/* 화면 전환은 공용 프레임이 #app의 data-screen 값으로 가른다. 프레임 기본값은 display:block인데
+   이 게임의 플레이 화면은 세로 flex(HUD 오버레이 + 캔버스)라 그 값을 여기서 되돌려 준다.
+   잠깐 멈춤·결과 카드는 플레이를 덮는 층이므로 그때도 켜 둔다. */
+.shooter.gg-frame[data-screen='play'] > [data-gg-screen='play'],
+.shooter.gg-frame[data-covered='play'] > [data-gg-screen='play'] {
+  display: flex; flex-direction: column; height: 100dvh; position: relative;
 }
-.menu-hero { display: flex; flex-direction: column; align-items: center; gap: clamp(4px, 1.2vh, 12px); text-align: center; }
-.hero-craft { position: relative; filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.4)); animation: hover 2.4s ease-in-out infinite; }
-.hero-craft img { width: clamp(56px, 13vh, 104px); height: auto; display: block; object-fit: contain; }
-.hero-craft .hero-friend { position: absolute; width: 42%; height: 42%; right: -31%; bottom: 2%; object-fit: contain; filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.55)); }
-.hero-craft .hero-friend[hidden] { display: none; }
+
+/* 플레이 화면에서는 공용 상단 띠를 감춘다. 이 게임 HUD는 캔버스 위에 겹쳐 놓아 화면 공간을
+   차지하지 않는 구조라, 규격 띠를 얹으면 그 띠가 다시 공간을 먹는다(규격 4.8-17).
+   같은 자리의 소리·전체화면·되돌아가기 버튼을 HUD에 두고 동작만 공용에 연결한다. */
+.shooter.gg-frame[data-screen='play'] .gg-topbar,
+.shooter.gg-frame[data-screen='pause'] .gg-topbar,
+.shooter.gg-frame[data-screen='result'] .gg-topbar { display: none; }
+
+/* 프레임이 쓰는 색 이름을 이 게임 팔레트로 이어 준다. */
+.shooter.gg-frame { --accent-fg: #071018; }
+
+/* 캐릭터가 시작 화면에서 천천히 떠오르는 움직임(옛 홈에서 쓰던 것을 그대로 이어 씀). */
+.shooter .gg-title-hero img { animation: hover 2.4s ease-in-out infinite; }
 @keyframes hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-.menu-tagline { max-width: 320px; color: var(--fg-dim); font-size: 14px; margin: 0; }
-.menu-best { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.menu-best .best-label { font-size: 11px; letter-spacing: 1px; color: var(--fg-mute); }
-.menu-best b { font-family: var(--font-mono); font-size: clamp(18px, 4vh, 26px); font-weight: 800; color: var(--sky-power); }
-.menu-actions { display: flex; flex-direction: column; gap: clamp(6px, 1.7vh, 18px); width: min(320px, 88%); }
-.btn-play { font-size: 18px; padding: clamp(10px, 2vh, 16px); letter-spacing: 2px; }
-.btn-resume { display: flex; flex-direction: column; gap: 2px; letter-spacing: 1px; }
-.btn-resume:disabled { opacity: 0.4; cursor: default; }
-.resume-sub { font-size: 12px; font-weight: 600; opacity: 0.85; letter-spacing: 0; }
 
-/* 난이도 선택 세그먼트(세로 1열) */
-.diff-select { display: flex; flex-direction: column; gap: 6px; }
-.opt-label { font-size: 12px; color: var(--fg-dim); letter-spacing: 1px; }
-.seg { display: grid; grid-template-columns: 1fr; gap: 6px; }
-.seg-btn {
-  padding: clamp(7px, 1.5vh, 11px) 6px; border: 1px solid var(--line); border-radius: var(--r-3);
-  background: var(--bg-elev); color: var(--fg-dim); font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: background .12s, color .12s, border-color .12s;
-}
-/* 난이도 선택색(시안). 선택된 항목 앞에 체크마크로 시인성 강화 */
-.seg-btn.on { background: var(--sky-accent); border-color: var(--sky-accent); color: #071018; }
-.seg-btn.on::before {
-  content: ''; display: inline-block; width: 13px; height: 13px;
-  margin-right: 6px; vertical-align: middle; margin-top: -2px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23071018' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E") no-repeat center / contain;
-}
-
-/* 친구 동행 / 자동 플레이 아이콘 토글(눌러서 on/off). 난이도와 다른 색으로 구분 */
-.opt-icons { display: flex; gap: var(--sp-2); }
-.opt-icon {
-  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
-  padding: clamp(7px, 1.5vh, 12px) 6px; border: 1px solid var(--line); border-radius: var(--r-3);
-  background: var(--bg-elev); color: var(--fg-dim); cursor: pointer;
-  font-size: 12px; font-weight: 700; transition: background .12s, color .12s, border-color .12s;
-}
-.opt-icon svg { display: block; width: clamp(22px, 5vh, 34px); height: auto; }
-.opt-icon:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; }
-/* 친구 = 초록, 자동 = 보라 (서로도 다르게, 난이도 시안과도 다르게) */
-#opt-friend.on { background: #5fe0a0; border-color: #5fe0a0; color: #05231a; }
-#opt-auto.on { background: #b191ff; border-color: #b191ff; color: #140a2e; }
-/* 어린이 모드 시작: 일반(민트)과 구분되는 따뜻한 노란 톤 + 작은 부제 */
-.btn-kid { background: #ffd36b; border-color: #ffd36b; color: #3a2e0a; display: flex; flex-direction: column; gap: 2px; line-height: 1.15; }
-.btn-kid small { font-size: 11px; font-weight: 600; letter-spacing: 0; opacity: 0.75; }
-.btn-auto-start { background: transparent; border-color: var(--sky-accent); color: var(--sky-accent); display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-.btn-how { background: transparent; border-color: var(--line); color: var(--fg-dim); padding: clamp(7px, 1.5vh, 12px) var(--sp-4); }
-.menu-tips {
-  list-style: none; margin: 0; padding: var(--sp-4); max-width: 340px;
-  background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--r-3);
-  display: flex; flex-direction: column; gap: var(--sp-2);
-}
-.menu-tips li { font-size: 13px; color: var(--fg-dim); }
-.menu-tips b { color: var(--sky-accent); font-weight: 700; margin-right: 6px; }
-.menu-tips[hidden] { display: none; }
-
-/* 가로 모드(4:3·16:9): 세로로 다 못 쌓으므로 좌우 2열로 전환.
-   왼쪽 = 캐릭터·최고점수, 오른쪽 = 난이도·토글·버튼. 세로 예산이 절반 이하로 줄어 짧은 화면에도 fit.
-   (세로 비례 clamp가 가로 모드의 낮은 vh에서 이미 최소 크기로 눌러 준다.) */
-@media (orientation: landscape) {
-  .menu-stage {
-    flex-direction: row; align-items: center; justify-content: center;
-    gap: clamp(20px, 5vw, 56px); padding: clamp(6px, 2vh, 20px) var(--sp-4);
-  }
-  .menu-hero { flex: 0 0 auto; }
-  .menu-actions { flex: 0 0 auto; width: min(360px, 46vw); gap: clamp(6px, 1.6vh, 14px); }
+/* 이 게임만 배경이 실사에 가까운 밝은 그림이라(다른 넷은 게임 요소로 배경을 대신함)
+   프레임 기본 대비로는 제목과 조작단 글자가 배경에 묻힌다. 두 곳만 더 눌러 준다. */
+.shooter .gg-title-name { text-shadow: 0 2px 10px rgba(2, 6, 14, .9), 0 0 3px rgba(2, 6, 14, .95); }
+.shooter .gg-dock {
+  background: linear-gradient(180deg, rgba(6, 10, 20, 0) 0%, rgba(6, 10, 20, .86) 14%, rgba(6, 10, 20, .97) 40%, rgba(6, 10, 20, 1) 100%);
 }
 
 /* ── 환경설정 모달 ── */

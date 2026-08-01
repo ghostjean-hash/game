@@ -11,20 +11,22 @@
 <link rel="manifest" href="app.webmanifest" />
 <link rel="stylesheet" href="../../shared/tokens.css" />
 <link rel="stylesheet" href="../../shared/base.css" />
+<link rel="stylesheet" href="../../shared/frame/frame.css" />
 <link rel="stylesheet" href="style.css" />
 <title>Sudoku - game_ghost</title>
 </head>
 <body>
-<div class="page sudoku">
+<!-- 시작 화면·상단 띠·잠깐 멈춤·결과 카드는 공용 프레임이 만든다(html-game 표준 4.8).
+     예전에는 열면 곧바로 퍼즐이 떴고 소리 버튼도 없었다. -->
+<div class="page sudoku" id="app">
+ <div id="screen-play">
   <div class="topbar">
-    <a href="../../" class="home" aria-label="홈으로">←</a>
+    <!-- 되돌아가기·소리·전체화면은 공용 상단 띠가 갖는다. 이 줄에는 놀이 중에 계속
+         보고 있어야 하는 값(난이도·경과 시간)과 잠깐 멈춤만 남긴다. -->
     <span class="diff-label" id="diff-label">입문</span>
     <div class="timer" id="timer" aria-live="polite">00:00</div>
     <div class="spacer"></div>
-    <button id="btn-fs" class="icon-btn" type="button" aria-label="전체화면" hidden>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-    </button>
-    <button id="btn-pause" class="icon-btn" type="button" aria-label="일시정지">⏸</button>
+    <button id="btn-pause" class="icon-btn" type="button" aria-label="잠깐 멈춤">⏸</button>
   </div>
   <div class="stage">
     <div class="board" id="board" role="grid" aria-label="스도쿠 보드"></div>
@@ -46,6 +48,7 @@
       <button class="pad-num" data-num="9" type="button">9</button>
     </div>
   </div>
+ </div>
 </div>
 <script type="module" src="../../shared/cloud/auto.js"></script>
 <script type="module" src="game.js"></script>

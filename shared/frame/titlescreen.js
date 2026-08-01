@@ -28,7 +28,9 @@ function el(tag, cls, text) {
 //   resume:     { enabled, detail } - 없으면 칸 자체를 만들지 않는다.
 //               지원하는데 지금 저장이 없으면 enabled:false로 두어 누를 수 없는 상태로 보인다.
 //   choices:    { label, items:[{id,name,note,record}], selectedId, openFirstVisit }
-//   options:    { items:[{id,name}], selectedId } - 셋 이하일 때만 한 줄로 노출한다.
+//   options:    { items:[{id,name}], selectedId } - 넷 이하일 때만 한 줄로 노출한다.
+//   toggles:    [{ id, label, on }] - 켜고 끄는 것이 여럿일 때 시작 바로 위 한 줄에 둔다.
+//               갈래를 고르는 options와 달리 서로 배타가 아니다(비행 슈팅 친구 동행·자동 플레이).
 //   extras:     [{ id, label }] - 상점·도감처럼 그 게임에만 있는 화면. 맨 아래 한 줄에 나란히.
 export function mountTitleScreen({
   parent,
@@ -40,11 +42,13 @@ export function mountTitleScreen({
   resume = null,
   choices = null,
   options = null,
+  toggles = [],
   extras = [],
   onStart = null,
   onResume = null,
   onChoice = null,
   onOption = null,
+  onToggle = null,
   onExtra = null,
 } = {}) {
   if (!parent) throw new Error('mountTitleScreen: parent required');
@@ -170,10 +174,35 @@ export function mountTitleScreen({
     dock.appendChild(seg);
   }
 
+  // 켜고 끄는 것들 - 시작 바로 위 한 줄. 서로 배타가 아니라 각자 켜지고 꺼진다.
+  // 규격이 옵션을 환경설정에 숨기지 말라고 한 이유와 같다 - 시작 전에 정하는 것은 손 닿는 자리에 둔다.
+  const toggleState = {};
+  let toggleRow = null;
+  if (Array.isArray(toggles) && toggles.length) {
+    toggleRow = el('div', 'gg-row');
+    toggles.forEach((tg) => {
+      const id = tg.id || tg.label;
+      toggleState[id] = !!tg.on;
+      const b = el('button', 'gg-btn gg-btn-ghost', tg.label);
+      b.type = 'button';
+      b.dataset.ggToggle = id;
+      b.setAttribute('aria-pressed', toggleState[id] ? 'true' : 'false');
+      b.classList.toggle('is-on', toggleState[id]);
+      b.addEventListener('click', () => {
+        toggleState[id] = !toggleState[id];
+        b.setAttribute('aria-pressed', toggleState[id] ? 'true' : 'false');
+        b.classList.toggle('is-on', toggleState[id]);
+        if (onToggle) onToggle(id, toggleState[id]);
+      });
+      toggleRow.appendChild(b);
+    });
+    dock.appendChild(toggleRow);
+  }
+
   // 시작 - 가장 크고 강조된 하나.
   const startBtn = el('button', 'gg-btn gg-btn-primary', TEXT.start);
   startBtn.type = 'button';
-  if (onStart) startBtn.addEventListener('click', () => onStart({ choiceId: selectedId, optionId }));
+  if (onStart) startBtn.addEventListener('click', () => onStart({ choiceId: selectedId, optionId, toggles: { ...toggleState } }));
   dock.appendChild(startBtn);
 
   // 시작 다음 화면이 있는 게임(골라 들어가는 형)은 그 사실을 한 줄로 알린다.
@@ -223,6 +252,17 @@ export function mountTitleScreen({
     },
     choiceId() { return selectedId; },
     optionId() { return optionId; },
+    // 켜짐 상태를 게임이 나중에 바꿀 때(환경설정에서 같은 값을 만졌을 때 등).
+    setToggle(id, on) {
+      if (!(id in toggleState)) return;
+      toggleState[id] = !!on;
+      const b = toggleRow?.querySelector(`[data-gg-toggle="${id}"]`);
+      if (b) {
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.classList.toggle('is-on', !!on);
+      }
+    },
+    toggleOn(id) { return !!toggleState[id]; },
     openChoices(open = true) { setListOpen(open); },
     destroy() { rootEl.remove(); },
   };
