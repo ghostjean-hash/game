@@ -17,3 +17,18 @@ export const SCOPE = "https://www.googleapis.com/auth/drive.appdata";
 
 // 드라이브 숨김 폴더에 두는 세이브 파일 이름.
 export const FILE_NAME = "save-v1.json";
+
+// 만료된 로그인을 팝업 없이 되살리는 "주소 이동 갱신"(설계 4.4.6).
+// 켜면 허브에 들어올 때 같은 창이 구글에 다녀와 새 출입증을 받아온다.
+//
+// 켜기 전에 반드시 아래를 먼저 해야 한다.
+//   구글 클라우드 콘솔 > API 및 서비스 > 사용자 인증 정보 > 위 CLIENT_ID의 클라이언트 열기
+//   > "승인된 리디렉션 URI"에 REDIRECT_URI 값을 그대로 추가 > 저장
+// 등록하지 않은 채 켜면 사용자가 구글의 400 오류 화면(redirect_uri_mismatch)에 갇힌다.
+// 2026-08-01: 사용자가 콘솔에 등록 완료, 실측으로 되돌아옴을 확인해 켰다.
+// 문제가 생기면 이 값을 false로 되돌리는 것이 가장 빠른 차단이다(팝업 관련 수정은 그대로 남는다).
+export const REDIRECT_RENEW = true;
+
+// 구글에 등록할 주소이자 돌아올 주소. 글자 하나까지 콘솔 등록값과 같아야 한다.
+// 이 주소와 다른 화면(게임 페이지, 개발 서버)에서는 주소 이동 갱신이 아예 발동하지 않는다.
+export const REDIRECT_URI = "https://ghostjean-hash.github.io/game/";

@@ -15,6 +15,9 @@ import { CLIENT_ID, SCOPE } from "./config.js";
 async function boot() {
   if (!CLIENT_ID) return;
 
+  // 게임 화면에서는 주소 이동 갱신을 쓰지 않는다(redirectRenew 기본값 false).
+  // 되살리려고 화면을 구글로 옮기면 놀이 중인 판이 사라진다 - 게임 도중에는 아무것도 묻지 않는다는
+  // 규정(설계 4.4.4)과 같은 이유다. 만료됐으면 동기화만 멈추고, 허브에 들어올 때 되살아난다.
   const auth = createGoogleAuth({ clientId: CLIENT_ID, scope: SCOPE });
   if (!auth.isSignedIn()) return;
 

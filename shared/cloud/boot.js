@@ -10,7 +10,7 @@ import { createMemoryRemote, createDriveRemote } from "./remote.js";
 import { createMockAuth, createGoogleAuth } from "./auth.js";
 import { createSync } from "./sync.js";
 import { mountCloudUI } from "./ui.js";
-import { CLIENT_ID, SCOPE } from "./config.js";
+import { CLIENT_ID, SCOPE, REDIRECT_RENEW, REDIRECT_URI } from "./config.js";
 
 async function loadTitles() {
   const titles = {};
@@ -58,7 +58,16 @@ export async function bootCloud({ container }) {
   if (!mock && !CLIENT_ID) return null;
 
   const local = createLocal();
-  const auth = mock ? createMockAuth() : createGoogleAuth({ clientId: CLIENT_ID, scope: SCOPE });
+  // 허브는 진행 중인 게임이 없는 화면이라, 만료된 로그인을 되살리러 구글에 다녀와도 잃을 것이 없다.
+  // 주소 이동 갱신을 허용하는 유일한 화면이다(설계 4.4.6).
+  const auth = mock
+    ? createMockAuth()
+    : createGoogleAuth({
+        clientId: CLIENT_ID,
+        scope: SCOPE,
+        redirectRenew: REDIRECT_RENEW,
+        redirectUri: REDIRECT_URI,
+      });
   const remote = mock
     ? createMemoryRemote()
     : createDriveRemote({

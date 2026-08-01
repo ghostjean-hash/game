@@ -130,6 +130,23 @@ if (has('shared/cloud/config.js')) {
       oks.push(`${f.replace('shared/cloud/', '')} 로그인 창 호출 0 (게임 중 묻지 않음)`);
     }
   }
+
+  // 구글 부품에 "조용한 재발급"을 맡기는 요청이 되살아나지 않아야 한다(설계 4.4.6, 2026-08-01).
+  // 그 요청은 prompt를 비워도 실제로는 팝업을 열어, 팝업 차단 사용자에게 1시간마다
+  // 로그인이 풀리는 사고를 냈다. 갱신은 주소 이동(startRedirectRenew) 담당이다.
+  if (has('shared/cloud/auth.js')) {
+    const src = read('shared/cloud/auth.js')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|\s)\/\/.*$/gm, '');
+    if (/prompt\s*:\s*(''|"")/.test(src) || /requestAccessToken\s*\(\s*[a-zA-Z]/.test(src)) {
+      fails.push('auth.js에 팝업을 여는 조용한 재발급이 되살아남 (설계 4.4.6 위반)');
+    } else {
+      oks.push('auth.js 조용한 팝업 재발급 0 (갱신은 주소 이동 담당)');
+    }
+    if (!/startRedirectRenew/.test(src)) {
+      fails.push('auth.js에 주소 이동 갱신이 없음 (설계 4.4.6.1 이탈)');
+    }
+  }
 }
 
 // --- 4. 전체화면 유지 규약 (2026-07-31) ---

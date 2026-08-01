@@ -297,6 +297,15 @@ export function mountCloudUI({ container, auth, sync, local, titles = {} }) {
       await auth.signIn();
       return;
     }
+    // 유효기간이 끝나 동기화가 멈춘 상태다. 버튼에 "다시 로그인"이라고 적혀 있으니
+    // 눌렀을 때 메뉴가 아니라 로그인 창이 떠야 한다. 사용자가 직접 누른 순간이라
+    // 창을 띄워도 팝업 차단에 막히지 않는다(설계 4.4.6.3).
+    if (last.state === STATUS.DISABLED) {
+      const ok = await auth.signIn();
+      if (ok) await sync.pullNow();
+      else showToast("다시 로그인하지 못했습니다");
+      return;
+    }
     openMenu();
   });
 
