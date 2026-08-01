@@ -1,0 +1,325 @@
+/* 시작 흐름 공용 프레임 - 화면 골격·상단 띠·시작 화면·카드 스타일.
+ *
+ * 색은 shared/tokens.css 변수를 참조하고, 변수를 재정의한 게임(스도쿠의 흰 바탕,
+ * 러시아워의 플럼 톤)에서도 그대로 맞도록 하드코딩 색을 쓰지 않는다.
+ * 변수가 없는 환경을 대비해 두 번째 값(fallback)을 함께 적어 둔다.
+ *
+ * 화면을 가르는 방식: 요소마다 숨김을 켜고 끄지 않는다. 뿌리 요소의 data-screen 값 하나만 보고
+ * 아래 규칙이 표시를 정한다. 두 화면이 동시에 보이는 상태가 구조상 만들어지지 않는다.
+ * SSOT: standards/html-game/plans/doc/screen-frame.html 4.1 / 5장 / 10장.
+ */
+
+/* ── 화면 골격 ─────────────────────────────────────────── */
+.gg-frame {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;               /* 세로 스크롤이 생기면 규격 위반이다(Ⅰ권 5.5) */
+  background: var(--bg, #0a0f1c);
+  color: var(--fg, #e9eff9);
+  font-family: var(--font-sans, system-ui, sans-serif);
+}
+.gg-frame > [data-gg-screen] { display: none; }
+.gg-frame[data-screen='intro']  > [data-gg-screen='intro'],
+.gg-frame[data-screen='title']  > [data-gg-screen='title'],
+.gg-frame[data-screen='select'] > [data-gg-screen='select'],
+.gg-frame[data-screen='play']   > [data-gg-screen='play'],
+.gg-frame[data-screen='pause']  > [data-gg-screen='pause'],
+.gg-frame[data-screen='result'] > [data-gg-screen='result'] { display: block; }
+/* 멈춤·결과는 플레이를 덮는 층이라 덮인 화면도 함께 보여야 한다 */
+.gg-frame[data-covered='play']   > [data-gg-screen='play'],
+.gg-frame[data-covered='select'] > [data-gg-screen='select'],
+.gg-frame[data-covered='title']  > [data-gg-screen='title'] { display: block; }
+
+.gg-frame > [data-gg-screen] {
+  position: absolute;
+  inset: 0;
+}
+
+/* ── 상단 띠 ───────────────────────────────────────────── */
+.gg-topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 46px;
+  padding: 0 12px;
+  padding-top: env(safe-area-inset-top, 0px);
+  box-sizing: content-box;
+}
+.gg-topbar-center {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg, #e9eff9);
+}
+.gg-ic {
+  width: 28px; height: 28px;
+  flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0;
+  border-radius: 9px;
+  border: 1px solid var(--line, rgba(255, 255, 255, .16));
+  background: color-mix(in srgb, var(--fg, #fff) 10%, transparent);
+  color: inherit;
+  cursor: pointer;
+}
+.gg-ic svg {
+  width: 14px; height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.gg-ic[hidden] { display: none; }
+
+/* ── 시작 화면 ─────────────────────────────────────────── */
+.gg-title { position: absolute; inset: 0; }
+.gg-title-bg {
+  position: absolute; inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center 76%;
+}
+/* 배경 위 글자가 묻히지 않도록 아래로 갈수록 어두워지는 결을 깐다.
+   밝은 톤 게임은 .gg-frame.is-light를 걸어 반대 방향으로 뒤집는다. */
+.gg-title-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(4, 8, 18, .30) 0%, rgba(4, 8, 18, 0) 36%, rgba(4, 8, 18, .82) 100%);
+}
+.gg-frame.is-light .gg-title-bg::after {
+  background: linear-gradient(180deg, rgba(255, 255, 255, .10) 0%, rgba(255, 255, 255, 0) 36%, rgba(255, 255, 255, .92) 100%);
+}
+
+.gg-title-hero {
+  position: absolute;
+  top: calc(46px + env(safe-area-inset-top, 0px) + 2vh);
+  left: 0; right: 0;
+  z-index: 3;
+  text-align: center;
+  padding: 0 14px;
+}
+/* 캐릭터와 제목은 고정 크기를 쓰지 않는다. 브라우저 창이 화면을 먹는 기기에서
+   같은 화면이 작게 나와야 하기 때문이다(Ⅰ권 5.5). */
+.gg-title-hero img {
+  display: block;
+  margin: 0 auto;
+  width: clamp(84px, 34vw, 168px);
+  max-height: 26dvh;
+  object-fit: contain;
+  filter: drop-shadow(0 0 14px rgba(255, 248, 232, .42)) drop-shadow(0 12px 20px rgba(0, 0, 0, .6));
+}
+.gg-frame.is-light .gg-title-hero img { filter: drop-shadow(0 10px 18px rgba(30, 40, 60, .22)); }
+.gg-title-name {
+  margin: 6px 0 0;
+  font-size: clamp(19px, 6.4vw, 30px);
+  font-weight: 700;
+  letter-spacing: -.025em;
+  text-shadow: 0 2px 12px rgba(2, 6, 14, .85);
+}
+.gg-frame.is-light .gg-title-name { text-shadow: none; }
+.gg-title-record {
+  margin: 2px 0 0;
+  font-size: clamp(10.5px, 3.2vw, 13px);
+  color: var(--fg-dim, #cbd6e8);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 8px rgba(2, 6, 14, .9);
+}
+.gg-frame.is-light .gg-title-record { text-shadow: none; }
+.gg-title-hint {
+  margin: 0;
+  font-size: 11.5px;
+  text-align: center;
+  color: var(--fg-dim, #8e9bb3);
+}
+
+/* 조작단 - 누르는 것 전부가 화면 아래에 모인다.
+   맨 아래 여백은 여기서 일괄 관리한다. 브라우저 도구모음·홈 표시와 겹치면
+   손가락이 헛짚기 때문이다(Ⅰ권 5.5). 게임이 이 값을 각자 정하지 않는다. */
+.gg-dock {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 5;
+  display: grid;
+  gap: 8px;
+  padding: 15px 14px calc(env(safe-area-inset-bottom, 0px) + 22px);
+  background: linear-gradient(180deg, rgba(8, 12, 22, 0) 0%, rgba(8, 12, 22, .72) 16%, rgba(9, 13, 24, .96) 46%, rgba(9, 13, 24, .99) 100%);
+}
+.gg-frame.is-light .gg-dock {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .82) 16%, var(--bg, #fff) 46%, var(--bg, #fff) 100%);
+}
+
+/* ── 버튼 ─────────────────────────────────────────────── */
+.gg-btn {
+  display: block;
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line, #2c3650);
+  background: var(--bg-elev-2, #1b2438);
+  color: var(--fg, #e9eff9);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}
+.gg-btn:disabled { opacity: .38; cursor: default; }
+.gg-btn-main { display: block; }
+.gg-btn-sub {
+  display: block;
+  margin-top: 1px;
+  font-size: 10.5px;
+  font-weight: 500;
+  opacity: .72;
+}
+.gg-btn-primary {
+  padding: 15px 12px;
+  font-size: 17px;
+  border-color: var(--accent, #22d3ee);
+  background: var(--accent, #22d3ee);
+  color: var(--bg, #04121a);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .3);
+}
+.gg-btn-ghost {
+  padding: 9px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fg-dim, #8e9bb3);
+  background: color-mix(in srgb, var(--fg, #fff) 5%, transparent);
+}
+.gg-row { display: flex; gap: 8px; }
+.gg-row > * { flex: 1; }
+
+/* ── 고르는 칸과 펼침 목록 ─────────────────────────────── */
+.gg-pick {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line, #2c3650);
+  background: var(--bg-elev, #141c2e);
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+.gg-pick-label { flex: 0 0 auto; font-size: 9.5px; letter-spacing: .03em; color: var(--fg-dim, #8e9bb3); }
+.gg-pick-value { font-size: 14px; font-weight: 700; }
+.gg-pick-record { margin-left: auto; font-size: 10.5px; color: var(--fg-dim, #8e9bb3); font-variant-numeric: tabular-nums; }
+.gg-pick-chev { flex: 0 0 auto; display: flex; }
+.gg-pick-chev svg {
+  width: 13px; height: 13px;
+  fill: none; stroke: var(--fg-dim, #8e9bb3);
+  stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 160ms;
+}
+.gg-pick[aria-expanded='true'] .gg-pick-chev svg { transform: rotate(180deg); }
+
+.gg-picklist {
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--line, #2c3650);
+  background: var(--bg-elev, #0d1320);
+  box-shadow: 0 -6px 26px rgba(0, 0, 0, .5);
+  max-height: 46dvh;
+  overflow-y: auto;
+}
+.gg-frame.is-light .gg-picklist { box-shadow: 0 -6px 26px rgba(30, 40, 60, .16); }
+.gg-picklist[hidden] { display: none; }
+.gg-card {
+  display: block;
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line, #2c3650);
+  background: var(--bg-elev-2, rgba(20, 28, 46, .86));
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.gg-card.is-on {
+  border-color: var(--accent, #22d3ee);
+  background: color-mix(in srgb, var(--accent, #22d3ee) 14%, var(--bg-elev-2, #141c2e));
+}
+.gg-card-row { display: flex; align-items: baseline; gap: 6px; }
+.gg-card-name { font-size: 12.5px; font-weight: 700; }
+.gg-card-record { margin-left: auto; font-size: 10.5px; color: var(--fg-dim, #8e9bb3); font-variant-numeric: tabular-nums; }
+.gg-card-note { font-size: 10.5px; color: var(--fg-dim, #8e9bb3); }
+
+/* ── 옵션 한 줄 ────────────────────────────────────────── */
+.gg-seg {
+  display: flex;
+  border-radius: 11px;
+  border: 1px solid var(--line, #2c3650);
+  overflow: hidden;
+  background: var(--bg-elev, rgba(20, 28, 46, .78));
+}
+.gg-seg-item {
+  flex: 1;
+  padding: 8px 0;
+  border: 0;
+  border-right: 1px solid var(--line, #2c3650);
+  background: transparent;
+  color: var(--fg-dim, #8e9bb3);
+  font-family: inherit;
+  font-size: 10.5px;
+  cursor: pointer;
+}
+.gg-seg-item:last-child { border-right: 0; }
+.gg-seg-item.is-on { background: var(--accent, #22d3ee); color: var(--bg, #04121a); font-weight: 700; }
+
+/* ── 겹치는 층(잠깐 멈춤·결과) ─────────────────────────── */
+.gg-layer {
+  position: absolute; inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(4, 8, 18, .62);
+  backdrop-filter: blur(2px);
+}
+.gg-frame.is-light .gg-layer { background: rgba(20, 28, 44, .38); }
+/* 층은 자기 화면 이름이 켜졌을 때만 보인다. 화면 골격 규칙과 같은 방식이다. */
+.gg-frame:not([data-screen='pause'])  .gg-layer-pause,
+.gg-frame:not([data-screen='result']) .gg-layer-result { display: none; }
+
+.gg-card-panel {
+  width: min(340px, 100%);
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid var(--line, #2c3650);
+  background: var(--bg-elev, #141c2e);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .45);
+  display: grid;
+  gap: 12px;
+}
+.gg-card-title { margin: 0; font-size: 19px; font-weight: 700; text-align: center; }
+.gg-card-body { display: grid; gap: 6px; }
+.gg-card-line { margin: 0; font-size: 13px; color: var(--fg-dim, #cbd6e8); text-align: center; }
+.gg-kv { display: flex; align-items: baseline; gap: 10px; font-size: 13px; }
+.gg-kv-label { color: var(--fg-dim, #8e9bb3); }
+.gg-kv-value { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+.gg-kv.is-highlight .gg-kv-value { color: var(--accent, #22d3ee); }
+.gg-card-actions { display: grid; gap: 8px; }
+.gg-newrecord {
+  justify-self: center;
+  padding: 3px 12px;
+  border-radius: 99px;
+  background: var(--accent, #22d3ee);
+  color: var(--bg, #04121a);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.gg-newrecord[hidden] { display: none; }

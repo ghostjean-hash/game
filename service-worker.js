@@ -143,7 +143,9 @@
 // v200 (2026-07-31): 전체화면 유지 개선 - 공용 shared/fullscreen.js 신설(브라우저가 조작 중 임의로 전체화면을 끝내면 다음 조작에 자동 복귀, 홈 화면 앱이면 버튼 자동 숨김) + 게임·앱 8곳에 홈 화면 앱 설정(app.webmanifest) 연결. 아이패드 Safari·Chrome 공통 대응. 옛 v199 캐시 폐기.
 // v201 (2026-07-31): 아이폰 전체화면 안내 - 전체화면이 막힌 기기(아이폰: 애플이 동영상 외 전체화면을 열지 않고 모든 브라우저가 Safari 엔진 강제)에서 버튼을 감추는 대신 홈 화면 추가 안내를 띄운다. 허브 첫 방문 1회 + 게임 화면 버튼 클릭 시. 옛 v200 캐시 폐기.
 // v202 (2026-07-31): 아이폰 홈 화면 추가 안내를 글 → 3단계 그림 카드로 개편(눌러야 할 버튼 모양 SVG + 그 도구 모음 방향을 가리키는 화살표 + "알겠습니다"). 사파리는 아래 도구 모음 가운데, 아이폰 크롬은 주소창 오른쪽 메뉴로 방향·문구 분기. 일반 사용자가 글 설명만으로 버튼을 못 찾던 문제. 옛 v201 캐시 폐기.
-const CACHE_VERSION = "v203";
+// v203 (2026-08-01): 클라우드 선택 창 반복 수정 - 겹치는 값이 모두 같으면 묻지 않고 합치고, 클라우드를 고르면 저장 시각을 지금으로 올려 다음 동기화에서 끝나게 함. 옛 v202 캐시 폐기.
+// v204 (2026-08-01): 시작 흐름 공용 프레임 1단계 - shared/frame/ 부품 10개 신설(다섯 화면 골격·상단 띠·시작 화면·잠깐 멈춤/결과 카드·소리·진행 저장) 미리 담기 등재. 게임 파일은 아직 바꾸지 않아 화면 동작 변화는 없다. 옛 v203 캐시 폐기.
+const CACHE_VERSION = "v204";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
@@ -172,6 +174,17 @@ const PRECACHE = [
   // storage.js가 직접 의존한다. 이게 없으면 오프라인에서 게임 전체 모듈 로드가 실패한다.
   "./shared/cloud/stamp.js",
   "./shared/cloud/policy.js",
+  // 시작 흐름 공용 프레임(기획서 Ⅰ권 9장 1단계). 게임이 첫 로드에 import하므로 미리 담는다.
+  "./shared/frame/index.js",
+  "./shared/frame/text.js",
+  "./shared/frame/stack.js",
+  "./shared/frame/screens.js",
+  "./shared/frame/topbar.js",
+  "./shared/frame/titlescreen.js",
+  "./shared/frame/cards.js",
+  "./shared/frame/audio.js",
+  "./shared/frame/save.js",
+  "./shared/frame/frame.css",
   "./shared/loop.js",
   "./shared/ui.js",
   "./shared/fullscreen.js",

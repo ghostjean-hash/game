@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>시작 흐름 공용 프레임 · 확인용</title>
+<link rel="icon" href="data:,"><!-- 확인용 페이지라 아이콘이 없다. 없으면 콘솔에 404가 남아 진짜 오류와 섞인다 -->
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../mobile-shell.css">
+<link rel="stylesheet" href="./frame.css">
+<style>
+  /* 이 페이지는 게임이 아니라 부품 확인용이다. 실제 게임에는 아래 스타일이 없다. */
+  body { margin: 0; }
+  #app { position: fixed; inset: 0; }
+  /* 배경 그림이 없는 게임이 게임 자체 요소로 배경을 대신하는 경우를 흉내 낸다 */
+  .demo-grid {
+    position: absolute; left: 22px; right: 22px; top: 32%;
+    display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; opacity: .42;
+  }
+  .demo-grid i { aspect-ratio: 1; border-radius: 3px; background: var(--c3, #7cf3c4); }
+  .demo-grid i.e { visibility: hidden; }
+  .demo-plain { background: radial-gradient(130% 78% at 50% 6%, #10382f 0%, #08111c 66%); }
+  .demo-play {
+    display: grid; place-items: center; height: 100%;
+    font-size: 15px; color: var(--fg-dim);
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="module">
+import { createGameFrame, SCREEN } from './index.js';
+
+const q = new URLSearchParams(location.search);
+const type = q.get('type') || 'simple';       // simple | branch | select
+const screen = q.get('screen') || '';         // pause | result | open
+
+// 배경 대용 - 실제 게임에서는 그 게임의 화면 요소가 들어온다.
+function decoGrid() {
+  const g = document.createElement('div');
+  g.className = 'demo-grid';
+  const pattern = '0110110110 1111011111 0111111110 1101111011 0111111110 0011111100 0001111000';
+  pattern.split(' ').forEach((row) => {
+    row.split('').forEach((c) => {
+      const i = document.createElement('i');
+      if (c === '0') i.className = 'e';
+      g.appendChild(i);
+    });
+  });
+  return g;
+}
+
+const COMMON = {
+  root: document.getElementById('app'),
+  gameId: 'frame-demo',
+  hubHref: '../../',
+  background: { className: 'demo-plain', el: decoGrid() },
+};
+
+let frame;
+if (type === 'branch') {
+  // 갈래 시작형 - 모드마다 기록이 따로 남는 게임. 카드를 펼치지 않고 한 칸으로 접는다.
+  frame = createGameFrame({
+    ...COMMON,
+    title: 'Tetris',
+    tagline: '라인을 지워라',
+    choices: {
+      label: '모드',
+      selectedId: 'marathon',
+      openFirstVisit: screen === 'open',
+      items: [
+        { id: 'kids', name: '배움', note: '천천히. 몇 칸 더 채울까?', record: '최고 4,200' },
+        { id: 'marathon', name: '마라톤', note: '라인을 지워라. 끝까지.', record: '최고 38,900' },
+        { id: 'zen', name: '젠', note: '가속 없음. 호흡대로.', record: '최고 12,050' },
+        { id: 'sprint', name: '스프린트', note: '40라인. 최단 시간.', record: '최단 1분 52초' },
+      ],
+    },
+  });
+} else if (type === 'select') {
+  // 골라 들어가는 형 - 시작을 누르면 판 고르는 화면이 한 칸 들어간다.
+  frame = createGameFrame({
+    ...COMMON,
+    title: '노노그램',
+    hasSelect: true,
+    resume: { enabled: true, detail: '중급 · 금붕어' },
+    startHint: '누르면 그림 고르는 지도로 감',
+    extras: [{ id: 'album', label: '도감' }],
+  });
+  frame.title.setRecord('완성한 그림 128 / 344 · 모은 별 291');
+  frame.selectEl.innerHTML = '<div class="demo-play">판 고르는 화면 자리</div>';
+} else {
+  // 바로 시작형 - 옵션이 셋 이하라 시작 바로 위에 한 줄로 노출한다.
+  frame = createGameFrame({
+    ...COMMON,
+    title: '바푸리의 모험',
+    resume: { enabled: true, detail: '12구역 도쿄' },
+    options: {
+      selectedId: 'normal',
+      items: [
+        { id: 'easy', name: '쉬움' },
+        { id: 'normal', name: '보통' },
+        { id: 'hard', name: '어려움' },
+      ],
+    },
+  });
+  frame.title.setRecord('최고 점수 128,400 · 가장 멀리 간 곳 파리');
+}
+
+frame.playEl.innerHTML = '<div class="demo-play">플레이 화면 자리</div>';
+
+// 겹치는 층 확인용. 실제 게임에서는 멈춤 버튼이나 판이 끝날 때 이 상태가 된다.
+if (screen === 'pause') {
+  frame.screens.go(SCREEN.PLAY);
+  frame.screens.go(SCREEN.PAUSE);
+} else if (screen === 'result') {
+  frame.screens.go(SCREEN.PLAY);
+  frame.finish({
+    title: '한 판 끝',
+    lines: [
+      { label: '이번 점수', value: '42,180', highlight: true },
+      { label: '최고 기록', value: '38,900' },
+      { label: '지운 줄', value: '64' },
+    ],
+    newRecord: true,
+  });
+}
+
+globalThis.__frame = frame;   // 확인용
+</script>
+</body>
+</html>
