@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@400;500;600&family=Noto+Serif:ital,wght@1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/gdd.css">
+<link rel="stylesheet" href="../assets/screen-mockup.css">
 <style>
   /* 이 문서 전용 도면 색 - 공용 토큰만 사용 */
   .fg-box{fill:var(--sheet-2);stroke:var(--rule)}
@@ -19,6 +20,16 @@
 </style>
 </head>
 <body>
+
+<!-- 아이콘 정의: 화면 아이콘은 문자 대신 그림으로 쓴다(게임 실제 규칙과 동일). Ⅱ권과 같은 정의임 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></symbol>
+  <symbol id="i-snd" viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M16 9a4 4 0 010 6"/></symbol>
+  <symbol id="i-full" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 00-2 2v3"/><path d="M16 3h3a2 2 0 012 2v3"/><path d="M8 21H5a2 2 0 01-2-2v-3"/><path d="M16 21h3a2 2 0 002-2v-3"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.2M12 18.8V21M4.2 7.5l1.9 1.1M17.9 15.4l1.9 1.1M4.2 16.5l1.9-1.1M17.9 8.6l1.9-1.1"/></symbol>
+  <symbol id="i-arw" viewBox="0 0 24 24"><path d="M5 12h13"/><path d="M12 5l7 7-7 7"/></symbol>
+</defs></svg>
+
 <main class="sheet">
 
 <div class="titleblock">
@@ -180,7 +191,7 @@
 <section id="s5">
   <div class="sechead"><span class="n">5.</span><h2>시작 화면 규격</h2><span class="rid">FRM-TITLE</span></div>
 
-  <p class="lead">아래 규격은 대안 네 안을 실제 화면으로 그려 비교한 뒤 사용자가 A안(배경 전면과 하단 조작단)으로 확정한 것임(2026-07-31). 실제 화면 목업은 <a class="ref" href="screen-frame-drafts.html">Ⅱ권 시작 화면 규격 대안 네 안</a>에 있고, 이 절은 그 결론만 규칙으로 적음.</p>
+  <p class="lead">아래 규격은 대안 네 안을 실제 화면으로 그려 비교한 뒤 사용자가 A안(배경 전면과 하단 조작단)으로 확정한 것임(2026-07-31). 고르던 단계의 네 안 비교 목업은 <a class="ref" href="screen-frame-drafts.html">Ⅱ권 시작 화면 규격 대안 네 안</a>에 있고, 이 절은 그 결론만 규칙으로 적음. 이 규격을 다섯 게임에 실제로 적용한 화면은 6장에 있음.</p>
 
   <h3><span class="sn">5.1.</span>배경 전면과 하단 조작단</h3>
   <div class="figure mid">
@@ -251,7 +262,7 @@
   </table>
 
   <h3><span class="sn">5.4.</span>칸이 게임에 따라 달라지는 경우</h3>
-  <p>칸의 순서는 고정이지만 게임에 따라 칸의 생김새가 달라짐. 아래 다섯 가지는 예외가 아니라 규격의 일부이며, 실제 적용 모습은 <a class="ref" href="screen-frame-drafts.html">Ⅱ권 3장</a>에 있음.</p>
+  <p>칸의 순서는 고정이지만 게임에 따라 칸의 생김새가 달라짐. 아래 다섯 가지는 예외가 아니라 규격의 일부이며, 다섯 게임에 실제로 적용한 모습은 아래 6장에 있음(안을 고르던 단계의 비교 목업은 <a class="ref" href="screen-frame-drafts.html">Ⅱ권 3장</a>).</p>
   <div class="ol">
     <div class="oi"><span class="bl"></span><div class="ot">고를 갈래가 여러 개면 카드를 펼치지 않고 고르는 칸 하나로 접음
       <ul class="od"><li>모드나 난이도마다 최고 기록이 따로 남는 게임이 해당. 칸에는 지금 고른 것과 그 기록만 보임</li><li>칸을 누르면 목록이 위로 펼쳐지고, 고르면 다시 접힌 뒤 시작을 누름. 지난번에 고른 것이 이미 칸에 들어 있어 대부분은 시작만 누름</li><li>갈래가 넷이든 여덟이든 첫 화면 높이가 변하지 않는 것이 이 방식을 쓰는 이유임</li><li>처음 방문에는 목록을 펼친 상태로 열어 어떤 갈래가 있는지 보여줌</li></ul>
@@ -291,9 +302,7 @@
 
 <section id="s6">
   <div class="sechead"><span class="n">6.</span><h2>게임별 시작 화면 시안</h2><span class="rid">FRM-DRAFT</span></div>
-  <p class="lead">규격만으로는 적용이 애매한 지점이 시작 칸임. 게임마다 고를 것의 개수가 달라 어떤 게임은 버튼 하나로 끝나고 어떤 게임은 판이 수백 개임. 그래서 시작 칸을 세 유형으로 나누고 다섯 게임을 배정함.</p>
-
-  <div class="hold"><b>그림 갱신 대기</b>아래 6.2부터 6.6까지의 게임별 그림은 규격을 A안으로 확정하기 전에 그린 것이라 환경설정 자리와 갈래 표현이 지금 5장 규격과 다름. 확정 규격 기준의 실제 화면은 <a class="ref" href="screen-frame-drafts.html">Ⅱ권 3장</a>에 있고, 아래 그림은 그 기준으로 다시 그릴 예정임. 본문 설명은 확정 규격에 맞게 고쳐 둠.</div>
+  <p class="lead">규격만으로는 적용이 애매한 지점이 시작 칸임. 게임마다 고를 것의 개수가 달라 어떤 게임은 버튼 하나로 끝나고 어떤 게임은 판이 수백 개임. 그래서 시작 칸을 세 유형으로 나누고 다섯 게임을 배정함. 아래 다섯 장은 설명용 도면이 아니라 5장 확정 규격을 그대로 적용한 실제 화면 모습이며, 색·글자 크기·캐릭터 그림·기록값을 각 게임의 실제 자산에서 가져옴.</p>
 
   <h3><span class="sn">6.1.</span>시작 칸 세 유형</h3>
   <table class="tight">
@@ -306,212 +315,271 @@
   </table>
   <p>골라 들어가는 형에서 판 고르는 화면은 플레이 앞에 붙는 것이 아니라 <strong>시작 화면과 플레이 사이의 한 칸</strong>임. 되돌아가기 계단이 한 칸 늘어나며, 판 고르는 화면에서 되돌아가면 시작 화면으로 감.</p>
 
+  <p class="note">배경 그림을 가진 게임은 비행 슈팅 하나뿐임. 나머지 넷은 <strong>그 게임의 실제 화면 요소</strong>로 배경을 대신함(2026-07-31 확정) - 테트리스는 떨어지는 조각과 쌓인 판, 스도쿠는 9칸 판, 노노그램은 완성한 그림 격자, 러시아워는 크림 보드와 출구 길임. 아래 그림에 쓴 판과 문제는 각 게임에 실제로 들어 있는 것임.</p>
+
   <h3><span class="sn">6.2.</span>비행 슈팅 <span class="chip c-sys">바로 시작형</span></h3>
-  <div class="figure mid">
-    <div class="fscroll">
-    <svg viewBox="0 0 880 340" role="img" aria-label="비행 슈팅 시작 화면 시안">
-      <rect class="fg-box" x="10" y="10" width="240" height="320" rx="6" fill="#ffffff"/>
-      <rect class="fg-box" x="10" y="10" width="240" height="30"/>
-      <text class="fg-s" x="22" y="30">←</text>
-      <text class="fg-s" x="120" y="30" text-anchor="middle">바푸리의 모험</text>
-      <text class="fg-s" x="196" y="30">소리</text>
-      <text class="fg-s" x="222" y="30">화면</text>
-      <rect class="fg-box" x="30" y="50" width="200" height="74" rx="3"/>
-      <text class="fg-t" x="130" y="78" text-anchor="middle">바푸리 · 키위</text>
-      <text class="fg-s" x="130" y="98" text-anchor="middle">최고 점수 128,400</text>
-      <text class="fg-s" x="130" y="114" text-anchor="middle">가장 멀리 간 곳 · 파리</text>
-      <rect class="fg-box" x="30" y="134" width="200" height="30" rx="3"/>
-      <text class="fg-t" x="130" y="154" text-anchor="middle">이어서 하기 · 12구역 도쿄</text>
-      <rect class="fg-box" x="30" y="174" width="200" height="26" rx="3"/>
-      <text class="fg-s" x="130" y="191" text-anchor="middle">쉬움 · 보통 · 어려움 · 매우 어려움</text>
-      <rect class="fg-box" x="30" y="206" width="96" height="26" rx="3"/>
-      <text class="fg-s" x="78" y="223" text-anchor="middle">친구 동행</text>
-      <rect class="fg-box" x="134" y="206" width="96" height="26" rx="3"/>
-      <text class="fg-s" x="182" y="223" text-anchor="middle">자동 플레이</text>
-      <rect class="fg-key" x="30" y="242" width="200" height="40" rx="3"/>
-      <text class="fg-t" x="130" y="267" text-anchor="middle">시작</text>
-      <rect class="fg-box" x="30" y="292" width="200" height="28" rx="3"/>
-      <text class="fg-t" x="130" y="311" text-anchor="middle">환경설정</text>
-      <text class="fg-t" x="290" y="60">지금 화면이 규격에 가장 가까움. 난이도 네 단계와 동행·자동 두 옵션을</text>
-      <text class="fg-t" x="290" y="80">시작 바로 위에 그대로 두고, 자동 플레이 실력과 치트는 환경설정에 유지</text>
-      <text class="fg-t" x="290" y="118">달라지는 것</text>
-      <text class="fg-s" x="290" y="140">· 소리와 전체화면 버튼을 상단 띠 오른쪽으로 옮김</text>
-      <text class="fg-s" x="290" y="160">· 이어서 하기 문구에 몇 구역 어느 도시인지 함께 적음</text>
-      <text class="fg-s" x="290" y="180">· 플레이에서 되돌아가면 이 화면으로. 지금은 그 게임 혼자 처리하던 것을</text>
-      <text class="fg-s" x="290" y="198">  공용 부품이 맡음</text>
-      <text class="fg-s" x="290" y="228">최고 기록 자리에 점수와 함께 가장 멀리 간 도시를 적음. 세계 여행이</text>
-      <text class="fg-s" x="290" y="246">이 게임의 진행이라 점수만으로는 어디까지 갔는지 드러나지 않음</text>
-    </svg>
+  <div class="figure">
+    <div class="stage">
+      <div class="unit">
+        <div class="cap"><span>TYPE 1</span><b>바로 시작형 · 바푸리의 모험</b></div>
+        <div class="mk">
+          <div class="mk-bg" style="background-image:url(../../../../games/flightshooting/assets/diorama/FR-paris.png)"></div>
+          <div class="mk-top">
+            <span class="ic"><svg><use href="#i-back"/></svg></span>
+            <span class="sp"></span>
+            <span class="ic"><svg><use href="#i-gear"/></svg></span>
+            <span class="ic"><svg><use href="#i-snd"/></svg></span>
+            <span class="ic"><svg><use href="#i-full"/></svg></span>
+          </div>
+          <div class="mk-hero" style="top:66px">
+            <img src="../../../../games/flightshooting/assets/characters/bapuri-upward-v5.png" alt="바푸리" style="width:138px">
+            <div class="mk-ttl">바푸리의 모험</div>
+            <div class="mk-sub">가장 멀리 간 곳 · 파리</div>
+          </div>
+          <div class="mk-dock veil">
+            <div class="rec">최고 점수 <b>128,400</b></div>
+            <div class="b">이어서 하기<span class="s">12구역 도쿄</span></div>
+            <div class="seg"><span>쉬움</span><span class="on">보통</span><span>어려움</span><span>매우 어려움</span></div>
+            <div class="row"><div class="b gho">친구 동행</div><div class="b gho">자동 플레이</div></div>
+            <div class="b pri">시작</div>
+          </div>
+          <div class="mk-home"></div>
+        </div>
+      </div>
     </div>
-    <div class="figcap"><span class="fid">FIG FRM-03</span><span>비행 슈팅. 옵션이 셋 이하라 시작 위 한 줄에 노출.</span></div>
+    <div class="figcap"><span class="fid">FIG FRM-03</span><span>비행 슈팅. 옵션이 셋 이하라 시작 바로 위 한 줄에 그대로 노출함. 배경은 실제 나라별 그림(파리).</span></div>
+  </div>
+  <p>다섯 게임 중 규격에 가장 가까운 화면임. 난이도 네 단계와 동행·자동 두 옵션은 한 판마다 바꾸는 것이라 환경설정 안으로 숨기지 않고 시작 바로 위에 남김(5.4). 나라별 배경 그림 열일곱 장을 이미 갖고 있어 배경은 그대로 씀.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">게임 이름을 상단 띠에서 빼고 배경 위 큰 글자 하나만 남김. 소리·전체화면과 함께 환경설정도 상단 아이콘으로 올라감</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">이어서 하기 문구에 몇 구역 어느 도시인지 함께 적음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">플레이에서 되돌아가면 이 화면으로 옴. 지금은 그 게임 혼자 들고 있던 처리를 공용 부품이 맡음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">최고 기록 자리에 점수와 함께 가장 멀리 간 도시를 적음
+      <ul class="od"><li>세계를 옮겨 다니는 것이 이 게임의 진행이라 점수만으로는 어디까지 갔는지 드러나지 않음</li></ul>
+    </div></div>
   </div>
 
   <h3><span class="sn">6.3.</span>테트리스 <span class="chip c-scr">갈래 시작형</span></h3>
-  <div class="figure mid">
-    <div class="fscroll">
-    <svg viewBox="0 0 880 330" role="img" aria-label="테트리스 시작 화면 시안">
-      <rect class="fg-box" x="10" y="10" width="240" height="310" rx="6" fill="#ffffff"/>
-      <rect class="fg-box" x="10" y="10" width="240" height="30"/>
-      <text class="fg-s" x="22" y="30">←</text>
-      <text class="fg-s" x="120" y="30" text-anchor="middle">Tetris</text>
-      <text class="fg-s" x="196" y="30">소리</text>
-      <text class="fg-s" x="222" y="30">화면</text>
-      <rect class="fg-box" x="30" y="50" width="200" height="46" rx="3"/>
-      <text class="fg-t" x="130" y="79" text-anchor="middle">Tetris</text>
-      <rect class="fg-box" x="30" y="106" width="200" height="34" rx="3"/>
-      <text class="fg-t" x="46" y="122">배움</text>
-      <text class="fg-s" x="90" y="122">어린이</text>
-      <text class="fg-s" x="214" y="122" text-anchor="end">최고 4,200</text>
-      <text class="fg-s" x="46" y="135">천천히. 몇 칸 더 채울까?</text>
-      <rect class="fg-key" x="30" y="146" width="200" height="34" rx="3"/>
-      <text class="fg-t" x="46" y="162">마라톤</text>
-      <text class="fg-s" x="98" y="162">지난 선택</text>
-      <text class="fg-s" x="214" y="162" text-anchor="end">최고 38,900</text>
-      <text class="fg-s" x="46" y="175">라인을 지워라. 끝까지.</text>
-      <rect class="fg-box" x="30" y="186" width="200" height="34" rx="3"/>
-      <text class="fg-t" x="46" y="202">젠</text>
-      <text class="fg-s" x="214" y="202" text-anchor="end">최고 12,050</text>
-      <text class="fg-s" x="46" y="215">가속 없음. 호흡대로.</text>
-      <rect class="fg-box" x="30" y="226" width="200" height="34" rx="3"/>
-      <text class="fg-t" x="46" y="242">스프린트</text>
-      <text class="fg-s" x="214" y="242" text-anchor="end">최단 1분 52초</text>
-      <text class="fg-s" x="46" y="255">40라인. 최단 시간.</text>
-      <rect class="fg-box" x="30" y="272" width="200" height="28" rx="3"/>
-      <text class="fg-t" x="130" y="291" text-anchor="middle">환경설정</text>
-      <text class="fg-t" x="290" y="60">모드마다 최고 기록이 따로 남는 게임임. 확정 규격에서는 카드를 펼치지 않고</text>
-      <text class="fg-t" x="290" y="80">고르는 칸 하나로 접고, 제목 아래에 대표 기록을 적지 않음</text>
-      <text class="fg-t" x="290" y="118">달라지는 것</text>
-      <text class="fg-s" x="290" y="140">· 지금은 카드를 누르면 주소가 바뀌며 페이지를 새로 읽음. 화면만 바꾸도록 고침</text>
-      <text class="fg-s" x="290" y="160">· 되돌아가기가 우연히 동작하던 것을 계단 규칙으로 확정</text>
-      <text class="fg-s" x="290" y="180">· 이어서 하기 칸은 두지 않음. 한 판이 짧고 저장할 진행이 없음</text>
-      <text class="fg-s" x="290" y="200">· 지난번에 고른 모드가 칸에 들어 있어 대부분은 시작만 누름</text>
-      <text class="fg-s" x="290" y="230">스프린트만 기록이 시간이라 최단으로 적음. 다른 셋은 점수라 최고로 적음.</text>
-      <text class="fg-s" x="290" y="248">같은 자리에 다른 종류 기록이 오므로 숫자 앞에 무엇인지 밝힘</text>
-    </svg>
+  <div class="figure">
+    <div class="stage">
+      <div class="unit">
+        <div class="cap"><span>TYPE 2</span><b>갈래 시작형 · 테트리스</b></div>
+        <div class="mk mk-tet">
+          <div class="mk-bg tetbg"></div>
+          <!-- 배경 = 게임 자체 요소. 실제 조각 일곱 종의 모양과 실제 게임 색을 그대로 씀 -->
+          <div class="tetdeco">
+            <div class="tmino c3" style="left:22px;top:76px;--c:#b48cff"><i></i><i></i><i></i><i class="v"></i><i></i><i class="v"></i></div>
+            <div class="tmino c1" style="left:230px;top:64px;--c:#7cf3c4"><i></i><i></i><i></i><i></i></div>
+            <div class="tmino c3" style="left:198px;top:198px;--c:#ff6b81"><i></i><i></i><i class="v"></i><i class="v"></i><i></i><i></i></div>
+            <div class="tmino c3" style="left:28px;top:236px;--c:#ffa05c"><i class="v"></i><i class="v"></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="tstack" style="top:374px">
+            <i class="e"></i><i class="e"></i><i style="--c:#5aa9ff"></i><i class="e"></i><i class="e"></i><i class="e"></i><i style="--c:#f7c948"></i><i style="--c:#f7c948"></i><i class="e"></i><i class="e"></i>
+            <i style="--c:#ffa05c"></i><i style="--c:#ffa05c"></i><i style="--c:#5aa9ff"></i><i class="e"></i><i style="--c:#4ad8a3"></i><i style="--c:#4ad8a3"></i><i style="--c:#f7c948"></i><i style="--c:#f7c948"></i><i style="--c:#b48cff"></i><i class="e"></i>
+            <i style="--c:#ffa05c"></i><i style="--c:#5aa9ff"></i><i style="--c:#5aa9ff"></i><i style="--c:#7cf3c4"></i><i style="--c:#4ad8a3"></i><i style="--c:#ff6b81"></i><i style="--c:#ff6b81"></i><i style="--c:#b48cff"></i><i style="--c:#b48cff"></i><i style="--c:#b48cff"></i>
+          </div>
+          <div class="mk-top">
+            <span class="ic"><svg><use href="#i-back"/></svg></span>
+            <span class="sp"></span>
+            <span class="ic"><svg><use href="#i-gear"/></svg></span>
+            <span class="ic"><svg><use href="#i-snd"/></svg></span>
+            <span class="ic"><svg><use href="#i-full"/></svg></span>
+          </div>
+          <div class="mk-hero" style="top:112px">
+            <div class="mk-ttl">Tetris</div>
+            <div class="mk-sub">라인을 지워라</div>
+          </div>
+          <div class="mk-dock veil">
+            <div class="pick">
+              <span class="lb">모드</span><span class="vl">마라톤</span>
+              <span class="sc">최고 38,900</span>
+              <svg class="cv" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+            </div>
+            <div class="b pri">시작</div>
+          </div>
+          <div class="mk-home"></div>
+        </div>
+      </div>
     </div>
-    <div class="figcap"><span class="fid">FIG FRM-04</span><span>테트리스. 모드 카드 넷이 시작 칸을 차지하고 이어서 하기 칸은 생략.</span></div>
+    <div class="figcap"><span class="fid">FIG FRM-04</span><span>테트리스. 모드 넷을 고르는 칸 하나로 접어 조작단이 두 줄로 끝남. 배경은 실제 조각 일곱 종과 쌓인 판.</span></div>
+  </div>
+  <p>모드마다 최고 기록이 따로 남는 게임임. 카드 넷을 펼치면 위 칸이 밀려 사라지므로 고르는 칸 하나로 접고(5.4), 갈래마다 기록이 붙으니 제목 아래에는 대표 기록을 적지 않음. 칸을 눌러 목록을 펼친 모습은 <a class="ref" href="screen-frame-drafts.html">Ⅱ권 3장</a>에 있음. 배경 그림이 없어 게임 자체 요소로 대신함 - 위에서 떨어지는 조각과 아래 열 칸 판에 쌓인 블록 모두 실제 게임의 모양과 색임.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">지금은 카드를 누르면 주소가 바뀌며 페이지를 새로 읽음. 화면만 바꾸도록 고침</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">되돌아가기가 우연히 동작하던 것을 계단 규칙으로 확정함</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">이어서 하기 칸은 두지 않음. 한 판이 짧고 저장할 진행이 없음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">지난번에 고른 모드가 칸에 이미 들어 있어 대부분은 시작만 누름</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">스프린트만 기록이 시간이라 숫자 앞에 최단이라고 밝힘. 나머지 셋은 최고 점수임</div></div>
   </div>
 
   <h3><span class="sn">6.4.</span>스도쿠 <span class="chip c-scr">갈래 시작형</span></h3>
-  <div class="figure mid">
-    <div class="fscroll">
-    <svg viewBox="0 0 880 330" role="img" aria-label="스도쿠 시작 화면 시안">
-      <rect class="fg-box" x="10" y="10" width="240" height="310" rx="6" fill="#ffffff"/>
-      <rect class="fg-box" x="10" y="10" width="240" height="30"/>
-      <text class="fg-s" x="22" y="30">←</text>
-      <text class="fg-s" x="120" y="30" text-anchor="middle">스도쿠</text>
-      <text class="fg-s" x="196" y="30">소리</text>
-      <text class="fg-s" x="222" y="30">화면</text>
-      <rect class="fg-box" x="30" y="50" width="200" height="46" rx="3"/>
-      <text class="fg-t" x="130" y="79" text-anchor="middle">스도쿠</text>
-      <rect class="fg-box" x="30" y="106" width="200" height="30" rx="3"/>
-      <text class="fg-t" x="130" y="126" text-anchor="middle">이어서 하기 · 중급 12분째</text>
-      <rect class="fg-box" x="30" y="146" width="200" height="30" rx="3"/>
-      <text class="fg-t" x="46" y="166">입문</text>
-      <text class="fg-s" x="214" y="166" text-anchor="end">최단 1분 40초</text>
-      <rect class="fg-box" x="30" y="182" width="200" height="30" rx="3"/>
-      <text class="fg-t" x="46" y="202">초급</text>
-      <text class="fg-s" x="214" y="202" text-anchor="end">최단 4분 12초</text>
-      <rect class="fg-key" x="30" y="218" width="200" height="30" rx="3"/>
-      <text class="fg-t" x="46" y="238">중급</text>
-      <text class="fg-s" x="98" y="238">지난 선택</text>
-      <text class="fg-s" x="214" y="238" text-anchor="end">최단 9분 05초</text>
-      <rect class="fg-box" x="30" y="254" width="200" height="30" rx="3"/>
-      <text class="fg-t" x="46" y="274">상급</text>
-      <text class="fg-s" x="214" y="274" text-anchor="end">기록 없음</text>
-      <rect class="fg-box" x="30" y="292" width="200" height="28" rx="3"/>
-      <text class="fg-t" x="130" y="311" text-anchor="middle">환경설정</text>
-      <text class="fg-t" x="290" y="60">지금 시작 화면이 없어 열면 곧바로 퍼즐이 뜨고 난이도를 고를 자리가 없음.</text>
-      <text class="fg-t" x="290" y="80">네 단계는 고르는 칸 하나로 접고 목록은 눌렀을 때 펼침</text>
-      <text class="fg-t" x="290" y="118">달라지는 것</text>
-      <text class="fg-s" x="290" y="140">· 시작 화면이 새로 생김. 난이도를 고를 자리도 함께 생김</text>
-      <text class="fg-s" x="290" y="160">· 소리 버튼이 새로 생김. 다섯 게임 중 유일하게 없던 게임</text>
-      <text class="fg-s" x="290" y="180">· 매 입력마다 저장하고 있어 이어서 하기 칸을 살릴 수 있음</text>
-      <text class="fg-s" x="290" y="200">· 자동 메모와 충돌 강조는 난이도마다 기본값이 달라 환경설정에 둠</text>
-      <text class="fg-s" x="290" y="230">기록은 보조를 쓰지 않은 판만 적음. 힌트를 쓴 판은 따로 세되 이 자리에는</text>
-      <text class="fg-s" x="290" y="248">올리지 않음. 없으면 비우지 않고 기록 없음으로 적음</text>
-    </svg>
+  <div class="figure">
+    <div class="stage">
+      <div class="unit">
+        <div class="cap"><span>TYPE 2</span><b>갈래 시작형 · 스도쿠</b></div>
+        <div class="mk light">
+          <div class="mk-bg sudbg"></div>
+          <!-- 배경 = 게임에 실제로 들어 있는 입문 문제. 검은 숫자가 처음부터 있던 단서, 파란 숫자가 사람이 넣은 것 -->
+          <div class="suddeco" style="top:150px">
+            <i>5</i><i class="u">3</i><i>4</i><i></i><i>7</i><i>8</i><i>9</i><i>1</i><i class="u">2</i>
+            <i>6</i><i>7</i><i class="u">2</i><i>1</i><i></i><i>5</i><i>3</i><i></i><i>8</i>
+            <i></i><i>9</i><i>8</i><i>3</i><i></i><i>2</i><i></i><i>6</i><i>7</i>
+            <i>8</i><i>5</i><i></i><i>7</i><i>6</i><i></i><i>4</i><i></i><i>3</i>
+            <i></i><i>2</i><i>6</i><i>8</i><i class="u hl">5</i><i>3</i><i>7</i><i>9</i><i></i>
+            <i>7</i><i></i><i>3</i><i></i><i>2</i><i>4</i><i></i><i>5</i><i>6</i>
+            <i>9</i><i>6</i><i></i><i>5</i><i>3</i><i></i><i>2</i><i>8</i><i></i>
+            <i class="u">2</i><i>8</i><i>7</i><i>4</i><i>1</i><i>9</i><i></i><i>3</i><i>5</i>
+            <i>3</i><i></i><i>5</i><i>2</i><i>8</i><i></i><i>1</i><i>7</i><i>9</i>
+          </div>
+          <div class="mk-top">
+            <span class="ic"><svg><use href="#i-back"/></svg></span>
+            <span class="sp"></span>
+            <span class="ic"><svg><use href="#i-gear"/></svg></span>
+            <span class="ic"><svg><use href="#i-snd"/></svg></span>
+            <span class="ic"><svg><use href="#i-full"/></svg></span>
+          </div>
+          <div class="mk-hero" style="top:64px">
+            <div class="mk-ttl">스도쿠</div>
+            <div class="mk-sub">스마트 힌트로 배우는 스도쿠</div>
+          </div>
+          <div class="mk-dock veil">
+            <div class="b">이어서 하기<span class="s">중급 · 12분째</span></div>
+            <div class="pick">
+              <span class="lb">난이도</span><span class="vl">중급</span>
+              <span class="sc">최단 9분 05초</span>
+              <svg class="cv" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+            </div>
+            <div class="b pri">시작</div>
+          </div>
+          <div class="mk-home"></div>
+        </div>
+      </div>
     </div>
-    <div class="figcap"><span class="fid">FIG FRM-05</span><span>스도쿠. 시작 화면과 소리 버튼이 새로 생기는 게임.</span></div>
+    <div class="figcap"><span class="fid">FIG FRM-05</span><span>스도쿠. 다섯 중 유일한 흰 바탕 게임이라 같은 규격을 밝은 톤으로 뒤집어 적용함. 시작 화면과 소리 버튼이 새로 생김.</span></div>
+  </div>
+  <p>지금은 게임을 열면 곧바로 퍼즐이 떠서 난이도를 고를 자리가 없음. 배경 그림도 캐릭터도 없는 게임이라 9칸 판 자체가 배경이 됨. 규격은 색을 정하지 않고 칸의 순서와 강조만 정하므로, 어두운 게임이든 밝은 게임이든 같은 골격이 그대로 성립함을 이 그림이 보임.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">시작 화면이 새로 생김. 난이도 네 단계(입문·초급·중급·상급)를 고르는 자리도 함께 생김</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">소리 버튼이 새로 생김. 다섯 게임 중 유일하게 없던 게임임</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">매 입력마다 저장하고 있어 이어서 하기 칸을 그대로 살릴 수 있음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">자동 메모와 충돌 강조는 난이도마다 기본값이 달라 환경설정 안에 둠</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">기록은 난이도별 최단 시간 하나뿐임
+      <ul class="od"><li>보조를 쓰지 않은 판만 셈. 힌트를 쓴 판은 따로 세되 이 자리에는 올리지 않음</li><li>없으면 비우지 않고 기록 없음으로 적음</li></ul>
+    </div></div>
   </div>
 
   <h3><span class="sn">6.5.</span>노노그램 <span class="chip c-ui">골라 들어가는 형</span></h3>
-  <div class="figure mid">
-    <div class="fscroll">
-    <svg viewBox="0 0 880 330" role="img" aria-label="노노그램 시작 화면 시안">
-      <rect class="fg-box" x="10" y="10" width="240" height="310" rx="6" fill="#ffffff"/>
-      <rect class="fg-box" x="10" y="10" width="240" height="30"/>
-      <text class="fg-s" x="22" y="30">←</text>
-      <text class="fg-s" x="120" y="30" text-anchor="middle">노노그램</text>
-      <text class="fg-s" x="196" y="30">소리</text>
-      <text class="fg-s" x="222" y="30">화면</text>
-      <rect class="fg-box" x="30" y="50" width="200" height="86" rx="3"/>
-      <text class="fg-t" x="130" y="78" text-anchor="middle">노노그램</text>
-      <text class="fg-s" x="130" y="98" text-anchor="middle">완성한 그림 128 · 344</text>
-      <text class="fg-s" x="130" y="116" text-anchor="middle">모은 별 291</text>
-      <rect class="fg-box" x="30" y="146" width="200" height="30" rx="3"/>
-      <text class="fg-t" x="130" y="166" text-anchor="middle">이어서 하기 · 중급 금붕어</text>
-      <rect class="fg-key" x="30" y="186" width="200" height="40" rx="3"/>
-      <text class="fg-t" x="130" y="211" text-anchor="middle">시작</text>
-      <text class="fg-s" x="130" y="242" text-anchor="middle">누르면 그림 고르는 지도로</text>
-      <rect class="fg-box" x="30" y="256" width="200" height="28" rx="3"/>
-      <text class="fg-t" x="130" y="275" text-anchor="middle">환경설정</text>
-      <text class="fg-t" x="290" y="60">지금은 열면 곧바로 스테이지 지도가 뜸. 지도를 없애지 않고 시작 화면</text>
-      <text class="fg-t" x="290" y="80">다음 칸으로 옮김. 판이 344개라 시작 버튼 하나로는 고를 수 없음</text>
-      <text class="fg-t" x="290" y="118">달라지는 것</text>
-      <text class="fg-s" x="290" y="140">· 지도 앞에 시작 화면이 생김. 지도는 시작을 누른 뒤 나옴</text>
-      <text class="fg-s" x="290" y="160">· 되돌아가기 계단이 한 칸 늘어남. 지도에서 되돌아가면 시작 화면으로,</text>
-      <text class="fg-s" x="290" y="178">  거기서 한 번 더 되돌아가면 허브로. 지금은 지도에서 곧바로 허브로 나감</text>
-      <text class="fg-s" x="290" y="198">· 화면 바꾸는 방법은 이미 규격이 채택한 방식이라 고칠 것이 없음</text>
-      <text class="fg-s" x="290" y="228">모은 별과 완성한 그림 수가 이 게임의 기록임. 점수가 없는 게임이라</text>
-      <text class="fg-s" x="290" y="246">최고 기록 자리를 수집 현황으로 채움</text>
-    </svg>
+  <div class="figure">
+    <div class="stage">
+      <div class="unit">
+        <div class="cap"><span>TYPE 3</span><b>골라 들어가는 형 · 노노그램</b></div>
+        <div class="mk mk-non">
+          <div class="mk-bg nonbg"></div>
+          <!-- 배경 = 완성한 그림(금붕어) 격자 -->
+          <div class="nondeco" style="top:172px">
+            <i></i><i></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i class="f"></i><i class="f"></i>
+            <i></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i>
+            <i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i>
+            <i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="e"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i>
+            <i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i>
+            <i></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i>
+            <i></i><i></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i class="f"></i><i class="f"></i>
+          </div>
+          <div class="mk-top">
+            <span class="ic"><svg><use href="#i-back"/></svg></span>
+            <span class="sp"></span>
+            <span class="ic"><svg><use href="#i-gear"/></svg></span>
+            <span class="ic"><svg><use href="#i-snd"/></svg></span>
+            <span class="ic"><svg><use href="#i-full"/></svg></span>
+          </div>
+          <div class="mk-hero" style="top:74px">
+            <div class="mk-ttl">노노그램</div>
+            <div class="mk-sub">완성한 그림 128 / 344 · 모은 별 291</div>
+          </div>
+          <div class="mk-dock veil">
+            <div class="b">이어서 하기<span class="s">중급 · 금붕어</span></div>
+            <div class="b pri">시작</div>
+            <div class="rec">누르면 그림 고르는 지도로 감</div>
+          </div>
+          <div class="mk-home"></div>
+        </div>
+      </div>
     </div>
-    <div class="figcap"><span class="fid">FIG FRM-06</span><span>노노그램. 스테이지 지도가 시작 화면 다음 칸으로 내려감.</span></div>
+    <div class="figcap"><span class="fid">FIG FRM-06</span><span>노노그램. 스테이지 지도가 시작 화면 다음 칸으로 내려감. 배경은 완성한 그림 격자.</span></div>
+  </div>
+  <p>지금은 열면 곧바로 스테이지 지도가 뜸. 지도를 없애지 않고 시작 화면 다음 칸으로 옮김. 판이 344개라 시작 버튼 하나로는 고를 수 없기 때문임. 배경 그림이 없어 완성한 그림 격자로 대신했고, 이 게임의 결과물이 곧 그림이라 배경 대용으로 가장 자연스러움.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">지도 앞에 시작 화면이 생김. 지도는 시작을 누른 뒤 나옴</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">되돌아가기 계단이 한 칸 늘어남
+      <ul class="od"><li>지도에서 되돌아가면 시작 화면으로, 거기서 한 번 더 되돌아가면 허브로. 지금은 지도에서 곧바로 허브로 나감</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">화면 바꾸는 방법은 이미 규격이 채택한 방식이라 고칠 것이 없음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">점수가 없는 게임이라 최고 기록 자리를 수집 현황으로 채움. 완성한 그림 수와 모은 별이 그 자리에 옴</div></div>
   </div>
 
   <h3><span class="sn">6.6.</span>러시아워 <span class="chip c-ui">골라 들어가는 형</span></h3>
-  <div class="figure mid">
-    <div class="fscroll">
-    <svg viewBox="0 0 880 330" role="img" aria-label="러시아워 시작 화면 시안">
-      <rect class="fg-box" x="10" y="10" width="240" height="310" rx="6" fill="#ffffff"/>
-      <rect class="fg-box" x="10" y="10" width="240" height="30"/>
-      <text class="fg-s" x="22" y="30">←</text>
-      <text class="fg-s" x="120" y="30" text-anchor="middle">러시아워</text>
-      <text class="fg-s" x="196" y="30">소리</text>
-      <text class="fg-s" x="222" y="30">화면</text>
-      <rect class="fg-box" x="30" y="50" width="200" height="86" rx="3"/>
-      <text class="fg-t" x="130" y="78" text-anchor="middle">밥풀이와 포니</text>
-      <text class="fg-s" x="130" y="98" text-anchor="middle">모은 별 214 · 골드 1,180</text>
-      <text class="fg-s" x="130" y="116" text-anchor="middle">오리지널 47 · 보드게임 6 · 고난도 12</text>
-      <rect class="fg-box" x="30" y="146" width="200" height="30" rx="3"/>
-      <text class="fg-t" x="130" y="166" text-anchor="middle">이어서 하기 · 오리지널 48번</text>
-      <rect class="fg-key" x="30" y="186" width="200" height="40" rx="3"/>
-      <text class="fg-t" x="130" y="211" text-anchor="middle">시작</text>
-      <text class="fg-s" x="130" y="242" text-anchor="middle">누르면 모드와 퍼즐 고르는 진행 맵으로</text>
-      <rect class="fg-box" x="30" y="256" width="96" height="28" rx="3"/>
-      <text class="fg-t" x="78" y="275" text-anchor="middle">환경설정</text>
-      <rect class="fg-box" x="134" y="256" width="96" height="28" rx="3"/>
-      <text class="fg-t" x="182" y="275" text-anchor="middle">상점</text>
-      <text class="fg-t" x="290" y="60">지금은 열면 곧바로 퍼즐이 뜨고, 상점과 진행 맵은 위쪽 아이콘으로 들어감.</text>
-      <text class="fg-t" x="290" y="80">모드가 셋에 퍼즐이 수백 개라 시작 다음 칸에서 고름</text>
-      <text class="fg-t" x="290" y="118">달라지는 것</text>
-      <text class="fg-s" x="290" y="140">· 시작 화면이 새로 생김. 진행 맵은 시작을 누른 뒤 나옴</text>
-      <text class="fg-s" x="290" y="160">· 상점은 새 칸을 만들지 않고 시작 아래 줄에 나란히 둠</text>
-      <text class="fg-s" x="290" y="180">· 모드 고르기는 이미 진행 맵 안 탭으로 들어가 있어 그대로 씀</text>
-      <text class="fg-s" x="290" y="200">· 되돌아가기 계단이 한 칸 늘어남. 노노그램과 같은 구조</text>
-      <text class="fg-s" x="290" y="230">모드마다 진행이 따로 쌓이고 골드와 꾸미기는 공용임. 그래서 위 칸에</text>
-      <text class="fg-s" x="290" y="248">공용 재산을 먼저 적고 모드별 진행을 그 아래 한 줄로 요약함</text>
-    </svg>
+  <div class="figure">
+    <div class="stage">
+      <div class="unit">
+        <div class="cap"><span>TYPE 3</span><b>골라 들어가는 형 · 밥풀이와 포니</b></div>
+        <div class="mk mk-rush">
+          <div class="mk-bg rushbg"></div>
+          <!-- 배경 = 실제 보드. 크림 6x6 판 + 오른쪽 세 번째 줄 골드 출구 길 + 실제 48번 문제의 차 배치 -->
+          <div class="rushlane" style="left:220px;width:52px;top:261px;height:26px"></div>
+          <div class="rushdeco" style="left:66px;right:66px;top:210px">
+            <div class="grid"></div>
+            <div class="car" style="--c:#ffd873;left:0;top:0;width:33.33%;height:16.67%"></div>
+            <div class="car" style="--c:#a8e6b8;left:50%;top:0;width:33.33%;height:16.67%"></div>
+            <div class="car" style="--c:#cdb0ff;left:83.33%;top:0;width:16.67%;height:50%"></div>
+            <div class="car" style="--c:#a6d3ff;left:66.67%;top:16.67%;width:16.67%;height:33.33%"></div>
+            <div class="car x" style="--c:#ffb0c8;left:0;top:33.33%;width:33.33%;height:16.67%"></div>
+            <div class="car" style="--c:#ffb894;left:33.33%;top:50%;width:16.67%;height:33.33%"></div>
+            <div class="car" style="--c:#a8e6b8;left:50%;top:66.67%;width:16.67%;height:33.33%"></div>
+            <div class="car" style="--c:#a6d3ff;left:66.67%;top:83.33%;width:33.33%;height:16.67%"></div>
+          </div>
+          <div class="mk-top">
+            <span class="ic"><svg><use href="#i-back"/></svg></span>
+            <span class="sp"></span>
+            <span class="ic"><svg><use href="#i-gear"/></svg></span>
+            <span class="ic"><svg><use href="#i-snd"/></svg></span>
+            <span class="ic"><svg><use href="#i-full"/></svg></span>
+          </div>
+          <div class="mk-hero" style="top:46px">
+            <div class="duo">
+              <img src="../../../../games/rushhour/assets/ponies/a_v2.png" alt="포니" style="width:54px">
+              <div class="bapul" style="--sheet:url(../../../../games/rushhour/assets/ponies/c_cell_16_a.png)"></div>
+            </div>
+            <div class="mk-ttl sm">밥풀이와 포니</div>
+            <div class="mk-sub">모은 별 214 · 골드 1,180 · 오리지널 47 / 186</div>
+          </div>
+          <div class="mk-dock veil">
+            <div class="b">이어서 하기<span class="s">오리지널 48번</span></div>
+            <div class="b pri">시작</div>
+            <div class="rec">누르면 모드와 퍼즐 고르는 진행 맵으로 감</div>
+            <div class="b gho">상점</div>
+          </div>
+          <div class="mk-home"></div>
+        </div>
+      </div>
     </div>
-    <div class="figcap"><span class="fid">FIG FRM-07</span><span>러시아워. 상점이 환경설정과 같은 줄로 내려오고 진행 맵은 시작 다음 칸.</span></div>
+    <div class="figcap"><span class="fid">FIG FRM-07</span><span>러시아워. 상점이 조작단 맨 아래 줄로 내려오고 진행 맵은 시작 다음 칸. 배경은 실제 보드와 48번 문제의 차 배치.</span></div>
+  </div>
+  <p>지금은 열면 곧바로 퍼즐이 뜨고 상점과 진행 맵은 위쪽 아이콘으로 들어감. 퍼즐이 수백 개라 시작 다음 칸에서 고름. 배경 그림은 없지만 크림 바닥 판과 오른쪽 출구 길이 이 게임의 얼굴이라 그대로 배경으로 씀. 위 그림의 차 배치는 실제 48번 문제이고 붉은 테두리가 빼내야 할 주인공 차임.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">시작 화면이 새로 생김. 진행 맵은 시작을 누른 뒤 나옴</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">상점은 새 칸을 만들지 않고 조작단 맨 아래 줄에 둠(5.4). 환경설정은 상단 아이콘이라 이 줄에 넣지 않음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">모드 고르기는 이미 진행 맵 안 탭으로 들어가 있어 그대로 씀</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">되돌아가기 계단이 한 칸 늘어남. 노노그램과 같은 구조임</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">골드와 꾸미기는 모드와 무관한 공용 재산이고 진행은 모드마다 따로 쌓임
+      <ul class="od"><li>그래서 제목 아래 한 줄에 공용 재산인 별과 골드를 먼저 적고 지금 고른 모드의 진행을 뒤에 붙임. 모드를 바꾸면 뒷부분만 바뀜</li><li>실제 모드는 자체 제작 오리지널 186개와 외부 문제집 Fogleman 400개 둘임. 옛 그림에 적혔던 보드게임·고난도는 게임에 없는 이름이라 바로잡음</li></ul>
+    </div></div>
   </div>
 
   <h3><span class="sn">6.7.</span>시안에서 확정된 사항</h3>
-  <p>다섯 게임을 실제로 그려보고 규격에 더한 것임. 5.4에 규칙으로 반영했고 여기서는 왜 그렇게 정했는지를 적음.</p>
+  <p>다섯 게임을 실제 화면으로 그려보고 규격에 더한 것임. 5.4에 규칙으로 반영했고 여기서는 왜 그렇게 정했는지를 적음.</p>
   <div class="ol">
     <div class="oi"><span class="bl"></span><div class="ot">최고 기록 자리는 게임마다 다른 것이 들어옴
-      <ul class="od"><li>점수인 게임은 점수, 수집이 진행인 게임은 모은 별과 완성 수, 여행이 진행인 게임은 가장 멀리 간 곳</li><li>비어 있으면 안 되고, 기록이 없으면 기록 없음으로 적음</li></ul>
+      <ul class="od"><li>점수인 게임은 점수, 수집이 진행인 게임은 모은 별과 완성 수, 여행이 진행인 게임은 가장 멀리 간 곳, 푸는 시간이 실력인 게임은 최단 시간</li><li>비어 있으면 안 되고, 기록이 없으면 기록 없음으로 적음</li></ul>
     </div></div>
     <div class="oi"><span class="bl"></span><div class="ot">같은 자리에 점수와 시간이 섞여 오는 경우가 있음
       <ul class="od"><li>테트리스 스프린트만 시간이라 숫자 앞에 최고인지 최단인지 밝힘</li></ul>
@@ -521,6 +589,12 @@
     </div></div>
     <div class="oi"><span class="bl"></span><div class="ot">다섯 게임 중 시작 화면을 새로 만들어야 하는 것은 셋임
       <ul class="od"><li>스도쿠, 러시아워는 시작 화면 자체가 없고 노노그램은 지도가 그 자리를 대신하고 있음</li><li>테트리스와 비행 슈팅은 있는 화면을 규격에 맞추는 정도임</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">규격은 색과 톤을 정하지 않음
+      <ul class="od"><li>스도쿠 그림이 그 증거임. 흰 바탕 게임에 같은 칸 순서를 그대로 적용해도 골격이 무너지지 않음</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">배경 그림이 없는 게임은 그 게임의 실제 화면 요소가 곧 배경임
+      <ul class="od"><li>다섯 중 넷이 이 경우라 예외가 아니라 기본에 가까움. 새로 그리는 그림 없이 이미 있는 요소를 크게 깔면 됨</li></ul>
     </div></div>
   </div>
 </section>
@@ -590,7 +664,7 @@
   </div>
 </section>
 
-<div class="foot"><span>게임 허브 기획서</span><span>Ⅰ. 게임 시작 흐름 공용 프레임</span><span>r1.1 · 시작 화면 규격 A안 확정</span></div>
+<div class="foot"><span>게임 허브 기획서</span><span>Ⅰ. 게임 시작 흐름 공용 프레임</span><span>r1.2 · 게임별 시안 확정 규격 재작도</span></div>
 </main>
 </body>
 </html>
