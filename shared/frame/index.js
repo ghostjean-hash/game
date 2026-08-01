@@ -35,6 +35,10 @@ export function createGameFrame({
   hubHref = '../../',
   buttons = ['settings', 'sound', 'fullscreen'],
   sounds = {},
+  // 화면을 벗어났을 때 자동으로 잠깐 멈춤 상태로 갈지. 시간이 흐르거나 죽을 수 있는 게임은
+  // 그래야 돌아왔을 때 이미 죽어 있는 일을 막는다(규격 3.4). 실패도 시간 제한도 없는 게임은
+  // 돌아올 때마다 카드가 뜨는 것이 방해라 끈다(노노그램 검증에서 드러난 필요).
+  pauseOnHide = true,
   resume = null,
   choices = null,
   options = null,
@@ -47,6 +51,9 @@ export function createGameFrame({
   onExtra = null,
   onSettings = null,
   onScreenChange = null,
+  // 음소거가 바뀔 때 알려준다. 플레이 화면에 자기 소리 버튼을 따로 둔 게임이
+  // 그 아이콘을 같이 맞추는 데 쓴다.
+  onMuted = null,
 } = {}) {
   if (!root) throw new Error('createGameFrame: root required');
   if (!gameId) throw new Error('createGameFrame: gameId required');
@@ -69,6 +76,7 @@ export function createGameFrame({
     onMutedChange: (m) => {
       save.saveMuted(m);
       topbar.setMuted(m);
+      if (onMuted) onMuted(m);
     },
   });
 
@@ -130,7 +138,7 @@ export function createGameFrame({
   function onVisibility() {
     if (document.hidden) {
       audio.suspendAudio();
-      if (screens.current() === SCREEN.PLAY) screens.go(SCREEN.PAUSE);
+      if (pauseOnHide && screens.current() === SCREEN.PLAY) screens.go(SCREEN.PAUSE);
     } else {
       audio.resumeAudio();
     }

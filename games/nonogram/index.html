@@ -12,17 +12,15 @@
 <link rel="manifest" href="app.webmanifest" />
 <link rel="stylesheet" href="./styles/tokens.css" />
 <link rel="stylesheet" href="../../shared/mobile-shell.css" />
+<link rel="stylesheet" href="../../shared/frame/frame.css" />
 <link rel="stylesheet" href="./styles/main.css" />
 </head>
 <body>
 <main id="app">
 
-  <!-- 스테이지 맵 -->
+  <!-- 그림 고르는 지도. 규격에서는 시작 화면과 플레이 사이의 한 칸이다(공용 프레임 select).
+       상단 띠는 공용 프레임이 모든 화면에 하나만 두므로 여기서 따로 만들지 않는다. -->
   <section id="screen-map" class="screen active">
-    <div class="topbar">
-      <a href="../../" class="home" aria-label="홈으로">←</a>
-      <h1 class="title">노노그램</h1>
-    </div>
     <div id="map-body"></div>
     <p class="credit">그림 일부는 <a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener">Twemoji</a> (CC-BY 4.0)를 사용했어요</p>
   </section>
@@ -86,20 +84,15 @@
     <div id="praise-toast" class="praise-toast" hidden></div>
   </section>
 
-  <!-- 결과 -->
-  <section id="screen-result" class="screen">
+  <!-- 결과는 전용 화면이 아니라 플레이를 덮는 카드다(규격 3.5). 카드는 공용 프레임이 만들고
+       그 안에 들어갈 완성 그림·제목·별점만 여기 틀에 담아 넘긴다. -->
+  <template id="result-body">
     <div class="result">
       <div id="result-pic" class="result-pic"></div>
       <div id="result-title" class="result-title"></div>
       <div id="result-stars" class="result-stars"></div>
-      <div class="result-actions">
-        <button id="result-map" class="btn">맵으로</button>
-        <button id="result-next" class="btn primary">다음
-          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </button>
-      </div>
     </div>
-  </section>
+  </template>
 
 </main>
 <script type="module" src="../../shared/cloud/auto.js"></script>

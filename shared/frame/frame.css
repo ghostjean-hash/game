@@ -31,10 +31,9 @@
 .gg-frame[data-covered='select'] > [data-gg-screen='select'],
 .gg-frame[data-covered='title']  > [data-gg-screen='title'] { display: block; }
 
-.gg-frame > [data-gg-screen] {
-  position: absolute;
-  inset: 0;
-}
+/* 화면 요소의 배치(위치·높이)는 프레임이 강제하지 않는다. 게임마다 플레이 화면 레이아웃이
+   전혀 다르고(보드 중앙 정렬, 목록 스크롤 등), 프레임이 절대 배치를 걸면 그 레이아웃이 깨진다.
+   프레임이 정하는 것은 "어느 화면을 보이느냐"까지다. 시작 화면만 프레임 소유라 아래에서 배치한다. */
 
 /* ── 상단 띠 ───────────────────────────────────────────── */
 .gg-topbar {
@@ -151,6 +150,9 @@
   padding: 15px 14px calc(env(safe-area-inset-bottom, 0px) + 22px);
   background: linear-gradient(180deg, rgba(8, 12, 22, 0) 0%, rgba(8, 12, 22, .72) 16%, rgba(9, 13, 24, .96) 46%, rgba(9, 13, 24, .99) 100%);
 }
+/* 넓은 화면(태블릿 가로·데스크톱)에서 버튼이 화면 끝까지 늘어나면 누르는 자리가 흩어진다.
+   조작단 안쪽 폭만 손에 맞게 묶고 가운데 세운다. 칸 순서와 강조는 그대로다. */
+.gg-dock > * { max-width: 460px; width: 100%; margin-inline: auto; }
 .gg-frame.is-light .gg-dock {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .82) 16%, var(--bg, #fff) 46%, var(--bg, #fff) 100%);
 }
@@ -179,12 +181,14 @@
   font-weight: 500;
   opacity: .72;
 }
+/* 강조 버튼의 글자색은 배경(accent) 위에서 읽혀야 한다. 게임 팔레트에 따라 검정이 맞을 수도
+   흰색이 맞을 수도 있어 --accent-fg로 열어 둔다. 지정이 없으면 페이지 배경색을 쓴다. */
 .gg-btn-primary {
   padding: 15px 12px;
   font-size: 17px;
   border-color: var(--accent, #22d3ee);
   background: var(--accent, #22d3ee);
-  color: var(--bg, #04121a);
+  color: var(--accent-fg, var(--bg, #04121a));
   box-shadow: 0 8px 20px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .3);
 }
 .gg-btn-ghost {
@@ -277,11 +281,13 @@
   cursor: pointer;
 }
 .gg-seg-item:last-child { border-right: 0; }
-.gg-seg-item.is-on { background: var(--accent, #22d3ee); color: var(--bg, #04121a); font-weight: 700; }
+.gg-seg-item.is-on { background: var(--accent, #22d3ee); color: var(--accent-fg, var(--bg, #04121a)); font-weight: 700; }
 
 /* ── 겹치는 층(잠깐 멈춤·결과) ─────────────────────────── */
+/* 덮는 층은 화면 전체 기준이다. 게임 화면이 안에서 스크롤될 수 있어 절대 배치로 두면
+   스크롤을 따라 밀린다. 고정 배치라야 어디까지 스크롤했든 화면 한가운데 뜬다. */
 .gg-layer {
-  position: absolute; inset: 0;
+  position: fixed; inset: 0;
   z-index: 20;
   display: flex;
   align-items: center;
@@ -318,7 +324,7 @@
   padding: 3px 12px;
   border-radius: 99px;
   background: var(--accent, #22d3ee);
-  color: var(--bg, #04121a);
+  color: var(--accent-fg, var(--bg, #04121a));
   font-size: 11.5px;
   font-weight: 700;
 }

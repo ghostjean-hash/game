@@ -115,16 +115,29 @@ export function mountResultCard({ parent, title = '결과' } = {}) {
     el: layer,
     on(action, fn) { handlers[action] = fn; return this; },
     // 한 판이 끝났을 때 부른다. lines는 {label, value, highlight} 목록이다.
-    show({ title: t, lines = [], newRecord = false } = {}) {
-      if (t) titleEl.textContent = t;
+    // bodyEl을 주면 줄 목록 대신 그 요소를 그대로 넣는다 - 완성한 그림이나 별점처럼
+    // 게임마다 결과에서 보여줄 것이 글자가 아닌 경우가 있다(노노그램 검증에서 드러난 필요).
+    show({ title: t, lines = [], bodyEl = null, newRecord = false } = {}) {
+      if (t !== undefined) titleEl.textContent = t || '';
+      titleEl.hidden = !titleEl.textContent;
       let body = panel.querySelector('.gg-card-body');
       if (body) body.remove();
-      if (lines.length) {
+      if (bodyEl) {
+        const wrap = el('div', 'gg-card-body');
+        wrap.appendChild(bodyEl);
+        panel.insertBefore(wrap, badge);
+      } else if (lines.length) {
         const rebuilt = buildCard('result', { title: '', lines, actions: [] });
         body = rebuilt.layer.querySelector('.gg-card-body');
         panel.insertBefore(body, badge);
       }
       badge.hidden = !newRecord;
+    },
+    // 결과 카드의 버튼 문구를 게임 흐름에 맞게 바꾼다(예: 다시 하기 → 다음 그림).
+    // 규격 5.3이 고정한 뜻과 다른 행동일 때만 쓴다. 같은 뜻이면 고정 문구를 그대로 둔다.
+    setActionLabel(action, label) {
+      const b = actionsEl.querySelector(`[data-gg-action="${action}"]`);
+      if (b) b.textContent = label;
     },
     destroy() { layer.remove(); },
   };

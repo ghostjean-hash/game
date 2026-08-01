@@ -19,9 +19,51 @@ body {
   overscroll-behavior: none;
 }
 
-/* 화면 전환: 활성 화면만 표시 */
+/* 화면 전환: 지금 어느 화면인지는 공용 프레임이 #app에 적고, 표시는 프레임 CSS가 가른다
+   (shared/frame/frame.css). 아래 두 줄은 이 게임의 옛 레이아웃 규칙(#screen-play.active 등)이
+   계속 물리도록 남긴 호환 표시다 - 프레임이 화면을 바꿀 때 main.js가 같이 맞춰 준다. */
 .screen { display: none; }
 .screen.active { display: block; }
+
+/* --- 공용 프레임을 이 게임 껍데기에 맞추기 --- */
+/* 프레임이 쓰는 색 이름을 이 게임 팔레트로 이어 준다. 이어주지 않으면 프레임 기본값(어두운 톤)이
+   나와 흰 바탕 게임에 검은 버튼이 뜬다. */
+#app.gg-frame {
+  --bg-elev: var(--surface);
+  --bg-elev-2: var(--surface);
+  --fg-dim: var(--muted);
+  --accent-fg: #ffffff;          /* 라벤더 강조 버튼 위 글자 */
+  --font-sans: var(--font-body);
+  height: 100%;
+  overflow-y: auto;              /* 지도처럼 긴 화면은 이 안에서만 스크롤(페이지는 고정) */
+  background: var(--bg);
+  color: var(--fg);
+}
+/* 시작 화면은 화면을 가득 쓰는 규격이라 껍데기 여백을 걷어낸다(조작단이 화면 끝에 붙어야 한다). */
+#app.gg-frame[data-screen='title'] { padding: 0; overflow: hidden; }
+/* 상단 띠는 화면 맨 위에 뜬다. 지도 화면은 그만큼 내려서 시작한다. */
+#app.gg-frame[data-screen='select'] #map-body { padding-top: 46px; }
+/* 플레이 화면은 자기 4코너 배치를 그대로 쓴다. 띠가 그 위에 겹치지 않게 감춘다. */
+#app.gg-frame[data-screen='play'] .gg-topbar,
+#app.gg-frame[data-screen='pause'] .gg-topbar,
+#app.gg-frame[data-screen='result'] .gg-topbar { display: none; }
+
+/* 시작 화면 배경 - 이 게임은 배경 그림이 없어 완성한 그림 격자로 대신한다(규격 5.1).
+   격자 내용은 실제 퍼즐 데이터로 main.js가 만든다. */
+.title-deco { background: radial-gradient(120% 72% at 50% 4%, #fff 0%, var(--bg) 66%); }
+.title-grid {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  transform: translate(-50%, -50%);
+  width: min(74vw, 48dvh);
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  gap: 1px;
+  opacity: .5;
+}
+.title-grid i { aspect-ratio: 1; border-radius: 1px; background: var(--cell-empty); }
+.title-grid i.on { background: var(--accent); }
 
 /* --- 공통 --- */
 .topbar {

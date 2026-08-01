@@ -6,9 +6,9 @@
 |---|---|---|---|---|
 | lotto | v0.2 | 2026-05-01 | `apps/lotto/` | 진행중 (v0.1 → v0.2 마이그레이션 완료) |
 | rushhour | v0.3.1 | 2026-07-06 | `games/rushhour/` | 4.7 모바일 규칙 적용(확대 잠금·전체화면·가로 방향 레이아웃·보드 크기 산정) + 무테마 골격 base.css @import 경유. playable |
-| nonogram | v0.3.2 | 2026-07-06 | `games/nonogram/` | 모바일 플레이 규칙(4.7) 적용·검증 + 무테마 골격 shared/mobile-shell.css 링크 + 창 비율 무관 전체 fit(4.7-7 강화) 적용. playable |
+| nonogram | v0.4.0 | 2026-08-01 | `games/nonogram/` | 4.8 시작 흐름 공용 프레임 첫 적용(2단계 검증 게임). 시작 화면 신설·맵을 다음 칸으로·결과 덮는 카드·되돌아가기 계단·소리 공용화. 이전 적용분(4.7 모바일 규칙·무테마 골격·전체 fit) 유지. playable |
 | flightshooting | v0.3.2 | 2026-07-06 | `games/flightshooting/` | 신규 게임. 표준 구조(src core/render/input/data/audio 모듈 분리 + docs 4종 + tests) + 다크 테마 shared/base.css + 모바일 4.7(전체화면 버튼 포함) 적용. core 순수 로직/렌더 분리. playable |
-| (공용 프레임) | v0.4.0 | 2026-08-01 | `shared/frame/` | 4.8 시작 흐름 공용 부품 제작(1단계). 게임 적용은 아직 0곳 - 2단계 노노그램 검증 후 나머지 넷 순차. 확인용 화면 `shared/frame/demo.html` |
+| (공용 프레임) | v0.4.0 | 2026-08-01 | `shared/frame/` | 4.8 시작 흐름 공용 부품(1단계 제작 + 2단계 노노그램 검증 완료). 남은 적용은 비행 슈팅·테트리스·러시아워·스도쿠 넷(3단계). 확인용 화면 `shared/frame/demo.html` |
 
 # 2. 적용 절차 체크리스트 (본 표준 9.1)
 

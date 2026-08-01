@@ -1,6 +1,6 @@
 // 진입점: 화면 전환 오케스트레이션 + 저장 연결. core를 조립하고 render/input에 위임한다.
 
-import { createStorage } from '../../../shared/storage.js';
+import { createGameFrame, SCREEN } from '../../../shared/frame/index.js';
 import { setupFullscreen } from '../../../shared/fullscreen.js';
 import { CELL, MODE, MAX_STARS, ANIM, PRAISE, PRAISE_STREAK, CELL_FIT } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
@@ -19,24 +19,70 @@ import {
 import { renderMap } from './render/mapView.js';
 import { renderResult } from './render/resultView.js';
 import { attachBoardInput } from './input/boardInput.js';
-import * as sound from './audio/sound.js';
+import { SOUNDS } from './audio/sound.js';
 
-const store = createStorage('nonogram');
+// --- DOM 참조 ---
+const el = (id) => document.getElementById(id);
+const boardEl = el('board');
+const puzzleEl = boardEl.parentElement;
+
+// 플레이 화면 소리 버튼(이 게임의 4코너 UI에 있는 것). 프레임 상단 띠는 플레이에서 감추므로
+// 그 자리를 이 버튼이 대신하고, 상태는 프레임이 알려주는 대로 따라간다.
+const ICON_SOUND = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
+const ICON_MUTE = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor" stroke="none"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>';
+function syncPlaySoundBtn(muted) {
+  const b = el('sound-toggle');
+  if (b) b.innerHTML = muted ? ICON_MUTE : ICON_SOUND;
+}
+
+// 시작 화면 배경. 이 게임은 배경 그림이 없어 게임 자체 요소로 대신한다(규격 5.1) -
+// 실제 퍼즐 하나를 완성한 모습의 격자를 흐리게 깐다. 이 게임의 결과물이 곧 그림이라
+// 배경 대용으로 가장 자연스럽다(Ⅰ권 6.5).
+function titleBackdrop() {
+  const puzzle = PUZZLES.find((p) => p.title === '고양이' && p.size === 15) || PUZZLES[PUZZLES.length - 1];
+  const wrap = document.createElement('div');
+  wrap.className = 'title-grid';
+  wrap.style.setProperty('--n', puzzle.size);
+  puzzle.grid.forEach((row) => row.forEach((v) => {
+    const cell = document.createElement('i');
+    if (v) cell.className = 'on';
+    wrap.appendChild(cell);
+  }));
+  return wrap;
+}
+
+// --- 공용 프레임(기획서 Ⅰ권 / html-game 표준 4.8) ---
+// 다섯 화면 골격·되돌아가기 계단·상단 띠·결과 카드·소리·저장을 여기서 한 번에 받는다.
+// 이 게임은 판이 344개라 "골라 들어가는 형"이다 - 시작 화면과 플레이 사이에 지도 한 칸이 들어간다.
+const frame = createGameFrame({
+  root: el('app'),
+  gameId: 'nonogram',
+  title: '노노그램',
+  light: true,                       // 흰 바탕 게임이라 배경 결·그림자를 밝은 쪽으로 뒤집는다
+  hasSelect: true,
+  background: { className: 'title-deco', el: titleBackdrop() },
+  buttons: ['sound', 'fullscreen'],  // 환경설정은 이 게임에 없다(설정 항목 자체가 없음)
+  sounds: SOUNDS,
+  pauseOnHide: false,                // 실패도 시간 제한도 없는 게임이라 자리를 비워도 잃을 것이 없다
+
+  resume: { enabled: false, detail: '' },
+  startHint: '누르면 그림 고르는 지도로 감',
+  onStart: () => openMap(),
+  onResume: () => resumeLast(),
+  onMuted: (m) => syncPlaySoundBtn(m),
+});
+const sound = frame.audio;
+const store = frame.save;            // 기존 저장 키(progress/inprogress/mode/muted)를 그대로 쓴다
+
+// 기존 화면 요소를 프레임에 등록한다. 표시는 프레임이 화면 이름으로 가른다.
+frame.screens.register(SCREEN.SELECT, el('screen-map'));
+frame.screens.register(SCREEN.PLAY, el('screen-play'));
 
 // --- 영속 상태 ---
 let progress = store.get('progress', {});   // { [id]: { cleared, stars, bestMistakes } }
 
 // --- 현재 판 상태 ---
 let cur = null;
-
-// --- DOM 참조 ---
-const el = (id) => document.getElementById(id);
-const screens = {
-  map: el('screen-map'), play: el('screen-play'),
-  result: el('screen-result'),
-};
-const boardEl = el('board');
-const puzzleEl = boardEl.parentElement;
 
 const DIFF = {
   tutorial: { icon: '🎓', name: '튜토리얼' },
@@ -51,14 +97,33 @@ const COACH = {
   3: '이제 자유롭게! 숫자 힌트만 보고 그림을 완성해 봐요.',
 };
 
-function showScreen(name) {
-  for (const [k, node] of Object.entries(screens)) node.classList.toggle('active', k === name);
-}
-
-// --- 맵 ---
+// --- 맵(그림 고르는 화면) ---
 function openMap() {
   renderMap(el('map-body'), progress, startPuzzle);
-  showScreen('map');
+  frame.screens.go(SCREEN.SELECT);
+}
+
+// 시작 화면의 이어서 하기 - 마지막에 풀던 그림으로 곧장 들어간다.
+function resumeLast() {
+  const saved = frame.save.readResume();
+  const p = saved && PUZZLES.find((q) => q.id === saved.data?.id);
+  if (p) startPuzzle(p);
+  else openMap();
+}
+
+// 시작 화면 기록 줄과 이어서 하기 칸을 지금 상태로 맞춘다.
+// 이 게임은 점수가 없어 수집 현황(완성한 그림 수·모은 별)이 기록 자리에 온다(Ⅰ권 6.7).
+function refreshTitle() {
+  const done = Object.values(progress).filter((v) => v && v.cleared).length;
+  const stars = Object.values(progress).reduce((sum, v) => sum + (v?.stars || 0), 0);
+  frame.title.setRecord(`완성한 그림 ${done} / ${PUZZLES.length} · 모은 별 ${stars}`);
+
+  const saved = frame.save.readResume();
+  const p = saved && PUZZLES.find((q) => q.id === saved.data?.id);
+  frame.title.setResume({
+    enabled: !!p,
+    detail: p ? `${DIFF[p.difficulty].name} · ${p.title}` : '풀던 그림 없음',
+  });
 }
 
 // 난이도 내 순번.
@@ -136,7 +201,10 @@ function startPuzzle(puzzle) {
   }
   el('hint-line').hidden = !isTut;
 
-  showScreen('play');
+  // 지금 이 그림을 이어서 하기 대상으로 남긴다(규격 8장 - 저장이 있으면 시작 화면에서 눌린다).
+  frame.save.saveResume({ id: puzzle.id }, `${d.name} · ${puzzle.title}`);
+
+  frame.screens.go(SCREEN.PLAY);
   // 화면 전환으로 레이아웃이 잡힌 다음 프레임에 격자 크기를 화면에 맞춘다.
   requestAnimationFrame(() => { fitBoard(); updateFinger(); });
 }
@@ -430,6 +498,8 @@ function win() {
   progress = { ...progress, [id]: { cleared: true, stars: bestStars, bestMistakes } };
   store.set('progress', progress);
   clearInProgress(id);
+  // 이 그림은 끝났으니 이어서 할 대상에서 뺀다(끝난 판으로 다시 들어가지 않게).
+  frame.save.clearResume();
 
   el('finger').hidden = true;
   // 다 맞췄으니 모드 버튼을 잠근다(완성 연출 중 조작 방지 + 완료 표현).
@@ -441,9 +511,18 @@ function win() {
   sound.play('clear');
   const waveMs = (cur.puzzle.size * 2) * ANIM.REVEAL_STEP_MS + ANIM.RESULT_DELAY_MS;
   setTimeout(() => {
-    renderResult(el('result-pic'), el('result-title'), el('result-stars'), cur.puzzle, stars);
-    showScreen('result');
-    sound.playStars(stars);
+    // 결과는 전용 화면이 아니라 플레이를 덮는 카드다(규격 3.5). 완성 그림·제목·별점은
+    // 글자가 아니라 그림이라 카드 본문에 통째로 넣는다.
+    const body = el('result-body').content.cloneNode(true).firstElementChild;
+    renderResult(
+      body.querySelector('#result-pic'),
+      body.querySelector('#result-title'),
+      body.querySelector('#result-stars'),
+      cur.puzzle, stars,
+    );
+    frame.result.show({ title: '', bodyEl: body, newRecord: !prev?.cleared });
+    frame.screens.go(SCREEN.RESULT);
+    sound.playRepeat('star', stars);
   }, waveMs);
 }
 
@@ -463,7 +542,7 @@ function moveCursor(dr, dc) {
 }
 
 function onKey(e) {
-  if (!screens.play.classList.contains('active') || !cur) return;
+  if (frame.screens.current() !== SCREEN.PLAY || !cur) return;
   const { r, c } = cur.cursor;
   switch (e.key) {
     case 'ArrowUp': moveCursor(-1, 0); break;
@@ -487,29 +566,28 @@ function onKey(e) {
   e.preventDefault();
 }
 
-// --- 사운드 ---
-// 소리 켜짐/음소거 SVG 아이콘(버튼 안에서 상태에 따라 교체). tool-btn 규격에 맞춰 라벨 포함.
-const ICON_SOUND = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
-const ICON_MUTE = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor" stroke="none"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>';
-function updateMuteBtn() {
-  el('sound-toggle').innerHTML = sound.isMuted() ? ICON_MUTE : ICON_SOUND;
-}
-function toggleMute() {
-  const m = !sound.isMuted();
-  sound.setMuted(m);
-  store.set('muted', m);
-  updateMuteBtn();
-}
-
 // --- 배선 ---
+// 음소거 저장·오디오 열기·화면 이탈 처리는 공용 프레임이 맡는다. 다만 이 게임의 플레이 화면은
+// 보드를 화면 가득 쓰려고 UI를 네 모서리에 붙이는 구조라, 규격의 상단 띠를 그대로 얹으면
+// 보드 공간이 줄고 가로 방향 재배치가 깨진다. 그래서 플레이 화면에서만 띠를 감추고
+// 그 자리의 게임 버튼을 프레임에 연결한다(2단계에서 드러난 규격의 빈틈, 기획서에 기록).
+// 소리 버튼 아이콘·동기화는 파일 위쪽(프레임 생성 전)에 정의돼 있다 - 프레임이 만들어질 때
+// 지난 음소거 상태를 되살리며 곧바로 이 함수를 부르기 때문이다.
 function init() {
   attachBoardInput(boardEl, { onStart: onPaintStart, onMove: onPaintMove, onEnd: onPaintEnd });
   el('mode-fill').addEventListener('click', () => setMode(MODE.FILL));
   el('mode-mark').addEventListener('click', () => setMode(MODE.MARK));
-  el('play-back').addEventListener('click', openMap);
-  el('result-map').addEventListener('click', openMap);
-  el('result-next').addEventListener('click', nextPuzzle);
-  el('sound-toggle').addEventListener('click', toggleMute);
+  // 플레이 화면의 왼쪽 위 화살표도 계단을 따른다 - 한 칸 위(지도)로만 간다.
+  el('play-back').addEventListener('click', () => frame.screens.back());
+  // 결과 카드 버튼. 이 게임은 "다시 하기"가 같은 그림을 또 푸는 것이 아니라 다음 그림으로
+  // 넘어가는 흐름이라 그 자리 문구만 바꾼다(뜻이 다르므로, 규격 5.3 고정 문구 예외).
+  frame.result.setActionLabel('retry', '다음 그림');
+  frame.result.on('retry', () => nextPuzzle());
+  frame.result.on('quit', () => openMap());
+  el('sound-toggle').addEventListener('click', () => frame.audio.setMuted(!frame.audio.isMuted()));
+  syncPlaySoundBtn(frame.audio.isMuted());
+  // 플레이 화면 전용 전체화면 버튼도 같은 공용 모듈에 건다(막힌 기기 안내·자동 복귀 포함).
+  setupFullscreen({ button: el('fs-toggle') });
   el('undo-btn').addEventListener('click', undo);
   el('help-btn').addEventListener('click', useHelp);
   // 힌트 숫자 누르면 완성된 줄의 빈 칸을 자동 X로.
@@ -521,9 +599,6 @@ function init() {
     const line = e.target.closest('.clue-col');
     if (line) fillLineMarks('col', [...el('col-clues').children].indexOf(line));
   });
-  // 전체화면. 미지원 기기·홈 화면 앱은 버튼을 숨기고, 조작 중 브라우저가 임의로 끝내면
-  // 다음 조작에 되돌린다(shared/fullscreen.js).
-  setupFullscreen({ button: el('fs-toggle') });
   document.addEventListener('keydown', onKey);
   // 창 크기·방향(가로/세로 회전)·전체화면 전환이 바뀌면 격자를 다시 화면에 맞춘다.
   window.addEventListener('resize', () => { fitBoard(); updateFinger(); });
@@ -534,15 +609,21 @@ function init() {
   document.addEventListener('fullscreenchange', onFsChange);
   document.addEventListener('webkitfullscreenchange', onFsChange);
 
-  sound.setMuted(store.get('muted', false));
-  updateMuteBtn();
-  document.addEventListener('pointerdown', () => sound.unlockAudio(), { once: true });
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) sound.suspendAudio();
-    else sound.resumeAudio();
-  });
+  // 소리 열기·음소거 저장·화면 이탈 시 재우기는 공용 프레임이 이미 하고 있다.
 
-  openMap();
+  // 화면이 바뀔 때 옛 CSS가 쓰던 활성 표시를 함께 맞춘다. 이 게임의 레이아웃 규칙이
+  // #screen-play.active 같은 선택자에 걸려 있어, 표시 판단은 프레임이 하되 그 결과만 알려준다.
+  const syncLegacyActive = (now) => {
+    el('screen-map').classList.toggle('active', now === SCREEN.SELECT);
+    el('screen-play').classList.toggle('active', now === SCREEN.PLAY || now === SCREEN.PAUSE || now === SCREEN.RESULT);
+    if (now === SCREEN.TITLE) refreshTitle();
+    if (now === SCREEN.PLAY) requestAnimationFrame(() => { fitBoard(); updateFinger(); });
+  };
+  frame.screens.onChange(syncLegacyActive);
+  syncLegacyActive(frame.screens.current());
+
+  // 첫 화면은 시작 화면이다(규격 3.2). 지도는 시작을 누른 뒤 나온다.
+  refreshTitle();
 }
 
 init();
