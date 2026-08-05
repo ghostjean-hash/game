@@ -9,7 +9,8 @@ import {
 } from '../src/core/board.js';
 import { lineFlags, completedCount } from '../src/core/lines.js';
 import { starsFor } from '../src/core/stars.js';
-import { CELL, MAX_STARS } from '../src/data/constants.js';
+import { fitCellSize, clampCell, zoomScroll, planBoardFit, distance, midpoint } from '../src/core/zoom.js';
+import { CELL, MAX_STARS, ZOOM, CELL_FIT } from '../src/data/constants.js';
 import { PUZZLES } from '../src/data/puzzles.js';
 
 const tests = [];
@@ -178,6 +179,76 @@ test(`내장 퍼즐 ${PUZZLES.length}개 전수: 유일해 + 추측 불필요`, 
     const v = verifyPuzzle(p.grid);
     assert(v.ok, `${p.id} 검증 실패 (lineSolvable=${v.lineSolvable} matches=${v.matches})`);
   }
+});
+
+// --- zoom (확대·이동 계산) ---
+const IPHONE_MINI = {   // 아이폰 미니 세로에서 실측한 가용 공간·힌트 크기(docs/06 1장)
+  availW: 359, availH: 600, clueW: 70, clueH: 70,
+  gutter: CELL_FIT.GUTTER_PX, minPx: CELL_FIT.MIN_PX,
+  fitMin: ZOOM.FIT_MIN_PX, startPx: ZOOM.START_PX,
+};
+
+test('fitCellSize: 폭·높이 중 좁은 쪽이 셀 크기를 정한다', () => {
+  const base = { availH: 1000, clueH: 0, marginRight: 0, gutter: 0, minPx: 1 };
+  eq(fitCellSize({ ...base, availW: 100, clueW: 0, n: 10 }), 10, '폭 병목');
+  eq(fitCellSize({ ...base, availW: 1000, availH: 50, clueW: 0, n: 10 }), 5, '높이 병목');
+});
+test('fitCellSize: 힌트·여백·둘레를 뺀 나머지로 계산한다', () => {
+  eq(fitCellSize({ availW: 200, availH: 999, clueW: 40, clueH: 0, marginRight: 40, n: 10, gutter: 20, minPx: 1 }), 10);
+});
+test('fitCellSize: 상한·바닥값을 지킨다', () => {
+  const base = { availH: 9999, clueW: 0, clueH: 0, marginRight: 0, n: 5, gutter: 0 };
+  eq(fitCellSize({ ...base, availW: 9999, minPx: 1, maxPx: 44 }), 44, '상한');
+  eq(fitCellSize({ ...base, availW: 10, minPx: 12 }), 12, '바닥값');
+});
+test('clampCell: 범위 안으로 자르고, 하한이 상한보다 크면 하한을 쓴다', () => {
+  eq(clampCell(30, 20, 60), 30);
+  eq(clampCell(10, 20, 60), 20, '하한');
+  eq(clampCell(90, 20, 60), 60, '상한');
+  eq(clampCell(30, 80, 60), 80, '전체가 보이는 상태가 우선');
+});
+test('zoomScroll: 확대해도 초점의 칸이 제자리에 남는다', () => {
+  // 힌트 70 + 칸 3개(20px) 자리를 초점으로 잡고 2배로 확대 → 같은 칸이 여전히 초점에 있어야 한다.
+  const next = zoomScroll({ scroll: 0, focus: 130, clueLen: 70, oldCell: 20, newCell: 40 });
+  eq(next, 60, '새 스크롤');
+  eq(70 + 3 * 40 - next, 130, '초점 위치 유지(칸 3번이 그대로 초점에)');
+});
+test('zoomScroll: 크게 축소해 스크롤이 음수가 되면 0으로 자른다', () => {
+  eq(zoomScroll({ scroll: 0, focus: 200, clueLen: 70, oldCell: 40, newCell: 10 }), 0);
+});
+test('distance/midpoint: 두 손가락 거리와 중점', () => {
+  eq(distance({ x: 0, y: 0 }, { x: 3, y: 4 }), 5);
+  const m = midpoint({ x: 0, y: 10 }, { x: 4, y: 20 });
+  eq(m.x, 2); eq(m.y, 15);
+});
+test('planBoardFit: 다 들어가고 누를 수도 있으면 전체 맞춤(이동 없음)', () => {
+  const p = planBoardFit({ ...IPHONE_MINI, marginRight: 70, n: 5, maxPx: 92 });
+  eq(p.pannable, false);
+  assert(p.cell >= ZOOM.FIT_MIN_PX, '손가락 기준 이상');
+  eq(p.cell, p.minCell, '전체 맞춤이라 축소 하한과 같다');
+  eq(p.marginRight, 70, '여백을 걷어낼 이유가 없다');
+});
+test('planBoardFit: 여백 때문에 칸이 작아지면 여백부터 버린다(폭 회수)', () => {
+  // 10칸 판: 여백 70을 그대로 두면 21px(손가락 기준 미달) → 여백을 버려 28px 확보.
+  const p = planBoardFit({ ...IPHONE_MINI, marginRight: 70, n: 10, maxPx: 60 });
+  eq(p.marginRight, 0, '여백 회수');
+  eq(p.pannable, false, '회수만으로 손가락 기준을 넘으면 전체 맞춤 유지');
+  assert(p.cell >= ZOOM.FIT_MIN_PX, `회수 후 ${p.cell}px`);
+});
+test('planBoardFit: 여백을 버려도 작으면 확대·이동 모드로 넘긴다', () => {
+  // 15칸 판: 여백을 버려도 18px이라 손가락으로 못 누른다.
+  const p = planBoardFit({ ...IPHONE_MINI, marginRight: 70, n: 15, maxPx: 44 });
+  eq(p.pannable, true);
+  eq(p.cell, ZOOM.START_PX, '손가락으로 누를 수 있는 크기로 시작');
+  assert(p.minCell < ZOOM.FIT_MIN_PX, '축소 하한 = 전체가 들어가는 크기');
+  assert(p.minCell >= CELL_FIT.MIN_PX, '바닥값 이상');
+  eq(p.marginRight, 0);
+});
+test('planBoardFit: 축소 하한은 확대 상한(maxPx)에 눌리지 않는다', () => {
+  // 15칸 판 하한은 "전체가 들어가는 크기"라야 오므리기 한 번이 전체 보기가 된다.
+  const p = planBoardFit({ ...IPHONE_MINI, marginRight: 70, n: 15, maxPx: 44 });
+  const whole = fitCellSize({ ...IPHONE_MINI, marginRight: 0, clueW: 70, clueH: 70, n: 15 });
+  eq(p.minCell, whole);
 });
 
 // --- 실행 ---

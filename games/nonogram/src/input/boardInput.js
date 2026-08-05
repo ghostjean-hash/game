@@ -9,6 +9,7 @@ export function attachBoardInput(boardEl, cb) {
   let last = null;    // 직전에 onMove로 넘긴 칸 { r, c }
   let start = null;   // 드래그 시작 칸
   let axis = null;    // 'row'(가로 고정) | 'col'(세로 고정) | null(미정)
+  let startedAt = 0;  // 드래그 시작 시각(두 손가락 확대가 끼어들 때 오조작 판정용)
 
   const cellOf = (x, y) => {
     const el = document.elementFromPoint(x, y);
@@ -18,12 +19,16 @@ export function attachBoardInput(boardEl, cb) {
   };
 
   boardEl.addEventListener('pointerdown', (e) => {
+    // 이미 한 손가락이 칠하는 중이면 둘째 손가락은 무시한다. 그건 확대·이동 신호이고
+    // (boardZoom이 받는다) 여기서 또 칠하기 시작하면 그 칸이 남아버린다.
+    if (dragging) return;
     const pos = cellOf(e.clientX, e.clientY);
     if (!pos) return;
     dragging = true;
     start = { r: pos.r, c: pos.c };
     axis = null;
     last = { r: pos.r, c: pos.c };
+    startedAt = performance.now();
     try { boardEl.setPointerCapture(e.pointerId); } catch { /* noop */ }
     cb.onStart(pos.r, pos.c);
     e.preventDefault();
@@ -69,4 +74,16 @@ export function attachBoardInput(boardEl, cb) {
   };
   boardEl.addEventListener('pointerup', end);
   boardEl.addEventListener('pointercancel', end);
+
+  // 밖(두 손가락 확대·이동)에서 진행 중인 드래그를 끊는다.
+  // 반환: 실제로 끊었는지 + 시작 후 지난 시간(ms). 시간이 아주 짧으면 호출한 쪽이
+  // "확대하려다 첫 손가락이 먼저 닿은 오조작"으로 보고 되돌린다(docs/06 2.1).
+  return {
+    cancelDrag() {
+      if (!dragging) return { cancelled: false, elapsedMs: 0 };
+      const elapsedMs = performance.now() - startedAt;
+      end();
+      return { cancelled: true, elapsedMs };
+    },
+  };
 }

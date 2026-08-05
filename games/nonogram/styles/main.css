@@ -185,10 +185,12 @@ body:has(#screen-play.active) #app {
 .pc-tr { grid-area: tr; display: flex; align-items: center; justify-self: end; }
 .pc-br { grid-area: br; display: flex; align-items: flex-end; justify-self: center; }   /* 모드: 세로에선 중앙 */
 /* 보드 영역: 배정된 공간을 꽉 쓰고 그 안에서 격자를 중앙에. */
+/* height를 100%로 못박지 않는다 - grid가 늘려주는 기본(stretch)에 맡겨야 아래 margin-top이
+   높이에서 제대로 빠진다. 100%로 두면 위 여백만큼 아래로 밀려 모드 버튼 자리를 침범한다. */
 .play-center {
   grid-area: center; min-height: 0; min-width: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: var(--space-2); width: 100%; height: 100%;
+  gap: var(--space-2); width: 100%;
 }
 /* 세로 방향: 상단바와 보드(열 힌트)가 달라붙지 않게 사이에 마진. */
 @media (orientation: portrait) { .play-center { margin-top: var(--space-4); } }
@@ -207,6 +209,10 @@ body:has(#screen-play.active) #app {
   }
   .play-center { width: auto; }   /* 보드 크기에 맞춰 가운데 열 폭 결정 */
   .puzzle-wrap { width: auto; }
+  /* 확대·이동 모드에선 격자가 화면보다 크다. 가운데 열이 내용을 따라가면 좌우 UI가 밀려나므로
+     양끝 UI를 제 폭만 쓰게 하고 남은 공간 전부를 격자에 준다. */
+  #screen-play.active.has-pan { grid-template-columns: auto 1fr auto; }
+  #screen-play.active.has-pan .play-center { width: 100%; min-width: 0; }
   .pc-tl { align-self: start; justify-self: end; flex-direction: column; align-items: flex-start; }  /* 뒤로·난이도·스테이지·실수: 보드 왼쪽 위 세로 스택 */
   .pc-tr { align-self: start; justify-self: start; } /* 조작: 보드 오른쪽 위 */
   .pc-br { align-self: end; justify-self: start; align-items: flex-end; }  /* 모드: 보드 오른쪽 아래 */
@@ -246,6 +252,33 @@ body:has(#screen-play.active) #app {
   grid-template-columns: auto auto;
   grid-template-rows: auto auto;
 }
+
+/* --- 확대·이동 모드(.pannable) ---
+   좁은 화면에서 큰 판은 전체를 넣으면 칸이 손가락보다 작다. 그때는 전체 넣기를 포기하고
+   칸을 키운 뒤 이 스크롤 영역 안에서 두 손가락으로 확대·이동한다(01_spec §3, 06_plan_zoom_pan).
+   스크롤은 JS(boardZoom)가 두 손가락 제스처로만 움직인다 - 한 손가락은 칠하기라 touch-action:none. */
+.puzzle-wrap.pannable {
+  overflow: auto;
+  touch-action: none;
+  flex: 1 1 auto;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  /* 내용이 영역보다 클 때 flex 중앙 정렬은 시작 쪽(왼쪽·위)을 잘라먹는다.
+     시작 정렬로 두고, 내용이 작을 때만 auto 마진으로 가운데에 놓는다. */
+  justify-content: flex-start;
+  align-items: flex-start;
+  scrollbar-width: none;
+  /* 힌트 바깥으로 뻗은 확장 클릭 영역은 스크롤 영역 밖이라 잘린다.
+     이 모드는 칸이 이미 충분히 커서 확장이 필요 없으므로 끈다. */
+  --clue-hit: 0px;
+}
+.puzzle-wrap.pannable::-webkit-scrollbar { display: none; }
+.puzzle-wrap.pannable .puzzle { margin: auto; }
+/* 밀어도 숫자 힌트는 늘 보여야 푼다 - 열 힌트는 위, 행 힌트는 왼쪽, 모서리는 양쪽에 고정. */
+.puzzle-wrap.pannable .col-clues { position: sticky; top: 0; z-index: 4; background: var(--bg); }
+.puzzle-wrap.pannable .row-clues { position: sticky; left: 0; z-index: 4; background: var(--bg); }
+.puzzle-wrap.pannable .corner { position: sticky; top: 0; left: 0; z-index: 5; background: var(--bg); }
 .corner { }
 .col-clues, .row-clues { display: grid; }
 .col-clues {

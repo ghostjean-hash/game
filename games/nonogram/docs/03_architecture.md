@@ -15,13 +15,15 @@ nonogram/
 │   │   ├── solver.js   #   줄 논리 솔버 + 유일해/추측불필요 검증 + 난이도
 │   │   ├── board.js    #   보드 상태(불변): 셀 토글, 승리/실수, 도움(한 줄 열기), 저장 직렬화
 │   │   ├── lines.js    #   행/열 완성 판정(완성 줄 흐리게 + 칭찬)
-│   │   └── stars.js    #   실수 → 별점 계산
+│   │   ├── stars.js    #   실수 → 별점 계산
+│   │   └── zoom.js     #   확대·이동 계산(전체 맞춤 셀 크기·배율 클램프·중심 유지 보정)
 │   ├── render/         # 화면 그리기 (core 결과를 DOM으로)
 │   │   ├── boardView.js#   격자 + 힌트 렌더
 │   │   ├── mapView.js  #   스테이지 맵
 │   │   └── resultView.js#  결과(변신+별점)
 │   ├── input/          # 입력 처리 (터치/마우스/키보드 → core 액션)
-│   │   └── boardInput.js
+│   │   ├── boardInput.js#  한 손가락: 탭/드래그로 칠하기·지우기
+│   │   └── boardZoom.js #  두 손가락: 확대·이동(core/zoom 계산을 DOM에 반영)
 │   ├── audio/          # Web Audio 효과음 합성 (음원 파일 0, core 아님)
 │   │   └── sound.js
 │   └── data/           # 상수 / 색상 / 퍼즐 (매직 넘버 SSOT)
@@ -49,6 +51,7 @@ data  ←  core  ←  render / input  ←  main
 1. `main.js`가 `puzzles.js`에서 퍼즐 선택 → `hints.js`로 행/열 힌트 생성.
 2. `board.js`가 빈 보드 상태 생성(불변). 입력이 올 때마다 새 상태 반환.
 3. `input/boardInput.js`가 탭/드래그/키를 받아 board 액션(칠함/X/지움) 호출 → 새 상태.
+   손가락이 둘로 늘면 `input/boardZoom.js`가 가로채 확대·이동으로 전환하고, 진행 중이던 드래그는 `boardInput.cancelDrag()`로 끝낸다(아주 짧았으면 `main.js`가 되돌린다).
 4. 상태가 바뀌면 `render/boardView.js`가 다시 그림. 승리 판정 시 `main.js`가 결과 화면으로 전환.
 5. 결과에서 `stars.js`로 별점 계산 → `storage`에 progress 저장 → 맵 썸네일이 컬러로 갱신.
 

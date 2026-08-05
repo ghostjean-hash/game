@@ -2,7 +2,7 @@
 
 import { createGameFrame, SCREEN } from '../../../shared/frame/index.js';
 import { setupFullscreen } from '../../../shared/fullscreen.js';
-import { CELL, MODE, MAX_STARS, ANIM, PRAISE, PRAISE_STREAK, CELL_FIT } from './data/constants.js';
+import { CELL, MODE, MAX_STARS, ANIM, PRAISE, PRAISE_STREAK, CELL_FIT, ZOOM } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
 import { makeClues } from './core/hints.js';
 import {
@@ -19,6 +19,8 @@ import {
 import { renderMap } from './render/mapView.js';
 import { renderResult } from './render/resultView.js';
 import { attachBoardInput } from './input/boardInput.js';
+import { attachBoardZoom } from './input/boardZoom.js';
+import { planBoardFit, clampCell } from './core/zoom.js';
 import { SOUNDS } from './audio/sound.js';
 
 // --- DOM 참조 ---
@@ -206,14 +208,42 @@ function startPuzzle(puzzle) {
 
   frame.screens.go(SCREEN.PLAY);
   // 화면 전환으로 레이아웃이 잡힌 다음 프레임에 격자 크기를 화면에 맞춘다.
-  requestAnimationFrame(() => { fitBoard(); updateFinger(); });
+  // 새 그림이므로 확대 배율도 기본값에서 다시 시작한다(reset).
+  requestAnimationFrame(() => { fitBoard(true); updateFinger(); });
 }
 
-// 격자를 현재 화면에 꼭 맞춘다(페이지 스크롤 없이 한 화면에).
-// 머리말·모드바가 쓰고 남은 .puzzle-wrap 공간에서 힌트 영역을 뺀 뒤,
-// 폭·높이 중 작은 쪽으로 셀 크기를 정한다. 힌트 폭·높이는 글자 기반이라 셀 크기와
-// 사실상 무관하므로 한 번 측정으로 충분하다. CSS clamp는 JS 미동작 시 fallback.
-function fitBoard() {
+// --- 격자 크기·확대 상태 ---
+// cell   지금 화면에 적용 중인 셀 크기(px)
+// minCell 축소 하한 = 그림 전체가 화면에 들어오는 크기
+// basePannable 이 화면·판에서는 전체를 넣으면 손가락보다 작아져 처음부터 확대·이동 모드인가
+// marginRight 전체 맞춤일 때만 주는 우측 대칭 여백(확대·이동 중엔 0)
+const view = { cell: 0, minCell: 0, basePannable: false, marginRight: 0, pannable: false };
+
+// 확대·이동 모드 on/off. 스크롤 영역(.puzzle-wrap)과 가로 방향 열 배분(#screen-play)이 함께 바뀐다.
+function setPannable(on) {
+  if (view.pannable === on) return;
+  view.pannable = on;
+  puzzleEl.parentElement.classList.toggle('pannable', on);
+  el('screen-play').classList.toggle('has-pan', on);
+}
+
+// 셀 크기 하나를 실제 화면에 반영한다. 전체 맞춤 크기를 넘어서면 밀어 볼 수 있어야 하므로
+// 그 순간부터 확대·이동 모드로 전환한다(작은 판에서 손가락으로 확대한 경우).
+function applyCell(px) {
+  view.cell = px;
+  const pan = view.basePannable || px > view.minCell;
+  setPannable(pan);
+  puzzleEl.style.marginRight = pan ? '0px' : `${view.marginRight}px`;
+  puzzleEl.style.setProperty('--cell', `${px}px`);
+}
+
+// 격자를 현재 화면에 앉힌다.
+// 머리말·모드바가 쓰고 남은 .puzzle-wrap 공간에서 힌트 영역을 뺀 뒤, 폭·높이 중 작은 쪽으로
+// 전체 맞춤 크기를 구한다. 그 크기가 손가락보다 작으면 전체 넣기를 포기하고 확대·이동에 맡긴다
+// (판정은 core/zoom.js planBoardFit). 힌트 폭·높이는 글자 기반이라 셀 크기와 사실상 무관하므로
+// 한 번 측정으로 충분하다. CSS clamp는 JS 미동작 시 fallback.
+// reset=false면 사용자가 확대해 둔 배율을 지키고 한계값만 다시 잡는다(화면 회전·크기 변경).
+function fitBoard(reset = true) {
   if (!cur) return;
   const n = cur.puzzle.size;
   const wrap = puzzleEl.parentElement; // .puzzle-wrap
@@ -252,20 +282,26 @@ function fitBoard() {
   if (availH <= 0 || availW <= 0) return;        // 아직 레이아웃 전(display:none 등)
   const clueLeft = el('row-clues').offsetWidth;  // 좌측 행 힌트 폭
   const clueTop = el('col-clues').offsetHeight;  // 상단 열 힌트 높이
-  const g = CELL_FIT.GUTTER_PX;
   // 보드 오른쪽 여백: 세로에선 좌측 힌트 폭만큼 줘 격자(board)를 화면 정중앙에.
   // 가로에선 그 1/3만 줘 우측 UI를 보드에 가깝게 붙인다(RIGHT_MARGIN_RATIO).
-  const marginRight = isLandscape
+  // 단 그 여백 탓에 칸이 손가락보다 작아지면 planBoardFit이 여백을 걷어낸다.
+  const wantMargin = isLandscape
     ? Math.round(clueLeft * CELL_FIT.RIGHT_MARGIN_RATIO)
     : clueLeft;
-  const byW = (availW - clueLeft - marginRight - g) / n;
-  const byH = (availH - clueTop - g) / n;
   // 가로에선 보드가 배정 영역(높이)을 꽉 채워야 UI가 보드 모서리에 정확히 붙는다.
   // cap을 두면 보드가 영역보다 작아져 그 여백만큼 UI가 보드 밖으로 벗어난다.
-  const cap = isLandscape ? Number.POSITIVE_INFINITY : (CELL_FIT.MAX[n] || CELL_FIT.DEFAULT_MAX);
-  const cell = Math.max(CELL_FIT.MIN_PX, Math.floor(Math.min(byW, byH, cap)));
-  puzzleEl.style.setProperty('--cell', `${cell}px`);
-  puzzleEl.style.marginRight = `${marginRight}px`;
+  const plan = planBoardFit({
+    availW, availH, clueW: clueLeft, clueH: clueTop, marginRight: wantMargin, n,
+    gutter: CELL_FIT.GUTTER_PX, minPx: CELL_FIT.MIN_PX,
+    maxPx: isLandscape ? null : (CELL_FIT.MAX[n] || CELL_FIT.DEFAULT_MAX),
+    fitMin: ZOOM.FIT_MIN_PX, startPx: ZOOM.START_PX,
+  });
+  view.minCell = plan.minCell;
+  view.basePannable = plan.pannable;
+  view.marginRight = plan.marginRight;
+  applyCell(reset ? plan.cell : clampCell(view.cell || plan.cell, plan.minCell, ZOOM.MAX_PX));
+  // 새 퍼즐을 열 때는 좌상단부터(노노그램은 왼쪽 위부터 푼다).
+  if (reset) { wrap.scrollLeft = 0; wrap.scrollTop = 0; }
 }
 
 // 화면 갱신: 셀 상태 + 완성 줄 흐리게 + 별 예고 + 실수 + 중도 저장.
@@ -574,7 +610,19 @@ function onKey(e) {
 // 소리 버튼 아이콘·동기화는 파일 위쪽(프레임 생성 전)에 정의돼 있다 - 프레임이 만들어질 때
 // 지난 음소거 상태를 되살리며 곧바로 이 함수를 부르기 때문이다.
 function init() {
-  attachBoardInput(boardEl, { onStart: onPaintStart, onMove: onPaintMove, onEnd: onPaintEnd });
+  const paint = attachBoardInput(boardEl, { onStart: onPaintStart, onMove: onPaintMove, onEnd: onPaintEnd });
+  // 두 손가락 확대·이동. 손가락이 둘이 되는 순간 칠하기를 끊고, 그 칠하기가 아주 짧았으면
+  // "확대하려다 첫 손가락이 먼저 닿은 것"으로 보고 되돌린다(실수로 세지 않게).
+  attachBoardZoom(puzzleEl.parentElement, {
+    getCell: () => view.cell,
+    setCell: (px) => applyCell(px),
+    getLimits: () => ({ min: view.minCell, max: ZOOM.MAX_PX }),
+    getClueSize: () => ({ w: el('row-clues').offsetWidth, h: el('col-clues').offsetHeight }),
+    onGestureStart: () => {
+      const r = paint.cancelDrag();
+      if (r.cancelled && r.elapsedMs < ZOOM.CANCEL_MS) undo();
+    },
+  });
   el('mode-fill').addEventListener('click', () => setMode(MODE.FILL));
   el('mode-mark').addEventListener('click', () => setMode(MODE.MARK));
   // 플레이 화면의 왼쪽 위 화살표도 계단을 따른다 - 한 칸 위(지도)로만 간다.
@@ -601,11 +649,11 @@ function init() {
   });
   document.addEventListener('keydown', onKey);
   // 창 크기·방향(가로/세로 회전)·전체화면 전환이 바뀌면 격자를 다시 화면에 맞춘다.
-  window.addEventListener('resize', () => { fitBoard(); updateFinger(); });
+  window.addEventListener('resize', () => { fitBoard(false); updateFinger(); });
   window.addEventListener('orientationchange', () => {
-    requestAnimationFrame(() => { fitBoard(); updateFinger(); });
+    requestAnimationFrame(() => { fitBoard(false); updateFinger(); });
   });
-  const onFsChange = () => requestAnimationFrame(() => { fitBoard(); updateFinger(); });
+  const onFsChange = () => requestAnimationFrame(() => { fitBoard(false); updateFinger(); });
   document.addEventListener('fullscreenchange', onFsChange);
   document.addEventListener('webkitfullscreenchange', onFsChange);
 
@@ -617,7 +665,7 @@ function init() {
     el('screen-map').classList.toggle('active', now === SCREEN.SELECT);
     el('screen-play').classList.toggle('active', now === SCREEN.PLAY || now === SCREEN.PAUSE || now === SCREEN.RESULT);
     if (now === SCREEN.TITLE) refreshTitle();
-    if (now === SCREEN.PLAY) requestAnimationFrame(() => { fitBoard(); updateFinger(); });
+    if (now === SCREEN.PLAY) requestAnimationFrame(() => { fitBoard(false); updateFinger(); });
   };
   frame.screens.onChange(syncLegacyActive);
   syncLegacyActive(frame.screens.current());

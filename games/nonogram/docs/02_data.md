@@ -13,11 +13,13 @@
 | `TUTORIAL_COUNT` | `3` | 튜토리얼 판 수 |
 | `LARGE_UNLOCK_CLEARS` | `6` | 15×15 해금에 필요한 중급 이하 클리어 수 |
 | `MODE` | `{ FILL: 'fill', MARK: 'mark' }` | 입력 모드 |
-| `CELL_FIT` | `{ MIN_PX: 18, GUTTER_PX: 8, MAX: {5:92,10:60,15:44}, DEFAULT_MAX: 60, RIGHT_MARGIN_RATIO: 1/3 }` | 격자를 화면에 맞출 때 쓰는 셀 크기(px) 한계 + 가로 방향 보드 우측 여백 비율 |
+| `CELL_FIT` | `{ MIN_PX: 12, GUTTER_PX: 8, MAX: {5:92,10:60,15:44}, DEFAULT_MAX: 60, RIGHT_MARGIN_RATIO: 1/3 }` | 격자를 화면에 맞출 때 쓰는 셀 크기(px) 한계 + 가로 방향 보드 우측 여백 비율 |
+| `ZOOM` | `{ FIT_MIN_PX: 26, START_PX: 34, MAX_PX: 64, CANCEL_MS: 300 }` | 두 손가락 확대·이동(01_spec §3)의 기준값 |
 
 - 별점 계산: `mistakes <= STAR_THRESHOLDS.THREE ? 3 : mistakes <= STAR_THRESHOLDS.TWO ? 2 : 1`.
 - 셀 크기(px)는 CSS 변수 `--cell` 한 곳에서 파생. 플레이 화면은 세로로 스크롤되지 않고 한 화면에 담기므로, `main.js`의 `fitBoard`가 남은 공간(폭·높이)을 재서 `--cell`을 정한다(폭·높이 중 작은 쪽, `CELL_FIT.MIN_PX`~크기별 `MAX` 범위, 가로 방향은 MAX 무시하되 화면 폭에서 좌·우 UI 열 폭을 뺀 가용 폭을 병목에 포함 - 창 비율이 어떻든 게임 전체가 화면 안에 들어온다, STANDARD 4.7-7). `styles/tokens.css`의 `clamp` 값은 JS 미동작 시 fallback.
-- 보드 우측 여백: 세로 방향은 좌측 행 힌트 폭만큼(격자 정중앙), 가로 방향은 그 `RIGHT_MARGIN_RATIO`(1/3)만 줘 우측 UI(조작·모드 버튼)를 보드에 가깝게 붙인다(2026-07-06 사용자 결정).
+- 보드 우측 여백: 세로 방향은 좌측 행 힌트 폭만큼(격자 정중앙), 가로 방향은 그 `RIGHT_MARGIN_RATIO`(1/3)만 줘 우측 UI(조작·모드 버튼)를 보드에 가깝게 붙인다(2026-07-06 사용자 결정). 단 그 여백 때문에 셀이 `ZOOM.FIT_MIN_PX` 미만으로 눌리면 여백을 0으로 걷어내 폭을 되찾는다(좁은 화면 우선, 2026-08-06).
+- 확대·이동(`ZOOM`, 2026-08-06 신설): `FIT_MIN_PX`(26) = 전체를 넣었을 때 이 크기 이상이면 화면에 다 담고, 미만이면 확대·이동 모드로 넘어가는 경계. `START_PX`(34) = 확대·이동 모드 진입 시 기본 셀 크기(손가락으로 누를 수 있는 크기). `MAX_PX`(64) = 확대 상한. `CANCEL_MS`(300) = 두 손가락이 닿았을 때 직전 칠하기를 오조작으로 보고 되돌리는 시간 한계. 축소 하한은 상수가 아니라 그때그때 계산한 "전체가 들어가는 크기"다. `CELL_FIT.MIN_PX`는 그 전체 맞춤 계산의 바닥값이라 12로 낮췄다(18이던 옛 값은 축소 하한을 실제보다 크게 만들어 큰 판의 전체 보기를 막는다).
 
 ## 2. 색상 (`src/data/colors.js`)
 
