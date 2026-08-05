@@ -32,10 +32,19 @@
 /* iOS 노치 등 safe-area 뒤(body)도 같은 톤으로. 이 게임에서만 덮는다(--rh-page와 동일 값). */
 body:has(.rushhour) { background: #3a2d40; }
 
-/* 상단 바는 배경에 녹이고(§8.0) 아이콘 칩·알약만 띄운다. */
+/* 상단 바는 배경에 녹이고(§8.0) 아이콘 칩·알약만 띄운다.
+   공용 상단 띠(높이 46px)는 화면 맨 위에 겹쳐 뜨고 왼쪽 끝(되돌아가기)과 오른쪽 끝(소리·설정·
+   전체화면)만 쓴다. 그래서 골드·이동 알약을 같은 줄 가운데에 앉힌다 - 줄 하나를 새로
+   쓰지 않아 세로가 귀한 가로 화면에서도 조작 버튼이 밀려나지 않고, 왼쪽에만 몰려
+   화면이 한쪽으로 기울어 보이던 것도 함께 해소된다(2026-08-06 사용자 신고). */
 .rushhour .topbar {
   background: transparent;
   border-bottom: none;
+  justify-content: center;
+  box-sizing: content-box;
+  min-height: 46px;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: 0;
 }
 .rushhour .home {
   display: inline-flex;
@@ -110,14 +119,31 @@ body:has(.rushhour) { background: #3a2d40; }
    그대로 두면 공용 상단 띠가 그 막 뒤로 깔려 되돌아가기 화살표가 흐려진다. 띠를 위로 올린다. */
 .rushhour.gg-frame[data-screen='select'] .gg-topbar { z-index: 101; }
 
-/* 플레이 화면에서는 공용 상단 띠를 감춘다. 이 게임은 보드를 화면 가득 키우려고
-   위·아래 줄을 최소로 눌러 놓은 구조라 띠를 얹으면 보드가 줄어든다(규격 4.8-11). */
-.rushhour.gg-frame[data-screen='play'] .gg-topbar,
+/* 결과 카드가 덮고 있을 때만 띠를 감춘다. 놀이 중에는 띠가 있어야 나가기·소리·설정에
+   손이 닿는다(2026-08-06 사용자 신고 "메뉴 버튼이 안 보여"). 보드는 폭이 병목이라
+   띠 높이를 얹어도 작아지지 않는다(세로는 오히려 남는다). */
 .rushhour.gg-frame[data-screen='result'] .gg-topbar { display: none; }
 
 /* 프레임이 쓰는 색 이름을 이 게임 크림 팔레트로 이어 준다. */
 .rushhour.gg-frame {
   --accent-fg: #3a2e3a;
+}
+
+/* 저녁 플럼 배경 위에 바로 놓이는 프레임 요소(상단 띠·시작 화면 글자)는 크림빛으로 뒤집는다.
+   이 게임은 팝업 기준의 어두운 글자색을 통째로 물려받는데, 그 색이 다크 배경에 그대로 얹히면
+   아이콘이 배경과 같은 톤이 되어 사라진다(2026-08-06 사용자 신고 "배경이 다크라서 중복됨").
+   크림 카드 위에 앉는 요소(팝업·시작 화면 버튼)는 원래 어두운 글자 그대로 둔다. */
+.rushhour.gg-frame .gg-topbar,
+.rushhour.gg-frame .gg-title-hero,
+.rushhour.gg-frame .gg-title-hint,
+.rushhour.gg-frame .gg-btn-ghost {
+  --fg: #fdeee0;
+  --fg-dim: #e7c9d4;
+  --fg-mute: #c9a9b8;
+  --bg-elev: rgba(253, 238, 224, 0.16);
+  --bg-elev-2: rgba(253, 238, 224, 0.24);
+  --line: rgba(253, 238, 224, 0.42);
+  color: var(--fg);
 }
 
 /* 시작 화면 배경: 실제 크림 판과 오른쪽 출구 길 + 48번 문제의 차 배치. */
@@ -167,8 +193,19 @@ body:has(.rushhour) { background: #3a2d40; }
   min-height: 0;
 }
 .rushhour .board-wrap {
-  /* 순수 보드판(6x6 격자)을 화면 가로 정중앙에 정렬한다. 출구 화살표/집은 board 자식 absolute라
-     이 폭 계산에 안 잡혀 정렬에서 제외된다(보드 오른쪽 바깥 여백에 떠 있음). */
+  /* 보드판(6x6)과 그 오른쪽 바깥으로 나가는 출구를 "한 묶음"으로 보고 화면 중앙에 놓는다.
+     출구는 board 자식 absolute라 폭 계산에 안 잡히므로, 그 폭만큼 오른쪽에 자리를 잡아 준다.
+     예전에는 보드판만 정중앙에 뒀는데, 출구가 오른쪽으로 삐져나가 화면 전체가 왼쪽으로
+     치우쳐 보였다(2026-08-06 사용자 신고). 그만큼 보드도 더 키울 수 있다.
+     --exit-ratio = 출구 폭 ÷ 보드 폭 (출구는 한 칸의 0.95배 = 보드의 0.95/6). */
+  --exit-ratio: 0.1583;
+  --board-w: min(
+    calc((100vw - 2 * var(--sp-4)) / (1 + var(--exit-ratio))),
+    60vh,
+    480px
+  );
+  --exit-w: calc(var(--board-w) * var(--exit-ratio));
+  margin-right: var(--exit-w);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -275,9 +312,8 @@ body:has(.rushhour) { background: #3a2d40; }
   --size: 6;
   --cell: calc(100% / var(--size));
   position: relative;
-  /* 보드는 화면 중앙. 출구(집)가 오른쪽 바깥(약 0.16×보드폭)으로 나가므로, 보드가 정중앙일 때
-     출구가 오른쪽 여백 안에 들어오도록 폭을 72vw로 잡는다(72vw 보드 + 출구 ≈ 화면 안). */
-  width: min(72vw, 60vh, 480px);
+  /* 폭은 감싼 .board-wrap이 계산한다(보드 + 출구를 한 묶음으로 화면에 맞춘 값). */
+  width: var(--board-w, min(72vw, 60vh, 480px));
   aspect-ratio: 1;
   border-radius: var(--r-2);
   background-color: var(--rh-board);
@@ -765,13 +801,35 @@ body:has(.rushhour) { background: #3a2d40; }
   .rushhour .board-head { flex-wrap: wrap; justify-content: center; }
   .rushhour .board-stage { flex-direction: row; align-items: center; gap: 8px; padding: 6px 12px 8px; }
   .rushhour .stage-num { font-size: 18px; }
-  .rushhour .controls { gap: 4px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
+  /* 좁은 폭에서 버튼 다섯을 한 줄에 욱여넣으면 글자 11px에 높이 31px짜리가 다닥다닥 붙어
+     손가락으로 누르기 어렵다(2026-08-06 사용자 신고 "하단도 엉망"). 두 줄로 나눈다 -
+     자주 쓰는 놀이 조작 셋을 엄지가 닿는 아래 줄에 크게, 스테이지 이동 둘은 위 줄에.
+     세로 공간은 남으므로(보드는 폭이 병목) 두 줄로 늘려도 보드가 줄지 않는다. */
+  .rushhour .controls {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-left: var(--sp-3);
+    padding-right: var(--sp-3);
+  }
   .rushhour .controls .btn {
-    font-size: 11px;
-    padding: var(--sp-2) 2px;
+    font-size: 13px;
+    min-height: 44px;              /* 손가락 최소 크기 */
+    padding: var(--sp-2) var(--sp-2);
     white-space: nowrap;
     letter-spacing: -0.3px;
   }
+  /* 위 줄: 이전 / 다음 (둘이 한 줄을 반씩) */
+  .rushhour #btn-prev,
+  .rushhour #btn-next {
+    order: -1;
+    flex: 1 1 calc(50% - 3px);
+    min-height: 38px;              /* 보조 버튼이라 조금 낮게 */
+    font-size: 12px;
+  }
+  /* 아래 줄: 되돌리기 / 힌트 / 리셋 */
+  .rushhour #btn-undo,
+  .rushhour #btn-reset { flex: 1 1 0; }
+  .rushhour .controls .btn-hint { flex: 1.5 1 0; }
 }
 
 /* 가로 방향(STANDARD 4.7 규칙 5·7): 세로 스택 대신 controls를 보드 왼쪽 세로열로 옮기고
@@ -801,6 +859,8 @@ body:has(.rushhour) { background: #3a2d40; }
   .rushhour #btn-prev,
   .rushhour #btn-next { flex: 0 0 auto; }
   /* 보드 위 스테이지 카드·타이머(board-head)와 상하 여백을 감안해 높이의 60%로 잡는다
-     (낮은 가로 화면에서 board-head까지 더해도 페이지가 넘치지 않게). */
-  .rushhour .board { width: min(60vh, 56vw, 520px); }
+     (낮은 가로 화면에서 board-head까지 더해도 페이지가 넘치지 않게).
+     가로에선 높이가 병목이라 폭 기준 계산 대신 이 값을 쓴다. 출구 자리(margin-right)는
+     세로와 똑같이 board-wrap이 잡아 준다. */
+  .rushhour .board-wrap { --board-w: min(60vh, 56vw, 520px); }
 }
