@@ -107,10 +107,22 @@ body[data-fs="large"] { --fs: 1.15; }
   color: var(--fg);
   cursor: pointer;
 }
+/* 목록 항목 안에 들어가는 작은 버튼(묻은 단어 되살리기 등). 터치 최소 크기는 유지. */
+.btn-sm {
+  flex: none;
+  padding: 10px 14px;
+  border-radius: var(--r-2);
+  font-size: calc(13px * var(--fs));
+  font-weight: 700;
+  border: 1px solid var(--line);
+  background: var(--bg-elev);
+  color: var(--fg);
+  cursor: pointer;
+}
 .btn-accent { background: var(--accent); color: #fff; border-color: transparent; }
 .btn-accent:active { background: var(--accent-strong); }
 .btn-ghost { background: var(--bg-elev); color: var(--fg-dim); }
-.btn-xl:active, .btn-md:active { transform: scale(0.98); }
+.btn-xl:active, .btn-md:active, .btn-sm:active { transform: scale(0.98); }
 
 /* --- 홈 --- */
 .home { gap: var(--sp-5); }
@@ -153,6 +165,8 @@ body[data-fs="large"] { --fs: 1.15; }
   padding: var(--sp-4);
   text-align: center;
 }
+/* 묻은 단어 칸은 2열을 통째로 차지해 4칸 격자가 홀수로 깨지지 않게 한다. */
+.stat-wide { grid-column: 1 / -1; }
 .stat-val { font-size: calc(22px * var(--fs)); font-weight: 800; }
 .stat-label { font-size: calc(12px * var(--fs)); color: var(--fg-mute); margin-top: 4px; }
 
@@ -266,6 +280,21 @@ body[data-fs="large"] { --fs: 1.15; }
   cursor: pointer;
 }
 .undo-btn svg { width: 18px; height: 18px; }
+
+/* "이 단어 다시 안 보기" - 판정 버튼과 명확히 다른 크기·무게(오탭 방지). 위험 강조색은 쓰지 않는다
+   (되살리기가 가능한 동작이라 겁줄 필요가 없다). */
+.bury-btn {
+  align-self: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--fg-mute);
+  font-size: calc(13px * var(--fs));
+  font-weight: 600;
+  cursor: pointer;
+}
+.bury-btn:active { transform: scale(0.98); }
 
 /* 하단 고정 동작 영역 - 되돌리기 + 주 동작(뜻 확인 또는 판정) + 안내를 화면 아래에 모은다. */
 .study-foot { margin-top: auto; display: flex; flex-direction: column; gap: var(--sp-3); }

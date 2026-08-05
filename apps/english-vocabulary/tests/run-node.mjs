@@ -205,5 +205,65 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   eq(deck.serialize().progress[g.id].unknownCount, 0, "Undo로 unknownCount 원복");
 })();
 
+// --- 11. 다시 안 보기(buried): 영구 제외 + 진도 분모 제외 + 되살리기 ---
+(() => {
+  const deck = createDeck(DATA, null, seededRng(31));
+  const n = DATA.words.length;
+  const f = deck.current();
+
+  const buriedId = deck.bury("b1");
+  eq(buriedId, f.id, "bury는 지금 보는 단어를 처리");
+  eq(deck.serialize().progress[f.id].status, "buried", "묻은 단어는 buried 상태");
+  ok(deck.serialize().progress[f.id].buriedAt === "b1", "묻은 시각 기록");
+  ok(deck.current() && deck.current().id !== f.id, "묻은 단어는 즉시 학습 순환에서 빠짐");
+  eq(deck.serialize().progress[f.id].seenCount, 0, "묻기는 학습 처리가 아니라 본 횟수를 올리지 않음");
+
+  const s = deck.stats();
+  eq(s.buried, 1, "stats.buried 집계");
+  eq(s.start, n - 1, "묻은 단어는 진도 분모(start)에서 제외");
+  eq(s.total, n, "원본 개수(total)는 유지");
+  eq(s.remaining, n - 1, "남은 단어도 묻은 만큼 줄어듦");
+  ok(!deck.learnedWords().some((w) => w.id === f.id), "묻은 단어는 보관함(복습 대상)에 없음");
+  eq(deck.buriedWords().length, 1, "묻은 단어 목록에 1개");
+  eq(deck.buriedWords()[0].id, f.id, "묻은 단어 목록에 그 단어 존재");
+
+  // 되돌리기(직전 1회) - 실수로 눌렀을 때의 1차 회복 경로
+  ok(deck.canUndo(), "묻기 직후 되돌리기 가능");
+  deck.undo();
+  eq(deck.serialize().progress[f.id].status, "active", "되돌리기로 active 복귀");
+  eq(deck.stats().buried, 0, "되돌리기로 묻은 수 0");
+  eq(deck.current().id, f.id, "되돌린 단어가 현재 단어로 복원");
+
+  // 되살리기(목록에서) - 2차 회복 경로
+  deck.bury("b2");
+  const saved = JSON.parse(JSON.stringify(deck.serialize())); // localStorage 왕복 모사
+  const restored = createDeck(DATA, saved, seededRng(31));
+  eq(restored.stats().buried, 1, "저장·복원 후에도 묻은 상태 유지");
+  eq(restored.stats().start, n - 1, "복원 후 분모도 동일");
+  ok(restored.unbury(f.id), "묻은 단어 되살리기 성공");
+  eq(restored.serialize().progress[f.id].status, "active", "되살리면 active 복귀");
+  eq(restored.stats().start, n, "되살리면 분모 원복");
+  ok(!restored.canUndo(), "되살리기는 학습 되돌리기 대상이 아님(undo 무효화)");
+  // 되살린 단어는 다시 학습 대상에 등장해야 한다.
+  markAll(restored, "unknown", "t");
+  ok(restored.buriedWords().length === 0, "되살린 뒤 묻은 목록 비어 있음");
+
+  ok(!restored.unbury("ev-s01-0000-none"), "없는 id 되살리기는 무해하게 false");
+})();
+
+// --- 12. 남은 단어를 전부 묻으면 세트 완료(회복 경로 유지) ---
+(() => {
+  const deck = createDeck(DATA, null, seededRng(37));
+  let guard = 0;
+  while (deck.current() && guard++ < 10000) deck.bury("b");
+  const s = deck.stats();
+  eq(s.buried, DATA.words.length, "전부 묻으면 buried = 원본 수");
+  eq(s.start, 0, "학습 대상 0");
+  eq(s.remaining, 0, "남은 단어 0");
+  ok(s.completed, "학습 대상이 없으면 세트 완료로 처리");
+  eq(s.percent, 100, "분모 0에서 완료율은 100(0 나눗셈 방지)");
+  eq(deck.buriedWords().length, DATA.words.length, "묻은 목록에서 전부 되살릴 수 있음");
+})();
+
 console.log(`\n[english-vocabulary] 테스트 완료: ${pass} PASS, ${fail} FAIL`);
 process.exit(fail ? 1 : 0);

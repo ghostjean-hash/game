@@ -70,7 +70,7 @@ let deck = null;         // 현재 선택된 세트의 학습 덱
 let DATA = null;         // 현재 선택된 세트의 단어 데이터
 let currentSetId = null; // 현재 선택된 세트 id
 let bundleMode = false;  // "못 외운 단어 모음" 학습 중인가(여러 세트 통합, 별도 저장 없음)
-let bundleLastKnown = null; // 모음에서 직전에 "알았음"으로 원본에 반영한 단어(undo 되돌림용)
+let bundleLastApplied = null; // 모음에서 직전에 원본 세트로 반영한 단어(알았음·다시 안 보기 공용, undo 되돌림용)
 let view = "menu";       // 첫 화면은 세트 선택 메뉴
 const REMAINING_ID = "__remaining__";
 // 학습·복습 카드의 표시 단계(question=단어만 / answer=뜻 공개). 단어가 바뀔 때마다 question으로 초기화.
@@ -110,6 +110,7 @@ function render() {
   else if (view === "home") renderHome();
   else if (view === "study") renderStudy();
   else if (view === "vault") renderVault();
+  else if (view === "buried") renderBuried();
   else if (view === "review") renderReview();
   else if (view === "complete") renderComplete();
   else if (view === "settings") renderSettings();
@@ -138,22 +139,29 @@ const LEVEL_LABEL = { elementary: "초등", middle: "중등", high: "고등" };
 const DATA_DIR = "./src/data/";
 
 // 세트별 진도를 저장된 덱 상태에서 가볍게 계산(덱을 새로 만들지 않고 요약만).
+// target = 묻은 단어(buried)를 뺀 실질 학습 대상 수. 진도율 분모도 이 값이다(deck.stats와 동일 기준).
 function setProgress(setId, count) {
+  const total = count || 0;
   const st = store.get(deckKey(setId));
-  if (!st || !st.progress) return { learned: 0, percent: 0 };
+  if (!st || !st.progress) return { learned: 0, buried: 0, target: total, percent: 0 };
   let learned = 0;
-  for (const id in st.progress) if (st.progress[id].status === "learned") learned++;
-  return { learned, percent: count ? Math.round((learned / count) * 100) : 0 };
+  let buried = 0;
+  for (const id in st.progress) {
+    if (st.progress[id].status === "learned") learned++;
+    else if (st.progress[id].status === "buried") buried++;
+  }
+  const target = Math.max(0, total - buried);
+  return { learned, buried, target, percent: target ? Math.round((learned / target) * 100) : 100 };
 }
 
-// 아직 못 외운(learned 아님) 단어 수 합계 - 모든 available 세트 기준(층 표시 on/off와 무관).
+// 아직 못 외운 단어 수 합계 - 모든 available 세트 기준(층 표시 on/off와 무관). 묻은 단어는 제외.
 function remainingCount() {
   const sets = (MANIFEST && MANIFEST.sets) || [];
   let n = 0;
   for (const s of sets) {
     if (!s.available) continue;
     const p = setProgress(s.setId, s.count);
-    n += (s.count || 0) - p.learned;
+    n += p.target - p.learned;
   }
   return n;
 }
@@ -185,7 +193,7 @@ function renderMenu() {
     let avail = group.filter((s) => s.available);
     // 다 외운(100%) 세트 자동 숨김 옵션
     if (settings.hideCompleted) avail = avail.filter((s) => setProgress(s.setId, s.count).percent < 100);
-    const totalWords = avail.reduce((n, s) => n + (s.count || 0), 0);
+    const totalWords = avail.reduce((n, s) => n + setProgress(s.setId, s.count).target, 0);
 
     const head = el("div", "menu-group-head");
     head.appendChild(el("div", "menu-group-title", LEVEL_LABEL[level]));
@@ -206,7 +214,9 @@ function renderMenu() {
       const card = el("button", "menu-set");
       const main = el("div", "menu-set-main");
       main.appendChild(el("div", "menu-set-title", `SET ${num} · ${s.title}`));
-      main.appendChild(el("div", "menu-set-meta", `${s.count}단어 · ${p.learned}개 외움`));
+      main.appendChild(el("div", "menu-set-meta", p.buried
+        ? `${p.target}단어 · ${p.learned}개 외움 · ${p.buried}개 묻음`
+        : `${s.count}단어 · ${p.learned}개 외움`));
       const bar = el("div", "menu-set-bar");
       bar.appendChild(el("div", "menu-set-bar-fill")).style.width = `${p.percent}%`;
       main.appendChild(bar);
@@ -252,14 +262,16 @@ async function openRemaining() {
       const st = store.get(deckKey(s.setId));
       const prog = (st && st.progress) || {};
       for (const w of data.words) {
-        if (!prog[w.id] || prog[w.id].status !== "learned") combined.push(w);
+        // 이미 외운 단어와 묻은 단어(다시 안 보기)는 모음에서도 빼야 한다.
+        const st2 = prog[w.id];
+        if (!st2 || (st2.status !== "learned" && st2.status !== "buried")) combined.push(w);
       }
     }
     if (combined.length === 0) { showToast("못 외운 단어가 없습니다"); return; }
     DATA = { setId: REMAINING_ID, title: "못 외운 단어 모음", words: combined };
     currentSetId = REMAINING_ID;
     bundleMode = true;
-    bundleLastKnown = null;
+    bundleLastApplied = null;
     deck = createDeck(DATA, null, settings.shuffle ? Math.random : null);
     cardView = VIEW.QUESTION;
     go("home");
@@ -268,27 +280,33 @@ async function openRemaining() {
   }
 }
 
-// 모음에서 "알았음" 시 원본 세트 진도에도 learned로 반영(단일 진도 유지). 저장 상태 JSON 직접 갱신.
-function markLearnedInSource(word, nowIso) {
+// 모음에서 처리한 결과를 원본 세트 진도에 반영(단일 진도 유지). 저장 상태 JSON 직접 갱신.
+// status: "learned"(알았음) | "buried"(다시 안 보기).
+function applyStatusInSource(word, status, nowIso) {
   const key = deckKey(word.setId);
   const st = store.get(key) || { version: 1, setId: word.setId, round: 1, queue: [], progress: {}, lastStudiedAt: null, undo: null };
   if (!st.progress) st.progress = {};
-  const p = st.progress[word.id] || { status: "active", seenCount: 0, unknownCount: 0, learnedAt: null, lastReviewedAt: null };
-  p.status = "learned";
-  p.learnedAt = nowIso;
-  p.seenCount = (p.seenCount || 0) + 1;
+  const p = st.progress[word.id] || { status: "active", seenCount: 0, unknownCount: 0, learnedAt: null, lastReviewedAt: null, buriedAt: null };
+  p.status = status;
+  if (status === "learned") {
+    p.learnedAt = nowIso;
+    p.seenCount = (p.seenCount || 0) + 1; // 묻기는 학습 처리가 아니라 본 횟수를 올리지 않는다
+  } else {
+    p.buriedAt = nowIso;
+  }
   st.progress[word.id] = p;
   if (Array.isArray(st.queue)) st.queue = st.queue.filter((id) => id !== word.id);
   st.undo = null; // 외부에서 상태를 바꿨으니 그 세트의 직전-처리 undo는 무효화
   store.set(key, st);
 }
-// 모음 undo 시 원본 반영 되돌리기(learned → active).
-function revertLearnedInSource(word) {
+// 모음 undo 시 원본 반영 되돌리기(learned·buried → active).
+function revertToActiveInSource(word) {
   const key = deckKey(word.setId);
   const st = store.get(key);
   if (!st || !st.progress || !st.progress[word.id]) return;
   st.progress[word.id].status = "active";
   st.progress[word.id].learnedAt = null;
+  st.progress[word.id].buriedAt = null;
   store.set(key, st);
 }
 
@@ -308,20 +326,24 @@ function renderHome() {
   const barWrap = el("div", "home-bar");
   barWrap.appendChild(el("div", "home-bar-fill")).style.width = `${s.percent}%`;
   hero.appendChild(barWrap);
-  hero.appendChild(el("div", "hero-sub", `${s.start}개 중 ${s.learned}개 외움 · 완료율 ${s.percent}%`));
+  hero.appendChild(el("div", "hero-sub", s.buried
+    ? `${s.start}개 중 ${s.learned}개 외움 · 완료율 ${s.percent}% · ${s.buried}개 묻음`
+    : `${s.start}개 중 ${s.learned}개 외움 · 완료율 ${s.percent}%`));
   home.appendChild(hero);
 
   const grid = el("div", "stat-grid");
-  const stat = (label, val) => {
-    const c = el("div", "stat-cell");
+  const stat = (label, val, wide) => {
+    const c = el("div", "stat-cell" + (wide ? " stat-wide" : ""));
     c.appendChild(el("div", "stat-val", String(val)));
     c.appendChild(el("div", "stat-label", label));
     return c;
   };
-  grid.appendChild(stat("시작 단어", s.start));
+  grid.appendChild(stat("학습 대상", s.start));
   grid.appendChild(stat("남은 단어", s.remaining));
   grid.appendChild(stat("외운 단어", s.learned));
   grid.appendChild(stat("마지막 학습", fmtDate(s.lastStudiedAt)));
+  // 묻은 단어가 있을 때만 한 칸을 더 넓게 붙인다(원본 개수와의 차이를 눈으로 확인).
+  if (s.buried) grid.appendChild(stat(`묻은 단어 (원본 ${s.total}개 중)`, s.buried, true));
   home.appendChild(grid);
 
   const actions = el("div", "home-actions");
@@ -351,6 +373,12 @@ function renderHome() {
       vb.onclick = () => go("vault");
       actions.appendChild(vb);
     }
+  }
+  // 묻은 단어 목록(되살리기)은 완료 여부와 무관하게 열 수 있다. 모음에서는 숨김(원본 세트가 진도의 주인).
+  if (!bundleMode && s.buried > 0) {
+    const bb = el("button", "btn-xl btn-ghost", `묻은 단어 (${s.buried})`);
+    bb.onclick = () => go("buried");
+    actions.appendChild(bb);
   }
   home.appendChild(actions);
 
@@ -436,7 +464,7 @@ function renderStudy() {
     const undo = el("button", "undo-btn", `${ICON.undo}<span>방금 처리 되돌리기</span>`);
     undo.onclick = () => {
       deck.undo();
-      if (bundleMode) { if (bundleLastKnown) revertLearnedInSource(bundleLastKnown); bundleLastKnown = null; }
+      if (bundleMode) { if (bundleLastApplied) revertToActiveInSource(bundleLastApplied); bundleLastApplied = null; }
       else saveDeck();
       cardView = VIEW.ANSWER; // 되돌린 단어는 다시 판정할 수 있게 공개 상태로 복원
       render();
@@ -459,6 +487,10 @@ function renderStudy() {
     btns.appendChild(known);
     foot.appendChild(btns);
     foot.appendChild(el("div", "study-hint", "← 또는 1: 몰랐음 · → 또는 2: 알았음"));
+    // 영구 제외는 큰 판정 버튼과 크기·위치를 달리해 오탭을 막는다. 키보드 단축키도 일부러 두지 않는다.
+    const bury = el("button", "bury-btn", "이 단어 다시 안 보기");
+    bury.onclick = handleBury;
+    foot.appendChild(bury);
   }
   screen.appendChild(foot);
 
@@ -480,12 +512,25 @@ function handleMark(type) {
   deck.mark(type, now());
   if (bundleMode) {
     // 모음은 별도 저장 없음. "알았음"만 원본 세트에 learned로 반영(단일 진도).
-    if (type === "known" && word) { markLearnedInSource(word, now()); bundleLastKnown = word; }
-    else bundleLastKnown = null;
+    if (type === "known" && word) { applyStatusInSource(word, "learned", now()); bundleLastApplied = word; }
+    else bundleLastApplied = null;
   } else {
     saveDeck();
   }
   cardView = VIEW.QUESTION; // 다음 단어는 다시 단어만 보이는 상태로
+  if (deck.stats().completed) go("complete");
+  else render();
+}
+
+// "이 단어 다시 안 보기" - 학습 순환에서 영구 제외. 실수해도 직전 되돌리기 + 묻은 단어 목록으로 회복 가능.
+function handleBury() {
+  const word = deck.current();
+  if (!word) return;
+  deck.bury(now());
+  if (bundleMode) { applyStatusInSource(word, "buried", now()); bundleLastApplied = word; }
+  else saveDeck();
+  showToast(`“${word.word}”를 다시 안 보기로 옮겼습니다`);
+  cardView = VIEW.QUESTION;
   if (deck.stats().completed) go("complete");
   else render();
 }
@@ -522,6 +567,51 @@ function renderVault() {
       spk.onclick = () => speak(w.word);
       item.appendChild(spk);
     }
+    list.appendChild(item);
+  }
+  screen.appendChild(list);
+  stage.appendChild(screen);
+}
+
+// --- 묻은 단어 목록(다시 안 보기) ---
+// 영구 제외한 단어를 모아 보여주고, 필요하면 되살려 학습 목록으로 돌려보낸다.
+function renderBuried() {
+  setTopbar("다시 안 볼 단어", true);
+  const buried = deck.buriedWords();
+  const screen = el("div", "screen vault");
+
+  if (buried.length === 0) {
+    screen.appendChild(el("div", "empty-note", "묻은 단어가 없습니다.\n학습에서 “이 단어 다시 안 보기”를 누르면 여기 모입니다."));
+    stage.appendChild(screen);
+    return;
+  }
+
+  const head = el("div", "vault-head");
+  head.appendChild(el("div", "vault-title", `묻은 단어 ${buried.length}개`));
+  screen.appendChild(head);
+  screen.appendChild(el("div", "set-note", "여기 있는 단어는 학습과 복습에 나오지 않습니다. 되살리면 다음 바퀴부터 다시 나옵니다."));
+
+  const list = el("div", "vault-list");
+  for (const w of buried) {
+    const item = el("div", "vault-item");
+    const left = el("div", "vault-item-main");
+    left.appendChild(el("div", "vault-word", w.word));
+    left.appendChild(el("div", "vault-mean", w.meaningKr.join(", ")));
+    item.appendChild(left);
+    if (speechSupported()) {
+      const spk = el("button", "speak-btn small", ICON.speaker);
+      spk.setAttribute("aria-label", "발음 듣기");
+      spk.onclick = () => speak(w.word);
+      item.appendChild(spk);
+    }
+    const back = el("button", "btn-sm btn-ghost", "되살리기");
+    back.onclick = () => {
+      deck.unbury(w.id);
+      saveDeck();
+      showToast(`“${w.word}”를 학습 목록으로 되돌렸습니다`);
+      render();
+    };
+    item.appendChild(back);
     list.appendChild(item);
   }
   screen.appendChild(list);
@@ -610,14 +700,16 @@ function renderComplete() {
   const screen = el("div", "screen complete");
   screen.appendChild(el("div", "complete-badge", "✓"));
   screen.appendChild(el("div", "complete-title", `SET ${s.setId.replace(/\D/g, "") || "01"} 완료`));
-  screen.appendChild(el("div", "complete-sub", `${s.start}개 학습 완료 · 외운 단어 ${s.learned}개`));
+  screen.appendChild(el("div", "complete-sub", s.buried
+    ? `${s.start}개 학습 완료 · 외운 단어 ${s.learned}개 · 묻은 단어 ${s.buried}개`
+    : `${s.start}개 학습 완료 · 외운 단어 ${s.learned}개`));
 
   // 마지막 단어를 실수로 처리해 완료됐을 때를 위한 되돌리기(안전장치 - 학습 화면과 동일).
   if (deck.canUndo()) {
     const undo = el("button", "undo-btn", `${ICON.undo}<span>방금 처리 되돌리기</span>`);
     undo.onclick = () => {
       deck.undo();
-      if (bundleMode) { if (bundleLastKnown) revertLearnedInSource(bundleLastKnown); bundleLastKnown = null; }
+      if (bundleMode) { if (bundleLastApplied) revertToActiveInSource(bundleLastApplied); bundleLastApplied = null; }
       else saveDeck();
       cardView = VIEW.ANSWER; // 되돌린 마지막 단어를 다시 판정할 수 있게 공개 상태로
       go("study");
@@ -629,6 +721,12 @@ function renderComplete() {
   const rb = el("button", "btn-xl btn-accent", "외운 단어 복습");
   rb.onclick = () => go("vault");
   actions.appendChild(rb);
+  // 단어를 전부 묻어 완료된 경우에도 되살릴 경로가 필요하다.
+  if (!bundleMode && s.buried > 0) {
+    const bb = el("button", "btn-xl btn-ghost", `묻은 단어 (${s.buried})`);
+    bb.onclick = () => go("buried");
+    actions.appendChild(bb);
+  }
   const restart = el("button", "btn-xl btn-ghost", "처음부터 다시");
   restart.onclick = confirmReset;
   actions.appendChild(restart);

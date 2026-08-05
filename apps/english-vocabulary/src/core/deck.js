@@ -6,6 +6,9 @@
 //  - "모름" 처리한 단어는 이번 바퀴에 다시 안 나온다(즉시 재출제 방지). 다음 바퀴부터 재등장.
 //  - active가 0이 되면 세트 완료.
 //  - 직전 처리 1회 undo. 보관함(learned) 수동 복습에서 "모름"이면 active로 복귀.
+//  - 세 번째 상태 buried = "다시 안 보기"(banana처럼 이미 아는 단어). 학습 순환에서 영구 제외되고
+//    보관함 복습 대상도 아니다. 진도 분모(start)에서도 빠져 "묻은 것 뺀 실질 개수"가 기준이 된다.
+//    회복 경로는 둘 - 직전 1회 undo, 묻은 단어 목록에서 unbury.
 //
 // 상태(serialize 결과)는 그대로 localStorage에 저장한다.
 
@@ -22,7 +25,7 @@ function shuffle(arr, rng) {
 }
 
 function freshProgress() {
-  return { status: "active", seenCount: 0, unknownCount: 0, learnedAt: null, lastReviewedAt: null };
+  return { status: "active", seenCount: 0, unknownCount: 0, learnedAt: null, lastReviewedAt: null, buriedAt: null };
 }
 
 export function createDeck(data, state = null, rng = Math.random) {
@@ -78,6 +81,17 @@ export function createDeck(data, state = null, rng = Math.random) {
     if (deck.queue.length === 0 && activeIds().length > 0) rebuildRound(false);
   }
 
+  // 직전 1회 복원용 스냅샷(학습 처리·묻기 공용).
+  function snapshot(id) {
+    deck._undo = {
+      id,
+      queue: deck.queue.slice(),
+      round: deck.round,
+      progress: { ...deck.progress[id] },
+      lastStudiedAt: deck.lastStudiedAt,
+    };
+  }
+
   const api = {
     setId,
     startCount,
@@ -93,15 +107,20 @@ export function createDeck(data, state = null, rng = Math.random) {
       return deck.round;
     },
 
+    // 진도 기준은 "묻은 단어를 뺀 실질 개수"(start). 원본 개수는 total로 따로 준다.
     stats() {
       const learned = words.filter((w) => deck.progress[w.id].status === "learned").length;
-      const remaining = startCount - learned;
+      const buried = words.filter((w) => deck.progress[w.id].status === "buried").length;
+      const start = startCount - buried;
+      const remaining = start - learned;
       return {
         setId,
-        start: startCount,
+        start,
+        total: startCount,
         remaining,
         learned,
-        percent: startCount ? Math.round((learned / startCount) * 1000) / 10 : 0,
+        buried,
+        percent: start ? Math.round((learned / start) * 1000) / 10 : 100,
         round: deck.round,
         completed: remaining === 0,
         lastStudiedAt: deck.lastStudiedAt,
@@ -113,14 +132,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       ensureQueue();
       const id = deck.queue[0];
       if (!id) return; // 볼 단어 없음
-      // undo용 스냅샷 - 이 처리 직전 상태만 저장(직전 1회 복원).
-      deck._undo = {
-        id,
-        queue: deck.queue.slice(),
-        round: deck.round,
-        progress: { ...deck.progress[id] },
-        lastStudiedAt: deck.lastStudiedAt,
-      };
+      snapshot(id); // undo용 - 이 처리 직전 상태만 저장(직전 1회 복원)
       const p = deck.progress[id];
       p.seenCount += 1;
       deck.lastStudiedAt = now;
@@ -132,6 +144,38 @@ export function createDeck(data, state = null, rng = Math.random) {
         p.unknownCount += 1;
       }
       if (deck.queue.length === 0) rebuildRound(true); // 바퀴 종료 → 남은 active 섞어 새 바퀴
+    },
+
+    // 지금 보는 단어를 영구 제외(buried)한다 - 이미 아는 쉬운 단어를 학습 순환에서 아예 뺀다.
+    // 학습 처리가 아니므로 seenCount·lastStudiedAt은 건드리지 않는다. 처리한 단어 id 반환.
+    bury(now = null) {
+      ensureQueue();
+      const id = deck.queue[0];
+      if (!id) return null;
+      snapshot(id);
+      const p = deck.progress[id];
+      p.status = "buried";
+      p.buriedAt = now;
+      deck.queue.shift();
+      if (deck.queue.length === 0) rebuildRound(true);
+      return id;
+    },
+
+    // 묻은 단어 목록(원본 + 진행 병합).
+    buriedWords() {
+      return words
+        .filter((w) => deck.progress[w.id].status === "buried")
+        .map((w) => ({ ...w, ...deck.progress[w.id] }));
+    },
+
+    // 묻은 단어 되살리기 - active로 복귀해 다음 바퀴부터 다시 등장한다. undo 대상 아님.
+    unbury(id) {
+      const p = deck.progress[id];
+      if (!p || p.status !== "buried") return false;
+      p.status = "active";
+      p.buriedAt = null;
+      deck._undo = null; // 외부에서 상태를 바꿨으니 직전-처리 undo는 무효화
+      return true;
     },
 
     canUndo() {
