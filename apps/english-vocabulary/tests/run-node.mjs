@@ -4,7 +4,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { createDeck, BURY_TIER } from "../src/core/deck.js";
+import { createDeck, ARCHIVE_TIER } from "../src/core/deck.js";
 import { VIEW, initialCardView, resolveKey } from "../src/core/viewstate.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -158,7 +158,7 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   const restored = createDeck(grown, saved, seededRng(13));
   eq(restored.serialize().progress[learnedId].status, "learned", "기존 외운 단어 진행 유지");
   eq(restored.serialize().progress["ev-s01-9999"].status, "active", "새 단어는 active로 합류");
-  eq(restored.stats().start, grown.words.length, "시작 수는 새 원본 기준");
+  eq(restored.stats().total, grown.words.length, "세트 크기는 새 원본 기준");
 })();
 
 // --- 9. 카드 표시 단계(QUESTION/ANSWER) + 키 매핑: 회상 강제 규칙 ---
@@ -205,13 +205,13 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   eq(deck.serialize().progress[g.id].unknownCount, 0, "Undo로 unknownCount 원복");
 })();
 
-// --- 11. 다시 안 보기 KNOWN(이미 아는 단어): 학습 대상 제외 + 진도 분모 제외 + 되살리기 ---
+// --- 11. 아카이브 KNOWN(이미 아는 단어): 세트 크기에서 통째 제외 + 되살리기 ---
 (() => {
   const deck = createDeck(DATA, null, seededRng(31));
   const n = DATA.words.length;
   const f = deck.current();
 
-  const buriedId = deck.bury("b1");
+  const buriedId = deck.archiveKnown("b1");
   eq(buriedId, f.id, "bury는 지금 보는 단어를 처리");
   eq(deck.serialize().progress[f.id].status, "buried", "묻은 단어는 buried 상태");
   ok(deck.serialize().progress[f.id].buriedAt === "b1", "묻은 시각 기록");
@@ -219,133 +219,132 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   eq(deck.serialize().progress[f.id].seenCount, 0, "묻기는 학습 처리가 아니라 본 횟수를 올리지 않음");
 
   const s = deck.stats();
-  eq(s.buried, 1, "stats.buried 집계");
-  eq(s.start, n - 1, "묻은 단어는 진도 분모(start)에서 제외");
-  eq(s.total, n, "원본 개수(total)는 유지");
-  eq(s.remaining, n - 1, "남은 단어도 묻은 만큼 줄어듦");
-  ok(!deck.learnedWords().some((w) => w.id === f.id), "묻은 단어는 보관함(복습 대상)에 없음");
-  eq(deck.buriedWords().length, 1, "묻은 단어 목록에 1개");
-  eq(deck.buriedWords()[0].id, f.id, "묻은 단어 목록에 그 단어 존재");
+  eq(s.archivedKnown, 1, "stats.archivedKnown 집계");
+  eq(s.total, n - 1, "아카이브한 단어는 세트 크기(total)에서 통째로 빠짐");
+  eq(s.sourceTotal, n, "파일에 든 개수(sourceTotal)는 그대로");
+  eq(s.remaining, n - 1, "남은 단어도 아카이브한 만큼 줄어듦");
+  ok(!deck.learnedWords().some((w) => w.id === f.id), "아카이브한 단어는 보관함(복습 대상)에 없음");
+  eq(deck.archivedWords().length, 1, "묻은 단어 목록에 1개");
+  eq(deck.archivedWords()[0].id, f.id, "묻은 단어 목록에 그 단어 존재");
 
   // 되돌리기(직전 1회) - 실수로 눌렀을 때의 첫 회복 경로
   ok(deck.canUndo(), "묻기 직후 되돌리기 가능");
   deck.undo();
   eq(deck.serialize().progress[f.id].status, "active", "되돌리기로 active 복귀");
-  eq(deck.stats().buried, 0, "되돌리기로 묻은 수 0");
+  eq(deck.stats().archivedKnown, 0, "되돌리기로 아카이브 수 0");
   eq(deck.current().id, f.id, "되돌린 단어가 현재 단어로 복원");
 
   // 되살리기(목록에서) - 두 번째 회복 경로
-  deck.bury("b2");
+  deck.archiveKnown("b2");
   const saved = JSON.parse(JSON.stringify(deck.serialize())); // localStorage 왕복 모사
   const restored = createDeck(DATA, saved, seededRng(31));
-  eq(restored.stats().buried, 1, "저장·복원 후에도 묻은 상태 유지");
-  eq(restored.stats().start, n - 1, "복원 후 분모도 동일");
-  ok(restored.unbury(f.id), "묻은 단어 되살리기 성공");
+  eq(restored.stats().archivedKnown, 1, "저장·복원 후에도 아카이브 유지");
+  eq(restored.stats().total, n - 1, "복원 후 세트 크기도 동일");
+  ok(restored.unarchive(f.id), "묻은 단어 되살리기 성공");
   eq(restored.serialize().progress[f.id].status, "active", "되살리면 active 복귀");
-  eq(restored.stats().start, n, "되살리면 분모 원복");
+  eq(restored.stats().total, n, "되살리면 세트 크기 원복");
   ok(!restored.canUndo(), "되살리기는 학습 되돌리기 대상이 아님(undo 무효화)");
   // 되살린 단어는 다시 학습 대상에 등장해야 한다.
   markAll(restored, "unknown", "t");
-  ok(restored.buriedWords().length === 0, "되살린 뒤 묻은 목록 비어 있음");
+  ok(restored.archivedWords().length === 0, "되살린 뒤 묻은 목록 비어 있음");
 
-  ok(!restored.unbury("ev-s01-0000-none"), "없는 id 되살리기는 무해하게 false");
+  ok(!restored.unarchive("ev-s01-0000-none"), "없는 id 되살리기는 무해하게 false");
 })();
 
 // --- 12. 남은 단어를 전부 묻으면 세트 완료(회복 경로 유지) ---
 (() => {
   const deck = createDeck(DATA, null, seededRng(37));
   let guard = 0;
-  while (deck.current() && guard++ < 10000) deck.bury("b");
+  while (deck.current() && guard++ < 10000) deck.archiveKnown("b");
   const s = deck.stats();
-  eq(s.buried, DATA.words.length, "전부 묻으면 buried = 원본 수");
-  eq(s.start, 0, "학습 대상 0");
+  eq(s.archivedKnown, DATA.words.length, "전부 아카이브하면 archivedKnown = 파일 개수");
+  eq(s.total, 0, "세트 크기 0");
   eq(s.remaining, 0, "남은 단어 0");
   ok(s.completed, "학습 대상이 없으면 세트 완료로 처리");
   eq(s.percent, 100, "분모 0에서 완료율은 100(0 나눗셈 방지)");
-  eq(deck.buriedWords().length, DATA.words.length, "묻은 목록에서 전부 되살릴 수 있음");
+  eq(deck.archivedWords().length, DATA.words.length, "묻은 목록에서 전부 되살릴 수 있음");
 })();
 
-// --- 13. 다시 안 보기 MASTERED(완전히 외운 단어): 복습에서만 제외 + 진도 분자 유지 + 복습 복귀 ---
+// --- 13. 아카이브 MASTERED(완전히 외운 단어): 세트에서 제외 + 되살리면 복습 목록으로 ---
 (() => {
   const deck = createDeck(DATA, null, seededRng(41));
   const n = DATA.words.length;
   deck.mark("known", "t1");
   deck.mark("known", "t2");
-  const before = deck.stats();
-  eq(before.done, 2, "외운 2개가 진도 분자(done)");
-  eq(before.learned, 2, "복습 대상은 2개");
+  eq(deck.stats().learned, 2, "복습 대상은 2개");
+  eq(deck.stats().total, n, "아직 아카이브가 없으니 세트 크기는 파일 개수");
 
   const target = deck.learnedWords()[0].id;
-  ok(deck.buryLearned(target, "m1"), "외운 단어를 완전히 외움으로 옮김");
-  eq(deck.serialize().progress[target].status, "buried", "완전히 외운 단어도 buried 상태");
-  eq(deck.serialize().progress[target].buriedTier, BURY_TIER.MASTERED, "MASTERED 갈래 기록");
-  ok(deck.serialize().progress[target].buriedAt === "m1", "정리 시각 기록");
+  ok(deck.archiveLearned(target, "m1"), "외운 단어를 아카이브로 보냄");
+  eq(deck.serialize().progress[target].status, "buried", "아카이브 상태는 buried(저장 호환)");
+  eq(deck.serialize().progress[target].buriedTier, ARCHIVE_TIER.MASTERED, "MASTERED 갈래 기록");
+  ok(deck.serialize().progress[target].buriedAt === "m1", "아카이브 시각 기록");
 
   const s = deck.stats();
-  eq(s.mastered, 1, "stats.mastered 집계");
-  eq(s.buried, 0, "MASTERED는 KNOWN 집계(buried)에 들어가지 않음");
+  eq(s.archivedMastered, 1, "stats.archivedMastered 집계");
+  eq(s.archivedKnown, 0, "MASTERED는 KNOWN 집계에 들어가지 않음");
+  eq(s.archived, 1, "아카이브 합계");
   eq(s.learned, 1, "복습 대상에서 빠짐");
-  eq(s.done, before.done, "이미 외운 단어라 진도 분자는 그대로");
-  eq(s.start, n, "MASTERED는 학습 대상(분모)을 줄이지 않음");
-  eq(s.percent, before.percent, "완전히 외움으로 옮겨도 완료율이 뒤로 가지 않음");
-  eq(s.remaining, before.remaining, "남은 단어 수도 그대로");
-  ok(!deck.learnedWords().some((w) => w.id === target), "완전히 외운 단어는 복습 목록에 없음");
+  eq(s.total, n - 1, "아카이브한 만큼 세트 크기가 줄어든다(KNOWN과 같은 규칙)");
+  eq(s.sourceTotal, n, "파일 개수는 그대로");
+  ok(!deck.learnedWords().some((w) => w.id === target), "아카이브한 단어는 복습 목록에 없음");
 
-  // 단계별 목록 분리
-  deck.bury("b1"); // 지금 보는 active 단어를 KNOWN으로
-  eq(deck.buriedWords(BURY_TIER.KNOWN).length, 1, "KNOWN 목록 1개");
-  eq(deck.buriedWords(BURY_TIER.MASTERED).length, 1, "MASTERED 목록 1개");
-  eq(deck.buriedWords().length, 2, "갈래 미지정이면 전체");
-  eq(deck.stats().start, n - 1, "KNOWN만 분모를 줄임");
+  // 갈래별 목록 분리
+  deck.archiveKnown("b1"); // 지금 보는 active 단어를 KNOWN으로
+  eq(deck.archivedWords(ARCHIVE_TIER.KNOWN).length, 1, "KNOWN 목록 1개");
+  eq(deck.archivedWords(ARCHIVE_TIER.MASTERED).length, 1, "MASTERED 목록 1개");
+  eq(deck.archivedWords().length, 2, "갈래 미지정이면 전체");
+  eq(deck.archivedWords(ARCHIVE_TIER.MASTERED)[0].tier, ARCHIVE_TIER.MASTERED, "목록 항목에 갈래가 실려 온다");
+  eq(deck.stats().total, n - 2, "두 갈래 모두 세트 크기를 줄인다");
 
   // 되살리기 - MASTERED는 복습 목록(learned)으로, KNOWN은 학습(active)으로
-  ok(deck.unbury(target), "완전히 외운 단어 되살리기 성공");
-  eq(deck.serialize().progress[target].status, "learned", "완전히 외운 단어를 되살리면 복습 목록으로 복귀");
+  ok(deck.unarchive(target), "아카이브에서 되살리기 성공");
+  eq(deck.serialize().progress[target].status, "learned", "MASTERED를 되살리면 복습 목록으로 복귀");
   eq(deck.serialize().progress[target].buriedTier, null, "되살리면 갈래 값 비움");
   eq(deck.stats().learned, 2, "복습 대상 원복");
-  eq(deck.stats().done, before.done, "되살려도 진도 분자는 동일");
+  eq(deck.stats().total, n - 1, "되살린 만큼 세트 크기 복구");
 
   // 저장·복원 왕복에도 갈래가 유지된다.
-  deck.buryLearned(target, "m2");
+  deck.archiveLearned(target, "m2");
   const saved = JSON.parse(JSON.stringify(deck.serialize()));
   const restored = createDeck(DATA, saved, seededRng(41));
-  eq(restored.stats().mastered, 1, "복원 후에도 MASTERED 유지");
-  eq(restored.stats().buried, 1, "복원 후에도 KNOWN 유지");
-  eq(restored.stats().done, before.done, "복원 후 진도 분자 동일");
+  eq(restored.stats().archivedMastered, 1, "복원 후에도 MASTERED 유지");
+  eq(restored.stats().archivedKnown, 1, "복원 후에도 KNOWN 유지");
+  eq(restored.stats().total, n - 2, "복원 후 세트 크기 동일");
 
-  ok(!deck.buryLearned("ev-s01-0000-none", "m3"), "없는 id 정리는 무해하게 false");
+  ok(!deck.archiveLearned("ev-s01-0000-none", "m3"), "없는 id는 무해하게 false");
 })();
 
 // --- 14. 갈래가 없던 저장본(v1) 호환: 옛 buried는 KNOWN으로 읽는다 ---
 (() => {
   const deck = createDeck(DATA, null, seededRng(43));
   const f = deck.current();
-  deck.bury("b1");
+  deck.archiveKnown("b1");
   // v1 저장본 모사 - buriedTier 키 자체가 없던 시절
   const saved = JSON.parse(JSON.stringify(deck.serialize()));
   saved.version = 1;
   delete saved.progress[f.id].buriedTier;
 
   const restored = createDeck(DATA, saved, seededRng(43));
-  eq(restored.serialize().progress[f.id].buriedTier, BURY_TIER.KNOWN, "옛 buried는 KNOWN으로 승격");
-  eq(restored.stats().buried, 1, "KNOWN 집계에 포함");
-  eq(restored.stats().mastered, 0, "MASTERED로 새지 않음");
-  eq(restored.stats().start, DATA.words.length - 1, "옛 저장본의 분모 계산이 그대로 유지");
+  eq(restored.serialize().progress[f.id].buriedTier, ARCHIVE_TIER.KNOWN, "옛 buried는 KNOWN으로 승격");
+  eq(restored.stats().archivedKnown, 1, "KNOWN 집계에 포함");
+  eq(restored.stats().archivedMastered, 0, "MASTERED로 새지 않음");
+  eq(restored.stats().total, DATA.words.length - 1, "옛 저장본도 세트 크기에서 빠진다");
 })();
 
 // --- 15. 외운 단어를 한 번에 완전히 외움으로(일괄) ---
 (() => {
   const deck = createDeck(DATA, null, seededRng(47));
   markAll(deck, "known", "t");
-  const before = deck.stats();
-  ok(before.completed, "전부 외우면 완료");
-  const n = deck.buryAllLearned("m");
-  eq(n, DATA.words.length, "외운 단어 전부가 옮김 대상");
+  ok(deck.stats().completed, "전부 외우면 완료");
+  const n = deck.archiveAllLearned("m");
+  eq(n, DATA.words.length, "외운 단어 전부가 아카이브 대상");
   const s = deck.stats();
   eq(s.learned, 0, "복습 목록 비움");
-  eq(s.mastered, DATA.words.length, "전부 MASTERED");
-  eq(s.done, before.done, "진도 분자 유지");
-  eq(s.percent, 100, "완료율 100 유지");
+  eq(s.archivedMastered, DATA.words.length, "전부 MASTERED");
+  eq(s.total, 0, "세트가 통째로 비어 크기 0");
+  eq(s.sourceTotal, DATA.words.length, "파일 개수는 그대로");
+  eq(s.percent, 100, "크기 0에서 완료율은 100(0 나눗셈 방지)");
   ok(s.completed, "완료 상태 유지");
 })();
 

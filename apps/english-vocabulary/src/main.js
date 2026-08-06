@@ -3,7 +3,7 @@
 
 import { createStorage } from "../../../shared/storage.js";
 import { showModal, showToast, registerServiceWorker } from "../../../shared/ui.js";
-import { createDeck, BURY_TIER } from "./core/deck.js";
+import { createDeck, ARCHIVE_TIER } from "./core/deck.js";
 import { VIEW, initialCardView, resolveKey } from "./core/viewstate.js";
 
 registerServiceWorker("/service-worker.js");
@@ -12,6 +12,7 @@ const store = createStorage("english-vocabulary");
 const stage = document.getElementById("stage");
 const backBtn = document.getElementById("nav-back");
 const settingsBtn = document.getElementById("nav-settings");
+const vaultBtn = document.getElementById("nav-vault");
 const titleEl = document.getElementById("topbar-title");
 
 const now = () => new Date().toISOString();
@@ -71,7 +72,9 @@ let DATA = null;         // 현재 선택된 세트의 단어 데이터
 let currentSetId = null; // 현재 선택된 세트 id
 let bundleMode = false;  // "못 외운 단어 모음" 학습 중인가(여러 세트 통합, 별도 저장 없음)
 let bundleLastApplied = null; // 모음에서 직전에 원본 세트로 반영한 단어(알았음·다시 안 보기 공용, undo 되돌림용)
-let view = "menu";       // 첫 화면은 세트 선택 메뉴
+let view = "menu";       // 첫 화면은 세트 선택 메뉴(= 앱 홈). 세트를 누르면 곧바로 학습이다.
+let ARCHIVE = [];        // 아카이브 화면이 쓸 전 세트 통합 목록(열 때 채운다)
+let settingsFrom = "menu"; // 설정에서 뒤로 갈 때 돌아갈 화면
 const REMAINING_ID = "__remaining__";
 // 학습·복습 카드의 표시 단계(question=단어만 / answer=뜻 공개). 단어가 바뀔 때마다 question으로 초기화.
 // 새로고침 복원 시에도 기본값 question이라 정답 공개 상태는 이어지지 않는다(편법 방지).
@@ -93,28 +96,29 @@ let knownRecover = false;
 
 // --- 라우팅 ---
 function go(next) {
-  if (next !== "buried") knownRecover = false;
+  if (next !== "archive") knownRecover = false;
   view = next;
   render();
 }
 // 뒤로 버튼은 화면마다 동작이 다르다(앱 홈에서는 허브로 나가고, 하위 화면에서는 앱 홈으로).
-let backHandler = () => go("home");
+let backHandler = () => go("menu");
 function setTopbar(title, showBack, onBack) {
   titleEl.textContent = title;
   backBtn.hidden = !showBack;
-  backHandler = onBack || (() => go("home"));
+  backHandler = onBack || (() => go("menu"));
 }
 backBtn.addEventListener("click", () => backHandler());
-settingsBtn.addEventListener("click", () => go("settings"));
+settingsBtn.addEventListener("click", () => { settingsFrom = view === "settings" ? settingsFrom : view; go("settings"); });
+vaultBtn.addEventListener("click", () => go("vault"));
 
 function render() {
   stage.innerHTML = "";
   document.onkeydown = null;
+  vaultBtn.hidden = true; // 복습 진입은 학습 화면에서만 (renderStudy가 다시 켠다)
   if (view === "menu") renderMenu();
-  else if (view === "home") renderHome();
   else if (view === "study") renderStudy();
   else if (view === "vault") renderVault();
-  else if (view === "buried") renderBuried();
+  else if (view === "archive") renderArchive();
   else if (view === "review") renderReview();
   else if (view === "complete") renderComplete();
   else if (view === "settings") renderSettings();
@@ -143,39 +147,42 @@ const LEVEL_LABEL = { elementary: "초등", middle: "중등", high: "고등" };
 const DATA_DIR = "./src/data/";
 
 // 세트별 진도를 저장된 덱 상태에서 가볍게 계산(덱을 새로 만들지 않고 요약만).
-// deck.stats()와 같은 기준 - target(분모) = 원본 - 이미 아는 단어, done(분자) = 외움 + 완전히 외움.
+// deck.stats()와 같은 기준 - total = 파일 개수 - 아카이브. 아카이브한 단어는 이 세트에 없는 것과 같다.
 function setProgress(setId, count) {
-  const total = count || 0;
+  const source = count || 0;
   const st = store.get(deckKey(setId));
-  if (!st || !st.progress) {
-    return { learned: 0, mastered: 0, buried: 0, target: total, done: 0, percent: 0 };
-  }
+  if (!st || !st.progress) return { learned: 0, archived: 0, total: source, percent: 0 };
   let learned = 0;
-  let mastered = 0;
-  let buried = 0;
+  let archived = 0;
   for (const id in st.progress) {
     const p = st.progress[id];
     if (p.status === "learned") learned++;
-    // 갈래가 없던 저장본의 buried는 "이미 아는 단어"와 뜻이 같다(deck.js normalizeTier와 동일 규칙).
-    else if (p.status === "buried") {
-      if (p.buriedTier === BURY_TIER.MASTERED) mastered++;
-      else buried++;
-    }
+    else if (p.status === "buried") archived++; // 갈래(buriedTier)와 무관하게 세트에서 빠진다
   }
-  const target = Math.max(0, total - buried);
-  const done = learned + mastered;
-  return { learned, mastered, buried, target, done, percent: target ? Math.round((done / target) * 100) : 100 };
+  const total = Math.max(0, source - archived);
+  return { learned, archived, total, percent: total ? Math.round((learned / total) * 100) : 100 };
 }
 
-// 아직 못 외운 단어 수 합계 - 모든 available 세트 기준(층 표시 on/off와 무관).
-// "이미 아는 단어"와 "완전히 외운 단어"는 모두 빠진다.
+// 아직 못 외운 단어 수 합계 - 모든 available 세트 기준(층 표시 on/off와 무관). 아카이브는 빠진다.
 function remainingCount() {
   const sets = (MANIFEST && MANIFEST.sets) || [];
   let n = 0;
   for (const s of sets) {
     if (!s.available) continue;
     const p = setProgress(s.setId, s.count);
-    n += p.target - p.done;
+    n += p.total - p.learned;
+  }
+  return n;
+}
+
+// 전 세트 아카이브 단어 수 - 홈 아카이브 카드의 숫자. 저장본만 훑어 파일은 읽지 않는다.
+function archivedCount() {
+  let n = 0;
+  for (const s of ((MANIFEST && MANIFEST.sets) || [])) {
+    if (!s.available) continue;
+    const st = store.get(deckKey(s.setId));
+    if (!st || !st.progress) continue;
+    for (const id in st.progress) if (st.progress[id].status === "buried") n++;
   }
   return n;
 }
@@ -198,6 +205,19 @@ function renderMenu() {
     screen.appendChild(card);
   }
 
+  // 아카이브 카드 - 학습에서 뺀 단어는 세트 어디에도 안 보이므로 여기서만 들어간다.
+  const ac = archivedCount();
+  if (ac > 0) {
+    const card = el("button", "menu-set menu-archive");
+    const main = el("div", "menu-set-main");
+    main.appendChild(el("div", "menu-set-title", "아카이브"));
+    main.appendChild(el("div", "menu-set-meta", "학습에서 뺀 단어를 모아 둡니다"));
+    card.appendChild(main);
+    card.appendChild(el("div", "menu-set-pct", `${ac}`));
+    card.onclick = openArchive;
+    screen.appendChild(card);
+  }
+
   const sets = (MANIFEST && MANIFEST.sets) || [];
   let shownAny = false;
   for (const level of LEVEL_ORDER) {
@@ -207,7 +227,7 @@ function renderMenu() {
     let avail = group.filter((s) => s.available);
     // 다 외운(100%) 세트 자동 숨김 옵션
     if (settings.hideCompleted) avail = avail.filter((s) => setProgress(s.setId, s.count).percent < 100);
-    const totalWords = avail.reduce((n, s) => n + setProgress(s.setId, s.count).target, 0);
+    const totalWords = avail.reduce((n, s) => n + setProgress(s.setId, s.count).total, 0);
 
     const head = el("div", "menu-group-head");
     head.appendChild(el("div", "menu-group-title", LEVEL_LABEL[level]));
@@ -228,9 +248,7 @@ function renderMenu() {
       const card = el("button", "menu-set");
       const main = el("div", "menu-set-main");
       main.appendChild(el("div", "menu-set-title", `SET ${num} · ${s.title}`));
-      main.appendChild(el("div", "menu-set-meta", p.buried
-        ? `${p.target}단어 · ${p.done}개 외움 · ${p.buried}개 제외`
-        : `${s.count}단어 · ${p.done}개 외움`));
+      main.appendChild(el("div", "menu-set-meta", `${p.total}단어 · ${p.learned}개 외움`));
       const bar = el("div", "menu-set-bar");
       bar.appendChild(el("div", "menu-set-bar-fill")).style.width = `${p.percent}%`;
       main.appendChild(bar);
@@ -259,7 +277,7 @@ async function openSet(entry) {
     buildDeck();
     saveDeck();
     cardView = VIEW.QUESTION;
-    go("home");
+    go("study"); // 중간 화면 없이 바로 학습(2026-08-06 사용자 지시)
   } catch {
     showToast("세트를 불러오지 못했습니다");
   }
@@ -288,7 +306,7 @@ async function openRemaining() {
     bundleLastApplied = null;
     deck = createDeck(DATA, null, settings.shuffle ? Math.random : null);
     cardView = VIEW.QUESTION;
-    go("home");
+    go("study");
   } catch {
     showToast("단어를 불러오지 못했습니다");
   }
@@ -308,7 +326,7 @@ function applyStatusInSource(word, status, nowIso) {
     p.buriedTier = null;
   } else {
     p.buriedAt = nowIso;
-    p.buriedTier = BURY_TIER.KNOWN;
+    p.buriedTier = ARCHIVE_TIER.KNOWN;
   }
   st.progress[word.id] = p;
   if (Array.isArray(st.queue)) st.queue = st.queue.filter((id) => id !== word.id);
@@ -327,93 +345,7 @@ function revertToActiveInSource(word) {
   store.set(key, st);
 }
 
-// --- 홈 (선택된 세트의 진행 화면) ---
-function renderHome() {
-  // 세트 홈에서는 뒤로 버튼이 세트 선택 메뉴로 간다.
-  setTopbar(DATA.title || "영어 단어장", true, () => go("menu"));
-  const s = deck.stats();
-
-  const home = el("div", "screen home");
-
-  const hero = el("div", "hero");
-  hero.appendChild(el("div", "hero-set", bundleMode
-    ? "못 외운 단어 모음"
-    : `SET ${s.setId.replace(/\D/g, "") || "01"} · ${DATA.title || ""}`));
-  hero.appendChild(el("div", "hero-big", `${s.remaining}<span class="hero-unit">개 남음</span>`));
-  const barWrap = el("div", "home-bar");
-  barWrap.appendChild(el("div", "home-bar-fill")).style.width = `${s.percent}%`;
-  hero.appendChild(barWrap);
-  hero.appendChild(el("div", "hero-sub", s.buried
-    ? `${s.start}개 중 ${s.done}개 외움 · 완료율 ${s.percent}% · 이미 아는 단어 ${s.buried}개`
-    : `${s.start}개 중 ${s.done}개 외움 · 완료율 ${s.percent}%`));
-  home.appendChild(hero);
-
-  const grid = el("div", "stat-grid");
-  const stat = (label, val, wide) => {
-    const c = el("div", "stat-cell" + (wide ? " stat-wide" : ""));
-    c.appendChild(el("div", "stat-val", String(val)));
-    c.appendChild(el("div", "stat-label", label));
-    return c;
-  };
-  grid.appendChild(stat("학습 대상", s.start));
-  grid.appendChild(stat("남은 단어", s.remaining));
-  grid.appendChild(stat("외운 단어", s.done));
-  grid.appendChild(stat("마지막 학습", fmtDate(s.lastStudiedAt)));
-  // "이미 아는 단어"가 있을 때만 한 칸을 더 넓게 붙인다(원본 개수와의 차이를 눈으로 확인).
-  if (s.buried) grid.appendChild(stat(`이미 아는 단어 (원본 ${s.total}개 중)`, s.buried, true));
-  // "완전히 외운 단어"는 진도상 외움에 포함되므로 몇 개가 복습에서 빠졌는지만 보여준다.
-  if (s.mastered) grid.appendChild(stat("완전히 외움 (외운 수에 포함)", s.mastered, true));
-  home.appendChild(grid);
-
-  const actions = el("div", "home-actions");
-  if (s.completed) {
-    // 모음은 별도 보관함·재시작이 없다(원본 세트가 진도의 주인). 메뉴로만.
-    const done = el("div", "done-note", bundleMode ? "🎉 못 외운 단어를 모두 외웠습니다." : "🎉 이 세트의 단어를 모두 외웠습니다.");
-    home.appendChild(done);
-    if (bundleMode) {
-      const back = el("button", "btn-xl btn-accent", "메뉴로");
-      back.onclick = () => go("menu");
-      actions.appendChild(back);
-    } else {
-      // 외운 단어를 전부 옮기면 복습할 것이 없으므로 버튼을 내린다.
-      if (s.learned > 0) {
-        const rb = el("button", "btn-xl btn-accent", `외운 단어 복습 (${s.learned})`);
-        rb.onclick = () => go("vault");
-        actions.appendChild(rb);
-      }
-      const restart = el("button", "btn-xl btn-ghost", "처음부터 다시");
-      restart.onclick = confirmReset;
-      actions.appendChild(restart);
-    }
-  } else {
-    const cont = el("button", "btn-xl btn-accent", s.learned === 0 && s.round === 1 ? "학습 시작" : "이어서 학습");
-    cont.onclick = enterStudy;
-    actions.appendChild(cont);
-    // 보관함(수동 복습)은 세트 진도 기반이라 모음에서는 숨긴다(세션 임시 값 혼동 방지).
-    if (!bundleMode && s.learned > 0) {
-      const vb = el("button", "btn-xl btn-ghost", `외운 단어 복습 (${s.learned})`);
-      vb.onclick = () => go("vault");
-      actions.appendChild(vb);
-    }
-  }
-  // 다시 안 볼 단어 목록은 완료 여부와 무관하게 열 수 있다. 모음에서는 숨김(원본 세트가 진도의 주인).
-  if (!bundleMode && s.buried + s.mastered > 0) {
-    const bb = el("button", "btn-xl btn-ghost", `다시 안 볼 단어 (${s.buried + s.mastered})`);
-    bb.onclick = () => go("buried");
-    actions.appendChild(bb);
-  }
-  home.appendChild(actions);
-
-  stage.appendChild(home);
-}
-
 // --- 학습 ---
-// 학습 진입 - 카드는 항상 단어만 보이는 상태(QUESTION)로 시작.
-function enterStudy() {
-  cardView = VIEW.QUESTION;
-  go("study");
-}
-
 // 정답 공개 - 같은 카드 안에서 QUESTION → ANSWER로 전환.
 function revealAnswer() {
   cardView = VIEW.ANSWER;
@@ -456,7 +388,9 @@ function renderStudy() {
     go("complete");
     return;
   }
-  setTopbar(`SET ${s.setId.replace(/\D/g, "") || "01"}`, true);
+  setTopbar(bundleMode ? "못 외운 단어 모음" : `SET ${s.setId.replace(/\D/g, "") || "01"}`, true, () => go("menu"));
+  // 중간 화면을 없앴으므로 복습 진입은 상단바가 맡는다(외운 단어가 있고 모음이 아닐 때만).
+  vaultBtn.hidden = bundleMode || s.learned === 0;
   const word = deck.current();
   if (!word) {
     go("complete");
@@ -468,7 +402,7 @@ function renderStudy() {
 
   // 진행 정보(QUESTION·ANSWER 공통)
   const info = el("div", "study-info");
-  info.appendChild(el("div", "study-count", `${s.remaining} / ${s.start} 남음`));
+  info.appendChild(el("div", "study-count", `${s.remaining} / ${s.total} 남음`));
   const bar = el("div", "study-bar");
   bar.appendChild(el("div", "study-bar-fill")).style.width = `${s.percent}%`;
   info.appendChild(bar);
@@ -544,14 +478,14 @@ function handleMark(type) {
   else render();
 }
 
-// "이미 아는 단어로 빼기" - 학습 대상에서 영구 제외. 실수했을 때의 회복은 직전 되돌리기다.
+// "이미 아는 단어로 빼기" - 세트에서 통째로 빼 아카이브로 보낸다. 실수했을 때의 회복은 직전 되돌리기다.
 function handleBury() {
   const word = deck.current();
   if (!word) return;
-  deck.bury(now());
+  deck.archiveKnown(now());
   if (bundleMode) { applyStatusInSource(word, "buried", now()); bundleLastApplied = word; }
   else saveDeck();
-  showToast(`“${word.word}”를 이미 아는 단어로 뺐습니다`);
+  showToast(`“${word.word}”를 아카이브로 보냈습니다`);
   cardView = VIEW.QUESTION;
   if (deck.stats().completed) go("complete");
   else render();
@@ -559,7 +493,7 @@ function handleBury() {
 
 // --- 보관함 ---
 function renderVault() {
-  setTopbar("외운 단어", true);
+  setTopbar("외운 단어", true, () => go(deck && deck.stats().completed ? "complete" : "study"));
   const learned = deck.learnedWords();
   const screen = el("div", "screen vault");
 
@@ -576,7 +510,7 @@ function renderVault() {
   head.appendChild(rev);
   screen.appendChild(head);
 
-  screen.appendChild(el("div", "set-note", "확실히 외운 단어는 완전히 외움으로 옮기면 복습 목록에서 빠집니다. 이미 외운 것이라 완료율은 그대로고, 다시 안 볼 단어 목록에서 되살릴 수 있습니다."));
+  screen.appendChild(el("div", "set-note", "확실히 외운 단어는 완전히 외움으로 옮기면 아카이브로 가서 이 세트에서 빠집니다. 홈의 아카이브에서 되살릴 수 있습니다."));
 
   const bulk = el("button", "btn-sm btn-ghost vault-bulk", "전부 완전히 외움");
   bulk.onclick = confirmMasterAll;
@@ -597,9 +531,9 @@ function renderVault() {
     }
     const grad = el("button", "btn-sm btn-ghost", "완전히 외움");
     grad.onclick = () => {
-      deck.buryLearned(w.id, now());
+      deck.archiveLearned(w.id, now());
       saveDeck();
-      showToast(`“${w.word}”를 완전히 외운 단어로 옮겼습니다`);
+      showToast(`“${w.word}”를 아카이브로 보냈습니다`);
       render();
     };
     item.appendChild(grad);
@@ -615,40 +549,91 @@ async function confirmMasterAll() {
   if (n === 0) return;
   const r = await showModal({
     title: "전부 완전히 외움",
-    body: `외운 단어 ${n}개를 복습 목록에서 내립니다. 완료율은 그대로이고, 다시 안 볼 단어 목록에서 되살릴 수 있습니다. 계속할까요?`,
+    body: `외운 단어 ${n}개를 아카이브로 보냅니다. 이 세트에서 빠지고, 홈의 아카이브에서 되살릴 수 있습니다. 계속할까요?`,
     actions: [
       { label: "취소", value: "cancel" },
       { label: "정리", value: "ok", primary: true },
     ],
   });
   if (r !== "ok") return;
-  const done = deck.buryAllLearned(now());
+  const done = deck.archiveAllLearned(now());
   saveDeck();
-  showToast(`${done}개를 완전히 외운 단어로 옮겼습니다`);
+  showToast(`${done}개를 아카이브로 보냈습니다`);
   render();
 }
 
-// --- 다시 안 볼 단어 목록 (이미 아는 단어 · 완전히 외운 단어) ---
+// --- 아카이브 (전 세트 통합) ---
+// 아카이브한 단어는 세트에서 빠져 있어 세트 화면 어디에도 안 나온다. 홈의 아카이브 카드로만 들어온다.
+// 열 때 아카이브가 있는 세트만 파일을 읽는다(없는 세트는 내려받지 않는다).
+async function openArchive() {
+  try {
+    const items = [];
+    for (const s of ((MANIFEST && MANIFEST.sets) || [])) {
+      if (!s.available) continue;
+      const st = store.get(deckKey(s.setId));
+      const prog = (st && st.progress) || {};
+      if (!Object.keys(prog).some((id) => prog[id].status === "buried")) continue;
+      const data = await fetch(DATA_DIR + s.file, { cache: "no-cache" }).then((r) => r.json());
+      for (const w of data.words) {
+        const p = prog[w.id];
+        if (!p || p.status !== "buried") continue;
+        items.push({
+          ...w,
+          setTitle: s.title,
+          setNum: s.setId.replace(/\D/g, ""),
+          tier: p.buriedTier === ARCHIVE_TIER.MASTERED ? ARCHIVE_TIER.MASTERED : ARCHIVE_TIER.KNOWN,
+        });
+      }
+    }
+    ARCHIVE = items;
+    go("archive");
+  } catch {
+    showToast("아카이브를 불러오지 못했습니다");
+  }
+}
+
+// 아카이브에서 되살리기 - 원본 세트의 저장 상태를 직접 고친다(아카이브는 세트를 고르기 전 화면이라
+// 덱이 없을 수 있다). 마침 그 세트를 열어 둔 상태면 덱도 다시 만들어 화면 수치를 맞춘다.
+function unarchiveInSource(word) {
+  const key = deckKey(word.setId);
+  const st = store.get(key);
+  if (!st || !st.progress || !st.progress[word.id]) return false;
+  const p = st.progress[word.id];
+  if (p.status !== "buried") return false;
+  const mastered = p.buriedTier === ARCHIVE_TIER.MASTERED;
+  p.status = mastered ? "learned" : "active"; // 외운 단어는 복습 목록으로, 그 밖은 학습으로
+  p.buriedAt = null;
+  p.buriedTier = null;
+  st.undo = null; // 외부에서 상태를 바꿨으니 그 세트의 직전-처리 undo는 무효화
+  store.set(key, st);
+  if (!bundleMode && currentSetId === word.setId && DATA) buildDeck();
+  ARCHIVE = ARCHIVE.filter((x) => x.id !== word.id);
+  return true;
+}
+
 // "이미 아는 단어"는 되살리기를 기본으로 내놓지 않는다(원칙상 학습에 다시 넣지 않는다).
 // 다만 잘못 넣은 단어까지 갇히지는 않도록, 안내를 눌러 펼쳤을 때만 되살리기가 나타난다.
-function renderBuried() {
-  setTopbar("다시 안 볼 단어", true);
-  const known = deck.buriedWords(BURY_TIER.KNOWN);
-  const mastered = deck.buriedWords(BURY_TIER.MASTERED);
+function renderArchive() {
+  setTopbar("아카이브", true, () => go("menu"));
+  const known = ARCHIVE.filter((w) => w.tier === ARCHIVE_TIER.KNOWN);
+  const mastered = ARCHIVE.filter((w) => w.tier === ARCHIVE_TIER.MASTERED);
   const screen = el("div", "screen vault");
 
-  if (known.length + mastered.length === 0) {
-    screen.appendChild(el("div", "empty-note", "다시 안 볼 단어가 없습니다.\n학습에서 “이미 아는 단어로 빼기”를,\n외운 단어 목록에서 “완전히 외움”을 누르면 여기 모입니다."));
+  if (ARCHIVE.length === 0) {
+    screen.appendChild(el("div", "empty-note", "아카이브가 비어 있습니다.\n학습에서 “이미 아는 단어로 빼기”를,\n외운 단어 목록에서 “완전히 외움”을 누르면 여기 모입니다."));
     stage.appendChild(screen);
     return;
   }
 
-  // 한 단어 행(발음 + 선택적 되살리기).
+  screen.appendChild(el("div", "set-note", "아카이브한 단어는 세트에서 빠져 학습·복습·개수 어디에도 나오지 않습니다. 되살리면 그 세트로 돌아갑니다."));
+
+  // 한 단어 행(어느 세트에서 왔는지 + 발음 + 선택적 되살리기).
   const itemOf = (w, onRestore, restoreLabel) => {
     const item = el("div", "vault-item");
     const left = el("div", "vault-item-main");
     left.appendChild(el("div", "vault-word", w.word));
     left.appendChild(el("div", "vault-mean", w.meaningKr.join(", ")));
+    left.appendChild(el("div", "vault-src", `SET ${w.setNum} · ${w.setTitle}`));
     item.appendChild(left);
     if (speechSupported()) {
       const spk = el("button", "speak-btn small", ICON.speaker);
@@ -664,20 +649,17 @@ function renderBuried() {
     return item;
   };
 
-  // 이미 아는 단어 - 학습 대상에서 빠져 완료율 분모에도 들어가지 않는다.
+  // 이미 아는 단어 - 되살리면 학습으로 돌아간다.
   const kHead = el("div", "vault-head");
   kHead.appendChild(el("div", "vault-title", `이미 아는 단어 ${known.length}개`));
   screen.appendChild(kHead);
-  screen.appendChild(el("div", "set-note", "학습·복습 어디에도 나오지 않고, 완료율 계산에서도 빠집니다. 다시 학습에 넣지 않는 것이 원칙입니다."));
   if (known.length === 0) {
     screen.appendChild(el("div", "vault-none", "아직 없습니다."));
   } else {
     const list = el("div", "vault-list");
     for (const w of known) {
       list.appendChild(itemOf(w, knownRecover ? () => {
-        deck.unbury(w.id);
-        saveDeck();
-        showToast(`“${w.word}”를 학습 목록으로 되돌렸습니다`);
+        if (unarchiveInSource(w)) showToast(`“${w.word}”를 학습으로 되돌렸습니다`);
         render();
       } : null, "학습으로 되돌리기"));
     }
@@ -687,20 +669,17 @@ function renderBuried() {
     screen.appendChild(toggle);
   }
 
-  // 완전히 외운 단어 - 복습까지 졸업했고 진도상 외움으로 남아 있다.
+  // 완전히 외운 단어 - 되살리면 그 세트의 복습 목록으로 돌아간다.
   const mHead = el("div", "vault-head vault-head-gap");
   mHead.appendChild(el("div", "vault-title", `완전히 외운 단어 ${mastered.length}개`));
   screen.appendChild(mHead);
-  screen.appendChild(el("div", "set-note", "외운 단어로 계산에 남아 있고 복습 목록에서만 빠집니다. 되살리면 복습 목록으로 돌아갑니다."));
   if (mastered.length === 0) {
     screen.appendChild(el("div", "vault-none", "아직 없습니다."));
   } else {
     const list = el("div", "vault-list");
     for (const w of mastered) {
       list.appendChild(itemOf(w, () => {
-        deck.unbury(w.id);
-        saveDeck();
-        showToast(`“${w.word}”를 복습 목록으로 되돌렸습니다`);
+        if (unarchiveInSource(w)) showToast(`“${w.word}”를 복습 목록으로 되돌렸습니다`);
         render();
       }, "복습으로 되돌리기"));
     }
@@ -787,14 +766,14 @@ function reviewNext(id, remembered) {
 
 // --- 세트 완료 ---
 function renderComplete() {
-  setTopbar("세트 완료", true);
+  setTopbar("세트 완료", true, () => go("menu"));
   const s = deck.stats();
   const screen = el("div", "screen complete");
   screen.appendChild(el("div", "complete-badge", "✓"));
   screen.appendChild(el("div", "complete-title", `SET ${s.setId.replace(/\D/g, "") || "01"} 완료`));
-  screen.appendChild(el("div", "complete-sub", s.buried
-    ? `${s.start}개 학습 완료 · 외운 단어 ${s.done}개 · 이미 아는 단어 ${s.buried}개`
-    : `${s.start}개 학습 완료 · 외운 단어 ${s.done}개`));
+  screen.appendChild(el("div", "complete-sub", s.total === 0
+    ? "이 세트의 단어를 모두 아카이브로 보냈습니다"
+    : `${s.total}개 학습 완료 · 외운 단어 ${s.learned}개`));
 
   // 마지막 단어를 실수로 처리해 완료됐을 때를 위한 되돌리기(안전장치 - 학습 화면과 동일).
   if (deck.canUndo()) {
@@ -815,15 +794,12 @@ function renderComplete() {
     rb.onclick = () => go("vault");
     actions.appendChild(rb);
   }
-  // 단어를 전부 "이미 아는 단어"로 빼서 완료된 경우에도 목록을 열 경로가 필요하다.
-  if (!bundleMode && s.buried + s.mastered > 0) {
-    const bb = el("button", "btn-xl btn-ghost", `다시 안 볼 단어 (${s.buried + s.mastered})`);
-    bb.onclick = () => go("buried");
-    actions.appendChild(bb);
-  }
   const restart = el("button", "btn-xl btn-ghost", "처음부터 다시");
   restart.onclick = confirmReset;
   actions.appendChild(restart);
+  const back = el("button", "btn-xl btn-ghost", "세트 목록으로");
+  back.onclick = () => go("menu");
+  actions.appendChild(back);
   screen.appendChild(actions);
 
   stage.appendChild(screen);
@@ -831,8 +807,8 @@ function renderComplete() {
 
 // --- 설정 ---
 function renderSettings() {
-  // 설정은 메뉴/세트 홈 어디서든 들어올 수 있으니, 돌아갈 곳을 상황에 맞게 정한다.
-  setTopbar("설정", true, () => go(DATA ? "home" : "menu"));
+  // 설정은 어느 화면에서든 들어올 수 있으니, 들어오기 직전 화면으로 돌아간다.
+  setTopbar("설정", true, () => go(settingsFrom === "settings" ? "menu" : settingsFrom));
   const screen = el("div", "screen settings");
 
   const toggle = (label, desc, key) => {
@@ -930,7 +906,7 @@ async function confirmReset() {
   buildDeck();
   saveDeck();
   showToast("이 세트를 초기화했습니다");
-  go("home");
+  go("study");
 }
 
 // --- 부팅 ---

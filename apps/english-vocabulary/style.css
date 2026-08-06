@@ -210,6 +210,10 @@ body[data-fs="large"] { --fs: 1.15; }
 /* 못 외운 단어 모음 카드 - 세트 카드와 구분되게 강조. */
 .menu-remaining { border-color: var(--accent); background: var(--bg-elev); margin-bottom: var(--sp-2); }
 .menu-remaining .menu-set-title { color: var(--accent); }
+/* 아카이브 카드 - 학습 대상이 아니라는 것을 점선 테두리와 눌린 색으로 알린다(강조하지 않는다). */
+.menu-archive { border-style: dashed; background: transparent; margin-bottom: var(--sp-2); }
+.menu-archive .menu-set-title { color: var(--fg-dim); }
+.menu-archive .menu-set-pct { color: var(--fg-mute); }
 .menu-set-done { opacity: 0.5; cursor: default; }
 
 /* --- 학습 / 복습 카드 --- */
@@ -338,7 +342,9 @@ body[data-fs="large"] { --fs: 1.15; }
 .vault-item-main { flex: 1; min-width: 0; }
 .vault-word { font-size: calc(18px * var(--fs)); font-weight: 800; }
 .vault-mean { font-size: calc(14px * var(--fs)); color: var(--fg-dim); }
-/* 다시 안 볼 단어 화면은 두 묶음이라 두 번째 머리에 간격을 준다. */
+/* 아카이브는 전 세트를 한데 모으므로 단어마다 출신 세트를 밝힌다. */
+.vault-src { font-size: calc(12px * var(--fs)); color: var(--fg-mute); margin-top: 2px; }
+/* 아카이브 화면은 두 묶음이라 두 번째 머리에 간격을 준다. */
 .vault-head-gap { margin-top: var(--sp-5); }
 .vault-none { font-size: calc(14px * var(--fs)); color: var(--fg-mute); padding: var(--sp-2) 0; }
 /* 외운 단어 전부 정리 - 목록 위에 놓는 보조 동작이라 폭을 채우지 않는다. */

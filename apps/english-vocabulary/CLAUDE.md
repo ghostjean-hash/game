@@ -5,7 +5,7 @@
 # 1. 앱 정의
 
 1.1. **한 줄**: 200개에서 시작해 외운 단어를 하나씩 지워가며, 남은 단어만 계속 반복해 결국 0개로 만드는 반복 암기 단어장. 시험·타이핑 없이 "모름/외움" 두 버튼으로만 굴린다. 직장인·중장년 포함 대상이라 큰 글자·큰 버튼·라이트 테마.
-1.2. **상태**: 앱 기능 완성(회상형 학습·세트 선택 메뉴·세트별 진도·목록 표시 설정·못 외운 단어 모음·다시 안 보기 두 갈래). 콘텐츠는 **공식 2022 개정 3,000단어 제작·검수 완료**(2026-07-30, 초등 800 + 중등 1,200 + 고등 1,000). 전수 통합 검사 통과 기록은 `docs/sources/moe-2022-english/vocab-3000-final-audit.md`.
+1.2. **상태**: 앱 기능 완성(회상형 학습·세트 선택 메뉴·세트별 진도·목록 표시 설정·못 외운 단어 모음·아카이브 두 갈래). 콘텐츠는 **공식 2022 개정 3,000단어 제작·검수 완료**(2026-07-30, 초등 800 + 중등 1,200 + 고등 1,000). 전수 통합 검사 통과 기록은 `docs/sources/moe-2022-english/vocab-3000-final-audit.md`.
    - **앱 반영 현황**: **SET01~15 전량 반영 완료**(2026-07-30, 초등 800 + 중등 1,200 + 고등 1,000 = 3,000). manifest 15세트 전부 `available:true`·`count:200`, `dataVersion: moe-2022-full-v1`. 설계 정본 - 초등 `docs/elementary-learning-set-design.md`, 중·고 `docs/middle-high-learning-set-design.md`. 재변환이 필요하면 `node tools/apply-tier-topic-proposal.mjs <middle|high>`(제안 JSON → `set-NNN.json` + manifest 갱신, 멱등).
    - 세트 구성(사용자 확정 2026-07-30) - 중등 SET05 나와 사람들 / SET06 집과 먹고 입기 / SET07 학교와 배움 / SET08 동네와 이동 / SET09 자연과 환경 / SET10 사회와 일. 고등 SET11 사람과 마음 / SET12 생활과 사물 / SET13 학문과 표현 / SET14 자연과 세계 / SET15 사회와 사고.
 1.3. **위치**: game-hub 허브의 두 번째 "app"(english-reading 형제). `apps/_registry.json` 등록, 별도 자비스 도메인 아님.
@@ -20,7 +20,7 @@ apps/english-vocabulary/
 ├── index.html            # 진입점 (topbar / stage 1개, 화면은 JS가 교체 렌더)
 ├── style.css             # 라이트 테마 + 큰 글자(글자크기 3단계 --fs 배율)
 ├── src/
-│   ├── main.js           # 화면 조립 + 이벤트(DOM). home/study/vault/review/complete/settings
+│   ├── main.js           # 화면 조립 + 이벤트(DOM). menu/study/vault/archive/review/complete/settings
 │   ├── core/
 │   │   └── deck.js       # 학습 순환 순수 로직 (DOM 미의존, rng 주입)
 │   └── data/
@@ -36,13 +36,15 @@ apps/english-vocabulary/
 3.2. **타이핑 0, 100% 클릭·터치**. 철자 입력·객관식 강제·정답 판정 없음. 처리는 "모름/외움" 두 버튼 + 키보드(←/1=모름, →/2=외움, 스페이스=발음).
 3.3. **라이트 테마 단독**. `body` 스코프에서 허브 다크 토큰을 라이트로 재정의(english-reading 방식). 테마 토글 없음. 대신 글자 크기 3단계(작게/보통/크게, `body[data-fs]` → `--fs` 배율).
 3.4. **학습 규칙은 deck.js가 권위**(요청서 2·9장). active 단어만 순환, "외움"=learned로 빠짐(영구삭제 아님), "모름"=active 유지. 한 바퀴(round)=현재 active를 한 번씩 다 봄 → 바퀴 끝나면 남은 active 셔플해 새 바퀴. "모름" 단어는 이번 바퀴 재출제 안 함(다음 바퀴부터). active 0=세트 완료. 순수 로직이라 rng 주입으로 테스트 결정성 확보(순서섞기 OFF면 rng=null → 원본 순서).
-3.4.1. **세 번째 상태 buried = "다시 안 보기". 갈래가 둘이다**(2026-08-06 사용자 지시). `progress.buriedTier`에 `BURY_TIER.KNOWN` / `BURY_TIER.MASTERED`가 들어간다. **화면 문구로 "1차/2차"를 쓰지 않는다** - 순서처럼 읽혀 뜻이 안 드러난다는 사용자 지적(2026-08-06)으로 폐기했다. 이름이 곧 뜻인 아래 두 말만 쓴다.
-   - **KNOWN = "이미 아는 단어"**(banana처럼 애초에 배울 필요가 없는 것). 진입은 학습 화면 하단 "이미 아는 단어로 빼기"(`bury`). 학습 순환·복습·"못 외운 단어 모음" 전부에서 빠지고 **진도 분모에서도 제외**된다. 원칙상 학습으로 되돌리지 않는다 - 회복은 직전 1회 Undo이고, 목록의 되살리기는 기본 접힘 상태로 두어 펼쳐야만 나온다.
-   - **MASTERED = "완전히 외운 단어"**(learned를 복습까지 졸업시킨 것). 진입은 외운 단어 목록의 "완전히 외움"(`buryLearned`) 또는 "전부 완전히 외움"(`buryAllLearned`, 확인 모달). 복습 목록에서만 빠지고 **진도 분자에는 그대로 남는다**. `unbury`하면 active가 아니라 learned로 복귀한다.
-   - **진도 계산**: `stats().start` = 원본 - KNOWN, `stats().done` = learned + MASTERED(분자), `remaining` = start - done. `learned`는 "복습 목록에 남은 수"로 뜻이 좁다. 원본 수는 `stats().total`. MASTERED로 옮겨도 완료율이 뒤로 가지 않는 것이 이 계산의 목적이므로 분자에서 빼지 말 것.
-   - **v1 저장본 호환**: 갈래 개념이 없던 저장본의 buried는 `normalizeTier()`가 KNOWN으로 읽는다(당시 의미와 동일). 같은 규칙이 main.js `setProgress()`에도 있으니 한쪽만 고치지 말 것.
-   - "이미 아는 단어로 빼기" 버튼은 판정 버튼과 크기·위치를 달리한 하단 보조 버튼이고 **키보드 단축키를 일부러 두지 않는다**(오타로 제외되는 사고 방지).
-3.5. **안전장치 1차 포함**(요청서 핵심 수정). (a) 직전 처리 1회 Undo(mark·bury 직전 스냅샷 복원, 연속 불가). (b) 외운 단어 보관함 + 수동 복습: "기억남"=learned 유지·복습시각 갱신, "모름"=active 복귀(다음 바퀴 재등장). 복습은 Undo 대상 아님. (c) 다시 안 볼 단어 목록(홈·완료 화면의 "다시 안 볼 단어 (N)")에서 개별 되살리기 - 전부 빼서 세트가 완료로 넘어간 경우에도 진입 가능. "이미 아는 단어" 되살리기는 접힘 기본(3.4.1).
+3.4.1. **세 번째 상태 = 아카이브**(2026-08-06 사용자 지시). 저장 문자열은 예전 그대로 `status:"buried"` + `buriedTier`이고 이름만 아카이브다(마이그레이션 없음). API는 `archiveKnown` / `archiveLearned` / `archiveAllLearned` / `archivedWords(tier)` / `unarchive`, 상수는 `ARCHIVE_TIER.KNOWN` / `ARCHIVE_TIER.MASTERED`.
+   - **아카이브한 단어는 그 세트에 없는 것과 같다**(핵심 규칙). `stats().total` = 파일 개수 - 아카이브이므로 200단어 중 197개를 아카이브하면 그 세트는 "3단어짜리 세트"가 된다. 남은 개수·완료율·세트 카드·층 합계 어디에도 아카이브 수가 드러나면 안 된다. 파일 개수는 `stats().sourceTotal`로 남기되 **화면에 쓰지 않는다**. 화면 문구로 "제외 N개" 같은 표시를 되살리지 말 것.
+   - **두 갈래는 되살릴 때 돌아가는 곳만 다르다**. KNOWN("이미 아는 단어", 학습 화면 "이미 아는 단어로 빼기") → 되살리면 active. MASTERED("완전히 외운 단어", 외운 단어 목록 "완전히 외움" / "전부 완전히 외움") → 되살리면 learned(복습 목록). 세트 크기에서 빠지는 것은 둘 다 같다.
+   - **진도 계산**: `total` = sourceTotal - archived, `remaining` = total - learned, `percent` = learned / total. total 0이면 percent 100(0 나눗셈 방지)·completed. 외운 단어를 아카이브하면 분자와 분모가 함께 줄어 완료율이 달라진다 - 아카이브는 "이 세트에서 뺀다"는 뜻이므로 의도된 동작이다.
+   - **아카이브 화면은 전 세트 통합**이고 홈(세트 목록)의 아카이브 카드로만 들어간다. 세트를 고르기 전 화면이라 덱이 없을 수 있어, 되살리기는 `unarchiveInSource()`가 그 세트의 저장본을 직접 고친다(열려 있는 세트면 `buildDeck()`로 덱도 다시 만든다). 목록은 아카이브가 있는 세트의 파일만 읽는다.
+   - **v1 저장본 호환**: 갈래 개념이 없던 저장본의 buried는 `normalizeTier()`가 KNOWN으로 읽는다. 같은 규칙이 main.js `setProgress()`에도 있으니 한쪽만 고치지 말 것.
+   - KNOWN 되살리기는 기본 접힘("잘못 넣은 단어가 있나요?"를 눌러야 나온다). 학습 화면의 빼기 버튼은 판정 버튼과 크기·위치를 달리하고 **키보드 단축키를 두지 않는다**(오타 사고 방지).
+3.4.2. **화면 구성 - 중간 화면 없음**(2026-08-06 사용자 지시로 세트 홈 폐기). 홈(세트 목록) → 세트를 누르면 **곧바로 학습**이다. 세트별 진도 요약 화면(옛 `renderHome`)은 삭제했고 되살리지 말 것("서브화면 정보에는 관심이 없어"). 그래서 진입점이 이렇게 옮겨졌다 - 복습은 **학습 화면 상단바 버튼**(`#nav-vault`, 외운 단어가 있고 모음이 아닐 때만 노출), 아카이브는 **홈의 아카이브 카드**, 초기화·세트 목록 복귀는 **완료 화면**과 **설정**. 설정은 들어오기 직전 화면(`settingsFrom`)으로 돌아간다.
+3.5. **안전장치 1차 포함**(요청서 핵심 수정). (a) 직전 처리 1회 Undo(mark·bury 직전 스냅샷 복원, 연속 불가). (b) 외운 단어 보관함 + 수동 복습: "기억남"=learned 유지·복습시각 갱신, "모름"=active 복귀(다음 바퀴 재등장). 복습은 Undo 대상 아님. (c) 홈의 아카이브 화면에서 개별 되살리기 - 세트를 통째로 아카이브한 경우에도 홈에서 바로 들어갈 수 있다. KNOWN 되살리기는 접힘 기본(3.4.1).
 3.6. **저장은 기기 저장**(localStorage, `createStorage("english-vocabulary")` → `gg.english-vocabulary.*`): `deck`(serialize 상태 - progress·queue·round·undo·lastStudiedAt), `settings`(토글·글자크기). 원본 단어(words.json)와 진행(progress) 분리 - 원본이 바뀌어도(단어 추가/삭제) 기존 id 진행은 보존, 새 단어는 active로 합류(deck.js 초기화 로직).
 3.7. **발음은 SpeechSynthesis**(요청서 13장). 단어 클릭·스페이스로 재생, `lang=en-US`. 자동 재생 기본 OFF. 미지원·실패해도 try/catch로 학습 흐름 안 막음(발음 버튼은 지원 시에만 노출).
 3.8. **버튼 아이콘은 인라인 SVG**(발음 스피커·Undo·뒤로·설정). 이모지·유니코드 문자를 버튼 아이콘으로 쓰지 않음(english-reading 5.6 규칙 준용). 완료 badge(✓)·토스트는 버튼 아님이라 예외.
