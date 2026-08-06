@@ -4,7 +4,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { createDeck } from "../src/core/deck.js";
+import { createDeck, BURY_TIER } from "../src/core/deck.js";
 import { VIEW, initialCardView, resolveKey } from "../src/core/viewstate.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -205,7 +205,7 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   eq(deck.serialize().progress[g.id].unknownCount, 0, "Undo로 unknownCount 원복");
 })();
 
-// --- 11. 다시 안 보기(buried): 영구 제외 + 진도 분모 제외 + 되살리기 ---
+// --- 11. 다시 안 보기 1차(이미 아는 단어): 학습 대상 제외 + 진도 분모 제외 + 되살리기 ---
 (() => {
   const deck = createDeck(DATA, null, seededRng(31));
   const n = DATA.words.length;
@@ -263,6 +263,90 @@ function markAll(deck, type, now = "2026-07-23T00:00:00Z") {
   ok(s.completed, "학습 대상이 없으면 세트 완료로 처리");
   eq(s.percent, 100, "분모 0에서 완료율은 100(0 나눗셈 방지)");
   eq(deck.buriedWords().length, DATA.words.length, "묻은 목록에서 전부 되살릴 수 있음");
+})();
+
+// --- 13. 다시 안 보기 2차(외운 단어 정리): 복습에서만 제외 + 진도 분자 유지 + 복습 복귀 ---
+(() => {
+  const deck = createDeck(DATA, null, seededRng(41));
+  const n = DATA.words.length;
+  deck.mark("known", "t1");
+  deck.mark("known", "t2");
+  const before = deck.stats();
+  eq(before.done, 2, "외운 2개가 진도 분자(done)");
+  eq(before.learned, 2, "복습 대상은 2개");
+
+  const target = deck.learnedWords()[0].id;
+  ok(deck.buryLearned(target, "m1"), "외운 단어를 2차로 정리");
+  eq(deck.serialize().progress[target].status, "buried", "2차도 buried 상태");
+  eq(deck.serialize().progress[target].buriedTier, BURY_TIER.MASTERED, "2차 단계 기록");
+  ok(deck.serialize().progress[target].buriedAt === "m1", "정리 시각 기록");
+
+  const s = deck.stats();
+  eq(s.mastered, 1, "stats.mastered 집계");
+  eq(s.buried, 0, "2차는 1차 집계(buried)에 들어가지 않음");
+  eq(s.learned, 1, "복습 대상에서 빠짐");
+  eq(s.done, before.done, "이미 외운 단어라 진도 분자는 그대로");
+  eq(s.start, n, "2차는 학습 대상(분모)을 줄이지 않음");
+  eq(s.percent, before.percent, "2차로 정리해도 완료율이 뒤로 가지 않음");
+  eq(s.remaining, before.remaining, "남은 단어 수도 그대로");
+  ok(!deck.learnedWords().some((w) => w.id === target), "2차 단어는 복습 목록에 없음");
+
+  // 단계별 목록 분리
+  deck.bury("b1"); // 지금 보는 active 단어를 1차로
+  eq(deck.buriedWords(BURY_TIER.KNOWN).length, 1, "1차 목록 1개");
+  eq(deck.buriedWords(BURY_TIER.MASTERED).length, 1, "2차 목록 1개");
+  eq(deck.buriedWords().length, 2, "단계 미지정이면 전체");
+  eq(deck.stats().start, n - 1, "1차만 분모를 줄임");
+
+  // 되살리기 - 2차는 복습 목록(learned)으로, 1차는 학습(active)으로
+  ok(deck.unbury(target), "2차 되살리기 성공");
+  eq(deck.serialize().progress[target].status, "learned", "2차를 되살리면 복습 목록으로 복귀");
+  eq(deck.serialize().progress[target].buriedTier, null, "되살리면 단계 값 비움");
+  eq(deck.stats().learned, 2, "복습 대상 원복");
+  eq(deck.stats().done, before.done, "되살려도 진도 분자는 동일");
+
+  // 저장·복원 왕복에도 단계가 유지된다.
+  deck.buryLearned(target, "m2");
+  const saved = JSON.parse(JSON.stringify(deck.serialize()));
+  const restored = createDeck(DATA, saved, seededRng(41));
+  eq(restored.stats().mastered, 1, "복원 후에도 2차 유지");
+  eq(restored.stats().buried, 1, "복원 후에도 1차 유지");
+  eq(restored.stats().done, before.done, "복원 후 진도 분자 동일");
+
+  ok(!deck.buryLearned("ev-s01-0000-none", "m3"), "없는 id 정리는 무해하게 false");
+})();
+
+// --- 14. 단계가 없던 저장본(v1) 호환: 옛 buried는 1차로 읽는다 ---
+(() => {
+  const deck = createDeck(DATA, null, seededRng(43));
+  const f = deck.current();
+  deck.bury("b1");
+  // v1 저장본 모사 - buriedTier 키 자체가 없던 시절
+  const saved = JSON.parse(JSON.stringify(deck.serialize()));
+  saved.version = 1;
+  delete saved.progress[f.id].buriedTier;
+
+  const restored = createDeck(DATA, saved, seededRng(43));
+  eq(restored.serialize().progress[f.id].buriedTier, BURY_TIER.KNOWN, "옛 buried는 1차로 승격");
+  eq(restored.stats().buried, 1, "1차 집계에 포함");
+  eq(restored.stats().mastered, 0, "2차로 새지 않음");
+  eq(restored.stats().start, DATA.words.length - 1, "옛 저장본의 분모 계산이 그대로 유지");
+})();
+
+// --- 15. 전부 2차로 정리(일괄) ---
+(() => {
+  const deck = createDeck(DATA, null, seededRng(47));
+  markAll(deck, "known", "t");
+  const before = deck.stats();
+  ok(before.completed, "전부 외우면 완료");
+  const n = deck.buryAllLearned("m");
+  eq(n, DATA.words.length, "외운 단어 전부가 정리 대상");
+  const s = deck.stats();
+  eq(s.learned, 0, "복습 목록 비움");
+  eq(s.mastered, DATA.words.length, "전부 2차");
+  eq(s.done, before.done, "진도 분자 유지");
+  eq(s.percent, 100, "완료율 100 유지");
+  ok(s.completed, "완료 상태 유지");
 })();
 
 console.log(`\n[english-vocabulary] 테스트 완료: ${pass} PASS, ${fail} FAIL`);

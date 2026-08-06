@@ -338,6 +338,21 @@ body[data-fs="large"] { --fs: 1.15; }
 .vault-item-main { flex: 1; min-width: 0; }
 .vault-word { font-size: calc(18px * var(--fs)); font-weight: 800; }
 .vault-mean { font-size: calc(14px * var(--fs)); color: var(--fg-dim); }
+/* 다시 안 볼 단어 화면은 1차·2차 두 묶음이라 두 번째 머리에 간격을 준다. */
+.vault-head-gap { margin-top: var(--sp-5); }
+.vault-none { font-size: calc(14px * var(--fs)); color: var(--fg-mute); padding: var(--sp-2) 0; }
+/* 외운 단어 전부 정리 - 목록 위에 놓는 보조 동작이라 폭을 채우지 않는다. */
+.vault-bulk { align-self: flex-start; }
+/* 1차 되살리기 펼침 - 원칙(되돌리지 않음)을 흐리지 않도록 버튼이 아닌 글줄로 둔다. */
+.vault-linkbtn {
+  align-self: flex-start;
+  padding: var(--sp-2) 0;
+  background: none; border: none;
+  color: var(--fg-mute);
+  font-size: calc(13px * var(--fs)); font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 /* --- 세트 완료 --- */
 .complete { align-items: center; justify-content: center; text-align: center; gap: var(--sp-4); }
