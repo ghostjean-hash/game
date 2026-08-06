@@ -8,21 +8,22 @@
 //  - 직전 처리 1회 undo. 보관함(learned) 수동 복습에서 "모름"이면 active로 복귀.
 //
 // 세 번째 상태 buried = "다시 안 보기". 단계가 둘이고 의미가 서로 다르다(2026-08-06 사용자 지시).
-//  - 1차 KNOWN    : banana처럼 애초에 배울 필요가 없는 단어. 학습 대상 자체에서 뺀다.
+//  - KNOWN(이미 아는 단어)     : banana처럼 애초에 배울 필요가 없는 단어. 학습 대상 자체에서 뺀다.
 //                   진도 분모(start)에서 빠져 "제외하고 남은 실질 개수"가 기준이 된다.
 //                   원칙상 학습으로 되돌리지 않는다(회복 경로는 직전 1회 undo).
-//  - 2차 MASTERED : 외운(learned) 뒤 복습까지 졸업시킨 단어. 이미 외운 것이라
+//  - MASTERED(완전히 외운 단어): 외운(learned) 뒤 복습까지 졸업시킨 단어. 이미 외운 것이라
 //                   진도 분자(done)에는 그대로 남고 복습 목록에서만 빠진다.
 //                   되살리면 learned로 복귀해 복습 목록에 다시 나온다.
 //
-// 진도 계산 - start = 원본 - 1차, done = learned + 2차, remaining = start - done.
-// 그래서 외운 단어를 2차로 정리해도 완료율이 뒤로 가지 않는다.
+// 진도 계산 - start = 원본 - KNOWN, done = learned + MASTERED, remaining = start - done.
+// 그래서 외운 단어를 MASTERED로 옮겨도 완료율이 뒤로 가지 않는다.
 //
 // 상태(serialize 결과)는 그대로 localStorage에 저장한다.
 
 export const STATE_VERSION = 2;
 
-// 다시 안 보기 단계. 저장된 progress의 buriedTier에 이 값이 들어간다.
+// 다시 안 보기 갈래. 저장된 progress의 buriedTier에 이 값이 들어간다.
+// 화면 문구는 KNOWN="이미 아는 단어", MASTERED="완전히 외운 단어"(main.js).
 export const BURY_TIER = { KNOWN: 1, MASTERED: 2 };
 
 // 배열을 rng로 섞은 새 배열 반환(Fisher-Yates). 원본 불변.
@@ -47,9 +48,9 @@ function freshProgress() {
   };
 }
 
-// 저장본에는 단계 개념이 없던 시절(STATE_VERSION 1)의 buried가 섞여 있다.
-// 그때의 "다시 안 보기"는 지금의 1차와 뜻이 같으므로 KNOWN으로 읽는다.
-// buried가 아닌 단어의 buriedTier는 남겨두지 않는다(상태와 단계가 어긋나는 값 방지).
+// 저장본에는 갈래 개념이 없던 시절(STATE_VERSION 1)의 buried가 섞여 있다.
+// 그때의 "다시 안 보기"는 지금의 KNOWN과 뜻이 같으므로 KNOWN으로 읽는다.
+// buried가 아닌 단어의 buriedTier는 남겨두지 않는다(상태와 갈래가 어긋나는 값 방지).
 function normalizeTier(p) {
   if (p.status === "buried") {
     p.buriedTier = p.buriedTier === BURY_TIER.MASTERED ? BURY_TIER.MASTERED : BURY_TIER.KNOWN;
@@ -147,8 +148,8 @@ export function createDeck(data, state = null, rng = Math.random) {
       return deck.round;
     },
 
-    // 진도 기준은 "1차로 제외한 단어를 뺀 실질 개수"(start). 원본 개수는 total로 따로 준다.
-    // 분자는 done = learned(복습 대상) + mastered(2차로 정리한 외운 단어)다.
+    // 진도 기준은 "이미 아는 단어를 뺀 실질 개수"(start). 원본 개수는 total로 따로 준다.
+    // 분자는 done = learned(복습 대상) + mastered(복습까지 졸업한 외운 단어)다.
     stats() {
       let learned = 0;
       let mastered = 0;
@@ -199,7 +200,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       if (deck.queue.length === 0) rebuildRound(true); // 바퀴 종료 → 남은 active 섞어 새 바퀴
     },
 
-    // 지금 보는 단어를 1차로 제외한다 - 이미 아는 쉬운 단어를 학습 대상에서 아예 뺀다.
+    // 지금 보는 단어를 KNOWN으로 뺀다 - 이미 아는 쉬운 단어를 학습 대상에서 아예 뺀다.
     // 학습 처리가 아니므로 seenCount·lastStudiedAt은 건드리지 않는다. 처리한 단어 id 반환.
     bury(now = null) {
       ensureQueue();
@@ -215,7 +216,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       return id;
     },
 
-    // 외운(learned) 단어를 2차로 정리한다 - 복습 목록에서만 빼고 진도는 외움으로 유지.
+    // 외운(learned) 단어를 MASTERED로 옮긴다 - 복습 목록에서만 빼고 진도는 외움으로 유지.
     // 목록에서 고르는 동작이라 학습 undo 대상이 아니다(되살리기로 복구).
     buryLearned(id, now = null) {
       const p = deck.progress[id];
@@ -227,7 +228,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       return true;
     },
 
-    // 외운 단어를 한 번에 2차로 정리. 정리한 개수 반환.
+    // 외운 단어를 한 번에 MASTERED로 옮긴다. 옮긴 개수 반환.
     buryAllLearned(now = null) {
       let n = 0;
       for (const w of words) {
@@ -239,7 +240,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       return n;
     },
 
-    // 묻은 단어 목록(원본 + 진행 병합). tier를 주면 그 단계만 거른다.
+    // 묻은 단어 목록(원본 + 진행 병합). tier를 주면 그 갈래만 거른다.
     buriedWords(tier = null) {
       return words
         .filter((w) => {
@@ -250,8 +251,8 @@ export function createDeck(data, state = null, rng = Math.random) {
         .map((w) => ({ ...w, ...deck.progress[w.id] }));
     },
 
-    // 묻은 단어 되살리기. 1차는 active로(다음 바퀴부터 재등장),
-    // 2차는 외운 단어이므로 learned로 복귀해 복습 목록에 다시 나온다. undo 대상 아님.
+    // 묻은 단어 되살리기. KNOWN은 active로(다음 바퀴부터 재등장),
+    // MASTERED는 외운 단어이므로 learned로 복귀해 복습 목록에 다시 나온다. undo 대상 아님.
     unbury(id) {
       const tier = tierOf(id);
       if (tier === null) return false;
@@ -279,7 +280,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       return true;
     },
 
-    // 보관함: 외운(learned) 단어 목록(원본 + 진행 병합). 2차로 정리한 단어는 빠진다.
+    // 보관함: 외운(learned) 단어 목록(원본 + 진행 병합). MASTERED로 옮긴 단어는 빠진다.
     learnedWords() {
       return words
         .filter((w) => deck.progress[w.id].status === "learned")

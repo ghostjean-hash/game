@@ -88,12 +88,12 @@ function saveDeck() {
   store.set(deckKey(currentSetId), deck.serialize());
 }
 
-// 1차 목록에서 되살리기 버튼을 펼쳤는가(기본 접힘 - 원칙은 되돌리지 않는 것). 화면을 벗어나면 접는다.
-let tier1Recover = false;
+// "이미 아는 단어" 목록에서 되살리기 버튼을 펼쳤는가(기본 접힘 - 원칙은 되돌리지 않는 것). 화면을 벗어나면 접는다.
+let knownRecover = false;
 
 // --- 라우팅 ---
 function go(next) {
-  if (next !== "buried") tier1Recover = false;
+  if (next !== "buried") knownRecover = false;
   view = next;
   render();
 }
@@ -143,7 +143,7 @@ const LEVEL_LABEL = { elementary: "초등", middle: "중등", high: "고등" };
 const DATA_DIR = "./src/data/";
 
 // 세트별 진도를 저장된 덱 상태에서 가볍게 계산(덱을 새로 만들지 않고 요약만).
-// deck.stats()와 같은 기준 - target(분모) = 원본 - 1차 제외, done(분자) = 외움 + 2차 정리.
+// deck.stats()와 같은 기준 - target(분모) = 원본 - 이미 아는 단어, done(분자) = 외움 + 완전히 외움.
 function setProgress(setId, count) {
   const total = count || 0;
   const st = store.get(deckKey(setId));
@@ -156,7 +156,7 @@ function setProgress(setId, count) {
   for (const id in st.progress) {
     const p = st.progress[id];
     if (p.status === "learned") learned++;
-    // 단계가 없던 저장본의 buried는 1차와 뜻이 같다(deck.js normalizeTier와 동일 규칙).
+    // 갈래가 없던 저장본의 buried는 "이미 아는 단어"와 뜻이 같다(deck.js normalizeTier와 동일 규칙).
     else if (p.status === "buried") {
       if (p.buriedTier === BURY_TIER.MASTERED) mastered++;
       else buried++;
@@ -168,7 +168,7 @@ function setProgress(setId, count) {
 }
 
 // 아직 못 외운 단어 수 합계 - 모든 available 세트 기준(층 표시 on/off와 무관).
-// 1차로 제외한 단어와 2차로 정리한 단어는 모두 빠진다.
+// "이미 아는 단어"와 "완전히 외운 단어"는 모두 빠진다.
 function remainingCount() {
   const sets = (MANIFEST && MANIFEST.sets) || [];
   let n = 0;
@@ -295,7 +295,7 @@ async function openRemaining() {
 }
 
 // 모음에서 처리한 결과를 원본 세트 진도에 반영(단일 진도 유지). 저장 상태 JSON 직접 갱신.
-// status: "learned"(알았음) | "buried"(다시 안 보기 1차 - 모음에서는 1차만 처리한다).
+// status: "learned"(알았음) | "buried"(모음에서는 "이미 아는 단어"만 처리한다).
 function applyStatusInSource(word, status, nowIso) {
   const key = deckKey(word.setId);
   const st = store.get(key) || { version: 2, setId: word.setId, round: 1, queue: [], progress: {}, lastStudiedAt: null, undo: null };
@@ -344,7 +344,7 @@ function renderHome() {
   barWrap.appendChild(el("div", "home-bar-fill")).style.width = `${s.percent}%`;
   hero.appendChild(barWrap);
   hero.appendChild(el("div", "hero-sub", s.buried
-    ? `${s.start}개 중 ${s.done}개 외움 · 완료율 ${s.percent}% · 1차 제외 ${s.buried}개`
+    ? `${s.start}개 중 ${s.done}개 외움 · 완료율 ${s.percent}% · 이미 아는 단어 ${s.buried}개`
     : `${s.start}개 중 ${s.done}개 외움 · 완료율 ${s.percent}%`));
   home.appendChild(hero);
 
@@ -359,10 +359,10 @@ function renderHome() {
   grid.appendChild(stat("남은 단어", s.remaining));
   grid.appendChild(stat("외운 단어", s.done));
   grid.appendChild(stat("마지막 학습", fmtDate(s.lastStudiedAt)));
-  // 1차로 제외한 단어가 있을 때만 한 칸을 더 넓게 붙인다(원본 개수와의 차이를 눈으로 확인).
-  if (s.buried) grid.appendChild(stat(`1차 제외 (원본 ${s.total}개 중)`, s.buried, true));
-  // 2차는 진도상 외움에 포함되므로 따로 몇 개가 복습에서 빠졌는지만 보여준다.
-  if (s.mastered) grid.appendChild(stat("2차 정리 (외움에 포함)", s.mastered, true));
+  // "이미 아는 단어"가 있을 때만 한 칸을 더 넓게 붙인다(원본 개수와의 차이를 눈으로 확인).
+  if (s.buried) grid.appendChild(stat(`이미 아는 단어 (원본 ${s.total}개 중)`, s.buried, true));
+  // "완전히 외운 단어"는 진도상 외움에 포함되므로 몇 개가 복습에서 빠졌는지만 보여준다.
+  if (s.mastered) grid.appendChild(stat("완전히 외움 (외운 수에 포함)", s.mastered, true));
   home.appendChild(grid);
 
   const actions = el("div", "home-actions");
@@ -375,7 +375,7 @@ function renderHome() {
       back.onclick = () => go("menu");
       actions.appendChild(back);
     } else {
-      // 외운 단어를 전부 2차로 정리하면 복습할 것이 없으므로 버튼을 내린다.
+      // 외운 단어를 전부 옮기면 복습할 것이 없으므로 버튼을 내린다.
       if (s.learned > 0) {
         const rb = el("button", "btn-xl btn-accent", `외운 단어 복습 (${s.learned})`);
         rb.onclick = () => go("vault");
@@ -509,8 +509,8 @@ function renderStudy() {
     btns.appendChild(known);
     foot.appendChild(btns);
     foot.appendChild(el("div", "study-hint", "← 또는 1: 몰랐음 · → 또는 2: 알았음"));
-    // 1차 제외는 큰 판정 버튼과 크기·위치를 달리해 오탭을 막는다. 키보드 단축키도 일부러 두지 않는다.
-    const bury = el("button", "bury-btn", "이미 아는 단어 · 1차로 제외");
+    // "이미 아는 단어로 빼기"는 큰 판정 버튼과 크기·위치를 달리해 오탭을 막는다. 키보드 단축키도 일부러 두지 않는다.
+    const bury = el("button", "bury-btn", "이미 아는 단어로 빼기");
     bury.onclick = handleBury;
     foot.appendChild(bury);
   }
@@ -544,14 +544,14 @@ function handleMark(type) {
   else render();
 }
 
-// "이미 아는 단어 · 1차로 제외" - 학습 대상에서 영구 제외. 실수했을 때의 회복은 직전 되돌리기다.
+// "이미 아는 단어로 빼기" - 학습 대상에서 영구 제외. 실수했을 때의 회복은 직전 되돌리기다.
 function handleBury() {
   const word = deck.current();
   if (!word) return;
   deck.bury(now());
   if (bundleMode) { applyStatusInSource(word, "buried", now()); bundleLastApplied = word; }
   else saveDeck();
-  showToast(`“${word.word}”를 1차로 제외했습니다`);
+  showToast(`“${word.word}”를 이미 아는 단어로 뺐습니다`);
   cardView = VIEW.QUESTION;
   if (deck.stats().completed) go("complete");
   else render();
@@ -576,9 +576,9 @@ function renderVault() {
   head.appendChild(rev);
   screen.appendChild(head);
 
-  screen.appendChild(el("div", "set-note", "확실히 외운 단어는 2차로 정리하면 복습 목록에서 빠집니다. 이미 외운 것이라 완료율은 그대로고, 다시 안 볼 단어 목록에서 되살릴 수 있습니다."));
+  screen.appendChild(el("div", "set-note", "확실히 외운 단어는 완전히 외움으로 옮기면 복습 목록에서 빠집니다. 이미 외운 것이라 완료율은 그대로고, 다시 안 볼 단어 목록에서 되살릴 수 있습니다."));
 
-  const bulk = el("button", "btn-sm btn-ghost vault-bulk", "외운 단어 전부 2차로 정리");
+  const bulk = el("button", "btn-sm btn-ghost vault-bulk", "전부 완전히 외움");
   bulk.onclick = confirmMasterAll;
   screen.appendChild(bulk);
 
@@ -595,11 +595,11 @@ function renderVault() {
       spk.onclick = () => speak(w.word);
       item.appendChild(spk);
     }
-    const grad = el("button", "btn-sm btn-ghost", "2차로 정리");
+    const grad = el("button", "btn-sm btn-ghost", "완전히 외움");
     grad.onclick = () => {
       deck.buryLearned(w.id, now());
       saveDeck();
-      showToast(`“${w.word}”를 2차로 정리했습니다`);
+      showToast(`“${w.word}”를 완전히 외운 단어로 옮겼습니다`);
       render();
     };
     item.appendChild(grad);
@@ -609,12 +609,12 @@ function renderVault() {
   stage.appendChild(screen);
 }
 
-// 외운 단어를 한 번에 2차로 정리 - 되돌리려면 목록에서 하나씩이라 확인을 받는다.
+// 외운 단어를 한 번에 옮긴다 - 되돌리려면 목록에서 하나씩이라 확인을 받는다.
 async function confirmMasterAll() {
   const n = deck.learnedWords().length;
   if (n === 0) return;
   const r = await showModal({
-    title: "전부 2차로 정리",
+    title: "전부 완전히 외움",
     body: `외운 단어 ${n}개를 복습 목록에서 내립니다. 완료율은 그대로이고, 다시 안 볼 단어 목록에서 되살릴 수 있습니다. 계속할까요?`,
     actions: [
       { label: "취소", value: "cancel" },
@@ -624,12 +624,12 @@ async function confirmMasterAll() {
   if (r !== "ok") return;
   const done = deck.buryAllLearned(now());
   saveDeck();
-  showToast(`${done}개를 2차로 정리했습니다`);
+  showToast(`${done}개를 완전히 외운 단어로 옮겼습니다`);
   render();
 }
 
-// --- 다시 안 볼 단어 목록 (1차 · 2차) ---
-// 1차는 이미 아는 단어라 되살리기를 기본으로 내놓지 않는다(원칙상 학습에 다시 넣지 않는다).
+// --- 다시 안 볼 단어 목록 (이미 아는 단어 · 완전히 외운 단어) ---
+// "이미 아는 단어"는 되살리기를 기본으로 내놓지 않는다(원칙상 학습에 다시 넣지 않는다).
 // 다만 잘못 넣은 단어까지 갇히지는 않도록, 안내를 눌러 펼쳤을 때만 되살리기가 나타난다.
 function renderBuried() {
   setTopbar("다시 안 볼 단어", true);
@@ -638,7 +638,7 @@ function renderBuried() {
   const screen = el("div", "screen vault");
 
   if (known.length + mastered.length === 0) {
-    screen.appendChild(el("div", "empty-note", "다시 안 볼 단어가 없습니다.\n학습에서 “이미 아는 단어 · 1차로 제외”를,\n외운 단어 목록에서 “2차로 정리”를 누르면 여기 모입니다."));
+    screen.appendChild(el("div", "empty-note", "다시 안 볼 단어가 없습니다.\n학습에서 “이미 아는 단어로 빼기”를,\n외운 단어 목록에서 “완전히 외움”을 누르면 여기 모입니다."));
     stage.appendChild(screen);
     return;
   }
@@ -664,9 +664,9 @@ function renderBuried() {
     return item;
   };
 
-  // 1차 - 이미 아는 단어. 학습 대상에서 빠져 완료율 분모에도 들어가지 않는다.
+  // 이미 아는 단어 - 학습 대상에서 빠져 완료율 분모에도 들어가지 않는다.
   const kHead = el("div", "vault-head");
-  kHead.appendChild(el("div", "vault-title", `1차 · 이미 아는 단어 ${known.length}개`));
+  kHead.appendChild(el("div", "vault-title", `이미 아는 단어 ${known.length}개`));
   screen.appendChild(kHead);
   screen.appendChild(el("div", "set-note", "학습·복습 어디에도 나오지 않고, 완료율 계산에서도 빠집니다. 다시 학습에 넣지 않는 것이 원칙입니다."));
   if (known.length === 0) {
@@ -674,7 +674,7 @@ function renderBuried() {
   } else {
     const list = el("div", "vault-list");
     for (const w of known) {
-      list.appendChild(itemOf(w, tier1Recover ? () => {
+      list.appendChild(itemOf(w, knownRecover ? () => {
         deck.unbury(w.id);
         saveDeck();
         showToast(`“${w.word}”를 학습 목록으로 되돌렸습니다`);
@@ -682,14 +682,14 @@ function renderBuried() {
       } : null, "학습으로 되돌리기"));
     }
     screen.appendChild(list);
-    const toggle = el("button", "vault-linkbtn", tier1Recover ? "되살리기 감추기" : "잘못 넣은 단어가 있나요?");
-    toggle.onclick = () => { tier1Recover = !tier1Recover; render(); };
+    const toggle = el("button", "vault-linkbtn", knownRecover ? "되살리기 감추기" : "잘못 넣은 단어가 있나요?");
+    toggle.onclick = () => { knownRecover = !knownRecover; render(); };
     screen.appendChild(toggle);
   }
 
-  // 2차 - 외운 뒤 복습까지 졸업한 단어. 진도상 외움으로 남아 있다.
+  // 완전히 외운 단어 - 복습까지 졸업했고 진도상 외움으로 남아 있다.
   const mHead = el("div", "vault-head vault-head-gap");
-  mHead.appendChild(el("div", "vault-title", `2차 · 외워서 정리 ${mastered.length}개`));
+  mHead.appendChild(el("div", "vault-title", `완전히 외운 단어 ${mastered.length}개`));
   screen.appendChild(mHead);
   screen.appendChild(el("div", "set-note", "외운 단어로 계산에 남아 있고 복습 목록에서만 빠집니다. 되살리면 복습 목록으로 돌아갑니다."));
   if (mastered.length === 0) {
@@ -793,7 +793,7 @@ function renderComplete() {
   screen.appendChild(el("div", "complete-badge", "✓"));
   screen.appendChild(el("div", "complete-title", `SET ${s.setId.replace(/\D/g, "") || "01"} 완료`));
   screen.appendChild(el("div", "complete-sub", s.buried
-    ? `${s.start}개 학습 완료 · 외운 단어 ${s.done}개 · 1차 제외 ${s.buried}개`
+    ? `${s.start}개 학습 완료 · 외운 단어 ${s.done}개 · 이미 아는 단어 ${s.buried}개`
     : `${s.start}개 학습 완료 · 외운 단어 ${s.done}개`));
 
   // 마지막 단어를 실수로 처리해 완료됐을 때를 위한 되돌리기(안전장치 - 학습 화면과 동일).
@@ -815,7 +815,7 @@ function renderComplete() {
     rb.onclick = () => go("vault");
     actions.appendChild(rb);
   }
-  // 단어를 전부 1차로 제외해 완료된 경우에도 목록을 열 경로가 필요하다.
+  // 단어를 전부 "이미 아는 단어"로 빼서 완료된 경우에도 목록을 열 경로가 필요하다.
   if (!bundleMode && s.buried + s.mastered > 0) {
     const bb = el("button", "btn-xl btn-ghost", `다시 안 볼 단어 (${s.buried + s.mastered})`);
     bb.onclick = () => go("buried");
