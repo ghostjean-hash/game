@@ -2,10 +2,10 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const draftFiles = [
-  "docs/authoring/draft-081-085.json", "docs/authoring/draft-086-090.json",
-  "docs/authoring/draft-091-095.json", "docs/authoring/draft-096-100.json",
-  "docs/authoring/draft-101-105.json", "docs/authoring/draft-106-110.json",
-  "docs/authoring/draft-111-115.json", "docs/authoring/draft-116-120.json",
+  "drafts/batch-01.json", "drafts/batch-02.json", "drafts/batch-03.json",
+  "drafts/batch-04.json", "drafts/batch-05.json", "drafts/batch-06.json",
+  "drafts/batch-07.json", "drafts/batch-08.json", "drafts/batch-09.json",
+  "drafts/batch-10.json",
 ];
 const target = resolve("src/data/passages.json");
 const data = JSON.parse(readFileSync(target, "utf8"));

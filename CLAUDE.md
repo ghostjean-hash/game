@@ -40,7 +40,7 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 
 1.1. 게임 등록부: `games/_registry.json`. 카드 클릭으로 진입.
 1.2. 새 세션이 특정 게임 작업 시 `games/<id>/CLAUDE.md` 자동 로드.
-1.3. 앱 등록부: `apps/_registry.json` (게임 아닌 학습·도구류). `english-reading`(영어 독해, wip) / `english-vocabulary`(영어 단어장, playable - 3,000단어 15세트 전량 반영) / `lotto`(lotto 추천번호 - 캐릭터 시드 기반 11전략 추천, wip). 세부는 `apps/<id>/CLAUDE.md`.
+1.3. 앱 등록부: `apps/_registry.json` (게임 아닌 학습·도구류). `english-reading`(영어 독해, wip - 지문 200편 1000문장 전량 반영, Lv1 60 / Lv2 80 / Lv3 60) / `english-vocabulary`(영어 단어장, playable - 3,000단어 15세트 전량 반영) / `lotto`(lotto 추천번호 - 캐릭터 시드 기반 11전략 추천, wip). 세부는 `apps/<id>/CLAUDE.md`.
 1.4. lotto는 2026-07-29 `games/` → `apps/` 이동(사용자 결정). 게임이 아니라 도구류라는 분류 정정. 저장 키 접두는 `lotto_` 그대로라 사용자 진행 데이터 영향 0.
 
 # 2. 표준 (html-game)
