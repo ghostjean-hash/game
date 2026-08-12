@@ -318,8 +318,9 @@ function applyStatusInSource(word, status, nowIso) {
   const key = deckKey(word.setId);
   const st = store.get(key) || { version: 2, setId: word.setId, round: 1, queue: [], progress: {}, lastStudiedAt: null, undo: null };
   if (!st.progress) st.progress = {};
-  const p = st.progress[word.id] || { status: "active", seenCount: 0, unknownCount: 0, learnedAt: null, lastReviewedAt: null, buriedAt: null, buriedTier: null };
+  const p = st.progress[word.id] || { status: "active", seenCount: 0, unknownCount: 0, learnedAt: null, lastReviewedAt: null, buriedAt: null, buriedTier: null, statusChangedAt: null };
   p.status = status;
+  p.statusChangedAt = nowIso;
   if (status === "learned") {
     p.learnedAt = nowIso;
     p.seenCount = (p.seenCount || 0) + 1; // 묻기는 학습 처리가 아니라 본 횟수를 올리지 않는다
@@ -342,6 +343,7 @@ function revertToActiveInSource(word) {
   st.progress[word.id].learnedAt = null;
   st.progress[word.id].buriedAt = null;
   st.progress[word.id].buriedTier = null;
+  st.progress[word.id].statusChangedAt = now();
   store.set(key, st);
 }
 
@@ -604,6 +606,7 @@ function unarchiveInSource(word) {
   p.status = mastered ? "learned" : "active"; // 외운 단어는 복습 목록으로, 그 밖은 학습으로
   p.buriedAt = null;
   p.buriedTier = null;
+  p.statusChangedAt = now();
   st.undo = null; // 외부에서 상태를 바꿨으니 그 세트의 직전-처리 undo는 무효화
   store.set(key, st);
   if (!bundleMode && currentSetId === word.setId && DATA) buildDeck();

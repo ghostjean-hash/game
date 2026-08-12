@@ -163,14 +163,49 @@ function maxTs(a, b) {
   return Math.max(x, y);
 }
 
-// 단어 하나의 학습 진행을 합친다. 더 많이 진행된 쪽을 남긴다(사용자 결정 2026-07-29).
+// status가 "얼마나 진행됐는지"의 순서. 시각을 모를 때만 순서 판정으로 물러난다.
+const STATUS_RANK = { active: 0, learned: 1, buried: 2 };
+
+// 시각 값을 비교 가능한 숫자로. 이 앱들의 학습 진행은 ISO 문자열(now().toISOString())로
+// 찍히므로 문자열도 Date.parse로 받아들인다 - 못 읽으면 시각을 모르는 것으로 취급.
+function statusTs(v) {
+  if (isFiniteNumber(v)) return v;
+  if (typeof v === "string") {
+    const t = Date.parse(v);
+    return Number.isFinite(t) ? t : null;
+  }
+  return null;
+}
+
+// 단어 하나의 학습 진행을 합친다.
+// status는 "더 많이 진행된 쪽"이 아니라 "더 최근에 상태가 바뀐 쪽"을 남긴다(statusChangedAt 기준).
+// 아카이브(buried)처럼 되돌아가지 않는 상태도 있고, 복습에서 학습→활성으로 되돌리는
+// 경우도 있어서 진행 순서만으로는 방금 한 처리가 오래된 기록에 덮이는 사고가 난다
+// (2026-08-12 신고: 방금 아카이브한 단어가 재실행하면 아카이브가 풀려 있음).
+// 양쪽 다 시각을 모르는 옛 기록만 예전처럼 진행 순서로 판정한다(하위 호환).
 function mergeProgressEntry(a, b) {
   if (!isPlainObject(a)) return clone(b);
   if (!isPlainObject(b)) return clone(a);
   const out = clone(a);
   for (const k of Object.keys(b)) if (!(k in out)) out[k] = clone(b[k]);
-  // 외운 상태가 더 진행된 것으로 본다.
-  if (a.status === "learned" || b.status === "learned") out.status = "learned";
+
+  const aStatus = a.status in STATUS_RANK ? a.status : "active";
+  const bStatus = b.status in STATUS_RANK ? b.status : "active";
+  const aAt = statusTs(a.statusChangedAt);
+  const bAt = statusTs(b.statusChangedAt);
+
+  let winner;
+  if (aStatus === bStatus) winner = "a";
+  else if (aAt !== null && bAt !== null) winner = aAt >= bAt ? "a" : "b";
+  else if (aAt !== null || bAt !== null) winner = aAt !== null ? "a" : "b";
+  else winner = STATUS_RANK[aStatus] >= STATUS_RANK[bStatus] ? "a" : "b";
+
+  const src = winner === "a" ? a : b;
+  out.status = winner === "a" ? aStatus : bStatus;
+  out.statusChangedAt = winner === "a" ? (a.statusChangedAt ?? null) : (b.statusChangedAt ?? null);
+  out.buriedTier = out.status === "buried" ? (src.buriedTier ?? null) : null;
+  out.buriedAt = out.status === "buried" ? (src.buriedAt ?? null) : null;
+
   out.seenCount = Math.max(Number(a.seenCount) || 0, Number(b.seenCount) || 0);
   out.unknownCount = Math.max(Number(a.unknownCount) || 0, Number(b.unknownCount) || 0);
   const learnedAt = maxTs(a.learnedAt, b.learnedAt);

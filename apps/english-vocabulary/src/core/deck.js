@@ -48,6 +48,9 @@ function freshProgress() {
     lastReviewedAt: null,
     buriedAt: null,
     buriedTier: null,
+    // 상태(status)가 마지막으로 바뀐 시각. 클라우드 병합이 "더 진행됨"이 아니라
+    // "더 최근에 바뀜" 기준으로 아카이브 vs 학습을 가르는 데 쓴다(shared/cloud/merge.js).
+    statusChangedAt: null,
   };
 }
 
@@ -196,6 +199,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       if (type === "known") {
         p.status = "learned";
         p.learnedAt = now;
+        p.statusChangedAt = now;
       } else {
         p.unknownCount += 1;
       }
@@ -213,6 +217,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       p.status = "buried";
       p.buriedTier = ARCHIVE_TIER.KNOWN;
       p.buriedAt = now;
+      p.statusChangedAt = now;
       deck.queue.shift();
       if (deck.queue.length === 0) rebuildRound(true);
       return id;
@@ -226,6 +231,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       p.status = "buried";
       p.buriedTier = ARCHIVE_TIER.MASTERED;
       p.buriedAt = now;
+      p.statusChangedAt = now;
       deck._undo = null; // 외부에서 상태를 바꿨으니 직전-처리 undo는 무효화
       return true;
     },
@@ -255,13 +261,14 @@ export function createDeck(data, state = null, rng = Math.random) {
 
     // 아카이브에서 되살리기. KNOWN은 active로(다음 바퀴부터 재등장),
     // MASTERED는 외운 단어이므로 learned로 복귀해 복습 목록에 다시 나온다. undo 대상 아님.
-    unarchive(id) {
+    unarchive(id, now = null) {
       const tier = tierOf(id);
       if (tier === null) return false;
       const p = deck.progress[id];
       p.status = tier === ARCHIVE_TIER.MASTERED ? "learned" : "active";
       p.buriedAt = null;
       p.buriedTier = null;
+      p.statusChangedAt = now;
       deck._undo = null; // 외부에서 상태를 바꿨으니 직전-처리 undo는 무효화
       return true;
     },
@@ -298,6 +305,7 @@ export function createDeck(data, state = null, rng = Math.random) {
       if (!remembered) {
         p.status = "active";
         p.learnedAt = null;
+        p.statusChangedAt = now;
         deck._undo = null; // 복습으로 상태가 바뀌면 학습 undo는 무효화
       }
     },

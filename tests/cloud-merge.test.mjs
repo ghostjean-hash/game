@@ -457,6 +457,71 @@ test('같은 세트를 양쪽에서 공부하면 단어마다 더 많이 진행�
   assert.equal(r.apply.toLocal.length, 1);
 });
 
+test('방금 아카이브(buried)한 단어는 아직 안 올라간 옛 학습(learned) 기록에 덮이지 않는다 (2026-08-12 신고)', () => {
+  const local = doc({
+    'gg.english-vocabulary': slot(T - 500, {
+      'deck:1:set-a': {
+        round: 4,
+        queue: [],
+        progress: {
+          // 방금 "완전히 외움"으로 아카이브했다. statusChangedAt이 가장 최근이다.
+          w1: {
+            status: 'buried', buriedTier: 2, buriedAt: T - 500, statusChangedAt: T - 500,
+            seenCount: 5, unknownCount: 1, learnedAt: T - 6000, lastReviewedAt: T - 6000,
+          },
+        },
+      },
+    }),
+  });
+  const remote = doc({
+    'gg.english-vocabulary': slot(T - 6000, {
+      'deck:1:set-a': {
+        round: 4,
+        queue: [],
+        // 업로드 지연 중이던 옛 스냅샷 - 아카이브 이전의 learned 상태.
+        progress: {
+          w1: { status: 'learned', buriedTier: null, buriedAt: null, statusChangedAt: T - 6000, seenCount: 5, unknownCount: 1, learnedAt: T - 6000, lastReviewedAt: T - 6000 },
+        },
+      },
+    }),
+  });
+  const r = mergeDocuments(local, remote, { now: T });
+  const p = r.merged.slots['gg.english-vocabulary'].data['deck:1:set-a'].progress.w1;
+  assert.equal(p.status, 'buried');
+  assert.equal(p.buriedTier, 2);
+});
+
+test('아카이브에서 되살린 뒤라면 반대로 옛 buried 기록에 덮이지 않는다 (되돌리기도 최근 쪽 우선)', () => {
+  const local = doc({
+    'gg.english-vocabulary': slot(T - 6000, {
+      'deck:1:set-a': {
+        round: 4,
+        queue: [],
+        // 이 기기에는 아직 옛 아카이브 상태가 남아 있다(다른 기기에서 되살린 것을 아직 못 받음).
+        progress: {
+          w1: { status: 'buried', buriedTier: 2, buriedAt: T - 6000, statusChangedAt: T - 6000, seenCount: 5, unknownCount: 1, learnedAt: T - 6000, lastReviewedAt: T - 6000 },
+        },
+      },
+    }),
+  });
+  const remote = doc({
+    'gg.english-vocabulary': slot(T - 100, {
+      'deck:1:set-a': {
+        round: 4,
+        queue: [],
+        // 다른 기기에서 방금 되살려 복습 목록(learned)으로 돌아갔다.
+        progress: {
+          w1: { status: 'learned', buriedTier: null, buriedAt: null, statusChangedAt: T - 100, seenCount: 5, unknownCount: 1, learnedAt: T - 6000, lastReviewedAt: T - 6000 },
+        },
+      },
+    }),
+  });
+  const r = mergeDocuments(local, remote, { now: T });
+  const p = r.merged.slots['gg.english-vocabulary'].data['deck:1:set-a'].progress.w1;
+  assert.equal(p.status, 'learned');
+  assert.equal(p.buriedTier, null);
+});
+
 test('이긴 쪽에 없는 항목도 버리지 않는다 (2026-07-29 유실 사고 이후 원칙)', () => {
   const local = doc({ 'gg.tetris': slot(T - 5000, { 'best.zen': 50, 'best.sprint': 12 }) });
   const remote = doc({ 'gg.tetris': slot(T - 100, { 'best.zen': 70 }) });
