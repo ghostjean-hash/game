@@ -12,10 +12,15 @@ import { normalizeSentence, boundarySet, reasonByBoundary } from "../src/core/no
 
 const here = dirname(fileURLToPath(import.meta.url));
 let failures = 0;
+let passes = 0;
+// 지문 200편이 되며 통과 로그가 1.1MB를 넘어 배포 스크립트 출력 버퍼를 터뜨렸다(2026-08-13).
+// 기본은 실패만 찍고 끝에 합계를 낸다. 항목별 ok 줄이 필요하면 --verbose로 실행한다.
+const verbose = process.argv.includes("--verbose");
 
 function check(name, cond, detail = "") {
   if (cond) {
-    console.log(`ok - ${name}`);
+    passes += 1;
+    if (verbose) console.log(`ok - ${name}`);
   } else {
     failures += 1;
     console.error(`FAIL - ${name}${detail ? ` :: ${detail}` : ""}`);
@@ -467,5 +472,5 @@ function check(name, cond, detail = "") {
   console.log(`\ni - lint 경고 실측: 현 ${all.length}편 중 ${total}건` + (flagged.length ? ` :: ${flagged.join(", ")}` : " :: 경고 0"));
 }
 
-console.log(failures === 0 ? "\n모든 테스트 통과" : `\n실패 ${failures}건`);
+console.log(failures === 0 ? `\n모든 테스트 통과 (${passes}건)` : `\n실패 ${failures}건 / 통과 ${passes}건`);
 process.exit(failures === 0 ? 0 : 1);
