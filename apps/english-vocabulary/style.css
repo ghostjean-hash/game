@@ -210,10 +210,6 @@ body[data-fs="large"] { --fs: 1.15; }
 /* 못 외운 단어 모음 카드 - 세트 카드와 구분되게 강조. */
 .menu-remaining { border-color: var(--accent); background: var(--bg-elev); margin-bottom: var(--sp-2); }
 .menu-remaining .menu-set-title { color: var(--accent); }
-/* 아카이브 카드 - 학습 대상이 아니라는 것을 점선 테두리와 눌린 색으로 알린다(강조하지 않는다). */
-.menu-archive { border-style: dashed; background: transparent; margin-bottom: var(--sp-2); }
-.menu-archive .menu-set-title { color: var(--fg-dim); }
-.menu-archive .menu-set-pct { color: var(--fg-mute); }
 .menu-set-done { opacity: 0.5; cursor: default; }
 
 /* --- 학습 / 복습 카드 --- */

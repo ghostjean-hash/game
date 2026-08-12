@@ -205,19 +205,6 @@ function renderMenu() {
     screen.appendChild(card);
   }
 
-  // 아카이브 카드 - 학습에서 뺀 단어는 세트 어디에도 안 보이므로 여기서만 들어간다.
-  const ac = archivedCount();
-  if (ac > 0) {
-    const card = el("button", "menu-set menu-archive");
-    const main = el("div", "menu-set-main");
-    main.appendChild(el("div", "menu-set-title", "아카이브"));
-    main.appendChild(el("div", "menu-set-meta", "학습에서 뺀 단어를 모아 둡니다"));
-    card.appendChild(main);
-    card.appendChild(el("div", "menu-set-pct", `${ac}`));
-    card.onclick = openArchive;
-    screen.appendChild(card);
-  }
-
   const sets = (MANIFEST && MANIFEST.sets) || [];
   let shownAny = false;
   for (const level of LEVEL_ORDER) {
@@ -565,7 +552,7 @@ async function confirmMasterAll() {
 }
 
 // --- 아카이브 (전 세트 통합) ---
-// 아카이브한 단어는 세트에서 빠져 있어 세트 화면 어디에도 안 나온다. 홈의 아카이브 카드로만 들어온다.
+// 아카이브한 단어는 세트에서 빠져 있어 세트 화면 어디에도 안 나온다. 설정 화면의 아카이브 행으로만 들어온다.
 // 열 때 아카이브가 있는 세트만 파일을 읽는다(없는 세트는 내려받지 않는다).
 async function openArchive() {
   try {
@@ -617,7 +604,7 @@ function unarchiveInSource(word) {
 // "이미 아는 단어"는 되살리기를 기본으로 내놓지 않는다(원칙상 학습에 다시 넣지 않는다).
 // 다만 잘못 넣은 단어까지 갇히지는 않도록, 안내를 눌러 펼쳤을 때만 되살리기가 나타난다.
 function renderArchive() {
-  setTopbar("아카이브", true, () => go("menu"));
+  setTopbar("아카이브", true, () => go("settings"));
   const known = ARCHIVE.filter((w) => w.tier === ARCHIVE_TIER.KNOWN);
   const mastered = ARCHIVE.filter((w) => w.tier === ARCHIVE_TIER.MASTERED);
   const screen = el("div", "screen vault");
@@ -879,6 +866,18 @@ function renderSettings() {
   screen.appendChild(fsRow);
 
   screen.appendChild(el("div", "set-group-title", "데이터"));
+  const ac = archivedCount();
+  if (ac > 0) {
+    const archiveRow = el("button", "set-row");
+    const archiveTxt = el("div", "set-text");
+    archiveTxt.appendChild(el("div", "set-label", "아카이브"));
+    archiveTxt.appendChild(el("div", "set-desc", "학습에서 뺀 단어를 모아 둡니다"));
+    archiveRow.appendChild(archiveTxt);
+    archiveRow.appendChild(el("div", "menu-set-pct", `${ac}`));
+    archiveRow.onclick = openArchive;
+    screen.appendChild(archiveRow);
+  }
+
   const resetRow = el("button", "set-danger", "데이터 초기화");
   resetRow.onclick = confirmReset;
   screen.appendChild(resetRow);
