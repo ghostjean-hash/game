@@ -1,0 +1,2417 @@
+[
+ {
+  "id": "eleven-tries-on-the-same-stage",
+  "level": 2,
+  "topic": "Games",
+  "title": "One Word in the Notebook",
+  "titleKr": "공책에 남은 한 낱말",
+  "sentences": [
+   {
+    "text": "Minho lost the same stage eleven times in one evening.",
+    "chunks": [
+     {
+      "en": "Minho lost the same stage",
+      "kr": "민호는 같은 단계에서 졌다"
+     },
+     {
+      "en": "eleven times",
+      "kr": "열한 번이나"
+     },
+     {
+      "en": "in one evening.",
+      "kr": "하루 저녁에"
+     }
+    ],
+    "naturalTranslation": "민호는 하루 저녁에 같은 단계에서 열한 번이나 졌다.",
+    "wordOrderPoint": {
+     "title": "목적어 뒤에 횟수와 때를 차례로",
+     "explanation": "lost the same stage를 먼저 말하고 몇 번(eleven times), 언제(in one evening)를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "동사 lost와 목적어 the same stage를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "숫자 eleven과 그 단위 times를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 in과 그 목적어 one evening을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 불규칙 lost",
+      "note": "lost는 lose의 과거형으로 '졌다, 실패했다'는 뜻입니다."
+     },
+     {
+      "label": "정관사 the + same",
+      "note": "same은 늘 the와 짝을 이루어 the same stage처럼 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "stage",
+      "meaning": "(게임의) 단계"
+     },
+     {
+      "word": "eleven times",
+      "meaning": "열한 번"
+     }
+    ]
+   },
+   {
+    "text": "At first he blamed the controller, but the same mistake kept coming back.",
+    "chunks": [
+     {
+      "en": "At first",
+      "kr": "처음에는"
+     },
+     {
+      "en": "he blamed the controller,",
+      "kr": "그는 조종기를 탓했다"
+     },
+     {
+      "en": "but the same mistake kept coming back.",
+      "kr": "하지만 같은 실수가 계속 되풀이됐다"
+     }
+    ],
+    "naturalTranslation": "처음에 그는 조종기를 탓했지만, 같은 실수가 계속 되풀이됐다.",
+    "wordOrderPoint": {
+     "title": "대조의 but으로 두 절을 맞세우기",
+     "explanation": "앞 절에 그가 내린 판단을 놓고 but 뒤에 그와 어긋나는 사실을 이어 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 9,
+       "reason": "주어 the same mistake가 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "at first는 한 덩어리 표현이라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 he와 동사 blamed를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 blamed와 목적어 the controller를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "kept와 뒤따르는 coming back을 갈라 읽으면 '계속 되풀이됐다'가 끊깁니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 -ed",
+      "note": "blamed는 blame의 과거형으로 그때 그가 한 판단을 나타냅니다."
+     },
+     {
+      "label": "keep + -ing",
+      "note": "kept coming back은 '계속 되풀이됐다'로 keep 뒤에는 -ing가 옵니다."
+     },
+     {
+      "label": "대조의 접속사 but",
+      "note": "but은 앞뒤 내용을 맞세워 잇습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "blamed",
+      "meaning": "탓했다"
+     },
+     {
+      "word": "kept coming back",
+      "meaning": "계속 되풀이됐다"
+     }
+    ]
+   },
+   {
+    "text": "So he opened a notebook and wrote one short line after each try.",
+    "chunks": [
+     {
+      "en": "So he opened a notebook",
+      "kr": "그래서 그는 공책을 폈다"
+     },
+     {
+      "en": "and wrote one short line",
+      "kr": "그리고 짧은 한 줄을 적었다"
+     },
+     {
+      "en": "after each try.",
+      "kr": "시도할 때마다"
+     }
+    ],
+    "naturalTranslation": "그래서 그는 공책을 펴고 시도할 때마다 짧은 한 줄을 적었다.",
+    "wordOrderPoint": {
+     "title": "동사 + 목적어 + 언제(얼마나 자주)",
+     "explanation": "noted one short line을 말한 뒤 after each try를 붙여 얼마나 자주 적었는지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 접속사 So 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 he와 동사 opened를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 opened와 목적어 a notebook을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 wrote와 목적어 one short line을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 after와 그 목적어 each try를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 이은 두 동사",
+      "note": "opened와 wrote가 같은 주어 he에 이어져 두 동작을 차례로 잇습니다."
+     },
+     {
+      "label": "each + 단수명사",
+      "note": "after each try는 '시도할 때마다'로 each 뒤에는 단수명사가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "line",
+      "meaning": "(글의) 한 줄"
+     },
+     {
+      "word": "try",
+      "meaning": "(한 번의) 시도"
+     }
+    ]
+   },
+   {
+    "text": "After ten lines, one word appeared again and again in his list.",
+    "chunks": [
+     {
+      "en": "After ten lines,",
+      "kr": "열 줄이 지나자"
+     },
+     {
+      "en": "one word appeared again and again",
+      "kr": "한 낱말이 자꾸자꾸 나타났다"
+     },
+     {
+      "en": "in his list.",
+      "kr": "그의 목록에서"
+     }
+    ],
+    "naturalTranslation": "열 줄이 지나자 그의 목록에는 한 낱말이 자꾸자꾸 나타났다.",
+    "wordOrderPoint": {
+     "title": "동사 뒤에 놓이는 되풀이 부사구",
+     "explanation": "동사 appeared 다음에 again and again을 놓아 얼마나 되풀이되는지 나타냅니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 After와 그 목적어 ten lines를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "짧은 주어 one word와 동사 appeared를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "again and again은 한 덩어리 부사구라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 in과 그 목적어 his list를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 -ed",
+      "note": "appeared는 appear의 과거형으로 그때 눈에 띈 일을 나타냅니다."
+     },
+     {
+      "label": "관사 대신 쓰인 수사 one",
+      "note": "one word는 a word와 달리 '한 낱말'이라고 개수를 짚어 말합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "appeared",
+      "meaning": "나타났다"
+     },
+     {
+      "word": "again and again",
+      "meaning": "자꾸자꾸, 몇 번이고"
+     }
+    ]
+   },
+   {
+    "text": "That one word told him what to practice before his next try.",
+    "chunks": [
+     {
+      "en": "That one word told him",
+      "kr": "그 한 낱말이 그에게 알려 주었다"
+     },
+     {
+      "en": "what to practice",
+      "kr": "무엇을 연습해야 할지를"
+     },
+     {
+      "en": "before his next try.",
+      "kr": "다음 시도 전에"
+     }
+    ],
+    "naturalTranslation": "그 한 낱말이 다음 시도 전에 무엇을 연습해야 할지를 그에게 알려 주었다.",
+    "wordOrderPoint": {
+     "title": "의문사 + to부정사 덩어리가 알려 준 내용",
+     "explanation": "told him 뒤에 what to practice가 통째로 들어와 무엇을 알려 주었는지를 나타냅니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 That one word가 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "told와 듣는 사람 him을 갈라 읽으면 4형식 뼈대가 흩어집니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "to와 뒤따르는 practice를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 before와 그 목적어 his next try를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "4형식 tell + 사람 + 내용",
+      "note": "told him what to practice에서 him이 듣는 사람, what 이하가 알려 준 내용입니다."
+     },
+     {
+      "label": "의문사 + to부정사",
+      "note": "what to practice는 '무엇을 연습해야 할지'로 절 하나를 짧게 줄인 꼴입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "what to practice",
+      "meaning": "무엇을 연습해야 할지"
+     }
+    ],
+    "insight": {
+     "formula": "[동사 told] + [사람 him] + [what + to부정사]",
+     "why": "한국어는 '무엇을 연습할지를 알려 주었다'처럼 내용을 동사 앞에 놓지만, 영어는 told him을 먼저 말하고 what to practice를 뒤에 붙입니다. what to practice는 what he should practice를 짧게 줄인 꼴이라 주어를 다시 쓰지 않습니다.",
+     "wrong": "That one word told him what he to practice. (의문사 뒤에 주어를 남기면 to부정사와 섞여 문장이 무너집니다.)",
+     "natural": "그 한 낱말이 다음 시도 전에 무엇을 연습해야 할지를 그에게 알려 주었다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "noticing-the-mistake-in-the-replay",
+  "level": 2,
+  "topic": "Games",
+  "title": "The Mistake I Kept Missing",
+  "titleKr": "자꾸 놓치던 실수",
+  "sentences": [
+   {
+    "text": "On Saturday afternoon, the same battle beat me four times.",
+    "chunks": [
+     {
+      "en": "On Saturday afternoon,",
+      "kr": "토요일 오후에"
+     },
+     {
+      "en": "the same battle beat me",
+      "kr": "그 똑같은 전투가 나를 이겼다"
+     },
+     {
+      "en": "four times.",
+      "kr": "네 번이나"
+     }
+    ],
+    "naturalTranslation": "토요일 오후에 그 똑같은 전투가 나를 네 번이나 이겼다.",
+    "wordOrderPoint": {
+     "title": "이긴 쪽을 주어로 세우는 영어",
+     "explanation": "한국어는 '내가 졌다'로 말하지만, 영어는 the same battle을 주어로 세워 '그 전투가 나를 이겼다'처럼 사건 쪽을 앞에 놓기도 합니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 5,
+       "reason": "주어 the same battle이 세 낱말로 길어 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 On과 목적어 Saturday afternoon을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 beat와 목적어 me를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "숫자 four와 그 단위 times를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "원형과 형태가 같은 과거형 beat",
+      "note": "beat는 과거형도 beat라 -ed를 붙이지 않습니다."
+     },
+     {
+      "label": "문두 전치사구 뒤의 콤마",
+      "note": "On Saturday afternoon처럼 문두 부사구가 길면 콤마로 주절과 갈라 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "battle",
+      "meaning": "전투, 한판 싸움"
+     },
+     {
+      "word": "beat",
+      "meaning": "이겼다, 물리쳤다"
+     }
+    ]
+   },
+   {
+    "text": "Then I watched the replay to the end and finally noticed my own mistake.",
+    "chunks": [
+     {
+      "en": "Then I watched the replay",
+      "kr": "그러고 나서 나는 다시보기를 봤다"
+     },
+     {
+      "en": "to the end",
+      "kr": "끝까지"
+     },
+     {
+      "en": "and finally noticed my own mistake.",
+      "kr": "그리고 마침내 내가 저지른 실수를 알아차렸다"
+     }
+    ],
+    "naturalTranslation": "그러고 나서 나는 다시보기를 끝까지 봤고, 마침내 내가 저지른 실수를 알아차렸다.",
+    "wordOrderPoint": {
+     "title": "'끝까지'를 동사 뒤로 미루는 영어",
+     "explanation": "한국어는 '끝까지 봤다'처럼 범위를 동사 앞에 두지만, 영어는 watched the replay를 먼저 말하고 to the end를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Then 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 I와 동사 watched를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 watched와 목적어 the replay를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 to와 목적어 the end를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 noticed와 목적어 my own mistake를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 동사 잇기",
+      "note": "watched와 noticed가 같은 주어 I의 두 동작입니다."
+     },
+     {
+      "label": "강조하는 own",
+      "note": "my own mistake의 own은 '다른 누구도 아닌 내' 실수임을 강조합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "replay",
+      "meaning": "다시보기, 경기를 되돌려 보는 화면"
+     },
+     {
+      "word": "noticed",
+      "meaning": "알아차렸다"
+     }
+    ]
+   },
+   {
+    "text": "I always used my best card too early.",
+    "chunks": [
+     {
+      "en": "I always used my best card",
+      "kr": "나는 늘 가장 좋은 카드를 썼다"
+     },
+     {
+      "en": "too early.",
+      "kr": "너무 이르게"
+     }
+    ],
+    "naturalTranslation": "나는 늘 가장 좋은 카드를 너무 이르게 써 버렸다.",
+    "wordOrderPoint": {
+     "title": "언제였는지는 문장 끝에",
+     "explanation": "무엇을 했는지 다 말한 다음 too early로 그 시점이 잘못됐다는 판단을 덧붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "빈도부사 always와 동사 used를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 used와 목적어 my best card를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "too와 early는 한 덩어리라 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "빈도부사 always의 위치",
+      "note": "always는 일반동사 used 바로 앞에 놓입니다."
+     },
+     {
+      "label": "최상급 best",
+      "note": "my best card - good의 최상급 best가 명사를 꾸밉니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "too early",
+      "meaning": "너무 이르게"
+     }
+    ]
+   },
+   {
+    "text": "So I changed my plan and saved that card for the last round.",
+    "chunks": [
+     {
+      "en": "So I changed my plan",
+      "kr": "그래서 나는 작전을 바꿨다"
+     },
+     {
+      "en": "and saved that card",
+      "kr": "그리고 그 카드를 남겨 두었다"
+     },
+     {
+      "en": "for the last round.",
+      "kr": "마지막 라운드를 위해"
+     }
+    ],
+    "naturalTranslation": "그래서 나는 작전을 바꿔 그 카드를 마지막 라운드까지 남겨 두었다.",
+    "wordOrderPoint": {
+     "title": "무엇을 위해서인지는 맨 뒤에",
+     "explanation": "카드를 남겼다는 사실을 먼저 말하고 무엇을 위한 것인지(for the last round)를 끝에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 접속사 So 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 I와 동사 changed를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 changed와 목적어 my plan을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 saved와 목적어 that card를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 for와 목적어 the last round를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "접속사 so로 결과 잇기",
+      "note": "앞 문장에서 알아챈 일의 결과로 무엇을 했는지 So가 이어 줍니다."
+     },
+     {
+      "label": "지시형용사 that",
+      "note": "that card는 앞에서 말한 바로 그 카드를 가리킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "saved",
+      "meaning": "(나중을 위해) 남겨 두었다"
+     }
+    ]
+   },
+   {
+    "text": "A small change in my plan finally turned the game around.",
+    "chunks": [
+     {
+      "en": "A small change in my plan",
+      "kr": "내 작전의 작은 변화 하나가"
+     },
+     {
+      "en": "finally turned the game around.",
+      "kr": "마침내 판세를 뒤집었다"
+     }
+    ],
+    "naturalTranslation": "작전의 작은 변화 하나가 마침내 판세를 뒤집었다.",
+    "wordOrderPoint": {
+     "title": "주어에 전치사구를 붙여 길게 만들기",
+     "explanation": "A small change 뒤에 in my plan을 붙여 '무엇의 변화인지'까지 담은 한 덩어리 주어를 만듭니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어에 붙은 in my plan 앞에서는 끊어 읽어도 뜻이 흐트러지지 않습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "전치사 in과 목적어 my plan을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 turned와 목적어 the game을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "turn ~ around는 한 동사라 the game과 around를 갈라 읽으면 뜻이 흩어집니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "명사 + 전치사구로 만든 긴 주어",
+      "note": "A small change in my plan 전체가 하나의 주어입니다."
+     },
+     {
+      "label": "분리 가능 구동사 turn ~ around",
+      "note": "목적어가 명사면 turned the game around와 turned around the game 둘 다 되고, 대명사면 turned it around처럼 사이에만 넣습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "turned the game around",
+      "meaning": "판세를 뒤집었다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 A small change in my plan] + [부사 finally] + [turned] + [목적어 the game] + [around]",
+     "why": "주어에 전치사구 in my plan이 붙어 길어져도 이 문장의 동사는 turned 하나입니다. turn around는 목적어가 명사면 사이에 넣어도 뒤에 놓아도 되지만, 대명사일 때는 turned it around처럼 반드시 사이에 넣습니다.",
+     "wrong": "A small change in my plan finally the game turned around.",
+     "natural": "작전의 작은 변화 하나가 마침내 판세를 뒤집었다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "our-own-rule-for-the-card-game",
+  "level": 2,
+  "topic": "Games",
+  "title": "The Rule We Invented Ourselves",
+  "titleKr": "우리가 직접 만든 규칙",
+  "sentences": [
+   {
+    "text": "Our card game always ended the same way after ten minutes.",
+    "chunks": [
+     {
+      "en": "Our card game",
+      "kr": "우리 카드 게임은"
+     },
+     {
+      "en": "always ended the same way",
+      "kr": "늘 똑같은 방식으로 끝났다"
+     },
+     {
+      "en": "after ten minutes.",
+      "kr": "10분이 지나면"
+     }
+    ],
+    "naturalTranslation": "우리 카드 게임은 10분이 지나면 늘 똑같은 방식으로 끝났다.",
+    "wordOrderPoint": {
+     "title": "언제 끝났는지는 맨 뒤에",
+     "explanation": "무슨 일이 있었는지(ended the same way)를 먼저 말하고 시점(after ten minutes)을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "빈도부사 always와 동사 ended를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 ended와 방식을 말하는 the same way를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 after와 목적어 ten minutes를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "빈도부사 always의 위치",
+      "note": "always는 일반동사 ended 바로 앞에 놓입니다."
+     },
+     {
+      "label": "과거시제 ended",
+      "note": "ended로 예전에 늘 그랬던 일을 말합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "the same way",
+      "meaning": "똑같은 방식으로"
+     }
+    ]
+   },
+   {
+    "text": "One rainy afternoon, my friend Jaeho came up with a strange new idea.",
+    "chunks": [
+     {
+      "en": "One rainy afternoon,",
+      "kr": "비 오는 어느 오후"
+     },
+     {
+      "en": "my friend Jaeho",
+      "kr": "내 친구 재호가"
+     },
+     {
+      "en": "came up with a strange new idea.",
+      "kr": "이상한 새 아이디어를 하나 떠올렸다"
+     }
+    ],
+    "naturalTranslation": "비 오는 어느 오후, 내 친구 재호가 이상한 새 아이디어를 하나 떠올렸다.",
+    "wordOrderPoint": {
+     "title": "때를 먼저 깔고 사건을 뒤에",
+     "explanation": "One rainy afternoon으로 장면의 때를 먼저 정한 뒤 누가 무엇을 했는지 이어 말합니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 6,
+       "reason": "come up with는 세 낱말이 한 동사라 came과 up을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "up과 with를 갈라 읽으면 '떠올리다'라는 뜻이 흩어집니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "with와 목적어 a strange new idea를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "세 낱말 구동사 come up with",
+      "note": "come up with는 세 낱말이 한 동사처럼 붙어 '생각을 떠올리다'가 됩니다."
+     },
+     {
+      "label": "형용사 두 개의 순서",
+      "note": "strange new idea - 판단을 담은 strange가 새것임을 말하는 new 앞에 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "came up with",
+      "meaning": "(생각을) 떠올렸다, 생각해 냈다"
+     },
+     {
+      "word": "strange",
+      "meaning": "이상한, 낯선"
+     }
+    ]
+   },
+   {
+    "text": "Each player could invent one new rule before the first turn.",
+    "chunks": [
+     {
+      "en": "Each player could invent one new rule",
+      "kr": "각 사람이 새 규칙 하나를 만들 수 있었다"
+     },
+     {
+      "en": "before the first turn.",
+      "kr": "첫 차례가 시작되기 전에"
+     }
+    ],
+    "naturalTranslation": "첫 차례가 시작되기 전에 각 사람이 새 규칙을 하나씩 만들 수 있었다.",
+    "wordOrderPoint": {
+     "title": "조동사 + 동사원형 + 목적어 순서",
+     "explanation": "could invent를 붙여 읽고 무엇을 만드는지(one new rule)를 바로 뒤에 놓습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Each player와 조동사 could를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "조동사 could 뒤에서 끊으면 동사 invent가 떨어져 나갑니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 invent와 목적어 one new rule을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "before와 목적어 the first turn을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조동사 could + 동사원형",
+      "note": "could invent는 '만들 수 있었다'로 조동사 뒤에는 원형을 씁니다."
+     },
+     {
+      "label": "each + 단수 명사",
+      "note": "Each player는 '각각의 사람'이라 단수로 취급합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "invent",
+      "meaning": "만들어 내다, 새로 지어내다"
+     },
+     {
+      "word": "turn",
+      "meaning": "(놀이의) 차례"
+     }
+    ]
+   },
+   {
+    "text": "We wrote the new rules on a card and taped it to the box.",
+    "chunks": [
+     {
+      "en": "We wrote the new rules",
+      "kr": "우리는 새 규칙들을 적었다"
+     },
+     {
+      "en": "on a card",
+      "kr": "카드 한 장에"
+     },
+     {
+      "en": "and taped it to the box.",
+      "kr": "그리고 그것을 상자에 붙였다"
+     }
+    ],
+    "naturalTranslation": "우리는 새 규칙들을 카드 한 장에 적어서 상자에 붙였다.",
+    "wordOrderPoint": {
+     "title": "무엇을 먼저, 어디에는 뒤에",
+     "explanation": "적은 내용(the new rules)을 먼저 말하고 어디에 적었는지(on a card)를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 10,
+       "reason": "목적어 it 뒤의 to the box 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 We와 동사 wrote를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 wrote와 목적어 the new rules를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 on과 목적어 a card를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "동사 taped와 목적어 it을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "전치사 to와 목적어 the box를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 동사 잇기",
+      "note": "wrote와 taped가 같은 주어 We의 두 동작입니다."
+     },
+     {
+      "label": "대명사 it이 가리키는 것",
+      "note": "it은 앞에 나온 a card를 가리킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "taped",
+      "meaning": "테이프로 붙였다"
+     }
+    ]
+   },
+   {
+    "text": "Now the same old game feels new again every Friday night.",
+    "chunks": [
+     {
+      "en": "Now the same old game",
+      "kr": "이제 그 늘 하던 게임이"
+     },
+     {
+      "en": "feels new again",
+      "kr": "다시 새롭게 느껴진다"
+     },
+     {
+      "en": "every Friday night.",
+      "kr": "금요일 밤마다"
+     }
+    ],
+    "naturalTranslation": "이제 늘 하던 그 게임이 금요일 밤마다 다시 새롭게 느껴진다.",
+    "wordOrderPoint": {
+     "title": "느낌을 먼저, 반복되는 때를 뒤에",
+     "explanation": "feels new again으로 어떤 느낌인지 먼저 말하고 얼마나 자주인지(every Friday night)를 끝에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Now 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 5,
+       "reason": "feels와 보어 new를 갈라 읽으면 '새롭게 느껴진다'가 끊깁니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "every와 Friday night은 한 덩어리라 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "감각동사 feel + 형용사 보어",
+      "note": "feels new - feel 뒤에는 부사가 아니라 형용사를 씁니다."
+     },
+     {
+      "label": "every + 명사로 만든 빈도 표현",
+      "note": "every Friday night은 '금요일 밤마다'로 되풀이되는 때를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "the same old game",
+      "meaning": "늘 하던 그 똑같은 게임"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 the same old game] + [감각동사 feels] + [형용사 보어 new] + [빈도 every Friday night]",
+     "why": "한국어는 '새롭게 느껴진다'처럼 부사꼴로 말해 feels newly를 쓰기 쉽지만, 영어는 feel 뒤에 주어의 상태를 그대로 담는 형용사 new를 놓습니다. 얼마나 자주인지는 맨 뒤에 붙입니다.",
+     "wrong": "Now the same old game feels newly again every Friday night.",
+     "natural": "이제 늘 하던 그 게임이 금요일 밤마다 다시 새롭게 느껴진다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "teaming-up-for-the-last-stage",
+  "level": 2,
+  "topic": "Games",
+  "title": "The Stage She Could Not Beat Alone",
+  "titleKr": "혼자서는 못 깨던 마지막 단계",
+  "sentences": [
+   {
+    "text": "The last stage of the racing game was too hard for Minji alone.",
+    "chunks": [
+     {
+      "en": "The last stage of the racing game",
+      "kr": "그 레이싱 게임의 마지막 단계는"
+     },
+     {
+      "en": "was too hard",
+      "kr": "너무 어려웠다"
+     },
+     {
+      "en": "for Minji alone.",
+      "kr": "민지 혼자에게는"
+     }
+    ],
+    "naturalTranslation": "그 레이싱 게임의 마지막 단계는 민지 혼자 하기에는 너무 어려웠다.",
+    "wordOrderPoint": {
+     "title": "긴 주어를 먼저 세우고 판단은 뒤에",
+     "explanation": "of the racing game까지가 통째로 주어라서, 어렵다는 판단(was too hard)은 그 뒤에야 나옵니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어에 붙은 of the racing game이 네 낱말로 길어서 stage 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "전치사 of와 목적어 the racing game을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "was 뒤에서 끊으면 보어 too hard가 떨어져 나갑니다. was too hard를 한 덩어리로 읽으세요."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 for와 목적어 Minji alone을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "주어 + be동사 + 형용사 보어",
+      "note": "was 뒤의 too hard가 주어의 상태를 설명하는 보어입니다."
+     },
+     {
+      "label": "too + 형용사",
+      "note": "too hard는 '감당하기 힘들 만큼 어렵다'로 정도가 지나침을 나타냅니다."
+     },
+     {
+      "label": "명사 + 전치사구 수식",
+      "note": "of the racing game이 앞의 the last stage를 좁혀 어느 게임의 단계인지 밝힙니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "stage",
+      "meaning": "(게임의) 단계, 판"
+     }
+    ]
+   },
+   {
+    "text": "She asked her older brother to team up with her for one night.",
+    "chunks": [
+     {
+      "en": "She asked her older brother",
+      "kr": "그녀는 오빠에게 부탁했다"
+     },
+     {
+      "en": "to team up with her",
+      "kr": "자기와 팀을 짜 달라고"
+     },
+     {
+      "en": "for one night.",
+      "kr": "하룻밤 동안만"
+     }
+    ],
+    "naturalTranslation": "그녀는 오빠에게 하룻밤만 자기와 팀을 짜 달라고 부탁했다.",
+    "wordOrderPoint": {
+     "title": "기간 표현은 문장 맨 뒤로",
+     "explanation": "부탁 내용(to team up with her)을 다 말한 뒤에 얼마 동안인지(for one night)를 맨 끝에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 She와 동사 asked를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 asked와 부탁을 받는 사람 her older brother를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "team up은 두 낱말이 한 동사라 team과 up을 붙여 읽습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "team up with는 세 낱말이 한 덩어리라 up과 with를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 for와 목적어 one night를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "ask + 목적어 + to부정사",
+      "note": "asked her brother to team up - '~에게 ~해 달라고 부탁하다'는 뜻입니다."
+     },
+     {
+      "label": "구동사 team up with",
+      "note": "team up with는 '~와 한편이 되다'로 세 낱말이 한 동사처럼 움직입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "team up with",
+      "meaning": "~와 팀을 짜다, 한편이 되다"
+     }
+    ]
+   },
+   {
+    "text": "Minji steered the car while her partner called out each turn.",
+    "chunks": [
+     {
+      "en": "Minji steered the car",
+      "kr": "민지는 차를 몰았다"
+     },
+     {
+      "en": "while her partner called out each turn.",
+      "kr": "그녀의 파트너가 커브를 하나하나 외쳐 주는 동안"
+     }
+    ],
+    "naturalTranslation": "파트너가 커브를 하나하나 외쳐 주는 동안 민지는 차를 몰았다.",
+    "wordOrderPoint": {
+     "title": "주된 동작 먼저, 배경은 while절로 뒤에",
+     "explanation": "한국어는 '~하는 동안'을 앞에 두지만, 영어는 주된 동작을 먼저 말하고 배경을 while절로 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Minji와 동사 steered를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 steered와 목적어 the car를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "call out은 두 낱말이 한 동사라 called와 out을 붙여 읽습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "구동사 called out과 목적어 each turn을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 call out",
+      "note": "call out은 '큰 소리로 알리다'로 out까지 한 덩어리입니다."
+     },
+     {
+      "label": "접속사 while이 이끄는 부사절",
+      "note": "while 뒤에 주어+동사를 갖춘 절이 와서 두 일이 동시에 벌어짐을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "steered",
+      "meaning": "(차를) 몰았다, 방향을 조종했다"
+     },
+     {
+      "word": "called out",
+      "meaning": "큰 소리로 알려 주었다"
+     },
+     {
+      "word": "turn",
+      "meaning": "굽잇길, 커브"
+     }
+    ]
+   },
+   {
+    "text": "Together they finished the stage on their third try, and both of them cheered.",
+    "chunks": [
+     {
+      "en": "Together they finished the stage",
+      "kr": "함께 그들은 그 단계를 끝냈다"
+     },
+     {
+      "en": "on their third try,",
+      "kr": "세 번째 시도에서"
+     },
+     {
+      "en": "and both of them cheered.",
+      "kr": "그리고 둘 다 환호했다"
+     }
+    ],
+    "naturalTranslation": "세 번째 시도에서 두 사람은 함께 그 단계를 끝냈고, 둘 다 환호했다.",
+    "wordOrderPoint": {
+     "title": "부사 Together를 맨 앞에",
+     "explanation": "Together를 문장 앞에 놓아 혼자가 아니라 함께 해낸 일이라는 점을 먼저 못 박습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Together 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 they와 동사 finished를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 finished와 목적어 the stage를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 on과 목적어 their third try를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "both of them은 한 덩어리라 of와 them을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 두 절 잇기",
+      "note": "단계를 끝낸 일과 환호한 일을 and가 나란히 잇습니다."
+     },
+     {
+      "label": "both of + 복수 대명사",
+      "note": "both of them은 '그들 둘 다'로 of 뒤에 목적격 them을 씁니다."
+     },
+     {
+      "label": "전치사 on + 서수",
+      "note": "on their third try는 '세 번째 시도에서'로 몇 번째였는지 짚습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "try",
+      "meaning": "시도, 해 보기"
+     },
+     {
+      "word": "cheered",
+      "meaning": "환호했다, 소리 지르며 기뻐했다"
+     }
+    ]
+   },
+   {
+    "text": "Minji learned that a hard challenge feels lighter with a partner.",
+    "chunks": [
+     {
+      "en": "Minji learned",
+      "kr": "민지는 배웠다"
+     },
+     {
+      "en": "that a hard challenge feels lighter",
+      "kr": "어려운 도전이 더 가볍게 느껴진다는 것을"
+     },
+     {
+      "en": "with a partner.",
+      "kr": "파트너와 함께라면"
+     }
+    ],
+    "naturalTranslation": "민지는 파트너와 함께라면 어려운 도전도 더 가볍게 느껴진다는 것을 배웠다.",
+    "wordOrderPoint": {
+     "title": "learned 뒤에 that절을 통째로",
+     "explanation": "배운 내용 전체가 that절 하나로 묶여 동사 뒤에 붙습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 5,
+       "reason": "that절의 주어 a hard challenge가 세 낱말로 길어 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Minji와 동사 learned를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "feels와 보어 lighter를 갈라 읽으면 '더 가볍게 느껴진다'가 끊깁니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 with와 목적어 a partner를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "감각동사 feel + 형용사 보어",
+      "note": "feels lighter - feel 뒤에는 부사가 아니라 형용사를 씁니다."
+     },
+     {
+      "label": "명사절 접속사 that",
+      "note": "that 이하 절 전체가 learned의 목적어 노릇을 합니다."
+     },
+     {
+      "label": "비교급 lighter",
+      "note": "lighter는 light의 비교급으로 '혼자일 때보다 더 가벼운'을 뜻합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "challenge",
+      "meaning": "도전, 힘든 과제"
+     },
+     {
+      "word": "partner",
+      "meaning": "짝, 함께 하는 상대"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 Minji] + [동사 learned] + [that절 a hard challenge feels lighter] + [조건 with a partner]",
+     "why": "learned 뒤의 that절이 통째로 목적어가 됩니다. 그 절 안은 다시 주어(a hard challenge) + 동사(feels) + 보어(lighter) 순서를 지키고, 조건을 나타내는 with a partner가 맨 뒤에 붙습니다.",
+     "wrong": "Minji learned that a hard challenge feels lightly with a partner.",
+     "natural": "민지는 파트너와 함께라면 어려운 도전도 더 가볍게 느껴진다는 것을 배웠다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "the-designer-who-watched-the-losers",
+  "level": 3,
+  "topic": "Games",
+  "title": "The Designer Who Watched People Quit",
+  "titleKr": "그만두는 사람을 지켜본 설계자",
+  "sentences": [
+   {
+    "text": "A game designer noticed that most players quit at the same difficult stage.",
+    "chunks": [
+     {
+      "en": "A game designer noticed",
+      "kr": "한 게임 설계자가 알아차렸다"
+     },
+     {
+      "en": "that most players quit",
+      "kr": "대부분의 플레이어가 그만둔다는 것을"
+     },
+     {
+      "en": "at the same difficult stage.",
+      "kr": "하나같이 똑같은 그 어려운 단계에서"
+     }
+    ],
+    "naturalTranslation": "한 게임 설계자는 대부분의 플레이어가 하나같이 똑같은 그 어려운 단계에서 그만둔다는 것을 알아차렸다.",
+    "wordOrderPoint": {
+     "title": "알아챈 내용을 that절로 통째로",
+     "explanation": "noticed 뒤에 that절이 목적어로 붙고, 어디서 벌어진 일인지는 그 절 끝에 전치사구로 붙습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 A game designer가 세 낱말로 길어 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 4,
+       "reason": "접속사 that과 그 절의 주어 most players를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 most players와 동사 quit을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 at과 목적어 the same difficult stage를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "명사절 접속사 that",
+      "note": "that 이하 절 전체가 noticed의 목적어입니다."
+     },
+     {
+      "label": "most + 복수 명사",
+      "note": "most players는 '대부분의 플레이어'로 관사 없이 씁니다."
+     },
+     {
+      "label": "지점을 짚는 전치사 at",
+      "note": "at the same difficult stage - 어느 지점에서 벌어진 일인지 못 박습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "designer",
+      "meaning": "설계자, 만드는 사람"
+     },
+     {
+      "word": "quit",
+      "meaning": "그만두다, 손을 떼다"
+     }
+    ]
+   },
+   {
+    "text": "The stage itself was well made, but the jump in difficulty was simply too big.",
+    "chunks": [
+     {
+      "en": "The stage itself was well made,",
+      "kr": "그 단계 자체는 잘 만들어져 있었다"
+     },
+     {
+      "en": "but the jump in difficulty",
+      "kr": "그러나 난이도가 뛰어오르는 폭은"
+     },
+     {
+      "en": "was simply too big.",
+      "kr": "그저 너무 컸다"
+     }
+    ],
+    "naturalTranslation": "그 단계 자체는 잘 만들어져 있었지만, 난이도가 뛰어오르는 폭이 그저 너무 컸다.",
+    "wordOrderPoint": {
+     "title": "주어를 되짚는 itself의 자리",
+     "explanation": "한국어는 '단계 자체는'처럼 조사에 실어 말하지만, 영어는 The stage 바로 뒤에 itself를 붙여 '다른 것 말고 그 단계'임을 짚습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 The stage itself가 세 낱말로 길어 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "명사 The stage와 그것을 되짚는 itself를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "수동태 was well made에서 was와 well made를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 in과 목적어 difficulty를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "was 뒤에서 끊으면 보어 too big이 떨어져 나갑니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "수동태 be + 과거분사",
+      "note": "was well made - 만든 사람보다 잘 만들어졌다는 사실을 앞세웁니다."
+     },
+     {
+      "label": "재귀대명사 itself의 강조 용법",
+      "note": "주어 바로 뒤에 붙어 '바로 그것'이라고 못 박습니다."
+     },
+     {
+      "label": "명사 + 전치사구 수식",
+      "note": "the jump in difficulty - in difficulty가 앞의 jump를 좁혀 무엇의 도약인지 밝힙니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "itself",
+      "meaning": "그 자체, 바로 그것"
+     },
+     {
+      "word": "difficulty",
+      "meaning": "난이도, 어려움"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 The stage itself] + [수동태 was well made] + [but] + [주어 the jump in difficulty] + [was too big]",
+     "why": "was made는 '만들어졌다'로 만든 사람을 앞세우지 않는 수동태입니다. 주어 뒤에 붙인 itself는 '다른 것 말고 바로 그 단계'라고 못 박고, 뒤 절의 주어 the jump에는 in difficulty가 붙어 무엇의 도약인지 좁혀 줍니다.",
+     "wrong": "The stage itself was well making, but the jump in difficulty was simply too big.",
+     "natural": "그 단계 자체는 잘 만들어져 있었지만, 난이도가 뛰어오르는 폭이 그저 너무 컸다."
+    }
+   },
+   {
+    "text": "So she spread the hard parts across three stages and evened out the sudden jump.",
+    "chunks": [
+     {
+      "en": "So she spread the hard parts",
+      "kr": "그래서 그녀는 어려운 부분들을 나눠 놓았다"
+     },
+     {
+      "en": "across three stages",
+      "kr": "세 단계에 걸쳐"
+     },
+     {
+      "en": "and evened out the sudden jump.",
+      "kr": "그리고 그 갑작스러운 도약을 고르게 다듬었다"
+     }
+    ],
+    "naturalTranslation": "그래서 그녀는 어려운 부분들을 세 단계에 걸쳐 나누고 그 갑작스러운 도약을 고르게 다듬었다.",
+    "wordOrderPoint": {
+     "title": "무엇을 먼저, 어디에 걸쳐서는 뒤에",
+     "explanation": "옮긴 대상(the hard parts)을 먼저 말하고 어느 범위에 걸쳐인지(across three stages)를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 접속사 So 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 she와 동사 spread를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 spread와 목적어 the hard parts를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 across와 목적어 three stages를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "even out은 두 낱말이 한 동사라 evened와 out을 붙여 읽습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 even out",
+      "note": "even out은 들쭉날쭉한 것을 고르게 만들다는 뜻으로 out까지 한 덩어리입니다."
+     },
+     {
+      "label": "등위접속사 and로 동사 잇기",
+      "note": "spread와 evened out이 같은 주어 she의 두 조치입니다."
+     },
+     {
+      "label": "범위를 나타내는 전치사 across",
+      "note": "across three stages - '세 단계에 걸쳐' 퍼뜨렸다는 범위를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "spread",
+      "meaning": "펼쳐 놓았다, 나눠 배치했다"
+     },
+     {
+      "word": "evened out",
+      "meaning": "고르게 다듬었다, 격차를 줄였다"
+     }
+    ]
+   },
+   {
+    "text": "Balance does not mean an easy game, but a fair one.",
+    "chunks": [
+     {
+      "en": "Balance does not mean an easy game,",
+      "kr": "균형은 쉬운 게임을 뜻하지 않는다"
+     },
+     {
+      "en": "but a fair one.",
+      "kr": "공정한 게임을 뜻한다"
+     }
+    ],
+    "naturalTranslation": "균형이란 쉬운 게임이 아니라 공정한 게임을 뜻한다.",
+    "wordOrderPoint": {
+     "title": "not A but B로 뜻 바로잡기",
+     "explanation": "아닌 쪽을 먼저 말해 오해를 지우고, but 뒤에 맞는 쪽만 짧게 얹습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Balance와 does를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "does not은 한 덩어리라 does와 not을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 mean과 목적어 an easy game을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "does not + 동사원형",
+      "note": "일반동사를 부정할 때 does not 뒤에는 원형 mean을 씁니다."
+     },
+     {
+      "label": "not A but B",
+      "note": "'A가 아니라 B'로 앞의 목적어만 바꿔 다시 말합니다."
+     },
+     {
+      "label": "부정대명사 one",
+      "note": "a fair one의 one은 앞에 나온 game을 되풀이하지 않고 대신합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "balance",
+      "meaning": "(난이도) 균형"
+     },
+     {
+      "word": "fair",
+      "meaning": "공정한, 억울하지 않은"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 Balance] + [does not mean] + [목적어 an easy game] + [but] + [대체 목적어 a fair one]",
+     "why": "일반동사를 부정할 때는 does not 뒤에 원형 mean을 씁니다. 뒤의 but a fair one은 앞의 목적어만 갈아 끼운 짝이라 동사를 다시 쓰지 않고, one이 game을 대신합니다.",
+     "wrong": "Balance does not means an easy game, but a fair game it means.",
+     "natural": "균형이란 쉬운 게임이 아니라 공정한 게임을 뜻한다."
+    }
+   },
+   {
+    "text": "Now players still lose at that stage, but almost nobody puts the controller down.",
+    "chunks": [
+     {
+      "en": "Now players still lose at that stage,",
+      "kr": "지금도 플레이어들은 그 단계에서 여전히 진다"
+     },
+     {
+      "en": "but almost nobody puts the controller down.",
+      "kr": "그러나 거의 아무도 조종기를 내려놓지 않는다"
+     }
+    ],
+    "naturalTranslation": "지금도 플레이어들은 그 단계에서 여전히 지지만, 거의 아무도 조종기를 내려놓지 않는다.",
+    "wordOrderPoint": {
+     "title": "부정 주어 + 긍정 동사",
+     "explanation": "almost nobody를 주어로 세우면 동사는 긍정형이어도 문장 전체가 '거의 아무도 ~하지 않는다'가 됩니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Now 뒤에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 뒤의 at that stage 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "부사 still과 동사 lose를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 at과 목적어 that stage를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "주어 almost nobody와 동사 puts를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 puts와 목적어 the controller를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "put ~ down은 한 동사라 the controller와 down을 갈라 읽으면 뜻이 흩어집니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부정 주어 almost nobody",
+      "note": "almost nobody가 주어라 동사는 긍정형이지만 뜻은 부정입니다."
+     },
+     {
+      "label": "부사 still의 위치",
+      "note": "still이 일반동사 lose 앞에 놓여 '여전히'를 뜻합니다."
+     },
+     {
+      "label": "분리 가능 구동사 put ~ down",
+      "note": "목적어가 명사면 puts the controller down과 puts down the controller 둘 다 되고, 대명사면 puts it down처럼 사이에만 넣습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "controller",
+      "meaning": "조종기, 게임 패드"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "what-a-losing-streak-taught-hyunwoo",
+  "level": 3,
+  "topic": "Games",
+  "title": "The Month He Kept Losing",
+  "titleKr": "계속 지기만 했던 한 달",
+  "sentences": [
+   {
+    "text": "Last month Hyunwoo lost nine matches in a row and wanted to quit.",
+    "chunks": [
+     {
+      "en": "Last month",
+      "kr": "지난달"
+     },
+     {
+      "en": "Hyunwoo lost nine matches in a row",
+      "kr": "현우는 아홉 경기를 내리 졌다"
+     },
+     {
+      "en": "and wanted to quit.",
+      "kr": "그리고 그만두고 싶어졌다"
+     }
+    ],
+    "naturalTranslation": "지난달 현우는 아홉 경기를 내리 지고 나서 그만두고 싶어졌다.",
+    "wordOrderPoint": {
+     "title": "때를 앞세우고 두 사실을 and로 잇기",
+     "explanation": "Last month로 언제인지 먼저 정하고, 진 사실과 그만두고 싶었던 마음을 and로 나란히 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 5,
+       "reason": "목적어 뒤의 in a row 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "동사 lost와 목적어 nine matches를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "in a row는 한 덩어리라 in과 a row를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "wanted와 목적어 to quit을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "want + to부정사",
+      "note": "wanted to quit - '그만두고 싶었다'로 to부정사가 want의 목적어입니다."
+     },
+     {
+      "label": "등위접속사 and로 동사 잇기",
+      "note": "lost와 wanted가 같은 주어의 두 과거 사실을 잇습니다."
+     },
+     {
+      "label": "문두 시간 부사구",
+      "note": "Last month를 맨 앞에 두어 언제 일인지 먼저 정합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "in a row",
+      "meaning": "연달아, 내리"
+     },
+     {
+      "word": "quit",
+      "meaning": "그만두다, 손을 떼다"
+     }
+    ]
+   },
+   {
+    "text": "He tried again right away, but nothing changed in his play.",
+    "chunks": [
+     {
+      "en": "He tried again right away,",
+      "kr": "그는 곧바로 다시 도전했다"
+     },
+     {
+      "en": "but nothing changed in his play.",
+      "kr": "그러나 그의 플레이에서 달라진 것은 없었다"
+     }
+    ],
+    "naturalTranslation": "그는 곧바로 다시 도전했지만, 그의 플레이에서 달라진 것은 없었다.",
+    "wordOrderPoint": {
+     "title": "부정 주어를 앞에 세우는 영어",
+     "explanation": "한국어는 '아무것도 달라지지 않았다'처럼 부정을 동사에 붙이지만, 영어는 nothing을 주어 자리에 놓고 동사는 그대로 씁니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 He와 동사 tried를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "right away는 한 덩어리라 right와 away를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 nothing과 동사 changed를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 in과 목적어 his play를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부정 주어 nothing",
+      "note": "nothing이 주어라 동사는 긍정형 changed이지만 뜻은 '아무것도 달라지지 않았다'입니다."
+     },
+     {
+      "label": "등위접속사 but으로 대비",
+      "note": "곧바로 다시 도전한 일과 아무 변화가 없던 결과를 but이 맞세웁니다."
+     },
+     {
+      "label": "과거시제 -ed",
+      "note": "tried와 changed 모두 -ed를 붙인 과거형으로 지나간 일을 말합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "tried again",
+      "meaning": "다시 도전했다"
+     },
+     {
+      "word": "right away",
+      "meaning": "곧바로, 즉시"
+     }
+    ]
+   },
+   {
+    "text": "Then his older sister asked him to write down one lesson after each loss, not after each win.",
+    "chunks": [
+     {
+      "en": "Then his older sister asked him",
+      "kr": "그러자 그의 누나가 그에게 부탁했다"
+     },
+     {
+      "en": "to write down one lesson after each loss,",
+      "kr": "질 때마다 배운 점 하나를 적어 두라고"
+     },
+     {
+      "en": "not after each win.",
+      "kr": "이길 때가 아니라"
+     }
+    ],
+    "naturalTranslation": "그러자 누나가 그에게 이길 때가 아니라 질 때마다 배운 점을 하나씩 적어 두라고 했다.",
+    "wordOrderPoint": {
+     "title": "부탁 내용을 동사 뒤로 미루는 영어",
+     "explanation": "한국어는 '적어 두라고 부탁했다'처럼 내용을 동사 앞에 두지만, 영어는 asked him을 먼저 말하고 to write down 이하를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Then 뒤에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "목적어 one lesson 뒤의 after each loss 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 4,
+       "reason": "동사 asked와 부탁을 받는 사람 him을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "write down은 두 낱말이 한 동사라 write와 down을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "구동사 write down과 목적어 one lesson을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "전치사 after와 목적어 each loss를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 15,
+       "reason": "전치사 after와 목적어 each win을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "ask + 목적어 + to부정사",
+      "note": "asked him to write down - '그에게 ~하라고 부탁했다'는 뜻입니다."
+     },
+     {
+      "label": "not으로 앞말 바로잡기",
+      "note": "after each loss, not after each win처럼 뒤에 not을 붙여 어느 쪽인지 대비시킵니다."
+     },
+     {
+      "label": "each + 단수 명사",
+      "note": "each loss와 each win은 형태는 단수지만 '질 때마다, 이길 때마다'라는 뜻입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "write down",
+      "meaning": "적어 두다, 받아 적다"
+     },
+     {
+      "word": "lesson",
+      "meaning": "배운 점, 교훈"
+     }
+    ]
+   },
+   {
+    "text": "The notes slowly showed him one habit that cost him every close match.",
+    "chunks": [
+     {
+      "en": "The notes slowly showed him",
+      "kr": "그 메모들은 천천히 그에게 보여 주었다"
+     },
+     {
+      "en": "one habit",
+      "kr": "습관 하나를"
+     },
+     {
+      "en": "that cost him every close match.",
+      "kr": "아슬아슬한 경기마다 그를 지게 만든"
+     }
+    ],
+    "naturalTranslation": "그 메모들은 아슬아슬한 경기마다 그를 지게 만든 습관 하나를 천천히 그에게 보여 주었다.",
+    "wordOrderPoint": {
+     "title": "꾸미는 말을 명사 뒤에 붙이는 영어",
+     "explanation": "한국어는 '그를 지게 만든 습관'처럼 꾸미는 말을 앞에 두지만, 영어는 one habit을 먼저 내놓고 that 이하를 뒤에 붙여 설명합니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The notes와 이어지는 부사 slowly를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "showed와 받는 사람 him을 갈라 읽으면 4형식 뼈대가 흩어집니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 cost와 him을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "cost him every close match는 두 목적어가 이어진 꼴이라 him과 every를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "4형식 show + 사람 + 사물",
+      "note": "showed him one habit - 받는 사람 him이 먼저, 보여 준 것이 뒤에 옵니다."
+     },
+     {
+      "label": "주격 관계대명사 that",
+      "note": "that cost him every close match가 앞의 one habit을 꾸밉니다."
+     },
+     {
+      "label": "부사 slowly의 위치",
+      "note": "slowly가 동사 showed 앞에 놓여 서서히 드러났음을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "cost",
+      "meaning": "~을 잃게 했다, 대가를 치르게 했다"
+     },
+     {
+      "word": "close",
+      "meaning": "아슬아슬한, 막상막하의"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 The notes] + [동사 showed] + [사람 him] + [사물 one habit] + [관계절 that cost him every close match]",
+     "why": "showed 뒤에 받는 사람 him이 먼저 오고 보여 준 것 one habit이 뒤에 옵니다. 그 명사를 관계대명사 that절이 뒤에서 꾸며 어떤 습관인지 좁힙니다.",
+     "wrong": "The notes slowly showed to him one habit that cost him every close match.",
+     "natural": "그 메모들은 아슬아슬한 경기마다 그를 지게 만든 습관 하나를 천천히 그에게 보여 주었다."
+    }
+   },
+   {
+    "text": "Now he bounces back quickly, and losing teaches him more than winning.",
+    "chunks": [
+     {
+      "en": "Now he bounces back quickly,",
+      "kr": "이제 그는 빠르게 다시 일어선다"
+     },
+     {
+      "en": "and losing teaches him more",
+      "kr": "그리고 지는 일이 그에게 더 많이 가르쳐 준다"
+     },
+     {
+      "en": "than winning.",
+      "kr": "이기는 일보다"
+     }
+    ],
+    "naturalTranslation": "이제 그는 빠르게 다시 일어서고, 지는 일이 이기는 일보다 그에게 더 많은 것을 가르쳐 준다.",
+    "wordOrderPoint": {
+     "title": "견줄 대상을 than 뒤로 미루기",
+     "explanation": "한국어는 '이기는 일보다 더 많이'처럼 견줄 대상을 앞에 두지만, 영어는 teaches him more를 먼저 말하고 than winning을 맨 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Now 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "bounce back은 두 낱말이 한 동사라 bounces와 back을 붙여 읽습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 losing과 동사 teaches를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "teaches와 받는 사람 him을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "him과 가르쳐 주는 양을 말하는 more를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "동명사 주어",
+      "note": "losing이 '지는 일'이라는 주어 노릇을 해 동사는 단수 teaches입니다."
+     },
+     {
+      "label": "비교급 more + than",
+      "note": "much의 비교급 more 뒤에 than을 붙여 견주는 짝을 만듭니다."
+     },
+     {
+      "label": "구동사 bounce back",
+      "note": "bounce back은 넘어진 뒤 다시 튀어 오르듯 회복하다는 뜻입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "bounces back",
+      "meaning": "(실패에서) 다시 일어선다"
+     }
+    ],
+    "insight": {
+     "formula": "[동명사 주어 losing] + [동사 teaches] + [사람 him] + [비교 more than winning]",
+     "why": "동사에서 온 losing이 주어 자리에 오면 하나로 취급해 teaches를 씁니다. 비교 대상도 같은 꼴인 동명사 winning으로 맞춰야 두 쪽의 짝이 맞습니다.",
+     "wrong": "Now he bounces back quickly, and lose teach him more than win.",
+     "natural": "이제 그는 빠르게 다시 일어서고, 지는 일이 이기는 일보다 그에게 더 많은 것을 가르쳐 준다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "what-a-locked-door-teaches",
+  "level": 3,
+  "topic": "Games",
+  "title": "What a Locked Door Teaches",
+  "titleKr": "잠긴 문이 가르치는 것",
+  "sentences": [
+   {
+    "text": "In many puzzle games, a locked door blocks the player until she finds the right key.",
+    "chunks": [
+     {
+      "en": "In many puzzle games,",
+      "kr": "많은 퍼즐 게임에서는"
+     },
+     {
+      "en": "a locked door blocks the player",
+      "kr": "잠긴 문 하나가 플레이어를 막아 선다"
+     },
+     {
+      "en": "until she finds the right key.",
+      "kr": "플레이어가 맞는 열쇠를 찾을 때까지"
+     }
+    ],
+    "naturalTranslation": "많은 퍼즐 게임에서 잠긴 문 하나는 플레이어가 맞는 열쇠를 찾을 때까지 그 앞을 막아 선다.",
+    "wordOrderPoint": {
+     "title": "배경 - 사건 - 끝점 순서",
+     "explanation": "어디서 벌어지는 일인지 먼저 깔고, 무슨 일이 일어나는지 말한 뒤, 언제까지인지를 until절로 닫습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 6,
+       "reason": "주어 a locked door가 세 낱말로 길어 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 In과 목적어 many puzzle games를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 blocks와 목적어 the player를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "짧은 주어 she와 동사 finds를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "동사 finds와 목적어 the right key를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거분사 locked의 명사 수식",
+      "note": "a locked door - 과거분사 locked가 '잠긴'이라는 뜻으로 앞에서 door를 꾸밉니다."
+     },
+     {
+      "label": "시간 부사절 until",
+      "note": "until she finds ~ - '~할 때까지'로 상태가 이어지는 끝점을 나타냅니다."
+     },
+     {
+      "label": "문두 전치사구",
+      "note": "In many puzzle games가 문장 전체의 배경을 먼저 깔아 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "locked",
+      "meaning": "잠긴"
+     },
+     {
+      "word": "blocks",
+      "meaning": "막아 선다, 가로막는다"
+     }
+    ]
+   },
+   {
+    "text": "She cannot open it by pressing the same button faster.",
+    "chunks": [
+     {
+      "en": "She cannot open it",
+      "kr": "그녀는 그것을 열 수 없다"
+     },
+     {
+      "en": "by pressing the same button faster.",
+      "kr": "같은 버튼을 더 빨리 누르는 것으로는"
+     }
+    ],
+    "naturalTranslation": "같은 버튼을 더 빨리 누른다고 해서 그 문이 열리지는 않는다.",
+    "wordOrderPoint": {
+     "title": "수단은 by + 동명사로 뒤에",
+     "explanation": "안 된다는 결론을 먼저 말하고, 무엇으로 해 봤자 안 되는지를 by 뒤에 동명사로 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 She와 조동사 cannot을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "cannot 뒤에서 끊으면 동사 open이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 open과 목적어 it을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 by와 동명사 pressing을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조동사 cannot + 동사원형",
+      "note": "cannot open은 '열 수 없다'로 조동사 뒤에는 원형을 씁니다."
+     },
+     {
+      "label": "전치사 by + 동명사",
+      "note": "by pressing은 '누름으로써'라는 수단을 나타냅니다."
+     },
+     {
+      "label": "비교급 부사 faster",
+      "note": "faster는 fast의 비교급으로 '(전보다) 더 빨리'를 뜻합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "pressing",
+      "meaning": "누르는 것"
+     }
+    ]
+   },
+   {
+    "text": "Instead she must notice a pattern, make a guess, and figure out why the last try failed.",
+    "chunks": [
+     {
+      "en": "Instead she must notice a pattern,",
+      "kr": "그 대신 그녀는 규칙 하나를 알아채야 한다"
+     },
+     {
+      "en": "make a guess,",
+      "kr": "추측을 해 보고"
+     },
+     {
+      "en": "and figure out why the last try failed.",
+      "kr": "그리고 지난 시도가 왜 실패했는지 알아내야 한다"
+     }
+    ],
+    "naturalTranslation": "그 대신 그녀는 규칙을 알아채고, 추측을 해 보고, 지난 시도가 왜 실패했는지 알아내야 한다.",
+    "wordOrderPoint": {
+     "title": "왜냐고 묻는 절을 동사 뒤에 통째로",
+     "explanation": "한국어는 '왜 실패했는지 알아내다'처럼 물음을 앞에 두지만, 영어는 figure out을 먼저 말하고 why the last try failed를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Instead 뒤에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "why가 이끄는 절 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "조동사 must 뒤에서 끊으면 동사 notice가 떨어져 나갑니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 notice와 목적어 a pattern을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 make와 목적어 a guess를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "figure out은 두 낱말이 한 동사라 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조동사 must + 동사원형 병렬",
+      "note": "notice, make, figure out 세 원형이 must 하나에 나란히 걸립니다."
+     },
+     {
+      "label": "간접의문문(의문사절)",
+      "note": "why the last try failed가 figure out의 목적어로 들어가며 주어+동사 순서를 지킵니다."
+     },
+     {
+      "label": "구동사 figure out",
+      "note": "figure out은 '따져서 알아내다'로 out까지 한 덩어리입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "pattern",
+      "meaning": "되풀이되는 규칙, 패턴"
+     },
+     {
+      "word": "make a guess",
+      "meaning": "추측해 보다"
+     },
+     {
+      "word": "figure out",
+      "meaning": "따져서 알아내다"
+     }
+    ],
+    "insight": {
+     "formula": "[조동사 must] + [동사원형 notice / make / figure out] + [의문사절 why the last try failed]",
+     "why": "must 하나에 동사원형 세 개가 나란히 걸립니다. 마지막 figure out의 목적어는 why가 이끄는 절인데, 물음이 아니라 목적어라서 why the last try failed처럼 주어+동사 순서를 그대로 둡니다.",
+     "wrong": "Instead she must notice a pattern, makes a guess, and figure out why the last try failed.",
+     "natural": "그 대신 그녀는 규칙을 알아채고, 추측을 해 보고, 지난 시도가 왜 실패했는지 알아내야 한다."
+    }
+   },
+   {
+    "text": "Some researchers say that this slow guessing can build skills that help in real life.",
+    "chunks": [
+     {
+      "en": "Some researchers say",
+      "kr": "몇몇 연구자들은 말한다"
+     },
+     {
+      "en": "that this slow guessing can build skills",
+      "kr": "이 느린 추측이 능력을 길러 줄 수 있다고"
+     },
+     {
+      "en": "that help in real life.",
+      "kr": "실생활에 도움이 되는"
+     }
+    ],
+    "naturalTranslation": "몇몇 연구자들은 이런 느린 추측이 실생활에 도움이 되는 능력을 길러 줄 수 있다고 말한다.",
+    "wordOrderPoint": {
+     "title": "꾸미는 절을 명사 뒤에 붙이는 영어",
+     "explanation": "한국어는 '실생활에 도움이 되는 능력'처럼 꾸미는 말을 앞에 두지만, 영어는 skills를 먼저 말하고 that help in real life를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 6,
+       "reason": "that절의 주어 this slow guessing이 세 낱말로 길어 조동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Some researchers와 동사 say를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "접속사 that과 그 절의 주어 this slow guessing을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "조동사 can 뒤에서 끊으면 동사 build가 떨어져 나갑니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "관계대명사 that과 동사 help를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "전치사 in과 목적어 real life를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "명사절 접속사 that",
+      "note": "첫 번째 that 이하 절 전체가 say의 목적어입니다."
+     },
+     {
+      "label": "주격 관계대명사 that",
+      "note": "두 번째 that은 앞의 skills를 꾸미는 절을 이끕니다."
+     },
+     {
+      "label": "조동사 can + 동사원형",
+      "note": "can build는 '길러 줄 수 있다'로 단정하지 않고 가능성만 말합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "guessing",
+      "meaning": "추측하기, 짐작해 보기"
+     },
+     {
+      "word": "skills",
+      "meaning": "능력, 기술"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 Some researchers] + [동사 say] + [that절 this slow guessing can build skills] + [관계절 that help in real life]",
+     "why": "that이 두 번 나오지만 역할이 다릅니다. 앞의 that은 say의 목적어가 될 절을 여는 접속사라 빼도 되고, 뒤의 that은 앞 명사 skills를 꾸미는 관계대명사라 뺄 수 없습니다.",
+     "wrong": "Some researchers say that this slow guessing can builds skills that help in real life.",
+     "natural": "몇몇 연구자들은 이런 느린 추측이 실생활에 도움이 되는 능력을 길러 줄 수 있다고 말한다."
+    }
+   },
+   {
+    "text": "That habit of asking why stays with her outside the game.",
+    "chunks": [
+     {
+      "en": "That habit of asking why",
+      "kr": "왜냐고 묻는 그 습관은"
+     },
+     {
+      "en": "stays with her",
+      "kr": "그녀에게 남는다"
+     },
+     {
+      "en": "outside the game.",
+      "kr": "게임 밖에서도"
+     }
+    ],
+    "naturalTranslation": "왜냐고 묻는 그 습관은 게임 밖에서도 그녀에게 그대로 남는다.",
+    "wordOrderPoint": {
+     "title": "명사 뒤에 of + 동명사로 좁히기",
+     "explanation": "That habit을 먼저 던지고 of asking why를 뒤에 붙여 어떤 습관인지 좁힙니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "주어에 붙은 of asking why 앞에서는 끊어 읽어도 뜻이 흐트러지지 않습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "전치사 of와 동명사 asking을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 with와 목적어 her를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "outside와 목적어 the game을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "of + 동명사",
+      "note": "the habit of asking - '묻는 습관'으로 of 뒤에는 동명사를 씁니다."
+     },
+     {
+      "label": "의문사 why가 목적어 자리에",
+      "note": "asking why는 '왜냐고 묻기'로 why 하나가 물음 전체를 대신합니다."
+     },
+     {
+      "label": "지시형용사 That",
+      "note": "That habit은 앞 문장들에서 말한 바로 그 습관을 가리킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "stays with",
+      "meaning": "~에게 남아 있다"
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,3165 @@
+[
+ {
+  "id": "looking-up-new-words",
+  "level": 2,
+  "topic": "Language",
+  "title": "The Guess Before the Dictionary",
+  "titleKr": "사전을 펴기 전의 짐작",
+  "sentences": [
+   {
+    "text": "Guessing a word's meaning from the sentence is Yuri's first step.",
+    "chunks": [
+     {
+      "en": "Guessing a word's meaning from the sentence",
+      "kr": "문장에서 단어의 뜻을 짐작해 보는 것이"
+     },
+     {
+      "en": "is Yuri's first step.",
+      "kr": "유리의 첫 단계다"
+     }
+    ],
+    "naturalTranslation": "문장에서 단어의 뜻을 짐작해 보는 것이 유리의 첫 단계다.",
+    "wordOrderPoint": {
+     "title": "긴 주어를 통째로 앞에 세우기",
+     "explanation": "한국어는 '~하는 것이'로 주어를 매듭짓지만, 영어는 Guessing부터 sentence까지를 통째로 앞에 세운 뒤 동사 is를 놓습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "뒤에 붙는 from 전치사구 앞이라 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "동명사 Guessing과 목적어 a word's meaning을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 from과 목적어 the sentence가 갈립니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "be동사 is와 보어 Yuri's first step을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "주어와 동사의 수 일치",
+      "note": "동명사구 주어는 하나로 묶여 단수 취급하므로 are가 아니라 is를 씁니다."
+     },
+     {
+      "label": "be동사 + 명사 보어",
+      "note": "is 뒤의 Yuri's first step이 주어가 무엇인지 설명하는 보어입니다."
+     },
+     {
+      "label": "소유격 's",
+      "note": "a word's meaning은 '그 단어의 뜻'으로, 's가 앞 명사를 뒤 명사의 임자로 만듭니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "Guessing",
+      "meaning": "짐작하기, 추측하기"
+     }
+    ]
+   },
+   {
+    "text": "When the guess feels wrong, she looks up the word in her dictionary.",
+    "chunks": [
+     {
+      "en": "When the guess feels wrong,",
+      "kr": "짐작이 틀린 것 같으면"
+     },
+     {
+      "en": "she looks up the word",
+      "kr": "그녀는 그 단어를 찾아본다"
+     },
+     {
+      "en": "in her dictionary.",
+      "kr": "사전에서"
+     }
+    ],
+    "naturalTranslation": "짐작이 틀린 것 같으면 그녀는 사전에서 그 단어를 찾아본다.",
+    "wordOrderPoint": {
+     "title": "구동사 look up + 목적어",
+     "explanation": "look과 up이 붙어 '찾아보다'라는 한 동사가 되고, 그 뒤에 찾는 대상이 옵니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 6,
+       "reason": "구동사 look up의 looks와 up을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "구동사 looks up과 목적어 the word가 갈립니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 in과 목적어 her dictionary가 갈립니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조건·시간 부사절 when",
+      "note": "When the guess feels wrong이 뒤 주절이 일어나는 경우를 밝힙니다."
+     },
+     {
+      "label": "감각동사 feel + 형용사 보어",
+      "note": "feels wrong은 '틀린 것 같다'로, feel 뒤에는 부사가 아니라 형용사가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "looks up",
+      "meaning": "(사전에서) 찾아본다"
+     }
+    ]
+   },
+   {
+    "text": "The entry shows the meaning and a short example sentence.",
+    "chunks": [
+     {
+      "en": "The entry shows the meaning",
+      "kr": "그 항목은 뜻을 보여 준다"
+     },
+     {
+      "en": "and a short example sentence.",
+      "kr": "그리고 짧은 예문 하나도"
+     }
+    ],
+    "naturalTranslation": "그 항목은 뜻과 짧은 예문 하나를 보여 준다.",
+    "wordOrderPoint": {
+     "title": "and로 이은 두 목적어",
+     "explanation": "shows의 목적어로 the meaning과 a short example sentence 둘을 and로 나란히 이었습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The entry와 동사 shows를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 shows와 목적어 the meaning을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "접속사 and와 뒤따르는 명사구가 갈립니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "명사가 명사를 꾸미는 복합명사",
+      "note": "example이 뒤의 sentence를 꾸며 example sentence가 '예문'이라는 한 덩어리 명사가 됩니다."
+     },
+     {
+      "label": "정관사 the의 특정 지시",
+      "note": "the meaning은 방금 찾아본 바로 그 단어의 뜻을 콕 집어 가리킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "entry",
+      "meaning": "(사전의) 표제어 항목"
+     }
+    ]
+   },
+   {
+    "text": "Yuri writes both of them down in the back of her notebook.",
+    "chunks": [
+     {
+      "en": "Yuri writes both of them down",
+      "kr": "유리는 그 둘을 적어 둔다"
+     },
+     {
+      "en": "in the back of her notebook.",
+      "kr": "공책 뒤쪽에"
+     }
+    ],
+    "naturalTranslation": "유리는 그 둘을 공책 뒤쪽에 적어 둔다.",
+    "wordOrderPoint": {
+     "title": "구동사 write down의 목적어 자리",
+     "explanation": "목적어가 대명사면 반드시 writes와 down 사이에 넣고(writes them down), 명사면 둘 다 됩니다(writes down the words / writes the words down). 여기서는 both of them이 대명사 덩어리라 사이에 넣었습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "뒤에 붙는 of 전치사구 앞이라 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "동사 writes와 목적어 both of them을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 of와 목적어 them이 갈립니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 in과 목적어 the back이 갈립니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "both of + 복수대명사",
+      "note": "both of them은 앞에 나온 뜻과 예문 두 가지를 함께 가리킵니다."
+     },
+     {
+      "label": "전치사구 안에 든 of 전치사구",
+      "note": "in the back of her notebook처럼 전치사구 안에 of 전치사구가 또 들어가 위치를 좁힙니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "both of them",
+      "meaning": "그 둘 다"
+     },
+     {
+      "word": "the back of",
+      "meaning": "~의 뒤쪽"
+     }
+    ]
+   },
+   {
+    "text": "Now she knows which words she has looked up before.",
+    "chunks": [
+     {
+      "en": "Now she knows",
+      "kr": "이제 그녀는 안다"
+     },
+     {
+      "en": "which words she has looked up before.",
+      "kr": "어떤 단어를 전에 찾아봤는지"
+     }
+    ],
+    "naturalTranslation": "이제 그녀는 어떤 단어를 전에 찾아봤는지 안다.",
+    "wordOrderPoint": {
+     "title": "know + 의문사절 목적어",
+     "explanation": "knows 뒤에 명사 하나 대신 which words로 시작하는 절 전체가 목적어로 들어갑니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "문장 끝 부사 before 앞이라 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "의문사 which와 뒤의 명사 words를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "현재완료의 has와 과거분사 looked를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "구동사 look up의 looked와 up을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "간접의문문의 어순",
+      "note": "의문사 뒤는 의문문 어순(has she)이 아니라 평서문 어순(she has)을 씁니다."
+     },
+     {
+      "label": "현재완료 has + 과거분사",
+      "note": "has looked up은 지금까지 찾아본 경험을 나타냅니다."
+     }
+    ],
+    "words": [],
+    "insight": {
+     "formula": "[주어 she] + [동사 knows] + [목적어 절 which words she has looked up before]",
+     "why": "knows의 목적어 자리에 의문사절이 통째로 들어갑니다. 절 안은 의문문 어순이 아니라 주어 she 다음에 동사 has가 오는 평서문 어순입니다.",
+     "wrong": "Now she knows which words has she looked up before.",
+     "natural": "이제 그녀는 어떤 단어를 전에 찾아봤는지 안다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "phrases-picked-up-while-playing",
+  "level": 2,
+  "topic": "Language",
+  "title": "Words from Playtime",
+  "titleKr": "놀다가 주워 온 말들",
+  "sentences": [
+   {
+    "text": "Minji learns new English expressions when she plays with her friend Emma.",
+    "chunks": [
+     {
+      "en": "Minji learns new English expressions",
+      "kr": "민지는 새로운 영어 표현들을 배운다"
+     },
+     {
+      "en": "when she plays",
+      "kr": "그녀가 놀 때"
+     },
+     {
+      "en": "with her friend Emma.",
+      "kr": "친구 엠마와"
+     }
+    ],
+    "naturalTranslation": "민지는 친구 엠마와 놀 때 새로운 영어 표현들을 배운다.",
+    "wordOrderPoint": {
+     "title": "뼈대 먼저, 언제·누구와는 뒤에",
+     "explanation": "Minji learns new English expressions로 문장의 뼈대를 먼저 세우고, 그것이 언제 어떤 상황에서 일어나는지를 뒤에 차례로 덧붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Minji와 동사 learns를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 learns와 목적어 new English expressions를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 she와 동사 plays를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 with와 목적어 her friend Emma를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "동격 명사구",
+      "note": "her friend Emma - '친구'와 'Emma'가 같은 사람을 가리키며 나란히 붙어 한 덩어리를 이룹니다."
+     },
+     {
+      "label": "시간 부사절 when",
+      "note": "when she plays는 '그녀가 놀 때'로, 주절이 언제 일어나는 일인지 알려 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "expressions",
+      "meaning": "표현, 말하는 방식"
+     }
+    ]
+   },
+   {
+    "text": "She picks up new phrases from Emma's jokes, and she repeats them later.",
+    "chunks": [
+     {
+      "en": "She picks up new phrases",
+      "kr": "그녀는 새로운 표현들을 저절로 익힌다"
+     },
+     {
+      "en": "from Emma's jokes,",
+      "kr": "엠마의 농담에서"
+     },
+     {
+      "en": "and she repeats them later.",
+      "kr": "그리고 그녀는 나중에 그것들을 되풀이한다"
+     }
+    ],
+    "naturalTranslation": "그녀는 엠마의 농담에서 새로운 표현들을 저절로 익히고, 나중에 그것들을 되풀이해 본다.",
+    "wordOrderPoint": {
+     "title": "구동사는 두 낱말이 한 동사",
+     "explanation": "picks up이 통째로 하나의 동사라 그 뒤에 목적어 new phrases가 바로 붙습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 11,
+       "reason": "문장 끝의 부사 later 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 She와 동사 picks를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "pick up은 두 낱말이 한 동사라 picks와 up을 붙여 읽습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "구동사 picks up과 목적어 new phrases를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 from과 목적어 Emma's jokes를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "짧은 주어 she와 동사 repeats를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 pick up",
+      "note": "pick up은 '따로 공부하지 않고 저절로 익히다'라는 뜻으로 up까지 한 덩어리입니다."
+     },
+     {
+      "label": "등위접속사 and로 두 절 잇기",
+      "note": "콤마와 and가 앞 절과 뒤 절을 나란히 이어 두 일이 차례로 일어남을 보입니다."
+     },
+     {
+      "label": "대명사 them",
+      "note": "them은 앞 절의 new phrases를 가리켜 같은 말을 되풀이하지 않게 합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "picks up",
+      "meaning": "(따로 배우지 않고) 저절로 익힌다"
+     },
+     {
+      "word": "phrases",
+      "meaning": "표현, 몇 낱말로 된 어구"
+     }
+    ]
+   },
+   {
+    "text": "These words stick better than the ones in her textbook.",
+    "chunks": [
+     {
+      "en": "These words stick better",
+      "kr": "이 말들은 더 잘 남는다"
+     },
+     {
+      "en": "than the ones in her textbook.",
+      "kr": "교과서에 있는 것들보다"
+     }
+    ],
+    "naturalTranslation": "이렇게 익힌 말들은 교과서에 있는 것들보다 머리에 더 잘 남는다.",
+    "wordOrderPoint": {
+     "title": "비교급 뒤에 than으로 대상 붙이기",
+     "explanation": "better로 '더 낫다'를 먼저 말하고, 무엇과 견주는지는 than 뒤에 붙여 뒤에서 채웁니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 6,
+       "reason": "the ones를 꾸미는 전치사구 in her textbook 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 These words와 동사 stick을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 stick과 그 정도를 말하는 better를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "than과 비교 대상 the ones를 갈라놓으면 무엇과 견주는지가 사라집니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 in과 목적어 her textbook을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "비교급 + than",
+      "note": "better than ~ 으로 두 대상을 견주며, better는 well·good의 비교급입니다."
+     },
+     {
+      "label": "명사를 대신하는 the ones",
+      "note": "the ones는 앞에 나온 words를 대신해 같은 명사를 되풀이하지 않게 합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "stick",
+      "meaning": "(기억에) 남다, 달라붙다"
+     }
+    ]
+   },
+   {
+    "text": "In class the next day, she uses one of Emma's phrases without thinking.",
+    "chunks": [
+     {
+      "en": "In class the next day,",
+      "kr": "다음 날 수업 시간에"
+     },
+     {
+      "en": "she uses one of Emma's phrases",
+      "kr": "그녀는 엠마의 표현 하나를 쓴다"
+     },
+     {
+      "en": "without thinking.",
+      "kr": "생각할 것도 없이"
+     }
+    ],
+    "naturalTranslation": "다음 날 수업 시간에 그녀는 엠마의 표현 하나를 저절로 입 밖에 낸다.",
+    "wordOrderPoint": {
+     "title": "장면을 여는 문두 부사구",
+     "explanation": "In class the next day를 맨 앞에 놓아 언제 어디서 벌어진 일인지 먼저 못 박고 주어를 꺼냅니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "장소 In class와 시간 the next day 사이에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 In과 목적어 class를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "짧은 주어 she와 동사 uses를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 uses와 목적어 one of Emma's phrases를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 of와 목적어 Emma's phrases를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "one of + 복수명사",
+      "note": "one of Emma's phrases는 '엠마의 표현들 중 하나'로 of 뒤에 복수형을 씁니다."
+     },
+     {
+      "label": "전치사 + 동명사",
+      "note": "without thinking - 전치사 without 뒤에는 동사원형이 아니라 -ing형이 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "without thinking",
+      "meaning": "생각할 것도 없이, 저절로"
+     }
+    ]
+   },
+   {
+    "text": "She now believes that play teaches her more than any word list.",
+    "chunks": [
+     {
+      "en": "She now believes",
+      "kr": "그녀는 이제 믿는다"
+     },
+     {
+      "en": "that play teaches her more",
+      "kr": "노는 것이 그녀에게 더 많은 것을 가르쳐 준다고"
+     },
+     {
+      "en": "than any word list.",
+      "kr": "어떤 단어 목록보다도"
+     }
+    ],
+    "naturalTranslation": "그녀는 이제 노는 시간이 어떤 단어 목록보다 자기에게 더 많은 것을 가르쳐 준다고 믿는다.",
+    "wordOrderPoint": {
+     "title": "생각의 내용을 that절로 통째로 담기",
+     "explanation": "believes 뒤에 that절 하나를 통째로 놓아 '무엇을 믿는지'를 문장 모양 그대로 담습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 She와 부사 now를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "접속사 that과 그 절의 주어 play를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "짧은 주어 play와 동사 teaches를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "than과 비교 대상 any word list를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "명사절 접속사 that",
+      "note": "that play teaches her more가 통째로 believes의 목적어 노릇을 합니다."
+     },
+     {
+      "label": "비교급 more + than",
+      "note": "much·many의 비교급 more가 '더 많은 것'으로 teaches의 목적어 노릇을 하고, 견주는 대상은 than 뒤에 옵니다."
+     },
+     {
+      "label": "명사로 쓰인 play",
+      "note": "동사 play가 그대로 '노는 일'이라는 명사로 쓰여 that절의 주어가 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "word list",
+      "meaning": "단어 목록, 단어장"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 She] + [부사 now] + [동사 believes] + [that절 play teaches her more than any word list]",
+     "why": "believes 뒤의 that은 뜻이 없고 '여기부터 믿는 내용'이라고 알리는 표시입니다. 그래서 that 뒤는 질문이 아니라 평서문 어순 그대로 주어(play) + 동사(teaches)가 이어집니다.",
+     "wrong": "She now believes that does play teach her more than any word list. (that절 안을 의문문 어순으로 뒤집지 않습니다.)",
+     "natural": "그녀는 이제 노는 시간이 어떤 단어 목록보다 자기에게 더 많은 것을 가르쳐 준다고 믿는다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "the-movie-without-subtitles",
+  "level": 2,
+  "topic": "Language",
+  "title": "The Strip of Paper on the Screen",
+  "titleKr": "화면을 가린 종이 한 줄",
+  "sentences": [
+   {
+    "text": "Jiho covers the subtitles with a strip of paper and starts the movie.",
+    "chunks": [
+     {
+      "en": "Jiho covers the subtitles",
+      "kr": "지호는 자막을 가린다"
+     },
+     {
+      "en": "with a strip of paper",
+      "kr": "종이 한 줄로"
+     },
+     {
+      "en": "and starts the movie.",
+      "kr": "그리고 영화를 시작한다"
+     }
+    ],
+    "naturalTranslation": "지호는 종이 한 줄로 자막을 가린 뒤 영화를 튼다.",
+    "wordOrderPoint": {
+     "title": "도구는 with로 동사 뒤에",
+     "explanation": "무엇을 하는지(covers the subtitles)를 먼저 말하고, 무엇으로 하는지는 with 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Jiho와 동사 covers를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 covers와 목적어 the subtitles를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 with와 목적어 a strip of paper를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 전치사구 of paper는 앞의 a strip에 붙여 한 덩어리로 읽습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 starts와 목적어 the movie를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "도구를 나타내는 전치사 with",
+      "note": "with a strip of paper - '종이 한 줄로'처럼 수단·도구를 나타냅니다."
+     },
+     {
+      "label": "등위접속사 and로 동사 잇기",
+      "note": "covers와 starts가 같은 주어 Jiho의 연속 동작입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "subtitles",
+      "meaning": "자막"
+     },
+     {
+      "word": "a strip of",
+      "meaning": "가늘고 긴 한 조각의"
+     }
+    ]
+   },
+   {
+    "text": "For the first ten minutes he can follow almost every line.",
+    "chunks": [
+     {
+      "en": "For the first ten minutes",
+      "kr": "처음 10분 동안은"
+     },
+     {
+      "en": "he can follow almost every line.",
+      "kr": "그는 거의 모든 대사를 따라갈 수 있다"
+     }
+    ],
+    "naturalTranslation": "처음 10분 동안 그는 거의 모든 대사를 따라갈 수 있다.",
+    "wordOrderPoint": {
+     "title": "기간을 문두에 두어 범위 정하기",
+     "explanation": "For the first ten minutes를 앞세워 뒤에 오는 말이 어느 구간에만 해당하는지 미리 못 박습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 For와 목적어 the first ten minutes를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "짧은 주어 he와 조동사 can을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "조동사 can과 본동사 follow는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 follow와 목적어 almost every line을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조동사 can",
+      "note": "can follow - 지금 그럴 능력이 된다는 뜻으로 뒤에 동사원형이 옵니다."
+     },
+     {
+      "label": "기간을 나타내는 전치사 for",
+      "note": "for the first ten minutes는 '처음 10분 동안'으로 얼마나 오래인지를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "follow",
+      "meaning": "(말을) 따라가다, 알아듣다"
+     },
+     {
+      "word": "line",
+      "meaning": "(영화·연극의) 대사 한 줄"
+     }
+    ]
+   },
+   {
+    "text": "Then the actors speak faster, and he cannot keep up with the story.",
+    "chunks": [
+     {
+      "en": "Then the actors speak faster,",
+      "kr": "그러다 배우들이 더 빨리 말한다"
+     },
+     {
+      "en": "and he cannot keep up",
+      "kr": "그리고 그는 따라가지 못한다"
+     },
+     {
+      "en": "with the story.",
+      "kr": "그 이야기를"
+     }
+    ],
+    "naturalTranslation": "그러다 배우들의 말이 더 빨라지고, 그는 이야기를 따라가지 못한다.",
+    "wordOrderPoint": {
+     "title": "구동사 뒤에 전치사로 대상 잇기",
+     "explanation": "keep up만으로 '뒤처지지 않는다'가 되고, 무엇을 따라가는지는 with 뒤에 붙여 말합니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Then 뒤에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 the actors와 동사 speak을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 he와 조동사 cannot을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "조동사 cannot과 본동사 keep은 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "keep up은 두 낱말이 한 동사라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 with와 목적어 the story를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 keep up + 전치사 with",
+      "note": "keep up이 '뒤처지지 않다'라는 한 동사이고, 따라가는 대상은 전치사 with 뒤에 붙입니다."
+     },
+     {
+      "label": "부정 조동사 cannot",
+      "note": "cannot keep up - can의 부정형으로 그럴 능력이 안 된다는 뜻입니다."
+     },
+     {
+      "label": "등위접속사 and로 두 절 잇기",
+      "note": "and가 배우들이 빨라진 일과 그가 못 따라가는 일을 원인과 결과처럼 잇습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "keep up with",
+      "meaning": "~에 뒤처지지 않고 따라가다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 he] + [부정 조동사 cannot] + [구동사 keep up] + [전치사 with + 대상 the story]",
+     "why": "keep up은 그 자체로 '뒤처지지 않다'라는 뜻이라 목적어를 바로 받지 못합니다. 따라가는 대상을 말하려면 전치사 with를 하나 더 데려와 with the story로 이어 붙여야 합니다.",
+     "wrong": "He cannot keep up the story. (with 없이 목적어를 바로 붙이면 '이야기를 계속 유지한다'라는 다른 뜻이 됩니다.)",
+     "natural": "그는 이야기를 따라가지 못한다."
+    }
+   },
+   {
+    "text": "He goes back a few seconds, listens once more, and catches the missing word.",
+    "chunks": [
+     {
+      "en": "He goes back a few seconds,",
+      "kr": "그는 몇 초를 되감는다"
+     },
+     {
+      "en": "listens once more,",
+      "kr": "한 번 더 듣는다"
+     },
+     {
+      "en": "and catches the missing word.",
+      "kr": "그리고 놓쳤던 단어를 잡아낸다"
+     }
+    ],
+    "naturalTranslation": "그는 몇 초를 되감아 한 번 더 들어 보고서, 놓쳤던 단어를 잡아낸다.",
+    "wordOrderPoint": {
+     "title": "동작 셋을 콤마와 and로 나열",
+     "explanation": "주어 He 하나에 goes back, listens, catches 세 동사를 콤마로 잇고 마지막만 and로 묶습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 He와 동사 goes를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "go back은 두 낱말이 한 동사라 goes와 back을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "되감는 길이 a few seconds를 앞의 goes back에서 떼어 놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "a few는 '몇몇의'라는 한 덩어리라 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 listens와 그 횟수를 말하는 once more를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 catches와 목적어 the missing word를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "동사 세 개의 병렬 나열",
+      "note": "goes back, listens, and catches가 같은 주어 He에 나란히 걸려 시간 순서를 만듭니다."
+     },
+     {
+      "label": "현재분사의 형용사 용법",
+      "note": "the missing word - missing이 명사 앞에서 '빠져 있는'이라는 뜻으로 word를 꾸밉니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "goes back",
+      "meaning": "(뒤로) 되돌아가다, 되감다"
+     },
+     {
+      "word": "catches",
+      "meaning": "(소리·말을) 알아듣다, 잡아내다"
+     }
+    ]
+   },
+   {
+    "text": "Next time he will watch a longer film with the paper strip again.",
+    "chunks": [
+     {
+      "en": "Next time",
+      "kr": "다음번에"
+     },
+     {
+      "en": "he will watch a longer film",
+      "kr": "그는 더 긴 영화를 볼 것이다"
+     },
+     {
+      "en": "with the paper strip again.",
+      "kr": "종이 줄을 다시 대고"
+     }
+    ],
+    "naturalTranslation": "다음번에 그는 종이 줄을 다시 대고 더 긴 영화를 볼 것이다.",
+    "wordOrderPoint": {
+     "title": "어떤 상태로 하는지는 with로 끝에",
+     "explanation": "무엇을 볼지 먼저 다 말한 뒤, 어떤 상태로 보는지는 with 뒤에 붙여 맨 끝에 덧댑니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 11,
+       "reason": "문장 끝 부사 again 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 he와 조동사 will을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "조동사 will과 본동사 watch는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 watch와 목적어 a longer film을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 with와 목적어 the paper strip을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "미래를 나타내는 will",
+      "note": "will watch - 앞으로 그렇게 하겠다는 계획이나 의지를 나타냅니다."
+     },
+     {
+      "label": "비교급 + 명사",
+      "note": "a longer film은 '지금보다 더 긴 영화'로, 견주는 대상은 문맥에서 짐작합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "Next time",
+      "meaning": "다음번에"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "the-email-that-sounded-cold",
+  "level": 2,
+  "topic": "Language",
+  "title": "Polite but Chilly",
+  "titleKr": "정중한데 왜 차갑게 읽힐까",
+  "sentences": [
+   {
+    "text": "Sujin writes a short email to ask her teacher for advice.",
+    "chunks": [
+     {
+      "en": "Sujin writes a short email",
+      "kr": "수진은 짧은 메일을 쓴다"
+     },
+     {
+      "en": "to ask her teacher",
+      "kr": "선생님께 여쭤보려고"
+     },
+     {
+      "en": "for advice.",
+      "kr": "조언을"
+     }
+    ],
+    "naturalTranslation": "수진은 선생님께 조언을 여쭤보려고 짧은 메일을 쓴다.",
+    "wordOrderPoint": {
+     "title": "무엇을 했는지 먼저, 이유는 to로 뒤에",
+     "explanation": "writes a short email로 한 일을 먼저 말하고, 왜 썼는지는 to ask 뒤에 붙여 설명합니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Sujin과 동사 writes를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 writes와 목적어 a short email을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "to부정사의 to와 동사원형 ask는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 ask와 묻는 상대 her teacher를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 for와 목적어 advice를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "to부정사의 목적 용법",
+      "note": "to ask는 '여쭤보기 위해'로 메일을 쓴 이유를 나타냅니다."
+     },
+     {
+      "label": "ask + 사람 + for + 내용",
+      "note": "묻는 상대는 동사 바로 뒤에, 묻는 내용은 for 뒤에 놓는 문형입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "advice",
+      "meaning": "조언, 충고"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 Sujin] + [동사 writes] + [목적어 a short email] + [to부정사 to ask her teacher for advice]",
+     "why": "영어는 한 문장에 동사를 하나만 세웁니다. '쓰다'와 '여쭤보다'를 나란히 놓으려면 뒤쪽 동작에 to를 붙여 to ask로 만들어 이유·목적으로 매달아야 합니다.",
+     "wrong": "Sujin writes a short email asks her teacher for advice. (동사 writes와 asks를 접속사 없이 나란히 세울 수 없습니다.)",
+     "natural": "수진은 선생님께 조언을 여쭤보려고 짧은 메일을 쓴다."
+    }
+   },
+   {
+    "text": "Every sentence is correct and polite, but the whole message feels cold.",
+    "chunks": [
+     {
+      "en": "Every sentence is correct and polite,",
+      "kr": "모든 문장이 정확하고 정중하다"
+     },
+     {
+      "en": "but the whole message feels cold.",
+      "kr": "그런데 메일 전체가 차갑게 느껴진다"
+     }
+    ],
+    "naturalTranslation": "문장 하나하나는 정확하고 정중한데, 메일 전체는 차갑게 느껴진다.",
+    "wordOrderPoint": {
+     "title": "but으로 앞말을 뒤집기",
+     "explanation": "앞 절을 다 말한 뒤 but을 놓아, 정중함과 차가움이 함께 있다는 반전을 뒤 절에서 드러냅니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "두 보어를 잇는 and 앞에서는 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "주어 the whole message가 세 낱말로 길어 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Every sentence와 be동사 is를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "be동사 is와 보어 correct를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "감각동사 feels와 보어 cold를 갈라 읽으면 '차갑게 느껴진다'가 끊깁니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "be동사 + 형용사 보어",
+      "note": "is correct and polite - 두 형용사가 and로 묶여 주어를 함께 설명합니다."
+     },
+     {
+      "label": "감각동사 feel + 형용사 보어",
+      "note": "feels cold는 '차갑게 느껴지다'로, feel 뒤에는 부사가 아니라 형용사를 씁니다."
+     },
+     {
+      "label": "역접 접속사 but",
+      "note": "앞 절과 반대되는 사실을 뒤 절에 이어 붙일 때 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "polite",
+      "meaning": "정중한, 예의 바른"
+     }
+    ]
+   },
+   {
+    "text": "She adds a warm opening line and a short thank-you at the end.",
+    "chunks": [
+     {
+      "en": "She adds a warm opening line",
+      "kr": "그녀는 따뜻한 첫 줄을 덧붙인다"
+     },
+     {
+      "en": "and a short thank-you",
+      "kr": "그리고 짧은 감사 인사도"
+     },
+     {
+      "en": "at the end.",
+      "kr": "맨 끝에"
+     }
+    ],
+    "naturalTranslation": "그녀는 첫 줄에 따뜻한 인사를 넣고, 맨 끝에 짧은 감사 인사도 덧붙인다.",
+    "wordOrderPoint": {
+     "title": "목적어 둘을 and로 이어 붙이기",
+     "explanation": "동사 adds 하나에 a warm opening line과 a short thank-you 두 목적어를 and로 나란히 매답니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 She와 동사 adds를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 adds와 목적어 a warm opening line을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "형용사 warm과 그것이 꾸미는 opening line을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 at과 목적어 the end를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 목적어 잇기",
+      "note": "and 앞뒤의 두 명사구가 같은 동사 adds의 목적어입니다."
+     },
+     {
+      "label": "형용사의 명사 앞 수식",
+      "note": "a warm opening line - 형용사 warm이 뒤의 명사구를 앞에서 꾸밉니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "warm",
+      "meaning": "따뜻한, 다정한"
+     },
+     {
+      "word": "thank-you",
+      "meaning": "감사 인사"
+     }
+    ]
+   },
+   {
+    "text": "The words stay polite, and the tone turns friendly.",
+    "chunks": [
+     {
+      "en": "The words stay polite,",
+      "kr": "말은 정중한 채로 남는다"
+     },
+     {
+      "en": "and the tone turns friendly.",
+      "kr": "그리고 말투는 다정해진다"
+     }
+    ],
+    "naturalTranslation": "쓰인 말은 그대로 정중한데, 말투만 다정해진다.",
+    "wordOrderPoint": {
+     "title": "상태 동사 뒤에는 형용사",
+     "explanation": "stay와 turn은 둘 다 뒤에 형용사를 데려와 '어떤 상태로 남다·변하다'를 나타냅니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The words와 동사 stay를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 stay와 보어 polite를 갈라 읽으면 '정중한 채로 남는다'가 끊깁니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 the tone과 동사 turns를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 turns와 보어 friendly를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "상태 유지 동사 stay + 형용사",
+      "note": "stay polite는 '정중한 상태를 그대로 유지하다'라는 뜻입니다."
+     },
+     {
+      "label": "변화 동사 turn + 형용사",
+      "note": "turns friendly는 '다정한 쪽으로 바뀌다'로 변화를 나타냅니다."
+     },
+     {
+      "label": "등위접속사 and로 두 절 잇기",
+      "note": "and가 변하지 않은 것과 변한 것을 나란히 놓아 대비를 만듭니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "tone",
+      "meaning": "말투, 어조"
+     }
+    ]
+   },
+   {
+    "text": "Her teacher replies within an hour, and the answer feels warm too.",
+    "chunks": [
+     {
+      "en": "Her teacher replies",
+      "kr": "선생님이 답장한다"
+     },
+     {
+      "en": "within an hour,",
+      "kr": "한 시간 안에"
+     },
+     {
+      "en": "and the answer feels warm too.",
+      "kr": "그리고 그 답장도 따뜻하게 느껴진다"
+     }
+    ],
+    "naturalTranslation": "선생님은 한 시간 안에 답장을 주고, 그 답장 또한 따뜻하게 느껴진다.",
+    "wordOrderPoint": {
+     "title": "시간 범위는 동사 뒤에 within으로",
+     "explanation": "replies로 무슨 일이 있었는지 먼저 말하고, 얼마 안에 벌어진 일인지는 within 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 10,
+       "reason": "문장 끝 부사 too 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Her teacher와 동사 replies를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 within과 목적어 an hour를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "짧은 주어 the answer와 동사 feels를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "감각동사 feels와 보어 warm을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간 범위 전치사 within",
+      "note": "within an hour는 '한 시간이 지나기 전에'로 기한을 나타냅니다."
+     },
+     {
+      "label": "부사 too의 위치",
+      "note": "too는 보통 문장 맨 끝에 놓여 '또한'을 더합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "within",
+      "meaning": "~ 안에, ~을 넘기지 않고"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "words-that-shape-our-thinking",
+  "level": 3,
+  "topic": "Language",
+  "title": "The Frame Our Words Build",
+  "titleKr": "말이 짜 놓는 생각의 틀",
+  "sentences": [
+   {
+    "text": "Quietly, the language we speak shapes the way we notice the world.",
+    "chunks": [
+     {
+      "en": "Quietly,",
+      "kr": "조용히"
+     },
+     {
+      "en": "the language we speak",
+      "kr": "우리가 쓰는 언어는"
+     },
+     {
+      "en": "shapes the way",
+      "kr": "방식을 형성한다"
+     },
+     {
+      "en": "we notice the world.",
+      "kr": "우리가 세상을 알아채는"
+     }
+    ],
+    "naturalTranslation": "우리가 쓰는 언어는 우리가 세상을 알아채는 방식을 조용히 형성한다.",
+    "wordOrderPoint": {
+     "title": "긴 주어 뒤에서 진짜 동사 찾기",
+     "explanation": "문두 부사 Quietly 다음의 the language we speak까지가 통째로 주어이고, 이 문장의 동사는 shapes 하나뿐입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "the language를 꾸미는 절 we speak 앞은 관계대명사가 생략된 자리라 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 we와 동사 speak을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 shapes와 목적어 the way를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "짧은 주어 we와 동사 notice를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "동사 notice와 목적어 the world를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "목적격 관계대명사 생략",
+      "note": "the language (that) we speak - 관계대명사가 목적어 자리라 통째로 생략할 수 있습니다."
+     },
+     {
+      "label": "the way + 절",
+      "note": "the way we notice the world는 '우리가 세상을 알아채는 방식'으로, 관계부사 how 대신 the way를 씁니다."
+     },
+     {
+      "label": "문두로 옮긴 부사 quietly",
+      "note": "태도를 나타내는 부사는 보통 동사 뒤에 오지만, 문장 맨 앞으로 보내면 문장 전체가 조용히 벌어지는 일임을 먼저 알려 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "shapes",
+      "meaning": "형성한다, 모양을 잡는다"
+     },
+     {
+      "word": "notice",
+      "meaning": "알아채다, 눈에 담다"
+     }
+    ]
+   },
+   {
+    "text": "Some languages have several different words for a single color.",
+    "chunks": [
+     {
+      "en": "Some languages have several different words",
+      "kr": "어떤 언어들은 여러 다른 낱말을 가진다"
+     },
+     {
+      "en": "for a single color.",
+      "kr": "한 가지 색을 두고"
+     }
+    ],
+    "naturalTranslation": "어떤 언어들은 한 가지 색을 두고 여러 다른 낱말을 갖고 있다.",
+    "wordOrderPoint": {
+     "title": "무엇에 대한 낱말인지는 for로 뒤에",
+     "explanation": "have several different words로 뼈대를 세우고, 그 낱말이 무엇을 가리키는지는 for 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Some languages와 동사 have를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 have와 목적어 several different words를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 for와 목적어 a single color를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "관사 a와 명사구 single color를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "수량 형용사 several",
+      "note": "several은 '몇 개의'로 뒤에 복수명사 words가 옵니다."
+     },
+     {
+      "label": "용도·대상을 나타내는 전치사 for",
+      "note": "for a single color는 '한 색을 가리키는 데 쓰는'이라는 뜻을 더합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "single",
+      "meaning": "단 하나의"
+     }
+    ]
+   },
+   {
+    "text": "Their speakers spot small differences faster, because their language already gives each shade a name.",
+    "chunks": [
+     {
+      "en": "Their speakers spot small differences faster,",
+      "kr": "그 언어를 쓰는 사람들은 작은 차이를 더 빨리 알아본다"
+     },
+     {
+      "en": "because their language already gives each shade a name.",
+      "kr": "그들의 언어가 이미 각 색조에 이름을 하나씩 주기 때문에"
+     }
+    ],
+    "naturalTranslation": "그 언어를 쓰는 사람들은 작은 차이를 더 빨리 알아보는데, 그들의 언어가 이미 색조마다 이름을 하나씩 붙여 두었기 때문이다.",
+    "wordOrderPoint": {
+     "title": "4형식 - 받는 쪽을 먼저",
+     "explanation": "gives 뒤에 받는 쪽 each shade를 먼저 놓고, 주는 것 a name을 그다음에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 12,
+       "reason": "4형식에서 받는 쪽 each shade와 주는 것 a name 사이는 끊어 읽어도 뜻이 살아납니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Their speakers와 동사 spot을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 spot과 목적어 small differences를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "접속사 because와 그 절의 주어 their language를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "주어 their language와 그 동사 쪽을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "gives와 받는 쪽 each shade를 갈라 읽으면 4형식 뼈대가 흩어집니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "이유 부사절 because",
+      "note": "because 이하가 앞 절이 그렇게 되는 이유를 통째로 설명합니다."
+     },
+     {
+      "label": "비교급 부사 faster",
+      "note": "faster는 '더 빨리'로 동사 spot을 꾸미며, 견주는 대상은 문맥에서 짐작합니다."
+     },
+     {
+      "label": "each + 단수명사",
+      "note": "each shade는 '색조 하나하나'로 each 뒤에는 단수명사를 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "speakers",
+      "meaning": "그 언어를 쓰는 사람들"
+     },
+     {
+      "word": "shade",
+      "meaning": "(색의) 색조, 미묘한 차이"
+     }
+    ],
+    "insight": {
+     "formula": "[주절 Their speakers spot small differences faster] + [because절 their language gives + 받는 쪽 each shade + 주는 것 a name]",
+     "why": "give는 '누구에게 무엇을'을 전치사 없이 나란히 받습니다. 받는 쪽(each shade)을 먼저, 주는 것(a name)을 나중에 놓는 순서가 고정되어 있어 순서를 바꾸면 to를 넣어야 합니다.",
+     "wrong": "Their language already gives a name each shade. (순서를 뒤집으면 gives a name to each shade처럼 to가 필요합니다.)",
+     "natural": "그들의 언어가 이미 색조마다 이름을 하나씩 붙여 두었기 때문이다."
+    }
+   },
+   {
+    "text": "Words do not build our thoughts, but they decide which ones come first.",
+    "chunks": [
+     {
+      "en": "Words do not build our thoughts,",
+      "kr": "낱말이 우리 생각을 만들어 내지는 않는다"
+     },
+     {
+      "en": "but they decide",
+      "kr": "그러나 그것들은 정한다"
+     },
+     {
+      "en": "which ones come first.",
+      "kr": "어느 생각이 먼저 떠오를지를"
+     }
+    ],
+    "naturalTranslation": "낱말이 우리 생각을 만들어 내는 것은 아니지만, 어느 생각이 먼저 떠오를지는 낱말이 정한다.",
+    "wordOrderPoint": {
+     "title": "의문사절이 통째로 목적어",
+     "explanation": "decide 뒤에 which ones come first가 통째로 목적어로 들어가며, 질문이 아니라 평서문 어순을 그대로 지킵니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Words와 조동사 do를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "조동사 do와 부정어 not은 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "부정어 not과 본동사 build를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 build와 목적어 our thoughts를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 they와 동사 decide를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "의문사 which와 그것이 꾸미는 ones를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "do를 쓴 현재시제 부정문",
+      "note": "do not build - 일반동사를 부정할 때 do not을 앞에 세우고 동사원형을 씁니다."
+     },
+     {
+      "label": "간접의문문이 목적어",
+      "note": "which ones come first가 decide의 목적어로 들어가며 주어+동사 순서를 그대로 지킵니다."
+     },
+     {
+      "label": "역접 접속사 but",
+      "note": "앞 절을 부정한 뒤 but으로 진짜 하고 싶은 말을 뒤에 붙입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "thoughts",
+      "meaning": "생각, 떠오르는 생각들"
+     }
+    ]
+   },
+   {
+    "text": "So learning a new language brings not only new words but a new angle.",
+    "chunks": [
+     {
+      "en": "So learning a new language",
+      "kr": "그래서 새 언어를 배우는 일은"
+     },
+     {
+      "en": "brings not only new words",
+      "kr": "새 낱말만 가져다주는 게 아니라"
+     },
+     {
+      "en": "but a new angle.",
+      "kr": "새로운 시각까지 가져다준다"
+     }
+    ],
+    "naturalTranslation": "그래서 새 언어를 배우는 일은 새 낱말만이 아니라 세상을 보는 새 시각까지 가져다준다.",
+    "wordOrderPoint": {
+     "title": "한 자리에 두 가지를 나눠 담기",
+     "explanation": "한국어는 '~만이 아니라 ~까지'로 앞뒤를 묶지만, 영어는 동사 뒤 한 자리에 not only 다음 A, but 다음 B를 차례로 놓아 같은 자리를 둘이 나눠 씁니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두의 연결 부사 So 뒤에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "동명사 learning과 목적어 a new language를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 brings와 목적어 not only new words를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "not only는 짝을 이룬 표현이라 not과 only를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "but과 그 뒤의 명사구 a new angle을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "관사 a와 명사구 new angle을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "not only A but B",
+      "note": "'A만이 아니라 B도'로 짝을 이루며, A와 B에는 같은 품사·모양을 놓습니다."
+     },
+     {
+      "label": "동명사 주어의 단수 취급",
+      "note": "learning a new language가 주어라 뒤 동사는 bring이 아니라 brings입니다."
+     },
+     {
+      "label": "동사 bring + 목적어",
+      "note": "brings 뒤의 new words와 a new angle이 '무엇을 가져다주는지'를 말하는 목적어입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "angle",
+      "meaning": "(바라보는) 시각, 관점"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 learning a new language] + [동사 brings] + [not only + 명사구 new words] + [but + 명사구 a new angle]",
+     "why": "not only A but B는 A와 B의 모양을 맞춰야 합니다. 여기서는 brings 뒤의 목적어 자리라 양쪽 모두 명사구(new words / a new angle)로 놓아야 균형이 맞습니다.",
+     "wrong": "Learning a new language brings not only new words but you see differently. (앞은 명사구, 뒤는 문장이라 짝이 어긋납니다.)",
+     "natural": "새 언어를 배우는 일은 새 낱말만이 아니라 새로운 시각까지 가져다준다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "two-languages-one-busy-brain",
+  "level": 3,
+  "topic": "Language",
+  "title": "Two Languages, One Busy Brain",
+  "titleKr": "두 언어를 굴리는 바쁜 뇌",
+  "sentences": [
+   {
+    "text": "A bilingual child must choose a language before every single sentence.",
+    "chunks": [
+     {
+      "en": "A bilingual child must choose a language",
+      "kr": "두 언어를 쓰는 아이는 언어 하나를 골라야 한다"
+     },
+     {
+      "en": "before every single sentence.",
+      "kr": "문장을 말할 때마다 그 전에"
+     }
+    ],
+    "naturalTranslation": "두 언어를 쓰는 아이는 문장을 하나 말할 때마다 어느 언어로 말할지를 먼저 골라야 한다.",
+    "wordOrderPoint": {
+     "title": "조동사 + 동사원형",
+     "explanation": "must 뒤에는 반드시 동사원형 choose가 오고, 시제·인칭 표시는 must가 대신 짊어집니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 A bilingual child가 세 낱말로 길어 조동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "형용사 bilingual과 그것이 꾸미는 child를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "조동사 must와 본동사 choose는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 choose와 목적어 a language를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "before와 그 목적어 every single sentence를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조동사 must",
+      "note": "must choose - 그렇게 하지 않을 수 없다는 강한 필요를 나타내며 뒤에 동사원형이 옵니다."
+     },
+     {
+      "label": "형용사의 명사 앞 수식",
+      "note": "A bilingual child - bilingual이 child를 앞에서 꾸며 '두 언어를 쓰는 아이'가 됩니다."
+     },
+     {
+      "label": "강조하는 every single",
+      "note": "every single sentence는 '문장 하나하나 빠짐없이'로 every를 single이 더 세게 만듭니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "bilingual",
+      "meaning": "두 언어를 쓰는"
+     }
+    ]
+   },
+   {
+    "text": "Each time she speaks, her brain holds one language back and lets the other through.",
+    "chunks": [
+     {
+      "en": "Each time she speaks,",
+      "kr": "그녀가 말할 때마다"
+     },
+     {
+      "en": "her brain holds one language back",
+      "kr": "그녀의 뇌는 한 언어를 붙잡아 두고"
+     },
+     {
+      "en": "and lets the other through.",
+      "kr": "그리고 나머지 하나를 통과시킨다"
+     }
+    ],
+    "naturalTranslation": "그녀가 말할 때마다 뇌는 한 언어를 붙잡아 두고 나머지 하나만 내보낸다.",
+    "wordOrderPoint": {
+     "title": "구동사 사이에 목적어 끼우기",
+     "explanation": "hold back에 목적어가 붙으면 holds one language back처럼 목적어를 두 낱말 사이에 끼워 넣습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "Each time은 '~할 때마다'를 여는 한 덩어리라 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 she와 동사 speaks를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "짧은 주어 her brain과 동사 holds를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 holds와 목적어 one language를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "동사 lets와 목적어 the other를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간 부사절 each time",
+      "note": "each time she speaks는 '그녀가 말할 때마다'로 반복되는 상황을 나타냅니다."
+     },
+     {
+      "label": "등위접속사 and로 동사 잇기",
+      "note": "holds와 lets가 같은 주어 her brain의 동시 동작입니다."
+     },
+     {
+      "label": "부정대명사 the other",
+      "note": "둘 중 하나를 one으로 가리키면 남은 하나는 the other로 받습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "the other",
+      "meaning": "(둘 중) 나머지 하나"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 her brain] + [구동사 앞부분 holds] + [목적어 one language] + [구동사 뒷부분 back]",
+     "why": "hold back처럼 목적어를 사이에 끼울 수 있는 구동사는 명사 목적어가 오면 holds one language back과 holds back one language 둘 다 되지만, 앞뒤 대비를 살리려면 목적어를 사이에 끼우는 쪽이 자연스럽습니다.",
+     "wrong": "Her brain holds back it and lets through the other. (대명사 목적어는 반드시 사이에 끼워 holds it back으로 써야 합니다.)",
+     "natural": "뇌는 한 언어를 붙잡아 두고 나머지 하나만 내보낸다."
+    }
+   },
+   {
+    "text": "That daily practice steadily trains attention rather than vocabulary.",
+    "chunks": [
+     {
+      "en": "That daily practice steadily trains attention",
+      "kr": "그 매일의 연습은 꾸준히 주의력을 훈련한다"
+     },
+     {
+      "en": "rather than vocabulary.",
+      "kr": "어휘력이 아니라"
+     }
+    ],
+    "naturalTranslation": "그렇게 매일 되풀이되는 연습은 어휘력이 아니라 주의력을 꾸준히 훈련한다.",
+    "wordOrderPoint": {
+     "title": "A rather than B로 바로잡기",
+     "explanation": "trains attention을 먼저 말한 뒤 rather than vocabulary를 붙여 '그게 아니라 이것'이라고 범위를 좁힙니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 That daily practice가 세 낱말로 길어 동사 쪽 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "부사 steadily와 그것이 꾸미는 동사 trains를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 trains와 목적어 attention을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "rather than은 짝을 이룬 한 덩어리라 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "지시형용사 that",
+      "note": "That daily practice는 앞 문장에서 말한 그 연습을 되짚어 가리킵니다."
+     },
+     {
+      "label": "부사 steadily의 위치",
+      "note": "태도를 나타내는 부사는 보통 동사 뒤에 오지만, 이렇게 본동사 바로 앞에 놓아 동작 전체를 물들이기도 합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "attention",
+      "meaning": "주의력, 집중력"
+     },
+     {
+      "word": "vocabulary",
+      "meaning": "어휘, 어휘력"
+     }
+    ]
+   },
+   {
+    "text": "Years later, some studies find sharper attention in tasks that have nothing to do with language.",
+    "chunks": [
+     {
+      "en": "Years later,",
+      "kr": "여러 해가 지난 뒤"
+     },
+     {
+      "en": "some studies find sharper attention",
+      "kr": "몇몇 연구는 더 예리해진 주의력을 발견한다"
+     },
+     {
+      "en": "in tasks that have nothing to do with language.",
+      "kr": "언어와는 아무 상관이 없는 과제들에서"
+     }
+    ],
+    "naturalTranslation": "여러 해가 지난 뒤, 몇몇 연구는 언어와 아무 상관도 없는 과제들에서 더 예리해진 주의력을 발견한다.",
+    "wordOrderPoint": {
+     "title": "발견한 것 먼저, 어디서인지는 뒤에",
+     "explanation": "한국어는 '~한 과제들에서 ~를 발견한다'로 장소를 앞세우지만, 영어는 find sharper attention으로 무엇을 발견했는지 먼저 말하고 어디서인지는 in 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "명사 tasks를 꾸미는 관계절 that 앞이라 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 some studies와 동사 find를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 find와 목적어 sharper attention을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 in과 목적어 tasks를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "관계대명사 that과 그 동사 have를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 have와 목적어 nothing을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 13,
+       "reason": "nothing to do with는 한 덩어리라 do와 with를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "주격 관계대명사 that",
+      "note": "that have nothing to do with language가 앞의 tasks를 꾸미며, that이 그 절의 주어입니다."
+     },
+     {
+      "label": "to부정사의 형용사적 수식",
+      "note": "nothing to do - to do가 앞의 nothing을 뒤에서 꾸며 '할 것이 없음'을 나타냅니다."
+     },
+     {
+      "label": "문두 시간 부사구",
+      "note": "Years later를 맨 앞에 놓아 언제의 이야기인지 먼저 정해 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "studies",
+      "meaning": "연구, 연구 결과"
+     },
+     {
+      "word": "have nothing to do with",
+      "meaning": "~와 아무 상관이 없다"
+     }
+    ],
+    "insight": {
+     "formula": "[주절 some studies find sharper attention in tasks] + [관계절 that have nothing to do with language]",
+     "why": "관계대명사 that이 tasks를 대신해 뒤 절의 주어가 되므로 that 뒤에는 주어를 다시 쓰지 않습니다. 선행사가 복수 tasks라 동사도 has가 아니라 have입니다.",
+     "wrong": "Some studies find sharper attention in tasks that they have nothing to do with language. (that이 이미 주어라 they를 또 넣지 않습니다.)",
+     "natural": "몇몇 연구는 언어와 아무 상관도 없는 과제들에서 더 예리해진 주의력을 발견한다."
+    }
+   },
+   {
+    "text": "The gain is not two vocabularies but one brain with better control.",
+    "chunks": [
+     {
+      "en": "The gain is not two vocabularies",
+      "kr": "얻는 것은 두 개의 어휘 목록이 아니라"
+     },
+     {
+      "en": "but one brain",
+      "kr": "뇌 하나다"
+     },
+     {
+      "en": "with better control.",
+      "kr": "더 나은 조절력을 갖춘"
+     }
+    ],
+    "naturalTranslation": "얻는 것은 어휘 목록 두 벌이 아니라, 조절력이 더 나아진 뇌 하나다.",
+    "wordOrderPoint": {
+     "title": "명사를 뒤에서 꾸미는 전치사구",
+     "explanation": "one brain을 먼저 내놓고 어떤 뇌인지는 with better control로 뒤에서 좁힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The gain과 be동사 is를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "be동사 is와 뒤따르는 not은 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "부정어 not과 그것이 부정하는 two vocabularies를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "but과 그 뒤의 명사구 one brain을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 with와 목적어 better control을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "not A but B",
+      "note": "'A가 아니라 B다'로 짝을 이루며 A와 B에 같은 모양의 명사구를 놓습니다."
+     },
+     {
+      "label": "be동사 + 명사 보어",
+      "note": "is 뒤의 명사구가 주어 The gain의 정체를 설명합니다."
+     },
+     {
+      "label": "비교급 형용사 better",
+      "note": "better control은 '전보다 더 나은 조절력'으로 good의 비교급입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "control",
+      "meaning": "조절력, 통제"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "when-a-language-dies-out",
+  "level": 3,
+  "topic": "Language",
+  "title": "The Last Fluent Speaker",
+  "titleKr": "마지막으로 유창했던 한 사람",
+  "sentences": [
+   {
+    "text": "On one small island, only nine elderly people still speak the old language.",
+    "chunks": [
+     {
+      "en": "On one small island,",
+      "kr": "어느 작은 섬에서는"
+     },
+     {
+      "en": "only nine elderly people",
+      "kr": "나이 든 아홉 사람만이"
+     },
+     {
+      "en": "still speak the old language.",
+      "kr": "아직도 그 오래된 언어를 말한다"
+     }
+    ],
+    "naturalTranslation": "어느 작은 섬에서는 나이 든 아홉 사람만이 아직도 그 오래된 언어를 쓴다.",
+    "wordOrderPoint": {
+     "title": "장소를 문두에 두어 무대 세우기",
+     "explanation": "On one small island를 맨 앞에 놓아 어디 이야기인지 먼저 정하고, 그다음에 주어를 꺼냅니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 On과 목적어 one small island를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "only는 뒤의 nine elderly people을 한정하므로 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "부사 still과 그것이 꾸미는 동사 speak을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "동사 speak과 목적어 the old language를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "장소 전치사 on",
+      "note": "섬·거리처럼 면으로 보는 장소 앞에는 in이 아니라 on을 씁니다."
+     },
+     {
+      "label": "한정 부사 only",
+      "note": "only nine elderly people - only가 뒤의 명사구 전체를 '그만큼뿐'으로 한정합니다."
+     },
+     {
+      "label": "부사 still의 위치",
+      "note": "still은 본동사 앞에 놓여 '아직도 이어진다'를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "elderly",
+      "meaning": "나이가 지긋한"
+     }
+    ]
+   },
+   {
+    "text": "Their grandchildren understand a few words, but they answer in the national language.",
+    "chunks": [
+     {
+      "en": "Their grandchildren understand a few words,",
+      "kr": "그들의 손주들은 몇 낱말은 알아듣는다"
+     },
+     {
+      "en": "but they answer",
+      "kr": "그러나 그들은 대답한다"
+     },
+     {
+      "en": "in the national language.",
+      "kr": "그 나라의 국어로"
+     }
+    ],
+    "naturalTranslation": "그들의 손주들은 몇 낱말은 알아듣지만, 대답은 그 나라의 국어로 한다.",
+    "wordOrderPoint": {
+     "title": "어떤 언어로 하는지는 in으로",
+     "explanation": "answer로 무엇을 하는지 먼저 말하고, 어떤 언어를 써서 하는지는 in 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Their grandchildren과 동사 understand를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 understand와 목적어 a few words를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "a few는 '몇몇의'라는 한 덩어리라 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 they와 동사 answer를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 in과 목적어 the national language를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "역접 접속사 but",
+      "note": "알아듣는 것과 대답하는 언어가 다르다는 반전을 뒤 절에 담습니다."
+     },
+     {
+      "label": "a few + 복수명사",
+      "note": "a few words는 '몇 낱말'로 셀 수 있는 명사의 복수형과 함께 씁니다."
+     },
+     {
+      "label": "수단을 나타내는 전치사 in",
+      "note": "in the national language처럼 '어떤 언어로'를 말할 때 in을 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "national language",
+      "meaning": "그 나라의 국어, 나라를 대표하는 말"
+     }
+    ]
+   },
+   {
+    "text": "When the last fluent speaker dies, the language dies out with her.",
+    "chunks": [
+     {
+      "en": "When the last fluent speaker dies,",
+      "kr": "마지막으로 유창했던 사람이 세상을 떠나면"
+     },
+     {
+      "en": "the language dies out",
+      "kr": "그 언어는 사라진다"
+     },
+     {
+      "en": "with her.",
+      "kr": "그 사람과 함께"
+     }
+    ],
+    "naturalTranslation": "마지막으로 유창했던 사람이 세상을 떠나면, 그 언어도 그 사람과 함께 사라진다.",
+    "wordOrderPoint": {
+     "title": "조건을 앞세우고 결과는 뒤에",
+     "explanation": "When절로 조건을 먼저 깔고, 그때 벌어지는 일을 콤마 뒤 주절에 놓습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "주어 the last fluent speaker가 네 낱말로 길어 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "접속사 When과 그 절의 주어를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 the language와 동사 dies를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "die out은 두 낱말이 한 동사라 dies와 out을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 with와 목적어 her를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간·조건 부사절 when",
+      "note": "when절이 '그때가 되면'이라는 조건을 앞세워 주절의 일이 언제 일어나는지 정합니다."
+     },
+     {
+      "label": "구동사 die out",
+      "note": "die out은 '완전히 자취를 감추다'로 종이나 언어가 사라질 때 씁니다."
+     },
+     {
+      "label": "순서를 나타내는 the last",
+      "note": "the last는 '마지막 하나'를 콕 집으므로 언제나 the와 함께 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "fluent",
+      "meaning": "유창한"
+     },
+     {
+      "word": "dies out",
+      "meaning": "완전히 사라진다, 자취를 감춘다"
+     }
+    ],
+    "insight": {
+     "formula": "[when절 When the last fluent speaker dies] + [주절 the language dies out with her]",
+     "why": "같은 동사 die가 앞에서는 혼자 쓰여 '죽다'이고, 뒤에서는 out을 데려와 '자취를 감추다'가 됩니다. 구동사는 낱말 하나가 붙는 순간 뜻이 옮겨 가므로 out까지 한 덩어리로 봐야 합니다.",
+     "wrong": "When the last fluent speaker dies out, the language dies with her. (사람에게는 dies, 언어에는 dies out을 씁니다.)",
+     "natural": "마지막으로 유창했던 사람이 떠나면, 그 언어도 함께 사라진다."
+    }
+   },
+   {
+    "text": "What disappears is more than a word list, because the songs and jokes go with the language.",
+    "chunks": [
+     {
+      "en": "What disappears is more than a word list,",
+      "kr": "사라지는 것은 단어 목록 하나보다 크다"
+     },
+     {
+      "en": "because the songs and jokes go with the language.",
+      "kr": "노래와 농담도 그 언어와 함께 사라지기 때문에"
+     }
+    ],
+    "naturalTranslation": "사라지는 것은 단어 목록 하나보다 크다. 그 언어와 함께 노래와 농담까지 사라지기 때문이다.",
+    "wordOrderPoint": {
+     "title": "비교를 먼저, 이유는 because로 뒤에",
+     "explanation": "무엇이 더 큰지를 than으로 먼저 매듭짓고, 왜 그런지는 because절로 뒤에 이어 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 12,
+       "reason": "주어 the songs and jokes가 네 낱말로 길어 동사 go 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "주어 노릇을 하는 What disappears를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "be동사 is와 보어 more than a word list를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "than과 비교 대상 a word list를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "접속사 because와 그 절의 주어를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 14,
+       "reason": "전치사 with와 목적어 the language를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "명사절을 이끄는 what",
+      "note": "What disappears가 '사라지는 것'이라는 명사 덩어리가 되어 문장의 주어 자리에 놓입니다."
+     },
+     {
+      "label": "비교급 more than",
+      "note": "more than a word list로 사라지는 것의 크기를 단어 목록과 견줍니다."
+     },
+     {
+      "label": "이유 부사절 because",
+      "note": "because 이하가 앞 절이 왜 그런지를 통째로 설명합니다."
+     },
+     {
+      "label": "등위접속사 and로 주어 잇기",
+      "note": "the songs and jokes가 함께 하나의 복수 주어를 이룹니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "disappears",
+      "meaning": "사라진다"
+     },
+     {
+      "word": "more than",
+      "meaning": "~보다 더한 것, ~ 이상"
+     }
+    ],
+    "insight": {
+     "formula": "[주절 What disappears is more than a word list] + [because절 the songs and jokes go with the language]",
+     "why": "동사 바로 앞 낱말 하나(jokes)가 아니라 and로 묶인 the songs and jokes 전체가 주어입니다. 이 주어는 복수이므로 동사에 -s를 붙이지 않고 go로 씁니다.",
+     "wrong": "What disappears is more than a word list, because the songs and jokes goes with the language.",
+     "natural": "그 언어와 함께 노래와 농담까지 사라지기 때문이다."
+    }
+   },
+   {
+    "text": "Recordings help a little, but they cannot replace everyday conversation.",
+    "chunks": [
+     {
+      "en": "Recordings help a little,",
+      "kr": "녹음은 조금 도움이 된다"
+     },
+     {
+      "en": "but they cannot replace everyday conversation.",
+      "kr": "그러나 그것들이 매일 주고받는 말을 대신할 수는 없다"
+     }
+    ],
+    "naturalTranslation": "녹음이 조금은 도움이 되지만, 매일 주고받는 말을 대신할 수는 없다.",
+    "wordOrderPoint": {
+     "title": "조동사 부정형 + 동사원형",
+     "explanation": "cannot 뒤에도 동사원형 replace가 그대로 오고, 부정과 시제는 cannot이 함께 짊어집니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Recordings와 동사 help를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 help와 그 정도를 말하는 a little을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "짧은 주어 they와 조동사 cannot을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "조동사 cannot과 본동사 replace는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 replace와 목적어 everyday conversation을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "대명사 they의 지시 대상",
+      "note": "they는 앞 절의 Recordings를 가리켜 같은 낱말을 되풀이하지 않게 합니다."
+     },
+     {
+      "label": "역접 접속사 but",
+      "note": "도움이 되는 면을 인정한 뒤 but으로 한계를 이어 붙입니다."
+     },
+     {
+      "label": "부사구 a little",
+      "note": "a little이 동사 help의 정도를 '조금'으로 낮춰 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "Recordings",
+      "meaning": "녹음, 녹음 자료"
+     },
+     {
+      "word": "replace",
+      "meaning": "대신하다, 자리를 메우다"
+     },
+     {
+      "word": "everyday conversation",
+      "meaning": "매일 주고받는 말, 일상 대화"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "one-gesture-many-meanings",
+  "level": 3,
+  "topic": "Language",
+  "title": "The Thumb That Means Two Things",
+  "titleKr": "같은 손짓이 갈라지는 자리",
+  "sentences": [
+   {
+    "text": "A thumbs-up means good in Seoul and something rude in a few countries.",
+    "chunks": [
+     {
+      "en": "A thumbs-up means good in Seoul",
+      "kr": "엄지를 세운 손짓은 서울에서는 좋다는 뜻이다"
+     },
+     {
+      "en": "and something rude in a few countries.",
+      "kr": "그리고 몇몇 나라에서는 무례한 몸짓이다"
+     }
+    ],
+    "naturalTranslation": "엄지를 세운 손짓은 서울에서는 좋다는 뜻이지만, 몇몇 나라에서는 무례한 몸짓이 된다.",
+    "wordOrderPoint": {
+     "title": "-thing 뒤에는 형용사가 뒤에",
+     "explanation": "something rude처럼 -thing으로 끝나는 낱말은 형용사를 앞이 아니라 뒤에 붙여 꾸밉니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "문장 끝의 전치사구 in a few countries 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 A thumbs-up과 동사 means를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 means와 그 뜻을 받는 good을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "짧은 전치사구 in Seoul은 앞의 good에 붙여 한 덩어리로 읽습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 in과 목적어 Seoul을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 in과 목적어 a few countries를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "동사 mean + 목적어",
+      "note": "means good은 '좋다는 뜻이다'로, 뜻하는 내용이 목적어 자리에 바로 옵니다."
+     },
+     {
+      "label": "등위접속사 and로 목적어 잇기",
+      "note": "good과 something rude가 같은 동사 means에 나란히 걸립니다."
+     },
+     {
+      "label": "대비를 만드는 장소 전치사 in",
+      "note": "in Seoul과 in a few countries를 나란히 놓아 장소에 따른 차이를 드러냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "thumbs-up",
+      "meaning": "엄지를 세워 보이는 손짓"
+     },
+     {
+      "word": "rude",
+      "meaning": "무례한, 버릇없는"
+     }
+    ]
+   },
+   {
+    "text": "The hand is the same, but the meaning sits in the culture, not in the fingers.",
+    "chunks": [
+     {
+      "en": "The hand is the same,",
+      "kr": "손 모양은 똑같다"
+     },
+     {
+      "en": "but the meaning sits in the culture,",
+      "kr": "그러나 뜻은 문화 안에 자리 잡는다"
+     },
+     {
+      "en": "not in the fingers.",
+      "kr": "손가락 안이 아니라"
+     }
+    ],
+    "naturalTranslation": "손 모양은 똑같지만, 뜻이 놓인 자리는 손가락이 아니라 문화다.",
+    "wordOrderPoint": {
+     "title": "말한 뒤 not으로 고쳐 못 박기",
+     "explanation": "in the culture를 먼저 말하고 not in the fingers를 뒤에 붙여, 어디가 아닌지를 나중에 못 박습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The hand와 be동사 is를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "be동사 is와 보어 the same을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 the meaning과 동사 sits를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "짧은 전치사구 in the culture는 앞의 sits에 붙여 읽습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 in과 목적어 the culture를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 13,
+       "reason": "전치사 in과 목적어 the fingers를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "be동사 + the same",
+      "note": "is the same은 '똑같다'로, the same 앞에는 언제나 the가 붙습니다."
+     },
+     {
+      "label": "역접 접속사 but",
+      "note": "겉모습은 같고 뜻은 다르다는 대비를 but이 만듭니다."
+     },
+     {
+      "label": "not + 전치사구의 대비",
+      "note": "앞의 in the culture와 짝을 맞춰 not in the fingers로 아닌 쪽을 지목합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "sits in",
+      "meaning": "~ 안에 자리 잡고 있다"
+     },
+     {
+      "word": "culture",
+      "meaning": "문화"
+     }
+    ],
+    "insight": {
+     "formula": "[주절 the meaning sits in the culture] + [대비 not in the fingers]",
+     "why": "not 뒤에는 앞과 같은 모양을 놓아야 짝이 맞습니다. 앞이 전치사구 in the culture이므로 뒤에도 전치사 in을 한 번 더 써 주면 두 자리가 또렷이 견주어집니다(in을 빼고 not the fingers로 줄여 써도 됩니다).",
+     "wrong": "The meaning is not the fingers but sits in the culture. (be동사 뒤 명사와 일반동사를 not A but B로 묶을 수 없습니다.)",
+     "natural": "뜻이 놓인 자리는 손가락이 아니라 문화다."
+    }
+   },
+   {
+    "text": "Children learn these rules early, long before anyone explains them.",
+    "chunks": [
+     {
+      "en": "Children learn these rules early,",
+      "kr": "아이들은 이 규칙들을 일찍 익힌다"
+     },
+     {
+      "en": "long before anyone explains them.",
+      "kr": "누군가 설명해 주기 훨씬 전에"
+     }
+    ],
+    "naturalTranslation": "아이들은 누군가 설명해 주기 훨씬 전에 이런 규칙들을 이미 익힌다.",
+    "wordOrderPoint": {
+     "title": "부사 뒤에 시간절을 덧대기",
+     "explanation": "early로 언제쯤인지 한 번 말하고, long before절로 그 시점을 더 자세히 못 박습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "목적어 these rules 뒤, 부사 early 앞이라 끊어 읽어도 뜻이 살아납니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Children과 동사 learn을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 learn과 목적어 these rules를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "long before는 '훨씬 전에'라는 한 덩어리라 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "접속사 before와 그 절의 주어 anyone을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 anyone과 동사 explains를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간 접속사 before + 절",
+      "note": "before 뒤에 주어와 동사가 있는 절이 통째로 와서 '~하기 전에'가 됩니다."
+     },
+     {
+      "label": "강조 부사 long",
+      "note": "long before는 '한참 전에'로, long이 시간 차이를 크게 벌립니다."
+     },
+     {
+      "label": "부정대명사 anyone",
+      "note": "anyone은 '누구든 한 사람'으로 단수 취급하여 동사에 -s가 붙습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "explains",
+      "meaning": "설명한다, 풀어 알려 준다"
+     }
+    ]
+   },
+   {
+    "text": "So a gesture that feels friendly at home can offend a stranger abroad.",
+    "chunks": [
+     {
+      "en": "So a gesture",
+      "kr": "그래서 어떤 손짓은"
+     },
+     {
+      "en": "that feels friendly at home",
+      "kr": "집에서는 다정하게 느껴지는"
+     },
+     {
+      "en": "can offend a stranger abroad.",
+      "kr": "밖에서는 낯선 사람을 불쾌하게 할 수 있다"
+     }
+    ],
+    "naturalTranslation": "그래서 집에서는 다정하게 느껴지는 손짓이 외국에서는 낯선 사람의 기분을 상하게 할 수 있다.",
+    "wordOrderPoint": {
+     "title": "주어와 동사 사이에 끼어드는 관계절",
+     "explanation": "a gesture 뒤에 that절이 통째로 끼어들어도 이 문장의 동사는 can offend 하나뿐입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두의 연결 부사 So 뒤에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "관계대명사 that과 그 동사 feels를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 feels와 보어 friendly를 갈라 읽으면 '다정하게 느껴진다'가 끊깁니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 at과 목적어 home을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "조동사 can과 본동사 offend는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "동사 offend와 목적어 a stranger를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "주격 관계대명사 that",
+      "note": "that feels friendly at home이 앞의 a gesture를 꾸미며, that이 그 절의 주어입니다."
+     },
+     {
+      "label": "가능성을 나타내는 can",
+      "note": "can offend는 '그럴 수 있다'로 늘 그렇다는 뜻이 아니라 가능성을 말합니다."
+     },
+     {
+      "label": "부사 abroad의 문장 끝 위치",
+      "note": "abroad는 전치사 없이 홀로 '외국에서'를 뜻하며 문장 끝에 놓입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "offend",
+      "meaning": "기분을 상하게 하다"
+     },
+     {
+      "word": "abroad",
+      "meaning": "외국에서, 나라 밖에서"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 a gesture (that feels friendly at home)] + [조동사 can] + [동사 offend] + [목적어 a stranger abroad]",
+     "why": "that절이 주어와 동사 사이에 끼어들면 동사가 멀어져 어디까지가 주어인지 헷갈립니다. that 앞의 명사 a gesture가 주어이고, 관계절이 끝나는 지점에서 비로소 주절의 동사 can offend가 나옵니다.",
+     "wrong": "So a gesture that feels friendly at home it can offend a stranger abroad. (관계절이 끝난 뒤 주어 it을 다시 넣지 않습니다.)",
+     "natural": "집에서는 다정하게 느껴지는 손짓이 외국에서는 낯선 사람의 기분을 상하게 할 수 있다."
+    }
+   },
+   {
+    "text": "Cultures differ not only in how much a hand says but in what it may say.",
+    "chunks": [
+     {
+      "en": "Cultures differ",
+      "kr": "문화들은 서로 다르다"
+     },
+     {
+      "en": "not only in how much a hand says",
+      "kr": "손이 얼마나 많이 말하는지에서만이 아니라"
+     },
+     {
+      "en": "but in what it may say.",
+      "kr": "손이 무엇을 말할 수 있는지에서도"
+     }
+    ],
+    "naturalTranslation": "문화가 갈리는 자리는 손이 얼마나 많이 말하느냐만이 아니라, 손이 무엇을 말할 수 있느냐이기도 하다.",
+    "wordOrderPoint": {
+     "title": "같은 전치사를 되풀이해 짝 맞추기",
+     "explanation": "not only in ...과 but in ...으로 전치사 in을 두 번 되풀이해 두 기준을 나란히 견줍니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "not only는 짝을 이룬 표현이라 not과 only를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 in과 그 목적어 노릇을 하는 how much절을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "의문사구 how much는 한 덩어리라 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "관사 a와 명사 hand를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "짧은 주어 a hand와 동사 says를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "전치사 in과 그 목적어 노릇을 하는 what절을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 13,
+       "reason": "짧은 주어 it과 조동사 may를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 14,
+       "reason": "조동사 may와 본동사 say는 한 덩어리라 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조동사 may의 가능성",
+      "note": "may say는 '말할 수도 있다'로 허용이나 가능성을 나타냅니다."
+     },
+     {
+      "label": "의문사가 이끄는 명사절",
+      "note": "how much a hand says와 what it may say가 각각 전치사 in의 목적어가 됩니다."
+     },
+     {
+      "label": "not only A but B",
+      "note": "'A만이 아니라 B도'로 짝을 이루며, 여기서는 in으로 시작하는 두 전치사구를 나란히 놓습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "differ",
+      "meaning": "서로 다르다"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "when-nice-meant-silly",
+  "level": 3,
+  "topic": "Language",
+  "title": "Nice Once Meant Silly",
+  "titleKr": "'nice'가 뜻을 갈아입은 자리",
+  "sentences": [
+   {
+    "text": "Few words keep the same meaning for hundreds of years.",
+    "chunks": [
+     {
+      "en": "Few words keep the same meaning",
+      "kr": "많지 않은 낱말만이 같은 뜻을 지킨다"
+     },
+     {
+      "en": "for hundreds of years.",
+      "kr": "수백 년 동안"
+     }
+    ],
+    "naturalTranslation": "수백 년 동안 같은 뜻을 지키는 낱말은 몇 개 되지 않는다.",
+    "wordOrderPoint": {
+     "title": "얼마나 오랜 일인지는 문장 끝에",
+     "explanation": "무엇이 어떻다는 뼈대를 먼저 세우고, 그 일이 얼마나 긴 시간에 걸친 이야기인지는 맨 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Few words와 동사 keep을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 keep과 목적어 the same meaning을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 for와 목적어 hundreds of years를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 전치사구 of years는 앞의 hundreds에 붙여 한 덩어리로 읽습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "수량 표현 few + 복수명사",
+      "note": "few words는 a 없이 쓰여 '얼마 안 되는 낱말'이라는 부정에 가까운 뜻입니다."
+     },
+     {
+      "label": "the same + 명사",
+      "note": "the same meaning처럼 same 앞에는 언제나 the를 붙입니다."
+     },
+     {
+      "label": "hundreds of + 복수명사",
+      "note": "hundreds of years는 '수백 년'으로, 정확한 숫자가 아닐 때 -s와 of를 함께 씁니다."
+     }
+    ],
+    "words": []
+   },
+   {
+    "text": "In old books, 'nice' meant 'silly', and nobody used it as praise.",
+    "chunks": [
+     {
+      "en": "In old books,",
+      "kr": "옛날 책에서는"
+     },
+     {
+      "en": "'nice' meant 'silly',",
+      "kr": "'nice'가 '어리석다'는 뜻이었다"
+     },
+     {
+      "en": "and nobody used it as praise.",
+      "kr": "그리고 아무도 그 말을 칭찬으로 쓰지 않았다"
+     }
+    ],
+    "naturalTranslation": "옛날 책에서 'nice'는 '어리석다'는 뜻이었고, 아무도 그 말을 칭찬으로 쓰지 않았다.",
+    "wordOrderPoint": {
+     "title": "부정어를 주어 자리에 두기",
+     "explanation": "nobody가 주어 자리에 오면 동사는 그대로 긍정형 used를 쓰고, 부정의 뜻은 주어가 담습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 9,
+       "reason": "문장 끝의 짧은 전치사구 as praise 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 In과 목적어 old books를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 'nice'와 동사 meant를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 meant와 그 뜻을 받는 'silly'를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 nobody와 동사 used를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 used와 목적어 it을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 as와 목적어 praise를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부정 주어 nobody",
+      "note": "nobody가 주어라 not 없이도 문장 전체가 부정이 되며, 단수 취급합니다."
+     },
+     {
+      "label": "과거시제 불규칙 meant",
+      "note": "meant는 mean의 과거형으로 옛날에 그랬다는 사실을 나타냅니다."
+     },
+     {
+      "label": "자격·용도를 나타내는 전치사 as",
+      "note": "as praise는 '칭찬으로'라는 뜻으로 쓰임새를 밝힙니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "praise",
+      "meaning": "칭찬"
+     }
+    ]
+   },
+   {
+    "text": "Over a few centuries, the word slid from 'silly' to 'exact', and then to 'pleasant'.",
+    "chunks": [
+     {
+      "en": "Over a few centuries,",
+      "kr": "몇 세기에 걸쳐"
+     },
+     {
+      "en": "the word slid from 'silly' to 'exact',",
+      "kr": "그 낱말은 '어리석다'에서 '정확하다'로 미끄러져 갔다"
+     },
+     {
+      "en": "and then to 'pleasant'.",
+      "kr": "그리고 그다음엔 '기분 좋다'로"
+     }
+    ],
+    "naturalTranslation": "몇 세기에 걸쳐 그 낱말은 '어리석다'에서 '정확하다'로, 다시 '기분 좋다'로 미끄러져 갔다.",
+    "wordOrderPoint": {
+     "title": "from A to B로 옮겨 간 길 보이기",
+     "explanation": "출발점을 from으로, 도착점을 to로 잡아 뜻이 어디서 어디로 갔는지를 한 줄에 담습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "출발점 from 'silly'와 도착점 to 'exact' 사이라 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 Over와 목적어 a few centuries를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "짧은 주어 the word와 동사 slid를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 전치사구 from 'silly'는 앞의 slid에 붙여 읽습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 from과 목적어 'silly'를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 13,
+       "reason": "전치사 to와 목적어 'pleasant'를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "from A to B",
+      "note": "출발점과 도착점을 짝지어 변화의 방향을 나타내는 짜임입니다."
+     },
+     {
+      "label": "과거시제 불규칙 slid",
+      "note": "slid는 slide의 과거형으로 천천히 옮겨 간 움직임을 나타냅니다."
+     },
+     {
+      "label": "기간 전치사 over",
+      "note": "over a few centuries는 '몇 세기에 걸쳐'로 긴 기간 내내를 뜻합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "slid",
+      "meaning": "미끄러져 갔다, 슬며시 옮겨 갔다"
+     }
+    ]
+   },
+   {
+    "text": "It came to mean kind, and the old sense slowly faded.",
+    "chunks": [
+     {
+      "en": "It came to mean kind,",
+      "kr": "그것은 '다정하다'는 뜻이 되었다"
+     },
+     {
+      "en": "and the old sense slowly faded.",
+      "kr": "그리고 옛 뜻은 천천히 희미해졌다"
+     }
+    ],
+    "naturalTranslation": "그 말은 '다정하다'는 뜻으로 굳었고, 옛 뜻은 천천히 희미해졌다.",
+    "wordOrderPoint": {
+     "title": "'~하게 되다'는 come to + 동사원형",
+     "explanation": "came to mean은 한순간이 아니라 시간이 흐르면서 그런 뜻이 되었음을 나타냅니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "주어 the old sense가 세 낱말로 길어 동사 쪽 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 It과 동사 came을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "came to는 '~하게 되다'를 여는 한 덩어리라 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "to부정사의 to와 동사원형 mean은 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 mean과 그 뜻을 받는 kind를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "부사 slowly와 그것이 꾸미는 동사 faded를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "대명사 It의 지시 대상",
+      "note": "It은 앞 문장의 the word, 곧 nice를 가리킵니다."
+     },
+     {
+      "label": "부사 slowly의 위치",
+      "note": "태도를 나타내는 부사는 동사 뒤에도 올 수 있지만(faded slowly), 본동사 바로 앞에 놓으면 변화가 천천히 진행되었음이 더 또렷해집니다."
+     },
+     {
+      "label": "등위접속사 and로 두 절 잇기",
+      "note": "새 뜻이 자리 잡은 일과 옛 뜻이 사라진 일을 나란히 잇습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "came to mean",
+      "meaning": "(시간이 지나면서) ~라는 뜻이 되었다"
+     },
+     {
+      "word": "faded",
+      "meaning": "희미해졌다, 빛이 바랬다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 It] + [came to] + [동사원형 mean] + [보어 kind]",
+     "why": "come to 뒤에는 반드시 동사원형이 옵니다. '되었다'를 한국어처럼 became으로 바꾸고 뜻을 명사로 세우면 became a meaning of kind처럼 늘어지므로, 영어는 came to mean으로 한 번에 처리합니다.",
+     "wrong": "It came to meaning kind. (come to 뒤에는 -ing가 아니라 동사원형 mean을 씁니다.)",
+     "natural": "그 말은 '다정하다'는 뜻으로 굳었다."
+    }
+   },
+   {
+    "text": "Dictionaries record such changes, but the people who use the words are the ones who cause them.",
+    "chunks": [
+     {
+      "en": "Dictionaries record such changes,",
+      "kr": "사전은 그런 변화를 기록한다"
+     },
+     {
+      "en": "but the people who use the words",
+      "kr": "그러나 그 말을 쓰는 사람들이야말로"
+     },
+     {
+      "en": "are the ones who cause them.",
+      "kr": "그 변화를 일으키는 쪽이다"
+     }
+    ],
+    "naturalTranslation": "사전은 그런 변화를 기록할 뿐이고, 변화를 일으키는 쪽은 그 말을 쓰는 사람들이다.",
+    "wordOrderPoint": {
+     "title": "the ones who로 주인공 못 박기",
+     "explanation": "'변화를 일으키는 쪽은 바로 이들'이라고 짚고 싶을 때 the ones를 세우고 who절로 어떤 사람인지 뒤에서 채웁니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 6,
+       "reason": "the people을 꾸미는 관계절 who use the words 앞이라 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 13,
+       "reason": "the ones를 꾸미는 관계절 who cause them 앞이라 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Dictionaries와 동사 record를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 record와 목적어 such changes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "관계대명사 who와 그 동사 use를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "be동사 are와 보어 the ones를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 14,
+       "reason": "관계대명사 who와 그 동사 cause를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "주격 관계대명사 who",
+      "note": "who use the words와 who cause them이 각각 앞의 명사를 꾸미며, who가 그 절의 주어 노릇을 합니다."
+     },
+     {
+      "label": "be동사 + the ones 강조",
+      "note": "'바로 ~인 사람들이다'라고 콕 집어 말하는 짜임입니다."
+     },
+     {
+      "label": "대명사 them의 지시 대상",
+      "note": "them은 앞 절의 such changes를 가리킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "cause",
+      "meaning": "일으키다, 생기게 하다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 the people who use the words] + [be동사 are] + [보어 the ones] + [관계절 who cause them]",
+     "why": "the ones는 '그런 사람들'이라는 빈 그릇이고, 어떤 사람인지는 who절이 채웁니다. 선행사 the ones가 복수라 관계절 동사도 causes가 아니라 cause입니다.",
+     "wrong": "But the people who use the words are the ones who causes them. (선행사 the ones가 복수이므로 cause로 씁니다.)",
+     "natural": "변화를 일으키는 쪽은 그 말을 쓰는 사람들이다."
+    }
+   }
+  ]
+ }
+]

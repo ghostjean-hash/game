@@ -1,0 +1,2154 @@
+[
+ {
+  "id": "a-puzzle-game-between-classes",
+  "level": 1,
+  "topic": "Games",
+  "title": "Ten Minutes Between Classes",
+  "titleKr": "수업 사이 10분",
+  "sentences": [
+   {
+    "text": "Between classes we get a ten-minute break.",
+    "chunks": [
+     {
+      "en": "Between classes",
+      "kr": "수업과 수업 사이에"
+     },
+     {
+      "en": "we get a ten-minute break.",
+      "kr": "우리는 10분짜리 쉬는 시간을 갖는다"
+     }
+    ],
+    "naturalTranslation": "수업과 수업 사이에 우리는 10분짜리 쉬는 시간을 갖는다.",
+    "wordOrderPoint": {
+     "title": "때를 맨 앞에 두고 주어·동사를 잇는 순서",
+     "explanation": "Between classes로 언제인지를 문장 맨 앞에 놓고, 그 뒤에 주어 we와 동사 get을 이어 갑니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 Between과 그 목적어 classes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 we와 동사 get을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 get과 목적어 a ten-minute break를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "ten-minute는 break를 꾸미는 말이라 뒤와 붙여 읽습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "범위를 나타내는 전치사 between",
+      "note": "Between classes는 '수업과 수업 사이에'라는 뜻입니다."
+     },
+     {
+      "label": "숫자+단위를 하이픈으로 묶은 형용사",
+      "note": "ten-minute break처럼 명사 앞에서 꾸밀 때는 단위를 단수로 써서 minutes가 아니라 minute입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "break",
+      "meaning": "쉬는 시간"
+     }
+    ]
+   },
+   {
+    "text": "During the break I open a puzzle game on my phone.",
+    "chunks": [
+     {
+      "en": "During the break",
+      "kr": "쉬는 시간 동안"
+     },
+     {
+      "en": "I open a puzzle game",
+      "kr": "나는 퍼즐 게임 하나를 연다"
+     },
+     {
+      "en": "on my phone.",
+      "kr": "내 휴대폰에서"
+     }
+    ],
+    "naturalTranslation": "쉬는 시간 동안 나는 휴대폰으로 퍼즐 게임을 연다.",
+    "wordOrderPoint": {
+     "title": "언제 + 주어·동사·목적어 + 어디에서",
+     "explanation": "During the break로 때를 먼저 밝히고, 하는 일을 말한 뒤 on my phone으로 어디에서인지 덧붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 During과 그 목적어 the break를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 I와 동사 open을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 open과 목적어 a puzzle game을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 on과 그 목적어 my phone을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "기간을 나타내는 전치사 during",
+      "note": "During the break는 '쉬는 시간 동안'이라는 뜻입니다."
+     },
+     {
+      "label": "관사 a + 명사",
+      "note": "a puzzle game은 여럿 중 하나를 가리켜 a를 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "puzzle",
+      "meaning": "퍼즐, 알아맞히는 놀이"
+     }
+    ]
+   },
+   {
+    "text": "One round takes two minutes, so it fits the break perfectly.",
+    "chunks": [
+     {
+      "en": "One round takes two minutes,",
+      "kr": "한 판은 2분 걸린다"
+     },
+     {
+      "en": "so it fits the break perfectly.",
+      "kr": "그래서 쉬는 시간에 딱 들어맞는다"
+     }
+    ],
+    "naturalTranslation": "한 판이 2분 걸려서 쉬는 시간에 딱 들어맞는다.",
+    "wordOrderPoint": {
+     "title": "한국어의 '2분 걸린다'와 뒤바뀌는 자리",
+     "explanation": "한국어는 걸리는 시간을 '2분 걸린다'처럼 동사 앞에 두지만, 영어는 takes를 먼저 놓고 two minutes를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 9,
+       "reason": "문장 끝 부사 perfectly 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 One round와 동사 takes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 takes와 걸리는 시간 two minutes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "접속사 so 뒤에서 바로 끊으면 이어지는 절이 붙을 자리를 잃습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 it과 동사 fits를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 fits와 목적어 the break를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간이 걸린다는 뜻의 take",
+      "note": "take + 시간은 '~만큼 걸리다'라는 뜻입니다."
+     },
+     {
+      "label": "결과의 접속사 so",
+      "note": "so 뒤에 앞 내용 때문에 생긴 결과를 잇습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "fits",
+      "meaning": "(시간·크기에) 딱 들어맞는다"
+     }
+    ]
+   },
+   {
+    "text": "When the bell rings, I put the phone away at once.",
+    "chunks": [
+     {
+      "en": "When the bell rings,",
+      "kr": "종이 울리면"
+     },
+     {
+      "en": "I put the phone away at once.",
+      "kr": "나는 곧바로 휴대폰을 치운다"
+     }
+    ],
+    "naturalTranslation": "종이 울리면 나는 곧바로 휴대폰을 치운다.",
+    "wordOrderPoint": {
+     "title": "when이 이끄는 시간절을 문장 앞에",
+     "explanation": "When the bell rings를 앞에 놓아 언제인지 먼저 말하고, 콤마 뒤에 주절을 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "문장 끝 부사구 at once 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "접속사 When과 뒤따르는 절 the bell rings를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "짧은 주어 I와 동사 put을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 put과 목적어 the phone을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "at once는 한 덩어리 표현이라 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간의 접속사 when",
+      "note": "When ~은 '~할 때'로 뒤에 주어와 동사가 이어집니다."
+     },
+     {
+      "label": "구동사 put away",
+      "note": "put away는 '치우다, 넣어 두다'로 목적어가 put과 away 사이에 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "put the phone away",
+      "meaning": "휴대폰을 치우다"
+     }
+    ]
+   },
+   {
+    "text": "My phone stays in my bag after the last class.",
+    "chunks": [
+     {
+      "en": "My phone stays",
+      "kr": "내 휴대폰은 그대로 있다"
+     },
+     {
+      "en": "in my bag",
+      "kr": "가방 속에"
+     },
+     {
+      "en": "after the last class.",
+      "kr": "마지막 수업이 끝난 뒤에는"
+     }
+    ],
+    "naturalTranslation": "마지막 수업이 끝난 뒤에는 내 휴대폰이 가방 속에 그대로 있다.",
+    "wordOrderPoint": {
+     "title": "어디에 있는지 먼저, 언제인지는 뒤에",
+     "explanation": "한국어는 '마지막 수업 뒤에는'을 앞에 두지만, 영어는 stays in my bag으로 어디에 있는지 먼저 말하고 때를 문장 끝에 덧붙일 수 있습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 My phone과 동사 stays를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 in과 그 목적어 my bag을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 after와 그 목적어 the last class를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "형용사 last와 그 명사 class를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "3인칭 단수 현재 -s",
+      "note": "주어 My phone이 3인칭 단수라 stay에 -s를 붙입니다."
+     },
+     {
+      "label": "때를 나타내는 전치사 after",
+      "note": "after the last class는 '마지막 수업 뒤에'라는 때를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "stays",
+      "meaning": "그대로 있다, 머문다"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "counting-points-in-a-card-game",
+  "level": 1,
+  "topic": "Games",
+  "title": "Counting Points at Grandma's Table",
+  "titleKr": "할머니 식탁에서 점수 세기",
+  "sentences": [
+   {
+    "text": "At Grandma's house my cousins taught me a card game.",
+    "chunks": [
+     {
+      "en": "At Grandma's house",
+      "kr": "할머니 댁에서"
+     },
+     {
+      "en": "my cousins taught me a card game.",
+      "kr": "사촌들이 나에게 카드 게임을 가르쳐 주었다"
+     }
+    ],
+    "naturalTranslation": "할머니 댁에서 사촌들이 나에게 카드 게임 하나를 가르쳐 주었다.",
+    "wordOrderPoint": {
+     "title": "4형식 어순 - 동사 + 사람 + 사물",
+     "explanation": "taught 뒤에 배우는 사람 me를 먼저 놓고, 가르친 내용 a card game을 그다음에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 At과 그 목적어 Grandma's house를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "짧은 주어 my cousins와 동사 taught를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "taught와 받는 사람 me를 갈라 읽으면 4형식 뼈대가 흩어집니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "관사 a와 명사 card game을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "소유격 's",
+      "note": "Grandma's house - 사람을 가리키는 말 뒤에 's를 붙여 '할머니의 집'이 됩니다."
+     },
+     {
+      "label": "4형식 teach + 사람 + 사물",
+      "note": "taught me a card game에서 me가 배우는 사람, a card game이 가르친 내용입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "cousins",
+      "meaning": "사촌들"
+     },
+     {
+      "word": "card game",
+      "meaning": "카드 게임"
+     }
+    ]
+   },
+   {
+    "text": "One player draws a card, and the next player follows.",
+    "chunks": [
+     {
+      "en": "One player draws a card,",
+      "kr": "한 사람이 카드 한 장을 뽑는다"
+     },
+     {
+      "en": "and the next player follows.",
+      "kr": "그리고 그다음 사람이 이어서 한다"
+     }
+    ],
+    "naturalTranslation": "한 사람이 카드를 한 장 뽑고, 그다음 차례의 사람이 이어서 뽑는다.",
+    "wordOrderPoint": {
+     "title": "콤마와 and로 두 절을 나란히 잇기",
+     "explanation": "앞 절 One player draws a card와 뒤 절 the next player follows를 콤마와 and로 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "주어 the next player가 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 One player와 동사 draws를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 draws와 목적어 a card를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "관사 the와 뒤따르는 next player를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "3인칭 단수 현재 -s",
+      "note": "주어 One player가 3인칭 단수라 draw에 -s를 붙입니다."
+     },
+     {
+      "label": "명사를 꾸미는 next",
+      "note": "the next player는 '그다음 차례의 사람'으로 next가 player를 꾸밉니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "draws",
+      "meaning": "(카드를) 뽑는다"
+     }
+    ]
+   },
+   {
+    "text": "After each round we count the points on our own cards.",
+    "chunks": [
+     {
+      "en": "After each round",
+      "kr": "한 판이 끝날 때마다"
+     },
+     {
+      "en": "we count the points",
+      "kr": "우리는 점수를 센다"
+     },
+     {
+      "en": "on our own cards.",
+      "kr": "각자 자기 카드에 적힌"
+     }
+    ],
+    "naturalTranslation": "한 판이 끝날 때마다 우리는 각자 자기 카드에 있는 점수를 센다.",
+    "wordOrderPoint": {
+     "title": "때 + 주어·동사 + 어디에 있는지 순서",
+     "explanation": "After each round로 언제인지 먼저 밝히고, 세는 일을 말한 뒤 on our own cards로 어디의 점수인지 좁힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 After와 그 목적어 each round를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 we와 동사 count를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 count와 목적어 the points를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 on과 그 목적어 our own cards를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "each + 단수명사",
+      "note": "After each round - each 뒤에는 단수명사 round가 옵니다."
+     },
+     {
+      "label": "소유를 강조하는 own",
+      "note": "our own cards는 '우리 각자 자기 카드'로 own이 소유를 강조합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "points",
+      "meaning": "점수"
+     },
+     {
+      "word": "round",
+      "meaning": "(게임의) 한 판"
+     }
+    ]
+   },
+   {
+    "text": "The player with the highest score wins at the end.",
+    "chunks": [
+     {
+      "en": "The player with the highest score",
+      "kr": "가장 높은 점수를 낸 사람이"
+     },
+     {
+      "en": "wins at the end.",
+      "kr": "마지막에 이긴다"
+     }
+    ],
+    "naturalTranslation": "마지막에 가장 높은 점수를 낸 사람이 이긴다.",
+    "wordOrderPoint": {
+     "title": "사람을 먼저 말하고 뒤에서 좁히는 순서",
+     "explanation": "한국어는 '가장 높은 점수를 낸 사람'처럼 꾸미는 말이 앞에 오지만, 영어는 The player를 먼저 말하고 with the highest score를 뒤에 붙여 좁힙니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "명사 player 뒤에서 그것을 꾸미는 with 구 앞에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "문장 끝 때 표현 at the end 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "전치사 with와 그 목적어 the highest score를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "최상급 highest와 그 명사 score를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 at과 그 목적어 the end를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "최상급 the + -est",
+      "note": "형용사 high에 -est를 붙이고 앞에 the를 놓아 '가장 높은'이 됩니다."
+     },
+     {
+      "label": "명사를 뒤에서 꾸미는 전치사구",
+      "note": "with the highest score가 앞의 The player를 뒤에서 꾸며 어떤 사람인지 좁힙니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "highest",
+      "meaning": "가장 높은"
+     },
+     {
+      "word": "at the end",
+      "meaning": "마지막에"
+     }
+    ]
+   },
+   {
+    "text": "Tonight I counted the points without any help.",
+    "chunks": [
+     {
+      "en": "Tonight",
+      "kr": "오늘 밤에는"
+     },
+     {
+      "en": "I counted the points",
+      "kr": "내가 점수를 셌다"
+     },
+     {
+      "en": "without any help.",
+      "kr": "아무 도움 없이"
+     }
+    ],
+    "naturalTranslation": "오늘 밤에는 내가 아무 도움 없이 점수를 다 셌다.",
+    "wordOrderPoint": {
+     "title": "문두 시간 부사 + 주어 + 동사",
+     "explanation": "Tonight을 맨 앞에 놓아 언제인지 먼저 밝히고 주어와 동사를 이어 갑니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 I와 동사 counted를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 counted와 목적어 the points를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 without과 그 목적어 any help를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 -ed",
+      "note": "counted는 count의 과거형으로 오늘 밤 있었던 일을 나타냅니다."
+     },
+     {
+      "label": "전치사 without + 명사",
+      "note": "without any help는 '아무 도움 없이'로 없는 상태를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "without any help",
+      "meaning": "아무 도움 없이"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "a-handshake-after-the-last-move",
+  "level": 1,
+  "topic": "Games",
+  "title": "The Handshake After the Last Move",
+  "titleKr": "마지막 수 뒤의 악수",
+  "sentences": [
+   {
+    "text": "I won the chess match against my classmate at lunchtime.",
+    "chunks": [
+     {
+      "en": "I won the chess match",
+      "kr": "나는 체스 시합을 이겼다"
+     },
+     {
+      "en": "against my classmate",
+      "kr": "반 친구를 상대로"
+     },
+     {
+      "en": "at lunchtime.",
+      "kr": "점심시간에"
+     }
+    ],
+    "naturalTranslation": "점심시간에 나는 반 친구와 둔 체스 시합에서 이겼다.",
+    "wordOrderPoint": {
+     "title": "목적어 뒤에 상대와 때를 차례로 붙이기",
+     "explanation": "won the chess match를 먼저 말하고 누구를 상대로(against my classmate), 언제(at lunchtime)를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "동사 won과 목적어 the chess match를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 against와 그 목적어 my classmate를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 at과 그 목적어 lunchtime을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 불규칙 won",
+      "note": "won은 win의 과거형으로 '이겼다'는 뜻입니다."
+     },
+     {
+      "label": "전치사 against + 상대",
+      "note": "against my classmate는 '반 친구를 상대로'라는 뜻입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "match",
+      "meaning": "시합"
+     },
+     {
+      "word": "classmate",
+      "meaning": "반 친구"
+     }
+    ]
+   },
+   {
+    "text": "My opponent looked at the board and said nothing.",
+    "chunks": [
+     {
+      "en": "My opponent looked at the board",
+      "kr": "내 상대는 판을 바라보았다"
+     },
+     {
+      "en": "and said nothing.",
+      "kr": "그리고 아무 말도 하지 않았다"
+     }
+    ],
+    "naturalTranslation": "내 상대는 판을 바라보고 아무 말도 하지 않았다.",
+    "wordOrderPoint": {
+     "title": "한 주어에 이어지는 두 동사",
+     "explanation": "My opponent 하나에 looked와 said가 and로 이어져 두 동작을 나란히 말합니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 My opponent와 동사 looked를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 looked와 딸린 전치사 at을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 at과 그 목적어 the board를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 said와 목적어 nothing을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부정 대명사 nothing",
+      "note": "said nothing은 not 없이 '아무 말도 하지 않았다'는 뜻이 됩니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 동사",
+      "note": "looked와 said가 같은 주어 My opponent에 이어집니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "opponent",
+      "meaning": "상대, 겨루는 사람"
+     }
+    ]
+   },
+   {
+    "text": "I held out my hand and thanked him for the game.",
+    "chunks": [
+     {
+      "en": "I held out my hand",
+      "kr": "나는 손을 내밀었다"
+     },
+     {
+      "en": "and thanked him",
+      "kr": "그리고 그에게 고맙다고 했다"
+     },
+     {
+      "en": "for the game.",
+      "kr": "그 시합에 대해"
+     }
+    ],
+    "naturalTranslation": "나는 손을 내밀고 그 시합에 대해 그에게 고맙다고 말했다.",
+    "wordOrderPoint": {
+     "title": "thank + 사람 + for + 이유",
+     "explanation": "thanked him 뒤에 for the game을 붙여 무엇에 대해 고마운지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "hold out은 두 낱말이 한 동사라 held와 out을 붙여 읽습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "구동사 held out과 목적어 my hand를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 thanked와 고마움을 받는 사람 him을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 for와 그 목적어 the game을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 hold out",
+      "note": "hold out은 '내밀다'로 out까지가 한 덩어리입니다."
+     },
+     {
+      "label": "전치사 for로 이유 밝히기",
+      "note": "thank + 사람 + for + 이유 꼴로 고마운 까닭을 붙입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "held out",
+      "meaning": "내밀었다"
+     },
+     {
+      "word": "thanked",
+      "meaning": "고맙다고 했다"
+     }
+    ]
+   },
+   {
+    "text": "A good winner never laughs at the other player.",
+    "chunks": [
+     {
+      "en": "A good winner",
+      "kr": "좋은 승자는"
+     },
+     {
+      "en": "never laughs at the other player.",
+      "kr": "상대편 사람을 결코 비웃지 않는다"
+     }
+    ],
+    "naturalTranslation": "좋은 승자는 상대를 결코 비웃지 않는다.",
+    "wordOrderPoint": {
+     "title": "부정을 문장 앞쪽에서 미리 알리는 영어",
+     "explanation": "한국어는 '비웃지 않는다'처럼 부정을 맨 끝에 붙이지만, 영어는 never를 동사 앞에 먼저 놓아 부정임을 미리 알립니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "형용사 good과 그 명사 winner를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "never와 그 뒤 동사 laughs를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 laughs와 딸린 전치사 at을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 at과 그 목적어 the other player를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "빈도부사 never의 위치",
+      "note": "never는 일반동사 앞에 놓여 not 없이 부정을 나타냅니다."
+     },
+     {
+      "label": "구동사 laugh at",
+      "note": "laugh at은 '~을 비웃다'로 at까지 한 덩어리입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "laughs at",
+      "meaning": "비웃는다"
+     }
+    ]
+   },
+   {
+    "text": "Tomorrow he may win, and I will shake his hand again.",
+    "chunks": [
+     {
+      "en": "Tomorrow he may win,",
+      "kr": "내일은 그가 이길지도 모른다"
+     },
+     {
+      "en": "and I will shake his hand again.",
+      "kr": "그리고 나는 다시 그의 손을 잡을 것이다"
+     }
+    ],
+    "naturalTranslation": "내일은 그가 이길지도 모르고, 그때도 나는 다시 그와 악수할 것이다.",
+    "wordOrderPoint": {
+     "title": "추측·의지를 주어 바로 뒤에서 밝히는 자리",
+     "explanation": "한국어는 '이길지도 모른다'처럼 추측을 문장 끝에 붙이지만, 영어는 may·will을 주어 바로 뒤에 놓아 확실한 일인지 아닌지를 먼저 알립니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 9,
+       "reason": "문장 끝 부사 again 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 he와 조동사 may를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "조동사 may와 본동사 win을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "조동사 will과 본동사 shake를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 shake와 목적어 his hand를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조동사 may",
+      "note": "may win은 '이길지도 모른다'로 확실하지 않은 일을 나타냅니다."
+     },
+     {
+      "label": "조동사 will",
+      "note": "will shake는 앞으로 할 일을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "shake his hand",
+      "meaning": "그와 악수하다"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "deciding-who-rolls-first",
+  "level": 1,
+  "topic": "Games",
+  "title": "The Highest Roll Starts",
+  "titleKr": "가장 큰 눈이 먼저",
+  "sentences": [
+   {
+    "text": "Four players sat around the table in the club room.",
+    "chunks": [
+     {
+      "en": "Four players sat around the table",
+      "kr": "네 명이 탁자에 둘러앉았다"
+     },
+     {
+      "en": "in the club room.",
+      "kr": "동아리방에서"
+     }
+    ],
+    "naturalTranslation": "네 명이 동아리방 탁자에 둘러앉았다.",
+    "wordOrderPoint": {
+     "title": "장소를 좁은 곳에서 넓은 곳 순서로",
+     "explanation": "sat 뒤에 around the table(바로 그 자리)을 먼저, in the club room(더 큰 장소)을 나중에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "동사 sat 뒤에서 자리를 밝히는 around the table 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Four players와 동사 sat을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 around와 그 목적어 the table을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 in과 그 목적어 the club room을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "club room은 한 덩어리 이름이라 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 불규칙 sat",
+      "note": "sat은 sit의 과거형으로 '앉았다'는 뜻입니다."
+     },
+     {
+      "label": "장소 전치사 around",
+      "note": "around the table은 '탁자를 빙 둘러'라는 위치를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "club room",
+      "meaning": "동아리방"
+     }
+    ]
+   },
+   {
+    "text": "Everyone wanted the first turn, so we needed a fair way.",
+    "chunks": [
+     {
+      "en": "Everyone wanted the first turn,",
+      "kr": "모두가 첫 차례를 원했다"
+     },
+     {
+      "en": "so we needed a fair way.",
+      "kr": "그래서 우리는 공정한 방법이 필요했다"
+     }
+    ],
+    "naturalTranslation": "모두가 첫 차례를 하고 싶어 해서 우리에게는 공정한 방법이 필요했다.",
+    "wordOrderPoint": {
+     "title": "원인 + so + 결과",
+     "explanation": "앞 절에 원인을 놓고 so 뒤에 그래서 생긴 결과를 이어 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "동사 wanted와 목적어 the first turn을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "관사 the와 뒤따르는 first turn을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "접속사 so 뒤에서 바로 끊으면 이어지는 절이 붙을 자리를 잃습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 needed와 목적어 a fair way를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "단수 취급하는 everyone",
+      "note": "Everyone은 여러 사람을 뜻하지만 단수로 봅니다. 과거형 wanted는 티가 나지 않지만 현재형이면 Everyone wants처럼 -s가 붙습니다."
+     },
+     {
+      "label": "결과의 접속사 so",
+      "note": "so는 '그래서'로 앞 내용의 결과를 잇습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "fair",
+      "meaning": "공정한"
+     }
+    ]
+   },
+   {
+    "text": "We rolled the dice, and the highest number went first.",
+    "chunks": [
+     {
+      "en": "We rolled the dice,",
+      "kr": "우리는 주사위를 굴렸다"
+     },
+     {
+      "en": "and the highest number",
+      "kr": "그리고 가장 큰 수가"
+     },
+     {
+      "en": "went first.",
+      "kr": "먼저 시작했다"
+     }
+    ],
+    "naturalTranslation": "우리는 주사위를 굴렸고, 가장 큰 수가 나온 사람이 먼저 시작했다.",
+    "wordOrderPoint": {
+     "title": "and 뒤에서 새 주어가 시작되는 자리",
+     "explanation": "and는 두 절을 잇는 접속사라 그 뒤의 the highest number 세 낱말이 새 주어가 되고, 이어서 동사 went가 옵니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 We와 동사 rolled를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 rolled와 목적어 the dice를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "관사 the와 최상급 highest를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 went와 붙어 뜻을 이루는 first를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 -ed",
+      "note": "rolled는 roll의 과거형으로 그때 굴린 일을 나타냅니다."
+     },
+     {
+      "label": "최상급 the highest",
+      "note": "the highest number는 '가장 큰 수'로 최상급 앞에는 the를 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "dice",
+      "meaning": "주사위"
+     },
+     {
+      "word": "rolled",
+      "meaning": "굴렸다"
+     }
+    ]
+   },
+   {
+    "text": "The order felt fair, and nobody complained.",
+    "chunks": [
+     {
+      "en": "The order felt fair,",
+      "kr": "그 순서는 공정하게 느껴졌다"
+     },
+     {
+      "en": "and nobody complained.",
+      "kr": "그리고 아무도 불평하지 않았다"
+     }
+    ],
+    "naturalTranslation": "그 순서는 공정하게 느껴졌고, 아무도 불평하지 않았다.",
+    "wordOrderPoint": {
+     "title": "한국어의 '-하게'와 달리 형용사를 그대로 놓기",
+     "explanation": "한국어는 '공정하게'처럼 부사꼴로 말하지만, 영어는 felt 뒤에 형용사 fair를 그대로 놓아 느낌을 나타냅니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "관사 The와 뒤따르는 order를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The order와 동사 felt를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "felt와 그 보어 fair를 갈라 읽으면 '공정하게 느껴졌다'가 끊깁니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "짧은 주어 nobody와 동사 complained를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "감각동사 feel + 형용사",
+      "note": "felt fair는 '공정하게 느껴지다'로 feel 뒤에는 형용사를 씁니다."
+     },
+     {
+      "label": "부정 주어 nobody",
+      "note": "nobody가 주어라 not 없이 '아무도 ~않다'는 뜻이 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "complained",
+      "meaning": "불평했다"
+     }
+    ]
+   },
+   {
+    "text": "Now we roll the dice before every game night.",
+    "chunks": [
+     {
+      "en": "Now",
+      "kr": "이제"
+     },
+     {
+      "en": "we roll the dice",
+      "kr": "우리는 주사위를 굴린다"
+     },
+     {
+      "en": "before every game night.",
+      "kr": "같이 게임하는 저녁마다 그 전에"
+     }
+    ],
+    "naturalTranslation": "이제 우리는 같이 게임하는 저녁이면 시작 전에 늘 주사위를 굴린다.",
+    "wordOrderPoint": {
+     "title": "때를 나타내는 before + 명사구를 문장 끝에",
+     "explanation": "before every game night를 문장 끝에 붙여 언제 그렇게 하는지를 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 we와 동사 roll을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 roll과 목적어 the dice를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "every는 game night를 꾸미는 말이라 뒤와 붙여 읽습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "습관을 나타내는 현재시제",
+      "note": "roll처럼 현재형을 쓰면 지금 되풀이하는 습관을 나타냅니다."
+     },
+     {
+      "label": "전치사 before + 명사구",
+      "note": "before every game night는 '게임하는 저녁마다 그 전에'로 때를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "game night",
+      "meaning": "다 같이 게임하는 저녁"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "first-board-game-with-family",
+  "level": 1,
+  "topic": "Games",
+  "title": "The Rules on the Box Lid",
+  "titleKr": "상자 뚜껑에 적힌 규칙",
+  "sentences": [
+   {
+    "text": "My family opened a new board game after lunch on Sunday.",
+    "chunks": [
+     {
+      "en": "My family opened a new board game",
+      "kr": "우리 가족은 새 보드게임을 뜯었다"
+     },
+     {
+      "en": "after lunch",
+      "kr": "점심 식사 후에"
+     },
+     {
+      "en": "on Sunday.",
+      "kr": "일요일에"
+     }
+    ],
+    "naturalTranslation": "일요일 점심을 먹고 나서 우리 가족은 새 보드게임을 뜯었다.",
+    "wordOrderPoint": {
+     "title": "동사+목적어 뒤에 때를 차례로 붙이는 순서",
+     "explanation": "opened a new board game을 먼저 말하고, 언제인지(after lunch, on Sunday)를 뒤에 차례로 덧붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 My family와 동사 opened를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 opened와 목적어 a new board game을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 after와 그 목적어 lunch를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 on과 그 목적어 Sunday를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 -ed",
+      "note": "opened는 open의 과거형으로, 새 게임 상자를 뜯어 연 일을 나타냅니다."
+     },
+     {
+      "label": "때를 나타내는 전치사 after",
+      "note": "after lunch는 '점심 식사 후에'로 어떤 일 다음인지를 밝힙니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "board game",
+      "meaning": "보드게임(판을 놓고 하는 게임)"
+     },
+     {
+      "word": "after lunch",
+      "meaning": "점심 식사 후에"
+     }
+    ]
+   },
+   {
+    "text": "The rules on the box lid looked long at first.",
+    "chunks": [
+     {
+      "en": "The rules on the box lid",
+      "kr": "상자 뚜껑에 적힌 규칙은"
+     },
+     {
+      "en": "looked long at first.",
+      "kr": "처음에는 길어 보였다"
+     }
+    ],
+    "naturalTranslation": "상자 뚜껑에 적힌 규칙은 처음에는 길어 보였다.",
+    "wordOrderPoint": {
+     "title": "명사 뒤에 붙어 어떤 것인지 좁히는 전치사구",
+     "explanation": "The rules 뒤에 on the box lid를 붙여 어디에 적힌 규칙인지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "명사 rules 뒤에서 그것을 꾸미는 on 구 앞에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "문장 끝 부사구 at first 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "전치사 on과 그 목적어 the box lid를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "looked와 그 보어 long을 갈라 읽으면 '길어 보였다'가 끊깁니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "at first는 한 덩어리 표현이라 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "감각동사 look + 형용사 보어",
+      "note": "looked long은 '길어 보였다'로, look 뒤에는 부사가 아니라 형용사를 씁니다."
+     },
+     {
+      "label": "장소를 나타내는 전치사 on",
+      "note": "on the box lid - 표면에 적힌 것을 말할 때 on을 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "box lid",
+      "meaning": "상자 뚜껑"
+     },
+     {
+      "word": "at first",
+      "meaning": "처음에는"
+     }
+    ]
+   },
+   {
+    "text": "Dad read them aloud, we asked questions, and then we started.",
+    "chunks": [
+     {
+      "en": "Dad read them aloud,",
+      "kr": "아빠가 그것들을 소리 내어 읽었다"
+     },
+     {
+      "en": "we asked questions,",
+      "kr": "우리는 질문을 했다"
+     },
+     {
+      "en": "and then we started.",
+      "kr": "그리고 그다음 우리는 시작했다"
+     }
+    ],
+    "naturalTranslation": "아빠가 규칙을 소리 내어 읽어 주었고, 우리는 질문을 했고, 그런 다음 게임을 시작했다.",
+    "wordOrderPoint": {
+     "title": "콤마와 and로 나란히 잇는 세 개의 절",
+     "explanation": "주어+동사 덩어리 셋을 콤마로 잇고 마지막만 and를 붙여 일이 일어난 차례를 그대로 보여 줍니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Dad와 동사 read를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 read와 목적어 them을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 asked와 목적어 questions를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "짧은 주어 we와 동사 started를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "목적격 대명사 them",
+      "note": "them이 앞 문장의 the rules를 대신해 '그 규칙들을'이라는 뜻이 됩니다."
+     },
+     {
+      "label": "등위접속사 and로 마무리하는 나열",
+      "note": "절을 여러 개 이을 때 앞은 콤마로만 잇고 마지막 절 앞에 and를 놓습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "aloud",
+      "meaning": "소리 내어"
+     }
+    ]
+   },
+   {
+    "text": "By the third turn, my little brother knew almost every rule.",
+    "chunks": [
+     {
+      "en": "By the third turn,",
+      "kr": "세 번째 차례쯤에는"
+     },
+     {
+      "en": "my little brother",
+      "kr": "내 어린 남동생이"
+     },
+     {
+      "en": "knew almost every rule.",
+      "kr": "거의 모든 규칙을 알고 있었다"
+     }
+    ],
+    "naturalTranslation": "세 번째 차례쯤에는 어린 남동생도 거의 모든 규칙을 알고 있었다.",
+    "wordOrderPoint": {
+     "title": "세 낱말로 길어진 주어를 한 덩어리로 읽기",
+     "explanation": "my little brother처럼 주어가 길어지면 주어를 한 덩어리로 묶어 읽고 동사 knew를 이어 갑니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 By와 그 목적어 the third turn을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "소유격 my와 뒤따르는 little brother를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 knew와 목적어 almost every rule을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "almost는 every rule을 꾸미는 말이라 뒤와 붙여 읽습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "서수 the third",
+      "note": "the third turn - 순서를 말할 때는 서수 앞에 the를 붙입니다."
+     },
+     {
+      "label": "almost every + 단수명사",
+      "note": "almost every rule은 '거의 모든 규칙'으로 every 뒤에는 단수명사가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "By the third turn",
+      "meaning": "세 번째 차례쯤에는"
+     }
+    ]
+   },
+   {
+    "text": "Now the box is always ready on our shelf.",
+    "chunks": [
+     {
+      "en": "Now",
+      "kr": "이제"
+     },
+     {
+      "en": "the box is always ready",
+      "kr": "그 상자는 늘 준비되어 있다"
+     },
+     {
+      "en": "on our shelf.",
+      "kr": "우리 집 선반 위에"
+     }
+    ],
+    "naturalTranslation": "이제 그 상자는 우리 집 선반 위에서 늘 준비되어 있다.",
+    "wordOrderPoint": {
+     "title": "상태를 먼저 말하고 장소를 뒤에 붙이기",
+     "explanation": "the box is always ready로 어떤 상태인지 먼저 말하고, on our shelf로 어디에 있는지를 뒤에 덧붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 the box와 be동사 is를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "be동사 is 뒤에서 끊으면 상태를 말하는 always ready가 떨어져 나갑니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "always는 뒤의 ready를 꾸미는 말이라 붙여 읽습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 on과 그 목적어 our shelf를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "빈도부사 always의 위치",
+      "note": "always는 be동사 is 뒤, 형용사 ready 앞에 놓여 '늘, 언제나'라는 뜻을 더합니다."
+     },
+     {
+      "label": "장소를 나타내는 전치사 on",
+      "note": "on our shelf는 '우리 선반 위에'라는 위치를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "shelf",
+      "meaning": "선반"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rain-changed-our-saturday-plan",
+  "level": 1,
+  "topic": "Games",
+  "title": "Three Games from the Closet",
+  "titleKr": "옷장에서 꺼낸 게임 세 개",
+  "sentences": [
+   {
+    "text": "Rain fell all Saturday afternoon, so we stayed inside.",
+    "chunks": [
+     {
+      "en": "Rain fell",
+      "kr": "비가 내렸다"
+     },
+     {
+      "en": "all Saturday afternoon,",
+      "kr": "토요일 오후 내내"
+     },
+     {
+      "en": "so we stayed inside.",
+      "kr": "그래서 우리는 집 안에 있었다"
+     }
+    ],
+    "naturalTranslation": "토요일 오후 내내 비가 내려서 우리는 집 안에 있었다.",
+    "wordOrderPoint": {
+     "title": "동사 뒤에 얼마나 오래인지 붙이기",
+     "explanation": "Rain fell 다음에 all Saturday afternoon을 놓아 얼마나 오래 내렸는지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Rain과 동사 fell을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 we와 동사 stayed를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 stayed와 붙어 뜻을 이루는 inside를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 불규칙 fell",
+      "note": "fell은 fall의 과거형으로 '(비가) 내렸다'는 뜻입니다."
+     },
+     {
+      "label": "결과의 접속사 so",
+      "note": "so 뒤에는 앞 내용 때문에 생긴 결과가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "stayed inside",
+      "meaning": "집 안에 있었다"
+     }
+    ]
+   },
+   {
+    "text": "In the evening my three friends arrived with wet umbrellas.",
+    "chunks": [
+     {
+      "en": "In the evening",
+      "kr": "저녁에"
+     },
+     {
+      "en": "my three friends arrived",
+      "kr": "내 친구 셋이 도착했다"
+     },
+     {
+      "en": "with wet umbrellas.",
+      "kr": "젖은 우산을 들고"
+     }
+    ],
+    "naturalTranslation": "저녁에 친구 셋이 젖은 우산을 들고 우리 집에 왔다.",
+    "wordOrderPoint": {
+     "title": "동사 뒤에 어떤 모습으로 왔는지 붙이기",
+     "explanation": "arrived를 말한 뒤 with wet umbrellas를 붙여 어떤 모습으로 왔는지 덧붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 5,
+       "reason": "주어 my three friends가 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 In과 그 목적어 the evening을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "소유격 my와 뒤따르는 three friends를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 with와 그 목적어 wet umbrellas를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 -ed",
+      "note": "arrived는 arrive의 과거형으로 그때 도착한 일을 나타냅니다."
+     },
+     {
+      "label": "전치사 with + 명사",
+      "note": "with wet umbrellas는 '젖은 우산을 들고'라는 모습을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "arrived",
+      "meaning": "도착했다, 왔다"
+     }
+    ]
+   },
+   {
+    "text": "We pulled three board games out of the closet.",
+    "chunks": [
+     {
+      "en": "We pulled three board games",
+      "kr": "우리는 보드게임 세 개를 꺼냈다"
+     },
+     {
+      "en": "out of the closet.",
+      "kr": "옷장 밖으로"
+     }
+    ],
+    "naturalTranslation": "우리는 옷장에서 보드게임 세 개를 꺼냈다.",
+    "wordOrderPoint": {
+     "title": "동사 + 목적어 + 어디에서",
+     "explanation": "pulled three board games를 먼저 말하고 out of the closet으로 어디에서 꺼냈는지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 We와 동사 pulled를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 pulled와 목적어 three board games를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "out of는 두 낱말이 한 전치사라 out과 of를 붙여 읽습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 out of와 그 목적어 the closet을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 -ed",
+      "note": "pulled는 pull의 과거형으로 '꺼냈다, 당겼다'는 뜻입니다."
+     },
+     {
+      "label": "두 낱말로 된 전치사 out of",
+      "note": "out of the closet은 '옷장 밖으로'라는 출발점을 나타내며, out과 of가 한 덩어리로 움직입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "out of",
+      "meaning": "~ 밖으로, ~에서"
+     },
+     {
+      "word": "closet",
+      "meaning": "옷장, 붙박이장"
+     }
+    ]
+   },
+   {
+    "text": "The rain did not stop, but nobody looked out the window.",
+    "chunks": [
+     {
+      "en": "The rain did not stop,",
+      "kr": "비는 그치지 않았다"
+     },
+     {
+      "en": "but nobody looked out the window.",
+      "kr": "하지만 아무도 창밖을 내다보지 않았다"
+     }
+    ],
+    "naturalTranslation": "비는 그치지 않았지만, 아무도 창밖을 내다보지 않았다.",
+    "wordOrderPoint": {
+     "title": "부정을 동사 앞에서 먼저 밝히는 자리",
+     "explanation": "한국어는 '그치지 않았다'처럼 부정을 맨 끝에 붙이지만, 영어는 did not을 동사 앞에 먼저 놓고 원형 stop을 이어 말합니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The rain과 did not을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "did not은 부정을 만드는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "did not과 뒤따르는 동사원형 stop을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "look out은 두 낱말이 한 덩어리라 looked와 out을 붙여 읽습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "out과 그 목적어 the window를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거 부정 did not + 동사원형",
+      "note": "did not stop은 '그치지 않았다'로, did not 뒤에는 과거형이 아니라 동사원형 stop이 옵니다."
+     },
+     {
+      "label": "대조의 접속사 but",
+      "note": "but은 앞뒤 내용을 맞세워 잇습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "looked out",
+      "meaning": "밖을 내다보았다"
+     }
+    ]
+   },
+   {
+    "text": "These days we secretly wish for rain on Saturday evenings.",
+    "chunks": [
+     {
+      "en": "These days",
+      "kr": "요즘에는"
+     },
+     {
+      "en": "we secretly wish for rain",
+      "kr": "우리는 은근히 비를 바란다"
+     },
+     {
+      "en": "on Saturday evenings.",
+      "kr": "토요일 저녁마다"
+     }
+    ],
+    "naturalTranslation": "요즘 우리는 토요일 저녁이면 은근히 비가 오기를 바란다.",
+    "wordOrderPoint": {
+     "title": "부사 + 동사 + for + 바라는 것",
+     "explanation": "secretly wish를 말한 뒤 for rain을 붙여 무엇을 바라는지 이어 갑니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "These는 days를 꾸미는 말이라 뒤와 붙여 읽습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 we와 그 동사 덩어리 secretly wish를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "wish for는 두 낱말이 한 동사라 wish와 for를 붙여 읽습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 on과 그 목적어 Saturday evenings를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 wish for",
+      "note": "wish for는 '~을 바라다'로 for 뒤에 바라는 것이 옵니다."
+     },
+     {
+      "label": "부사 secretly의 위치",
+      "note": "secretly는 동사 wish 앞에 놓여 '남몰래, 은근히'라는 뜻을 더합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "wish for",
+      "meaning": "~을 바라다"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "the-teammate-i-never-met",
+  "level": 2,
+  "topic": "Games",
+  "title": "A Teammate I Never Met",
+  "titleKr": "얼굴도 모르는 한 팀",
+  "sentences": [
+   {
+    "text": "Last night a stranger joined our online team without a word.",
+    "chunks": [
+     {
+      "en": "Last night",
+      "kr": "지난밤"
+     },
+     {
+      "en": "a stranger joined our online team",
+      "kr": "낯선 사람 하나가 우리 온라인 팀에 들어왔다"
+     },
+     {
+      "en": "without a word.",
+      "kr": "말 한마디 없이"
+     }
+    ],
+    "naturalTranslation": "지난밤, 낯선 사람 하나가 말 한마디 없이 우리 온라인 팀에 들어왔다.",
+    "wordOrderPoint": {
+     "title": "때 - 사건 - 방식 순서",
+     "explanation": "Last night으로 때를 열고, 무슨 일이 있었는지 말한 뒤, 어떻게였는지(without a word)를 맨 끝에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 a stranger와 동사 joined를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 joined와 목적어 our online team을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "online은 team을 꾸미는 말이라 뒤와 붙여 읽습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 without과 목적어 a word를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 없이 목적어를 바로 받는 join",
+      "note": "팀·모임에 들어갈 때는 join 뒤에 전치사를 두지 않고 목적어를 바로 놓아 joined our team이라고 씁니다."
+     },
+     {
+      "label": "문두 시간 부사구",
+      "note": "Last night을 맨 앞에 놓아 언제 일인지 먼저 정합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "joined",
+      "meaning": "들어왔다, 한 팀이 됐다"
+     },
+     {
+      "word": "without a word",
+      "meaning": "말 한마디 없이"
+     }
+    ]
+   },
+   {
+    "text": "We spoke different languages, so words were no help.",
+    "chunks": [
+     {
+      "en": "We spoke different languages,",
+      "kr": "우리는 서로 다른 언어를 썼다"
+     },
+     {
+      "en": "so words were no help.",
+      "kr": "그래서 말은 아무 도움이 안 됐다"
+     }
+    ],
+    "naturalTranslation": "우리는 서로 다른 언어를 썼기 때문에 말은 아무 도움이 되지 않았다.",
+    "wordOrderPoint": {
+     "title": "원인 절 다음에 결과 절",
+     "explanation": "영어는 원인을 먼저 말하고 so로 결과를 이어 붙이는 순서를 그대로 지킵니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 We와 동사 spoke를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 spoke와 목적어 different languages를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "짧은 주어 words와 동사 were를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "were 뒤에서 끊으면 보어 no help가 떨어져 나갑니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "접속사 so로 결과 잇기",
+      "note": "so 뒤에 앞 절 때문에 벌어진 결과가 옵니다."
+     },
+     {
+      "label": "부정 한정사 no + 명사",
+      "note": "no help는 not any help와 같은 뜻으로 '아무 도움도 없음'을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "no help",
+      "meaning": "아무 도움도 안 되는 것"
+     }
+    ]
+   },
+   {
+    "text": "Instead we used map pings and short emotes to plan every move together.",
+    "chunks": [
+     {
+      "en": "Instead we used map pings and short emotes",
+      "kr": "그 대신 우리는 지도 신호와 짧은 동작을 썼다"
+     },
+     {
+      "en": "to plan every move together.",
+      "kr": "모든 움직임을 함께 짜기 위해"
+     }
+    ],
+    "naturalTranslation": "그 대신 우리는 모든 움직임을 함께 짜려고 지도 신호와 짧은 동작을 썼다.",
+    "wordOrderPoint": {
+     "title": "한국어와 뒤바뀌는 목적 표현의 자리",
+     "explanation": "한국어는 '~하려고'를 문장 앞쪽에 두지만, 영어는 무엇을 썼는지 먼저 다 말하고 목적을 문장 끝에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Instead 뒤에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "두 목적어를 잇는 접속사 and 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 we와 동사 used를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 used와 목적어 map pings를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "동사 plan과 목적어 every move를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "to부정사의 목적 용법",
+      "note": "to plan은 '짜기 위해'로 무엇을 위한 행동인지 밝힙니다."
+     },
+     {
+      "label": "등위접속사 and로 목적어 잇기",
+      "note": "map pings와 short emotes가 used의 목적어로 나란히 묶입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "pings",
+      "meaning": "지도에 찍어 알리는 신호"
+     },
+     {
+      "word": "emotes",
+      "meaning": "감정을 나타내는 짧은 동작"
+     }
+    ]
+   },
+   {
+    "text": "My teammate guarded the gate while I carried the key across the bridge.",
+    "chunks": [
+     {
+      "en": "My teammate guarded the gate",
+      "kr": "내 팀원은 문을 지켰다"
+     },
+     {
+      "en": "while I carried the key",
+      "kr": "내가 열쇠를 나르는 동안"
+     },
+     {
+      "en": "across the bridge.",
+      "kr": "다리를 건너서"
+     }
+    ],
+    "naturalTranslation": "내가 열쇠를 들고 다리를 건너는 동안 내 팀원은 문을 지켰다.",
+    "wordOrderPoint": {
+     "title": "두 사람의 동시 동작을 while로 잇기",
+     "explanation": "각자 무엇을 맡았는지 주절과 while절로 나눠 같은 시간에 벌어진 일을 보여 줍니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 My teammate와 동사 guarded를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 guarded와 목적어 the gate를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 I와 동사 carried를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 carried와 목적어 the key를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 across와 목적어 the bridge를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "접속사 while이 이끄는 부사절",
+      "note": "while 뒤에 주어+동사가 와서 두 동작이 같은 시간에 벌어짐을 나타냅니다."
+     },
+     {
+      "label": "과거시제 두 절",
+      "note": "guarded와 carried 모두 과거형이라 둘 다 지난 일임이 드러납니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "guarded",
+      "meaning": "지켰다, 막아 섰다"
+     }
+    ]
+   },
+   {
+    "text": "Now we cooperate better than many teams that talk the whole game.",
+    "chunks": [
+     {
+      "en": "Now we cooperate better",
+      "kr": "이제 우리는 더 잘 협력한다"
+     },
+     {
+      "en": "than many teams",
+      "kr": "많은 팀들보다"
+     },
+     {
+      "en": "that talk the whole game.",
+      "kr": "게임 내내 떠드는"
+     }
+    ],
+    "naturalTranslation": "이제 우리는 게임 내내 떠드는 많은 팀들보다 더 잘 협력한다.",
+    "wordOrderPoint": {
+     "title": "비교 대상을 먼저, 꾸미는 절은 그 뒤에",
+     "explanation": "than many teams로 비교 상대를 먼저 세운 뒤 어떤 팀인지를 that절로 뒤에서 좁힙니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Now 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 we와 동사 cooperate를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 cooperate와 그 정도를 말하는 better를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "than과 비교 대상 many teams를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 talk와 the whole game을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "비교급 better than",
+      "note": "well의 비교급 better로 두 편의 협력 정도를 견줍니다."
+     },
+     {
+      "label": "주격 관계대명사 that",
+      "note": "that talk the whole game이 앞의 many teams를 꾸밉니다."
+     },
+     {
+      "label": "기간을 나타내는 명사구",
+      "note": "the whole game은 '게임이 진행되는 내내'라는 시간 폭을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "cooperate",
+      "meaning": "협력하다, 손발을 맞추다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 we] + [동사 cooperate] + [비교 better than many teams] + [관계절 that talk the whole game]",
+     "why": "비교 대상 many teams 뒤에 관계대명사 that절을 붙여 어떤 팀들보다인지 좁힙니다. 한국어는 '게임 내내 떠드는 팀들보다'처럼 꾸미는 말이 앞에 오지만, 영어는 명사를 먼저 말하고 뒤에서 꾸밉니다.",
+     "wrong": "Now we cooperate better than many talk the whole game teams.",
+     "natural": "이제 우리는 게임 내내 떠드는 많은 팀들보다 더 잘 협력한다."
+    }
+   }
+  ]
+ }
+]

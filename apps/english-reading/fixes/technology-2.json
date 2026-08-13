@@ -1,0 +1,2834 @@
+[
+ {
+  "id": "saving-my-files-to-the-cloud",
+  "level": 2,
+  "topic": "Technology",
+  "title": "The Week of Homework That Vanished",
+  "titleKr": "사라진 일주일치 숙제",
+  "sentences": [
+   {
+    "text": "Jiwon lost a whole week of homework when her old laptop died.",
+    "chunks": [
+     {
+      "en": "Jiwon lost a whole week of homework",
+      "kr": "지원이는 일주일치 숙제를 통째로 잃었다"
+     },
+     {
+      "en": "when her old laptop died.",
+      "kr": "그녀의 낡은 노트북이 멈췄을 때"
+     }
+    ],
+    "naturalTranslation": "지원이는 낡은 노트북이 멈추는 바람에 일주일치 숙제를 통째로 잃었다.",
+    "wordOrderPoint": {
+     "title": "주절 먼저, 때는 뒤에",
+     "explanation": "한국어는 '노트북이 멈췄을 때 숙제를 잃었다'처럼 때를 앞에 두지만, 영어는 무슨 일이 있었는지를 먼저 말하고 when절을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 10,
+       "reason": "주어 her old laptop이 세 낱말이라 동사 died 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Jiwon과 동사 lost를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "a whole week of homework는 한 덩어리입니다. week와 of를 갈라 읽지 마세요."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 of와 목적어 homework를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "접속사 when 뒤에서 끊으면 이어질 절이 떨어져 나갑니다. when부터 끝까지 한 덩어리로 읽으세요."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "수량 표현 a week of + 명사",
+      "note": "a whole week of homework - '일주일치 숙제'로, of 뒤에 양을 채우는 명사가 옵니다."
+     },
+     {
+      "label": "시간 부사절 when",
+      "note": "when her old laptop died가 '언제 잃었는지'를 알려 주는 부사절입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "died",
+      "meaning": "(기계가) 작동을 멈췄다"
+     }
+    ]
+   },
+   {
+    "text": "Ever since that day, she has kept every school file safe in the cloud.",
+    "chunks": [
+     {
+      "en": "Ever since that day,",
+      "kr": "그날 이후로 줄곧"
+     },
+     {
+      "en": "she has kept every school file",
+      "kr": "그녀는 모든 학교 파일을 지켜 왔다"
+     },
+     {
+      "en": "safe in the cloud.",
+      "kr": "안전하게, 클라우드에"
+     }
+    ],
+    "naturalTranslation": "그날 이후로 그녀는 모든 학교 파일을 클라우드에 안전하게 보관해 왔다.",
+    "wordOrderPoint": {
+     "title": "목적어 뒤에 상태를 붙이는 자리",
+     "explanation": "한국어는 '파일을 안전하게 지킨다'처럼 상태를 동사 앞에 두지만, 영어는 목적어 every school file를 먼저 놓고 그 상태 safe를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 10,
+       "reason": "장소를 나타내는 전치사구 in the cloud 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "Ever since는 한 덩어리 표현이라 Ever와 since를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "전치사 since와 목적어 that day를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "현재완료 has kept는 한 덩어리라 has와 kept를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 kept와 목적어 every school file를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "전치사 in과 목적어 the cloud를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "5형식 keep + 목적어 + 형용사",
+      "note": "kept every school file safe - safe가 목적어의 상태를 설명하는 보어입니다."
+     },
+     {
+      "label": "현재완료 has + 과거분사",
+      "note": "has kept - 그날부터 지금까지 이어지는 일이라 단순현재가 아니라 현재완료를 씁니다."
+     },
+     {
+      "label": "every + 단수명사",
+      "note": "every school file - every 뒤에는 단수명사가 오지만 뜻은 '모든'입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "the cloud",
+      "meaning": "클라우드, 인터넷상의 저장 공간"
+     }
+    ]
+   },
+   {
+    "text": "A small app sends her folder to the cloud every time she saves.",
+    "chunks": [
+     {
+      "en": "A small app sends her folder",
+      "kr": "작은 앱 하나가 그녀의 폴더를 보낸다"
+     },
+     {
+      "en": "to the cloud",
+      "kr": "클라우드로"
+     },
+     {
+      "en": "every time she saves.",
+      "kr": "그녀가 저장할 때마다"
+     }
+    ],
+    "naturalTranslation": "작은 앱 하나가 그녀가 저장할 때마다 그 폴더를 클라우드로 보낸다.",
+    "wordOrderPoint": {
+     "title": "목적어 뒤에 도착지, 그 뒤에 때",
+     "explanation": "한국어는 '클라우드로 폴더를 보낸다'처럼 도착지를 먼저 말하지만, 영어는 목적어 her folder를 먼저 놓고 to the cloud와 every time절을 차례로 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 A small app이 세 낱말이라 동사 sends 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "동사 sends와 목적어 her folder를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 to와 목적어 the cloud를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "every time은 '~할 때마다'라는 한 덩어리 표현이라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "짧은 주어 she와 동사 saves를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "동사 send + 목적어 + to + 도착지",
+      "note": "sends her folder to the cloud - 보내는 것을 먼저 놓고 도착지는 to로 뒤에 붙입니다."
+     },
+     {
+      "label": "시간 부사절 every time",
+      "note": "every time she saves - '그녀가 저장할 때마다'로 접속사처럼 절을 이끕니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "folder",
+      "meaning": "폴더, 파일을 모아 둔 곳"
+     },
+     {
+      "word": "every time",
+      "meaning": "~할 때마다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 A small app] + [동사 sends] + [목적어 her folder] + [도착지 to the cloud] + [때 every time she saves]",
+     "why": "영어는 '보낸다 → 무엇을 → 어디로 → 언제'의 차례로 뒤로 갈수록 정보를 덧붙입니다. 한국어처럼 목적어와 때를 동사 앞으로 끌어오지 않습니다.",
+     "wrong": "A small app her folder to the cloud every time she saves sends.",
+     "natural": "작은 앱 하나가 그녀가 저장할 때마다 그 폴더를 클라우드로 보낸다."
+    }
+   },
+   {
+    "text": "Last Monday her tablet froze in the middle of a group project.",
+    "chunks": [
+     {
+      "en": "Last Monday her tablet froze",
+      "kr": "지난 월요일에 그녀의 태블릿이 멈춰 버렸다"
+     },
+     {
+      "en": "in the middle of a group project.",
+      "kr": "모둠 과제를 하던 도중에"
+     }
+    ],
+    "naturalTranslation": "지난 월요일, 모둠 과제를 하던 도중에 그녀의 태블릿이 멈춰 버렸다.",
+    "wordOrderPoint": {
+     "title": "문두 시간 부사구로 장면 열기",
+     "explanation": "Last Monday를 맨 앞에 놓아 언제 벌어진 일인지 먼저 못 박습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "문두 시간 부사구 Last Monday 뒤에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 her tablet과 동사 froze를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 in과 목적어 the middle을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "the middle of a group project는 한 덩어리입니다. middle과 of를 갈라 읽지 마세요."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 of와 목적어 a group project를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제",
+      "note": "froze는 freeze의 과거형으로, 지난 월요일에 이미 벌어진 일을 나타냅니다."
+     },
+     {
+      "label": "전치사구 in the middle of",
+      "note": "in the middle of ~ - '~하는 도중에'라는 뜻으로 of 뒤에 명사가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "froze",
+      "meaning": "(화면이) 멈춰 버렸다, 먹통이 됐다"
+     }
+    ]
+   },
+   {
+    "text": "She opened the same file on a school computer and finished the project.",
+    "chunks": [
+     {
+      "en": "She opened the same file on a school computer",
+      "kr": "그녀는 학교 컴퓨터에서 같은 파일을 열었다"
+     },
+     {
+      "en": "and finished the project.",
+      "kr": "그리고 그 과제를 끝냈다"
+     }
+    ],
+    "naturalTranslation": "그녀는 학교 컴퓨터에서 같은 파일을 열어 그 과제를 끝냈다.",
+    "wordOrderPoint": {
+     "title": "목적어 뒤에 장소, 그다음에 두 번째 동작",
+     "explanation": "한국어는 '학교 컴퓨터에서 파일을 열었다'처럼 장소를 앞에 두지만, 영어는 목적어 the same file를 먼저 놓고 on a school computer를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "목적어를 다 말한 뒤 장소를 나타내는 on a school computer 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 She와 동사 opened를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 opened와 목적어 the same file를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 on과 목적어 a school computer를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 finished와 목적어 the project를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "the same + 명사",
+      "note": "the same file - 앞에서 말한 그 파일과 똑같은 것을 가리킵니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 동사구",
+      "note": "opened와 finished가 나란히 이어져 두 동작의 순서를 보여 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "the same file",
+      "meaning": "(앞서 말한) 바로 그 파일"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "the-watch-that-counts-steps",
+  "level": 3,
+  "topic": "Technology",
+  "title": "Nine Thousand Steps Nobody Counted",
+  "titleKr": "아무도 세지 않은 구천 걸음",
+  "sentences": [
+   {
+    "text": "Dad's watch says he walked nine thousand steps, but he never counted them.",
+    "chunks": [
+     {
+      "en": "Dad's watch says",
+      "kr": "아빠의 시계는 말한다"
+     },
+     {
+      "en": "he walked nine thousand steps,",
+      "kr": "그가 구천 걸음을 걸었다고"
+     },
+     {
+      "en": "but he never counted them.",
+      "kr": "하지만 그는 그것을 센 적이 없다"
+     }
+    ],
+    "naturalTranslation": "아빠의 시계는 그가 구천 걸음을 걸었다고 하지만, 아빠는 걸음을 센 적이 없다.",
+    "wordOrderPoint": {
+     "title": "한국어와 반대인 '~라고'의 자리",
+     "explanation": "한국어는 '걸었다고 말한다'처럼 전하는 내용을 동사 앞에 두지만, 영어는 says를 먼저 놓고 그 내용 절을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Dad's watch와 동사 says를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 he와 동사 walked를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 walked와 목적어 nine thousand steps를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "접속사 but 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 but으로 대조",
+      "note": "but이 시계의 말과 아빠의 실제 경험을 맞세웁니다."
+     },
+     {
+      "label": "빈도 부사 never의 위치",
+      "note": "never는 일반동사 앞에 놓여 '한 번도 ~하지 않았다'를 뜻합니다."
+     },
+     {
+      "label": "that 생략된 목적어절",
+      "note": "says 뒤에 that이 생략된 채 he walked ... 절이 통째로 목적어가 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "nine thousand steps",
+      "meaning": "구천 걸음"
+     }
+    ]
+   },
+   {
+    "text": "A tiny sensor inside the watch feels every small shake of his arm.",
+    "chunks": [
+     {
+      "en": "A tiny sensor inside the watch",
+      "kr": "시계 안에 든 아주 작은 센서가"
+     },
+     {
+      "en": "feels every small shake of his arm.",
+      "kr": "그의 팔이 조금씩 흔들리는 것을 하나하나 느낀다"
+     }
+    ],
+    "naturalTranslation": "시계 안에 든 아주 작은 센서가 그의 팔이 조금씩 흔들리는 것을 하나하나 느낀다.",
+    "wordOrderPoint": {
+     "title": "주어를 다 말한 뒤에야 동사",
+     "explanation": "A tiny sensor inside the watch까지가 통째로 주어이고, 그 뒤에 오는 feels가 이 문장의 동사입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "명사를 꾸미는 전치사구 inside the watch 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "전치사 inside와 목적어 the watch를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 feels와 목적어 every small shake를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "every small shake of his arm은 한 덩어리입니다. shake와 of를 갈라 읽지 마세요."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 of와 목적어 his arm을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사구의 명사 수식",
+      "note": "inside the watch가 앞의 A tiny sensor를 꾸며 어디에 든 센서인지 알려 줍니다."
+     },
+     {
+      "label": "every + 단수명사",
+      "note": "every small shake - '작은 흔들림 하나하나'로 every 뒤에는 단수명사가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "sensor",
+      "meaning": "감지 장치, 센서"
+     },
+     {
+      "word": "shake",
+      "meaning": "흔들림"
+     }
+    ]
+   },
+   {
+    "text": "Each step makes one bump in that shaking, and the watch counts those bumps all day.",
+    "chunks": [
+     {
+      "en": "Each step makes one bump in that shaking,",
+      "kr": "걸음 하나하나가 그 흔들림 속에 봉우리 하나를 만든다"
+     },
+     {
+      "en": "and the watch counts those bumps",
+      "kr": "그리고 시계는 그 봉우리들을 센다"
+     },
+     {
+      "en": "all day.",
+      "kr": "하루 내내"
+     }
+    ],
+    "naturalTranslation": "걸음 하나하나가 그 흔들림 속에 봉우리 하나를 만들고, 시계는 하루 내내 그 봉우리를 센다.",
+    "wordOrderPoint": {
+     "title": "목적어 뒤에 붙는 장소와 기간",
+     "explanation": "한국어는 '그 흔들림 속에 봉우리를 만든다'처럼 장소를 앞에 두지만, 영어는 목적어 one bump를 먼저 놓고 in that shaking을 뒤에 붙입니다. 뒤 절도 목적어를 말한 뒤 all day를 끝에 답니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "목적어를 말한 뒤 전치사구 in that shaking 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Each step과 동사 makes를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 makes와 목적어 one bump를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 in과 목적어 that shaking을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "접속사 and 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "동사 counts와 목적어 those bumps를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "each + 단수명사 주어",
+      "note": "Each step makes - each 뒤에는 단수명사가 오고 동사도 단수형 makes를 씁니다."
+     },
+     {
+      "label": "등위접속사 and로 두 절 잇기",
+      "note": "and가 봉우리가 생기는 일과 시계가 그것을 세는 일을 나란히 잇습니다."
+     },
+     {
+      "label": "기간 부사구 all day",
+      "note": "all day가 문장 끝에 놓여 '하루 내내'라는 시간 폭을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "bump",
+      "meaning": "봉우리처럼 솟은 자리"
+     },
+     {
+      "word": "shaking",
+      "meaning": "흔들림"
+     }
+    ]
+   },
+   {
+    "text": "Shaking a bag can look like walking, so the software counts only steady, repeating bumps.",
+    "chunks": [
+     {
+      "en": "Shaking a bag can look like walking,",
+      "kr": "가방을 흔드는 것은 걷기처럼 보일 수 있다"
+     },
+     {
+      "en": "so the software counts only steady, repeating bumps.",
+      "kr": "그래서 소프트웨어는 고르게 되풀이되는 봉우리만 센다"
+     }
+    ],
+    "naturalTranslation": "가방을 흔드는 것도 걷기처럼 보일 수 있어서, 소프트웨어는 고르게 되풀이되는 봉우리만 센다.",
+    "wordOrderPoint": {
+     "title": "결과를 뒤에 붙이는 so",
+     "explanation": "한국어는 '~기 때문에'를 앞세우지만, 영어는 원인이 되는 문장을 먼저 말하고 so를 붙여 결과절을 뒤에 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 Shaking a bag이 세 낱말이라 조동사 can 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "조동사 can과 본동사 look을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "look like는 한 덩어리라 look과 like를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 like와 그 목적어 walking을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 counts와 세는 대상 only steady, repeating bumps를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조동사 can + 원형",
+      "note": "can look - '~일 수 있다'는 가능성을 나타내며 뒤 동사는 원형입니다."
+     },
+     {
+      "label": "전치사 like + 명사·동명사",
+      "note": "look like walking - like의 목적어 자리라 동사를 쓰려면 -ing 형태로 바꿉니다."
+     },
+     {
+      "label": "동명사 주어",
+      "note": "Shaking a bag이 주어 자리에 놓여 '가방을 흔드는 것'이라는 뜻이 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "look like",
+      "meaning": "~처럼 보이다"
+     },
+     {
+      "word": "steady",
+      "meaning": "고른, 일정한"
+     }
+    ],
+    "insight": {
+     "formula": "[동명사 주어 Shaking a bag] + [조동사 can] + [동사 look] + [전치사 like + 목적어 walking] + [so + 결과절 the software counts only steady, repeating bumps]",
+     "why": "동작을 주어로 세울 때는 -ing를 붙여 동명사로 만듭니다. Shake처럼 원형을 그대로 두면 주어 자리에 설 수 없습니다.",
+     "wrong": "Shake a bag can look like walking, so the software counts only steady, repeating bumps.",
+     "natural": "가방을 흔드는 것도 걷기처럼 보일 수 있어서, 소프트웨어는 고르게 되풀이되는 봉우리만 센다."
+    }
+   },
+   {
+    "text": "By evening, the small number on the screen tells him whether he moved enough today.",
+    "chunks": [
+     {
+      "en": "By evening,",
+      "kr": "저녁쯤이면"
+     },
+     {
+      "en": "the small number on the screen",
+      "kr": "화면 위의 작은 숫자가"
+     },
+     {
+      "en": "tells him whether he moved enough today.",
+      "kr": "그날 충분히 움직였는지를 그에게 알려 준다"
+     }
+    ],
+    "naturalTranslation": "저녁쯤이면 화면 위의 작은 숫자가 그날 충분히 움직였는지를 알려 준다.",
+    "wordOrderPoint": {
+     "title": "한국어와 반대인 '누구에게'의 자리",
+     "explanation": "한국어는 '그에게 알려 준다'처럼 듣는 사람을 동사 앞에 두지만, 영어는 tells 뒤에 him을 먼저 놓고 알려 주는 내용을 그 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "명사를 꾸미는 전치사구 on the screen 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 By와 목적어 evening을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 on과 목적어 the screen을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "tells와 듣는 사람 him을 갈라 읽으면 4형식 뼈대가 흩어집니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "whether 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "whether절이 목적어",
+      "note": "whether he moved enough today는 '~인지 아닌지'를 뜻하며 주어+동사 순서를 지킵니다."
+     },
+     {
+      "label": "시간 전치사 by",
+      "note": "By evening은 '저녁까지는, 저녁쯤이면'으로 그때까지 쌓인 결과를 가리킵니다."
+     },
+     {
+      "label": "4형식 tell + 사람 + 내용절",
+      "note": "tells him whether ... - him이 듣는 사람, whether절이 알려 주는 내용입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "whether",
+      "meaning": "~인지 아닌지"
+     }
+    ],
+    "insight": {
+     "formula": "[시간구 By evening] + [주어 the small number on the screen] + [동사 tells] + [사람 him] + [내용절 whether he moved enough today]",
+     "why": "tell 뒤에는 듣는 사람이 먼저 오고 전할 내용이 그다음에 옵니다. 사람 앞에 to를 넣지 않고, whether절도 질문이 아니라 목적어라서 어순을 뒤집지 않습니다.",
+     "wrong": "By evening, the small number on the screen tells to him whether did he move enough today.",
+     "natural": "저녁쯤이면 화면 위의 작은 숫자가 그날 충분히 움직였는지를 알려 준다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "how-a-map-app-picks-a-route",
+  "level": 3,
+  "topic": "Technology",
+  "title": "The Blue Line on the Screen",
+  "titleKr": "화면 위의 파란 선",
+  "sentences": [
+   {
+    "text": "The map app shows a blue line to the school before you even leave the house.",
+    "chunks": [
+     {
+      "en": "The map app shows a blue line",
+      "kr": "지도 앱은 파란 선을 보여 준다"
+     },
+     {
+      "en": "to the school",
+      "kr": "학교까지"
+     },
+     {
+      "en": "before you even leave the house.",
+      "kr": "네가 집을 나서기도 전에"
+     }
+    ],
+    "naturalTranslation": "지도 앱은 네가 집을 나서기도 전에 학교까지 가는 파란 선을 보여 준다.",
+    "wordOrderPoint": {
+     "title": "목적어 뒤에 목적지, 그 뒤에 때",
+     "explanation": "무엇을 보여 주는지(a blue line)를 먼저 말하고 어디까지인지(to the school), 언제인지(before절)를 차례로 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 The map app이 세 낱말이라 동사 shows 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "동사 shows와 목적어 a blue line을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 to와 목적어 the school을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "접속사 before 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 13,
+       "reason": "동사 leave와 목적어 the house를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간 부사절 before",
+      "note": "before you even leave the house가 '언제보다 먼저인지'를 알려 줍니다."
+     },
+     {
+      "label": "강조 부사 even",
+      "note": "even이 leave 앞에 놓여 '나서기도 전에'라는 뜻을 더합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "map app",
+      "meaning": "지도 앱"
+     }
+    ]
+   },
+   {
+    "text": "Inside the phone, the city is a web of dots and lines, and each dot is a corner.",
+    "chunks": [
+     {
+      "en": "Inside the phone,",
+      "kr": "휴대폰 안에서"
+     },
+     {
+      "en": "the city is a web of dots and lines,",
+      "kr": "그 도시는 점과 선으로 짜인 그물망이다"
+     },
+     {
+      "en": "and each dot is a corner.",
+      "kr": "그리고 점 하나하나는 길모퉁이다"
+     }
+    ],
+    "naturalTranslation": "휴대폰 안에서 그 도시는 점과 선으로 짜인 그물망이고, 점 하나하나는 길모퉁이다.",
+    "wordOrderPoint": {
+     "title": "장소를 먼저 못 박는 문두 전치사구",
+     "explanation": "한국어는 '휴대폰 안에서는'처럼 조사로 무대를 정하지만, 영어는 Inside the phone을 문장 맨 앞에 두고 콤마로 끊어 같은 일을 합니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 Inside와 목적어 the phone을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "짧은 주어 the city와 be동사 is를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "be동사 is와 보어 a web을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "a web of dots and lines는 한 덩어리입니다. web과 of를 갈라 읽지 마세요."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 of와 목적어 dots and lines를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "접속사 and 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 15,
+       "reason": "be동사 is와 보어 a corner를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 of로 재료·구성 잇기",
+      "note": "a web of dots and lines - of가 그물망이 무엇으로 이루어졌는지를 잇습니다."
+     },
+     {
+      "label": "be동사 + 명사 보어",
+      "note": "the city is a web - is 뒤 명사가 주어를 다시 설명하는 보어입니다."
+     },
+     {
+      "label": "each + 단수명사",
+      "note": "each dot is - each 뒤에는 단수명사가 오고 동사도 단수형 is를 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "web",
+      "meaning": "그물망, 얽힌 망"
+     },
+     {
+      "word": "corner",
+      "meaning": "길모퉁이, 길이 꺾이는 지점"
+     }
+    ],
+    "insight": {
+     "formula": "[장소 부사구 Inside the phone] + [주어 the city] + [be동사 is] + [보어 a web of dots and lines] + [and + 절 each dot is a corner]",
+     "why": "'A is B'에서 is 뒤의 명사구가 주어의 정체를 설명합니다. of는 그 명사가 무엇으로 짜였는지 이어 주는 전치사라 뒤에 관계사를 덧붙이지 않습니다.",
+     "wrong": "Inside the phone, the city is a web which of dots and lines, and each dot is a corner.",
+     "natural": "휴대폰 안에서 그 도시는 점과 선으로 짜인 그물망이고, 점 하나하나는 길모퉁이다."
+    }
+   },
+   {
+    "text": "Each line carries a cost in minutes, and traffic reports change that cost all day.",
+    "chunks": [
+     {
+      "en": "Each line carries a cost in minutes,",
+      "kr": "선은 저마다 분 단위의 값을 지닌다"
+     },
+     {
+      "en": "and traffic reports change that cost all day.",
+      "kr": "그리고 교통 정보가 하루 내내 그 값을 바꾼다"
+     }
+    ],
+    "naturalTranslation": "선은 저마다 몇 분이 걸리는지를 값으로 지니고, 교통 정보가 하루 내내 그 값을 바꾼다.",
+    "wordOrderPoint": {
+     "title": "값을 지닌 쪽을 주어로 세우기",
+     "explanation": "한국어는 '선마다 값이 붙어 있다'처럼 말하지만, 영어는 Each line을 주어로 세우고 carries a cost처럼 동사와 목적어로 이어 갑니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 12,
+       "reason": "기간을 나타내는 all day 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Each line과 동사 carries를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 carries와 목적어 a cost를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "짧은 전치사구 in minutes는 앞의 a cost에 붙여 읽습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 in과 목적어 minutes를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 change와 목적어 that cost를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "each + 단수명사",
+      "note": "Each line carries - each 뒤에는 단수명사가 오고 동사도 단수형입니다."
+     },
+     {
+      "label": "등위접속사 and로 두 절 잇기",
+      "note": "and가 값이 붙어 있다는 사실과 그 값이 바뀐다는 사실을 나란히 잇습니다."
+     },
+     {
+      "label": "기간 부사구 all day",
+      "note": "all day가 문장 끝에 놓여 '하루 내내'라는 시간 폭을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "cost",
+      "meaning": "드는 값, 비용"
+     },
+     {
+      "word": "traffic reports",
+      "meaning": "교통 정보"
+     }
+    ]
+   },
+   {
+    "text": "The app tests many paths and keeps the cheapest one.",
+    "chunks": [
+     {
+      "en": "The app tests many paths",
+      "kr": "그 앱은 여러 길을 시험해 본다"
+     },
+     {
+      "en": "and keeps the cheapest one.",
+      "kr": "그리고 값이 가장 싼 것을 남긴다"
+     }
+    ],
+    "naturalTranslation": "그 앱은 여러 길을 시험해 보고 값이 가장 싼 길만 남긴다.",
+    "wordOrderPoint": {
+     "title": "한 주어에 두 동작 잇기",
+     "explanation": "tests many paths와 keeps the cheapest one이 같은 주어 The app에 이어져 두 동작이 차례로 붙습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The app과 동사 tests를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 tests와 목적어 many paths를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "접속사 and와 뒤 동사 keeps를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 keeps와 목적어 the cheapest one을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "최상급 the cheapest",
+      "note": "cheap의 최상급으로, 여러 길 가운데 값이 가장 적게 드는 하나를 가리킵니다."
+     },
+     {
+      "label": "부정대명사 one",
+      "note": "one이 앞에 나온 path를 대신해 같은 명사를 되풀이하지 않게 합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "the cheapest one",
+      "meaning": "값이 가장 싼 것"
+     }
+    ]
+   },
+   {
+    "text": "When an accident blocks the bridge, the line turns red and a new path appears.",
+    "chunks": [
+     {
+      "en": "When an accident blocks the bridge,",
+      "kr": "사고가 그 다리를 막으면"
+     },
+     {
+      "en": "the line turns red",
+      "kr": "그 선이 붉게 바뀐다"
+     },
+     {
+      "en": "and a new path appears.",
+      "kr": "그리고 새 길이 나타난다"
+     }
+    ],
+    "naturalTranslation": "사고가 다리를 막으면 그 선이 붉게 바뀌고 새 길이 나타난다.",
+    "wordOrderPoint": {
+     "title": "한국어와 같은 자리에 놓이는 조건",
+     "explanation": "한국어도 '사고가 다리를 막으면'을 앞에 두고, 영어도 When절을 문장 앞에 두고 콤마로 끊습니다. 다만 뒤 절은 주어를 반드시 밝혀 a new path appears로 씁니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 13,
+       "reason": "주어 a new path가 세 낱말이라 동사 appears 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "접속사 When 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 blocks와 목적어 the bridge를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 turns와 보어 red를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "turn + 형용사 보어",
+      "note": "turns red - turn 뒤에는 부사가 아니라 형용사가 와서 '~로 변하다'가 됩니다."
+     },
+     {
+      "label": "등위접속사 and로 두 절 잇기",
+      "note": "and가 선이 바뀌는 일과 새 길이 나타나는 일을 나란히 잇습니다."
+     },
+     {
+      "label": "시간·조건 부사절 when",
+      "note": "When an accident blocks the bridge가 주절이 일어나는 상황을 정합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "blocks",
+      "meaning": "막는다"
+     }
+    ],
+    "insight": {
+     "formula": "[시간절 When an accident blocks the bridge] + [주어 the line] + [동사 turns] + [보어 red] + [and + 절 a new path appears]",
+     "why": "and 뒤의 절도 주어를 앞에, 동사를 뒤에 두는 순서를 지킵니다. 한국어처럼 '나타난다 새 길이'로 뒤집어 쓰지 않습니다.",
+     "wrong": "When an accident blocks the bridge, the line turns red and appears a new path.",
+     "natural": "사고가 다리를 막으면 그 선이 붉게 바뀌고 새 길이 나타난다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "how-ai-draws-a-blue-cat",
+  "level": 3,
+  "topic": "Technology",
+  "title": "The Cat That Never Existed",
+  "titleKr": "존재한 적 없는 고양이",
+  "sentences": [
+   {
+    "text": "Minji typed one short line about a blue cat, and a picture appeared.",
+    "chunks": [
+     {
+      "en": "Minji typed one short line about a blue cat,",
+      "kr": "민지는 파란 고양이에 대해 짧은 한 줄을 입력했다"
+     },
+     {
+      "en": "and a picture appeared.",
+      "kr": "그러자 그림 한 장이 나타났다"
+     }
+    ],
+    "naturalTranslation": "민지가 파란 고양이에 대해 짧은 한 줄을 입력하자 그림 한 장이 나타났다.",
+    "wordOrderPoint": {
+     "title": "꾸미는 말을 명사 뒤에 붙이는 순서",
+     "explanation": "한국어는 '파란 고양이에 대한 한 줄'처럼 꾸미는 말을 앞에 두지만, 영어는 one short line을 먼저 놓고 about a blue cat을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "목적어를 말한 뒤 꾸미는 전치사구 about a blue cat 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Minji와 동사 typed를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 typed와 목적어 one short line을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 about과 목적어 a blue cat을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "짧은 주어 a picture와 동사 appeared를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 두 절 잇기",
+      "note": "and 앞뒤가 각각 주어와 동사를 갖춘 절이라, 입력한 일과 그림이 나타난 일을 나란히 잇습니다."
+     },
+     {
+      "label": "전치사 about + 명사구",
+      "note": "about a blue cat이 앞의 one short line을 꾸며 '무엇에 관한 줄'인지 알려 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "typed",
+      "meaning": "자판으로 입력했다"
+     }
+    ]
+   },
+   {
+    "text": "The program did not copy that cat from anywhere, because no such photo exists.",
+    "chunks": [
+     {
+      "en": "The program did not copy that cat from anywhere,",
+      "kr": "그 프로그램은 그 고양이를 어디에서도 베끼지 않았다"
+     },
+     {
+      "en": "because no such photo exists.",
+      "kr": "그런 사진은 존재하지 않기 때문에"
+     }
+    ],
+    "naturalTranslation": "그런 사진은 어디에도 없기 때문에, 그 프로그램은 그 고양이를 어디에서도 베낀 것이 아니다.",
+    "wordOrderPoint": {
+     "title": "결론 먼저, 까닭은 뒤에",
+     "explanation": "한국어는 '그런 사진이 없기 때문에 베끼지 않았다'처럼 까닭을 앞세우지만, 영어는 결론을 먼저 놓고 because절을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 12,
+       "reason": "주어 no such photo가 세 낱말이라 동사 exists 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The program과 조동사 did를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "did not은 한 덩어리 부정 표현이라 did와 not을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "did not과 본동사 copy는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 copy와 목적어 that cat을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 전치사구 from anywhere는 앞의 copy that cat에 붙여 읽습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 from과 목적어 anywhere를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "이유 부사절 because",
+      "note": "because no such photo exists가 왜 베낀 것이 아닌지를 설명합니다."
+     },
+     {
+      "label": "no such + 명사",
+      "note": "no such photo는 '그런 사진은 하나도 없다'는 뜻으로 such가 앞 내용을 되짚습니다."
+     },
+     {
+      "label": "과거시제 부정 did not + 원형",
+      "note": "did not copy - did가 과거를 나타내므로 뒤 동사는 원형으로 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "from anywhere",
+      "meaning": "그 어디에서도"
+     }
+    ]
+   },
+   {
+    "text": "It studies millions of labeled images, so it learns which shapes usually go with which words.",
+    "chunks": [
+     {
+      "en": "It studies millions of labeled images,",
+      "kr": "그것은 이름표가 붙은 이미지 수백만 장을 살펴본다"
+     },
+     {
+      "en": "so it learns which shapes usually go with which words.",
+      "kr": "그래서 어떤 모양이 대개 어떤 낱말과 어울리는지를 배운다"
+     }
+    ],
+    "naturalTranslation": "그것은 이름표가 붙은 이미지 수백만 장을 살펴보면서, 어떤 모양이 대개 어떤 낱말과 어울리는지를 배운다.",
+    "wordOrderPoint": {
+     "title": "한국어의 '~인지를'이 영어에서는 동사 뒤로",
+     "explanation": "한국어는 '어떤 모양이 어떤 낱말과 어울리는지를 배운다'처럼 목적어를 동사 앞에 두지만, 영어는 learns를 먼저 놓고 그 긴 절을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "동사 learns 뒤 목적어절이 시작되는 자리라 여기서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 It과 동사 studies를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "millions of labeled images는 한 덩어리입니다. millions와 of를 갈라 읽지 마세요."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 of와 목적어 labeled images를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 it과 동사 learns를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "go with는 한 덩어리라 go와 with를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "결과 접속사 so",
+      "note": "so는 앞 내용의 결과를 잇습니다 - 많이 살펴본 결과 배우게 된다는 흐름입니다."
+     },
+     {
+      "label": "수량 표현 millions of",
+      "note": "millions of labeled images - '수백만 장의'라는 뜻으로 of 뒤에 복수명사가 옵니다."
+     },
+     {
+      "label": "간접의문문(의문사절)이 목적어",
+      "note": "which shapes usually go with which words가 통째로 learns의 목적어이며 주어+동사 순서를 그대로 지킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "labeled",
+      "meaning": "이름표가 붙은"
+     },
+     {
+      "word": "go with",
+      "meaning": "~와 어울리다, 짝을 이루다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 It] + [동사 learns] + [목적어절 which shapes usually go with which words]",
+     "why": "learns의 목적어 자리에 which가 이끄는 절이 통째로 들어갑니다. 한국어처럼 그 절을 동사 앞으로 끌어오지 않고 반드시 learns 뒤에 놓습니다.",
+     "wrong": "It which shapes usually go with which words learns.",
+     "natural": "그것은 이름표가 붙은 이미지 수백만 장을 살펴보면서, 어떤 모양이 대개 어떤 낱말과 어울리는지를 배운다."
+    }
+   },
+   {
+    "text": "To make a new picture, the program starts from a screen of pure noise.",
+    "chunks": [
+     {
+      "en": "To make a new picture,",
+      "kr": "새 그림을 만들기 위해"
+     },
+     {
+      "en": "the program starts",
+      "kr": "그 프로그램은 시작한다"
+     },
+     {
+      "en": "from a screen of pure noise.",
+      "kr": "무작위 점만 가득한 화면에서"
+     }
+    ],
+    "naturalTranslation": "새 그림을 만들 때 그 프로그램은 무작위 점만 가득한 화면에서 출발한다.",
+    "wordOrderPoint": {
+     "title": "목적을 앞에, 하는 일을 뒤에",
+     "explanation": "한국어는 '새 그림을 만들려고'를 앞에 두는데, 영어도 To make a new picture를 문장 앞에 두고 콤마 뒤에 주절을 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "to와 동사원형 make는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 make와 목적어 a new picture를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 from과 목적어 a screen을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "a screen of pure noise는 한 덩어리입니다. screen과 of를 갈라 읽지 마세요."
+      },
+      {
+       "boundary": 11,
+       "reason": "전치사 of와 목적어 pure noise를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 from + 출발점",
+      "note": "starts from ~ - 어디에서 출발하는지를 from으로 나타냅니다."
+     },
+     {
+      "label": "to부정사의 목적 용법",
+      "note": "To make a new picture - '~하기 위해'라는 뜻으로 문장 앞에 놓여 목적을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "pure noise",
+      "meaning": "아무 무늬도 없는 무작위 점(잡음)"
+     }
+    ]
+   },
+   {
+    "text": "Step by step the program clears the noise until a blue cat takes shape.",
+    "chunks": [
+     {
+      "en": "Step by step",
+      "kr": "한 단계씩"
+     },
+     {
+      "en": "the program clears the noise",
+      "kr": "그 프로그램은 그 무작위 점들을 걷어 낸다"
+     },
+     {
+      "en": "until a blue cat takes shape.",
+      "kr": "파란 고양이가 형태를 갖출 때까지"
+     }
+    ],
+    "naturalTranslation": "한 단계씩, 프로그램은 파란 고양이가 형태를 갖출 때까지 그 무작위 점들을 걷어 낸다.",
+    "wordOrderPoint": {
+     "title": "한국어의 '~까지'가 영어에서는 뒤로",
+     "explanation": "한국어는 '형태를 갖출 때까지 걷어 낸다'처럼 끝점을 동사 앞에 두지만, 영어는 clears the noise를 먼저 말하고 until절을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 11,
+       "reason": "주어 a blue cat이 세 낱말이라 동사 takes 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "Step by step은 세 낱말이 한 덩어리인 표현입니다. 안에서 끊어 읽지 마세요."
+      },
+      {
+       "boundary": 1,
+       "reason": "전치사 by와 목적어 step을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 clears와 목적어 the noise를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "take shape는 한 덩어리 표현이라 takes와 shape를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부사구 step by step",
+      "note": "명사를 by로 이어 붙여 '한 단계씩'이라는 뜻의 부사구를 만듭니다."
+     },
+     {
+      "label": "현재시제로 쓰는 과정 설명",
+      "note": "clears·takes처럼 현재형을 써서 늘 이렇게 벌어지는 과정을 설명합니다."
+     },
+     {
+      "label": "시간 부사절 until",
+      "note": "until a blue cat takes shape - 그 일이 이루어질 때까지 계속한다는 끝점을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "takes shape",
+      "meaning": "형태를 갖춘다, 모습이 드러난다"
+     }
+    ],
+    "insight": {
+     "formula": "[방식 부사구 Step by step] + [주어 the program] + [동사 clears] + [목적어 the noise] + [시간절 until a blue cat takes shape]",
+     "why": "until은 '~할 때까지'를 뜻하는 접속사라 뒤에 주어+동사가 옵니다. 앞으로 벌어질 일을 가리켜도 그 절에는 will을 쓰지 않고 현재형 takes를 씁니다.",
+     "wrong": "Step by step the program clears the noise until a blue cat will take shape.",
+     "natural": "한 단계씩, 프로그램은 파란 고양이가 형태를 갖출 때까지 그 무작위 점들을 걷어 낸다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "what-the-spam-filter-decides",
+  "level": 3,
+  "topic": "Technology",
+  "title": "The Mail That Never Reaches You",
+  "titleKr": "받은편지함에 닿지 않는 메일",
+  "sentences": [
+   {
+    "text": "Only three of the forty messages sent to Dad last night reached his inbox.",
+    "chunks": [
+     {
+      "en": "Only three of the forty messages sent to Dad last night",
+      "kr": "어젯밤 아빠에게 보내진 마흔 통의 메시지 가운데 오직 세 통만"
+     },
+     {
+      "en": "reached his inbox.",
+      "kr": "받은편지함에 닿았다"
+     }
+    ],
+    "naturalTranslation": "어젯밤 아빠에게 온 메시지 마흔 통 가운데 세 통만 받은편지함에 닿았다.",
+    "wordOrderPoint": {
+     "title": "긴 주어 뒤에서 진짜 동사 찾기",
+     "explanation": "sent to Dad last night가 주어를 꾸미며 끼어들어도 이 문장의 동사는 reached 하나뿐입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 5,
+       "reason": "주어를 꾸미는 과거분사구 sent to Dad last night 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "전치사 of와 목적어 the forty messages를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 to와 목적어 Dad을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "sent to Dad last night는 한 덩어리로 주어를 꾸밉니다. 안에서 끊어 읽지 마세요."
+      },
+      {
+       "boundary": 11,
+       "reason": "동사 reached와 목적어 his inbox를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거분사구의 명사 수식",
+      "note": "sent to Dad last night가 앞의 messages를 꾸며 '보내진 메시지'라는 뜻을 만듭니다."
+     },
+     {
+      "label": "수량 표현 three of the + 복수명사",
+      "note": "three of the forty messages - 전체 가운데 몇 개인지를 of로 나타냅니다."
+     },
+     {
+      "label": "한정 부사 only",
+      "note": "only가 three 앞에 놓여 '세 통뿐'이라는 적음을 강조합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "inbox",
+      "meaning": "받은편지함"
+     }
+    ]
+   },
+   {
+    "text": "Before a message reaches Dad, a filter reads it and gives it a score.",
+    "chunks": [
+     {
+      "en": "Before a message reaches Dad,",
+      "kr": "메시지 하나가 아빠에게 닿기 전에"
+     },
+     {
+      "en": "a filter reads it and gives it a score.",
+      "kr": "필터 하나가 그것을 읽고 그것에 점수를 준다"
+     }
+    ],
+    "naturalTranslation": "메시지가 아빠에게 닿기 전에 필터 하나가 그것을 읽고 점수를 매긴다.",
+    "wordOrderPoint": {
+     "title": "받는 쪽을 먼저, 주는 것은 뒤에",
+     "explanation": "한국어는 '그것에 점수를 준다'처럼 조사로 받는 쪽을 표시하지만, 영어는 gives 바로 뒤에 받는 쪽 it을 놓고 주는 것 a score를 그다음에 놓습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "두 번째 동작이 시작되기 전, 등위접속사 and 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "접속사 Before 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 a message와 동사 reaches를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 reaches와 목적어 Dad을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 reads와 목적어 it을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "gives와 받는 쪽 it을 갈라 읽으면 4형식 뼈대가 흩어집니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "받는 쪽 it과 주는 것 a score를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간 부사절 before",
+      "note": "Before a message reaches Dad가 주절보다 먼저 일어나는 일의 기준을 잡습니다."
+     },
+     {
+      "label": "4형식 give + 간접목적어 + 직접목적어",
+      "note": "gives it a score - it이 받는 쪽, a score가 주는 것입니다."
+     },
+     {
+      "label": "등위접속사 and로 동사 잇기",
+      "note": "reads와 gives가 같은 주어 a filter에 이어진 두 동작입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "filter",
+      "meaning": "걸러 내는 장치, 필터"
+     }
+    ]
+   },
+   {
+    "text": "Words like \"free prize\" push the score up, while a familiar sender pulls it down.",
+    "chunks": [
+     {
+      "en": "Words like \"free prize\"",
+      "kr": "\"free prize\" 같은 낱말은"
+     },
+     {
+      "en": "push the score up,",
+      "kr": "그 점수를 밀어 올린다"
+     },
+     {
+      "en": "while a familiar sender pulls it down.",
+      "kr": "반면 낯익은 발신자는 그것을 끌어내린다"
+     }
+    ],
+    "naturalTranslation": "\"free prize\" 같은 낱말은 점수를 올리고, 반대로 낯익은 발신자는 점수를 끌어내린다.",
+    "wordOrderPoint": {
+     "title": "한국어의 '올린다'가 영어에서는 두 조각",
+     "explanation": "한국어는 '점수를 올린다'로 한 낱말이지만, 영어는 push와 up으로 나뉘어 목적어 the score가 그 사이에 들어갑니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 11,
+       "reason": "주어 a familiar sender가 세 낱말이라 동사 pulls 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "like \"free prize\"가 앞의 Words를 꾸미므로 Words와 like를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "전치사 like와 그 예시 \"free prize\"를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "동사 push와 목적어 the score를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "push ~ up은 한 덩어리 표현이라 the score와 up을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "동사 pulls와 목적어 it을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "대조 접속사 while",
+      "note": "여기서 while은 '반면에'라는 대조를 나타내며 앞뒤 절을 견줍니다."
+     },
+     {
+      "label": "구동사 push up / pull down",
+      "note": "목적어가 대명사면 반드시 동사와 부사 사이에 넣고(pulls it down), 명사면 push the score up과 push up the score가 모두 됩니다."
+     },
+     {
+      "label": "전치사 like로 예시 들기",
+      "note": "Words like \"free prize\" - like가 '~ 같은'이라는 예시를 앞 명사에 붙입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "sender",
+      "meaning": "보낸 사람, 발신자"
+     },
+     {
+      "word": "familiar",
+      "meaning": "낯익은, 익숙한"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 Words like \"free prize\"] + [동사 push] + [목적어 the score] + [방향 부사 up] + [대조절 while a familiar sender pulls it down]",
+     "why": "구동사의 목적어가 대명사면 반드시 동사와 부사 사이에 넣습니다(pulls it down). 명사 목적어라면 push the score up과 push up the score가 둘 다 됩니다.",
+     "wrong": "Words like \"free prize\" push the score up, while a familiar sender pulls down it.",
+     "natural": "\"free prize\" 같은 낱말은 점수를 올리고, 반대로 낯익은 발신자는 점수를 끌어내린다."
+    }
+   },
+   {
+    "text": "Anything above a set line gets filtered out before he ever sees it.",
+    "chunks": [
+     {
+      "en": "Anything above a set line gets filtered out",
+      "kr": "정해진 기준선을 넘는 것은 무엇이든 걸러져 나간다"
+     },
+     {
+      "en": "before he ever sees it.",
+      "kr": "그가 보기도 전에"
+     }
+    ],
+    "naturalTranslation": "정해진 기준선을 넘는 것은 그가 보기도 전에 걸러져 나간다.",
+    "wordOrderPoint": {
+     "title": "걸러지는 쪽을 주어 자리에 놓기",
+     "explanation": "한국어는 '기준선을 넘으면 걸러진다'처럼 조건을 앞세우지만, 영어는 걸러지는 대상 Anything above a set line을 주어 자리에 먼저 놓습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "주어를 다 말한 뒤 동사 gets 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "전치사 above와 목적어 a set line을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "gets와 과거분사 filtered는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "filter out은 out까지 한 동사라 filtered와 out을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "접속사 before 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 filter out",
+      "note": "filter out은 '걸러 내다'로 out까지 한 덩어리입니다."
+     },
+     {
+      "label": "부정대명사 anything + 수식어",
+      "note": "Anything above a set line - anything 뒤에서 전치사구가 꾸며 범위를 좁힙니다."
+     },
+     {
+      "label": "get + 과거분사(수동)",
+      "note": "gets filtered out - be동사 대신 get을 써서 '~되어 버린다'는 변화를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "filtered out",
+      "meaning": "걸러져 빠져나간"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 Anything above a set line] + [get 수동 gets filtered out] + [시간절 before he ever sees it]",
+     "why": "get 뒤에는 과거분사가 와야 '~되어 버린다'는 수동의 뜻이 됩니다. filter out은 out까지 한 동사라 분사도 filtered out 형태로 붙여 씁니다.",
+     "wrong": "Anything above a set line gets filter out before he ever sees it.",
+     "natural": "정해진 기준선을 넘는 것은 그가 보기도 전에 걸러져 나간다."
+    }
+   },
+   {
+    "text": "The filter also learns from him, so one wrong guess is rarely repeated.",
+    "chunks": [
+     {
+      "en": "The filter also learns from him,",
+      "kr": "그 필터는 그에게서도 배운다"
+     },
+     {
+      "en": "so one wrong guess is rarely repeated.",
+      "kr": "그래서 한 번의 잘못된 판단은 거의 되풀이되지 않는다"
+     }
+    ],
+    "naturalTranslation": "그 필터는 아빠에게서도 배우기 때문에, 한 번 잘못 판단한 일을 거의 되풀이하지 않는다.",
+    "wordOrderPoint": {
+     "title": "원인 먼저, 결과는 so 뒤에",
+     "explanation": "한국어는 '배우기 때문에 되풀이하지 않는다'처럼 원인에 어미를 붙이지만, 영어는 원인 절을 그대로 두고 so를 붙여 결과절을 뒤에 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 9,
+       "reason": "주어 one wrong guess가 세 낱말이라 be동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The filter와 부사·동사를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "learn from은 한 덩어리라 learns와 from을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 from과 목적어 him을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "is rarely repeated는 한 덩어리입니다. 사이에 낀 rarely까지 붙여 읽으세요."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "수동태 be + 과거분사",
+      "note": "is rarely repeated - 누가 되풀이하는지보다 되풀이되지 않는다는 사실을 앞세웁니다."
+     },
+     {
+      "label": "결과 접속사 so",
+      "note": "so는 앞 절을 원인으로 삼아 뒤 절의 결과를 잇습니다."
+     },
+     {
+      "label": "빈도 부사 rarely의 위치",
+      "note": "rarely는 be동사 뒤, 과거분사 앞에 놓여 '거의 ~하지 않는다'를 뜻합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "wrong guess",
+      "meaning": "잘못된 판단"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "how-a-phone-knows-your-face",
+  "level": 3,
+  "topic": "Technology",
+  "title": "The Phone That Knows a Face",
+  "titleKr": "얼굴을 알아보는 휴대폰",
+  "sentences": [
+   {
+    "text": "Your phone unlocks in less than a second when you look at it.",
+    "chunks": [
+     {
+      "en": "Your phone unlocks in less than a second",
+      "kr": "네 휴대폰은 1초도 안 되는 사이에 잠금이 풀린다"
+     },
+     {
+      "en": "when you look at it.",
+      "kr": "네가 그것을 바라볼 때"
+     }
+    ],
+    "naturalTranslation": "네가 바라보기만 하면 휴대폰은 1초도 안 되어 잠금이 풀린다.",
+    "wordOrderPoint": {
+     "title": "동사 뒤에 걸린 시간, 그 뒤에 때",
+     "explanation": "unlocks 뒤에 얼마나 걸리는지(in less than a second)를 놓고, 언제인지는 when절로 마지막에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어와 동사를 다 말한 뒤 시간을 나타내는 in less than a second 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Your phone과 동사 unlocks를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 in과 목적어 less than a second를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "less than은 한 덩어리 비교 표현이라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "than과 비교 대상 a second를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "look at은 두 낱말이 한 동사라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "전치사 at과 목적어 it을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "비교 표현 less than",
+      "note": "in less than a second - '1초보다 적은 시간에'라는 뜻으로 than 뒤에 비교 대상이 옵니다."
+     },
+     {
+      "label": "시간 부사절 when",
+      "note": "when you look at it이 잠금이 풀리는 때를 알려 줍니다."
+     },
+     {
+      "label": "구동사 look at",
+      "note": "look at은 '~을 바라보다'로 at까지 붙여야 목적어를 데려올 수 있습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "unlocks",
+      "meaning": "잠금이 풀린다"
+     }
+    ]
+   },
+   {
+    "text": "It does not compare two photos the way a person would.",
+    "chunks": [
+     {
+      "en": "It does not compare two photos",
+      "kr": "그것은 사진 두 장을 견주어 보지 않는다"
+     },
+     {
+      "en": "the way a person would.",
+      "kr": "사람이 그렇게 하는 방식으로는"
+     }
+    ],
+    "naturalTranslation": "그것은 사람이 하듯이 사진 두 장을 견주어 보는 것이 아니다.",
+    "wordOrderPoint": {
+     "title": "한국어의 '~하듯이'가 영어에서는 문장 뒤로",
+     "explanation": "한국어는 '사람이 하듯이 견주어 본다'처럼 비교를 동사 앞에 두지만, 영어는 동사와 목적어를 먼저 말하고 the way a person would를 맨 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 7,
+       "reason": "the way 뒤 절이 시작되는 자리라 여기서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 It과 조동사 does를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "does not과 본동사 compare는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 compare와 목적어 two photos를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "주어 a person과 대동사 would를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "현재시제 부정 does not + 원형",
+      "note": "does not compare - does가 시제를 맡으므로 뒤 동사는 원형입니다."
+     },
+     {
+      "label": "the way + 절(방식)",
+      "note": "the way a person would는 '사람이 하는 방식대로'라는 뜻의 방식 표현입니다."
+     },
+     {
+      "label": "대동사 would",
+      "note": "would 뒤의 compare two photos는 되풀이하지 않고 생략합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "compare",
+      "meaning": "견주어 보다, 비교하다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 It] + [부정 does not] + [동사 compare] + [목적어 two photos] + [방식 the way a person would]",
+     "why": "the way 뒤에는 주어와 동사가 든 절이 옵니다. 그 절도 a person would처럼 주어를 앞에 두고, 앞에 나온 compare two photos는 되풀이하지 않고 would 하나로 줄입니다.",
+     "wrong": "It does not compare two photos the way would a person.",
+     "natural": "그것은 사람이 하듯이 사진 두 장을 견주어 보는 것이 아니다."
+    }
+   },
+   {
+    "text": "Instead, the camera measures the depth of every point on your face.",
+    "chunks": [
+     {
+      "en": "Instead,",
+      "kr": "그 대신"
+     },
+     {
+      "en": "the camera measures the depth of every point on your face.",
+      "kr": "카메라는 네 얼굴 위 모든 지점의 깊이를 잰다"
+     }
+    ],
+    "naturalTranslation": "그 대신 카메라는 네 얼굴 위 모든 지점의 깊이를 잰다.",
+    "wordOrderPoint": {
+     "title": "무엇을 재는지 먼저, 어디인지는 뒤에",
+     "explanation": "한국어는 '얼굴 위 모든 지점의 깊이를 잰다'처럼 꾸미는 말을 앞에 쌓지만, 영어는 the depth를 먼저 놓고 of every point, on your face를 차례로 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "장소를 나타내는 전치사구 on your face 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 the camera와 동사 measures를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 measures와 목적어 the depth를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "the depth of every point는 한 덩어리입니다. depth와 of를 갈라 읽지 마세요."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 of와 목적어 every point를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 on과 목적어 your face를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "문두 부사 instead",
+      "note": "Instead는 '그 대신'으로 앞 문장의 방식을 뒤집어 다른 방식을 소개합니다."
+     },
+     {
+      "label": "전치사 of로 소속 잇기",
+      "note": "the depth of every point - of가 '무엇의 깊이'인지를 이어 줍니다."
+     },
+     {
+      "label": "every + 단수명사",
+      "note": "every point - every 뒤에는 단수명사가 오지만 뜻은 '모든 지점'입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "measures",
+      "meaning": "잰다, 측정한다"
+     },
+     {
+      "word": "depth",
+      "meaning": "깊이"
+     }
+    ]
+   },
+   {
+    "text": "Those numbers become a short code that belongs only to your face.",
+    "chunks": [
+     {
+      "en": "Those numbers become a short code",
+      "kr": "그 숫자들은 짧은 코드가 된다"
+     },
+     {
+      "en": "that belongs only to your face.",
+      "kr": "오직 네 얼굴에만 해당하는"
+     }
+    ],
+    "naturalTranslation": "그 숫자들은 오직 네 얼굴에만 해당하는 짧은 코드가 된다.",
+    "wordOrderPoint": {
+     "title": "한국어와 반대로 꾸미는 말이 뒤에",
+     "explanation": "한국어는 '네 얼굴에만 해당하는 코드'처럼 꾸미는 말을 앞에 두지만, 영어는 a short code를 먼저 놓고 that belongs only to your face를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Those numbers와 동사 become을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "become과 보어 a short code를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "관계대명사 that과 그 동사 belongs를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "belongs와 뒤따르는 only to your face를 갈라 읽지 않습니다. belong to는 한 덩어리입니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 to와 목적어 your face를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 belong to",
+      "note": "belong to는 '~에 속하다'로 to까지 붙여 목적어를 데려옵니다."
+     },
+     {
+      "label": "주격 관계대명사 that",
+      "note": "that belongs only to your face가 앞의 a short code를 꾸밉니다."
+     },
+     {
+      "label": "become + 명사 보어",
+      "note": "become a short code - '~이 되다'로 뒤에 보어가 붙습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "belongs only to",
+      "meaning": "오직 ~에만 속한다"
+     }
+    ]
+   },
+   {
+    "text": "Because the code checks shape instead of color, a new haircut does not fool it.",
+    "chunks": [
+     {
+      "en": "Because the code checks shape",
+      "kr": "그 코드가 모양을 확인하기 때문에"
+     },
+     {
+      "en": "instead of color,",
+      "kr": "색깔이 아니라"
+     },
+     {
+      "en": "a new haircut does not fool it.",
+      "kr": "새 머리 모양은 그것을 속이지 못한다"
+     }
+    ],
+    "naturalTranslation": "그 코드는 색이 아니라 모양을 확인하기 때문에, 머리를 새로 잘라도 속지 않는다.",
+    "wordOrderPoint": {
+     "title": "이유를 먼저 말할 때의 콤마",
+     "explanation": "한국어는 '~하기 때문에'를 앞에 두는데, 영어도 Because절을 앞에 둘 수 있고 그때는 콤마로 끊은 뒤 주절을 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 10,
+       "reason": "주어 a new haircut이 세 낱말이라 조동사 does 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "접속사 Because 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 checks와 목적어 shape를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "instead of는 한 덩어리 표현이라 of와 목적어 color를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "does not과 본동사 fool은 한 덩어리라 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 instead of",
+      "note": "instead of color - '색깔 대신에'로 of 뒤에 명사나 동명사가 옵니다."
+     },
+     {
+      "label": "현재시제 부정 does not + 원형",
+      "note": "does not fool - does가 시제를 맡아 뒤 동사는 원형 fool입니다."
+     },
+     {
+      "label": "이유 부사절 because",
+      "note": "Because the code checks shape ...가 주절의 이유를 먼저 밝힙니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "fool",
+      "meaning": "속이다"
+     }
+    ],
+    "insight": {
+     "formula": "[이유절 Because the code checks shape instead of color] + [주어 a new haircut] + [부정 does not] + [동사 fool] + [목적어 it]",
+     "why": "Because절을 문장 앞에 두면 콤마로 끊고 주절이 옵니다. instead of는 전치사라 뒤에 절이 아니라 명사(color)가 와야 합니다.",
+     "wrong": "Because the code checks shape instead of it checks color, a new haircut does not fool it.",
+     "natural": "그 코드는 색이 아니라 모양을 확인하기 때문에, 머리를 새로 잘라도 속지 않는다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "the-robot-vacuum-learns-the-floor",
+  "level": 3,
+  "topic": "Technology",
+  "title": "The Robot That Draws Your Floor",
+  "titleKr": "바닥 지도를 그리는 로봇",
+  "sentences": [
+   {
+    "text": "On its first run, the robot vacuum scans the whole room as it cleans.",
+    "chunks": [
+     {
+      "en": "On its first run,",
+      "kr": "첫 청소에서"
+     },
+     {
+      "en": "the robot vacuum scans the whole room",
+      "kr": "로봇 청소기는 방 전체를 훑는다"
+     },
+     {
+      "en": "as it cleans.",
+      "kr": "청소를 하면서"
+     }
+    ],
+    "naturalTranslation": "첫 청소에서 로봇 청소기는 청소를 하면서 방 전체를 훑는다.",
+    "wordOrderPoint": {
+     "title": "주된 동작이 먼저, 동시에 벌어지는 일은 뒤에",
+     "explanation": "한국어는 '청소를 하면서 방을 훑는다'처럼 동시 상황을 앞에 두지만, 영어는 scans the whole room을 먼저 말하고 as절을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 6,
+       "reason": "주어 the robot vacuum이 세 낱말이라 동사 scans 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 On과 목적어 its first run을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 scans와 목적어 the whole room을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "접속사 as 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "짧은 주어 it과 동사 cleans를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "동시 상황 부사절 as",
+      "note": "as it cleans - '~하면서'로 주절과 같은 때에 벌어지는 일을 나타냅니다."
+     },
+     {
+      "label": "소유격 its + 명사",
+      "note": "On its first run - its가 그 청소기 자신의 첫 청소임을 가리킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "scans",
+      "meaning": "훑어 살핀다"
+     }
+    ]
+   },
+   {
+    "text": "Each turn and each reading becomes a tiny mark on an invisible map.",
+    "chunks": [
+     {
+      "en": "Each turn and each reading",
+      "kr": "회전 하나하나와 측정값 하나하나가"
+     },
+     {
+      "en": "becomes a tiny mark",
+      "kr": "작은 표시가 된다"
+     },
+     {
+      "en": "on an invisible map.",
+      "kr": "눈에 보이지 않는 지도 위에"
+     }
+    ],
+    "naturalTranslation": "회전 하나하나와 측정값 하나하나가 눈에 보이지 않는 지도 위의 작은 표시가 된다.",
+    "wordOrderPoint": {
+     "title": "긴 주어 뒤에서 동사 찾기",
+     "explanation": "and로 이어진 주어가 길어도 동사는 becomes 하나뿐입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "등위로 묶인 두 주어 사이의 and 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "접속사 and와 뒤에 오는 each reading을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "becomes와 보어 a tiny mark를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 on과 목적어 an invisible map을 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "become + 명사 보어",
+      "note": "becomes a tiny mark - '~이 된다'로 뒤에 보어가 옵니다."
+     },
+     {
+      "label": "전치사 on + 장소",
+      "note": "on an invisible map이 표시가 찍히는 곳을 알려 줍니다."
+     },
+     {
+      "label": "each + 단수명사 주어",
+      "note": "Each turn and each reading - each가 하나하나를 가리켜 동사는 단수형 becomes를 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "reading",
+      "meaning": "(기계가 읽어 낸) 측정값"
+     },
+     {
+      "word": "invisible",
+      "meaning": "눈에 보이지 않는"
+     }
+    ]
+   },
+   {
+    "text": "A spinning laser on its lid measures how far the walls are.",
+    "chunks": [
+     {
+      "en": "A spinning laser on its lid",
+      "kr": "뚜껑 위에서 돌아가는 레이저가"
+     },
+     {
+      "en": "measures how far the walls are.",
+      "kr": "벽이 얼마나 멀리 있는지를 잰다"
+     }
+    ],
+    "naturalTranslation": "뚜껑 위에서 돌아가는 레이저가 벽까지의 거리가 얼마인지를 잰다.",
+    "wordOrderPoint": {
+     "title": "한국어의 '얼마나 먼지를'이 영어에서는 동사 뒤로",
+     "explanation": "한국어는 '벽이 얼마나 먼지를 잰다'처럼 목적어를 동사 앞에 두지만, 영어는 measures를 먼저 놓고 how far the walls are를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 6,
+       "reason": "동사 뒤 how절이 시작되는 자리라 여기서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "전치사 on과 목적어 its lid를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "how far는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "주어 the walls와 be동사 are를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "현재분사의 명사 수식",
+      "note": "spinning이 laser 앞에서 '돌아가는'이라는 뜻으로 명사를 꾸밉니다."
+     },
+     {
+      "label": "전치사구의 명사 수식",
+      "note": "on its lid가 앞의 laser를 꾸며 어디에 달린 레이저인지 알려 줍니다."
+     },
+     {
+      "label": "간접의문문(how far절)이 목적어",
+      "note": "how far the walls are가 통째로 measures의 목적어이며 주어+동사 순서를 지킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "spinning",
+      "meaning": "빙글빙글 도는"
+     },
+     {
+      "word": "measures",
+      "meaning": "잰다, 측정한다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 A spinning laser on its lid] + [동사 measures] + [목적어절 how far the walls are]",
+     "why": "how far가 이끄는 절이 measures의 목적어입니다. 질문이 아니라 목적어라서 are를 앞으로 끌어내지 않고 the walls are 순서를 그대로 둡니다.",
+     "wrong": "A spinning laser on its lid measures how far are the walls.",
+     "natural": "뚜껑 위에서 돌아가는 레이저가 벽까지의 거리가 얼마인지를 잰다."
+    }
+   },
+   {
+    "text": "From that first run, it drives in neat rows instead of random circles.",
+    "chunks": [
+     {
+      "en": "From that first run,",
+      "kr": "그 첫 청소에서부터"
+     },
+     {
+      "en": "it drives in neat rows instead of random circles.",
+      "kr": "그것은 아무렇게나 도는 원이 아니라 가지런한 줄을 따라 움직인다"
+     }
+    ],
+    "naturalTranslation": "그 첫 청소에서부터 그것은 아무렇게나 돌지 않고 가지런한 줄을 따라 움직인다.",
+    "wordOrderPoint": {
+     "title": "하는 쪽을 먼저, 하지 않는 쪽은 뒤에",
+     "explanation": "한국어는 '아무렇게나 돌지 않고 줄을 따라 움직인다'처럼 부정을 앞에 두지만, 영어는 실제로 하는 방식을 먼저 말하고 instead of로 하지 않는 쪽을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "대조를 덧붙이는 instead of 구 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 From과 목적어 that first run을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "짧은 주어 it과 동사 drives를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 in과 목적어 neat rows를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "instead of는 한 덩어리 표현이라 of와 목적어를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 from + 출발 시점",
+      "note": "From that first run은 '그 첫 청소에서부터'로 시작 시점을 나타냅니다."
+     },
+     {
+      "label": "전치사 instead of",
+      "note": "instead of random circles - '~ 대신에'로 of 뒤에 명사가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "instead of",
+      "meaning": "~ 대신에, ~이 아니라"
+     }
+    ]
+   },
+   {
+    "text": "Now the robot knows which corner it missed last night and starts there.",
+    "chunks": [
+     {
+      "en": "Now the robot knows",
+      "kr": "이제 그 로봇은 안다"
+     },
+     {
+      "en": "which corner it missed last night",
+      "kr": "어젯밤 어느 구석을 빠뜨렸는지를"
+     },
+     {
+      "en": "and starts there.",
+      "kr": "그리고 거기서부터 시작한다"
+     }
+    ],
+    "naturalTranslation": "이제 그 로봇은 어젯밤 어느 구석을 빠뜨렸는지 알고 거기서부터 시작한다.",
+    "wordOrderPoint": {
+     "title": "한국어와 반대로 목적어절이 동사 뒤에",
+     "explanation": "한국어는 '어느 구석을 빠뜨렸는지 안다'처럼 목적어를 동사 앞에 두지만, 영어는 knows를 먼저 놓고 which corner ... 절을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Now 뒤에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 the robot과 동사 knows를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "which와 corner는 한 덩어리라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "missed last night는 한 덩어리라 동사와 시간 표현을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "접속사 and와 뒤 동사 starts를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 동사 잇기",
+      "note": "knows와 starts가 같은 주어 the robot에 이어진 두 동작입니다."
+     },
+     {
+      "label": "장소 부사 there",
+      "note": "there가 앞에서 말한 그 구석을 가리켜 같은 말을 되풀이하지 않게 합니다."
+     },
+     {
+      "label": "간접의문문(which + 명사절)",
+      "note": "which corner it missed last night가 knows의 목적어이며 주어+동사 순서를 지킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "corner",
+      "meaning": "구석, 모서리"
+     },
+     {
+      "word": "missed",
+      "meaning": "빠뜨렸다, 놓쳤다"
+     }
+    ],
+    "insight": {
+     "formula": "[부사 Now] + [주어 the robot] + [동사 knows] + [목적어절 which corner it missed last night] + [and + 동사 starts there]",
+     "why": "which corner가 이끄는 절이 knows의 목적어라 did를 넣지 않고 it missed 순서를 그대로 씁니다. and 뒤의 starts는 같은 주어 the robot에 이어집니다.",
+     "wrong": "Now the robot knows which corner did it miss last night and starts there.",
+     "natural": "이제 그 로봇은 어젯밤 어느 구석을 빠뜨렸는지 알고 거기서부터 시작한다."
+    }
+   }
+  ]
+ },
+ {
+  "id": "why-the-translator-moves-the-verb",
+  "level": 3,
+  "topic": "Technology",
+  "title": "The Verb That Has to Move",
+  "titleKr": "자리를 옮겨야 하는 동사",
+  "sentences": [
+   {
+    "text": "Yuna typed a Korean sentence into the app and read the English that came out.",
+    "chunks": [
+     {
+      "en": "Yuna typed a Korean sentence",
+      "kr": "유나는 한국어 문장 하나를 입력했다"
+     },
+     {
+      "en": "into the app",
+      "kr": "그 앱에"
+     },
+     {
+      "en": "and read the English that came out.",
+      "kr": "그리고 나온 영어를 읽어 보았다"
+     }
+    ],
+    "naturalTranslation": "유나는 앱에 한국어 문장 하나를 입력하고 나온 영어를 읽어 보았다.",
+    "wordOrderPoint": {
+     "title": "꾸미는 말을 명사 뒤에 붙이는 순서",
+     "explanation": "한국어는 '나온 영어'처럼 꾸미는 말을 명사 앞에 두지만, 영어는 the English를 먼저 놓고 that came out을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 11,
+       "reason": "명사를 꾸미는 관계절 that came out 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Yuna와 동사 typed를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 typed와 목적어 a Korean sentence를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 into와 목적어 the app을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "동사 read와 목적어 the English를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "관계대명사 that과 그 동사 came를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 동사 잇기",
+      "note": "typed와 read가 같은 주어 Yuna의 연속 동작이라 두 번째 주어를 다시 쓰지 않습니다."
+     },
+     {
+      "label": "전치사 into + 방향",
+      "note": "into the app - 안으로 들어가는 방향을 나타냅니다."
+     },
+     {
+      "label": "주격 관계대명사 that",
+      "note": "that came out이 앞의 the English를 꾸며 '나온 영어'라는 뜻을 만듭니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "came out",
+      "meaning": "(결과가) 나왔다"
+     }
+    ]
+   },
+   {
+    "text": "In Korean the verb waits until the very end of the sentence.",
+    "chunks": [
+     {
+      "en": "In Korean the verb waits",
+      "kr": "한국어에서는 동사가 기다린다"
+     },
+     {
+      "en": "until the very end of the sentence.",
+      "kr": "문장의 맨 끝까지"
+     }
+    ],
+    "naturalTranslation": "한국어에서는 동사가 문장의 맨 끝까지 기다린다.",
+    "wordOrderPoint": {
+     "title": "문두 전치사구로 조건 정하기",
+     "explanation": "In Korean을 앞에 두어 어떤 언어에서의 이야기인지 먼저 정합니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "문두 전치사구 In Korean 뒤에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 In과 목적어 Korean을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 the verb와 동사 waits를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 until과 목적어 the very end를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 of와 목적어 the sentence를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 until + 명사",
+      "note": "until the very end - '끝까지'라는 끝점을 나타내며 뒤에 명사가 옵니다."
+     },
+     {
+      "label": "강조 표현 the very + 명사",
+      "note": "the very end는 '맨 끝, 바로 그 끝'으로 very가 명사를 강조합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "verb",
+      "meaning": "동사"
+     }
+    ]
+   },
+   {
+    "text": "English puts the verb right after the subject, so the app must rebuild the order.",
+    "chunks": [
+     {
+      "en": "English puts the verb right after the subject,",
+      "kr": "영어는 동사를 주어 바로 뒤에 놓는다"
+     },
+     {
+      "en": "so the app must rebuild the order.",
+      "kr": "그래서 그 앱은 순서를 다시 짜야 한다"
+     }
+    ],
+    "naturalTranslation": "영어는 동사를 주어 바로 뒤에 놓기 때문에, 그 앱은 순서를 다시 짜야 한다.",
+    "wordOrderPoint": {
+     "title": "동사 자리가 두 언어에서 갈리는 곳",
+     "explanation": "한국어는 동사를 문장 끝까지 미루지만, 영어는 주어 English 바로 뒤에 puts를 놓고 목적어와 위치 표현을 그 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "목적어를 말한 뒤 위치를 나타내는 right after the subject 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 English와 동사 puts를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 puts와 목적어 the verb를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 after와 목적어 the subject를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "조동사 must와 본동사 rebuild를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 12,
+       "reason": "동사 rebuild와 목적어 the order를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "결과 접속사 so",
+      "note": "so가 앞 절을 원인으로 삼아 뒤 절의 결과를 잇습니다."
+     },
+     {
+      "label": "강조 부사 right + 전치사구",
+      "note": "right after the subject - right가 '바로'라는 뜻으로 위치를 좁힙니다."
+     },
+     {
+      "label": "조동사 must + 원형",
+      "note": "must rebuild - '~해야 한다'는 의무를 나타내며 뒤 동사는 원형입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "subject",
+      "meaning": "주어"
+     },
+     {
+      "word": "rebuild",
+      "meaning": "다시 짜다, 재구성하다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 English] + [동사 puts] + [목적어 the verb] + [위치 right after the subject] + [so + 결과절 the app must rebuild the order]",
+     "why": "영어는 주어 바로 뒤에 동사를 놓고, 한국어는 동사를 맨 끝에 놓습니다. 그래서 그 앱은 낱말만 바꾸는 데서 끝내지 못하고 순서를 다시 짜야 합니다.",
+     "wrong": "English the verb puts right after the subject, so the app the order must rebuild.",
+     "natural": "영어는 동사를 주어 바로 뒤에 놓기 때문에, 그 앱은 순서를 다시 짜야 한다."
+    }
+   },
+   {
+    "text": "It reads the whole sentence first, because the last word can change everything.",
+    "chunks": [
+     {
+      "en": "It reads the whole sentence first,",
+      "kr": "그것은 문장 전체를 먼저 읽는다"
+     },
+     {
+      "en": "because the last word can change everything.",
+      "kr": "마지막 낱말이 모든 것을 바꿀 수 있기 때문에"
+     }
+    ],
+    "naturalTranslation": "마지막 낱말이 뜻을 통째로 바꿀 수 있기 때문에, 그것은 문장 전체를 먼저 읽는다.",
+    "wordOrderPoint": {
+     "title": "한국어와 반대인 이유의 자리",
+     "explanation": "한국어는 '바꿀 수 있기 때문에 먼저 읽는다'처럼 이유를 앞에 두지만, 영어는 하는 일을 먼저 말하고 because절을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 9,
+       "reason": "주어 the last word가 세 낱말이라 조동사 can 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 It과 동사 reads를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 reads와 목적어 the whole sentence를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "접속사 because 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "조동사 can과 본동사 change를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "조동사 can + 원형",
+      "note": "can change - '~할 수 있다'는 가능성을 나타내며 뒤 동사는 원형입니다."
+     },
+     {
+      "label": "순서 부사 first",
+      "note": "first가 목적어 뒤에 놓여 '무엇보다 먼저'라는 순서를 나타냅니다."
+     },
+     {
+      "label": "이유 부사절 because",
+      "note": "because the last word can change everything이 주절의 이유를 설명합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "the whole sentence",
+      "meaning": "문장 전체"
+     }
+    ]
+   },
+   {
+    "text": "When the app moves those pieces well, the English finally sounds like a person wrote it.",
+    "chunks": [
+     {
+      "en": "When the app moves those pieces well,",
+      "kr": "그 앱이 그 조각들을 잘 옮기면"
+     },
+     {
+      "en": "the English finally sounds like a person wrote it.",
+      "kr": "그 영어는 마침내 사람이 쓴 것처럼 들린다"
+     }
+    ],
+    "naturalTranslation": "앱이 그 조각들을 잘 옮겨 놓으면, 그 영어는 마침내 사람이 쓴 것처럼 들린다.",
+    "wordOrderPoint": {
+     "title": "한국어의 '~처럼'이 영어에서는 like 뒤에 절로",
+     "explanation": "한국어는 '사람이 쓴 것처럼'을 동사 앞에 두지만, 영어는 sounds를 먼저 놓고 like a person wrote it을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "접속사 When 뒤에서 끊으면 이어질 절이 떨어져 나갑니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 moves와 목적어 those pieces를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "like와 뒤에 오는 절의 주어 a person을 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 13,
+       "reason": "짧은 주어 a person과 동사 wrote를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "감각동사 sounds와 like가 이끄는 절을 갈라 읽지 않습니다. sound like를 붙여 읽으세요."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간·조건 부사절 when",
+      "note": "When the app moves those pieces well이 주절이 이루어지는 조건을 정합니다."
+     },
+     {
+      "label": "부사 finally의 위치",
+      "note": "finally가 주어와 동사 사이에 놓여 '마침내'라는 뜻을 더합니다."
+     },
+     {
+      "label": "감각동사 sound like + 절",
+      "note": "sounds like a person wrote it - like 뒤에 주어+동사가 든 절이 붙어 '~처럼 들린다'가 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "pieces",
+      "meaning": "조각들"
+     },
+     {
+      "word": "sounds like",
+      "meaning": "~처럼 들린다"
+     }
+    ],
+    "insight": {
+     "formula": "[조건절 When the app moves those pieces well] + [주어 the English] + [동사 sounds] + [like + 절 a person wrote it]",
+     "why": "sound like 뒤에는 명사뿐 아니라 주어+동사가 든 절도 올 수 있습니다. 그 절도 a person wrote it처럼 주어를 앞에, 동사를 뒤에 두는 순서를 지킵니다.",
+     "wrong": "When the app moves those pieces well, the English finally sounds like wrote it a person.",
+     "natural": "앱이 그 조각들을 잘 옮겨 놓으면, 그 영어는 마침내 사람이 쓴 것처럼 들린다."
+    }
+   }
+  ]
+ }
+]

@@ -1,0 +1,2618 @@
+[
+ {
+  "id": "a-bean-seed-in-a-paper-cup",
+  "level": 1,
+  "topic": "Science",
+  "title": "One Bean, One Paper Cup",
+  "titleKr": "종이컵 속 콩 한 알",
+  "sentences": [
+   {
+    "text": "On Monday Minji plants one bean seed in a paper cup.",
+    "chunks": [
+     {
+      "en": "On Monday",
+      "kr": "월요일에"
+     },
+     {
+      "en": "Minji plants one bean seed",
+      "kr": "민지는 콩 씨앗 한 알을 심는다"
+     },
+     {
+      "en": "in a paper cup.",
+      "kr": "종이컵 안에"
+     }
+    ],
+    "naturalTranslation": "월요일에 민지는 종이컵 안에 콩 씨앗 한 알을 심는다.",
+    "wordOrderPoint": {
+     "title": "요일을 알리는 전치사구를 문장 앞에",
+     "explanation": "On Monday를 맨 앞에 놓아 어느 날의 일인지 먼저 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 On과 그 목적어 Monday를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 Minji와 동사 plants를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 plants와 목적어 one bean seed를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 in과 그 목적어 a paper cup을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "요일에 붙는 전치사 on",
+      "note": "On Monday - 요일이나 날짜 앞에는 on을 씁니다."
+     },
+     {
+      "label": "수를 나타내는 one",
+      "note": "one bean seed - one이 관사 대신 '단 한 알'임을 또렷하게 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "plants",
+      "meaning": "심는다"
+     }
+    ]
+   },
+   {
+    "text": "The tiny seed hides under dark, wet soil.",
+    "chunks": [
+     {
+      "en": "The tiny seed hides",
+      "kr": "그 작은 씨앗은 숨는다"
+     },
+     {
+      "en": "under dark, wet soil.",
+      "kr": "어둡고 젖은 흙 밑에"
+     }
+    ],
+    "naturalTranslation": "그 작은 씨앗은 어둡고 젖은 흙 밑에 숨는다.",
+    "wordOrderPoint": {
+     "title": "형용사 두 개를 콤마로 잇기",
+     "explanation": "dark, wet처럼 같은 명사를 꾸미는 형용사 두 개를 콤마로 나란히 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 The tiny seed가 세 낱말이라 동사 hides 앞에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "콤마 뒤라 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "관사 The와 tiny seed를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 under와 그 목적어 dark, wet soil을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 under + 장소",
+      "note": "under dark, wet soil - '흙 밑에'라는 위치를 나타냅니다."
+     },
+     {
+      "label": "형용사 나열",
+      "note": "dark와 wet이 둘 다 soil을 꾸미며 콤마로 이어집니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "hides",
+      "meaning": "숨는다"
+     },
+     {
+      "word": "soil",
+      "meaning": "흙"
+     }
+    ]
+   },
+   {
+    "text": "After five days, a thin green stem pushes through the soil.",
+    "chunks": [
+     {
+      "en": "After five days,",
+      "kr": "닷새 뒤에"
+     },
+     {
+      "en": "a thin green stem",
+      "kr": "가느다란 초록 줄기 하나가"
+     },
+     {
+      "en": "pushes through the soil.",
+      "kr": "흙을 뚫고 올라온다"
+     }
+    ],
+    "naturalTranslation": "닷새 뒤에 가느다란 초록 줄기 하나가 흙을 뚫고 올라온다.",
+    "wordOrderPoint": {
+     "title": "며칠 뒤를 나타내는 After + 기간",
+     "explanation": "After 뒤에 five days라는 기간을 붙여 '닷새가 지난 뒤'라는 시점을 만듭니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 After와 그 목적어 five days를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "관사 a와 thin green stem을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 pushes와 딸린 전치사 through를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 through와 그 목적어 the soil을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "형용사 두 개가 앞에서 꾸미기",
+      "note": "a thin green stem - 굵기(thin)와 색(green)을 명사 앞에 차례로 놓습니다."
+     },
+     {
+      "label": "동사 + through로 통과 나타내기",
+      "note": "pushes through the soil - 동사 뒤에 through를 붙여 무엇을 뚫고 지나는지 밝힙니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "stem",
+      "meaning": "줄기"
+     },
+     {
+      "word": "pushes through",
+      "meaning": "뚫고 나온다"
+     }
+    ]
+   },
+   {
+    "text": "Two round leaves open wide, and the cup looks alive.",
+    "chunks": [
+     {
+      "en": "Two round leaves",
+      "kr": "둥근 잎 두 장이"
+     },
+     {
+      "en": "open wide,",
+      "kr": "활짝 벌어진다"
+     },
+     {
+      "en": "and the cup looks alive.",
+      "kr": "그리고 그 컵은 살아 있는 것처럼 보인다"
+     }
+    ],
+    "naturalTranslation": "둥근 잎 두 장이 활짝 벌어지고, 그 컵은 살아 있는 것처럼 보인다.",
+    "wordOrderPoint": {
+     "title": "look + 형용사 보어",
+     "explanation": "looks 뒤에 alive가 와서 '~해 보인다'라는 뜻을 만듭니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "수를 나타내는 Two와 round leaves를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "and와 뒤 절의 주어 the cup을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 the cup과 동사 looks를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "looks와 그 보어 alive를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부사 wide",
+      "note": "open wide - wide가 동사 뒤에서 '활짝'이라는 정도를 나타냅니다."
+     },
+     {
+      "label": "감각동사 look + 형용사",
+      "note": "looks alive는 '살아 있어 보인다'로, look 뒤에는 부사가 아니라 형용사를 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "leaves",
+      "meaning": "잎"
+     },
+     {
+      "word": "alive",
+      "meaning": "살아 있는"
+     }
+    ]
+   },
+   {
+    "text": "A whole plant grows out of one dry seed.",
+    "chunks": [
+     {
+      "en": "A whole plant",
+      "kr": "온전한 식물 한 그루가"
+     },
+     {
+      "en": "grows out of one dry seed.",
+      "kr": "마른 씨앗 한 알에서 자라 나온다"
+     }
+    ],
+    "naturalTranslation": "온전한 식물 한 그루가 마른 씨앗 한 알에서 자라 나온다.",
+    "wordOrderPoint": {
+     "title": "출발점을 동사 뒤에 두는 영어 어순",
+     "explanation": "한국어는 '마른 씨앗에서 자라 나온다'처럼 출발점을 동사 앞에 두지만, 영어는 grows를 먼저 말하고 out of one dry seed를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "관사 A와 whole plant를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "grow out of는 한 덩어리라 grows 뒤에서 끊어 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 of와 그 목적어 one dry seed를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "수를 나타내는 one과 dry seed를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 grow out of",
+      "note": "grow out of는 '~에서 자라 나오다'로 세 낱말이 한 동사처럼 쓰입니다."
+     },
+     {
+      "label": "형용사 whole",
+      "note": "A whole plant는 '한 그루 통째의 식물'로, whole이 빠진 것 없는 온전함을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "grows out of",
+      "meaning": "~에서 자라 나온다"
+     },
+     {
+      "word": "whole",
+      "meaning": "온전한, 통째의"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "the-flagpole-shadow-all-day",
+  "level": 1,
+  "topic": "Science",
+  "title": "The Clock the Sun Draws",
+  "titleKr": "해가 그리는 시계",
+  "sentences": [
+   {
+    "text": "In the morning, the flagpole makes a long shadow.",
+    "chunks": [
+     {
+      "en": "In the morning,",
+      "kr": "아침에는"
+     },
+     {
+      "en": "the flagpole makes a long shadow.",
+      "kr": "그 깃대가 긴 그림자를 만든다"
+     }
+    ],
+    "naturalTranslation": "아침에는 그 깃대가 긴 그림자를 만든다.",
+    "wordOrderPoint": {
+     "title": "make + 목적어로 '~을 만든다'",
+     "explanation": "makes 뒤에 a long shadow를 바로 붙여 무엇을 만드는지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 In과 그 목적어 the morning을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "짧은 주어 the flagpole과 동사 makes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 makes와 목적어 a long shadow를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "관사 a와 long shadow를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "때를 가리키는 전치사 in",
+      "note": "in the morning - 하루의 한 때를 말할 때 in을 씁니다."
+     },
+     {
+      "label": "형용사 long의 위치",
+      "note": "a long shadow처럼 형용사는 꾸미는 명사 앞에 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "flagpole",
+      "meaning": "깃대"
+     }
+    ]
+   },
+   {
+    "text": "The shadow points west, and it stretches across the whole yard.",
+    "chunks": [
+     {
+      "en": "The shadow points west,",
+      "kr": "그 그림자는 서쪽을 가리킨다"
+     },
+     {
+      "en": "and it stretches",
+      "kr": "그리고 그것은 길게 뻗는다"
+     },
+     {
+      "en": "across the whole yard.",
+      "kr": "운동장 전체를 가로질러"
+     }
+    ],
+    "naturalTranslation": "그 그림자는 서쪽을 가리키며 운동장 전체를 가로질러 길게 뻗는다.",
+    "wordOrderPoint": {
+     "title": "콤마와 and로 이은 두 절",
+     "explanation": "앞 절 The shadow points west와 뒤 절 it stretches across the whole yard를 나란히 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The shadow와 동사 points를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "and와 뒤 절의 주어 it을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "짧은 주어 it과 동사 stretches를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 across와 그 목적어 the whole yard를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "방향을 가리키는 부사 west",
+      "note": "points west - west가 동사 뒤에서 '서쪽으로'라는 방향을 나타냅니다."
+     },
+     {
+      "label": "대명사 it",
+      "note": "it이 앞 절의 the shadow를 대신합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "west",
+      "meaning": "서쪽"
+     },
+     {
+      "word": "stretches",
+      "meaning": "길게 뻗는다"
+     }
+    ]
+   },
+   {
+    "text": "At noon the same shadow becomes very short.",
+    "chunks": [
+     {
+      "en": "At noon",
+      "kr": "정오에는"
+     },
+     {
+      "en": "the same shadow becomes very short.",
+      "kr": "그 같은 그림자가 아주 짧아진다"
+     }
+    ],
+    "naturalTranslation": "정오에는 그 같은 그림자가 아주 짧아진다.",
+    "wordOrderPoint": {
+     "title": "become + 형용사 보어",
+     "explanation": "becomes 뒤에 very short가 와서 주어가 어떤 상태로 바뀌는지 나타냅니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "주어 the same shadow가 세 낱말이라 동사 becomes 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 At과 그 목적어 noon을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "becomes와 그 보어 very short를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "정도 부사 very와 형용사 short를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시각을 가리키는 전치사 at",
+      "note": "at noon - 정오처럼 한 시점을 콕 집을 때 at을 씁니다."
+     },
+     {
+      "label": "정도 부사 very",
+      "note": "very가 형용사 short 앞에서 정도를 키웁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "noon",
+      "meaning": "정오, 낮 열두 시"
+     }
+    ]
+   },
+   {
+    "text": "By evening the shadow grows long again, but it points east.",
+    "chunks": [
+     {
+      "en": "By evening",
+      "kr": "저녁쯤이면"
+     },
+     {
+      "en": "the shadow grows long again,",
+      "kr": "그 그림자가 다시 길어진다"
+     },
+     {
+      "en": "but it points east.",
+      "kr": "그러나 그것은 동쪽을 가리킨다"
+     }
+    ],
+    "naturalTranslation": "저녁쯤이면 그 그림자가 다시 길어지는데, 이번에는 동쪽을 가리킨다.",
+    "wordOrderPoint": {
+     "title": "but으로 앞뒤를 뒤집는 두 절",
+     "explanation": "앞 절에서 그림자가 다시 길어진 사실을 말하고, but 뒤에서 향하는 방향이 반대라는 점을 뒤집습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 By와 그 목적어 evening을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 the shadow와 동사 grows를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "grows와 그 보어 long을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "but과 뒤 절의 주어 it을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "동사 points와 방향을 나타내는 east를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간 전치사 by",
+      "note": "By evening은 '저녁쯤이면'으로 그때까지 이루어진 상태를 가리킵니다."
+     },
+     {
+      "label": "grow + 형용사로 상태 바뀜 나타내기",
+      "note": "grows long은 '길어진다'로, grow 뒤에 형용사를 놓아 상태가 바뀜을 나타냅니다."
+     },
+     {
+      "label": "부사 again의 위치",
+      "note": "again은 동사구 맨 뒤에 놓여 '다시'라는 되풀이를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "grows long",
+      "meaning": "길어진다"
+     },
+     {
+      "word": "east",
+      "meaning": "동쪽"
+     }
+    ]
+   },
+   {
+    "text": "All day the shadow moves like a slow clock hand.",
+    "chunks": [
+     {
+      "en": "All day",
+      "kr": "하루 내내"
+     },
+     {
+      "en": "the shadow moves",
+      "kr": "그 그림자는 움직인다"
+     },
+     {
+      "en": "like a slow clock hand.",
+      "kr": "느린 시계 바늘처럼"
+     }
+    ],
+    "naturalTranslation": "하루 내내 그 그림자는 느린 시계 바늘처럼 움직인다.",
+    "wordOrderPoint": {
+     "title": "주어 + 동사 뒤에 like로 견줌 붙이기",
+     "explanation": "the shadow moves를 먼저 말하고 like a slow clock hand를 붙여 무엇처럼 움직이는지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "All과 day를 갈라 읽지 않습니다. All day를 한 덩어리로 붙여 읽으세요."
+      },
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 the shadow와 동사 moves를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 like와 그 목적어 a slow clock hand를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "관사 a와 slow clock hand를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "기간 전체를 나타내는 All day",
+      "note": "All day는 '하루 내내'로 그동안 줄곧 이어짐을 나타냅니다."
+     },
+     {
+      "label": "명사가 명사를 꾸미기",
+      "note": "clock hand처럼 앞 명사 clock이 뒤 명사 hand의 종류를 밝혀 '시계 바늘'이 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "All day",
+      "meaning": "하루 내내"
+     },
+     {
+      "word": "clock hand",
+      "meaning": "시계 바늘"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ice-water-steam-in-the-kitchen",
+  "level": 1,
+  "topic": "Science",
+  "title": "Three Faces of the Same Water",
+  "titleKr": "같은 물의 세 얼굴",
+  "sentences": [
+   {
+    "text": "An ice cube sits in a glass in a warm room.",
+    "chunks": [
+     {
+      "en": "An ice cube",
+      "kr": "각얼음 한 덩이가"
+     },
+     {
+      "en": "sits in a glass",
+      "kr": "유리컵 안에 놓여 있다"
+     },
+     {
+      "en": "in a warm room.",
+      "kr": "따뜻한 방 안에서"
+     }
+    ],
+    "naturalTranslation": "각얼음 한 덩이가 따뜻한 방 안 유리컵에 놓여 있다.",
+    "wordOrderPoint": {
+     "title": "장소를 좁은 곳부터 넓은 곳 차례로",
+     "explanation": "한국어는 '따뜻한 방 안 유리컵에'처럼 넓은 곳을 먼저 말하지만, 영어는 좁은 곳 in a glass를 먼저 놓고 넓은 곳 in a warm room을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "동사 sits 뒤 전치사구 in a glass 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "관사 An과 ice cube를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 in과 그 목적어 a glass를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 in과 그 목적어 a warm room을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "관사 a와 warm room을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "3인칭 단수 현재 -s",
+      "note": "주어 An ice cube가 3인칭 단수라 sit에 -s를 붙여 sits로 씁니다."
+     },
+     {
+      "label": "장소를 나타내는 전치사 in",
+      "note": "in a glass, in a warm room - 안쪽 공간을 가리킬 때 in을 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "ice cube",
+      "meaning": "각얼음, 얼음 한 덩이"
+     }
+    ]
+   },
+   {
+    "text": "Soon the ice melts and becomes cool water.",
+    "chunks": [
+     {
+      "en": "Soon",
+      "kr": "곧"
+     },
+     {
+      "en": "the ice melts",
+      "kr": "그 얼음은 녹는다"
+     },
+     {
+      "en": "and becomes cool water.",
+      "kr": "그리고 시원한 물이 된다"
+     }
+    ],
+    "naturalTranslation": "곧 그 얼음은 녹아서 시원한 물이 된다.",
+    "wordOrderPoint": {
+     "title": "때를 알리는 부사를 문장 맨 앞에",
+     "explanation": "Soon을 맨 앞에 놓아 '곧'이라는 시간 정보를 먼저 알려 줍니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "관사 the와 명사 ice를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 the ice와 동사 melts를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "and와 뒤따르는 동사 becomes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "becomes와 그 보어 cool water를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 이은 두 동사",
+      "note": "melts와 becomes가 같은 주어 the ice를 함께 씁니다."
+     },
+     {
+      "label": "become + 명사 보어",
+      "note": "becomes cool water - become 뒤 보어가 주어의 바뀐 모습을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "melts",
+      "meaning": "녹는다"
+     }
+    ]
+   },
+   {
+    "text": "Later that water goes into a pot and boils.",
+    "chunks": [
+     {
+      "en": "Later",
+      "kr": "나중에"
+     },
+     {
+      "en": "that water goes into a pot",
+      "kr": "그 물이 냄비 안으로 옮겨 간다"
+     },
+     {
+      "en": "and boils.",
+      "kr": "그리고 끓는다"
+     }
+    ],
+    "naturalTranslation": "나중에 그 물이 냄비 안으로 옮겨 가서 끓는다.",
+    "wordOrderPoint": {
+     "title": "도착 지점을 동사 뒤에 붙이기",
+     "explanation": "한국어는 '냄비 안으로 옮겨 간다'처럼 도착 지점을 동사 앞에 두지만, 영어는 goes를 먼저 말하고 into a pot을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "한정사 that과 명사 water를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 that water와 동사 goes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 goes와 딸린 전치사 into를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 into와 그 목적어 a pot을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "and와 뒤따르는 동사 boils를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 into",
+      "note": "into는 밖에서 안으로 들어가는 움직임을 나타내 in과 다릅니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 동사",
+      "note": "goes와 boils가 같은 주어 that water를 함께 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "boils",
+      "meaning": "끓는다"
+     },
+     {
+      "word": "pot",
+      "meaning": "냄비"
+     }
+    ]
+   },
+   {
+    "text": "The water turns into steam, and a white cloud rises.",
+    "chunks": [
+     {
+      "en": "The water turns into steam,",
+      "kr": "그 물이 수증기로 바뀐다"
+     },
+     {
+      "en": "and a white cloud rises.",
+      "kr": "그리고 흰 김이 피어오른다"
+     }
+    ],
+    "naturalTranslation": "그 물이 수증기로 바뀌고, 흰 김이 피어오른다.",
+    "wordOrderPoint": {
+     "title": "바뀐 결과를 동사 뒤에 붙이기",
+     "explanation": "한국어는 '수증기로 바뀐다'처럼 결과를 동사 앞에 두지만, 영어는 turns를 먼저 말하고 into steam을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "주어 a white cloud가 세 낱말이라 동사 rises 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "관사 The와 명사 water를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 turns와 딸린 전치사 into를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 into와 그 목적어 steam을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "and와 뒤 절의 주어 a white cloud를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "형용사가 명사 앞에서 꾸미기",
+      "note": "a white cloud처럼 꾸미는 말 white를 명사 cloud 앞에 둡니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 절",
+      "note": "and가 주어와 동사를 각각 갖춘 두 문장을 하나로 잇습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "turns into",
+      "meaning": "~으로 바뀐다"
+     },
+     {
+      "word": "steam",
+      "meaning": "수증기(눈에 보이지 않는 기체)"
+     },
+     {
+      "word": "cloud",
+      "meaning": "흰 김(공기 중에 다시 맺힌 물방울)"
+     }
+    ]
+   },
+   {
+    "text": "Heat alone moves the same water from ice to steam.",
+    "chunks": [
+     {
+      "en": "Heat alone moves the same water",
+      "kr": "열 하나만으로 그 같은 물을 옮긴다"
+     },
+     {
+      "en": "from ice to steam.",
+      "kr": "얼음에서 수증기까지"
+     }
+    ],
+    "naturalTranslation": "열 하나만으로 그 같은 물이 얼음에서 수증기까지 옮겨 간다.",
+    "wordOrderPoint": {
+     "title": "move A from B to C",
+     "explanation": "목적어 the same water를 먼저 말하고 from(어디서)과 to(어디로)를 차례로 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 7,
+       "reason": "from ice와 to steam은 짝을 이루므로 to 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "주어 Heat와 그것을 한정하는 alone을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 moves와 목적어 the same water를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 from과 그 목적어 ice를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 to와 그 목적어 steam을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부사 alone의 위치",
+      "note": "명사 Heat 뒤에 alone을 놓아 '열 하나만으로'라는 뜻이 됩니다."
+     },
+     {
+      "label": "전치사 짝 from ~ to ~",
+      "note": "from은 출발점, to는 도착점을 가리켜 짝으로 쓰입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "Heat",
+      "meaning": "열"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "the-windowsill-plant-that-leans",
+  "level": 2,
+  "topic": "Science",
+  "title": "The Basil That Leans at the Window",
+  "titleKr": "창가로 기우는 바질",
+  "sentences": [
+   {
+    "text": "Dami keeps a small basil plant on the kitchen windowsill.",
+    "chunks": [
+     {
+      "en": "Dami keeps a small basil plant",
+      "kr": "다미는 작은 바질 한 포기를 둔다"
+     },
+     {
+      "en": "on the kitchen windowsill.",
+      "kr": "부엌 창턱 위에"
+     }
+    ],
+    "naturalTranslation": "다미는 부엌 창턱 위에 작은 바질 한 포기를 둔다.",
+    "wordOrderPoint": {
+     "title": "keep + 목적어 + 장소 전치사구",
+     "explanation": "무엇을 두는지(a small basil plant)를 먼저 말하고, 어디에 두는지를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Dami와 동사 keeps를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 keeps와 목적어 a small basil plant를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "관사 a와 small basil plant를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 on과 그 목적어 the kitchen windowsill을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "명사가 명사를 꾸미기",
+      "note": "basil plant, kitchen windowsill처럼 앞 명사가 뒤 명사의 종류나 장소를 밝힙니다."
+     },
+     {
+      "label": "장소 전치사 on",
+      "note": "on the kitchen windowsill - 표면 위에 놓인 상태를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "basil",
+      "meaning": "바질(향이 나는 허브)"
+     },
+     {
+      "word": "windowsill",
+      "meaning": "창턱"
+     }
+    ]
+   },
+   {
+    "text": "After a week, its stems all lean toward the light from the window.",
+    "chunks": [
+     {
+      "en": "After a week,",
+      "kr": "한 주가 지나면"
+     },
+     {
+      "en": "its stems all lean",
+      "kr": "그 줄기들이 모두 기운다"
+     },
+     {
+      "en": "toward the light from the window.",
+      "kr": "창에서 들어오는 빛 쪽으로"
+     }
+    ],
+    "naturalTranslation": "한 주가 지나면 그 줄기들이 모두 창에서 들어오는 빛 쪽으로 기운다.",
+    "wordOrderPoint": {
+     "title": "주어 뒤에 붙는 all",
+     "explanation": "its stems all lean처럼 all을 주어 뒤에 놓아 '그것들이 하나같이'라는 뜻을 더합니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 9,
+       "reason": "명사 light 뒤에서 그 빛이 어디서 오는지 밝히는 from the window 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 After와 그 목적어 a week를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "주어 its stems와 그것을 받는 all을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "all과 동사 lean을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 toward와 그 목적어 the light를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 from과 그 목적어 the window를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "기간을 나타내는 After + 명사",
+      "note": "After a week은 '한 주가 지난 뒤'라는 시점을 만듭니다."
+     },
+     {
+      "label": "소유격 its",
+      "note": "its가 앞 문장의 basil plant를 받아 '그 식물의'라는 뜻이 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "lean",
+      "meaning": "기울다, 기대다"
+     }
+    ]
+   },
+   {
+    "text": "Each stem grows faster on its dark side, so the tip bends.",
+    "chunks": [
+     {
+      "en": "Each stem grows faster",
+      "kr": "줄기 하나하나가 더 빨리 자란다"
+     },
+     {
+      "en": "on its dark side,",
+      "kr": "그늘진 쪽에서"
+     },
+     {
+      "en": "so the tip bends.",
+      "kr": "그래서 끝이 휜다"
+     }
+    ],
+    "naturalTranslation": "줄기 하나하나가 그늘진 쪽에서 더 빨리 자라기 때문에 끝이 휜다.",
+    "wordOrderPoint": {
+     "title": "결과를 잇는 접속사 so",
+     "explanation": "앞 절에서 원인을 말하고 so 뒤에 그 결과를 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Each stem과 동사 grows를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 grows와 그것을 꾸미는 faster를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 on과 그 목적어 its dark side를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "짧은 주어 the tip과 동사 bends를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부사의 비교급 faster",
+      "note": "faster는 fast의 비교급으로 '더 빨리'라는 뜻으로 동사를 꾸밉니다."
+     },
+     {
+      "label": "결과를 잇는 접속사 so",
+      "note": "so 뒤에는 주어와 동사를 갖춘 절이 와서 앞 내용의 결과를 말합니다."
+     },
+     {
+      "label": "한정사 each + 단수 명사",
+      "note": "Each stem 뒤에는 단수 동사 grows가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "stem",
+      "meaning": "줄기"
+     },
+     {
+      "word": "bends",
+      "meaning": "휜다, 구부러진다"
+     }
+    ]
+   },
+   {
+    "text": "Day by day, the whole plant turns toward the brightest part of the window.",
+    "chunks": [
+     {
+      "en": "Day by day,",
+      "kr": "날이 갈수록"
+     },
+     {
+      "en": "the whole plant",
+      "kr": "그 식물 전체가"
+     },
+     {
+      "en": "turns toward the brightest part of the window.",
+      "kr": "창에서 가장 밝은 쪽으로 돌아선다"
+     }
+    ],
+    "naturalTranslation": "날이 갈수록 그 식물 전체가 창에서 가장 밝은 쪽으로 돌아선다.",
+    "wordOrderPoint": {
+     "title": "방향을 동사 뒤에 붙이는 영어 어순",
+     "explanation": "한국어는 '밝은 쪽으로 돌아선다'처럼 방향을 동사 앞에 두지만, 영어는 turns를 먼저 말하고 toward 이하를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 6,
+       "reason": "동사 turns 뒤 방향을 나타내는 전치사구 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "Day by day는 한 덩어리라 낱말 사이에서 끊어 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "관사 the와 whole plant를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 toward와 그 목적어 the brightest part를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "명사 part와 그 범위를 밝히는 of the window를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "방향을 나타내는 전치사 toward",
+      "note": "toward 뒤에는 명사구가 와서 '~쪽으로'라는 방향을 나타내고, 도착까지 말하지는 않습니다."
+     },
+     {
+      "label": "한정사 whole의 자리",
+      "note": "the whole plant처럼 whole은 관사와 명사 사이에 놓여 '빠짐없이 전부'를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "whole",
+      "meaning": "전체의, 통째의"
+     },
+     {
+      "word": "brightest",
+      "meaning": "가장 밝은"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 the whole plant] + [동사 turns] + [toward + 최상급 명사구 the brightest part of the window]",
+     "why": "toward는 '~쪽으로'라는 방향을 가리키고, 그 뒤에 최상급 the brightest part가 옵니다. 최상급 앞에는 the를 붙이고, 어느 범위에서 가장 밝은지는 of the window로 뒤에 붙여 좁힙니다.",
+     "wrong": "Day by day, the whole plant turns toward brightest part of the window. (최상급 brightest 앞에 the가 빠졌습니다.)",
+     "natural": "날이 갈수록 그 식물 전체가 창에서 가장 밝은 쪽으로 돌아선다."
+    }
+   },
+   {
+    "text": "Every Sunday Dami gives the pot a quarter turn.",
+    "chunks": [
+     {
+      "en": "Every Sunday",
+      "kr": "일요일마다"
+     },
+     {
+      "en": "Dami gives the pot",
+      "kr": "다미는 그 화분에 준다"
+     },
+     {
+      "en": "a quarter turn.",
+      "kr": "4분의 1바퀴 돌리기를"
+     }
+    ],
+    "naturalTranslation": "일요일마다 다미는 그 화분을 4분의 1바퀴씩 돌려 준다.",
+    "wordOrderPoint": {
+     "title": "4형식 어순 - 동사 + 받는 대상 + 주는 것",
+     "explanation": "gives 뒤에 받는 대상 the pot을 먼저 놓고, 주는 것 a quarter turn을 그다음에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "Every와 Sunday를 갈라 읽지 않습니다. Every Sunday를 한 덩어리로 붙여 읽으세요."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 Dami와 동사 gives를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "gives와 받는 대상 the pot을 갈라 읽으면 4형식 뼈대가 흩어집니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "관사 a와 quarter turn을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "4형식 give + 간접목적어 + 직접목적어",
+      "note": "gives the pot a quarter turn에서 the pot이 받는 대상, a quarter turn이 주는 것입니다."
+     },
+     {
+      "label": "every + 요일로 만드는 반복",
+      "note": "Every Sunday는 '일요일마다'로 되풀이되는 때를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "a quarter turn",
+      "meaning": "4분의 1바퀴 돌리기"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "a-magnet-and-a-paper-clip",
+  "level": 2,
+  "topic": "Science",
+  "title": "The Clip That Leaps by Itself",
+  "titleKr": "저절로 건너뛰는 클립",
+  "sentences": [
+   {
+    "text": "Suho slides a small magnet across the table toward a paper clip.",
+    "chunks": [
+     {
+      "en": "Suho slides a small magnet",
+      "kr": "수호가 작은 자석을 밀어 간다"
+     },
+     {
+      "en": "across the table",
+      "kr": "책상을 가로질러"
+     },
+     {
+      "en": "toward a paper clip.",
+      "kr": "종이 클립 쪽으로"
+     }
+    ],
+    "naturalTranslation": "수호가 작은 자석을 책상 위로 밀어 종이 클립 쪽으로 가져간다.",
+    "wordOrderPoint": {
+     "title": "전치사구 두 개로 경로와 방향을 차례로 붙이기",
+     "explanation": "across the table로 지나는 길을 먼저 말하고, toward a paper clip으로 향하는 쪽을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Suho와 동사 slides를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 slides와 목적어 a small magnet을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 across와 그 목적어 the table을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 toward와 그 목적어 a paper clip을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 across",
+      "note": "across the table - 어떤 면을 가로질러 지나감을 나타냅니다."
+     },
+     {
+      "label": "전치사 toward",
+      "note": "toward는 도착을 말하지 않고 '~쪽으로 향함'만 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "slides",
+      "meaning": "미끄러뜨려 민다"
+     },
+     {
+      "word": "paper clip",
+      "meaning": "종이 클립"
+     }
+    ]
+   },
+   {
+    "text": "The clip suddenly leaps across the last gap of air.",
+    "chunks": [
+     {
+      "en": "The clip suddenly leaps",
+      "kr": "그 클립이 갑자기 뛰어 건넌다"
+     },
+     {
+      "en": "across the last gap of air.",
+      "kr": "남은 마지막 공기 틈을 가로질러"
+     }
+    ],
+    "naturalTranslation": "그 클립이 갑자기 남은 마지막 공기 틈을 뛰어 건넌다.",
+    "wordOrderPoint": {
+     "title": "주어 + 부사 + 동사 어순",
+     "explanation": "suddenly를 주어와 동사 사이에 놓아 그 동작이 갑작스러웠음을 알립니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The clip과 부사 suddenly를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "부사 suddenly와 동사 leaps를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 across와 그 목적어 the last gap을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "명사 gap과 그것을 좁혀 주는 of air를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "양태 부사의 위치",
+      "note": "suddenly처럼 동작의 모습을 나타내는 부사는 일반동사 앞에 올 수 있습니다."
+     },
+     {
+      "label": "순서를 가리키는 the + last",
+      "note": "the last gap - last는 최상급이 아니라 순서상 맨 마지막을 가리키는 말이고, 그 앞에 the를 붙입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "leaps",
+      "meaning": "뛰어 건넌다"
+     },
+     {
+      "word": "gap",
+      "meaning": "틈, 벌어진 사이"
+     }
+    ]
+   },
+   {
+    "text": "An invisible pull spreads around the magnet and grabs metal with iron in it.",
+    "chunks": [
+     {
+      "en": "An invisible pull",
+      "kr": "눈에 보이지 않는 끌어당김이"
+     },
+     {
+      "en": "spreads around the magnet",
+      "kr": "자석 둘레로 퍼진다"
+     },
+     {
+      "en": "and grabs metal with iron in it.",
+      "kr": "그리고 쇠가 든 금속을 붙잡는다"
+     }
+    ],
+    "naturalTranslation": "눈에 보이지 않는 끌어당김이 자석 둘레로 퍼져, 쇠가 든 금속을 붙잡는다.",
+    "wordOrderPoint": {
+     "title": "꾸미는 말을 명사 뒤에 붙이는 영어 어순",
+     "explanation": "한국어는 '쇠가 든 금속'처럼 꾸미는 말을 앞에 두지만, 영어는 metal을 먼저 말하고 with iron in it을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "동사 spreads 뒤 전치사구 around the magnet 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 4,
+       "reason": "전치사 around와 그 목적어 the magnet을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "and와 뒤따르는 동사 grabs를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 grabs와 목적어 metal을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "명사 metal과 그것을 좁혀 주는 with iron in it을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "형용사로 쓰인 invisible",
+      "note": "invisible이 pull 앞에서 '눈에 보이지 않는'이라는 뜻으로 꾸밉니다."
+     },
+     {
+      "label": "동사에서 온 명사 pull",
+      "note": "pull이 여기서는 동사가 아니라 '끌어당기는 힘'이라는 명사로 쓰였습니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 동사구",
+      "note": "spreads와 grabs가 같은 주어 An invisible pull을 함께 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "invisible",
+      "meaning": "눈에 보이지 않는"
+     },
+     {
+      "word": "pull",
+      "meaning": "끌어당기는 힘"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 An invisible pull] + [동사1 spreads + around the magnet] + and + [동사2 grabs + 목적어 metal + 뒤에서 꾸미는 with iron in it]",
+     "why": "눈에 안 보이는 힘을 주어로 세우고 동사 두 개를 and로 잇습니다. metal 뒤의 with iron in it은 앞 명사를 뒤에서 꾸며 '쇠가 든 금속'을 가리킵니다.",
+     "wrong": "An invisible pull spreads around the magnet and grabs with iron in it metal. (꾸미는 with구는 그것이 꾸미는 명사 metal 바로 뒤에 와야 합니다.)",
+     "natural": "눈에 보이지 않는 끌어당김이 자석 둘레로 퍼져, 쇠가 든 금속을 붙잡는다."
+    }
+   },
+   {
+    "text": "A copper coin never moves, because copper holds no iron.",
+    "chunks": [
+     {
+      "en": "A copper coin never moves,",
+      "kr": "구리 동전은 결코 움직이지 않는다"
+     },
+     {
+      "en": "because copper holds no iron.",
+      "kr": "구리는 쇠를 품고 있지 않기 때문에"
+     }
+    ],
+    "naturalTranslation": "구리 동전은 결코 움직이지 않는데, 구리에는 쇠가 들어 있지 않기 때문이다.",
+    "wordOrderPoint": {
+     "title": "결과를 먼저, 이유는 because 뒤에",
+     "explanation": "한국어와 달리 영어는 결과를 앞세우고 because 이하로 이유를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 A copper coin이 세 낱말이라 그 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "부정 부사 never와 동사 moves를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 copper와 동사 holds를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 holds와 목적어 no iron을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "이유를 잇는 접속사 because",
+      "note": "because 뒤에는 주어와 동사를 갖춘 절이 옵니다."
+     },
+     {
+      "label": "부정 한정사 no + 명사",
+      "note": "holds no iron은 '쇠를 하나도 품지 않는다'로, not 없이 no가 부정을 만듭니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "copper",
+      "meaning": "구리"
+     }
+    ]
+   },
+   {
+    "text": "So one small magnet quietly sorts the metals in a drawer.",
+    "chunks": [
+     {
+      "en": "So one small magnet",
+      "kr": "그래서 작은 자석 하나가"
+     },
+     {
+      "en": "quietly sorts the metals",
+      "kr": "조용히 금속들을 갈라 놓는다"
+     },
+     {
+      "en": "in a drawer.",
+      "kr": "서랍 안에서"
+     }
+    ],
+    "naturalTranslation": "그래서 작은 자석 하나가 서랍 속 금속들을 조용히 갈라 놓는다.",
+    "wordOrderPoint": {
+     "title": "결과를 잇는 문두 So",
+     "explanation": "So를 맨 앞에 놓아 앞 문장들에서 본 일의 결론임을 알립니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두의 So 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 4,
+       "reason": "부사 quietly와 동사 sorts를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 sorts와 목적어 the metals를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 in과 그 목적어 a drawer를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "수를 나타내는 one",
+      "note": "one small magnet - one이 관사 대신 '단 하나'임을 또렷하게 나타냅니다."
+     },
+     {
+      "label": "양태 부사 quietly",
+      "note": "quietly가 동사 sorts 앞에서 '조용히'라는 방식을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "sorts",
+      "meaning": "갈라 나눈다"
+     },
+     {
+      "word": "drawer",
+      "meaning": "서랍"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "why-a-rainbow-follows-the-rain",
+  "level": 2,
+  "topic": "Science",
+  "title": "The Color Band Over the Schoolyard",
+  "titleKr": "운동장 위에 걸린 색 띠",
+  "sentences": [
+   {
+    "text": "The rain stops at four, and a wide rainbow appears over the schoolyard.",
+    "chunks": [
+     {
+      "en": "The rain stops at four,",
+      "kr": "비가 네 시에 그친다"
+     },
+     {
+      "en": "and a wide rainbow appears",
+      "kr": "그리고 넓은 무지개가 나타난다"
+     },
+     {
+      "en": "over the schoolyard.",
+      "kr": "운동장 위에"
+     }
+    ],
+    "naturalTranslation": "비가 네 시에 그치고, 넓은 무지개가 운동장 위에 나타난다.",
+    "wordOrderPoint": {
+     "title": "콤마와 and로 이은 두 절",
+     "explanation": "앞 절 The rain stops at four와 뒤 절 a wide rainbow appears over the schoolyard를 나란히 잇습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "주어 a wide rainbow가 세 낱말이라 동사 appears 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The rain과 동사 stops를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 at과 그 목적어 four를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 over와 그 목적어 the schoolyard를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시각을 가리키는 전치사 at",
+      "note": "at four - 몇 시라는 한 시점을 콕 집을 때 at을 씁니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 절",
+      "note": "콤마 뒤 and가 주어와 동사를 각각 갖춘 두 문장을 하나로 잇습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "appears",
+      "meaning": "나타난다"
+     },
+     {
+      "word": "schoolyard",
+      "meaning": "학교 운동장"
+     }
+    ]
+   },
+   {
+    "text": "Tiny drops of water still hang in the cool air.",
+    "chunks": [
+     {
+      "en": "Tiny drops of water",
+      "kr": "아주 작은 물방울들이"
+     },
+     {
+      "en": "still hang in the cool air.",
+      "kr": "여전히 서늘한 공기 속에 떠 있다"
+     }
+    ],
+    "naturalTranslation": "아주 작은 물방울들이 아직 서늘한 공기 속에 떠 있다.",
+    "wordOrderPoint": {
+     "title": "명사 + of + 명사로 재료를 밝히기",
+     "explanation": "Tiny drops를 먼저 말하고 of water를 붙여 무엇으로 된 방울인지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 5,
+       "reason": "동사 hang 뒤 전치사구 in the cool air 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "명사 drops와 그것을 좁혀 주는 of water를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "전치사 of와 그 목적어 water를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 in과 그 목적어 the cool air를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부사 still의 위치",
+      "note": "still은 일반동사 hang 앞에 놓여 '아직도 그대로'라는 상태 이어짐을 나타냅니다."
+     },
+     {
+      "label": "복수 주어에 맞춘 현재형 동사",
+      "note": "주어 Tiny drops가 복수라 hang에 -s를 붙이지 않습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "drops",
+      "meaning": "방울"
+     },
+     {
+      "word": "hang",
+      "meaning": "떠 있다, 매달려 있다"
+     }
+    ]
+   },
+   {
+    "text": "Each drop bends the sunlight and splits it into a band of colors.",
+    "chunks": [
+     {
+      "en": "Each drop bends the sunlight",
+      "kr": "물방울 하나하나가 햇빛을 꺾는다"
+     },
+     {
+      "en": "and splits it",
+      "kr": "그리고 그것을 쪼갠다"
+     },
+     {
+      "en": "into a band of colors.",
+      "kr": "여러 색의 띠로"
+     }
+    ],
+    "naturalTranslation": "물방울 하나하나가 햇빛을 꺾어, 그 빛을 여러 색의 띠로 쪼갠다.",
+    "wordOrderPoint": {
+     "title": "split A into B - 목적어 뒤에 결과를 붙이기",
+     "explanation": "splits 뒤에 목적어 it을 먼저 놓고, 무엇으로 쪼개지는지를 into 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Each drop과 동사 bends를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 bends와 목적어 the sunlight를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 into와 그 목적어 a band를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "전치사 of와 그 목적어 colors를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "한정사 each + 단수 명사",
+      "note": "Each drop처럼 each 뒤에는 단수 명사가 오고 동사도 단수로 맞춥니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 동사구",
+      "note": "bends와 splits가 같은 주어 Each drop을 함께 씁니다."
+     },
+     {
+      "label": "목적격 대명사 it",
+      "note": "it이 앞에 나온 the sunlight를 대신합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "bends",
+      "meaning": "꺾는다, 휘게 한다"
+     },
+     {
+      "word": "splits",
+      "meaning": "쪼갠다, 갈라놓는다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 Each drop] + [동사1 bends + 목적어 the sunlight] + and + [동사2 splits + 목적어 it] + [into + 결과 a band of colors]",
+     "why": "동사 두 개가 주어 하나를 나눠 쓰고, 두 번째 목적어 it은 앞의 the sunlight를 대신합니다. split A into B는 'A를 B로 쪼개다'라서 바뀐 결과가 into 뒤에 옵니다.",
+     "wrong": "Each drop bends the sunlight and splits into a band of colors. (목적어 it을 빼면 '물방울이 쪼개진다'는 전혀 다른 뜻이 됩니다.)",
+     "natural": "물방울 하나하나가 햇빛을 꺾어, 그 빛을 여러 색의 띠로 쪼갠다."
+    }
+   },
+   {
+    "text": "Red rides on top, and violet sits at the bottom.",
+    "chunks": [
+     {
+      "en": "Red rides on top,",
+      "kr": "빨강은 맨 위에 얹힌다"
+     },
+     {
+      "en": "and violet sits at the bottom.",
+      "kr": "그리고 보라는 맨 아래에 자리한다"
+     }
+    ],
+    "naturalTranslation": "빨강이 맨 위에 얹히고, 보라가 맨 아래에 자리한다.",
+    "wordOrderPoint": {
+     "title": "대조되는 두 절을 같은 틀로 잇기",
+     "explanation": "주어 + 동사 + 위치 전치사구라는 같은 틀을 두 번 써서 위와 아래를 나란히 견줍니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "동사 rides 뒤 위치를 나타내는 전치사구 on top 앞에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "문장 끝 전치사구 at the bottom 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Red와 동사 rides를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "전치사 on과 그 목적어 top을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "짧은 주어 violet과 동사 sits를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 at과 그 목적어 the bottom을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "색 이름이 주어로 쓰인 명사",
+      "note": "Red와 violet이 색 그 자체를 가리키는 명사로 쓰여 관사가 붙지 않습니다."
+     },
+     {
+      "label": "위치를 나타내는 on과 at",
+      "note": "on top은 '맨 위에', at the bottom은 '맨 아래에'로 위치를 짝으로 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "violet",
+      "meaning": "보라색"
+     },
+     {
+      "word": "on top",
+      "meaning": "맨 위에"
+     }
+    ]
+   },
+   {
+    "text": "So every rainbow shows the hidden colors inside plain white light.",
+    "chunks": [
+     {
+      "en": "So",
+      "kr": "그래서"
+     },
+     {
+      "en": "every rainbow shows the hidden colors",
+      "kr": "모든 무지개는 숨어 있던 색들을 보여 준다"
+     },
+     {
+      "en": "inside plain white light.",
+      "kr": "평범한 흰빛 속에"
+     }
+    ],
+    "naturalTranslation": "그래서 모든 무지개는 평범한 흰빛 속에 숨어 있던 색들을 보여 준다.",
+    "wordOrderPoint": {
+     "title": "목적어 뒤에 붙어 어디에 있는지 밝히는 전치사구",
+     "explanation": "the hidden colors를 먼저 말하고 inside plain white light를 뒤에 붙여 그 색이 어디에 숨어 있었는지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "한정사 every와 명사 rainbow를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 shows와 목적어 the hidden colors를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 inside와 그 목적어 plain white light를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "형용사 plain과 뒤따르는 white light를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "한정사 every + 단수 명사",
+      "note": "every rainbow처럼 every 뒤에는 단수 명사가 오고 동사도 shows로 맞춥니다."
+     },
+     {
+      "label": "형용사로 쓰인 hidden",
+      "note": "hidden이 colors 앞에서 '숨어 있던'이라는 뜻으로 명사를 꾸밉니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "hidden",
+      "meaning": "숨어 있는"
+     },
+     {
+      "word": "plain",
+      "meaning": "평범한, 무늬 없는"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "why-ice-cubes-stay-on-top",
+  "level": 2,
+  "topic": "Science",
+  "title": "The Cubes That Will Not Sink",
+  "titleKr": "가라앉지 않는 얼음",
+  "sentences": [
+   {
+    "text": "Jiho drops three ice cubes into a tall glass of juice.",
+    "chunks": [
+     {
+      "en": "Jiho drops three ice cubes",
+      "kr": "지호가 얼음 세 개를 떨어뜨려 넣는다"
+     },
+     {
+      "en": "into a tall glass of juice.",
+      "kr": "주스가 든 키 큰 잔 속으로"
+     }
+    ],
+    "naturalTranslation": "지호가 주스가 든 키 큰 잔에 얼음 세 개를 떨어뜨려 넣는다.",
+    "wordOrderPoint": {
+     "title": "동사 + 목적어 + into + 도착 지점",
+     "explanation": "무엇을 넣는지(three ice cubes)를 먼저 말하고, 어디로 들어가는지를 into 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Jiho와 동사 drops를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 drops와 목적어 three ice cubes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 into와 그 목적어 a tall glass를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "명사 glass와 그것을 좁혀 주는 of juice를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "명사가 명사를 꾸미기",
+      "note": "ice cubes처럼 앞 명사 ice가 뒤 명사 cubes의 재료를 밝힙니다."
+     },
+     {
+      "label": "전치사 into",
+      "note": "into는 밖에서 안으로 들어가는 움직임을 나타내 in과 다릅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "drops",
+      "meaning": "떨어뜨려 넣는다"
+     }
+    ]
+   },
+   {
+    "text": "Every cube rises and floats on the surface.",
+    "chunks": [
+     {
+      "en": "Every cube rises",
+      "kr": "얼음 하나하나가 떠오른다"
+     },
+     {
+      "en": "and floats on the surface.",
+      "kr": "그리고 표면 위에 떠 있다"
+     }
+    ],
+    "naturalTranslation": "얼음 하나하나가 떠올라 표면 위에 떠 있다.",
+    "wordOrderPoint": {
+     "title": "and로 이은 두 자동사",
+     "explanation": "rises와 floats가 목적어 없이 이어져 떠오르는 동작과 떠 있는 상태를 차례로 보여 줍니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "동사 floats 뒤 전치사구 on the surface 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Every cube와 동사 rises를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "and와 뒤따르는 동사 floats를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 on과 그 목적어 the surface를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "한정사 every + 단수 명사",
+      "note": "Every cube 뒤에는 단수 동사 rises가 옵니다."
+     },
+     {
+      "label": "목적어가 필요 없는 자동사",
+      "note": "rise와 float은 목적어 없이 쓰이고 위치는 전치사구로 덧붙입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "floats",
+      "meaning": "뜬다, 떠 있다"
+     },
+     {
+      "word": "surface",
+      "meaning": "표면, 겉면"
+     }
+    ]
+   },
+   {
+    "text": "Water pushes outward as it freezes, so the same amount fills more space.",
+    "chunks": [
+     {
+      "en": "Water pushes outward",
+      "kr": "물은 바깥쪽으로 밀어낸다"
+     },
+     {
+      "en": "as it freezes,",
+      "kr": "물이 얼면서"
+     },
+     {
+      "en": "so the same amount fills more space.",
+      "kr": "그래서 같은 양이 더 많은 자리를 채운다"
+     }
+    ],
+    "naturalTranslation": "물은 얼면서 바깥쪽으로 밀어내기 때문에, 같은 양이 더 많은 자리를 채운다.",
+    "wordOrderPoint": {
+     "title": "동시에 벌어지는 일을 뒤에 붙이는 영어 어순",
+     "explanation": "한국어는 '얼면서 밀어낸다'처럼 때를 앞에 두지만, 영어는 주절 Water pushes outward를 먼저 말하고 as it freezes를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 9,
+       "reason": "주어 the same amount가 세 낱말이라 동사 fills 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Water와 동사 pushes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 pushes와 방향을 나타내는 outward를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "접속사 as와 뒤따르는 주어 it을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "짧은 주어 it과 동사 freezes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 fills와 목적어 more space를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "방향을 나타내는 부사 outward",
+      "note": "outward는 동사 뒤에서 '바깥쪽으로'라는 방향을 나타냅니다."
+     },
+     {
+      "label": "접속사 as",
+      "note": "as는 여기서 '~하면서'로 두 일이 같은 때에 벌어짐을 나타냅니다."
+     },
+     {
+      "label": "more + 셀 수 없는 명사",
+      "note": "more space는 '더 많은 자리'로, more가 양을 늘리는 말로 쓰였습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "outward",
+      "meaning": "바깥쪽으로"
+     },
+     {
+      "word": "freezes",
+      "meaning": "언다"
+     }
+    ]
+   },
+   {
+    "text": "Ice is less dense than water, and less dense things float.",
+    "chunks": [
+     {
+      "en": "Ice is less dense",
+      "kr": "얼음은 밀도가 더 낮다"
+     },
+     {
+      "en": "than water,",
+      "kr": "물보다"
+     },
+     {
+      "en": "and less dense things float.",
+      "kr": "그리고 밀도가 더 낮은 것은 뜬다"
+     }
+    ],
+    "naturalTranslation": "얼음은 물보다 밀도가 낮고, 밀도가 더 낮은 것은 뜬다.",
+    "wordOrderPoint": {
+     "title": "less + 형용사 + than",
+     "explanation": "less를 형용사 dense 앞에 놓아 '덜 ~한'을 만들고, 견줄 대상은 than 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 9,
+       "reason": "주어 less dense things가 세 낱말이라 동사 float 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Ice와 be동사 is를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "is와 그 보어 less dense를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "than과 견줄 대상 water를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "and와 뒤 절의 주어 less dense things를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "less dense와 그것이 꾸미는 things를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "비교급 less + 형용사",
+      "note": "less는 형용사 앞에 놓여 '덜 ~한'을 만듭니다. -er를 붙인 denser는 '더 빽빽한'이라 뜻이 반대가 됩니다."
+     },
+     {
+      "label": "비교 대상을 잇는 than",
+      "note": "than 뒤에 견줄 대상 water를 놓아 무엇보다 덜한지를 밝힙니다."
+     },
+     {
+      "label": "형용사구가 명사 앞에서 꾸미기",
+      "note": "less dense things - less dense가 통째로 앞에서 things를 꾸밉니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "float",
+      "meaning": "뜬다, 떠 있다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 Ice] + [be동사 is] + [less + 형용사 dense] + [than + 견줄 대상 water]",
+     "why": "less는 형용사 dense 앞에 놓여 '덜 ~한'을 만들고, 무엇보다 덜한지는 than 뒤에 붙입니다. -er를 붙인 denser는 '더 빽빽한'이라 뜻이 반대가 되니, 낮은 쪽으로 견줄 때는 less를 씁니다.",
+     "wrong": "Ice is dense less than water. (less는 형용사 dense 뒤가 아니라 앞에 와야 합니다 - less dense.)",
+     "natural": "얼음은 물보다 밀도가 낮고, 밀도가 더 낮은 것은 뜬다."
+    }
+   },
+   {
+    "text": "So ice never sinks, and every cold drink shows it.",
+    "chunks": [
+     {
+      "en": "So ice never sinks,",
+      "kr": "그래서 얼음은 결코 가라앉지 않는다"
+     },
+     {
+      "en": "and every cold drink",
+      "kr": "그리고 차가운 음료 하나하나가"
+     },
+     {
+      "en": "shows it.",
+      "kr": "그것을 보여 준다"
+     }
+    ],
+    "naturalTranslation": "그래서 얼음은 결코 가라앉지 않고, 차가운 음료 한 잔마다 그 사실을 보여 준다.",
+    "wordOrderPoint": {
+     "title": "부정 부사 never의 자리",
+     "explanation": "never를 일반동사 sinks 앞에 놓아 not 없이도 '결코 ~않는다'를 만듭니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두의 So 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "부정 부사 never와 동사 sinks를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "and와 뒤 절의 주어 every cold drink를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 shows와 목적어 it을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부정 부사 never",
+      "note": "never 하나로 부정이 되므로 not을 겹쳐 쓰지 않습니다."
+     },
+     {
+      "label": "목적격 대명사 it",
+      "note": "it이 앞에서 말한 '얼음이 뜬다는 사실'을 통째로 대신합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "sinks",
+      "meaning": "가라앉는다"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "why-the-moon-changes-shape",
+  "level": 2,
+  "topic": "Science",
+  "title": "The Moon That Is Never the Same",
+  "titleKr": "매일 밤 얼굴이 바뀌는 달",
+  "sentences": [
+   {
+    "text": "Minji watches the moon from her window almost every night.",
+    "chunks": [
+     {
+      "en": "Minji watches the moon",
+      "kr": "민지는 달을 바라본다"
+     },
+     {
+      "en": "from her window",
+      "kr": "자기 방 창문에서"
+     },
+     {
+      "en": "almost every night.",
+      "kr": "거의 매일 밤"
+     }
+    ],
+    "naturalTranslation": "민지는 거의 매일 밤 자기 방 창문에서 달을 바라본다.",
+    "wordOrderPoint": {
+     "title": "동사 + 목적어 + 장소 + 빈도 순서",
+     "explanation": "무엇을 하는지(watches the moon)를 먼저 말하고, 어디서(from her window)와 얼마나 자주(almost every night)를 뒤에 차례로 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Minji와 동사 watches를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 watches와 목적어 the moon을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 from과 목적어 her window를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "3인칭 단수 현재 -es",
+      "note": "주어 Minji가 3인칭 단수라 watch에 -es를 붙여 watches로 씁니다."
+     },
+     {
+      "label": "전치사 from + 출발점",
+      "note": "from her window - 시선이 시작되는 자리를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "almost every night",
+      "meaning": "거의 매일 밤"
+     }
+    ]
+   },
+   {
+    "text": "Some nights it looks like a full plate of white light.",
+    "chunks": [
+     {
+      "en": "Some nights",
+      "kr": "어떤 밤에는"
+     },
+     {
+      "en": "it looks like a full plate of white light.",
+      "kr": "그것이 하얀 빛으로 꽉 찬 접시처럼 보인다"
+     }
+    ],
+    "naturalTranslation": "어떤 밤에는 달이 하얀 빛으로 꽉 찬 접시처럼 보인다.",
+    "wordOrderPoint": {
+     "title": "look like + 명사구",
+     "explanation": "looks 뒤에 like를 붙이면 그다음에 오는 명사구가 '무엇처럼 보이는지'를 말해 줍니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 7,
+       "reason": "문장 끝 전치사구 of white light 앞에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 it과 동사 looks를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "looks like는 한 덩어리라 looks와 like를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 of와 목적어 white light를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "명사구의 부사 용법",
+      "note": "Some nights는 전치사 없이 그대로 '어떤 밤에는'이라는 때를 나타냅니다."
+     },
+     {
+      "label": "전치사 like + 명사구",
+      "note": "like 뒤에는 절이 아니라 a full plate 같은 명사구가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "a full plate",
+      "meaning": "꽉 찬 접시"
+     }
+    ]
+   },
+   {
+    "text": "A week later, the same moon shows only half a circle in the sky.",
+    "chunks": [
+     {
+      "en": "A week later,",
+      "kr": "일주일 뒤"
+     },
+     {
+      "en": "the same moon shows only half a circle",
+      "kr": "같은 그 달이 반원만 보여 준다"
+     },
+     {
+      "en": "in the sky.",
+      "kr": "하늘에서"
+     }
+    ],
+    "naturalTranslation": "일주일 뒤에는 같은 그 달이 하늘에 반원만 보여 준다.",
+    "wordOrderPoint": {
+     "title": "시간 표현을 문두에 두기",
+     "explanation": "A week later를 맨 앞에 놓아 언제의 장면인지 먼저 정한 뒤 주어와 동사를 이어 갑니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 5,
+       "reason": "주어 the same moon이 세 낱말이라 동사 shows 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "A week later는 한 덩어리라 week와 later를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "동사 shows와 목적어 only half a circle을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "half와 a circle을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "전치사 in과 목적어 the sky를 갈라놓지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부사 only의 위치",
+      "note": "only는 꾸미려는 말 바로 앞에 놓여 '반원만'이라는 뜻을 만듭니다."
+     },
+     {
+      "label": "한정사 the same",
+      "note": "the same moon - 앞 문장에 나온 바로 그 달을 가리켜 같은 대상임을 못 박습니다."
+     },
+     {
+      "label": "half a + 단수 명사",
+      "note": "half a circle - half가 관사 a 앞에 놓여 '~의 절반'을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "half a circle",
+      "meaning": "반원, 원의 절반"
+     }
+    ]
+   },
+   {
+    "text": "The moon circles the Earth, so its sunlit half turns slowly toward us.",
+    "chunks": [
+     {
+      "en": "The moon circles the Earth,",
+      "kr": "달은 지구 둘레를 돈다"
+     },
+     {
+      "en": "so its sunlit half",
+      "kr": "그래서 햇빛을 받는 그 반쪽이"
+     },
+     {
+      "en": "turns slowly toward us.",
+      "kr": "천천히 우리 쪽을 향한다"
+     }
+    ],
+    "naturalTranslation": "달이 지구 둘레를 돌기 때문에, 햇빛을 받는 그 반쪽이 천천히 우리 쪽을 향한다.",
+    "wordOrderPoint": {
+     "title": "방향을 동사 뒤에 붙이는 영어 어순",
+     "explanation": "한국어는 '우리 쪽을 향한다'처럼 방향을 동사 앞에 두지만, 영어는 turns를 먼저 말하고 slowly toward us를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 10,
+       "reason": "부사 slowly 뒤 방향을 나타내는 전치사구 toward us 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The moon과 동사 circles를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 circles와 목적어 the Earth를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "접속사 so와 뒤 절의 주어 its sunlit half를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "전치사 toward와 그 목적어 us를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "결과를 잇는 접속사 so",
+      "note": "so 뒤에는 주어와 동사를 갖춘 절이 와서 앞 내용의 결과를 말합니다."
+     },
+     {
+      "label": "소유격 its",
+      "note": "its가 앞에 나온 The moon을 받아 '달의'라는 뜻이 됩니다."
+     },
+     {
+      "label": "부사 slowly의 위치",
+      "note": "slowly가 동사 turns 바로 뒤에 놓여 도는 속도를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "circles",
+      "meaning": "둘레를 돈다"
+     },
+     {
+      "word": "sunlit",
+      "meaning": "햇빛을 받는"
+     }
+    ]
+   },
+   {
+    "text": "Minji now knows each shape has a name, and people call it a phase.",
+    "chunks": [
+     {
+      "en": "Minji now knows",
+      "kr": "민지는 이제 안다"
+     },
+     {
+      "en": "each shape has a name,",
+      "kr": "각 모양에는 이름이 있다는 것을"
+     },
+     {
+      "en": "and people call it a phase.",
+      "kr": "그리고 사람들은 그것을 위상이라 부른다"
+     }
+    ],
+    "naturalTranslation": "민지는 이제 각 모양마다 이름이 있다는 것을 알고, 사람들은 그것을 위상이라고 부른다.",
+    "wordOrderPoint": {
+     "title": "동사 뒤에 절 하나를 통째로 얹기",
+     "explanation": "knows 다음에 each shape has a name이라는 문장 하나가 그대로 목적어 자리에 들어갑니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 4,
+       "reason": "짧은 주어 each shape와 동사 has를 갈라놓지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 has와 목적어 a name을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "and와 뒤 절의 주어 people을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "동사 call과 목적어 it을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "5형식 call + 목적어 + 목적격보어",
+      "note": "call it a phase - 목적어 it 뒤에 그 이름 a phase가 바로 붙습니다."
+     },
+     {
+      "label": "부정관사 a + 셀 수 있는 명사",
+      "note": "a name·a phase처럼 셀 수 있는 명사가 처음 나올 때는 앞에 a를 붙입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "phase",
+      "meaning": "(달의) 위상, 모양 단계"
+     }
+    ]
+   }
+  ]
+ }
+]

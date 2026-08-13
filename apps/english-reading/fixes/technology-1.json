@@ -1,0 +1,2585 @@
+[
+ {
+  "id": "five-alarms-down-to-one",
+  "level": 1,
+  "topic": "Technology",
+  "title": "Down to One Alarm",
+  "titleKr": "알람 다섯 개에서 하나로",
+  "sentences": [
+   {
+    "text": "Last week Minho set several alarms on his phone.",
+    "chunks": [
+     {
+      "en": "Last week",
+      "kr": "지난주에"
+     },
+     {
+      "en": "Minho set several alarms",
+      "kr": "민호는 알람 여러 개를 맞췄다"
+     },
+     {
+      "en": "on his phone.",
+      "kr": "자기 휴대전화에"
+     }
+    ],
+    "naturalTranslation": "지난주에 민호는 자기 휴대전화에 알람을 여러 개 맞춰 두었다.",
+    "wordOrderPoint": {
+     "title": "때를 먼저 밝히고 주어·동사를 잇는 어순",
+     "explanation": "Last week를 맨 앞에 놓아 언제 일인지 먼저 알려 주고, 그다음에 누가 무엇을 했는지 말합니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "Last week는 한 덩어리 시간 표현이라 Last와 week를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 Minho와 동사 set을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 set과 목적어 several alarms를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 on과 그 목적어 his phone을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 불규칙동사 set",
+      "note": "set은 현재형과 과거형의 모양이 같아 Last week 같은 과거 표현으로 시제를 알아봅니다."
+     },
+     {
+      "label": "수량 형용사 several",
+      "note": "several alarms - several은 '몇 개의'라는 뜻으로 셀 수 있는 복수 명사 앞에 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "several",
+      "meaning": "여러 개의, 몇 개의"
+     }
+    ]
+   },
+   {
+    "text": "The first one rang at six, and he turned it off.",
+    "chunks": [
+     {
+      "en": "The first one rang at six,",
+      "kr": "첫 번째 알람이 6시에 울렸다"
+     },
+     {
+      "en": "and he turned it off.",
+      "kr": "그리고 그는 그것을 껐다"
+     }
+    ],
+    "naturalTranslation": "첫 번째 알람이 6시에 울렸고, 그는 그것을 껐다.",
+    "wordOrderPoint": {
+     "title": "대명사 목적어가 들어가는 자리",
+     "explanation": "한국어는 '그것을 껐다'로 붙여 말하지만, 영어는 turned와 off 사이에 it을 끼워 turned it off로 말합니다. 목적어가 명사면 turned off the alarm처럼 뒤에 놓아도 됩니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 2,
+       "reason": "주어 The first one이 세 낱말이라 동사 rang 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "짧은 전치사구 at six 앞에서는 끊지 말고 rang at six를 붙여 읽으세요."
+      },
+      {
+       "boundary": 4,
+       "reason": "전치사 at과 그 목적어 six를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 he와 동사 turned를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 turned와 목적어 it을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "구동사 turn off의 목적어 it과 off를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "부정대명사 one",
+      "note": "one은 앞에 나온 명사 하나를 대신하는 말로, 여기서는 알람 하나를 가리킵니다."
+     },
+     {
+      "label": "구동사 turn off",
+      "note": "turn과 off가 붙어 '끄다'라는 하나의 동사가 됩니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 절",
+      "note": "콤마와 and가 앞 절과 뒤 절을 나란히 이어 두 가지 일을 차례로 전합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "rang",
+      "meaning": "울렸다 (ring의 과거형)"
+     }
+    ]
+   },
+   {
+    "text": "But four more alarms woke him again and again.",
+    "chunks": [
+     {
+      "en": "But",
+      "kr": "하지만"
+     },
+     {
+      "en": "four more alarms woke him",
+      "kr": "알람 네 개가 더 그를 깨웠다"
+     },
+     {
+      "en": "again and again.",
+      "kr": "몇 번이고 되풀이해서"
+     }
+    ],
+    "naturalTranslation": "하지만 나머지 알람 네 개가 그를 몇 번이고 다시 깨웠다.",
+    "wordOrderPoint": {
+     "title": "수 + more + 명사로 '더'를 나타내는 어순",
+     "explanation": "four more alarms처럼 숫자와 more를 명사 앞에 나란히 놓아 '네 개가 더'라는 뜻을 만듭니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "주어 four more alarms가 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 4,
+       "reason": "동사 woke와 목적어 him을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "again and again은 하나의 표현이라 중간을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "again and again은 하나의 표현이라 마지막 again을 떼어 내지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "문두 등위접속사 But",
+      "note": "But이 문장 맨 앞에 와서 앞 문장과 반대되는 내용을 잇습니다."
+     },
+     {
+      "label": "과거시제 불규칙동사 woke",
+      "note": "woke는 wake의 과거형으로 '깨웠다'라는 뜻입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "again and again",
+      "meaning": "몇 번이고 되풀이해서"
+     }
+    ]
+   },
+   {
+    "text": "Now Minho keeps just one alarm and trusts it.",
+    "chunks": [
+     {
+      "en": "Now",
+      "kr": "이제"
+     },
+     {
+      "en": "Minho keeps just one alarm",
+      "kr": "민호는 알람을 딱 하나만 둔다"
+     },
+     {
+      "en": "and trusts it.",
+      "kr": "그리고 그것을 믿는다"
+     }
+    ],
+    "naturalTranslation": "이제 민호는 알람을 딱 하나만 남겨 두고 그 하나를 믿는다.",
+    "wordOrderPoint": {
+     "title": "한 주어에 이어지는 두 동사",
+     "explanation": "keeps와 trusts가 and로 이어져 주어 Minho 하나가 두 동작을 함께 합니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Minho와 동사 keeps를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 keeps와 목적어 just one alarm을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "접속사 and와 뒤따르는 동사 trusts를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 trusts와 목적어 it을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "3인칭 단수 현재 -s",
+      "note": "주어 Minho가 3인칭 단수라 keep과 trust에 -s를 붙입니다."
+     },
+     {
+      "label": "강조 부사 just",
+      "note": "just one alarm - just가 수를 강조해 '딱 하나만'이라는 뜻이 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "trusts",
+      "meaning": "믿는다, 신뢰한다"
+     }
+    ]
+   },
+   {
+    "text": "One alarm works better than five noisy ones.",
+    "chunks": [
+     {
+      "en": "One alarm works better",
+      "kr": "알람 하나가 더 잘 작동한다"
+     },
+     {
+      "en": "than five noisy ones.",
+      "kr": "시끄러운 다섯 개보다"
+     }
+    ],
+    "naturalTranslation": "시끄러운 알람 다섯 개보다 알람 하나가 더 잘 통한다.",
+    "wordOrderPoint": {
+     "title": "비교급 + than + 비교 대상",
+     "explanation": "better를 먼저 말하고 than 뒤에 비교 대상을 놓아 무엇보다 나은지 밝힙니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 One alarm과 동사 works를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 works와 그 뒤의 better를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "than과 비교 대상 five noisy ones를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "형용사 noisy와 그 뒤의 ones를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "비교급 better than",
+      "note": "well의 비교급 better 뒤에 than을 붙여 두 대상을 견줍니다."
+     },
+     {
+      "label": "복수 부정대명사 ones",
+      "note": "ones가 앞의 alarms를 대신해 '(알람) 다섯 개'를 가리킵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "noisy",
+      "meaning": "시끄러운"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "a-password-for-each-account",
+  "level": 1,
+  "topic": "Technology",
+  "title": "A Different Key for Each Door",
+  "titleKr": "계정마다 다른 열쇠",
+  "sentences": [
+   {
+    "text": "Sujin used the same password on every site and app.",
+    "chunks": [
+     {
+      "en": "Sujin used the same password",
+      "kr": "수진이는 똑같은 비밀번호를 썼다"
+     },
+     {
+      "en": "on every site and app.",
+      "kr": "모든 사이트와 앱에"
+     }
+    ],
+    "naturalTranslation": "수진이는 모든 사이트와 앱에 똑같은 비밀번호를 썼다.",
+    "wordOrderPoint": {
+     "title": "동사 + 목적어 + 장소 전치사구",
+     "explanation": "무엇을 썼는지 먼저 말하고 어디에 썼는지는 on 구로 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 7,
+       "reason": "등위접속사 and 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Sujin과 동사 used를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 used와 목적어 the same password를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 on과 그 목적어 every site를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "and와 뒤에 오는 app을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "동일함을 나타내는 the same",
+      "note": "the same password - '똑같은 비밀번호'로, same 앞에는 the를 붙입니다."
+     },
+     {
+      "label": "every + 단수 명사",
+      "note": "every site and app처럼 every 뒤에는 단수 명사를 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "password",
+      "meaning": "비밀번호"
+     }
+    ]
+   },
+   {
+    "text": "One day a strange email arrived in her inbox at midnight.",
+    "chunks": [
+     {
+      "en": "One day",
+      "kr": "어느 날"
+     },
+     {
+      "en": "a strange email arrived",
+      "kr": "낯선 메일 한 통이 도착했다"
+     },
+     {
+      "en": "in her inbox at midnight.",
+      "kr": "자정에 그녀의 받은 편지함으로"
+     }
+    ],
+    "naturalTranslation": "어느 날 자정에 낯선 메일 한 통이 그녀의 받은 편지함에 도착했다.",
+    "wordOrderPoint": {
+     "title": "장소 다음에 때가 오는 어순",
+     "explanation": "영어는 in her inbox처럼 장소를 먼저 말하고 at midnight처럼 때를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "문장 끝 시간 표현 at midnight 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "One day는 한 덩어리 시간 표현이라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "관사 a와 뒤따르는 strange email을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 in과 그 목적어 her inbox를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "전치사 at과 그 목적어 midnight을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 arrived",
+      "note": "arrive의 과거형으로, 메일이 이미 도착한 일을 나타냅니다."
+     },
+     {
+      "label": "시간 전치사 at",
+      "note": "at midnight처럼 정확한 시각 앞에는 at을 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "strange",
+      "meaning": "낯선, 이상한"
+     },
+     {
+      "word": "inbox",
+      "meaning": "받은 편지함"
+     }
+    ]
+   },
+   {
+    "text": "The message asked for her password and worried her.",
+    "chunks": [
+     {
+      "en": "The message asked for her password",
+      "kr": "그 메일은 그녀의 비밀번호를 요구했다"
+     },
+     {
+      "en": "and worried her.",
+      "kr": "그리고 그녀를 걱정시켰다"
+     }
+    ],
+    "naturalTranslation": "그 메일은 그녀의 비밀번호를 알려 달라고 했고, 그 때문에 그녀는 걱정이 되었다.",
+    "wordOrderPoint": {
+     "title": "ask for + 원하는 것",
+     "explanation": "무엇을 달라고 할 때는 ask 뒤에 for를 붙이고 그다음에 원하는 것을 놓습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The message와 동사 asked를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "asked for는 한 덩어리라 asked와 for를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "전치사 for와 그 목적어 her password를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 worried와 목적어 her를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "동사 + 전치사 ask for",
+      "note": "ask for는 '~을 달라고 하다'로 for까지 붙여 한 동사처럼 씁니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 동사",
+      "note": "asked와 worried가 같은 주어 The message에 이어집니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "asked for",
+      "meaning": "~을 달라고 했다"
+     },
+     {
+      "word": "worried",
+      "meaning": "걱정시켰다"
+     }
+    ]
+   },
+   {
+    "text": "These days she picks a different password for each account.",
+    "chunks": [
+     {
+      "en": "These days",
+      "kr": "요즘은"
+     },
+     {
+      "en": "she picks a different password",
+      "kr": "그녀는 서로 다른 비밀번호를 고른다"
+     },
+     {
+      "en": "for each account.",
+      "kr": "계정마다"
+     }
+    ],
+    "naturalTranslation": "요즘 그녀는 계정마다 서로 다른 비밀번호를 고른다.",
+    "wordOrderPoint": {
+     "title": "for each + 단수 명사",
+     "explanation": "for each account를 뒤에 붙여 '계정 하나하나마다'라는 뜻을 더합니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 she와 동사 picks를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 picks와 목적어 a different password를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 for와 그 목적어 each account를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "현재시제로 나타내는 습관",
+      "note": "picks는 요즘 되풀이하는 습관을 나타내는 현재시제입니다."
+     },
+     {
+      "label": "each + 단수 명사",
+      "note": "each account - each 뒤에는 단수 명사가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "different",
+      "meaning": "서로 다른"
+     },
+     {
+      "word": "account",
+      "meaning": "계정"
+     }
+    ]
+   },
+   {
+    "text": "Now a short note in her drawer holds all her passwords.",
+    "chunks": [
+     {
+      "en": "Now",
+      "kr": "이제"
+     },
+     {
+      "en": "a short note in her drawer",
+      "kr": "서랍 속 짧은 쪽지 하나가"
+     },
+     {
+      "en": "holds all her passwords.",
+      "kr": "그녀의 비밀번호를 모두 담고 있다"
+     }
+    ],
+    "naturalTranslation": "이제 서랍 속 짧은 쪽지 한 장이 그녀의 비밀번호를 모두 담고 있다.",
+    "wordOrderPoint": {
+     "title": "꾸미는 말을 명사 뒤로 보내는 배열",
+     "explanation": "한국어는 '서랍 속 짧은 쪽지'처럼 꾸미는 말을 앞에 두지만, 영어는 a short note를 먼저 던져 놓고 in her drawer를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "명사 note 뒤 위치를 밝히는 in 구 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 4,
+       "reason": "전치사 in과 그 목적어 her drawer를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 holds와 목적어 all her passwords를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "all과 뒤따르는 her passwords를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "3인칭 단수 현재 -s",
+      "note": "주어 a short note가 단수라 hold에 -s를 붙여 holds로 씁니다."
+     },
+     {
+      "label": "수량 표현 all + 소유격 + 명사",
+      "note": "all her passwords처럼 all이 소유격 앞에 놓여 '그녀의 ~ 전부'를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "drawer",
+      "meaning": "서랍"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sending-the-sunset-photo",
+  "level": 1,
+  "topic": "Technology",
+  "title": "The Sunset in Two Phones",
+  "titleKr": "두 폰에 담긴 노을",
+  "sentences": [
+   {
+    "text": "After school Yuna took a photo of the sunset.",
+    "chunks": [
+     {
+      "en": "After school",
+      "kr": "방과 후에"
+     },
+     {
+      "en": "Yuna took a photo",
+      "kr": "유나는 사진을 한 장 찍었다"
+     },
+     {
+      "en": "of the sunset.",
+      "kr": "노을을 담은"
+     }
+    ],
+    "naturalTranslation": "방과 후에 유나는 노을을 사진으로 한 장 찍었다.",
+    "wordOrderPoint": {
+     "title": "무엇을 찍은 사진인지 뒤에서 좁히는 배열",
+     "explanation": "한국어는 '노을 사진'처럼 대상을 앞에 두지만, 영어는 a photo를 먼저 말하고 of the sunset을 뒤에 붙여 좁혀 줍니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 After와 그 목적어 school을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 took과 목적어 a photo를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 of와 그 목적어 the sunset을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 불규칙동사 took",
+      "note": "took은 take의 과거형으로 이미 끝난 동작을 나타냅니다."
+     },
+     {
+      "label": "정관사 the",
+      "note": "the sunset처럼 서로 무엇을 가리키는지 아는 대상 앞에는 the를 붙입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "took a photo",
+      "meaning": "사진을 한 장 찍었다"
+     },
+     {
+      "word": "sunset",
+      "meaning": "노을, 해 질 무렵"
+     }
+    ]
+   },
+   {
+    "text": "The colors in the photo looked warm and soft.",
+    "chunks": [
+     {
+      "en": "The colors",
+      "kr": "그 색깔들은"
+     },
+     {
+      "en": "in the photo",
+      "kr": "사진 속의"
+     },
+     {
+      "en": "looked warm and soft.",
+      "kr": "따뜻하고 부드러워 보였다"
+     }
+    ],
+    "naturalTranslation": "사진 속 색깔들은 따뜻하고 부드러워 보였다.",
+    "wordOrderPoint": {
+     "title": "주어 뒤에 붙는 전치사구",
+     "explanation": "The colors 뒤에 in the photo를 붙여 어디의 색인지 밝힌 다음 동사를 말합니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 6,
+       "reason": "등위접속사 and 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "전치사 in과 그 목적어 the photo를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 looked와 보어 warm을 갈라 읽으면 '따뜻해 보였다'가 끊깁니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "and와 뒤에 오는 soft를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "감각동사 look + 형용사 보어",
+      "note": "looked warm은 '따뜻해 보였다'로, look 뒤에는 부사가 아니라 형용사가 옵니다."
+     },
+     {
+      "label": "형용사 두 개를 잇는 and",
+      "note": "warm and soft처럼 같은 자리의 형용사 둘을 and로 나란히 잇습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "looked",
+      "meaning": "~해 보였다"
+     },
+     {
+      "word": "soft",
+      "meaning": "부드러운"
+     }
+    ]
+   },
+   {
+    "text": "She sent it to Jiho and waited by the window.",
+    "chunks": [
+     {
+      "en": "She sent it to Jiho",
+      "kr": "그녀는 그것을 지호에게 보냈다"
+     },
+     {
+      "en": "and waited",
+      "kr": "그리고 기다렸다"
+     },
+     {
+      "en": "by the window.",
+      "kr": "창가에서"
+     }
+    ],
+    "naturalTranslation": "그녀는 그 사진을 지호에게 보내고 창가에서 기다렸다.",
+    "wordOrderPoint": {
+     "title": "받는 사람을 문장 뒤로 보내는 배열",
+     "explanation": "한국어는 '지호에게 그것을 보냈다'처럼 받는 사람을 먼저 말하지만, 영어는 보낸 것 it을 먼저 놓고 to Jiho를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 She와 동사 sent를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 sent와 목적어 it을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "to와 받는 사람 Jiho를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 by와 그 목적어 the window를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "대명사 목적어 it",
+      "note": "it이 앞 문장의 사진을 대신해 같은 말을 되풀이하지 않습니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 동사",
+      "note": "sent와 waited가 같은 주어 She에 이어져 두 동작을 차례로 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "by the window",
+      "meaning": "창가에서"
+     }
+    ]
+   },
+   {
+    "text": "A minute later, Jiho replied and asked about the place.",
+    "chunks": [
+     {
+      "en": "A minute later,",
+      "kr": "1분 뒤에"
+     },
+     {
+      "en": "Jiho replied and asked about the place.",
+      "kr": "지호가 답장을 보내고 그곳에 대해 물었다"
+     }
+    ],
+    "naturalTranslation": "1분 뒤에 지호가 답장을 보내고 그곳에 대해 물었다.",
+    "wordOrderPoint": {
+     "title": "때를 문장 맨 앞으로 끌어내는 배열",
+     "explanation": "A minute later를 콤마와 함께 맨 앞에 끌어내 얼마 만의 일인지 먼저 알려 주고, 누가 무엇을 했는지는 그 뒤에 말합니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "등위접속사 and 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "짧은 주어 Jiho와 동사 replied를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "asked about은 한 덩어리라 asked와 about을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 about과 그 목적어 the place를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "기간 + later",
+      "note": "A minute later는 '1분 뒤에'로, 기간 명사 뒤에 later를 붙여 얼마나 지났는지를 나타냅니다."
+     },
+     {
+      "label": "동사 + 전치사 ask about",
+      "note": "ask about은 '~에 대해 묻다'로 about까지 한 덩어리로 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "replied",
+      "meaning": "답장했다, 답했다"
+     },
+     {
+      "word": "asked about",
+      "meaning": "~에 대해 물었다"
+     }
+    ]
+   },
+   {
+    "text": "The same sunset now sits in two phones.",
+    "chunks": [
+     {
+      "en": "The same sunset",
+      "kr": "똑같은 그 노을이"
+     },
+     {
+      "en": "now sits in two phones.",
+      "kr": "이제 휴대전화 두 대 안에 담겨 있다"
+     }
+    ],
+    "naturalTranslation": "똑같은 그 노을이 이제 휴대전화 두 대 안에 담겨 있다.",
+    "wordOrderPoint": {
+     "title": "'이제'를 주어와 동사 사이에 넣는 자리",
+     "explanation": "한국어는 '이제'를 문장 맨 앞에 두기 쉽지만, 영어는 now를 주어 뒤 동사 앞에 넣어 The same sunset now sits로 말할 수 있습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "동사 sits 뒤 장소를 밝히는 in 구 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "형용사 same과 명사 sunset을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "부사 now와 동사 sits를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 in과 그 목적어 two phones를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "동일함을 나타내는 the same",
+      "note": "the same sunset - same 앞에는 늘 the를 붙입니다."
+     },
+     {
+      "label": "3인칭 단수 현재 -s",
+      "note": "주어 The same sunset이 단수라 sit에 -s를 붙입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "sits",
+      "meaning": "자리 잡고 있다, 놓여 있다"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "tracking-down-a-lost-phone",
+  "level": 2,
+  "topic": "Technology",
+  "title": "A Blue Dot on the Map",
+  "titleKr": "지도 위 파란 점",
+  "sentences": [
+   {
+    "text": "Yerin lost her phone somewhere between the bus stop and the library.",
+    "chunks": [
+     {
+      "en": "Yerin lost her phone",
+      "kr": "예린이는 휴대전화를 잃어버렸다"
+     },
+     {
+      "en": "somewhere between the bus stop and the library.",
+      "kr": "버스 정류장과 도서관 사이 어딘가에서"
+     }
+    ],
+    "naturalTranslation": "예린이는 버스 정류장과 도서관 사이 어딘가에서 휴대전화를 잃어버렸다.",
+    "wordOrderPoint": {
+     "title": "between A and B",
+     "explanation": "between 뒤에 두 지점을 and로 이어 놓아 그 사이라는 범위를 나타냅니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "between A and B의 and 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Yerin과 동사 lost를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 lost와 목적어 her phone을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "somewhere와 뒤따르는 between 구를 갈라 읽으면 어디쯤인지가 사라집니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 between과 그 목적어 the bus stop을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "전치사 between A and B",
+      "note": "between은 두 지점 사이를 나타내며 and로 두 대상을 잇습니다."
+     },
+     {
+      "label": "과거시제 불규칙동사 lost",
+      "note": "lost는 lose의 과거형으로 '잃어버렸다'라는 뜻입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "somewhere",
+      "meaning": "어딘가에서"
+     }
+    ]
+   },
+   {
+    "text": "Her older sister opened the phone finder on her own laptop.",
+    "chunks": [
+     {
+      "en": "Her older sister",
+      "kr": "그녀의 언니가"
+     },
+     {
+      "en": "opened the phone finder",
+      "kr": "휴대전화 위치 찾기 기능을 열었다"
+     },
+     {
+      "en": "on her own laptop.",
+      "kr": "자기 노트북에서"
+     }
+    ],
+    "naturalTranslation": "언니는 자기 노트북에서 휴대전화 위치 찾기 기능을 열었다.",
+    "wordOrderPoint": {
+     "title": "장소를 문장 뒤로 보내는 배열",
+     "explanation": "한국어는 '노트북에서 기능을 열었다'처럼 장소를 먼저 말하지만, 영어는 무엇을 열었는지를 먼저 놓고 on her own laptop을 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "형용사 older와 뒤따르는 명사 sister를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 opened와 목적어 the phone finder를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "phone finder는 한 덩어리 이름이라 phone과 finder를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 on과 그 목적어 her own laptop을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "비교급 older가 꾸미는 명사",
+      "note": "older sister는 '언니, 누나'로 비교급이 명사 앞에서 나이 차를 나타냅니다."
+     },
+     {
+      "label": "소유 강조 own",
+      "note": "her own laptop의 own은 '자기 자신의'라는 뜻으로 소유격 뒤에 붙습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "phone finder",
+      "meaning": "휴대전화 위치 찾기 기능"
+     }
+    ]
+   },
+   {
+    "text": "The map showed a blue dot that sat behind the library.",
+    "chunks": [
+     {
+      "en": "The map showed a blue dot",
+      "kr": "지도는 파란 점 하나를 보여 주었다"
+     },
+     {
+      "en": "that sat behind the library.",
+      "kr": "도서관 뒤에 자리 잡고 있는"
+     }
+    ],
+    "naturalTranslation": "지도에는 도서관 뒤에 자리 잡고 있는 파란 점 하나가 보였다.",
+    "wordOrderPoint": {
+     "title": "'무엇을'을 동사 바로 뒤에 두는 배열",
+     "explanation": "한국어는 '지도가 파란 점을 보여 주었다'처럼 목적어가 동사 앞에 오지만, 영어는 showed 바로 뒤에 a blue dot을 놓습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 7,
+       "reason": "동사 sat 뒤 장소를 밝히는 behind 구 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The map과 동사 showed를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 showed와 목적어 a blue dot을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "관계대명사 that과 그 동사 sat을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 behind와 그 목적어 the library를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "주격 관계대명사 that",
+      "note": "that이 뒤 절의 주어 자리를 대신하므로 생략할 수 없습니다."
+     },
+     {
+      "label": "장소 전치사 behind",
+      "note": "behind the library는 '도서관 뒤에'라는 위치를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "dot",
+      "meaning": "점"
+     },
+     {
+      "word": "behind",
+      "meaning": "~ 뒤에"
+     }
+    ],
+    "insight": {
+     "formula": "[명사 a blue dot] + [관계대명사 that] + [동사 sat] + [전치사구 behind the library]",
+     "why": "영어는 꾸미는 말이 길어지면 명사 뒤로 보냅니다. a blue dot을 먼저 던져 놓고 that 이하로 그 점이 어디에 있는지 덧붙입니다.",
+     "wrong": "The map showed a behind the library sat blue dot. (한국어 어순대로 꾸미는 말을 명사 앞에 몰아넣으면 문장이 무너집니다.)",
+     "natural": "지도에 도서관 뒤에 자리 잡고 있는 파란 점 하나가 떴다."
+    }
+   },
+   {
+    "text": "They tracked down the phone under a bench in ten long minutes.",
+    "chunks": [
+     {
+      "en": "They tracked down the phone",
+      "kr": "그들은 그 휴대전화를 찾아냈다"
+     },
+     {
+      "en": "under a bench",
+      "kr": "벤치 밑에서"
+     },
+     {
+      "en": "in ten long minutes.",
+      "kr": "긴 10분 만에"
+     }
+    ],
+    "naturalTranslation": "그들은 긴 10분 만에 벤치 밑에서 그 휴대전화를 찾아냈다.",
+    "wordOrderPoint": {
+     "title": "장소를 먼저, 걸린 시간을 나중에 두는 배열",
+     "explanation": "한국어는 '10분 만에 벤치 밑에서'처럼 때를 먼저 말하기도 하지만, 영어는 장소 under a bench를 먼저 놓고 걸린 시간 in ten long minutes를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "track down은 두 낱말이 한 동사라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "구동사 tracked down과 목적어 the phone을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 under와 그 목적어 a bench를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 in과 그 목적어 ten long minutes를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 track down",
+      "note": "track과 down이 붙어 '뒤쫓아 찾아내다'라는 하나의 동사가 됩니다. 목적어가 명사면 tracked down the phone / tracked the phone down 둘 다 되고, 대명사면 tracked it down처럼 사이에 넣습니다."
+     },
+     {
+      "label": "걸린 시간을 나타내는 in",
+      "note": "in ten minutes는 '10분 만에'로 어떤 일이 끝나기까지 걸린 시간을 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "tracked down",
+      "meaning": "뒤쫓아 찾아냈다"
+     },
+     {
+      "word": "bench",
+      "meaning": "벤치, 긴 의자"
+     }
+    ]
+   },
+   {
+    "text": "These days she checks the phone finder before every trip and worries less.",
+    "chunks": [
+     {
+      "en": "These days she checks the phone finder",
+      "kr": "요즘 그녀는 위치 찾기 기능을 확인한다"
+     },
+     {
+      "en": "before every trip",
+      "kr": "어디를 나서기 전마다"
+     },
+     {
+      "en": "and worries less.",
+      "kr": "그리고 걱정을 덜 한다"
+     }
+    ],
+    "naturalTranslation": "요즘 그녀는 어디를 나서기 전마다 위치 찾기 기능을 확인하고 걱정을 덜 한다.",
+    "wordOrderPoint": {
+     "title": "'얼마나'를 동사 뒤에 붙이는 배열",
+     "explanation": "한국어는 '덜 걱정한다'처럼 정도를 동사 앞에 두지만, 영어는 worries를 먼저 말하고 less를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "문두 시간 표현 These days 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "These days는 한 덩어리 시간 표현이라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 she와 동사 checks를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 checks와 목적어 the phone finder를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 before와 그 목적어 every trip을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "동사 worries와 정도를 나타내는 less를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "현재시제로 나타내는 습관",
+      "note": "checks와 worries는 요즘 되풀이되는 일을 나타내는 현재시제입니다."
+     },
+     {
+      "label": "등위접속사 and로 이은 두 동사",
+      "note": "checks와 worries가 같은 주어 she에 이어집니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "less",
+      "meaning": "덜, 더 적게"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ordering-a-desk-lamp-online",
+  "level": 2,
+  "topic": "Technology",
+  "title": "The Lamp That Came in Two Days",
+  "titleKr": "이틀 만에 온 책상 스탠드",
+  "sentences": [
+   {
+    "text": "Hyerin needed a desk lamp before her exams started.",
+    "chunks": [
+     {
+      "en": "Hyerin needed a desk lamp",
+      "kr": "혜린이는 책상 스탠드가 필요했다"
+     },
+     {
+      "en": "before her exams started.",
+      "kr": "시험이 시작되기 전에"
+     }
+    ],
+    "naturalTranslation": "혜린이는 시험이 시작되기 전에 책상 스탠드가 필요했다.",
+    "wordOrderPoint": {
+     "title": "'언제까지'를 문장 뒤로 보내는 배열",
+     "explanation": "한국어는 '시험이 시작되기 전에 스탠드가 필요했다'처럼 때를 앞세우지만, 영어는 필요한 것을 먼저 말하고 때를 뒤로 보냅니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 Hyerin과 동사 needed를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 needed와 목적어 a desk lamp를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "접속사 before와 뒤따르는 her exams를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 her exams와 동사 started를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "접속사 before + 주어 + 동사",
+      "note": "before는 '~하기 전에'라는 뜻으로 뒤에 주어와 동사가 갖춰진 절이 옵니다."
+     },
+     {
+      "label": "명사가 명사를 꾸미는 형태",
+      "note": "desk lamp처럼 앞 명사가 뒤 명사의 종류를 밝혀 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "lamp",
+      "meaning": "전등, 스탠드"
+     }
+    ]
+   },
+   {
+    "text": "The shops in her town closed early, so she opened a shopping app.",
+    "chunks": [
+     {
+      "en": "The shops in her town",
+      "kr": "그녀의 동네 가게들은"
+     },
+     {
+      "en": "closed early,",
+      "kr": "일찍 문을 닫았다"
+     },
+     {
+      "en": "so she opened a shopping app.",
+      "kr": "그래서 그녀는 쇼핑 앱을 열었다"
+     }
+    ],
+    "naturalTranslation": "동네 가게들이 일찍 문을 닫아서 그녀는 쇼핑 앱을 열었다.",
+    "wordOrderPoint": {
+     "title": "결과를 잇는 접속사 so",
+     "explanation": "앞 절에 이유가 오고 so 뒤에 그래서 벌어진 일을 이어 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 1,
+       "reason": "명사 shops 뒤 위치를 밝히는 in 구 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "전치사 in과 그 목적어 her town을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "짧은 주어 she와 동사 opened를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "동사 opened와 목적어 a shopping app을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 so",
+      "note": "so는 앞 내용의 결과를 잇는 접속사로 '그래서'라는 뜻입니다."
+     },
+     {
+      "label": "부사로 쓰인 early",
+      "note": "closed early의 early는 '일찍'이라는 뜻의 부사로 동사 뒤에 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "closed early",
+      "meaning": "일찍 문을 닫았다"
+     }
+    ]
+   },
+   {
+    "text": "She compared prices, read a few reviews, and ordered the cheapest one.",
+    "chunks": [
+     {
+      "en": "She compared prices,",
+      "kr": "그녀는 가격을 비교했다"
+     },
+     {
+      "en": "read a few reviews,",
+      "kr": "후기를 몇 개 읽었다"
+     },
+     {
+      "en": "and ordered the cheapest one.",
+      "kr": "그리고 가장 싼 것을 주문했다"
+     }
+    ],
+    "naturalTranslation": "그녀는 가격을 비교하고 후기를 몇 개 읽은 뒤 가장 싼 것을 주문했다.",
+    "wordOrderPoint": {
+     "title": "동사구 셋을 콤마와 and로 잇기",
+     "explanation": "같은 주어에 이어지는 세 동작을 A, B, and C 꼴로 차례차례 늘어놓습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 She와 동사 compared를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 compared와 목적어 prices를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "동사 read와 목적어 a few reviews를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 ordered와 목적어 the cheapest one을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "세 동사구의 병렬",
+      "note": "compared, read, ordered 세 동사가 같은 주어 She에 나란히 이어집니다."
+     },
+     {
+      "label": "최상급 the cheapest",
+      "note": "cheap의 최상급으로 '가장 싼'이라는 뜻이며 앞에 the를 붙입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "compared",
+      "meaning": "비교했다"
+     },
+     {
+      "word": "reviews",
+      "meaning": "후기, 상품평"
+     }
+    ]
+   },
+   {
+    "text": "The delivery arrived two days later, right in front of her door.",
+    "chunks": [
+     {
+      "en": "The delivery arrived",
+      "kr": "그 배송품이 도착했다"
+     },
+     {
+      "en": "two days later,",
+      "kr": "이틀 뒤에"
+     },
+     {
+      "en": "right in front of her door.",
+      "kr": "바로 그녀의 문 앞에"
+     }
+    ],
+    "naturalTranslation": "그 물건은 이틀 뒤에 바로 그녀의 문 앞까지 도착했다.",
+    "wordOrderPoint": {
+     "title": "콤마로 덧붙이는 위치 표현",
+     "explanation": "영어는 원래 장소를 먼저, 때를 뒤에 놓습니다. 다만 콤마를 찍고 뒤에 붙이면 right in front of her door처럼 나중에 떠올린 정보를 덧붙일 수 있습니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 The delivery와 동사 arrived를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "in front of는 한 덩어리 표현이라 in과 front를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "in front of와 그 목적어 her door를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "기간 + later",
+      "note": "two days later는 '이틀 뒤에'로, 기간 뒤에 later를 붙여 지난 시간을 나타냅니다."
+     },
+     {
+      "label": "강조 부사 right",
+      "note": "right in front of처럼 right가 위치 표현 앞에 놓여 '바로'라는 뜻을 더합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "delivery",
+      "meaning": "배송, 배달된 물건"
+     },
+     {
+      "word": "in front of",
+      "meaning": "~의 앞에"
+     }
+    ]
+   },
+   {
+    "text": "Online orders save time, and now her desk is bright before the exams.",
+    "chunks": [
+     {
+      "en": "Online orders save time,",
+      "kr": "온라인 주문은 시간을 아껴 준다"
+     },
+     {
+      "en": "and now her desk is bright",
+      "kr": "그리고 이제 그녀의 책상은 환하다"
+     },
+     {
+      "en": "before the exams.",
+      "kr": "시험을 앞두고"
+     }
+    ],
+    "naturalTranslation": "온라인 주문은 시간을 아껴 주고, 이제 시험을 앞두고 그녀의 책상은 환하다.",
+    "wordOrderPoint": {
+     "title": "때를 문장 맨 뒤에 붙이는 배열",
+     "explanation": "한국어는 '시험을 앞두고 책상이 환하다'처럼 때를 앞에 두지만, 영어는 상태를 먼저 말하고 before the exams를 맨 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 5,
+       "reason": "부사 now 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Online orders와 동사 save를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 save와 목적어 time을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "짧은 주어 her desk와 be동사 is를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "be동사 is와 보어 bright를 갈라 읽으면 '환하다'가 끊깁니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 before와 그 목적어 the exams를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "등위접속사 and로 이은 두 절",
+      "note": "and가 앞 절과 뒤 절을 나란히 이어 두 가지를 함께 전합니다."
+     },
+     {
+      "label": "be동사 + 형용사 보어",
+      "note": "is bright는 be동사 뒤에 형용사를 놓아 주어의 상태를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "save time",
+      "meaning": "시간을 아끼다"
+     },
+     {
+      "word": "bright",
+      "meaning": "환한, 밝은"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "putting-off-the-phone-update",
+  "level": 2,
+  "topic": "Technology",
+  "title": "The Later Button",
+  "titleKr": "'나중에' 버튼을 그만 누르다",
+  "sentences": [
+   {
+    "text": "Every week a small window asked Dohyun to install the new update.",
+    "chunks": [
+     {
+      "en": "Every week",
+      "kr": "매주"
+     },
+     {
+      "en": "a small window asked Dohyun",
+      "kr": "작은 창 하나가 도현이에게 요청했다"
+     },
+     {
+      "en": "to install the new update.",
+      "kr": "새 업데이트를 설치하라고"
+     }
+    ],
+    "naturalTranslation": "매주 작은 창 하나가 도현이에게 새 업데이트를 설치하라고 요청했다.",
+    "wordOrderPoint": {
+     "title": "부탁받는 사람을 동사 바로 뒤에 두는 배열",
+     "explanation": "한국어는 '도현이에게 설치하라고 요청했다'처럼 할 일을 앞에 두지만, 영어는 asked 바로 뒤에 Dohyun을 놓고 할 일은 뒤로 보냅니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "주어 a small window가 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "Every week는 한 덩어리 시간 표현이라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "관사 a와 뒤따르는 small window를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "동사 install과 목적어 the new update를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "빈도를 나타내는 every + 기간",
+      "note": "Every week는 '매주'로, every 뒤에 기간 명사를 붙여 되풀이를 나타냅니다."
+     },
+     {
+      "label": "5형식 ask + 목적어 + to부정사",
+      "note": "ask 뒤에 사람이 오고 그 사람이 할 일이 to부정사로 이어집니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "install",
+      "meaning": "설치하다"
+     }
+    ]
+   },
+   {
+    "text": "He pressed the Later button almost every time and forgot about it.",
+    "chunks": [
+     {
+      "en": "He pressed the Later button",
+      "kr": "그는 '나중에' 버튼을 눌렀다"
+     },
+     {
+      "en": "almost every time",
+      "kr": "거의 매번"
+     },
+     {
+      "en": "and forgot about it.",
+      "kr": "그리고 그 일을 잊어버렸다"
+     }
+    ],
+    "naturalTranslation": "그는 거의 매번 '나중에' 버튼을 누르고는 그 일을 잊어버렸다.",
+    "wordOrderPoint": {
+     "title": "동사 + 목적어 + 빈도 표현 순서",
+     "explanation": "무엇을 눌렀는지 먼저 말하고 얼마나 자주였는지는 almost every time으로 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 He와 동사 pressed를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 pressed와 목적어 the Later button을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "forgot about은 한 덩어리라 forgot과 about을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 about과 그 목적어 it을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 불규칙동사 forgot",
+      "note": "forgot은 forget의 과거형으로 '잊어버렸다'라는 뜻입니다."
+     },
+     {
+      "label": "동사 + 전치사 forget about",
+      "note": "forget about은 '~에 대해 잊다'로 about까지 붙여 씁니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "almost every time",
+      "meaning": "거의 매번"
+     }
+    ]
+   },
+   {
+    "text": "Then his banking app stopped working on the old version.",
+    "chunks": [
+     {
+      "en": "Then",
+      "kr": "그러다"
+     },
+     {
+      "en": "his banking app stopped working",
+      "kr": "그의 은행 앱이 작동을 멈췄다"
+     },
+     {
+      "en": "on the old version.",
+      "kr": "옛 버전에서는"
+     }
+    ],
+    "naturalTranslation": "그러다 옛 버전에서는 그의 은행 앱이 아예 작동을 멈춰 버렸다.",
+    "wordOrderPoint": {
+     "title": "동사 뒤에 붙는 조건의 on 구",
+     "explanation": "무슨 일이 벌어졌는지 먼저 말하고 어떤 환경에서였는지는 on the old version으로 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "주어 his banking app이 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "소유격 his와 뒤따르는 banking app을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "stopped와 그 목적어 working을 갈라 읽으면 '작동을 멈췄다'가 끊깁니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "전치사 on과 그 목적어 the old version을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "stop + 동명사",
+      "note": "stop 뒤에 -ing를 쓰면 '하던 것을 멈추다'라는 뜻이 됩니다."
+     },
+     {
+      "label": "명사를 꾸미는 -ing 형태",
+      "note": "banking app의 banking은 앱의 종류를 밝히는 말로 쓰였습니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "stopped working",
+      "meaning": "작동을 멈췄다"
+     },
+     {
+      "word": "version",
+      "meaning": "버전, 판"
+     }
+    ]
+   },
+   {
+    "text": "A friend told him to keep up with the small updates each week.",
+    "chunks": [
+     {
+      "en": "A friend told him",
+      "kr": "한 친구가 그에게 말했다"
+     },
+     {
+      "en": "to keep up with the small updates",
+      "kr": "작은 업데이트들을 놓치지 말고 따라가라고"
+     },
+     {
+      "en": "each week.",
+      "kr": "주마다"
+     }
+    ],
+    "naturalTranslation": "한 친구는 주마다 나오는 작은 업데이트들을 놓치지 말고 따라가라고 그에게 말해 주었다.",
+    "wordOrderPoint": {
+     "title": "'얼마나 자주'를 문장 끝에 붙이는 배열",
+     "explanation": "한국어는 '주마다 나오는 업데이트를 따라가라'처럼 빈도를 앞에 두지만, 영어는 할 일을 먼저 말하고 each week를 맨 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 A friend와 동사 told를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "told와 듣는 사람 him을 갈라 읽으면 문장의 뼈대가 흩어집니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "keep up with는 세 낱말이 한 동사라 중간을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "with와 그 목적어 the small updates를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 keep up with",
+      "note": "keep up with는 '~에 뒤처지지 않고 따라가다'로 세 낱말이 한 동사처럼 움직입니다."
+     },
+     {
+      "label": "빈도를 나타내는 each + 기간",
+      "note": "each week는 '주마다'로, each 뒤에 단수 기간 명사를 붙여 되풀이를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "keep up with",
+      "meaning": "~에 뒤처지지 않고 따라가다"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 A friend] + [동사 told] + [사람 him] + [to부정사 to keep up with ...]",
+     "why": "told 뒤에는 듣는 사람이 바로 오고, 그 사람이 할 일은 to부정사가 통째로 받습니다. 한국어는 '그에게 ~하라고 말했다'처럼 내용을 앞에 두지만 영어는 사람을 먼저 놓습니다.",
+     "wrong": "A friend told to him keep up with the small updates. (tell 뒤 사람 앞에는 to를 붙이지 않고, 할 일 앞에는 to를 붙입니다.)",
+     "natural": "한 친구가 그에게 작은 업데이트들을 주마다 놓치지 말고 따라가라고 말했다."
+    }
+   },
+   {
+    "text": "Now the update runs while he sleeps, and the app never stops working.",
+    "chunks": [
+     {
+      "en": "Now the update runs",
+      "kr": "이제 업데이트는 실행된다"
+     },
+     {
+      "en": "while he sleeps,",
+      "kr": "그가 자는 동안에"
+     },
+     {
+      "en": "and the app never stops working.",
+      "kr": "그리고 그 앱은 절대 멈추지 않는다"
+     }
+    ],
+    "naturalTranslation": "이제 업데이트는 그가 자는 동안 돌아가고, 앱은 절대 멈추지 않는다.",
+    "wordOrderPoint": {
+     "title": "부정어 never를 동사 앞에 두는 자리",
+     "explanation": "한국어는 '절대 멈추지 않는다'처럼 부정을 동사 끝에 붙이지만, 영어는 never를 동사 stops 바로 앞에 놓습니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 부사 Now 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 the update와 동사 runs를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "접속사절의 주어 he와 동사 sleeps를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "짧은 주어 the app과 뒤따르는 never stops를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "stop working은 함께 읽어야 '작동을 멈추다'가 되므로 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "접속사 while + 주어 + 동사",
+      "note": "while은 '~하는 동안'이라는 뜻으로 뒤에 주어와 동사를 갖춘 절이 옵니다."
+     },
+     {
+      "label": "stop + 동명사",
+      "note": "stops working처럼 stop 뒤에 -ing를 쓰면 '하던 것을 멈추다'라는 뜻이 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "runs",
+      "meaning": "실행된다, 돌아간다"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "clearing-out-a-full-phone",
+  "level": 2,
+  "topic": "Technology",
+  "title": "The Phone That Kept Freezing",
+  "titleKr": "자꾸 멈추던 폰 비우기",
+  "sentences": [
+   {
+    "text": "Minji's phone became slow after a year of photos and games.",
+    "chunks": [
+     {
+      "en": "Minji's phone became slow",
+      "kr": "민지의 휴대전화는 느려졌다"
+     },
+     {
+      "en": "after a year of photos and games.",
+      "kr": "사진과 게임으로 보낸 1년이 지난 뒤"
+     }
+    ],
+    "naturalTranslation": "사진과 게임으로 1년을 보내고 나자 민지의 휴대전화는 느려졌다.",
+    "wordOrderPoint": {
+     "title": "상태를 동사 뒤에 붙이는 배열",
+     "explanation": "한국어는 '느려졌다'가 한 낱말이지만, 영어는 became을 먼저 놓고 slow를 뒤에 붙여 변화를 두 낱말로 말합니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 8,
+       "reason": "등위접속사 and 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Minji's phone과 동사 became을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "became과 보어 slow를 갈라 읽으면 '느려졌다'가 끊깁니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "after와 그 목적어 a year를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "전치사 of와 그 목적어 photos를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "and와 뒤에 오는 games를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "기간을 나타내는 after",
+      "note": "after a year는 '1년이 지난 뒤'로 시간의 흐름을 나타냅니다."
+     },
+     {
+      "label": "become + 형용사 보어",
+      "note": "become은 상태의 변화를 나타내며 뒤에 형용사가 옵니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "became slow",
+      "meaning": "느려졌다"
+     }
+    ]
+   },
+   {
+    "text": "Every app opened slowly, and the camera froze in the middle of a video.",
+    "chunks": [
+     {
+      "en": "Every app opened slowly,",
+      "kr": "모든 앱이 느리게 열렸다"
+     },
+     {
+      "en": "and the camera froze",
+      "kr": "그리고 카메라가 멈췄다"
+     },
+     {
+      "en": "in the middle of a video.",
+      "kr": "영상을 찍는 도중에"
+     }
+    ],
+    "naturalTranslation": "모든 앱이 느리게 열렸고, 카메라는 영상을 찍는 도중에 멈춰 버렸다.",
+    "wordOrderPoint": {
+     "title": "방식 부사를 동사 뒤에 두는 배열",
+     "explanation": "한국어는 '느리게 열렸다'처럼 부사를 동사 앞에 두지만, 영어는 opened를 먼저 말하고 slowly를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 Every app과 동사 opened를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 opened와 방식 부사 slowly를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "짧은 주어 the camera와 동사 froze를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 in과 그 목적어 the middle을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "in the middle of는 한 덩어리 표현이라 of를 떼어 읽지 않습니다."
+      },
+      {
+       "boundary": 11,
+       "reason": "in the middle of와 그 목적어 a video를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "every + 단수 명사",
+      "note": "Every 뒤에는 app처럼 단수 명사가 옵니다."
+     },
+     {
+      "label": "과거시제 불규칙동사 froze",
+      "note": "froze는 freeze의 과거형으로 화면이 멈춰 버린 상태를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "slowly",
+      "meaning": "느리게, 천천히"
+     },
+     {
+      "word": "froze",
+      "meaning": "멈춰 버렸다, 먹통이 되었다"
+     },
+     {
+      "word": "in the middle of",
+      "meaning": "한창 ~하는 도중에"
+     }
+    ]
+   },
+   {
+    "text": "Last Saturday she decided to clean up the phone from top to bottom.",
+    "chunks": [
+     {
+      "en": "Last Saturday",
+      "kr": "지난 토요일에"
+     },
+     {
+      "en": "she decided to clean up the phone",
+      "kr": "그녀는 휴대전화를 정리하기로 했다"
+     },
+     {
+      "en": "from top to bottom.",
+      "kr": "구석구석 전부"
+     }
+    ],
+    "naturalTranslation": "지난 토요일에 그녀는 휴대전화를 구석구석 정리하기로 마음먹었다.",
+    "wordOrderPoint": {
+     "title": "목적어 뒤에 붙는 범위 표현",
+     "explanation": "정리할 대상 the phone을 먼저 말하고 얼마나 구석구석인지는 from top to bottom으로 맨 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "to부정사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 2,
+       "reason": "짧은 주어 she와 동사 decided를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "clean up은 두 낱말이 한 동사라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "구동사 clean up과 목적어 the phone을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "from top to bottom은 한 덩어리 표현이라 from을 떼어 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "decide + to부정사",
+      "note": "decide 뒤에는 동명사가 아니라 to부정사가 와서 '~하기로 정하다'가 됩니다."
+     },
+     {
+      "label": "구동사 clean up",
+      "note": "clean과 up이 붙어 '깨끗이 치우다, 정리하다'라는 하나의 동사가 됩니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "clean up",
+      "meaning": "깨끗이 정리하다, 치우다"
+     },
+     {
+      "word": "from top to bottom",
+      "meaning": "구석구석, 처음부터 끝까지"
+     }
+    ]
+   },
+   {
+    "text": "She deleted blurry pictures and old apps that she never opened.",
+    "chunks": [
+     {
+      "en": "She deleted blurry pictures",
+      "kr": "그녀는 흐릿한 사진들을 지웠다"
+     },
+     {
+      "en": "and old apps",
+      "kr": "그리고 오래된 앱들도"
+     },
+     {
+      "en": "that she never opened.",
+      "kr": "그녀가 한 번도 열지 않은"
+     }
+    ],
+    "naturalTranslation": "그녀는 흐릿한 사진들과 한 번도 열지 않던 오래된 앱들을 지웠다.",
+    "wordOrderPoint": {
+     "title": "명사 뒤에서 꾸며 주는 관계절",
+     "explanation": "한국어와 달리 영어는 old apps를 먼저 말하고 that she never opened를 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "짧은 주어 She와 동사 deleted를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 1,
+       "reason": "동사 deleted와 목적어 blurry pictures를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "관계대명사 that과 뒤 절의 주어 she를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "부사 never와 동사 opened를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "목적격 관계대명사 that",
+      "note": "that이 뒤 절 동사 opened의 목적어 자리를 대신하므로 통째로 생략할 수도 있습니다."
+     },
+     {
+      "label": "빈도부사 never의 위치",
+      "note": "never는 일반동사 앞에 놓여 '한 번도 ~않다'라는 뜻을 더합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "blurry",
+      "meaning": "흐릿한, 초점이 나간"
+     }
+    ],
+    "insight": {
+     "formula": "[명사 old apps] + [관계대명사 that] + [주어 she] + [부사 never] + [동사 opened]",
+     "why": "that이 opened의 목적어 자리를 대신해 앞의 old apps와 이어 줍니다. 목적어 자리를 이미 that이 채웠으므로 뒤 절에는 목적어를 다시 쓰지 않습니다.",
+     "wrong": "She deleted old apps that she never opened them. (that이 목적어를 대신하므로 them을 또 쓰면 안 됩니다.)",
+     "natural": "그녀는 한 번도 열지 않던 오래된 앱들을 지웠다."
+    }
+   },
+   {
+    "text": "Now the storage bar shows free space, and the phone feels new again.",
+    "chunks": [
+     {
+      "en": "Now",
+      "kr": "이제"
+     },
+     {
+      "en": "the storage bar shows free space,",
+      "kr": "저장 공간 막대가 빈자리를 보여 준다"
+     },
+     {
+      "en": "and the phone feels new again.",
+      "kr": "그리고 그 휴대전화는 다시 새것처럼 느껴진다"
+     }
+    ],
+    "naturalTranslation": "이제 저장 공간 막대에 빈자리가 보이고, 휴대전화는 다시 새것처럼 느껴진다.",
+    "wordOrderPoint": {
+     "title": "'다시'를 문장 끝에 두는 배열",
+     "explanation": "한국어는 '다시 새것처럼 느껴진다'로 '다시'를 앞에 두지만, 영어는 feels new를 먼저 말하고 again을 맨 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 3,
+       "reason": "주어 the storage bar가 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 4,
+       "reason": "동사 shows와 목적어 free space를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "짧은 주어 the phone과 동사 feels를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "feels와 보어 new를 갈라 읽으면 '새것처럼 느껴진다'가 끊깁니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "콤마와 and로 이은 두 절",
+      "note": "앞 절과 뒤 절을 콤마와 and로 나란히 이어 두 결과를 함께 전합니다."
+     },
+     {
+      "label": "감각동사 feel + 형용사",
+      "note": "feel 뒤에는 부사가 아니라 형용사를 써서 상태를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "storage",
+      "meaning": "저장 공간"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "dark-mode-in-a-dark-room",
+  "level": 2,
+  "topic": "Technology",
+  "title": "The Screen That Stopped Glaring",
+  "titleKr": "어두운 방에서 켠 다크 모드",
+  "sentences": [
+   {
+    "text": "At night the bright screen hurt Jaemin's eyes in his dark room.",
+    "chunks": [
+     {
+      "en": "At night",
+      "kr": "밤에는"
+     },
+     {
+      "en": "the bright screen hurt Jaemin's eyes",
+      "kr": "밝은 화면이 재민이의 눈을 아프게 했다"
+     },
+     {
+      "en": "in his dark room.",
+      "kr": "어두운 방에서"
+     }
+    ],
+    "naturalTranslation": "밤에 어두운 방에서는 밝은 화면이 재민이의 눈을 아프게 했다.",
+    "wordOrderPoint": {
+     "title": "때를 문두로 끌어내는 배열",
+     "explanation": "장소 in his dark room은 문장 끝 제자리에 두고, 때를 나타내는 At night만 맨 앞으로 끌어내 언제 일인지 먼저 알립니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "주어 the bright screen이 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 0,
+       "reason": "전치사 At과 그 목적어 night를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "동사 hurt와 목적어 Jaemin's eyes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "전치사 in과 그 목적어 his dark room을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "과거시제 불규칙동사 hurt",
+      "note": "hurt는 현재형과 과거형의 모양이 같아 문맥으로 시제를 알아봅니다."
+     },
+     {
+      "label": "소유격 아포스트로피 s",
+      "note": "Jaemin's eyes처럼 사람 이름 뒤에 s를 붙여 누구의 것인지를 나타냅니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "hurt",
+      "meaning": "아프게 했다"
+     }
+    ]
+   },
+   {
+    "text": "So he turned on dark mode, and the glare was gone.",
+    "chunks": [
+     {
+      "en": "So he turned on dark mode,",
+      "kr": "그래서 그는 다크 모드를 켰다"
+     },
+     {
+      "en": "and the glare was gone.",
+      "kr": "그리고 눈부심이 사라졌다"
+     }
+    ],
+    "naturalTranslation": "그래서 그는 다크 모드를 켰고, 눈부심은 사라졌다.",
+    "wordOrderPoint": {
+     "title": "결과를 뒤 절로 이어 붙이는 배열",
+     "explanation": "한국어는 '다크 모드를 켜서 눈부심이 사라졌다'처럼 한 문장으로 이어 말하지만, 영어는 콤마와 and로 절을 하나 더 붙여 결과를 따로 세웁니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 접속사 So 뒤에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "짧은 주어 he와 동사 turned를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "turn on은 두 낱말이 한 동사라 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 3,
+       "reason": "구동사 turned on과 목적어 dark mode를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "짧은 주어 the glare와 be동사 was를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "be동사 was와 gone을 갈라 읽으면 '사라지고 없다'가 끊깁니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "구동사 turn on",
+      "note": "turn과 on이 붙어 '켜다'라는 하나의 동사가 됩니다. 목적어가 명사면 turned on dark mode / turned dark mode on 둘 다 되고, 대명사면 turned it on처럼 사이에 넣습니다."
+     },
+     {
+      "label": "be동사 + gone",
+      "note": "was gone은 '사라지고 없었다'라는 상태를 나타내는 표현입니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "turned on",
+      "meaning": "켰다"
+     },
+     {
+      "word": "dark mode",
+      "meaning": "다크 모드, 어두운 화면 설정"
+     },
+     {
+      "word": "glare",
+      "meaning": "눈부심, 번쩍이는 빛"
+     }
+    ]
+   },
+   {
+    "text": "The dim screen is easier on tired eyes late at night.",
+    "chunks": [
+     {
+      "en": "The dim screen",
+      "kr": "그 어둑한 화면은"
+     },
+     {
+      "en": "is easier on tired eyes",
+      "kr": "피곤한 눈에 더 편하다"
+     },
+     {
+      "en": "late at night.",
+      "kr": "밤늦게"
+     }
+    ],
+    "naturalTranslation": "어둑한 화면은 밤늦은 시간에 피곤한 눈에 더 편하다.",
+    "wordOrderPoint": {
+     "title": "때를 문장 맨 뒤에 붙이는 배열",
+     "explanation": "한국어는 '밤늦게 눈이 편하다'처럼 때를 앞에 두지만, 영어는 상태를 먼저 말하고 late at night를 맨 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [],
+     "discouraged": [
+      {
+       "boundary": 3,
+       "reason": "be동사 is와 보어 easier를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 4,
+       "reason": "easier와 딸린 전치사 on을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 on과 그 목적어 tired eyes를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 8,
+       "reason": "late at night은 한 덩어리 시간 표현이라 late와 at을 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "비교급 easier + on",
+      "note": "easy의 비교급 easier 뒤에 on을 붙여 '~에게 더 편한'이라는 뜻이 됩니다."
+     },
+     {
+      "label": "형용사로 쓰인 tired",
+      "note": "tired eyes의 tired는 '피곤한'이라는 뜻으로 명사 앞에서 눈의 상태를 꾸밉니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "is easier on",
+      "meaning": "~에 덜 부담을 준다, ~이 더 편하다"
+     },
+     {
+      "word": "dim",
+      "meaning": "어둑한, 흐릿한"
+     }
+    ]
+   },
+   {
+    "text": "But in the morning, the same screen looked gray and hard to read.",
+    "chunks": [
+     {
+      "en": "But in the morning,",
+      "kr": "하지만 아침에는"
+     },
+     {
+      "en": "the same screen looked gray",
+      "kr": "그 똑같은 화면이 잿빛으로 보였다"
+     },
+     {
+      "en": "and hard to read.",
+      "kr": "그리고 읽기 힘들어 보였다"
+     }
+    ],
+    "naturalTranslation": "하지만 아침이 되자 그 똑같은 화면이 잿빛에다 읽기 힘들어 보였다.",
+    "wordOrderPoint": {
+     "title": "'보이다' 뒤에 인상 두 개를 나란히 놓는 배열",
+     "explanation": "한국어는 '잿빛에다 읽기 힘들어 보였다'처럼 끝에 몰아 말하지만, 영어는 looked를 먼저 놓고 gray와 hard to read를 and로 이어 뒤에 붙입니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 0,
+       "reason": "문두 접속사 But 뒤에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 6,
+       "reason": "주어 the same screen이 세 낱말로 길어서 동사 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "전치사 in과 그 목적어 the morning을 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 7,
+       "reason": "동사 looked와 보어 gray를 갈라 읽으면 '잿빛으로 보였다'가 끊깁니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "형용사 hard와 뒤따르는 to read를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "문두 접속사 But",
+      "note": "But이 문장 맨 앞에 와서 앞 문장과 반대되는 상황을 잇습니다."
+     },
+     {
+      "label": "형용사 + to부정사",
+      "note": "hard to read는 '읽기 힘든'으로, to부정사가 앞의 형용사를 좁혀 줍니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "hard to read",
+      "meaning": "읽기 힘든"
+     }
+    ],
+    "insight": {
+     "formula": "[주어 the same screen] + [동사 looked] + [보어 gray and hard to read]",
+     "why": "looked 뒤에는 부사가 아니라 형용사가 와서 겉모습을 설명합니다. hard 뒤의 to read는 '읽기에'라는 뜻으로 그 형용사가 어느 쪽으로 힘든지를 좁혀 줍니다.",
+     "wrong": "The same screen looked grayly and hard for reading. (감각동사 뒤에는 부사를 쓰지 않고, 형용사 뒤에는 for -ing가 아니라 to부정사를 붙입니다.)",
+     "natural": "그 똑같은 화면이 잿빛에다 읽기 힘들어 보였다."
+    }
+   },
+   {
+    "text": "Jaemin now keeps dark mode at night and light mode during the day.",
+    "chunks": [
+     {
+      "en": "Jaemin now keeps dark mode at night",
+      "kr": "이제 재민이는 밤에는 다크 모드를 쓴다"
+     },
+     {
+      "en": "and light mode during the day.",
+      "kr": "그리고 낮에는 라이트 모드를 쓴다"
+     }
+    ],
+    "naturalTranslation": "재민이는 이제 밤에는 다크 모드를, 낮에는 라이트 모드를 쓴다.",
+    "wordOrderPoint": {
+     "title": "대상과 때를 짝지어 나란히 놓는 배열",
+     "explanation": "한국어는 '밤에는 다크 모드, 낮에는 라이트 모드'처럼 때를 앞에 두지만, 영어는 dark mode at night / light mode during the day처럼 대상을 먼저 놓고 때를 뒤에 붙여 짝을 맞춥니다."
+    },
+    "breakRules": {
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "목적어 dark mode 뒤 때를 밝히는 at 구 앞에서 끊어 읽어도 자연스럽습니다."
+      },
+      {
+       "boundary": 9,
+       "reason": "목적어 light mode 뒤 때를 밝히는 during 구 앞에서 끊어 읽어도 자연스럽습니다."
+      }
+     ],
+     "discouraged": [
+      {
+       "boundary": 1,
+       "reason": "부사 now와 동사 keeps를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 2,
+       "reason": "동사 keeps와 목적어 dark mode를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 5,
+       "reason": "전치사 at과 그 목적어 night를 갈라 읽지 않습니다."
+      },
+      {
+       "boundary": 10,
+       "reason": "전치사 during과 그 목적어 the day를 갈라 읽지 않습니다."
+      }
+     ]
+    },
+    "grammar": [
+     {
+      "label": "시간 전치사 at과 during",
+      "note": "at night는 밤이라는 시점, during the day는 낮 동안의 기간을 나타냅니다."
+     },
+     {
+      "label": "부사 now의 위치",
+      "note": "now는 주어 뒤 동사 앞에 놓여 '이제는'이라는 뜻을 더합니다."
+     }
+    ],
+    "words": [
+     {
+      "word": "light mode",
+      "meaning": "라이트 모드, 밝은 화면 설정"
+     },
+     {
+      "word": "during the day",
+      "meaning": "낮 동안에"
+     }
+    ]
+   }
+  ]
+ }
+]
