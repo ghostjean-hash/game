@@ -84,7 +84,7 @@ const getSettings = () => ({ chunks: true, words: true, scope: true, ...(store.g
 // 모든 지문은 passages.json 단일 소스(앱에서 직접 입력·저장하는 기능은 폐지, 2026-07-16 사용자 결정).
 // 새 문제는 JSON을 자비스에게 주면 자비스가 passages.json에 커밋해 전체 배포한다.
 // 난이도 우선(2026-07-21): 주제별로 저장된 코스를 난이도(Level)별로 재편해 보여준다.
-const LEVEL_LABELS = { 1: "Level 1 · 입문", 2: "Level 2 · 기초", 3: "Level 3 · 중급" };
+const LEVEL_LABELS = { 1: "Level 1.입문", 2: "Level 2.기초", 3: "Level 3.중급" };
 function rebuildCourse() {
   courses = createLevelCourses(baseData.courses, LEVEL_LABELS);
   // 재빌드 후 현재 코스 참조 갱신(사라졌으면 해제)
@@ -212,15 +212,11 @@ function renderCourseList() {
   list.className = "passage-list";
   courses.forEach((c) => {
     const prog = courseProgress(c, done);
-    // 이 레벨에 어떤 주제들이 섞여 있는지 부제로 보여준다(난이도 우선 - 한 레벨에 여러 주제).
-    const topics = [...new Set(c.passages.map((p) => p.topic).filter(Boolean))];
-    const sub = `${c.passageCount}개 지문${topics.length ? " · " + topics.join(" · ") : ""}`;
     const card = document.createElement("button");
     card.type = "button";
     card.className = "passage-card course-card";
     card.innerHTML =
-      `<span class="pc-body"><span class="pc-title">${c.title}${prog.cleared ? ' <span class="mine-badge">완주 ✓</span>' : ""}</span>` +
-      `<span class="pc-en">${sub}</span></span>` +
+      `<span class="pc-body"><span class="pc-title">${c.title}${prog.cleared ? ' <span class="mine-badge">완주 ✓</span>' : ""}</span></span>` +
       `<span class="pc-status${prog.cleared ? " done" : ""}">${prog.done} / ${prog.total}편</span>`;
     card.onclick = () => renderList(c);
     list.appendChild(card);
@@ -277,17 +273,18 @@ function renderList(c) {
     card.type = "button";
     const r = reads[p.id] || 0;
     const isDone = done.includes(p.id);
+    const isToday = readDates[p.id] === todayKey();
     const inProgress = !!progress[p.id]; // 저장된 진행이 있으면 첫 회독 중이어도 '읽는 중'
     let status;
     if (isDone) {
-      status = readDates[p.id] === todayKey() ? "Today" : `${Math.max(1, r)}회독`;
+      status = isToday ? "Today" : `${Math.max(1, r)}회독`;
     } else {
       status = (r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음";
     }
     card.className = "passage-card";
     card.innerHTML =
       `<span class="pc-body"><span class="pc-title">${p.title}</span></span>` +
-      `<span class="pc-status${isDone ? " done" : ""}">${status}</span>`;
+      `<span class="pc-status${isDone ? " done" : ""}${isToday ? " today" : ""}">${status}</span>`;
     if (isDone) lastDoneCard = card;
     card.onclick = () => {
       saveListScroll(course.id, stage.scrollTop);
