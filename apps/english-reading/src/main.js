@@ -66,6 +66,11 @@ const LIST_SCROLL_RESTORE_FRAMES = 10; // 목록 스크롤 복원을 재시도�
 // ── 상태 저장(기기 저장소) ──
 const getDone = () => store.get("done", []); // 완독한 지문 id 배열
 const getReads = () => store.get("reads", {}); // { passageId: 회독수 }
+const getReadDates = () => store.get("readDates", {}); // { passageId: 마지막 완독일(YYYY-MM-DD) }
+function todayKey(date = new Date()) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
 const getListScroll = () => store.get("listScroll", {}); // { courseId: 목록의 스크롤 위치 }
 function saveListScroll(courseId, scrollTop) {
   const positions = getListScroll();
@@ -241,6 +246,7 @@ function renderList(c) {
   currentPassage = null; // 목록으로 나오면 '읽던 지문' 해제(단어장 백은 이 목록으로)
   const done = getDone();
   const reads = getReads();
+  const readDates = getReadDates();
   const prog = courseProgress(course, done);
   setBar(prog.ratio);
   setTop({ title: course.title, onBack: renderCourseList, showVocab: true, showSavedSentences: true });
@@ -274,7 +280,7 @@ function renderList(c) {
     const inProgress = !!progress[p.id]; // 저장된 진행이 있으면 첫 회독 중이어도 '읽는 중'
     let status;
     if (isDone) {
-      status = `${Math.max(1, r)}회독`;
+      status = readDates[p.id] === todayKey() ? "Today" : `${Math.max(1, r)}회독`;
     } else {
       status = (r > 0 || inProgress) ? "읽는 중" : "아직 안 읽음";
     }
@@ -897,6 +903,9 @@ function finishRound(p) {
   const wasCleared = courseProgress(course, done).cleared;
   reads[p.id] = round;
   store.set("reads", reads);
+  const readDates = getReadDates();
+  readDates[p.id] = todayKey();
+  store.set("readDates", readDates);
   if (!done.includes(p.id)) { done.push(p.id); store.set("done", done); }
   clearPassageProgress(p.id);
   const prog = courseProgress(course, done);
