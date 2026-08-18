@@ -630,6 +630,11 @@ body {
   line-height: 1.2;
   white-space: nowrap;
 }
+.vocab-meaning-value .vocab-pos {
+  display: inline-flex;
+  margin: 0 8px 0 0;
+  vertical-align: middle;
+}
 .saved-sentence-open {
   flex: 1;
   min-width: 0;

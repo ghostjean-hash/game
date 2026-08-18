@@ -1015,19 +1015,16 @@ function renderVocab() {
     row.className = "vocab-row";
     const word = document.createElement("div");
     word.className = "vocab-word"; word.textContent = v.word;
-    const pos = document.createElement("span");
-    pos.className = "vocab-pos";
-    pos.textContent = wordPartOfSpeech(v.word, v.meaning, v.pos);
     const del = document.createElement("button");
     del.type = "button"; del.className = "vocab-del"; del.innerHTML = ICON.close; del.setAttribute("aria-label", "단어 삭제");
-    row.append(word, pos, del);
+    row.append(word, del);
 
     // 뜻·해석은 먼저 감춘다. 원문 문장은 뜻과 해석을 잇는 기준점으로 항상 보인다.
     const detail = document.createElement("div");
     detail.className = "vocab-detail vocab-study-detail";
     const translation = vocabTranslation(v);
     detail.append(
-      buildInlineToggle("뜻 보기", `${wordPartOfSpeech(v.word, v.meaning, v.pos)} · ${v.meaning || "뜻 미등록 - 직접 채워 보세요"}`, !v.meaning),
+      buildVocabMeaningToggle(v),
       (() => {
         const sentence = document.createElement("div");
         sentence.className = "vd-ex";
@@ -1058,6 +1055,39 @@ function savedSentenceTranslation(item) {
 }
 
 function vocabTranslation(vocab) { return savedSentenceTranslation(vocab); }
+
+// 뜻 보기 안에서만 품사 배지를 뜻과 분리해 표시한다.
+function buildVocabMeaningToggle(vocab) {
+  const host = document.createElement("div");
+  host.className = "vocab-reveal";
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "vocab-reveal-toggle";
+  const labelText = document.createElement("span");
+  labelText.className = "vocab-toggle-label";
+  labelText.textContent = "뜻 보기";
+  const valueText = document.createElement("span");
+  valueText.className = "vocab-toggle-value vocab-meaning-value";
+  const pos = document.createElement("span");
+  pos.className = "vocab-pos";
+  pos.textContent = wordPartOfSpeech(vocab.word, vocab.meaning, vocab.pos);
+  const meaning = document.createElement("span");
+  meaning.textContent = vocab.meaning || "뜻 미등록 - 직접 채워 보세요";
+  valueText.append(pos, meaning);
+  const isEmpty = !vocab.meaning;
+  let revealed = false;
+  const paint = () => {
+    toggle.classList.toggle("is-revealed", revealed);
+    toggle.classList.toggle("vd-empty", revealed && isEmpty);
+    toggle.setAttribute("aria-expanded", String(revealed));
+    toggle.setAttribute("aria-label", revealed ? `${pos.textContent} · ${meaning.textContent}` : "뜻 보기");
+  };
+  toggle.onclick = () => { revealed = !revealed; paint(); };
+  paint();
+  toggle.append(labelText, valueText);
+  host.appendChild(toggle);
+  return host;
+}
 
 // 뜻·해석을 아래에 펼치지 않고, 보기 바 자체의 글자로 교체한다.
 function buildInlineToggle(label, value, isEmpty) {
