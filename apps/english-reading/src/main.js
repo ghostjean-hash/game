@@ -77,7 +77,7 @@ function saveListScroll(courseId, scrollTop) {
   positions[courseId] = scrollTop;
   store.set("listScroll", positions);
 }
-const getVocab = () => store.get("vocab", []); // [{ wordKey, word, meaning, sentence, passageId, passageTitle }]
+const getVocab = () => store.get("vocab", []); // [{ wordKey, word, meaning, pos, sentence, passageId, passageTitle }]
 const getSavedSentences = () => store.get("savedSentences", []); // [{ key, text, passageId, passageTitle, level, topic, sentenceIndex }]
 const getSettings = () => ({ chunks: true, words: true, scope: true, ...(store.get("settings", {}) || {}) });
 
@@ -718,12 +718,27 @@ function collectWord(target, s, passage) {
     wordKey: key,
     word: target.word,
     meaning: target.meaning,
+    pos: wordPartOfSpeech(target.word, target.meaning, target.pos),
     sentence: s.text,
     translation: s.naturalTranslation,
     passageId: passage.id,
     passageTitle: passage.titleKr,
   });
   store.set("vocab", vocab);
+}
+
+// 단어장용 학습 분류. 여러 낱말은 품사 하나로 축소하지 않고 "표현"으로 보여 준다.
+// 콘텐츠에 명시한 pos가 생기면 그 값을 우선하되, 기존 저장 단어도 뜻·형태로 안전하게 분류한다.
+function wordPartOfSpeech(word, meaning, explicitPos) {
+  if (explicitPos) return explicitPos;
+  const text = String(word || "").trim();
+  const kr = String(meaning || "").trim();
+  if (/\s/.test(text)) return "표현";
+  if (/ly$/i.test(text)) return "부사";
+  if (/(하다|되다|이다|시키다|하다,|다\)|다$)/.test(kr)) return "동사";
+  if (/(적인|스러운|로운|한|있는|없는|진|진다|진,)$/.test(kr) || /(ous|ful|less|able|ive|al)$/i.test(text)) return "형용사";
+  if (/(게|히)$/.test(kr)) return "부사";
+  return "명사";
 }
 
 // 검토 후 공개되는 끊어 읽기 해석 (영-한 쌍, 위→아래 슬라이드).
@@ -1009,7 +1024,7 @@ function renderVocab() {
     detail.className = "vocab-detail vocab-study-detail";
     const translation = vocabTranslation(v);
     detail.append(
-      buildInlineToggle("뜻 보기", v.meaning || "뜻 미등록 - 직접 채워 보세요", !v.meaning),
+      buildInlineToggle("뜻 보기", `${wordPartOfSpeech(v.word, v.meaning, v.pos)} · ${v.meaning || "뜻 미등록 - 직접 채워 보세요"}`, !v.meaning),
       (() => {
         const sentence = document.createElement("div");
         sentence.className = "vd-ex";
