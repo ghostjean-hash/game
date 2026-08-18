@@ -51,7 +51,7 @@ export const ANIM = {
   PRAISE_MS: 1100,      // 연속 응원 문구 노출 시간
   RESULT_DELAY_MS: 900, // 변신 후 결과 화면 전환까지
   SPARKLE_STEP_MS: 60,  // 줄 완성 파도 반짝의 칸별 순차 지연
-  MARK_STEP_MS: 100,    // 힌트 자동 확정을 눈으로 따라갈 수 있는 칸별 순차 지연(파도)
+  MARK_STEP_MS: 40,     // 힌트 눌러 X 자동 채울 때 칸별 순차 지연(파도)
 };
 
 // 연속 정답 응원 문구(칭찬). 저학년 즉각 격려.
@@ -59,3 +59,4 @@ export const PRAISE = ['좋아요', '잘한다', '척척!', '멋져요', '거의
 
 // 연속 응원이 뜨기 시작하는 줄 완성 연속 횟수.
 export const PRAISE_STREAK = 3;
+
