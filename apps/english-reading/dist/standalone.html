@@ -64631,7 +64631,7 @@ function renderVocab() {
     detail.className = "vocab-detail vocab-study-detail";
     const translation = vocabTranslation(v);
     detail.append(
-      buildInlineToggle("뜻 보기", v.meaning || "뜻 미등록 - 직접 채워 보세요", !v.meaning),
+      buildInlineToggle("뜻 보기", `${wordPartOfSpeech(v.word, v.meaning, v.pos)} · ${v.meaning || "뜻 미등록 - 직접 채워 보세요"}`, !v.meaning),
       (() => {
         const sentence = document.createElement("div");
         sentence.className = "vd-ex";
