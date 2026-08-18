@@ -46,13 +46,17 @@ export function applyState(boardEl, board, solution) {
   let i = 0;
   for (let r = 0; r < board.size; r++) {
     for (let c = 0; c < board.size; c++) {
-      const st = board.cells[r][c];
-      const el = cells[i++];
-      el.classList.toggle('filled', st === CELL.FILLED);
-      el.classList.toggle('marked', st === CELL.MARKED);
-      el.classList.toggle('wrong', st === CELL.FILLED && !!solution && solution[r][c] === false);
+      applyCellState(cells[i++], board.cells[r][c], solution?.[r]?.[c]);
     }
   }
+}
+
+// 한 칸만 상태를 반영한다. 자동 확정의 순차 채움 연출에서 나머지 칸을 미리 보이지 않게 한다.
+export function applyCellState(el, state, solutionCell) {
+  if (!el) return;
+  el.classList.toggle('filled', state === CELL.FILLED);
+  el.classList.toggle('marked', state === CELL.MARKED);
+  el.classList.toggle('wrong', state === CELL.FILLED && solutionCell === false);
 }
 
 // 방금 칠한 칸에 톡 튀는 피드백(잠깐).

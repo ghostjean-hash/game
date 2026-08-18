@@ -12,7 +12,7 @@ import {
 import { lineFlags, completedCount } from './core/lines.js';
 import { starsFor } from './core/stars.js';
 import {
-  renderClues, applyClueDim, renderBoard, applyState, revealColors,
+  renderClues, applyClueDim, renderBoard, applyState, applyCellState, revealColors,
   setCursor, popCell, waveHighlight, pointFinger, showDragCount, hideDragCount,
   markDragRun, clearDragRun, clearWaves, markFlow,
 } from './render/boardView.js';
@@ -305,8 +305,8 @@ function fitBoard(reset = true) {
 }
 
 // 화면 갱신: 셀 상태 + 완성 줄 흐리게 + 별 예고 + 실수 + 중도 저장.
-function refresh() {
-  applyState(boardEl, cur.board, cur.solution);
+function refresh(renderCells = true) {
+  if (renderCells) applyState(boardEl, cur.board, cur.solution);
   applyClueDim(el('col-clues'), el('row-clues'), lineFlags(cur.board, cur.clues));
   updateStarPreview();
   updateMistake();
@@ -461,7 +461,8 @@ function fillLineMarks(type, idx, { recordHistory = true } = {}) {
   if (result.board === before) return false;
   if (recordHistory) pushHistory();
   cur.board = result.board;
-  refresh();
+  // 잠금·저장은 즉시 반영하되, 보드는 기존처럼 한 칸씩 채워 보여 준다.
+  refresh(false);
   updateFinger();
   sound.play(result.action);
   const puzzleId = cur.puzzle.id;
@@ -469,6 +470,8 @@ function fillLineMarks(type, idx, { recordHistory = true } = {}) {
   result.cells.forEach(([r, c], k) => {
     setTimeout(() => {
       if (!cur || cur.puzzle.id !== puzzleId) return;
+      const cell = boardEl.children[r * cur.puzzle.size + c];
+      applyCellState(cell, cur.board.cells[r][c], cur.solution[r][c]);
       if (result.action === 'mark') markFlow(boardEl, r, c, cur.puzzle.size);
       else popCell(boardEl, r, c, cur.puzzle.size);
     }, k * ANIM.MARK_STEP_MS);
