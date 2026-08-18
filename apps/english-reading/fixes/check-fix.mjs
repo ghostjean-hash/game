@@ -3,9 +3,9 @@
 // 사용: node check-fix.mjs <수정한 json 경로>
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { validatePassage, lintPassage } from "/Users/ghostjin/game/apps/english-reading/src/core/validate.js";
-import { chunkViolations } from "/Users/ghostjin/game/apps/english-reading/src/core/chunking.js";
-import { tokenize } from "/Users/ghostjin/game/apps/english-reading/src/core/tokenize.js";
+import { validatePassage, lintPassage } from "../src/core/validate.js";
+import { chunkViolations } from "../src/core/chunking.js";
+import { tokenize } from "../src/core/tokenize.js";
 
 const path = process.argv[2];
 if (!path) { console.error("사용: node check-fix.mjs <파일경로>"); process.exit(2); }

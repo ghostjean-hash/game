@@ -2426,21 +2426,21 @@
     ]
    },
    {
-    "text": "The maker had cut the bottom off the vertical axis on purpose.",
+    "text": "The maker had started the vertical axis at forty on purpose.",
     "chunks": [
      {
-      "en": "The maker had cut the bottom",
-      "kr": "만든 사람이 아래쪽을 잘라 냈다"
+      "en": "The maker had started the vertical axis",
+      "kr": "만든 사람이 세로축을 시작하게 했다"
      },
      {
-      "en": "off the vertical axis on purpose.",
-      "kr": "일부러 세로축에서"
+      "en": "at forty on purpose.",
+      "kr": "일부러 40에서"
      }
     ],
-    "naturalTranslation": "만든 사람이 세로축의 아래쪽을 일부러 잘라 낸 것이었다.",
+    "naturalTranslation": "만든 사람이 세로축을 일부러 40에서 시작하게 한 것이었다.",
     "wordOrderPoint": {
-     "title": "과거완료로 더 앞선 일을 말하기",
-     "explanation": "had cut은 그래프를 본 시점보다 먼저 벌어진 일임을 나타냅니다."
+     "title": "동사 뒤에 축과 시작값을 차례로 놓기",
+     "explanation": "started 뒤에 무엇을 시작했는지 the vertical axis를 놓고, at forty로 시작값을 덧붙입니다."
     },
     "breakRules": {
      "allowed": [
@@ -2459,23 +2459,23 @@
        "reason": "과거완료의 had와 과거분사 cut은 한 덩어리라 갈라 읽지 않습니다."
       },
       {
-       "boundary": 4,
-       "reason": "동사 cut과 목적어 the bottom을 갈라 읽지 않습니다."
+      "boundary": 3,
+      "reason": "동사 started와 목적어 the vertical axis를 갈라 읽지 않습니다."
       },
       {
-       "boundary": 6,
-       "reason": "전치사 off와 목적어 the vertical axis를 갈라놓지 않습니다."
+      "boundary": 7,
+      "reason": "전치사 at과 시작값 forty를 갈라놓지 않습니다."
       }
      ]
     },
     "grammar": [
      {
       "label": "과거완료 had + 과거분사",
-      "note": "had cut - 앞선 과거에 이미 해 둔 일을 나타냅니다."
+      "note": "had started - 그래프를 본 시점보다 먼저 세로축을 설정한 일을 나타냅니다."
      },
      {
-      "label": "구문 cut A off B",
-      "note": "cut the bottom off the vertical axis - 무엇에서 무엇을 잘라 냈는지 off로 밝힙니다."
+      "label": "start A at B",
+      "note": "started the vertical axis at forty - 축의 시작값을 40으로 정했음을 나타냅니다."
      },
      {
       "label": "방식 표현 on purpose",
@@ -2494,72 +2494,69 @@
     ]
    },
    {
-    "text": "By leaving out the lower half, the graph made a tiny gap look huge.",
+    "text": "By starting at forty, the graph made a small gap look huge.",
     "chunks": [
      {
-      "en": "By leaving out the lower half,",
-      "kr": "아래쪽 절반을 빼 버림으로써"
+      "en": "By starting at forty,",
+      "kr": "40에서 시작함으로써"
      },
      {
-      "en": "the graph made a tiny gap look huge.",
-      "kr": "그 그래프는 작은 차이가 커 보이게 만들었다"
+      "en": "the graph made a small gap look huge.",
+      "kr": "그 그래프는 작은 차이가 아주 커 보이게 만들었다"
      }
     ],
-    "naturalTranslation": "아래쪽 절반을 빼 버림으로써, 그 그래프는 작은 차이를 아주 커 보이게 만들었다.",
+    "naturalTranslation": "40에서 시작함으로써, 그 그래프는 작은 차이가 아주 커 보이게 만들었다.",
     "wordOrderPoint": {
-     "title": "make + 목적어 + 동사원형",
-     "explanation": "made a tiny gap look huge - make 뒤 목적어 다음에 to 없는 동사원형 look이 옵니다."
+     "title": "수단을 앞에, 결과를 뒤에 놓기",
+     "explanation": "By starting at forty로 방법을 먼저 밝히고, 그 결과를 the graph made 이하에 이어 말합니다."
     },
     "breakRules": {
-     "allowed": [],
+     "allowed": [
+      {
+       "boundary": 4,
+       "reason": "문두 By구가 끝난 뒤에서는 끊어 읽어도 자연스럽습니다."
+      }
+     ],
      "discouraged": [
       {
-       "boundary": 2,
-       "reason": "leave out은 하나의 구동사라 leaving과 out을 갈라 읽지 않습니다."
+      "boundary": 1,
+      "reason": "동명사 starting과 뒤의 시작값을 갈라 읽지 않습니다."
       },
       {
-       "boundary": 3,
-       "reason": "구동사 leaving out과 목적어 the lower half를 갈라 읽지 않습니다."
+      "boundary": 2,
+      "reason": "전치사 at과 시작값 forty를 갈라 읽지 않습니다."
       },
       {
-       "boundary": 8,
-       "reason": "동사 made와 목적어 a tiny gap을 갈라 읽지 않습니다."
+      "boundary": 7,
+      "reason": "동사 made와 목적어 a small gap을 갈라 읽지 않습니다."
       },
       {
-       "boundary": 11,
-       "reason": "목적어 a tiny gap과 그 뒤 원형부정사 look은 한 덩어리라 갈라 읽지 않습니다."
+      "boundary": 10,
+      "reason": "목적어 a small gap과 그 뒤 원형부정사 look은 한 덩어리라 갈라 읽지 않습니다."
       }
      ]
     },
     "grammar": [
      {
       "label": "사역동사 make + 목적어 + 원형부정사",
-      "note": "made a tiny gap look huge - look 앞에 to를 넣지 않습니다."
+      "note": "made a small gap look huge - look 앞에 to를 넣지 않습니다."
      },
      {
       "label": "전치사 By + 동명사",
-      "note": "By leaving out - '~함으로써'라는 수단을 나타냅니다."
-     },
-     {
-      "label": "구동사 leave out",
-      "note": "leave out - '빼놓다, 빠뜨리다'로 out까지 한 덩어리입니다."
+      "note": "By starting at forty - '~에서 시작함으로써'라는 수단을 나타냅니다."
      }
     ],
     "words": [
-     {
-      "word": "leaving out",
-      "meaning": "빼 버리는 것, 빠뜨리는 것"
-     },
      {
       "word": "gap",
       "meaning": "차이, 벌어진 간격"
      }
     ],
     "insight": {
-     "formula": "[By + 동명사 leaving out the lower half], + [주어 the graph] + [동사 made] + [목적어 a tiny gap] + [원형부정사 look huge]",
-     "why": "make는 사역동사라 목적어 뒤에 to 없는 동사원형을 데려옵니다. 그래서 a tiny gap이 '커 보이게 되는' 주체가 됩니다.",
-     "wrong": "By leaving out the lower half, the graph made a tiny gap to look huge.",
-     "natural": "아래쪽 절반을 빼 버림으로써, 그 그래프는 작은 차이를 아주 커 보이게 만들었다."
+     "formula": "[By + 동명사 starting at forty], + [주어 the graph] + [동사 made] + [목적어 a small gap] + [원형부정사 look huge]",
+     "why": "make는 사역동사라 목적어 뒤에 to 없는 동사원형을 데려옵니다. 그래서 a small gap이 '아주 커 보이게 되는' 대상이 됩니다.",
+     "wrong": "By starting at forty, the graph made a small gap to look huge.",
+     "natural": "40에서 시작함으로써, 그 그래프는 작은 차이가 아주 커 보이게 만들었다."
     }
    },
    {
@@ -3204,65 +3201,69 @@
     ]
    },
    {
-    "text": "Hot weather drives both habits, so we can rule out a direct link.",
+    "text": "Hot weather may help explain both patterns, but it does not settle the question.",
     "chunks": [
      {
-      "en": "Hot weather drives both habits,",
-      "kr": "더운 날씨가 두 행동을 모두 밀어붙인다"
+      "en": "Hot weather may help explain both patterns,",
+      "kr": "더운 날씨가 두 패턴을 모두 설명하는 데 도움이 될 수 있지만"
      },
      {
-      "en": "so we can rule out a direct link.",
-      "kr": "그래서 우리는 직접적인 연결을 배제할 수 있다"
+      "en": "but it does not settle the question.",
+      "kr": "그것만으로 답이 정해지는 것은 아니다"
      }
     ],
-    "naturalTranslation": "더운 날씨가 두 행동을 모두 밀어붙이니, 우리는 둘 사이의 직접적인 연결을 배제할 수 있다.",
+    "naturalTranslation": "더운 날씨가 두 패턴을 모두 설명하는 데 도움이 될 수 있지만, 그것만으로 직접적인 연결이 있는지에 대한 답이 정해지는 것은 아니다.",
     "wordOrderPoint": {
-     "title": "결과를 잇는 so절",
-     "explanation": "앞 절이 근거가 되고, so 뒤에 그래서 내릴 수 있는 판단을 이어 붙입니다."
+     "title": "가능성을 먼저, 한계를 뒤에 붙이기",
+     "explanation": "may help explain으로 가능한 설명을 먼저 말하고, but 뒤에 그것만으로 결론낼 수 없다는 한계를 덧붙입니다."
     },
     "breakRules": {
      "allowed": [],
      "discouraged": [
       {
-       "boundary": 1,
-       "reason": "짧은 주어 Hot weather와 동사 drives를 갈라놓지 않습니다."
+      "boundary": 1,
+      "reason": "짧은 주어 Hot weather와 조동사 may를 갈라놓지 않습니다."
       },
       {
-       "boundary": 2,
-       "reason": "동사 drives와 목적어 both habits를 갈라 읽지 않습니다."
+      "boundary": 2,
+      "reason": "조동사 may와 동사 help를 갈라 읽지 않습니다."
       },
       {
-       "boundary": 8,
-       "reason": "rule out은 하나의 구동사라 rule과 out을 갈라 읽지 않습니다."
+      "boundary": 3,
+      "reason": "help와 뒤의 동사 explain을 갈라 읽지 않습니다."
       },
       {
-       "boundary": 9,
-       "reason": "구동사 rule out과 목적어 a direct link를 갈라 읽지 않습니다."
+      "boundary": 9,
+      "reason": "부정의 do와 not을 갈라 읽지 않습니다."
+     },
+     {
+      "boundary": 11,
+      "reason": "동사 settle과 목적어 the question을 갈라 읽지 않습니다."
       }
      ]
     },
     "grammar": [
      {
-      "label": "결과 접속사 so",
-      "note": "so we can rule out - 앞 내용이 근거, so 뒤가 그로부터 나온 판단입니다."
+      "label": "조동사 may + 동사원형",
+      "note": "may help explain - 가능한 설명 하나를 조심스럽게 제시합니다."
      },
      {
-      "label": "조동사 can + 동사원형",
-      "note": "can rule out - '배제할 수 있다'는 가능을 나타냅니다."
+      "label": "대조 접속사 but",
+      "note": "앞의 가능한 설명과 뒤의 결론 보류를 대비해 잇습니다."
      },
      {
-      "label": "수량 형용사 both",
-      "note": "both habits - 두 가지 모두를 한꺼번에 가리킵니다."
+      "label": "does not + 동사원형",
+      "note": "does not settle - 한 가지 설명만으로 답이 확정되지는 않음을 나타냅니다."
      }
     ],
     "words": [
      {
-      "word": "rule out",
-      "meaning": "가능성을 배제하다, 아니라고 잘라 내다"
+      "word": "patterns",
+      "meaning": "반복되어 나타나는 양상, 패턴"
      },
      {
-      "word": "direct link",
-      "meaning": "직접적인 연결"
+      "word": "settle the question",
+      "meaning": "그 문제의 답을 확정하다"
      }
     ]
    },
