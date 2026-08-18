@@ -1015,16 +1015,19 @@ function renderVocab() {
     row.className = "vocab-row";
     const word = document.createElement("div");
     word.className = "vocab-word"; word.textContent = v.word;
+    const pos = document.createElement("span");
+    pos.className = "vocab-pos";
+    pos.textContent = wordPartOfSpeech(v.word, v.meaning, v.pos);
     const del = document.createElement("button");
     del.type = "button"; del.className = "vocab-del"; del.innerHTML = ICON.close; del.setAttribute("aria-label", "단어 삭제");
-    row.append(word, del);
+    row.append(word, pos, del);
 
     // 뜻·해석은 먼저 감춘다. 원문 문장은 뜻과 해석을 잇는 기준점으로 항상 보인다.
     const detail = document.createElement("div");
     detail.className = "vocab-detail vocab-study-detail";
     const translation = vocabTranslation(v);
     detail.append(
-      buildInlineToggle("뜻 보기", `${wordPartOfSpeech(v.word, v.meaning, v.pos)} · ${v.meaning || "뜻 미등록 - 직접 채워 보세요"}`, !v.meaning),
+      buildInlineToggle("뜻 보기", v.meaning || "뜻 미등록 - 직접 채워 보세요", !v.meaning),
       (() => {
         const sentence = document.createElement("div");
         sentence.className = "vd-ex";
