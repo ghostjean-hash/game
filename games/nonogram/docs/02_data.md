@@ -107,7 +107,7 @@ localStorage 키는 래퍼가 `gg.nonogram.<key>`로 네임스페이스한다. �
 | `tutorialDone` | `boolean` | 튜토리얼 3판 완료 |
 | `mode` | `'fill' \| 'mark'` | 마지막 입력 모드(편의 복원) |
 | `muted` | `boolean` | 사운드 음소거 여부 |
-| `inprogress` | `{ [puzzleId]: { size, cells, mistakes, mistakenKeys } }` | 풀던 판 중도 저장(완성 시 해당 항목 삭제) |
+| `inprogress` | `{ [puzzleId]: { size, cells, lockedCells, mistakes, mistakenKeys } }` | 풀던 판 중도 저장(완성 시 해당 항목 삭제). `lockedCells`는 회색 힌트 자동 확정으로 고정된 칸의 불리언 격자이며, 이전 저장에는 전부 `false`로 보정한다. |
 
 - 진행 중 판(중도 저장)은 1차 범위 제외(클리어 결과만 영속). 재진입 시 빈 격자부터.
 - 스키마 변경 시 이 표가 SSOT이며 마이그레이션은 이후 필요 시 추가.

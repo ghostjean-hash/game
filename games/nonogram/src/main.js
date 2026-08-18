@@ -6,7 +6,7 @@ import { CELL, MODE, MAX_STARS, ANIM, PRAISE, PRAISE_STREAK, CELL_FIT, ZOOM } fr
 import { PUZZLES } from './data/puzzles.js';
 import { makeClues } from './core/hints.js';
 import {
-  createBoard, toSolution, setCell, isSolved,
+  createBoard, toSolution, setCell, isSolved, isLocked, autoCompleteLine,
   revealLine, serializeBoard, deserializeBoard,
 } from './core/board.js';
 import { lineFlags, completedCount } from './core/lines.js';
@@ -345,6 +345,7 @@ function isCorrectFilled(r, c) {
 // 칠하기 모드: 빈 칸·맞은 칸은 fill(맞은 칸은 무변화라 유지되며 드래그가 이어짐), 틀린 칸(붉은)만 erase.
 // 표시 모드: X 토글(있으면 erase, 없으면 mark).
 function decideAction(r, c) {
+  if (isLocked(cur.board, r, c)) return null;
   const st = cur.board.cells[r][c];
   if (cur.mode === MODE.FILL) {
     if (st === CELL.FILLED) return cur.solution[r][c] === false ? 'erase' : 'fill';
@@ -355,6 +356,7 @@ function decideAction(r, c) {
 
 function applyAction(r, c) {
   if (!cur.dragAction) return; // 잠긴 맞은 칸(무동작)
+  if (isLocked(cur.board, r, c)) return; // 힌트 자동 확정 칸도 어떤 모드에서도 고정.
   // 지우기 드래그가 맞게 칠한 칸을 지나가도 그 칸은 건너뛴다(잠금 유지).
   if (cur.dragAction === 'erase' && isCorrectFilled(r, c)) return;
   const target = cur.dragAction === 'fill' ? CELL.FILLED
@@ -450,39 +452,74 @@ function useHelp() {
   highlightNewCompletions(beforeFlags, true);
 }
 
-// 힌트 숫자를 누르면: 그 줄이 완성됐을 때만 남은 빈 칸을 자동으로 X로 채운다.
-// 아직 못 맞춘 줄은 아무 동작도 하지 않는다(type='row'|'col', idx=줄 번호).
-function fillLineMarks(type, idx) {
-  if (!cur) return;
-  const n = cur.puzzle.size;
-  // "맞춘 줄" 판정을 정답 기준으로: 정답 칠칸은 모두 칠했고 잘못 칠한 칸이 없어야 한다.
-  // (빈 줄=힌트 0 은 칠할 칸이 없으므로, 잘못 칠한 게 없으면 맞춘 것으로 본다.)
-  for (let i = 0; i < n; i++) {
-    const r = type === 'row' ? idx : i;
-    const c = type === 'col' ? idx : i;
-    const filled = cur.board.cells[r][c] === CELL.FILLED;
-    if (filled !== (cur.solution[r][c] === true)) return; // 아직 못 맞춘 줄이면 무동작
-  }
-  // 남은 빈 칸 목록을 줄 방향 순서로 모은다(누른 쪽=힌트에서 흘러가는 파도).
-  const empties = [];
-  for (let i = 0; i < n; i++) {
-    const r = type === 'row' ? idx : i;
-    const c = type === 'col' ? idx : i;
-    if (cur.board.cells[r][c] === CELL.EMPTY) empties.push([r, c]);
-  }
-  if (!empties.length) return; // 채울 빈 칸이 없으면 무동작
-  pushHistory();
-  sound.play('mark');
-  // 칸별로 순차 지연을 줘 X가 파도처럼 흘러가며 채워지게 한다.
-  empties.forEach(([r, c], k) => {
+// 회색 힌트 클릭 자동 확정: 남은 칸이 전부 빈칸이면 X, 전부 칠칸이면 칠하기로 고정한다.
+// 직접 표시한 X는 건드리지 않아 계속 수정할 수 있다(type='row'|'col', idx=줄 번호).
+function fillLineMarks(type, idx, { recordHistory = true } = {}) {
+  if (!cur) return false;
+  const before = cur.board;
+  const result = autoCompleteLine(before, cur.solution, type, idx);
+  if (result.board === before) return false;
+  if (recordHistory) pushHistory();
+  cur.board = result.board;
+  refresh();
+  updateFinger();
+  sound.play(result.action);
+  const puzzleId = cur.puzzle.id;
+  // 이미 상태는 확정해 입력을 즉시 막고, 연출만 힌트에서 보드 쪽으로 순차 재생한다.
+  result.cells.forEach(([r, c], k) => {
     setTimeout(() => {
-      if (!cur) return;
-      cur.board = setCell(cur.board, r, c, CELL.MARKED, cur.solution);
-      applyState(boardEl, cur.board, cur.solution);
-      markFlow(boardEl, r, c, cur.puzzle.size);
+      if (!cur || cur.puzzle.id !== puzzleId) return;
+      if (result.action === 'mark') markFlow(boardEl, r, c, cur.puzzle.size);
+      else popCell(boardEl, r, c, cur.puzzle.size);
     }, k * ANIM.MARK_STEP_MS);
   });
-  setTimeout(() => { if (cur) refresh(); }, empties.length * ANIM.MARK_STEP_MS + 20);
+  if (isSolved(cur.board, cur.solution)) win();
+  return true;
+}
+
+// 힌트도 보드처럼 한 번 누른 뒤 쭉 훑어 여러 줄을 처리한다. 한 스트로크의 이전 상태는
+// 한 번만 남겨 되돌리기 한 번으로 모두 취소한다. 행 힌트는 위·아래, 열 힌트는 좌·우만 따른다.
+const clueDrag = { active: false, type: null, pointerId: null, seen: null, before: null, changed: false };
+function clueLineAt(type, target) {
+  const selector = type === 'row' ? '.clue-row' : '.clue-col';
+  const line = target instanceof Element ? target.closest(selector) : null;
+  const container = el(type === 'row' ? 'row-clues' : 'col-clues');
+  return line && line.parentElement === container ? [...container.children].indexOf(line) : -1;
+}
+function applyClueDragLine(type, target) {
+  const idx = clueLineAt(type, target);
+  if (idx < 0 || clueDrag.seen.has(idx)) return;
+  clueDrag.seen.add(idx);
+  if (fillLineMarks(type, idx, { recordHistory: false })) clueDrag.changed = true;
+}
+function onCluePointerDown(type, e) {
+  if (e.button !== 0 || !cur) return;
+  clueDrag.active = true;
+  clueDrag.type = type;
+  clueDrag.pointerId = e.pointerId;
+  clueDrag.seen = new Set();
+  clueDrag.before = cur.board;
+  clueDrag.changed = false;
+  applyClueDragLine(type, e.target);
+  e.preventDefault();
+}
+function onCluePointerMove(e) {
+  if (!clueDrag.active || e.pointerId !== clueDrag.pointerId) return;
+  applyClueDragLine(clueDrag.type, document.elementFromPoint(e.clientX, e.clientY));
+  e.preventDefault();
+}
+function onCluePointerEnd(e) {
+  if (!clueDrag.active || e.pointerId !== clueDrag.pointerId) return;
+  if (clueDrag.changed) {
+    cur.history.push(clueDrag.before);
+    if (cur.history.length > 200) cur.history.shift();
+  }
+  clueDrag.active = false;
+  clueDrag.type = null;
+  clueDrag.pointerId = null;
+  clueDrag.seen = null;
+  clueDrag.before = null;
+  clueDrag.changed = false;
 }
 
 function onPaintStart(r, c) {
@@ -638,15 +675,12 @@ function init() {
   setupFullscreen({ button: el('fs-toggle') });
   el('undo-btn').addEventListener('click', undo);
   el('help-btn').addEventListener('click', useHelp);
-  // 힌트 숫자 누르면 완성된 줄의 빈 칸을 자동 X로.
-  el('row-clues').addEventListener('click', (e) => {
-    const line = e.target.closest('.clue-row');
-    if (line) fillLineMarks('row', [...el('row-clues').children].indexOf(line));
-  });
-  el('col-clues').addEventListener('click', (e) => {
-    const line = e.target.closest('.clue-col');
-    if (line) fillLineMarks('col', [...el('col-clues').children].indexOf(line));
-  });
+  // 힌트도 탭과 드래그를 함께 받는다. 한 번의 훑기는 한 번의 되돌리기로 묶인다.
+  el('row-clues').addEventListener('pointerdown', (e) => onCluePointerDown('row', e));
+  el('col-clues').addEventListener('pointerdown', (e) => onCluePointerDown('col', e));
+  document.addEventListener('pointermove', onCluePointerMove, { passive: false });
+  document.addEventListener('pointerup', onCluePointerEnd);
+  document.addEventListener('pointercancel', onCluePointerEnd);
   document.addEventListener('keydown', onKey);
   // 창 크기·방향(가로/세로 회전)·전체화면 전환이 바뀌면 격자를 다시 화면에 맞춘다.
   window.addEventListener('resize', () => { fitBoard(false); updateFinger(); });

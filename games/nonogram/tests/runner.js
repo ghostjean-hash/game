@@ -4,7 +4,7 @@
 import { lineClue, rowClues, colClues, makeClues, isFilled } from '../src/core/hints.js';
 import { solve, verifyPuzzle } from '../src/core/solver.js';
 import {
-  createBoard, toSolution, toggleFill, toggleMark, setCell, isSolved,
+  createBoard, toSolution, toggleFill, toggleMark, setCell, isSolved, isLocked, autoCompleteLine,
   revealLine, serializeBoard, deserializeBoard,
 } from '../src/core/board.js';
 import { lineFlags, completedCount } from '../src/core/lines.js';
@@ -109,6 +109,36 @@ test('setCell: 드래그 설정', () => {
   eq(b1.cells[0][0], CELL.FILLED);
   eq(setCell(b1, 0, 0, CELL.FILLED, sol), b1, '같은 상태면 무변화(동일 참조)');
 });
+test('autoCompleteLine: 완성 줄의 남은 빈칸을 잠긴 X로 확정', () => {
+  const sol = toSolution([[1, 0, 1]]);
+  let b = createBoard(3);
+  b = setCell(b, 0, 0, CELL.FILLED, sol);
+  b = setCell(b, 0, 2, CELL.FILLED, sol);
+  const result = autoCompleteLine(b, sol, 'row', 0);
+  eq(result.action, 'mark');
+  eqArr(result.cells, [[0, 1]]);
+  eq(result.board.cells[0][1], CELL.MARKED);
+  eq(isLocked(result.board, 0, 1), true);
+  eq(toggleFill(result.board, 0, 1, sol), result.board, '자동 X는 칠하기로 덮지 못함');
+});
+test('autoCompleteLine: 남은 칸이 전부 칠칸이면 잠긴 칠하기로 확정', () => {
+  const sol = toSolution([[1, 1, 1]]); // 힌트 3: 빈 판에서도 전부 확정 가능
+  let b = createBoard(3);
+  b = setCell(b, 0, 0, CELL.FILLED, sol); // 일부를 이미 칠한 경우도 포함
+  const result = autoCompleteLine(b, sol, 'row', 0);
+  eq(result.action, 'fill');
+  eqArr(result.cells, [[0, 1], [0, 2]]);
+  eqArr(result.board.cells[0], [CELL.FILLED, CELL.FILLED, CELL.FILLED]);
+  eq(isLocked(result.board, 0, 1), true);
+});
+test('autoCompleteLine: 직접 입력한 X는 잠그지 않아 다시 칠할 수 있다', () => {
+  const sol = toSolution([[1, 1]]);
+  let b = createBoard(2);
+  b = toggleMark(b, 0, 0);
+  eq(isLocked(b, 0, 0), false);
+  b = toggleFill(b, 0, 0, sol);
+  eq(b.cells[0][0], CELL.FILLED);
+});
 test('isSolved: 칠함 여부만 정답과 일치하면 승리(X 무관)', () => {
   const grid = [[1, 0], [1, 1]];
   const sol = toSolution(grid);
@@ -157,6 +187,7 @@ test('serialize/deserialize: 라운드트립 보존', () => {
   const round = deserializeBoard(serializeBoard(b));
   eq(round.size, 2); eq(round.mistakes, 1);
   eq(round.cells[0][1], CELL.FILLED);
+  eq(round.lockedCells.every((row) => row.every((v) => v === false)), true, '예전 저장은 잠금 없음으로 보정');
   eq(deserializeBoard(null), null, '깨진 데이터는 null');
 });
 
