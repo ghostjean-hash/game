@@ -14,7 +14,7 @@ import { starsFor } from './core/stars.js';
 import {
   renderClues, applyClueDim, renderBoard, applyState, applyCellState, revealColors,
   setCursor, popCell, waveHighlight, pointFinger, showDragCount, hideDragCount,
-  markDragRun, clearDragRun, clearWaves, markFlow,
+  markDragRun, clearDragRun, clearWaves, lineSweep, setClueDragState,
 } from './render/boardView.js';
 import { renderMap } from './render/mapView.js';
 import { renderResult } from './render/resultView.js';
@@ -101,6 +101,8 @@ const COACH = {
 
 // --- 맵(그림 고르는 화면) ---
 function openMap() {
+  // 이어하기에서 시작 화면으로 돌아온 뒤 다시 시작을 누르면 정상 지도 흐름을 쓴다.
+  if (cur) cur.entry = 'map';
   renderMap(el('map-body'), progress, startPuzzle);
   frame.screens.go(SCREEN.SELECT);
 }
@@ -109,7 +111,7 @@ function openMap() {
 function resumeLast() {
   const saved = frame.save.readResume();
   const p = saved && PUZZLES.find((q) => q.id === saved.data?.id);
-  if (p) startPuzzle(p);
+  if (p) startPuzzle(p, { entry: 'resume' });
   else openMap();
 }
 
@@ -151,9 +153,10 @@ function loadInProgress(id, size) {
 }
 
 // --- 플레이 ---
-function startPuzzle(puzzle) {
+function startPuzzle(puzzle, { entry = 'map' } = {}) {
   cur = {
     puzzle,
+    entry,
     clues: makeClues(puzzle.grid),
     solution: toSolution(puzzle.grid),
     board: loadInProgress(puzzle.id, puzzle.size),
@@ -457,32 +460,46 @@ function useHelp() {
 function fillLineMarks(type, idx, { recordHistory = true } = {}) {
   if (!cur) return false;
   const before = cur.board;
-  const result = autoCompleteLine(before, cur.solution, type, idx);
+  const result = autoCompleteLine(before, cur.solution, cur.clues, type, idx);
   if (result.board === before) return false;
   if (recordHistory) pushHistory();
   cur.board = result.board;
-  // 잠금·저장은 즉시 반영하되, 보드는 기존처럼 한 칸씩 채워 보여 준다.
+  // 판정·저장은 즉시 반영하되, 보드는 줄 전체 파도가 각 칸을 지날 때만 갱신한다.
   refresh(false);
   updateFinger();
   sound.play(result.action);
   const puzzleId = cur.puzzle.id;
-  // 이미 상태는 확정해 입력을 즉시 막고, 연출만 힌트에서 보드 쪽으로 순차 재생한다.
-  result.cells.forEach(([r, c], k) => {
+  const changed = new Set(result.cells.map(([r, c]) => `${r},${c}`));
+  // 이미 있던 칠하기/X도 건너뛰지 않고 줄 전체를 훑는다.
+  result.path.forEach(([r, c], k) => {
     setTimeout(() => {
       if (!cur || cur.puzzle.id !== puzzleId) return;
-      const cell = boardEl.children[r * cur.puzzle.size + c];
-      applyCellState(cell, cur.board.cells[r][c], cur.solution[r][c]);
-      if (result.action === 'mark') markFlow(boardEl, r, c, cur.puzzle.size);
-      else popCell(boardEl, r, c, cur.puzzle.size);
+      if (changed.has(`${r},${c}`)) {
+        const cell = boardEl.children[r * cur.puzzle.size + c];
+        applyCellState(cell, cur.board.cells[r][c], cur.solution[r][c]);
+      }
+      lineSweep(boardEl, r, c, cur.puzzle.size);
     }, k * ANIM.MARK_STEP_MS);
   });
-  if (isSolved(cur.board, cur.solution)) win();
+  if (isSolved(cur.board, cur.solution)) {
+    setTimeout(() => {
+      if (cur && cur.puzzle.id === puzzleId && isSolved(cur.board, cur.solution)) win();
+    }, result.path.length * ANIM.MARK_STEP_MS);
+  }
   return true;
 }
 
 // 힌트도 보드처럼 한 번 누른 뒤 쭉 훑어 여러 줄을 처리한다. 한 스트로크의 이전 상태는
 // 한 번만 남겨 되돌리기 한 번으로 모두 취소한다. 행 힌트는 위·아래, 열 힌트는 좌·우만 따른다.
-const clueDrag = { active: false, type: null, pointerId: null, seen: null, before: null, changed: false };
+const clueDrag = {
+  active: false, type: null, pointerId: null, seen: null, before: null, changed: false,
+  activeIdx: -1, passed: [],
+};
+function paintClueDrag() {
+  setClueDragState(el('col-clues'), el('row-clues'), {
+    type: clueDrag.type, active: clueDrag.activeIdx, passed: clueDrag.passed,
+  });
+}
 function clueLineAt(type, target) {
   const selector = type === 'row' ? '.clue-row' : '.clue-col';
   const line = target instanceof Element ? target.closest(selector) : null;
@@ -491,24 +508,39 @@ function clueLineAt(type, target) {
 }
 function applyClueDragLine(type, target) {
   const idx = clueLineAt(type, target);
-  if (idx < 0 || clueDrag.seen.has(idx)) return;
+  if (idx < 0) return;
+  clueDrag.passed = clueDrag.activeIdx >= 0 && clueDrag.activeIdx !== idx ? [clueDrag.activeIdx] : [];
+  clueDrag.activeIdx = idx;
+  paintClueDrag();
+  if (clueDrag.seen.has(idx)) return;
   clueDrag.seen.add(idx);
   if (fillLineMarks(type, idx, { recordHistory: false })) clueDrag.changed = true;
 }
 function onCluePointerDown(type, e) {
-  if (e.button !== 0 || !cur) return;
+  // button 값은 마우스에서만 주 클릭 판별에 쓴다. 터치 포인터는 브라우저에 따라
+  // button을 -1로 보고할 수 있어 여기서 걸러지면 힌트 자동 확정이 시작되지 않는다.
+  if ((e.pointerType === 'mouse' && e.button !== 0) || !cur) return;
   clueDrag.active = true;
   clueDrag.type = type;
   clueDrag.pointerId = e.pointerId;
   clueDrag.seen = new Set();
   clueDrag.before = cur.board;
   clueDrag.changed = false;
+  clueDrag.activeIdx = -1;
+  clueDrag.passed = [];
   applyClueDragLine(type, e.target);
   e.preventDefault();
 }
 function onCluePointerMove(e) {
   if (!clueDrag.active || e.pointerId !== clueDrag.pointerId) return;
-  applyClueDragLine(clueDrag.type, document.elementFromPoint(e.clientX, e.clientY));
+  const target = document.elementFromPoint(e.clientX, e.clientY);
+  if (clueLineAt(clueDrag.type, target) < 0) {
+    clueDrag.activeIdx = -1;
+    clueDrag.passed = [];
+    paintClueDrag();
+  } else {
+    applyClueDragLine(clueDrag.type, target);
+  }
   e.preventDefault();
 }
 function onCluePointerEnd(e) {
@@ -523,6 +555,13 @@ function onCluePointerEnd(e) {
   clueDrag.seen = null;
   clueDrag.before = null;
   clueDrag.changed = false;
+  clueDrag.activeIdx = -1;
+  clueDrag.passed = [];
+  setClueDragState(el('col-clues'), el('row-clues'));
+}
+function onClueClick(type, e) {
+  const idx = clueLineAt(type, e.target);
+  if (idx >= 0) fillLineMarks(type, idx);
 }
 
 function onPaintStart(r, c) {
@@ -609,6 +648,12 @@ function nextPuzzle() {
   else openMap();
 }
 
+function leavePlay() {
+  // 이어하기는 지도를 거치지 않았으므로 한 칸 위가 시작 화면이다.
+  if (cur?.entry === 'resume') frame.screens.go(SCREEN.TITLE);
+  else frame.screens.back();
+}
+
 // --- 키보드(보조) ---
 function moveCursor(dr, dc) {
   const n = cur.puzzle.size;
@@ -666,7 +711,7 @@ function init() {
   el('mode-fill').addEventListener('click', () => setMode(MODE.FILL));
   el('mode-mark').addEventListener('click', () => setMode(MODE.MARK));
   // 플레이 화면의 왼쪽 위 화살표도 계단을 따른다 - 한 칸 위(지도)로만 간다.
-  el('play-back').addEventListener('click', () => frame.screens.back());
+  el('play-back').addEventListener('click', leavePlay);
   // 결과 카드 버튼. 이 게임은 "다시 하기"가 같은 그림을 또 푸는 것이 아니라 다음 그림으로
   // 넘어가는 흐름이라 그 자리 문구만 바꾼다(뜻이 다르므로, 규격 5.3 고정 문구 예외).
   frame.result.setActionLabel('retry', '다음 그림');
@@ -681,6 +726,10 @@ function init() {
   // 힌트도 탭과 드래그를 함께 받는다. 한 번의 훑기는 한 번의 되돌리기로 묶인다.
   el('row-clues').addEventListener('pointerdown', (e) => onCluePointerDown('row', e));
   el('col-clues').addEventListener('pointerdown', (e) => onCluePointerDown('col', e));
+  // 드래그를 지원하지 않는 터치 환경에서도 기존 탭 동작은 반드시 남긴다.
+  // pointerdown으로 이미 처리된 줄은 확정할 칸이 없어 이 보조 경로가 무동작이다.
+  el('row-clues').addEventListener('click', (e) => onClueClick('row', e));
+  el('col-clues').addEventListener('click', (e) => onClueClick('col', e));
   document.addEventListener('pointermove', onCluePointerMove, { passive: false });
   document.addEventListener('pointerup', onCluePointerEnd);
   document.addEventListener('pointercancel', onCluePointerEnd);
@@ -699,6 +748,11 @@ function init() {
   // 화면이 바뀔 때 옛 CSS가 쓰던 활성 표시를 함께 맞춘다. 이 게임의 레이아웃 규칙이
   // #screen-play.active 같은 선택자에 걸려 있어, 표시 판단은 프레임이 하되 그 결과만 알려준다.
   const syncLegacyActive = (now) => {
+    // 기기 뒤로가기도 이어하기의 왼쪽 위 화살표와 같은 곳(시작 화면)으로 보낸다.
+    if (now === SCREEN.SELECT && cur?.entry === 'resume') {
+      frame.screens.go(SCREEN.TITLE);
+      return;
+    }
     el('screen-map').classList.toggle('active', now === SCREEN.SELECT);
     el('screen-play').classList.toggle('active', now === SCREEN.PLAY || now === SCREEN.PAUSE || now === SCREEN.RESULT);
     if (now === SCREEN.TITLE) refreshTitle();

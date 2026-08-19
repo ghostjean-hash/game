@@ -13,7 +13,7 @@ nonogram/
 │   ├── core/           # 순수 게임 로직 (DOM/Canvas/window/document 금지)
 │   │   ├── hints.js    #   격자 → 행/열 힌트 생성
 │   │   ├── solver.js   #   줄 논리 솔버 + 유일해/추측불필요 검증 + 난이도
-│   │   ├── board.js    #   보드 상태(불변): 셀 토글·자동 확정 잠금, 승리/실수, 도움(한 줄 열기), 저장 직렬화
+│   │   ├── board.js    #   보드 상태(불변): 셀 토글·기계적 줄 자동입력·정답 잠금, 승리/실수, 도움(한 줄 열기), 저장 직렬화
 │   │   ├── lines.js    #   행/열 완성 판정(완성 줄 흐리게 + 칭찬)
 │   │   ├── stars.js    #   실수 → 별점 계산
 │   │   └── zoom.js     #   확대·이동 계산(전체 맞춤 셀 크기·배율 클램프·중심 유지 보정)
@@ -49,7 +49,7 @@ data  ←  core  ←  render / input  ←  main
 ## 3. 데이터 흐름
 
 1. `main.js`가 `puzzles.js`에서 퍼즐 선택 → `hints.js`로 행/열 힌트 생성.
-2. `board.js`가 빈 보드 상태 생성(불변). 입력이 올 때마다 새 상태 반환하며, 회색 힌트의 자동 확정은 `lockedCells`에 기록해 직접 입력 X와 구분한다.
+2. `board.js`가 빈 보드 상태 생성(불변). 입력이 올 때마다 새 상태를 반환한다. 힌트 자동 입력은 힌트와 현재 보드만으로 기계적으로 상태를 바꾸고, 그 결과가 실제 정답인 칸만 `lockedCells`에 기록한다.
 3. `input/boardInput.js`가 탭/드래그/키를 받아 board 액션(칠함/X/지움) 호출 → 새 상태.
    손가락이 둘로 늘면 `input/boardZoom.js`가 가로채 확대·이동으로 전환하고, 진행 중이던 드래그는 `boardInput.cancelDrag()`로 끝낸다(아주 짧았으면 `main.js`가 되돌린다).
 4. 상태가 바뀌면 `render/boardView.js`가 다시 그림. 승리 판정 시 `main.js`가 결과 화면으로 전환.

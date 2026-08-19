@@ -78,6 +78,25 @@ export function markFlow(boardEl, r, c, n) {
   el.classList.add('mark-flow');
 }
 
+// 힌트 자동 입력은 상태와 무관하게 줄 전체를 같은 파도로 훑는다.
+export function lineSweep(boardEl, r, c, n) {
+  const el = boardEl.children[r * n + c];
+  if (!el) return;
+  el.classList.remove('line-sweep');
+  void el.offsetWidth;
+  el.classList.add('line-sweep');
+}
+
+// 힌트 드래그: 현재 손가락 아래 줄은 눌림, 지나간 줄은 짧은 확정 반짝만 남긴다.
+export function setClueDragState(colEl, rowEl, { type = null, active = -1, passed = [] } = {}) {
+  const target = type === 'row' ? rowEl.children : type === 'col' ? colEl.children : [];
+  for (const line of [...colEl.children, ...rowEl.children]) {
+    line.classList.remove('drag-active', 'drag-passed');
+  }
+  for (const idx of passed) if (target[idx]) target[idx].classList.add('drag-passed');
+  if (target[active]) target[active].classList.add('drag-active');
+}
+
 // 방금 완성된 줄만 파도처럼 순차 반짝. lines=[{type:'row'|'col', idx}], forward=드래그 방향.
 // 줄 전체를 방향 순서로 stepMs씩 지연시켜 연쇄(파도) 효과를 준다. 칠한 칸은 뚜렷한 wave,
 // 빈칸은 희미한 wave-faint로 - 정답이 1칸뿐인 줄도 줄 전체가 흘러가는 느낌이 나게 한다.

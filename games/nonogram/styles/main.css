@@ -459,6 +459,18 @@ body:has(#screen-play.active) #app {
   100% { box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0); }
 }
 
+/* 힌트 자동 입력: X·칠하기·기존 상태를 가리지 않고 줄 전체에 같은 흐름을 준다. */
+.cell.line-sweep { animation: line-sweep 0.5s ease; z-index: 2; }
+@keyframes line-sweep {
+  0% { box-shadow: inset 0 0 0 40px var(--mark-flow); }
+  65% { box-shadow: inset 0 0 0 40px var(--mark-flow); }
+  100% { box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0); }
+}
+
+.clue-col.drag-active, .clue-row.drag-active { background: color-mix(in srgb, var(--accent-2) 42%, transparent); }
+.clue-col.drag-passed, .clue-row.drag-passed { animation: clue-drag-passed 0.28s ease; }
+@keyframes clue-drag-passed { 0% { background: color-mix(in srgb, var(--accent-2) 42%, transparent); } 100% { background: transparent; } }
+
 /* 줄 완성 반짝 */
 /* 줄 완성 파도: 칸 색이 잠깐 민트로 바뀌었다 원래 색으로(노란 링 폐기). */
 .cell.wave { animation: wave-fill 0.6s ease; z-index: 2; }

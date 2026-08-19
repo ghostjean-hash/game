@@ -110,11 +110,13 @@ test('setCell: 드래그 설정', () => {
   eq(setCell(b1, 0, 0, CELL.FILLED, sol), b1, '같은 상태면 무변화(동일 참조)');
 });
 test('autoCompleteLine: 완성 줄의 남은 빈칸을 잠긴 X로 확정', () => {
-  const sol = toSolution([[1, 0, 1]]);
+  const grid = [[1, 0, 1]];
+  const sol = toSolution(grid);
+  const clues = makeClues(grid);
   let b = createBoard(3);
   b = setCell(b, 0, 0, CELL.FILLED, sol);
   b = setCell(b, 0, 2, CELL.FILLED, sol);
-  const result = autoCompleteLine(b, sol, 'row', 0);
+  const result = autoCompleteLine(b, sol, clues, 'row', 0);
   eq(result.action, 'mark');
   eqArr(result.cells, [[0, 1]]);
   eq(result.board.cells[0][1], CELL.MARKED);
@@ -122,14 +124,41 @@ test('autoCompleteLine: 완성 줄의 남은 빈칸을 잠긴 X로 확정', () =
   eq(toggleFill(result.board, 0, 1, sol), result.board, '자동 X는 칠하기로 덮지 못함');
 });
 test('autoCompleteLine: 남은 칸이 전부 칠칸이면 잠긴 칠하기로 확정', () => {
-  const sol = toSolution([[1, 1, 1]]); // 힌트 3: 빈 판에서도 전부 확정 가능
+  const grid = [[1, 1, 1]];
+  const sol = toSolution(grid); // 힌트 3: 빈 판에서도 전부 확정 가능
+  const clues = makeClues(grid);
   let b = createBoard(3);
   b = setCell(b, 0, 0, CELL.FILLED, sol); // 일부를 이미 칠한 경우도 포함
-  const result = autoCompleteLine(b, sol, 'row', 0);
+  const result = autoCompleteLine(b, sol, clues, 'row', 0);
   eq(result.action, 'fill');
   eqArr(result.cells, [[0, 1], [0, 2]]);
   eqArr(result.board.cells[0], [CELL.FILLED, CELL.FILLED, CELL.FILLED]);
   eq(isLocked(result.board, 0, 1), true);
+});
+test('autoCompleteLine: X 양끝과 13 힌트면 가운데 13칸을 기계적으로 칠한다', () => {
+  const grid = [[0, ...Array(13).fill(1), 0]];
+  const sol = toSolution(grid);
+  const clues = makeClues(grid);
+  let b = createBoard(15);
+  b = toggleMark(b, 0, 0);
+  b = toggleMark(b, 0, 14);
+  const result = autoCompleteLine(b, sol, clues, 'row', 0);
+  eq(result.action, 'fill');
+  eq(result.cells.length, 13);
+  eq(result.path.length, 15, '연출은 줄 전체를 훑음');
+  eq(result.board.cells[0].slice(1, 14).every((v) => v === CELL.FILLED), true);
+});
+test('autoCompleteLine: 기계적 칠하기 뒤 오답은 잠그지 않고 실수로 표시한다', () => {
+  const grid = [[1, 1, 0]]; // 힌트 2
+  const sol = toSolution(grid);
+  const clues = makeClues(grid);
+  let b = createBoard(3);
+  b = toggleMark(b, 0, 0); // 잘못된 직접 X는 자동 칠하기가 덮지 않는다.
+  const result = autoCompleteLine(b, sol, clues, 'row', 0);
+  eqArr(result.board.cells[0], [CELL.MARKED, CELL.FILLED, CELL.FILLED]);
+  eq(result.board.mistakes, 1);
+  eq(isLocked(result.board, 0, 1), true, '맞은 자동 칠하기만 고정');
+  eq(isLocked(result.board, 0, 2), false, '오답 자동 칠하기는 수정 가능');
 });
 test('autoCompleteLine: 직접 입력한 X는 잠그지 않아 다시 칠할 수 있다', () => {
   const sol = toSolution([[1, 1]]);
