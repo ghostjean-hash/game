@@ -12,7 +12,7 @@ import {
 import { lineFlags, completedCount } from './core/lines.js';
 import { starsFor } from './core/stars.js';
 import {
-  renderClues, applyClueDim, renderBoard, applyState, applyCellState, revealColors,
+  renderClues, applyClueDim, renderBoard, applyState, applyCellState,
   setCursor, popCell, waveHighlight, pointFinger, showDragCount, hideDragCount,
   markDragRun, clearDragRun, clearWaves, lineSweep, setClueDragState,
 } from './render/boardView.js';
@@ -379,7 +379,7 @@ function applyAction(r, c) {
 // before=동작 직전 완성 flags, forward=드래그 방향. 이미 완성돼 있던 줄은 다시 반짝하지 않는다.
 function highlightNewCompletions(before, forward) {
   const n = cur.puzzle.size;
-  // 이 동작으로 퍼즐이 완성되면 줄 파도를 그리지 않는다(전체 컬러 변신과 겹쳐 지저분해짐).
+  // 이 동작으로 퍼즐이 완성되면 줄 파도를 그리지 않는다(결과 카드가 곧 표시됨).
   if (isSolved(cur.board, cur.solution)) return;
   const after = lineFlags(cur.board, cur.clues);
   const newLines = [];
@@ -528,6 +528,7 @@ function onCluePointerDown(type, e) {
   clueDrag.changed = false;
   clueDrag.activeIdx = -1;
   clueDrag.passed = [];
+  el('app').classList.add('clue-dragging');
   applyClueDragLine(type, e.target);
   e.preventDefault();
 }
@@ -557,6 +558,7 @@ function onCluePointerEnd(e) {
   clueDrag.changed = false;
   clueDrag.activeIdx = -1;
   clueDrag.passed = [];
+  el('app').classList.remove('clue-dragging');
   setClueDragState(el('col-clues'), el('row-clues'));
 }
 function onClueClick(type, e) {
@@ -620,11 +622,10 @@ function win() {
   // 다 맞췄으니 모드 버튼을 잠근다(완성 연출 중 조작 방지 + 완료 표현).
   el('mode-fill').disabled = true;
   el('mode-mark').disabled = true;
-  clearWaves(boardEl); // 진행 중이던 줄 파도를 지우고 나서 전체 컬러 변신(겹침 방지)
-  revealColors(boardEl, cur.puzzle.grid, ANIM.REVEAL_STEP_MS, cur.puzzle.palette);
+  clearWaves(boardEl);
   setCursor(boardEl, -1, -1, cur.puzzle.size);
   sound.play('clear');
-  const waveMs = (cur.puzzle.size * 2) * ANIM.REVEAL_STEP_MS + ANIM.RESULT_DELAY_MS;
+  const waveMs = ANIM.RESULT_DELAY_MS;
   setTimeout(() => {
     // 결과는 전용 화면이 아니라 플레이를 덮는 카드다(규격 3.5). 완성 그림·제목·별점은
     // 글자가 아니라 그림이라 카드 본문에 통째로 넣는다.
