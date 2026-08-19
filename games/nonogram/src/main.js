@@ -625,21 +625,17 @@ function win() {
   clearWaves(boardEl);
   setCursor(boardEl, -1, -1, cur.puzzle.size);
   sound.play('clear');
-  const waveMs = ANIM.RESULT_DELAY_MS;
-  setTimeout(() => {
-    // 결과는 전용 화면이 아니라 플레이를 덮는 카드다(규격 3.5). 완성 그림·제목·별점은
-    // 글자가 아니라 그림이라 카드 본문에 통째로 넣는다.
-    const body = el('result-body').content.cloneNode(true).firstElementChild;
-    renderResult(
-      body.querySelector('#result-pic'),
-      body.querySelector('#result-title'),
-      body.querySelector('#result-stars'),
-      cur.puzzle, stars,
-    );
-    frame.result.show({ title: '', bodyEl: body, newRecord: !prev?.cleared });
-    frame.screens.go(SCREEN.RESULT);
-    sound.playRepeat('star', stars);
-  }, waveMs);
+  // 완료 보드를 잠시 남겨 두거나 다음 화면으로 흐리게 넘기지 않는다.
+  const body = el('result-body').content.cloneNode(true).firstElementChild;
+  renderResult(
+    body.querySelector('#result-pic'),
+    body.querySelector('#result-title'),
+    body.querySelector('#result-stars'),
+    cur.puzzle, stars,
+  );
+  frame.result.show({ title: '', bodyEl: body, newRecord: !prev?.cleared });
+  frame.screens.go(SCREEN.RESULT);
+  sound.playRepeat('star', stars);
 }
 
 function nextPuzzle() {

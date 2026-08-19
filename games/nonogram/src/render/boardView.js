@@ -117,10 +117,10 @@ export function waveHighlight(boardEl, lines, n, forward, stepMs) {
   }
 }
 
-// 진행 중인 줄 완성 파도를 즉시 지운다(완성 변신 직전에 겹쳐 보이는 잔상 제거용).
+// 완료 화면 전환 전에 보드 위에 남아 있는 모든 칸 효과를 즉시 지운다.
 export function clearWaves(boardEl) {
   for (const el of boardEl.children) {
-    el.classList.remove('wave', 'wave-faint');
+    el.classList.remove('wave', 'wave-faint', 'line-sweep', 'mark-flow', 'pop');
     el.style.animationDelay = '';
   }
   void boardEl.offsetWidth; // 리플로우로 애니메이션 상태를 확정해 잔상을 없앤다

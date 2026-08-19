@@ -47,11 +47,9 @@ export const ZOOM = {
 
 // 연출 타이밍(ms). 값은 여기 한 곳에서.
 export const ANIM = {
-  REVEAL_STEP_MS: 45,   // 완성 변신 시 칸별 순차 지연
   PRAISE_MS: 1100,      // 연속 응원 문구 노출 시간
-  RESULT_DELAY_MS: 900, // 변신 후 결과 화면 전환까지
   SPARKLE_STEP_MS: 60,  // 줄 완성 파도 반짝의 칸별 순차 지연
-  MARK_STEP_MS: 10,     // 힌트 자동 줄 파도의 칸별 순차 지연(기존보다 2배 빠름)
+  MARK_STEP_MS: 20,     // 힌트 자동 줄 파도의 칸별 순차 지연(현재 흐름 속도)
 };
 
 // 연속 정답 응원 문구(칭찬). 저학년 즉각 격려.

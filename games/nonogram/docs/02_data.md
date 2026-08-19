@@ -15,7 +15,7 @@
 | `MODE` | `{ FILL: 'fill', MARK: 'mark' }` | 입력 모드 |
 | `CELL_FIT` | `{ MIN_PX: 12, GUTTER_PX: 8, MAX: {5:92,10:60,15:44}, DEFAULT_MAX: 60, RIGHT_MARGIN_RATIO: 1/3 }` | 격자를 화면에 맞출 때 쓰는 셀 크기(px) 한계 + 가로 방향 보드 우측 여백 비율 |
 | `ZOOM` | `{ FIT_MIN_PX: 26, START_PX: 34, MAX_PX: 64, CANCEL_MS: 300 }` | 두 손가락 확대·이동(01_spec §3)의 기준값 |
-| `ANIM.MARK_STEP_MS` | `10` | 힌트 자동 줄 파도의 칸별 진행 간격(ms). 2026-08-19에 다시 2배 빠르게 조정. |
+| `ANIM.MARK_STEP_MS` | `20` | 힌트 자동 줄 파도의 칸별 진행 간격(ms). 2026-08-19에 흐름을 절반 속도로 조정. |
 
 - 별점 계산: `mistakes <= STAR_THRESHOLDS.THREE ? 3 : mistakes <= STAR_THRESHOLDS.TWO ? 2 : 1`.
 - 셀 크기(px)는 CSS 변수 `--cell` 한 곳에서 파생. 플레이 화면은 세로로 스크롤되지 않고 한 화면에 담기므로, `main.js`의 `fitBoard`가 남은 공간(폭·높이)을 재서 `--cell`을 정한다(폭·높이 중 작은 쪽, `CELL_FIT.MIN_PX`~크기별 `MAX` 범위, 가로 방향은 MAX 무시하되 화면 폭에서 좌·우 UI 열 폭을 뺀 가용 폭을 병목에 포함 - 창 비율이 어떻든 게임 전체가 화면 안에 들어온다, STANDARD 4.7-7). `styles/tokens.css`의 `clamp` 값은 JS 미동작 시 fallback.
