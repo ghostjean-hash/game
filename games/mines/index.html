@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#0f172a" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Mines" />
+<title>지뢰찾기 - 숫자로 찾는 지뢰</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../../icons/icon-180.png" />
+<link rel="manifest" href="app.webmanifest" />
+<link rel="stylesheet" href="../../shared/tokens.css" />
+<link rel="stylesheet" href="../../shared/base.css" />
+<link rel="stylesheet" href="../../shared/frame/frame.css" />
+<link rel="stylesheet" href="./styles/tokens.css" />
+<link rel="stylesheet" href="./styles/main.css" />
+</head>
+<body>
+<main id="app">
+
+  <!-- 플레이 화면. 격자를 화면 가득 쓰는 게임이라 공용 상단 띠를 감추고 UI를 네 모서리에
+       붙인다(html-game 표준 4.8-11, docs/01_spec.md 5.2). 자리만 이 게임이 정하고
+       되돌아가기·소리·잠깐 멈춤 동작은 전부 공용 프레임에 연결한다. -->
+  <section id="screen-play" class="screen">
+
+    <div class="pc-tl">
+      <button id="play-back" class="icon-btn" aria-label="되돌아가기">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      </button>
+      <div class="stat">
+        <span class="stat-icon">🚩</span>
+        <b id="mines-left">0</b>
+      </div>
+    </div>
+
+    <div class="pc-tr">
+      <div class="tool-group">
+        <button id="sound-toggle" class="icon-btn" aria-label="소리 켜기/끄기"></button>
+        <button id="fs-toggle" class="icon-btn" aria-label="전체화면" hidden>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        </button>
+        <button id="pause-btn" class="icon-btn" aria-label="잠깐 멈춤">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h4v16H6z"/><path d="M14 4h4v16h-4z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="play-center">
+      <div class="board-wrap">
+        <div id="board" class="board"></div>
+      </div>
+    </div>
+
+    <div class="pc-bottom">
+      <div class="stat time">
+        <span class="stat-icon">⏱</span>
+        <b id="time">0:00</b>
+      </div>
+      <div class="mode-group">
+        <button id="mode-open" class="mode-btn active">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>열기</span>
+        </button>
+        <button id="mode-flag" class="mode-btn">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4"/><path d="M4 4h11l-2 4 2 4H4"/></svg>
+          <span>깃발</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 결과는 전용 화면이 아니라 플레이를 덮는 카드다(표준 4.8-8). 카드 자체는 공용 프레임이
+       만들고, 그 안에 들어갈 내용만 이 틀에 담아 넘긴다. -->
+  <template id="result-body">
+    <div class="result">
+      <div id="result-face" class="result-face"></div>
+      <div id="result-title" class="result-title"></div>
+      <div id="result-lines" class="result-lines"></div>
+    </div>
+  </template>
+
+</main>
+<script type="module" src="../../shared/cloud/auto.js"></script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

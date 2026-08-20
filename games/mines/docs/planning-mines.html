@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<!-- ai-tell-exempt: 사용자 결정 2026-07-30 - 게임 허브 기획서는 assets/gdd.css + screen-mockup.css 지면을 쓴다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지뢰찾기 게임 기획서 · 게임 허브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@400;500;600&family=Noto+Serif:ital,wght@1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../standards/html-game/plans/assets/gdd.css">
+<link rel="stylesheet" href="../../../standards/html-game/plans/assets/screen-mockup.css">
+<style>
+  /* 이 게임의 목업 톤 - 실제 게임에서 쓸 색을 그대로 쓴다(screen-mockup.css 방침) */
+  .mk-mine{--g:#F5A524;--gd:#1A1204;--bg:#0F172A;--pn:#1A2438;--pn2:#243149;--ln:#2C3A54}
+
+  /* 시작 화면 배경 장식 - 이 게임은 배경 그림이 없어 게임 자체 요소로 대신한다.
+     닫힌 칸이 깔린 격자에 깃발 몇 개를 흐리게 놓는다 */
+  .minedeco{position:absolute;left:0;right:0;z-index:1;display:grid;grid-template-columns:repeat(8,1fr);gap:3px;padding:0 14px;opacity:.30;
+    -webkit-mask-image:linear-gradient(180deg,#000 52%,transparent 88%);mask-image:linear-gradient(180deg,#000 52%,transparent 88%)}
+  .minedeco i{aspect-ratio:1;border-radius:3px;background:#3E4C63}
+  .minedeco i.a{background:#46556E}
+  .minedeco i.f{background:#F5A524}
+
+  /* 플레이 화면 격자 - 보통 판(12×12)의 중간 국면 */
+  .mgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
+  .mgrid i{aspect-ratio:1;border-radius:2.5px;background:#3E4C63;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;
+    font-size:10.5px;font-weight:800;line-height:1;font-style:normal}
+  .mgrid i.a{background:#46556E}
+  .mgrid i.o{background:#16202F;box-shadow:none}
+  .mgrid i.f{background:#F5A524}
+  .mgrid i.n1{color:#60A5FA}
+  .mgrid i.n2{color:#4ADE80}
+  .mgrid i.n3{color:#F87171}
+  .mgrid i.n4{color:#A78BFA}
+  .mgrid i.n5{color:#FB923C}
+  .mgrid i.n6{color:#22D3EE}
+  .mgrid i.n7{color:#E2E8F0}
+  .mgrid i.n8{color:#F472B6}
+  .mgrid i.hit{background:#E5484D}
+  .mgrid i.shown{background:#64748B}
+  .mgrid i svg{width:11px;height:11px;fill:#1A1204;stroke:none}
+
+  /* 플레이 화면 네 모서리 UI */
+  .mstat{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:9px;
+    background:rgba(26,36,56,.9);border:1px solid var(--ln);font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+  .mstat svg{width:10px;height:10px;fill:#F5A524;stroke:none}
+  .mmode{display:flex;gap:6px;padding:4px;border-radius:13px;background:rgba(26,36,56,.9);border:1px solid var(--ln)}
+  .mmode span{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:7px 10px;border-radius:9px;
+    font-size:11.5px;font-weight:700;color:var(--dim)}
+  .mmode span.on{background:var(--g);color:var(--gd)}
+  .mmode span svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* 결과 카드 - 플레이를 덮는 층 */
+  .mveil{position:absolute;inset:0;z-index:7;background:linear-gradient(180deg,rgba(6,10,20,.30) 0%,rgba(6,10,20,.55) 42%,rgba(6,10,20,.82) 100%);
+    display:flex;align-items:flex-end;justify-content:center;padding:20px 16px 26px}
+  .mcard{width:100%;border:1px solid var(--ln);border-radius:16px;background:var(--pn);padding:16px 14px;display:grid;gap:10px;text-align:center;
+    box-shadow:0 14px 34px rgba(0,0,0,.5)}
+  .mcard .fc{font-size:32px;line-height:1}
+  .mcard .tt{font-size:16px;font-weight:700}
+  .mcard .ln{font-size:11px;color:var(--dim);display:grid;gap:2px}
+  .mcard .ln b{color:var(--g)}
+
+  /* 손가락 조작 설명용 표시 */
+  .fingermark{position:absolute;z-index:8;width:26px;height:26px;border-radius:50%;
+    background:rgba(245,165,36,.28);border:2px solid #F5A524}
+</style>
+</head>
+<body>
+
+<!-- 화면 아이콘은 문자 대신 그림으로 쓴다(실제 게임과 같은 방식) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></symbol>
+  <symbol id="i-snd" viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M16 9a4 4 0 010 6"/></symbol>
+  <symbol id="i-full" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 00-2 2v3"/><path d="M16 3h3a2 2 0 012 2v3"/><path d="M8 21H5a2 2 0 01-2-2v-3"/><path d="M16 21h3a2 2 0 002-2v-3"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6z"/><path d="M14 4h4v16h-4z"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 2h2v20H5z"/><path d="M8.4 3h10.2l-2.7 3.9 2.7 3.9H8.4z"/></symbol>
+  <symbol id="i-open" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-time" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+</defs></svg>
+
+<main class="sheet">
+
+<div class="titleblock">
+  <h1>지뢰찾기</h1>
+  <p class="sub">게임 허브의 여섯 번째 게임. 숫자를 단서로 지뢰를 피해 안전한 칸을 모두 열어내는 고전 추리 퍼즐을, 세로 폰 한 손 조작을 기준으로 다시 짠 것임.</p>
+</div>
+
+<section id="s1">
+  <div class="sechead"><span class="n">1.</span><h2>무엇을 만드는가</h2><span class="rid">MIN-ROLE</span></div>
+  <p class="lead">원작 규칙을 바꾸지 않고 그대로 옮기되, 원작이 마우스 두 버튼을 전제로 만든 조작과 판 크기만 손가락 기준으로 다시 정하는 것이 이 기획의 범위임.</p>
+
+  <h3><span class="sn">1.1.</span>바꾸지 않는 것</h3>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">규칙 자체
+      <ul class="od"><li>숫자는 인접 여덟 칸의 지뢰 수라는 정의를 그대로 씀</li><li>안전한 칸을 다 열면 승리, 지뢰를 열면 패배라는 승패 조건을 그대로 씀</li><li>목숨·되돌리기·시간 연장 같은 완화 장치를 넣지 않음</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">지뢰찾기의 긴장
+      <ul class="od"><li>한 번의 판단이 판을 끝낸다는 성질이 이 게임의 본질이라 그것을 무르게 만드는 장치를 두지 않음</li></ul>
+    </div></div>
+  </div>
+
+  <h3><span class="sn">1.2.</span>손가락 기준으로 다시 정하는 것</h3>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">깃발 꽂는 방법
+      <ul class="od"><li>원작은 마우스 오른쪽 버튼임. 손가락에는 오른쪽 버튼이 없어 대체 조작이 필요함</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">판 크기
+      <ul class="od"><li>원작 고급 판은 가로 30칸임. 세로 폰에서 칸 하나가 11픽셀이 되어 손가락으로 누를 수 없음</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">첫 수의 처리
+      <ul class="od"><li>초기 원작은 첫 칸이 지뢰일 수 있었음. 아무 정보 없이 지는 판은 추리 게임으로 성립하지 않음</li></ul>
+    </div></div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="sechead"><span class="n">2.</span><h2>이 게임이 허브에서 갖는 자리</h2><span class="rid">MIN-SLOT</span></div>
+  <p class="lead">기존 다섯 게임과 겹치지 않는 자리를 확인한 결과임. 판단 근거는 한 판의 길이와 실패의 성격 두 가지임.</p>
+
+  <table class="tight">
+    <caption>HUB SLOT COMPARISON</caption>
+    <thead><tr><th style="width:104px">게임</th><th>한 판의 성격</th><th style="width:96px">실패</th><th style="width:88px">시간</th></tr></thead>
+    <tbody>
+      <tr><th>테트리스</th><td>손이 빨라야 하는 반사 게임</td><td><span class="st st-o">있음</span></td><td>흐름</td></tr>
+      <tr><th>비행 슈팅</th><td>손이 빨라야 하는 반사 게임</td><td><span class="st st-o">있음</span></td><td>흐름</td></tr>
+      <tr><th>스도쿠</th><td>느리게 푸는 논리 퍼즐</td><td><span class="st st-x">없음</span></td><td>안 흐름</td></tr>
+      <tr><th>노노그램</th><td>느리게 푸는 논리 퍼즐</td><td><span class="st st-x">없음</span></td><td>안 흐름</td></tr>
+      <tr><th>러시아워</th><td>한 판이 짧은 수순 퍼즐</td><td><span class="st st-x">없음</span></td><td>안 흐름</td></tr>
+      <tr><th>지뢰찾기</th><td>논리로 풀지만 한 수에 끝날 수 있는 퍼즐</td><td><span class="st st-o">있음</span></td><td>흐름</td></tr>
+    </tbody>
+  </table>
+
+  <p>지금 다섯 게임은 두 갈래로만 갈려 있음. 손이 빨라야 하는 반사 게임 둘은 실패가 있고, 논리 퍼즐 셋은 실패가 없음. 지뢰찾기는 그 사이의 빈 자리에 들어감. 머리로 푸는 퍼즐이면서 실패가 있고 시간이 흐름. 허브에 없던 성격임.</p>
+</section>
+
+<section id="s3">
+  <div class="sechead"><span class="n">3.</span><h2>판 규칙</h2><span class="rid">MIN-RULE</span></div>
+
+  <h3><span class="sn">3.1.</span>기본 진행</h3>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">칸을 열면 인접 여덟 칸의 지뢰 수가 숫자로 나옴</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">그 수가 0이면 숫자를 적지 않고, 이어진 0 영역과 그 영역에 닿은 숫자 칸까지 한 번에 열림
+      <ul class="od"><li>이것이 판을 여는 유일한 수단임. 이 연쇄가 없으면 사용자가 칸을 하나씩 다 눌러야 함</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">지뢰가 아닌 모든 칸을 열면 승리임
+      <ul class="od"><li>지뢰 칸에 깃발을 다 꽂는 것은 승리 조건이 아님</li><li>승리 순간 남은 지뢰 칸에는 깃발이 자동으로 채워져 표시됨</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">지뢰 칸을 열면 그 자리에서 패배임
+      <ul class="od"><li>모든 지뢰 위치를 공개하고, 밟은 지뢰와 잘못 꽂은 깃발을 서로 다른 색으로 구분해 보여줌</li></ul>
+    </div></div>
+  </div>
+
+  <h3><span class="sn">3.2.</span>첫 수는 반드시 안전함</h3>
+  <p class="lead">지뢰는 판에 들어갈 때가 아니라 사용자가 첫 칸을 여는 순간 놓임. 첫 탭 칸과 그 주변 여덟 칸에는 지뢰를 두지 않음.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">결과적으로 첫 수는 항상 0이 되어 연쇄가 터지고, 판이 열린 상태에서 추론이 시작됨</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">첫 수가 지뢰여서 아무 정보 없이 지는 판이 이 게임에는 없음
+      <ul class="od"><li>이것이 목숨을 두지 않는 근거임. 부당한 패배를 없애는 것이 목숨보다 정확한 처방임</li></ul>
+    </div></div>
+  </div>
+
+  <h3><span class="sn">3.3.</span>깃발</h3>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">깃발이 꽂힌 칸은 열기 조작으로 열리지 않음
+      <ul class="od"><li>자기가 표시해 둔 지뢰를 오조작으로 밟는 일을 막음</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">같은 조작을 다시 하면 깃발이 빠짐. 물음표 단계는 두지 않음
+      <ul class="od"><li>작은 화면에서 상태가 셋으로 늘면 아이콘 구분이 어렵고, 조작이 세 번 돌아야 원래로 돌아옴</li></ul>
+    </div></div>
+  </div>
+
+  <h3><span class="sn">3.4.</span>빠른 열기</h3>
+  <p class="lead">이미 열린 숫자 칸을 열기 조작으로 다시 누르면, 그 칸 주변에 꽂힌 깃발 수가 그 숫자와 같을 때 나머지 이웃 칸이 한 번에 열림.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">판이 커질수록 조작 수를 크게 줄이는 고전 관용 조작임
+      <ul class="od"><li>어려움 판에서 이 조작이 없으면 안전한 칸을 백 번 넘게 따로 눌러야 함</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">깃발이 틀린 자리에 있었다면 지뢰가 열려 그대로 패배함
+      <ul class="od"><li>편의 기능이지 안전 장치가 아님. 이 성질을 완화하지 않음</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">깃발 수가 숫자와 맞지 않으면 아무 일도 일어나지 않음</div></div>
+  </div>
+
+  <h3><span class="sn">3.5.</span>시간</h3>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">첫 칸을 여는 순간부터 흐름. 난이도를 고르는 동안이나 첫 탭 전에는 흐르지 않음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">잠깐 멈춤 상태에서는 멈춤. 화면을 벗어나면 자동으로 그 상태가 됨</div></div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="sechead"><span class="n">4.</span><h2>난이도</h2><span class="rid">MIN-DIFF</span></div>
+  <p class="lead">세로 폰에서 칸이 손가락 하한을 넘도록 가로 칸 수를 14 이하로 묶은 3단임. 원작 3단은 쓰지 않음.</p>
+
+  <table class="tight">
+    <caption>DIFFICULTY · 확정 2026-08-21</caption>
+    <thead><tr><th style="width:88px">이름</th><th class="num" style="width:76px">가로</th><th class="num" style="width:76px">세로</th><th class="num" style="width:76px">지뢰</th><th class="num" style="width:88px">지뢰 비율</th><th>목표 한 판</th></tr></thead>
+    <tbody>
+      <tr><th>쉬움</th><td class="num">9</td><td class="num">9</td><td class="num">10</td><td class="num">12.3%</td><td>1분 내외</td></tr>
+      <tr><th>보통</th><td class="num">12</td><td class="num">12</td><td class="num">25</td><td class="num">17.4%</td><td>2분 내외</td></tr>
+      <tr><th>어려움</th><td class="num">14</td><td class="num">18</td><td class="num">55</td><td class="num">21.8%</td><td>5분 내외</td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="sn">4.1.</span>원작 3단을 쓰지 않는 이유</h3>
+  <table class="tight">
+    <caption>ORIGINAL vs THIS</caption>
+    <thead><tr><th style="width:104px">구분</th><th>원작</th><th>이 게임</th><th style="width:150px">세로 폰에서의 칸 크기</th></tr></thead>
+    <tbody>
+      <tr><th>가장 쉬운 판</th><td>9 × 9 · 지뢰 10</td><td>9 × 9 · 지뢰 10</td><td>같음 · 39픽셀</td></tr>
+      <tr><th>중간 판</th><td>16 × 16 · 지뢰 40</td><td>12 × 12 · 지뢰 25</td><td>22픽셀 → 29픽셀</td></tr>
+      <tr><th>가장 어려운 판</th><td>30 × 16 · 지뢰 99</td><td>14 × 18 · 지뢰 55</td><td>11픽셀 → 25픽셀</td></tr>
+    </tbody>
+  </table>
+  <p>원작 고급 판을 그대로 쓰면 세로 폰에서 칸 하나가 11픽셀이 됨. 그 상태로는 두 손가락 확대와 화면 이동 조작이 필수가 되고, 그러면 판 전체를 한눈에 보며 추론하는 이 게임의 기본 동작이 깨짐. 판을 좁히는 대신 지뢰 비율을 12퍼센트에서 22퍼센트까지 올려 추론 난도를 보전함.</p>
+
+  <h3><span class="sn">4.2.</span>기본값</h3>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">처음 들어온 사용자에게는 보통이 골라진 상태로 보임</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">한 번이라도 고른 적이 있으면 마지막에 고른 난이도가 유지됨</div></div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="sechead"><span class="n">5.</span><h2>조작</h2><span class="rid">MIN-CTRL</span></div>
+  <p class="lead">깃발을 꽂는 길을 둘 다 둠. 길게 누르기와 모드 전환 버튼임. 둘 중 하나만 두면 한쪽 사용자가 막히기 때문임.</p>
+
+  <table class="tight">
+    <caption>INPUT MAP</caption>
+    <thead><tr><th style="width:120px">하려는 것</th><th style="width:210px">열기 모드에서</th><th style="width:210px">깃발 모드에서</th><th>키보드</th></tr></thead>
+    <tbody>
+      <tr><th>칸 열기</th><td>짧게 탭</td><td>길게 누르기</td><td><span class="key">Space</span></td></tr>
+      <tr><th>깃발 꽂기·빼기</th><td>길게 누르기</td><td>짧게 탭</td><td><span class="key">F</span></td></tr>
+      <tr><th>빠른 열기</th><td>열린 숫자 칸을 탭</td><td>열린 숫자 칸을 길게 누르기</td><td><span class="key">Enter</span></td></tr>
+      <tr><th>칸 이동</th><td colspan="2">해당 없음(직접 누름)</td><td><span class="key">←</span> <span class="key">↑</span> <span class="key">→</span> <span class="key">↓</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="sn">5.1.</span>길게 누르기는 항상 반대 동작임</h3>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">깃발 하나만 꽂을 때는 모드를 바꾸지 않고 길게 누르면 됨
+      <ul class="od"><li>익숙한 사용자가 쓰는 길임. 모드를 왕복하는 두 번의 조작이 사라짐</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">깃발을 여러 개 연속으로 꽂을 때는 모드를 바꾸는 것이 빠름
+      <ul class="od"><li>처음인 사용자가 쓰는 길임. 길게 누르기를 몰라도 화면에 보이는 버튼으로 도달함</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">한쪽만 두면 각각 다른 사고가 남음
+      <ul class="od"><li>길게 누르기만 두면 그 조작을 모르는 사용자가 깃발 기능 자체를 못 찾음</li><li>모드 버튼만 두면 깃발 하나 꽂을 때마다 모드를 두 번 바꿔야 함</li></ul>
+    </div></div>
+  </div>
+
+  <h3><span class="sn">5.2.</span>판정</h3>
+  <table class="tight">
+    <thead><tr><th style="width:190px">항목</th><th class="num" style="width:96px">값</th><th>이유</th></tr></thead>
+    <tbody>
+      <tr><th>길게 누르기 성립</th><td class="num">0.4초</td><td>웹 관례 0.5초보다 짧음. 판 하나에 깃발을 수십 번 꽂아 대기 시간이 곧 조작 피로가 됨</td></tr>
+      <tr><th>손가락 흔들림 허용</th><td class="num">10픽셀</td><td>이 거리를 넘겨 움직이면 조작이 취소됨. 판을 문지르다 칸이 열리는 일을 막음</td></tr>
+    </tbody>
+  </table>
+  <p>길게 누르기가 성립한 순간 그 칸을 눌린 색으로 바꾸고 소리를 냄. 손을 떼기 전에 무엇이 일어날지 알려야 함. 이 표시가 없으면 사용자는 0.4초를 세는 수밖에 없음.</p>
+</section>
+
+<section id="s6">
+  <div class="sechead"><span class="n">6.</span><h2>화면</h2><span class="rid">MIN-SCR</span></div>
+  <p class="lead">시작 흐름은 공용 프레임 규격을 그대로 씀(Ⅰ권). 다섯 화면 중 인트로와 판 고르는 화면은 쓰지 않음. 난이도가 셋뿐이라 시작 화면의 고르는 한 줄로 충분함.</p>
+
+  <h3><span class="sn">6.1.</span>시작 화면</h3>
+  <div class="figure mid" id="fig-title">
+    <div class="stage">
+      <div class="unit">
+        <div class="cap"><span>MK-01</span><b>시작 화면 · 세로</b></div>
+        <div class="mk mk-mine">
+          <div class="mk-bg plain"></div>
+          <div class="minedeco" style="top:46px">
+            <i></i><i class="a"></i><i></i><i class="a"></i><i class="f"></i><i class="a"></i><i></i><i class="a"></i>
+            <i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i>
+            <i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i class="f"></i><i class="a"></i>
+            <i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i>
+            <i></i><i class="a"></i><i class="f"></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i>
+            <i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i>
+            <i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i>
+            <i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i>
+            <i></i><i class="f"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i>
+            <i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i>
+            <i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="f"></i><i></i><i class="a"></i>
+            <i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i>
+            <i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i>
+          </div>
+          <div class="mk-top">
+            <div class="ic"><svg><use href="#i-back"/></svg></div>
+            <div class="sp"></div>
+            <div class="ic"><svg><use href="#i-snd"/></svg></div>
+            <div class="ic"><svg><use href="#i-full"/></svg></div>
+          </div>
+          <div class="mk-hero" style="top:110px">
+            <div class="mk-ttl">지뢰찾기</div>
+            <div class="mk-sub">숫자를 믿고 지뢰를 피하세요</div>
+          </div>
+          <div class="mk-dock veil">
+            <div class="b gho">이어서 하기<span class="s">보통 · 1분 22초 진행</span></div>
+            <div class="seg"><span>쉬움</span><span class="on">보통</span><span>어려움</span></div>
+            <div class="rec">최고 기록 <b>2분 41초</b></div>
+            <div class="b pri">시작</div>
+          </div>
+          <div class="mk-home"></div>
+        </div>
+      </div>
+    </div>
+    <div class="figcap"><span class="fid">FIG 6.1</span>시작 화면. 칸 순서는 이어서 하기 → 난이도 → 시작이며 시작이 가장 크고 강조된 하나임. 배경 그림이 없는 게임이라 닫힌 칸 격자를 흐리게 깔아 대신함.</div>
+  </div>
+
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">난이도는 카드를 펼치지 않고 한 줄 세그로 접음
+      <ul class="od"><li>첫 화면 높이가 갈래 수에 흔들리지 않아야 함(규격 5.5)</li><li>난이도는 하나를 고르는 갈래라 켜고 끄는 줄이 아니라 세그가 맞음(규격 4.8-16)</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">최고 기록은 지금 고른 난이도의 최단 시간을 시작 버튼 위 한 줄로 보여줌
+      <ul class="od"><li>기록이 없으면 기록 없음으로 표시함</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">진행 중인 판이 없으면 이어서 하기 칸은 보이지 않음</div></div>
+  </div>
+
+  <h3><span class="sn">6.2.</span>플레이 화면</h3>
+  <div class="figure mid" id="fig-play">
+    <div class="stage">
+      <div class="unit">
+        <div class="cap"><span>MK-02</span><b>플레이 · 보통 판 중간 국면</b></div>
+        <div class="mk mk-mine">
+          <div class="mk-bg plain"></div>
+          <div style="position:absolute;top:12px;left:12px;right:12px;z-index:6;display:flex;align-items:center;gap:7px">
+            <div class="ic"><svg><use href="#i-back"/></svg></div>
+            <div class="sp" style="flex:1"></div>
+            <div class="ic"><svg><use href="#i-snd"/></svg></div>
+            <div class="ic"><svg><use href="#i-full"/></svg></div>
+            <div class="ic"><svg><use href="#i-pause"/></svg></div>
+          </div>
+          <div style="position:absolute;top:50%;left:12px;right:12px;transform:translateY(-50%);z-index:4;display:grid;gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div class="mstat"><svg><use href="#i-flag"/></svg>22</div>
+              <div class="mstat"><svg><use href="#i-time"/></svg>1:22</div>
+            </div>
+            <div class="mgrid">
+              <i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i>
+              <i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i>
+              <i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o n1">1</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i>
+              <i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n2">2</i><i class="o"></i><i class="o n1">1</i><i class="o n2">2</i><i></i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i></i>
+              <i></i><i class="o n3">3</i><i class="o n1">1</i><i class="o"></i><i class="o n1">1</i><i class="o n1">1</i><i class="o n1">1</i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i>
+              <i class="a"></i><i></i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i></i><i class="a"></i><i></i><i class="a"></i><i></i>
+              <i></i><i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i>
+              <i class="a"></i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="o n1">1</i><i class="a"></i><i></i><i class="a"></i><i></i>
+              <i></i><i class="o n2">2</i><i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i></i><i class="a"></i><i></i><i class="a"></i>
+              <i class="a"></i><i></i><i class="a"></i><i class="o n2">2</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="a"></i><i></i><i class="a"></i><i></i>
+              <i></i><i class="a"></i><i></i><i class="o n3">3</i><i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o n1">1</i><i class="o n2">2</i><i class="a"></i><i></i><i class="a"></i>
+              <i class="a"></i><i></i><i class="a"></i><i></i><i class="a"></i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i></i><i class="a"></i><i></i>
+            </div>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;z-index:5;padding:14px 12px 22px;display:grid;gap:8px;justify-items:center">
+            <div class="mmode" style="width:100%">
+              <span class="on"><svg><use href="#i-open"/></svg>열기</span>
+              <span><svg><use href="#i-flag"/></svg>깃발</span>
+            </div>
+          </div>
+          <div class="mk-home"></div>
+        </div>
+      </div>
+    </div>
+    <div class="figcap"><span class="fid">FIG 6.2</span>플레이 화면. 격자를 화면 가득 쓰는 게임이라 공용 상단 띠를 감추고 UI를 네 모서리에 붙임(규격 4.8-11). 자리만 이 게임이 정하고 되돌아가기·소리·잠깐 멈춤 동작은 공용에 연결함.</div>
+  </div>
+
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">맨 위 줄은 누르는 것만 둠 - 왼쪽에 되돌아가기, 오른쪽에 소리 · 전체화면 · 잠깐 멈춤임
+      <ul class="od"><li>전체화면 버튼은 지원 기기에서만 그 줄에 나타남</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">읽는 것 둘(남은 지뢰 수 · 경과 시간)은 격자 바로 위 한 줄에 좌우로 붙임
+      <ul class="od"><li>화면 맨 위와 맨 아래로 갈라 두면 판을 보는 눈이 화면 양 끝을 왕복해야 함. 판 근처에 모아 한눈에 읽게 함</li><li>남은 지뢰 수는 전체 지뢰 수에서 꽂은 깃발 수를 뺀 값임. 실제 남은 지뢰가 아니라 사용자가 표시한 것을 뺀 값이라 음수가 될 수 있고, 그대로 보여줌</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">맨 아래는 모드 두 개만 둠. 켜진 모드는 강조색 바탕으로 알림
+      <ul class="od"><li>가장 자주 누르는 것이라 손가락이 닿는 자리에 단독으로 둠</li><li>아이콘 색만 바꾸면 어느 쪽이 켜졌는지 알기 어려움(규격 4.8-16)</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">닫힌 칸은 열린 칸보다 밝고 위쪽에 얇은 결을 둬 눌리지 않은 상태로 보이게 함
+      <ul class="od"><li>둘의 밝기가 비슷하면 어디까지 열었는지 한눈에 안 보임. 원작이 회색 버튼과 흰 바탕으로 갈라 둔 것과 같은 이유임</li><li>닫힌 칸은 두 색을 번갈아 아주 옅은 체크무늬로 깔아 좌표 감각을 줌</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">플레이 중에 허브로 곧장 나가는 문은 두지 않음
+      <ul class="od"><li>왼쪽 위 화살표는 한 칸 위인 시작 화면으로만 감(규격 4.8-3)</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">잠깐 멈춤 동안에는 격자를 흐리게 가려 판을 들여다볼 수 없게 함</div></div>
+  </div>
+
+  <h3><span class="sn">6.3.</span>결과</h3>
+  <div class="figure mid" id="fig-result">
+    <div class="stage">
+      <div class="unit">
+        <div class="cap"><span>MK-03</span><b>결과 · 승리</b></div>
+        <div class="mk mk-mine">
+          <div class="mk-bg plain"></div>
+          <div style="position:absolute;top:50%;left:12px;right:12px;transform:translateY(-50%);z-index:4;opacity:.72">
+            <div class="mgrid">
+              <i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="o n1">1</i><i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n3">3</i><i class="o n2">2</i>
+              <i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n2">2</i><i class="o n1">1</i><i class="o n3">3</i><i class="o n3">3</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="f"><svg><use href="#i-flag"/></svg></i>
+              <i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o n1">1</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n3">3</i><i class="o n2">2</i><i class="o"></i><i class="o n1">1</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n4">4</i><i class="o n3">3</i>
+              <i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n2">2</i><i class="o"></i><i class="o n1">1</i><i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n1">1</i><i class="o"></i><i class="o n2">2</i><i class="o n3">3</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n1">1</i>
+              <i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n3">3</i><i class="o n1">1</i><i class="o"></i><i class="o n1">1</i><i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o n1">1</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n2">2</i><i class="o n1">1</i>
+              <i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="o n1">1</i><i class="o n2">2</i><i class="o n1">1</i><i class="o n2">2</i><i class="o n1">1</i>
+              <i class="o n1">1</i><i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n1">1</i><i class="o"></i><i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i>
+              <i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i>
+              <i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n2">2</i><i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="o n1">1</i><i class="o n1">1</i><i class="o n1">1</i><i class="o n1">1</i>
+              <i class="o n1">1</i><i class="o n3">3</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n2">2</i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n2">2</i><i class="o n1">1</i><i class="o n1">1</i>
+              <i class="o"></i><i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n3">3</i><i class="o n1">1</i><i class="o n1">1</i><i class="o"></i><i class="o n1">1</i><i class="o n2">2</i><i class="o n4">4</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n3">3</i>
+              <i class="o"></i><i class="o n1">1</i><i class="o n1">1</i><i class="o n2">2</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="o n1">1</i><i class="o"></i><i class="o"></i><i class="o n1">1</i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="f"><svg><use href="#i-flag"/></svg></i><i class="f"><svg><use href="#i-flag"/></svg></i>
+            </div>
+          </div>
+          <div class="mveil">
+            <div class="mcard">
+              <div class="fc">🎉</div>
+              <div class="tt">다 찾았습니다</div>
+              <div class="ln">
+                <div>보통 · 2분 08초</div>
+                <div><b>최고 기록 경신</b> · 이전 2분 41초</div>
+              </div>
+              <div class="b pri" style="font-size:14px;padding:11px">다시 하기</div>
+              <div class="b gho">그만하기</div>
+            </div>
+          </div>
+          <div class="mk-home"></div>
+        </div>
+      </div>
+    </div>
+    <div class="figcap"><span class="fid">FIG 6.3</span>결과. 전용 화면이나 알림창이 아니라 플레이를 덮는 카드임(규격 4.8-8). 패배면 같은 자리에 몇 칸을 남겼는지 한 줄로 적음.</div>
+  </div>
+
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">카드는 화면 가운데가 아니라 아래에 붙임
+      <ul class="od"><li>이 게임의 결과물은 다 찾아낸 판 자체임. 카드를 가운데 띄우면 그 판을 가림</li><li>누르는 버튼이 손가락 닿는 아래에 오는 이점도 함께 얻음</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">승리하면 남은 지뢰 칸에 깃발이 자동으로 채워진 판을 보여줌(3.1)</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">패배하면 같은 자리에 모든 지뢰를 공개한 판을 보여주고, 밟은 지뢰와 잘못 꽂은 깃발을 다른 색으로 구분함</div></div>
+  </div>
+
+  <h3><span class="sn">6.4.</span>화면 문구</h3>
+  <p>시작 · 이어서 하기 · 계속하기 · 다시 하기 · 그만하기는 공용 문구표를 그대로 씀. 이 게임이 같은 뜻을 다르게 쓰지 않음(규격 4.8-6). 이 게임 고유 문구는 열기 · 깃발 · 남은 지뢰 · 시간 넷임.</p>
+</section>
+
+<section id="s7">
+  <div class="sechead"><span class="n">7.</span><h2>기록과 이어서 하기</h2><span class="rid">MIN-SAVE</span></div>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">난이도별 최단 완료 시간을 기록으로 남김
+      <ul class="od"><li>승리한 판만 기록에 반영됨</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">판 도중에 나가면 판 상태를 저장하고 시작 화면의 이어서 하기로 되돌아옴
+      <ul class="od"><li>저장 대상은 지뢰 배치, 열린 칸, 깃발, 경과 시간임</li><li>판이 끝나면 그 저장은 지움</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">저장은 공용 저장 부품을 거침
+      <ul class="od"><li>게임이 직접 저장하면 클라우드 동기화 신호가 끊겨 다른 기기에서 기록이 사라짐</li></ul>
+    </div></div>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="sechead"><span class="n">8.</span><h2>이 판에서 넣지 않는 것</h2><span class="rid">MIN-OUT</span></div>
+  <p class="lead">나중에 빠뜨렸는지를 다시 논의하지 않기 위해 남기는 목록임. 뺀 이유를 함께 적음.</p>
+
+  <table class="tight">
+    <thead><tr><th style="width:200px">항목</th><th>이유</th><th style="width:104px">다시 볼 조건</th></tr></thead>
+    <tbody>
+      <tr><th>사용자 지정 난이도</th><td>판 크기와 지뢰 수를 사용자가 정하면 손가락으로 누를 수 없는 판을 스스로 만들 수 있음</td><td>3단으로 부족하다는 신호</td></tr>
+      <tr><th>원작 3단 별도 갈래</th><td>갈래가 여섯이 되어 시작 화면 고르는 칸이 길어지고 검증 분량이 두 배가 됨</td><td>사용자 요청</td></tr>
+      <tr><th>두 손가락 확대·이동</th><td>어려움 판 칸이 25픽셀로 손가락 하한을 넘어 전체 판이 한 화면에 들어옴</td><td>실기에서 누르기 어렵다고 판정될 때</td></tr>
+      <tr><th>승률·도전 횟수 통계</th><td>판을 푸는 재미와 무관하고 화면 한 칸을 더 만들어야 함</td><td>기록 화면을 따로 만들 때</td></tr>
+      <tr><th>물음표 표시</th><td>작은 화면에서 상태가 셋으로 늘면 구분이 어려움(3.3)</td><td>재검토 없음</td></tr>
+      <tr><th>목숨 · 되돌리기</th><td>한 수가 판을 끝낸다는 성질이 이 게임의 본질임(1.1)</td><td>재검토 없음</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="s9">
+  <div class="sechead"><span class="n">9.</span><h2>만들 순서</h2><span class="rid">MIN-STEP</span></div>
+  <p class="lead">판 규칙을 먼저 세우고 화면을 얹음. 규칙은 화면 없이 검사할 수 있어 먼저 확정하는 것이 되돌림이 가장 적음.</p>
+
+  <div class="chain">
+    <div class="cx">판 규칙과 자동 검사</div><span class="op"></span>
+    <div class="cx">격자 화면과 손가락 조작</div><span class="op"></span>
+    <div class="cx">공용 프레임 연결</div><span class="op"></span>
+    <div class="cx">기록과 이어서 하기</div><span class="op"></span>
+    <div class="cx out">실기 화면 확인</div>
+  </div>
+
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">판 규칙과 자동 검사
+      <ul class="od"><li>지뢰 배치가 첫 탭 이웃을 비우는지, 연쇄가 0 영역과 그 경계까지만 여는지, 빠른 열기가 깃발 수 조건을 지키는지, 승패 판정, 저장 복원 왕복을 검사함</li><li>이 층은 화면을 부르지 않아 브라우저 없이 검사됨</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">격자 화면과 손가락 조작
+      <ul class="od"><li>칸 크기를 폭과 높이 둘 다 재서 맞추고, 짧게 탭과 길게 누르기를 가름</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">공용 프레임 연결
+      <ul class="od"><li>시작 화면·잠깐 멈춤·결과 카드·되돌아가기 계단·소리를 공용 부품에 연결함</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">기록과 이어서 하기</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">실기 화면 확인
+      <ul class="od"><li>세로와 가로 양쪽에서 스크롤과 잘림이 없는지, 어려움 판 칸을 손가락으로 누를 수 있는지 실제로 확인함</li><li>이 자리는 사용자가 직접 봐야 하는 자리임</li></ul>
+    </div></div>
+  </div>
+</section>
+
+<div class="foot">지뢰찾기 게임 기획서 · r1.0 · 2026-08-21</div>
+
+</main>
+</body>
+</html>
