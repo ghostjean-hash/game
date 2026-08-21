@@ -17,6 +17,7 @@
 /* 세로에서는 위(좌·우) · 격자 · 아래, 가로에서는 왼쪽 열 · 격자 · 오른쪽 열로 재배치한다
    (표준 4.7-5). 격자는 어느 방향에서도 화면 중앙에 온다. */
 #app.gg-frame[data-screen='play'] > #screen-play {
+  position: relative;
   display: grid;
   grid-template-areas:
     'tl tr'
@@ -35,6 +36,19 @@
 
 .pc-tl { grid-area: tl; display: flex; align-items: center; gap: var(--sp-2); justify-self: start; min-width: 0; }
 .pc-tr { grid-area: tr; display: flex; align-items: center; justify-self: end; }
+.play-title {
+  position: absolute;
+  top: var(--board-pad);
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
 .pc-bottom {
   grid-area: bottom;
   display: flex;
@@ -179,6 +193,9 @@
 
 /* 잠깐 멈춤 동안에는 격자를 가려 판을 들여다볼 수 없게 한다(01_spec.md 5.4) */
 #app.gg-frame[data-screen='pause'] .board { filter: blur(10px); }
+
+/* 결과는 판을 가리지 않도록 아래에 붙인다(docs/01_spec.md 5.5). */
+#app.gg-frame[data-screen='result'] .gg-layer-result { align-items: flex-end; padding-bottom: calc(var(--sp-5) + env(safe-area-inset-bottom, 0px)); }
 
 /* --- 결과 카드 내용 --- */
 .result { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); }

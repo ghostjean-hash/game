@@ -45,6 +45,7 @@
   .mstat{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:9px;
     background:rgba(26,36,56,.9);border:1px solid var(--ln);font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
   .mstat svg{width:10px;height:10px;fill:#F5A524;stroke:none}
+  .mplaytitle{font-size:13px;font-weight:700;color:#E8ECF5;letter-spacing:-.02em}
   .mmode{display:flex;gap:6px;padding:4px;border-radius:13px;background:rgba(26,36,56,.9);border:1px solid var(--ln)}
   .mmode span{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:7px 10px;border-radius:9px;
     font-size:11.5px;font-weight:700;color:var(--dim)}
@@ -330,6 +331,8 @@
           <div style="position:absolute;top:12px;left:12px;right:12px;z-index:6;display:flex;align-items:center;gap:7px">
             <div class="ic"><svg><use href="#i-back"/></svg></div>
             <div class="sp" style="flex:1"></div>
+            <div class="mplaytitle">지뢰찾기</div>
+            <div class="sp" style="flex:1"></div>
             <div class="ic"><svg><use href="#i-snd"/></svg></div>
             <div class="ic"><svg><use href="#i-full"/></svg></div>
             <div class="ic"><svg><use href="#i-pause"/></svg></div>
@@ -364,11 +367,11 @@
         </div>
       </div>
     </div>
-    <div class="figcap"><span class="fid">FIG 6.2</span>플레이 화면. 격자를 화면 가득 쓰는 게임이라 공용 상단 띠를 감추고 UI를 네 모서리에 붙임(규격 4.8-11). 자리만 이 게임이 정하고 되돌아가기·소리·잠깐 멈춤 동작은 공용에 연결함.</div>
+    <div class="figcap"><span class="fid">FIG 6.2</span>플레이 화면. 격자를 화면 가득 쓰는 게임이라 공용 상단 띠를 감추고 UI를 네 모서리에 붙임(규격 4.8-11). 상단 가운데에는 게임 이름을 고정해 현재 위치를 알리고, 되돌아가기·소리·잠깐 멈춤 동작은 공용에 연결함.</div>
   </div>
 
   <div class="ol">
-    <div class="oi"><span class="bl"></span><div class="ot">맨 위 줄은 누르는 것만 둠 - 왼쪽에 되돌아가기, 오른쪽에 소리 · 전체화면 · 잠깐 멈춤임
+    <div class="oi"><span class="bl"></span><div class="ot">맨 위 줄은 왼쪽에 되돌아가기, 가운데에 게임 이름, 오른쪽에 소리 · 전체화면 · 잠깐 멈춤을 둠
       <ul class="od"><li>전체화면 버튼은 지원 기기에서만 그 줄에 나타남</li></ul>
     </div></div>
     <div class="oi"><span class="bl"></span><div class="ot">읽는 것 둘(남은 지뢰 수 · 경과 시간)은 격자 바로 위 한 줄에 좌우로 붙임

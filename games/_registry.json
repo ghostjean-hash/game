@@ -58,6 +58,18 @@
         "keyboard"
       ],
       "accent": "#22d3ee"
+    },
+    {
+      "id": "mines",
+      "title": "Mines",
+      "subtitle": "숫자를 단서로 지뢰를 피해 안전한 칸을 모두 열어내세요",
+      "path": "games/mines/",
+      "status": "playable",
+      "controls": [
+        "touch",
+        "keyboard"
+      ],
+      "accent": "#f5a524"
     }
   ]
 }
