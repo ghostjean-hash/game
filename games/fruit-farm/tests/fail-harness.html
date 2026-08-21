@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><title>RUNNING</title>
+<style>html,body,iframe{width:100%;height:100%;margin:0;border:0}#report{position:fixed;right:8px;bottom:8px;padding:8px;background:#203326;color:#fff}</style>
+<iframe id="game" src="../index.html?harness=ui"></iframe><output id="report">검사 중</output>
+<script>
+const frame = document.querySelector('#game'); const report = document.querySelector('#report');
+const fail = (text) => { document.title = 'FAIL'; report.textContent = 'FAIL · ' + text; report.style.background = '#b42318'; };
+frame.addEventListener('load', () => {
+  const doc = frame.contentDocument; doc.querySelector('#find-button').click();
+  doc.querySelectorAll('#finder-board .cell')[40].dispatchEvent(new MouseEvent('mousedown', { bubbles: true, button: 0 }));
+  const board = doc.defaultView.__fruitBoard; const fruit = board.cells.findIndex((cell) => cell.mine);
+  if (!board.placed || fruit < 0) return fail('실패 판을 준비하지 못함');
+  setTimeout(() => {
+    doc.querySelectorAll('#finder-board .cell')[fruit].click();
+    if (doc.querySelector('#finder').open || !doc.querySelector('#harvest-fail').open) return fail('실패 팝업이 열리지 않음');
+    if (doc.querySelector('#coins').textContent !== '🪙 0') return fail('실패 뒤 코인이 바뀜');
+    doc.querySelector('#fail-retry').click();
+    if (!doc.querySelector('#finder').open || doc.querySelectorAll('#finder-board .cell').length !== 81) return fail('다시 하기가 새 판을 열지 않음');
+    document.title = 'PASS'; report.textContent = 'PASS · 실패 → 다시 하기'; report.style.background = '#15803d';
+  }, 400);
+});
+</script></html>

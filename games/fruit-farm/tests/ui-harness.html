@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><title>RUNNING</title>
+<style>html,body,iframe{width:100%;height:100%;margin:0;border:0}#report{position:fixed;right:8px;bottom:8px;padding:8px;background:#203326;color:#fff}</style>
+<iframe id="game" src="../index.html?harness=ui"></iframe><output id="report">검사 중</output>
+<script>
+const frame = document.querySelector('#game'); const report = document.querySelector('#report');
+const fail = (text) => { document.title = 'FAIL'; report.textContent = 'FAIL · ' + text; report.style.background = '#b42318'; };
+frame.addEventListener('load', () => {
+  const doc = frame.contentDocument;
+  if (doc.querySelector('#coins').textContent !== '🪙 0') return fail('초기 코인 오류');
+  doc.querySelector('#find-button').click();
+  const tiles = [...doc.querySelectorAll('#finder-board .cell')];
+  if (tiles.length !== 81 || !doc.querySelector('#finder').open) return fail('9×9 과일 찾기 판을 열지 못함');
+  tiles[40].dispatchEvent(new MouseEvent('mousedown', { bubbles: true, button: 0 }));
+  const board = doc.defaultView.__fruitBoard;
+  if (!board?.placed || board.cells[40].mine) return fail('첫 칸 안전 배치 오류');
+  setTimeout(() => {
+    board.cells.forEach((cell, index) => { if (cell.mine) doc.querySelectorAll('#finder-board .cell')[index].dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, button: 2 })); });
+    board.cells.forEach((cell, index) => { if (!cell.mine && cell.state !== 'open') doc.querySelectorAll('#finder-board .cell')[index].click(); });
+    setTimeout(() => {
+    if (doc.querySelector('#finder').open) return fail('마지막 과일 뒤 판이 닫히지 않음');
+    if (!doc.querySelector('#harvest-result').open || doc.querySelector('#result-apple').textContent !== '6' || doc.querySelector('#result-berry').textContent !== '4') return fail('수확 결과가 표시되지 않음');
+    if (!doc.querySelector('#result-continue')) return fail('수확 계속하기 선택지가 없음');
+    doc.querySelector('#result-continue').click();
+    if (!doc.querySelector('#finder').open || doc.querySelectorAll('#finder-board .cell').length !== 81) return fail('수확 계속하기가 새 과수원으로 이어지지 않음');
+    doc.querySelector('#close-finder').click();
+    doc.querySelector('#shop-button').click();
+    if (!doc.querySelector('#sheet-content h2')?.textContent.includes('사과 바구니')) return fail('맵 상점에서 첫 주문을 열지 못함');
+    if (doc.querySelector('#fulfill')?.disabled) return fail('첫 수확만으로 첫 주문을 납품할 수 없음');
+    doc.querySelector('#dock-inventory').click();
+    if (!doc.querySelector('#sheet-content').textContent.includes('사과 6')) return fail('창고 수확량 오류');
+    doc.querySelector('#dock-build').click();
+    if (!doc.querySelector('#sheet-content').textContent.includes('샘물 우물')) return fail('맵 건설 메뉴 없음');
+    document.title = 'PASS'; report.textContent = 'PASS · 맵 → 과일 찾기 → 주문 UI'; report.style.background = '#15803d';
+    }, 700);
+  }, 400);
+});
+</script></html>

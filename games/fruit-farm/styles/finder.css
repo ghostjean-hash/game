@@ -1,0 +1,6 @@
+.finder-tools{display:flex;align-items:center;gap:8px;margin:14px 0}
+.finder-mode{border:1px solid #e9ddc9;border-radius:10px;background:#fff;padding:8px 10px;color:#243629;font:inherit;font-weight:800;cursor:pointer}
+.finder-mode.active{border-color:#39734a;background:#39734a;color:#fff}
+.finder-tools .found{margin:0 0 0 auto}
+.tile.marked{background:#fff1db;color:#e25f42;font-size:22px}
+.tile.hit{background:#b44a37;color:#fff;font-size:22px}

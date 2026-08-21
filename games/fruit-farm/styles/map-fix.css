@@ -1,0 +1,6 @@
+.farm-map .map-object{display:block;min-height:0;padding:0;background:transparent;gap:0;align-items:initial;justify-content:initial}
+.farm-map .map-object.orchard{position:absolute;top:auto;right:24px!important;bottom:23%;left:auto;width:116px;height:116px;border:0;border-radius:0;background:transparent;box-shadow:none;transform:none!important}
+.farm-map .map-object.shop{position:absolute;top:auto;right:auto;bottom:18%;left:8%;width:116px;height:116px;border:0;border-radius:0;background:transparent;box-shadow:none}
+.farm-map .map-object.well{position:absolute;top:auto;right:auto;bottom:36%;left:37%;width:116px;height:116px;border:0;border-radius:0;background:transparent;box-shadow:none}
+.farm-map .map-object.workshop{position:absolute;top:25%;right:35%;bottom:auto;left:auto;width:116px;height:116px;border:0;border-radius:0;background:transparent;box-shadow:none}
+.farm-map .map-object.locked{position:absolute;top:28%;right:auto;bottom:auto;left:7%;width:116px;height:116px;border:0;border-radius:0;background:transparent;box-shadow:none}

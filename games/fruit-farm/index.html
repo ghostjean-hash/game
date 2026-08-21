@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#b9ddf0"><title>해뜰 과일 농장</title><link rel="stylesheet" href="../../shared/tokens.css"><link rel="stylesheet" href="../../shared/base.css"><link rel="stylesheet" href="./styles/main.css"><link rel="stylesheet" href="./styles/finder.css"><link rel="stylesheet" href="./styles/game.css"><link rel="stylesheet" href="./styles/map.css"><link rel="stylesheet" href="./styles/map-fix.css"><link rel="stylesheet" href="./styles/art-map.css"><link rel="stylesheet" href="../mines/styles/tokens.css"><link rel="stylesheet" href="../mines/styles/main.css"><link rel="stylesheet" href="./styles/mines-play.css"><link rel="stylesheet" href="./styles/harvest-result.css"><link rel="stylesheet" href="./styles/hud-exit.css"></head>
+<body><main class="farm-game">
+  <header class="map-hud"><button id="exit-game" aria-label="게임 허브로 나가기">×</button><b>해뜰 농장</b><output id="coins" aria-label="보유 코인">🪙 0</output></header>
+  <output id="message" class="map-message" aria-live="polite"></output>
+  <section class="farm-map" aria-label="내 농장 맵">
+    <i class="map-sun"></i><i class="map-hills"></i><i class="map-path"></i>
+    <button id="find-button" class="map-object orchard" aria-label="첫 과수원"><span>🌳</span><b>첫 과수원</b><small>과일 찾기</small></button>
+    <button id="shop-button" class="map-object shop" aria-label="상점"><span>🏪</span><b>상점</b><small id="shop-state">잠겨 있음</small></button>
+    <button id="well-button" class="map-object well" aria-label="샘물 우물"><span>💧</span><b>샘물 우물</b><small id="well-state">40 코인</small></button>
+    <button id="workshop-button" class="map-object workshop" aria-label="작업장"><span>🍯</span><b>작업장</b><small id="workshop-state">잠겨 있음</small></button>
+    <button id="locked-button" class="map-object locked" aria-label="잠긴 언덕 밭"><span>🌲</span><b>언덕 밭</b><small>잠김</small></button>
+  </section>
+  <nav class="map-dock"><button id="dock-order">📋<span>주문</span></button><button id="dock-inventory">📦<span>창고</span></button><button id="dock-build">🏗️<span>건설</span></button></nav>
+  <section id="map-sheet" class="map-sheet" hidden><button id="sheet-close" class="sheet-close" aria-label="닫기">×</button><p id="sheet-kicker" class="sheet-kicker"></p><div id="sheet-content"></div></section>
+</main>
+<dialog id="finder" aria-labelledby="finder-title"><section class="fruit-play"><div class="fruit-top"><button id="close-finder" class="icon" aria-label="농장으로">×</button><h2 id="finder-title">과일 수확</h2><output id="found" class="fruit-count">🧺 10</output></div><div class="fruit-center"><div class="board-status"><div class="stat"><span>🧺</span><b id="fruit-left">10</b></div><div class="stat time"><span>◷</span><b>0:00</b></div></div><div class="board-wrap"><div id="finder-board" class="board" aria-label="과일 수확 판"></div></div></div><div class="fruit-bottom"><div class="mode-group"><button id="finder-open" class="mode-btn active">열기</button><button id="finder-mark" class="mode-btn">🧺 바구니</button></div><p id="finder-help"></p></div></section></dialog>
+<dialog id="harvest-result" aria-labelledby="result-title"><section class="harvest-result"><p>수확 완료</p><h2 id="result-title">오늘의 과일</h2><div class="harvest-items"><b>🍎 사과 <span id="result-apple">0</span></b><b>🫐 베리 <span id="result-berry">0</span></b></div><div class="result-actions"><button id="result-continue">수확 계속하기</button><button id="result-confirm">마을로</button></div></section></dialog>
+<dialog id="harvest-fail" aria-labelledby="fail-title"><section class="harvest-result"><p>수확 실패</p><h2 id="fail-title">과일을 밟았어요</h2><div class="result-actions"><button id="fail-retry">다시 하기</button><button id="fail-village">마을로</button></div></section></dialog>
+<script type="module" src="./src/main.js"></script></body></html>
