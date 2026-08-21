@@ -49,14 +49,7 @@ function updateTitle() {
   frame.title.setResume({ enabled: !!saved, detail: saved?.detail || '' });
 }
 
-const play = document.createElement('section');
-play.id = 'screen-play';
-play.innerHTML = `
-  <div class="pc-tl"><button class="icon-btn" data-action="back" aria-label="되돌아가기">←</button><div class="stat"><span class="stat-icon">🚩</span><b id="mines-left">0</b></div></div>
-  <h1 class="play-title">지뢰찾기</h1>
-  <div class="pc-tr"><div class="tool-group"><button id="sound-toggle" class="icon-btn" aria-label="소리 켜기/끄기">♪</button><button id="pause-btn" class="icon-btn" aria-label="잠깐 멈춤">Ⅱ</button></div></div>
-  <div class="play-center"><div class="board-wrap"><div id="board" class="board"></div></div></div>
-  <div class="pc-bottom"><div class="stat time"><span class="stat-icon">⏱</span><b id="time">0:00</b></div><div class="mode-group"><button id="mode-open" class="mode-btn active">열기</button><button id="mode-flag" class="mode-btn">깃발</button></div></div>`;
+const play = document.querySelector('#screen-play');
 frame.screens.register(SCREEN.PLAY, play);
 const boardEl = play.querySelector('#board');
 const fullscreenButton = frame.topbar.button('fullscreen');
