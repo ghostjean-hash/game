@@ -17,6 +17,7 @@ games/mines/
 │   └── 01_spec / 02_data / 03_architecture / 04_conventions
 ├── src/
 │   ├── main.js            조립 + 화면 전환 오케스트레이션
+│   ├── gameHarness.js     화면과 무관한 플레이 조립 하네스
 │   ├── core/              규칙 (DOM 금지)
 │   │   ├── board.js       판 상태와 규칙 전부
 │   │   └── fit.js         칸 크기 산정
@@ -35,7 +36,8 @@ games/mines/
 │   └── main.css           이 게임 화면
 └── tests/
     ├── test.html          브라우저에서 여는 테스트 화면
-    └── runner.js          외부 라이브러리 없는 러너 + 케이스
+    ├── runner.js          외부 라이브러리 없는 러너 + 코어 케이스
+    └── gameHarness.js     시작·입력·저장 조립 경로 자동 검사
 ```
 
 ## 2. 의존성 방향
@@ -84,4 +86,6 @@ main.js ──> core/   ──> data/
 
 5.1. `tests/runner.js`가 검사하는 것은 `core/`다. 지뢰 배치가 첫 탭 이웃을 비우는지, 연쇄 열기가 0 영역과 그 경계까지만 여는지, 빠른 열기가 깃발 수 조건을 지키는지, 승패 판정, 직렬화 왕복이 핵심 케이스다.
 
-5.2. `render/` / `input/`은 브라우저 화면 검증(browser-shot)으로 확인하고 러너에 넣지 않는다.
+5.2. `gameHarness.js`는 DOM 없이 `main.js`가 쓰는 플레이 조립 경로를 검사한다. 시작 직후 READY, 첫 열기 후 PLAYING, 깃발 토글, 빠른 열기, 저장·복원, 승패 종료 뒤 저장 삭제를 모두 자동으로 확인한다.
+
+5.3. `render/` / `input/`은 브라우저 화면 검증(browser-shot)으로 확인한다. 하네스가 통과하지 않은 상태에서 화면만 고쳐 문제를 가리는 것은 금지한다.

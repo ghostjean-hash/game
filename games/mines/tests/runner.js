@@ -1,5 +1,6 @@
 import { createBoard, openCell, toggleFlag, chord, serialize, restore } from '../src/core/board.js';
 import { CELL_STATE, GAME } from '../src/data/constants.js';
+import { runGameHarness } from './gameHarness.js';
 
 const results = document.querySelector('#results');
 let failed = 0;
@@ -32,4 +33,5 @@ test('빠른 열기는 깃발 수가 숫자와 같을 때만 주변을 연다', 
 test('직렬화한 판은 같은 상태로 복원된다', () => {
   const board = createBoard({ w: 9, h: 9, mines: 10, key: 'easy' }); openCell(board, 4, 4, () => 0); const copy = restore(serialize(board)); ok(copy && copy.cells.length === board.cells.length && copy.placed);
 });
+runGameHarness(test, ok);
 document.title = failed ? `FAIL (${failed})` : 'PASS';

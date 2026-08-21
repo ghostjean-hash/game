@@ -1,7 +1,7 @@
 import { createGameFrame, createSave, SCREEN } from '../../../shared/frame/index.js';
 import { DIFFICULTY, DIFFICULTY_ORDER, DEFAULT_DIFFICULTY, GAME, LABEL } from './data/constants.js';
 import { CELL_COLOR, NUMBER_COLOR } from './data/colors.js';
-import { createBoard, openCell, toggleFlag, chord, countFlags, serialize, restore } from './core/board.js';
+import { createGameHarness } from './gameHarness.js';
 import { fitCell } from './core/fit.js';
 import { renderBoard } from './render/boardView.js';
 import { bindBoardInput } from './input/boardInput.js';
@@ -16,6 +16,7 @@ Object.entries(NUMBER_COLOR).forEach(([name, value]) => rootStyle.setProperty(`-
 const initialSave = createSave('mines');
 let selected = initialSave.get('lastDiff', DEFAULT_DIFFICULTY);
 let board = null;
+let game = null;
 let mode = 'open';
 let startedAt = 0;
 let elapsedMs = 0;
@@ -24,7 +25,7 @@ let unbind = null;
 let cursor = { x: 0, y: 0 };
 
 const formatTime = (ms) => `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')}`;
-const elapsed = () => elapsedMs + (board?.status === GAME.PLAYING ? Date.now() - startedAt : 0);
+const elapsed = () => game ? game.elapsed() : elapsedMs;
 const bestText = (key) => { const value = frame.save.readBest(key); return value === null ? '기록 없음' : `최고 기록 ${formatTime(value)}`; };
 
 function titleBackground() {
@@ -69,18 +70,19 @@ function draw() {
 function tick() { if (board?.status === GAME.PLAYING) { play.querySelector('#time').textContent = formatTime(elapsed()); } }
 function setMode(next) { mode = next; play.querySelector('#mode-open').classList.toggle('active', mode === 'open'); play.querySelector('#mode-flag').classList.toggle('active', mode === 'flag'); }
 function begin(key) {
-  const diff = DIFFICULTY[key]; board = createBoard(diff); selected = key; mode = 'open'; elapsedMs = 0; startedAt = 0; cursor = { x: 0, y: 0 };
+  const diff = DIFFICULTY[key]; game = createGameHarness({ difficulty: diff }); board = game.start(diff); selected = key; mode = 'open'; elapsedMs = 0; startedAt = 0; cursor = { x: 0, y: 0 };
   clearInterval(ticker); ticker = setInterval(tick, 1000); setMode(mode); frame.toPlay(); draw();
 }
 function resume(data) {
-  const restored = restore(data?.board); if (!restored) { frame.save.clearResume(); updateTitle(); return; }
-  board = restored; selected = data.key; elapsedMs = data.elapsedMs || 0; startedAt = board.status === GAME.PLAYING ? Date.now() : 0; cursor = { x: 0, y: 0 };
+  game = createGameHarness({ difficulty: DIFFICULTY[data?.key] || DIFFICULTY[DEFAULT_DIFFICULTY] });
+  const restored = game.resume(data); if (!restored) { frame.save.clearResume(); updateTitle(); return; }
+  board = restored; selected = data.key; elapsedMs = data.elapsedMs || 0; startedAt = 0; cursor = { x: 0, y: 0 };
   clearInterval(ticker); ticker = setInterval(tick, 1000); frame.toPlay(); draw();
 }
 function saveProgress() {
   if (!board || board.status !== GAME.PLAYING) return;
-  elapsedMs = elapsed(); startedAt = 0;
-  frame.save.saveResume({ board: serialize(board), key: selected, elapsedMs }, `${DIFFICULTY[selected].name} · ${formatTime(elapsedMs)} 진행`); updateTitle();
+  const saved = game.snapshot(); elapsedMs = saved.elapsedMs;
+  frame.save.saveResume(saved, `${DIFFICULTY[selected].name} · ${formatTime(elapsedMs)} 진행`); updateTitle();
 }
 function finish(result) {
   elapsedMs = elapsed(); clearInterval(ticker); frame.save.clearResume(); updateTitle(); draw();
@@ -91,13 +93,12 @@ function finish(result) {
 }
 function actOpen(x, y) {
   if (!board) return;
-  if (board.status === GAME.READY) startedAt = Date.now();
-  const result = openCell(board, x, y); frame.audio.play(result.opened.length > 1 ? 'chain' : 'open'); draw(); if (result.won || result.lost) finish(result);
+  const result = game.open(x, y); board = game.board(); frame.audio.play(result.opened.length > 1 ? 'chain' : 'open'); draw(); if (result.won || result.lost) finish(result);
 }
-function actFlag(x, y) { if (toggleFlag(board, x, y)) { frame.audio.play('flag'); draw(); } }
+function actFlag(x, y) { if (game.flag(x, y)) { board = game.board(); frame.audio.play('flag'); draw(); } }
 function actChord(x, y) {
   if (!board || board.status !== GAME.PLAYING) return;
-  const result = chord(board, x, y);
+  const result = game.chord(x, y); board = game.board();
   if (!result.opened.length && !result.lost) return;
   frame.audio.play('chord'); draw(); if (result.won || result.lost) finish(result);
 }
