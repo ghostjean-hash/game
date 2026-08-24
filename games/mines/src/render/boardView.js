@@ -1,7 +1,6 @@
-import { CELL_STATE, GAME, RULESET } from '../data/constants.js';
+import { CELL_STATE, GAME } from '../data/constants.js';
 
 const MINE = '✹';
-const FRUIT = '🍎';
 const FLAG = '⚑';
 
 export function renderBoard(el, board, { cursor = null } = {}) {
@@ -20,7 +19,7 @@ export function renderBoard(el, board, { cursor = null } = {}) {
       button.classList.add('flag'); button.textContent = board.markerSymbol || FLAG;
       if (board.status === GAME.LOST && !cell.mine) button.classList.add('flag-wrong');
     } else if (board.status === GAME.LOST && cell.mine) {
-      button.classList.add(cell.hit ? 'mine-hit' : 'mine-shown'); button.textContent = board.ruleset === RULESET.EXTENDED ? FRUIT : MINE;
+      button.classList.add(cell.hit ? 'mine-hit' : 'mine-shown'); button.textContent = MINE;
     }
     button.setAttribute('aria-label', `가로 ${x + 1}, 세로 ${y + 1}`);
     return button;
