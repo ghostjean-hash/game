@@ -155,7 +155,9 @@
 // v212 (2026-08-13): 영어 독해 지문을 120편에서 200편으로 채웠다. 새 주제 다섯(기술·심리·게임·과학·비판적 사고)이 생기고 언어 주제가 16편으로 찼다. 레벨별로 Level 1이 60편, Level 2가 80편, Level 3이 60편이라 애초 계획한 분량을 다 채운 상태다. 옛 v211 캐시 폐기.
 // v219 (2026-08-21): mines 신규 게임 추가. 기존 방문자가 새 게임의 화면·모듈을
 // 이전 캐시에서 섞어 읽지 않도록 셸 캐시를 교체한다.
-const CACHE_VERSION = "v219";
+// v220 (2026-08-24): mines 모듈·토큰 변경을 network-first로 전환한다. cache-first로
+// 새 main.js와 옛 하위 모듈을 섞어 읽으면 모듈 export 불일치로 게임이 시작하지 않는다.
+const CACHE_VERSION = "v220";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
@@ -247,7 +249,8 @@ self.addEventListener("fetch", (event) => {
   // _registry.json 등 + english-reading 앱 소스(JS)는 항상 network-first.
   // english-reading은 출제 검사기 등 로직이 자주 바뀌므로 JS를 cache-first로 두면 배포해도 옛 로직이 캐시로 남는다 → 항상 최신 fetch.
   const ER_JS = /\/apps\/english-reading\/src\/.*\.js$/.test(url.pathname);
-  if (ER_JS || NETWORK_FIRST_PATHS.some((p) => url.pathname.endsWith(p))) {
+  const MINES_ASSET = /\/games\/mines\/(?:index\.html|app\.webmanifest|src\/.*\.js|styles\/.*\.css)$/.test(url.pathname);
+  if (ER_JS || MINES_ASSET || NETWORK_FIRST_PATHS.some((p) => url.pathname.endsWith(p))) {
     event.respondWith(
       fetch(req)
         .then((res) => {
