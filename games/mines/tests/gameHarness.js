@@ -1,5 +1,6 @@
 import { createGameHarness } from '../src/gameHarness.js';
 import { DIFFICULTY, GAME } from '../src/data/constants.js';
+import { fitCell } from '../src/core/fit.js';
 
 export function runGameHarness(test, ok) {
   test('하네스는 시작 후 첫 칸을 열어 진행 상태로 만든다', () => {
@@ -16,5 +17,8 @@ export function runGameHarness(test, ok) {
     game.start(DIFFICULTY.easy); game.open(4, 4); clock = 1200; const saved = game.snapshot();
     const resumed = createGameHarness({ difficulty: DIFFICULTY.easy, now: () => clock }); resumed.resume(saved);
     ok(resumed.board().placed && resumed.elapsed() === 1200);
+  });
+  test('낮은 가로 화면은 컴팩트 하한으로 판을 줄일 수 있다', () => {
+    ok(fitCell({ width: 400, height: 420, w: 14, h: 18, min: 20 }) >= 20);
   });
 }

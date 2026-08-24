@@ -36,7 +36,7 @@
 ## 6. 색상과 스타일
 - 게임 데이터 색(숫자 색 1~8, 칸 상태 색): `src/data/colors.js` 상수만 사용
 - UI 색 / 간격 / 폰트: `styles/tokens.css` 변수만 사용
-- 다크 톤. 뷰포트·safe-area·터치 골격은 `shared/base.css` 링크로 받는다
+- 라이트 톤. 뷰포트·safe-area·터치 골격은 `shared/base.css` 링크로 받는다
 - 칸 크기는 CSS 변수 한 곳에서 파생. px 하드코딩 금지
 
 ## 7. 실행

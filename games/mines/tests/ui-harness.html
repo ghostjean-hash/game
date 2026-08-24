@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RUNNING</title>
+<style>
+  html, body, iframe { width: 100%; height: 100%; margin: 0; border: 0; }
+  .probe { position: fixed; inset: 0; visibility: hidden; pointer-events: none; }
+  #report { position: fixed; right: 8px; bottom: 8px; padding: 6px 10px; border-radius: 6px; background: #182235; color: #fff; font: 12px system-ui; }
+</style>
+<iframe id="game" src="../index.html?harness=win" title="지뢰찾기 UI 하네스"></iframe>
+<iframe id="idle" class="probe" src="../index.html?harness=idle" title="기본 보드 위치 검사"></iframe>
+<iframe id="cursor" class="probe" src="../index.html?harness=cursor" title="키보드 커서 검사"></iframe>
+<iframe id="pause" class="probe" src="../index.html?harness=pause" title="잠깐 멈춤 버튼 검사"></iframe>
+<iframe id="record" class="probe" src="../index.html?harness=record" title="최고 기록 표시 검사"></iframe>
+<output id="report">검사 중</output>
+<script type="module">
+  const frame = document.querySelector('#game');
+  const idleFrame = document.querySelector('#idle');
+  const cursorFrame = document.querySelector('#cursor');
+  const pauseFrame = document.querySelector('#pause');
+  const recordFrame = document.querySelector('#record');
+  const report = document.querySelector('#report');
+  const fail = (message) => { document.title = 'FAIL'; report.textContent = `FAIL · ${message}`; report.style.background = '#b42318'; };
+  const waitForFrame = (item) => item.contentDocument?.readyState === 'complete'
+    ? Promise.resolve()
+    : new Promise((resolve) => item.addEventListener('load', resolve, { once: true }));
+  const waitFor = (condition) => new Promise((resolve) => {
+    const check = () => condition() ? resolve() : setTimeout(check, 50);
+    check();
+  });
+  Promise.all([frame, idleFrame, cursorFrame, pauseFrame, recordFrame].map(waitForFrame)).then(() => waitFor(() => {
+    const doc = frame.contentDocument;
+    return !!doc?.querySelector('#outcome:not([hidden])')
+      && !!idleFrame.contentDocument?.querySelector('#board .cell')
+      && !!cursorFrame.contentDocument?.querySelector('.cell.cursor')
+      && pauseFrame.contentDocument?.querySelectorAll('.gg-layer-pause .gg-btn').length === 3
+      && !!recordFrame.contentDocument?.querySelector('.gg-title-record');
+  })).then(() => {
+    const doc = frame.contentDocument;
+    const idleDoc = idleFrame.contentDocument;
+    const cursorDoc = cursorFrame.contentDocument;
+    const pauseButtons = [...pauseFrame.contentDocument.querySelectorAll('.gg-layer-pause .gg-btn')];
+    const titleRecord = recordFrame.contentDocument.querySelector('.gg-title-record')?.textContent;
+    const outcome = doc.querySelector('#outcome');
+    const action = doc.querySelector('#end-action');
+    const modes = doc.querySelector('#mode-group');
+    const minesLeft = doc.querySelector('#mines-left');
+    const minesStat = doc.querySelector('#mines-stat');
+    const statIcons = doc.querySelectorAll('.stat-icon svg');
+    const status = doc.querySelector('.board-status').getBoundingClientRect();
+    const board = doc.querySelector('#board').getBoundingClientRect();
+    const idleBoard = idleDoc.querySelector('#board').getBoundingClientRect();
+    if (!outcome || outcome.hidden || !outcome.textContent.startsWith('클리어 · 이번 0:00 · 최고 0:00')) return fail('클리어 최고 기록 시간 없음');
+    if (!action || action.hidden || action.textContent !== '새 게임') return fail('새 게임 버튼 없음');
+    if (!modes?.hidden || getComputedStyle(modes).display !== 'none') return fail('결과 뒤 모드 버튼이 남음');
+    if (getComputedStyle(action).display === 'none') return fail('새 게임 버튼이 숨음');
+    if (minesLeft?.textContent !== '0') return fail('승리 뒤 남은 지뢰 수 오류');
+    if (minesStat?.getAttribute('aria-label') !== '남은 지뢰 0') return fail('남은 지뢰 수 대체 문구 오류');
+    if ([...statIcons].some((icon) => icon.getBoundingClientRect().width === 0)) return fail('상태 아이콘이 보이지 않음');
+    if (Math.abs((status.left + status.right) - (board.left + board.right)) > 2) return fail('상태 정보가 판 중심에서 벗어남');
+    if (Math.abs(board.top - idleBoard.top) > 2) return fail('결과에 따라 보드 위치가 움직임');
+    if (idleDoc.querySelector('.cell.cursor')) return fail('키보드를 쓰기 전 커서가 보임');
+    if (!cursorDoc.querySelector('.cell.cursor')) return fail('키보드 커서가 나타나지 않음');
+    if (pauseButtons.length !== 3 || new Set(pauseButtons.map((button) => button.getBoundingClientRect().height)).size !== 1) return fail('잠깐 멈춤 버튼 높이가 다름');
+    if (titleRecord !== '최고 기록 0:00') return fail('시작 화면 최고 기록이 표시되지 않음');
+    document.title = 'PASS'; report.textContent = 'PASS · 클리어 결과 UI'; report.style.background = '#15803d';
+  });
+</script>
+</html>

@@ -2,22 +2,24 @@
    게임 데이터 색(칸 상태 색·숫자 색)은 여기가 아니라 src/data/colors.js가 SSOT이며,
    main.js가 그 값을 읽어 --cell-* / --num-* 변수로 주입한다. 같은 색을 두 곳에 적지 않는다. */
 :root {
-  /* 이 게임의 톤 - 밤 남색 바탕에 호박색 강조(docs/02_data.md 4.4) */
-  --bg: #0f172a;
-  --bg-elev: #1a2438;
-  --bg-elev-2: #243149;
-  --fg: #e8ecf5;
-  --fg-dim: #94a3b8;
-  --line: #2c3a54;
+  /* 이 게임의 톤 - 밝은 바탕에 호박색 강조(docs/02_data.md 4.4) */
+  --bg: #f7f8fc;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #edf1f7;
+  --fg: #182235;
+  --fg-dim: #65738a;
+  --line: #d6deea;
   --accent: #f5a524;
   --accent-strong: #d98c12;
-  --accent-fg: #1a1204;   /* 강조 버튼 위 글자색(표준 4.8-15) */
+  --accent-fg: #241804;   /* 강조 버튼 위 글자색(표준 4.8-15) */
 
   /* 칸 크기. 실제 값은 main.js가 뷰포트를 재서 --cell로 덮는다(02_data.md 2장).
      여기 값은 계산 전 첫 렌더용 기본값이다. */
   --cell: 28px;
   --cell-gap: 2px;
   --board-pad: 12px;
+  --board-status-min: 152px;
+  --play-bottom-height: 52px;
 
   /* 격자 글자 크기는 칸 크기에서 파생한다. px 하드코딩 금지(04_conventions.md 3.1) */
   --cell-font: calc(var(--cell) * 0.58);

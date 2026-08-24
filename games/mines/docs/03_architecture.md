@@ -78,7 +78,9 @@ main.js ──> core/   ──> data/
 
 4.2. 플레이 화면에서는 공용 상단 띠를 감추고 네 모서리 UI를 프레임 동작에 연결한다(표준 4.8-11, `01_spec.md` 5.2).
 
-4.3. 전체화면은 `shared/fullscreen.js`, 뷰포트·safe-area·터치 골격은 `shared/base.css`(다크 톤이므로 base를 링크하면 `mobile-shell.css`가 함께 온다).
+4.3. 전체화면은 `shared/fullscreen.js`, 뷰포트·safe-area·터치 골격은 `shared/base.css`가 맡고, 이 게임은 라이트 토큰을 덮어쓴다.
+
+4.4. `tests/ui-harness.html`은 실제 게임 화면을 iframe으로 열고, `?harness=win` 시나리오로 승리 결과를 재현한다. 하네스는 결과 문구·하단 행동 버튼·모드 버튼 숨김·남은 깃발 수를 DOM에서 함께 판정한다. UI 변경은 이 검사가 통과해야 한다.
 
 4.4. 저장은 `shared/frame/save.js`를 거친다. localStorage 직접 접근 금지(클라우드 동기화 신호가 끊긴다).
 

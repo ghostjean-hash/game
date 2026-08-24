@@ -17,6 +17,7 @@ export const DEFAULT_DIFFICULTY = 'normal';
 // 칸 크기 산정(02_data.md 2장). 가용 폭과 가용 높이를 둘 다 재서 작은 쪽에 맞춘다.
 export const CELL = {
   min: 24,   // 이보다 작아지면 손가락으로 정확히 누를 수 없다
+  compactMin: 20, // 낮은 가로 화면에서는 하단 조작과 격자 겹침을 막기 위한 예외 하한
   max: 48,   // 넓은 화면에서 판이 과하게 커지지 않게 묶는다
   gap: 2,
 };
@@ -25,6 +26,7 @@ export const BOARD = {
   pad: 12,
   uiTop: 56,
   uiBottom: 104,
+  compactHeight: 640,
 };
 
 // 조작 판정(02_data.md 3장). 400ms는 웹 관례 500ms보다 짧다 -

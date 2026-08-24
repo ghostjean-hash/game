@@ -12,31 +12,31 @@
 <link rel="stylesheet" href="../../../standards/html-game/plans/assets/screen-mockup.css">
 <style>
   /* 이 게임의 목업 톤 - 실제 게임에서 쓸 색을 그대로 쓴다(screen-mockup.css 방침) */
-  .mk-mine{--g:#F5A524;--gd:#1A1204;--bg:#0F172A;--pn:#1A2438;--pn2:#243149;--ln:#2C3A54}
+  .mk-mine{--g:#F5A524;--gd:#241804;--bg:#F7F8FC;--pn:#FFFFFF;--pn2:#EDF1F7;--ln:#D6DEEA}
 
   /* 시작 화면 배경 장식 - 이 게임은 배경 그림이 없어 게임 자체 요소로 대신한다.
      닫힌 칸이 깔린 격자에 깃발 몇 개를 흐리게 놓는다 */
   .minedeco{position:absolute;left:0;right:0;z-index:1;display:grid;grid-template-columns:repeat(8,1fr);gap:3px;padding:0 14px;opacity:.30;
     -webkit-mask-image:linear-gradient(180deg,#000 52%,transparent 88%);mask-image:linear-gradient(180deg,#000 52%,transparent 88%)}
-  .minedeco i{aspect-ratio:1;border-radius:3px;background:#3E4C63}
-  .minedeco i.a{background:#46556E}
+  .minedeco i{aspect-ratio:1;border-radius:3px;background:#D9E2EE}
+  .minedeco i.a{background:#E4EAF3}
   .minedeco i.f{background:#F5A524}
 
   /* 플레이 화면 격자 - 보통 판(12×12)의 중간 국면 */
   .mgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
-  .mgrid i{aspect-ratio:1;border-radius:2.5px;background:#3E4C63;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;
+  .mgrid i{aspect-ratio:1;border-radius:2.5px;background:#D9E2EE;box-shadow:inset 0 1px 0 rgba(255,255,255,.70);display:flex;align-items:center;justify-content:center;
     font-size:10.5px;font-weight:800;line-height:1;font-style:normal}
-  .mgrid i.a{background:#46556E}
-  .mgrid i.o{background:#16202F;box-shadow:none}
+  .mgrid i.a{background:#E4EAF3}
+  .mgrid i.o{background:#F8FAFD;box-shadow:none}
   .mgrid i.f{background:#F5A524}
-  .mgrid i.n1{color:#60A5FA}
-  .mgrid i.n2{color:#4ADE80}
-  .mgrid i.n3{color:#F87171}
-  .mgrid i.n4{color:#A78BFA}
-  .mgrid i.n5{color:#FB923C}
-  .mgrid i.n6{color:#22D3EE}
-  .mgrid i.n7{color:#E2E8F0}
-  .mgrid i.n8{color:#F472B6}
+  .mgrid i.n1{color:#2563EB}
+  .mgrid i.n2{color:#15803D}
+  .mgrid i.n3{color:#DC2626}
+  .mgrid i.n4{color:#6D4CC7}
+  .mgrid i.n5{color:#B45309}
+  .mgrid i.n6{color:#0E7490}
+  .mgrid i.n7{color:#334155}
+  .mgrid i.n8{color:#BE185D}
   .mgrid i.hit{background:#E5484D}
   .mgrid i.shown{background:#64748B}
   .mgrid i svg{width:11px;height:11px;fill:#1A1204;stroke:none}
@@ -260,6 +260,10 @@
     </tbody>
   </table>
   <p>길게 누르기가 성립한 순간 그 칸을 눌린 색으로 바꾸고 소리를 냄. 손을 떼기 전에 무엇이 일어날지 알려야 함. 이 표시가 없으면 사용자는 0.4초를 세는 수밖에 없음.</p>
+
+  <h3><span class="sn">5.3.</span>마우스</h3>
+  <p>데스크톱에서는 왼쪽 클릭을 현재 모드의 짧은 탭과 같게 처리하고, 오른쪽 클릭은 언제나 깃발을 꽂거나 빼는 조작으로 처리함. 마우스로 먼저 시험하는 사용자가 키보드 없이 판을 열고 표시할 수 있어야 함.</p>
+  <p>하단 열기·깃발 버튼에는 각각 <span class="key">Space</span> · <span class="key">F</span> 키를 함께 적어, 키보드 조작을 외워야만 알 수 있는 상태를 만들지 않음.</p>
 </section>
 
 <section id="s6">

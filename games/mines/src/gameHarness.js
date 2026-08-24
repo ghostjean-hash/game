@@ -9,7 +9,7 @@ export function createGameHarness({ difficulty, now = () => Date.now(), rng = Ma
   let startedAt = 0;
 
   const elapsed = () => elapsedMs + (board?.status === GAME.PLAYING ? now() - startedAt : 0);
-  const freeze = () => { elapsedMs = elapsed(); startedAt = 0; return elapsedMs; };
+  const freeze = (value = elapsed()) => { elapsedMs = value; startedAt = 0; return elapsedMs; };
 
   return {
     start(nextDifficulty) {
@@ -22,15 +22,23 @@ export function createGameHarness({ difficulty, now = () => Date.now(), rng = Ma
     open(x, y) {
       if (!board) return { opened: [], won: false, lost: false };
       if (board.status === GAME.READY) startedAt = now();
+      const atAction = elapsed();
       const result = openCell(board, x, y, rng);
-      if (result.won || result.lost) freeze();
+      if (result.won || result.lost) freeze(atAction);
       return result;
     },
-    flag(x, y) { return board ? toggleFlag(board, x, y) : false; },
+    flag(x, y) {
+      if (!board) return false;
+      const atAction = elapsed();
+      const changed = toggleFlag(board, x, y);
+      if (changed && (board.status === GAME.WON || board.status === GAME.LOST)) freeze(atAction);
+      return changed;
+    },
     chord(x, y) {
       if (!board) return { opened: [], won: false, lost: false };
+      const atAction = elapsed();
       const result = chord(board, x, y);
-      if (result.won || result.lost) freeze();
+      if (result.won || result.lost) freeze(atAction);
       return result;
     },
     snapshot() { return board ? { board: serialize(board), key, elapsedMs: freeze() } : null; },

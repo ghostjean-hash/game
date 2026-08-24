@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
-<meta name="theme-color" content="#0f172a" />
+<meta name="theme-color" content="#f7f8fc" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Mines" />
+<meta name="apple-mobile-web-app-title" content="지뢰찾기" />
 <title>지뢰찾기 - 숫자로 찾는 지뢰</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../../icons/icon-180.png" />
 <link rel="manifest" href="app.webmanifest" />
@@ -20,21 +20,17 @@
 <main id="app">
 
   <section id="screen-play" class="screen">
-    <div class="pc-tl">
-      <button class="icon-btn" data-action="back" aria-label="되돌아가기">←</button>
-      <div class="stat"><span class="stat-icon">🚩</span><b id="mines-left">0</b></div>
-    </div>
+    <div class="pc-tl"><button class="icon-btn" data-action="back" aria-label="되돌아가기"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button></div>
     <h1 class="play-title">지뢰찾기</h1>
     <div class="pc-tr">
       <div class="tool-group">
-        <button id="sound-toggle" class="icon-btn" aria-label="소리 켜기/끄기">♪</button>
-        <button id="pause-btn" class="icon-btn" aria-label="잠깐 멈춤">Ⅱ</button>
+        <button id="sound-toggle" class="icon-btn" aria-label="소리 켜기/끄기"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4zM16 9a4 4 0 0 1 0 6"/></svg></button>
+        <button id="pause-btn" class="icon-btn" aria-label="잠깐 멈춤"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v14M17 5v14"/></svg></button>
       </div>
     </div>
-    <div class="play-center"><div class="board-wrap"><div id="board" class="board"></div></div></div>
+    <div class="play-center"><div class="board-status"><div id="mines-stat" class="stat" aria-label="남은 지뢰 0"><span class="stat-icon" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4m0 1c4-2 7 2 12 0v10c-5 2-8-2-12 0"/></svg></span><b id="mines-left">0</b></div><div id="time-stat" class="stat time" aria-label="경과 시간 0:00"><span class="stat-icon" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></span><b id="time">0:00</b></div></div><div class="board-wrap"><div id="board" class="board"></div></div></div>
     <div class="pc-bottom">
-      <div class="stat time"><span class="stat-icon">⏱</span><b id="time">0:00</b></div>
-      <div class="mode-group"><button id="mode-open" class="mode-btn active">열기</button><button id="mode-flag" class="mode-btn">깃발</button></div>
+      <div id="mode-group" class="mode-group"><button id="mode-open" class="mode-btn">열기 <kbd>Space</kbd></button><button id="mode-flag" class="mode-btn">깃발 <kbd>F</kbd></button></div><div id="outcome" class="outcome" aria-live="polite" hidden></div><button id="end-action" class="mode-btn active" hidden></button>
     </div>
   </section>
 

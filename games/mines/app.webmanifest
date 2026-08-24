@@ -1,6 +1,6 @@
 {
-  "name": "Mines - game_ghost",
-  "short_name": "Mines",
+  "name": "지뢰찾기 - game_ghost",
+  "short_name": "지뢰찾기",
   "id": "./",
   "start_url": "./",
   "scope": "../../",
@@ -10,8 +10,8 @@
     "standalone"
   ],
   "orientation": "any",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
+  "background_color": "#f7f8fc",
+  "theme_color": "#f7f8fc",
   "icons": [
     {
       "src": "../../icons/icon-192.png",
