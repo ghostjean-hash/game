@@ -79,7 +79,7 @@ export function midpoint(a, b) {
  * @returns {{ pannable:boolean, cell:number, minCell:number, marginRight:number }}
  *   pannable  확대·이동 모드 여부(스크롤 영역으로 쓸지)
  *   cell      지금 적용할 셀 크기
- *   minCell   축소 하한(= 전체가 들어가는 크기)
+ *   minCell   축소 하한(= 손가락으로 조작 가능한 최소 크기)
  *   marginRight 실제로 적용할 우측 여백
  */
 export function planBoardFit({
@@ -97,7 +97,7 @@ export function planBoardFit({
     return { pannable: false, cell: fit, minCell: fit, marginRight: margin };
   }
   // 전체를 넣으면 손가락으로 못 누르는 크기 - 확대·이동으로 넘긴다.
-  // 축소 하한은 상한(maxPx) 제약 없이 "전체가 들어가는 크기" 그대로.
-  const minCell = fitCellSize({ ...base, marginRight: 0 });
+  // 큰 판의 전체 보기는 너무 작아 조작할 수 없으므로 축소도 손가락 기준 아래로 내리지 않는다.
+  const minCell = Math.max(fitMin, fitCellSize({ ...base, marginRight: 0 }));
   return { pannable: true, cell: Math.max(startPx, minCell), minCell, marginRight: 0 };
 }

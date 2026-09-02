@@ -5,6 +5,7 @@
 import { clampCell, distance, midpoint, zoomScroll } from '../core/zoom.js';
 
 /**
+ * @param {HTMLElement} surfaceEl 제스처를 받는 격자(.board)
  * @param {HTMLElement} viewportEl 스크롤 영역(.puzzle-wrap)
  * @param {object} cb
  * @param {() => number} cb.getCell        현재 셀 크기(px)
@@ -13,7 +14,7 @@ import { clampCell, distance, midpoint, zoomScroll } from '../core/zoom.js';
  * @param {() => {w:number, h:number}} cb.getClueSize   힌트가 차지하는 고정 폭·높이
  * @param {() => void} cb.onGestureStart   두 손가락 인식 순간(칠하기 취소용)
  */
-export function attachBoardZoom(viewportEl, cb) {
+export function attachBoardZoom(surfaceEl, viewportEl, cb) {
   const points = new Map();   // pointerId → { x, y }
   let gesture = null;         // 제스처 시작 시점의 스냅샷
 
@@ -61,13 +62,16 @@ export function attachBoardZoom(viewportEl, cb) {
     viewportEl.scrollTop = top - (mid.y - gesture.midY);
   }
 
-  viewportEl.addEventListener('pointerdown', (e) => {
+  surfaceEl.addEventListener('pointerdown', (e) => {
     if (e.pointerType === 'mouse') return;          // 마우스는 확대 대상 아님(데스크톱은 화면이 넓다)
     points.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (points.size === 2) beginGesture();
+    // boardInput이 첫 손가락만 잡기 때문에 둘째 손가락은 격자 밖으로 나가면 쉽게 유실됐다.
+    // 두 포인터를 모두 격자에 고정해, 어느 칸에서 시작해도 끝까지 확대·이동이 이어지게 한다.
+    try { surfaceEl.setPointerCapture(e.pointerId); } catch { /* noop */ }
   });
 
-  viewportEl.addEventListener('pointermove', (e) => {
+  surfaceEl.addEventListener('pointermove', (e) => {
     if (!points.has(e.pointerId)) return;
     points.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (gesture && points.size >= 2) {
@@ -80,9 +84,8 @@ export function attachBoardZoom(viewportEl, cb) {
     if (!points.delete(e.pointerId)) return;
     if (points.size < 2) gesture = null;            // 손가락이 하나로 줄면 제스처 종료
   };
-  viewportEl.addEventListener('pointerup', drop);
-  viewportEl.addEventListener('pointercancel', drop);
-  viewportEl.addEventListener('pointerleave', drop);
+  surfaceEl.addEventListener('pointerup', drop);
+  surfaceEl.addEventListener('pointercancel', drop);
 
   return {
     /** 화면 회전·퍼즐 교체처럼 상태가 갈아엎힐 때 초기화. */

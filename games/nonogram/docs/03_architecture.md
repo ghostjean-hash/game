@@ -23,7 +23,7 @@ nonogram/
 │   │   └── resultView.js#  결과(변신+별점)
 │   ├── input/          # 입력 처리 (터치/마우스/키보드 → core 액션)
 │   │   ├── boardInput.js#  한 손가락: 탭/드래그로 칠하기·지우기
-│   │   └── boardZoom.js #  두 손가락: 확대·이동(core/zoom 계산을 DOM에 반영)
+│   │   └── boardZoom.js #  격자 위 두 손가락: 확대·이동(core/zoom 계산을 DOM에 반영)
 │   ├── audio/          # Web Audio 효과음 합성 (음원 파일 0, core 아님)
 │   │   └── sound.js
 │   └── data/           # 상수 / 색상 / 퍼즐 (매직 넘버 SSOT)

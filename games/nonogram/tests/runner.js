@@ -300,15 +300,14 @@ test('planBoardFit: 여백을 버려도 작으면 확대·이동 모드로 넘�
   const p = planBoardFit({ ...IPHONE_MINI, marginRight: 70, n: 15, maxPx: 44 });
   eq(p.pannable, true);
   eq(p.cell, ZOOM.START_PX, '손가락으로 누를 수 있는 크기로 시작');
-  assert(p.minCell < ZOOM.FIT_MIN_PX, '축소 하한 = 전체가 들어가는 크기');
+  eq(p.minCell, ZOOM.FIT_MIN_PX, '축소도 손가락 기준에서 멈춤');
   assert(p.minCell >= CELL_FIT.MIN_PX, '바닥값 이상');
   eq(p.marginRight, 0);
 });
-test('planBoardFit: 축소 하한은 확대 상한(maxPx)에 눌리지 않는다', () => {
-  // 15칸 판 하한은 "전체가 들어가는 크기"라야 오므리기 한 번이 전체 보기가 된다.
+test('planBoardFit: 축소 하한은 손가락 기준 아래로 내려가지 않는다', () => {
+  // 15칸 판의 전체 보기는 너무 작으므로, 축소도 조작 가능한 크기에서 멈춘다.
   const p = planBoardFit({ ...IPHONE_MINI, marginRight: 70, n: 15, maxPx: 44 });
-  const whole = fitCellSize({ ...IPHONE_MINI, marginRight: 0, clueW: 70, clueH: 70, n: 15 });
-  eq(p.minCell, whole);
+  eq(p.minCell, ZOOM.FIT_MIN_PX);
 });
 
 // --- 실행 ---

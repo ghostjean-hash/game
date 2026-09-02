@@ -695,7 +695,7 @@ function init() {
   const paint = attachBoardInput(boardEl, { onStart: onPaintStart, onMove: onPaintMove, onEnd: onPaintEnd });
   // 두 손가락 확대·이동. 손가락이 둘이 되는 순간 칠하기를 끊고, 그 칠하기가 아주 짧았으면
   // "확대하려다 첫 손가락이 먼저 닿은 것"으로 보고 되돌린다(실수로 세지 않게).
-  attachBoardZoom(puzzleEl.parentElement, {
+  attachBoardZoom(boardEl, puzzleEl.parentElement, {
     getCell: () => view.cell,
     setCell: (px) => applyCell(px),
     getLimits: () => ({ min: view.minCell, max: ZOOM.MAX_PX }),
