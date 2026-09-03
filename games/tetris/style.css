@@ -238,3 +238,52 @@
 /* 옛 모드 선택 화면(카드 넷을 펼쳐 놓던 화면)의 스타일은 제거했다.
    모드 고르기는 공용 시작 화면의 고르는 칸 하나로 접혔고(규격 4.8-5),
    그 생김새는 shared/frame/frame.css가 갖는다. */
+
+/* v0.4.3: 플레이 HUD는 더 이상 화면 폭을 가르는 상단 띠가 아니다.
+   보드 위에 필요한 정보만 각각의 작은 떠 있는 카드로 얹는다. */
+.tetris.gg-frame[data-screen='play'] > [data-gg-screen='play'],
+.tetris.gg-frame[data-covered='play'] > [data-gg-screen='play'] {
+  grid-template-rows: minmax(0, 1fr);
+  position: relative;
+}
+.tetris .game-screen > .topbar {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  left: 10px;
+  right: 10px;
+  z-index: 8;
+  padding: 0;
+  gap: 6px;
+  min-height: 0;
+  background: transparent;
+  border: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.tetris .game-screen > .topbar > * { pointer-events: auto; }
+.tetris .topbar .home,
+.tetris .score-big,
+.tetris .mini-hud,
+.tetris .piece-slot,
+.tetris .topbar .icon-btn {
+  border: 1px solid color-mix(in srgb, var(--line) 86%, transparent);
+  background: color-mix(in srgb, var(--bg-elev) 90%, transparent);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .22);
+  backdrop-filter: blur(12px);
+}
+.tetris .topbar .home,
+.tetris .topbar .icon-btn { border-radius: 12px; }
+.tetris .score-big {
+  flex: 0 1 auto;
+  padding: 6px 11px;
+  border-radius: 999px;
+}
+.tetris .score-big b { font-size: clamp(18px, 5vw, 25px); }
+.tetris .mini-hud { padding: 7px 10px; border-radius: 999px; }
+.tetris .piece-slot { padding: 3px; border-radius: 12px; }
+.tetris .piece-mini { border: 0; background: transparent; }
+.tetris .stage { padding-top: 58px; }
+@media (max-width: 430px) {
+  .tetris .mini-hud { display: none; }
+  .tetris .topbar .home { display: none; }
+}

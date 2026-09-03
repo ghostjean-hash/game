@@ -155,14 +155,18 @@
 // v212 (2026-08-13): 영어 독해 지문을 120편에서 200편으로 채웠다. 새 주제 다섯(기술·심리·게임·과학·비판적 사고)이 생기고 언어 주제가 16편으로 찼다. 레벨별로 Level 1이 60편, Level 2가 80편, Level 3이 60편이라 애초 계획한 분량을 다 채운 상태다. 옛 v211 캐시 폐기.
 // v219 (2026-08-21): mines 신규 게임 추가. 기존 방문자가 새 게임의 화면·모듈을
 // 이전 캐시에서 섞어 읽지 않도록 셸 캐시를 교체한다.
+// v224 (2026-08-24): 허브 하단 메뉴 고정과 게임·앱·정보 화면 분리를 즉시 반영한다.
+// v221 (2026-08-24): 허브 v2·공통 앱 바·standalone PWA 전환을 즉시 반영한다. 전체화면 공용 모듈은 더 이상 사전 캐시하지 않는다.
 // v220 (2026-08-24): mines 모듈·토큰 변경을 network-first로 전환한다. cache-first로
 // 새 main.js와 옛 하위 모듈을 섞어 읽으면 모듈 export 불일치로 게임이 시작하지 않는다.
-const CACHE_VERSION = "v220";
+const CACHE_VERSION = "v231";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
 const NETWORK_FIRST_PATHS = [
   "/games/_registry.json",
+  // 홈 화면 추가 때 최신 standalone 선언을 즉시 읽어야 한다.
+  "/games/nonogram/app.webmanifest",
   "/apps/lotto/src/data/draws.json",
   "/apps/_registry.json",
   "/apps/english-reading/src/data/passages.json",
@@ -199,7 +203,6 @@ const PRECACHE = [
   "./shared/frame/frame.css",
   "./shared/loop.js",
   "./shared/ui.js",
-  "./shared/fullscreen.js",
   "./games/_registry.json",
   "./games/tetris/index.html",
   "./games/tetris/style.css",

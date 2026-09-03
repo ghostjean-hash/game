@@ -3,7 +3,7 @@
 import { createLoop } from '../../../shared/loop.js';
 import { createStorage } from '../../../shared/storage.js';
 import { registerServiceWorker } from '../../../shared/ui.js';
-import { setupFullscreen } from '../../../shared/fullscreen.js';
+
 import { createGameFrame, SCREEN } from '../../../shared/frame/index.js';
 import { CFG } from './data/numbers.js';
 import { COLORS } from './data/colors.js';
@@ -42,7 +42,6 @@ const elBossFill = $('#boss-hp-fill');
 const elBanner = $('#banner');
 const btnPause = $('#btn-pause');
 const btnAuto = $('#btn-auto');
-const btnFs = $('#btn-fs');
 
 // HUD 토글 아이콘(이모지 대신 인라인 SVG - 고퀄 라인 아이콘).
 const SVG_A = 'width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
@@ -91,7 +90,7 @@ const frame = createGameFrame({
   title: '바푸리의 모험',
   character: { src: 'assets/characters/bapuri-upward-v5.png', width: 138 },
   background: { image: 'assets/diorama/KR-seoul.png' },
-  buttons: ['settings', 'sound', 'fullscreen'],
+  buttons: ['settings', 'sound'],
   sounds: SOUNDS,
   resume: { enabled: false, detail: '' },
   options: {
@@ -952,15 +951,6 @@ function syncCheatUI() {
   $('#cheat-kinds').querySelectorAll('input[data-kind]').forEach((c) => { c.checked = cheatState.dropKinds[c.dataset.kind] !== false; });
 }
 
-// ── 전체화면 (4.7-6: 지원 기기만 버튼 노출) ──
-// 미지원 기기·홈 화면 앱은 버튼을 숨기고, 조작 중 브라우저가 임의로 전체화면을 끝내면
-// 다음 조작에 되돌린다. 공용 구현은 shared/fullscreen.js.
-// 전체화면 버튼은 공용 상단 띠(시작 화면)에 있고 프레임이 이 모듈에 이미 걸어 두었다.
-// 이 게임 HUD에는 두지 않으므로 여기서 다시 걸 것이 없다.
-function initFullscreen() {
-  if (btnFs) setupFullscreen({ button: btnFs });
-}
-
 // ── 버튼 / 초기화 ──
 // 시작·이어서 하기·난이도·친구·자동·환경설정 버튼은 모두 공용 시작 화면이 갖고 있고,
 // 눌렀을 때 할 일은 프레임을 만들 때 넘겼다. 여기 남은 것은 플레이 화면의 버튼들이다.
@@ -1079,5 +1069,4 @@ frame.screens.onChange((now) => {
 
 refreshTitle();
 syncMuteBtn();
-initFullscreen();
 resize();

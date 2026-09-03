@@ -1,7 +1,7 @@
 // 진입점: 화면 전환 오케스트레이션 + 저장 연결. core를 조립하고 render/input에 위임한다.
 
 import { createGameFrame, SCREEN } from '../../../shared/frame/index.js';
-import { setupFullscreen } from '../../../shared/fullscreen.js';
+
 import { CELL, MODE, MAX_STARS, ANIM, PRAISE, PRAISE_STREAK, CELL_FIT, ZOOM } from './data/constants.js';
 import { PUZZLES } from './data/puzzles.js';
 import { makeClues } from './core/hints.js';
@@ -63,7 +63,7 @@ const frame = createGameFrame({
   light: true,                       // 흰 바탕 게임이라 배경 결·그림자를 밝은 쪽으로 뒤집는다
   hasSelect: true,
   background: { className: 'title-deco', el: titleBackdrop() },
-  buttons: ['sound', 'fullscreen'],  // 환경설정은 이 게임에 없다(설정 항목 자체가 없음)
+  buttons: ['sound'],  // 환경설정은 이 게임에 없다(설정 항목 자체가 없음)
   sounds: SOUNDS,
   pauseOnHide: false,                // 실패도 시간 제한도 없는 게임이라 자리를 비워도 잃을 것이 없다
 
@@ -217,7 +217,7 @@ function startPuzzle(puzzle, { entry = 'map' } = {}) {
 
 // --- 격자 크기·확대 상태 ---
 // cell   지금 화면에 적용 중인 셀 크기(px)
-// minCell 축소 하한 = 그림 전체가 화면에 들어오는 크기
+// minCell 축소 하한 = 손가락으로 조작 가능한 최소 크기
 // basePannable 이 화면·판에서는 전체를 넣으면 손가락보다 작아져 처음부터 확대·이동 모드인가
 // marginRight 전체 맞춤일 때만 주는 우측 대칭 여백(확대·이동 중엔 0)
 const view = { cell: 0, minCell: 0, basePannable: false, marginRight: 0, pannable: false };
@@ -716,8 +716,6 @@ function init() {
   frame.result.on('quit', () => openMap());
   el('sound-toggle').addEventListener('click', () => frame.audio.setMuted(!frame.audio.isMuted()));
   syncPlaySoundBtn(frame.audio.isMuted());
-  // 플레이 화면 전용 전체화면 버튼도 같은 공용 모듈에 건다(막힌 기기 안내·자동 복귀 포함).
-  setupFullscreen({ button: el('fs-toggle') });
   el('undo-btn').addEventListener('click', undo);
   el('help-btn').addEventListener('click', useHelp);
   // 힌트도 탭과 드래그를 함께 받는다. 한 번의 훑기는 한 번의 되돌리기로 묶인다.
@@ -736,9 +734,6 @@ function init() {
   window.addEventListener('orientationchange', () => {
     requestAnimationFrame(() => { fitBoard(false); updateFinger(); });
   });
-  const onFsChange = () => requestAnimationFrame(() => { fitBoard(false); updateFinger(); });
-  document.addEventListener('fullscreenchange', onFsChange);
-  document.addEventListener('webkitfullscreenchange', onFsChange);
 
   // 소리 열기·음소거 저장·화면 이탈 시 재우기는 공용 프레임이 이미 하고 있다.
 

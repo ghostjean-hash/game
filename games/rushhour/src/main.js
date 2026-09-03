@@ -17,7 +17,7 @@ import {
 } from './data/shop.js';
 import { PONY_STYLES, DEFAULT_STYLE } from './data/styles.js';
 import { createStorage } from '../../../shared/storage.js';
-import { setupFullscreen } from '../../../shared/fullscreen.js';
+
 import { createGameFrame, SCREEN } from '../../../shared/frame/index.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
@@ -62,7 +62,6 @@ const el = {
   settings: document.getElementById('settings'),
   settingList: document.getElementById('setting-list'),
   settingsClose: document.getElementById('btn-settings-close'),
-  fsBtn: document.getElementById('btn-fs'),
 };
 
 const state = {
@@ -681,7 +680,7 @@ const frame = createGameFrame({
   hasSelect: true,
   background: { className: 'title-deco', el: titleBackdrop() },
   character: { src: 'assets/ponies/a_v2.png', width: 76 },
-  buttons: ['settings', 'sound', 'fullscreen'],
+  buttons: ['settings', 'sound'],
   sounds: SOUNDS,
   pauseOnHide: false,                // 시간은 흐르지만 실패로 죽는 게임이 아니라 카드를 띄우지 않는다
   resume: { enabled: false, detail: '' },

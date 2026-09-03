@@ -3534,3 +3534,6 @@ a.btn-secondary,
 .home-link svg { width: 18px; height: 18px; }
 .home-link:hover { color: var(--color-text); background: var(--color-surface-soft); }
 .home-link:active { transform: scale(0.96); }
+
+/* 하단 허브 메뉴는 앱 내부에 두지 않는다. 독립 허브 버튼을 항상 보인다. */
+.home-link { display: inline-flex; }

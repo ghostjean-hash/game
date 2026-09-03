@@ -1,28 +1,28 @@
 # game_ghost - 게임 허브
 
-PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트는 각 게임의 `AGENTS.md` / `PROGRESS.md` / `docs/` 참조.
+PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트는 각 게임의 `CLAUDE.md` / `PROGRESS.md` / `docs/` 참조.
 
 # 0. 주요 문서 지도 (헷갈릴 때 여기부터)
 
 같은 이름 문서가 여러 층에 있어 헷갈릴 수 있다. 이름은 같아도 **위치가 곧 역할**이다. 헷갈리면 아래 두 표만 보면 된다.
 
-## 0.1. AGENTS.md (5개 - 폴더 진입 시 Codex가 자동으로 읽는 지침)
+## 0.1. CLAUDE.md (5개 - 폴더 진입 시 Claude Code가 자동으로 읽는 지침)
 
 | 위치 | 역할 | 한 줄 |
 |---|---|---|
-| `~/.Codex/AGENTS.md` | 모든 프로젝트 공통 (자비스 본체) | "자비스가 누구고 어떻게 답하나" |
-| `./AGENTS.md` (이 파일) | 게임 허브 전체 개발 규칙 | "이 게임들을 어떻게 만드나" |
-| `./.Codex/AGENTS.md` | 자비스 도메인 표식 (`domain: game-hub`) | "이 폴더가 어느 자비스 도메인인가" |
-| `./games/<id>/AGENTS.md` | 게임별 세부 규칙 (lotto 등) | "이 게임 하나를 어떻게 만드나" |
+| `~/.claude/CLAUDE.md` | 모든 프로젝트 공통 (자비스 본체) | "자비스가 누구고 어떻게 답하나" |
+| `./CLAUDE.md` (이 파일) | 게임 허브 전체 개발 규칙 | "이 게임들을 어떻게 만드나" |
+| `./.claude/CLAUDE.md` | 자비스 도메인 표식 (`domain: game-hub`) | "이 폴더가 어느 자비스 도메인인가" |
+| `./games/<id>/CLAUDE.md` · `./apps/<id>/CLAUDE.md` | 게임·앱별 세부 규칙 | "이거 하나를 어떻게 만드나" |
 
-핵심: 도메인 여부를 정하는 건 `./.Codex/AGENTS.md`의 `domain:` 키 하나뿐. 이름 겹침은 Codex 도구 표준이라 못 바꾸지만, 역할은 위 표대로 갈린다.
+핵심: 도메인 여부를 정하는 건 `./.claude/CLAUDE.md`의 `domain:` 키 하나뿐. 이름 겹침은 Claude Code 도구 표준이라 못 바꾸지만, 역할은 위 표대로 갈린다.
 
 ## 0.2. PROGRESS.md (4개 - 진행 로그)
 
 | 위치 | 역할 |
 |---|---|
 | `./PROGRESS.md` | 게임 허브 전체 메타 로그 + 자비스 도메인 self-critique 겸용 |
-| `./games/<id>/PROGRESS.md` | 그 게임 하나의 진행 로그 (lotto/sudoku/tetris 각각) |
+| `./games/<id>/PROGRESS.md` · `./apps/<id>/PROGRESS.md` | 그 게임·앱 하나의 진행 로그 |
 
 ## 0.3. 도메인 골격 문서 (루트에 1개씩, 겹침 없음)
 
@@ -34,25 +34,25 @@ PWA 미니 게임 모음 (GitHub Pages 호스팅). 게임별 세부 컨텍스트
 |---|---|---|
 | `tetris` | playable | 라인을 지워라 |
 | `sudoku` | wip | 스마트 힌트로 배우는 스도쿠 (라이트 톤) |
-| `lotto` | wip | lotto 추천번호 - 캐릭터 시드 기반 11전략 추천 |
 | `rushhour` | playable | 막힌 차를 빼내는 슬라이딩 퍼즐 |
 | `nonogram` | wip | 숫자 힌트로 그리는 픽셀 퍼즐 (노노그램) |
 | `flightshooting` | playable | Sky Raider - 드래그 조작 캐주얼 세로 스크롤 비행 슈팅 |
 
 1.1. 게임 등록부: `games/_registry.json`. 카드 클릭으로 진입.
-1.2. 새 세션이 특정 게임 작업 시 `games/<id>/AGENTS.md` 자동 로드.
-1.3. 앱 등록부: `apps/_registry.json` (게임 아닌 학습·도구류). 현재 `english-reading`(영어 독해 사다리, wip) 1종. 세부는 `apps/<id>/AGENTS.md`.
+1.2. 새 세션이 특정 게임 작업 시 `games/<id>/CLAUDE.md` 자동 로드.
+1.3. 앱 등록부: `apps/_registry.json` (게임 아닌 학습·도구류). `english-reading`(영어 독해, wip - 지문 200편 1000문장 전량 반영, Lv1 60 / Lv2 80 / Lv3 60) / `english-vocabulary`(영어 단어장, playable - 3,000단어 15세트 전량 반영) / `lotto`(lotto 추천번호 - 캐릭터 시드 기반 11전략 추천, wip). 세부는 `apps/<id>/CLAUDE.md`.
+1.4. lotto는 2026-07-29 `games/` → `apps/` 이동(사용자 결정). 게임이 아니라 도구류라는 분류 정정. 저장 키 접두는 `lotto_` 그대로라 사용자 진행 데이터 영향 0.
 
 # 2. 표준 (html-game)
 
 | 자산 | 경로 |
 |---|---|
-| 표준 본체 | `standards/html-game/STANDARD.md` (현재 v0.3.2) |
+| 표준 본체 | `standards/html-game/STANDARD.md` (현재 v0.4.2) |
 | 변경 이력 | `standards/html-game/CHANGELOG.md` |
 | 적용 프로젝트 | `standards/html-game/applications.md` |
 
-2.1. 적용 게임: **lotto만** (v0.2). sudoku / tetris는 후순위.
-2.2. 글로벌(`~/.Codex/rules/html-game/`) 미승격. 데이터 수집 단계 (v0.x).
+2.1. 적용 대상: 게임 다섯(tetris / sudoku / rushhour / nonogram / flightshooting)이 v0.4.2로 4.8 시작 흐름 공용 프레임을 함께 쓴다(2026-08-01, 세 단계 적용 완료). lotto는 v0.2(`apps/lotto/`).
+2.2. 글로벌(`~/.claude/rules/html-game/`) 미승격. 데이터 수집 단계 (v0.x).
 2.3. v1.0 승격 조건은 STANDARD.md 9.4 참조.
 
 # 3. 개발 환경
@@ -99,13 +99,13 @@ Conventional Commits. `<type>(<scope>): <subject>`.
 
 7.1. `standards/html-game/STANDARD.md` 6장 순서대로 폴더 셋업.
 7.2. `games/<id>/.standard`에 `html-game v<x.y>` 한 줄.
-7.3. `games/<id>/AGENTS.md` 작성 (sudoku 패턴 참고).
+7.3. `games/<id>/CLAUDE.md` 작성 (sudoku 패턴 참고).
 7.4. `games/_registry.json`에 게임 등록 (id / title / subtitle / path / status / accent).
 7.5. `standards/html-game/applications.md`에 행 추가.
 7.6. 첫 진입 면책 / 윤리 카피 검토 (lotto 같은 사행성 도메인은 6.3 강제).
 
 # 8. 새 세션 안내
 
-8.1. 게임 루트(`D:\Codex\game`)에서 시작 시 본 파일 자동 로드.
+8.1. 게임 루트(`D:\claude_code\game`)에서 시작 시 본 파일 자동 로드.
 8.2. 특정 게임 작업 이어서 할 때: `games/<id>의 작업 이어서. PROGRESS.md / docs 읽고 현재 상태 파악`.
-8.3. 본 파일은 200줄 이내 유지. 게임별 세부는 각 게임 AGENTS.md / docs로 위임.
+8.3. 본 파일은 200줄 이내 유지. 게임별 세부는 각 게임 CLAUDE.md / docs로 위임.

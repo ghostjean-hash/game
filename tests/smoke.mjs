@@ -149,63 +149,8 @@ if (has('shared/cloud/config.js')) {
   }
 }
 
-// --- 4. 전체화면 유지 규약 (2026-07-31) ---
-// 아이패드에서 조작 중 전체화면이 풀리던 문제의 처방 둘을 코드로 고정한다.
-if (!has('shared/fullscreen.js')) {
-  fails.push('shared/fullscreen.js 없음 → 전체화면 자동 복귀가 사라진다');
-} else {
-  const fs = read('shared/fullscreen.js');
-  const rules = [
-    ['홈 화면 앱 판별(display-mode)', /display-mode/],
-    ['iOS 홈 화면 앱 판별(navigator.standalone)', /navigator\.standalone/],
-    ['구형 접두 API 대응(webkitRequestFullscreen)', /webkitRequestFullscreen/],
-    ['해제 감지(fullscreenchange)', /fullscreenchange/],
-    ['조작 순간 복귀(pointerup)', /pointerup/],
-    // 아이폰은 전체화면 자체가 막혀 있다 - 버튼을 조용히 감추면 사용자가 이유를 알 수 없다.
-    ['막힌 기기용 홈 화면 추가 안내(showHomeScreenHint)', /export function showHomeScreenHint/],
-    ['기기별 3단계 안내(homeScreenHintGuide)', /export function homeScreenHintGuide/],
-    // 글만 있으면 일반 사용자가 어느 버튼인지 못 찾는다 - 버튼 그림과 가리킴 화살표를 함께 둔다.
-    ['단계 그림(인라인 SVG 아이콘)', /HINT_ICONS/],
-    ['가리킴 화살표(pointer 방향)', /gg-fs-arrow/],
-  ];
-  for (const [name, re] of rules) {
-    if (!re.test(fs)) fails.push(`shared/fullscreen.js에 ${name} 처리가 없음`);
-  }
-  if (!fails.some((f) => f.startsWith('shared/fullscreen.js'))) {
-    oks.push('shared/fullscreen.js 전체화면 유지 규칙 5종 보존');
-  }
-}
-
-// 게임이 옛 인라인 구현으로 되돌아가면 자동 복귀가 조용히 사라진다 - 공용 모듈 사용을 강제한다.
-const fsGames = [
-  ['tetris', 'games/tetris/game.js'],
-  ['sudoku', 'games/sudoku/game.js'],
-  ['rushhour', 'games/rushhour/src/main.js'],
-  ['nonogram', 'games/nonogram/src/main.js'],
-  ['flightshooting', 'games/flightshooting/src/main.js'],
-];
-for (const [id, file] of fsGames) {
-  if (!has(file)) { fails.push(`${id}: ${file} 없음`); continue; }
-  const src = read(file);
-  if (!/from ['"][^'"]*shared\/fullscreen\.js['"]/.test(src)) {
-    fails.push(`${id}: shared/fullscreen.js를 쓰지 않음 (전체화면이 풀려도 복귀하지 않는다)`);
-  } else if (/documentElement\.requestFullscreen/.test(src)) {
-    fails.push(`${id}: 옛 인라인 전체화면 구현이 남아 있음 (공용 모듈과 이중 배선)`);
-  } else {
-    oks.push(`${id}: 전체화면 공용 모듈 사용`);
-  }
-}
-
-// 허브 첫 화면이 안내를 배선하지 않으면 아이폰 사용자는 방법을 모른 채 끝난다.
-if (has('index.html')) {
-  const hub = read('index.html');
-  if (!/showHomeScreenHint/.test(hub)) {
-    fails.push('index.html이 홈 화면 추가 안내를 배선하지 않음 (아이폰에서 전체화면 방법을 알 길이 없다)');
-  } else {
-    oks.push('허브 첫 화면: 전체화면 막힌 기기에 홈 화면 추가 안내 배선');
-  }
-}
-
+// --- 4. 설치형 앱 셸 규약 ---
+// 전체화면 API는 쓰지 않고 각 화면이 standalone PWA로 실행된다.
 // 홈 화면 앱 설정. 이게 빠지면 게임 화면에서 홈 화면에 추가해도 브라우저 껍데기가 붙어 열린다.
 for (const g of entries) {
   const idx = `${g.path}index.html`;
@@ -228,12 +173,13 @@ for (const g of entries) {
     fails.push(`${g.id}: app.webmanifest 파싱 실패 - ${err.message}`);
     continue;
   }
-  if (manifest.display !== 'fullscreen') {
-    fails.push(`${g.id}: app.webmanifest display가 fullscreen이 아님(${manifest.display})`);
+  const requiredDisplay = 'standalone';
+  if (manifest.display !== requiredDisplay) {
+    fails.push(`${g.id}: app.webmanifest display가 ${requiredDisplay}이 아님(${manifest.display})`);
   } else if (manifest.start_url !== './') {
     fails.push(`${g.id}: app.webmanifest start_url이 './'가 아님 - 홈 화면 아이콘이 이 화면으로 열리지 않는다`);
   } else {
-    oks.push(`${g.id}: 홈 화면 앱 설정 OK (전체화면 실행 + 이 화면으로 시작)`);
+    oks.push(`${g.id}: 홈 화면 앱 설정 OK (${requiredDisplay} 실행 + 이 화면으로 시작)`);
   }
 }
 

@@ -14,9 +14,9 @@ const ICON = {
   back: '<path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>',
   soundOn: '<path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M16 9a4 4 0 010 6"/>',
   soundOff: '<path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/>',
-  fullscreen: '<path d="M8 3H5a2 2 0 00-2 2v3"/><path d="M16 3h3a2 2 0 012 2v3"/><path d="M8 21H5a2 2 0 01-2-2v-3"/><path d="M16 21h3a2 2 0 002-2v-3"/>',
   settings: '<circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.2M12 18.8V21M4.2 7.5l1.9 1.1M17.9 15.4l1.9 1.1M4.2 16.5l1.9-1.1M17.9 8.6l1.9-1.1"/>',
   pause: '<path d="M9 5v14M15 5v14"/>',
+  more: '<circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none"/>',
 };
 
 function iconButton(name, label) {
@@ -31,15 +31,14 @@ function iconButton(name, label) {
 
 // 상단 띠를 만들어 붙인다.
 //   parent:   띠를 넣을 요소
-//   buttons:  오른쪽에 둘 도구. 'settings' | 'sound' | 'fullscreen' | 'pause'
+//   buttons:  오른쪽에 둘 도구. 'settings' | 'sound' | 'pause'
 //             순서는 지정과 무관하게 규격 순서로 고정된다(게임마다 순서가 달라지지 않게).
 //   on...:    각 버튼을 눌렀을 때 부를 것. 넘기지 않은 버튼은 아예 만들지 않는다.
 export function mountTopbar({
   parent,
-  buttons = ['settings', 'sound', 'fullscreen'],
+  buttons = ['settings', 'sound'],
   onBack = null,
   onSound = null,
-  onFullscreen = null,
   onSettings = null,
   onPause = null,
 } = {}) {
@@ -57,20 +56,32 @@ export function mountTopbar({
   const center = document.createElement('div');
   center.className = 'gg-topbar-center';
   bar.appendChild(center);
+  const tools = document.createElement('div');
+  tools.className = 'gg-tool-menu';
 
   // 오른쪽 - 규격 순서(환경설정 → 소리 → 전체화면 → 잠깐 멈춤)로 강제한다.
-  const ORDER = ['settings', 'sound', 'fullscreen', 'pause'];
-  const handlers = { settings: onSettings, sound: onSound, fullscreen: onFullscreen, pause: onPause };
+  const ORDER = ['settings', 'sound', 'pause'];
+  const handlers = { settings: onSettings, sound: onSound, pause: onPause };
   const made = {};
   ORDER.filter((k) => buttons.includes(k)).forEach((k) => {
     const iconName = k === 'sound' ? 'soundOn' : k;
     const btn = iconButton(iconName, LABEL[k] || k);
     btn.dataset.ggBtn = k;
     if (handlers[k]) btn.addEventListener('click', handlers[k]);
-    bar.appendChild(btn);
+    tools.appendChild(btn);
     made[k] = btn;
   });
 
+  const more = iconButton('more', '도구 메뉴');
+  more.classList.add('gg-menu-toggle');
+  more.setAttribute('aria-expanded', 'false');
+  const toggleMenu = () => {
+    const open = bar.classList.toggle('is-open');
+    more.setAttribute('aria-expanded', String(open));
+  };
+  more.addEventListener('click', toggleMenu);
+  bar.appendChild(tools);
+  bar.appendChild(more);
   parent.appendChild(bar);
 
   return {
@@ -91,12 +102,7 @@ export function mountTopbar({
       b.setAttribute('aria-label', muted ? LABEL.soundOff : LABEL.soundOn);
       b.dataset.ggMuted = muted ? '1' : '0';
     },
-    // 전체화면이 막힌 기기에서는 자리를 비운다(Ⅰ권 5.2). 안내는 shared/fullscreen.js가 맡는다.
-    setFullscreenAvailable(available) {
-      const b = made.fullscreen;
-      if (b) b.hidden = !available;
-    },
-    destroy() { bar.remove(); },
+    destroy() { more.removeEventListener('click', toggleMenu); bar.remove(); },
   };
 }
 

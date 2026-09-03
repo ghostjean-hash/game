@@ -1,6 +1,6 @@
 import { createStorage } from "../../shared/storage.js";
 import { registerServiceWorker } from "../../shared/ui.js";
-import { setupFullscreen } from "../../shared/fullscreen.js";
+
 import { createGameFrame, SCREEN } from "../../shared/frame/index.js";
 
 registerServiceWorker("/service-worker.js");
@@ -77,7 +77,7 @@ const frame = createGameFrame({
   tagline: "스마트 힌트로 배우는 스도쿠",
   light: true,
   background: { className: "title-deco", el: titleBackdrop() },
-  buttons: ["sound", "fullscreen"],   // 환경설정 항목이 아직 없는 게임이라 그 자리를 만들지 않는다
+  buttons: ["sound"],   // 환경설정 항목이 아직 없는 게임이라 그 자리를 만들지 않는다
   resume: { enabled: false, detail: "" },
   onStart: () => startGame(),
   onResume: () => resumeSaved(),

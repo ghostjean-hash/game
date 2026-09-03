@@ -864,3 +864,20 @@ body:has(.rushhour) { background: #3a2d40; }
      세로와 똑같이 board-wrap이 잡아 준다. */
   .rushhour .board-wrap { --board-w: min(60vh, 56vw, 520px); }
 }
+
+/* v0.4.3: 골드·이동 수는 상단 띠가 아니라 보드 위의 작은 정보 카드다. */
+.rushhour.gg-frame[data-screen='play'] > [data-gg-screen='play'],
+.rushhour.gg-frame[data-covered='play'] > [data-gg-screen='play'] { position: relative; }
+.rushhour #screen-play > .topbar {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  left: 10px;
+  right: 10px;
+  z-index: 8;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
+  pointer-events: none;
+}
+.rushhour #screen-play > .topbar > * { pointer-events: auto; }
+.rushhour .stage { padding-top: 50px; }

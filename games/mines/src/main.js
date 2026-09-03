@@ -42,7 +42,7 @@ function titleBackground() {
 
 const frame = createGameFrame({
   root: app, gameId: storageGameId, title: '지뢰찾기', tagline: '숫자를 믿고 지뢰를 피하세요', background: titleBackground(), light: true,
-  buttons: ['sound', 'fullscreen'], sounds: SOUNDS, pauseOnHide: true,
+  buttons: ['sound'], sounds: SOUNDS, pauseOnHide: true,
   options: { items: DIFFICULTY_ORDER.map((key) => ({ id: key, name: DIFFICULTY[key].name })), selectedId: selected },
   resume: { enabled: false, detail: '' },
   onOption: (key) => { selected = key; frame.save.set('lastDiff', key); updateTitle(); },
@@ -70,8 +70,6 @@ function updateTitle() {
 const play = document.querySelector('#screen-play');
 frame.screens.register(SCREEN.PLAY, play);
 const boardEl = play.querySelector('#board');
-const fullscreenButton = frame.topbar.button('fullscreen');
-if (fullscreenButton) { fullscreenButton.id = 'fs-toggle'; fullscreenButton.classList.add('icon-btn'); play.querySelector('.tool-group').appendChild(fullscreenButton); }
 
 function resize() {
   if (!board) return;

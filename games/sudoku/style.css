@@ -365,3 +365,36 @@ body:has(.page.sudoku) .modal-backdrop .modal .btn-primary {
   color: #ffffff;
   border-color: transparent;
 }
+
+/* v0.4.3: 난이도·시간·정지 조작을 한 줄 배경이 아닌 독립 플로팅 카드로 바꾼다. */
+.sudoku.gg-frame[data-screen='play'] > [data-gg-screen='play'],
+.sudoku.gg-frame[data-covered='play'] > [data-gg-screen='play'] {
+  grid-template-rows: minmax(0, 1fr) auto;
+  position: relative;
+}
+.sudoku #screen-play > .topbar {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  left: 10px;
+  right: 10px;
+  z-index: 8;
+  padding: 0;
+  min-height: 0;
+  background: transparent;
+  border: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.sudoku #screen-play > .topbar > * { pointer-events: auto; }
+.sudoku .diff-label,
+.sudoku .timer,
+.sudoku .topbar .icon-btn {
+  border: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
+  background: color-mix(in srgb, #ffffff 90%, transparent);
+  box-shadow: 0 8px 22px rgba(28, 45, 72, .12);
+  backdrop-filter: blur(12px);
+}
+.sudoku .diff-label { border-radius: 999px; }
+.sudoku .timer { flex: 0 0 auto; padding: 4px 12px; border-radius: 999px; font-size: 19px; }
+.sudoku .topbar .icon-btn { border-radius: 12px; }
+.sudoku .stage { padding-top: 58px; }

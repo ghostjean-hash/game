@@ -2,7 +2,7 @@ import { createInput } from "../../shared/input.js";
 import { createStorage } from "../../shared/storage.js";
 import { createLoop } from "../../shared/loop.js";
 import { showModal, showToast, registerServiceWorker } from "../../shared/ui.js";
-import { setupFullscreen } from "../../shared/fullscreen.js";
+
 import { createGameFrame, SCREEN } from "../../shared/frame/index.js";
 import { SOUNDS } from "./sound.js";
 
@@ -147,7 +147,6 @@ const levelLabelEl = document.getElementById("level-label");
 const linesLabelEl = document.getElementById("lines-label");
 const bestEl = document.getElementById("best");
 const pauseBtn = document.getElementById("btn-pause");
-const fsBtn = document.getElementById("btn-fs");
 const muteBtn = document.getElementById("btn-mute");
 const nextEl = document.getElementById("next");
 const nextCtx = nextEl?.getContext("2d") || null;
@@ -329,7 +328,7 @@ const frame = createGameFrame({
   title: "Tetris",
   tagline: "라인을 지워라",
   background: { className: "title-deco", el: titleBackdrop() },
-  buttons: ["sound", "fullscreen"],   // 환경설정 항목이 없는 게임이라 그 자리를 만들지 않는다
+  buttons: ["sound"],   // 환경설정 항목이 없는 게임이라 그 자리를 만들지 않는다
   sounds: SOUNDS,
   choices: {
     label: "모드",
@@ -1202,8 +1201,6 @@ function setupOnce() {
   if (muteBtn) muteBtn.addEventListener("click", toggleMute);
   updateMuteBtn();
   // 오디오 열기·음소거 저장·화면 이탈 시 재우기·자동 잠깐 멈춤은 공용 프레임이 맡는다.
-  // 플레이 화면 전용 전체화면 버튼만 여기서 같은 공용 모듈에 건다.
-  setupFullscreen({ button: fsBtn });
 
   // 잠깐 멈춤 카드. 조작 안내를 본문에 담아 예전 알림창이 하던 역할을 잇는다.
   frame.pause.setLines(CONTROLS_HELP.split("\n"));

@@ -240,7 +240,7 @@ export function mountCloudUI({ container, auth, sync, local, titles = {} }) {
         input.name = `cf-${c.slot}`;
         input.id = id;
         input.value = side;
-        if (side === "local") input.checked = true;
+        if (side === "remote") input.checked = true;
 
         const text = document.createElement("span");
         const head = document.createElement("b");
@@ -282,7 +282,7 @@ export function mountCloudUI({ container, auth, sync, local, titles = {} }) {
     const choices = {};
     for (const c of conflicts) {
       const picked = wrap.querySelector(`input[name="cf-${CSS.escape(c.slot)}"]:checked`);
-      choices[c.slot] = picked ? picked.value : "local";
+      choices[c.slot] = picked ? picked.value : "remote";
     }
     await sync.resolveConflicts(choices);
     showToast("기록을 정리했습니다");

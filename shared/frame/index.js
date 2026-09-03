@@ -15,7 +15,6 @@ import { mountTitleScreen } from './titlescreen.js';
 import { mountPauseCard, mountResultCard } from './cards.js';
 import { createAudio } from './audio.js';
 import { createSave } from './save.js';
-import { setupFullscreen, isFullscreenSupported } from '../fullscreen.js';
 
 // 프레임 하나를 만든다. 인자 대부분은 시작 화면 규격 그대로다(Ⅰ권 5장).
 //   root:      프레임이 들어갈 요소(보통 페이지 본문 전체)
@@ -33,7 +32,7 @@ export function createGameFrame({
   hasSelect = false,
   light = false,
   hubHref = '../../',
-  buttons = ['settings', 'sound', 'fullscreen'],
+  buttons = ['settings', 'sound'],
   sounds = {},
   // 화면을 벗어났을 때 자동으로 잠깐 멈춤 상태로 갈지. 시간이 흐르거나 죽을 수 있는 게임은
   // 그래야 돌아왔을 때 이미 죽어 있는 일을 막는다(규격 3.4). 실패도 시간 제한도 없는 게임은
@@ -87,22 +86,19 @@ export function createGameFrame({
     buttons,
     onBack: () => screens.back(),
     onSound: () => audio.setMuted(!audio.isMuted()),
-    onFullscreen: null,        // setupFullscreen이 이 버튼을 직접 맡는다
     onSettings,
     onPause: () => screens.go(SCREEN.PAUSE),
   });
+  // 어떤 화면에 있든 허브로 바로 나갈 수 있는 공용 탈출구. 상단 띠가 아니라 독립된 작은 버튼이다.
+  const hubExit = document.createElement('a');
+  hubExit.className = 'gg-hub-exit';
+  hubExit.href = hubHref;
+  hubExit.textContent = '허브';
+  hubExit.setAttribute('aria-label', '게임 허브로 나가기');
+  root.appendChild(hubExit);
 
   // 지난번 음소거 상태를 되살린다. 게임마다 저장 위치가 달라 기억이 안 되던 것을 하나로 맞춘다.
   audio.setMuted(save.readMuted());
-
-  // 전체화면은 이미 있는 공용 모듈이 맡는다. 막힌 기기에서는 자리를 비우고
-  // 홈 화면 추가 안내를 그 모듈이 띄운다(Ⅰ권 5.5).
-  const fsBtn = topbar.button('fullscreen');
-  let fullscreen = null;
-  if (fsBtn) {
-    topbar.setFullscreenAvailable(true);
-    fullscreen = setupFullscreen({ button: fsBtn });
-  }
 
   const titleScreen = mountTitleScreen({
     parent: titleEl,
@@ -162,7 +158,6 @@ export function createGameFrame({
     result,
     audio,
     save,
-    fullscreen,
     // 게임이 자기 화면을 그릴 자리.
     playEl,
     selectEl,
@@ -179,17 +174,17 @@ export function createGameFrame({
     },
     destroy() {
       document.removeEventListener('visibilitychange', onVisibility);
-      fullscreen?.destroy?.();
       screens.destroy();
       titleScreen.destroy();
       pause.destroy();
       result.destroy();
+      hubExit.remove();
       topbar.destroy();
     },
   };
 }
 
-export { SCREEN, TEXT, LABEL, isFullscreenSupported };
+export { SCREEN, TEXT, LABEL };
 export { createScreens } from './screens.js';
 export { createStack } from './stack.js';
 export { mountTopbar } from './topbar.js';

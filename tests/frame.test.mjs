@@ -210,7 +210,7 @@ test('상단 띠 버튼 순서가 규격 순서로 고정돼 있다', () => {
   const m = src.match(/const ORDER = \[([^\]]+)\]/);
   assert.ok(m, '버튼 순서표가 없다');
   const order = m[1].split(',').map((s) => s.trim().replace(/['"]/g, ''));
-  assert.deepEqual(order, ['settings', 'sound', 'fullscreen', 'pause']);
+  assert.deepEqual(order, ['settings', 'sound', 'pause']);
 });
 
 test('시작 화면 조작단의 아래 여백을 공용 자산이 관리한다', () => {
@@ -273,15 +273,10 @@ test('다섯 게임이 각자 소리 그릇을 다시 만들지 않는다', () =
     });
 });
 
-test('플레이 중 허브로 곧장 나가는 문이 없다', () => {
-  // 게임을 닫는 지점은 시작 화면 하나뿐이다(규격 4.8-3).
-  ['games/tetris/index.html', 'games/sudoku/index.html', 'games/rushhour/index.html',
-   'games/flightshooting/index.html', 'games/nonogram/index.html']
-    .forEach((f) => {
-      const html = read(f);
-      assert.ok(!/<a[^>]+href="\.\.\/\.\.\/"/.test(html),
-        `${f}에 허브로 곧장 나가는 링크가 남아 있다`);
-    });
+test('공용 프레임이 모든 게임 화면의 허브 이동 버튼을 만든다', () => {
+  const frame = read('shared/frame/index.js');
+  assert.match(frame, /className = 'gg-hub-exit'/, '공용 허브 버튼 클래스가 없다');
+  assert.match(frame, /hubExit\.href = hubHref/, '공용 허브 버튼의 이동 경로가 없다');
 });
 
 // ── 결과 ─────────────────────────────────────────────────
