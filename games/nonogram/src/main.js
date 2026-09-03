@@ -20,6 +20,7 @@ import { renderMap } from './render/mapView.js';
 import { renderResult } from './render/resultView.js';
 import { attachBoardInput } from './input/boardInput.js';
 import { attachBoardZoom } from './input/boardZoom.js';
+import { attachBoardPanPad } from './input/boardPanPad.js';
 import { planBoardFit, clampCell } from './core/zoom.js';
 import { SOUNDS } from './audio/sound.js';
 
@@ -705,6 +706,7 @@ function init() {
       if (r.cancelled && r.elapsedMs < ZOOM.CANCEL_MS) undo();
     },
   });
+  attachBoardPanPad(el('board-pan-pad'), puzzleEl.parentElement);
   el('mode-fill').addEventListener('click', () => setMode(MODE.FILL));
   el('mode-mark').addEventListener('click', () => setMode(MODE.MARK));
   // 플레이 화면의 왼쪽 위 화살표도 계단을 따른다 - 한 칸 위(지도)로만 간다.

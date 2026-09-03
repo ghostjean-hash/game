@@ -273,12 +273,28 @@ body:has(#screen-play.active) #app {
      이 모드는 칸이 이미 충분히 커서 확장이 필요 없으므로 끈다. */
   --clue-hit: 0px;
 }
+#screen-play.has-pan .puzzle-wrap.pannable {
+  /* 아래 이동 영역을 위한 자리를 남긴다. 100% 높이를 고집하면 패드가 눌려 사라진다. */
+  flex: 1 1 0;
+  height: auto;
+}
 .puzzle-wrap.pannable::-webkit-scrollbar { display: none; }
 .puzzle-wrap.pannable .puzzle { margin: auto; }
 /* 밀어도 숫자 힌트는 늘 보여야 푼다 - 열 힌트는 위, 행 힌트는 왼쪽, 모서리는 양쪽에 고정. */
 .puzzle-wrap.pannable .col-clues { position: sticky; top: 0; z-index: 4; background: var(--bg); }
 .puzzle-wrap.pannable .row-clues { position: sticky; left: 0; z-index: 4; background: var(--bg); }
 .puzzle-wrap.pannable .corner { position: sticky; top: 0; left: 0; z-index: 5; background: var(--bg); }
+/* 큰 판의 보드 아래 빈 공간은 가로 이동 전용이다. 칸 위 한 손가락 칠하기와 완전히 분리해
+   보드를 가리지 않고 원하는 열을 찾아갈 수 있다. 평소에는 레이아웃 공간도 차지하지 않는다. */
+.board-pan-pad { display: none; }
+#screen-play.has-pan .board-pan-pad {
+  display: block;
+  flex: 0 0 var(--space-5);
+  width: 100%;
+  touch-action: none;
+}
+/* 이동 영역을 만든 큰 판에서는 모드 버튼을 조금 더 아래로 내려 손가락 길을 넓힌다. */
+#screen-play.has-pan .pc-br { transform: translateY(var(--space-2)); }
 .corner { }
 .col-clues, .row-clues { display: grid; }
 .col-clues {

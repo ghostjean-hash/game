@@ -25,6 +25,7 @@ nonogram/
 │   ├── input/          # 입력 처리 (터치/마우스/키보드 → core 액션)
 │   │   ├── boardInput.js#  한 손가락: 탭/드래그로 칠하기·지우기
 │   │   └── boardZoom.js #  격자 위 두 손가락: 확대·이동(core/zoom 계산을 DOM에 반영)
+│   │   └── boardPanPad.js# 보드 아래 빈 영역 한 손가락: 가로 이동만 viewport에 반영
 │   ├── audio/          # Web Audio 효과음 합성 (음원 파일 0, core 아님)
 │   │   └── sound.js
 │   └── data/           # 상수 / 색상 / 퍼즐 (매직 넘버 SSOT)
@@ -52,7 +53,7 @@ data  ←  core  ←  render / input  ←  main
 1. `main.js`가 `puzzles.js`에서 퍼즐 선택 → `hints.js`로 행/열 힌트 생성.
 2. `board.js`가 빈 보드 상태 생성(불변). 입력이 올 때마다 새 상태를 반환한다. 힌트 자동 입력은 힌트와 현재 보드만으로 기계적으로 상태를 바꾸고, 그 결과가 실제 정답인 칸만 `lockedCells`에 기록한다.
 3. `input/boardInput.js`가 탭/드래그/키를 받아 board 액션(칠함/X/지움) 호출 → 새 상태.
-   격자 위에서 손가락이 둘로 늘면 `input/boardZoom.js`가 두 포인터를 모두 격자에 고정해 확대·이동으로 전환하고, 진행 중이던 드래그는 `boardInput.cancelDrag()`로 끝낸다(아주 짧았으면 `main.js`가 되돌린다).
+   격자 위에서 손가락이 둘로 늘면 `input/boardZoom.js`가 두 포인터를 모두 격자에 고정해 확대·이동으로 전환하고, 진행 중이던 드래그는 `boardInput.cancelDrag()`로 끝낸다(아주 짧았으면 `main.js`가 되돌린다). 확대·이동 상태의 보드 아래 빈 영역은 `input/boardPanPad.js`가 별도로 받아 한 손가락 가로 이동만 스크롤 영역에 반영하므로 칠하기와 충돌하지 않는다.
 4. 상태가 바뀌면 `render/boardView.js`가 다시 그림. 승리 판정 시 `main.js`가 결과 화면으로 전환.
 5. 결과에서 `stars.js`로 별점 계산 → `storage`에 progress 저장 → 맵 썸네일이 컬러로 갱신.
 

@@ -56,6 +56,14 @@ export function zoomScroll({ scroll, focus, clueLen, oldCell, newCell }) {
 }
 
 /**
+ * 보드 아래 가로 이동 영역을 끌었을 때의 스크롤 위치.
+ * 왼쪽으로 민 만큼 오른쪽 열을 보도록 입력 방향을 뒤집는다.
+ */
+export function panScroll(scroll, startX, currentX) {
+  return Math.max(0, scroll - (currentX - startX));
+}
+
+/**
  * 두 점 사이 거리. 핀치 배율 계산용.
  */
 export function distance(a, b) {

@@ -9,7 +9,8 @@ import {
 } from '../src/core/board.js';
 import { lineFlags, completedCount } from '../src/core/lines.js';
 import { starsFor } from '../src/core/stars.js';
-import { fitCellSize, clampCell, zoomScroll, planBoardFit, distance, midpoint } from '../src/core/zoom.js';
+import { fitCellSize, clampCell, zoomScroll, panScroll, planBoardFit, distance, midpoint } from '../src/core/zoom.js';
+import { attachBoardPanPad } from '../src/input/boardPanPad.js';
 import { CELL, MAX_STARS, ZOOM, CELL_FIT } from '../src/data/constants.js';
 import { PUZZLES } from '../src/data/puzzles.js';
 
@@ -275,6 +276,24 @@ test('zoomScroll: 확대해도 초점의 칸이 제자리에 남는다', () => {
 });
 test('zoomScroll: 크게 축소해 스크롤이 음수가 되면 0으로 자른다', () => {
   eq(zoomScroll({ scroll: 0, focus: 200, clueLen: 70, oldCell: 40, newCell: 10 }), 0);
+});
+test('panScroll: 하단 이동 영역을 왼쪽으로 밀면 오른쪽 열로 간다', () => {
+  eq(panScroll(120, 200, 250), 70, '오른쪽으로 끌면 왼쪽 열');
+  eq(panScroll(120, 200, 150), 170, '왼쪽으로 끌면 오른쪽 열');
+  eq(panScroll(20, 200, 260), 0, '왼쪽 끝 밖으로는 나가지 않음');
+});
+test('boardPanPad: 빈 하단 영역의 한 손가락 가로 드래그만 스크롤에 반영한다', () => {
+  const pad = document.createElement('div');
+  // 입력 모듈이 쓰는 scrollLeft 인터페이스만 흉내낸다. 브라우저의 실제 스크롤 폭과 독립해
+  // 포인터 방향 변환을 정확히 검증한다.
+  const viewport = { scrollLeft: 0 };
+  document.body.append(pad);
+  attachBoardPanPad(pad, viewport);
+  pad.dispatchEvent(new PointerEvent('pointerdown', { pointerId: 1, clientX: 200, bubbles: true, cancelable: true }));
+  pad.dispatchEvent(new PointerEvent('pointermove', { pointerId: 1, clientX: 150, bubbles: true, cancelable: true }));
+  eq(viewport.scrollLeft, 50, '왼쪽으로 밀면 오른쪽 열을 본다');
+  pad.dispatchEvent(new PointerEvent('pointerup', { pointerId: 1, bubbles: true }));
+  pad.remove();
 });
 test('distance/midpoint: 두 손가락 거리와 중점', () => {
   eq(distance({ x: 0, y: 0 }, { x: 3, y: 4 }), 5);
