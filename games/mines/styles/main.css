@@ -7,11 +7,15 @@
    플레이 화면만 격자 배치로 바뀐다. */
 
 /* 격자를 화면 가득 쓰는 게임이라 플레이·멈춤·결과에서는 공용 상단 띠를 감춘다
-   (표준 4.8-11, docs/01_spec.md 5.2). 그 자리의 소리·전체화면·잠깐 멈춤은
+   (표준 4.8-11, docs/01_spec.md 5.2). 그 자리의 소리·잠깐 멈춤은
    이 화면 오른쪽 위 버튼이 대신하고, 동작은 공용 프레임에 연결된다. */
 #app.gg-frame[data-screen='play'] .gg-topbar,
 #app.gg-frame[data-screen='pause'] .gg-topbar,
 #app.gg-frame[data-screen='result'] .gg-topbar { display: none; }
+
+/* shared/mobile-shell.css가 body에 safe-area 안쪽 여백을 준다. 이 게임은 그 안쪽 높이를
+   그대로 써야 홈 표시 영역 아래로 하단 조작이 밀리지 않는다. */
+#app.gg-frame { height: 100%; }
 
 /* --- 플레이 화면: 네 모서리 배치 --- */
 /* 세로에서는 위(좌·우) · 격자 · 아래, 가로에서는 왼쪽 열 · 격자 · 오른쪽 열로 재배치한다
@@ -29,7 +33,7 @@
   gap: var(--sp-2);
   width: 100%;
   height: 100%;
-  padding: var(--board-pad);
+  padding: var(--board-pad) var(--board-pad) calc(var(--board-pad) + env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;
   overflow: hidden;              /* 판을 드래그해도 화면이 밀리지 않는다(표준 4.7-4) */
 }

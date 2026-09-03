@@ -73,6 +73,10 @@ const boardEl = play.querySelector('#board');
 
 function resize() {
   if (!board) return;
+  // 375px급 세로 화면은 어려움 판의 24px 칸을 기본 여백과 함께 담지 못한다(02_data.md 2.4).
+  // 칸 하한을 낮추거나 판을 자르는 대신, 내용과 무관한 좌우 여백만 줄인다.
+  const narrowPortrait = window.innerWidth < BOARD.narrowViewportWidth && window.innerWidth <= window.innerHeight;
+  play.style.setProperty('--board-pad', `${narrowPortrait ? BOARD.narrowPad : BOARD.pad}px`);
   const wrap = play.querySelector('.board-wrap').getBoundingClientRect();
   const compact = window.innerWidth > window.innerHeight && window.innerHeight <= BOARD.compactHeight;
   const min = compact ? CELL.compactMin : CELL.min;

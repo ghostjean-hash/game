@@ -24,6 +24,9 @@ export const CELL = {
 
 export const BOARD = {
   pad: 12,
+  narrowPad: 6,
+  // 어려움 판의 최소 폭(362px)에 기본 좌우 여백을 더한 값(02_data.md 2.4).
+  narrowViewportWidth: 386,
   uiTop: 56,
   uiBottom: 104,
   compactHeight: 640,
