@@ -205,12 +205,10 @@ test('화면 골격이 숨김 토글이 아니라 화면 이름으로 표시를 
   assert.ok(!/\.hidden\s*=\s*(true|false)/.test(src), '숨김 속성을 켜고 끄면 두 화면이 겹쳐 보이는 사고가 되살아난다');
 });
 
-test('상단 띠 버튼 순서가 규격 순서로 고정돼 있다', () => {
-  const src = read('shared/frame/topbar.js');
-  const m = src.match(/const ORDER = \[([^\]]+)\]/);
-  assert.ok(m, '버튼 순서표가 없다');
-  const order = m[1].split(',').map((s) => s.trim().replace(/['"]/g, ''));
-  assert.deepEqual(order, ['settings', 'sound', 'pause']);
+test('공용 프레임이 숨은 상단 띠를 다시 만들지 않는다', () => {
+  const src = read('shared/frame/index.js');
+  assert.ok(!/mountTopbar\s*\(/.test(src), '상단 띠를 다시 조립하면 게임 HUD와 중복된다');
+  assert.ok(!/buttons\s*=\s*\[/.test(src), '상단 띠 전용 버튼 옵션이 남아 있다');
 });
 
 test('시작 화면 조작단의 아래 여백을 공용 자산이 관리한다', () => {
@@ -225,7 +223,7 @@ test('새 공용 파일이 서비스 워커 미리 담기 목록에 있다', () 
   const sw = read('service-worker.js');
   ['shared/frame/index.js', 'shared/frame/frame.css', 'shared/frame/stack.js', 'shared/frame/screens.js',
    'shared/frame/topbar.js', 'shared/frame/titlescreen.js', 'shared/frame/cards.js',
-   'shared/frame/audio.js', 'shared/frame/save.js', 'shared/frame/text.js']
+   'shared/frame/audio.js', 'shared/frame/save.js', 'shared/frame/text.js', 'shared/hub.css']
     .forEach((f) => assert.ok(sw.includes(f), `${f}가 PRECACHE에 없다(오프라인 첫 진입 실패)`));
 });
 
@@ -253,6 +251,7 @@ test('공용 프레임이 다섯 게임 모두에 연결돼 있다', () => {
     nonogram: 'games/nonogram/src/main.js',
     rushhour: 'games/rushhour/src/main.js',
     flightshooting: 'games/flightshooting/src/main.js',
+    mines: 'games/mines/src/main.js',
   };
   for (const [id, file] of Object.entries(entries)) {
     const src = read(file);
@@ -273,10 +272,25 @@ test('다섯 게임이 각자 소리 그릇을 다시 만들지 않는다', () =
     });
 });
 
-test('공용 프레임이 모든 게임 화면의 허브 이동 버튼을 만든다', () => {
+test('공용 허브 복귀는 게임 홈 화면 안의 <- 하나로만 만든다', () => {
   const frame = read('shared/frame/index.js');
-  assert.match(frame, /className = 'gg-hub-exit'/, '공용 허브 버튼 클래스가 없다');
-  assert.match(frame, /hubExit\.href = hubHref/, '공용 허브 버튼의 이동 경로가 없다');
+  const css = read('shared/frame/frame.css');
+  assert.match(frame, /export function mountHubBack/, '홈 화면 허브 복귀 조립 함수가 없다');
+  assert.match(frame, /element\.className = 'gg-title-back'/, '홈 화면 버튼 클래스가 없다');
+  assert.match(frame, /element\.textContent = '<-'/, '허브 복귀 문구가 <-로 통일되지 않았다');
+  assert.match(frame, /parent: titleScreen\.el/, '공용 허브 복귀가 게임 홈 화면에 붙지 않는다');
+  assert.ok(!/gg-hub-exit/.test(frame + css), '세부 화면용 전역 허브 버튼이 남아 있다');
+  assert.match(frame, /navigate: \{ back: \(\) => screens\.back\(\) \}/, '공용 API에 세부 화면 허브 나가기가 남아 있다');
+});
+
+test('등록 게임은 공용 홈 화면 복귀 외의 직접 URL 이동을 만들지 않는다', () => {
+  const files = [
+    'games/tetris/game.js', 'games/sudoku/game.js', 'games/nonogram/src/main.js',
+    'games/rushhour/src/main.js', 'games/flightshooting/src/main.js',
+    'games/mines/src/main.js', 'games/fruit-farm/src/main.js',
+  ];
+  files.forEach((file) => assert.ok(!/(?:window\.)?location\.(?:href|assign|replace)\s*[=(]/.test(read(file)), `${file}에 직접 허브 이동이 남아 있다`));
+  assert.match(read('games/fruit-farm/src/main.js'), /mountHubBack/, '과일 농장이 공용 홈 화면 복귀 부품을 쓰지 않는다');
 });
 
 // ── 결과 ─────────────────────────────────────────────────

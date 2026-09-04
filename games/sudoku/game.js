@@ -77,10 +77,10 @@ const frame = createGameFrame({
   tagline: "스마트 힌트로 배우는 스도쿠",
   light: true,
   background: { className: "title-deco", el: titleBackdrop() },
-  buttons: ["sound"],   // 환경설정 항목이 아직 없는 게임이라 그 자리를 만들지 않는다
   resume: { enabled: false, detail: "" },
   onStart: () => startGame(),
   onResume: () => resumeSaved(),
+  onExit: () => { saveResume(); return true; },
 });
 
 // === 상태 ===
@@ -434,7 +434,7 @@ function tickTimer() {
 // 조작 안내는 카드 본문에 담아 예전 알림창이 하던 역할을 그대로 잇는다.
 function togglePause() {
   if (!state || state.cleared) return;
-  if (frame.screens.current() === SCREEN.PAUSE) frame.screens.back();
+  if (frame.screens.current() === SCREEN.PAUSE) frame.navigate.back();
   else frame.screens.go(SCREEN.PAUSE);
 }
 
@@ -567,14 +567,14 @@ function init() {
   // 시작 화면 위에 보드와 숫자 패드가 그대로 겹쳐 보인다.
   frame.screens.register(SCREEN.PLAY, document.getElementById("screen-play"));
   pauseBtn.addEventListener("click", togglePause);
-  // 전체화면 버튼은 공용 상단 띠에 있고 프레임이 이미 같은 모듈에 걸어 두었다.
+  // 허브 복귀는 홈 화면의 공용 <-가 맡고, 놀이 중 소리는 이 게임 HUD가 직접 맡는다.
   // 잠깐 멈춤·결과 카드 버튼을 이 게임 흐름에 잇는다.
   frame.pause.setLines([
     "셀 탭 또는 키보드 1~9 = 입력",
     "0·Backspace = 지우기 / 화살표 = 이동",
     "U = 실행취소 / P·Esc = 잠깐 멈춤",
   ]);
-  frame.pause.on("continue", () => frame.screens.back());
+  frame.pause.on("continue", () => frame.navigate.back());
   frame.pause.on("restart", () => { restart(); frame.screens.go(SCREEN.PLAY); });
   frame.pause.on("quit", () => { saveResume(); frame.screens.go(SCREEN.TITLE); });
   frame.result.on("retry", () => { restart(); frame.screens.go(SCREEN.PLAY); });

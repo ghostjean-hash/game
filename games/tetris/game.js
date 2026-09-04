@@ -328,7 +328,6 @@ const frame = createGameFrame({
   title: "Tetris",
   tagline: "라인을 지워라",
   background: { className: "title-deco", el: titleBackdrop() },
-  buttons: ["sound"],   // 환경설정 항목이 없는 게임이라 그 자리를 만들지 않는다
   sounds: SOUNDS,
   choices: {
     label: "모드",
@@ -1157,7 +1156,7 @@ function gameOver() {
 // 조작 안내는 카드 본문에 담아 예전 알림창이 하던 역할을 그대로 잇는다.
 function togglePause() {
   if (state.over) return;
-  if (frame.screens.current() === SCREEN.PAUSE) { frame.screens.back(); return; }
+  if (frame.screens.current() === SCREEN.PAUSE) { frame.navigate.back(); return; }
   frame.screens.go(SCREEN.PAUSE);
 }
 
@@ -1197,14 +1196,14 @@ function setupOnce() {
   window.addEventListener("orientationchange", () => setTimeout(resize, 100));
   pauseBtn.addEventListener("click", togglePause);
   // 플레이 화면 왼쪽 위 화살표도 계단을 따른다 - 한 칸 위(시작 화면)로만 간다.
-  document.getElementById("btn-back")?.addEventListener("click", () => frame.screens.back());
+  document.getElementById("btn-back")?.addEventListener("click", () => frame.navigate.back());
   if (muteBtn) muteBtn.addEventListener("click", toggleMute);
   updateMuteBtn();
   // 오디오 열기·음소거 저장·화면 이탈 시 재우기·자동 잠깐 멈춤은 공용 프레임이 맡는다.
 
   // 잠깐 멈춤 카드. 조작 안내를 본문에 담아 예전 알림창이 하던 역할을 잇는다.
   frame.pause.setLines(CONTROLS_HELP.split("\n"));
-  frame.pause.on("continue", () => frame.screens.back());
+  frame.pause.on("continue", () => frame.navigate.back());
   frame.pause.on("restart", () => { restart(); frame.screens.go(SCREEN.PLAY); });
   frame.pause.on("quit", () => frame.screens.go(SCREEN.TITLE));
   frame.result.on("retry", () => { restart(); frame.screens.go(SCREEN.PLAY); });

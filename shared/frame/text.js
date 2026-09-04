@@ -47,7 +47,6 @@ export const LABEL = {
   sound: '소리',
   soundOn: '소리 끄기',
   soundOff: '소리 켜기',
-  fullscreen: '전체화면',
   settings: '환경설정',
   pause: '잠깐 멈춤',
 };

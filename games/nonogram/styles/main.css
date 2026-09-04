@@ -213,7 +213,7 @@ body:has(#screen-play.active) #app {
      양끝 UI를 제 폭만 쓰게 하고 남은 공간 전부를 격자에 준다. */
   #screen-play.active.has-pan { grid-template-columns: auto 1fr auto; }
   #screen-play.active.has-pan .play-center { width: 100%; min-width: 0; }
-  .pc-tl { align-self: start; justify-self: end; flex-direction: column; align-items: flex-start; }  /* 뒤로·난이도·스테이지·실수: 보드 왼쪽 위 세로 스택 */
+  .pc-tl { align-self: start; justify-self: start; flex-direction: column; align-items: flex-start; }  /* 뒤로·난이도·스테이지·실수: 보드 왼쪽 위 세로 스택 */
   .pc-tr { align-self: start; justify-self: start; } /* 조작: 보드 오른쪽 위 */
   .pc-br { align-self: end; justify-self: start; align-items: flex-end; }  /* 모드: 보드 오른쪽 아래 */
   .mistake { margin-top: var(--space-4); }   /* 가로: 세로 스택이라 스테이지와 20px 간격 */

@@ -90,7 +90,6 @@ const frame = createGameFrame({
   title: '바푸리의 모험',
   character: { src: 'assets/characters/bapuri-upward-v5.png', width: 138 },
   background: { image: 'assets/diorama/KR-seoul.png' },
-  buttons: ['settings', 'sound'],
   sounds: SOUNDS,
   resume: { enabled: false, detail: '' },
   options: {
@@ -111,7 +110,9 @@ const frame = createGameFrame({
     if (id === 'friend') { friendOn = on; store.set('friendOn', on); }
     else if (id === 'auto') { autoOn = on; store.set('autoOn', on); }
   },
-  onSettings: () => { settingsModal.hidden = false; },
+  extras: [{ id: 'settings', label: '환경설정' }],
+  onExtra: (id) => { if (id === 'settings') settingsModal.hidden = false; },
+  onExit: () => { saveProgress(); return true; },
   onMuted: (m) => syncMuteBtn(m),
 });
 const sound = frame.audio;   // 예전 sound.js와 같은 이름들을 그대로 쓴다
@@ -415,7 +416,7 @@ function startGame(diff, saved) {
 // 예전에는 배너에 '일시정지'를 띄우고 화면을 탭해 풀었다.
 function togglePause() {
   if (state === 'playing') frame.screens.go(SCREEN.PAUSE);
-  else if (state === 'paused') frame.screens.back();
+  else if (state === 'paused') frame.navigate.back();
 }
 
 // 화면이 잠깐 멈춤으로 갈 때·나올 때 게임 상태를 맞춘다. 버튼으로 멈춘 경우와
@@ -959,7 +960,7 @@ function syncCheatUI() {
 frame.screens.register(SCREEN.PLAY, gameScreen);
 
 // 플레이 화면 왼쪽 위 화살표도 계단을 따른다 - 한 칸 위(시작 화면)로만 간다.
-$('#game-home').addEventListener('click', () => frame.screens.back());
+$('#game-home').addEventListener('click', () => frame.navigate.back());
 btnPause.addEventListener('click', togglePause);
 
 // 플레이 화면 HUD의 소리 버튼(캔버스 위 오버레이). 상태는 프레임이 알려주는 대로 따라간다.
@@ -989,7 +990,7 @@ const setSkill = $('#set-skill');
 const setCheat = $('#set-cheat');
 setSkill.value = apSkill;
 setCheat.checked = cheatEnabled;
-// 환경설정을 여는 버튼은 이제 공용 상단 띠의 톱니다(프레임 onSettings에서 이 창을 연다).
+// 환경설정은 시작 화면의 공용 추가 항목에서 연다.
 $('#set-close').addEventListener('click', () => { settingsModal.hidden = true; });
 setSkill.addEventListener('change', () => { apSkill = setSkill.value; store.set('apSkill', apSkill); game.apSkill = apSkill; });
 setCheat.addEventListener('change', () => {
@@ -1055,7 +1056,7 @@ cheatHead.addEventListener('pointerup', () => { cheatDrag = null; });
 
 // ── 첫 진입 ──
 // 잠깐 멈춤·결과 카드 버튼과 화면 이동을 잇는다. 카드는 공용 프레임이 갖고 있다.
-frame.pause.on('continue', () => frame.screens.back());
+frame.pause.on('continue', () => frame.navigate.back());
 frame.pause.on('restart', () => { frame.screens.go(SCREEN.PLAY); startGame(difficulty); });
 frame.pause.on('quit', () => backToMenu());
 frame.result.on('retry', () => { frame.screens.go(SCREEN.PLAY); startGame(difficulty); });

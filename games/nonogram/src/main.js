@@ -64,7 +64,6 @@ const frame = createGameFrame({
   light: true,                       // 흰 바탕 게임이라 배경 결·그림자를 밝은 쪽으로 뒤집는다
   hasSelect: true,
   background: { className: 'title-deco', el: titleBackdrop() },
-  buttons: ['sound'],  // 환경설정은 이 게임에 없다(설정 항목 자체가 없음)
   sounds: SOUNDS,
   pauseOnHide: false,                // 실패도 시간 제한도 없는 게임이라 자리를 비워도 잃을 것이 없다
 
@@ -72,6 +71,7 @@ const frame = createGameFrame({
   startHint: '누르면 그림 고르는 지도로 감',
   onStart: () => openMap(),
   onResume: () => resumeLast(),
+  onExit: () => { if (cur) saveInProgress(); return true; },
   onMuted: (m) => syncPlaySoundBtn(m),
 });
 const sound = frame.audio;
@@ -649,7 +649,7 @@ function nextPuzzle() {
 function leavePlay() {
   // 이어하기는 지도를 거치지 않았으므로 한 칸 위가 시작 화면이다.
   if (cur?.entry === 'resume') frame.screens.go(SCREEN.TITLE);
-  else frame.screens.back();
+  else frame.navigate.back();
 }
 
 // --- 키보드(보조) ---
@@ -731,7 +731,7 @@ function init() {
   document.addEventListener('pointerup', onCluePointerEnd);
   document.addEventListener('pointercancel', onCluePointerEnd);
   document.addEventListener('keydown', onKey);
-  // 창 크기·방향(가로/세로 회전)·전체화면 전환이 바뀌면 격자를 다시 화면에 맞춘다.
+  // 창 크기·방향(가로/세로 회전)이 바뀌면 격자를 다시 화면에 맞춘다.
   window.addEventListener('resize', () => { fitBoard(false); updateFinger(); });
   window.addEventListener('orientationchange', () => {
     requestAnimationFrame(() => { fitBoard(false); updateFinger(); });

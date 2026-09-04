@@ -25,7 +25,7 @@
 /* 플레이 화면에서는 공용 상단 띠를 감춘다. 이 게임은 HUD(점수·레벨·NEXT·HOLD)를
    자기 띠에 인라인으로 흡수해 보드 면적을 지키는 구조라, 규격 띠를 얹으면 행이 하나 늘어
    보드가 줄어든다(규격 4.8-11 예외). 자리만 이 게임이 정하고 규칙은 공용이 가진다 -
-   되돌아가기는 계단을 따르고 소리·전체화면은 공용 모듈에 걸려 있다. */
+   공용 나가기는 프레임이 맡고, 소리는 게임 HUD와 공용 오디오 그릇을 함께 쓴다. */
 .tetris.gg-frame[data-screen='play'] .gg-topbar,
 .tetris.gg-frame[data-screen='pause'] .gg-topbar,
 .tetris.gg-frame[data-screen='result'] .gg-topbar { display: none; }

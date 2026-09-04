@@ -3,6 +3,7 @@
    게임별 기획서는 그 게임 폴더 안(games/<id>/docs/)에 두고 여기서 불러온다. */
 window.GDD_NAV = [
   { group:true, vol:'A', label:'공용 규격', children:[
+    { id:'platform', vol:'0', label:'게임 플랫폼 이동 구조', file:'doc/platform-navigation.html' },
     { id:'sf',  vol:'Ⅰ', label:'게임 시작 흐름 공용 프레임', file:'doc/screen-frame.html' },
     { id:'sfd', vol:'Ⅱ', label:'시작 화면 규격 대안 네 안', file:'doc/screen-frame-drafts.html' },
   ]},

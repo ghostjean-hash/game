@@ -42,11 +42,12 @@ function titleBackground() {
 
 const frame = createGameFrame({
   root: app, gameId: storageGameId, title: '지뢰찾기', tagline: '숫자를 믿고 지뢰를 피하세요', background: titleBackground(), light: true,
-  buttons: ['sound'], sounds: SOUNDS, pauseOnHide: true,
+  sounds: SOUNDS, pauseOnHide: true,
   options: { items: DIFFICULTY_ORDER.map((key) => ({ id: key, name: DIFFICULTY[key].name })), selectedId: selected },
   resume: { enabled: false, detail: '' },
   onOption: (key) => { selected = key; frame.save.set('lastDiff', key); updateTitle(); },
   onStart: () => begin(selected), onResume: (saved) => resume(saved?.data),
+  onExit: () => { saveProgress(); return true; },
   onScreenChange: (now, previous) => { if (now === SCREEN.PAUSE && previous === SCREEN.PLAY) saveProgress(); },
 });
 
@@ -176,7 +177,7 @@ function actChord(x, y) {
 unbind = bindBoardInput(boardEl, { onOpen: (x, y) => { cursor = null; actOpen(x, y); }, onFlag: (x, y) => { cursor = null; actFlag(x, y); }, getMode: () => mode });
 play.querySelector('#mode-open').addEventListener('click', () => setMode('open'));
 play.querySelector('#mode-flag').addEventListener('click', () => setMode('flag'));
-play.querySelector('[data-action="back"]').addEventListener('click', () => { saveProgress(); frame.screens.back(); });
+play.querySelector('[data-action="back"]').addEventListener('click', () => { saveProgress(); frame.navigate.back(); });
 play.querySelector('#pause-btn').addEventListener('click', () => frame.screens.go(SCREEN.PAUSE));
 play.querySelector('#sound-toggle').addEventListener('click', () => frame.audio.setMuted(!frame.audio.isMuted()));
 play.querySelector('#end-action').addEventListener('click', () => begin(selected));

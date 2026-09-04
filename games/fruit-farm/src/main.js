@@ -1,4 +1,4 @@
-import { createSave } from '../../../shared/frame/save.js';
+import { createSave, mountHubBack } from '../../../shared/frame/index.js';
 import { BUILDING, BUILDINGS, ITEM, MENU, createFarmHarness } from './farmHarness.js';
 import { createBoard, openCell, toggleFlag, countFlags } from '../../mines/src/core/board.js';
 import { CELL_STATE, GAME, RULESET } from '../../mines/src/data/constants.js';
@@ -15,6 +15,7 @@ const labels = { [ITEM.APPLE]: '🍎 사과', [ITEM.BERRY]: '🫐 베리', [ITEM
 const detail = { [BUILDING.WELL]: '클리어마다 샘물 2개', [BUILDING.JUICER]: '주스 메뉴 해금', [BUILDING.HIVE]: '클리어마다 꿀 1개', [BUILDING.JAM]: '잼 메뉴 해금', [BUILDING.MILL]: '클리어마다 밀가루 1개', [BUILDING.OVEN]: '타르트 메뉴 해금' };
 const finder = document.querySelector('#finder'); const boardEl = document.querySelector('#finder-board'); let board = null; let finderMode = 'open';
 const persist = () => { if (!harnessMode) save.set('farm', farm.state()); };
+mountHubBack({ parent: document.querySelector('.map-hud'), onExit: () => { persist(); return true; } });
 function recipe(item) { return Object.entries(item.recipe).map(([id, count]) => labels[id] + ' ' + count).join(' · '); }
 function render() {
   const state = farm.state(); const order = farm.order();
@@ -80,7 +81,6 @@ function actFruitFlag(x, y) { toggleFlag(board, x, y); renderFinder(); finishBoa
 bindBoardInput(boardEl, { onOpen: actFruitOpen, onFlag: actFruitFlag, getMode: () => finderMode, directInput: true });
 function openFinder() { board = createBoard({ w: 9, h: 9, mines: 10, key: 'first-orchard', ruleset: RULESET.EXTENDED }); board.markerSymbol = '🧺'; if (harnessMode) window.__fruitBoard = board; finderMode = 'open'; setFinderMode('open'); document.querySelector('#finder-help').textContent = '탭 열기 · 길게 🧺'; renderFinder(); finder.showModal(); }
 document.querySelector('#find-button').addEventListener('click', openFinder); document.querySelector('#close-finder').addEventListener('click', () => finder.close());
-document.querySelector('#exit-game').addEventListener('click', () => { window.location.href = '../../'; });
 document.querySelector('#finder-open').addEventListener('click', () => setFinderMode('open')); document.querySelector('#finder-mark').addEventListener('click', () => setFinderMode('mark'));
 document.querySelector('#shop-button').addEventListener('click', () => showSheet('order'));
 document.querySelector('#well-button').addEventListener('click', () => showSheet('build'));

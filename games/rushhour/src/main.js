@@ -629,9 +629,9 @@ function onShopClick(e) {
 }
 el.shopThemes.addEventListener('click', onShopClick);
 el.shopAccessories.addEventListener('click', onShopClick);
-// 소리·전체화면 버튼은 공용 상단 띠가 갖는다(프레임이 만들 때 함께 걸린다).
+// 공용 프레임은 홈 화면의 <- 허브 복귀를 맡고, 놀이 중 소리는 이 게임 HUD가 직접 맡는다.
 // 진행 맵 닫기는 계단을 따라 한 칸 위(시작 화면)로 간다.
-el.mapClose.addEventListener('click', () => frame.screens.back());
+el.mapClose.addEventListener('click', () => frame.navigate.back());
 // 모드 탭: 보고 있는 모드만 바꿔 미리 본다(아직 전환 확정 아님).
 el.mapTabs.addEventListener('click', (e) => {
   const tab = e.target.closest('.map-tab');
@@ -680,16 +680,14 @@ const frame = createGameFrame({
   hasSelect: true,
   background: { className: 'title-deco', el: titleBackdrop() },
   character: { src: 'assets/ponies/a_v2.png', width: 76 },
-  buttons: ['settings', 'sound'],
   sounds: SOUNDS,
   pauseOnHide: false,                // 시간은 흐르지만 실패로 죽는 게임이 아니라 카드를 띄우지 않는다
   resume: { enabled: false, detail: '' },
   startHint: '누르면 모드와 퍼즐 고르는 진행 맵으로 감',
-  extras: [{ id: 'shop', label: '상점' }],
+  extras: [{ id: 'shop', label: '상점' }, { id: 'settings', label: '환경설정' }],
   onStart: () => openMap(),
   onResume: () => resumeLast(),
-  onExtra: (id) => { if (id === 'shop') openPanel(el.shop, renderShop); },
-  onSettings: () => openPanel(el.settings, renderSettings),
+  onExtra: (id) => { if (id === 'shop') openPanel(el.shop, renderShop); else if (id === 'settings') openPanel(el.settings, renderSettings); },
 });
 
 // 이 게임의 화면 둘을 프레임에 등록한다. 표시는 프레임이 화면 이름으로 가른다.

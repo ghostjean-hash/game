@@ -35,7 +35,7 @@
    전혀 다르고(보드 중앙 정렬, 목록 스크롤 등), 프레임이 절대 배치를 걸면 그 레이아웃이 깨진다.
    프레임이 정하는 것은 "어느 화면을 보이느냐"까지다. 시작 화면만 프레임 소유라 아래에서 배치한다. */
 
-/* ── 상단 띠 ───────────────────────────────────────────── */
+/* ── 과거 상단 띠 호환 규칙 ─────────────────────────────── */
 .gg-topbar {
   position: absolute;
   top: calc(env(safe-area-inset-top, 0px) + 12px);
@@ -106,30 +106,25 @@
 /* 상단 공용 띠를 쓰지 않는다. 게임 시작·선택·플레이 모두 화면 자체가 첫 요소부터 시작한다. */
 .gg-topbar { display: none !important; }
 .gg-title-hero { top: calc(env(safe-area-inset-top, 0px) + 3vh); }
-/* 모든 공용 프레임 게임의 허브 탈출구. 화면을 가르는 띠를 만들지 않고 독립 버튼만 띄운다. */
-.gg-hub-exit {
+/* 게임 홈 화면 안의 허브 복귀. 플레이 HUD와 분리된 공용 오버레이를 만들지 않는다. */
+.gg-title-back {
   position: absolute;
-  top: calc(env(safe-area-inset-top, 0px) + 10px);
-  left: 10px;
-  z-index: 20;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 42px;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  left: 12px;
+  z-index: 4;
+  min-width: 40px;
   height: 34px;
-  padding: 0 11px;
+  padding: 0 10px;
   border: 1px solid color-mix(in srgb, var(--line, #fff) 76%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--bg-elev, #161823) 92%, transparent);
-  box-shadow: 0 6px 16px rgba(0,0,0,.18);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg-elev, #161823) 88%, transparent);
   color: var(--fg, #e9eff9);
-  font-size: 12px;
-  font-weight: 700;
-  text-decoration: none;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
 }
-.gg-hub-exit:active { transform: scale(.96); }
+.gg-title-back:active { transform: scale(.96); }
 /* ── 시작 화면 ─────────────────────────────────────────── */
 .gg-title { position: absolute; inset: 0; }
 .gg-title-bg {

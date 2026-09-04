@@ -159,7 +159,7 @@
 // v221 (2026-08-24): 허브 v2·공통 앱 바·standalone PWA 전환을 즉시 반영한다. 전체화면 공용 모듈은 더 이상 사전 캐시하지 않는다.
 // v220 (2026-08-24): mines 모듈·토큰 변경을 network-first로 전환한다. cache-first로
 // 새 main.js와 옛 하위 모듈을 섞어 읽으면 모듈 export 불일치로 게임이 시작하지 않는다.
-const CACHE_VERSION = "v231";
+const CACHE_VERSION = "v232";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
@@ -184,7 +184,8 @@ const PRECACHE = [
   "./icons/icon-512.png",
   "./icons/icon-maskable.png",
   "./shared/tokens.css",
-  "./shared/base.css",
+  './shared/base.css',
+  './shared/hub.css',
   "./shared/input.js",
   "./shared/storage.js",
   // storage.js가 직접 의존한다. 이게 없으면 오프라인에서 게임 전체 모듈 로드가 실패한다.

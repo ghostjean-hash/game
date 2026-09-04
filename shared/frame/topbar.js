@@ -59,7 +59,7 @@ export function mountTopbar({
   const tools = document.createElement('div');
   tools.className = 'gg-tool-menu';
 
-  // 오른쪽 - 규격 순서(환경설정 → 소리 → 전체화면 → 잠깐 멈춤)로 강제한다.
+  // 오른쪽 - 규격 순서(환경설정 → 소리 → 잠깐 멈춤)로 강제한다.
   const ORDER = ['settings', 'sound', 'pause'];
   const handlers = { settings: onSettings, sound: onSound, pause: onPause };
   const made = {};
