@@ -6,6 +6,7 @@ window.GDD_NAV = [
     { id:'platform', vol:'0', label:'게임 플랫폼 이동 구조', file:'doc/platform-navigation.html' },
     { id:'sf',  vol:'Ⅰ', label:'게임 시작 흐름 공용 프레임', file:'doc/screen-frame.html' },
     { id:'sfd', vol:'Ⅱ', label:'시작 화면 규격 대안 네 안', file:'doc/screen-frame-drafts.html' },
+    { id:'plt', vol:'Ⅲ', label:'게임 공통 플랫폼', file:'doc/game-platform.html' },
   ]},
   { group:true, vol:'B', label:'게임별 기획서', children:[
     { id:'mines', vol:'MIN', label:'지뢰찾기', file:'../../../games/mines/docs/planning-mines.html' },
