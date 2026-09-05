@@ -9,6 +9,10 @@
 <link rel="stylesheet" href="../mobile-shell.css">
 <link rel="stylesheet" href="./frame.css">
 <style>
+  /* 부품 확인 줄. 실제 게임이라면 이 자리를 게임이 정한다(규칙 19 - 자리는 게임 몫). */
+  .demo-parts { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; z-index: 5; }
+</style>
+<style>
   /* 이 페이지는 게임이 아니라 부품 확인용이다. 실제 게임에는 아래 스타일이 없다. */
   body { margin: 0; }
   #app { position: fixed; inset: 0; }
@@ -124,6 +128,46 @@ if (screen === 'pause') {
     ],
     newRecord: true,
   });
+}
+
+// ── 부품 넷 확인(Ⅰ권 11.2) ──────────────────────────────
+// 환경설정 · 아이콘 버튼 · 덮는 카드 · 알림 쪽지. ?parts=1 로 열면 플레이 화면 위에 세운다.
+let vibrateOn = true;
+let handId = 'right';
+if (new URLSearchParams(location.search).get('parts')) {
+  // 게임이 자기 항목을 더하는 경우를 함께 본다. 소리 항목은 공용이 이미 넣어 두었다.
+  frame.settings.addItem({
+    id: 'vibrate', type: 'toggle', label: '진동',
+    get: () => vibrateOn, set: (v) => { vibrateOn = v; },
+  });
+  frame.settings.addItem({
+    id: 'hand', type: 'select', label: '조작 손',
+    options: [{ id: 'left', label: '왼손' }, { id: 'right', label: '오른손' }],
+    get: () => handId, set: (v) => { handId = v; },
+  });
+
+  const bar = document.createElement('div');
+  bar.className = 'demo-parts';
+  bar.innerHTML = `
+    <button type="button" class="gg-ic" data-demo="settings" aria-label="환경설정">⚙</button>
+    <button type="button" class="gg-ic gg-ic-lg" data-demo="card" aria-label="덮는 카드">▣</button>
+    <button type="button" class="gg-ic is-on" data-demo="toast" aria-label="알림 쪽지">✓</button>`;
+  frame.playEl.appendChild(bar);
+
+  bar.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-demo]');
+    if (!b) return;
+    if (b.dataset.demo === 'settings') frame.settings.open();
+    if (b.dataset.demo === 'toast') frame.overlay.toast('알림 쪽지 확인');
+    if (b.dataset.demo === 'card') {
+      const body = document.createElement('p');
+      body.className = 'gg-card-line';
+      body.textContent = '어느 화면에서든 열리는 덮는 카드. 바깥을 누르거나 되돌아가면 이것만 닫힌다.';
+      frame.overlay.openCard({ title: '덮는 카드', bodyEl: body, actions: [{ label: '확인', primary: true }] });
+    }
+  });
+
+  frame.screens.go(SCREEN.PLAY);
 }
 
 globalThis.__frame = frame;   // 확인용

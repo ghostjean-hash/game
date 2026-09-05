@@ -189,7 +189,8 @@ await testAsync('음소거는 진행과 섞이지 않고 따로 저장된다', a
 // ── 정적 규칙 ────────────────────────────────────────────
 
 test('공용 부품 파일이 모두 있다', () => {
-  ['text.js', 'stack.js', 'screens.js', 'topbar.js', 'titlescreen.js', 'cards.js', 'audio.js', 'save.js', 'index.js', 'frame.css']
+  ['text.js', 'stack.js', 'screens.js', 'topbar.js', 'titlescreen.js', 'cards.js', 'audio.js', 'save.js',
+   'overlay.js', 'settings.js', 'index.js', 'frame.css']
     .forEach((f) => assert.ok(read(`shared/frame/${f}`).length > 0, `shared/frame/${f} 없음`));
 });
 
@@ -223,7 +224,8 @@ test('새 공용 파일이 서비스 워커 미리 담기 목록에 있다', () 
   const sw = read('service-worker.js');
   ['shared/frame/index.js', 'shared/frame/frame.css', 'shared/frame/stack.js', 'shared/frame/screens.js',
    'shared/frame/topbar.js', 'shared/frame/titlescreen.js', 'shared/frame/cards.js',
-   'shared/frame/audio.js', 'shared/frame/save.js', 'shared/frame/text.js', 'shared/hub.css']
+   'shared/frame/audio.js', 'shared/frame/save.js', 'shared/frame/text.js',
+   'shared/frame/overlay.js', 'shared/frame/settings.js', 'shared/hub.css']
     .forEach((f) => assert.ok(sw.includes(f), `${f}가 PRECACHE에 없다(오프라인 첫 진입 실패)`));
 });
 
@@ -291,6 +293,59 @@ test('등록 게임은 공용 홈 화면 복귀 외의 직접 URL 이동을 만�
   ];
   files.forEach((file) => assert.ok(!/(?:window\.)?location\.(?:href|assign|replace)\s*[=(]/.test(read(file)), `${file}에 직접 허브 이동이 남아 있다`));
   assert.match(read('games/fruit-farm/src/main.js'), /mountHubBack/, '과일 농장이 공용 홈 화면 복귀 부품을 쓰지 않는다');
+});
+
+// ── 공용 부품과 배치 책임(Ⅰ권 11장 / 표준 4.8 규칙 19·20) ───
+
+test('환경설정 그릇이 소리 항목을 기본으로 넣는다', () => {
+  const src = read('shared/frame/settings.js');
+  assert.match(src, /id: 'sound'/, '소리 항목이 기본으로 들어 있지 않다');
+  assert.match(src, /audio\.setMuted/, '소리 항목이 공용 소리 그릇을 켜고 끄지 않는다');
+  assert.ok(!/localStorage\s*[.[]/.test(src), '저장을 직접 만지면 클라우드 동기화 신호가 끊긴다');
+  assert.match(read('shared/frame/index.js'), /save\.saveMuted\(m\)/, '음소거가 공용 저장으로 남지 않는다');
+});
+
+test('환경설정을 공용이 모든 게임 시작 화면에 넣는다', () => {
+  const src = read('shared/frame/index.js');
+  assert.match(src, /extraList\.push\(\{ id: SETTINGS_ID/, '게임이 적지 않으면 환경설정이 시작 화면에 안 뜬다');
+  assert.match(src, /hasSettingsExtra/, '게임이 이미 적어 둔 환경설정과 중복될 수 있다');
+});
+
+test('덮는 카드가 열려 있으면 되돌아가기가 화면을 옮기지 않는다', () => {
+  const ov = read('shared/frame/overlay.js');
+  // 카드가 열릴 때 자기 자리를 쌓고 닫힐 때 그 자리를 소모한다. 자리를 안 쌓으면 시작 화면에서
+  // 뒤로가기가 문서를 통째로 떠나 카드가 닫히는 대신 게임에서 나가진다(1회차 검사 적발).
+  assert.match(ov, /history\.pushState\(\{ ggOverlay: true \}/, '카드가 되돌아갈 자리를 쌓지 않는다');
+  assert.match(ov, /window\.addEventListener\('popstate'/, '카드가 기기 뒤로가기를 직접 받지 않는다');
+  assert.match(ov, /stopImmediatePropagation/, '화면 골격이 같은 뒤로가기를 또 받아 한 칸 물러난다');
+  const frame = read('shared/frame/index.js');
+  // 등록 순서가 곧 처리 순서라, 카드 그릇이 화면 골격보다 먼저 만들어져야 뒤로가기를 먼저 받는다.
+  assert.ok(frame.indexOf('createOverlayHost({ parent: root })') < frame.indexOf('createScreens({'),
+    '덮는 카드가 화면 골격보다 늦게 만들어져 뒤로가기를 먼저 받지 못한다');
+  assert.match(frame, /overlay\.hasOpen\(\) \? overlay\.requestCloseTop\(\)/, '조립이 카드 닫기를 되돌아가기에 물리지 않았다');
+});
+
+test('알림 쪽지와 덮는 카드가 공용 한 곳에 있다', () => {
+  const src = read('shared/frame/overlay.js');
+  assert.match(src, /export function createOverlayHost/, '덮는 카드 그릇이 없다');
+  assert.match(src, /function toast\(/, '알림 쪽지가 공용에 없다');
+  assert.match(read('shared/frame/frame.css'), /\.gg-toast/, '알림 쪽지 스타일이 공용에 없다');
+});
+
+test('강조 버튼 글자색이 공용 토큰에 있다', () => {
+  assert.match(read('shared/tokens.css'), /--accent-fg:/, '게임마다 따로 선언하게 된다(표준 4.8 규칙 15)');
+});
+
+test('러시아워가 잃었던 소리·되돌아가기·환경설정을 공용 부품으로 되돌렸다', () => {
+  const html = read('games/rushhour/index.html');
+  const js = read('games/rushhour/src/main.js');
+  ['btn-back', 'btn-mute', 'btn-play-settings'].forEach((id) => {
+    assert.ok(html.includes(`id="${id}"`), `놀이 중 ${id}가 없다`);
+  });
+  assert.match(html, /class="gg-ic"/, '자기 아이콘 버튼을 새로 만들었다(공용 부품을 써야 한다)');
+  assert.match(js, /frame\.audio\.setMuted/, '소리를 끌 수 없는 상태가 되돌아왔다');
+  assert.match(js, /frame\.settings\.open\(\)/, '놀이 중 환경설정을 열 길이 없다');
+  assert.ok(!/공용 상단 띠가 갖는다/.test(html + js), '폐기된 띠에 기능을 위임하는 서술이 남아 있다');
 });
 
 // ── 결과 ─────────────────────────────────────────────────

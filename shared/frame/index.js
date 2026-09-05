@@ -4,8 +4,9 @@
 // 되돌아가기 계단, 소리, 진행 저장을 한 번에 갖는다. 부품을 따로 쓰고 싶으면 각 모듈을
 // 직접 불러도 된다(screens.js / titlescreen.js / cards.js / audio.js / save.js).
 //
-// 이 단계에서는 게임 파일을 건드리지 않는다. 부품을 먼저 만들고 노노그램 하나로 검증한 뒤
-// 나머지 넷에 순차 적용하는 것이 확정된 순서다(Ⅰ권 9장, 2026-08-01).
+// 부품은 공용이 한 벌로 주고 그것을 화면 어디에 놓을지는 게임이 정한다(Ⅰ권 11장).
+// 환경설정은 게임이 적지 않아도 시작 화면 추가 항목 줄에 공용이 넣는다 - 규칙 20이
+// "모든 게임이 갖는다"이고, 게임에 맡겼더니 일곱 중 둘만 갖고 있었다(2026-09-05 실측).
 // SSOT: standards/html-game/plans/doc/platform-navigation.html
 
 import { SCREEN, TEXT, LABEL } from './text.js';
@@ -14,6 +15,8 @@ import { mountTitleScreen } from './titlescreen.js';
 import { mountPauseCard, mountResultCard } from './cards.js';
 import { createAudio } from './audio.js';
 import { createSave } from './save.js';
+import { createOverlayHost } from './overlay.js';
+import { createSettings } from './settings.js';
 // 게임 홈 UI 안에만 붙이는 공용 허브 복귀 버튼.
 export function mountHubBack({ parent, hubHref = '../../', onExit = null } = {}) {
   if (!parent) throw new Error('mountHubBack: parent required');
@@ -78,11 +81,16 @@ export function createGameFrame({
 
   const save = createSave(gameId);
   let exitToHub = null;
+  // 덮는 카드를 화면 골격보다 먼저 만든다 - 뒤로가기를 먼저 받아야 카드만 닫히고
+  // 화면이 함께 물러나지 않는다(overlay.js 머리말 참고).
+  const overlay = createOverlayHost({ parent: root });
   const screens = createScreens({
     root,
     hasSelect,
     onExit: () => { if (exitToHub) exitToHub(); },
     onChange: onScreenChange,
+    // 게임이 자기 되돌아가기 버튼으로 부른 경우. 기기 뒤로가기는 덮는 카드가 직접 받는다.
+    interceptBack: () => (overlay.hasOpen() ? overlay.requestCloseTop() : false),
   });
 
   // 화면 칸을 미리 만들어 둔다. 게임은 playEl 안에 자기 플레이 화면을 그리면 된다.
@@ -103,6 +111,15 @@ export function createGameFrame({
   // 지난번 음소거 상태를 되살린다. 게임마다 저장 위치가 달라 기억이 안 되던 것을 하나로 맞춘다.
   audio.setMuted(save.readMuted());
 
+  const settings = createSettings({ overlay, audio });
+
+  // 환경설정 항목을 게임이 시작 화면에 적지 않았어도 공용이 넣는다(규칙 20).
+  // 이미 적어 두었으면 중복해 넣지 않는다 - 러시아워처럼 상점과 나란히 두던 게임이 있다.
+  const SETTINGS_ID = 'settings';
+  const extraList = extras.slice();
+  const hasSettingsExtra = extraList.some((ex) => ex.id === SETTINGS_ID || ex.label === TEXT.settings);
+  if (!hasSettingsExtra) extraList.push({ id: SETTINGS_ID, label: TEXT.settings });
+
   const titleScreen = mountTitleScreen({
     parent: titleEl,
     title,
@@ -114,7 +131,7 @@ export function createGameFrame({
     choices,
     options,
     toggles,
-    extras,
+    extras: extraList,
     onStart: (sel) => {
       audio.play('start');
       if (onStart) onStart(sel);
@@ -126,7 +143,11 @@ export function createGameFrame({
     onChoice,
     onOption,
     onToggle,
-    onExtra,
+    onExtra: (id) => {
+      // 공용이 넣은 환경설정은 공용이 연다. 게임이 자기 것을 적어 두었으면 게임에 넘긴다.
+      if (id === SETTINGS_ID && !hasSettingsExtra) { settings.open(); return; }
+      if (onExtra) onExtra(id);
+    },
   });
   if (startHint) titleScreen.setStartHint(startHint);
 
@@ -164,6 +185,9 @@ export function createGameFrame({
     result,
     audio,
     save,
+    // 어느 화면에서든 열리는 덮는 카드와 알림 쪽지. 게임이 자기 모달을 새로 만들지 않는다(규칙 19).
+    overlay,
+    settings,
     // 게임이 자기 화면을 그릴 자리.
     playEl,
     selectEl,
@@ -184,6 +208,7 @@ export function createGameFrame({
       titleScreen.destroy();
       pause.destroy();
       result.destroy();
+      overlay.destroy();
       hubBack.destroy();
     },
   };
@@ -196,3 +221,5 @@ export { mountTitleScreen } from './titlescreen.js';
 export { mountPauseCard, mountResultCard } from './cards.js';
 export { createAudio, tone, BASE_SOUNDS } from './audio.js';
 export { createSave } from './save.js';
+export { createOverlayHost } from './overlay.js';
+export { createSettings } from './settings.js';

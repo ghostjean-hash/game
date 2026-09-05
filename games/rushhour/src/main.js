@@ -62,6 +62,9 @@ const el = {
   settings: document.getElementById('settings'),
   settingList: document.getElementById('setting-list'),
   settingsClose: document.getElementById('btn-settings-close'),
+  playBack: document.getElementById('btn-back'),
+  playMute: document.getElementById('btn-mute'),
+  playSettings: document.getElementById('btn-play-settings'),
 };
 
 const state = {
@@ -412,8 +415,12 @@ function hint() {
   frame.audio.play('hint');
 }
 
-// 음소거는 공용 프레임이 맡는다(상단 띠 버튼 + 저장 + 아이콘 갱신).
-// 예전에는 이 게임이 progress.muted에 따로 담고 아이콘도 직접 바꿨다.
+// 소리 상태를 보드 위 버튼 아이콘에 비춘다. 켜고 끄는 것과 저장은 공용 프레임이 맡고,
+// 이 함수는 지금 상태를 그리기만 한다(자리는 게임, 규칙은 공용 - 표준 4.8 규칙 19).
+function paintMute(muted) {
+  el.playMute.classList.toggle('is-muted', !!muted);
+  el.playMute.setAttribute('aria-label', muted ? '소리 켜기' : '소리 끄기');
+}
 
 
 
@@ -650,6 +657,11 @@ el.mapGrid.addEventListener('click', (e) => {
   frame.screens.go(SCREEN.PLAY);
 });
 el.settingsClose.addEventListener('click', () => closePanel(el.settings));
+
+// 놀이 중에 쓰는 셋. 되돌아가기는 계단을 따르고, 소리와 환경설정은 공용 부품을 연다.
+el.playBack.addEventListener('click', () => frame.navigate.back());
+el.playMute.addEventListener('click', () => frame.audio.setMuted(!frame.audio.isMuted()));
+el.playSettings.addEventListener('click', () => frame.settings.open());
 el.settingList.addEventListener('click', (e) => {
   const pick = e.target.closest('.set-pick');
   if (pick && pick.dataset.style) { setStyle(pick.dataset.style); return; }
@@ -684,11 +696,14 @@ const frame = createGameFrame({
   pauseOnHide: false,                // 시간은 흐르지만 실패로 죽는 게임이 아니라 카드를 띄우지 않는다
   resume: { enabled: false, detail: '' },
   startHint: '누르면 모드와 퍼즐 고르는 진행 맵으로 감',
-  extras: [{ id: 'shop', label: '상점' }, { id: 'settings', label: '환경설정' }],
+  extras: [{ id: 'shop', label: '상점' }, { id: 'decor', label: '꾸미기' }],
   onStart: () => openMap(),
   onResume: () => resumeLast(),
-  onExtra: (id) => { if (id === 'shop') openPanel(el.shop, renderShop); else if (id === 'settings') openPanel(el.settings, renderSettings); },
+  onExtra: (id) => { if (id === 'shop') openPanel(el.shop, renderShop); else if (id === 'decor') openPanel(el.settings, renderSettings); },
+  // 소리가 바뀌면 보드 위 버튼 아이콘을 같이 맞춘다.
+  onMuted: (m) => paintMute(m),
 });
+paintMute(frame.audio.isMuted());
 
 // 이 게임의 화면 둘을 프레임에 등록한다. 표시는 프레임이 화면 이름으로 가른다.
 frame.screens.register(SCREEN.PLAY, document.getElementById('screen-play'));

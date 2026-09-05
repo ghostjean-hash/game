@@ -40,12 +40,28 @@ body:has(.rushhour) { background: #3a2d40; }
 .rushhour .topbar {
   background: transparent;
   border-bottom: none;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--sp-2, 8px);
   box-sizing: content-box;
   min-height: 46px;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: 0;
 }
+/* 놀이 중에 보는 값은 가운데, 누르는 것은 양 끝. 버튼 모양은 공용 부품이 정한다. */
+.rushhour .topbar-stats {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4, 16px);
+}
+/* 소리 아이콘 한 벌로 켜짐·꺼짐 두 모양을 낸다(그림 파일을 두 개 두지 않는다). */
+.rushhour .gg-ic .snd-off { display: none; }
+.rushhour .gg-ic.is-muted .snd-on { display: none; }
+.rushhour .gg-ic.is-muted .snd-off { display: inline; }
+.rushhour .gg-ic.is-muted { color: var(--fg-dim, #9aa3b8); }
 .rushhour .home {
   display: inline-flex;
   align-items: center;
@@ -115,14 +131,10 @@ body:has(.rushhour) { background: #3a2d40; }
   padding-top: 52px;
 }
 
-/* 진행 맵은 예전 팝업 스타일(화면을 덮는 어두운 막, z-index 100)을 그대로 쓰기 때문에
-   그대로 두면 공용 상단 띠가 그 막 뒤로 깔려 되돌아가기 화살표가 흐려진다. 띠를 위로 올린다. */
-.rushhour.gg-frame[data-screen='select'] .gg-topbar { z-index: 101; }
-
-/* 결과 카드가 덮고 있을 때만 띠를 감춘다. 놀이 중에는 띠가 있어야 나가기·소리·설정에
-   손이 닿는다(2026-08-06 사용자 신고 "메뉴 버튼이 안 보여"). 보드는 폭이 병목이라
-   띠 높이를 얹어도 작아지지 않는다(세로는 오히려 남는다). */
-.rushhour.gg-frame[data-screen='result'] .gg-topbar { display: none; }
+/* 공용 상단 띠는 폐기됐다(기획서 Ⅰ권 5.2). 예전에는 이 자리에서 그 띠를 진행 맵 위로
+   올리고 결과 화면에서만 감췄는데, 띠가 없어지면서 나가기·소리·설정이 통째로 사라져 있었다
+   (2026-08-06 신고 "메뉴 버튼이 안 보여"가 그대로 재발한 상태였다).
+   지금은 그 셋을 보드 위 자기 줄에 공용 부품으로 두므로 여기서 감추거나 올릴 것이 없다. */
 
 /* 프레임이 쓰는 색 이름을 이 게임 크림 팔레트로 이어 준다. */
 .rushhour.gg-frame {
@@ -133,7 +145,7 @@ body:has(.rushhour) { background: #3a2d40; }
    이 게임은 팝업 기준의 어두운 글자색을 통째로 물려받는데, 그 색이 다크 배경에 그대로 얹히면
    아이콘이 배경과 같은 톤이 되어 사라진다(2026-08-06 사용자 신고 "배경이 다크라서 중복됨").
    크림 카드 위에 앉는 요소(팝업·시작 화면 버튼)는 원래 어두운 글자 그대로 둔다. */
-.rushhour.gg-frame .gg-topbar,
+.rushhour .topbar .gg-ic,
 .rushhour.gg-frame .gg-title-hero,
 .rushhour.gg-frame .gg-title-hint,
 .rushhour.gg-frame .gg-btn-ghost {
@@ -143,6 +155,18 @@ body:has(.rushhour) { background: #3a2d40; }
   --bg-elev: rgba(253, 238, 224, 0.16);
   --bg-elev-2: rgba(253, 238, 224, 0.24);
   --line: rgba(253, 238, 224, 0.42);
+  color: var(--fg);
+}
+
+/* 덮는 카드 안은 크림 바탕이라 위 뒤집기가 적용되면 크림 글자가 크림 위에 얹혀 사라진다.
+   카드 안 버튼은 팝업 기준의 어두운 글자로 되돌린다(실화면 확인에서 드러난 자리). */
+.rushhour.gg-frame .gg-layer-free .gg-btn-ghost {
+  --fg: #3a2e3a;
+  --fg-dim: #9c6b7d;
+  --fg-mute: #b892a0;
+  --bg-elev: #fdeee0;
+  --bg-elev-2: #f7e4d2;
+  --line: #ecd9c3;
   color: var(--fg);
 }
 

@@ -9,6 +9,8 @@
   --fg-mute: #6b7388;
   --accent: #7cf3c4;
   --accent-strong: #4ad8a3;
+  /* 강조 버튼 배경 위에 얹히는 글자색. 팔레트마다 달라 게임이 덮어쓸 수 있다(표준 4.8 규칙 15). */
+  --accent-fg: #04121a;
   --warn: #f7c948;
   --danger: #ff6b81;
   --line: #2a2e44;

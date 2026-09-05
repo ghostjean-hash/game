@@ -18,7 +18,10 @@ const ATTR_SCREEN = 'data-gg-screen';
 //   root:     화면 요소들을 담는 부모(여기에 지금 화면 이름이 적힌다)
 //   onExit:   시작 화면에서 한 번 더 되돌아갔을 때 공용 나가기 통로를 호출한다
 //   useHistory: 기기 자체의 되돌아가기 동작을 계단에 물릴지 여부
-export function createScreens({ root, hasSelect = false, useHistory = true, onExit = null, onChange = null } = {}) {
+//   interceptBack: 화면 안 되돌아가기 버튼을 먼저 받을 함수. true를 돌리면 화면을 옮기지 않는다
+//                  (덮는 카드가 열려 있을 때 그 카드만 닫기 위한 통로). 기기 뒤로가기는
+//                  덮는 카드가 직접 받으므로 여기로 오지 않는다
+export function createScreens({ root, hasSelect = false, useHistory = true, onExit = null, onChange = null, interceptBack = null } = {}) {
   if (!root) throw new Error('createScreens: root required');
 
   const stack = createStack({ hasSelect });
@@ -59,6 +62,7 @@ export function createScreens({ root, hasSelect = false, useHistory = true, onEx
 
     // 한 칸 바깥으로. 시작 화면에서는 공용 나가기만 호출한다(Ⅰ권 4.3).
   function back() {
+    if (interceptBack && interceptBack()) return stack.current();
     const target = stack.peekBack();
     if (target === null) {
       if (onExit) onExit();

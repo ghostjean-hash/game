@@ -386,3 +386,64 @@
   font-weight: 700;
 }
 .gg-newrecord[hidden] { display: none; }
+
+/* ── 아이콘 버튼 크기 두 갈래(Ⅰ권 11.2 / 표준 4.8 규칙 19) ─────────── */
+/* 게임마다 32~46px로 갈려 있던 것을 둘로 접는다. 기본은 보통 크기이고,
+   손가락으로 자주 누르는 게임(격자 위 도구 등)은 큰 것을 쓴다.
+   게임이 자기 폴더에서 크기를 새로 정의하지 않게 하려고 두 갈래를 여기서 준다. */
+.gg-ic { width: 34px; height: 34px; border-radius: var(--r-2, 10px); }
+.gg-ic svg { width: 16px; height: 16px; }
+.gg-ic-lg { width: 44px; height: 44px; border-radius: var(--r-3, 14px); }
+.gg-ic-lg svg { width: 20px; height: 20px; }
+.gg-ic:active { transform: scale(.94); }
+/* 켜진 상태는 강조색 테두리로 알린다. 아이콘 색만 바꾸면 켜졌는지 알기 어렵다(규칙 16과 같은 이유). */
+.gg-ic.is-on { border-color: var(--accent, #22d3ee); color: var(--accent, #22d3ee); }
+
+/* ── 어느 화면에서든 열리는 덮는 카드(Ⅰ권 11.2) ──────────────────── */
+/* 잠깐 멈춤·결과와 달리 화면 이름에 묶이지 않는다. 열고 닫는 호출이 표시를 가르므로
+   여기에 감추는 규칙을 두지 않는다 - 붙어 있는 동안은 보이는 것이 맞다. */
+.gg-layer-free { z-index: 30; }
+.gg-card-head { display: flex; align-items: center; gap: var(--sp-2, 8px); }
+.gg-card-head .gg-card-title { flex: 1; text-align: left; }
+.gg-card-close { font-size: 18px; line-height: 1; }
+
+/* ── 환경설정 항목(Ⅰ권 11.3) ──────────────────────────────────── */
+.gg-set-list { display: grid; gap: var(--sp-2, 8px); }
+.gg-set-row {
+  display: flex; align-items: center; gap: var(--sp-3, 12px);
+  padding: var(--sp-2, 8px) 0;
+  border-bottom: 1px solid var(--line, #2c3650);
+}
+.gg-set-row:last-child { border-bottom: 0; }
+/* 항목 이름은 줄어들 수 있고 오른쪽 조작부는 줄어들지 않는다.
+   반대로 두면 '오른손' 같은 짧은 말이 두 글자에서 꺾인다(확인용 화면에서 실측). */
+.gg-set-label { flex: 1 1 auto; min-width: 0; font-size: 13.5px; }
+.gg-set-toggle { width: auto; min-width: 68px; padding: var(--sp-2, 8px) var(--sp-3, 12px); }
+.gg-set-seg { flex: 0 0 auto; }
+.gg-set-seg .gg-seg-item { white-space: nowrap; padding: var(--sp-2, 8px) var(--sp-3, 12px); }
+
+/* ── 알림 쪽지(Ⅰ권 11.2) ──────────────────────────────────────── */
+/* 자리·머무는 시간·사라지는 방식을 공용이 정한다. 게임마다 다르면 같은 허브 안에서 조작감이 갈린다. */
+.gg-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--sp-6, 32px));
+  transform: translate(-50%, 8px);
+  z-index: 40;
+  max-width: min(320px, calc(100% - var(--sp-6, 32px)));
+  padding: var(--sp-2, 8px) var(--sp-4, 16px);
+  border-radius: 99px;
+  border: 1px solid var(--line, #2c3650);
+  background: var(--bg-elev-2, #1f2233);
+  color: var(--fg, #e8ecf5);
+  font-size: 13px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-2, 220ms) var(--ease, ease), transform var(--dur-2, 220ms) var(--ease, ease);
+}
+.gg-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) {
+  .gg-toast { transition: opacity var(--dur-1, 120ms) linear; }
+  .gg-ic:active { transform: none; }
+}

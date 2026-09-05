@@ -41,7 +41,7 @@ export const BANNED_TEXT = {
   settings: ['설정', '옵션'],
 };
 
-// 상단 띠 버튼의 화면 낭독용 이름. 아이콘만 있는 버튼이라 이 값이 유일한 설명이다.
+// 아이콘만 있는 버튼의 화면 낭독용 이름. 글자가 없어 이 값이 유일한 설명이다.
 export const LABEL = {
   back: '되돌아가기',
   sound: '소리',
@@ -49,4 +49,5 @@ export const LABEL = {
   soundOff: '소리 켜기',
   settings: '환경설정',
   pause: '잠깐 멈춤',
+  close: '닫기',
 };
