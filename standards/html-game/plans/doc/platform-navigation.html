@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!-- ai-tell-exempt: 사용자 결정 2026-07-30 - 회인무격 기획서 스타일·목차 셸을 게임 허브 기획서 표준으로 채택. 글로벌 뼈대 스킬 대신 assets/gdd.css + index.html 셸을 쓴다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>0. 게임 플랫폼 이동 구조 · 게임 허브 기획서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@400;500;600&family=Noto+Serif:ital,wght@1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/gdd.css">
+<link rel="stylesheet" href="../assets/screen-mockup.css">
+<style>
+  /* 이 문서 전용 도면 색 - 공용 토큰만 사용 */
+  .fg-box{fill:var(--sheet-2);stroke:var(--rule)}
+  .fg-key{fill:var(--indigo-soft);stroke:var(--indigo);stroke-width:2}
+  .fg-t{fill:var(--ink);font-family:var(--body);font-size:13px}
+  .fg-s{fill:var(--ink-3);font-family:var(--body);font-size:11.5px}
+  .fg-ar{stroke:var(--ink-3);fill:none}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0 0 L10 5 L0 10 z" fill="#80868D"/>
+  </marker>
+</defs></svg>
+
+<main class="sheet">
+
+<div class="titleblock">
+  <h1><span class="vn">0.</span>게임 플랫폼 이동 구조</h1>
+  <p class="sub">게임 허브라는 하나의 웹 주소 안에 게임과 앱이 여러 개 들어 있음. 이 문서는 <strong>그것들 사이를 오가는 규칙</strong>을 정함. 게임 하나를 열고 난 뒤의 화면 흐름은 <a class="ref" href="screen-frame.html">Ⅰ. 게임 시작 흐름 공용 프레임</a>이 맡으며, 이 문서가 그 상위임.</p>
+</div>
+
+<section id="s1">
+  <div class="sechead"><span class="n">1.</span><h2>세 층</h2><span class="rid">NAV-LAYER</span></div>
+  <p class="lead">플랫폼은 세 층으로 되어 있음. 층이 다르면 이동 방식도 다름.</p>
+
+  <div class="figure mid">
+    <div class="fscroll">
+    <svg viewBox="0 0 820 250" role="img" aria-label="플랫폼 세 층">
+      <rect class="fg-key" x="300" y="14" width="220" height="56" rx="4"/>
+      <text class="fg-t" x="410" y="38" text-anchor="middle">허브 첫 화면</text>
+      <text class="fg-s" x="410" y="58" text-anchor="middle">게임 · 앱 · 정보 세 칸</text>
+
+      <path class="fg-ar" d="M360 70 V110" marker-end="url(#ah)"/>
+      <path class="fg-ar" d="M460 70 V110" marker-end="url(#ah)"/>
+      <path class="fg-ar" d="M330 118 V78" marker-end="url(#ah)"/>
+      <path class="fg-ar" d="M490 118 V78" marker-end="url(#ah)"/>
+
+      <rect class="fg-box" x="150" y="118" width="240" height="112" rx="4"/>
+      <text class="fg-t" x="270" y="142" text-anchor="middle">게임</text>
+      <text class="fg-s" x="270" y="164" text-anchor="middle">공용 프레임을 쓰는 일곱</text>
+      <text class="fg-s" x="270" y="184" text-anchor="middle">홈 화면 &lt;- 하나로만 나옴</text>
+      <text class="fg-s" x="270" y="210" text-anchor="middle">안쪽 흐름은 Ⅰ권이 정함</text>
+
+      <rect class="fg-box" x="430" y="118" width="240" height="112" rx="4"/>
+      <text class="fg-t" x="550" y="142" text-anchor="middle">앱</text>
+      <text class="fg-s" x="550" y="164" text-anchor="middle">학습·도구류 셋</text>
+      <text class="fg-s" x="550" y="184" text-anchor="middle">자기 방식으로 나옴</text>
+      <text class="fg-s" x="550" y="210" text-anchor="middle">공용 프레임 밖(3.3)</text>
+    </svg>
+    </div>
+    <div class="figcap"><span class="fid">FIG NAV-01</span><span>허브가 뿌리이고 게임·앱이 그 아래 나란히 있음. 게임끼리, 앱끼리 직접 오가지 않음.</span></div>
+  </div>
+
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">허브 첫 화면 - 뿌리
+      <ul class="od"><li>게임 목록, 앱 목록, 정보 세 칸으로 나뉨. 어느 칸을 보고 있는지는 아래쪽 도크가 정함(2장)</li><li>등록부 파일 두 개(<code>games/_registry.json</code>, <code>apps/_registry.json</code>)가 목록의 유일한 출처임. 카드를 손으로 적지 않음</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">게임 - 공용 프레임을 쓰는 것
+      <ul class="od"><li>연 뒤의 화면 흐름은 Ⅰ권 규격을 따름. 허브로 나오는 문은 게임 홈 화면의 <strong>&lt;-</strong> 하나뿐임(3.1)</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">앱 - 게임이 아닌 것
+      <ul class="od"><li>영어 독해·영어 단어장·lotto 셋. 한 판이 있는 놀이가 아니라 계속 쓰는 도구라 시작 화면·결과 카드가 뜻을 갖지 않음</li><li>지금은 공용 프레임 밖에 있음. 어디까지 함께 쓸지는 3.3에 적음</li></ul>
+    </div></div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="sechead"><span class="n">2.</span><h2>허브 안에서의 이동</h2><span class="rid">NAV-HUB</span></div>
+
+  <h3><span class="sn">2.1.</span>하단 도크가 주 이동 <span class="chip c-new">확정 2026-08-24</span></h3>
+  <p>허브 첫 화면의 칸 이동은 화면 아래에 붙은 도크가 맡음. 위쪽 띠나 좌우 넘김을 쓰지 않음.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">칸은 셋 고정 - 게임 · 앱 · 정보
+      <ul class="od"><li>칸이 늘어나도 도크 줄을 새로 만들지 않고 기존 칸 안에서 나눔</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">지금 보고 있는 칸을 눈에 띄게 표시함. 어느 칸에 있는지 모르는 상태를 만들지 않음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">도크는 손이 닿는 아래쪽에 둠
+      <ul class="od"><li>한 손으로 드는 기기에서 위쪽 띠는 엄지가 닿지 않음. 홈 표시 막대와 겹치지 않게 여백을 둠</li></ul>
+    </div></div>
+  </div>
+
+  <h3><span class="sn">2.2.</span>카드를 눌러 들어감</h3>
+  <p>게임·앱으로 들어가는 것은 목록의 카드를 누르는 것 하나임. 카드에는 이름, 한 줄 설명, 상태(놀 수 있음·만드는 중)가 보임. 만드는 중인 것도 목록에 두되 그 사실을 카드에 적어, 들어갔다가 빈 화면을 만나는 일을 막음.</p>
+</section>
+
+<section id="s3">
+  <div class="sechead"><span class="n">3.</span><h2>안에서 밖으로 나오는 길</h2><span class="rid">NAV-EXIT</span></div>
+
+  <h3><span class="sn">3.1.</span>게임에서 나오는 문은 하나 <span class="chip c-new">확정 2026-08-24</span></h3>
+  <p>게임에서 허브로 나오는 길은 <strong>게임 홈 화면의 &lt;- 하나뿐</strong>임. 화면 위에 떠 있는 별도의 허브 버튼을 두지 않음.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">이 버튼은 공용 프레임이 붙임. 게임이 자기 손으로 만들지 않음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">플레이·잠깐 멈춤·결과 화면에는 이 문이 없음
+      <ul class="od"><li>거기서는 되돌아가기가 한 칸씩 올라가고, 홈 화면에 닿았을 때 비로소 나갈 수 있음(Ⅰ권 4.2)</li><li>판이 진행 중인데 한 번에 게임 밖으로 나가면 진행이 사라지는 사고가 나기 때문임</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">게임은 주소를 스스로 바꾸지 않음
+      <ul class="od"><li>이동은 공용 프레임을 거침. 게임이 직접 허브 주소로 튀는 길을 만들면 되돌아가기 계단이 어긋남</li></ul>
+    </div></div>
+  </div>
+
+  <h3><span class="sn">3.2.</span>기기 되돌아가기와 같은 결과</h3>
+  <p>화면 안의 <strong>&lt;-</strong>와 기기 자체의 되돌아가기 동작은 항상 같은 곳으로 감. 둘이 다르게 동작하면 어느 쪽을 눌러야 할지 사용자가 매번 시험해야 함.</p>
+
+  <h3><span class="sn">3.3.</span>앱은 아직 이 규칙 밖 <span class="chip c-off">미적용</span></h3>
+  <p>앱 셋(영어 독해·영어 단어장·lotto)은 공용 프레임을 쓰지 않고 각자 자기 방식으로 허브에 돌아옴. 한 판이 있는 놀이가 아니라 시작 화면·결과 카드가 뜻을 갖지 않기 때문임.</p>
+  <p>다만 <strong>허브로 돌아오는 문의 모양과 자리, 그리고 기본 부품은 게임과 같아야 함</strong>. 앱만 다르게 생긴 버튼과 다르게 열리는 덮는 카드를 쓰면 같은 허브 안에서 조작감이 갈림. 어디까지 함께 쓸지는 게임 쪽 부품 공용화(Ⅰ권 11장)가 선 뒤에 정함.</p>
+</section>
+
+<section id="s4">
+  <div class="sechead"><span class="n">4.</span><h2>설치해서 여는 경우</h2><span class="rid">NAV-APP</span></div>
+  <p class="lead">허브는 웹 주소로도 열리고, 홈 화면에 추가해 독립 창으로도 열림. 둘 다에서 같은 흐름이 성립해야 함.</p>
+
+  <h3><span class="sn">4.1.</span>독립 창으로 열리게 함 <span class="chip c-new">확정 2026-08-24</span></h3>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">게임·앱마다 자기 설치 정보를 가짐
+      <ul class="od"><li>독립 창으로 열리도록 지정하고, 시작 주소는 자기 폴더, 적용 범위는 허브 뿌리로 둠. 그래야 설치한 뒤에도 허브로 돌아올 수 있음</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">운영체제가 쓰는 영역은 침범하지 않음
+      <ul class="od"><li>노치·홈 표시 막대 안쪽 안전 영역에만 화면을 그림</li></ul>
+    </div></div>
+  </div>
+
+  <h3><span class="sn">4.2.</span>전체화면 버튼은 두지 않음 <span class="chip c-new">확정 2026-08-24</span></h3>
+  <p>브라우저 전체화면을 켜고 끄는 버튼과 아이폰용 홈 화면 추가 안내를 폐기함. 아이폰이 동영상 외 전체화면을 열어주지 않아 기기마다 결과가 갈렸고, 안내를 아무리 잘 그려도 사용자가 따라 해야 얻어지는 것이었음. 설치해서 독립 창으로 여는 길 하나로 통일함.</p>
+  <p class="note">폐기 결정 이전에 만든 전체화면 처리 코드가 아직 저장소에 남아 있으나 부르는 곳이 없음. 정리 대상임.</p>
+</section>
+
+<section id="s5">
+  <div class="sechead"><span class="n">5.</span><h2>고정과 자유</h2><span class="rid">NAV-SCOPE</span></div>
+  <table class="tight">
+    <thead><tr><th style="width:50%">어기면 안 되는 것</th><th>게임·앱이 자유롭게 정하는 것</th></tr></thead>
+    <tbody>
+      <tr><td>허브에서 들어가는 길은 목록 카드 하나</td><td>카드에 쓸 이름·설명·강조색</td></tr>
+      <tr><td>게임에서 나오는 문은 홈 화면 &lt;- 하나</td><td>홈 화면의 그림과 색</td></tr>
+      <tr><td>화면 안 되돌아가기와 기기 되돌아가기가 같은 결과를 내는 것</td><td>화면이 몇 칸 깊어지는지</td></tr>
+      <tr><td>이동을 공용 프레임을 거쳐 하는 것</td><td>이동할 때 보여줄 연출</td></tr>
+      <tr><td>독립 창으로 열리게 하는 것</td><td>설치 아이콘과 이름</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="foot"><span>게임 허브 기획서</span><span>0. 게임 플랫폼 이동 구조</span><span>r1.0 · 하단 도크와 홈 화면 &lt;- 확정</span></div>
+</main>
+</body>
+</html>

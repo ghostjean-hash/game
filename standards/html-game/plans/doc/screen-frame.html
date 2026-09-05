@@ -116,7 +116,7 @@
       <text class="fg-s" x="205" y="158" text-anchor="middle">생략 가능</text>
       <rect class="fg-key" x="296" y="112" width="160" height="62" rx="3"/>
       <text class="fg-t" x="376" y="138" text-anchor="middle">시작 화면</text>
-      <text class="fg-s" x="376" y="156" text-anchor="middle">나가기 버튼</text>
+      <text class="fg-s" x="376" y="156" text-anchor="middle">허브로 &lt;- 하나</text>
       <rect class="fg-key" x="486" y="112" width="120" height="62" rx="3"/>
       <text class="fg-t" x="546" y="147" text-anchor="middle">플레이</text>
       <rect class="fg-box" x="486" y="26" width="120" height="46" rx="3"/>
@@ -153,13 +153,13 @@
   </div>
 
   <h3><span class="sn">3.2.</span>시작 화면 <span class="chip c-sys">필수</span> <span class="chip c-new">확정 2026-08-01</span></h3>
-  <p>다섯 게임 모두에 공통으로 두는 것이 확정됨(2026-08-01 사용자 결정). 게임 홈 화면 UI 안에 공용 `<-` 버튼 하나를 두어 게임 허브로 돌아갈 수 있음. 세부 화면에는 허브 복귀 버튼을 두지 않음. 지금 즉시 플레이로 진입하는 스도쿠와 러시아워도 이 화면을 갖게 됨. 담는 것은 배경과 캐릭터, 게임 이름, 최고 기록, 이어서 하기, 시작이며 환경설정은 상단 띠 아이콘으로 둠. 자세한 규격은 5장에 있음.</p>
+  <p>다섯 게임 모두에 공통으로 두는 것이 확정됨(2026-08-01 사용자 결정). 게임 홈 화면 UI 안에 공용 `<-` 버튼 하나를 두어 게임 허브로 돌아갈 수 있음. 세부 화면에는 허브 복귀 버튼을 두지 않음. 지금 즉시 플레이로 진입하는 스도쿠와 러시아워도 이 화면을 갖게 됨. 담는 것은 배경과 캐릭터, 게임 이름, 최고 기록, 이어서 하기, 시작이며 환경설정은 조작단 맨 아래 추가 항목 줄에 둠(5.4). 자세한 규격은 5장에 있음.</p>
 
   <h3><span class="sn">3.3.</span>플레이 <span class="chip c-sys">필수</span></h3>
   <p>실제로 게임을 하는 화면. 허브 복귀 버튼은 두지 않으며, 게임 고유 HUD와 내부 되돌아가기만 둠. 진행 저장은 홈 화면의 `<-`와 화면 이탈 시점에 처리함.</p>
 
   <h3><span class="sn">3.4.</span>잠깐 멈춤</h3>
-  <p>플레이를 덮는 얇은 화면. 계속하기, 다시 시작, 시작 화면으로 나가기 셋만 둠. 게임 화면을 벗어났다가 돌아오는 경우에도 자동으로 이 상태가 되어, 돌아왔을 때 이미 죽어 있는 일을 막음.</p>
+  <p>플레이를 덮는 얇은 화면. 계속하기, 다시 시작, 그만하기 셋만 둠(문구는 5.3 표를 따름). 게임 화면을 벗어났다가 돌아오는 경우에도 자동으로 이 상태가 되어, 돌아왔을 때 이미 죽어 있는 일을 막음.</p>
 
   <h3><span class="sn">3.5.</span>결과</h3>
   <p>한 판이 끝났음을 알리고 다음 행동을 고르게 하는 화면. 지금 세 방식으로 갈려 있는 것을 플레이를 덮는 카드 하나로 통일함. 담는 것은 이번 점수, 최고 기록과의 비교, 다시 하기, 그만하기임. 새 기록이면 그 사실을 눈에 띄게 알림.</p>
@@ -198,32 +198,32 @@
     <div class="fscroll">
     <svg viewBox="0 0 880 350" role="img" aria-label="시작 화면 구성">
       <rect class="fg-box" x="10" y="10" width="240" height="330" rx="6" fill="#ffffff"/>
-      <rect class="fg-box" x="10" y="10" width="240" height="30" stroke-dasharray="4 3" fill="none"/>
-      <text class="fg-s" x="24" y="30">나가기</text>
-      <text class="fg-s" x="166" y="30">설정</text>
-      <text class="fg-s" x="196" y="30">소리</text>
-      <rect class="fg-box" x="10" y="40" width="240" height="150" fill="#F5F6F7"/>
+      <rect class="fg-box" x="10" y="10" width="240" height="180" fill="#F5F6F7"/>
+      <rect class="fg-box" x="22" y="20" width="28" height="24" rx="7" fill="#ffffff"/>
+      <text class="fg-s" x="36" y="36" text-anchor="middle">&lt;-</text>
       <text class="fg-t" x="130" y="96" text-anchor="middle">배경 그림과 캐릭터</text>
       <text class="fg-t" x="130" y="132" text-anchor="middle">게임 이름</text>
       <text class="fg-s" x="130" y="152" text-anchor="middle">최고 기록 한 줄</text>
       <rect class="fg-box" x="10" y="190" width="240" height="150" fill="#EEF2F7"/>
-      <rect class="fg-box" x="28" y="204" width="204" height="30" rx="3"/>
-      <text class="fg-t" x="130" y="224" text-anchor="middle">이어서 하기</text>
-      <rect class="fg-box" x="28" y="242" width="204" height="26" rx="3"/>
-      <text class="fg-s" x="130" y="259" text-anchor="middle">고르는 칸 또는 옵션 한 줄</text>
-      <rect class="fg-key" x="28" y="276" width="204" height="38" rx="3"/>
-      <text class="fg-t" x="130" y="300" text-anchor="middle">시작</text>
-      <path class="fg-ar" d="M240 314 V336" marker-end="url(#ah)"/>
-      <text class="fg-s" x="130" y="332" text-anchor="middle">여백</text>
-      <text class="fg-t" x="290" y="34">1. 나가기 - 배경 위 왼쪽에 독립된 작은 버튼으로 뜸</text>
-      <text class="fg-s" x="290" y="54">누르면 어느 화면에서나 게임 허브로 돌아감</text>
+      <rect class="fg-box" x="28" y="198" width="204" height="28" rx="3"/>
+      <text class="fg-t" x="130" y="217" text-anchor="middle">이어서 하기</text>
+      <rect class="fg-box" x="28" y="232" width="204" height="24" rx="3"/>
+      <text class="fg-s" x="130" y="248" text-anchor="middle">고르는 칸 또는 옵션 한 줄</text>
+      <rect class="fg-key" x="28" y="262" width="204" height="34" rx="3"/>
+      <text class="fg-t" x="130" y="284" text-anchor="middle">시작</text>
+      <rect class="fg-box" x="28" y="302" width="204" height="22" rx="3"/>
+      <text class="fg-s" x="130" y="317" text-anchor="middle">환경설정 · 상점 같은 추가 항목</text>
+      <path class="fg-ar" d="M240 324 V338" marker-end="url(#ah)"/>
+      <text class="fg-s" x="130" y="336" text-anchor="middle">여백</text>
+      <text class="fg-t" x="290" y="34">1. 허브로 - 배경 위 왼쪽에 독립된 작은 버튼 하나</text>
+      <text class="fg-s" x="290" y="54">이 화면에만 둠. 플레이·멈춤·결과에는 두지 않음(4.3)</text>
       <text class="fg-t" x="290" y="96">2. 배경 그림과 캐릭터가 화면 위쪽을 다 씀</text>
       <text class="fg-s" x="290" y="116">배경 그림이 없는 게임은 게임 자체 요소로 대신함</text>
       <text class="fg-s" x="290" y="136">(쌓인 조각, 완성한 그림 같은 것)</text>
       <text class="fg-t" x="290" y="172">3. 게임 이름은 큰 글자 하나. 그 아래 최고 기록 한 줄</text>
       <text class="fg-s" x="290" y="192">기록이 없으면 비우지 않고 기록 없음으로 적음</text>
       <text class="fg-t" x="290" y="228">4. 조작단 - 누르는 것 전부가 화면 아래에 모임</text>
-      <text class="fg-s" x="290" y="248">이어서 하기, 고르는 칸이나 옵션, 시작 순서</text>
+      <text class="fg-s" x="290" y="248">이어서 하기, 고르는 칸이나 옵션, 시작, 추가 항목 순서</text>
       <text class="fg-t" x="290" y="284">5. 시작 - 가장 크고 강조된 하나</text>
       <text class="fg-t" x="290" y="320">6. 맨 아래 여백 - 브라우저 도구모음·홈 표시와 겹치지 않게 띄움</text>
       <text class="fg-s" x="290" y="344">칸의 순서와 강조는 고정. 캐릭터·제목 크기는 남은 높이에 비례해 줄임</text>
@@ -234,8 +234,9 @@
 
   <p>이 구성으로 정한 이유는 셋임. 게임 이름이 상단 띠와 큰 글자에 두 번 나오던 중복이 사라짐. 캐릭터가 작은 칸에 갇히지 않아 게임의 첫인상이 살아남. 그리고 갈래가 여러 개인 게임에서도 조작단만 바뀌므로 배경·캐릭터·제목이 밀려 사라지지 않음.</p>
 
-  <h3><span class="sn">5.2.</span>공용 나가기 버튼</h3>
+  <h3><span class="sn">5.2.</span>허브로 돌아가는 버튼과 게임 HUD</h3>
   <p>공용 프레임은 화면을 가르는 상단 띠를 두지 않음. 게임 홈 화면 UI 안에 <strong>&lt;-</strong> 하나만 두고, 소리·환경설정·잠깐 멈춤처럼 게임 조작에 가까운 기능은 게임 HUD가 자기 레이아웃에 맞춰 둠.</p>
+  <p><strong>다만 게임이 자기 자리에 두는 것은 &lt;자리&gt;이지 &lt;부품&gt;이 아님.</strong> 버튼·덮는 카드·환경설정·알림 쪽지 같은 기본 부품은 공용 프레임이 한 벌로 주고, 게임은 그것을 자기 화면 어디에 놓을지만 정함. 부품 목록과 그 경계는 <a class="ref" href="#s11">11장 공용 부품과 배치 책임</a>에 있음.</p>
   <div class="ol">
     <div class="oi"><span class="bl"></span><div class="ot">홈 화면 왼쪽 위 - <strong>&lt;-</strong> 하나만. 제목·배경과 같은 홈 UI로 렌더하고 누르면 게임 허브로 돌아감</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">게임 HUD - 점수·진행·소리·환경설정·잠깐 멈춤은 게임이 필요한 자리에서 직접 보여줌
@@ -270,7 +271,7 @@
       <ul class="od"><li>한 판이 짧아 저장할 진행이 없는 게임이 해당</li><li>저장을 지원하는데 지금 저장이 없는 경우와 다름. 그때는 칸을 두고 누를 수 없는 상태로 보임</li></ul>
     </div></div>
     <div class="oi"><span class="bl"></span><div class="ot">게임 고유 화면은 조작단 맨 아래 한 줄에 나란히 둠
-      <ul class="od"><li>상점, 도감처럼 그 게임에만 있는 화면이 해당. 시작 아래 줄에 나란히 두고 새 칸을 만들지 않음</li><li>환경설정은 상단 아이콘이라 이 줄에 넣지 않음</li></ul>
+      <ul class="od"><li>상점, 도감처럼 그 게임에만 있는 화면이 해당. 시작 아래 줄에 나란히 두고 새 칸을 만들지 않음</li><li><strong>환경설정도 이 줄에 함께 둠</strong>. 상단 띠가 없어졌으므로 시작 화면에서 환경설정에 닿는 길은 이 줄 하나임. 모든 게임이 이 항목을 가짐</li></ul>
     </div></div>
     <div class="oi"><span class="bl"></span><div class="ot">고르는 옵션이 셋 이하면 시작 바로 위에 한 줄로 노출함
       <ul class="od"><li>환경설정 안으로 숨기면 매번 들어가야 하므로 자주 바꾸는 옵션은 밖에 둠</li></ul>
@@ -284,7 +285,7 @@
       <ul class="od"><li>맨 아래 버튼과 화면 끝 사이에 손가락이 헛짚지 않을 여백을 둠. 독립 창에서도 홈 표시 막대 위로 같은 여백을 둠</li></ul>
     </div></div>
     <div class="oi"><span class="bl"></span><div class="ot">조작단 줄 수를 늘리지 않고 접음
-      <ul class="od"><li>환경설정은 상단 아이콘으로, 갈래는 고르는 칸 하나로 접음. 줄이 더 필요해지면 새 줄을 만들지 않고 기존 칸 안으로 넣음</li></ul>
+      <ul class="od"><li>환경설정은 추가 항목 줄 안으로, 갈래는 고르는 칸 하나로 접음. 줄이 더 필요해지면 새 줄을 만들지 않고 기존 칸 안으로 넣음</li></ul>
     </div></div>
     <div class="oi"><span class="bl"></span><div class="ot">캐릭터와 제목은 고정 크기를 쓰지 않고 남은 높이에 비례해 줄임
       <ul class="od"><li>같은 화면이 독립 창에서는 크게, 브라우저 창 안에서는 작게 나옴. 칸 순서는 바꾸지 않고 크기만 바꿈</li></ul>
@@ -323,8 +324,6 @@
           <div class="mk-top">
             <span class="ic"><svg><use href="#i-back"/></svg></span>
             <span class="sp"></span>
-            <span class="ic"><svg><use href="#i-gear"/></svg></span>
-            <span class="ic"><svg><use href="#i-snd"/></svg></span>
           </div>
           <div class="mk-hero" style="top:66px">
             <img src="../../../../games/flightshooting/assets/characters/bapuri-upward-v5.png" alt="바푸리" style="width:138px">
@@ -337,6 +336,7 @@
             <div class="seg"><span>쉬움</span><span class="on">보통</span><span>어려움</span><span>매우 어려움</span></div>
             <div class="row"><div class="b gho">친구 동행</div><div class="b gho">자동 플레이</div></div>
             <div class="b pri">시작</div>
+            <div class="b gho">환경설정</div>
           </div>
           <div class="mk-home"></div>
         </div>
@@ -346,7 +346,7 @@
   </div>
   <p>다섯 게임 중 규격에 가장 가까운 화면임. 난이도 네 단계와 동행·자동 두 옵션은 한 판마다 바꾸는 것이라 환경설정 안으로 숨기지 않고 시작 바로 위에 남김(5.4). 나라별 배경 그림 열일곱 장을 이미 갖고 있어 배경은 그대로 씀.</p>
   <div class="ol">
-    <div class="oi"><span class="bl"></span><div class="ot">게임 이름을 상단 띠에서 빼고 배경 위 큰 글자 하나만 남김. 소리와 함께 환경설정도 상단 아이콘으로 올라감</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">게임 이름을 배경 위 큰 글자 하나로만 둠. 소리와 환경설정은 조작단 맨 아래 추가 항목 줄의 환경설정 안으로 들어감</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">이어서 하기 문구에 몇 구역 어느 도시인지 함께 적음</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">플레이에서 되돌아가면 이 화면으로 옴. 지금은 그 게임 혼자 들고 있던 처리를 공용 부품이 맡음</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">최고 기록 자리에 점수와 함께 가장 멀리 간 도시를 적음
@@ -376,8 +376,6 @@
           <div class="mk-top">
             <span class="ic"><svg><use href="#i-back"/></svg></span>
             <span class="sp"></span>
-            <span class="ic"><svg><use href="#i-gear"/></svg></span>
-            <span class="ic"><svg><use href="#i-snd"/></svg></span>
           </div>
           <div class="mk-hero" style="top:112px">
             <div class="mk-ttl">Tetris</div>
@@ -390,6 +388,7 @@
               <svg class="cv" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
             </div>
             <div class="b pri">시작</div>
+            <div class="b gho">환경설정</div>
           </div>
           <div class="mk-home"></div>
         </div>
@@ -428,8 +427,6 @@
           <div class="mk-top">
             <span class="ic"><svg><use href="#i-back"/></svg></span>
             <span class="sp"></span>
-            <span class="ic"><svg><use href="#i-gear"/></svg></span>
-            <span class="ic"><svg><use href="#i-snd"/></svg></span>
           </div>
           <div class="mk-hero" style="top:64px">
             <div class="mk-ttl">스도쿠</div>
@@ -443,6 +440,7 @@
               <svg class="cv" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
             </div>
             <div class="b pri">시작</div>
+            <div class="b gho">환경설정</div>
           </div>
           <div class="mk-home"></div>
         </div>
@@ -481,8 +479,6 @@
           <div class="mk-top">
             <span class="ic"><svg><use href="#i-back"/></svg></span>
             <span class="sp"></span>
-            <span class="ic"><svg><use href="#i-gear"/></svg></span>
-            <span class="ic"><svg><use href="#i-snd"/></svg></span>
           </div>
           <div class="mk-hero" style="top:74px">
             <div class="mk-ttl">노노그램</div>
@@ -492,6 +488,7 @@
             <div class="b">이어서 하기<span class="s">중급 · 금붕어</span></div>
             <div class="b pri">시작</div>
             <div class="rec">누르면 그림 고르는 지도로 감</div>
+            <div class="b gho">환경설정</div>
           </div>
           <div class="mk-home"></div>
         </div>
@@ -532,8 +529,6 @@
           <div class="mk-top">
             <span class="ic"><svg><use href="#i-back"/></svg></span>
             <span class="sp"></span>
-            <span class="ic"><svg><use href="#i-gear"/></svg></span>
-            <span class="ic"><svg><use href="#i-snd"/></svg></span>
           </div>
           <div class="mk-hero" style="top:46px">
             <div class="duo">
@@ -547,7 +542,7 @@
             <div class="b">이어서 하기<span class="s">오리지널 48번</span></div>
             <div class="b pri">시작</div>
             <div class="rec">누르면 모드와 퍼즐 고르는 진행 맵으로 감</div>
-            <div class="b gho">상점</div>
+            <div class="row"><div class="b gho">상점</div><div class="b gho">환경설정</div></div>
           </div>
           <div class="mk-home"></div>
         </div>
@@ -558,7 +553,7 @@
   <p>지금은 열면 곧바로 퍼즐이 뜨고 상점과 진행 맵은 위쪽 아이콘으로 들어감. 퍼즐이 수백 개라 시작 다음 칸에서 고름. 배경 그림은 없지만 크림 바닥 판과 오른쪽 출구 길이 이 게임의 얼굴이라 그대로 배경으로 씀. 위 그림의 차 배치는 실제 48번 문제이고 붉은 테두리가 빼내야 할 주인공 차임.</p>
   <div class="ol">
     <div class="oi"><span class="bl"></span><div class="ot">시작 화면이 새로 생김. 진행 맵은 시작을 누른 뒤 나옴</div></div>
-    <div class="oi"><span class="bl"></span><div class="ot">상점은 새 칸을 만들지 않고 조작단 맨 아래 줄에 둠(5.4). 환경설정은 상단 아이콘이라 이 줄에 넣지 않음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">상점은 새 칸을 만들지 않고 조작단 맨 아래 줄에 둠(5.4). 환경설정도 같은 줄에 나란히 둠</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">모드 고르기는 이미 진행 맵 안 탭으로 들어가 있어 그대로 씀</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">되돌아가기 계단이 한 칸 늘어남. 노노그램과 같은 구조임</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">골드와 꾸미기는 모드와 무관한 공용 재산이고 진행은 모드마다 따로 쌓임
@@ -598,10 +593,11 @@
     <tbody>
       <tr><td>다섯 화면의 존재와 순서</td><td>인트로 연출 내용과 유무</td></tr>
       <tr><td>화면 이동 방법과 되돌아가기 계단</td><td>시작 화면의 그림, 색, 캐릭터</td></tr>
-      <tr><td>상단 띠 세 구역과 버튼 자리(환경설정 포함)</td><td>환경설정 안에 담는 항목</td></tr>
+      <tr><td>공용 부품을 게임이 다시 만들지 않는 것(11장)</td><td>공용 부품을 화면 어디에 놓을지</td></tr>
       <tr><td>시작 화면 칸 순서와 강조, 누르는 것을 아래로 모으는 것</td><td>최고 기록을 무엇으로 셀지</td></tr>
       <tr><td>브라우저 창이 있을 때의 아래 여백과 접는 방식</td><td>배경을 그림으로 할지 게임 요소로 할지</td></tr>
       <tr><td>화면 문구</td><td>결과 카드에 함께 보여줄 내용</td></tr>
+      <tr><td>환경설정에 소리 항목이 있는 것</td><td>환경설정에 더 담는 항목</td></tr>
       <tr><td>결과를 덮는 카드로 알리는 방식</td><td>플레이 화면 구성 전부</td></tr>
     </tbody>
   </table>
@@ -640,14 +636,31 @@
   <p>새로 만드는 게임은 1단계가 끝난 시점부터 규격을 지키는 것이 필수임.</p>
 
   <div class="hold"><b>세 단계 모두 완료 - 다섯 게임이 같은 시작 흐름을 쓴다</b>공용 부품 제작(1단계) → 노노그램 검증(2단계) → 나머지 넷 적용(3단계)이 모두 끝남(2026-08-01). 이제 어느 게임을 열어도 시작 화면이 앞에 서고, 되돌아가기가 한 칸씩만 올라가며, 결과가 플레이를 덮는 카드로 뜨고, 소리 버튼이 같은 자리에 있음.<br><br><b>게임별로 바뀐 것</b> - 테트리스는 주소에 <code>?mode=</code>를 붙여 페이지를 다시 읽던 모드 선택이 고르는 칸 하나로 접힘. 비행 슈팅은 전용 메뉴의 항목이 규격 자리로 옮겨지고(난이도 세그 + 켜고 끄는 줄) 게임이 직접 들고 있던 이동 기록 관리가 공용 계단으로 통합됨. 러시아워는 시작 화면이 새로 생기고 진행 맵이 그 다음 칸으로, 상점이 조작단 맨 아래 줄로 내려옴. 스도쿠는 시작 화면·소리 버튼·이어서 하기가 새로 생기고, 다섯 중 유일한 흰 바탕이라 같은 규격을 밝은 톤으로 뒤집어 씀.<br><br><b>3단계에서 찾은 빈틈 셋</b> - (16) 켜고 끄는 것(친구 동행·자동 플레이)은 하나를 고르는 갈래(난이도)와 다른 자리다. 시작 바로 위 한 줄에 두고 켜진 것은 강조색 테두리로 보임. (17) HUD를 캔버스 위에 겹쳐 놓은 게임도 플레이 화면에서 규격 띠를 쓰지 않음(띠가 공간을 다시 먹음). (18) 게임이 자기 이동 기록을 직접 쌓고 있으면 먼저 걷어냄(그대로 두면 기기 뒤로가기 한 번에 두 칸이 물러남). 셋 모두 표준 4.8 규칙 16-18로 반영함(v0.4.2).<br><br><b>실측으로 드러난 사고 하나</b> - 공용 부품이 미리 만들어 둔 빈 화면 자리가 게임 화면과 같은 이름으로 남아 둘 다 표시되어 화면 높이를 반씩 나눠 가졌음(비행 슈팅에서 보드가 절반 크기로 보임). 공용 쪽에서 앞 자리의 이름표를 떼도록 고치고 회귀 검사로 고정함.<br><br><b>2단계에서 찾은 빈틈 다섯</b>(v0.4.1 규칙 11-15) - (11) 보드를 화면 가득 쓰는 게임은 플레이 화면에서 규격 띠를 감추고 모서리 버튼을 공용에 연결. (12) 실패도 시간 제한도 없는 게임은 자동 잠깐 멈춤을 끔. (13) 결과 카드가 글자 아닌 결과물(완성 그림·별점)도 받음. (14) 넓은 화면에서 조작단 폭을 묶음. (15) 강조 버튼 위 글자색은 게임이 정함.<br><br>규격에 걸려 있던 결정은 모두 끝남. 확정된 것 다섯 - (1) 시작 화면 구성은 A안(배경 전면과 하단 조작단, 5장, 2026-07-31). (2) 배경 그림이 없는 네 게임은 게임 자체 요소로 배경을 대신함(2026-07-31). (3) 시작 화면은 다섯 게임 모두에 공통으로 둠(2026-08-01). (4) 인트로는 다섯 게임 모두 두지 않음. 자리는 규격에 남기되 무거운 게임이 나올 때 다시 판단함(2026-08-01, 3.1). (5) 적용은 세 단계 순서대로 감(2026-08-01, 완료).</div>
+
+  <h3><span class="sn">9.1.</span>부품 공용화 적용 순서 <span class="chip c-new">확정 2026-09-05</span></h3>
+  <p>11장 부품 공용화도 한꺼번에 퍼뜨리지 않고 아래 순서로 감. 게임을 건드리는 것은 부품이 실제로 서고 난 뒤임.</p>
+  <div class="ol pinlist">
+    <div class="oi"><span class="cnum">1</span><div class="ot">기준 문서 세 층 맞추기
+      <ul class="od"><li>이 기획서(r2.1) · html-game 표준 4.8 · 플랫폼 이동 구조 문서를 같은 세대로 맞춤</li><li>표준 4.8이 아직 폐기된 상단 띠와 떠다니는 메뉴를 규격으로 적고 있어, 코드를 고치기 전에 어느 것이 현행인지부터 확정함</li></ul>
+    </div></div>
+    <div class="oi"><span class="cnum">2</span><div class="ot">폐기 잔재 걷어내기(11.5)
+      <ul class="od"><li>공용 상단 띠 부품과 그 스타일, 게임 여섯의 감추기 규칙, 그것을 붙잡는 검사 항목과 오프라인 저장 목록</li><li>화면에 보이는 변화가 없어야 정상임. 보이면 그 띠가 어딘가에서 아직 살아 있었다는 뜻임</li></ul>
+    </div></div>
+    <div class="oi"><span class="cnum">3</span><div class="ot">공용 부품 만들기(11.2 신설 넷)
+      <ul class="od"><li>환경설정 · 아이콘 버튼 · 덮는 카드 · 알림 쪽지. 게임은 아직 건드리지 않음</li><li>확인용 화면(<code>shared/frame/demo.html</code>)에 넷을 세워 눈으로 봄</li></ul>
+    </div></div>
+    <div class="oi"><span class="cnum">4</span><div class="ot">게임 한 개로 검증한 뒤 나머지 적용
+      <ul class="od"><li>환경설정이 이미 있는 게임 하나로 먼저 갈아 끼워 규격의 빈틈을 찾음</li><li>빈틈을 규칙으로 못박은 뒤 나머지에 순차 적용. 앱 셋은 프레임 밖에 있어 이 판의 범위가 아님</li></ul>
+    </div></div>
+  </div>
 </section>
 
 <section id="s10">
   <div class="sechead"><span class="n">10.</span><h2>개발 참고</h2><span class="rid">FRM-DEV</span></div>
-  <p class="lead">확정 후 구현에서 지킬 정책만 규칙 문장으로 남김. 아래 정책을 실제로 담은 공용 자산은 <code>shared/frame/</code>이며(2026-08-01 제작 완료), 파일은 열 개임 - 고정 문구(text) · 되돌아가기 계단(stack) · 화면 골격(screens) · 상단 띠(topbar) · 시작 화면(titlescreen) · 잠깐 멈춤과 결과 카드(cards) · 소리(audio) · 진행 저장(save) · 스타일(frame.css) · 조립 진입점(index).</p>
+  <p class="lead">확정 후 구현에서 지킬 정책만 규칙 문장으로 남김. 아래 정책을 실제로 담은 공용 자산은 <code>shared/frame/</code>이며(2026-08-01 제작 완료), 파일 구성은 11장에 있음 - 고정 문구(text) · 되돌아가기 계단(stack) · 화면 골격(screens) · 시작 화면(titlescreen) · 잠깐 멈춤과 결과 카드(cards) · 소리(audio) · 진행 저장(save) · 환경설정(settings) · 덮는 카드와 알림 쪽지(overlay) · 스타일(frame.css) · 조립 진입점(index). 상단 띠(topbar)는 r2.0에서 폐기함.</p>
   <div class="ol">
     <div class="oi"><span class="bl"></span><div class="ot">화면 전환은 현재 화면 이름을 한 곳에 두고 그 값으로 표시를 가르는 방식만 쓴다. 숨김 속성을 켜고 끄는 방식은 새 게임에 쓰지 않는다</div></div>
-    <div class="oi"><span class="bl"></span><div class="ot">화면 골격, 상단 띠, 결과 카드, 잠깐 멈춤, 되돌아가기 계단, 소리 열기, 진행 저장은 공용 자산 한 곳에 두고 게임이 복사하지 않는다</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">화면 골격, 결과 카드, 잠깐 멈춤, 되돌아가기 계단, 소리 열기, 진행 저장, 환경설정, 덮는 카드, 알림 쪽지, 아이콘 버튼은 공용 자산 한 곳에 두고 게임이 복사하지 않는다(11장)</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">되돌아가기 계단은 공용 자산이 일괄 관리한다. 게임이 개별로 이동 기록을 쌓지 않는다</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">기존 게임에 남아 있는 표시 억지 규칙은 전환 방식 교체와 함께 제거한다</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">시작 화면은 화면 높이를 실제로 쓸 수 있는 만큼만 쓴다. 세로 스크롤을 만들지 않고, 맨 아래 버튼과 화면 끝 사이 여백은 공용 자산이 일괄 관리한다(5.5)</div></div>
@@ -655,7 +668,71 @@
   </div>
 </section>
 
-<div class="foot"><span>게임 허브 기획서</span><span>Ⅰ. 게임 시작 흐름 공용 프레임</span><span>r2.0 · 홈 화면 &lt;- 허브 복귀 통일</span></div>
+<section id="s11">
+  <div class="sechead"><span class="n">11.</span><h2>공용 부품과 배치 책임</h2><span class="rid">FRM-PART</span></div>
+  <p class="lead">r2.0에서 상단 띠를 없애면서 소리·환경설정·잠깐 멈춤 버튼이 게임 몫으로 내려갔음. 그런데 <strong>자리를 내려준 것이 부품까지 내려준 것으로 읽혀</strong>, 같은 버튼과 같은 덮는 카드를 게임마다 다시 만드는 일이 벌어졌음. 이 장은 그 경계를 다시 그음 - <strong>부품은 공용이 한 벌로 주고, 자리는 게임이 정함</strong>(확정 2026-09-05 사용자 결정).</p>
+
+  <h3><span class="sn">11.1.</span>왜 자리와 부품을 갈라야 하는가</h3>
+  <p>게임마다 화면 구조가 달라 버튼 자리를 한 곳으로 못박으면 예외가 계속 늘어남. 보드를 화면 가득 쓰는 게임과 캔버스 위에 정보를 띄우는 게임은 같은 자리를 쓸 수 없어, 규격에 예외 조항이 이미 둘 생겼음. 그래서 <strong>자리는 게임이 정함</strong>.</p>
+  <p>반대로 버튼이 어떻게 생겼는지, 덮는 카드가 어떻게 열리고 닫히는지, 알림 쪽지가 몇 초 머무는지는 게임마다 다를 이유가 없음. 다르게 만들면 같은 허브 안에서 게임을 옮길 때마다 조작감이 바뀌고, 한 곳을 고쳐도 나머지가 안 따라옴. 그래서 <strong>부품은 공용이 가짐</strong>.</p>
+  <p class="note">실측(2026-09-05) - 같은 뜻의 부품이 아이콘 버튼 일곱 벌, 덮는 카드 여섯 벌, 알림 쪽지 다섯 벌, 버튼 체계 여섯 벌, 환경설정 다섯 벌로 갈려 있었음. 공용에 이미 있던 덮는 카드와 알림 쪽지를 그대로 쓴 곳은 열 곳 중 두 곳뿐이었음.</p>
+
+  <h3><span class="sn">11.2.</span>공용이 주는 부품</h3>
+  <table class="tight">
+    <thead><tr><th style="width:150px">부품</th><th style="width:44%">공용이 정하는 것</th><th>게임이 정하는 것</th></tr></thead>
+    <tbody>
+      <tr><th>화면 골격</th><td>다섯 화면의 존재·순서·전환 방식</td><td>각 화면 안의 내용</td></tr>
+      <tr><th>되돌아가기 계단</th><td>깊이 계산과 기기 되돌아가기 연결</td><td>없음(게임이 따로 쌓지 않음)</td></tr>
+      <tr><th>시작 화면</th><td>배경·제목·기록 줄·조작단 칸 순서 전부</td><td>배경 그림, 색, 칸에 담을 값</td></tr>
+      <tr><th>잠깐 멈춤·결과 카드</th><td>덮는 방식, 버튼 구성, 문구</td><td>카드 본문에 넣을 내용</td></tr>
+      <tr><th>소리 그릇</th><td>소리 열기·재우기·음소거 상태</td><td>음색표</td></tr>
+      <tr><th>진행 저장</th><td>저장 키 규격과 동기화 신호</td><td>저장할 값</td></tr>
+      <tr><th><span class="chip c-new">신설</span> 환경설정</th><td>여는 방식, 항목 줄 모양, 소리 항목</td><td>더 담을 항목과 어디서 열지</td></tr>
+      <tr><th><span class="chip c-new">신설</span> 아이콘 버튼</th><td>크기·모양·눌린 상태·켜진 상태 표시</td><td>어떤 아이콘을 어디에 놓을지</td></tr>
+      <tr><th><span class="chip c-new">신설</span> 덮는 카드</th><td>덮는 층, 여닫기, 바깥 눌러 닫기, 되돌아가기 연동</td><td>카드 안에 담을 내용</td></tr>
+      <tr><th><span class="chip c-new">신설</span> 알림 쪽지</th><td>뜨는 자리, 머무는 시간, 사라지는 방식</td><td>띄울 문구와 시점</td></tr>
+    </tbody>
+  </table>
+  <p>표의 신설 넷은 지금 공용에 없거나(환경설정), 있는데 아무도 쓰지 않는 것들임(아이콘 버튼·덮는 카드·알림 쪽지). 없어서 못 쓴 것과 있는데 안 쓴 것을 같이 다루는 이유는 결과가 같기 때문임 - 게임마다 다시 만들어졌음.</p>
+
+  <h3><span class="sn">11.3.</span>환경설정 그릇</h3>
+  <p>상단 띠가 사라지면서 환경설정에 닿는 길이 게임마다 갈렸음. 지금은 일곱 게임 중 둘만 시작 화면에 환경설정이 있고 나머지는 없거나 플레이 화면에만 있음. 아래를 규격으로 함.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">시작 화면에서 여는 길이 모든 게임에 반드시 있음
+      <ul class="od"><li>조작단 맨 아래 추가 항목 줄의 <strong>환경설정</strong> 하나(5.4). 상점·도감이 있는 게임은 그것들과 나란히 둠</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">소리 켜고 끄기는 공용이 넣어 주는 기본 항목임
+      <ul class="od"><li>게임이 따로 만들지 않아도 환경설정을 열면 소리 항목이 이미 들어 있음. 이것이 &lt;소리 버튼은 모든 게임에 있다&gt;를 지키는 방식임</li><li>플레이 중에 소리를 자주 끄는 게임은 그와 별도로 자기 HUD에 소리 버튼을 둘 수 있음. 그 버튼도 공용 아이콘 버튼을 씀</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">덮는 카드로 열림
+      <ul class="od"><li>전용 화면을 새로 만들지 않음. 잠깐 멈춤·결과와 같은 덮는 층을 씀</li><li>되돌아가기 한 번으로 닫히고 계단은 깊어지지 않음</li></ul>
+    </div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">게임이 항목을 더할 수 있음
+      <ul class="od"><li>진동, 조작 방식, 색약 배려처럼 그 게임에만 있는 항목을 뒤에 붙임. 소리 항목은 항상 맨 위</li></ul>
+    </div></div>
+  </div>
+
+  <h3><span class="sn">11.4.</span>게임이 다시 만들면 안 되는 것</h3>
+  <p>아래를 게임 폴더에서 새로 정의하면 규격 위반으로 봄. 자리를 바꾸고 싶으면 공용 부품을 다른 곳에 놓는 것이지, 같은 것을 다시 만드는 것이 아님.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">아이콘만 든 정사각 버튼의 모양·크기·눌린 표시</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">화면을 덮는 층과 그 위에 뜨는 카드</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">잠깐 떴다 사라지는 알림 쪽지</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">환경설정 화면 자체</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">기본 버튼(큰 버튼·보통 버튼·테두리만 있는 버튼)의 모양</div></div>
+  </div>
+  <p>게임 고유 조작 부품은 여기 해당하지 않음 - 숫자 입력판, 색 고르는 줄, 모드 전환처럼 그 게임의 놀이 자체인 것은 게임이 만듦.</p>
+
+  <h3><span class="sn">11.5.</span>남은 정리 대상</h3>
+  <p>r2.0에서 상단 띠를 폐기했지만 코드와 문서에 잔재가 남아 있음. 아래는 이 판에서 함께 걷어냄.</p>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">공용 상단 띠 부품 자체 - 파일은 남아 있으나 아무도 부르지 않고, 스타일 한 줄로 통째로 감춰져 있음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">게임 여섯이 각자 갖고 있는 &lt;상단 띠 감추기&gt; 규칙 - 감출 띠가 이미 없음</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">그 부품을 붙잡고 있는 검사 항목과 오프라인 저장 목록</div></div>
+  </div>
+</section>
+
+<div class="foot"><span>게임 허브 기획서</span><span>Ⅰ. 게임 시작 흐름 공용 프레임</span><span>r2.1 · 부품은 공용, 자리는 게임</span></div>
 </main>
 </body>
 </html>
