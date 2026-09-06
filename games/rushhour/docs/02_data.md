@@ -123,12 +123,46 @@ Fogleman 모드는 데이터에 **`optimal`(외부 검증된 최소 이동 수)*
 
 ## 4. 저장 스키마 - localStorage
 
-`shared/storage.js`의 `createStorage("rushhour")`를 쓴다. 실제 키는 `gg.rushhour.<키>`로 자동 네임스페이싱된다.
+**저장 판 2**(2026-09-06). 플랫폼 저장 칸 규격을 따른다 - 기획서 Ⅲ권 4.1(`standards/html-game/plans/doc/game-platform.html`), 설계 `docs/plans/design-2026-09-06-platform-store.md`.
 
-| 키 | 값 | 의미 |
+`shared/frame/save.js`의 `createSave("rushhour", { schema, migrate, verify })`를 쓴다. 실제 키는 `gg.rushhour.<칸>`으로 자동 네임스페이싱된다. **localStorage를 직접 만지지 않는다** - 공용 창구를 지나야 계정 저장에 변경 신호가 간다.
+
+| 칸 | 값 | 의미 |
 |---|---|---|
-| `progress` | `{ gold, ownedThemes, equippedTheme, ownedAccessories, equippedAccessory, ponyStyle, blockOpts, muted, activeMode, modes }` | **공유 필드**(골드·보유/적용 테마·보유/장착 포니 머리 장식·캐릭터 스타일·배경테두리 옵션·음소거) + 활성 모드(`activeMode`) + 모드별 진행(`modes`) |
-| `progress.modes[모드]` | `{ cleared, best, stars, current, combo, bestCombo }` | 모드(`original`/`fogleman`)별 진행: 클리어 퍼즐 + 퍼즐별 최고 수 + 퍼즐별 최고 별 + 마지막 본 퍼즐 + 현재 연속 콤보 + 최고 콤보. `migrateProgress`가 `MODES` 전체를 순회해 채운다(신규 모드 자동 포함) |
-| `current` (레거시) | `number` | 옛 단일 구조의 "마지막 본 퍼즐" 키. 지금은 안 쓰고, 옛 저장 데이터를 `modes.original.current`로 이관할 때만 읽는다(`migrateProgress`). |
+| `progress` | `{ active, modes }` | `active` = 마지막으로 고른 모드. `modes` = 모드별 진행 |
+| `progress.modes[모드]` | `{ stages, current, extra }` | `stages` = 퍼즐별 결과, `current` = 마지막 본 퍼즐, `extra` = 이 게임 고유 값(연속 클리어) |
+| `progress.modes[모드].stages[퍼즐id]` | `{ cleared, stars, best:{value,at} }` | 깼는가 · 별(0~3) · 최소 이동 수와 그 기록을 세운 시각 |
+| `wallet` | `{ gold }` | 골드 |
+| `owned` | `{ theme:[], accessory:[] }` | 산 보드 테마 · 포니 머리 장식 |
+| `equipped` | `{ theme, accessory, style }` | 적용 중 테마 · 장착 중 장식 · 고른 블록 캐릭터 |
+| `game` | `{ blockOpts }` | 규격이 뜻을 정하지 않는 게임 고유 값. 캐릭터별 배경·테두리 켜고 끄기 |
+| `muted` | `boolean` | 소리 끔. 공용 프레임이 관리한다 |
+| `schema` | `number` | 저장 판 번호. 옮기기가 두 번 도는 것을 막는다 |
+| `__backup` | `{ at, schema, data }` | 옮기기 전 원본 전량. 되돌릴 유일한 길이라 지우지 않는다. 계정에는 올리지 않는다 |
+| `current` (레거시) | `number` | 갈래가 없던 시절의 "마지막 본 퍼즐". 지금은 옮길 때만 읽는다 |
 
-옛 단일 구조(최상위 `cleared`/`best`/`stars`)로 저장된 데이터는 `main.js`의 `migrateProgress`가 읽는 즉시 현재 스키마로 정규화하고, 옛 진행을 `modes.original`로 이관한다(기존 사용자 진행 보존).
+### 4.1. 옛 저장을 옮기는 규칙
+
+`src/data/save-shape.js`가 순수 함수 셋으로 갖는다(화면 없이 검사하려고 그렇게 뒀다. 검사는 `tests/save.test.mjs`).
+
+- `migrateToPlatform(old, opts, ctx)` - 옛 저장 전부를 새 칸으로. 갈래 안이 이미 새 모양(`stages` 있음)이면 그대로 이어받는다. `ctx.remigrate`가 진행 밖 칸의 우선순위를 가른다(4.3)
+- `assembleShape(cells, opts)` - 새 칸 → `main.js`가 읽는 옛 모양 하나(임시 변환기)
+- `scatterShape(pr, prev, opts, now)` - 그 반대. `prev`(`{progress, game}`)로 기록 시각을 이어받고 게임 칸의 다른 항목을 지킨다
+- `looksCurrent(cells)` - 저장이 지금 판 모양인가. 갈래마다 `stages`가 있으면 지금 모양이다. 판 번호가 맞아도 이것이 false면 다시 옮긴다
+
+`main.js`의 `progress()` / `saveProgress()`가 변환기를 부르는 유일한 자리다. 나머지 코드는 종전 모양을 그대로 본다. **이 변환기는 임시 구조물이다** - 진행이 플랫폼으로 가는 걸음에서 절반, 지갑·상점이 가는 걸음에서 나머지가 사라진다.
+
+### 4.2. 판 번호를 올릴 때 반드시 지킬 것
+
+`SAVE_SCHEMA`를 올리려면 `migrateToPlatform`이 **어느 판에서 오는 저장이든 받아도 안전해야 한다.** 갈래별 새 모양 이어받기와 4.3의 우선순위 가르기를 지우고 번호만 올리면 이미 옮긴 사람의 골드와 진행이 그 자리에서 0이 된다. 백업은 이미 있어 덮이지 않으므로 그 뒤 쌓은 진행은 되돌릴 곳도 없다.
+
+### 4.3. 다시 옮기는 상황과 우선순위
+
+계정 저장은 기기 사이를 오간다. 한 기기가 새 판으로 올라간 뒤에도 다른 기기가 아직 옛 빌드면 그 기기가 **옛 모양 진행**을 계정에 올리고, 그것이 내려오면 판 번호는 그대로인데 내용만 옛 모양이 된다(`looksCurrent`가 잡는 자리). 그때 다시 옮기는데, 옛 모양 진행 덩어리 안에는 골드·산 것·쓰는 것이 **함께 들어 있다.** 그래서 어느 쪽이 이기는지를 상황에 따라 가른다.
+
+| 상황 | 진행 | 지갑·산 것·쓰는 것·게임 칸 |
+|---|---|---|
+| 첫 옮기기 (`remigrate` false) | 옛 값 | **옛 값이 이긴다** - 새 칸이 아직 비어 있다 |
+| 다시 옮기기 (`remigrate` true) | 내려온 옛 값 | **지금 값이 이긴다** - 이 기기가 그 뒤에 번 것 |
+
+한계 하나 - 다시 옮길 때 내려온 옛 덩어리는 백업되지 않는다. 백업은 먼저 것이 이겨 덮지 않기 때문이다.

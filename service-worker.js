@@ -161,7 +161,7 @@
 // 새 main.js와 옛 하위 모듈을 섞어 읽으면 모듈 export 불일치로 게임이 시작하지 않는다.
 // v233 (2026-09-06): 공용 부품 둘(환경설정·덮는 카드와 알림 쪽지) 신설. 게임이 첫 로드에
 // import하므로 미리 담는다. 안 담으면 오프라인 첫 진입에서 프레임 조립이 실패한다.
-const CACHE_VERSION = "v233";
+const CACHE_VERSION = "v234";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

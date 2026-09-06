@@ -35,7 +35,13 @@ export const EXCLUDED_KEYS = {
   ],
 };
 
+// 게임을 가리지 않고 올리지 않는 항목.
+// 저장 판을 옮기기 전 남기는 원본 백업은 그 기기에서 되돌리려고 두는 것이라 다른 기기로 갈
+// 이유가 없고, 저장 전체를 복사한 것이라 크기도 크다(shared/frame/save.js BACKUP_KEY).
+const COMMON_EXCLUDED = [/^__backup$/];
+
 export function isExcludedKey(slotId, key) {
+  if (COMMON_EXCLUDED.some((re) => re.test(key))) return true;
   const patterns = EXCLUDED_KEYS[slotId];
   if (!patterns) return false;
   return patterns.some((re) => re.test(key));

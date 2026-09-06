@@ -46,6 +46,18 @@ export function createStorage(namespace) {
       try { localStorage.removeItem(key(k)); } catch {}
       notifyCloud(namespace);
     },
+    // 이 게임이 저장한 키 이름 목록(접두 제거). 읽기만 하므로 클라우드 신호를 보내지 않는다.
+    // 저장 판을 옮길 때 옛 값 전부를 한 번에 집어 오려고 쓴다(shared/frame/save.js).
+    keys() {
+      const out = [];
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith(prefix)) out.push(k.slice(prefix.length));
+        }
+      } catch {}
+      return out;
+    },
     clearAll() {
       try {
         const toRemove = [];

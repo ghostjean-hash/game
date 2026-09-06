@@ -26,7 +26,7 @@
 ## 5. 기술 환경
 - ES Modules 직접 사용. 빌드 / 번들러 / TypeScript 금지
 - import는 상대경로 + .js 확장자 명시
-- 외부 라이브러리 없음(vanilla). 영속 데이터는 shared/storage.js(`createStorage("rushhour")`)
+- 외부 라이브러리 없음(vanilla). 영속 데이터는 shared/frame/save.js(`createSave("rushhour", …)`) - 플랫폼 저장 칸 규격(docs/02_data.md 4장). localStorage 직접 접근 금지
 
 ## 6. 색상과 스타일
 - 차 색(게임 데이터): src/data/colors.js 상수만 사용

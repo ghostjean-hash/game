@@ -16,9 +16,11 @@ import {
   BOARD_THEMES, DEFAULT_THEME, ACCESSORY_ITEMS, DEFAULT_ACCESSORY,
 } from './data/shop.js';
 import { PONY_STYLES, DEFAULT_STYLE } from './data/styles.js';
-import { createStorage } from '../../../shared/storage.js';
+import {
+  SAVE_SCHEMA, looksCurrent, migrateToPlatform, assembleShape, scatterShape,
+} from './data/save-shape.js';
 
-import { createGameFrame, SCREEN } from '../../../shared/frame/index.js';
+import { createGameFrame, createSave, SCREEN } from '../../../shared/frame/index.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
 
@@ -30,7 +32,21 @@ const MODES = [
 ];
 const DEFAULT_MODE = 'original';
 
-const store = createStorage(STORAGE_NS);
+// 저장은 플랫폼 저장 칸을 쓴다(기획서 Ⅲ권 4.1). 이 그릇이 만들어질 때 옛 저장을 새 칸으로
+// 딱 한 번 옮기고, 옮기기 전 원본은 백업 칸에 그대로 남는다(설계 4.2). 프레임보다 먼저
+// 만드는 이유는 소리 설정을 공용 칸으로 넘기는 일이 프레임의 소리 복원보다 앞서야 해서다.
+const SHAPE_OPTS = {
+  modeIds: MODES.map((m) => m.id),
+  defaultMode: DEFAULT_MODE,
+  defaultTheme: DEFAULT_THEME,
+  defaultAccessory: DEFAULT_ACCESSORY,
+  defaultStyle: DEFAULT_STYLE,
+};
+const save = createSave(STORAGE_NS, {
+  schema: SAVE_SCHEMA,
+  migrate: (old, ctx) => migrateToPlatform(old, SHAPE_OPTS, ctx),
+  verify: looksCurrent,
+});
 
 const el = {
   page: document.querySelector('.rushhour'),
@@ -81,49 +97,42 @@ const state = {
   timer: null,
 };
 
-// 모드별 진행(퍼즐 클리어/최고 수/별/현재 퍼즐/콤보). 골드·꾸미기와 달리 모드마다 따로 둔다.
-function emptyModeProg() {
-  return { cleared: [], best: {}, stars: {}, current: null, combo: 0, bestCombo: 0 };
+// --- 저장 칸 ↔ 게임이 읽는 모양 (설계 docs/plans/design-2026-09-06-platform-store.md 6장) ---
+//
+// 변환 규칙 자체는 data/save-shape.js가 순수 함수로 갖는다(화면 없이 검사하려고 그렇게 뒀다).
+// 여기서는 저장을 읽어 넘기고 돌려받은 것을 쓰기만 한다.
+
+function assemble() {
+  return assembleShape({
+    progress: save.readProgress(),
+    wallet: save.readWallet(),
+    owned: save.readOwned(),
+    equipped: save.readEquipped(),
+    game: save.readGame(),
+  }, SHAPE_OPTS);
 }
 
-// 저장 데이터를 현재 스키마(공유 필드 + modes{모드별 진행})로 정규화한다.
-// 옛 단일 구조(최상위 cleared/best/stars + 별도 'current' 키)는 오리지널 모드로 이관한다(하위호환).
-function migrateProgress(p) {
-  const s = p || {};
-  const base = {
-    gold: s.gold || 0,
-    ownedThemes: s.ownedThemes || [DEFAULT_THEME], equippedTheme: s.equippedTheme || DEFAULT_THEME,
-    ownedAccessories: s.ownedAccessories || [DEFAULT_ACCESSORY], equippedAccessory: s.equippedAccessory || DEFAULT_ACCESSORY,
-    ponyStyle: s.ponyStyle || DEFAULT_STYLE, blockOpts: s.blockOpts, muted: !!s.muted,
-    activeMode: s.activeMode || DEFAULT_MODE,
-    modes: {},
-  };
-  if (s.modes) {
-    // 모든 모드(신규 모드 추가 시 자동 포함) 진행을 채운다.
-    for (const m of MODES) base.modes[m.id] = { ...emptyModeProg(), ...(s.modes[m.id] || {}) };
-  } else {
-    for (const m of MODES) base.modes[m.id] = emptyModeProg();
-    base.modes.original = {
-      ...emptyModeProg(),
-      cleared: s.cleared || [], best: s.best || {}, stars: s.stars || {},
-      combo: s.combo || 0, bestCombo: s.bestCombo || 0,
-      current: store.get('current', null),
-    };
-  }
-  if (!MODES.some((m) => m.id === base.activeMode)) base.activeMode = DEFAULT_MODE;
-  return base;
+function scatter(pr) {
+  const cells = scatterShape(
+    pr, { progress: save.readProgress(), game: save.readGame() }, SHAPE_OPTS, Date.now(),
+  );
+  save.writeProgress(cells.progress);
+  save.writeWallet(cells.wallet);
+  save.writeOwned(cells.owned);
+  save.writeEquipped(cells.equipped);
+  save.writeGame(cells.game);
 }
 
-// progress는 메모리에 1회 파싱해 캐시한다(매 이동·렌더마다 localStorage JSON 재파싱 방지).
-// 변형한 pr은 반드시 saveProgress()로 저장한다(캐시와 localStorage를 함께 갱신하는 유일한 문).
+// progress는 메모리에 1회 조립해 캐시한다(매 이동·렌더마다 저장을 다시 읽지 않게).
+// 변형한 pr은 반드시 saveProgress()로 저장한다(캐시와 저장을 함께 갱신하는 유일한 문).
 let progCache = null;
 function progress() {
-  if (!progCache) progCache = migrateProgress(store.get('progress', null));
+  if (!progCache) progCache = assemble();
   return progCache;
 }
 function saveProgress(pr) {
   progCache = pr;
-  store.set('progress', pr);
+  scatter(pr);
 }
 
 // 모드 정의/퍼즐/진행 헬퍼. 인자 없으면 현재 활성 모드 기준.
