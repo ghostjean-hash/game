@@ -146,25 +146,26 @@ test('소리 설정은 공용 칸이 비어 있을 때만 옛 값을 옮긴다',
 // --- 2. 변환기가 왕복해도 값이 그대로인가 ---
 
 test('저장 칸을 게임이 읽는 모양으로 조립하면 값이 그대로다', () => {
+  // 걸음 B에서 진행은 공용 진행 부품으로 갔다(tests/progress.test.mjs).
+  // 여기 남은 변환기가 다루는 것은 지갑·산 것·쓰는 것·게임 칸뿐이다.
   const cells = migrateToPlatform(oldSave(), OPTS);
   const shape = assembleShape(cells, OPTS);
   assert.equal(shape.gold, 1350);
   assert.equal(shape.equippedTheme, 'mint');
+  assert.equal(shape.equippedAccessory, 'crown');
   assert.equal(shape.ponyStyle, 'a');
-  assert.equal(shape.activeMode, 'fogleman');
-  // 깬 판 번호는 숫자로 돌아와야 한다(게임이 숫자로 비교한다).
-  assert.deepEqual(shape.modes.original.cleared.sort((a, b) => a - b), [1, 2, 3, 7]);
-  assert.equal(typeof shape.modes.original.cleared[0], 'number');
-  assert.deepEqual(shape.modes.original.stars, { 1: 3, 2: 3, 3: 2, 7: 1 });
-  assert.deepEqual(shape.modes.original.best, { 1: 1, 2: 1, 3: 2, 7: 5 });
-  assert.equal(shape.modes.original.bestCombo, 4);
+  assert.deepEqual(shape.ownedThemes, ['cream', 'mint', 'sky']);
+  assert.deepEqual(shape.blockOpts, { a: true, c: false, target: { bg: true, border: false } });
+  // 진행은 더 이상 여기로 오지 않는다.
+  assert.equal(shape.modes, undefined);
+  assert.equal(shape.activeMode, undefined);
 });
 
 test('조립했다 다시 흩어 담아도 값이 하나도 바뀌지 않는다', () => {
   const cells = migrateToPlatform(oldSave(), OPTS);
   const shape = assembleShape(cells, OPTS);
-  const back = scatterShape(shape, { progress: cells.progress, game: cells.game }, OPTS, 1_700_000_000_000);
-  assert.deepEqual(back.progress, cells.progress);
+  const back = scatterShape(shape, { game: cells.game });
+  assert.equal(back.progress, undefined); // 진행은 진행 부품이 갖는다
   assert.deepEqual(back.wallet, cells.wallet);
   assert.deepEqual(back.owned, cells.owned);
   assert.deepEqual(back.equipped, cells.equipped);
@@ -176,22 +177,12 @@ test('저장할 때 게임 칸의 다른 항목을 지운 채로 덮지 않는�
   const cells = migrateToPlatform(oldSave(), OPTS);
   const shape = assembleShape(cells, OPTS);
   const prevGame = { ...cells.game, hintUsed: 7 };
-  const back = scatterShape(shape, { progress: cells.progress, game: prevGame }, OPTS, 1);
+  const back = scatterShape(shape, { game: prevGame });
   assert.equal(back.game.hintUsed, 7);
   assert.deepEqual(back.game.blockOpts, cells.game.blockOpts);
 });
 
-test('기록을 세운 시각은 값이 그대로면 이어받고 새 기록일 때만 바뀐다', () => {
-  const prev = { active: 'original', modes: { original: { stages: { 1: { best: { value: 5, at: 111 } } } } } };
-  const shape = assembleShape({ progress: prev }, OPTS);
-  // 값이 그대로면 옛 시각 유지.
-  let out = scatterShape(shape, { progress: prev }, OPTS, 999);
-  assert.equal(out.progress.modes.original.stages['1'].best.at, 111);
-  // 더 좋은 기록으로 바뀌면 지금 시각.
-  shape.modes.original.best['1'] = 3;
-  out = scatterShape(shape, { progress: prev }, OPTS, 999);
-  assert.deepEqual(out.progress.modes.original.stages['1'].best, { value: 3, at: 999 });
-});
+// 기록을 세운 시각을 이어받는 검사는 공용 진행 부품으로 옮겼다(tests/progress.test.mjs).
 
 // --- 3. 저장 그릇이 옮기기를 제대로 도는가 ---
 

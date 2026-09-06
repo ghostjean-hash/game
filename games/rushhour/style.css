@@ -710,59 +710,40 @@ body:has(.rushhour) { background: #3a2d40; }
 .rushhour .shop-modal { max-height: 88vh; display: flex; flex-direction: column; }
 .rushhour .shop-body { overflow-y: auto; min-height: 0; }
 
-/* 진행 맵 + 음소거. */
-.rushhour #btn-map,
-.rushhour #btn-mute,
-.rushhour #btn-settings { border: none; cursor: pointer; }
-.rushhour .map-modal { max-width: 460px; width: 94vw; }
-/* 모드 탭(오리지널/보드게임): 맵 상단에서 모드를 골라 미리 본다. */
-.rushhour .map-tabs { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-3); }
-.rushhour .map-tab {
-  flex: 1;
-  padding: var(--sp-2);
-  border: 2px solid var(--line);
-  border-radius: var(--r-2);
-  background: var(--bg-elev-2);
-  color: var(--fg-dim);
-  font-weight: 700;
-  font-size: 13px;
-  cursor: pointer;
+/* 놀이 중 소리 버튼. (진행 맵 버튼과 환경설정 버튼은 공용 부품으로 옮겨져 여기 없다.) */
+.rushhour #btn-mute { border: none; cursor: pointer; }
+/* 진행 맵 자리 - 부품은 공용, 자리는 게임(규칙 19). 맵을 그리는 일은 프레임이 하고,
+   이 게임은 그것을 어디에 얼마만 하게 앉힐지와 카드 톤만 정한다. 종전 팝업 안에 있던
+   모습을 그대로 유지하려고 라이트 톤 토큰을 여기서 덮는다. */
+/* 화면을 보이고 감추는 것은 프레임이 화면 이름 하나로 가른다. 여기서 display를 건드리면
+   그 규칙을 덮어 감춰야 할 화면이 남는다(실화면 확인에서 겹쳐 보였다). 자리만 잡는다.
+   위 여백은 이 파일 위쪽(고르는 화면 규칙)이 이미 정하므로 여기서 또 정하지 않는다. */
+.rushhour .gg-map {
+  animation: rh-pop 0.42s cubic-bezier(0.18, 0.9, 0.4, 1.3) both;
+  margin: 0 auto;
+  width: 94vw;
+  max-width: 460px;
+  max-height: 84vh;
+  padding: var(--sp-5);
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-2);
+  background: #fff8f0;
+  border: 1px solid #f2ddc8;
+  color: #3a2e3a;
+  --fg: #3a2e3a;
+  --fg-dim: #9c6b7d;
+  --bg-elev: #fdeee0;
+  --bg-elev-2: #f7e4d2;
+  --line: #ecd9c3;
+  --accent: var(--rh-exit);
+  --accent-fg: #5a3d00;
 }
-.rushhour .map-tab.active { border-color: var(--rh-exit); color: var(--fg); background: var(--bg-elev); }
-/* 데이터 출처(라이선스) 문구: 탭 아래 작게. */
-.rushhour .map-credit { font-size: 10px; color: var(--fg-dim); margin: 0 0 var(--sp-2); }
-.rushhour .map-credit[hidden] { display: none; }
-.rushhour .map-summary { font-weight: 700; font-size: 14px; margin: 2px 0 var(--sp-3); }
-.rushhour .map-scroll { max-height: 58vh; overflow-y: auto; margin-bottom: var(--sp-3); }
-.rushhour .map-section { margin-bottom: var(--sp-3); }
-.rushhour .map-section h3 {
-  font-size: 13px; color: var(--fg-dim); margin: 0 0 var(--sp-1);
-  position: sticky; top: 0; background: var(--bg-elev); padding: 3px 0; z-index: 1;
-}
-.rushhour .map-chips {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
-  gap: 6px;
-}
-.rushhour .map-chip {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1px;
-  aspect-ratio: 1;
-  border: 2px solid transparent;
-  border-radius: var(--r-2);
-  background: var(--bg-elev-2);
-  color: var(--fg-dim);
-  cursor: pointer;
-  padding: 2px;
-  overflow: hidden;
-}
-.rushhour .map-chip.done { background: var(--rh-exit); color: #5a3d00; }
-.rushhour .map-chip.current { border-color: var(--fg); }
-.rushhour .map-num { font-weight: 800; font-size: 14px; }
-.rushhour .map-stars { font-size: 8px; line-height: 1; letter-spacing: -1px; }
+.rushhour .gg-map-scroll { max-height: 58vh; }
+/* 글자 크기는 종전 팝업 그대로 - 옮기는 판이지 다듬는 판이 아니다(설계 6.3·9.4). */
+.rushhour .gg-map-tab { font-size: 13px; }
+.rushhour .gg-map-summary { font-size: 14px; }
+.rushhour .gg-map-title { display: flex; align-items: center; gap: 8px; font-size: 20px; }
+
 @keyframes rh-shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-6px); }
@@ -860,7 +841,12 @@ body:has(.rushhour) { background: #3a2d40; }
    보드를 화면 높이에 맞춰 키운다. 출구(집)가 보드 오른쪽 바깥으로 나가므로 controls를
    왼쪽에 둬 겹침을 피한다. 보드 크기는 가로에서 높이가 병목이라 vh 기준으로 잡는다. */
 @media (orientation: landscape) {
-  .rushhour.page {
+  /* 이 격자는 플레이 화면의 배치다. 고르는 화면(진행 맵)까지 걸리면 맵이 첫 열에 끼어
+     화면 왼쪽 끝에 붙는다(가로 1280에서 실측). 그래서 플레이일 때만 격자로 바꾼다.
+     덮인 상태도 함께 적는다 - 결과·잠깐 멈춤 카드가 뜨면 화면 이름이 그쪽으로 바뀌는데
+     플레이 화면은 카드 뒤에 계속 보인다. 빠뜨리면 카드가 뜰 때마다 보드가 옆으로 튄다. */
+  .rushhour.page[data-screen="play"],
+  .rushhour.page[data-covered="play"] {
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: auto 1fr;

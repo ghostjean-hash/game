@@ -447,3 +447,72 @@
   .gg-toast { transition: opacity var(--dur-1, 120ms) linear; }
   .gg-ic:active { transform: none; }
 }
+
+/* ---- 진행 맵 (기획서 Ⅲ권 4.3) --------------------------------------------
+   게임마다 넷으로 갈려 있던 화면을 하나로 모은다. 자리(어디에 놓는가)는 게임이
+   계속 정하고, 여기서는 화면 한 칸 안의 구조와 부품 생김새만 준다.
+   색은 공용 토큰을 쓴다 - 게임이 자기 강조색으로 덮고 싶으면 --accent를 바꾼다. */
+.gg-map { display: flex; flex-direction: column; min-height: 0; }
+
+.gg-map-tabs { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.gg-map-tabs[hidden] { display: none; }
+.gg-map-tab {
+  flex: 1;
+  padding: var(--sp-2);
+  border: 2px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev-2);
+  color: var(--fg-dim);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.gg-map-tab.is-on { border-color: var(--accent); color: var(--fg); background: var(--bg-elev); }
+
+.gg-map-credit { font-size: 10px; color: var(--fg-dim); margin: 0 0 var(--sp-2); }
+.gg-map-credit[hidden] { display: none; }
+.gg-map-summary { font-weight: 700; margin: 2px 0 var(--sp-3); }
+
+.gg-map-scroll { min-height: 0; overflow-y: auto; margin-bottom: var(--sp-3); }
+.gg-map-section { margin-bottom: var(--sp-3); }
+.gg-map-section h3 {
+  font-size: 13px; color: var(--fg-dim); margin: 0 0 var(--sp-1);
+  /* 묶음이 길어 스크롤될 때 제목이 위에 붙어 있어야 어디를 보는지 안다. */
+  position: sticky; top: 0; background: var(--bg-elev); padding: 3px 0; z-index: 1;
+}
+.gg-map-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 6px; }
+
+.gg-map-chip {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  aspect-ratio: 1;
+  border: 2px solid transparent;
+  border-radius: var(--r-2);
+  background: var(--bg-elev-2);
+  color: var(--fg-dim);
+  font: inherit;
+  cursor: pointer;
+  padding: 2px;
+  overflow: hidden;
+}
+.gg-map-chip.is-done { background: var(--accent); color: var(--accent-fg); }
+.gg-map-chip.is-current { border-color: var(--fg); }
+.gg-map-chip.is-locked { opacity: .55; cursor: not-allowed; }
+.gg-map-chip:active { transform: scale(.94); }
+.gg-map-num { font-weight: 800; font-size: 14px; }
+.gg-map-stars { font-size: 8px; line-height: 1; letter-spacing: -1px; }
+
+/* 거절 흔들기 - 잠긴 판을 눌렀을 때. 게임마다 따로 만들던 것을 공용으로 모은다. */
+@keyframes gg-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.gg-shake { animation: gg-shake var(--dur-2, .18s) ease 2; }
+@media (prefers-reduced-motion: reduce) {
+  .gg-shake { animation: none; }
+  .gg-map-chip:active { transform: none; }
+}
+
+/* 진행 맵 머리 - 한 칸 위로 돌아가는 문과 화면 이름. */
+.gg-map-head { display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.gg-map-title { font-size: 16px; font-weight: 700; margin: 0; }

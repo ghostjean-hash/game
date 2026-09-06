@@ -23,6 +23,7 @@ import {
 import { createGameFrame, createSave, SCREEN } from '../../../shared/frame/index.js';
 
 const DIFF_LABEL = { beginner: '입문', easy: '쉬움', medium: '보통', hard: '어려움' };
+const DIFF_ORDER = ['beginner', 'easy', 'medium', 'hard'];
 
 // 게임 모드: 오리지널(자체 제작 186개) / Fogleman(외부 DB 400개). 진행·별은 모드별로 각각
 // 저장하고, 골드·테마·장식·설정은 모든 모드가 공유한다(사용자 결정 2026-07-02).
@@ -69,12 +70,6 @@ const el = {
   shopThemes: document.getElementById('shop-themes'),
   shopAccessories: document.getElementById('shop-accessories'),
   shopClose: document.getElementById('btn-shop-close'),
-  map: document.getElementById('map'),
-  mapTabs: document.getElementById('map-tabs'),
-  mapCredit: document.getElementById('map-credit'),
-  mapSummary: document.getElementById('map-summary'),
-  mapGrid: document.getElementById('map-grid'),
-  mapClose: document.getElementById('btn-map-close'),
   settings: document.getElementById('settings'),
   settingList: document.getElementById('setting-list'),
   settingsClose: document.getElementById('btn-settings-close'),
@@ -104,7 +99,6 @@ const state = {
 
 function assemble() {
   return assembleShape({
-    progress: save.readProgress(),
     wallet: save.readWallet(),
     owned: save.readOwned(),
     equipped: save.readEquipped(),
@@ -113,10 +107,7 @@ function assemble() {
 }
 
 function scatter(pr) {
-  const cells = scatterShape(
-    pr, { progress: save.readProgress(), game: save.readGame() }, SHAPE_OPTS, Date.now(),
-  );
-  save.writeProgress(cells.progress);
+  const cells = scatterShape(pr, { game: save.readGame() });
   save.writeWallet(cells.wallet);
   save.writeOwned(cells.owned);
   save.writeEquipped(cells.equipped);
@@ -135,10 +126,9 @@ function saveProgress(pr) {
   scatter(pr);
 }
 
-// 모드 정의/퍼즐/진행 헬퍼. 인자 없으면 현재 활성 모드 기준.
-function modeDef(id) { return MODES.find((m) => m.id === id) || MODES[0]; }
-function modePuzzles(id) { return modeDef(id || progress().activeMode).puzzles; }
-function modeProg(pr) { const p = pr || progress(); return p.modes[p.activeMode] || p.modes.original; }
+// 모드 정의·퍼즐 목록은 공용 진행 부품이 갖는다(걸음 B). 여기서는 짧게 부르기만 한다.
+function modeDef(id) { return frame.progress.modeDef(id); }
+function modePuzzles(id) { return frame.progress.stages(id); }
 
 // 적용한 보드 테마.
 function currentTheme() {
@@ -208,6 +198,28 @@ function titleBackdrop() {
   return wrap;
 }
 
+// 진행 맵 제목. 종전 팝업 제목에 있던 지도 그림을 그대로 쓴다(게임 고유 장식은 게임 몫).
+function mapTitleNode() {
+  const frag = document.createDocumentFragment();
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'title-ic');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '2');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+  svg.setAttribute('aria-hidden', 'true');
+  for (const d of ['M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z', 'M9 4v14M15 6v14']) {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d);
+    svg.appendChild(path);
+  }
+  frag.appendChild(svg);
+  frag.appendChild(document.createTextNode('진행 맵'));
+  return frag;
+}
+
 function loadPuzzle(id) {
   stopTimer();
   const list = modePuzzles();
@@ -223,17 +235,15 @@ function loadPuzzle(id) {
   state.face = 'neutral';
   state.solved = false;
   state.els = buildBoard(el.board, state.cars, currentStyle(), currentBlockOpts());
-  // 마지막으로 보던 퍼즐을 현재 모드 진행에 저장(모드별).
-  const pr = progress();
-  pr.modes[pr.activeMode].current = p.id;
-  saveProgress(pr);
+  // 마지막으로 보던 퍼즐을 현재 갈래 진행에 저장(갈래별). 공용 진행 부품이 맡는다.
+  frame.progress.setCurrent(p.id);
   render();
   startTimer();
 }
 
 function render() {
   const list = modePuzzles();
-  el.stageMode.textContent = modeDef(progress().activeMode).name;
+  el.stageMode.textContent = modeDef().name;
   const cur = puzzleById(state.puzzleId);
   // 난이도는 4칸 게이지 + 라벨(§01 spec 8.2). 채움 칸 수·색은 style.css가 data-diff로 결정.
   el.stageDiffLabel.textContent = cur ? DIFF_LABEL[cur.difficulty] : '';
@@ -310,12 +320,6 @@ function onCommit(id, pos) {
   else frame.audio.play('move');
 }
 
-function starsFor(moves, optimal) {
-  if (moves <= optimal) return 3;
-  if (moves <= optimal + STAR2_MARGIN) return 2;
-  return 1;
-}
-
 function onSolved() {
   state.solved = true;
   stopTimer();
@@ -324,33 +328,30 @@ function onSolved() {
   updateTargetFace(state.els, 'happy');
   setBoardMood('happy'); // 주인공이 빠져나가면 남은 블록들도 전부 신난 표정
 
-  const pr = progress();
-  const mp = pr.modes[pr.activeMode]; // 진행·별·콤보는 현재 모드에 저장
-  if (!mp.cleared.includes(state.puzzleId)) mp.cleared.push(state.puzzleId);
-  const prevBest = mp.best[state.puzzleId];
-  if (prevBest == null || state.moves < prevBest) mp.best[state.puzzleId] = state.moves;
-
-  const stars = starsFor(state.moves, state.optimal);
-  mp.stars[state.puzzleId] = Math.max(mp.stars[state.puzzleId] || 0, stars);
+  // 깬 표시·별·최고 기록은 공용 진행 부품이 맡는다. 별 매기는 규칙(기준값 대비)도
+  // 프레임에 한 번 넘겼으므로 여기서 계산하지 않는다.
+  const { stars } = frame.progress.finish(state.puzzleId, {
+    cleared: true, value: state.moves, par: state.optimal,
+  });
 
   const inTime = state.elapsed <= state.limit;
 
-  // 연속 콤보: 시간 내 클리어면 +1, 초과 클리어면 끊겨 0. 2연속부터 보너스 골드.
-  const combo = inTime ? (mp.combo || 0) + 1 : 0;
-  mp.combo = combo;
-  mp.bestCombo = Math.max(mp.bestCombo || 0, combo);
+  // 연속 클리어는 이 게임 고유 규칙이라 갈래별 게임 고유 값 자리에 담는다.
+  // 시간 내 클리어면 +1, 초과 클리어면 끊겨 0. 2연속부터 보너스 골드.
+  const ex = frame.progress.extra();
+  const combo = inTime ? (ex.combo || 0) + 1 : 0;
+  frame.progress.setExtra({ combo, bestCombo: Math.max(ex.bestCombo || 0, combo) });
   const comboBonus = combo >= 2 ? Math.min(combo, COMBO_MAX) * COMBO_GOLD_STEP : 0;
 
   const gold = GOLD_BASE
     + (stars === 3 ? GOLD_STAR3 : stars === 2 ? GOLD_STAR2 : 0)
     + (inTime ? GOLD_TIME_BONUS : 0)
     + comboBonus;
-  pr.gold = (pr.gold || 0) + gold; // 골드는 두 모드 공유
+  const pr = progress();
+  pr.gold = (pr.gold || 0) + gold; // 골드는 두 갈래 공유
   saveProgress(pr);
 
-  const list = modePuzzles();
-  const idx = list.findIndex((p) => p.id === state.puzzleId);
-  const isLast = idx >= list.length - 1;
+  const isLast = !frame.progress.next(state.puzzleId);
   // 핵심만: 상태(제목) + 별 + 수/최소 + (콤보) + 획득 골드.
   // 별·수·콤보·골드는 글자 목록으로 담기지 않는 이 게임의 표현이라 카드 본문 조각을
   // 그대로 만들어 넣는다(규격 4.8-13). 버튼은 공용 카드의 다시 하기·그만하기를 쓴다.
@@ -434,17 +435,15 @@ function paintMute(muted) {
 
 
 function go(delta) {
-  const list = modePuzzles();
-  const idx = list.findIndex((p) => p.id === state.puzzleId);
-  const next = list[idx + delta];
-  if (next) loadPuzzle(next.id);
+  const target = delta > 0
+    ? frame.progress.next(state.puzzleId)
+    : frame.progress.prev(state.puzzleId);
+  if (target) loadPuzzle(target.id);
 }
 
 
-// --- 게임 모드(오리지널 / Fogleman): 진행 맵 안의 탭으로 고른다 ---
-// 상단에서 바로 전환하지 않는다. 맵을 열면 현재 모드 탭이 선택돼 있고, 탭으로 다른 모드의
-// 진행을 미리 볼 수 있다. 실제 전환은 그 모드의 퍼즐을 고를 때 확정된다(mapViewMode → activeMode).
-let mapViewMode = null; // 맵에서 보고 있는 모드(아직 확정 전, activeMode와 다를 수 있음)
+// 진행 맵은 공용 화면이다(기획서 Ⅲ권 4.3). 갈래 탭·요약 줄·묶음별 칩 격자·갈래 전환
+// 확정 규칙까지 프레임이 갖는다. 이 게임은 판 목록과 묶는 규칙만 넘긴다(아래 createGameFrame).
 
 // --- 상점(보드 테마 적용 + 포니 머리 장식 장착) ---
 
@@ -523,56 +522,6 @@ function closePanel(panel) {
   panel.hidden = true;
 }
 
-// --- 진행 맵(난이도별 별 현황) ---
-
-const DIFF_ORDER = ['beginner', 'easy', 'medium', 'hard'];
-
-// 맵 열기: 현재 활성 모드를 보기 모드로 잡고 렌더. 진행 맵은 시작 다음 칸이라
-// 화면 이동으로 연다(규격 4.8-1 '골라 들어가는 형'). 닫기는 계단을 따라 한 칸 위로.
-function openMap() {
-  mapViewMode = progress().activeMode;
-  renderMap();
-  frame.screens.go(SCREEN.SELECT);
-}
-
-function renderMap() {
-  const pr = progress();
-  const vm = mapViewMode || pr.activeMode; // 보고 있는 모드(탭으로 바뀜)
-  const mp = pr.modes[vm];
-  const list = modePuzzles(vm);
-  const cleared = new Set(mp.cleared || []);
-  const stars = mp.stars || {};
-  const totalStars = Object.values(stars).reduce((a, b) => a + b, 0);
-
-  // 모드 탭(오리지널/Fogleman). 보고 있는 모드가 active 표시.
-  el.mapTabs.innerHTML = MODES.map((m) =>
-    `<button class="map-tab${m.id === vm ? ' active' : ''}" data-mode="${m.id}" type="button">${m.name}</button>`,
-  ).join('');
-
-  // 데이터 출처(라이선스)가 있는 모드는 탭 아래에 표기.
-  const credit = modeDef(vm).credit;
-  el.mapCredit.textContent = credit || '';
-  el.mapCredit.hidden = !credit;
-
-  el.mapSummary.textContent = `클리어 ${cleared.size} / ${list.length} · 모은 별 ${totalStars} ⭐`;
-
-  const groups = {};
-  for (const p of list) (groups[p.difficulty] = groups[p.difficulty] || []).push(p);
-  el.mapGrid.innerHTML = DIFF_ORDER.filter((d) => groups[d]).map((d) => {
-    const chips = groups[d].map((p) => {
-      const done = cleared.has(p.id);
-      // 현재 플레이 중 퍼즐 강조는 보고 있는 모드가 활성 모드일 때만.
-      const cur = vm === pr.activeMode && p.id === state.puzzleId;
-      const starStr = done ? '⭐'.repeat(stars[p.id] || 0) : '·';
-      return `<button class="map-chip${done ? ' done' : ''}${cur ? ' current' : ''}" data-id="${p.id}" type="button">`
-        + `<span class="map-num">${p.id}</span>`
-        + `<span class="map-stars">${starStr}</span></button>`;
-    }).join('');
-    return `<div class="map-section"><h3>${DIFF_LABEL[d]} (${groups[d].length})</h3>`
-      + `<div class="map-chips">${chips}</div></div>`;
-  }).join('');
-}
-
 // --- 설정(블록 캐릭터 + 배경 · 테두리 통합) ---
 
 // 캐릭터마다 한 줄: [선택 칩(스타일만)] + [배경 토글] + [테두리 토글]. 주인공은 선택 없이 토글만.
@@ -646,25 +595,6 @@ function onShopClick(e) {
 el.shopThemes.addEventListener('click', onShopClick);
 el.shopAccessories.addEventListener('click', onShopClick);
 // 공용 프레임은 홈 화면의 <- 허브 복귀를 맡고, 놀이 중 소리는 이 게임 HUD가 직접 맡는다.
-// 진행 맵 닫기는 계단을 따라 한 칸 위(시작 화면)로 간다.
-el.mapClose.addEventListener('click', () => frame.navigate.back());
-// 모드 탭: 보고 있는 모드만 바꿔 미리 본다(아직 전환 확정 아님).
-el.mapTabs.addEventListener('click', (e) => {
-  const tab = e.target.closest('.map-tab');
-  if (tab) { mapViewMode = tab.dataset.mode; renderMap(); }
-});
-el.mapGrid.addEventListener('click', (e) => {
-  const chip = e.target.closest('.map-chip');
-  if (!chip) return;
-  // 퍼즐을 고르면 보고 있던 모드로 전환을 확정하고 그 퍼즐을 연다.
-  const pr = progress();
-  if (pr.activeMode !== mapViewMode) {
-    pr.activeMode = mapViewMode;
-    saveProgress(pr);
-  }
-  loadPuzzle(Number(chip.dataset.id));
-  frame.screens.go(SCREEN.PLAY);
-});
 el.settingsClose.addEventListener('click', () => closePanel(el.settings));
 
 // 놀이 중에 쓰는 셋. 되돌아가기는 계단을 따르고, 소리와 환경설정은 공용 부품을 연다.
@@ -699,6 +629,17 @@ const frame = createGameFrame({
   title: '밥풀이와 포니',
   // 판은 크림이지만 페이지 배경은 저녁 플럼(어두운 쪽)이라 밝은 톤으로 뒤집지 않는다.
   hasSelect: true,
+  // 판 목록을 넘기면 진행 부품과 진행 맵이 함께 선다(기획서 Ⅲ권 4.2·4.3).
+  // 별은 기준값(최소 이동 수) 대비로 매기고, 잠금은 두지 않는다 - 지금 동작 그대로다.
+  progress: {
+    modes: MODES.map((m) => ({ id: m.id, name: m.name, stages: m.puzzles, credit: m.credit })),
+    group: (p) => p.difficulty,
+    groups: DIFF_ORDER.map((d) => ({ id: d, label: DIFF_LABEL[d] })),
+    stars: { type: 'par', margin: STAR2_MARGIN },
+    higherIsBetter: false,             // 이동 수는 적을수록 좋다
+  },
+  onPickStage: (stage) => { loadPuzzle(stage.id); frame.screens.go(SCREEN.PLAY); },
+  mapTitle: mapTitleNode(),
   background: { className: 'title-deco', el: titleBackdrop() },
   character: { src: 'assets/ponies/a_v2.png', width: 76 },
   sounds: SOUNDS,
@@ -706,7 +647,7 @@ const frame = createGameFrame({
   resume: { enabled: false, detail: '' },
   startHint: '누르면 모드와 퍼즐 고르는 진행 맵으로 감',
   extras: [{ id: 'shop', label: '상점' }, { id: 'decor', label: '꾸미기' }],
-  onStart: () => openMap(),
+  onStart: () => frame.start(),
   onResume: () => resumeLast(),
   onExtra: (id) => { if (id === 'shop') openPanel(el.shop, renderShop); else if (id === 'decor') openPanel(el.settings, renderSettings); },
   // 소리가 바뀌면 보드 위 버튼 아이콘을 같이 맞춘다.
@@ -714,23 +655,21 @@ const frame = createGameFrame({
 });
 paintMute(frame.audio.isMuted());
 
-// 이 게임의 화면 둘을 프레임에 등록한다. 표시는 프레임이 화면 이름으로 가른다.
+// 플레이 화면만 등록한다. 고르는 화면은 공용 진행 맵이 쓴다.
 frame.screens.register(SCREEN.PLAY, document.getElementById('screen-play'));
-frame.screens.register(SCREEN.SELECT, el.map);
 
 // 결과 카드 버튼. 다시 하기는 다음 퍼즐로, 그만하기는 진행 맵으로 돌아간다.
 frame.result.on('retry', () => {
-  const list = modePuzzles();
-  const idx = list.findIndex((p) => p.id === state.puzzleId);
-  if (idx < list.length - 1) go(1);
-  else loadPuzzle(list[0].id); // 마지막 퍼즐 완주 후 처음으로
+  const nx = frame.progress.next(state.puzzleId);
+  if (nx) loadPuzzle(nx.id);
+  else loadPuzzle(modePuzzles()[0].id); // 마지막 퍼즐 완주 후 처음으로
   frame.screens.go(SCREEN.PLAY);
 });
-frame.result.on('quit', () => openMap());
+frame.result.on('quit', () => frame.start());
 
 frame.screens.onChange((now) => {
   if (now === SCREEN.TITLE) refreshTitle();
-  if (now === SCREEN.SELECT) renderMap();
+  if (now === SCREEN.SELECT) frame.map.refresh();
   if (now === SCREEN.PLAY && !state.solved && state.elapsed <= state.limit) startTimer();
   else if (now !== SCREEN.PLAY) stopTimer();
 });
@@ -739,12 +678,10 @@ frame.screens.onChange((now) => {
 // 골드·꾸미기는 모드와 무관한 공용 재산이고 진행은 모드마다 따로 쌓이므로 한 줄에 셋을 담는다.
 function refreshTitle() {
   const pr = progress();
-  const mp = modeProg(pr);
-  const totalStars = Object.values(mp.stars || {}).reduce((a, b) => a + (b || 0), 0);
-  const cleared = (mp.cleared || []).length;
-  const mode = modeDef(pr.activeMode);
-  frame.title.setRecord(`모은 별 ${totalStars} · 골드 ${(pr.gold || 0).toLocaleString()} · ${mode.name} ${cleared} / ${mode.puzzles.length}`);
-  const cur = mp.current;
+  const t = frame.progress.totals();
+  const mode = modeDef();
+  frame.title.setRecord(`모은 별 ${t.stars} · 골드 ${(pr.gold || 0).toLocaleString()} · ${mode.name} ${t.cleared} / ${t.total}`);
+  const cur = frame.progress.current();
   frame.title.setResume({
     enabled: cur != null,
     detail: cur != null ? `${mode.name} ${cur}번` : '풀던 문제 없음',
@@ -753,9 +690,9 @@ function refreshTitle() {
 
 // 시작 화면 '이어서 하기': 마지막에 보던 문제로 곧장 들어간다.
 function resumeLast() {
-  const mp = modeProg();
-  if (mp.current == null) { openMap(); return; }
-  loadPuzzle(mp.current);
+  const cur = frame.progress.current();
+  if (cur == null) { frame.start(); return; }
+  loadPuzzle(cur);
   frame.screens.go(SCREEN.PLAY);
 }
 
@@ -764,7 +701,7 @@ setTargetAccessory(currentAccessory().acc);
 applyTheme(currentTheme());
 // 첫 화면은 시작 화면이다(규격 4.8-1). 예전에는 열면 곧바로 퍼즐이 떴다.
 // 보드는 미리 만들어 두어 시작 다음 흐름이 매끄럽게 이어지게 한다.
-const startProg = modeProg();
-loadPuzzle(startProg.current != null ? startProg.current : modePuzzles()[0].id);
+const startAt = frame.progress.current();
+loadPuzzle(startAt != null ? startAt : modePuzzles()[0].id);
 stopTimer();
 refreshTitle();

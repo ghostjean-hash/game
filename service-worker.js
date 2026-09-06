@@ -161,7 +161,8 @@
 // 새 main.js와 옛 하위 모듈을 섞어 읽으면 모듈 export 불일치로 게임이 시작하지 않는다.
 // v233 (2026-09-06): 공용 부품 둘(환경설정·덮는 카드와 알림 쪽지) 신설. 게임이 첫 로드에
 // import하므로 미리 담는다. 안 담으면 오프라인 첫 진입에서 프레임 조립이 실패한다.
-const CACHE_VERSION = "v234";
+// v235: 진행 부품·진행 맵 신설(기획서 Ⅲ권 4.2·4.3, 걸음 B).
+const CACHE_VERSION = "v235";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
@@ -205,6 +206,9 @@ const PRECACHE = [
   "./shared/frame/save.js",
   "./shared/frame/overlay.js",
   "./shared/frame/settings.js",
+  // 진행과 진행 맵(기획서 Ⅲ권 4.2·4.3, v235). 게임이 첫 로드에 import하므로 미리 담는다.
+  "./shared/frame/progress.js",
+  "./shared/frame/mapscreen.js",
   "./shared/frame/frame.css",
   "./shared/loop.js",
   "./shared/ui.js",

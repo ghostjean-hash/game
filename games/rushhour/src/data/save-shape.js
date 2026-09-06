@@ -4,6 +4,10 @@
 //   1. 옛 저장을 플랫폼 저장 칸으로 옮기는 규칙 (딱 한 번 돈다)
 //   2. 플랫폼 저장 칸과 게임이 읽는 옛 모양 사이의 변환기 (매번 돈다)
 //
+// 걸음 B에서 변환기의 절반이 걷혔다 - 진행·별·최고 기록·마지막 위치·연속 클리어는 이제
+// 공용 진행 부품(shared/frame/progress.js)이 갖는다. 여기 남은 것은 지갑·산 것·쓰는 것·
+// 게임 칸뿐이고, 그것도 걸음 C에서 사라진다.
+//
 // 지금까지 러시아워는 'progress' 키 하나에 골드·산 것·쓰는 것·모드별 진행을 통째로 담았고,
 // 그 큰 객체를 읽고 쓰는 코드가 main.js 700줄에 퍼져 있다. 저장 자리를 옮기면서 그 700줄까지
 // 함께 고치면 무엇이 깨졌는지 가릴 수 없다. 그래서 변환기를 두어 나머지 코드가 옛 모양을
@@ -39,11 +43,6 @@ export function looksCurrent(cells) {
   if (!modes) return false; // 진행은 있는데 갈래가 없으면 갈래 이전의 옛 모양이다
   // 지금 모양은 갈래마다 반드시 stages를 갖는다. 없으면 옛 모양이다.
   return Object.values(modes).every((m) => !asObject(m) || asObject(m.stages) !== null);
-}
-
-// 게임이 읽는 모양에서 갈래 하나의 빈 진행.
-export function emptyModeProg() {
-  return { cleared: [], best: {}, stars: {}, current: null, combo: 0, bestCombo: 0 };
 }
 
 // --- 1. 옛 저장 → 플랫폼 저장 칸 (한 번만) ---
@@ -156,34 +155,15 @@ export function migrateToPlatform(old, opts, ctx) {
 }
 
 // --- 2. 저장 칸 → 게임이 읽는 모양 (매번) ---
+//
+// 진행은 여기 없다(걸음 B에서 공용 진행 부품으로 갔다). 지갑·산 것·쓰는 것·게임 칸만 남았다.
 export function assembleShape(cells, opts) {
   const c = asObject(cells) || {};
-  const { modeIds = [], defaultMode, defaultTheme, defaultAccessory, defaultStyle } = opts || {};
-  const pg = asObject(c.progress) || {};
-  const pgModes = asObject(pg.modes) || {};
+  const { defaultTheme, defaultAccessory, defaultStyle } = opts || {};
   const wallet = asObject(c.wallet) || {};
   const owned = asObject(c.owned) || {};
   const eq = asObject(c.equipped) || {};
   const gm = asObject(c.game) || {};
-
-  const modes = {};
-  for (const id of modeIds) {
-    const src = asObject(pgModes[id]) || {};
-    const stages = asObject(src.stages) || {};
-    const out = emptyModeProg();
-    for (const pid of Object.keys(stages)) {
-      const st = asObject(stages[pid]) || {};
-      // 판 번호는 저장에서 문자열로 돌아온다. 이 게임의 퍼즐 번호는 숫자라 되돌려 놓는다.
-      if (st.cleared) out.cleared.push(Number(pid));
-      if (st.stars !== undefined) out.stars[pid] = st.stars;
-      if (st.best && st.best.value !== undefined) out.best[pid] = st.best.value;
-    }
-    out.current = src.current === undefined ? null : src.current;
-    const ex = asObject(src.extra) || {};
-    out.combo = ex.combo || 0;
-    out.bestCombo = ex.bestCombo || 0;
-    modes[id] = out;
-  }
 
   return {
     gold: wallet.gold || 0,
@@ -193,51 +173,18 @@ export function assembleShape(cells, opts) {
     equippedAccessory: eq.accessory || defaultAccessory,
     ponyStyle: eq.style || defaultStyle,
     blockOpts: gm.blockOpts,
-    activeMode: modeIds.includes(pg.active) ? pg.active : defaultMode,
-    modes,
   };
 }
 
 // --- 3. 게임이 읽는 모양 → 저장 칸 (매번) ---
 //
-// prev는 지금 저장돼 있는 칸들(`{ progress, game }`)이다. 두 가지에 쓴다.
-//   - 판별 기록을 세운 시각 이어받기: 값이 그대로면 옛 시각을 유지하고 새 기록일 때만 now로
-//   - 게임 칸 지키기: 이 변환기는 blockOpts만 알므로, 게임 칸의 나머지 항목은 그대로 얹어 둔다.
-//     통째로 갈아치우면 게임 칸에 항목이 하나만 늘어도 다음 저장 한 번에 사라진다.
-export function scatterShape(pr, prev, opts, now) {
+// prev는 지금 저장돼 있는 칸들(`{ game }`)이다. 이 변환기는 blockOpts만 알므로, 게임 칸의
+// 나머지 항목은 그대로 얹어 둔다. 통째로 갈아치우면 항목이 하나만 늘어도 다음 저장 한 번에
+// 사라진다.
+export function scatterShape(pr, prev) {
   const p = asObject(pr) || {};
-  const { modeIds = [], defaultMode } = opts || {};
-  const prevCells = asObject(prev) || {};
-  const prevModes = asObject(asObject(prevCells.progress)?.modes) || {};
-  const prevGame = asObject(prevCells.game) || {};
-  const prModes = asObject(p.modes) || {};
-
-  const modes = {};
-  for (const id of modeIds) {
-    const o = asObject(prModes[id]) || emptyModeProg();
-    const prevStages = asObject(asObject(prevModes[id])?.stages) || {};
-    const stages = {};
-    const touch = (pid) => (stages[pid] = stages[pid] || {});
-
-    for (const pid of Array.isArray(o.cleared) ? o.cleared : []) touch(pid).cleared = true;
-    const stars = asObject(o.stars) || {};
-    for (const pid of Object.keys(stars)) touch(pid).stars = stars[pid];
-    const best = asObject(o.best) || {};
-    for (const pid of Object.keys(best)) {
-      const value = best[pid];
-      const prevBest = asObject(asObject(prevStages[pid])?.best) || {};
-      touch(pid).best = { value, at: prevBest.value === value ? (prevBest.at ?? null) : now };
-    }
-
-    modes[id] = {
-      stages,
-      current: o.current === undefined ? null : o.current,
-      extra: { combo: o.combo || 0, bestCombo: o.bestCombo || 0 },
-    };
-  }
-
+  const prevGame = asObject(asObject(prev)?.game) || {};
   return {
-    progress: { active: modeIds.includes(p.activeMode) ? p.activeMode : defaultMode, modes },
     wallet: { gold: p.gold || 0 },
     owned: { theme: p.ownedThemes, accessory: p.ownedAccessories },
     equipped: { theme: p.equippedTheme, accessory: p.equippedAccessory, style: p.ponyStyle },

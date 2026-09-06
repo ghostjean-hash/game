@@ -12,7 +12,7 @@
 | `CAR_MIN_LEN` | 2 | 승용차 길이 |
 | `CAR_MAX_LEN` | 3 | 트럭 길이 |
 | `ORIENT` | `{H:"h", V:"v"}` | 방향 enum |
-| `STORAGE_NS` | `"rushhour"` | localStorage 네임스페이스(shared/storage.js) |
+| `STORAGE_NS` | `"rushhour"` | 저장 네임스페이스. 실제 키는 `gg.rushhour.<칸>`이고 공용 저장 그릇을 지난다(§4) |
 | `DRAG_SNAP_RATIO` | 0.5 | 드래그 스냅 임계(셀 절반 넘으면 다음 칸) |
 | `DRAG_TAP_RATIO` | 0.2 | 탭 판정 임계(포인터 이동이 셀의 이 비율 미만이면 탭=누른 쪽 한 칸) |
 | `CLEAR_EXIT_MS` | 700 | 클리어 시 토끼가 출구 길로 빠져나가는 애니메이션 길이(ms) |
@@ -28,34 +28,24 @@
 | `HINT_COST` | 5 | 힌트 1회 골드 비용(§7.6 힌트) |
 | `COMBO_GOLD_STEP` | 5 | 연속 콤보 보너스 1단계 골드(§6.7) |
 | `COMBO_MAX` | 5 | 콤보 보너스 상한(이 이상은 같은 보너스) |
+| `HINT_MAX_OPTIMAL` | 18 | 최소 수가 이보다 크면 힌트를 막는다(멈춤 방지) |
+| `STAR_SOUND_GAP_MS` | 160 | 결과 카드에서 별 효과음을 계단식으로 낼 간격(ms) |
+| `ACCESSORY_ANCHORS` / `DEFAULT_ACCESSORY_ANCHOR` | - | 캐릭터별 머리 장식 위치·크기 앵커 |
 
 ## 2. 색상 / 캐릭터
 
-차의 시각 표현은 색(`src/data/colors.js`)과 동물 종류·표정(`src/data/characters.js`)으로 나뉜다. 둘을 `render.js`가 블록 크기·위치로 조합해 캐릭터를 그린다. UI 색(배경 / 바 / 텍스트)은 `shared/tokens.css` 토큰을 쓴다.
+차의 시각 표현은 **그림 시트**(`src/data/styles.js`, §2.3)와 **색조**(`src/data/colors.js`)로 나뉜다. `render.js`가 블록 크기·위치로 둘을 조합해 캐릭터를 그린다. UI 색(배경 / 바 / 텍스트)은 `shared/tokens.css` 토큰을 쓴다.
 
 ### 2.1. 색 - `src/data/colors.js`
 
 | 이름 | 의미 |
 |---|---|
-| `TARGET_COLOR` | 주인공 토끼 색(파스텔 핑크, 고정) |
-| `KIND_COLORS` | 동물 종류별 파스텔 색 후보 배열(`{cat:[...], dog:[...], chick:[...], penguin:[...]}`). 같은 종류라도 블록 위치에 따라 다른 색을 고른다 |
+| `TARGET_BORDER` | 주인공 블록 안쪽 테두리(붉은 계열). 배경이 투명이라 이 테두리만으로 주인공을 표시한다 |
+| `BLOCK_TINTS` | 블록 색조 후보 6개. 블록 위치에 따라 하나를 골라 얹는다 |
 
-### 2.2. 캐릭터 종류·표정 - `src/data/characters.js`
+초기에는 동물 종류별 색 표(`KIND_COLORS`)와 종류·표정 정의(`characters.js`)를 따로 뒀는데, 캐릭터를 SVG로 그리던 시절의 것이다. 그림 시트 방식으로 바뀌며 읽는 곳이 사라져 2026-09-06에 지웠다.
 
-차를 동물 친구로 그리기 위한 정의. 색은 갖지 않는다(`data/`끼리 import하지 않는 규칙).
-
-| 이름 | 의미 |
-|---|---|
-| `TARGET_KIND` | 주인공 동물 종류(`"rabbit"`, 고정) |
-| `KIND_BY_SHAPE` | 블록 크기 → 동물. 키는 방향+길이(`{h2:"cat", h3:"dog", v2:"chick", v3:"penguin"}`) |
-| `FACES` | 표정 종류 배열(`"normal"`, `"happy"`, `"wink"`, `"surprised"`) |
-| `ACCESSORIES` | 액세서리 종류 배열(`"none"` 다수 + `"ribbon"`, `"bowtie"`, `"flower"`). 일부 블록만 부착 |
-
-블록 크기 키는 `${orient}${len}`(예: 가로 길이2 = `h2`). 같은 동물이 여럿 나와도 색·표정·액세서리를 블록 위치(row·col) 기반으로 정해 다양하게 보인다. 얼굴·귀·표정·액세서리 그리기 좌표는 `render.js`의 SVG 마크업에 둔다(viewBox 0~100 정규화 디자인 상수, docs/04 §3.4).
-
-출구 표시(토끼의 집)는 게임 데이터가 아닌 UI 표시라 `shared/tokens.css` 토큰을 쓴다(style.css).
-
-### 2.3. 상점 품목 - `src/data/shop.js`
+### 2.2. 상점 품목 - `src/data/shop.js`
 
 상점은 **보드 테마 적용 + 포니 머리 장식 장착** 두 종류다(주인공이 무지개 갈기 포니라 색 스킨은 CSS filter로 탁해져 2026-07-02 제거).
 
@@ -66,11 +56,11 @@
 | `ACCESSORY_ITEMS` | 포니 머리 장식 배열(`{id, name, price, acc, emoji}`). `acc`는 render가 그리는 장식 키, `emoji`는 상점 미리보기. 첫 항목(`acc:"none"`) price 0 = 기본(없음) |
 | `DEFAULT_ACCESSORY` | 기본 장식 id(`"none"`). 처음부터 보유·장착 |
 
-골드로 구매(해금)한다. 보드 테마는 화면에 **'적용'**(`progress.ownedThemes`/`equippedTheme`), 포니 머리 장식(16종)은 주인공에 **'장착'**(`progress.ownedAccessories`/`equippedAccessory`)한다(§4). 상점에서 적용/장착된 항목만 '적용 중'/'장착 중'을 표시하고, 소유했지만 미적용인 항목은 라벨을 비운다. 반영 방식: 테마 색은 `.rushhour` 스코프 `--rh-*` 변수(04 §3.2)를 main이 인라인으로 덮어써 적용하고(`applyTheme`), 장식은 `render.setTargetAccessory`가 주인공 블록 정수리에 `acc`→이모지 오버레이(`.pony-acc`)를 올린다. **장식 위치(정수리)·크기는 캐릭터별 앵커(`ACCESSORY_ANCHORS`, constants.js)를 render가 인라인으로 준다** - 블록 영역을 넘어가 머리에 얹히며, 캐릭터가 바뀌거나 늘어도 앵커만 추가하면 된다. 시간 경과·클리어 표정(`render.updateTargetFace`)은 몸통 애니(`.face-worried`/`.face-cry`/`.face-happy`, 울상은 눈물 이모지 `.pony-tear`)로 표현하며, 장식도 같은 애니로 함께 움직인다(울 때 장식도 흔들림). 모든 팝업(상점/맵/설정/결과)은 우상단 X 버튼(`.modal-x`)으로 닫는다.
+골드로 구매(해금)한다. 보드 테마는 화면에 **'적용'**(저장의 `owned.theme`/`equipped.theme`), 포니 머리 장식(16종)은 주인공에 **'장착'**(저장의 `owned.accessory`/`equipped.accessory`)한다(§4). 상점에서 적용/장착된 항목만 '적용 중'/'장착 중'을 표시하고, 소유했지만 미적용인 항목은 라벨을 비운다. 반영 방식: 테마 색은 `.rushhour` 스코프 `--rh-*` 변수(04 §3.2)를 main이 인라인으로 덮어써 적용하고(`applyTheme`), 장식은 `render.setTargetAccessory`가 주인공 블록 정수리에 `acc`→이모지 오버레이(`.pony-acc`)를 올린다. **장식 위치(정수리)·크기는 캐릭터별 앵커(`ACCESSORY_ANCHORS`, constants.js)를 render가 인라인으로 준다** - 블록 영역을 넘어가 머리에 얹히며, 캐릭터가 바뀌거나 늘어도 앵커만 추가하면 된다. 시간 경과·클리어 표정(`render.updateTargetFace`)은 몸통 애니(`.face-worried`/`.face-cry`/`.face-happy`, 울상은 눈물 이모지 `.pony-tear`)로 표현하며, 장식도 같은 애니로 함께 움직인다(울 때 장식도 흔들림). 이 게임이 만든 팝업 둘(상점·꾸미기)은 우상단 X 버튼(`.modal-x`)으로 닫는다. 결과 카드와 진행 맵은 공용이라 여기 해당하지 않는다 - 결과는 공용 카드의 버튼으로, 진행 맵은 좌상단 되돌아가기로 한 칸 위(시작 화면)로 간다.
 
-### 2.4. 블록 이미지 스타일 - `src/data/styles.js`
+### 2.3. 블록 이미지 스타일 - `src/data/styles.js`
 
-차 블록을 어떤 그림으로 그릴지 정하는 스타일 세트(`PONY_STYLES`). 설정 화면에서 전환하고, 선택값은 `progress.ponyStyle`에 저장한다(없으면 `DEFAULT_STYLE='c'` 밥풀이, 사용자 결정 2026-07-02. 이미 저장된 선택은 그대로 유지). 이미지는 `assets/ponies/`에 둔다.
+차 블록을 어떤 그림으로 그릴지 정하는 스타일 세트(`PONY_STYLES`). 설정 화면에서 전환하고, 선택값은 저장의 `equipped.style`에 담는다(없으면 `DEFAULT_STYLE='c'` 밥풀이, 사용자 결정 2026-07-02. 이미 저장된 선택은 그대로 유지). 이미지는 `assets/ponies/`에 둔다.
 
 스타일마다 블록을 그리는 방식이 `tiled` 값으로 나뉜다.
 
@@ -87,9 +77,9 @@
 
 게임은 두 모드로 나뉜다(`main.js` `MODES`). **오리지널**(`src/data/puzzles.js`, 자체 제작 186개)과 **Fogleman**(`src/data/puzzles-fogleman.js`, Michael Fogleman의 Rush Hour DB에서 추출한 400개). 퍼즐 데이터 형식·유효성 규칙(§3.1~3.4)은 동일하다. 진행(클리어/최고 수/별/현재 퍼즐/콤보)은 모드별로 각각 저장하고(§4), 골드·테마·장식·설정은 모든 모드가 공유한다.
 
-Fogleman 모드는 데이터에 **`optimal`(외부 검증된 최소 이동 수)** 필드가 있다. 고난도(최대 51수)는 실시간 BFS(`solve`)가 무거워 `loadPuzzle`이 이 값을 그대로 쓴다(런타임 계산 생략). 저난도(≤15수)는 추출 단계에서 우리 solver와 전수 대조했고(불일치 0), `tests`가 표본으로 회귀 확인한다. 힌트(`solveStep`)는 최소 수가 `HINT_MAX_OPTIMAL`(18)을 넘으면 막는다(멈춤 방지). 데이터 출처(MIT)는 소스 헤더 + `LICENSE-fogleman` + 진행 맵의 Fogleman 탭 아래(`#map-credit`)에 표기한다.
+Fogleman 모드는 데이터에 **`optimal`(외부 검증된 최소 이동 수)** 필드가 있다. 고난도(최대 51수)는 실시간 BFS(`solve`)가 무거워 `loadPuzzle`이 이 값을 그대로 쓴다(런타임 계산 생략). 저난도(≤15수)는 추출 단계에서 우리 solver와 전수 대조했고(불일치 0), `tests`가 표본으로 회귀 확인한다. 힌트(`solveStep`)는 최소 수가 `HINT_MAX_OPTIMAL`(18)을 넘으면 막는다(멈춤 방지). 데이터 출처(MIT)는 소스 헤더 + `LICENSE-fogleman` + 진행 맵의 Fogleman 탭 아래에 표기한다(갈래 정의의 `credit`을 공용 진행 맵이 그린다).
 
-현재 모드(`#stage-mode`)와 퍼즐 난이도(`#stage-diff`, 단계별 색)는 보드 좌상단 배지로 화면에 늘 표시된다. 모드는 **진행 맵(🗺) 안의 탭**으로 고른다(상단바에서 즉시 전환하지 않는다). 맵을 열면 현재 모드 탭이 선택돼 있고, 다른 모드 탭을 누르면 그 모드의 진행을 미리 볼 수 있다(`mapViewMode`). 실제 전환은 그 모드의 퍼즐을 고를 때 확정된다(`mapViewMode` → `activeMode`). 모든 팝업(상점/맵/설정/결과)은 라이트 테마다(style.css `.rushhour .modal`에서 색 토큰을 밝은 값으로 재정의 → 내부 요소가 상속).
+현재 모드(`#stage-mode`)와 퍼즐 난이도(`#stage-diff`, 단계별 색)는 보드 좌상단 배지로 화면에 늘 표시된다. 모드는 **진행 맵 안의 탭**으로 고른다(상단바에서 즉시 전환하지 않는다). 맵을 열면 현재 모드 탭이 선택돼 있고, 다른 모드 탭을 누르면 그 모드의 진행을 미리 볼 수 있다. 실제 전환은 그 모드의 퍼즐을 고를 때 확정된다 - 보다가 그냥 나가면 모드가 바뀌지 않는다. **이 규칙은 이제 공용 진행 맵(`shared/frame/mapscreen.js`)이 갖는다**(걸음 B). 이 게임이 만든 팝업 둘(상점·꾸미기)은 라이트 테마다(style.css `.rushhour .modal`에서 색 토큰을 밝은 값으로 재정의 → 내부 요소가 상속). 진행 맵은 팝업이 아니라 화면(고르는 칸)이고, 같은 라이트 톤을 `.rushhour .gg-map`에서 따로 준다.
 
 ### 3.0. 오리지널 세트 (`puzzles.js`)
 
@@ -147,10 +137,10 @@ Fogleman 모드는 데이터에 **`optimal`(외부 검증된 최소 이동 수)*
 
 - `migrateToPlatform(old, opts, ctx)` - 옛 저장 전부를 새 칸으로. 갈래 안이 이미 새 모양(`stages` 있음)이면 그대로 이어받는다. `ctx.remigrate`가 진행 밖 칸의 우선순위를 가른다(4.3)
 - `assembleShape(cells, opts)` - 새 칸 → `main.js`가 읽는 옛 모양 하나(임시 변환기)
-- `scatterShape(pr, prev, opts, now)` - 그 반대. `prev`(`{progress, game}`)로 기록 시각을 이어받고 게임 칸의 다른 항목을 지킨다
+- `scatterShape(pr, prev)` - 그 반대. `prev`(`{game}`)로 게임 칸의 다른 항목을 지킨다. 기록 시각 이어받기는 걸음 B에서 공용 진행 부품으로 갔다
 - `looksCurrent(cells)` - 저장이 지금 판 모양인가. 갈래마다 `stages`가 있으면 지금 모양이다. 판 번호가 맞아도 이것이 false면 다시 옮긴다
 
-`main.js`의 `progress()` / `saveProgress()`가 변환기를 부르는 유일한 자리다. 나머지 코드는 종전 모양을 그대로 본다. **이 변환기는 임시 구조물이다** - 진행이 플랫폼으로 가는 걸음에서 절반, 지갑·상점이 가는 걸음에서 나머지가 사라진다.
+`main.js`의 `progress()` / `saveProgress()`가 변환기를 부르는 유일한 자리다. 나머지 코드는 종전 모양을 그대로 본다. **이 변환기는 임시 구조물이다** - 걸음 B에서 진행 몫이 이미 사라져 지금은 지갑·산 것·쓰는 것·게임 칸만 다루고, 그 나머지도 걸음 C에서 사라진다.
 
 ### 4.2. 판 번호를 올릴 때 반드시 지킬 것
 

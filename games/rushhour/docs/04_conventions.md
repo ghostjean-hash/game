@@ -17,10 +17,10 @@
 
 ## 3. 색상 / 스타일
 
-3.1. 차 색(게임 데이터)은 `src/data/colors.js`, 동물 종류는 `src/data/characters.js` 상수만 사용.
+3.1. 차 색조(게임 데이터)는 src/data/colors.js, 캐릭터 그림 시트는 src/data/styles.js 상수만 사용.
 3.2. UI 색 / 간격 / 폰트는 `shared/tokens.css` CSS 변수 사용. 인라인 매직 값 금지. 단 이 게임 고유의 파스텔 테마 색은 `style.css`의 `.rushhour` 스코프 CSS 변수(`--rh-*`)에 한 곳으로 모아 정의하고 참조한다. HUD(상단·하단 바, 스탯, 타이머)는 팝업(`.modal`)과 같은 라이트 팔레트를 `.rushhour` 스코프의 공용 토큰(`--fg`/`--bg-elev`/`--line` 등) 재정의로 상속한다(01_spec §8.0).
 3.3. 셀 크기는 `--cell` 한 곳에서 파생. px 하드코딩 금지.
-3.4. 캐릭터 얼굴(눈 / 볼 / 귀 / 부리) SVG 좌표는 `render.js`의 마크업에 둔다. viewBox `0 0 100 100` 정규화 디자인 상수라 매직 넘버 규칙(2.1)의 예외다.
+3.4. 캐릭터 표정은 그림 시트에서 칸을 골라 그리므로 좌표 상수가 없다(02_data §2.3). `render.js`에 남은 SVG 좌표는 출구 게이트 하나이고, viewBox `0 0 100 100` 정규화 디자인 상수라 매직 넘버 규칙(2.1)의 예외다.
 3.5. 효과음 합성 파라미터(주파수 / 길이 / 게인)는 `audio/sound.js` 내부 디자인 상수다. SVG 좌표(3.4)와 같은 부류로 매직 넘버 규칙(2.1)의 예외다.
 
 ## 4. 주석
@@ -37,5 +37,5 @@
 
 ## 6. localStorage
 
-6.1. 키 prefix는 `rushhour_`(`STORAGE_PREFIX`). 스키마는 02_data §4.
+6.1. 저장은 공용 그릇(`shared/frame/save.js`)을 지난다. 실제 키는 `gg.rushhour.<칸>`이고 localStorage를 직접 만지지 않는다. 칸 규격은 02_data §4.
 6.2. 읽기 실패 / 파싱 실패 시 기본값으로 안전 복구(throw 금지).

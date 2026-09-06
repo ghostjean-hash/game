@@ -8,7 +8,7 @@ export const CAR_MAX_LEN = 3;       // 트럭 길이
 
 export const ORIENT = { H: 'h', V: 'v' };
 
-// localStorage 네임스페이스(shared/storage.js createStorage 인자).
+// 저장 네임스페이스(shared/frame/save.js createSave 인자). 실제 키는 gg.rushhour.<칸>.
 export const STORAGE_NS = 'rushhour';
 
 // 드래그 변위가 셀의 이 비율을 넘으면 다음 칸으로 스냅한다.

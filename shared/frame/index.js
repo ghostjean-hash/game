@@ -17,6 +17,8 @@ import { createAudio } from './audio.js';
 import { createSave } from './save.js';
 import { createOverlayHost } from './overlay.js';
 import { createSettings } from './settings.js';
+import { createProgress } from './progress.js';
+import { mountMapScreen } from './mapscreen.js';
 // 게임 홈 UI 안에만 붙이는 공용 허브 복귀 버튼.
 export function mountHubBack({ parent, hubHref = '../../', onExit = null } = {}) {
   if (!parent) throw new Error('mountHubBack: parent required');
@@ -58,6 +60,13 @@ export function createGameFrame({
   resume = null,
   choices = null,
   options = null,
+  // 판 목록을 넘기면 진행 부품과 진행 맵 화면이 함께 선다(기획서 Ⅲ권 4.2·4.3).
+  // 안 넘기면 아무것도 생기지 않는다 - 진행이라는 개념이 없는 게임은 그대로 성립한다.
+  progress: progressOpt = null,
+  onPickStage = null,
+  mapTitle = '',
+  renderChip = null,
+  stageLabel = null,
   toggles = [],
   extras = [],
   startHint = '',
@@ -80,13 +89,15 @@ export function createGameFrame({
   if (light) root.classList.add('is-light');
 
   const save = createSave(gameId);
+  // 진행을 쓰는 게임은 고르는 화면이 반드시 있어야 맵이 설 자리가 생긴다.
+  const useSelect = hasSelect || !!progressOpt;
   let exitToHub = null;
   // 덮는 카드를 화면 골격보다 먼저 만든다 - 뒤로가기를 먼저 받아야 카드만 닫히고
   // 화면이 함께 물러나지 않는다(overlay.js 머리말 참고).
   const overlay = createOverlayHost({ parent: root });
   const screens = createScreens({
     root,
-    hasSelect,
+    hasSelect: useSelect,
     onExit: () => { if (exitToHub) exitToHub(); },
     onChange: onScreenChange,
     // 게임이 자기 되돌아가기 버튼으로 부른 경우. 기기 뒤로가기는 덮는 카드가 직접 받는다.
@@ -96,7 +107,7 @@ export function createGameFrame({
   // 화면 칸을 미리 만들어 둔다. 게임은 playEl 안에 자기 플레이 화면을 그리면 된다.
   const titleEl = document.createElement('section');
   const playEl = document.createElement('section');
-  const selectEl = hasSelect ? document.createElement('section') : null;
+  const selectEl = useSelect ? document.createElement('section') : null;
   screens.register(SCREEN.TITLE, titleEl);
   if (selectEl) screens.register(SCREEN.SELECT, selectEl);
   screens.register(SCREEN.PLAY, playEl);
@@ -112,6 +123,21 @@ export function createGameFrame({
   audio.setMuted(save.readMuted());
 
   const settings = createSettings({ overlay, audio });
+
+  // 진행 부품과 진행 맵. 넘기지 않았으면 둘 다 null로 남는다.
+  const progress = progressOpt ? createProgress({ save, ...progressOpt }) : null;
+  const map = progress && selectEl
+    ? mountMapScreen({
+      parent: selectEl,
+      progress,
+      onPick: (stage) => { if (onPickStage) onPickStage(stage); },
+      onBack: () => screens.back(),
+      title: mapTitle,
+      renderChip,
+      label: stageLabel,
+      toast: (t) => overlay.toast(t),
+    })
+    : null;
 
   // 환경설정 항목을 게임이 시작 화면에 적지 않았어도 공용이 넣는다(규칙 20).
   // 이미 적어 두었으면 중복해 넣지 않는다 - 러시아워처럼 상점과 나란히 두던 게임이 있다.
@@ -193,7 +219,13 @@ export function createGameFrame({
     selectEl,
     titleEl,
     // 자주 쓰는 이동을 짧게.
-    start() { screens.go(hasSelect ? SCREEN.SELECT : SCREEN.PLAY); },
+    // 진행 부품과 진행 맵. 넘기지 않은 게임에는 둘 다 null이다.
+    progress,
+    map,
+    start() {
+      if (map) map.open();
+      screens.go(useSelect ? SCREEN.SELECT : SCREEN.PLAY);
+    },
     toPlay() { screens.go(SCREEN.PLAY); },
     toTitle() { screens.go(SCREEN.TITLE); },
     // 판이 끝났을 때. 결과 카드를 채우고 겹치는 층으로 올린다.
@@ -209,6 +241,7 @@ export function createGameFrame({
       pause.destroy();
       result.destroy();
       overlay.destroy();
+      if (map) map.destroy();
       hubBack.destroy();
     },
   };

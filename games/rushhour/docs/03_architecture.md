@@ -6,22 +6,25 @@
 games/rushhour/
 ├── index.html          진입 HTML (shared 토큰/베이스 + style.css)
 ├── style.css           이 게임 전용 레이아웃 / 차 스타일
+├── assets/             캐릭터 그림 시트(머리 장식은 이모지라 파일이 없다)
 ├── src/
 │   ├── main.js         진입점. 상태 관리 + UI 바인딩 + 모듈 조립
 │   ├── core/
 │   │   ├── board.js    순수 게임 로직(이동 범위, 이동, 클리어 판정, 점유 격자)
 │   │   └── solver.js   BFS 최단 해 솔버(최소 이동수, 퍼즐 검증, 힌트용 다음 한 수)
 │   ├── render/
-│   │   └── render.js   보드 / 차 DOM 렌더 + 위치 갱신 + 동물 얼굴 SVG
+│   │   └── render.js   보드 / 차 DOM 렌더 + 위치 갱신 + 캐릭터 그림 시트 표정
 │   ├── audio/
-│   │   └── sound.js    Web Audio 효과음 합성(이동/클리어/힌트/구매/거부) + 음소거
+│   │   └── sound.js    이 게임의 음색표(이동/클리어/힌트/구매/거부). 그릇은 공용
 │   ├── input/
 │   │   └── drag.js     Pointer Events 드래그 → 이동 의도 산출
 │   └── data/
 │       ├── constants.js   보드 수치 / enum
 │       ├── colors.js      차 색상(파스텔)
-│       ├── characters.js  동물 종류(주인공 토끼 / 친구들)
-│       ├── shop.js        상점 품목(토끼 색 스킨)
+│       ├── shop.js        상점 품목(보드 테마 · 포니 머리 장식)
+│       ├── styles.js      블록 이미지 스타일 세트
+│       ├── puzzles-fogleman.js  Fogleman 세트(외부 DB 400개)
+│       ├── save-shape.js  저장 판 옮기기 + 저장 칸 ↔ 게임이 읽는 모양 변환(순수 함수)
 │       └── puzzles.js     내장 퍼즐 세트
 └── tests/
     ├── test.html       브라우저 테스트 진입
@@ -34,15 +37,19 @@ games/rushhour/
 main.js
  ├─→ core/board.js      (DOM 금지, 순수 함수)
  ├─→ core/solver.js  ─→ core/board.js, data/constants.js
- ├─→ render/render.js ─→ data/colors.js, data/characters.js, data/constants.js
- ├─→ audio/sound.js     (Web Audio API, DOM 무관 / core 아님)
+ ├─→ render/render.js ─→ data/constants.js, data/colors.js, data/styles.js, data/shop.js
+ ├─→ audio/sound.js     이 게임의 음색표만. 소리 그릇은 공용 프레임이 갖는다
  ├─→ input/drag.js   ─→ core/board.js, data/constants.js
- └─→ data/*           (의존 없음, 값만 export)
+ ├─→ data/*           (의존 없음, 값만 export)
+ └─→ shared/frame/index.js   공용 프레임 - 화면 골격·시작 화면·결과 카드·소리·저장·
+                              진행 부품·진행 맵. 이 게임은 판 목록과 규칙만 넘긴다
 ```
 
 2.1. `core/`는 DOM / Canvas / window / document를 일체 import하지 않는다. 순수 함수 + 불변 데이터.
 2.2. 게임 로직(`core/`)과 렌더링(`render/`)은 절대 한 모듈에 두지 않는다.
-2.3. `data/`는 값만 export하고 아무것도 import하지 않는다.
+2.3. `data/`는 값만 export하고 아무것도 import하지 않는다. 예외 하나 - `save-shape.js`는 값이 아니라 순수 함수를 내보낸다(저장 모양 변환). 화면 없이 검사하려고 그 자리에 뒀고, 여전히 아무것도 import하지 않는다.
+
+2.4. 공용 프레임은 **한 방향으로만** 쓴다 - 게임이 프레임을 부르고, 프레임은 게임을 모른다. 게임이 넘긴 콜백(`onPickStage`·`onStart` 등)으로만 되돌아온다.
 
 ## 3. 상태 모델
 
@@ -58,12 +65,14 @@ state = {
   solved,          // 클리어 여부
   limit,           // 제한시간(초) = optimal × TIME_PER_OPTIMAL_S + TIME_BASE_S
   elapsed,         // 경과 시간(초, 1초 타이머로 증가)
-  face,            // 토끼 현재 표정(neutral/worried/cry/happy)
+  els,             // 차 id → DOM 요소 맵(보드를 다시 그릴 때 교체)
+  face,            // 주인공 현재 표정(neutral/worried/cry/happy)
   timer,           // setInterval 핸들(퍼즐 전환·클리어 시 정리)
 }
-누적 골드와 퍼즐별 최고 별은 state가 아니라 localStorage `progress`에 저장한다(02_data §4).
-`progress`는 main.js가 메모리에 1회 파싱해 캐시하고(`progress()`), 모든 저장은 `saveProgress(pr)`
-한 곳을 지나 캐시와 localStorage를 함께 갱신한다(매 이동마다 JSON 재파싱 방지).
+누적 골드와 퍼즐별 최고 별은 state가 아니라 저장에 남긴다 - 골드는 지갑 칸, 별·깬 표시·최고 기록은 공용 진행 부품이 진행 칸에 담는다(02_data §4).
+지갑·산 것·쓰는 것은 main.js가 메모리에 1회 조립해 캐시하고(`progress()`), 저장은
+`saveProgress(pr)` 한 곳을 지나 공용 저장 창구(`save.write*`)로 흩어 담는다. 진행은
+공용 진행 부품이 자기 캐시로 따로 관리한다. localStorage를 직접 만지는 곳은 없다.
 ```
 
 3.2. `core/board.js`의 함수는 `cars`를 입력받아 새 `cars`(또는 판정값)를 반환한다. 상태를 직접 변형하지 않는다.
@@ -79,16 +88,16 @@ state = {
 
 ## 5. 렌더링 방식
 
-5.1. Canvas가 아니라 DOM. 차는 절대 위치 `<div>`이고 칸 좌표 → CSS 변수(`--cell`) 배수로 배치한다. 차 안쪽에는 동물 얼굴 인라인 SVG를 한 칸 크기 정사각으로 중앙 배치한다(색 = colors.js, 종류 = characters.js를 render.js가 조합).
+5.1. Canvas가 아니라 DOM. 차는 절대 위치 `<div>`이고 칸 좌표 → CSS 변수(`--cell`) 배수로 배치한다. 차 안쪽에는 캐릭터 그림을 한 칸 크기 정사각으로 배치한다(그림 = styles.js의 시트, 색조 = colors.js를 render.js가 조합).
 5.2. 이동 / 스냅 애니메이션은 CSS `transition`. 드래그 중에는 transition을 꺼 손가락을 1:1로 따라온다. 손을 떼면 칸 위치(`left`/`top`)는 transition 없이 즉시 목표 칸으로 옮기되 같은 순간 `transform`으로 손 뗀 시각 위치를 상쇄(점프 0)하고, 다음 프레임에 `transform`만 0으로 트랜지션해 목표 칸으로 정착한다(FLIP). `left`/`top`과 `transform`을 동시에 트랜지션하면 iPad 등에서 레이아웃 경로와 컴포지터 경로의 타이밍 차로 차가 좌우로 흔들리므로, 정착은 컴포지터 단일 속성(`transform`)으로만 애니메이션한다.
 
-5.4. 제한시간 타이머는 `main.js`가 1초 간격으로 `elapsed`를 올리며 상단바 남은 시간을 갱신하고, 경과/제한 비율로 토끼 표정(`render.updateTargetFace`)을 무표정→어두움→울상으로 바꾼다. 클리어 시 타이머를 멈추고 표정을 활짝 웃음으로 바꾼 뒤 별·골드를 계산해 저장한다. 시간 초과가 확정되면(`elapsed > limit`, 시간 내 판정에 딱 1초만 초과분이 필요) 타이머를 멈춰 무한 구동을 막고, `visibilitychange`로 탭이 백그라운드면 타이머·오디오를 재웠다가 복귀 시 되살린다(§01 spec 6.4·10.5). 표정 순환 타이머(render.js `startFaceCycle`)도 백그라운드에서는 틱을 건너뛴다. 시간 내 클리어면 연속 콤보(`progress.combo`)를 1 올리고 2연속부터 콤보 보너스 골드를 더한다. 시간 초과 클리어면 콤보를 0으로 끊는다(§01 spec 6.7).
+5.4. 제한시간 타이머는 `main.js`가 1초 간격으로 `elapsed`를 올리며 상단바 남은 시간을 갱신하고, 경과/제한 비율로 토끼 표정(`render.updateTargetFace`)을 무표정→어두움→울상으로 바꾼다. 클리어 시 타이머를 멈추고 표정을 활짝 웃음으로 바꾼 뒤 별·골드를 계산해 저장한다. 시간 초과가 확정되면(`elapsed > limit`, 시간 내 판정에 딱 1초만 초과분이 필요) 타이머를 멈춰 무한 구동을 막고, `visibilitychange`로 탭이 백그라운드면 타이머·오디오를 재웠다가 복귀 시 되살린다(§01 spec 6.4·10.5). 표정 순환 타이머(render.js `startFaceCycle`)도 백그라운드에서는 틱을 건너뛴다. 시간 내 클리어면 연속 콤보(공용 진행 부품의 갈래별 게임 고유 값 `extra.combo`)를 1 올리고 2연속부터 콤보 보너스 골드를 더한다. 시간 초과 클리어면 콤보를 0으로 끊는다(§01 spec 6.7).
 
 5.5. 힌트(§01 spec 7.6): `main.js`가 골드를 확인(부족하면 흔들림)하고 차감한 뒤 `solver.solveStep(cars)`로 최적의 다음 한 수(`{id, pos}` 또는 null)를 구해 `render.showHint(els, move)`로 해당 차를 잠깐 강조 + 목표 방향으로 살짝 움직여 보여준다. 자동 이동은 하지 않는다(플레이어가 직접 민다).
 
-5.6. 진행 맵(§01 spec 7.7): `main.js`가 `PUZZLES`(번호·난이도)와 localStorage `progress`(cleared·stars)를 읽어 난이도별 칩 격자를 모달에 그린다. 별도 데이터를 저장하지 않는 읽기 전용 화면이다. 칩 클릭 시 `loadPuzzle(id)`로 그 퍼즐로 점프하고 모달을 닫는다.
+5.6. 진행 맵(§01 spec 7.7): **공용 화면이다**(걸음 B, 기획서 Ⅲ권 4.3). `shared/frame/mapscreen.js`가 고르는 화면(SELECT) 안에 갈래 탭·요약 줄·묶음별 칩 격자를 그리고, 진행은 공용 진행 부품(`shared/frame/progress.js`)에서 읽는다. `main.js`는 판 목록(`MODES`)과 묶는 규칙(난이도)만 프레임에 넘기고, 칩을 고르면 `onPickStage`로 `loadPuzzle(id)` + 플레이 화면 이동을 한다. 한 칸 위로 돌아가는 문은 맵이 갖는다.
 
-5.8. 상점(§01 spec 7.5): `main.js`가 `RABBIT_SKINS`(토끼 색)·`BOARD_THEMES`(보드 색 세트)·`ACCESSORY_ITEMS`(토끼 머리 장식)를 모달에 그린다. 구매·장착(`buyOrEquip(kind, id)`)은 골드 확인(부족 시 흔들림+거부음) 후 `progress`의 보유/장착 키를 갱신한다. 스킨 장착은 `render.setTargetColor`, 테마 장착은 `.rushhour`의 `--rh-*` 변수 인라인 덮어쓰기, 액세서리 장착은 `render.setTargetAccessory`로 즉시 반영한다. 로드 시 저장된 스킨·테마·액세서리를 적용한다.
+5.8. 상점(§01 spec 7.5): `main.js`가 `BOARD_THEMES`(보드 색 세트)·`ACCESSORY_ITEMS`(포니 머리 장식)를 팝업에 그린다. 구매·장착(`buyOrEquip(kind, id)`)은 골드 확인(부족 시 흔들림+거부음) 후 저장의 `owned`/`equipped` 칸을 갱신한다. 테마 적용은 `.rushhour`의 `--rh-*` 변수 인라인 덮어쓰기, 장식 장착은 `render.setTargetAccessory`로 즉시 반영한다. 로드 시 저장된 테마·장식을 적용한다. (색 스킨은 무지개 갈기 포니에 CSS filter가 맞지 않아 2026-07-02에 없앴다.)
 
-5.7. 사운드(§01 spec 10): `audio/sound.js`가 `AudioContext`를 첫 재생 시점에 lazy 생성(자동재생 정책)하고 oscillator/gain으로 효과음을 합성한다. 음원 파일은 없다. `main.js`가 이동·클리어·힌트·구매·거부 시점에 `sound.play(name)`을 호출하고, 음소거 토글(🔊/🔇)은 `progress.muted`에 저장한다. 합성 파라미터(주파수·길이)는 sound.js 내부 디자인 상수다(04 §2.1 예외). iOS(아이폰/아이패드)는 사용자 제스처 핸들러 안에서 컨텍스트를 깨우고 무음 버퍼를 1회 재생해야 이후 소리가 나므로, `main.js`가 첫 `pointerdown`/`touchend`에서 `sound.unlockAudio()`를 1회 호출한다(미호출 시 iOS 크롬/사파리에서 효과음 전체 무음). 블루투스 출력 절전 방지용 무음 keep-alive oscillator는 unlock 시 시작하되, 음소거(`setMuted`)나 탭 백그라운드(`suspendAudio`/`resumeAudio`, main.js `visibilitychange`)에서는 컨텍스트를 suspend해 오디오 스레드를 재운다(§01 spec 10.5).
+5.7. 사운드(§01 spec 10): **소리 그릇은 공용 프레임이 갖는다**(`shared/frame/audio.js`). 음원 파일 없이 oscillator/gain으로 합성하는 것, 첫 재생 시점 lazy 생성, iOS 잠금 해제, 화면을 가렸을 때 재우기가 전부 그쪽 몫이다. 이 게임에 남은 것은 **음색표 하나**뿐이다 - `audio/sound.js`가 `SOUNDS`(이동·클리어·힌트·구매·거부의 주파수·길이)를 내보내고, `main.js`가 프레임을 만들 때 넘긴다. 재생은 `frame.audio.play(name)`, 음소거는 공용 환경설정과 소리 칸(`muted`)이 맡는다. 합성 파라미터는 sound.js 내부 디자인 상수다(04 §2.1 예외).
 5.3. 보드 크기는 CSS가 화면 너비에 맞춰 정사각형으로 잡고, 셀 크기는 한 곳(`--cell`)에서 파생한다.
