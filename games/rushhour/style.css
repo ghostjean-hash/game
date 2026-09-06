@@ -10,12 +10,11 @@
   --rh-page-2: #251d2e;        /* 페이지 배경(아래, 더 깊게) */
   --rh-card: #fffdf8;          /* 떠 있는 칩/알약 카드 */
   --rh-candy: #ecd3b8;         /* 캔디 버튼 아래쪽 그림자(눌리는 느낌) */
-  --rh-gold-soft: #fff1cf;     /* 골드 알약 배경 */
-  --rh-gold-line: #f0d9a0;     /* 골드 알약 그림자 */
   --rh-hint-1: #ffdf9e;        /* 힌트 버튼 그라데이션(위) */
   --rh-hint-2: #ffcf6e;        /* 힌트 버튼 그라데이션(아래) */
   --rh-hint-candy: #e8a83f;    /* 힌트 버튼 아래쪽 그림자 */
-  --rh-timer-fill: #8fd6a4;    /* 타이머 남은 시간 진행 막대 */
+  --rh-timer-fill: #edb02f;    /* 타이머 남은 시간 진행 막대(강조색 계열) */
+  --rh-gold-text: #b57a12;     /* 골드 값 글자(알약을 걷고 남긴 따뜻한 톤) */
   --rh-timer-track: #f0e3d0;   /* 타이머 진행 막대 바탕 */
 
   /* 공용 토큰을 크림 라이트 팔레트로 재정의 - 상단·하단 바, 버튼, 스탯, 그리고 공용
@@ -33,13 +32,13 @@
 body:has(.rushhour) { background: #3a2d40; }
 
 /* 상단 바는 배경에 녹이고(§8.0) 아이콘 칩·알약만 띄운다.
-   공용 상단 띠(높이 46px)는 화면 맨 위에 겹쳐 뜨고 왼쪽 끝(되돌아가기)과 오른쪽 끝(소리·설정·
-   전체화면)만 쓴다. 그래서 골드·이동 알약을 같은 줄 가운데에 앉힌다 - 줄 하나를 새로
-   쓰지 않아 세로가 귀한 가로 화면에서도 조작 버튼이 밀려나지 않고, 왼쪽에만 몰려
-   화면이 한쪽으로 기울어 보이던 것도 함께 해소된다(2026-08-06 사용자 신고). */
+   이 줄은 화면 맨 위에 겹쳐 뜨고 왼쪽 끝(되돌아가기)과 오른쪽 끝(소리·환경설정)만 쓴다.
+   놀면서 보는 값(골드·이동·남은 시간)은 2026-09-06에 보드 위 카드로 내려갔다 - 그전에는
+   골드·이동만 여기 있고 시간은 보드 위에 있어 같이 보는 값이 세로로 300px 떨어져 있었다. */
 .rushhour .topbar {
   background: transparent;
   border-bottom: none;
+  box-shadow: none;   /* base.css가 그림자로 그리던 밑줄. 테두리만 꺼서는 안 지워진다 */
   justify-content: flex-start;
   align-items: center;
   gap: var(--sp-2, 8px);
@@ -48,15 +47,10 @@ body:has(.rushhour) { background: #3a2d40; }
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: 0;
 }
-/* 놀이 중에 보는 값은 가운데, 누르는 것은 양 끝. 버튼 모양은 공용 부품이 정한다. */
-.rushhour .topbar-stats {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--sp-4, 16px);
-}
+/* 이 줄에는 누르는 것만 둔다(되돌아가기 / 소리 / 환경설정). 놀면서 보는 값은 보드 바로
+   위 카드로 내려갔다 - 예전에는 골드·이동이 여기 있고 남은 시간만 보드 위에 있어서,
+   같이 보는 값 셋이 세로로 300px 떨어져 있었다. 이 빈 칸이 왼쪽 끝과 오른쪽 끝을 벌린다. */
+.rushhour .topbar-gap { flex: 1 1 auto; min-width: 0; }
 /* 소리 아이콘 한 벌로 켜짐·꺼짐 두 모양을 낸다(그림 파일을 두 개 두지 않는다). */
 .rushhour .gg-ic .snd-off { display: none; }
 .rushhour .gg-ic.is-muted .snd-on { display: none; }
@@ -86,22 +80,16 @@ body:has(.rushhour) { background: #3a2d40; }
 .rushhour #btn-mute.muted .icon-sound-on { display: none; }
 .rushhour #btn-mute.muted .icon-sound-off { display: block; }
 
-/* 스탯(골드·이동)은 알약형 카드. 골드 알약은 따뜻한 골드빛(§8.1). */
+/* 놀면서 보는 값(골드·이동). 예전에는 각자 알약이었는데 지금은 보드 위 카드 안의
+   글자다 - 크림 카드 위에 크림 알약을 얹으면 경계가 안 보이고 모양만 복잡해진다.
+   골드는 알약 대신 값 색으로 따뜻한 톤을 남긴다(§8.1). */
 .rushhour .stat {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: var(--rh-card);
-  box-shadow: 0 2px 0 var(--rh-candy);
   font-size: 12px;
   font-weight: 700;
   color: var(--fg-dim);
-}
-.rushhour .stat-gold {
-  background: var(--rh-gold-soft);
-  box-shadow: 0 2px 0 var(--rh-gold-line);
 }
 .rushhour .stat-value,
 .rushhour .stat .gg-wallet-value {
@@ -115,7 +103,7 @@ body:has(.rushhour) { background: #3a2d40; }
 /* ── 화면 전환(공용 프레임, html-game 표준 4.8) ──
    지금 어느 화면인지는 프레임이 #app의 data-screen에 적고 표시는 shared/frame/frame.css가
    가른다. 프레임 기본값은 display:block인데 이 게임의 플레이 화면은 세로 flex 세 줄
-   (골드·이동 줄 / 보드 / 조작 버튼)이라 그 값을 여기서 되돌려 준다. */
+   (아이콘 줄 / 보드 묶음 / 조작 버튼)이라 그 값을 여기서 되돌려 준다. */
 .rushhour.gg-frame[data-screen='play'] > [data-gg-screen='play'],
 .rushhour.gg-frame[data-covered='play'] > [data-gg-screen='play'] {
   display: flex;
@@ -210,13 +198,19 @@ body:has(.rushhour) { background: #3a2d40; }
   border: 2px solid #e8577f;
 }
 
+/* 보드 묶음을 화면 한가운데 두지 않고 조금 아래로 내린다(위:아래 ≒ 1.7:1).
+   폰 세로에서는 보드가 화면 폭에 갇혀 세로가 남는 것이 물리적이라 여백을 없앨 수 없다.
+   그때 위아래를 똑같이 나누면 덩어리가 화면 한가운데 붕 뜨고 여백이 양쪽에서 도드라진다.
+   여백을 위로 몰면 남는 자리가 하나가 되고, 조작은 엄지가 닿는 아래에 가까워진다. */
 .rushhour .stage {
   flex: 1;
   display: grid;
-  place-items: center;
+  grid-template-rows: 1.7fr auto 1fr;
+  justify-items: center;
   padding: var(--sp-4);
   min-height: 0;
 }
+.rushhour .board-wrap { grid-row: 2; }
 .rushhour .board-wrap {
   /* 보드판(6x6)과 그 오른쪽 바깥으로 나가는 출구를 "한 묶음"으로 보고 화면 중앙에 놓는다.
      출구는 board 자식 absolute라 폭 계산에 안 잡히므로, 그 폭만큼 오른쪽에 자리를 잡아 준다.
@@ -224,10 +218,14 @@ body:has(.rushhour) { background: #3a2d40; }
      치우쳐 보였다(2026-08-06 사용자 신고). 그만큼 보드도 더 키울 수 있다.
      --exit-ratio = 출구 폭 ÷ 보드 폭 (출구는 한 칸의 0.95배 = 보드의 0.95/6). */
   --exit-ratio: 0.1583;
+  /* 세로 몫 - 화면 높이에서 이 화면이 반드시 쓰는 것(상단 줄 자리 + 보드 위 카드 +
+     조작 두 줄 + 여백)을 빼고 남는 만큼. 예전에는 60vh 어림값이라 세로가 남아도 못 썼다.
+     폭 상한 480px도 함께 올린다 - 태블릿에서 남는 200px을 그냥 버리고 있었다. */
+  --chrome-v: 262px;
   --board-w: min(
     calc((100vw - 2 * var(--sp-4)) / (1 + var(--exit-ratio))),
-    60vh,
-    480px
+    calc(100svh - var(--chrome-v)),
+    720px
   );
   --exit-w: calc(var(--board-w) * var(--exit-ratio));
   margin-right: var(--exit-w);
@@ -237,28 +235,50 @@ body:has(.rushhour) { background: #3a2d40; }
   gap: var(--sp-2);
   position: relative; /* 보드 왼쪽 위 스테이지 표시(absolute)의 기준 */
 }
-/* 보드 위 한 줄(§8.2): 왼쪽 스테이지 카드 + 오른쪽 타이머. 같은 flex 줄이라 카드가
-   넓어져도(모드명·스테이지 자릿수) 절대 겹치지 않는다. */
+/* 보드 바로 위 카드 하나(§8.2). 카드가 셋으로 흩어져 있던 것을 한 덩어리로 접는다 -
+   흩어져 있으면 화면에 알약 모양이 세 종류가 되고 덩어리가 안 만들어진다.
+     윗줄(.head-where) 지금 어디 - 모드 · 스테이지 번호 · 난이도. 가끔 보는 값
+     아랫줄(.head-play) 놀면서 보는 값 셋 - 골드 · 이동 · 남은 시간 */
+/* 폭을 보드에 맞춰 못박는다. 100%로 두면 감싼 칸이 내용 폭이라 값이 길어질 때
+   (골드 네 자리 등) 카드가 보드를 밀고 나간다 - 세로에서는 폭이 병목이라 안 드러나고
+   가로에서만 나온다(1회차 검사 3번). */
 .rushhour .board-head {
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  gap: var(--sp-2);
-  width: 100%;
-}
-/* 스테이지 카드: 모드 알약 + 스테이지 번호 + 난이도 게이지를 크림 카드 하나로. */
-.rushhour .board-stage {
+  width: var(--board-w);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 4px;
-  padding: 8px 12px 9px;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px 9px;
   border-radius: var(--r-3);
   background: var(--rh-card);
   box-shadow: 0 2px 0 var(--rh-candy);
   line-height: 1.05;
 }
+.rushhour .head-where {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+/* 카드 안에서는 값마다 알약을 다시 두지 않는다 - 크림 카드 위에 크림 알약을 얹으면
+   경계가 안 보이고 모양만 복잡해진다. 카드가 그릇이고 값은 글자다. */
+.rushhour .head-play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 카드가 보드 폭만큼 넓어지므로 값 사이도 함께 벌린다. 고정 간격이면 큰 화면에서
+     넓은 카드 한가운데 값 셋만 오글오글 뭉쳐 보인다. */
+  gap: clamp(16px, 4.5vw, 52px);
+  width: 100%;
+}
+.rushhour .head-play .stat-value,
+.rushhour .head-play .stat .gg-wallet-value { font-size: clamp(19px, 2.6vw, 26px); }
+/* 골드 값 색. **값 글자 규칙보다 뒤에 둔다** - 특이도가 같아 앞에 두면 그대로 덮여
+   한 번도 화면에 안 나온다(1회차 검사 2번, 이 판에서 같은 형태가 세 번째다). */
+.rushhour .head-play .stat-gold .gg-wallet-value { color: var(--rh-gold-text); }
+.rushhour .head-play .stat .gg-wallet-icon { font-size: clamp(14px, 1.9vw, 19px); }
 /* 현재 모드: 골드 알약. */
 .rushhour .stage-mode {
   font-size: 10px;
@@ -268,7 +288,6 @@ body:has(.rushhour) { background: #3a2d40; }
   color: #5a3d00;
   background: var(--rh-exit);
 }
-.rushhour .stage-line { display: flex; align-items: center; gap: 6px; }
 .rushhour .stage-cap { font-size: 12px; font-weight: 700; color: var(--fg-dim); }
 .rushhour .stage-num {
   font-family: var(--font-mono);
@@ -300,7 +319,7 @@ body:has(.rushhour) { background: #3a2d40; }
 .rushhour .stage-diff[data-diff="medium"] em { color: #b26f14; }
 .rushhour .stage-diff[data-diff="hard"] i:nth-child(-n+4) { background: #ef8383; }
 .rushhour .stage-diff[data-diff="hard"] em { color: #c04a4a; }
-/* 보드 위 중앙 타이머 알약: 숫자 + 남은 비율 진행 막대(--t: 1→0, main.js가 갱신).
+/* 남은 시간: 카드 안의 값 하나. 숫자 아래에 남은 비율 막대(--t: 1→0, main.js가 갱신).
    평소 기본색, 10초 이하 경고는 #time.low(빨강 + 두근거림). */
 .rushhour .board-timer {
   position: relative;
@@ -308,24 +327,21 @@ body:has(.rushhour) { background: #3a2d40; }
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  font-size: clamp(24px, 7vw, 34px);
+  font-size: clamp(19px, 5.4vw, 32px);
   font-weight: 800;
   line-height: 1;
   letter-spacing: 1px;
   color: var(--fg);
-  background: var(--rh-card);
-  border-radius: 999px;
-  padding: 8px 26px 14px;
-  box-shadow: 0 2px 0 var(--rh-candy);
-  overflow: hidden;
+  padding: 0 2px 7px;
+  min-width: 74px;
 }
 .rushhour .board-timer::after {
   content: '';
   position: absolute;
-  left: 14%;
-  right: 14%;
-  bottom: 6px;
-  height: 5px;
+  left: 4%;
+  right: 4%;
+  bottom: 0;
+  height: 4px;
   border-radius: 999px;
   /* 왼쪽부터 남은 비율만큼 채움(나머지는 바탕색). */
   background: linear-gradient(90deg,
@@ -549,15 +565,28 @@ body:has(.rushhour) { background: #3a2d40; }
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* 하단 캔디 버튼(§8.3): 바는 배경에 녹이고, 버튼은 카드 + 아래쪽 그림자로 눌리는 느낌. */
+/* 하단 캔디 버튼(§8.3): 바는 배경에 녹이고, 버튼은 카드 + 아래쪽 그림자로 눌리는 느낌.
+   두 묶음으로 나눈다 - 자주 누르는 셋(되돌리기·힌트·리셋)이 엄지가 닿는 줄, 판을 옮기는
+   둘은 그 아래 곁가지 줄. 예전에는 다섯이 한 통에 있고 폭 규칙이 없어서, 가장 밝은
+   흰색이 이전·다음·리셋이고 제일 자주 누르는 되돌리기가 회색으로 죽어 있었다. */
 .rushhour .controls {
   display: flex;
-  align-items: stretch;
-  gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-4) calc(var(--sp-4) + env(safe-area-inset-bottom));
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--sp-2) var(--sp-4) calc(var(--sp-3) + env(safe-area-inset-bottom));
   border-top: none;
   background: transparent;
 }
+.rushhour .ctrl-main,
+.rushhour .ctrl-move {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-2);
+  width: 100%;
+  max-width: 620px;      /* 큰 화면에서 버튼 하나가 400px까지 늘어나던 것을 묶는다 */
+  margin-inline: auto;
+}
+.rushhour .ctrl-main .btn { min-height: 46px; }
 .rushhour .controls .btn {
   flex: 1;
   font-size: 14px;
@@ -582,21 +611,33 @@ body:has(.rushhour) { background: #3a2d40; }
   color: rgba(255, 253, 248, 0.4);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
 }
-/* 이전/다음은 이동용 보조 버튼이라 좁게. */
-.rushhour #btn-prev,
-.rushhour #btn-next { flex: 0.65; }
 /* 힌트 버튼: 골드빛 캔디로 가장 넓고 도드라지게(도움 버튼임을 알림). */
 .rushhour .controls .btn-hint {
-  flex: 1.6;
+  flex: 1.5;
   background: linear-gradient(180deg, var(--rh-hint-1), var(--rh-hint-2));
   box-shadow: 0 3px 0 var(--rh-hint-candy);
   color: #5a3d00;
 }
 .rushhour .controls .btn-hint:active { box-shadow: 0 1px 0 var(--rh-hint-candy); }
+/* 판 이동은 곁가지다 - 판을 고르는 자리는 진행 맵이다. 배경 위에 얹히므로 크림을 옅게 쓴다.
+   **보통 버튼 규칙보다 뒤에 둔다** - 특이도가 같아 앞에 두면 크림 배경에 그대로 덮인다. */
+.rushhour .ctrl-move .btn {
+  min-height: 34px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255, 253, 248, 0.10);
+  color: rgba(255, 253, 248, 0.82);
+  box-shadow: none;
+}
+.rushhour .ctrl-move .btn:hover { background: rgba(255, 253, 248, 0.16); }
+.rushhour .ctrl-move .btn:active { transform: translateY(1px); box-shadow: none; }
+.rushhour .ctrl-move .btn:disabled {
+  background: rgba(255, 253, 248, 0.05);
+  color: rgba(255, 253, 248, 0.28);
+  box-shadow: none;
+}
 
-/* 상단바에 아이콘 5개 + 스탯 2개가 들어가므로 살짝 압축. */
-.rushhour .topbar { gap: var(--sp-2); }
-.rushhour .stat-icon,
+/* 골드 아이콘은 공용 지갑 부품이 그린다(이 게임 마크업에 아이콘 요소가 따로 없다). */
 .rushhour .stat .gg-wallet-icon { font-size: 13px; }
 /* 남은 시간이 10초 이하면 빨갛게 경고 + 두근거림(마지막 10초만 - 만료 후 무한 구동 금지). */
 .rushhour #time.low {
@@ -694,45 +735,28 @@ body:has(.rushhour) { background: #3a2d40; }
 @media (max-width: 480px) {
   .rushhour .topbar { gap: 4px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
   .rushhour .home { width: 33px; height: 33px; font-size: 16px; }
-  .rushhour .stat { font-size: 10px; gap: 3px; padding: 3px 9px; }
-  .rushhour .stat-value,
-  .rushhour .stat .gg-wallet-value { font-size: 13px; }
-  .rushhour .stat-icon,
-  .rushhour .stat .gg-wallet-icon { font-size: 11px; }
-  .rushhour .board-timer { font-size: clamp(20px, 6vw, 26px); padding: 6px 20px 12px; }
-  /* 좁은 화면: 한 줄이 모자라면 카드/타이머가 줄바꿈해 중앙 정렬로 쌓인다. */
-  .rushhour .board-head { flex-wrap: wrap; justify-content: center; }
-  .rushhour .board-stage { flex-direction: row; align-items: center; gap: 8px; padding: 6px 12px 8px; }
+  .rushhour .head-play .stat { font-size: 11px; gap: 4px; }
+  .rushhour .head-play .stat-value,
+  .rushhour .head-play .stat .gg-wallet-value { font-size: 16px; }
+  .rushhour .head-play .stat .gg-wallet-icon { font-size: 12px; }
+  .rushhour .board-timer { font-size: clamp(18px, 5vw, 22px); min-width: 64px; }
+  .rushhour .head-play { gap: var(--sp-3); }
+  .rushhour .board-head { padding: 6px 10px 8px; }
   .rushhour .stage-num { font-size: 18px; }
-  /* 좁은 폭에서 버튼 다섯을 한 줄에 욱여넣으면 글자 11px에 높이 31px짜리가 다닥다닥 붙어
-     손가락으로 누르기 어렵다(2026-08-06 사용자 신고 "하단도 엉망"). 두 줄로 나눈다 -
-     자주 쓰는 놀이 조작 셋을 엄지가 닿는 아래 줄에 크게, 스테이지 이동 둘은 위 줄에.
-     세로 공간은 남으므로(보드는 폭이 병목) 두 줄로 늘려도 보드가 줄지 않는다. */
+  /* 좁은 폭에서 버튼 다섯을 한 줄에 욱여넣으면 손가락으로 누르기 어렵다(2026-08-06
+     사용자 신고 "하단도 엉망"). 줄을 나누는 일은 이제 마크업의 두 묶음이 직접 하므로
+     여기서는 여백만 좁힌다 - 예전의 줄바꿈·차례 뒤집기 꼼수는 새 묶음과 싸운다. */
   .rushhour .controls {
-    flex-wrap: wrap;
-    gap: 6px;
     padding-left: var(--sp-3);
     padding-right: var(--sp-3);
   }
   .rushhour .controls .btn {
     font-size: 13px;
-    min-height: 44px;              /* 손가락 최소 크기 */
     padding: var(--sp-2) var(--sp-2);
     white-space: nowrap;
     letter-spacing: -0.3px;
   }
-  /* 위 줄: 이전 / 다음 (둘이 한 줄을 반씩) */
-  .rushhour #btn-prev,
-  .rushhour #btn-next {
-    order: -1;
-    flex: 1 1 calc(50% - 3px);
-    min-height: 38px;              /* 보조 버튼이라 조금 낮게 */
-    font-size: 12px;
-  }
-  /* 아래 줄: 되돌리기 / 힌트 / 리셋 */
-  .rushhour #btn-undo,
-  .rushhour #btn-reset { flex: 1 1 0; }
-  .rushhour .controls .btn-hint { flex: 1.5 1 0; }
+  .rushhour .ctrl-move .btn { min-height: 32px; font-size: 12px; }
 }
 
 /* 가로 방향(STANDARD 4.7 규칙 5·7): 세로 스택 대신 controls를 보드 왼쪽 세로열로 옮기고
@@ -743,34 +767,66 @@ body:has(.rushhour) { background: #3a2d40; }
      화면 왼쪽 끝에 붙는다(가로 1280에서 실측). 그래서 플레이일 때만 격자로 바꾼다.
      덮인 상태도 함께 적는다 - 결과·잠깐 멈춤 카드가 뜨면 화면 이름이 그쪽으로 바뀌는데
      플레이 화면은 카드 뒤에 계속 보인다. 빠뜨리면 카드가 뜰 때마다 보드가 옆으로 튄다. */
-  .rushhour.page[data-screen="play"],
-  .rushhour.page[data-covered="play"] {
+  /* **격자는 플레이 화면 래퍼에 건다.** 예전에는 페이지(.rushhour.page)에 걸어 뒀는데,
+     공용 프레임이 들어오면서 그 안에 화면 래퍼가 한 겹 생겼다. 상단 줄·보드·조작은 전부
+     래퍼 안에 있어 격자 칸에 들어가지 못했고, 규칙이 통째로 안 먹은 채 세로로 쌓였다 -
+     보드가 조작 줄을 50px 파고들어 겹치고 오른쪽 567px이 통째로 비었다(2026-09-06 실측). */
+  .rushhour.gg-frame[data-screen='play'] > [data-gg-screen='play'],
+  .rushhour.gg-frame[data-covered='play'] > [data-gg-screen='play'] {
     display: grid;
-    grid-template-columns: auto 1fr;
+    /* 두 열 다 내용폭으로 두고 격자째 가운데 놓는다. 둘째 열을 1fr로 두면 그 안에서
+       보드가 다시 중앙 정렬돼 조작 열과 238px 벌어진다(2026-09-06 실측). */
+    grid-template-columns: auto auto;
     grid-template-rows: auto 1fr;
     grid-template-areas:
       "topbar topbar"
       "controls stage";
+    justify-content: center;
     min-height: 0;
   }
   .rushhour .topbar { grid-area: topbar; }
   .rushhour .stage { grid-area: stage; min-height: 0; }
   .rushhour .controls {
     grid-area: controls;
-    flex-direction: column;
     justify-content: center;
     width: auto;
-    min-width: 92px;
+    min-width: 104px;
     padding: var(--sp-2) var(--sp-2) calc(var(--sp-2) + env(safe-area-inset-bottom)) var(--sp-4);
   }
+  /* 세로로 세운다 - 두 묶음이 위아래로, 묶음 안에서도 버튼이 위아래로. */
+  /* margin-inline: auto를 남기면 두 묶음이 각자 내용폭이 되어 판 이동 버튼만 좁아진다. */
+  .rushhour .ctrl-main,
+  .rushhour .ctrl-move { flex-direction: column; width: auto; max-width: none; margin-inline: 0; }
   .rushhour .controls .btn { flex: 0 0 auto; white-space: nowrap; }
-  .rushhour #btn-prev,
-  .rushhour #btn-next { flex: 0 0 auto; }
-  /* 보드 위 스테이지 카드·타이머(board-head)와 상하 여백을 감안해 높이의 60%로 잡는다
-     (낮은 가로 화면에서 board-head까지 더해도 페이지가 넘치지 않게).
-     가로에선 높이가 병목이라 폭 기준 계산 대신 이 값을 쓴다. 출구 자리(margin-right)는
-     세로와 똑같이 board-wrap이 잡아 준다. */
-  .rushhour .board-wrap { --board-w: min(60vh, 56vw, 520px); }
+  .rushhour .ctrl-main .btn { min-height: 40px; }
+  .rushhour .ctrl-move .btn { min-height: 30px; }
+  /* 가로에선 높이가 병목이다. 상단 줄 자리와 보드 위 카드를 뺀 만큼만 쓴다.
+     출구 자리(margin-right)는 세로와 똑같이 board-wrap이 잡아 준다. */
+  /* 빼는 값은 이 화면이 반드시 쓰는 세로다 - 상단 줄 자리 50(파일 끝 .stage padding-top)
+     + 보드 위 카드 약 68 + 사이 8 + 아래 여백 16 + 여유 6. **그 50은 이 미디어쿼리 밖
+     뒤쪽에 있어 여기서 안 보인다** - 130으로 뒀다가 보드 아래가 3px 잘렸다(1회차 검사 1번). */
+  .rushhour .board-wrap { --board-w: min(calc(100svh - 148px), 52vw, 720px); }
+  /* 카드 폭이 보드에 묶였으므로 값 사이 간격도 화면 폭이 아니라 그 안에서 잡는다. */
+  .rushhour .head-play { gap: var(--sp-3); }
+  .rushhour .head-play .stat-value,
+  .rushhour .head-play .stat .gg-wallet-value { font-size: 18px; }
+  .rushhour .board-timer { font-size: 22px; min-width: 62px; }
+}
+
+/* 낮은 가로(작은 폰을 눕힌 것). 카드 폭이 보드에 묶여 있는데 그 보드가 화면 높이로
+   정해지므로, 여기서는 카드가 가장 좁다. 골드가 다섯 자리까지 늘면 값 셋이 한 줄에
+   안 들어가 카드 밖으로 넘쳤다(1회차 검사 3번). 글자를 줄이고, 그래도 모자라면
+   줄바꿈하게 두되 그 한 줄만큼 보드 몫에서 미리 빼 둔다 - 안 빼면 넘친 만큼 아래가 잘린다. */
+@media (orientation: landscape) and (max-height: 400px) {
+  .rushhour .board-wrap { --board-w: min(calc(100svh - 170px), 52vw, 720px); }
+  .rushhour .head-play { flex-wrap: wrap; gap: 2px 9px; }
+  .rushhour .head-play .stat { font-size: 10px; gap: 3px; }
+  .rushhour .head-play .stat-value,
+  .rushhour .head-play .stat .gg-wallet-value { font-size: 15px; }
+  .rushhour .head-play .stat .gg-wallet-icon { font-size: 11px; }
+  .rushhour .board-timer { font-size: 18px; min-width: 52px; padding-bottom: 6px; }
+  .rushhour .head-where { font-size: 11px; gap: 4px; }
+  .rushhour .board-head { padding: 5px 10px 7px; gap: 3px; }
 }
 
 /* v0.4.3: 골드·이동 수는 상단 띠가 아니라 보드 위의 작은 정보 카드다. */
