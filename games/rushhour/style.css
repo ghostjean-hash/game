@@ -352,8 +352,20 @@ body:has(.rushhour) { background: #3a2d40; }
 .rushhour .board {
   --size: 6;
   --cell: calc(100% / var(--size));
+  /* 보드 안쪽 수치는 전부 한 칸에서 파생한다(01_spec 8.2.1 · 02_data 2.5 · 04 컨벤션 3.3).
+     --cell은 %라 테두리 굵기·그림자 번짐에 못 쓴다(box-shadow spread는 % 불가). 그래서
+     한 칸의 실제 픽셀 크기를 따로 잡는다. 폴백은 아래 width의 폴백과 **같은 식**이어야
+     한다 - 어긋나면 굵기만 다른 보드 크기를 기준으로 잡힌다. */
+  --cell-px: calc(var(--board-w, min(72vw, 60vh, 480px)) / var(--size));
+  --edge: calc(var(--cell-px) * 0.055);     /* 블록 안쪽 테두리 굵기 */
+  --edge-target: calc(var(--edge) * 1.5);   /* 주인공은 1.5배 */
+  --pad: var(--edge);                       /* 블록 카드 안쪽 여백(캐릭터가 물러나는 만큼) */
+  --round: calc(var(--cell-px) * 0.16);     /* 블록 모서리 둥글기 */
+  --drop: calc(var(--cell-px) * 0.03);      /* 바닥에서 뜬 만큼(그림자 세로 오프셋) */
+  /* 이름을 --lift로 두지 않는다 - 밥풀이 셀이 발 띄우는 양으로 이미 쓰는 이름이라
+     보드에서 물려주면 셀이 인라인으로 덮기 전까지 뜻이 겹친다(render.js appendFaceCell). */
   position: relative;
-  /* 폭은 감싼 .board-wrap이 계산한다(보드 + 출구를 한 묶음으로 화면에 맞춘 값). */
+  /* 폭은 감싼 .board-wrap이 계산한다(보드 + 집을 한 묶음으로 화면에 맞춘 값). */
   width: var(--board-w, min(72vw, 60vh, 480px));
   aspect-ratio: 1;
   border-radius: var(--r-2);
@@ -365,30 +377,46 @@ body:has(.rushhour) { background: #3a2d40; }
   touch-action: none;
 }
 
-/* 출구 길: 출구 행 보드 안 오른쪽을 따뜻한 색 + 흰 점선 차선으로 강조해 "이쪽으로 나간다"를 보여준다. */
+/* 출구 길: 출구 행을 **왼쪽 끝부터** 깐다(01_spec 0.4). 예전에는 오른쪽 1.6칸뿐이라
+   그 위에 블록이 올라오면 길이 반쯤 덮여 어느 줄로 나가는지가 사라졌다. 행 전체를
+   아주 옅게 깔고 오른쪽으로 갈수록 짙어지게 해서, 블록이 덮어도 줄과 방향이 남는다. */
 .rushhour .exit-lane {
   position: absolute;
   top: calc(var(--row) * var(--cell));
+  left: 0;
   right: 0;
-  width: calc(var(--cell) * 1.6);
   height: var(--cell);
-  background: linear-gradient(90deg, transparent, var(--rh-exit));
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--rh-exit) 26%, transparent) 0%,
+    color-mix(in srgb, var(--rh-exit) 48%, transparent) 55%,
+    var(--rh-exit) 100%);
   border-radius: 0 var(--r-2) var(--r-2) 0;
-  opacity: 0.8;
+  opacity: 0.85;
   pointer-events: none;
 }
+/* 흰 점선 차선. 길과 같이 왼쪽으로 갈수록 옅어져 "이쪽으로 나간다"의 방향을 만든다.
+   굵기도 칸에서 파생한다 - 3px 고정이면 태블릿에서 실오라기가 된다. */
 .rushhour .exit-lane::after {
   content: '';
   position: absolute;
   top: 50%;
-  left: 12%;
-  right: 4%;
-  height: 3px;
+  left: 4%;
+  right: 3%;
+  height: calc(var(--cell-px) * 0.06);
   transform: translateY(-50%);
-  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.85) 0 9px, transparent 9px 18px);
+  background: repeating-linear-gradient(90deg,
+    rgba(255, 255, 255, 0.9) 0 calc(var(--cell-px) * 0.19),
+    transparent calc(var(--cell-px) * 0.19) calc(var(--cell-px) * 0.38));
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 28%, #000 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 28%, #000 100%);
 }
 
-/* 출구 표시: 출구 행 오른쪽 바깥 = 토끼의 집. SVG라 --cell(%) 너비에 정확히 맞춰 크게 보인다. */
+/* 출구 표시: 출구 행 오른쪽 바깥에 선 **집**(01_spec 0.4·0.5). 화살표가 아니라 집인 이유는
+   사양이 처음부터 집이었기 때문이다 - 코드만 화살표를 그리고 있었다(2026-09-06 정정).
+   자리(0.95칸)는 건드리지 않는다. 이 폭은 --exit-ratio로 보드 크기 계산에 걸려 있어서
+   바꾸면 네 화면 전부에서 보드 폭이 함께 움직인다(01_spec 9.1).
+   집 앞에 길 조각을 깔아 보드 가장자리와 집을 한 줄로 잇는다 - 예전에는 화살표만 떠 있어
+   어두운 배경 위에 홀로 있었다. */
 .rushhour .exit {
   position: absolute;
   top: calc(var(--row) * var(--cell));
@@ -397,11 +425,31 @@ body:has(.rushhour) { background: #3a2d40; }
   height: var(--cell);
   display: grid;
   place-items: center;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+  color: var(--rh-exit);
+  filter: drop-shadow(0 var(--drop) calc(var(--drop) * 1.6) rgba(0, 0, 0, 0.3));
 }
-.rushhour .exit svg { width: 88%; height: 88%; }
+/* 보드 밖으로 이어지는 길 조각(집 발밑). 보드 안 길과 같은 색이라 한 줄로 읽힌다.
+   반투명으로 두면 안 된다 - 이 조각만 보드 밖 어두운 플럼 배경 위에 놓여서, 같은 반투명
+   값이 보드 안에서는 옅은 노랑이고 여기서는 탁한 회색이 된다(테마 다섯에서 전부 그랬다).
+   불투명하게 깔고 끝만 mask로 지워 길이 사라지는 느낌을 낸다. */
+.rushhour .exit::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 26%;
+  bottom: 12%;
+  height: 18%;
+  border-radius: 0 999px 999px 0;
+  background: var(--rh-exit);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 62%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 62%, transparent 100%);
+}
+.rushhour .exit svg { width: 92%; height: 92%; position: relative; }
 
-/* 차 = 동물 친구. 칸 좌표를 CSS 변수로 받아 배치하고, 안쪽에 얼굴 SVG를 중앙 배치한다. */
+/* 차 = 캐릭터 친구. 칸 좌표를 CSS 변수로 받아 배치한다.
+   블록은 "잡을 수 있는 카드 한 장"이다(01_spec 8.2.1) - 안쪽 여백(--pad)만큼 캐릭터가
+   물러나야 밥풀이 가로3이 "세 마리가 붙어 선 것"이 아니라 "카드 하나 위의 셋"으로 읽힌다.
+   굵기·여백·둥글기·그림자는 전부 한 칸에서 파생한다(--edge 등, .board 스코프). */
 .rushhour .car {
   position: absolute;
   left: calc(var(--col) * var(--cell));
@@ -409,21 +457,24 @@ body:has(.rushhour) { background: #3a2d40; }
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--r-2);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
+  padding: var(--pad);
+  border-radius: var(--round);
+  box-shadow: 0 var(--drop) calc(var(--drop) * 2.4) rgba(58, 46, 58, 0.18);
   cursor: grab;
   transition: left var(--dur-2) var(--ease), top var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
 }
-/* 같은 색 블록이 인접해도 경계가 보이도록 배경보다 진한 같은 계열 안쪽 테두리. */
+/* 같은 색 블록이 인접해도 경계가 보이도록 배경보다 진한 같은 계열 안쪽 테두리.
+   inset은 padding box 기준이라 여백이 있어도 카드 바깥선에 그대로 붙는다. */
 .rushhour .car::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  box-shadow: inset 0 0 0 3px var(--tint-border, transparent);
+  box-shadow: inset 0 0 0 var(--edge) var(--tint-border, transparent);
   pointer-events: none;
 }
-/* 조랑말 이미지: 블록을 꽉 채운다(이미지 비율이 블록과 같아 contain으로 딱 맞는다).
+/* 조랑말 이미지: 블록의 **여백 안쪽**을 채운다(이미지 비율이 블록과 같아 contain으로 딱 맞는다).
+   블록에 --pad가 생기면서 카드 바깥선과 그림 사이에 숨이 들어갔다(01_spec 8.2.1).
    입력은 차(.car)가 받으므로 이미지는 통과시키고, 브라우저 기본 드래그도 막는다. */
 .rushhour .pony {
   width: 100%;
@@ -471,13 +522,19 @@ body:has(.rushhour) { background: #3a2d40; }
   width: var(--cell);
   height: calc(var(--len) * var(--cell));
 }
+/* 주인공: 배경을 채우지 않는다(무지개 갈기에 파스텔 바탕을 깔면 색이 싸운다 - 꾸미기
+   기본값 target:{bg:false}). 대신 붉은 후광 + 다른 블록보다 진한 그림자로 바닥에서 띄워
+   판에서 하나만 다르게 보이게 한다(01_spec 8.2.1). 후광 색은 render가 TARGET_BORDER에서
+   뽑아 --target-glow로 준다 - 테두리를 꺼도 후광은 남아 주인공이 사라지지 않는다. */
 .rushhour .car.target {
-  box-shadow: none;
+  box-shadow:
+    0 0 calc(var(--cell-px) * 0.22) calc(var(--cell-px) * 0.035) var(--target-glow, transparent),
+    0 calc(var(--drop) * 1.4) calc(var(--drop) * 3.2) rgba(58, 46, 58, 0.22);
   z-index: 2;
 }
-/* 주인공: 안쪽 테두리만, 일반보다 1.5배 두껍게(4.5px). 붉은색/투명 배경은 render 인라인. */
+/* 주인공 안쪽 테두리는 일반의 1.5배. 붉은색/투명 배경은 render 인라인. */
 .rushhour .car.target::after {
-  box-shadow: inset 0 0 0 4.5px var(--tint-border, transparent);
+  box-shadow: inset 0 0 0 var(--edge-target) var(--tint-border, transparent);
 }
 /* 상점 머리 장식(이모지): 주인공 정수리에 얹는다. 위치(top/right)·크기(font-size)는 캐릭터별
    앵커를 render가 인라인으로 준다(블록 영역을 넘어가도 됨). 여기선 고정하지 않는다. */
@@ -493,7 +550,7 @@ body:has(.rushhour) { background: #3a2d40; }
   position: absolute;
   top: 32%;
   right: 22%;
-  font-size: 3vmin;
+  font-size: calc(var(--cell-px) * 0.34);
   pointer-events: none;
   z-index: 3;
   animation: rh-tear 1.2s ease-in-out infinite;
@@ -531,7 +588,9 @@ body:has(.rushhour) { background: #3a2d40; }
 /* 힌트: 추천 차를 골드빛으로 강조하고 목표 방향으로 두 번 살짝 움찔. */
 .rushhour .car.hint {
   z-index: 4;
-  box-shadow: 0 0 0 4px var(--rh-exit), 0 0 14px 4px rgba(255, 194, 77, 0.85);
+  box-shadow:
+    0 0 0 calc(var(--cell-px) * 0.07) var(--rh-exit),
+    0 0 calc(var(--cell-px) * 0.25) calc(var(--cell-px) * 0.07) rgba(255, 194, 77, 0.85);
   animation: rh-hint 1.5s ease;
 }
 @keyframes rh-hint {

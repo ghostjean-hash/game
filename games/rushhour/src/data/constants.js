@@ -23,14 +23,18 @@ export const CLEAR_EXIT_MS = 700;
 // 클리어 축하 파티클(별·하트) 개수.
 export const CONFETTI_COUNT = 16;
 
-// 주인공 머리 장식(상점 액세서리) 앵커: 블록 대비 위치(top/right %, 블록 밖으로 넘어가도 됨)와
-// 크기(vmin). 캐릭터(주인공 이미지)마다 정수리 위치가 다르므로 id별로 둔다. 지금 주인공은 'target'
-// 하나(오른쪽 보는 포니, 머리가 오른쪽 위)라 그 앵커만 있다. 캐릭터가 바뀌거나 늘면 여기에 추가한다.
-// top은 %(숫자) 또는 calc 문자열. size는 vmin. 캐릭터 정수리에 맞춘다.
+// 주인공 머리 장식(상점 액세서리) 앵커. 캐릭터(주인공 이미지)마다 정수리 위치가 다르므로
+// id별로 둔다. 지금 주인공은 'target' 하나(오른쪽 보는 포니, 머리가 오른쪽 위)라 그 앵커만
+// 있다. 캐릭터가 바뀌거나 늘면 여기에 추가한다.
+//   top/right - 블록 대비 %(블록 밖으로 넘어가도 되므로 음수 허용).
+//   size      - 한 칸(--cell-px) 대비 비율.
+// 셋 다 블록·칸 기준이다. 2026-09-06 이전에는 top이 `calc(8% - 10px)`, size가 vmin이라
+// **화면 기준과 블록 기준이 섞여 있었다** - 화면이 커질수록 장식이 정수리에서 어긋났다
+// (01_spec 8.2.1 · 04 컨벤션 3.3).
 export const ACCESSORY_ANCHORS = {
-  target: { top: 'calc(8% - 10px)', right: 20, size: 2.4 }, // 포니 이마 위(뿔 아래).
+  target: { top: -11, right: 20, size: 0.18 }, // 포니 이마 위(뿔 아래).
 };
-export const DEFAULT_ACCESSORY_ANCHOR = { top: 'calc(8% - 10px)', right: 20, size: 2.4 };
+export const DEFAULT_ACCESSORY_ANCHOR = { top: -11, right: 20, size: 0.18 };
 
 // 제한시간: 퍼즐별 = 최소 수 × TIME_PER_OPTIMAL_S + TIME_BASE_S(초). 넉넉하게.
 export const TIME_BASE_S = 60;

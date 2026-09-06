@@ -16,6 +16,13 @@ function tintOf(car) {
   return BLOCK_TINTS[seed % BLOCK_TINTS.length];
 }
 
+// 주인공 후광 색. 테두리와 같은 색에서 뽑아, 테두리를 꺼도 주인공이 판에서 사라지지 않게
+// 한다(01_spec 8.2.1). CSS에 색을 또 적지 않으려고 colors.js 한 곳에서만 가져온다.
+function alpha(hex, a) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+}
+
 // 같은 색 블록이 인접해도 경계가 보이도록, 배경보다 살짝 진한 같은 계열 색(안쪽 테두리용).
 function darken(hex, f = 0.85) {
   const n = parseInt(hex.slice(1), 16);
@@ -44,6 +51,25 @@ function styleDef(style) {
 // 위치 기반 결정적 해시(리셋해도 같은 블록은 같은 종류·시작 위상을 얻는다).
 function hashAt(car, i, salt) {
   return Math.abs(car.row * 31 + car.col * 17 + car.len * 7 + i * 13 + salt * 5);
+}
+
+// 평상시 표정 풀(styles.js calmFaces). 첫 배정·표정 순환·감정 해제 뒤 복귀가 전부 이 한
+// 곳을 지난다 - 세 자리가 각자 고르면 한 자리만 고쳤을 때 화난 컷이 다시 새어 나온다.
+// 풀이 없는 스타일은 눈감은 컷만 뺀 전체를 쓴다(옛 동작 유지).
+function calmPool(def) {
+  if (def.calmFaces && def.calmFaces.length) return def.calmFaces;
+  const all = [];
+  for (let i = 0; i < def.faceCount; i++) if (i !== def.blinkFace) all.push(i);
+  return all;
+}
+// 풀에서 결정적으로 하나 고른다(같은 블록은 리셋해도 같은 표정).
+function calmFaceAt(def, n) {
+  const pool = calmPool(def);
+  // 풀 크기가 hashAt의 계수와 맞물리면 성분이 죽는다 - 7컷 풀에서는 31%7 == 17%7 == 3,
+  // 7%7 == 0이라 len이 통째로 사라지고 row+col만 남아 같은 대각선 블록이 전부 같은 표정이
+  // 된다(풀이 16이던 때는 안 드러나던 문제다). 한 번 섞어 성분을 되살린다.
+  const mixed = (Math.abs(n) * 2654435761) % 2147483647;
+  return pool[mixed % pool.length];
 }
 
 // 블록 el에 단일 이미지(통 블록)를 채운다. 주인공/통 스타일/조립 실패 폴백 공용.
@@ -177,8 +203,7 @@ function startFaceCycle(boardEl, def) {
     for (const cells of blocks) {
       // 표정 변경: 같은 차의 셀 전체를 같은 새 표정으로(블록 통일, 눈감은 컷 제외).
       if (Math.random() > 1 - faceChance) {
-        let n = Math.floor(Math.random() * def.faceCount);
-        if (n === blink) n = (n + 1) % def.faceCount;
+        const n = calmFaceAt(def, Math.floor(Math.random() * def.faceCount));
         cells.forEach((c) => setFace(c, n, grid));
       }
       // 눈 깜빡: 셀마다 독립 타이밍으로 잠깐 눈감았다(기억 유지) 제 표정으로 복귀.
@@ -217,8 +242,7 @@ export function setBoardMood(mood) {
     blocks.forEach((cells, i) => { const f = pool[i % pool.length]; cells.forEach((c) => setFace(c, f, grid)); }); // 블록마다 감정 컷 하나
   } else {
     blocks.forEach((cells, i) => {
-      let n = (i * 7 + 3) % def.faceCount; // 평상 복귀: 블록별 결정적 표정(눈감은 컷 제외)
-      if (n === def.blinkFace) n = (n + 1) % def.faceCount;
+      const n = calmFaceAt(def, i * 7 + 3); // 평상 복귀: 블록별 결정적 표정
       cells.forEach((c) => setFace(c, n, grid));
     });
   }
@@ -232,7 +256,7 @@ function appendFaceCell(el, car, i, def, onFail, faceIdx) {
   const grid = def.faceGrid;
   const idx = faceIdx; // 블록(차) 단위로 통일된 표정
   cell.style.setProperty('--fg', String(grid)); // 그리드 한 변(스트립 배율)
-  cell.style.setProperty('--lift', `${def.footLiftPx || 0}px`); // 발을 바닥에서 살짝 띄움
+  cell.style.setProperty('--lift', `calc(var(--cell-px) * ${def.footLift || 0})`); // 발을 바닥에서 살짝 띄움(칸 대비 비율)
   const img = document.createElement('img');
   img.className = 'pony-frame';
   img.alt = '';
@@ -265,8 +289,7 @@ function fillCar(el, car, style) {
     fillWhole(el, car, style); // 통 블록 이미지로 폴백(→ 없으면 A타입)
   };
   // 블록(차) 하나에 표정 하나(같은 차 셀은 동일). 눈 깜빡 타이밍만 이후 셀별 독립(startFaceCycle).
-  let faceIdx = hashAt(car, 0, 1) % def.faceCount;
-  if (faceIdx === def.blinkFace) faceIdx = (faceIdx + 1) % def.faceCount; // 눈감은 컷으로 시작 안 함
+  const faceIdx = calmFaceAt(def, hashAt(car, 0, 1));
   for (let i = 0; i < car.len; i++) appendFaceCell(el, car, i, def, useSingle, faceIdx);
 }
 
@@ -311,9 +334,11 @@ function applyTargetAccessory() {
     host.appendChild(deco);
   }
   const a = targetAnchor();
-  deco.style.top = typeof a.top === 'number' ? `${a.top}%` : a.top; // 숫자면 %, 문자열(calc)이면 그대로
+  // 자리는 블록 대비 %, 크기는 한 칸 대비 비율이다(constants.js ACCESSORY_ANCHORS).
+  // 크기를 vmin으로 두면 화면 기준이라 보드가 커질 때 장식만 뒤처진다.
+  deco.style.top = `${a.top}%`;
   deco.style.right = `${a.right}%`;
-  deco.style.fontSize = `${a.size}vmin`;
+  deco.style.fontSize = `calc(var(--cell-px) * ${a.size})`;
   deco.textContent = emoji;
 }
 
@@ -361,12 +386,18 @@ export function buildBoard(boardEl, cars, style = 'a', opts = {}) {
   const exit = document.createElement('div');
   exit.className = 'exit';
   exit.style.setProperty('--row', String(EXIT_ROW));
-  // 출구 게이트: 오른쪽 화살표 + 반짝이 별("이쪽으로 나가요"). SVG라 --cell 너비에 정확히 맞춘다.
+  // 출구 = 주인공의 집(01_spec 0.4·0.5). 사양은 처음부터 집이었는데 코드만 화살표를 그리고
+  // 있었다(2026-09-06 정정). 지붕·문·굴뚝은 currentColor라 보드 테마를 따라가고(.exit가
+  // --rh-exit를 준다), 몸통만 크림 고정이다. 별 둘은 보드 밖 어두운 배경 위에 떠서
+  // "여기가 목적지"를 반짝인다. viewBox 정규화 좌표는 04 컨벤션 3.4의 매직 넘버 예외다.
   exit.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true">'
-    + '<polygon points="14,40 52,40 52,24 90,50 52,76 52,60 14,60" fill="#ffc24d"/>'
-    + '<polygon points="14,40 52,40 52,24 90,50 52,76 52,60 14,60" fill="none" stroke="#f0a92e" stroke-width="3" stroke-linejoin="round"/>'
-    + '<path d="M30 14 l2.5 5 5.5 .8 -4 4 1 5.5 -5-2.6 -5 2.6 1-5.5 -4-4 5.5-.8z" fill="#ffe08a"/>'
-    + '<path d="M78 78 l1.8 3.6 4 .6 -2.9 2.8 .7 4 -3.6-1.9 -3.6 1.9 .7-4 -2.9-2.8 4-.6z" fill="#ffe08a"/>'
+    + '<rect x="62" y="19" width="11" height="20" rx="2.5" fill="currentColor"/>'
+    + '<polygon points="48,12 93,49 3,49" fill="currentColor" stroke="rgba(90,61,0,0.22)" stroke-width="2.5" stroke-linejoin="round"/>'
+    + '<rect x="14" y="47" width="68" height="41" rx="5" fill="#fffdf8" stroke="rgba(90,61,0,0.2)" stroke-width="2.5"/>'
+    + '<path d="M38 88 v-18 a10 10 0 0 1 20 0 v18z" fill="currentColor" stroke="rgba(90,61,0,0.22)" stroke-width="2.5" stroke-linejoin="round"/>'
+    + '<circle cx="62" cy="88" r="2.4" fill="rgba(90,61,0,0.45)"/>'
+    + '<path d="M14 8 l2.2 4.4 4.8 .7 -3.5 3.4 .8 4.8 -4.3-2.3 -4.3 2.3 .8-4.8 -3.5-3.4 4.8-.7z" fill="#fff3c9"/>'
+    + '<path d="M93 30 l1.7 3.4 3.8 .6 -2.7 2.6 .6 3.8 -3.4-1.8 -3.4 1.8 .6-3.8 -2.7-2.6 3.8-.6z" fill="#fff3c9"/>'
     + '</svg>';
   boardEl.appendChild(exit);
 
@@ -385,6 +416,9 @@ export function buildBoard(boardEl, cars, style = 'a', opts = {}) {
     el.style.background = o.bg ? tint : 'transparent';
     const borderColor = isTarget ? TARGET_BORDER : darken(tint);
     el.style.setProperty('--tint-border', o.border ? borderColor : 'transparent');
+    // 후광은 테두리 on/off와 무관하게 준다 - 배경도 테두리도 없을 때 주인공을 떠받치는 것이
+    // 이것 하나뿐이다.
+    if (isTarget) el.style.setProperty('--target-glow', alpha(TARGET_BORDER, 0.45));
     fillCar(el, car, style);
     place(el, car);
     boardEl.appendChild(el);
@@ -443,7 +477,10 @@ export function playClear(els, boardEl, onDone) {
     target.style.transform = 'translateX(0)';
     void target.offsetWidth; // reflow로 시작 상태(제자리)를 확정
     target.style.transition = `transform ${CLEAR_EXIT_MS}ms cubic-bezier(0.45, 0, 0.55, 1), opacity ${CLEAR_EXIT_MS}ms ease-in`;
-    target.style.transform = 'translateX(175%)';
+    // 도착점은 집 앞이다. 클리어 시점의 주인공은 늘 오른쪽 끝(col+len==6)이므로 집 문까지가
+    // 딱 1.4칸이다. 예전 값 175%는 블록 폭 기준이라 3.5칸을 가서 집을 한참 지나쳤다 -
+    // 화살표였을 때는 지나쳐도 티가 안 났지만 집이 생기면 어디로 갔는지가 보인다.
+    target.style.transform = 'translateX(calc(var(--cell-px) * 1.4))';
     target.style.opacity = '0';
   }
   spawnConfetti(boardEl);

@@ -165,7 +165,9 @@
 // v236: 지갑·상점 부품과 상점 화면 신설(기획서 Ⅲ권 4.5·4.6·4.7, 걸음 C).
 // v237: 러시아워 플레이 화면 바깥틀 정리(마크업·CSS 개편). 새 파일은 없지만 옛 캐시가
 //       남으면 새 CSS와 옛 마크업이 섞여 화면이 무너진다.
-const CACHE_VERSION = "v237";
+// v238: 러시아워 보드 안쪽 개편(블록 카드·출구 집·칸 파생 수치). style.css와 render.js가
+//       --cell-px 계열 변수를 주고받으므로 둘이 섞이면 테두리·여백이 0이 되고 집이 안 뜬다.
+const CACHE_VERSION = "v238";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
