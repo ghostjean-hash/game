@@ -30,7 +30,8 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
     </button>
     <div class="topbar-stats">
-      <div class="stat"><span class="stat-icon">🪙</span><span class="stat-value" id="gold">0</span></div>
+      <!-- 잔액은 공용 지갑 부품이 그린다(기획서 Ⅲ권 4.5). 이 게임이 정하는 것은 자리뿐이다. -->
+      <div class="stat stat-gold" id="gold-slot"></div>
       <div class="stat"><span class="stat-label">이동</span><span class="stat-value" id="moves">0</span></div>
     </div>
     <button class="gg-ic" id="btn-mute" type="button" aria-label="소리">
@@ -63,28 +64,9 @@
   </div>
  </div>
 
-  <div class="modal-backdrop" id="shop" hidden>
-    <div class="modal shop-modal">
-      <button class="modal-x" id="btn-shop-close" type="button" aria-label="닫기"><svg class="x-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      <h2><svg class="title-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l1 13H5z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>상점</h2>
-      <p class="shop-gold-line">내 골드 <span id="shop-gold">0</span> 🪙</p>
-      <div class="shop-body">
-        <p class="shop-hint">보드 테마를 골라 적용해요</p>
-        <div class="shop-grid" id="shop-themes"></div>
-        <p class="shop-hint">포니 머리 장식을 달아요</p>
-        <div class="shop-grid" id="shop-accessories"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="settings" hidden>
-    <div class="modal settings-modal">
-      <button class="modal-x" id="btn-settings-close" type="button" aria-label="닫기"><svg class="x-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      <h2><svg class="title-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2.4"/><circle cx="15" cy="17" r="2.4"/></svg>꾸미기</h2>
-      <p class="settings-label">블록 캐릭터 · 배경 · 테두리</p>
-      <div class="setting-list" id="setting-list"></div>
-    </div>
-  </div>
+  <!-- 상점·꾸미기 팝업은 공용 상점 화면으로 갔다(기획서 Ⅲ권 4.6 · 4.7). 껍데기·닫기
+       버튼·격자·가격 표시를 이 게임이 다시 만들지 않는다 - 시작 화면 추가 항목에 이름이
+       스스로 서고, 누르면 공용 덮는 카드가 뜬다. -->
 
   <!-- 결과는 플레이를 덮는 공용 카드가 담는다(규격 4.8-8). 별·수·콤보·골드는 글자만이 아니라
        이 게임의 표현이라 카드 본문에 이 조각을 그대로 넣는다(규격 4.8-13). -->

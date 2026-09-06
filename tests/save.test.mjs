@@ -24,7 +24,7 @@ globalThis.localStorage = fakeLocalStorage();
 const { createSave } = await import('../shared/frame/save.js');
 const { isExcludedKey } = await import('../shared/cloud/policy.js');
 const {
-  SAVE_SCHEMA, looksCurrent, migrateToPlatform, assembleShape, scatterShape,
+  SAVE_SCHEMA, looksCurrent, migrateToPlatform,
 } = await import('../games/rushhour/src/data/save-shape.js');
 
 const OPTS = {
@@ -143,43 +143,21 @@ test('소리 설정은 공용 칸이 비어 있을 때만 옛 값을 옮긴다',
   assert.equal(migrateToPlatform({ progress: { muted: false } }, OPTS).muted, undefined);
 });
 
-// --- 2. 변환기가 왕복해도 값이 그대로인가 ---
+// --- 2. 옮긴 값이 그대로 저장 칸에 놓이는가 ---
+//
+// 걸음 A가 두었던 임시 변환기 검사는 여기서 사라졌다. 걸음 C에서 지갑·산 것·쓰는 것을
+// 공용 부품이 자기 칸에서 직접 읽고 쓰게 되어 변환기 자체가 없어졌다.
+// 그 부품들의 검사는 tests/wallet.test.mjs · tests/shop.test.mjs가 갖는다.
 
-test('저장 칸을 게임이 읽는 모양으로 조립하면 값이 그대로다', () => {
-  // 걸음 B에서 진행은 공용 진행 부품으로 갔다(tests/progress.test.mjs).
-  // 여기 남은 변환기가 다루는 것은 지갑·산 것·쓰는 것·게임 칸뿐이다.
+test('옮긴 결과가 지갑·산 것·쓰는 것 칸에 그대로 놓인다', () => {
   const cells = migrateToPlatform(oldSave(), OPTS);
-  const shape = assembleShape(cells, OPTS);
-  assert.equal(shape.gold, 1350);
-  assert.equal(shape.equippedTheme, 'mint');
-  assert.equal(shape.equippedAccessory, 'crown');
-  assert.equal(shape.ponyStyle, 'a');
-  assert.deepEqual(shape.ownedThemes, ['cream', 'mint', 'sky']);
-  assert.deepEqual(shape.blockOpts, { a: true, c: false, target: { bg: true, border: false } });
-  // 진행은 더 이상 여기로 오지 않는다.
-  assert.equal(shape.modes, undefined);
-  assert.equal(shape.activeMode, undefined);
-});
-
-test('조립했다 다시 흩어 담아도 값이 하나도 바뀌지 않는다', () => {
-  const cells = migrateToPlatform(oldSave(), OPTS);
-  const shape = assembleShape(cells, OPTS);
-  const back = scatterShape(shape, { game: cells.game });
-  assert.equal(back.progress, undefined); // 진행은 진행 부품이 갖는다
-  assert.deepEqual(back.wallet, cells.wallet);
-  assert.deepEqual(back.owned, cells.owned);
-  assert.deepEqual(back.equipped, cells.equipped);
-  assert.deepEqual(back.game, cells.game);
-});
-
-test('저장할 때 게임 칸의 다른 항목을 지운 채로 덮지 않는다', () => {
-  // 변환기는 blockOpts만 안다. 게임 칸에 항목이 늘어도 저장 한 번에 사라지면 안 된다.
-  const cells = migrateToPlatform(oldSave(), OPTS);
-  const shape = assembleShape(cells, OPTS);
-  const prevGame = { ...cells.game, hintUsed: 7 };
-  const back = scatterShape(shape, { game: prevGame });
-  assert.equal(back.game.hintUsed, 7);
-  assert.deepEqual(back.game.blockOpts, cells.game.blockOpts);
+  assert.equal(cells.wallet.gold, 1350);
+  assert.equal(cells.equipped.theme, 'mint');
+  assert.equal(cells.equipped.accessory, 'crown');
+  assert.equal(cells.equipped.style, 'a');
+  assert.deepEqual(cells.owned.theme, ['cream', 'mint', 'sky']);
+  // 켜고 끄는 값은 규격이 뜻을 정하지 않는 게임 칸에 담긴다.
+  assert.deepEqual(cells.game.blockOpts, { a: true, c: false, target: { bg: true, border: false } });
 });
 
 // 기록을 세운 시각을 이어받는 검사는 공용 진행 부품으로 옮겼다(tests/progress.test.mjs).

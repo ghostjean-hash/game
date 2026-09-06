@@ -19,6 +19,9 @@ import { createOverlayHost } from './overlay.js';
 import { createSettings } from './settings.js';
 import { createProgress } from './progress.js';
 import { mountMapScreen } from './mapscreen.js';
+import { createWallet } from './wallet.js';
+import { createShop } from './shop.js';
+import { mountShopCard } from './shopcard.js';
 // 게임 홈 UI 안에만 붙이는 공용 허브 복귀 버튼.
 export function mountHubBack({ parent, hubHref = '../../', onExit = null } = {}) {
   if (!parent) throw new Error('mountHubBack: parent required');
@@ -63,6 +66,10 @@ export function createGameFrame({
   // 판 목록을 넘기면 진행 부품과 진행 맵 화면이 함께 선다(기획서 Ⅲ권 4.2·4.3).
   // 안 넘기면 아무것도 생기지 않는다 - 진행이라는 개념이 없는 게임은 그대로 성립한다.
   progress: progressOpt = null,
+  // 재화 이름을 넘기면 지갑이 선다(기획서 Ⅲ권 4.5). 안 넘기면 지갑도 상점도 없다.
+  wallet: walletOpt = null,
+  // 상점 정의 목록(기획서 Ⅲ권 4.6 · 4.7). 값이 없는 정의가 곧 꾸미기다.
+  shops: shopsOpt = null,
   onPickStage = null,
   mapTitle = '',
   renderChip = null,
@@ -139,10 +146,50 @@ export function createGameFrame({
     })
     : null;
 
+  // 지갑. 재화를 선언하지 않으면 생기지 않는다(기획서 Ⅲ권 4.5 첫 문단).
+  const wallet = walletOpt
+    ? createWallet({
+      save,
+      currencies: Array.isArray(walletOpt) ? walletOpt : (walletOpt.currencies || []),
+      overlay,
+      audio,
+    })
+    : null;
+
+  // 상점들. 값이 없는 정의가 곧 꾸미기다(기획서 4.7 - 따로 만들지 않는다).
+  // 카드 화면은 열 때가 아니라 여기서 한 번 붙여 둔다 - 화면은 open()이 부를 때 생긴다.
+  const shopList = [];
+  for (const spec of (Array.isArray(shopsOpt) ? shopsOpt : [])) {
+    const s = createShop({
+      save,
+      wallet,
+      id: spec.id,
+      title: spec.title,
+      currency: spec.currency || null,
+      kinds: spec.kinds,
+      onEquip: spec.onEquip || null,
+    });
+    const view = mountShopCard({ shop: s, wallet, overlay, audio, extraEl: spec.extraEl || null });
+    // 게임이 잡는 손잡이는 하나로 둔다 - 규칙 쪽(사고 쓰기)과 화면 쪽(열고 닫기)을 한 자리에서
+    // 준다. 부를 때마다 새로 만들면 같은 상점인데 다른 물건이 돌아온다.
+    const handle = Object.assign(Object.create(s), {
+      open: () => view.open(),
+      close: () => view.close(),
+    });
+    shopList.push({ spec, shop: s, view, handle });
+  }
+  function shopEntry(id) { return shopList.find((e) => e.spec.id === id) || null; }
+
   // 환경설정 항목을 게임이 시작 화면에 적지 않았어도 공용이 넣는다(규칙 20).
   // 이미 적어 두었으면 중복해 넣지 않는다 - 러시아워처럼 상점과 나란히 두던 게임이 있다.
   const SETTINGS_ID = 'settings';
   const extraList = extras.slice();
+  // 상점도 스스로 추가 항목 줄에 들어간다 - 이름표와 여는 코드를 게임이 다시 적을 이유가 없다.
+  // 게임이 같은 이름표를 이미 적어 두었으면 중복해 넣지 않는다(환경설정과 같은 규칙).
+  const ownExtraIds = new Set(extraList.map((ex) => ex.id));
+  for (const e of shopList) {
+    if (!ownExtraIds.has(e.spec.id)) extraList.push({ id: e.spec.id, label: e.spec.title });
+  }
   const hasSettingsExtra = extraList.some((ex) => ex.id === SETTINGS_ID || ex.label === TEXT.settings);
   if (!hasSettingsExtra) extraList.push({ id: SETTINGS_ID, label: TEXT.settings });
 
@@ -172,6 +219,9 @@ export function createGameFrame({
     onExtra: (id) => {
       // 공용이 넣은 환경설정은 공용이 연다. 게임이 자기 것을 적어 두었으면 게임에 넘긴다.
       if (id === SETTINGS_ID && !hasSettingsExtra) { settings.open(); return; }
+      // 상점도 같다 - 게임이 자기 이름표로 먼저 적어 두었으면 여는 것도 게임 몫이다.
+      const e = shopEntry(id);
+      if (e && !ownExtraIds.has(id)) { e.view.open(); return; }
       if (onExtra) onExtra(id);
     },
   });
@@ -222,6 +272,13 @@ export function createGameFrame({
     // 진행 부품과 진행 맵. 넘기지 않은 게임에는 둘 다 null이다.
     progress,
     map,
+    // 지갑. 재화를 안 넘긴 게임에는 null이다.
+    wallet,
+    // 상점 하나를 이름표로 찾는다. 규칙 쪽(사고 쓰기)과 화면 쪽(열고 닫기)을 함께 돌려준다.
+    shop(id) {
+      const e = shopEntry(id);
+      return e ? e.handle : null;
+    },
     start() {
       if (map) map.open();
       screens.go(useSelect ? SCREEN.SELECT : SCREEN.PLAY);
@@ -242,6 +299,8 @@ export function createGameFrame({
       result.destroy();
       overlay.destroy();
       if (map) map.destroy();
+      for (const e of shopList) e.shop.destroy();
+      if (wallet) wallet.destroy();
       hubBack.destroy();
     },
   };
@@ -256,3 +315,6 @@ export { createAudio, tone, BASE_SOUNDS } from './audio.js';
 export { createSave } from './save.js';
 export { createOverlayHost } from './overlay.js';
 export { createSettings } from './settings.js';
+export { createWallet } from './wallet.js';
+export { createShop } from './shop.js';
+export { mountShopCard } from './shopcard.js';

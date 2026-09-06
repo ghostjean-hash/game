@@ -1,20 +1,13 @@
 // 러시아워 저장 모양 (설계 docs/plans/design-2026-09-06-platform-store.md 5장 · 6장).
 //
-// 두 가지를 담는다.
-//   1. 옛 저장을 플랫폼 저장 칸으로 옮기는 규칙 (딱 한 번 돈다)
-//   2. 플랫폼 저장 칸과 게임이 읽는 옛 모양 사이의 변환기 (매번 돈다)
+// 옛 저장을 플랫폼 저장 칸으로 옮기는 규칙만 담는다. 딱 한 번 돈다.
 //
-// 걸음 B에서 변환기의 절반이 걷혔다 - 진행·별·최고 기록·마지막 위치·연속 클리어는 이제
-// 공용 진행 부품(shared/frame/progress.js)이 갖는다. 여기 남은 것은 지갑·산 것·쓰는 것·
-// 게임 칸뿐이고, 그것도 걸음 C에서 사라진다.
+// 걸음 A에서는 여기에 변환기가 함께 있었다 - 저장 자리를 옮기면서 그것을 읽는 main.js 700줄까지
+// 한꺼번에 고치면 무엇이 깨졌는지 가릴 수 없어서, 나머지 코드가 옛 모양을 그대로 보게 하는
+// 임시 구조물을 뒀다. 걸음 B에서 진행 몫이, 걸음 C에서 지갑·산 것·쓰는 것 몫이 사라졌다.
+// 지금은 진행을 공용 진행 부품이, 지갑과 상점을 공용 지갑·상점 부품이 자기 칸에서 직접 읽고 쓴다.
 //
-// 지금까지 러시아워는 'progress' 키 하나에 골드·산 것·쓰는 것·모드별 진행을 통째로 담았고,
-// 그 큰 객체를 읽고 쓰는 코드가 main.js 700줄에 퍼져 있다. 저장 자리를 옮기면서 그 700줄까지
-// 함께 고치면 무엇이 깨졌는지 가릴 수 없다. 그래서 변환기를 두어 나머지 코드가 옛 모양을
-// 그대로 보게 한다. 변환기는 임시 구조물이다 - 진행이 플랫폼으로 가는 걸음에서 절반이,
-// 지갑·상점이 가는 걸음에서 나머지가 사라진다.
-//
-// 셋 다 순수 함수다. 저장도 화면도 만지지 않아야 화면 없는 곳에서 검사할 수 있다
+// 여기 남은 함수 둘은 순수 함수다. 저장도 화면도 만지지 않아야 화면 없는 곳에서 검사할 수 있다
 // (설계 4.3 / 7.1, tests/save.test.mjs). 그래서 모드 목록·기본값도 모듈에서 끌어오지 않고
 // 인자로 받는다 - main.js를 불러오면 화면이 없는 곳에서 죽는다.
 
@@ -152,42 +145,4 @@ export function migrateToPlatform(old, opts, ctx) {
   if ((src.muted === undefined || src.muted === null) && s.muted) out.muted = true;
 
   return out;
-}
-
-// --- 2. 저장 칸 → 게임이 읽는 모양 (매번) ---
-//
-// 진행은 여기 없다(걸음 B에서 공용 진행 부품으로 갔다). 지갑·산 것·쓰는 것·게임 칸만 남았다.
-export function assembleShape(cells, opts) {
-  const c = asObject(cells) || {};
-  const { defaultTheme, defaultAccessory, defaultStyle } = opts || {};
-  const wallet = asObject(c.wallet) || {};
-  const owned = asObject(c.owned) || {};
-  const eq = asObject(c.equipped) || {};
-  const gm = asObject(c.game) || {};
-
-  return {
-    gold: wallet.gold || 0,
-    ownedThemes: Array.isArray(owned.theme) ? owned.theme : [defaultTheme],
-    equippedTheme: eq.theme || defaultTheme,
-    ownedAccessories: Array.isArray(owned.accessory) ? owned.accessory : [defaultAccessory],
-    equippedAccessory: eq.accessory || defaultAccessory,
-    ponyStyle: eq.style || defaultStyle,
-    blockOpts: gm.blockOpts,
-  };
-}
-
-// --- 3. 게임이 읽는 모양 → 저장 칸 (매번) ---
-//
-// prev는 지금 저장돼 있는 칸들(`{ game }`)이다. 이 변환기는 blockOpts만 알므로, 게임 칸의
-// 나머지 항목은 그대로 얹어 둔다. 통째로 갈아치우면 항목이 하나만 늘어도 다음 저장 한 번에
-// 사라진다.
-export function scatterShape(pr, prev) {
-  const p = asObject(pr) || {};
-  const prevGame = asObject(asObject(prev)?.game) || {};
-  return {
-    wallet: { gold: p.gold || 0 },
-    owned: { theme: p.ownedThemes, accessory: p.ownedAccessories },
-    equipped: { theme: p.equippedTheme, accessory: p.equippedAccessory, style: p.ponyStyle },
-    game: p.blockOpts ? { ...prevGame, blockOpts: p.blockOpts } : { ...prevGame },
-  };
 }

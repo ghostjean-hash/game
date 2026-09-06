@@ -516,3 +516,52 @@
 /* 진행 맵 머리 - 한 칸 위로 돌아가는 문과 화면 이름. */
 .gg-map-head { display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-3); }
 .gg-map-title { font-size: 16px; font-weight: 700; margin: 0; }
+
+/* ---- 지갑과 상점 (기획서 Ⅲ권 4.5 · 4.6 · 4.7) -----------------------------
+   게임마다 지갑 자리·상점 껍데기·가격 표시가 다 달랐다(실측 2026-09-06 - 러시아워의
+   골드와 과일 농장의 코인이 공유하는 코드가 한 줄도 없었다). 그 생김새를 여기 모은다.
+   자리(어디에 놓는가)는 게임이 계속 정한다 - 잔액 표시는 게임이 원하는 곳에 붙인다. */
+
+/* 잔액 표시. 플레이 화면 위든 상점 안이든 시작 화면이든 같은 조각을 붙인다. */
+.gg-wallet { display: inline-flex; align-items: center; gap: 4px; }
+.gg-wallet-value { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* 품목이 많으면 카드가 화면을 넘는다(러시아워 머리 장식이 열여섯이다). 카드 키를 화면에
+   가두고 안쪽에서 스크롤시킨다 - 넘치면 닫기 버튼까지 화면 밖으로 나가 갇힌다. */
+.gg-layer-shop .gg-card-panel { max-height: 100%; min-height: 0; grid-template-rows: auto minmax(0, 1fr); }
+.gg-layer-shop .gg-card-body { min-height: 0; overflow: hidden; }
+
+/* 상점 카드 안쪽. 제목·닫기·잔액은 고정하고 품목만 스크롤한다
+   - 스크롤할 때 얼마가 남았는지가 화면에서 사라지면 살지 말지를 정할 수 없다. */
+.gg-shop { display: flex; flex-direction: column; min-height: 0; gap: var(--sp-2, 8px); }
+.gg-shop-balance { margin: 0; font-weight: 700; font-size: 15px; }
+.gg-shop-body { min-height: 0; overflow-y: auto; display: grid; gap: var(--sp-3, 12px); }
+.gg-shop-hint { color: var(--fg-dim, #8e9bb3); font-size: 13px; margin: 0 0 var(--sp-2, 8px); }
+.gg-shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; }
+
+.gg-shop-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: var(--sp-2, 8px) 4px;
+  border: 2px solid var(--line, #2c3650);
+  border-radius: var(--r-2, 10px);
+  background: var(--bg-elev-2, #1f2233);
+  color: var(--fg, #e8ecf5);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.gg-shop-item.is-on { border-color: var(--accent, #22d3ee); }
+/* 살 수 없는 것은 흐리게. 누르는 것은 막지 않는다 - 왜 안 되는지 알려 주는 편이
+   아무 반응도 없는 것보다 낫다(쪽지가 뜬다). */
+.gg-shop-item.is-short { opacity: .5; }
+.gg-shop-item:active { transform: scale(.96); }
+.gg-shop-preview { display: flex; align-items: center; justify-content: center; font-size: 20px; line-height: 1; }
+.gg-shop-name { font-weight: 700; }
+.gg-shop-state { color: var(--fg-dim, #8e9bb3); font-size: 10px; min-height: 12px; }
+
+/* 게임 조각 자리. 상점 규격에 맞지 않는 게임 고유 조작이 여기 온다. */
+.gg-shop-extra { border-top: 1px solid var(--line, #2c3650); padding-top: var(--sp-3, 12px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .gg-shop-item:active { transform: none; }
+}

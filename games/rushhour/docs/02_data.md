@@ -133,14 +133,20 @@ Fogleman 모드는 데이터에 **`optimal`(외부 검증된 최소 이동 수)*
 
 ### 4.1. 옛 저장을 옮기는 규칙
 
-`src/data/save-shape.js`가 순수 함수 셋으로 갖는다(화면 없이 검사하려고 그렇게 뒀다. 검사는 `tests/save.test.mjs`).
+`src/data/save-shape.js`가 순수 함수 둘로 갖는다(화면 없이 검사하려고 그렇게 뒀다. 검사는 `tests/save.test.mjs`).
 
 - `migrateToPlatform(old, opts, ctx)` - 옛 저장 전부를 새 칸으로. 갈래 안이 이미 새 모양(`stages` 있음)이면 그대로 이어받는다. `ctx.remigrate`가 진행 밖 칸의 우선순위를 가른다(4.3)
-- `assembleShape(cells, opts)` - 새 칸 → `main.js`가 읽는 옛 모양 하나(임시 변환기)
-- `scatterShape(pr, prev)` - 그 반대. `prev`(`{game}`)로 게임 칸의 다른 항목을 지킨다. 기록 시각 이어받기는 걸음 B에서 공용 진행 부품으로 갔다
 - `looksCurrent(cells)` - 저장이 지금 판 모양인가. 갈래마다 `stages`가 있으면 지금 모양이다. 판 번호가 맞아도 이것이 false면 다시 옮긴다
 
-`main.js`의 `progress()` / `saveProgress()`가 변환기를 부르는 유일한 자리다. 나머지 코드는 종전 모양을 그대로 본다. **이 변환기는 임시 구조물이다** - 걸음 B에서 진행 몫이 이미 사라져 지금은 지갑·산 것·쓰는 것·게임 칸만 다루고, 그 나머지도 걸음 C에서 사라진다.
+**걸음 A가 두었던 임시 변환기(`assembleShape` / `scatterShape`)는 걸음 C에서 사라졌다.** 저장 자리를 옮기면서 그것을 읽는 `main.js` 700줄까지 한꺼번에 고치면 무엇이 깨졌는지 가릴 수 없어서, 나머지 코드가 옛 모양을 그대로 보게 하는 임시 구조물을 뒀던 것이다. 걸음 B에서 진행 몫이, 걸음 C에서 지갑·산 것·쓰는 것 몫이 걷혔다. 지금은 각 칸을 그 칸의 공용 부품이 직접 읽고 쓴다.
+
+| 칸 | 누가 읽고 쓰나 |
+|---|---|
+| `progress` | 공용 진행 부품 `shared/frame/progress.js` |
+| `wallet` | 공용 지갑 부품 `shared/frame/wallet.js` |
+| `owned` · `equipped` | 공용 상점 부품 `shared/frame/shop.js` |
+| `muted` | 공용 프레임 조립 |
+| `game` | 이 게임(`main.js`의 `currentBlockOpts` / `toggleBlockOpt`). 플랫폼은 안을 보지 않는다 |
 
 ### 4.2. 판 번호를 올릴 때 반드시 지킬 것
 
