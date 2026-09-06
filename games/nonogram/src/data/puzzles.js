@@ -6,7 +6,9 @@
 // 중급(10×10)·고급(15×15)은 Twemoji(CC-BY 4.0, jdecked/twemoji)를 다운샘플한
 // 픽셀 그림이며, 각자 자기 palette(인덱스→HEX)를 가진다. 생성: scripts/build-emoji-puzzles.mjs.
 
-export const PUZZLES = [
+import { HARD_EXTRA } from './hard-extra.js';
+
+const BASE_PUZZLES = [
   {
     id: 't1', title: '하트', size: 5, difficulty: 'tutorial', tutorialStep: 1,
     grid: [
@@ -5939,3 +5941,5 @@ export const PUZZLES = [
     ],
   },
 ];
+
+export const PUZZLES = [...BASE_PUZZLES, ...HARD_EXTRA];
