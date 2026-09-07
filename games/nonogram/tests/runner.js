@@ -243,10 +243,11 @@ test(`내장 퍼즐 ${PUZZLES.length}개 전수: 유일해 + 추측 불필요`, 
   }
 });
 
-test('새 고급 100종: 원본 그림만 사용하고 색상 하트는 제외', () => {
-  eq(HARD_EXTRA.length, 100, '추가 고급 수');
+test('새 고급 팩: 반복 외형을 제외한 원본 그림만 사용한다', () => {
+  eq(HARD_EXTRA.length, 29, '반복 외형 제외 뒤 추가 고급 수');
   assert(HARD_EXTRA.every((p) => p.size === 15 && p.difficulty === 'hard'), '고급 15×15');
   assert(HARD_EXTRA.every((p) => !p.id.startsWith('em1f49')), '색상 하트 계열 제외');
+  assert(HARD_EXTRA.every((p) => !/(얼굴|미소|웃음|고양이|유령|외계인|로봇)/.test(p.title)), '반복 얼굴·고양이 외형 제외');
   eq(new Set(HARD_EXTRA.map((p) => p.id)).size, HARD_EXTRA.length, '원본 id 중복 없음');
 });
 
