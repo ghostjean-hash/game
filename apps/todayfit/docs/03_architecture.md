@@ -59,7 +59,7 @@ apps/todayfit/
 
 1.1. 위 나무는 다 지었을 때의 모양이다. 지금 없는 것은 `render/` 의 `calendarView.js` · `dayView.js` · `manageView.js` 셋과 `app.webmanifest` 밖의 홈 화면 자산뿐이고, 나머지는 전부 있다.
 
-- 있는 것 - `docs/` 다섯, `index.html`, `app.webmanifest`, `src/core/` 여섯, `src/data/` 셋(`constants.js` · `phrases.js` · `schema.js`), `src/store/repo.js`, `src/platform/` 셋, `src/input/pressInput.js`, `src/render/` 넷(`todayView.js` · `runView.js` · `summaryView.js` · `format.js`), `src/main.js`, `styles/` 둘, `tests/` 전부
+- 있는 것 - `docs/` 다섯, `index.html`, `app.webmanifest`, `src/core/` 일곱, `src/data/` 셋(`constants.js` · `phrases.js` · `schema.js`), `src/store/repo.js`, `src/platform/` 셋, `src/input/pressInput.js`, `src/render/` 넷(`todayView.js` · `runView.js` · `summaryView.js` · `format.js`), `src/main.js`, `styles/` 둘, `tests/` 전부
 - 없는 것 - 달력 `calendarView.js` · 날짜 상세 `dayView.js` · 관리 `manageView.js`. 이 셋이 없어 이동 막대의 달력·설정 자리는 안내 문구만 보인다
 - `render/format.js` 는 설계 때 없던 파일이다. 세 화면이 같은 시:분:초·분·날짜 표기를 쓰게 되어 한 자리에 모았다(2026-09-17 추가)
 
@@ -87,9 +87,9 @@ main.js ──> core/     ──> data/
 
 2.4. `store/repo.js`만 저장에 손댄다. `core/`와 `render/`는 저장을 모른다.
 
-2.6. `render/runView.js`만 `input/`을 직접 문다. 짧게·길게 누름을 가르는 자리가 다음 버튼 하나뿐이라, 그 버튼을 만드는 쪽에서 붙이는 편이 `main.js`가 남의 화면 속 버튼을 찾아 붙이는 것보다 짧다. 다른 화면이 같은 입력을 쓰게 되면 그때 `main.js`로 올린다(2026-09-17 추가).
-
 2.5. `platform/`은 브라우저 사정(화면 꺼짐·음성·시각)을 가두는 자리다. 이 세 파일 밖에서 `wakeLock` · `speechSynthesis` · `Date.now`를 직접 부르지 않는다. 고도 같은 다른 바탕으로 옮길 때 갈아 끼울 자리가 여기 하나로 모인다.
+
+2.6. `render/runView.js`만 `input/`을 직접 문다. 짧게·길게 누름을 가르는 자리가 다음 버튼 하나뿐이라, 그 버튼을 만드는 쪽에서 붙이는 편이 `main.js`가 남의 화면 속 버튼을 찾아 붙이는 것보다 짧다. 다른 화면이 같은 입력을 쓰게 되면 그때 `main.js`로 올린다(2026-09-17 추가).
 
 ## 3. 공용 자산 사용
 

@@ -2,9 +2,7 @@
  *
  * 색·간격·글자 크기는 토큰 변수만 쓴다. 인라인 값 금지(04_conventions.md 5.1).
  * 값 자체는 styles/tokens.css 에 있고 여기서는 자리만 잡는다.
- *
- * 남는 숫자는 한 자리에서만 쓰는 모양 값(테두리 두께·둥근 정도·한 번 쓰는 여백 nudge)이다.
- * 그런 값까지 이름을 붙이면 이름이 값보다 많아져 오히려 읽기 어려워진다.
+
  */
 
 /* hidden 속성은 브라우저 기본값이 display:none 인데, 그 기본값은 우선순위가 가장 낮아
@@ -85,7 +83,7 @@
   padding-bottom: var(--sp-3);
   border-bottom: 1px solid var(--line);
 }
-.fact { display: flex; flex-direction: column; gap: 2px; } /* 이름표와 값 사이 한 줄 nudge */
+.fact { display: flex; flex-direction: column; gap: var(--sp-hair); }
 .fact-label { font-size: var(--fs-label); font-weight: 700; color: var(--fg-mute); }
 .fact-value { font-size: var(--fs-value); font-weight: 800; font-variant-numeric: tabular-nums; }
 
@@ -144,7 +142,7 @@
   overflow: hidden;
 }
 .today-head { flex: 0 0 auto; }
-.today-date { margin: 0 0 2px; font-size: var(--fs-caption); font-weight: 700; color: var(--fg-mute); }
+.today-date { margin: 0 0 var(--sp-hair); font-size: var(--fs-caption); font-weight: 700; color: var(--fg-mute); }
 .today-title { margin: 0; font-size: var(--fs-title); font-weight: 800; }
 .today .card { flex: 1 1 auto; }
 
@@ -314,7 +312,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: var(--sp-tight);
   border-radius: var(--r-3);
   background: var(--accent);
   color: var(--accent-fg);
@@ -348,7 +346,7 @@
   overflow: hidden;
 }
 .summary-head { flex: 0 0 auto; }
-.summary-date { margin: 0 0 2px; font-size: var(--fs-caption); font-weight: 700; color: var(--fg-mute); }
+.summary-date { margin: 0 0 var(--sp-hair); font-size: var(--fs-caption); font-weight: 700; color: var(--fg-mute); }
 .summary-title { margin: 0; font-size: var(--fs-title); font-weight: 800; }
 .summary-head[data-status="complete"] .summary-title { color: var(--accent); }
 .summary-head[data-status="partial"] .summary-title { color: var(--warn); }

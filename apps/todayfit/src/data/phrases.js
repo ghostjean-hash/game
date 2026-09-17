@@ -104,7 +104,4 @@ export const TEXT = Object.freeze({
   unitCount: '개',
   unitMonth: '월',
   unitDay: '일',
-
-  rateNotAvailable: '-',
-  voiceUnavailable: '이 기기에 한국어 음성이 없어 비프음만 사용합니다',
 });

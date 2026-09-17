@@ -168,7 +168,7 @@
 | `undo` | `null` 또는 `{ phase, phaseElapsedBefore, exerciseIndex, setNumber, doneSets, result, activeSeconds, expiresAt }` |
 | `cueFlags` | 이 구간에서 이미 울린 알림. 구간이 바뀌면 비운다 |
 | `aliveElapsed` | 초. 마지막으로 살아 있던 시점의 구간 경과. 복구만 읽는다(`01_spec.md` 4.5.5) |
-| `savedAt` | epoch ms |
+| `savedAt` | epoch ms. **저장한 그 시각**이다. 세션을 시작한 시각도 마지막으로 화면이 숨은 시각도 아니다 |
 
 `prepSeconds`와 `transitionSeconds`를 세션이 갖는 이유는 1.1대로 그 둘이 실행 시점 설정값이기 때문이다. 운동 도중 설정을 바꿔도 그 판은 시작할 때의 값으로 끝난다.
 

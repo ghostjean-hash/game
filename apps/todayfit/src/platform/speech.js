@@ -13,7 +13,6 @@ const LANG_PREFIX = SOUND.voiceLang.split('-')[0];
 export function createSpeech() {
   const api = typeof globalThis !== 'undefined' ? globalThis.speechSynthesis : null;
   let voice = null;
-  let ready = false;
 
   function pickVoice() {
     if (!api) return null;
@@ -23,7 +22,6 @@ export function createSpeech() {
 
   function refresh() {
     voice = pickVoice();
-    ready = true;
   }
 
   if (api) {
@@ -32,12 +30,9 @@ export function createSpeech() {
     if (!voice) api.addEventListener?.('voiceschanged', refresh, { once: true });
   }
 
+  // 한국어 음성이 있는지 화면에 알리는 자리(기본값과 소리 화면 S-11)는 아직 없다.
+  // 그 화면을 만들 때 available()/checked() 를 여기 다시 연다(03_architecture.md 4.5.3).
   return {
-    // 한국어 음성이 없으면 쓸 수 없다고 알린다.
-    // 이 값을 보일 자리는 기본값과 소리 화면(S-11)인데 아직 만들지 않았다(03_architecture.md 4.5.3)
-    available() { return !!api && !!voice; },
-    checked() { return ready; },
-
     /** 첫 손짓에서 한 번 깨운다. 빈 문장을 읽혀 두면 그 뒤의 안내가 막히지 않는다(4.4.2). */
     warmUp() {
       if (!api) return;
