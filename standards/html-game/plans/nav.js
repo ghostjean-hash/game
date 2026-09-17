@@ -11,4 +11,7 @@ window.GDD_NAV = [
   { group:true, vol:'B', label:'게임별 기획서', children:[
     { id:'mines', vol:'MIN', label:'지뢰찾기', file:'../../../games/mines/docs/planning-mines.html' },
   ]},
+  { group:true, vol:'C', label:'앱 기획서', children:[
+    { id:'todayfit', vol:'TF', label:'오늘운동 TodayFit', file:'../../../apps/todayfit/docs/planning-todayfit.html' },
+  ]},
 ];
