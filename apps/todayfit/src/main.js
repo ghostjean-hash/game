@@ -58,8 +58,8 @@ const stage = document.getElementById('stage');
 const topbar = document.getElementById('topbar');
 const dock = document.getElementById('dock');
 
-// 화면에 나가는 글자는 한 곳에서만 온다(04_conventions.md 1.2).
-// index.html 에 적힌 것은 자바스크립트가 늦게 뜰 때 잠깐 보이는 기본값이다.
+// 화면에 나가는 글자는 한 곳에서만 온다(04_conventions.md 1.2 / 1.2.1).
+// index.html 의 상단 띠 제목과 이동 막대는 빈 채로 두고 여기서 채운다.
 const DOCK_LABEL = {
   today: TEXT.navToday,
   calendar: TEXT.navCalendar,
@@ -70,7 +70,7 @@ function paintChromeText() {
   document.title = TEXT.appTitle;
   topbar.querySelector('h1').textContent = TEXT.appTitle;
   for (const btn of dock.querySelectorAll('button[data-nav]')) {
-    btn.textContent = DOCK_LABEL[btn.dataset.nav] || btn.textContent;
+    btn.textContent = DOCK_LABEL[btn.dataset.nav];
   }
 }
 
@@ -87,31 +87,38 @@ function setChrome(visible) {
 // 두 화면은 이력 칸 하나를 함께 쓴다. 운동에서 요약으로 넘어갈 때 다시 얹지 않는다.
 const GUARD = { RUN: 'run', SUMMARY: 'summary' };
 let backGuard = null;
+// 지금 이력 칸을 쥐고 있는가. 어느 화면이 지키는가(backGuard)와 따로 센다 -
+// 실행 중 새로고침하면 칸은 남았는데 지키는 화면이 없는 상태로 앱이 다시 서기 때문이다.
+let ownsEntry = false;
 let ignoreNextPop = false;
 
 function guardBack(kind) {
-  if (kind === backGuard) return;
   if (kind) {
-    if (!backGuard) history.pushState({ todayfit: true }, '');
+    if (!ownsEntry) { history.pushState({ todayfit: true }, ''); ownsEntry = true; }
     backGuard = kind;
     return;
   }
   backGuard = null;
+  if (!ownsEntry) return;
   // 얹어 둔 칸을 도로 뺀다. 그때 오는 뒤로 가기 신호는 한 번 흘린다
+  ownsEntry = false;
   ignoreNextPop = true;
   history.back();
 }
 
 window.addEventListener('popstate', () => {
   if (ignoreNextPop) { ignoreNextPop = false; return; }
+  // 뒤로 가기가 왔다는 것은 쥐고 있던 칸이 빠졌다는 뜻이다
+  ownsEntry = false;
   if (!backGuard) return;
   if (backGuard === GUARD.SUMMARY) {
-    // 이미 칸이 빠진 뒤다. 다시 빼면 앱을 떠나므로 표식만 내리고 화면을 옮긴다
+    // 다시 빼면 앱을 떠난다. 표식만 내리고 닫기와 같게 오늘 화면으로 간다
     backGuard = null;
     goToday();
     return;
   }
   history.pushState({ todayfit: true }, '');
+  ownsEntry = true;
   handleEnd();
 });
 
@@ -612,9 +619,10 @@ window.addEventListener('pointerdown', () => speech.warmUp(), { once: true });
 // --- 시작 ---------------------------------------------------------------------
 function boot() {
   // 실행 중 새로고침하면 위에서 얹은 이력 칸 위에서 앱이 다시 선다.
-  // 그 칸은 이제 지키는 화면이 없으므로 표식을 내린다. 칸 자체는 브라우저 것이라
-  // 없앨 수 없어, 그 자리에서의 첫 뒤로 가기 한 번은 헛눌림으로 남는다.
-  if (history.state && history.state.todayfit) history.replaceState(null, '');
+  // 그 칸을 이어받는다 - 버리면 다시 들어갈 때 새 칸을 얹어 새로고침 횟수만큼 쌓이고,
+  // 그대로 두면 지키는 화면 없이 남아 뒤로 가기 한 번이 헛눌림이 된다.
+  // 이어받아 두면 바로 아래 goToday() 가 정상 경로로 되돌려 준다.
+  if (history.state && history.state.todayfit) ownsEntry = true;
 
   const saved = repo.getActive();
   if (saved) {

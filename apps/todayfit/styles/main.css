@@ -2,7 +2,6 @@
  *
  * 색·간격·글자 크기는 토큰 변수만 쓴다. 인라인 값 금지(04_conventions.md 5.1).
  * 값 자체는 styles/tokens.css 에 있고 여기서는 자리만 잡는다.
-
  */
 
 /* hidden 속성은 브라우저 기본값이 display:none 인데, 그 기본값은 우선순위가 가장 낮아
