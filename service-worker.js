@@ -167,7 +167,8 @@
 //       남으면 새 CSS와 옛 마크업이 섞여 화면이 무너진다.
 // v238: 오늘운동(apps/todayfit) 신설 + 허브 등록부 등재. 등록부는 network-first라 카드는
 //       바로 뜨지만, 옛 캐시가 남으면 앱 자산을 처음 받는 자리에서 섞인다.
-const CACHE_VERSION = "v238";
+// v239: 오늘운동 계획 없음 화면에서 같은 문장이 제목과 본문에 두 번 뜨던 것 정정.
+const CACHE_VERSION = "v239";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

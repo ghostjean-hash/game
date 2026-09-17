@@ -51,6 +51,7 @@ export const TEXT = Object.freeze({
 
   // --- 오늘 화면 (01_spec.md 2.7) ---
   todayNoPlan: '오늘 예정된 운동 없음',
+  noPlanHint: '요일 규칙에서 운동하는 요일을 정하면 그 달의 계획이 만들어집니다',
   resumeTitle: '진행 중인 운동이 있습니다',
   resumeAction: '이어하기',
   continueTitle: '남은 운동이 있습니다',

@@ -79,7 +79,8 @@ export function createTodayView({ onStart, onResume, onContinue }) {
       const parts = [header(m)];
 
       if (m.state === 'none') {
-        parts.push(el('div', 'empty', TEXT.todayNoPlan));
+        // 제목이 이미 '오늘 예정된 운동 없음' 이다. 같은 문장을 본문에 한 번 더 두지 않는다
+        parts.push(el('div', 'empty', TEXT.noPlanHint));
         parts.push(nextPlanLine(m));
         root.replaceChildren(...parts);
         return;
