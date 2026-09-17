@@ -27,6 +27,17 @@
         "keyboard"
       ],
       "accent": "#d4a657"
+    },
+    {
+      "id": "todayfit",
+      "title": "오늘운동",
+      "subtitle": "월 단위로 짜 둔 계획을 그날 실행하고 기록한다",
+      "path": "apps/todayfit/",
+      "status": "wip",
+      "controls": [
+        "touch"
+      ],
+      "accent": "#0f7b5a"
     }
   ]
 }

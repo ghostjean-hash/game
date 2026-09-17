@@ -225,8 +225,8 @@ main.js ──> core/     ──> data/
 
 7.1. `shared/cloud/policy.js` - 이 앱 항목 추가. 올리지 않을 키에 `active` 하나 (3.3).
 
-7.2. `apps/_registry.json` - 앱 등록 한 항목.
+7.2. `apps/_registry.json` - 앱 등록 한 항목. 2026-09-17 등재 완료(`status: wip`, accent `#0f7b5a`).
 
-7.3. `service-worker.js` - 배포 시 판 번호 올림.
+7.3. `service-worker.js` - 배포 시 판 번호 올림. 2026-09-17 v237 → v238.
 
 7.4. 위 셋 말고는 공용 자산을 고치지 않는다. 고칠 일이 생기면 그 자리가 이 앱 고유인지 전 앱 공통인지 먼저 가른다.
