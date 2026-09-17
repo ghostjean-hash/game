@@ -57,7 +57,11 @@ apps/todayfit/
     └── suites/*.test.js      core/ 단위 검사
 ```
 
-1.1. 위 나무는 다 지었을 때의 모양이다. 지금 있는 것은 `docs/` 다섯, `src/core/` 여섯, `src/data/` 둘(`constants.js` · `phrases.js`), `tests/` 전부다. `index.html` · `store/` · `render/` · `input/` · `platform/` · `styles/` · `data/schema.js`는 아직 없다.
+1.1. 위 나무는 다 지었을 때의 모양이다. 지금 없는 것은 `render/` 의 `calendarView.js` · `dayView.js` · `manageView.js` 셋과 `app.webmanifest` 밖의 홈 화면 자산뿐이고, 나머지는 전부 있다.
+
+- 있는 것 - `docs/` 다섯, `index.html`, `app.webmanifest`, `src/core/` 여섯, `src/data/` 셋(`constants.js` · `phrases.js` · `schema.js`), `src/store/repo.js`, `src/platform/` 셋, `src/input/pressInput.js`, `src/render/` 넷(`todayView.js` · `runView.js` · `summaryView.js` · `format.js`), `src/main.js`, `styles/` 둘, `tests/` 전부
+- 없는 것 - 달력 `calendarView.js` · 날짜 상세 `dayView.js` · 관리 `manageView.js`. 이 셋이 없어 이동 막대의 달력·설정 자리는 안내 문구만 보인다
+- `render/format.js` 는 설계 때 없던 파일이다. 세 화면이 같은 시:분:초·분·날짜 표기를 쓰게 되어 한 자리에 모았다(2026-09-17 추가)
 
 ## 2. 의존성 방향
 

@@ -42,18 +42,69 @@ export const RESULT_LABEL = Object.freeze({
 export const WEEKDAY_LABEL = Object.freeze(['', '월', '화', '수', '목', '금', '토', '일']);
 
 export const TEXT = Object.freeze({
+  // --- 앱 껍데기 ---
+  appTitle: '오늘운동',
+  navToday: '오늘',
+  navCalendar: '달력',
+  navSettings: '설정',
+  soonScreen: '아직 만들지 않은 화면입니다',
+
+  // --- 오늘 화면 (01_spec.md 2.7) ---
   todayNoPlan: '오늘 예정된 운동 없음',
   resumeTitle: '진행 중인 운동이 있습니다',
   resumeAction: '이어하기',
   continueTitle: '남은 운동이 있습니다',
   continueAction: '남은 운동 계속',
   startAction: '운동 시작',
+  todayHeading: '오늘의 운동',
+  timeLabel: '예정',
+  estimateLabel: '예상',
+  countLabel: '운동',
+  remainLabel: '남은 운동',
+  nextPlanLabel: '다음 예정',
+  noNextPlan: '다음 예정 없음',
+  doneToday: '오늘 운동을 마쳤습니다',
+
+  // --- 운동 실행 화면 (01_spec.md 4장) ---
   nextAction: '다음',
   pauseAction: '일시정지',
   unpauseAction: '계속',
   endAction: '운동 종료',
   undoAction: '되돌리기',
+  skipHint: '길게 누르면 이 운동 건너뛰기',
+  skipped: '이 운동을 건너뛰었습니다',
+  nowLabel: '지금',
+  upNextLabel: '다음',
+  startsSoonLabel: '곧 시작',
+  restLabel: '쉬는 중',
+  recommendPrefix: '권장',
+  overrunNote: '권장 시간을 넘겼습니다',
+  lastSetNote: '마지막 세트',
+  lastExerciseNote: '마지막 운동',
+  pausedNote: '멈춰 있습니다',
+  elapsedLabel: '총 시간',
+  positionLabel: '번째',
+  endConfirmTitle: '운동을 끝낼까요',
   endConfirm: '지금 운동을 끝냅니다. 남은 세트는 미완료로 남습니다.',
+  confirmYes: '끝내기',
+  confirmNo: '계속하기',
+
+  // --- 종료 요약 화면 (01_spec.md 2.3) ---
+  summaryTitle: '오늘 운동 결과',
+  summaryComplete: '계획한 운동을 모두 마쳤습니다',
+  summaryPartial: '일부만 마쳤습니다',
+  plannedLabel: '계획',
+  doneLabel: '수행',
+  totalTimeLabel: '총 운동시간',
+  closeAction: '닫기',
+
+  // --- 단위 ---
+  unitSets: '세트',
+  unitReps: '회',
+  unitMinutes: '분',
+  unitSeconds: '초',
+  unitCount: '개',
+
   rateNotAvailable: '-',
   voiceUnavailable: '이 기기에 한국어 음성이 없어 비프음만 사용합니다',
 });

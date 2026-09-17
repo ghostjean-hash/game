@@ -28,6 +28,11 @@ export const EXCLUDED_KEYS = {
   "gg.english-reading": [
     /^listScroll$/, // 목록 스크롤 위치. 폰의 위치가 PC로 넘어오면 오히려 방해된다
   ],
+  "gg.todayfit": [
+    // 진행 중인 운동 세션. 어느 기기에서 운동 중인지는 그 기기의 상태이고,
+    // 다른 기기로 넘기면 같은 세션이 둘로 갈린다(apps/todayfit/docs/03_architecture.md 3.3)
+    /^active$/,
+  ],
   lotto: [
     /^draws$/,      // 회차 캐시. 언제든 다시 받는다
     /^stats_/,      // draws에서 다시 계산되는 파생값

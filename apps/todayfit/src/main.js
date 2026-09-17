@@ -1,0 +1,550 @@
+// 조립과 화면 전환 (03_architecture.md 2장).
+//
+// 규칙은 core/ 가 갖고, 저장은 store/ 가, 브라우저 사정은 platform/ 이 갖는다.
+// 이 파일은 그 셋을 이어 붙이고 어느 화면을 보일지 정한다.
+
+import { createRepo } from './store/repo.js';
+import { now, createTicker } from './platform/ticker.js';
+import { createWakeLock } from './platform/wakelock.js';
+import { createSpeech } from './platform/speech.js';
+import { createTodayView } from './render/todayView.js';
+import { createRunView } from './render/runView.js';
+import { createSummaryView } from './render/summaryView.js';
+import { clock, clockUp, minutes, seconds, duration, dayLabel } from './render/format.js';
+import { PHASE, CUE, SOUND, EXERCISE_RESULT } from './data/constants.js';
+import { TEXT, VOICE, PHASE_LABEL, RESULT_LABEL, WEEKDAY_LABEL } from './data/phrases.js';
+import {
+  startSession, resumeSession, recover, advance, view,
+  pressNext, skipExercise, undoSkip, pause, unpause, endSession,
+  toRecord, fromRecord, markAlive, remainingSets, hasResumeTarget, nextTargetIndex,
+} from './core/session.js';
+import { dateKeyOf, weekdayOf, monthDateKeys, shiftMonth } from './core/datekey.js';
+import { estimatePlanSeconds, estimateRemainingSeconds } from './core/estimate.js';
+import { nextPlannedDate } from './core/stats.js';
+import { createAudio, tone } from '../../../shared/frame/audio.js';
+import { showModal, registerServiceWorker } from '../../../shared/ui.js';
+
+const MS_PER_SECOND = 1000;
+
+// --- 소리 ---------------------------------------------------------------------
+// 비프는 짧은 한 음 하나뿐이다. 음색 값은 02_data.md 6장이 SSOT 다.
+const SOUNDS = {
+  beep: (c) => tone(c, {
+    freq: SOUND.beepHz, dur: SOUND.beepMs / MS_PER_SECOND, gain: SOUND.beepGain, type: 'sine',
+  }),
+  beepLong: (c) => tone(c, {
+    freq: SOUND.beepHz, dur: SOUND.beepLongMs / MS_PER_SECOND, gain: SOUND.beepGain, type: 'sine',
+  }),
+};
+
+// 비프가 함께 울리는 알림 (01_spec.md 7.1)
+const BEEP_CUES = new Set([CUE.OVERRUN, CUE.OVERRUN_AGAIN, CUE.SET_DONE, CUE.SKIP]);
+
+const audio = createAudio({ sounds: SOUNDS });
+const speech = createSpeech();
+const wakeLock = createWakeLock();
+const repo = createRepo();
+
+const state = {
+  screen: 'today',
+  active: null,
+  lastRecord: null,
+  settings: repo.getSettings(),
+  // 구간이 바뀔 때만 저장한다. 매 틱마다 쓰면 저장 장치를 계속 두드린다(01_spec.md 8.1)
+  savedMark: '',
+};
+
+// --- 화면 껍데기 ---------------------------------------------------------------
+const stage = document.getElementById('stage');
+const topbar = document.getElementById('topbar');
+const dock = document.getElementById('dock');
+
+function setChrome(visible) {
+  topbar.hidden = !visible;
+  dock.hidden = !visible;
+}
+
+// --- 소리 내기 -----------------------------------------------------------------
+function voiceArgs(key, s) {
+  const ex = s.plan.exercises[s.exerciseIndex];
+  const nextIdx = nextTargetIndex(s, s.exerciseIndex);
+  const nextName = nextIdx >= 0 ? s.plan.exercises[nextIdx].name : null;
+  switch (key) {
+    case CUE.PREP_START: return { name: ex ? ex.name : '' };
+    case CUE.SET_START: return { name: ex.name, setNumber: s.setNumber };
+    case CUE.LAST_SET_START: return { name: ex.name };
+    case CUE.REST_START: return { seconds: Math.round(ex.restSeconds) };
+    case CUE.TRANSITION_START: return { nextName };
+    case CUE.SKIP: return { nextName };
+    default: return {};
+  }
+}
+
+function playCues(cues, s) {
+  for (const raw of cues) {
+    const [key, arg] = String(raw).split(':');
+    const isCountdown = key === CUE.COUNTDOWN;
+
+    if (state.settings.beepOn) {
+      if (key === CUE.FINISH) audio.play('beepLong');
+      else if (isCountdown || BEEP_CUES.has(key)) audio.play('beep');
+    }
+    if (!state.settings.voiceOn) continue;
+
+    const make = VOICE[key];
+    if (!make) continue;
+    speech.say(isCountdown ? make({ n: Number(arg) }) : make(voiceArgs(key, s)));
+  }
+}
+
+// --- 오늘 화면 -----------------------------------------------------------------
+function todayKey() {
+  return dateKeyOf(now());
+}
+
+function labelOf(key) {
+  return dayLabel(key, WEEKDAY_LABEL[weekdayOf(key)]);
+}
+
+/** 이번 달과 다음 달에서 오늘 뒤의 첫 계획일. 두 달이면 화면에 쓸 만큼 넉넉하다. */
+function findNextPlanned(key, plans) {
+  const [y, m] = key.split('-').map(Number);
+  const after = shiftMonth(y, m, 1);
+  const range = [...monthDateKeys(y, m), ...monthDateKeys(after.year, after.month)];
+  return nextPlannedDate(range, key, plans);
+}
+
+/**
+ * 운동 한 줄의 오른쪽 글자.
+ * 아직 시작 전이면 계획을(4세트 · 15회), 한 번이라도 손댔으면 수행분을(2 / 4세트) 보인다.
+ * 한 화면 안에서 '수행 / 전체' 하나로 맞춘다 - 남은 세트와 수행 세트를 같은 자리에 섞으면
+ * 같은 0 이 '다 했다'로도 '하나도 못 했다'로도 읽힌다.
+ */
+function planRows(plan, results) {
+  return plan.exercises.map((ex, i) => {
+    if (!results) {
+      return { name: ex.name, specText: `${ex.sets}${TEXT.unitSets} · ${ex.reps}${TEXT.unitReps}` };
+    }
+    const r = results[i];
+    const tail = r.result === EXERCISE_RESULT.SKIPPED
+      ? ` · ${RESULT_LABEL[EXERCISE_RESULT.SKIPPED]}`
+      : '';
+    return { name: ex.name, specText: `${r.doneSets} / ${ex.sets}${TEXT.unitSets}${tail}` };
+  });
+}
+
+function todayModel() {
+  const key = todayKey();
+  const plans = repo.getPlans();
+  const plan = plans[key] || null;
+  const record = repo.getSession(key);
+  const found = findNextPlanned(key, plans);
+  const base = { dateText: labelOf(key), nextPlanText: found ? labelOf(found) : null };
+
+  // 1순위 - 진행 중 세션 (01_spec.md 2.7)
+  if (state.active) {
+    const s = state.active;
+    const left = remainingSets(s);
+    return {
+      ...base,
+      state: 'resume',
+      headline: TEXT.resumeTitle,
+      routineName: s.plan.routineName,
+      timeText: '',
+      estimateText: minutes(estimateRemainingSeconds(s.plan.exercises, left, state.settings)),
+      countLabel: TEXT.remainLabel,
+      countText: `${left.filter((n) => n > 0).length}${TEXT.unitCount}`,
+      exercises: planRows(s.plan, s.results),
+    };
+  }
+
+  // 2순위 - 같은 날 재개 대상이 남은 부분 완료 (2.8 - 남은 자리가 없으면 완료와 같게 보인다)
+  if (record && record.status === 'partial' && hasResumeTarget(fromRecord(record))) {
+    const left = remainingSets(fromRecord(record));
+    return {
+      ...base,
+      state: 'continue',
+      headline: TEXT.continueTitle,
+      routineName: record.plan.routineName,
+      timeText: '',
+      estimateText: minutes(estimateRemainingSeconds(record.plan.exercises, left, state.settings)),
+      countLabel: TEXT.remainLabel,
+      countText: `${left.filter((n) => n > 0).length}${TEXT.unitCount}`,
+      exercises: planRows(record.plan, record.results),
+    };
+  }
+
+  // 3순위 - 오늘 기록이 끝난 상태
+  if (record) {
+    return {
+      ...base,
+      state: 'complete',
+      headline: TEXT.doneToday,
+      routineName: record.plan.routineName,
+      timeText: '',
+      estimateLabel: TEXT.totalTimeLabel,
+      estimateText: duration(record.activeSeconds),
+      countText: `${record.plan.exercises.length}${TEXT.unitCount}`,
+      exercises: planRows(record.plan, record.results),
+    };
+  }
+
+  // 4순위 - 시작 대기
+  if (plan) {
+    return {
+      ...base,
+      state: 'ready',
+      headline: TEXT.todayHeading,
+      routineName: plan.routineName,
+      timeText: plan.time,
+      estimateText: minutes(estimatePlanSeconds(plan.exercises, state.settings)),
+      countText: `${plan.exercises.length}${TEXT.unitCount}`,
+      exercises: planRows(plan, null),
+    };
+  }
+
+  // 5순위 - 계획 없음
+  return { ...base, state: 'none', headline: TEXT.todayNoPlan, exercises: [] };
+}
+
+// --- 운동 실행 화면 ------------------------------------------------------------
+/** '4개 중 2번째'. 세트 번호와 헷갈리지 않게 개수를 앞에 둔다. */
+function positionText(index, total) {
+  return `${total}${TEXT.unitCount} 중 ${index + 1}${TEXT.positionLabel}`;
+}
+
+/**
+ * 화면이 그대로 그릴 수 있는 모양으로 바꾼다.
+ * 구간마다 무엇을 크게 보일지가 다르다 - 전환 구간에서는 지금 운동이 아니라
+ * 다음 운동을 크게 보여야 사용자가 무엇을 준비할지 안다.
+ */
+function runModel(s, t) {
+  const v = view(s, t);
+  const idx = s.exerciseIndex;
+  const ex = s.plan.exercises[idx];
+  const total = s.plan.exercises.length;
+
+  const m = {
+    phaseKey: s.phase,
+    phaseLabel: PHASE_LABEL[s.phase] || '',
+    elapsedText: clock(v.elapsedSeconds),
+    paused: v.paused,
+    undoPending: v.undoPending,
+    isOverrun: v.isOverrun,
+    showReps: true,
+    upNextText: '',
+    timerNote: '',
+    // 준비 구간에는 건너뛸 운동이 아직 없다. 사양 4.2 전환표에도 그 자리가 없다
+    canSkip: s.phase !== PHASE.PREP,
+  };
+
+  if (s.phase === PHASE.TRANSITION) {
+    const nextIdx = nextTargetIndex(s, idx);
+    const nextEx = s.plan.exercises[nextIdx];
+    const doneNext = s.results[nextIdx].doneSets;
+    return {
+      ...m,
+      lead: TEXT.upNextLabel,
+      title: nextEx.name,
+      posText: positionText(nextIdx, total),
+      setText: `${doneNext + 1} / ${nextEx.sets}`,
+      repsText: String(nextEx.reps),
+      dotsTotal: nextEx.sets,
+      dotsDone: doneNext,
+      dotsCurrent: doneNext,
+      timerText: clockUp(v.remainSeconds),
+      timerNote: v.paused ? TEXT.pausedNote : '',
+    };
+  }
+
+  const done = s.results[idx].doneSets;
+  const posText = positionText(idx, total);
+  const upNextText = v.isLastExercise
+    ? TEXT.lastExerciseNote
+    : `${TEXT.upNextLabel} · ${v.nextExerciseName}`;
+
+  if (s.phase === PHASE.PREP) {
+    return {
+      ...m,
+      lead: TEXT.startsSoonLabel,
+      title: ex.name,
+      posText,
+      setText: `1 / ${ex.sets}`,
+      repsText: String(ex.reps),
+      dotsTotal: ex.sets,
+      dotsDone: 0,
+      dotsCurrent: 0,
+      timerText: clockUp(v.remainSeconds),
+      timerNote: v.paused ? TEXT.pausedNote : '',
+      upNextText,
+    };
+  }
+
+  if (s.phase === PHASE.REST) {
+    const nextSet = v.setNumber + 1;
+    return {
+      ...m,
+      lead: TEXT.restLabel,
+      title: ex.name,
+      posText,
+      setText: `${nextSet} / ${ex.sets}`,
+      repsText: String(ex.reps),
+      dotsTotal: ex.sets,
+      dotsDone: done,
+      dotsCurrent: done,
+      timerText: clockUp(v.remainSeconds),
+      timerNote: v.paused ? TEXT.pausedNote : `${TEXT.upNextLabel} ${nextSet}${TEXT.unitSets}`,
+      upNextText,
+    };
+  }
+
+  // 운동 구간 - 권장 시간이 지나면 남은 시간 대신 초과 시간을 센다(01_spec.md 4.1.2)
+  let note = `${TEXT.recommendPrefix} ${seconds(ex.workSeconds)}`;
+  if (v.isOverrun) note = TEXT.overrunNote;
+  if (v.paused) note = TEXT.pausedNote;
+  return {
+    ...m,
+    lead: v.isLastSet ? TEXT.lastSetNote : TEXT.nowLabel,
+    title: ex.name,
+    posText,
+    setText: `${v.setNumber} / ${ex.sets}`,
+    repsText: String(ex.reps),
+    dotsTotal: ex.sets,
+    dotsDone: done,
+    dotsCurrent: v.setNumber - 1,
+    timerText: v.isOverrun ? `+${clock(v.overrunSeconds)}` : clockUp(v.remainSeconds),
+    timerNote: note,
+    upNextText,
+  };
+}
+
+// --- 진행 중 세션 저장 ----------------------------------------------------------
+function markOf(s) {
+  return `${s.phase}|${s.exerciseIndex}|${s.setNumber}|${s.paused}|${s.undo !== null}`;
+}
+
+function saveActive(s, force = false) {
+  const mark = markOf(s);
+  if (!force && mark === state.savedMark) return;
+  state.savedMark = mark;
+  repo.setActive(s);
+}
+
+// --- 화면 전환 -----------------------------------------------------------------
+const todayView = createTodayView({
+  onStart: startToday,
+  onResume: enterRun,
+  onContinue: continueToday,
+});
+
+const runView = createRunView({
+  onNext: handleNext,
+  onSkip: handleSkip,
+  onPause: handlePause,
+  onEnd: handleEnd,
+  onUndo: handleUndo,
+});
+
+const summaryView = createSummaryView({ onClose: goToday });
+
+const ticker = createTicker(tick);
+
+function setDockActive(name) {
+  for (const btn of dock.querySelectorAll('button[data-nav]')) {
+    btn.classList.toggle('is-active', btn.dataset.nav === name);
+  }
+}
+
+function goToday() {
+  state.screen = 'today';
+  ticker.stop();
+  wakeLock.release();
+  setChrome(true);
+  todayView.update(todayModel());
+  stage.replaceChildren(todayView.el);
+  setDockActive('today');
+}
+
+function goPlaceholder(name) {
+  state.screen = name;
+  setChrome(true);
+  const box = document.createElement('div');
+  box.className = 'empty';
+  box.textContent = TEXT.soonScreen;
+  stage.replaceChildren(box);
+  setDockActive(name);
+}
+
+function enterRun() {
+  state.screen = 'run';
+  setChrome(false);
+  stage.replaceChildren(runView.el);
+  runView.update(runModel(state.active, now()));
+  wakeLock.request();
+  ticker.start();
+}
+
+function summaryModel(record) {
+  const found = findNextPlanned(record.date, repo.getPlans());
+  const doneSets = record.results.reduce((sum, r) => sum + r.doneSets, 0);
+  const planSets = record.results.reduce((sum, r) => sum + r.plannedSets, 0);
+  return {
+    dateText: labelOf(record.date),
+    status: record.status,
+    headline: record.status === 'complete' ? TEXT.summaryComplete : TEXT.summaryPartial,
+    totalTimeText: duration(record.activeSeconds),
+    doneText: `${doneSets} / ${planSets}${TEXT.unitSets}`,
+    rows: record.results.map((r) => ({
+      name: r.name,
+      countText: `${r.doneSets} / ${r.plannedSets}${TEXT.unitSets}`,
+      result: r.result,
+      resultLabel: RESULT_LABEL[r.result] || '',
+    })),
+    nextPlanText: found ? labelOf(found) : null,
+  };
+}
+
+function goSummary(record) {
+  state.screen = 'summary';
+  ticker.stop();
+  wakeLock.release();
+  setChrome(false);
+  summaryView.update(summaryModel(record));
+  stage.replaceChildren(summaryView.el);
+}
+
+// --- 조작 ---------------------------------------------------------------------
+function startToday() {
+  const plan = repo.getPlan(todayKey());
+  if (!plan) return;
+  state.active = startSession({ plan, settings: state.settings, now: now() });
+  saveActive(state.active, true);
+  enterRun();
+}
+
+function continueToday() {
+  const record = repo.getSession(todayKey());
+  if (!record) return;
+  const s = resumeSession({ session: fromRecord(record), settings: state.settings, now: now() });
+  if (!s) return;
+  state.active = s;
+  saveActive(s, true);
+  enterRun();
+}
+
+function finishRun(session) {
+  const record = toRecord(session);
+  repo.putSession(record);
+  repo.clearActive();
+  state.active = null;
+  state.savedMark = '';
+  state.lastRecord = record;
+  goSummary(record);
+}
+
+function apply(result) {
+  state.active = result.session;
+  playCues(result.cues, result.session);
+  if (result.session.phase === null) { finishRun(result.session); return; }
+  saveActive(result.session);
+  runView.update(runModel(result.session, now()));
+}
+
+function tick(t) {
+  const s = state.active;
+  if (!s || state.screen !== 'run') return;
+  const stepped = advance(s, t);
+  state.active = stepped.session;
+  playCues(stepped.cues, stepped.session);
+  if (stepped.session.phase === null) { finishRun(stepped.session); return; }
+  saveActive(stepped.session);
+  runView.update(runModel(stepped.session, t));
+}
+
+function handleNext() {
+  if (!state.active) return;
+  apply(pressNext(state.active, now()));
+}
+
+function handleSkip() {
+  const s = state.active;
+  if (!s || s.phase === PHASE.PREP) return;
+  apply(skipExercise(s, now()));
+}
+
+function handleUndo() {
+  if (!state.active) return;
+  apply(undoSkip(state.active, now()));
+}
+
+function handlePause() {
+  const s = state.active;
+  if (!s) return;
+  const next = s.paused ? unpause(s, now()) : pause(s, now());
+  if (next.paused) speech.cancel();
+  state.active = next;
+  saveActive(next, true);
+  runView.update(runModel(next, now()));
+}
+
+async function handleEnd() {
+  if (!state.active) return;
+  // 되돌릴 수 없는 조작이라 한 번 묻는다. 건너뛰기와 다른 점이다(01_spec.md 4.3.3)
+  const answer = await showModal({
+    title: TEXT.endConfirmTitle,
+    body: TEXT.endConfirm,
+    actions: [
+      { label: TEXT.confirmNo, value: 'no' },
+      { label: TEXT.confirmYes, value: 'yes', primary: true },
+    ],
+  });
+  if (answer !== 'yes' || !state.active) return;
+  apply(endSession(state.active, now()));
+}
+
+dock.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-nav]');
+  if (!btn) return;
+  if (btn.dataset.nav === 'today') goToday();
+  else goPlaceholder(btn.dataset.nav);
+});
+
+// --- 앱이 숨거나 내려갈 때 -------------------------------------------------------
+// 휴식·전환의 남은 시간을 살리려면 마지막으로 살아 있던 시점을 적어 둬야 한다
+// (01_spec.md 4.5.5). 이 두 자리가 실제 종료의 대부분을 잡는다.
+function markAndSave() {
+  const s = state.active;
+  if (!s || s.phase === null) return;
+  const marked = markAlive(s, now());
+  state.active = marked;
+  saveActive(marked, true);
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    markAndSave();
+    speech.cancel();
+    audio.suspendAudio();
+  } else {
+    audio.resumeAudio();
+  }
+});
+window.addEventListener('pagehide', markAndSave);
+
+// 첫 손짓에서 음성을 한 번 깨운다. 소리 장치는 공용 부품이 같은 손짓에서 연다(4.4)
+window.addEventListener('pointerdown', () => speech.warmUp(), { once: true });
+
+// --- 시작 ---------------------------------------------------------------------
+function boot() {
+  const saved = repo.getActive();
+  if (saved) {
+    // 닫혀 있던 동안 구간이 지나가지 않는다. 멈춘 상태로 되살아나 재개를 기다린다
+    const restored = recover(saved);
+    state.active = restored;
+    saveActive(restored, true);
+  }
+  goToday();
+  registerServiceWorker();
+}
+
+boot();

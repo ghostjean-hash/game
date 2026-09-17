@@ -33,3 +33,6 @@ npm-debug.log*
 # english-reading 출제 draft 임시 파일 (검증 전, 공식 원본 아님 - 반영 후 삭제)
 apps/english-reading/docs/ChatGPT/incoming/
 
+
+# 화면 확인용 임시 스크린샷 (사람이 보고 나면 지운다)
+apps/*/_shots/

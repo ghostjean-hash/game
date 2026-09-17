@@ -1,0 +1,46 @@
+/* 이 앱의 토큰. 공용 토큰 위에 얹는다 (02_data.md 7장 / 03_architecture.md 3.7).
+ *
+ * 이 앱만 밝은 바탕이다. 토큰 이름은 그대로 두고 값만 갈아 끼운다 -
+ * 이름을 바꾸면 shared/base.css 의 공통 버튼과 팝업이 색을 잃는다(04_conventions.md 5.2).
+ *
+ * 스코프를 좁히지 않고 :root 에서 덮어쓴다. 화면 위로 뜨는 팝업은 body 바로 아래 붙어
+ * 좁힌 스코프 밖으로 새는데, 스도쿠가 그 탓에 팝업 색을 손으로 다시 적어야 했다.
+ */
+:root {
+  --bg: #ffffff;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #f2f4f7;
+  --fg: #15181d;
+  --fg-dim: #4b5563;
+  --fg-mute: #8a93a3;
+  --line: #dde1e7;
+  --accent: #0f7b5a;
+  --accent-strong: #0b6449;
+  --accent-fg: #ffffff;
+  --warn: #b4770a;
+  --danger: #c0392b;
+
+  /* 밝은 바탕에서는 어두운 바탕용 그림자가 지저분하게 번진다. 옅게 다시 잡는다 */
+  --shadow-1: 0 1px 2px rgba(21, 24, 29, 0.06), 0 2px 8px rgba(21, 24, 29, 0.05);
+  --shadow-2: 0 8px 24px rgba(21, 24, 29, 0.12);
+
+  /* --- 이 앱만 쓰는 값 (04_conventions.md 5.2.2) --- */
+
+  /* 날짜 상태 넷. 색과 함께 모양으로도 갈린다(02_data.md 7.3 / 7.4) */
+  --day-planned: #8a93a3;
+  --day-complete: #0f7b5a;
+  --day-partial: #b4770a;
+  --day-missed: #c0392b;
+
+  /* 손으로 누르는 최소 크기. 운동 실행 화면은 이보다 훨씬 크게 잡는다(5.4) */
+  --touch-min: 56px;
+  /* 다음 버튼 - 세트마다 누르는 유일한 조작이라 화면 아래를 통째로 쓴다 */
+  --run-next-h: 124px;
+
+  /* 거치한 폰을 한두 걸음 떨어져 보는 화면의 글자 크기.
+     화면 폭에 따라 늘었다 줄지만 위아래 한계를 둬 작은 폰에서 넘치지 않게 한다 */
+  --run-name: clamp(30px, 10vw, 48px);
+  --run-timer: clamp(72px, 26vw, 120px);
+  --run-meta: clamp(22px, 7vw, 34px);
+  --run-next-label: clamp(26px, 8vw, 36px);
+}

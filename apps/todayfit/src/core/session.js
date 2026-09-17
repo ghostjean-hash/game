@@ -65,7 +65,8 @@ function firstTargetIndex(s) {
   return -1;
 }
 
-function nextTargetIndex(s, from) {
+/** 지금 자리 뒤에서 처음 만나는 재개 대상. 화면이 다음 운동을 미리 보일 때도 쓴다. */
+export function nextTargetIndex(s, from) {
   for (let i = from + 1; i < s.plan.exercises.length; i += 1) if (isTarget(s, i)) return i;
   return -1;
 }

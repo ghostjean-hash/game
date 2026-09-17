@@ -2,7 +2,7 @@ import { suite, test, assertEqual, assertClose, assertNull, assert, assertDeep }
 import {
   startSession, resumeSession, recover, markAlive, advance, view, pressNext, skipExercise,
   undoSkip, pause, unpause, endSession, toRecord, remainingSets, hasResumeTarget,
-  activeSecondsAt,
+  activeSecondsAt, nextTargetIndex,
 } from '../../src/core/session.js';
 import { PHASE, EXERCISE_RESULT, CUE } from '../../src/data/constants.js';
 
@@ -459,4 +459,21 @@ test('계획 스냅샷을 통째로 갖는다', () => {
   const rec = toRecord(finishAll().session);
   assertEqual(rec.plan.exercises.length, 2);
   assertEqual(rec.date, '2026-09-17');
+});
+
+suite('session - 다음 재개 대상 찾기');
+
+// 화면이 전환 구간에서 다음 운동의 세트 수·횟수를 미리 보이는 데 쓴다.
+test('바로 뒤의 남은 운동을 가리킨다', () => {
+  assertEqual(nextTargetIndex(atFirstSet(), 0), 1);
+});
+
+test('마지막 운동 뒤에는 없다', () => {
+  assertEqual(nextTargetIndex(atFirstSet(), 1), -1);
+});
+
+test('건너뛴 운동은 대상이 아니다', () => {
+  const skipped = skipExercise(atFirstSet(), at(10)).session;
+  assertEqual(nextTargetIndex(skipped, 0), 1);
+  assertEqual(nextTargetIndex(skipped, 1), -1);
 });

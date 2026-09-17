@@ -1,0 +1,378 @@
+/* 오늘운동 화면.
+ *
+ * 색·간격·글자 크기는 토큰 변수만 쓴다. 인라인 값 금지(04_conventions.md 5.1).
+ * 값 자체는 styles/tokens.css 에 있고 여기서는 자리만 잡는다.
+ */
+
+/* hidden 속성은 브라우저 기본값이 display:none 인데, 그 기본값은 우선순위가 가장 낮아
+   display 를 직접 적은 규칙(.topbar 의 flex, .app-dock 의 grid)에 그대로 진다.
+   실행 화면에서 이동 막대를 감추는 규칙(01_spec.md 2.6)이 여기에 걸려 안 먹었다. */
+[hidden] { display: none !important; }
+
+/* --- 껍데기 ------------------------------------------------------------- */
+.todayfit .topbar h1 {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-2);
+  color: var(--fg-dim);
+}
+.nav-btn svg { width: 20px; height: 20px; }
+
+.stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.stage > * { flex: 1 1 auto; min-height: 0; }
+
+/* 공용 도크는 링크로 만들어져 있다. 이 앱은 화면 안에서 갈아 끼우므로 버튼을 쓴다 */
+.app-dock button {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  border-radius: var(--r-2);
+  color: var(--fg-dim);
+  font-size: 12px;
+  font-weight: 800;
+}
+.app-dock button.is-active {
+  background: var(--bg-elev-2);
+  color: var(--accent);
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  padding: var(--sp-6);
+  color: var(--fg-mute);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* --- 공통 조각 ---------------------------------------------------------- */
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-1);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-height: 0;
+}
+.card-lead {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.facts {
+  display: flex;
+  gap: var(--sp-5);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--line);
+}
+.fact { display: flex; flex-direction: column; gap: 2px; }
+.fact-label { font-size: 12px; font-weight: 700; color: var(--fg-mute); }
+.fact-value { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.exlist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.exrow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+.exrow:last-child { border-bottom: 0; }
+.exrow-no {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bg-elev-2);
+  color: var(--fg-dim);
+  font-size: 12px;
+  font-weight: 800;
+}
+.exrow-name { flex: 1 1 auto; font-size: 16px; font-weight: 700; word-break: keep-all; }
+.exrow-spec { flex: 0 0 auto; font-size: 14px; color: var(--fg-dim); font-variant-numeric: tabular-nums; }
+
+/* 화면 아래에 놓는 주 조작. 이 앱에서 한 화면에 하나뿐이다 */
+.big-btn {
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 72px;
+  border-radius: var(--r-3);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 22px;
+  font-weight: 800;
+  box-shadow: var(--shadow-1);
+}
+.big-btn:active { background: var(--accent-strong); transform: scale(0.99); }
+
+/* --- 오늘 화면 ---------------------------------------------------------- */
+.today {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  overflow: hidden;
+}
+.today-head { flex: 0 0 auto; }
+.today-date { margin: 0 0 2px; font-size: 13px; font-weight: 700; color: var(--fg-mute); }
+.today-title { margin: 0; font-size: 24px; font-weight: 800; }
+.today .card { flex: 1 1 auto; }
+
+.today-nextplan,
+.summary-nextplan {
+  flex: 0 0 auto;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-2);
+}
+.today-nextplan-label { font-size: 13px; font-weight: 700; color: var(--fg-mute); }
+.today-nextplan-value { font-size: 15px; font-weight: 800; }
+
+/* --- 운동 실행 화면 ------------------------------------------------------ */
+/* 손에 들고 보는 화면이 아니다. 폰을 세워 두고 떨어져 곁눈으로 본다.
+   그래서 운동명·세트·시간 셋이 화면 대부분을 차지하고 나머지는 가장자리로 밀었다. */
+.run {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  overflow: hidden;
+}
+
+.run-top {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg-dim);
+}
+.run-phase {
+  padding: 4px 12px;
+  border-radius: var(--r-4);
+  background: var(--bg-elev-2);
+  color: var(--fg-dim);
+  font-weight: 800;
+}
+.run[data-phase="work"] .run-phase { background: var(--accent); color: var(--accent-fg); }
+.run[data-phase="rest"] .run-phase { background: var(--warn); color: var(--accent-fg); }
+.run[data-phase="transition"] .run-phase { background: var(--fg-dim); color: var(--accent-fg); }
+.run-elapsed { font-variant-numeric: tabular-nums; }
+
+.run-main {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  text-align: center;
+}
+.run-lead {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--fg-mute);
+}
+.run-name {
+  margin: 0;
+  font-size: var(--run-name);
+  font-weight: 800;
+  line-height: 1.15;
+  word-break: keep-all;
+}
+
+.run-meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-5);
+}
+.run-metabox { display: flex; align-items: baseline; gap: 4px; }
+.run-metavalue {
+  font-size: var(--run-meta);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.run-metaunit { font-size: 17px; font-weight: 700; color: var(--fg-dim); }
+
+/* 세트 진행은 점으로도 보인다 - 숫자를 읽지 않아도 남은 개수가 눈에 들어온다 */
+.run-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.run-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--fg-mute);
+  box-sizing: border-box;
+}
+.run-dot.is-done { background: var(--accent); border-color: var(--accent); }
+/* 바깥으로 퍼지는 그림자라 점의 자리 크기는 그대로다 */
+.run-dot.is-now { box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent); }
+
+.run-timer {
+  font-family: var(--font-mono);
+  font-size: var(--run-timer);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -2px;
+}
+.run-timer.is-overrun { color: var(--warn); }
+.run-timer.is-paused { color: var(--fg-mute); }
+.run-timernote {
+  margin: 0;
+  min-height: 22px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--fg-dim);
+}
+.run[data-phase="work"] .run-timer.is-overrun + .run-timernote { color: var(--warn); }
+
+.run-upnext {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--fg-dim);
+}
+
+.run-undo {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev-2);
+}
+.run-undotext { font-size: 14px; font-weight: 700; color: var(--fg-dim); }
+.run-undobtn {
+  min-height: 44px;
+  padding: 0 var(--sp-4);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.run-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+/* 세트마다 누르는 유일한 조작이라 폭 전체를 쓰고 다른 버튼보다 두 배 높다 */
+.run-next {
+  width: 100%;
+  min-height: var(--run-next-h);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--r-3);
+  background: var(--accent);
+  color: var(--accent-fg);
+  box-shadow: var(--shadow-1);
+}
+.run-next:active { background: var(--accent-strong); transform: scale(0.99); }
+.run-nextlabel { font-size: var(--run-next-label); font-weight: 800; }
+.run-nexthint { font-size: 13px; font-weight: 600; opacity: 0.85; }
+
+.run-sub { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+.run-subbtn {
+  min-height: var(--touch-min);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  color: var(--fg-dim);
+  font-size: 16px;
+  font-weight: 700;
+}
+.run-endbtn { color: var(--danger); }
+
+/* 멈춰 있는 동안에는 가운데를 흐려 둔다 - 시계가 멈춘 것을 멀리서도 알아야 한다 */
+.run.is-paused .run-main { opacity: 0.55; }
+
+/* --- 종료 요약 화면 ------------------------------------------------------ */
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  overflow: hidden;
+}
+.summary-head { flex: 0 0 auto; }
+.summary-date { margin: 0 0 2px; font-size: 13px; font-weight: 700; color: var(--fg-mute); }
+.summary-title { margin: 0; font-size: 24px; font-weight: 800; }
+.summary-head[data-status="complete"] .summary-title { color: var(--accent); }
+.summary-head[data-status="partial"] .summary-title { color: var(--warn); }
+
+.summary .facts { border-bottom: 0; padding-bottom: 0; }
+
+.sumlist {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+}
+.sumrow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+}
+.sumrow:last-child { border-bottom: 0; }
+.sumrow-name { flex: 1 1 auto; font-size: 16px; font-weight: 700; word-break: keep-all; }
+.sumrow-count { font-size: 14px; color: var(--fg-dim); font-variant-numeric: tabular-nums; }
+/* 결과는 색만으로 가르지 않는다. 글자가 그대로 뜻을 말한다(04_conventions.md 5.3) */
+.sumrow-result { font-size: 13px; font-weight: 800; min-width: 44px; text-align: right; }
+.sumrow[data-result="complete"] .sumrow-result { color: var(--accent); }
+.sumrow[data-result="incomplete"] .sumrow-result { color: var(--fg-mute); }
+.sumrow[data-result="skipped"] .sumrow-result { color: var(--danger); }
