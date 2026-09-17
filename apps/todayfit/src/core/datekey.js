@@ -3,9 +3,8 @@
 // 날짜 키는 'YYYY-MM-DD' 로컬 달력 날짜다. 시간대 변환을 하지 않는다 -
 // UTC 로 한 번 돌리면 자정 언저리에 하루가 밀린다(04_conventions.md 3.4).
 
-import { WEEK_START } from '../data/constants.js';
+import { WEEK_START, DAYS_IN_WEEK } from '../data/constants.js';
 
-const DAYS_IN_WEEK = 7;
 const MONTHS_IN_YEAR = 12;
 
 function pad2(n) {

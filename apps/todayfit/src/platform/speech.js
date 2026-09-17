@@ -33,7 +33,8 @@ export function createSpeech() {
   }
 
   return {
-    // 한국어 음성이 없으면 쓸 수 없다고 알린다. 화면의 음성 설정이 이 값을 표시한다
+    // 한국어 음성이 없으면 쓸 수 없다고 알린다.
+    // 이 값을 보일 자리는 기본값과 소리 화면(S-11)인데 아직 만들지 않았다(03_architecture.md 4.5.3)
     available() { return !!api && !!voice; },
     checked() { return ready; },
 

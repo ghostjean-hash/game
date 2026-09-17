@@ -1,12 +1,12 @@
 // 화면 표기 helper. 값을 글자로 바꾸기만 하고 상태를 바꾸지 않는다(04_conventions.md 8.1).
 
 import { TEXT } from '../data/phrases.js';
+import { SECONDS_PER_MINUTE, MINUTES_PER_HOUR } from '../data/constants.js';
 
-const SECONDS_PER_MINUTE = 60;
-const MINUTES_PER_HOUR = 60;
+const CLOCK_DIGITS = 2;
 
 function pad2(n) {
-  return String(n).padStart(2, '0');
+  return String(n).padStart(CLOCK_DIGITS, '0');
 }
 
 /** 분:초. 큰 시계에 쓰므로 한 자리 분도 두 자리로 맞춰 글자 폭이 흔들리지 않게 한다. */
@@ -50,11 +50,6 @@ export function seconds(value) {
 /** 'YYYY-MM-DD' → '9월 17일 (수)'. 날짜 키를 Date 로 돌리지 않고 글자만 자른다. */
 export function dayLabel(dateKey, weekdayLabel) {
   const [, month, day] = dateKey.split('-');
-  const md = `${Number(month)}월 ${Number(day)}일`;
+  const md = `${Number(month)}${TEXT.unitMonth} ${Number(day)}${TEXT.unitDay}`;
   return weekdayLabel ? `${md} (${weekdayLabel})` : md;
-}
-
-/** 'HH:MM' 은 그대로 보인다. 비어 있으면 자리를 만들지 않는다. */
-export function timeLabel(value) {
-  return value || '';
 }

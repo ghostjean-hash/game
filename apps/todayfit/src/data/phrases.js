@@ -82,18 +82,16 @@ export const TEXT = Object.freeze({
   lastSetNote: '마지막 세트',
   lastExerciseNote: '마지막 운동',
   pausedNote: '멈춰 있습니다',
-  elapsedLabel: '총 시간',
   positionLabel: '번째',
+  positionOf: '중',
   endConfirmTitle: '운동을 끝낼까요',
   endConfirm: '지금 운동을 끝냅니다. 남은 세트는 미완료로 남습니다.',
   confirmYes: '끝내기',
   confirmNo: '계속하기',
 
   // --- 종료 요약 화면 (01_spec.md 2.3) ---
-  summaryTitle: '오늘 운동 결과',
   summaryComplete: '계획한 운동을 모두 마쳤습니다',
   summaryPartial: '일부만 마쳤습니다',
-  plannedLabel: '계획',
   doneLabel: '수행',
   totalTimeLabel: '총 운동시간',
   closeAction: '닫기',
@@ -104,6 +102,8 @@ export const TEXT = Object.freeze({
   unitMinutes: '분',
   unitSeconds: '초',
   unitCount: '개',
+  unitMonth: '월',
+  unitDay: '일',
 
   rateNotAvailable: '-',
   voiceUnavailable: '이 기기에 한국어 음성이 없어 비프음만 사용합니다',

@@ -2,7 +2,7 @@ import { suite, test, assertEqual, assertClose, assertNull, assert, assertDeep }
 import {
   startSession, resumeSession, recover, markAlive, advance, view, pressNext, skipExercise,
   undoSkip, pause, unpause, endSession, toRecord, remainingSets, hasResumeTarget,
-  activeSecondsAt, nextTargetIndex,
+  activeSecondsAt, nextTargetIndex, phaseElapsedSeconds,
 } from '../../src/core/session.js';
 import { PHASE, EXERCISE_RESULT, CUE } from '../../src/data/constants.js';
 
@@ -476,4 +476,23 @@ test('건너뛴 운동은 대상이 아니다', () => {
   const skipped = skipExercise(atFirstSet(), at(10)).session;
   assertEqual(nextTargetIndex(skipped, 0), 1);
   assertEqual(nextTargetIndex(skipped, 1), -1);
+});
+
+suite('session - 생존 표식은 구간마다 새로 찍는다');
+
+// 앞 구간의 경과를 물려주면 복구가 그것을 이 구간의 것으로 읽어, 쉬지도 않은 휴식을 깎는다.
+test('구간이 바뀌면 표식이 0 으로 돌아간다', () => {
+  const marked = markAlive(atFirstSet(), at(45)); // 운동 40초 지점에서 화면이 숨었다
+  assertEqual(marked.aliveElapsed, 40);
+  const rest = pressNext(marked, at(45)).session;
+  assertEqual(rest.phase, PHASE.REST);
+  assertEqual(rest.aliveElapsed, 0);
+});
+
+test('앞 구간 표식이 휴식 시간을 깎지 않는다', () => {
+  const marked = markAlive(atFirstSet(), at(45));
+  const rest = pressNext(marked, at(45)).session;
+  // 표식을 남기지 못한 딱딱한 중단 - 휴식은 처음부터 간다(01_spec.md 4.5.5)
+  const back = recover(rest);
+  assertEqual(phaseElapsedSeconds(back, at(100)), 0);
 });

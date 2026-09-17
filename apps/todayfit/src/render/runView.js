@@ -139,8 +139,6 @@ export function createRunView({ onNext, onSkip, onPause, onEnd, onUndo }) {
 
       if (root.dataset.phase !== m.phaseKey) root.dataset.phase = m.phaseKey;
       setFlag(root, 'is-paused', m.paused);
-      // 횟수를 세지 않는 구간(준비·휴식·전환)에서는 횟수 칸을 비운다
-      if (repsBox.hidden !== !m.showReps) repsBox.hidden = !m.showReps;
     },
   };
 }

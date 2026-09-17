@@ -27,6 +27,12 @@ export const COUNTDOWN_FROM = 3;
 export const OVERRUN_NOTICE_SECONDS = 30;
 export const TICK_MS = 250;
 
+// 세상이 정한 환산값 (02_data.md 2.0). 코드 어디에도 숫자를 적지 않으려고 여기 둔다.
+export const MS_PER_SECOND = 1000;
+export const SECONDS_PER_MINUTE = 60;
+export const MINUTES_PER_HOUR = 60;
+export const DAYS_IN_WEEK = 7;
+
 // --- 3. 코드값 (02_data.md 3장) -----------------------------------------------
 export const PHASE = Object.freeze({
   PREP: 'prep',

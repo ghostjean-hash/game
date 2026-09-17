@@ -12,14 +12,13 @@ import {
   STORAGE_NAMESPACE,
   STORAGE_KEYS,
   DEFAULT_SETTINGS,
+  DAYS_IN_WEEK,
 } from '../data/constants.js';
 import { migrate } from '../data/schema.js';
 
-const WEEKDAY_COUNT = 7;
-
 /** 요일 규칙 7행. 켠 요일이 하나도 없는 상태가 처음 모습이다(02_data.md 5.3). */
 function blankWeekly() {
-  return Array.from({ length: WEEKDAY_COUNT }, (_, i) => ({
+  return Array.from({ length: DAYS_IN_WEEK }, (_, i) => ({
     weekday: i + 1,
     enabled: false,
     time: '',
@@ -63,7 +62,7 @@ export function createRepo(storage = createStorage(STORAGE_NAMESPACE)) {
     // --- 요일 규칙 ---
     getWeekly() {
       const found = asArray(get(STORAGE_KEYS.WEEKLY, null));
-      return found.length === WEEKDAY_COUNT ? found : blankWeekly();
+      return found.length === DAYS_IN_WEEK ? found : blankWeekly();
     },
     setWeekly(rules) { set(STORAGE_KEYS.WEEKLY, rules); },
 

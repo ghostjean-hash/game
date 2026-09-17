@@ -27,7 +27,6 @@ export function createWakeLock() {
   }
 
   return {
-    supported,
     request() {
       if (wanted) return;
       wanted = true;

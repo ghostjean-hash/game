@@ -11,7 +11,9 @@ import { createTodayView } from './render/todayView.js';
 import { createRunView } from './render/runView.js';
 import { createSummaryView } from './render/summaryView.js';
 import { clock, clockUp, minutes, seconds, duration, dayLabel } from './render/format.js';
-import { PHASE, CUE, SOUND, EXERCISE_RESULT } from './data/constants.js';
+import {
+  PHASE, CUE, SOUND, EXERCISE_RESULT, MS_PER_SECOND,
+} from './data/constants.js';
 import { TEXT, VOICE, PHASE_LABEL, RESULT_LABEL, WEEKDAY_LABEL } from './data/phrases.js';
 import {
   startSession, resumeSession, recover, advance, view,
@@ -23,8 +25,6 @@ import { estimatePlanSeconds, estimateRemainingSeconds } from './core/estimate.j
 import { nextPlannedDate } from './core/stats.js';
 import { createAudio, tone } from '../../../shared/frame/audio.js';
 import { showModal, registerServiceWorker } from '../../../shared/ui.js';
-
-const MS_PER_SECOND = 1000;
 
 // --- 소리 ---------------------------------------------------------------------
 // 비프는 짧은 한 음 하나뿐이다. 음색 값은 02_data.md 6장이 SSOT 다.
@@ -48,7 +48,6 @@ const repo = createRepo();
 const state = {
   screen: 'today',
   active: null,
-  lastRecord: null,
   settings: repo.getSettings(),
   // 구간이 바뀔 때만 저장한다. 매 틱마다 쓰면 저장 장치를 계속 두드린다(01_spec.md 8.1)
   savedMark: '',
@@ -59,10 +58,50 @@ const stage = document.getElementById('stage');
 const topbar = document.getElementById('topbar');
 const dock = document.getElementById('dock');
 
+// 화면에 나가는 글자는 한 곳에서만 온다(04_conventions.md 1.2).
+// index.html 에 적힌 것은 자바스크립트가 늦게 뜰 때 잠깐 보이는 기본값이다.
+const DOCK_LABEL = {
+  today: TEXT.navToday,
+  calendar: TEXT.navCalendar,
+  settings: TEXT.navSettings,
+};
+
+function paintChromeText() {
+  topbar.querySelector('h1').textContent = TEXT.appTitle;
+  for (const btn of dock.querySelectorAll('button[data-nav]')) {
+    btn.textContent = DOCK_LABEL[btn.dataset.nav] || btn.textContent;
+  }
+}
+
 function setChrome(visible) {
   topbar.hidden = !visible;
   dock.hidden = !visible;
 }
+
+// 실행 화면에서는 뒤로 가기를 막는다(01_spec.md 2.6). 브라우저에 '막기'는 없어서,
+// 들어갈 때 이력 칸 하나를 얹어 두고 뒤로 가기가 오면 그 칸을 다시 얹어 제자리에 세운다.
+// 나가려는 뜻은 받아 종료 확인을 띄운다 - 그래야 요약을 거쳐 나가는 길만 남는다.
+let backGuard = false;
+let ignoreNextPop = false;
+
+function guardBack(on) {
+  if (on === backGuard) return;
+  backGuard = on;
+  if (on) {
+    history.pushState({ todayfitRun: true }, '');
+    return;
+  }
+  // 얹어 둔 칸을 도로 뺀다. 그때 오는 뒤로 가기 신호는 한 번 흘린다
+  ignoreNextPop = true;
+  history.back();
+}
+
+window.addEventListener('popstate', () => {
+  if (ignoreNextPop) { ignoreNextPop = false; return; }
+  if (!backGuard) return;
+  history.pushState({ todayfitRun: true }, '');
+  handleEnd();
+});
 
 // --- 소리 내기 -----------------------------------------------------------------
 function voiceArgs(key, s) {
@@ -208,9 +247,23 @@ function todayModel() {
 }
 
 // --- 운동 실행 화면 ------------------------------------------------------------
+/**
+ * 길게 눌러 건너뛸 수 있는 구간인가.
+ *
+ * 준비 구간에는 건너뛸 운동이 아직 없다.
+ * 전환 구간은 더 나쁘다 - 화면 가운데는 다음 운동을 보이는데 건너뛰기가 집는 대상은
+ * 방금 끝낸 운동이라, 다 마친 운동이 건너뜀으로 강등되고 그날 전체가 완료에서
+ * 부분 완료로 떨어진다. 사양 4.2 전환표가 전환 구간을 길게 누름 대상에 넣어 두었으나
+ * 그 자리의 '현재 운동'이 무엇인지는 비어 있다. 기록이 깨지는 쪽이라 막아 둔다
+ * (기획 결정 대기, 01_spec.md 4.2).
+ */
+function canSkip(s) {
+  return s.phase === PHASE.WORK || s.phase === PHASE.REST;
+}
+
 /** '4개 중 2번째'. 세트 번호와 헷갈리지 않게 개수를 앞에 둔다. */
 function positionText(index, total) {
-  return `${total}${TEXT.unitCount} 중 ${index + 1}${TEXT.positionLabel}`;
+  return `${total}${TEXT.unitCount} ${TEXT.positionOf} ${index + 1}${TEXT.positionLabel}`;
 }
 
 /**
@@ -231,11 +284,9 @@ function runModel(s, t) {
     paused: v.paused,
     undoPending: v.undoPending,
     isOverrun: v.isOverrun,
-    showReps: true,
     upNextText: '',
     timerNote: '',
-    // 준비 구간에는 건너뛸 운동이 아직 없다. 사양 4.2 전환표에도 그 자리가 없다
-    canSkip: s.phase !== PHASE.PREP,
+    canSkip: canSkip(s),
   };
 
   if (s.phase === PHASE.TRANSITION) {
@@ -323,11 +374,17 @@ function markOf(s) {
   return `${s.phase}|${s.exerciseIndex}|${s.setNumber}|${s.paused}|${s.undo !== null}`;
 }
 
+/**
+ * 진행 중 세션을 남긴다.
+ * savedAt 은 저장한 그 시각이어야 한다(02_data.md 5.6) - 세션을 시작한 시각을 적어 두면
+ * 나중에 이 값을 믿는 자리가 몇십 분 낡은 값으로 판단한다.
+ */
 function saveActive(s, force = false) {
   const mark = markOf(s);
   if (!force && mark === state.savedMark) return;
   state.savedMark = mark;
-  repo.setActive(s);
+  state.active = { ...s, savedAt: now() };
+  repo.setActive(state.active);
 }
 
 // --- 화면 전환 -----------------------------------------------------------------
@@ -358,6 +415,7 @@ function setDockActive(name) {
 function goToday() {
   state.screen = 'today';
   ticker.stop();
+  guardBack(false);
   wakeLock.release();
   setChrome(true);
   todayView.update(todayModel());
@@ -378,6 +436,7 @@ function goPlaceholder(name) {
 function enterRun() {
   state.screen = 'run';
   setChrome(false);
+  guardBack(true);
   stage.replaceChildren(runView.el);
   runView.update(runModel(state.active, now()));
   wakeLock.request();
@@ -407,6 +466,7 @@ function summaryModel(record) {
 function goSummary(record) {
   state.screen = 'summary';
   ticker.stop();
+  guardBack(false);
   wakeLock.release();
   setChrome(false);
   summaryView.update(summaryModel(record));
@@ -438,7 +498,6 @@ function finishRun(session) {
   repo.clearActive();
   state.active = null;
   state.savedMark = '';
-  state.lastRecord = record;
   goSummary(record);
 }
 
@@ -468,7 +527,7 @@ function handleNext() {
 
 function handleSkip() {
   const s = state.active;
-  if (!s || s.phase === PHASE.PREP) return;
+  if (!s || !canSkip(s)) return;
   apply(skipExercise(s, now()));
 }
 
@@ -487,8 +546,11 @@ function handlePause() {
   runView.update(runModel(next, now()));
 }
 
+let endAsking = false;
+
 async function handleEnd() {
-  if (!state.active) return;
+  if (!state.active || endAsking) return;
+  endAsking = true;
   // 되돌릴 수 없는 조작이라 한 번 묻는다. 건너뛰기와 다른 점이다(01_spec.md 4.3.3)
   const answer = await showModal({
     title: TEXT.endConfirmTitle,
@@ -498,6 +560,7 @@ async function handleEnd() {
       { label: TEXT.confirmYes, value: 'yes', primary: true },
     ],
   });
+  endAsking = false;
   if (answer !== 'yes' || !state.active) return;
   apply(endSession(state.active, now()));
 }
@@ -543,6 +606,7 @@ function boot() {
     state.active = restored;
     saveActive(restored, true);
   }
+  paintChromeText();
   goToday();
   registerServiceWorker();
 }

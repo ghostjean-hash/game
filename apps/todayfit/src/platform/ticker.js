@@ -28,6 +28,5 @@ export function createTicker(onTick, intervalMs = TICK_MS) {
       clearInterval(id);
       id = null;
     },
-    running() { return id !== null; },
   };
 }

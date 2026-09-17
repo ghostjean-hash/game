@@ -14,9 +14,9 @@ import {
   COUNTDOWN_FROM,
   OVERRUN_NOTICE_SECONDS,
   UNDO_WINDOW_SECONDS,
+  MS_PER_SECOND,
 } from '../data/constants.js';
 
-const MS_PER_SECOND = 1000;
 const MAX_ADVANCE_STEPS = 8; // 준비시간·전환시간이 0이어도 맴돌지 않게 하는 빗장
 
 // --- 읽기 -------------------------------------------------------------------
@@ -241,6 +241,9 @@ function enter(s, phase, now, extra = {}) {
     phaseStartedAt: now,
     phaseElapsedBefore: 0,
     cueFlags: {},
+    // 생존 표식은 구간마다 새로 찍는다. 앞 구간 값을 물려주면 복구가 그 값을
+    // 이 구간의 경과로 읽어, 쉬지도 않은 휴식을 쉰 것으로 깎는다(01_spec.md 4.5.5)
+    aliveElapsed: 0,
   };
 }
 
