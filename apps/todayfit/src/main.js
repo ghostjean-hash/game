@@ -70,7 +70,11 @@ function paintChromeText() {
   document.title = TEXT.appTitle;
   topbar.querySelector('h1').textContent = TEXT.appTitle;
   for (const btn of dock.querySelectorAll('button[data-nav]')) {
-    btn.textContent = DOCK_LABEL[btn.dataset.nav];
+    const label = DOCK_LABEL[btn.dataset.nav];
+    btn.textContent = label;
+    // 낭독기는 aria-label 이 있으면 보이는 글자 대신 그쪽을 읽는다.
+    // 둘을 함께 맞춰야 문구표를 고쳤을 때 두 이름이 갈라지지 않는다(04_conventions.md 1.2.2)
+    btn.setAttribute('aria-label', label);
   }
 }
 
@@ -108,8 +112,9 @@ function guardBack(kind) {
 
 window.addEventListener('popstate', () => {
   if (ignoreNextPop) { ignoreNextPop = false; return; }
-  // 뒤로 가기가 왔다는 것은 쥐고 있던 칸이 빠졌다는 뜻이다
-  ownsEntry = false;
+  // 뒤로 가기면 쥐고 있던 칸이 빠진 것이고, 앞으로 가기면 그 칸으로 도로 들어온 것이다.
+  // 어느 쪽인지는 지금 서 있는 칸에 우리 표식이 있는가로 가른다
+  ownsEntry = !!(history.state && history.state.todayfit);
   if (!backGuard) return;
   if (backGuard === GUARD.SUMMARY) {
     // 다시 빼면 앱을 떠난다. 표식만 내리고 닫기와 같게 오늘 화면으로 간다
