@@ -10,6 +10,7 @@ import { createSpeech } from './platform/speech.js';
 import { createTodayView } from './render/todayView.js';
 import { createRunView } from './render/runView.js';
 import { createSummaryView } from './render/summaryView.js';
+import { createManage } from './manage.js';
 import { clock, clockUp, minutes, seconds, duration, dayLabel } from './render/format.js';
 import {
   PHASE, CUE, SOUND, EXERCISE_RESULT, MS_PER_SECOND,
@@ -428,6 +429,20 @@ const runView = createRunView({
 
 const summaryView = createSummaryView({ onClose: goToday });
 
+// 달력·설정과 그 아래 관리 화면은 이 묶음이 통째로 맡는다(03_architecture.md 2.7).
+// 앱 설정을 고치면 여기 들고 있는 값도 함께 갈아야 한다 - 저장만 고치면 앱을 다시
+// 열기 전까지 오늘 화면의 예상 시간이 옛 값으로 남는다(05_manage-screens.md 4.10.5).
+const manage = createManage({
+  repo,
+  getSettings: () => state.settings,
+  onSettingsChange: (next) => { state.settings = next; },
+  todayKey,
+  voiceAvailable: () => speech.available(),
+  // 계단 맨 밑에서 더 물러나면 오늘 화면으로 돌린다. 지금은 주 화면 둘에 뒤로
+  // 버튼이 없어 닿지 않지만, 그 자리가 비어 있으면 화면이 멈춘 것처럼 보인다
+  onExit: () => goToday(),
+});
+
 const ticker = createTicker(tick);
 
 function setDockActive(name) {
@@ -441,19 +456,21 @@ function goToday() {
   ticker.stop();
   guardBack(null);
   wakeLock.release();
+  manage.leave();
   setChrome(true);
   todayView.update(todayModel());
   stage.replaceChildren(todayView.el);
   setDockActive('today');
 }
 
-function goPlaceholder(name) {
+/** 달력과 설정. 그 아래 관리 화면 계단은 묶음이 자기 안에서 갈아 끼운다. */
+function goManage(name) {
   state.screen = name;
+  ticker.stop();
   setChrome(true);
-  const box = document.createElement('div');
-  box.className = 'empty';
-  box.textContent = TEXT.soonScreen;
-  stage.replaceChildren(box);
+  if (name === 'calendar') manage.showCalendar();
+  else manage.showSettings();
+  stage.replaceChildren(manage.el);
   setDockActive(name);
 }
 
@@ -593,7 +610,7 @@ dock.addEventListener('click', (e) => {
   const btn = e.target.closest('button[data-nav]');
   if (!btn) return;
   if (btn.dataset.nav === 'today') goToday();
-  else goPlaceholder(btn.dataset.nav);
+  else goManage(btn.dataset.nav);
 });
 
 // --- 앱이 숨거나 내려갈 때 -------------------------------------------------------

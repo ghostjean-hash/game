@@ -87,7 +87,8 @@ export function createTodayView({ onStart, onResume, onContinue }) {
       }
 
       const card = el('div', 'card');
-      card.append(el('p', 'card-lead', m.routineName));
+      // 날짜 상세에서 손으로 만든 계획에는 루틴 이름이 없다. 빈 줄을 두지 않는다
+      if (m.routineName) card.append(el('p', 'card-lead', m.routineName));
       card.append(planFacts(m));
       card.append(exerciseList(m.exercises));
       parts.push(card);

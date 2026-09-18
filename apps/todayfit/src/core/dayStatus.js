@@ -47,8 +47,15 @@ export function dayStatusMap({ dateKeys, todayKey, plans, records, activeDate = 
   return out;
 }
 
-/** 그 날짜의 계획을 수정할 수 있는가 (01_spec.md 3.9). */
-export function canEditPlan({ dateKey, todayKey, record }) {
+/**
+ * 그 날짜의 계획을 수정할 수 있는가 (01_spec.md 3.9).
+ *
+ * 진행 중 세션이 붙은 날짜도 잠근다(3.9.1). 그 날짜는 아직 기록이 없지만 운동이
+ * 돌고 있어서, 계획을 지우면 끝난 뒤 저장되는 기록이 계획 없는 날에 놓인다 -
+ * 달력과 달성률이 그 기록을 찾지 못한다.
+ */
+export function canEditPlan({ dateKey, todayKey, record, activeDate = null }) {
   if (record) return false;
+  if (activeDate === dateKey) return false;
   return compareDateKey(dateKey, todayKey) >= 0;
 }

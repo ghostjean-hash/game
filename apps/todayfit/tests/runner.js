@@ -9,5 +9,7 @@ import './suites/planner.test.js';
 import './suites/session.test.js';
 import './suites/dayStatus.test.js';
 import './suites/stats.test.js';
+import './suites/validate.test.js';
+import './suites/cascade.test.js';
 
 export const ok = done();

@@ -47,6 +47,15 @@ export function seconds(value) {
   return `${Math.round(value)}${TEXT.unitSeconds}`;
 }
 
+/**
+ * epoch ms → '오후 7:05' 꼴의 로컬 시각. 기록의 시작·종료 시각을 보이는 자리에 쓴다.
+ * 저장은 밀리초 정수이고 표기만 로컬로 바꾼다(02_data.md 4.3).
+ */
+export function clockOfDay(ms) {
+  if (!Number.isFinite(ms)) return '';
+  return new Date(ms).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+}
+
 /** 'YYYY-MM-DD' → '9월 17일 (수)'. 날짜 키를 Date 로 돌리지 않고 글자만 자른다. */
 export function dayLabel(dateKey, weekdayLabel) {
   const [, month, day] = dateKey.split('-');

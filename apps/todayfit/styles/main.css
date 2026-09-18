@@ -377,3 +377,476 @@
 .sumrow[data-result="complete"] .sumrow-result { color: var(--accent); }
 .sumrow[data-result="incomplete"] .sumrow-result { color: var(--fg-mute); }
 .sumrow[data-result="skipped"] .sumrow-result { color: var(--danger); }
+
+/* --- 관리 화면 (05_manage-screens.md) ------------------------------------ */
+/* 화면 아홉이 같은 뼈대를 쓴다 - 머리는 고정, 몸통만 구른다.
+   몸통 밖에서 구르면 뒤로 버튼이 화면 밖으로 밀려 되돌아갈 길이 사라진다. */
+.manage { display: flex; flex-direction: column; min-height: 0; }
+.mscreen {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+.mbody {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+}
+/* 몸통이 세로 flex 라 자식이 기본으로 줄어든다. 요일 일곱처럼 화면보다 긴 내용에서는
+   칸마다 조금씩 눌리다가 overflow:hidden 인 카드 안쪽이 통째로 잘려 사라진다 -
+   요일 규칙에서 시간과 루틴 칸이 안 보이던 원인이다. 줄이지 말고 몸통을 굴린다. */
+.mbody > * { flex: 0 0 auto; }
+
+.mhead {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+}
+.mhead-back {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-2);
+  color: var(--fg-dim);
+}
+.mhead-back svg { width: 22px; height: 22px; }
+.mhead-back.is-empty { display: block; }
+.mhead-box { flex: 1 1 auto; min-width: 0; }
+.mhead-title { margin: 0; font-size: var(--fs-card); font-weight: 800; }
+.mhead-note { margin: var(--sp-hair) 0 0; font-size: var(--fs-caption); color: var(--fg-mute); }
+
+/* --- 줄 --- */
+.mrow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: var(--touch-min);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  text-align: left;
+}
+.mrow-nav { width: 100%; }
+.mrow-box { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: var(--sp-hair); }
+.mrow-label { font-size: var(--fs-list); font-weight: 700; word-break: keep-all; }
+.mrow-note { font-size: var(--fs-caption); color: var(--fg-mute); }
+.mrow-value {
+  flex: 0 0 auto;
+  font-size: var(--fs-note);
+  font-weight: 700;
+  color: var(--fg-dim);
+  font-variant-numeric: tabular-nums;
+}
+.mrow-chev { flex: 0 0 auto; font-size: var(--fs-lead); color: var(--fg-mute); }
+.mrow-nav:active { background: var(--bg-elev-2); }
+
+/* --- 입력 칸 --- */
+.mfield { display: flex; flex-direction: column; gap: var(--sp-tight); }
+.mfield-label { font-size: var(--fs-label); font-weight: 700; color: var(--fg-dim); }
+.mfield-slot { display: flex; align-items: center; gap: var(--sp-2); }
+.mfield-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: var(--touch-min);
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  color: var(--fg);
+  font-size: var(--fs-list);
+  font-family: inherit;
+}
+/* 수는 폭을 줄여 단위가 바로 옆에 붙게 한다 - 칸이 넓으면 숫자와 단위가 멀어진다 */
+.mfield-input.is-num { flex: 0 0 auto; width: 110px; font-variant-numeric: tabular-nums; }
+.mfield-input.is-time { flex: 0 0 auto; width: 150px; }
+.mfield-input:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
+.mfield-unit { font-size: var(--fs-note); font-weight: 700; color: var(--fg-dim); }
+/* 안내와 오류가 같은 자리를 쓴다 - 줄이 늘었다 줄었다 하면 화면이 흔들린다 */
+.mfield-note { min-height: 18px; font-size: var(--fs-caption); color: var(--fg-mute); }
+.mfield-note.is-error { color: var(--danger); font-weight: 700; }
+
+/* --- 켜고 끄는 자리 --- */
+.mrow-toggle { background: var(--bg-elev); }
+.mswitch {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 32px;
+  padding: var(--sp-hair);
+  border-radius: var(--r-4);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line);
+  display: flex;
+  justify-content: flex-start;
+}
+.mswitch.is-on { background: var(--accent); border-color: var(--accent); justify-content: flex-end; }
+.mswitch-knob {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-1);
+}
+
+.mrow-select { gap: var(--sp-3); }
+.mselect {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: var(--touch-min);
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  color: var(--fg);
+  font-size: var(--fs-body);
+  font-family: inherit;
+}
+
+/* --- 목록 --- */
+.mlist, .mitems {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.mlist-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-2);
+}
+.mlist-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: var(--touch-min);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  text-align: left;
+}
+.mlist-main:active { background: var(--bg-elev-2); }
+.mlist-sub, .mlist-del {
+  flex: 0 0 auto;
+  min-width: 52px;
+  min-height: var(--touch-min);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  font-size: var(--fs-caption);
+  font-weight: 700;
+  color: var(--fg-dim);
+}
+.mlist-del { color: var(--danger); }
+
+/* --- 루틴 항목 --- */
+.mitem {
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  overflow: hidden;
+}
+.mitem[data-open="yes"] { border-color: var(--accent); }
+.mitem-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+}
+.mitem-no {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bg-elev-2);
+  color: var(--fg-dim);
+  font-size: var(--fs-label);
+  font-weight: 800;
+}
+.mitem-mark {
+  align-self: flex-start;
+  margin-top: var(--sp-hair);
+  padding: 0 var(--sp-2);
+  border-radius: var(--r-4);
+  background: var(--bg-elev-2);
+  color: var(--accent);
+  font-size: var(--fs-label);
+  font-weight: 800;
+}
+.mitem-moves { flex: 0 0 auto; display: flex; gap: var(--sp-1); }
+.mitem-move {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  background: var(--bg-elev);
+  color: var(--fg-dim);
+  font-size: var(--fs-list);
+}
+.mitem-move:disabled { opacity: 0.3; }
+.mitem-tools {
+  display: flex;
+  gap: var(--sp-2);
+  padding: 0 var(--sp-3) var(--sp-3);
+}
+.mitem-toolbtn {
+  flex: 1 1 0;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  background: var(--bg-elev-2);
+  color: var(--fg-dim);
+  font-size: var(--fs-note);
+  font-weight: 700;
+}
+.mitem-toolbtn.is-danger { color: var(--danger); }
+.mitem-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border-top: 1px solid var(--line);
+  background: var(--bg-elev-2);
+}
+.mitem-fieldshead {
+  margin: 0;
+  font-size: var(--fs-label);
+  font-weight: 800;
+  color: var(--fg-dim);
+}
+
+/* --- 버튼과 안내 --- */
+.madd {
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: var(--touch-min);
+  border-radius: var(--r-2);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: var(--fs-list);
+  font-weight: 800;
+}
+.madd:active { background: var(--accent-strong); }
+.mdanger {
+  width: 100%;
+  min-height: var(--touch-min);
+  border: 1px solid var(--danger);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  color: var(--danger);
+  font-size: var(--fs-list);
+  font-weight: 700;
+}
+
+.mgroup { display: flex; flex-direction: column; gap: var(--sp-2); }
+.mgroup-title { margin: var(--sp-2) 0 0; font-size: var(--fs-label); font-weight: 800; color: var(--fg-dim); }
+
+.mhint {
+  margin: 0;
+  padding: var(--sp-3);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-2);
+  font-size: var(--fs-note);
+  color: var(--fg-dim);
+  line-height: 1.5;
+}
+.mwarn { margin: 0; font-size: var(--fs-caption); font-weight: 700; color: var(--warn); }
+.mfoot {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-caption);
+  color: var(--fg-mute);
+  line-height: 1.5;
+}
+
+/* --- 요일 규칙 --- */
+.mday {
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  overflow: hidden;
+}
+.mday .mrow-toggle { border: 0; border-radius: 0; }
+.mday-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-3) var(--sp-3);
+}
+/* 끈 요일은 흐리게 두되 값은 지우지 않는다 - 다시 켜면 그대로 돌아온다 */
+.mday[data-on="no"] .mday-detail { opacity: 0.45; }
+
+/* --- 달력 --- */
+.cal-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.cal-move {
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev);
+  color: var(--fg-dim);
+  font-size: var(--fs-title);
+}
+.cal-month { font-size: var(--fs-title); font-weight: 800; font-variant-numeric: tabular-nums; }
+.cal-count {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-2);
+}
+
+/* --- 미리보기 판 --- */
+.prev { text-align: left; }
+.prev-head { margin: 0 0 var(--sp-2); font-size: var(--fs-list); font-weight: 800; }
+.prev-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 46vh;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+}
+.prev-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--line);
+}
+.prev-row:last-child { border-bottom: 0; }
+.prev-date { font-size: var(--fs-note); font-weight: 700; }
+.prev-name { font-size: var(--fs-caption); color: var(--fg-dim); }
+
+/* --- 달력 격자 ------------------------------------------------------------ */
+/* 월요일에서 시작해 일요일에 끝난다(01_spec.md 6.8).
+   상태는 색만으로 가르지 않는다 - 네 상태가 모양으로도 갈린다(02_data.md 7.4). */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--sp-1);
+}
+.cal-wd {
+  display: grid;
+  place-items: center;
+  padding: var(--sp-1) 0;
+  font-size: var(--fs-label);
+  font-weight: 800;
+  color: var(--fg-mute);
+}
+.cal-cell {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-hair);
+  border-radius: var(--r-1);
+  background: transparent;
+  border: 0;
+}
+.cal-cell.is-blank { visibility: hidden; }
+.cal-cell:active { background: var(--bg-elev-2); }
+.cal-num { font-size: var(--fs-caption); font-weight: 700; font-variant-numeric: tabular-nums; }
+/* 오늘은 상태와 별개다 - 계획이 없는 오늘도 어디인지 보여야 한다 */
+.cal-cell[data-today="yes"] { background: var(--bg-elev-2); }
+.cal-cell[data-today="yes"] .cal-num { color: var(--accent); font-weight: 800; }
+
+/* 네 상태의 모양. 테두리만 / 꽉 참 / 반만 참 / 빗금 */
+.cal-mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+}
+.cal-cell[data-status="none"] .cal-mark { border-color: transparent; }
+[data-status="planned"] .cal-mark,
+.cal-mark[data-status="planned"] {
+  border-color: var(--day-planned);
+}
+[data-status="complete"] .cal-mark,
+.cal-mark[data-status="complete"] {
+  background: var(--day-complete);
+  border-color: var(--day-complete);
+}
+[data-status="partial"] .cal-mark,
+.cal-mark[data-status="partial"] {
+  border-color: var(--day-partial);
+  background: linear-gradient(to top, var(--day-partial) 50%, transparent 50%);
+}
+[data-status="missed"] .cal-mark,
+.cal-mark[data-status="missed"] {
+  border-color: var(--day-missed);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--day-missed) 0 2px,
+    transparent 2px 5px
+  );
+}
+/* 진행 중인 날짜는 예정 표시 위에 점 하나를 더 얹는다(01_spec.md 5.1) */
+.cal-run {
+  position: absolute;
+  top: var(--sp-1);
+  right: var(--sp-1);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-top: 1px solid var(--line);
+}
+.cal-legenditem { display: flex; align-items: center; gap: var(--sp-1); }
+.cal-legendlabel { font-size: var(--fs-label); color: var(--fg-dim); font-weight: 700; }
+
+.cal-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-2);
+}
+.cal-stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+}
+/* 마지막 한 칸이 홀로 남으면 두 칸을 다 쓴다 */
+.cal-stat:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.cal-statlabel { font-size: var(--fs-label); font-weight: 700; color: var(--fg-mute); }
+.cal-statvalue { font-size: var(--fs-list); font-weight: 800; font-variant-numeric: tabular-nums; }

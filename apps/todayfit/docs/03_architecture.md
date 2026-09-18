@@ -70,11 +70,11 @@ apps/todayfit/
     └── suites/*.test.js      core/ 단위 검사
 ```
 
-1.1. 위 나무는 다 지었을 때의 모양이다. 지금 없는 것은 관리 화면 묶음(`manage.js` · `render/` 아홉 · `core/` 둘 · `platform/id.js`)과 `app.webmanifest` 밖의 홈 화면 자산뿐이다.
+1.1. 위 나무가 지금 저장소의 모습이다. 화면 열셋이 전부 서 있고, 남은 것은 `app.webmanifest` 밖의 홈 화면 자산뿐이다.
 
-- 있는 것 - `docs/` 여섯, `index.html`, `app.webmanifest`, `src/core/` 일곱, `src/data/` 셋(`constants.js` · `phrases.js` · `schema.js`), `src/store/repo.js`, `src/platform/` 셋, `src/input/pressInput.js`, `src/render/` 넷(`todayView.js` · `runView.js` · `summaryView.js` · `format.js`), `src/main.js`, `styles/` 둘, `tests/` 전부
-- 없는 것 - 관리 화면 묶음 전부. 이것이 없어 이동 막대의 달력·설정 자리는 안내 문구만 보이고, **앱 안에서 운동 템플릿·루틴·계획을 만들 길이 없다**
+- `src/core/` 아홉 · `src/render/` 열넷 · `src/platform/` 넷 · `manage.js` 까지 2026-09-18 판에서 채웠다. **앱 안에서 운동 템플릿부터 월간 계획까지 만드는 길이 열렸다**
 - `render/format.js` 는 설계 때 없던 파일이다. 세 화면이 같은 시:분:초·분·날짜 표기를 쓰게 되어 한 자리에 모았다(2026-09-17 추가)
+- `render/parts.js` 도 설계에 없던 파일이다. 관리 화면 아홉이 같은 머리·줄·입력 칸을 쓰게 되어 한 자리에 모았다(2026-09-18 추가)
 - **화면 하나에 파일 하나**로 나눈다. 애초 설계는 관리 화면 일곱을 `manageView.js` 하나에, 날짜 상세와 계획 수정을 `dayView.js` 하나에 담기로 했으나, 앞은 600줄을 넘어 고칠 자리를 찾기 어렵고 뒤는 읽기 전용 화면과 입력 화면이라 성격이 갈린다(2026-09-18 변경, `05_manage-screens.md` 2.2)
 
 ## 2. 의존성 방향

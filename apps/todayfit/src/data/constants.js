@@ -33,6 +33,18 @@ export const SECONDS_PER_MINUTE = 60;
 export const MINUTES_PER_HOUR = 60;
 export const DAYS_IN_WEEK = 7;
 
+// 관리 화면이 쓰는 값 (02_data.md 2.0.1)
+export const NAME_MAX_LENGTH = 20;
+
+// 새 운동 템플릿의 처음 값 (02_data.md 2.0.2).
+// 시간 둘은 비운 채로 시작한다 - 그래야 앱 기본값을 따라간다(01_spec.md 3.5)
+export const NEW_EXERCISE = Object.freeze({
+  sets: 3,
+  reps: 10,
+  workSeconds: null,
+  restSeconds: null,
+});
+
 // --- 3. 코드값 (02_data.md 3장) -----------------------------------------------
 export const PHASE = Object.freeze({
   PREP: 'prep',
