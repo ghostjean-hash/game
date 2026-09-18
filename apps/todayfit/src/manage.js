@@ -65,6 +65,13 @@ const SOURCE_NOTE = {
   settings: TEXT.sourceSettings,
 };
 
+/** 왜 못 고치는가. 잠금 갈래 셋에 사유가 하나씩 붙는다(01_spec.md 3.9 / 3.9.1). */
+function lockReasonOf({ record, running }) {
+  if (running) return TEXT.lockedRunning;
+  if (record) return TEXT.lockedDone;
+  return TEXT.lockedPast;
+}
+
 function weekdayListText(weekdays) {
   if (weekdays.length === 0) return '';
   return weekdays.slice().sort((a, b) => a - b).map((w) => WEEKDAY_LABEL[w]).join(' · ');
@@ -602,8 +609,8 @@ export function createManage({
 
   /** 만들 것이 0일일 때 왜 0일인지 (05_manage-screens.md 4.7.5 4단계). */
   function whyNothing(existingDates) {
-    // 켠 요일이 있는데 그 요일이 전부 이미 만들어진 경우가 가장 흔하다
-    if (existingDates.length > 0) return TEXT.previewWhyAllMade;
+    // 이미 만들어졌다는 답은 맨 뒤다. 앞에 두면 손으로 하루만 넣어 둔 달에서
+    // 진짜 이유(켠 요일이 없다)를 가린다
     const on = repo.getWeekly().filter((d) => d.enabled);
     if (on.length === 0) return TEXT.previewWhyNoWeekday;
 
@@ -615,7 +622,9 @@ export function createManage({
     const exercisesById = indexById(namedExercises());
     const s = getSettings();
     const anyFilled = linked.some((r) => expandRoutine(r, exercisesById, s).length > 0);
-    return anyFilled ? TEXT.previewWhyNoWeekday : TEXT.previewWhyEmptyRoutine;
+    if (!anyFilled) return TEXT.previewWhyEmptyRoutine;
+    // 만들 재료는 다 있는데 0일이면 그 요일 날짜가 전부 이미 만들어진 것이다
+    return existingDates.length > 0 ? TEXT.previewWhyAllMade : TEXT.previewWhyNoWeekday;
   }
 
   async function makeMonthPlans() {
@@ -719,7 +728,7 @@ export function createManage({
       rows,
       missed: info.status === DAY_STATUS.MISSED,
       canEdit,
-      lockReason: canEdit ? null : (record ? TEXT.lockedDone : TEXT.lockedPast),
+      lockReason: canEdit ? null : lockReasonOf({ record, running: activeDate === date }),
     };
   }
 
@@ -1063,7 +1072,12 @@ export function createManage({
   return {
     el: root,
     showSettings: () => reset(SCREEN.SETTINGS),
-    showCalendar: () => reset(SCREEN.CALENDAR),
+    showCalendar: () => {
+      // 이동 막대로 달력을 새로 열면 이번 달부터 본다. 날짜 상세에 들렀다 뒤로
+      // 오는 길은 back() 이라 보던 달이 그대로 남는다
+      shown = { year: 0, month: 0 };
+      reset(SCREEN.CALENDAR);
+    },
     leave,
   };
 }

@@ -161,6 +161,7 @@ export const TEXT = Object.freeze({
   notLinked: '걸린 요일 없음',
   routineDeleteTitle: '이 루틴을 지울까요',
   routineNeedExercise: '운동 템플릿을 먼저 만들어야 루틴에 담을 수 있습니다',
+  planNeedExercise: '운동 템플릿을 먼저 만들어야 이 날짜에 담을 수 있습니다',
 
   // --- 루틴 편집 S-08 ---
   routineEditHeading: '루틴 편집',
@@ -217,6 +218,7 @@ export const TEXT = Object.freeze({
   editPlanAction: '계획 수정',
   lockedPast: '지난 날짜는 고칠 수 없습니다',
   lockedDone: '운동한 날짜는 고칠 수 없습니다',
+  lockedRunning: '지금 운동 중인 날짜라 고칠 수 없습니다',
   startedAtLabel: '시작',
   endedAtLabel: '종료',
   missedNote: '이 날은 운동하지 않았습니다',

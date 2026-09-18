@@ -86,3 +86,24 @@ test('지나간 날짜는 잠긴다', () => {
 test('기록이 있으면 오늘이어도 잠긴다', () => {
   assertEqual(canEditPlan({ dateKey: TODAY, todayKey: TODAY, record: { status: 'partial' } }), false);
 });
+
+test('진행 중 세션이 붙은 날짜는 기록이 없어도 잠긴다 (01_spec.md 3.9.1)', () => {
+  assertEqual(
+    canEditPlan({ dateKey: TODAY, todayKey: TODAY, record: null, activeDate: TODAY }),
+    false,
+  );
+});
+
+test('다른 날짜에서 운동 중이면 이 날짜는 그대로 고칠 수 있다', () => {
+  assertEqual(
+    canEditPlan({ dateKey: '2026-09-20', todayKey: TODAY, record: null, activeDate: TODAY }),
+    true,
+  );
+});
+
+test('진행 중 표시가 없으면 종전대로 판정한다', () => {
+  assertEqual(
+    canEditPlan({ dateKey: TODAY, todayKey: TODAY, record: null, activeDate: null }),
+    true,
+  );
+});

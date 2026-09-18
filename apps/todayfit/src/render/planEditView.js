@@ -114,11 +114,14 @@ export function createPlanEditView(handlers) {
         group.append(sub);
       }
 
+      // 담을 새 운동이 없다는 것과 이미 담긴 것이 없다는 것은 다르다.
+      // 템플릿을 전부 지운 뒤에도 이 날짜에 담긴 운동은 그대로 보여야 한다
       if (m.hasNoExercises) {
-        group.append(emptyNote(TEXT.routineNeedExercise));
+        group.append(emptyNote(TEXT.planNeedExercise));
         group.append(button('madd', TEXT.goMakeExercise, () => handlers.onGoExercises?.()));
-      } else if (m.items.length === 0) {
-        group.append(emptyNote(TEXT.planEmptyNote));
+      }
+      if (m.items.length === 0) {
+        if (!m.hasNoExercises) group.append(emptyNote(TEXT.planEmptyNote));
       } else {
         const list = el('ol', 'mitems');
         m.items.forEach((item) => list.append(itemRow(item, handlers)));
