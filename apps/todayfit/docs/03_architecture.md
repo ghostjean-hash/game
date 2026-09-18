@@ -16,9 +16,10 @@ apps/todayfit/
 ├── .standard                 html-game v0.4.4
 ├── docs/
 │   ├── planning-todayfit.html   기획서 (결정과 근거의 SSOT, 도면 포함)
-│   └── 01_spec / 02_data / 03_architecture / 04_conventions
+│   └── 01_spec / 02_data / 03_architecture / 04_conventions / 05_manage-screens
 ├── src/
 │   ├── main.js               조립 + 화면 전환
+│   ├── manage.js             관리 화면 묶음의 조립·전환·저장 (main.js 가 부름)
 │   ├── core/                 규칙 (DOM 금지, 브라우저 없이 테스트 가능)
 │   │   ├── session.js        운동 실행 상태 기계 (구간 전환·세트 확정·건너뛰기·되돌리기)
 │   │   ├── planner.js        요일 규칙 → 월간 날짜별 계획 생성, 값 적용 순서
@@ -26,7 +27,9 @@ apps/todayfit/
 │   │   ├── dayStatus.js      날짜 상태 판정 (저장분 + 계산분)
 │   │   ├── stats.js          달성률·진행·도래 계획 일수
 │   │   ├── estimate.js       예상 총 운동시간
-│   │   └── datekey.js        로컬 달력 날짜 키, 주 경계(월~일)
+│   │   ├── datekey.js        로컬 달력 날짜 키, 주 경계(월~일)
+│   │   ├── validate.js       입력 범위 검사 (02_data.md 1.3)
+│   │   └── cascade.js        지움이 번지는 자리 · 참조 세기
 │   ├── data/
 │   │   ├── constants.js      02_data 1~4장 수치의 코드 실체
 │   │   ├── phrases.js        음성 문구표
@@ -34,17 +37,27 @@ apps/todayfit/
 │   ├── store/
 │   │   └── repo.js           저장 읽기·쓰기 (createStorage 감싸기, core 밖)
 │   ├── render/
-│   │   ├── todayView.js      오늘 화면
-│   │   ├── calendarView.js   달력 격자 + 달성 현황
-│   │   ├── dayView.js        날짜 상세 + 계획 수정
-│   │   ├── manageView.js     요일 규칙·루틴·운동 템플릿·설정
-│   │   ├── runView.js        운동 실행 화면
-│   │   └── summaryView.js    종료 요약
+│   │   ├── parts.js          화면 공통 조각 (머리 · 목록 행 · 입력 칸 · 버튼)
+│   │   ├── format.js         시:분:초 · 분 · 날짜 표기
+│   │   ├── todayView.js      오늘 화면 S-01
+│   │   ├── calendarView.js   달력 S-02 (격자 + 달성 현황 + 월간 계획 생성)
+│   │   ├── settingsView.js   설정 S-03 (관리 화면 진입 통로)
+│   │   ├── dayView.js        날짜 상세 S-04
+│   │   ├── planEditView.js   날짜별 계획 수정 S-05
+│   │   ├── weeklyView.js     요일 규칙 S-06
+│   │   ├── routineListView.js   루틴 목록 S-07
+│   │   ├── routineEditView.js   루틴 편집 S-08
+│   │   ├── exerciseListView.js  운동 템플릿 목록 S-09
+│   │   ├── exerciseEditView.js  운동 템플릿 편집 S-10
+│   │   ├── prefsView.js      기본값과 소리 S-11
+│   │   ├── runView.js        운동 실행 화면 S-12
+│   │   └── summaryView.js    종료 요약 S-13
 │   ├── input/
 │   │   └── pressInput.js     짧게/길게 누름 판별, 맥락 메뉴 차단
 │   └── platform/             브라우저 사정을 한 자리에 가둔다
 │       ├── wakelock.js       화면 꺼짐 방지
 │       ├── speech.js         음성 안내
+│       ├── id.js             새 항목의 식별자
 │       └── ticker.js         시각 차이 기반 경과 계산
 ├── styles/
 │   ├── tokens.css            이 앱 토큰 (공용 토큰 위에 얹음)
@@ -57,11 +70,12 @@ apps/todayfit/
     └── suites/*.test.js      core/ 단위 검사
 ```
 
-1.1. 위 나무는 다 지었을 때의 모양이다. 지금 없는 것은 `render/` 의 `calendarView.js` · `dayView.js` · `manageView.js` 셋과 `app.webmanifest` 밖의 홈 화면 자산뿐이고, 나머지는 전부 있다.
+1.1. 위 나무는 다 지었을 때의 모양이다. 지금 없는 것은 관리 화면 묶음(`manage.js` · `render/` 아홉 · `core/` 둘 · `platform/id.js`)과 `app.webmanifest` 밖의 홈 화면 자산뿐이다.
 
-- 있는 것 - `docs/` 다섯, `index.html`, `app.webmanifest`, `src/core/` 일곱, `src/data/` 셋(`constants.js` · `phrases.js` · `schema.js`), `src/store/repo.js`, `src/platform/` 셋, `src/input/pressInput.js`, `src/render/` 넷(`todayView.js` · `runView.js` · `summaryView.js` · `format.js`), `src/main.js`, `styles/` 둘, `tests/` 전부
-- 없는 것 - 달력 `calendarView.js` · 날짜 상세 `dayView.js` · 관리 `manageView.js`. 이 셋이 없어 이동 막대의 달력·설정 자리는 안내 문구만 보인다
+- 있는 것 - `docs/` 여섯, `index.html`, `app.webmanifest`, `src/core/` 일곱, `src/data/` 셋(`constants.js` · `phrases.js` · `schema.js`), `src/store/repo.js`, `src/platform/` 셋, `src/input/pressInput.js`, `src/render/` 넷(`todayView.js` · `runView.js` · `summaryView.js` · `format.js`), `src/main.js`, `styles/` 둘, `tests/` 전부
+- 없는 것 - 관리 화면 묶음 전부. 이것이 없어 이동 막대의 달력·설정 자리는 안내 문구만 보이고, **앱 안에서 운동 템플릿·루틴·계획을 만들 길이 없다**
 - `render/format.js` 는 설계 때 없던 파일이다. 세 화면이 같은 시:분:초·분·날짜 표기를 쓰게 되어 한 자리에 모았다(2026-09-17 추가)
+- **화면 하나에 파일 하나**로 나눈다. 애초 설계는 관리 화면 일곱을 `manageView.js` 하나에, 날짜 상세와 계획 수정을 `dayView.js` 하나에 담기로 했으나, 앞은 600줄을 넘어 고칠 자리를 찾기 어렵고 뒤는 읽기 전용 화면과 입력 화면이라 성격이 갈린다(2026-09-18 변경, `05_manage-screens.md` 2.2)
 
 ## 2. 의존성 방향
 
@@ -75,6 +89,8 @@ main.js ──> core/     ──> data/
    │          └──────> input/          (운동 실행 화면의 다음 버튼 하나, 2.6)
    ├─────> input/     ──> data/
    ├─────> platform/  ──> data/
+   │
+   ├─────> manage.js  ──> core/ · store/ · render/ · platform/   (관리 화면 묶음, 2.7)
    │
    └─────> shared/storage, shared/ui, shared/frame/audio (공용 자산)
 ```
@@ -90,6 +106,11 @@ main.js ──> core/     ──> data/
 2.5. `platform/`은 브라우저 사정(화면 꺼짐·음성·시각)을 가두는 자리다. 이 세 파일 밖에서 `wakeLock` · `speechSynthesis` · `Date.now`를 직접 부르지 않는다. 고도 같은 다른 바탕으로 옮길 때 갈아 끼울 자리가 여기 하나로 모인다.
 
 2.6. `render/runView.js`만 `input/`을 직접 문다. 짧게·길게 누름을 가르는 자리가 다음 버튼 하나뿐이라, 그 버튼을 만드는 쪽에서 붙이는 편이 `main.js`가 남의 화면 속 버튼을 찾아 붙이는 것보다 짧다. 다른 화면이 같은 입력을 쓰게 되면 그때 `main.js`로 올린다(2026-09-17 추가).
+
+2.7. `manage.js`는 `main.js`와 같은 조립 층이다. 관리 화면 아홉을 계단으로 쌓고, 그 화면들이 콜백으로 알린 것을 저장에 반영한다. `main.js`가 이 묶음을 열고 닫으며, 반대로 `manage.js`가 `main.js`를 부르지 않는다 - 나갈 때는 받아 둔 콜백을 부른다.
+
+- 저장을 이 한 자리에 모으는 이유는 2.3 때문이다. 화면 아홉이 저마다 저장에 손대면 `render/`가 상태를 바꾸지 않는다는 규칙이 무너진다
+- 앱 설정을 바꾸는 화면(`S-11`)은 `main.js`가 들고 있는 값도 함께 갱신해야 한다. 그 자리만 콜백으로 거슬러 올린다(`05_manage-screens.md` 4.10.5)
 
 ## 3. 공용 자산 사용
 
