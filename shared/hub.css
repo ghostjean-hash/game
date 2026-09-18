@@ -8,23 +8,31 @@
   --hub-ink-muted: #5a6273;
   --hub-line: #dee2ec;
   --hub-accent: #0f9d70;
+
+  /* 공용 부품(대화상자·버튼·알림 띠·머리 띠)은 공용 토큰을 읽는데, 그 토큰은 어두운
+     팔레트다. 허브만 밝은 바탕이라 공용 부품이 이 화면에서 검은 바탕으로 떴고, 글자색은
+     본문에서 내려온 검정이라 글이 보이지 않았다(2026-09-18 로그인 충돌 창에서 적발).
+     부품마다 색을 덧칠하면 새 부품이 올 때마다 같은 사고가 나므로, 이 화면에서는
+     토큰 자체를 밝은 값으로 다시 정의한다. 다른 화면의 어두운 팔레트는 그대로다. */
+  --bg: var(--hub-bg);
+  --bg-elev: var(--hub-surface);
+  --bg-elev-2: var(--hub-surface-muted);
+  --fg: var(--hub-ink);
+  --fg-dim: var(--hub-ink-muted);
+  --fg-mute: #7a8294;
+  --line: var(--hub-line);
+  --accent: var(--hub-accent);
+  --accent-strong: #0c8560;
+  --accent-fg: #ffffff;
 }
 
 body, .page { min-height: 100dvh; background: var(--hub-bg); color: var(--hub-ink); }
 .page { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 
-/* 공용 대화상자는 어두운 토큰으로 칠해지는데 허브 본문은 밝은 팔레트라, 배경만 어둡고
-   글자색은 본문에서 내려온 검정이 된다 - 같은 검정끼리 겹쳐 글이 보이지 않았다.
-   허브에서는 대화상자도 밝은 쪽으로 맞춘다(2026-09-18, 로그인 충돌 창에서 적발). */
-.modal { background: var(--hub-surface); border-color: var(--hub-line); color: var(--hub-ink); }
-.modal p { color: var(--hub-ink-muted); }
-.modal .cloud-conflict-row { border-color: var(--hub-line); }
-.modal .cloud-conflict-row:has(input:checked) { border-color: var(--hub-accent); background: var(--hub-surface-muted); }
-.modal .cloud-conflict-when { color: var(--hub-ink-muted); }
-.modal .btn { background: var(--hub-surface-muted); color: var(--hub-ink); border-color: var(--hub-line); }
-.modal .btn:hover { background: var(--hub-line); }
-.modal .btn-primary { background: var(--hub-accent); color: #ffffff; border-color: transparent; }
-.modal .btn-primary:hover { background: #0c8560; }
+/* 위 토큰 재정의로 공용 부품의 색은 전부 따라온다. 여기서는 허브에서만 다른 두 자리만
+   손본다 - 고른 줄을 바탕색으로도 알리고, 딸림 버튼은 흰 바탕과 구분되게 한 단 눌러 둔다. */
+.modal .cloud-conflict-row:has(input:checked) { background: var(--hub-surface-muted); }
+.modal .btn:not(.btn-primary) { background: var(--hub-surface-muted); }
 .launcher { width: min(1160px, 100%); margin: 0 auto; padding: 24px 24px 32px; }
 .hub-panel { margin: 0; }
 .hub-panel[hidden] { display: none; }
