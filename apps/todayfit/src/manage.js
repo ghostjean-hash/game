@@ -879,6 +879,22 @@ export function createManage({
     });
     if (picked === 'no' || !picked) return;
 
+    const routine = routines.find((r) => r.id === picked);
+    const expanded = expandRoutine(routine, indexById(repo.getExercises()), getSettings());
+
+    // 빈 루틴인지는 고른 순간 이미 안다. 바꿀 수 없다는 것을 먼저 알린다 -
+    // 뒤에 두면 사라진다는 말에 동의를 받아 놓고 아무 일도 하지 않는 헛걸음이 된다.
+    // (그대로 받으면 목록이 0개가 되어 writePlan 이 이 날짜 계획을 통째로 지운다.
+    //  계획 삭제는 전용 확인 창을 거치는 조작이다 - 05_manage-screens.md 4.9.6)
+    if (expanded.length === 0) {
+      await showModal({
+        title: TEXT.fromRoutineEmptyTitle,
+        body: TEXT.fromRoutineEmptyBody,
+        actions: [{ label: TEXT.okAction, primary: true }],
+      });
+      return;
+    }
+
     const plan = repo.getPlan(frame.date);
     // 지금 담긴 것이 사라지므로 한 번 더 묻는다. 비어 있으면 잃을 것이 없어 건너뛴다
     if (plan && plan.exercises.length > 0) {
@@ -891,21 +907,6 @@ export function createManage({
         ],
       });
       if (ok !== 'yes') return;
-    }
-
-    const routine = routines.find((r) => r.id === picked);
-    const expanded = expandRoutine(routine, indexById(repo.getExercises()), getSettings());
-
-    // 빈 루틴을 불러오면 목록이 0개가 되고, 그대로 두면 writePlan 이 이 날짜 계획을
-    // 통째로 지운다 - 사용자는 목록을 바꾸겠다고 했지 계획을 지우겠다고 하지 않았다.
-    // 계획 삭제는 전용 확인 창을 거치는 조작이다(05_manage-screens.md 4.9.6)
-    if (expanded.length === 0) {
-      await showModal({
-        title: TEXT.fromRoutineEmptyTitle,
-        body: TEXT.fromRoutineEmptyBody,
-        actions: [{ label: TEXT.okAction, primary: true }],
-      });
-      return;
     }
 
     ui.draftRoutineName = routine.name;
