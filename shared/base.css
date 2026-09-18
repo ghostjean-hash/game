@@ -77,6 +77,24 @@ a { color: var(--accent); text-decoration: none; }
 .modal p { margin: 0 0 var(--sp-4); color: var(--fg-dim); white-space: pre-line; }
 /* 충돌 목록이 길어지면 이 영역만 손가락·휠로 스크롤된다. 아래 선택 버튼은 항상 남는다. */
 .modal > .cloud-conflict { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 4px; }
+/* 고르는 줄에 모양이 없으면 label·span·small 이 전부 인라인이라 두 선택지가 한 문단으로
+   이어붙는다. 무엇을 고르는 중인지 읽히지 않아 줄과 간격을 여기서 준다. */
+.cloud-conflict-group + .cloud-conflict-group { margin-top: var(--sp-4); }
+.cloud-conflict-name { margin-bottom: var(--sp-2); font-weight: 700; }
+.cloud-conflict-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-2);
+  padding: var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  cursor: pointer;
+}
+.cloud-conflict-row:has(input:checked) { border-color: var(--accent); }
+.cloud-conflict-row > input { flex: 0 0 auto; margin-top: 2px; }
+.cloud-conflict-row > span { display: flex; flex-direction: column; gap: 2px; }
+.cloud-conflict-when { color: var(--fg-dim); font-size: 13px; line-height: 1.45; }
 .modal-actions { flex: 0 0 auto; display: flex; gap: var(--sp-2); justify-content: flex-end; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 

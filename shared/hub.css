@@ -12,6 +12,19 @@
 
 body, .page { min-height: 100dvh; background: var(--hub-bg); color: var(--hub-ink); }
 .page { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+
+/* 공용 대화상자는 어두운 토큰으로 칠해지는데 허브 본문은 밝은 팔레트라, 배경만 어둡고
+   글자색은 본문에서 내려온 검정이 된다 - 같은 검정끼리 겹쳐 글이 보이지 않았다.
+   허브에서는 대화상자도 밝은 쪽으로 맞춘다(2026-09-18, 로그인 충돌 창에서 적발). */
+.modal { background: var(--hub-surface); border-color: var(--hub-line); color: var(--hub-ink); }
+.modal p { color: var(--hub-ink-muted); }
+.modal .cloud-conflict-row { border-color: var(--hub-line); }
+.modal .cloud-conflict-row:has(input:checked) { border-color: var(--hub-accent); background: var(--hub-surface-muted); }
+.modal .cloud-conflict-when { color: var(--hub-ink-muted); }
+.modal .btn { background: var(--hub-surface-muted); color: var(--hub-ink); border-color: var(--hub-line); }
+.modal .btn:hover { background: var(--hub-line); }
+.modal .btn-primary { background: var(--hub-accent); color: #ffffff; border-color: transparent; }
+.modal .btn-primary:hover { background: #0c8560; }
 .launcher { width: min(1160px, 100%); margin: 0 auto; padding: 24px 24px 32px; }
 .hub-panel { margin: 0; }
 .hub-panel[hidden] { display: none; }
