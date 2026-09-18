@@ -70,6 +70,11 @@ export function monthKeyOf(key) {
   return key.slice(0, 'YYYY-MM'.length);
 }
 
+/** 연·월 숫자 → 월 키. month 는 1..12 다. */
+export function monthKeyFrom(year, month) {
+  return `${year}-${pad2(month)}`;
+}
+
 export function daysInMonth(year, month) {
   return new Date(year, month, 0).getDate();
 }

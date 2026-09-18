@@ -2,7 +2,7 @@ import { suite, test, assertEqual, assertDeep } from '../core.js';
 import {
   toDateKey, fromDateKey, addDays, weekdayOf, startOfWeek, endOfWeek,
   weekDateKeys, monthDateKeys, monthDateKeysOnWeekdays, daysInMonth,
-  compareDateKey, shiftMonth, monthKeyOf, isDateKey,
+  compareDateKey, shiftMonth, monthKeyOf, monthKeyFrom, isDateKey,
 } from '../../src/core/datekey.js';
 
 suite('datekey - 날짜 키');
@@ -108,6 +108,19 @@ test('요일로 걸러낸다 - 화·목·토', () => {
 
 test('달 키를 뗀다', () => {
   assertEqual(monthKeyOf('2026-09-17'), '2026-09');
+});
+
+// 0 패딩이 곧 사전순 비교의 전제다(planner 의 canMakeMonthPlans 가 이 성질에 기댄다)
+test('연·월 숫자로 달 키를 만든다 - 한 자리 달도 0 을 채운다', () => {
+  assertEqual(monthKeyFrom(2026, 9), '2026-09');
+  assertEqual(monthKeyFrom(2026, 12), '2026-12');
+  assertEqual(monthKeyFrom(2027, 1), '2027-01');
+});
+
+test('만든 달 키가 뗀 달 키와 같은 자로 비교된다', () => {
+  assertEqual(monthKeyFrom(2026, 9) === monthKeyOf('2026-09-18'), true);
+  assertEqual(monthKeyFrom(2026, 8) < monthKeyOf('2026-09-18'), true);
+  assertEqual(monthKeyFrom(2027, 1) > monthKeyOf('2026-12-31'), true);
 });
 
 test('달을 옮긴다 - 해를 넘어도 맞다', () => {

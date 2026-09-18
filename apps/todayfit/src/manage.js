@@ -15,8 +15,11 @@ import {
 } from './core/cascade.js';
 import { resolveItem, sourceOfItem, expandRoutine, indexById } from './core/resolve.js';
 import { estimatePlanSeconds } from './core/estimate.js';
-import { buildMonthPlans, previewMonthPlans } from './core/planner.js';
-import { monthDateKeys, weekDateKeys, weekdayOf, shiftMonth, compareDateKey } from './core/datekey.js';
+import { buildMonthPlans, previewMonthPlans, canMakeMonthPlans } from './core/planner.js';
+import {
+  monthDateKeys, monthDateKeysOnWeekdays, monthKeyFrom, monthKeyOf,
+  weekDateKeys, weekdayOf, shiftMonth, compareDateKey,
+} from './core/datekey.js';
 import { dayStatus, dayStatusMap, canEditPlan } from './core/dayStatus.js';
 import { weekStats, monthStats, toPercent } from './core/stats.js';
 import { now } from './platform/ticker.js';
@@ -555,6 +558,10 @@ export function createManage({
     return {
       monthText: SAY.yearMonth(year, month),
       planCount,
+      // 지난 달에는 만들기를 내지 않는다(01_spec.md 3.7.1). 이번 달이면 오늘부터
+      // 월말까지만 만든다는 것을 조작 옆에 적는다 - 미리보기를 열기 전에 알아야 한다
+      canMake: canMakeMonthPlans({ year, month, today }),
+      isThisMonth: monthKeyFrom(year, month) === monthKeyOf(today),
       // 격자는 월요일에서 시작한다. 1일 앞의 빈칸 수가 그 달의 첫 요일에서 나온다
       weekdayHeads: WEEKDAY_LABEL.slice(1),
       leading: weekdayOf(keys[0]) - WEEK_START,
@@ -608,27 +615,36 @@ export function createManage({
   }
 
   /** 만들 것이 0일일 때 왜 0일인지 (05_manage-screens.md 4.7.5 4단계). */
-  function whyNothing(existingDates) {
+  function whyNothing({ year, month, today }) {
     // 이미 만들어졌다는 답은 맨 뒤다. 앞에 두면 손으로 하루만 넣어 둔 달에서
     // 진짜 이유(켠 요일이 없다)를 가린다
     const on = repo.getWeekly().filter((d) => d.enabled);
     if (on.length === 0) return TEXT.previewWhyNoWeekday;
 
     const routinesById = indexById(repo.getRoutines());
-    const linked = on.map((d) => routinesById[d.routineId]).filter(Boolean);
     // 루틴을 안 걸었거나, 건 루틴이 지워져 가리키는 곳이 없거나
+    const linked = on.filter((d) => routinesById[d.routineId]);
     if (linked.length === 0) return TEXT.previewWhyNoRoutine;
 
     const exercisesById = indexById(namedExercises());
     const s = getSettings();
-    const anyFilled = linked.some((r) => expandRoutine(r, exercisesById, s).length > 0);
-    if (!anyFilled) return TEXT.previewWhyEmptyRoutine;
-    // 만들 재료는 다 있는데 0일이면 그 요일 날짜가 전부 이미 만들어진 것이다
-    return existingDates.length > 0 ? TEXT.previewWhyAllMade : TEXT.previewWhyNoWeekday;
+    const filled = linked.filter((d) => expandRoutine(routinesById[d.routineId], exercisesById, s).length > 0);
+    if (filled.length === 0) return TEXT.previewWhyEmptyRoutine;
+
+    // 재료는 다 있는데 0일이다. 남은 기간에 그 요일이 아예 없는 것과, 있는데 이미
+    // 다 만들어진 것은 사용자가 할 일이 달라 사유를 가른다(01_spec.md 3.7.1 / 3.7.2)
+    const targets = monthDateKeysOnWeekdays(year, month, filled.map((d) => d.weekday))
+      .filter((k) => compareDateKey(k, today) >= 0);
+    return targets.length === 0 ? TEXT.previewWhyNoDaysLeft : TEXT.previewWhyAllMade;
   }
 
   async function makeMonthPlans() {
     const { year, month } = calendarMonth();
+    const today = todayKey();
+    // 지난 달에는 조작 자체를 내지 않지만(달력 화면), 부르는 길이 하나 더 생겨도
+    // 지난 날짜가 만들어지지 않도록 여기서도 막는다
+    if (!canMakeMonthPlans({ year, month, today })) return;
+
     const plans = repo.getPlans();
     const existingDates = monthDateKeys(year, month).filter((k) => plans[k]);
 
@@ -640,13 +656,14 @@ export function createManage({
       exercises: repo.getExercises(),
       settings: getSettings(),
       createdAt: now(),
+      today,
       existingDates,
     });
 
     if (built.length === 0) {
       await showModal({
         title: TEXT.previewNothing,
-        body: whyNothing(existingDates),
+        body: whyNothing({ year, month, today }),
         actions: [{ label: TEXT.okAction, primary: true }],
       });
       return;

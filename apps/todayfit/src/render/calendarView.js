@@ -7,12 +7,15 @@
 // 이미 만든 계획은 덮어쓰지 않는다(사용자 결정 2026-09-18). 저장에 자동 생성분과
 // 손으로 고친 계획을 가르는 표식이 없어서다. 그 결정을 지키는 자리는 만들기 조작을
 // 감추는 것이 아니라 이미 있는 날짜를 건너뛰는 것이다(planner 의 existingDates).
+//
+// 지난 달에서만 만들기를 내지 않는다(05_manage-screens.md 4.7.6.1). 이것은 위와 달리
+// 기간 자체가 없는 경우라 누를 것을 남겨 둘 이유가 없다.
 
 import { TEXT, SAY } from '../data/phrases.js';
 import { el, screenHead, body, button, addButton } from './parts.js';
 
 /**
- * 월간 계획 생성 미리보기 (01_spec.md 3.7 5단계).
+ * 월간 계획 생성 미리보기 (01_spec.md 3.7 6단계).
  *
  * 화면을 새로 쌓지 않고 달력 위에 덮는 판으로 낸다 - 기획서가 이 자리에 화면 번호를
  * 붙이지 않고 달력의 조작으로 적었기 때문이다(05_manage-screens.md 4.7.6).
@@ -117,11 +120,17 @@ export function createCalendarView(handlers) {
       );
       box.append(line);
 
-      // 만들기는 늘 열어 둔다. 이미 있는 날짜는 건너뛰므로(planner 의 existingDates)
-      // 만들어 둔 계획이 덮이지 않는다 - 사용자 결정 3번이 막으려던 것은 덮어쓰기다.
-      // 하루를 손수 넣었다고 그 달 나머지를 만들 길까지 닫으면 막다른 골목이 된다
-      box.append(addButton(TEXT.makePlanAction, () => handlers.onMakePlan?.()));
-      if (m.planCount > 0) box.append(el('p', 'mhint', TEXT.alreadyPlanned));
+      // 이번 달과 다음 달 이후에는 만들기를 늘 열어 둔다. 이미 있는 날짜는 건너뛰므로
+      // (planner 의 existingDates) 만들어 둔 계획이 덮이지 않는다 - 사용자 결정 3번이
+      // 막으려던 것은 덮어쓰기다. 하루를 손수 넣었다고 그 달 나머지를 만들 길까지
+      // 닫으면 막다른 골목이 된다
+      if (m.canMake) {
+        box.append(addButton(TEXT.makePlanAction, () => handlers.onMakePlan?.()));
+        if (m.isThisMonth) box.append(el('p', 'mhint', TEXT.thisMonthFromToday));
+        if (m.planCount > 0) box.append(el('p', 'mhint', TEXT.alreadyPlanned));
+      } else {
+        box.append(el('p', 'mhint', TEXT.pastMonthNoMake));
+      }
 
       box.append(grid(m, handlers));
       box.append(legend(m));

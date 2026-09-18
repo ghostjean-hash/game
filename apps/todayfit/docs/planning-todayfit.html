@@ -403,7 +403,7 @@
       <tr><td>남은 운동 계속</td><td>그 날짜의 수행 기록을 다시 진행 중 세션으로 열고 남은 세트부터 진행</td><td>오늘 부분 완료, 재개 대상 세트 잔여</td></tr>
       <tr><td rowspan="3">달력 S-02</td><td>이전 달 · 다음 달</td><td>표시 월 변경</td><td>상시</td></tr>
       <tr><td>날짜 선택</td><td>날짜 상세 진입</td><td>상시</td></tr>
-      <tr><td>월간 계획 생성</td><td>미리보기 표시 후 확정 시 날짜별 계획 일괄 생성</td><td>표시 월에 날짜별 계획 없음</td></tr>
+      <tr><td>월간 계획 생성</td><td>미리보기 표시 후 확정 시 날짜별 계획 일괄 생성. 대상 기간은 9.5, 이미 계획이 있는 날짜는 건너뜀</td><td>표시 월이 이번 달 또는 그 이후</td></tr>
       <tr><td>날짜 상세 S-04</td><td>계획 수정</td><td>날짜별 계획 수정 진입</td><td>오늘 이후 날짜, 수행 기록 없음</td></tr>
       <tr><td rowspan="6">날짜별 계획 수정 S-05</td><td>예정 시간 변경</td><td>그 날짜의 예정 시간 갱신</td><td rowspan="6">수정 잠김 아닌 날짜</td></tr>
       <tr><td>운동 추가</td><td>운동 템플릿 선택 후 목록 끝에 항목 추가</td></tr>
@@ -919,10 +919,10 @@
 
   <h3><span class="sn">9.1</span> 생성 절차</h3>
   <div class="ol pinlist">
-    <div class="oi"><span class="cnum">1</span><div class="ot">달력에서 계획이 없는 달로 이동</div></div>
+    <div class="oi"><span class="cnum">1</span><div class="ot">달력에서 계획을 만들 달로 이동 - 이번 달 또는 그 이후</div></div>
     <div class="oi"><span class="cnum">2</span><div class="ot">월간 계획 생성 조작</div></div>
     <div class="oi"><span class="cnum">3</span><div class="ot">요일 규칙에서 사용 중인 요일 추출</div></div>
-    <div class="oi"><span class="cnum">4</span><div class="ot">그 달에서 해당 요일에 드는 날짜 전부 추출</div></div>
+    <div class="oi"><span class="cnum">4</span><div class="ot">생성 대상 기간(9.5) 안에서 해당 요일에 드는 날짜 추출. 이미 계획이 있는 날짜는 제외</div></div>
     <div class="oi"><span class="cnum">5</span><div class="ot">날짜마다 연결 루틴의 운동 항목을 순서대로 전개</div></div>
     <div class="oi"><span class="cnum">6</span><div class="ot">각 운동의 세트당 권장 수행시간과 세트 간 휴식시간을 6.10 값 적용 순서로 확정</div></div>
     <div class="oi"><span class="cnum">7</span><div class="ot">미리보기 표시 - 생성 일수, 날짜별 루틴 이름, 날짜별 예정 시간</div></div>
@@ -961,9 +961,25 @@
   <div class="ol">
     <div class="oi"><span class="bl"></span><div class="ot">생성 단위 - 달 하나</div></div>
     <div class="oi"><span class="bl"></span><div class="ot">날짜당 계획 하나 - 같은 날짜에 계획을 두 개 만들지 않음</div></div>
-    <div class="oi"><span class="bl"></span><div class="ot">이미 생성된 달의 재생성 <span class="chip c-todo">확정 대기</span></div></div>
-    <div class="oi"><span class="bl"></span><div class="ot">다음 달 계획 생성 시점 <span class="chip c-todo">확정 대기</span></div></div>
-    <div class="oi"><span class="bl"></span><div class="ot">계획이 없는 날짜에 계획 추가 <span class="chip c-todo">확정 대기</span></div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">이미 계획이 있는 날짜 - 그대로 두고 건너뜀. 생성은 빈 날짜만 채움 (11.1 3번)</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">다음 달 계획 생성 시점 - 사용자가 달력에서 직접 생성 (11.1 2번)</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">계획이 없는 날짜에 계획 추가 - 날짜 상세에서 직접 추가 (11.1 1번)</div></div>
+  </div>
+
+  <h3><span class="sn">9.5</span> 생성 대상 기간</h3>
+  <p class="lead">지난 날짜에는 계획을 만들지 않는다. 앱을 쓰기 시작하기 전 날짜에 계획이 생기면 그 날짜는 곧바로 미실시가 되고, 쓰지도 않던 기간이 실패 기록으로 쌓여 달성률이 계획 준수도를 나타내지 못한다.</p>
+  <table class="tight">
+    <thead><tr><th>표시 월</th><th>생성 대상 기간</th><th>생성 조작</th></tr></thead>
+    <tbody>
+      <tr><td>이번 달</td><td>오늘부터 월말까지. 오늘 포함, 오늘 이전 날짜 제외</td><td>노출</td></tr>
+      <tr><td>다음 달 이후</td><td>그 달 전체</td><td>노출</td></tr>
+      <tr><td>지난 달</td><td>없음</td><td>미노출</td></tr>
+    </tbody>
+  </table>
+  <div class="ol">
+    <div class="oi"><span class="bl"></span><div class="ot">예 - 9월 18일에 9월 계획 생성 시 9월 18일~30일 가운데 요일 규칙에 드는 날짜만 생성. 9월 1일~17일은 계획 없음 상태 유지</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">기존 계획과의 관계 - 대상 기간 안이라도 이미 계획이 있는 날짜는 9.4대로 건너뜀</div></div>
+    <div class="oi"><span class="bl"></span><div class="ot">달성률의 뜻 - 앱을 실제로 쓰기 시작한 뒤 계획을 얼마나 지켰는가</div></div>
   </div>
 </section>
 
@@ -1009,10 +1025,10 @@
 <section id="s11">
   <div class="sechead"><span class="n">11</span><h2>확정 대기</h2><span class="rid">TF-11</span></div>
 
-  <div class="hold"><b>미결 범위</b>핵심 실행 규칙과 데이터 구조는 확정을 마쳤다. 관리 화면에 걸리는 넷은 그 화면을 만드는 시점인 2026-09-18 에 확정했고(11.1), 실행 화면과 기기 이동에 걸리는 셋은 아직 열려 있다(11.1.1).</div>
+  <div class="hold"><b>미결 범위</b>핵심 실행 규칙과 데이터 구조는 확정을 마쳤다. 관리 화면에 걸리는 넷과 그 화면을 돌려 보고 새로 정한 하나는 2026-09-18 에 확정했고(11.1), 실행 화면과 기기 이동에 걸리는 셋은 아직 열려 있다(11.1.1).</div>
 
   <h3><span class="sn">11.1</span> 관리 화면 기획 결정 - 확정</h3>
-  <p class="lead">관리 화면을 만드는 시점에 사용자가 확정한 넷이다(2026-09-18). 구현 설계는 <b>05_manage-screens.md</b> 6장이 받는다.</p>
+  <p class="lead">관리 화면에 걸리는 기획 결정 다섯이다. 넷은 그 화면을 만드는 시점에, 8번은 화면을 돌려 본 뒤에 확정했다. 구현 설계는 <b>05_manage-screens.md</b> 6장이 받는다.</p>
   <table class="tight">
     <thead><tr><th class="num">번호</th><th>항목</th><th>확정</th><th>근거</th></tr></thead>
     <tbody>
@@ -1020,6 +1036,7 @@
       <tr><td class="num">2</td><td>다음 달 계획 생성 시점</td><td>사용자가 달력에서 직접 만든다. 자동 생성하지 않는다</td><td>월 단위 앱이라 다음 달에 들어가기 전 한 번 확인하고 만드는 편이 자연스럽다</td></tr>
       <tr><td class="num">3</td><td>이미 만든 계획의 취급</td><td>덮어쓰지 않는다. 월간 계획 생성은 이미 있는 날짜를 건너뛰고 빈 날짜만 채운다. 만든 계획을 고칠 일은 날짜별 계획 수정으로 한다</td><td>자동 생성분과 손으로 고친 계획을 가르는 표식이 저장에 없어, 있는 날짜를 다시 만들면 공들여 고친 계획이 조용히 덮인다. 처음에는 계획이 하나라도 있는 달의 생성 조작을 감췄으나, 그러면 1번으로 하루를 손수 넣는 순간 그 달 나머지를 만들 길이 사라져 되돌렸다(2026-09-18 구현 중 확인)</td></tr>
       <tr><td class="num">6</td><td>과거 기록 손 수정</td><td>1차에 허용하지 않는다. 지난 기록은 읽기 전용이다</td><td>손으로 완료 처리할 수 있으면 달성률의 뜻이 약해진다</td></tr>
+      <tr><td class="num">8</td><td>월간 계획 생성 대상 기간</td><td>생성 대상 기간이 지난 날짜를 비껴간다. 이번 달은 오늘부터 월말까지(오늘 포함), 다음 달 이후는 그 달 1일부터 말일까지, 지난 달은 생성 조작을 뺀다. 상세는 9.5</td><td>앱을 쓰지도 않던 기간이 미실시로 쌓이면 달성률이 계획 준수도를 나타내지 못한다. 달 중간에 이번 달 계획을 처음 만들면 그 달 앞부분이 통째로 미실시가 되고 달성률이 0퍼센트로 시작한다</td></tr>
     </tbody>
   </table>
 
