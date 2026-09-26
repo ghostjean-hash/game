@@ -228,7 +228,8 @@ const VALID_MODES = [MODE_MARATHON, MODE_ZEN, MODE_SPRINT, MODE_KIDS];
 const ZEN_GRAVITY = 1 / 0.500;        // 0.500초/라인 (기획서 4.2.1)
 const SPRINT_GRAVITY = 1 / 0.300;     // 0.300초/라인 (기획서 4.3.1)
 const SPRINT_TARGET_LINES = 40;       // 기획서 4.3.2
-const KIDS_GRAVITY = 1 / 2.000;       // 2.000초/라인. 초보(초등) 여유 학습용. 젠보다 4배 느림.
+const KIDS_GRAVITY = 0;               // 자동 낙하 없음. 시간 압박 없이 자리를 고른 뒤 직접 내린다(사용자 지시 2026-09-26).
+const NO_GRAVITY_SOFT_DROP = 10;      // 자동 낙하가 없는 모드의 소프트드롭 속도(라인/초). 배수 계산이 0이 되므로 따로 둔다. 종전 배움 모드 체감(0.5 x 20)과 같다.
 const KIDS_HINT_MIN = 1;              // 완성까지 남은 빈칸이 이 값 이상 (수학 힌트 표시 하한)
 const KIDS_HINT_MAX = 3;              // 이하일 때만 "몇 칸 더" 힌트 노출. 임박 행만 강조해 산만함 회피.
 const KIDS_CHEERS = ["잘했어! 🎉", "멋져! ✨", "최고야! 👍", "대단해! 🌟"];
@@ -260,7 +261,7 @@ const MODES = {
   },
   [MODE_KIDS]: {
     label: "배움",
-    levelUp: false,          // 가속 없음. 좌절 없이 감각 익히기.
+    levelUp: false,          // 가속 없음. 자동 낙하도 없음 - 시간과 관계없이 맞춘다.
     gravity: () => KIDS_GRAVITY,
     capToast: false,
     endCondition: () => false, // 시간·라인 종료 없음. 천장에 닿을 때(top-out)만 종료.
@@ -402,6 +403,11 @@ function spawn(type) {
   state.lastKickIndex = -1;
   if (collides(p, p.x, p.y, p.r)) {
     state.over = true;
+    return;
+  }
+  // 자동 낙하가 없는 모드(배움): 숨은 줄(vanish)에서 태어나면 내려오지 않아 안 보이므로 보이는 첫 줄까지 내려 둔다.
+  if (state.gravity === 0) {
+    for (let i = 0; i < VANISH && !collides(p, p.x, p.y + 1, p.r); i++) p.y += 1;
   }
 }
 
@@ -494,6 +500,12 @@ function hardDrop() {
 function step() {
   const p = state.current;
   if (!p) return;
+  // 자동 낙하가 없는 모드(배움): 낙하 타이머가 차지 않으므로 드래그로 바닥에 닿은 경우도 여기서 락에 진입시킨다.
+  if (state.gravity === 0 && !state.locking && collides(p, p.x, p.y + 1, p.r)) {
+    state.locking = true;
+    state.lockTimer = 0;
+    state.lockResets = 0;
+  }
   // 한 칸 단위 적용
   while (state.fallTimer >= 1) {
     if (!collides(p, p.x, p.y + 1, p.r)) {
@@ -967,7 +979,9 @@ function update(dt) {
   if (!state.current) return;
 
   // 중력. softDrop = 정상 중력 * SOFT_DROP_MULT (정통 SRS 정렬, 이중 가속 제거).
-  state.fallTimer += dt * (state.softDrop ? state.gravity * SOFT_DROP_MULT : state.gravity);
+  // 자동 낙하가 없는 모드(배움)는 배수가 0이 되므로 소프트드롭 속도를 따로 쓴다.
+  const softDropRate = state.gravity > 0 ? state.gravity * SOFT_DROP_MULT : NO_GRAVITY_SOFT_DROP;
+  state.fallTimer += dt * (state.softDrop ? softDropRate : state.gravity);
   step();
 
   // 락 딜레이
