@@ -231,7 +231,7 @@ const SPRINT_TARGET_LINES = 40;       // 기획서 4.3.2
 const KIDS_GRAVITY = 0;               // 자동 낙하 없음. 시간 압박 없이 자리를 고른 뒤 직접 내린다(사용자 지시 2026-09-26).
 const NO_GRAVITY_SOFT_DROP = 10;      // 자동 낙하가 없는 모드의 소프트드롭 속도(라인/초). 배수 계산이 0이 되므로 따로 둔다. 종전 배움 모드 체감(0.5 x 20)과 같다.
 const KIDS_HINT_MIN = 1;              // 완성까지 남은 빈칸이 이 값 이상 (수학 힌트 표시 하한)
-const KIDS_HINT_MAX = 3;              // 이하일 때만 "몇 칸 더" 힌트 노출. 임박 행만 강조해 산만함 회피.
+const KIDS_HINT_MAX = 3;              // 이하일 때만 빈칸 강조 힌트 노출. 임박 행만 강조해 산만함 회피.
 const KIDS_CHEERS = ["잘했어! 🎉", "멋져! ✨", "최고야! 👍", "대단해! 🌟"];
 
 const MODES = {
@@ -781,13 +781,10 @@ function drawGrid() {
   }
 }
 
-// 배움(초등) 모드 수학 힌트: 완성까지 조금 남은 행의 빈 칸을 강조하고 "몇 칸 더" 숫자를 표시.
-// 10칸 중 채운 칸을 세어 남은 칸(10의 보수)을 스스로 세게 하는 것이 목적. 고정 블록 기준(낙하 중 피스 제외).
+// 배움(초등) 모드 힌트: 완성까지 조금 남은 행의 빈 칸을 노란 테두리로 강조.
+// 남은 칸 수 숫자 배지는 오히려 헷갈린다는 사용자 판단으로 제거(2026-09-28). 고정 블록 기준(낙하 중 피스 제외).
 function drawKidsHints() {
   ctx.save();
-  ctx.font = `bold ${Math.floor(cellSize * 0.62)}px sans-serif`;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
   for (let y = VANISH; y < TOTAL_ROWS; y++) {
     let filled = 0;
     for (let x = 0; x < COLS; x++) if (state.grid[y][x]) filled++;
@@ -801,17 +798,6 @@ function drawKidsHints() {
       if (state.grid[y][x]) continue;
       ctx.strokeRect(x * cellSize + 2, py + 2, cellSize - 4, cellSize - 4);
     }
-    // 첫 빈 칸에 남은 칸 수 배지
-    const fx = state.grid[y].indexOf(null);
-    if (fx < 0) continue;
-    const cx = fx * cellSize + cellSize / 2;
-    const cy = py + cellSize / 2;
-    ctx.fillStyle = "rgba(0,0,0,0.55)";
-    ctx.beginPath();
-    ctx.arc(cx, cy, cellSize * 0.34, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#ffd600";
-    ctx.fillText(String(remain), cx, cy + 0.5);
   }
   ctx.restore();
 }
