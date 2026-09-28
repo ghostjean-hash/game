@@ -179,7 +179,10 @@
 // v244: 테트리스 배움 모드 자동 낙하 제거 - 시간과 관계없이 자리를 고른 뒤 직접 내린다.
 //        옛 game.js 가 캐시에 남으면 조각이 계속 2초마다 내려온다.
 
-const CACHE_VERSION = "v244";
+// v245: 테트리스 배움 모드 빈칸 숫자 배지 제거 - 노란 테두리 강조만 남긴다.
+//        옛 game.js 가 캐시에 남으면 숫자가 계속 보인다.
+
+const CACHE_VERSION = "v245";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
