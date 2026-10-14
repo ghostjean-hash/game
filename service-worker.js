@@ -182,7 +182,10 @@
 // v245: 테트리스 배움 모드 빈칸 숫자 배지 제거 - 노란 테두리 강조만 남긴다.
 //        옛 game.js 가 캐시에 남으면 숫자가 계속 보인다.
 
-const CACHE_VERSION = "v245";
+// v246: 테트리스 바닥 붙기 시간 정리 - 배움 모드는 바닥에서 다시 내릴 때만 붙고,
+//        다른 모드는 지금 속도로 한 칸 내려가는 시간에 붙는다. 옛 game.js 가 캐시에 남으면 0.5초에 붙는다.
+
+const CACHE_VERSION = "v246";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
