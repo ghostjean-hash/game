@@ -16,7 +16,6 @@ const COLS = 10;
 const ROWS = 20;
 const VANISH = 2; // 위쪽 보이지 않는 여유 행
 const TOTAL_ROWS = ROWS + VANISH;
-const LOCK_DELAY = 0.5;       // 락 딜레이 (초)
 const LOCK_RESET_MAX = 15;    // 정통 SRS Move/Rotate Reset Limit
 const SOFT_DROP_MULT = 20;    // 소프트드롭 가속 배수 (정통 SRS *20G 정렬)
 
@@ -497,15 +496,18 @@ function hardDrop() {
   lockPiece();
 }
 
+// 자동 낙하가 없는 모드(배움)에서 바닥에 닿은 피스를 사용자가 다시 내렸을 때 붙인다.
+// 바닥에 닿지 않았으면 false (호출 쪽이 평소 동작을 이어 간다).
+function lockByUser() {
+  const p = state.current;
+  if (!p || state.gravity !== 0 || !collides(p, p.x, p.y + 1, p.r)) return false;
+  lockPiece();
+  return true;
+}
+
 function step() {
   const p = state.current;
   if (!p) return;
-  // 자동 낙하가 없는 모드(배움): 낙하 타이머가 차지 않으므로 드래그로 바닥에 닿은 경우도 여기서 락에 진입시킨다.
-  if (state.gravity === 0 && !state.locking && collides(p, p.x, p.y + 1, p.r)) {
-    state.locking = true;
-    state.lockTimer = 0;
-    state.lockResets = 0;
-  }
   // 한 칸 단위 적용
   while (state.fallTimer >= 1) {
     if (!collides(p, p.x, p.y + 1, p.r)) {
@@ -514,14 +516,15 @@ function step() {
       if (state.softDrop) state.score += 1;
     } else {
       state.fallTimer = 0;
-      // 락 진입
-      if (!state.locking) {
-        state.locking = true;
-        state.lockTimer = 0;
-        state.lockResets = 0;
-      }
       break;
     }
+  }
+  // 락 진입: 바닥에 닿은 순간부터 잰다(다음 낙하 시도까지 기다리면 한 칸 시간이 두 번 걸린다).
+  // 자동 낙하가 없는 모드(배움)는 시간으로 붙지 않는다 - 사용자가 다시 내릴 때만 붙는다(lockByUser).
+  if (state.gravity > 0 && !state.locking && collides(p, p.x, p.y + 1, p.r)) {
+    state.locking = true;
+    state.lockTimer = 0;
+    state.lockResets = 0;
   }
 }
 
@@ -857,6 +860,10 @@ function setupInput() {
   let panAnchorX = 0;
   let panAnchorY = 0;
   let panEntryDy = 0;
+  // 배움 모드: 바닥에 닿은 상태에서 새로 시작한 아래 드래그가 한 칸을 넘으면 붙인다.
+  // 내려오던 드래그가 바닥을 지나쳐 더 내려가는 것은 붙는 신호로 치지 않는다(내려놓자마자 붙는 오발 방지).
+  let panLockArmed = false;
+  let panDone = false; // 이 드래그로 이미 붙였으면 남은 손가락 이동을 다음 피스에 적용하지 않는다.
   input = createInput(inputTarget, {
     onTap: () => { if (canPlay()) tryRotate(1); },
     onSwipe: (dir) => {
@@ -871,11 +878,18 @@ function setupInput() {
       panAnchorX = state.current.x;
       panAnchorY = state.current.y;
       panEntryDy = info.dy || 0;
+      const p = state.current;
+      panLockArmed = state.gravity === 0 && collides(p, p.x, p.y + 1, p.r);
+      panDone = false;
     },
     onPan: ({ dx, dy }) => {
       // 손가락 이동량을 셀 단위로 환산해, 시작 위치 + offset만큼 따라감.
       // 매 호출에서 목표 좌표까지 한 칸씩 tryMove로 진행(벽/충돌이 있으면 거기서 멈춤).
-      if (!canPlay() || !state.current || !cellSize) return;
+      if (!canPlay() || !state.current || !cellSize || panDone) return;
+      if (panLockArmed && dy - panEntryDy >= cellSize && lockByUser()) {
+        panDone = true;
+        return;
+      }
       // 가로: 양방향 추적
       const targetX = panAnchorX + Math.round(dx / cellSize);
       while (state.current.x < targetX) {
@@ -903,7 +917,10 @@ function setupInput() {
       switch (key) {
         case "ArrowLeft": tryMove(-1, 0); break;
         case "ArrowRight": tryMove(1, 0); break;
-        case "ArrowDown": state.softDrop = true; break;
+        case "ArrowDown":
+          // 배움 모드: 바닥에 닿은 상태에서 새로 누르면 붙인다. 누른 채 내려오다 바닥에 닿는 것은 멈추기만 한다.
+          if (!ev.repeat && lockByUser()) break;
+          state.softDrop = true; break;
         case "ArrowUp":
         case "x":
         case "X":
@@ -970,10 +987,10 @@ function update(dt) {
   state.fallTimer += dt * (state.softDrop ? softDropRate : state.gravity);
   step();
 
-  // 락 딜레이
+  // 락 딜레이 = 지금 속도로 한 칸 내려가는 시간. 바닥에 닿은 뒤 다음 줄로 넘어갈 시점에 붙는다(사용자 지시 2026-10-14).
   if (state.locking) {
     state.lockTimer += dt;
-    if (state.lockTimer >= LOCK_DELAY) {
+    if (state.lockTimer >= 1 / state.gravity) {
       lockPiece();
     }
   }
