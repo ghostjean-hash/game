@@ -11,11 +11,17 @@
   const transact=(state,fn)=>{const s=clone(state);fn(s);return s;};
   function create(quick,first,chosenSet='orange'){
     const s={version:1,players:D.players.map(()=>({cash:D.startingCash,pos:0,jail:false,attempts:0,cards:0})),deeds:{},phase:'roll',pending:null,doubles:0,extra:false,dice:null};
-    D.board.forEach((t,i)=>{if(isStreet(i)||['station','utility'].includes(t[1]))s.deeds[i]={owner:null,mortgaged:false,mortgage:t[2]/2,buildings:0,houseCost:null,rents:{}};});
+    D.board.forEach((t,i)=>{if(isStreet(i)||['station','utility'].includes(t[1]))s.deeds[i]={owner:null,mortgaged:false,mortgage:t[2]/2,buildings:0,houseCost:D.printedDeeds[i]?.house??null,rents:D.printedDeeds[i]?Object.fromEntries(D.printedDeeds[i].rents.map((v,n)=>[n,v])):{}};});
     if(quick)for(const [p,color] of [[first,chosenSet],[1-first,chosenSet==='orange'?'red':'orange']])for(const i of streets.filter(i=>D.board[i][1]===color)){s.deeds[i].owner=p;cash(s,p,-D.board[i][2]);}
     return s;
   }
   function beginTurn(state){return {...clone(state),phase:'roll',pending:null,doubles:0,extra:false,dice:null};}
+  function hydrate(state){
+    const s=clone(state);
+    for(const [i,printed] of Object.entries(D.printedDeeds)){const d=s.deeds[i];d.houseCost=printed.house;d.rents=Object.fromEntries(printed.rents.map((v,n)=>[n,v]));}
+    const q=s.pending;if(q?.type==='rent'&&q.kind==='street'){const d=s.deeds[q.index];q.factor=d.buildings===0&&ownsSet(s,d.owner,q.index)?2:1;q.key=String(d.buildings);q.amount=d.rents[q.key]*q.factor;}
+    return s;
+  }
   function resolve(s){s.pending=null;s.phase=s.extra?'roll':'end';}
   function land(s,p){
     const index=s.players[p].pos,t=D.board[index],deed=s.deeds[index];s.phase='land';
@@ -62,6 +68,39 @@
     else if(action==='otherReceive'){cash(s,1-p,-value);cash(s,p,value);}
     else fail('카드 지시를 선택하세요.');resolve(s);
   });}
+  function cardSummary(state,p,deck,id){
+    const c=D.cards[deck]?.find(c=>c.id===id);if(!c)fail('카드를 확인하세요.');
+    const amount=c.action==='repairs'?Object.values(state.deeds).filter(d=>d.owner===p).reduce((n,d)=>n+(d.buildings===5?c.hotel:d.buildings*c.house),0):c.value;
+    return {...c,amount};
+  }
+  function printedCard(state,p,deck,id){return transact(state,s=>{
+    if(s.pending?.type!=='card'||D.board[s.pending.index][1]!==deck)fail('지금 뽑은 카드 종류를 확인하세요.');
+    const c=cardSummary(s,p,deck,id),old=s.players[p].pos;
+    if(c.action==='nearestStation'||c.action==='nearestUtility'){
+      const type=c.action==='nearestStation'?'station':'utility';
+      const target=Array.from({length:40},(_,n)=>(old+n+1)%40).find(i=>D.board[i][1]===type);
+      const moved=card(s,p,'move',target);Object.assign(s,moved);
+      if(s.pending?.type==='rent'){
+        const d=s.deeds[target];
+        if(type==='station'){s.pending.kind='fixed';s.pending.amount=D.stationRents[Object.entries(s.deeds).filter(([i,x])=>x.owner===d.owner&&D.board[i][1]==='station').length-1]*2;}
+        else{s.pending.kind='utility';s.pending.factor=10;s.pending.amount=null;}
+      }
+      return;
+    }
+    if(c.action==='repairs'){cash(s,p,-c.amount);resolve(s);return;}
+    const action=c.action==='backThree'?'back':c.action,value=c.action==='backThree'?(old+37)%40:c.value??0;
+    Object.assign(s,card(s,p,action,value));
+    if(c.action==='move'||c.action==='backThree'){
+      // 일반 이동 카드에는 도착 부지 권리증의 임대료를 적용한다.
+      if(s.pending?.type==='rent'){
+        const q=s.pending,d=s.deeds[value],type=D.board[value][1];
+        if(isStreet(value)){q.kind='street';q.key=String(d.buildings);q.factor=d.buildings===0&&ownsSet(s,d.owner,value)?2:1;q.amount=d.rents[q.key]*q.factor;}
+        else if(type==='station'){q.kind='fixed';q.amount=D.stationRents[Object.entries(s.deeds).filter(([i,x])=>x.owner===d.owner&&D.board[i][1]==='station').length-1];}
+      }
+      if(value===0&&old===0)cash(s,p,200);
+    }
+  });}
+  function utilityRoll(state,a,b){return transact(state,s=>{integer(a,1,6);integer(b,1,6);if(s.pending?.type!=='rent'||s.pending.kind!=='utility'||s.pending.amount!==null)fail('주사위를 새로 굴릴 상황이 아닙니다.');s.pending.amount=(a+b)*s.pending.factor;});}
   function supplies(s){let houses=0,hotels=0;for(const d of Object.values(s.deeds)){if(d.buildings===5)hotels++;else houses+=d.buildings;}return {houses:32-houses,hotels:12-hotels};}
   function build(state,p,index,cost){return transact(state,s=>{
     const d=s.deeds[index];if(!d||d.owner!==p||!isStreet(index)||!ownsSet(s,p,index))fail('같은 색 도시를 전부 가져야 합니다.');
@@ -106,5 +145,5 @@
     if(streets.some(i=>{const values=group(i).map(j=>s.deeds[j]?.buildings??0);return Math.max(...values)-Math.min(...values)>1;}))return false;
     return keys.every(i=>{const d=s.deeds[i];return d&&[null,0,1].includes(d.owner)&&typeof d.mortgaged==='boolean'&&Number.isInteger(d.buildings)&&d.buildings>=0&&d.buildings<=(isStreet(Number(i))?5:0)&&(d.owner!==null||!d.buildings&&!d.mortgaged)&&!(d.mortgaged&&d.buildings)&&Number.isSafeInteger(d.mortgage)&&d.mortgage>0&&(d.houseCost===null||Number.isSafeInteger(d.houseCost)&&d.houseCost>0)&&d.rents&&Object.entries(d.rents).every(([k,v])=>/^[0-5]$/.test(k)&&Number.isSafeInteger(v)&&v>=0);})&&Number.isInteger(s.doubles)&&s.doubles>=0&&s.doubles<=3&&typeof s.extra==='boolean'&&supplies(s).houses>=0&&supplies(s).hotels>=0;
   }
-  globalThis.MC_BOARD=Object.freeze({create,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,build,sell,mortgage,trade,correct,supplies,valid,isStreet,group});
+  globalThis.MC_BOARD=Object.freeze({create,hydrate,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,printedCard,cardSummary,utilityRoll,build,sell,mortgage,trade,correct,supplies,valid,isStreet,group,ownsSet});
 })();

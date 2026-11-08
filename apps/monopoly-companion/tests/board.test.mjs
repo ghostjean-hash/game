@@ -32,10 +32,77 @@ test('station counts and utility ownership determine rent without invented city 
   s=B.pay(s,0);assert.equal(s.players[0].cash,1450);assert.equal(s.players[1].cash,1550);
   s=fresh();s.players[0].pos=5;s.deeds[12].owner=1;s.deeds[28].owner=1;s=B.roll(s,0,3,4);assert.equal(s.pending.amount,70);
 });
-test('city rent is requested once, cached by building row and doubled for complete color',()=>{
-  let s=fresh();s.deeds[1].owner=1;s.deeds[3].owner=1;s=B.roll(s,0,1,2);assert.equal(s.pending.amount,null);assert.equal(s.pending.factor,2);
-  s=B.recordRent(s,4);assert.equal(s.pending.amount,8);s=B.pay(s,0);assert.equal(s.players[0].cash,1492);
+test('printed city rent is automatic and doubled for complete color; explicit adjustments remain possible',()=>{
+  let s=fresh();s.deeds[1].owner=1;s.deeds[3].owner=1;s=B.roll(s,0,1,2);assert.equal(s.pending.amount,8);assert.equal(s.pending.factor,2);
+  s=B.pay(s,0);assert.equal(s.players[0].cash,1492);
   s=B.beginTurn(s);s.players[0].pos=0;s=B.roll(s,0,1,2);assert.equal(s.pending.amount,8);
+  s=B.recordRent(s,12,true);assert.equal(s.pending.amount,12);
+});
+
+test('all 22 photographed deeds charge the printed rents at every building level',()=>{
+  const rows=[
+    [1,50,2,10,30,90,160,250],[3,50,4,20,60,180,320,450],
+    [6,50,6,30,90,270,400,550],[8,50,6,30,90,270,400,550],[9,50,8,40,100,300,450,600],
+    [11,100,10,50,150,450,625,750],[13,100,10,50,150,450,625,750],[14,100,12,60,180,500,700,900],
+    [16,100,14,70,200,550,750,950],[18,100,14,70,200,550,750,950],[19,100,16,80,220,600,800,1000],
+    [21,150,18,90,250,700,875,1050],[23,150,18,90,250,700,875,1050],[24,150,20,100,300,750,925,1100],
+    [26,150,22,110,330,800,975,1150],[27,150,22,110,330,800,975,1150],[29,150,24,120,360,850,1025,1200],
+    [31,200,26,130,390,900,1100,1275],[32,200,26,130,390,900,1100,1275],[34,200,28,150,450,1000,1200,1400],
+    [37,200,35,175,500,1100,1300,1500],[39,200,50,200,600,1400,1700,2000]
+  ];
+  assert.equal(Object.keys(D.printedDeeds).length,rows.length);
+  for(const [i,cost,...rents] of rows)for(let n=0;n<=5;n++){
+    let s=fresh();for(const j of B.group(i)){s.deeds[j].owner=1;s.deeds[j].buildings=n;}
+    assert.equal(s.deeds[i].houseCost,cost);s.players[0].pos=(i+37)%40;s=B.roll(s,0,1,2);
+    assert.equal(s.pending.amount,rents[n]*(n===0?2:1),`${D.board[i][0]} ${n}`);
+    if(n===0){s=fresh();s.deeds[i].owner=1;s.players[0].pos=(i+37)%40;s=B.roll(s,0,1,2);assert.equal(s.pending.amount,rents[0]);}
+  }
+});
+
+test('old saves gain printed values and pending rent without losing positions, cash, deeds or turns',()=>{
+  let s=fresh();s.deeds[3].owner=1;s.players[0].pos=0;s=B.roll(s,0,1,2);
+  for(const d of Object.values(s.deeds)){d.rents={};d.houseCost=null;}s.pending.amount=null;
+  const before=snapshot(s);const next=B.hydrate(s);assert.equal(next.pending.amount,4);assert.equal(next.deeds[3].houseCost,50);
+  assert.equal(snapshot(next.players),snapshot(s.players));assert.equal(next.phase,s.phase);assert.equal(next.deeds[3].owner,1);assert.equal(snapshot(s),before);assert.equal(B.valid(next),true);
+});
+
+const onCard=(deck='chance',pos=7)=>{const s=fresh();s.players[0].pos=pos;s.phase='land';s.pending={type:'card',index:pos};return s;};
+test('photo cards stay separated; a card from the other deck cannot be applied',()=>{
+  assert.equal(D.cards.chest.length,13);assert.equal(D.cards.chance.length,15);
+  assert.equal(D.cards.chest.find(c=>c.id==='repairs').house,40);assert.equal(D.cards.chance.find(c=>c.id==='repairs').hotel,100);
+  const s=onCard(),before=snapshot(s);assert.throws(()=>B.printedCard(s,0,'chest','stock'),/종류/);assert.equal(snapshot(s),before);
+  for(const deck of ['chest','chance'])for(const c of D.cards[deck]){const s=onCard(deck,deck==='chest'?2:7);assert.equal(B.valid(B.printedCard(s,0,deck,c.id)),true,deck+' '+c.id);}
+});
+test('birthday, chairman and card fees transfer to the right recipient atomically',()=>{
+  let s=B.printedCard(onCard('chest',2),0,'chest','birthday');assert.equal(s.players[0].cash,1510);assert.equal(s.players[1].cash,1490);
+  s=B.printedCard(onCard(),0,'chance','chairman');assert.equal(s.players[0].cash,1450);assert.equal(s.players[1].cash,1550);
+  s=onCard();s.players[0].cash=10;const before=snapshot(s);assert.throws(()=>B.printedCard(s,0,'chance','chairman'),/부족/);assert.equal(snapshot(s),before);
+});
+test('repairs count only own houses and hotels, treating a hotel as one hotel',()=>{
+  for(const [deck,pos,expected] of [['chest',2,275],['chance',7,200]]){
+    const s=onCard(deck,pos);s.deeds[1].owner=0;s.deeds[1].buildings=4;s.deeds[3].owner=0;s.deeds[3].buildings=5;
+    s.deeds[6].owner=1;s.deeds[6].buildings=4;const n=B.printedCard(s,0,deck,'repairs');assert.equal(n.players[0].cash,1500-expected);
+  }
+});
+test('nearest station doubles rent and awards GO once; named station uses normal rent',()=>{
+  let s=onCard('chance',36);s.deeds[5].owner=1;s.deeds[15].owner=1;s=B.printedCard(s,0,'chance','nearest-station');assert.equal(s.players[0].pos,5);assert.equal(s.players[0].cash,1700);assert.equal(s.pending.amount,100);
+  s=onCard('chance',36);s.deeds[5].owner=1;s=B.printedCard(s,0,'chance','gwangju-station');assert.equal(s.pending.amount,25);assert.equal(s.players[0].cash,1700);
+});
+test('nearest utility requires fresh physical dice and charges ten times, even for a single utility',()=>{
+  let s=onCard();s.dice=[1,6];s.deeds[12].owner=1;s=B.printedCard(s,0,'chance','nearest-utility');assert.equal(s.players[0].pos,12);assert.equal(s.pending.amount,null);assert.equal(s.pending.factor,10);
+  s=B.utilityRoll(s,3,4);assert.equal(s.pending.amount,70);s=B.pay(s,0);assert.equal(s.players[1].cash,1570);
+  s=onCard('chance',36);s.deeds[12].owner=1;s.deeds[12].mortgaged=true;s=B.printedCard(s,0,'chance','nearest-utility');assert.equal(s.players[0].cash,1700);assert.equal(s.pending.type,'info');
+});
+test('printed movement resolves city rents, backwards chest chains, GO and jail correctly',()=>{
+  let s=onCard();s.deeds[39].owner=1;s=B.printedCard(s,0,'chance','seoul');assert.equal(s.pending.amount,50);
+  s=onCard('chance',36);s=B.printedCard(s,0,'chance','back-three');assert.equal(s.pending.type,'card');assert.equal(s.pending.index,33);s=B.printedCard(s,0,'chest','stock');assert.equal(s.players[0].cash,1550);
+  s=onCard();s=B.printedCard(s,0,'chance','go');assert.equal(s.players[0].pos,0);assert.equal(s.players[0].cash,1700);
+  s=onCard();s.extra=true;s=B.printedCard(s,0,'chance','jail');assert.equal(s.players[0].jail,true);assert.equal(s.extra,false);assert.equal(s.players[0].cash,1500);
+});
+test('station and utility mortgage and redemption match the supplied backs',()=>{
+  for(const [i,loan,release] of [[5,100,110],[15,100,110],[25,100,110],[35,100,110],[12,75,83],[28,75,83]]){
+    let s=fresh();s.deeds[i].owner=0;s=B.mortgage(s,0,i);assert.equal(s.players[0].cash,1500+loan);s=B.mortgage(s,0,i);assert.equal(s.players[0].cash,1500+loan-release);
+  }
 });
 test('mortgaged property never charges rent',()=>{
   let s=fresh();s.deeds[3].owner=1;s.deeds[3].mortgaged=true;s=B.roll(s,0,1,2);assert.equal(s.pending.type,'info');s=B.acknowledge(s);assert.equal(s.players[0].cash,1500);
