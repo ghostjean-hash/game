@@ -1,5 +1,7 @@
 # game-hub NEXT-SESSION
 
+> 2026-11-08 모노폴리: 기록했던 수정 8건을 사용자 재개 지시와 추가 답변으로 진행했다. 최신 확정 사항과 검증 상태는 `apps/monopoly-companion/NEXT-SESSION.md`와 `PROGRESS.md`에 있다. 기록만 제한은 해제됐으며 이전 대기 질문을 반복하지 않는다.
+
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
 ## 0. 사용자 결정

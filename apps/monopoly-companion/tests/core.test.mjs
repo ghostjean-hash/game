@@ -75,3 +75,29 @@ test('valid names remain plain data, are trimmed and limited for safe rendering'
   const s=C.createSession(['  <img src=x>  ','a'.repeat(30)],45,true);
   assert.equal(s.names[0],'<img src=x>');assert.equal(s.names[1].length,16);assert.equal(C.valid(s),true);
 });
+
+test('unified presets create unlimited classic or pre-owned timed games',()=>{
+  const classic=C.createPreset(D.players,'classic');assert.equal(classic.minutes,null);assert.equal(classic.quick,false);assert.equal(C.budget(classic),Infinity);assert.equal(C.valid(JSON.parse(JSON.stringify(classic))),true);
+  for(const minutes of [30,60]){const s=C.createPreset(D.players,String(minutes));assert.equal(s.minutes,minutes);assert.equal(s.quick,true);assert.equal(C.budget(s),(minutes-10)*60000);assert.equal(C.valid(s),true);}
+  assert.throws(()=>C.createPreset(D.players,'45'));
+});
+
+test('classic never times out but manual finishing still gives both players equal turns',()=>{
+  let s={...C.createPreset(D.players,'classic'),screen:'play',runningSince:1000};
+  const later=1000+365*24*60*60000;
+  s=C.advance(s,later);assert.equal(s.screen,'play');assert.equal(s.ending,false);assert.equal(C.remaining(s,later),Infinity);
+  s=C.requestFinish(s);s=C.advance(s,later+1000);assert.equal(s.screen,'finish');assert.deepEqual(plain(s.turns),[1,1]);assert.equal(C.valid(s),true);
+});
+
+test('player colors stay distinct by swapping the other color and survive stored sessions',()=>{
+  let colors=C.chooseColor(['blue','rose'],0,'teal');assert.deepEqual(plain(colors),['teal','rose']);
+  const old=plain(colors);colors=C.chooseColor(colors,1,'teal');assert.deepEqual(plain(colors),['rose','teal']);assert.deepEqual(old,['teal','rose']);
+  const s={...fresh(),playerColors:colors};assert.equal(C.valid(JSON.parse(JSON.stringify(s))),true);
+  for(const playerColors of [['blue','blue'],['blue','unknown'],['blue'],null,['blue','constructor']])assert.equal(C.valid({...s,playerColors}),false);
+  assert.throws(()=>C.chooseColor(colors,0,'constructor'));assert.throws(()=>C.chooseColor(colors,2,'blue'));
+});
+
+test('legacy 45-minute and basic saves without colors retain valid clocks and modes',()=>{
+  for(const quick of [true,false]){const s={...C.createSession(D.players,45,quick),screen:'play',turns:[2,2],elapsed:120000,playerColors:undefined};assert.equal(C.valid(JSON.parse(JSON.stringify(s))),true);assert.equal(C.remaining(s,0),33*60000);}
+  assert.equal(C.valid({...fresh(),minutes:null,quick:true}),false);
+});

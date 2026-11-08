@@ -1,6 +1,16 @@
 globalThis.MC_DATA = Object.freeze({
   version: 1, storageKey: 'gg.monopoly-companion.session', players: ['아빠', '서우'],
   durations: [30, 45, 60], reserveMinutes: 10, minute: 60000, tick: 1000,
+  presets: [{id:'classic',label:'기본',minutes:null,quick:false},{id:'30',label:'30분',minutes:30,quick:true},{id:'60',label:'60분',minutes:60,quick:true}],
+  defaultPlayerColors: ['blue','rose'],
+  playerPalette: {
+    blue:{name:'파랑',hex:'#315b85',rgb:'49,91,133',soft:'#e0edf8'},
+    rose:{name:'분홍',hex:'#a95c78',rgb:'169,92,120',soft:'#f5e3eb'},
+    teal:{name:'초록',hex:'#287466',rgb:'40,116,102',soft:'#dcefe7'},
+    amber:{name:'주황',hex:'#a86620',rgb:'168,102,32',soft:'#f7e9d3'},
+    violet:{name:'보라',hex:'#76569a',rgb:'118,86,154',soft:'#eae2f5'},
+    slate:{name:'회색',hex:'#58646f',rgb:'88,100,111',soft:'#e4e9ed'}
+  },
   startingCash: 1500, maxAmount: 9999999,
   sets: {
     orange: { name: '주황', color: '#e98a39', cost: 560, prices: '180 + 180 + 200', cities: ['창원', '울산', '부산'], house: 100 },
