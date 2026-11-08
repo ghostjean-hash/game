@@ -42,7 +42,7 @@
     {
       "id": "monopoly-companion",
       "title": "모노폴리 클래식 동행",
-      "subtitle": "우리 둘의 30~60분 보드게임 · 준비부터 결산까지",
+      "subtitle": "실물 보드와 같은 판을 기록하는 두 사람의 진행 매니저",
       "path": "apps/monopoly-companion/",
       "status": "wip",
       "controls": [

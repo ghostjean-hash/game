@@ -7,8 +7,8 @@ const ctx=vm.createContext({});
 for(const f of ['data.js','core.js','manager.js']) vm.runInContext(readFileSync(new URL('../'+f,import.meta.url),'utf8'),ctx);
 const flows=ctx.MC_MANAGER.flows(['아빠','서우']);
 
-test('all eight manager flows have reachable choices and no dead ends',()=>{
-  assert.equal(Object.keys(flows).length,8);
+test('all ten manager flows have reachable choices and no dead ends',()=>{
+  assert.equal(Object.keys(flows).length,10);
   for(const [id,nodes] of Object.entries(flows)){
     const visited=new Set();
     const walk=(key)=>{if(visited.has(key))return;const node=nodes[key];assert.ok(node,`${id}: missing ${key}`);visited.add(key);assert.ok(node.title&&node.text);assert.ok(node.choices.length>=1&&node.choices.length<=3);for(const c of node.choices){assert.ok(c.label);if(!['close','bankrupt0','bankrupt1'].includes(c.next))walk(c.next);}};

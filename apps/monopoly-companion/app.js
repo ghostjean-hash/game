@@ -1,142 +1,149 @@
 (function () {
   'use strict';
-  const D = globalThis.MC_DATA, C = globalThis.MC;
-  const root = document.getElementById('app');
-  const ruleDialog = document.getElementById('rule-dialog');
-  const newDialog = document.getElementById('confirm-dialog');
-  const money = n => Number(n).toLocaleString('ko-KR');
-  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  let session = load(), home = true, duration = 45, undo = null, managerId = null, managerPath = [];
-  function load() { try { const s = JSON.parse(localStorage.getItem(D.storageKey)); if(!C.valid(s))return null; if(s.names[0]==='나'&&s.names[1]==='딸')s.names=[...D.players]; return s; } catch { return null; } }
-  function save() { try { localStorage.setItem(D.storageKey, JSON.stringify(session)); document.getElementById('save-warning').hidden = localStorage.getItem(D.storageKey) === JSON.stringify(session); } catch { document.getElementById('save-warning').hidden = false; } }
-  function set(next, keepScroll = false) { session = next; save(); render(); if (!keepScroll) { window.scrollTo({ top: 0 }); root.querySelector('h1,h2')?.focus({ preventScroll: true }); } }
-  function heading(eyebrow, title) { return `<div class="screen-head"><div><span class="eyebrow">${eyebrow}</span><h1 tabindex="-1">${title}</h1></div><button class="text-button" data-action="home">테이블 처음으로</button></div>`; }
-  function artwork() { return `<div class="hero-art" aria-hidden="true"><div class="halo"></div><div class="mini-board"><div class="board-tiles">${['#dbb251','#d88054','#cf6265','#7c9c82','#84a7b2','#d0ad71','#89a39a'].map(c => `<i style="--tile:${c}"></i>`).join('')}</div><span class="board-word">our little<br>property club<small>JUST THE TWO OF US</small></span><div class="board-tiles bottom">${['#93a9ba','#6d9586','#dbb251','#cf6265','#d88054','#89a39a','#94a0b5'].map(c => `<i style="--tile:${c}"></i>`).join('')}</div></div><div class="house"></div><div class="house two"></div><div class="dice"><i></i><i></i><i></i><i></i></div><span class="art-note">a little less rules, a little more us.</span></div>`; }
-  function renderHome() {
-    root.innerHTML = `${session ? `<section class="resume"><p><strong>${esc(session.names.join(' & '))}</strong>의 테이블이 남아 있어요.<br><small>${session.screen === 'result' ? '지난 결과 보기' : session.screen === 'setup' ? '준비하던 곳부터 이어갈 수 있어요.' : '기록된 차례와 시간을 이어갈 수 있어요.'}</small></p><div class="button-row"><button class="primary" data-action="resume">${session.screen === 'result' ? '결과 보기' : '이어하기'} ↗</button><button class="text-button" data-action="new">새 판</button></div></section>` : ''}
-    <section class="hero"><div class="hero-copy"><span class="eyebrow">LESS READING, MORE PLAYING</span><h1>우리 둘의 모노폴리,<br><em>한 시간이면 충분하게.</em></h1><p>긴 설명서 대신, 지금 필요한 도움만.<br>땅을 모으고 집을 짓는 재미까지 함께 가요.</p></div>${artwork()}</section>
-    <form id="new-form"><div class="setup-grid"><section class="panel"><div class="section-label"><span class="number">01</span> 오늘은 얼마나 놀까요?</div><div class="duration-options" role="group" aria-label="목표 시간">${D.durations.map(n => `<button type="button" class="duration-button ${n === duration ? 'selected' : ''}" data-duration="${n}" aria-pressed="${n === duration}">${n === 45 ? '<span class="recommended">첫 판 추천</span>' : ''}<strong>${n}<span>분</span></strong><small>${({30:'가볍게 한 판',45:'집 짓기까지 도전',60:'거래도 여유롭게'})[n]}</small></button>`).join('')}</div><p class="duration-detail" id="duration-detail">준비 약 5분 + 플레이 ${duration - D.reserveMinutes}분 + 결산 약 5분</p></section>
-    <section class="panel"><div class="section-label"><span class="number">02</span> 오늘의 플레이어</div><div class="players">${D.players.map((n,i)=>`<div class="player-profile"><span class="player-avatar" aria-hidden="true">${n.slice(0,1)}</span><strong>${n}</strong><small>선택됨 ✓</small><input type="hidden" name="player${i}" value="${n}"></div>`).join('')}</div><label class="mode-check"><input name="quick" type="checkbox" checked><span>색 세트를 받고 빠르게 시작하기<small>우리 집 규칙 · 각자 땅 한 세트를 사고 시작해요.</small></span></label></section></div>
-    <div class="start-strip"><p><strong>실물 클래식 보드와 주사위를 준비해 주세요.</strong><br>도시 이름을 입력하거나, 매번 돈을 기록할 필요는 없어요.</p><button class="primary" type="submit">우리 테이블 준비하기 <span class="arrow">↗</span></button></div></form>
-    <div class="trust-row"><span>설치 없이 바로</span><span>상황별 짧은 규칙</span><span>시간이 끝나면 함께 결산</span></div><p class="muted" style="text-align:center;font-size:10px;margin-top:17px">단축 모드는 제안한 우리 집 규칙이에요. 준비·결산 속도와 마지막 차례에 따라 목표 시간을 조금 넘길 수 있어요.</p>`;
-    document.getElementById('new-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const form = new FormData(e.target);
-      if (session) { newDialog.dataset.pending = 'form'; newDialog.showModal(); return; }
-      startNew(form);
-    });
+  const D=MC_DATA,C=MC,B=MC_BOARD,root=document.getElementById('app'),dialog=document.getElementById('rule-dialog'),confirmDialog=document.getElementById('confirm-dialog');
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const money=n=>'M'+Number(n).toLocaleString('ko-KR');
+  const tileName=i=>D.board[i][0];
+  const tileOption=i=>['chest','chance'].includes(D.board[i][1])?tileName(i)+' ('+tileName((i+39)%40)+' 다음)':tileName(i);
+  const button=(text,attr='',kind='secondary')=>`<button type="button" class="${kind}" ${attr}>${text}</button>`;
+  const field=(label,id,value='',extra='')=>`<label for="${id}">${label}</label><input id="${id}" type="number" min="0" max="${D.maxAmount}" step="1" inputmode="numeric" value="${value}" ${extra}>`;
+  const tileOptions=(selected=0)=>D.board.map((t,i)=>`<option value="${i}" ${i===selected?'selected':''}>${tileOption(i)}</option>`).join('');
+  let s=load(),home=true,undo=null,draft=s?.screen==='setup'?structuredClone(s):C.createSession(D.players,45,true,0),managerId=null,path=[],pendingNew=false;
+  function load(){try{const v=JSON.parse(localStorage.getItem(D.storageKey));if(!C.valid(v)||v.board&&!B.valid(v.board))return null;if(v.names[0]==='나'&&v.names[1]==='딸')v.names=[...D.players];return v;}catch{return null;}}
+  function save(){try{localStorage.setItem(D.storageKey,JSON.stringify(s));document.getElementById('save-warning').hidden=localStorage.getItem(D.storageKey)===JSON.stringify(s);}catch{document.getElementById('save-warning').hidden=false;}}
+  function render(){if(home||s?.screen==='setup')return preparation();({play:play,finish:finish,score:score,result:result}[s.screen])();}
+  function set(next){s=next;save();render();}
+  function heading(title,back=true){return `<div class="screen-head"><h1 tabindex="-1">${title}</h1>${back?button('준비','data-action="home"'):''}</div>`;}
+  function error(message){const el=document.getElementById(dialog.open?'dialog-error':'action-error');if(el){el.textContent=message;el.hidden=false;el.focus();}}
+  function open(title,body,wide=false){dialog.className=wide?'wide-dialog':'';document.getElementById('rule-content').innerHTML=`<div class="dialog-head"><h2 id="rule-title" tabindex="-1">${esc(title)}</h2>${button('×','data-close aria-label="닫기"','icon-button')}</div>${body}<p id="dialog-error" class="error" role="alert" tabindex="-1" hidden></p>`;if(!dialog.open)dialog.showModal();else document.getElementById('rule-title').focus({preventScroll:true});dialog.scrollTop=0;}
+  function preparation(){
+    const d=draft,colors=[d.chosenSet,d.chosenSet==='orange'?'red':'orange'];
+    root.innerHTML=heading('게임 준비',false)+`<div class="prep-options"><fieldset><legend>시간</legend><div class="segmented">${D.durations.map(n=>button(n+'분',`data-duration="${n}" aria-pressed="${n===d.minutes}"`,n===d.minutes?'primary':'secondary')).join('')}</div></fieldset><fieldset><legend>준비 방식</legend><div class="segmented">${button('단축 준비','data-quick="true" aria-pressed="'+d.quick+'"',d.quick?'primary':'secondary')}${button('기본 준비','data-quick="false" aria-pressed="'+!d.quick+'"',!d.quick?'primary':'secondary')}</div></fieldset><fieldset><legend>주사위를 굴려 큰 수부터</legend><div class="segmented">${D.players.map((n,i)=>button(n+ ' 선공',`data-first="${i}" aria-pressed="${d.first===i}"`,d.first===i?'primary':'secondary')).join('')}</div></fieldset></div>
+    <section class="money-prep"><h2>각자 ${money(D.startingCash)} 받기</h2><div class="banknotes">${D.money.map(([v,n])=>`<div><strong>${money(v)}</strong><span>${n}장</span></div>`).join('')}</div></section>
+    <div class="prep-players">${D.players.map((n,p)=>{const color=colors[p===d.first?0:1],v=D.sets[color];return `<section class="prep-player" style="--swatch:${d.quick?v.color:'#517b68'}"><h2>${n}</h2>${d.quick?`<p class="cities">${v.cities.join(' · ')}</p><p>부지값 <strong>${money(v.cost)}</strong> 은행에 내기</p><p class="cash-left">남는 현금 <strong>${money(D.startingCash-v.cost)}</strong></p>`:`<p class="cash-left">현금 <strong>${money(D.startingCash)}</strong></p><p>모든 권리증은 은행에 두기</p>`}</section>`;}).join('')}</div>
+    <div class="placement"><p><strong>말</strong> 출발에 놓기</p><p><strong>카드</strong> 찬스·사회사업기금 각각 섞어 지정 칸에 놓기</p><p><strong>은행</strong> 남은 돈·권리증·주택·호텔 모아 두기</p></div>
+    <div class="prep-bottom"><p>${d.quick?'단축: 색 세트 미리 구입 · ':''}시간제 결산<br>플레이 ${d.minutes-D.reserveMinutes}분 + 준비·결산 약 10분</p><div class="button-row">${s&&s.screen!=='setup'?button(s.screen==='result'?'결과 보기':'이어서 하기','data-action="resume"'):''}${button('게임 시작','data-action="start"','primary')}</div></div>`;
   }
-  function startNew(form) { const first = Math.random() < .5 ? 0 : 1; home = false; undo = null; set(C.createSession([form.get('player0'), form.get('player1')], duration, form.has('quick'), first)); }
-  function setup() {
-    const s = session, firstName = esc(s.names[s.first]);
-    let content = '';
-    if (s.step === 0) {
-      const sets = [s.chosenSet, s.chosenSet === 'orange' ? 'red' : 'orange'];
-      content = `<span class="house-badge">${s.quick ? '우리 집 규칙 · 빠른 시작' : '기본 준비 · 시간제 종료는 우리 집 규칙'}</span><h2>돈과 땅을 나눠 가져요.</h2><p>오늘의 선공은 무작위로 뽑힌 <strong>${firstName}</strong>님이에요.${s.quick ? ' 먼저 원하는 색 세트를 골라 주세요.' : ' 각자 1,500을 받고 모든 땅은 은행에 두세요.'}</p>
-      ${s.quick ? `<div class="set-selector">${Object.entries(D.sets).map(([k, v]) => `<button class="set-option ${s.chosenSet === k ? 'selected' : ''}" data-set="${k}" aria-pressed="${s.chosenSet === k}"><span class="color-dot" style="--swatch:${v.color}"></span>${v.name} 세트<small class="muted" style="display:block;margin-top:6px">인쇄 가격 ${v.prices}</small></button>`).join('')}</div><div class="deal-grid">${[s.first,1-s.first].map((p, i) => { const k = sets[i], v = D.sets[k]; return `<section class="deal-card" style="--swatch:${v.color}"><h3>${esc(s.names[p])}</h3><p>${v.name} 권리증 3장 + 남는 현금</p><strong>${money(D.startingCash-s.costs[k])}</strong><p>1,500에서 땅값을 빼요.</p><label class="field-label">이 판의 세트 가격 합계<input type="number" min="0" max="1500" step="1" value="${s.costs[k]}" data-cost="${k}" aria-label="${v.name} 세트 가격 합계"></label></section>`; }).join('')}</div><p class="muted" style="font-size:12px">권리증을 색깔로 찾으면 도시 이름이 달라도 괜찮아요. 땅값이 다르면 위 합계를 고쳐 주세요. 두 사람 모두 땅값을 뺀 현금만 받아요.</p><div class="note">받은 세트로 첫 차례부터 집을 지을 수 있어요. 시작 총자산은 같지만 색깔별 유불리는 달라요. 다음 판에는 색을 바꿔 보세요.</div>` : `<div class="money-grid">${D.money.map(([v,n]) => `<span class="money-note">${v} × ${n}장</span>`).join('')}</div><p class="muted" style="margin-top:15px;font-size:12px">합계 1,500이면 지폐 구성은 달라도 괜찮아요. 위 구성은 나눠 받기 예시예요.</p>`}<p id="cost-error" class="error" role="alert" hidden>세트 합계를 0~1,500의 정수로 입력해 주세요.</p>`;
-    } else if (s.step === 1) {
-      content = `<h2>테이블을 준비해요.</h2><p>웹은 옆에서 도와줄게요. 실제 말과 돈을 움직이며 놀아요.</p><div class="checklist">${['두 사람이 고른 말을 출발점에 놓았어요.','찬스와 공동기금 카드를 따로 섞어 뒤집었어요.','은행 돈은 내 돈과 따로, 집·호텔은 은행 옆에 놓았어요.'].map(t => `<label><input type="checkbox" data-ready>${t}</label>`).join('')}</div><div class="note">시작 전 규칙서를 다 읽지 않아도 돼요. 도착한 칸이나 궁금한 상황을 누르면 필요한 설명이 나와요.</div>`;
-    } else {
-      content = `<span class="house-badge">시작 전에 함께 읽는 우리 집 약속</span><h2>우리의 작은 약속, 세 가지.</h2><div class="walkthrough"><div><strong>01. 서로 설명해 주기</strong><p>사고 싶은 이유, 바꾸고 싶은 이유를 이야기해요. 거래는 거절해도 괜찮아요.</p></div><div><strong>02. 플레이 ${s.minutes-D.reserveMinutes}분</strong><p>시간이 되면 지금 차례를 마치고 두 사람의 차례 수를 맞춰요. 준비·결산은 각 5분 정도예요.</p></div><div><strong>03. 마지막엔 재산 세기</strong><p>현금 + 땅 + 건물로 결산해요. 상대방이 파산하면 먼저 끝낼 수도 있어요.</p></div></div><details><summary>결산 약속을 자세히 볼래요</summary><p>현금 + 담보 아닌 땅의 인쇄 가격 + 담보 땅의 담보금액 + 건물 구매금액 전액이에요. 호텔은 집 다섯 채 값이에요. 건물 판매가인 절반과 달라요. 동점은 공동 승리예요.</p></details><p class="setup-lead"><strong>${firstName}</strong>님부터 시작해요. 실물 주사위 두 개를 굴려 주세요!</p><p class="muted" style="font-size:12px">무료 주차 보너스와 개인 간 대출은 없어요. 나머지는 클래식 기본 규칙으로 해요.</p>`;
-    }
-    root.innerHTML = `<div class="content-width">${heading('SET THE TABLE · '+(s.step+1)+' / 3','작은 준비, 큰 재미.')}<div class="steps">${[0,1,2].map(i=>`<span class="${i<=s.step?'active':''}"></span>`).join('')}</div><section class="panel">${content}<div class="button-row" style="margin-top:25px">${s.step>0?'<button class="secondary" data-action="setup-back">이전</button>':''}<button class="primary" data-action="setup-next">${s.step===2?'타이머 켜고 시작하기 ↗':'준비했어요, 다음 ↗'}</button></div></section></div>`;
-  }
-  function play() {
-    const s = session, p = C.current(s);
-    root.innerHTML = `${heading('OUR LITTLE PROPERTY CLUB','오늘의 테이블.')}<div class="play-grid"><aside class="table-panel"><span class="eyebrow">JUST THE TWO OF US</span><div class="timer-label">플레이 남은 시간</div><div class="timer" id="timer" role="timer" aria-label="플레이 남은 시간"></div><div class="paused" id="paused"></div><div class="timer-track"><span id="timer-bar"></span></div><div class="timer-actions"><button class="text-button" data-action="pause">${s.runningSince===null?'▶ 계속하기':'Ⅱ 잠깐 쉬기'}</button><button class="text-button" data-action="end" ${s.ending?'disabled':''}>이 라운드로 마무리</button></div><div class="turn-block"><span class="timer-label">지금은</span><h2>${esc(s.names[p])} 차례예요.</h2><p>주사위 두 개를 굴려 이동하세요.<br>도착한 칸은 오른쪽에서 골라 주세요.</p><button class="primary" data-action="next-turn" ${s.runningSince===null?'disabled':''}>칸 처리와 추가 굴림까지 끝났어요 <span>→</span></button><div class="turn-counts">${s.names.map((n,i)=>`<span>${esc(n)} ${s.turns[i]}차례 완료</span>`).join('')}</div>${undo?'<button class="text-button" data-action="undo">방금 차례 되돌리기</button>':''}</div></aside><section><div id="ending-alert" class="ending-alert" role="status" ${s.ending?'':'hidden'}>${endingMessage()}</div><div class="play-top"><span class="eyebrow">A LITTLE HELP, RIGHT ON TIME</span><h2 tabindex="-1">어느 칸에 도착했나요?</h2><p class="muted" style="font-size:12px">상황을 고르면 매니저가 하나씩 알려드려요.</p></div><div class="rules-grid">${D.rules.map(r=>`<button class="rule-card" data-rule="${r.id}" aria-haspopup="dialog"><span class="rule-icon" aria-hidden="true">${r.icon}</span><span><strong>${r.title}</strong><small>${r.tag}</small></span><span class="chevron">›</span></button>`).join('')}</div><div class="mini-tip"><span class="eyebrow">TODAY'S LITTLE CHALLENGE</span><p>“이 땅이 왜 갖고 싶어?” 서로 한 번 물어보세요.<br>이유를 말하는 순간, 거래도 놀이가 돼요.</p></div><button class="text-button" data-action="bankrupt">실제로 파산한 사람이 있어요</button></section></div>`;
+  function start(){home=false;undo=null;const next=C.createSession(D.players,draft.minutes,draft.quick,draft.first);next.chosenSet=draft.chosenSet;next.screen='play';next.runningSince=Date.now();next.board=B.create(next.quick,next.first,next.chosenSet);set(next);}
+  function timerHeader(){return `<div class="game-header"><h1>모노폴리</h1><div class="clock"><span id="timer" role="timer" aria-label="남은 시간"></span>${button(s.runningSince===null?'계속':'일시정지','data-action="pause"')}${button('마무리','data-action="end"')}${button('준비','data-action="home"')}</div></div>`;}
+  function play(){
+    const p=C.current(s);
+    if(!s.board){root.innerHTML=timerHeader()+`<section class="legacy"><h2>${esc(s.names[p])} 차례</h2><p>이 판에는 말·현금 기록이 없습니다.</p>${button('현재 판 입력','data-action="import"','primary')}<div class="guide-list">${D.rules.map(r=>button(r.title,`data-rule="${r.id}"`)).join('')}</div>${button('차례 마침','data-action="legacy-next"')}<p id="action-error" class="error" role="alert" hidden></p></section>`;updateTimer();return;}
+    const b=s.board;
+    root.innerHTML=timerHeader()+`<div class="player-balances">${s.names.map((n,i)=>`<button class="balance ${i===p?'current':''}" data-portfolio="${i}"><strong>${esc(n)}</strong><span>${money(b.players[i].cash)}</span><span class="position">${tileName(b.players[i].pos)}${b.players[i].jail?' · 수감':''}</span></button>`).join('')}</div>${s.ending?`<p class="ending">마지막 라운드 · 두 사람 모두 ${s.targetTurns}차례를 마치면 결산합니다.</p>`:''}
+    <div class="board-layout"><div class="board-map" aria-label="실제 게임판과 같은 40칸">${D.board.map((t,i)=>{let row,col;if(i<=10){row=11;col=11-i;}else if(i<=20){row=21-i;col=1;}else if(i<=30){row=1;col=i-19;}else{row=i-29;col=11;}const owner=b.deeds[i]?.owner;return `<button type="button" class="board-tile ${owner!==undefined&&owner!==null?'owner-'+owner:''} ${b.players[p].pos===i?'active-tile':''}" style="grid-row:${row};grid-column:${col};--tile-color:var(--${t[1]},#dadfd8)" data-tile="${i}" aria-label="${tileOption(i)}${owner!==undefined&&owner!==null?' · '+esc(s.names[owner])+' 소유':''}"><span>${t[0].replace('감옥으로 가시오!','감옥으로<br>가시오!').replace('사회사업기금','사회사업<br>기금').replace('수자원공사','수자원<br>공사').replace('무료 주차장','무료<br>주차장')}</span>${b.players.map((x,j)=>x.pos===i?`<b class="token token-${j}" aria-label="${esc(s.names[j])} 말">${esc(s.names[j].slice(0,1))}</b>`:'').join('')}${b.deeds[i]?.buildings?`<em class="building-count">${b.deeds[i].buildings===5?'호텔':b.deeds[i].buildings+'채'}</em>`:''}</button>`;}).join('')}<div class="board-center"><h2>${esc(s.names[p])} 차례</h2><p class="current-place">${tileName(b.players[p].pos)}</p>${s.note?`<p class="transaction-note" role="status">${esc(s.note)}</p>`:''}<div class="current-task">${task()}</div><p id="action-error" class="error" role="alert" tabindex="-1" hidden></p></div></div>
+    <aside class="game-tools">${button('주택 · 호텔 · 저당','data-action="properties"')}${button('거래','data-action="trade"')}${button('실물과 기록 맞추기','data-action="correct"')}${undo?button('마지막 작업 되돌리기','data-action="undo"'):''}<details><summary>규칙</summary><div class="guide-list">${D.rules.map(r=>button(r.title,`data-rule="${r.id}"`)).join('')}</div></details>${button('파산','data-action="bankrupt"','danger')}</aside></div>`;
     updateTimer();
   }
-  function endingMessage() { return `마지막 라운드예요. <strong>${esc(session.names[C.current(session)])}</strong>님의 현재 차례를 마쳐 주세요. 두 사람 모두 ${session.targetTurns ?? Math.max(...session.turns)+1}차례를 마치면 결산해요.`; }
-  function updateTimer() {
-    if (home || session?.screen !== 'play') return;
-    const now = Date.now(), rem = C.remaining(session, now);
-    if (rem === 0 && !session.ending) { session = C.requestFinish(session); save(); play(); return; }
-    const seconds = Math.ceil(rem/1000), el = document.getElementById('timer');
-    if(el) el.textContent = `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;
-    const bar = document.getElementById('timer-bar'); if(bar) bar.style.width = `${rem/C.budget(session)*100}%`;
-    const paused = document.getElementById('paused'); if(paused) paused.textContent = session.runningSince===null ? '잠깐 쉬는 중 · 시간도 멈췄어요' : session.ending ? (rem===0?'시간 종료 · 마지막 라운드 진행 중':'마무리 요청 · 마지막 라운드 진행 중') : '실물 보드를 보며 천천히 놀아요';
+  function task(){
+    const b=s.board,p=C.current(s),person=b.players[p],q=b.pending;
+    if(b.phase==='roll')return `${person.jail?`<p>감옥 탈출</p><div class="button-row">${button('M50 내기','data-board="jail-pay"')}${person.cards?button('탈출 카드 사용','data-board="jail-card"'):''}</div>`:''}<p>${person.jail?'더블 시도':b.extra?'더블 · 한 번 더 굴리세요.':'주사위를 굴리세요.'}</p><form id="dice-form" class="dice-form"><label><input id="die1" type="number" min="1" max="6" step="1" inputmode="numeric" required aria-label="첫 번째 주사위"></label><label><input id="die2" type="number" min="1" max="6" step="1" inputmode="numeric" required aria-label="두 번째 주사위"></label><button class="primary" type="submit">이동</button></form>`;
+    if(b.phase==='end')return `${button('차례 마침','data-board="next" '+(s.runningSince===null?'disabled':''),'primary')}`;
+    if(!q)return '';
+    if(q.type==='info')return `<p>${esc(q.text)}</p>${button('확인','data-board="ack"','primary')}`;
+    if(q.type==='buy')return `<p>주인 없는 부지 · ${money(q.amount)}</p><div class="button-row">${button('구입','data-board="buy"','primary')}${button('경매','data-action="auction"')}</div>`;
+    if(q.type==='rent'){
+      if(q.amount===null)return `<p>${esc(s.names[q.to])} 소유</p><form id="rent-form">${field(q.kind==='street'?(b.deeds[q.index].buildings===0?'권리증의 기본 임대료':b.deeds[q.index].buildings===5?'호텔 임대료':'주택 '+b.deeds[q.index].buildings+'채 임대료'):q.kind==='card'?'카드가 지정한 임대료':'카드의 주사위를 굴려 계산한 임대료','rent-input','','required')} ${q.kind==='street'&&q.factor===2?'<p>색 세트: 입력한 기본 임대료의 두 배 적용</p>':''}<button class="primary" type="submit">금액 확인</button></form>`;
+      return `<p>${esc(s.names[q.to])}에게 <strong>${money(q.amount)}</strong> 내세요.</p>${button('돈을 냈어요','data-board="pay"','primary')}${button('금액 수정','data-action="rent-adjust"')}`;
+    }
+    if(q.type==='pay'||q.type==='jailFee')return `<p>${q.type==='jailFee'?'세 번째 탈출 실패 · ':''}은행에 <strong>${money(q.amount)}</strong> 내세요.</p>${button('돈을 냈어요','data-board="pay"','primary')}`;
+    if(q.type==='card')return `<p>${tileName(q.index)} 카드를 뽑으세요.</p><div class="card-actions">${button('돈 주고받기','data-action="card-money"')}${button('이동','data-action="card-move"')}${button('감옥으로','data-board="card-jail"')}${button('탈출 카드 받기','data-board="card-escape"')}</div>`;
+    return '';
   }
-  function finish() {
-    root.innerHTML = `<div class="content-width">${heading('EVERY GOOD GAME HAS AN ENDING','함께 마무리할 시간.')}<section class="panel"><h2>이제 재산을 세어 볼까요?</h2><p>두 사람 모두 <strong>${session.turns[0]}차례</strong>를 마쳤어요. 이제 주사위와 거래는 멈추고, 각자 현금과 권리증을 모아 주세요.</p><div class="note">우리 집 결산: 현금 + 담보 아닌 땅의 인쇄 가격 + 담보 땅의 담보금액 + 건물 구매금액 전액. 호텔은 집 다섯 채 값이에요.</div><div class="button-row"><button class="primary" data-action="score">재산 계산하기 →</button><button class="secondary" data-action="return-play">방금 차례로 돌아가기</button></div></section></div>`;
+  function run(fn,note='',close=false){try{const before=structuredClone(s),board=fn(s.board);if(!B.valid(board))throw Error('기록을 확인할 수 없습니다.');undo=before;s={...s,board,note,scores:[null,null]};save();if(close)dialog.close();play();return true;}catch(e){error(e.message);return false;}}
+  function updateTimer(){if(home||s?.screen!=='play')return;const rem=C.remaining(s,Date.now());if(rem===0&&!s.ending){s=C.requestFinish(s);save();play();return;}const el=document.getElementById('timer');if(el){const sec=Math.ceil(rem/1000);el.textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');}}
+  function portfolio(p){const b=s.board;open(s.names[p]+' 보유 부지',`<div class="portfolio-list">${Object.entries(b.deeds).filter(([,d])=>d.owner===p).map(([i,d])=>button(tileName(Number(i))+(d.mortgaged?' · 저당':d.buildings===5?' · 호텔':d.buildings?' · 주택 '+d.buildings+'채':''),`data-tile="${i}"`)).join('')||'<p>없음</p>'}</div>`);}
+  function property(index){
+    const d=s.board.deeds[index],t=D.board[index];if(!d){showRule(t[1]==='tax'?'tax':['chance','chest'].includes(t[1])?'card':['jail','gotojail'].includes(t[1])?'jail':'corner');return;}
+    const p=d.owner;
+    open(t[0],`<p>${p===null?'은행 소유':esc(s.names[p])+' 소유'} · 부지값 ${money(t[2])}</p>${d.buildings?`<p>${d.buildings===5?'호텔':'주택 '+d.buildings+'채'}</p>`:''}${p!==null?`<div class="property-actions">${B.isStreet(index)?`${d.houseCost===null?field('권리증의 주택 한 채 가격','house-cost','','required'):''}${button('주택/호텔 한 채 건설',`data-property="build" data-index="${index}"`)}${d.buildings?button('건물 한 채 판매',`data-property="sell" data-index="${index}"`)+button('이 색 건물 모두 판매',`data-property="sell-all" data-index="${index}"`):''}`:''}${d.mortgaged?button('저당 해제 '+money(Math.ceil(d.mortgage*110/100)),`data-property="mortgage" data-index="${index}"`):field('권리증의 저당 가격','mortgage-value',d.mortgage)+button('저당 잡히기',`data-property="mortgage" data-index="${index}"`)}</div>`:''}<details><summary>실물 권리증과 기록 맞추기</summary><form id="deed-correct" data-index="${index}"><label for="deed-owner">주인</label><select id="deed-owner"><option value="" ${p===null?'selected':''}>은행</option>${s.names.map((n,i)=>`<option value="${i}" ${p===i?'selected':''}>${esc(n)}</option>`).join('')}</select>${B.isStreet(index)?`<label for="deed-buildings">건물</label><select id="deed-buildings">${[0,1,2,3,4,5].map(n=>`<option value="${n}" ${d.buildings===n?'selected':''}>${n===5?'호텔':n+'채'}</option>`).join('')}</select>`:''}<label class="check"><input id="deed-mortgaged" type="checkbox" ${d.mortgaged?'checked':''}>저당</label><button class="primary">기록 수정</button></form></details>`);
   }
-  function score() {
-    const labels = [['가지고 있는 현금','지금 손에 있는 지폐의 합계'],['담보 아닌 땅의 가격 합계','권리증의 구매 가격 · 현재 임대료가 아니에요'],['담보 땅의 담보금액 합계','담보 땅은 위 항목과 중복해서 넣지 않아요'],['건물 구매금액 합계','현재 집 수 × 건축비 · 호텔은 집 다섯 채 값']];
-    root.innerHTML = `<div class="content-width">${heading('COUNT THE LITTLE THINGS','누구의 마을이 자랐을까요?')}<p class="muted">거래 기록을 되짚을 필요 없어요. 지금 가진 것만 세어 주세요.<br>없는 항목도 <strong>0</strong>을 입력해 주세요.</p><form id="score-form"><div class="score-grid">${session.names.map((n,p)=>`<section class="score-card"><h3>${esc(n)}의 재산</h3>${labels.map(([label,hint],i)=>`<label for="score-${p}-${i}">${label}<small>${hint}</small></label><input id="score-${p}-${i}" name="score-${p}-${i}" data-score="${p},${i}" type="number" min="0" max="${D.maxAmount}" step="1" inputmode="numeric" required placeholder="0" value="${esc(session.scores[p]?.[i]??'')}">`).join('')}<div class="score-total"><span>총자산</span><strong id="total-${p}">입력 중</strong></div></section>`).join('')}</div><p id="score-error" class="error" role="alert" hidden>네 항목을 모두 0 이상의 정수로 입력해 주세요.</p><div class="note">건물은 팔지 마세요. 이번 판에서는 구매금액 전액으로 평가해요. 실제 건물 판매가는 절반이지만, 여기서는 사용하지 않아요.</div><div class="button-row"><button class="secondary" type="button" data-action="finish">이전</button><button class="primary" type="submit">우리의 결과 보기 ↗</button></div></form></div>`;
-    refreshTotals();
-    document.getElementById('score-form').addEventListener('submit', e=>{e.preventDefault(); captureScores(); const totals=session.scores.map(C.total); if(totals.some(n=>n===null)){document.getElementById('score-error').hidden=false;return;} set({...session,screen:'result',winner:C.winner(totals),finishReason:'time'});});
+  function auction(){open(tileName(s.board.pending.index)+' 경매',`<p>M10부터, M1 이상 올려 부르세요.</p><form id="auction-form"><label for="auction-winner">낙찰자</label><select id="auction-winner">${s.names.map((n,i)=>`<option value="${i}">${esc(n)}</option>`).join('')}</select>${field('마지막에 부른 금액','auction-amount','','min="1" required')}<button class="primary">돈을 내고 권리증 받기</button></form>${button('아무도 입찰 안 함','data-board="no-bid"')}`);}
+  function cardMoney(){open('카드의 돈 지시',`<form id="card-money-form"><label for="card-direction">지시</label><select id="card-direction"><option value="receive">은행에서 받기</option><option value="give">은행에 내기</option><option value="otherGive">상대방에게 내기</option><option value="otherReceive">상대방에게 받기</option></select>${field('카드의 금액','card-amount','','required')}<button class="primary">처리했어요</button></form>`);}
+  function cardMove(){open('카드의 이동 지시',`<form id="card-move-form"><label for="card-destination">도착 칸</label><select id="card-destination">${tileOptions()}</select><label for="card-direction">방향</label><select id="card-direction"><option value="move">앞으로</option><option value="back">뒤로</option></select><button class="primary">이동했어요</button></form>${button('세 칸 뒤로','data-board="back-three"')}`);}
+  function trading(){
+    open('거래',`<form id="trade-form"><div class="trade-grid">${s.names.map((n,p)=>`<section><h3>${esc(n)}가 줄 것</h3><label for="trade-deed-${p}">권리증</label><select id="trade-deed-${p}"><option value="">없음</option>${Object.entries(s.board.deeds).filter(([,d])=>d.owner===p).map(([i,d])=>`<option value="${i}">${tileName(Number(i))}${d.mortgaged?' · 저당':''}</option>`).join('')}</select>${field('현금','trade-cash-'+p,0)}<label class="check" id="release-label-${p}" hidden><input type="checkbox" id="release-${p}">받는 저당을 즉시 해제</label></section>`).join('')}</div><p id="trade-fees"></p><button class="primary">둘 다 동의 · 거래했어요</button></form>`);tradeFees();
   }
-  function captureScores() { session.scores=[0,1].map(p=>[0,1,2,3].map(i=>document.getElementById(`score-${p}-${i}`).value)); save(); }
-  function refreshTotals() { [0,1].forEach(p=>{const values=[0,1,2,3].map(i=>document.getElementById(`score-${p}-${i}`).value), t=C.total(values); document.getElementById(`total-${p}`).textContent=t===null?'입력 중':money(t);}); }
-  function result() {
-    const s=session, tie=s.winner==='tie';
-    root.innerHTML=`<div class="content-width result"><span class="eyebrow">A SMALL GAME, A GOOD MEMORY</span><div class="result-icon" aria-hidden="true">⌂</div><h1 tabindex="-1">${tie?'오늘은 나란히, 공동 승리!':`${esc(s.names[s.winner])}님의 마을이<br>더 크게 자랐어요!`}</h1><p class="muted">${s.finishReason==='bankruptcy'?'상대방의 파산으로 이번 판이 끝났어요.':'약속한 마지막 라운드까지, 두 사람 모두 수고했어요.'}</p>${s.finishReason==='time'?`<div class="deal-grid">${s.names.map((n,i)=>`<section class="deal-card"><p>${esc(n)}</p><strong>${money(C.total(s.scores[i]))}</strong><p>총자산</p></section>`).join('')}</div>`:''}<div class="mini-tip" style="text-align:left;margin:25px auto"><span class="eyebrow">ONE LAST QUESTION</span><p>“오늘 가장 잘했다고 생각하는 선택은 뭐야?”<br>승부 이야기 다음에는, 서로의 선택도 들어 주세요.</p></div><div class="button-row">${s.finishReason==='time'?'<button class="secondary" data-action="score">결산 입력 고치기</button>':''}<button class="primary" data-action="new">다음에 또 만나요 · 새 판 준비</button></div></div>`;
+  function tradeFees(){const incoming=[document.getElementById('trade-deed-1').value,document.getElementById('trade-deed-0').value];incoming.forEach((v,p)=>{const applicable=v!==''&&s.board.deeds[v].mortgaged;document.getElementById('release-label-'+p).hidden=!applicable;if(!applicable)document.getElementById('release-'+p).checked=false;});const parts=incoming.flatMap((v,p)=>v!==''&&s.board.deeds[v].mortgaged?[s.names[p]+' 은행 비용 '+money(Math.ceil(s.board.deeds[v].mortgage*(document.getElementById('release-'+p).checked?110:10)/100))]:[]);document.getElementById('trade-fees').textContent=parts.join(' · ');}
+  function correction(importing=false){
+    const b=s.board??B.create(false,0);
+    open(importing?'현재 판 입력':'실물과 기록 맞추기',`<form id="correct-form" data-import="${importing}"><div class="trade-grid">${s.names.map((n,p)=>`<section><h3>${esc(n)}</h3>${field('실제 현금','correct-cash-'+p,importing?'':b.players[p].cash,'required')}<label for="correct-pos-${p}">말 위치</label><select id="correct-pos-${p}">${tileOptions(b.players[p].pos)}</select><label class="check"><input type="checkbox" id="correct-jail-${p}" ${b.players[p].jail?'checked':''}>감옥에 수감 중</label></section>`).join('')}</div>${importing?`<h3>권리증 주인</h3><div class="import-deeds">${Object.keys(b.deeds).map(i=>`<label>${tileName(Number(i))}<select data-import-owner="${i}"><option value="">은행</option>${s.names.map((n,p)=>`<option value="${p}">${esc(n)}</option>`).join('')}</select></label>`).join('')}</div><label class="check"><input type="checkbox" required>말·현금·모든 권리증을 대조했습니다.</label><p>건물·저당은 입력 후 해당 부지를 눌러 맞추세요.</p>`:'<p>말 위치를 바꾸면 다음 주사위 입력부터 진행합니다.</p>'}<button class="primary">기록 맞추기</button></form>`,importing);
   }
-  function showRule(id) {
-    if(!D.rules.some(r=>r.id===id))return;
-    managerId=id;managerPath=['start'];ruleDialog.classList.add('manager-dialog');renderManager();ruleDialog.showModal();
+  function showRule(id){managerId=id;path=['start'];renderGuide();}
+  function renderGuide(){const flow=MC_MANAGER.flows(s?.names??D.players)[managerId],n=flow?.[path.at(-1)];if(!n)return;open(n.title,`<p class="instruction">${esc(n.text)}</p>${n.note?`<p>${esc(n.note)}</p>`:''}<div class="guide-choices">${n.choices.map((c,i)=>button(esc(c.label),`data-guide="${c.next}"`,i===0?'primary':'secondary')).join('')}</div>${path.length>1?button('이전','data-action="guide-back"'):''}`);}
+  function bankrupt(){open('파산',`<p>건물 판매·저당으로도 빚을 못 갚는 사람</p><div class="button-row">${s.names.map((n,i)=>button(esc(n),`data-bankrupt="${i}"`,'danger')).join('')}</div>`);}
+  function finish(){
+    root.innerHTML=heading('결산')+`<p>두 사람 모두 ${s.turns[0]}차례를 마쳤습니다.</p><p>현금 + 부지 + 건물 구매금액으로 비교합니다. 저당 부지는 저당 가격입니다.</p><div class="button-row">${button('재산 확인','data-action="score"','primary')}${button('마지막 차례로 돌아가기','data-action="return-play"')}</div>`;
   }
-  function renderManager() {
-    const rule=D.rules.find(r=>r.id===managerId), node=globalThis.MC_MANAGER.flows(session.names)[managerId][managerPath.at(-1)];
-    document.getElementById('rule-content').innerHTML=`<div class="dialog-head"><span class="manager-label" aria-hidden="true">m</span><span class="manager-context">테이블 매니저 <small>${esc(session.names[C.current(session)])} 차례 · ${rule.title}</small></span><button type="button" class="icon-button" data-close aria-label="안내 닫기">×</button></div><div class="manager-body"><span class="eyebrow">지금 할 일</span><h2 id="rule-title" tabindex="-1">${esc(node.title)}</h2><p class="manager-instruction">${esc(node.text)}</p>${node.note?`<p class="manager-note">${esc(node.note)}</p>`:''}${node.calculator?`<div class="manager-calculator"><label for="manager-base">${node.calculator==='street'?'기본 임대료를 넣으면 계산해 드려요':'주사위 두 개의 합을 넣으세요'}</label><input id="manager-base" type="number" min="${node.calculator==='street'?0:2}" max="${node.calculator==='street'?D.maxAmount:12}" step="1" inputmode="numeric" data-multiplier="${node.calculator==='street'?2:node.calculator}" placeholder="${node.calculator==='street'?'권리증의 기본 임대료':'2~12'}"><output id="manager-result" aria-live="polite"></output></div>`:''}<div class="manager-choices">${node.choices.map((c,i)=>`<button type="button" class="${i===0?'primary':'secondary'}" data-manager-next="${c.next}">${esc(c.label)}<span aria-hidden="true">${c.next==='close'?'✓':'→'}</span></button>`).join('')}</div></div><div class="manager-footer"><button type="button" class="text-button" data-manager-back>${managerPath.length>1?'← 이전 안내':'← 보드로 돌아가기'}</button><button type="button" class="text-button" data-manager-pause>${session.runningSince===null?'▶ 시간 다시 흐르게':'Ⅱ 설명 읽는 동안 시간 멈추기'}</button></div><details class="manager-details"><summary>자세한 규칙 · 출처</summary><p>${rule.body}</p><ol class="rule-steps">${rule.steps.map(t=>`<li>${t}</li>`).join('')}</ol><p>실물 카드와 설명서가 우선이에요. 이전 안내는 웹 화면만 되돌려요. 실제 돈과 말은 되돌리지 않아요.</p><a href="${D.sources.classic}" target="_blank" rel="noopener noreferrer">Hasbro 클래식 설명서 ↗</a></details>`;
-    if(ruleDialog.open)document.getElementById('rule-title').focus({preventScroll:true});
-    ruleDialog.scrollTop=0;
+  function score(){
+    const b=s.board,fields=['현금','저당 아닌 부지값 합계','저당 부지의 저당값 합계','건물 구매금액 합계'];
+    if(b&&s.scores.every(x=>x===null)){s.scores=b.players.map((person,p)=>{const deeds=Object.entries(b.deeds).filter(([,d])=>d.owner===p),unknown=deeds.some(([,d])=>d.buildings&&d.houseCost===null);return [String(person.cash),String(deeds.filter(([,d])=>!d.mortgaged).reduce((a,[i])=>a+D.board[i][2],0)),String(deeds.filter(([,d])=>d.mortgaged).reduce((a,[,d])=>a+d.mortgage,0)),unknown?'':String(deeds.reduce((a,[,d])=>a+d.buildings*(d.houseCost??0),0))];});save();}
+    root.innerHTML=heading('재산 확인')+`<form id="score-form"><div class="score-grid">${s.names.map((n,p)=>`<section><h2>${esc(n)}</h2>${fields.map((label,i)=>field(label,`score-${p}-${i}`,esc(s.scores[p]?.[i]??''),'data-score required')).join('')}<p>총자산 <strong id="total-${p}"></strong></p></section>`).join('')}</div><div class="button-row">${button('이전','data-action="finish"')}<button class="primary">결과</button></div></form><p id="action-error" class="error" hidden></p>`;refreshTotals();
   }
-  function render() { if(home){renderHome();return;} ({setup,play,finish,score,result}[session.screen])(); }
-  function confirmBankrupt() {
-    ruleDialog.classList.remove('manager-dialog');
-    document.getElementById('rule-content').innerHTML=`<div class="dialog-head"><span class="eyebrow">BANKRUPTCY · 파산 확인</span><button class="icon-button" data-close aria-label="닫기">×</button></div><h2 id="rule-title">실제로 파산했나요?</h2><p>건물 판매와 담보로 마련해도 빚을 다 갚지 못할 때 파산이에요. 잠깐 현금이 모자라는 경우라면 먼저 해결해 보세요.</p><p>파산한 사람을 누르면 상대방의 승리로 끝나요.</p><div class="button-row">${session.names.map((n,i)=>`<button class="danger" data-bankrupt="${i}">${esc(n)} 파산</button>`).join('')}</div><button class="text-button" data-close>아직 아니에요, 계속할게요</button>`;
-    ruleDialog.showModal();
-  }
+  function captureScores(){s.scores=[0,1].map(p=>[0,1,2,3].map(i=>document.getElementById(`score-${p}-${i}`).value));save();}
+  function refreshTotals(){[0,1].forEach(p=>{const n=C.total([0,1,2,3].map(i=>document.getElementById(`score-${p}-${i}`).value));document.getElementById('total-'+p).textContent=n===null?'입력 필요':money(n);});}
+  function result(){root.innerHTML=heading(s.winner==='tie'?'공동 승리':esc(s.names[s.winner])+' 승리',false)+(s.finishReason==='bankruptcy'?'<p>상대방 파산</p>':`<div class="score-grid">${s.names.map((n,p)=>`<section><h2>${esc(n)}</h2><p class="result-amount">${money(C.total(s.scores[p]))}</p></section>`).join('')}</div>`)+`<div class="button-row">${s.finishReason==='time'?button('결산 수정','data-action="score"'):''}${button('새 판 준비','data-action="home"','primary')}</div>`;}
   document.addEventListener('click',e=>{
-    const close=e.target.closest('[data-close]'); if(close){close.closest('dialog')?.close();return;}
-    const managerNext=e.target.closest('[data-manager-next]');
-    if(managerNext){const next=managerNext.dataset.managerNext;if(next==='close'){ruleDialog.close();return;}if(/^bankrupt[01]$/.test(next)){ruleDialog.close();undo=null;set({...C.pause(session,Date.now()),screen:'result',winner:1-Number(next.at(-1)),finishReason:'bankruptcy'});return;}managerPath.push(next);renderManager();return;}
-    if(e.target.closest('[data-manager-back]')){if(managerPath.length>1){managerPath.pop();renderManager();}else ruleDialog.close();return;}
-    const managerPause=e.target.closest('[data-manager-pause]');if(managerPause){session=session.runningSince===null?{...session,runningSince:Date.now()}:C.pause(session,Date.now());save();play();managerPause.textContent=session.runningSince===null?'▶ 시간 다시 흐르게':'Ⅱ 설명 읽는 동안 시간 멈추기';return;}
-    const dur=e.target.closest('[data-duration]'); if(dur){duration=Number(dur.dataset.duration);root.querySelectorAll('[data-duration]').forEach(b=>{const active=Number(b.dataset.duration)===duration;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active));});document.getElementById('duration-detail').textContent=`준비 약 5분 + 플레이 ${duration-D.reserveMinutes}분 + 결산 약 5분`;return;}
-    const color=e.target.closest('[data-set]'); if(color){set({...session,chosenSet:color.dataset.set},true);return;}
-    const rule=e.target.closest('[data-rule]'); if(rule){showRule(rule.dataset.rule);return;}
-    const bankrupt=e.target.closest('[data-bankrupt]');if(bankrupt){ruleDialog.close();undo=null;set({...C.pause(session,Date.now()),screen:'result',winner:1-Number(bankrupt.dataset.bankrupt),finishReason:'bankruptcy'});return;}
-    const action=e.target.closest('[data-action]')?.dataset.action;
-    if(!action)return;
-    if(action==='home'){home=true;render();window.scrollTo({top:0});}
-    if(action==='resume'){home=false;render();}
-    if(action==='new'){newDialog.dataset.pending='reset';newDialog.showModal();}
-    if(action==='setup-back')set({...session,step:session.step-1});
-    if(action==='setup-next'){
-      if(session.step===0 && session.quick){const values={}; for(const inp of root.querySelectorAll('[data-cost]'))values[inp.dataset.cost]=C.amount(inp.value); if(Object.values(values).some(v=>v===null||v>D.startingCash)){document.getElementById('cost-error').hidden=false;return;} session.costs=values;}
-      if(session.step===1 && [...root.querySelectorAll('[data-ready]')].some(i=>!i.checked)){root.querySelector('[data-ready]:not(:checked)').focus();return;}
-      set(session.step===2?{...session,screen:'play',runningSince:Date.now()}:{...session,step:session.step+1});
-    }
-    if(action==='pause')set(session.runningSince===null?{...session,runningSince:Date.now()}:C.pause(session,Date.now()),true);
-    if(action==='next-turn' && session.runningSince!==null){undo=structuredClone(session);set(C.advance(session,Date.now()));}
-    if(action==='undo' && undo){const old={...undo,elapsed:C.elapsed(session,Date.now()),runningSince:session.runningSince===null?null:Date.now(),ending:session.ending,targetTurns:session.targetTurns};undo=null;set(old);}
-    if(action==='end')set(C.requestFinish(session),true);
-    if(action==='bankrupt')confirmBankrupt();
-    if(action==='score')set({...session,screen:'score'});
-    if(action==='finish')set({...session,screen:'finish'});
-    if(action==='return-play'){
-      const turns=[...session.turns];turns[1-session.first]--;
-      undo=null;set({...session,screen:'play',turns,runningSince:Date.now()});
-    }
+    if(e.target.closest('[data-close]')){e.target.closest('dialog').close();return;}
+    const el=e.target.closest('button');if(!el)return;
+    if(el.dataset.duration){draft.minutes=Number(el.dataset.duration);return preparation();}
+    if(el.dataset.quick){draft.quick=el.dataset.quick==='true';return preparation();}
+    if(el.dataset.first){draft.first=Number(el.dataset.first);return preparation();}
+    if(el.dataset.rule)return showRule(el.dataset.rule);
+    if(el.dataset.guide){const n=el.dataset.guide;if(n==='close')dialog.close();else if(n.startsWith('bankrupt'))bankrupt();else{path.push(n);renderGuide();}return;}
+    if(el.dataset.portfolio)return portfolio(Number(el.dataset.portfolio));
+    if(el.dataset.tile)return property(Number(el.dataset.tile));
+    const p=s?C.current(s):0;
+    if(el.dataset.property){const index=Number(el.dataset.index),d=s.board.deeds[index],owner=d.owner,cost=C.amount(document.getElementById('house-cost')?.value);const action=el.dataset.property;if(action==='build')run(b=>B.build(b,owner,index,cost),'실물 건물도 같은 수로 맞추세요.',true);else if(action==='sell'||action==='sell-all')run(b=>B.sell(b,owner,index,action==='sell-all',cost),'건물을 은행에 돌려주고 돈을 받으세요.',true);else run(b=>B.mortgage(b,owner,index,d.mortgaged?null:C.amount(document.getElementById('mortgage-value').value)),d.mortgaged?'저당 해제 금액을 은행에 내세요.':'저당금을 받고 권리증을 뒤집으세요.',true);return;}
+    if(el.dataset.bankrupt){dialog.close();undo=structuredClone(s);return set({...C.pause(s,Date.now()),screen:'result',winner:1-Number(el.dataset.bankrupt),finishReason:'bankruptcy'});}
+    const a=el.dataset.action;
+    if(a==='home'){home=true;if(s?.screen==='setup')draft=structuredClone(s);render();return;}
+    if(a==='resume'){home=false;render();return;}
+    if(a==='start'){if(s){pendingNew=true;confirmDialog.showModal();}else start();return;}
+    if(a==='pause'){s=s.runningSince===null?{...s,runningSince:Date.now()}:C.pause(s,Date.now());save();render();return;}
+    if(a==='end'){s=C.requestFinish(s);save();render();return;}
+    if(a==='undo'&&undo){const time=C.elapsed(s,Date.now()),running=s.runningSince!==null,old=undo;undo=null;s={...old,elapsed:time,runningSince:running?Date.now():null,note:'웹과 실물을 함께 되돌리세요.'};save();render();return;}
+    if(a==='auction')return auction();if(a==='card-money')return cardMoney();if(a==='card-move')return cardMove();if(a==='trade')return trading();
+    if(a==='correct'||a==='import')return correction(a==='import');
+    if(a==='properties')return portfolio(p);
+    if(a==='bankrupt')return bankrupt();
+    if(a==='guide-back'){path.pop();return renderGuide();}
+    if(a==='rent-adjust')return open('이번 임대료 수정',`<form id="rent-adjust-form">${field('실물 권리증·카드의 최종 금액','rent-adjust',s.board.pending.amount,'required')}<button class="primary">금액 수정</button></form>`);
+    if(a==='finish')return set({...s,screen:'finish'});if(a==='score')return set({...s,screen:'score'});
+    if(a==='return-play'){const turns=[...s.turns];turns[1-s.first]--;const board=s.board?{...s.board,phase:'end',pending:null}:undefined;return set({...s,board,screen:'play',turns,runningSince:Date.now()});}
+    if(a==='legacy-next'){undo=structuredClone(s);return set(C.advance(s,Date.now()));}
+    const op=el.dataset.board;if(!op)return;
+    if(op==='ack')run(b=>B.acknowledge(b));
+    if(op==='buy')run(b=>B.purchase(b,p),'부지값을 은행에 내고 권리증을 받으세요.');
+    if(op==='no-bid')run(b=>B.purchase(b,p,null),'부지는 은행에 둡니다.',true);
+    if(op==='pay')run(b=>B.pay(b,p));
+    if(op==='card-jail')run(b=>B.card(b,p,'jail',0),'감옥으로 이동하세요.');
+    if(op==='card-escape')run(b=>B.card(b,p,'escape',0),'탈출 카드를 보관하세요.');
+    if(op==='back-three')run(b=>B.card(b,p,'back',(b.players[p].pos+37)%40),'말을 세 칸 뒤로 옮기세요.',true);
+    if(op==='jail-pay'||op==='jail-card')run(b=>B.jailExit(b,p,op==='jail-card'?'card':'cash'),op==='jail-card'?'탈출 카드를 더미 맨 아래에 돌려놓으세요.':'은행에 M50을 내세요.');
+    if(op==='next'&&s.board.phase==='end'&&s.runningSince!==null){undo=structuredClone(s);let next=C.advance(s,Date.now());if(next.screen==='play')next={...next,board:B.beginTurn(next.board),note:''};set(next);}
   });
-  document.getElementById('confirm-new').addEventListener('click',()=>{
-    const pending=newDialog.dataset.pending;newDialog.close();
-    if(pending==='form'){startNew(new FormData(document.getElementById('new-form')));return;}
-    session=null;undo=null;try{localStorage.removeItem(D.storageKey);}catch{}home=true;render();window.scrollTo({top:0});
-  });
-  document.addEventListener('input',e=>{
-    if(e.target.matches('[data-cost]')){
-      const v=C.amount(e.target.value), k=e.target.dataset.cost;
-      if(v!==null&&v<=D.startingCash){session.costs[k]=v;save();e.target.closest('.deal-card').querySelector('strong').textContent=money(D.startingCash-v);}
+  function rollDice(a,b){const p=C.current(s),old=s.board.players[p].cash;try{const next=B.roll(s.board,p,a,b),gain=next.players[p].cash-old;run(()=>next,`${a} + ${b} = ${a+b}${gain===200?' · 출발 통과: 은행에서 M200을 받으세요.':''}`);}catch(e){error(e.message);}}
+  document.addEventListener('submit',e=>{
+    e.preventDefault();const p=s?C.current(s):0,f=e.target,id=f.id;
+    if(id==='dice-form')return rollDice(Number(document.getElementById('die1').value),Number(document.getElementById('die2').value));
+    if(id==='rent-form')return run(b=>B.recordRent(b,C.amount(document.getElementById('rent-input').value)));
+    if(id==='rent-adjust-form')return run(b=>B.recordRent(b,C.amount(document.getElementById('rent-adjust').value),true),'',true);
+    if(id==='auction-form')return run(b=>B.purchase(b,p,Number(document.getElementById('auction-winner').value),C.amount(document.getElementById('auction-amount').value)),'낙찰금을 은행에 내고 권리증을 받으세요.',true);
+    if(id==='card-money-form')return run(b=>B.card(b,p,document.getElementById('card-direction').value,C.amount(document.getElementById('card-amount').value)),'카드의 금액을 반영했습니다.',true);
+    if(id==='card-move-form')return run(b=>B.card(b,p,document.getElementById('card-direction').value,Number(document.getElementById('card-destination').value)),'실물 말도 같은 칸으로 옮기세요.',true);
+    if(id==='trade-form'){const v=[0,1].map(i=>document.getElementById('trade-deed-'+i).value);return run(b=>B.trade(b,v[0]===''?null:Number(v[0]),v[1]===''?null:Number(v[1]),C.amount(document.getElementById('trade-cash-0').value),C.amount(document.getElementById('trade-cash-1').value),document.getElementById('release-0').checked,document.getElementById('release-1').checked),'권리증·돈을 교환하고 저당 인수 비용은 은행에 내세요.',true);}
+    if(id==='deed-correct'){const index=Number(f.dataset.index);return run(b=>{const next=structuredClone(b),d=next.deeds[index],v=document.getElementById('deed-owner').value;d.owner=v===''?null:Number(v);d.buildings=Number(document.getElementById('deed-buildings')?.value??0);d.mortgaged=document.getElementById('deed-mortgaged').checked;if(d.owner===null&&(d.buildings||d.mortgaged))throw Error('은행 부지에는 건물·저당을 넣을 수 없습니다.');if(d.mortgaged&&d.buildings)throw Error('건물이 있는 부지를 저당 잡을 수 없습니다.');return next;},'실물 권리증 기준으로 맞췄습니다.',true);}
+    if(id==='correct-form'){
+      const importing=f.dataset.import==='true';
+      const fn=original=>{let b=importing?B.create(false,0):structuredClone(original);for(let i=0;i<2;i++){const pos=Number(document.getElementById('correct-pos-'+i).value),jail=document.getElementById('correct-jail-'+i).checked;if(jail&&pos!==10)throw Error('수감 중인 말은 감옥에 있어야 합니다.');b=B.correct(b,i,pos,C.amount(document.getElementById('correct-cash-'+i).value));b.players[i].jail=jail;if(!jail)b.players[i].attempts=0;}if(importing)for(const el of document.querySelectorAll('[data-import-owner]'))b.deeds[el.dataset.importOwner].owner=el.value===''?null:Number(el.value);return {...b,phase:'roll',pending:null,extra:false,doubles:0};};
+      if(importing){try{const b=fn(null);if(!B.valid(b))throw Error('기록을 확인하세요.');undo=structuredClone(s);s={...s,board:b};save();dialog.close();play();}catch(e){error(e.message);}return;}
+      return run(fn,'실물 기준으로 기록을 맞췄습니다.',true);
     }
-    if(e.target.matches('[data-score]')){captureScores();refreshTotals();}
-    if(e.target.id==='manager-base'){
-      const v=C.amount(e.target.value), multiplier=Number(e.target.dataset.multiplier);
-      document.getElementById('manager-result').textContent=v===null?'숫자를 넣어 주세요.':(multiplier!==2&&(v<2||v>12))?'주사위 합은 2~12예요.':`낼 돈은 ${money(v*multiplier)}이에요.`;
-    }
+    if(id==='score-form'){captureScores();const totals=s.scores.map(C.total);if(totals.some(v=>v===null))return error('모든 항목에 0 이상의 정수를 입력하세요.');set({...s,screen:'result',winner:C.winner(totals),finishReason:'time'});}
   });
-  document.addEventListener('visibilitychange',()=>{if(!home&&session?.screen==='play')updateTimer();});
-  setInterval(updateTimer,D.tick);
-  render();
+  document.addEventListener('input',e=>{if(e.target.hasAttribute('data-score')){captureScores();refreshTotals();}});
+  document.addEventListener('change',e=>{if(e.target.id.startsWith('trade-')||e.target.id.startsWith('release-'))tradeFees();});
+  document.getElementById('confirm-new').addEventListener('click',()=>{confirmDialog.close();if(pendingNew){pendingNew=false;start();}});
+  setInterval(updateTimer,D.tick);document.addEventListener('visibilitychange',()=>{if(!home&&s?.screen==='play')updateTimer();});render();
 })();
