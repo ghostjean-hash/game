@@ -129,6 +129,23 @@
     incoming.forEach((index,p)=>{if(index!==null){s.deeds[index].owner=p;if([release0,release1][p])s.deeds[index].mortgaged=false;}});
   });}
   function correct(state,p,pos,balance){return transact(state,s=>{integer(pos,0,39);integer(balance);s.players[p].pos=pos;s.players[p].cash=balance;});}
+  function rentInfo(s,index){
+    const d=s.deeds[index],type=D.board[index][1];if(!d||d.owner===null||d.mortgaged)return {amount:0};
+    if(isStreet(index))return {amount:d.rents[d.buildings]*(d.buildings===0&&ownsSet(s,d.owner,index)?2:1)};
+    const count=Object.entries(s.deeds).filter(([i,x])=>x.owner===d.owner&&D.board[i][1]===type).length;
+    return type==='station'?{amount:D.stationRents[count-1]}:{factor:count===2?10:4};
+  }
+  function tradeReason(s,index){const d=s.deeds[index];if(!d||d.owner===null)return '내 부지가 아닙니다.';if(s.pending?.type==='rent'&&s.pending.index===index)return '이 부지의 임대료부터 처리하세요.';return isStreet(index)&&group(index).some(i=>s.deeds[i].buildings)?'이 색의 건물을 모두 먼저 파세요.':'';}
+  function assetOptions(state,p){
+    integer(p,0,1);
+    const preview=(index,fn)=>{try{const next=fn();return {allowed:true,change:next.players[p].cash-state.players[p].cash,rent:rentInfo(next,index)};}catch(e){return {allowed:false,reason:e.message};}};
+    return Object.entries(state.deeds).filter(([,d])=>d.owner===p).map(([key,d])=>{const index=Number(key);return {index,monopoly:isStreet(index)&&ownsSet(state,p,index),rent:rentInfo(state,index),tradeReason:tradeReason(state,index),
+      build:isStreet(index)?preview(index,()=>build(state,p,index,d.houseCost)):null,
+      sell:d.buildings?preview(index,()=>sell(state,p,index)):null,
+      sellAll:d.buildings?preview(index,()=>sell(state,p,index,true)):null,
+      mortgage:d.mortgaged?null:preview(index,()=>mortgage(state,p,index)),
+      release:d.mortgaged?preview(index,()=>mortgage(state,p,index)):null};});
+  }
   function valid(s){
     if(!s||s.version!==1||!Array.isArray(s.players)||s.players.length!==2||!['roll','land','end'].includes(s.phase)||!s.deeds)return false;
     if(!s.players.every(p=>Number.isSafeInteger(p.cash)&&p.cash>=0&&p.cash<=D.maxAmount&&Number.isInteger(p.pos)&&p.pos>=0&&p.pos<40&&typeof p.jail==='boolean'&&(!p.jail||p.pos===10)&&Number.isInteger(p.attempts)&&p.attempts>=0&&p.attempts<=3&&Number.isInteger(p.cards)&&p.cards>=0))return false;
@@ -145,5 +162,5 @@
     if(streets.some(i=>{const values=group(i).map(j=>s.deeds[j]?.buildings??0);return Math.max(...values)-Math.min(...values)>1;}))return false;
     return keys.every(i=>{const d=s.deeds[i];return d&&[null,0,1].includes(d.owner)&&typeof d.mortgaged==='boolean'&&Number.isInteger(d.buildings)&&d.buildings>=0&&d.buildings<=(isStreet(Number(i))?5:0)&&(d.owner!==null||!d.buildings&&!d.mortgaged)&&!(d.mortgaged&&d.buildings)&&Number.isSafeInteger(d.mortgage)&&d.mortgage>0&&(d.houseCost===null||Number.isSafeInteger(d.houseCost)&&d.houseCost>0)&&d.rents&&Object.entries(d.rents).every(([k,v])=>/^[0-5]$/.test(k)&&Number.isSafeInteger(v)&&v>=0);})&&Number.isInteger(s.doubles)&&s.doubles>=0&&s.doubles<=3&&typeof s.extra==='boolean'&&supplies(s).houses>=0&&supplies(s).hotels>=0;
   }
-  globalThis.MC_BOARD=Object.freeze({create,hydrate,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,printedCard,cardSummary,utilityRoll,build,sell,mortgage,trade,correct,supplies,valid,isStreet,group,ownsSet});
+  globalThis.MC_BOARD=Object.freeze({create,hydrate,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,printedCard,cardSummary,utilityRoll,build,sell,mortgage,trade,correct,supplies,valid,isStreet,group,ownsSet,rentInfo,tradeReason,assetOptions});
 })();

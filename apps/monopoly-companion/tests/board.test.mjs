@@ -160,3 +160,22 @@ test('auction cannot start below the printed M10 minimum and a non-current playe
   let s=B.roll(fresh(),0,1,2),before=snapshot(s);assert.throws(()=>B.purchase(s,0,1,5));assert.equal(snapshot(s),before);
   s=B.purchase(s,0,1,10);assert.equal(s.players[1].cash,1490);assert.equal(s.deeds[3].owner,1);assert.equal(s.phase,'end');
 });
+
+test('money manager previews exact cash and lost rent without changing the board',()=>{
+  let s=fresh();s.deeds[3].owner=0;const before=snapshot(s),option=B.assetOptions(s,0).find(a=>a.index===3);
+  assert.equal(option.monopoly,false);assert.equal(option.rent.amount,4);assert.equal(option.mortgage.allowed,true);assert.equal(option.mortgage.change,30);assert.equal(option.mortgage.rent.amount,0);assert.equal(option.build.allowed,false);assert.equal(snapshot(s),before);
+  s=B.mortgage(s,0,3);const released=B.assetOptions(s,0)[0];assert.equal(released.release.change,-33);assert.equal(released.release.rent.amount,4);assert.equal(released.mortgage,null);
+});
+
+test('manager explains even construction, half-price sale, mortgage blocks and low cash',()=>{
+  let s=B.create(true,0);s=B.build(s,0,16);const options=B.assetOptions(s,0),built=options.find(a=>a.index===16),empty=options.find(a=>a.index===18);
+  assert.equal(built.sell.change,50);assert.equal(built.sell.rent.amount,28);assert.equal(built.mortgage.allowed,false);assert.match(built.mortgage.reason,/건물/);assert.equal(built.build.allowed,false);assert.match(built.build.reason,/가장 적은/);assert.equal(empty.build.allowed,true);assert.equal(empty.build.change,-100);assert.equal(empty.build.rent.amount,70);assert.match(B.tradeReason(s,18),/건물/);
+  s.players[0].cash=0;const poor=B.assetOptions(s,0).find(a=>a.index===18);assert.equal(poor.build.allowed,false);assert.match(poor.build.reason,/현금/);
+});
+
+test('money manager exposes all-building sale when a hotel cannot be broken into unavailable houses',()=>{
+  let s=fresh();for(const d of Object.values(s.deeds))d.owner=0;
+  for(const i of [1,3])s.deeds[i].buildings=5;
+  for(const i of [6,8,9,11,13,14,16,18])s.deeds[i].buildings=4;
+  const option=B.assetOptions(s,0).find(a=>a.index===1);assert.equal(option.sell.allowed,false);assert.match(option.sell.reason,/주택/);assert.equal(option.sellAll.allowed,true);assert.equal(option.sellAll.change,250);
+});

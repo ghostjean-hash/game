@@ -28,7 +28,7 @@
         ten: { title: '주사위 합의 10배를 내세요.', text: '이번 이동에 쓴 주사위 두 개의 합이에요.', note: '카드가 따로 지시하면 카드대로 해요.', calculator: '10', choices: [done] }
       },
       build: {
-        start: { title: '같은 색을 전부 가졌나요?', text: '주택을 지으려는 색의 권리증을 모아 보세요.', choices: [choice('전부 있어요', 'mortgage'), choice('아직 모으는 중이에요', 'wait')] },
+        start: { title: '같은 색을 전부 가졌나요?', text: '내 차례가 아니어도 지을 수 있어요. 먼저 이 색의 권리증을 전부 모아야 해요.', choices: [choice('전부 있어요', 'mortgage'), choice('아직 모으는 중이에요', 'wait')] },
         wait: { title: '같은 색을 다 모으면 지어요.', text: '땅을 더 사거나 상대방과 교환해 보세요.', choices: [done] },
         mortgage: { title: '그 색에 저당 땅이 있나요?', text: '그 색의 권리증 중 뒤집힌 것이 있는지 보세요.', choices: [choice('있어요', 'release'), choice('없어요', 'level')] },
         release: { title: '저당부터 풀어야 해요.', text: '그 색에 저당 땅이 남아 있으면 주택을 못 지어요.', choices: [done] },
@@ -48,7 +48,7 @@
         visit: { title: '방문예요. 벌은 없어요.', text: '다음 차례에 평소처럼 굴리면 돼요.', choices: [done] },
         sent: { title: '말을 감옥에 놓으세요.', text: '이번 차례는 끝이에요. 출발점을 지나도 M200은 받지 않아요.', choices: [done] },
         leave: { title: '어떻게 나올까요?', text: '돈을 내거나 카드를 쓰면 평소처럼 굴릴 수 있어요.', choices: [choice('은행에 M50 낼래요', 'pay'), choice('탈출 카드를 쓸래요', 'card'), choice('더블을 시도할래요', 'try')] },
-        pay: { title: '은행에 MM50을 내세요.', text: '주사위를 굴려 이동하고 도착한 칸을 처리하세요.', choices: [done] },
+        pay: { title: '은행에 M50을 내세요.', text: '주사위를 굴려 이동하고 도착한 칸을 처리하세요.', choices: [done] },
         card: { title: '탈출 카드를 돌려놓으세요.', text: '해당 카드 더미 맨 아래에 놓고, 주사위를 굴려 이동하세요.', choices: [done] },
         try: { title: '주사위를 굴리세요.', text: '더블이 나왔나요?', choices: [choice('더블이에요', 'escape'), choice('더블이 아니에요', 'attempt')] },
         escape: { title: '그 숫자만큼 이동하세요.', text: '도착한 칸을 처리하고 차례를 마쳐요. 한 번 더 굴리지는 않아요.', choices: [done] },
@@ -70,7 +70,7 @@
         park: { title: '돈은 오가지 않습니다.', text: '무료 주차장입니다.', choices: [done] }
       },
       trade: {
-        start: { title: '원하는 땅을 말해 보세요.', text: '“이 땅을 줄게. 네 땅과 바꿀래?”', note: '상대방은 거절해도 괜찮아요.', choices: [choice('둘 다 동의했어요', 'agree'), choice('이번에는 안 바꿀래요', 'stop')] },
+        start: { title: '원하는 땅을 말해 보세요.', text: '“이 땅을 줄게. 네 땅과 바꿀래?” 땅과 돈을 함께 주거나, 돈으로 땅을 사도 돼요.', note: '내 차례가 아니어도 가능해요. 가격은 둘이 정하고 거절해도 괜찮아요.', choices: [choice('둘 다 동의했어요', 'agree'), choice('이번에는 안 바꿀래요', 'stop')] },
         agree: { title: '거래할 땅에 건물이나 저당이 있나요?', text: '아무것도 없으면 바로 바꿀 수 있어요.', choices: [choice('둘 다 없어요', 'exchange'), choice('건물이나 저당이 있어요', 'special')] },
         exchange: { title: '약속한 권리증과 돈을 바꾸세요.', text: '서로 받은 것을 확인하면 끝이에요.', choices: [done] },
         special: { title: '건물이 있으면 그 색의 건물을 먼저 파세요.', text: '저당 권리증은 받는 사람이 은행 비용을 냅니다.', choices: [choice('저당을 즉시 해제', 'release'), choice('저당을 유지', 'keep'), choice('거래 취소', 'stop')] },
@@ -81,7 +81,7 @@
       debt: {
         start: { title: '낼 돈부터 마련해요.', text: '팔 건물이 있나요?', choices: [choice('주택이나 호텔이 있어요', 'sell'), choice('건물은 없어요', 'mortgage')] },
         sell: { title: '건물을 은행에 절반 가격으로 파세요.', text: '같은 색에서 골고루 줄이세요.', note: '호텔을 주택으로 바꾸려면 은행에 필요한 주택이 있어야 해요. 없으면 실물 설명서대로 그 색 건물을 정리해 주세요.', choices: [choice('이제 빚을 낼 수 있어요', 'pay'), choice('아직 모자라요', 'mortgage')] },
-        mortgage: { title: '땅을 은행에 저당으로 맡겨요.', text: '그 색의 건물을 모두 판 뒤, 권리증의 저당금액을 받으세요.', note: '권리증을 뒤집어요. 이미 저당인 땅에서는 다시 받을 수 없어요.', choices: [choice('이제 빚을 낼 수 있어요', 'pay'), choice('모두 정리해도 못 갚아요', 'bankrupt')] },
+        mortgage: { title: '집이 아니라 부지를 맡겨 돈을 빌려요.', text: '그 색의 건물을 모두 판 뒤 권리증의 저당금액을 받으세요. 내 차례가 아니어도 가능해요.', note: '권리증을 뒤집어요. 부지는 내 것이지만 임대료를 못 받아요. 나중에 원금과 이자를 내고 풀어요.', choices: [choice('이제 빚을 낼 수 있어요', 'pay'), choice('모두 정리해도 못 갚아요', 'bankrupt')] },
         pay: { title: '빚진 곳에 돈을 내세요.', text: '상대방에게 줄 돈인지, 은행에 줄 돈인지 확인하세요.', choices: [done] },
         bankrupt: { title: '실제로 파산한 사람을 골라 주세요.', text: '상대방의 승리로 이번 판이 끝나요.', choices: names.map((n,i)=>({label:n+' 파산',next:'bankrupt'+i})) }
       }
