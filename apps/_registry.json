@@ -38,6 +38,17 @@
         "touch"
       ],
       "accent": "#0f7b5a"
+    },
+    {
+      "id": "monopoly-companion",
+      "title": "모노폴리 클래식 동행",
+      "subtitle": "우리 둘의 30~60분 보드게임 · 준비부터 결산까지",
+      "path": "apps/monopoly-companion/",
+      "status": "wip",
+      "controls": [
+        "touch"
+      ],
+      "accent": "#22644e"
     }
   ]
 }
