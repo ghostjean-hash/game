@@ -109,6 +109,19 @@
     const price=d.houseCost??integer(cost,1);if(d.buildings===4){if(supplies(s).hotels<1)fail('은행에 호텔이 없습니다.');}else if(supplies(s).houses<1)fail('은행에 주택이 없습니다.');
     cash(s,p,-price);for(const i of group(index))s.deeds[i].houseCost=price;d.buildings++;
   });}
+  function buildPlan(state,p,index,targets){
+    integer(p,0,1);if(!isStreet(index))fail('도시를 선택하세요.');
+    const cities=group(index);if(!Array.isArray(targets)||targets.length!==cities.length)fail('도시별 건설 수를 확인하세요.');
+    targets.forEach((n,k)=>integer(n,state.deeds[cities[k]].buildings,5));
+    if(Math.max(...targets)-Math.min(...targets)>1)fail('같은 색 도시에는 골고루 지어야 해요. 도시별 차이는 한 채까지예요.');
+    if(!ownsSet(state,p,index))fail('같은 색 도시를 전부 가져야 합니다.');
+    let next=clone(state);
+    while(cities.some((i,k)=>next.deeds[i].buildings<targets[k])){
+      const candidates=cities.filter((i,k)=>next.deeds[i].buildings<targets[k]).sort((a,b)=>next.deeds[a].buildings-next.deeds[b].buildings);
+      next=build(next,p,candidates[0]);
+    }
+    return next;
+  }
   function sell(state,p,index,all=false,cost=null){return transact(state,s=>{
     const d=s.deeds[index];if(!d||d.owner!==p||!d.buildings)fail('팔 건물이 없습니다.');const same=group(index);if(!d.houseCost){const price=integer(cost,1);for(const i of same)s.deeds[i].houseCost=price;}
     if(all){let value=0;for(const i of same){value+=s.deeds[i].buildings*d.houseCost/2;s.deeds[i].buildings=0;}cash(s,p,value);return;}
@@ -162,5 +175,5 @@
     if(streets.some(i=>{const values=group(i).map(j=>s.deeds[j]?.buildings??0);return Math.max(...values)-Math.min(...values)>1;}))return false;
     return keys.every(i=>{const d=s.deeds[i];return d&&[null,0,1].includes(d.owner)&&typeof d.mortgaged==='boolean'&&Number.isInteger(d.buildings)&&d.buildings>=0&&d.buildings<=(isStreet(Number(i))?5:0)&&(d.owner!==null||!d.buildings&&!d.mortgaged)&&!(d.mortgaged&&d.buildings)&&Number.isSafeInteger(d.mortgage)&&d.mortgage>0&&(d.houseCost===null||Number.isSafeInteger(d.houseCost)&&d.houseCost>0)&&d.rents&&Object.entries(d.rents).every(([k,v])=>/^[0-5]$/.test(k)&&Number.isSafeInteger(v)&&v>=0);})&&Number.isInteger(s.doubles)&&s.doubles>=0&&s.doubles<=3&&typeof s.extra==='boolean'&&supplies(s).houses>=0&&supplies(s).hotels>=0;
   }
-  globalThis.MC_BOARD=Object.freeze({create,hydrate,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,printedCard,cardSummary,utilityRoll,build,sell,mortgage,trade,correct,supplies,valid,isStreet,group,ownsSet,rentInfo,tradeReason,assetOptions});
+  globalThis.MC_BOARD=Object.freeze({create,hydrate,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,printedCard,cardSummary,utilityRoll,build,buildPlan,sell,mortgage,trade,correct,supplies,valid,isStreet,group,ownsSet,rentInfo,tradeReason,assetOptions});
 })();

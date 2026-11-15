@@ -8,6 +8,36 @@ const B=ctx.MC_BOARD,D=ctx.MC_DATA;
 const fresh=()=>B.create(false,0),snapshot=s=>JSON.stringify(s);
 const ready=s=>({...s,phase:'roll',pending:null});
 
+test('batch building previews and applies several houses evenly without mutating the original',()=>{
+  const s=B.create(true,0),before=snapshot(s),next=B.buildPlan(s,0,16,[2,2,2]);
+  assert.equal(snapshot(s),before);assert.equal(next.players[0].cash,340);
+  assert.deepEqual([16,18,19].map(i=>next.deeds[i].buildings),[2,2,2]);assert.equal(B.valid(next),true);
+  assert.equal(B.buildPlan(next,0,16,[3,2,2]).players[0].cash,240);
+});
+
+test('batch building fails atomically for cash, mortgage, uneven targets and missing ownership',()=>{
+  const s=B.create(true,0),before=snapshot(s);
+  assert.throws(()=>B.buildPlan(s,0,16,[4,4,4]),/현금/);
+  assert.throws(()=>B.buildPlan(s,0,16,[3,1,1]),/골고루/);
+  assert.throws(()=>B.buildPlan(s,1,16,[1,1,1]),/전부/);
+  const mortgaged=B.mortgage(s,0,16);assert.throws(()=>B.buildPlan(mortgaged,0,16,[1,1,1]),/저당/);
+  const built=B.build(s,0,16);assert.throws(()=>B.buildPlan(built,0,16,[0,0,0]),/숫자/);
+  assert.equal(snapshot(s),before);
+});
+
+test('batch hotel conversion respects house and hotel supplies',()=>{
+  const s=B.create(true,0);s.players[0].cash=10000;
+  const built=B.buildPlan(s,0,16,[4,4,4]),hotels=B.buildPlan(built,0,16,[5,5,5]);
+  assert.deepEqual([16,18,19].map(i=>hotels.deeds[i].buildings),[5,5,5]);assert.equal(B.supplies(hotels).houses,32);assert.equal(B.valid(hotels),true);
+  const full=fresh();for(const d of Object.values(full.deeds))d.owner=0;full.players[0].cash=10000;
+  for(const i of [6,8,9,11,13,14,16,18,19,21,23,24])full.deeds[i].buildings=5;
+  for(const i of [1,3])full.deeds[i].buildings=4;
+  assert.throws(()=>B.buildPlan(full,0,1,[5,5]),/호텔/);
+  const noHouses=fresh();for(const d of Object.values(noHouses.deeds))d.owner=0;
+  for(const i of [6,8,9,11,13,14,16,18])noHouses.deeds[i].buildings=4;
+  assert.throws(()=>B.buildPlan(noHouses,0,1,[1,1]),/주택/);
+});
+
 test('photographed Korean board and banknote breakdown match all 40 positions',()=>{
   assert.equal(D.board.length,40);assert.equal(Object.keys(fresh().deeds).length,28);
   assert.deepEqual(Array.from(D.money,([v,n])=>[v,n]),[[500,2],[100,4],[50,1],[20,1],[10,2],[5,1],[1,5]]);
