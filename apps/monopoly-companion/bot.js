@@ -22,6 +22,8 @@
     const ids=D.cards[deck].map(c=>c.id),st=decks?.[deck];
     let order=st?.order,next=Number.isInteger(st?.next)?st.next:0;
     if(!Array.isArray(order)||!order.every(id=>ids.includes(id))||next<0||next>=order.length){order=shuffle(ids.filter(id=>!(heldEscape&&id==='escape')),random);next=0;}
+    // 쓴 탈출 카드는 더미 맨 아래로 돌아간다.
+    else if(ids.includes('escape')&&!heldEscape&&!order.slice(next).includes('escape'))order=[...order,'escape'];
     return {decks:{...(decks??{}),[deck]:{order,next:next+1}},id:order[next]};
   }
 
@@ -107,7 +109,7 @@
     if(c.action==='otherReceive'&&c.amount>0)return {who:1-p,amount:c.amount};
     return null;
   }
-  // 다음 행동 하나. ctx = {opponentAuto, turnNo, memo:{asked, offers}, card:{deck,id}|null}
+  // 다음 행동 하나. ctx = {opponentAuto, turnNo, memo:{asked(색 맞추기 제안), fundAsked(돈 마련 거래 요청), offers}, card:{deck,id}|null}
   function decide(b,p,ctx){
     const me=b.players[p],q=b.pending;
     if(b.phase==='end')return {kind:'next'};
@@ -125,12 +127,12 @@
       const need=cardNeed(b,p,ctx.card);
       if(need&&b.players[need.who].cash<need.amount){
         if(need.who!==p&&!ctx.opponentAuto)return {kind:'humanFunds',who:need.who};
-        return raise(b,need.who,need.amount,need.who===p&&!ctx.memo?.asked);
+        return raise(b,need.who,need.amount,need.who===p&&!ctx.memo?.fundAsked);
       }
       return {kind:'card',deck:ctx.card.deck,id:ctx.card.id};
     }
     if(q.type==='rent'&&q.amount===null)return q.kind==='utility'?{kind:'utilityRoll'}:{kind:'fixRent',amount:B.rentInfo(b,q.index).amount??0};
-    if(['rent','pay','jailFee'].includes(q.type)){if(me.cash>=q.amount)return {kind:'pay'};return raise(b,p,q.amount,!ctx.memo?.asked);}
+    if(['rent','pay','jailFee'].includes(q.type)){if(me.cash>=q.amount)return {kind:'pay'};return raise(b,p,q.amount,!ctx.memo?.fundAsked);}
     return {kind:'wait'};
   }
   // 판에 행동 적용. 주사위 행동은 action.dice 가 있으면 그 눈을, 없으면 random 으로 굴린다.

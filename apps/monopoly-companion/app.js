@@ -246,7 +246,7 @@
     const p=s?C.current(s):0;
     if(el.dataset.property){const index=Number(el.dataset.index),d=s.board.deeds[index],owner=d.owner,cost=C.amount(document.getElementById('house-cost')?.value);const action=el.dataset.property;if(action==='build')run(b=>B.build(b,owner,index,cost),'실물 건물도 같은 수로 맞추세요.',true);else if(action==='sell'||action==='sell-all')run(b=>B.sell(b,owner,index,action==='sell-all',cost),'건물을 은행에 돌려주고 돈을 받으세요.',true);else run(b=>B.mortgage(b,owner,index,d.mortgaged?null:C.amount(document.getElementById('mortgage-value')?.value)),d.mortgaged?'저당 해제 금액을 은행에 내세요.':'저당금을 받고 권리증을 뒤집으세요.',true);return;}
     if(el.dataset.bankrupt){dialog.close();undo=structuredClone(s);return set({...C.pause(s,Date.now()),screen:'result',winner:1-Number(el.dataset.bankrupt),finishReason:'bankruptcy'});}
-    if(el.dataset.auto!==undefined){const auto=[...(s.auto??[false,false])];auto[Number(el.dataset.auto)]=!auto[Number(el.dataset.auto)];s={...s,auto};save();return play();}
+    if(el.dataset.auto!==undefined){if(botDice){botDice=null;diceSelection=[null,null];}const auto=[...(s.auto??[false,false])];auto[Number(el.dataset.auto)]=!auto[Number(el.dataset.auto)];s={...s,auto};save();return play();}
     if(el.dataset.speed!==undefined){s={...s,speed:Number(el.dataset.speed)};save();return play();}
     if(el.dataset.botOffer!==undefined){const offer=botOffer;botOffer=null;dialog.close();if(el.dataset.botOffer==='yes'&&offer)run(b=>BOT.applyOffer(b,offer));return;}
     const a=el.dataset.action;
@@ -312,8 +312,9 @@
   function offerView(o){const seller=o.type==='sell'?o.from:o.to,buyer=1-seller,mortgaged=s.board.deeds[o.index].mortgaged;return `<div class="bot-offer"><p class="dealt-row"><span>${tileName(o.index)}${mortgaged?' <small>저당</small>':''}</span><strong>${esc(s.names[seller])} → ${esc(s.names[buyer])}</strong></p><p class="dealt-row"><span>${money(o.amount)}</span><strong>${esc(s.names[buyer])} → ${esc(s.names[seller])}</strong></p></div><div class="button-row">${button('수락','data-bot-offer="yes"','primary')}${button('거절','data-bot-offer="no"')}</div>`;}
   function botStep(){
     const p=C.current(s),b=s.board,turnKey=s.turns.join();
-    if(s.botMemo.turn!==turnKey)s.botMemo={...s.botMemo,turn:turnKey,asked:false,steps:0};
-    if(++s.botMemo.steps>D.bot.maxStepsPerTurn){s=C.pause(s,Date.now());save();render();return;}
+    if(s.botMemo.turn!==turnKey)s.botMemo={...s.botMemo,turn:turnKey,asked:false,fundAsked:false,steps:0};
+    // 걸음 상한: 판을 멈추고 걸음 수를 비워, 계속을 누르면 다시 상한만큼 진행한다.
+    if(++s.botMemo.steps>D.bot.maxStepsPerTurn){s.botMemo.steps=0;s=C.pause(s,Date.now());save();render();return;}
     const act=BOT.decide(b,p,{opponentAuto:!!s.auto[1-p],turnNo:s.turns[p],memo:s.botMemo,card:liveBotCard()});
     if(act.kind==='roll'||act.kind==='utilityRoll'){const key=turnKey+'|'+b.phase+'|'+act.kind+'|'+(b.dice??[]).join();if(botDice?.key!==key){botDice={key,dice:[BOT.die(),BOT.die()]};diceSelection=[...botDice.dice];save();play();return;}const dice=botDice.dice;botDice=null;diceSelection=[null,null];run(x=>BOT.apply(x,p,{...act,dice}));return;}
     if(act.kind==='next'){if(b.phase!=='end')return;undo=structuredClone(s);let next=C.advance(s,Date.now());if(next.screen==='play')next={...next,board:B.beginTurn(next.board),note:''};set(next);return;}
@@ -322,7 +323,7 @@
     if(act.kind==='auctionHuman')return auction();
     if(act.kind==='humanFunds')return portfolio(act.who,'money');
     if(act.kind==='bankrupt'){undo=structuredClone(s);set({...C.pause(s,Date.now()),screen:'result',winner:1-act.who,finishReason:'bankruptcy'});return;}
-    if(act.kind==='offer'){s.botMemo.asked=true;s.botMemo.offers={...s.botMemo.offers,[act.index]:s.turns[act.from]};save();
+    if(act.kind==='offer'){s.botMemo[act.type==='sell'?'fundAsked':'asked']=true;s.botMemo.offers={...s.botMemo.offers,[act.index]:s.turns[act.from]};save();
       if(s.auto[act.to]){if(BOT.accept(b,act))run(x=>BOT.applyOffer(x,act));return;}
       botOffer=act;return open('거래 요청',offerView(act));}
     if(act.kind==='wait')return;
