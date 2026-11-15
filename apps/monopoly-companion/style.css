@@ -131,3 +131,112 @@ button:active:not(:disabled){transform:translateY(1px)}.board-tile:active:not(:d
 .auction-players button{flex-direction:row;white-space:nowrap}
 .property-actions button{white-space:nowrap}
 .property-buildings{font-weight:600}
+
+/* 0.11 팝업 가운데 정렬 · 경매 · 돈 마련 창 압축 (2026-11-15) */
+#rule-dialog .dialog-head{display:grid;grid-template-columns:46px minmax(0,1fr) 46px;align-items:center}
+#rule-dialog .dialog-head h2{grid-column:2;text-align:center}
+#rule-dialog .dialog-head .icon-button{grid-column:3}
+#rule-dialog p,#rule-dialog h3{text-align:center}
+#rule-dialog button{text-align:center;justify-content:center}
+#rule-dialog .card-catalog button,#rule-dialog .trade-deeds button{align-items:center}
+#rule-dialog .construction-groups>button{justify-items:center}
+#rule-dialog .asset-summary>button{text-align:left;justify-content:flex-start}
+.current-task .button-row>button.two-line{flex-direction:column;gap:4px;line-height:1.2;padding:12px 24px;min-height:72px}
+.two-line small{display:block;font-size:13px;font-weight:450;opacity:.85}
+.auction-inline .task-actions{align-items:stretch}
+.auction-inline .task-actions>.auction-back{flex:0 1 auto;min-width:120px}
+.touch-amount{grid-template-columns:minmax(0,1fr) 250px}
+.touch-amount .number-pad{gap:7px}
+.touch-amount .number-pad button{min-height:56px;font-size:26px;padding:4px}
+.touch-amount .number-pad button[data-amount-key="C"],.touch-amount .number-pad button[data-amount-key="back"]{font-size:16px;white-space:nowrap;letter-spacing:-.02em}
+.touch-amount .amount-add{gap:7px}
+.touch-amount .amount-add button{flex:1;min-height:52px;font-size:19px;padding:6px 10px}
+dialog.finance-dialog[open]{display:flex;flex-direction:column;height:min(880px,92dvh);overflow:hidden;padding:16px 22px}
+.finance-dialog #rule-content{display:flex;flex-direction:column;flex:1;min-height:0}
+.finance-dialog .dialog-head{margin-bottom:8px}
+.finance-dialog .dialog-head h2{font-size:22px;line-height:1.3}
+.finance-dialog .portfolio-head{justify-content:flex-start;gap:10px;margin-bottom:8px}
+.finance-dialog .portfolio-head .segmented{min-width:0}
+.finance-dialog .portfolio-head .finance-tabs{flex:1;max-width:none}
+.finance-dialog .portfolio-head>strong{font-size:20px;margin-left:auto;white-space:nowrap}
+.finance-guide{font-size:15px;line-height:1.5;margin:2px 0 6px}
+.finance-guide:empty{display:none}
+.finance-order{font-size:14px;line-height:1.5;margin:2px 0 8px}
+.finance-dialog .asset-list{flex:1 1 auto;max-height:none;min-height:0;gap:6px;align-content:start}
+.finance-dialog.has-debt .asset-list{max-height:none}
+.finance-dialog .finance-footer{margin-top:auto;padding-top:10px}
+.asset-row{grid-template-columns:200px minmax(0,1fr);gap:10px;padding:8px 12px;align-items:center}
+.asset-summary{flex-direction:row;flex-wrap:wrap;column-gap:8px;row-gap:0;align-items:baseline}
+.asset-summary>button{flex-basis:100%;font-size:18px;min-height:26px}
+.asset-summary>span,.asset-summary>small{font-size:13px;line-height:1.4}
+.asset-actions{gap:8px;align-items:center}
+.asset-action{display:flex;align-items:center;gap:8px;min-width:0;flex:1 1 0}
+.asset-action>button,.asset-actions>button{min-height:42px;font-size:16px;padding:6px 12px;white-space:nowrap;flex-shrink:0}
+.asset-action small,.asset-actions>small{font-size:12px;line-height:1.35}
+@media(max-width:760px){.asset-row{grid-template-columns:1fr}
+.finance-dialog .portfolio-head{flex-wrap:wrap}
+.touch-amount{grid-template-columns:minmax(0,1fr) 200px}}
+.prep-allocation .purchase-cost:empty::before{content:"\00a0"}
+#rule-dialog .button-row,#rule-dialog .card-actions{justify-content:center}
+.session-controls>button.ending-on{background:#f6ecd3;border-color:#d9bf83;color:#7c652e;font-weight:650}
+.ending{font-size:18px;font-weight:650;text-align:center;border:1px solid #d9bf83}
+.turn-status h2,.session-controls>button{white-space:nowrap}
+.session-controls>button.ending-on{padding-inline:2px}
+/* 0.12 보드 확대와 오른쪽 진행 칸 (2026-11-15) */
+.is-playing .game-shell{grid-template-columns:minmax(0,1fr) clamp(400px,36vw,500px);gap:16px}
+.board-viewport{position:relative;width:min(100%,calc(100dvh - 32px));max-height:100%;aspect-ratio:1;overflow:hidden;border-radius:14px;touch-action:none}
+.board-viewport>.board-map{width:100%;height:100%;max-height:none;position:relative;transform-origin:0 0}
+.board-map.view-animate{transition:transform .35s ease}
+.board-viewport.is-zoomed{cursor:grab}
+.zoom-controls{position:absolute;left:50%;bottom:calc(100% / 11 + 14px);transform:translateX(-50%);display:flex;gap:6px;z-index:3;padding:5px;border-radius:14px;background:#fffefae6;box-shadow:0 2px 12px #23392b1f}
+.zoom-controls button{min-height:44px;min-width:48px;padding:0 12px;font-size:17px;background:#fffefa}
+.zoom-controls .icon-button{font-size:24px;width:48px}
+.is-playing .game-tools{gap:10px;padding:0}
+.game-tools>.play-panel{grid-row:auto;grid-column:auto;flex:1 1 auto;min-height:0;border-radius:16px}
+.play-panel .turn-status{height:84px;min-height:84px;flex-basis:84px;padding:14px 18px;gap:12px}
+.play-panel .turn-identity h2{font-size:22px}
+.play-panel .turn-cash{font-size:28px}
+.turn-strip{height:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:center;padding:0 12px}
+.turn-strip>.ending{font-size:15px;padding:6px 12px;white-space:nowrap}
+.play-panel .turn-content{padding:4px 16px 16px;gap:10px}
+.play-panel .current-task{margin-block:auto}
+.is-playing .tool-menu{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:6px;overflow:visible;padding:0}
+.is-playing .tool-menu>button{min-height:44px;padding:8px 10px;font-size:15px;text-align:center;margin:0}
+.is-playing .tool-menu>details{grid-column:1/-1;padding:6px 12px}
+.is-playing .session-dock{margin-top:0;padding:10px 12px;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px}
+.is-playing .session-controls{grid-template-columns:repeat(3,1fr);gap:6px}
+.is-playing .session-controls>button:first-child{grid-column:auto}
+@media(orientation:portrait) and (min-width:761px){.is-playing .game-shell{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);height:calc(100dvh - 32px)}
+.is-playing{height:100dvh;overflow:hidden}
+.board-viewport{width:min(100%,calc(100dvh - 32px - 470px))}
+.is-playing .game-tools{display:grid;grid-template-columns:minmax(0,1fr) 260px;grid-template-rows:minmax(0,1fr) auto;height:auto;min-height:0}
+.game-tools>.play-panel{grid-row:1 / 3}
+.is-playing .tool-menu{grid-template-columns:1fr}
+.is-playing .session-dock{grid-template-columns:1fr}}
+.play-panel .dice-form{column-gap:28px}
+.play-panel .dice-faces{grid-template-columns:repeat(3,56px);gap:8px}
+.play-panel .die-face{width:56px;height:56px;padding:12px;border-radius:12px}
+.is-playing .tool-menu>details{grid-column:auto;display:flex;flex-direction:column;justify-content:center;min-height:44px}
+.is-playing .tool-menu summary{text-align:center;font-size:15px}
+@media(max-width:1100px){.play-panel .dice-form{column-gap:22px}
+.play-panel .dice-faces{grid-template-columns:repeat(3,50px);gap:7px}
+.play-panel .die-face{width:50px;height:50px;padding:10px}}
+@media(max-height:820px) and (min-width:900px){.play-panel .turn-status{height:70px;min-height:70px;flex-basis:70px;padding-block:10px}
+.turn-strip{height:36px;flex-basis:36px}
+.turn-strip>.ending{font-size:13px;padding:4px 10px}
+.play-panel .dice-instruction{margin-bottom:8px!important;font-size:18px!important}
+.prep-config{gap:13px}
+.prep-config legend{margin-bottom:6px}}
+@media(orientation:portrait) and (min-width:761px){.board-viewport{width:min(100%,calc(100dvh - 32px - 500px))}
+.is-playing .tool-menu>button,.is-playing .tool-menu>details{min-height:40px}}
+.play-panel .auction-inline .task-actions{display:grid;grid-template-columns:1fr 1fr 96px;gap:8px}
+.play-panel .auction-inline .task-actions>button{max-width:none;min-width:0;padding:10px 8px}
+.play-panel .two-line small{font-size:12px;white-space:nowrap}
+@media(max-height:820px) and (min-width:900px){.game-tools:has(.auction-inline) .tool-menu{display:none}
+.play-panel .arrival-place{font-size:22px}
+.play-panel .touch-amount{padding-block:6px}
+.play-panel .touch-amount .number-pad button{min-height:48px}
+.play-panel .touch-amount .amount-add button{min-height:46px}
+.play-panel .auction-inline .task-actions>button{min-height:60px}}
+.prep-config [data-bonus]{padding-inline:4px;font-size:15px;min-width:0}
+@media(max-width:1200px){.prep-config [data-bonus]{font-size:13px;padding-inline:2px}}

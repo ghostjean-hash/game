@@ -1,6 +1,6 @@
 # game-hub NEXT-SESSION
 
-> 2026-11-08 모노폴리: 기록했던 수정 8건을 사용자 재개 지시와 추가 답변으로 진행했다. 최신 확정 사항과 검증 상태는 `apps/monopoly-companion/NEXT-SESSION.md`와 `PROGRESS.md`에 있다. 기록만 제한은 해제됐으며 이전 대기 질문을 반복하지 않는다.
+> 2026-11-15 모노폴리: planning.html 0.11·0.12(팝업 정렬, 돈 부족 처리, 차례 자동 넘김, 마무리 버튼, 서우 보너스, 보드 확대·오른쪽 진행 칸) 반영, 미커밋·미배포. 다음 행동: 배포 후 아이패드 실기기에서 확대·드래그·카메라 따라가기와 패널 크기 확인. 상세는 `apps/monopoly-companion/NEXT-SESSION.md`.
 
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
