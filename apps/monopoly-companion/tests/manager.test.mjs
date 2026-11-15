@@ -42,3 +42,9 @@ test('rent excludes mortgaged property before asking for payment and uses applic
 test('empty player names use the requested family defaults',()=>{
   assert.deepEqual(Array.from(ctx.MC.createSession(['',' '],45,true).names),['아빠','서우']);
 });
+
+test('build guide says three houses before a hotel in the official short game',()=>{
+  const short=ctx.MC_MANAGER.flows(['아빠','서우'],3).build,standard=ctx.MC_MANAGER.flows(['아빠','서우']).build;
+  assert.match(short.hotel.title,/세 채/);assert.match(short.hotelpay.text,/세 채/);assert.doesNotMatch(JSON.stringify(short),/네 채/);
+  assert.match(standard.hotel.title,/네 채/);
+});

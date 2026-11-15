@@ -76,14 +76,22 @@ test('valid names remain plain data, are trimmed and limited for safe rendering'
   assert.equal(s.names[0],'<img src=x>');assert.equal(s.names[1].length,16);assert.equal(C.valid(s),true);
 });
 
-test('unified presets create unlimited classic or pre-owned timed games',()=>{
-  const classic=C.createPreset(D.players,'classic');assert.equal(classic.minutes,null);assert.equal(classic.quick,false);assert.equal(C.budget(classic),Infinity);assert.equal(C.valid(JSON.parse(JSON.stringify(classic))),true);
-  for(const minutes of [30,60]){const s=C.createPreset(D.players,String(minutes));assert.equal(s.minutes,minutes);assert.equal(s.quick,true);assert.equal(C.budget(s),(minutes-10)*60000);assert.equal(C.valid(s),true);}
-  assert.throws(()=>C.createPreset(D.players,'45'));
+test('presets create an unlimited standard game or official short timed games without pre-owned sets',()=>{
+  const standard=C.createPreset(D.players,'standard');assert.equal(standard.minutes,null);assert.equal(standard.quick,false);assert.equal(standard.mode,'standard');assert.equal(C.budget(standard),Infinity);assert.equal(C.valid(JSON.parse(JSON.stringify(standard))),true);
+  for(const minutes of [30,60]){const s=C.createPreset(D.players,'short'+minutes);assert.equal(s.minutes,minutes);assert.equal(s.quick,false);assert.equal(s.mode,'short');assert.equal(C.budget(s),(minutes-10)*60000);assert.equal(C.valid(JSON.parse(JSON.stringify(s))),true);}
+  for(const id of ['classic','30','60','45'])assert.throws(()=>C.createPreset(D.players,id));
+  assert.deepEqual(plain(D.presets.map(p=>p.id)),['standard','short30','short60']);
+});
+
+test('mode must match its clock and legacy saves without mode stay valid',()=>{
+  const short=C.createPreset(D.players,'short30');
+  assert.equal(C.valid({...short,minutes:null}),false);assert.equal(C.valid({...short,quick:true}),false);assert.equal(C.valid({...short,mode:'rivals'}),false);
+  assert.equal(C.valid({...C.createPreset(D.players,'standard'),minutes:30}),false);
+  const legacyQuick=JSON.parse(JSON.stringify(C.createSession(D.players,30,true)));assert.equal(legacyQuick.mode,undefined);assert.equal(C.valid(legacyQuick),true);
 });
 
 test('classic never times out but manual finishing still gives both players equal turns',()=>{
-  let s={...C.createPreset(D.players,'classic'),screen:'play',runningSince:1000};
+  let s={...C.createPreset(D.players,'standard'),screen:'play',runningSince:1000};
   const later=1000+365*24*60*60000;
   s=C.advance(s,later);assert.equal(s.screen,'play');assert.equal(s.ending,false);assert.equal(C.remaining(s,later),Infinity);
   s=C.requestFinish(s);s=C.advance(s,later+1000);assert.equal(s.screen,'finish');assert.deepEqual(plain(s.turns),[1,1]);assert.equal(C.valid(s),true);

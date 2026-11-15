@@ -209,3 +209,53 @@ test('money manager exposes all-building sale when a hotel cannot be broken into
   for(const i of [6,8,9,11,13,14,16,18])s.deeds[i].buildings=4;
   const option=B.assetOptions(s,0).find(a=>a.index===1);assert.equal(option.sell.allowed,false);assert.match(option.sell.reason,/주택/);assert.equal(option.sellAll.allowed,true);assert.equal(option.sellAll.change,250);
 });
+
+const seeded=(seed=7)=>()=>{seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;};
+const shortSet=()=>{const s=B.create(false,0,'orange','short',()=>0);for(const d of Object.values(s.deeds))d.owner=null;for(const i of [16,18,19])s.deeds[i].owner=0;s.players[0].cash=10000;return s;};
+
+test('official short game deals two different printed-price deeds to each player',()=>{
+  const s=B.create(false,1,'orange','short',seeded()),again=B.create(false,1,'orange','short',seeded());
+  assert.equal(s.rule,'short');assert.equal(snapshot(s),snapshot(again));
+  const owned=[0,1].map(p=>Object.keys(s.deeds).map(Number).filter(i=>s.deeds[i].owner===p));
+  assert.deepEqual(owned.map(o=>o.length),[2,2]);assert.equal(new Set([...owned[0],...owned[1]]).size,4);
+  owned.forEach((o,p)=>assert.equal(s.players[p].cash,D.startingCash-o.reduce((a,i)=>a+D.board[i][2],0)));
+  assert.equal(B.valid(s),true);assert.equal(B.create(false,0).rule,undefined);
+});
+
+test('official short game turns three houses into a hotel and has no four-house step',()=>{
+  const s=shortSet(),three=B.buildPlan(s,0,16,[3,3,3]);
+  assert.equal(B.hotelAt(three),3);assert.throws(()=>B.buildPlan(three,0,16,[4,4,4]),/3채/);
+  const one=B.build(three,0,16);assert.equal(one.deeds[16].buildings,5);assert.equal(one.players[0].cash,three.players[0].cash-100);assert.equal(B.valid(one),true);
+  assert.throws(()=>B.build(one,0,16),/호텔|적은/);
+  const hotels=B.buildPlan(three,0,16,[5,5,5]);assert.deepEqual([16,18,19].map(i=>hotels.deeds[i].buildings),[5,5,5]);
+  assert.deepEqual(plainSupplies(hotels),{houses:32,hotels:9});assert.equal(hotels.players[0].cash,10000-12*100);
+  assert.throws(()=>B.buildPlan(s,0,16,[5,2,2]),/골고루/);
+  assert.equal(B.level(hotels,hotels.deeds[16]),4);
+  const standard=B.create(false,0);assert.equal(B.hotelAt(standard),4);assert.equal(B.level(standard,{buildings:5}),5);
+});
+
+test('official short hotel sells for half its price back to three houses',()=>{
+  const hotels=B.buildPlan(shortSet(),0,16,[5,5,5]),sold=B.sell(hotels,0,16);
+  assert.equal(sold.deeds[16].buildings,3);assert.equal(sold.players[0].cash,hotels.players[0].cash+50);assert.equal(B.valid(sold),true);
+  assert.throws(()=>B.sell(sold,0,16),/많은/);
+  const all=B.sell(hotels,0,16,true);assert.equal(all.players[0].cash,hotels.players[0].cash+3*4*100/2);
+});
+
+test('board validation knows the short rule',()=>{
+  const s=shortSet();s.deeds[16].buildings=s.deeds[18].buildings=s.deeds[19].buildings=4;assert.equal(B.valid(s),false);
+  s.deeds[16].buildings=5;s.deeds[18].buildings=s.deeds[19].buildings=3;assert.equal(B.valid(s),true);
+  assert.equal(B.valid({...s,rule:'rivals'}),false);
+  const legacy=B.create(true,0);assert.equal(legacy.rule,undefined);assert.equal(B.valid(legacy),true);
+});
+test('scoring counts a short hotel as four houses and a standard hotel as five',()=>{
+  const hotels=B.buildPlan(shortSet(),0,16,[5,5,5]);assert.equal(B.buildingValue(hotels,hotels.deeds[16]),400);
+  const three=B.buildPlan(shortSet(),0,16,[3,3,3]);assert.equal(B.buildingValue(three,three.deeds[16]),300);
+  const standard=B.create(true,0);standard.players[0].cash=10000;const std=B.buildPlan(B.buildPlan(standard,0,16,[4,4,4]),0,16,[5,5,5]);assert.equal(B.buildingValue(std,std.deeds[16]),500);
+});
+
+test('a saved short board survives storage and hydrate with its rule',()=>{
+  const saved=JSON.parse(JSON.stringify(B.buildPlan(shortSet(),0,16,[5,3,3])));
+  assert.equal(B.valid(saved),true);const back=B.hydrate(saved);assert.equal(back.rule,'short');assert.equal(B.hotelAt(back),3);
+  assert.equal(B.build(back,0,18).deeds[18].buildings,5);
+});
+const plainSupplies=s=>JSON.parse(JSON.stringify(B.supplies(s)));

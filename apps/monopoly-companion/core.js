@@ -1,10 +1,10 @@
 (function () {
   'use strict';
   const D = globalThis.MC_DATA;
-  function createSession(names, minutes, quick, first = 0) {
-    return { version: D.version, screen: 'setup', step: 0, names: names.map((s, i) => String(s).trim().slice(0, 16) || D.players[i]), minutes, quick, first, playerColors:[...D.defaultPlayerColors], chosenSet: 'orange', costs: { orange: D.sets.orange.cost, red: D.sets.red.cost }, elapsed: 0, runningSince: null, ending: false, targetTurns: null, turns: [0, 0], scores: [null, null], winner: null, finishReason: null };
+  function createSession(names, minutes, quick, first = 0, mode = undefined) {
+    return { version: D.version, screen: 'setup', step: 0, names: names.map((s, i) => String(s).trim().slice(0, 16) || D.players[i]), minutes, quick, first, mode, playerColors:[...D.defaultPlayerColors], chosenSet: 'orange', costs: { orange: D.sets.orange.cost, red: D.sets.red.cost }, elapsed: 0, runningSince: null, ending: false, targetTurns: null, turns: [0, 0], scores: [null, null], winner: null, finishReason: null };
   }
-  function createPreset(names,id,first=0){const preset=D.presets.find(p=>p.id===id);if(!preset)throw Error('준비 방식을 확인하세요.');return createSession(names,preset.minutes,preset.quick,first);}
+  function createPreset(names,id,first=0){const preset=D.presets.find(p=>p.id===id);if(!preset)throw Error('준비 방식을 확인하세요.');return createSession(names,preset.minutes,false,first,preset.mode);}
   function chooseColor(colors,player,id){
     if(![0,1].includes(player)||!Object.hasOwn(D.playerPalette,id))throw Error('색을 확인하세요.');
     const next=[...(colors??D.defaultPlayerColors)],other=1-player;
@@ -43,6 +43,7 @@
     return !!s && s.version === D.version && ['setup', 'play', 'finish', 'score', 'result'].includes(s.screen)
       && Array.isArray(s.names) && s.names.length === 2 && s.names.every(n => typeof n === 'string' && n.length > 0 && n.length <= 16)
       && (D.durations.includes(s.minutes)||s.minutes===null&&s.quick===false) && typeof s.quick === 'boolean' && [0, 1].includes(s.first)
+      && (s.mode===undefined||D.modes.includes(s.mode)) && (s.mode!=='short'||s.quick===false&&[30,60].includes(s.minutes)) && (s.mode!=='standard'||s.quick===false&&s.minutes===null)
       && (s.playerColors===undefined||Array.isArray(s.playerColors)&&s.playerColors.length===2&&s.playerColors[0]!==s.playerColors[1]&&s.playerColors.every(c=>Object.hasOwn(D.playerPalette,c)))
       && ['orange', 'red'].includes(s.chosenSet) && s.costs && ['orange', 'red'].every(k => amount(s.costs[k]) !== null && s.costs[k] <= D.startingCash)
       && Number.isInteger(s.step) && s.step >= 0 && s.step <= 2

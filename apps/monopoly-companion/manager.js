@@ -2,7 +2,16 @@
   'use strict';
   const choice = (label, next) => ({ label, next });
   const done = choice('다 했어요', 'close');
-  function flows(names) {
+  // hotelAt: 호텔로 바꾸는 주택 수. 공식 단축 판은 3이라 집 짓기 안내 문구를 세 채로 바꾼다.
+  function flows(names, hotelAt = 4) {
+    const all = guides(names);
+    if (hotelAt === 3) for (const n of Object.values(all.build)) {
+      for (const k of ['title', 'text', 'note']) if (n[k]) n[k] = n[k].replaceAll('네 채', '세 채');
+      n.choices = n.choices.map(c => ({ ...c, label: c.label.replaceAll('네 채', '세 채') }));
+    }
+    return all;
+  }
+  function guides(names) {
     return {
       buy: {
         start: { title: '이 땅을 살까요?', text: '권리증에 적힌 땅값을 보세요.', choices: [choice('살래요', 'pay'), choice('안 살래요', 'auction')] },

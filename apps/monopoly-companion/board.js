@@ -7,12 +7,22 @@
   function integer(n,min=0,max=D.maxAmount){if(!Number.isSafeInteger(n)||n<min||n>max)fail('숫자를 확인해 주세요.');return n;}
   const group=i=>streets.filter(j=>D.board[j][1]===D.board[i][1]);
   const ownsSet=(s,p,i)=>group(i).every(j=>s.deeds[j].owner===p);
+  // 공식 단축 게임(1951 별지): 주택 3채에서 호텔. 호텔은 균등 판정의 네 번째 단계로 본다.
+  const isShort=s=>s.rule==='short', hotelAt=s=>isShort(s)?D.shortHotelAt:4;
+  const level=(s,d)=>isShort(s)&&d.buildings===5?4:d.buildings;
+  // 결산의 건물 구입가: 단축 호텔은 주택 4채 값, 스탠다드 호텔은 5채 값.
+  const buildingValue=(s,d)=>level(s,d)*(d.houseCost??0);
   const cash=(s,p,amount)=>{integer(p,0,1);integer(Math.abs(amount));if(s.players[p].cash+amount<0)fail(D.players[p]+'의 현금이 부족해요. 주택 판매·저당·거래로 돈을 마련하세요.');s.players[p].cash+=amount;};
   const transact=(state,fn)=>{const s=clone(state);fn(s);return s;};
-  function create(quick,first,chosenSet='orange'){
+  function create(quick,first,chosenSet='orange',rule=null,random=Math.random){
     const s={version:1,players:D.players.map(()=>({cash:D.startingCash,pos:0,jail:false,attempts:0,cards:0})),deeds:{},phase:'roll',pending:null,doubles:0,extra:false,dice:null};
     D.board.forEach((t,i)=>{if(isStreet(i)||['station','utility'].includes(t[1]))s.deeds[i]={owner:null,mortgaged:false,mortgage:t[2]/2,buildings:0,houseCost:D.printedDeeds[i]?.house??null,rents:D.printedDeeds[i]?Object.fromEntries(D.printedDeeds[i].rents.map((v,n)=>[n,v])):{}};});
     if(quick)for(const [p,color] of [[first,chosenSet],[1-first,chosenSet==='orange'?'red':'orange']])for(const i of streets.filter(i=>D.board[i][1]===color)){s.deeds[i].owner=p;cash(s,p,-D.board[i][2]);}
+    if(rule==='short'){
+      s.rule='short';const deck=Object.keys(s.deeds).map(Number);
+      for(let k=deck.length-1;k>0;k--){const j=Math.floor(random()*(k+1));[deck[k],deck[j]]=[deck[j],deck[k]];}
+      deck.slice(0,D.shortDeedsEach*2).forEach((i,k)=>{const p=k%2===0?first:1-first;s.deeds[i].owner=p;cash(s,p,-D.board[i][2]);});
+    }
     return s;
   }
   function beginTurn(state){return {...clone(state),phase:'roll',pending:null,doubles:0,extra:false,dice:null};}
@@ -105,29 +115,32 @@
   function build(state,p,index,cost){return transact(state,s=>{
     const d=s.deeds[index];if(!d||d.owner!==p||!isStreet(index)||!ownsSet(s,p,index))fail('같은 색 도시를 전부 가져야 합니다.');
     const same=group(index).map(i=>s.deeds[i]);if(same.some(d=>d.mortgaged))fail('이 색의 저당부터 해제하세요.');if(d.buildings>=5)fail('이미 호텔이 있습니다.');
-    if(same.some(x=>x.buildings<d.buildings))fail('주택이 가장 적은 도시에 지으세요.');
-    const price=d.houseCost??integer(cost,1);if(d.buildings===4){if(supplies(s).hotels<1)fail('은행에 호텔이 없습니다.');}else if(supplies(s).houses<1)fail('은행에 주택이 없습니다.');
-    cash(s,p,-price);for(const i of group(index))s.deeds[i].houseCost=price;d.buildings++;
+    if(same.some(x=>level(s,x)<level(s,d)))fail('주택이 가장 적은 도시에 지으세요.');
+    const toHotel=d.buildings===hotelAt(s);
+    const price=d.houseCost??integer(cost,1);if(toHotel){if(supplies(s).hotels<1)fail('은행에 호텔이 없습니다.');}else if(supplies(s).houses<1)fail('은행에 주택이 없습니다.');
+    cash(s,p,-price);for(const i of group(index))s.deeds[i].houseCost=price;d.buildings=toHotel?5:d.buildings+1;
   });}
   function buildPlan(state,p,index,targets){
     integer(p,0,1);if(!isStreet(index))fail('도시를 선택하세요.');
     const cities=group(index);if(!Array.isArray(targets)||targets.length!==cities.length)fail('도시별 건설 수를 확인하세요.');
     targets.forEach((n,k)=>integer(n,state.deeds[cities[k]].buildings,5));
-    if(Math.max(...targets)-Math.min(...targets)>1)fail('같은 색 도시에는 골고루 지어야 해요. 도시별 차이는 한 채까지예요.');
+    if(isShort(state)&&targets.includes(4))fail('공식 단축 게임은 주택 3채 다음이 호텔이에요.');
+    const levels=targets.map(n=>isShort(state)&&n===5?4:n);
+    if(Math.max(...levels)-Math.min(...levels)>1)fail('같은 색 도시에는 골고루 지어야 해요. 도시별 차이는 한 채까지예요.');
     if(!ownsSet(state,p,index))fail('같은 색 도시를 전부 가져야 합니다.');
     let next=clone(state);
     while(cities.some((i,k)=>next.deeds[i].buildings<targets[k])){
-      const candidates=cities.filter((i,k)=>next.deeds[i].buildings<targets[k]).sort((a,b)=>next.deeds[a].buildings-next.deeds[b].buildings);
+      const candidates=cities.filter((i,k)=>next.deeds[i].buildings<targets[k]).sort((a,b)=>level(next,next.deeds[a])-level(next,next.deeds[b]));
       next=build(next,p,candidates[0]);
     }
     return next;
   }
   function sell(state,p,index,all=false,cost=null){return transact(state,s=>{
     const d=s.deeds[index];if(!d||d.owner!==p||!d.buildings)fail('팔 건물이 없습니다.');const same=group(index);if(!d.houseCost){const price=integer(cost,1);for(const i of same)s.deeds[i].houseCost=price;}
-    if(all){let value=0;for(const i of same){value+=s.deeds[i].buildings*d.houseCost/2;s.deeds[i].buildings=0;}cash(s,p,value);return;}
-    if(same.some(i=>s.deeds[i].buildings>d.buildings))fail('건물이 가장 많은 도시에서 먼저 파세요.');
-    if(d.buildings===5&&supplies(s).houses<4)fail('은행 주택이 부족합니다. 이 색의 건물을 모두 팔 수 있습니다.');
-    d.buildings--;cash(s,p,d.houseCost/2);
+    if(all){let value=0;for(const i of same){value+=level(s,s.deeds[i])*d.houseCost/2;s.deeds[i].buildings=0;}cash(s,p,value);return;}
+    if(same.some(i=>level(s,s.deeds[i])>level(s,d)))fail('건물이 가장 많은 도시에서 먼저 파세요.');
+    if(d.buildings===5&&supplies(s).houses<hotelAt(s))fail('은행 주택이 부족합니다. 이 색의 건물을 모두 팔 수 있습니다.');
+    d.buildings=d.buildings===5?hotelAt(s):d.buildings-1;cash(s,p,d.houseCost/2);
   });}
   function mortgage(state,p,index,value=null){return transact(state,s=>{const d=s.deeds[index];if(!d||d.owner!==p)fail('내 부지가 아닙니다.');if(d.mortgaged){cash(s,p,-Math.ceil(d.mortgage*110/100));d.mortgaged=false;return;}if(isStreet(index)&&group(index).some(i=>s.deeds[i].buildings))fail('이 색의 건물을 모두 먼저 파세요.');if(value!==null)d.mortgage=integer(value,1);cash(s,p,d.mortgage);d.mortgaged=true;});}
   function trade(state,fromIndex,toIndex,fromCash,toCash,release0=false,release1=false){return transact(state,s=>{
@@ -172,8 +185,10 @@
     if(q?.type==='jailFee'&&(!Number.isInteger(q.steps)||q.steps<2||q.steps>12))return false;
     const keys=Object.keys(create(false,0).deeds);if(Object.keys(s.deeds).length!==keys.length)return false;
     if(keys.some(i=>s.deeds[i]?.buildings>0&&group(Number(i)).some(j=>!s.deeds[j]||s.deeds[j].owner!==s.deeds[i].owner||s.deeds[j].mortgaged)))return false;
-    if(streets.some(i=>{const values=group(i).map(j=>s.deeds[j]?.buildings??0);return Math.max(...values)-Math.min(...values)>1;}))return false;
+    if(s.rule!==undefined&&s.rule!=='short')return false;
+    if(isShort(s)&&streets.some(i=>s.deeds[i]?.buildings===4))return false;
+    if(streets.some(i=>{const values=group(i).map(j=>s.deeds[j]?level(s,s.deeds[j]):0);return Math.max(...values)-Math.min(...values)>1;}))return false;
     return keys.every(i=>{const d=s.deeds[i];return d&&[null,0,1].includes(d.owner)&&typeof d.mortgaged==='boolean'&&Number.isInteger(d.buildings)&&d.buildings>=0&&d.buildings<=(isStreet(Number(i))?5:0)&&(d.owner!==null||!d.buildings&&!d.mortgaged)&&!(d.mortgaged&&d.buildings)&&Number.isSafeInteger(d.mortgage)&&d.mortgage>0&&(d.houseCost===null||Number.isSafeInteger(d.houseCost)&&d.houseCost>0)&&d.rents&&Object.entries(d.rents).every(([k,v])=>/^[0-5]$/.test(k)&&Number.isSafeInteger(v)&&v>=0);})&&Number.isInteger(s.doubles)&&s.doubles>=0&&s.doubles<=3&&typeof s.extra==='boolean'&&supplies(s).houses>=0&&supplies(s).hotels>=0;
   }
-  globalThis.MC_BOARD=Object.freeze({create,hydrate,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,printedCard,cardSummary,utilityRoll,build,buildPlan,sell,mortgage,trade,correct,supplies,valid,isStreet,group,ownsSet,rentInfo,tradeReason,assetOptions});
+  globalThis.MC_BOARD=Object.freeze({create,hydrate,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,printedCard,cardSummary,utilityRoll,build,buildPlan,sell,mortgage,trade,correct,supplies,valid,isStreet,level,hotelAt,buildingValue,group,ownsSet,rentInfo,tradeReason,assetOptions});
 })();

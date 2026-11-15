@@ -1,7 +1,8 @@
 globalThis.MC_DATA = Object.freeze({
   version: 1, storageKey: 'gg.monopoly-companion.session', players: ['아빠', '서우'],
   durations: [30, 45, 60], reserveMinutes: 10, minute: 60000, tick: 1000,
-  presets: [{id:'classic',label:'기본',minutes:null,quick:false},{id:'30',label:'30분',minutes:30,quick:true},{id:'60',label:'60분',minutes:60,quick:true}],
+  presets: [{id:'standard',label:'스탠다드',minutes:null,mode:'standard'},{id:'short30',label:'공식 단축 30분',minutes:30,mode:'short'},{id:'short60',label:'공식 단축 60분',minutes:60,mode:'short'}],
+  modes: ['standard','short'], shortDeedsEach: 2, shortHotelAt: 3,
   defaultPlayerColors: ['blue','rose'],
   playerPalette: {
     blue:{name:'파랑',hex:'#315b85',rgb:'49,91,133',soft:'#e0edf8'},
