@@ -218,25 +218,124 @@ dialog.finance-dialog[open]{display:flex;flex-direction:column;height:min(880px,
 .play-panel .die-face{width:56px;height:56px;padding:12px;border-radius:12px}
 .is-playing .tool-menu>details{grid-column:auto;display:flex;flex-direction:column;justify-content:center;min-height:44px}
 .is-playing .tool-menu summary{text-align:center;font-size:15px}
-@media(max-width:1100px){.play-panel .dice-form{column-gap:22px}
-.play-panel .dice-faces{grid-template-columns:repeat(3,50px);gap:7px}
-.play-panel .die-face{width:50px;height:50px;padding:10px}}
-@media(max-height:820px) and (min-width:900px){.play-panel .turn-status{height:70px;min-height:70px;flex-basis:70px;padding-block:10px}
-.turn-strip{height:36px;flex-basis:36px}
-.turn-strip>.ending{font-size:13px;padding:4px 10px}
-.play-panel .dice-instruction{margin-bottom:8px!important;font-size:18px!important}
-.prep-config{gap:13px}
+@media(max-height:820px) and (min-width:900px){.prep-config{gap:13px}
 .prep-config legend{margin-bottom:6px}}
 @media(orientation:portrait) and (min-width:761px){.board-viewport{width:min(100%,calc(100dvh - 32px - 500px))}
 .is-playing .tool-menu>button,.is-playing .tool-menu>details{min-height:40px}}
 .play-panel .auction-inline .task-actions{display:grid;grid-template-columns:1fr 1fr 96px;gap:8px}
 .play-panel .auction-inline .task-actions>button{max-width:none;min-width:0;padding:10px 8px}
 .play-panel .two-line small{font-size:12px;white-space:nowrap}
-@media(max-height:820px) and (min-width:900px){.game-tools:has(.auction-inline) .tool-menu{display:none}
-.play-panel .arrival-place{font-size:22px}
-.play-panel .touch-amount{padding-block:6px}
-.play-panel .touch-amount .number-pad button{min-height:48px}
-.play-panel .touch-amount .amount-add button{min-height:46px}
-.play-panel .auction-inline .task-actions>button{min-height:60px}}
 .prep-config [data-bonus]{padding-inline:4px;font-size:15px;min-width:0}
 @media(max-width:1200px){.prep-config [data-bonus]{font-size:13px;padding-inline:2px}}
+/* 0.13 오른쪽 칸 정리 (2026-11-15) */
+.panel-top{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 10px 8px 16px;border:1px solid #d9e2d3;border-radius:16px;background:#fffefa}
+.panel-top #timer{font-size:30px;min-width:5.2ch;text-align:left;font-variant-numeric:tabular-nums lining-nums}
+.panel-top .zoom-controls{position:static;transform:none;margin-left:auto;display:flex;gap:6px;padding:0;background:none;box-shadow:none;border-radius:0}
+.panel-top .icon-button{width:48px;min-width:48px;min-height:48px;padding:0;background:#f1f4ec}
+.panel-top .menu-button{margin-left:6px;background:var(--green);color:#fff}
+.is-playing .tool-icons{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.is-playing .tool-icons>.icon-tool{min-height:58px;display:grid;place-items:center;padding:0;background:#fffefa}
+.is-playing .tool-icons>.icon-tool.danger{background:#fbf5ee;color:#9b4b3a}
+.icon-tool .ui-icon{width:30px;height:30px}
+.is-playing .game-tools>.session-controls{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.is-playing .game-tools>.session-controls>button{min-height:52px;font-size:17px;white-space:nowrap}
+.menu-list{display:grid;gap:10px}
+.menu-list>button{min-height:56px;font-size:19px}
+.board-viewport,.board-viewport *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+@media(orientation:portrait) and (min-width:761px){.is-playing .game-tools{grid-template-columns:minmax(0,1fr) 260px;grid-template-rows:auto auto minmax(0,1fr);grid-template-areas:"panel top" "panel icons" "panel controls"}
+.game-tools>.panel-top{grid-area:top}
+.game-tools>.play-panel{grid-area:panel}
+.is-playing .game-tools>.tool-icons{grid-area:icons;grid-template-columns:repeat(4,minmax(0,1fr))}
+.is-playing .game-tools>.session-controls{grid-area:controls;align-self:end}
+.panel-top{flex-wrap:wrap;padding-left:12px}
+.panel-top #timer{width:100%;text-align:center}
+.panel-top .zoom-controls{margin-left:0}}
+/* 0.13 진행 칸 경매 숫자패드: 3줄×4칸 (1 2 3 초기화 / 4 5 6 삭제 / 7 8 9 0) */
+.play-panel .touch-amount{grid-template-columns:1fr;gap:8px;padding-block:4px}
+.play-panel .amount-readout{display:flex;align-items:center;gap:10px}
+.play-panel .amount-readout label{margin:0;white-space:nowrap}
+.play-panel .amount-readout output{font-size:30px;line-height:1.2;margin-right:auto}
+.play-panel .amount-add{margin-top:0;flex-wrap:nowrap;gap:6px}
+.play-panel .touch-amount .amount-add button{flex:0 0 auto;min-width:60px;min-height:48px}
+.play-panel .number-pad{grid-template-columns:repeat(4,1fr);grid-auto-flow:row}
+.play-panel .number-pad button:nth-child(-n+3){grid-row:1}
+.play-panel .number-pad button:nth-child(n+4):nth-child(-n+6){grid-row:2}
+.play-panel .number-pad button:nth-child(n+7):nth-child(-n+9){grid-row:3}
+.play-panel .number-pad button:nth-child(10){grid-row:1;grid-column:4}
+.play-panel .number-pad button:nth-child(11){grid-row:3;grid-column:4}
+.play-panel .number-pad button:nth-child(12){grid-row:2;grid-column:4}
+.play-panel .auction-players{margin-bottom:4px}
+.play-panel .auction-inline .arrival-place{margin:0 0 6px}
+@media(orientation:portrait) and (min-width:761px){.board-viewport{width:min(100%,calc(100dvh - 32px - 560px))}}
+.play-panel #auction-status{height:22px;min-height:22px;margin:2px 0 4px;font-size:15px;line-height:22px}
+.play-panel .auction-inline .task-actions{margin-top:0}
+@media(orientation:portrait) and (min-width:761px){.board-viewport{width:min(100%,calc(100dvh - 32px - 600px))}}
+.play-panel .turn-content{padding-bottom:8px}
+.play-panel form.auction-inline{gap:3px}
+.play-panel .current-task>.arrival-place{margin-bottom:4px}
+.play-panel .touch-amount .number-pad button{min-height:50px}
+/* 0.14 거래 금액 입력 = 진행 칸 경매와 같은 모양 */
+.touch-trade .touch-amount{grid-template-columns:1fr;gap:8px;padding-block:4px}
+.touch-trade .amount-readout{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.touch-trade .amount-readout label{margin:0;white-space:nowrap}
+.touch-trade .amount-readout output{font-size:30px;line-height:1.2;margin-right:auto}
+.touch-trade .amount-add{margin-top:0;flex-wrap:nowrap;gap:6px}
+.touch-trade .touch-amount .amount-add button{flex:0 0 auto;min-width:60px;min-height:48px}
+.touch-trade .number-pad{grid-template-columns:repeat(4,1fr);grid-auto-flow:row;gap:7px}
+.touch-trade .number-pad button:nth-child(-n+3){grid-row:1}
+.touch-trade .number-pad button:nth-child(n+4):nth-child(-n+6){grid-row:2}
+.touch-trade .number-pad button:nth-child(n+7):nth-child(-n+9){grid-row:3}
+.touch-trade .number-pad button:nth-child(10){grid-row:1;grid-column:4}
+.touch-trade .number-pad button:nth-child(11){grid-row:3;grid-column:4}
+.touch-trade .number-pad button:nth-child(12){grid-row:2;grid-column:4}
+.touch-trade .touch-amount .number-pad button{min-height:50px;font-size:26px}
+/* 0.14 좁은 화면(폰): 보드 아래로 이어 붙이기 */
+@media(max-width:760px){.is-playing{height:auto;min-height:100dvh;overflow:visible;padding:10px}
+.is-playing .game-shell{grid-template-columns:1fr;grid-template-rows:auto auto;height:auto;gap:10px}
+.board-viewport{width:100%;max-height:none}
+.board-viewport>.board-map{min-height:0;aspect-ratio:1;height:100%;width:100%}
+.board-viewport:not(.is-zoomed){touch-action:pan-y}
+.is-playing .game-tools{display:flex;flex-direction:column;height:auto}
+.game-tools>.play-panel{flex:0 0 auto}
+.play-panel .turn-content{overflow:visible}
+.panel-top #timer{font-size:22px}
+.panel-top .icon-button{width:42px;min-width:42px;min-height:42px}}
+:is(.play-panel,.touch-trade) .touch-amount .number-pad button{height:50px;min-height:0;font-size:26px}
+:is(.play-panel,.touch-trade) .touch-amount .number-pad button:is([data-amount-key="C"],[data-amount-key="back"]){font-size:16px}
+/* 0.15 오른쪽 칸 비례 축소(4:3), 메뉴 판, 아이콘, 이동 연출 */
+@media(orientation:landscape) and (min-width:761px){.is-playing .game-shell{grid-template-columns:minmax(0,1fr) calc(492px * var(--pz,1))}
+.is-playing .game-tools{zoom:var(--pz,1);width:492px;height:calc((100dvh - 32px) / var(--pz,1))}}
+.game-tools{position:relative}
+.panel-top{min-height:66px}
+.panel-top #timer{font-size:32px}
+.paused-pill{padding:5px 12px;border-radius:999px;background:#f6ecd3;color:#7c652e;border:1px solid #d9bf83;font-size:15px;font-weight:650;white-space:nowrap}
+.panel-top .menu-button{margin-left:auto;width:52px;min-width:52px;min-height:52px}
+.panel-top .menu-button[aria-expanded="true"]{background:#1d3a2b}
+.menu-pop{position:absolute;top:76px;right:0;z-index:20;width:300px;display:grid;gap:8px;padding:12px;border:1px solid #d9e2d3;border-radius:16px;background:#fffefa;box-shadow:0 14px 40px #1e332c33}
+.menu-pop>button,.menu-session>button{min-height:52px;font-size:17px;text-align:center;white-space:nowrap}
+.menu-pop .zoom-controls{position:static;transform:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 0 8px;margin:0;background:none;box-shadow:none;border-bottom:1px solid #e6ebe0;border-radius:0}
+.menu-pop .zoom-controls .icon-button{width:auto;min-width:0;min-height:52px;background:#f1f4ec}
+.menu-session{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:8px;border-bottom:1px solid #e6ebe0}
+.menu-session>button:first-child{background:var(--green);color:#fff;border-color:var(--green)}
+.is-playing .tool-icons>.icon-tool{min-height:64px}
+.icon-tool .ui-icon{width:34px;height:34px;stroke-width:1.6}
+.ui-icon .tone{fill:currentColor;fill-opacity:.15}
+.ui-icon .paper{fill:#fffefa}
+.ui-icon .solid{fill:currentColor;fill-opacity:.85}
+.ui-icon .cut{stroke:#fffefa;stroke-width:1.5}
+.ui-icon .crack{stroke-width:1.9}
+.icon-tool:nth-child(1){color:#2f6b4f}
+.icon-tool:nth-child(2){color:#3d5f8a}
+.icon-tool:nth-child(3){color:#7a5a2e}
+.icon-tool.danger .ui-icon .paper{fill:#fbf5ee}
+.board-tile.walk-p0{--walk-rgb:var(--player-0-rgb,49,91,133)}
+.board-tile.walk-p1{--walk-rgb:var(--player-1-rgb,169,92,120)}
+.board-tile.walk-focus{z-index:2}
+.board-tile.walk-focus:before{content:"";position:absolute;inset:0;border:3px solid rgb(var(--walk-rgb));border-radius:inherit;box-shadow:0 0 12px rgba(var(--walk-rgb),.55),inset 0 0 10px rgba(var(--walk-rgb),.25);pointer-events:none;z-index:4}
+.board-tile.walk-hold.active-tile:after{opacity:0;animation:none}
+@media(orientation:portrait) and (min-width:761px){.is-playing .game-tools{grid-template-areas:"panel top" "panel icons" "panel ."}
+.menu-pop{top:auto;bottom:auto;right:0}}
+.icon-tool .ui-icon{width:44px;height:44px;stroke-width:1.45}
+@media(orientation:portrait) and (min-width:761px){.panel-top{flex-wrap:nowrap;padding-left:16px}
+.panel-top #timer{width:auto;text-align:left}
+.menu-pop{top:76px;right:0}}

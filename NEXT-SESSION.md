@@ -1,6 +1,6 @@
 # game-hub NEXT-SESSION
 
-> 2026-11-15 모노폴리: planning.html 0.11·0.12(팝업 정렬, 돈 부족 처리, 차례 자동 넘김, 마무리 버튼, 서우 보너스, 보드 확대·오른쪽 진행 칸) 반영, 미커밋·미배포. 다음 행동: 배포 후 아이패드 실기기에서 확대·드래그·카메라 따라가기와 패널 크기 확인. 상세는 `apps/monopoly-companion/NEXT-SESSION.md`.
+> 2026-11-15 모노폴리: planning.html 0.11~0.15 반영, 미배포. 다음 행동: 배포 후 아이패드 실기기에서 이동 연출·메뉴 판·확대·숫자패드 크기 확인. 상세는 `apps/monopoly-companion/NEXT-SESSION.md`.
 
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
