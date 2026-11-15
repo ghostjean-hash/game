@@ -331,7 +331,7 @@ dialog.finance-dialog[open]{display:flex;flex-direction:column;height:min(880px,
 .board-tile.walk-p0{--walk-rgb:var(--player-0-rgb,49,91,133)}
 .board-tile.walk-p1{--walk-rgb:var(--player-1-rgb,169,92,120)}
 .board-tile.walk-focus{z-index:2}
-.board-tile.walk-focus:before{content:"";position:absolute;inset:0;border:3px solid rgb(var(--walk-rgb));border-radius:inherit;box-shadow:0 0 12px rgba(var(--walk-rgb),.55),inset 0 0 10px rgba(var(--walk-rgb),.25);pointer-events:none;z-index:4}
+.board-tile.walk-focus{outline:3px solid rgb(var(--walk-rgb));outline-offset:-3px;box-shadow:0 0 12px rgba(var(--walk-rgb),.55),inset 0 0 10px rgba(var(--walk-rgb),.25)}
 .board-tile.walk-hold.active-tile:after{opacity:0;animation:none}
 @media(orientation:portrait) and (min-width:761px){.is-playing .game-tools{grid-template-areas:"panel top" "panel icons" "panel ."}
 .menu-pop{top:auto;bottom:auto;right:0}}
@@ -339,3 +339,35 @@ dialog.finance-dialog[open]{display:flex;flex-direction:column;height:min(880px,
 @media(orientation:portrait) and (min-width:761px){.panel-top{flex-wrap:nowrap;padding-left:16px}
 .panel-top #timer{width:auto;text-align:left}
 .menu-pop{top:76px;right:0}}
+/* 0.16 보너스 버튼 · 말 색 선택 정렬 */
+.cash-left{align-items:center}
+.cash-left>.bonus-button{margin-right:auto;display:inline-flex;align-items:center;gap:4px;min-height:44px;min-width:44px;padding:0 8px;border-radius:12px;background:#fffefa;color:#9a6a1f;border-color:#e3d6b8}
+.cash-left>.bonus-button .ui-icon{width:26px;height:26px}
+.cash-left>.bonus-button.has-bonus{background:#f6ecd3;border-color:#d9bf83}
+.cash-left>.bonus-button b{font-size:15px;font-weight:650;font-variant-numeric:tabular-nums}
+.bonus-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.bonus-choices>button{min-height:60px;font-size:22px}
+.color-option{width:32px;height:32px;min-height:0;padding:0;border-radius:9px}
+.palette-dot{width:26px;height:26px}
+@media(max-width:1200px){.color-option{width:30px;height:30px}
+.palette-dot{width:24px;height:24px}}
+@media(max-height:820px) and (min-width:900px){.color-option{min-height:0;height:30px}}
+@media(max-width:760px){.color-option{width:28px;height:28px;padding:0}
+.palette-dot{width:22px;height:22px}}
+/* 0.17 돈 마련 창 편의 */
+.bonus-choices{grid-template-columns:repeat(3,1fr)}
+.trade-footer{display:flex;gap:10px;margin-top:8px}
+.trade-footer>#trade-confirm{flex:1;margin-top:0;width:auto}
+.trade-footer>button{min-height:52px;white-space:nowrap}
+@media(min-width:761px){.finance-dialog .asset-list{grid-template-columns:1fr 1fr;gap:8px}
+.finance-dialog .asset-row{grid-template-columns:1fr;gap:6px;align-items:stretch;align-content:start}
+.finance-dialog .asset-summary{flex-wrap:nowrap;align-items:baseline;column-gap:8px;min-width:0}
+.finance-dialog .asset-summary>button{flex-basis:auto;flex-shrink:0}
+.finance-dialog .asset-summary>span,.finance-dialog .asset-summary>small{white-space:nowrap}
+.finance-dialog .asset-actions{flex-wrap:nowrap;gap:6px;align-items:stretch}
+.finance-dialog .asset-action{flex-direction:column;align-items:stretch;gap:2px;flex:1 1 0;min-width:0}
+.finance-dialog .asset-action>button,.finance-dialog .asset-actions>button{min-height:40px;font-size:15px;padding:4px 8px}
+.finance-dialog .asset-action small,.finance-dialog .asset-actions>small{text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+@media(min-width:761px){.finance-dialog .asset-action{flex-direction:row;align-items:center;gap:8px}
+.finance-dialog .asset-action>button{flex:0 0 auto}
+.finance-dialog .asset-action small,.finance-dialog .asset-actions>small{text-align:left;min-width:0}}
