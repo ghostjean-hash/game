@@ -37,12 +37,12 @@
   function palette(player){const selected=draft.playerColors[player];return `<fieldset class="player-colors"><legend>말 색</legend><div class="color-options">${Object.entries(D.playerPalette).map(([id,c])=>button(`<span class="palette-dot" style="--swatch:${c.hex}">${selected===id?'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 10 3 3 7-7"/></svg>':''}</span>`,`data-player-color="${id}" data-player="${player}" aria-label="${D.players[player]} ${c.name}" title="${c.name}" aria-pressed="${selected===id}"`,'color-option')).join('')}</div></fieldset>`;}
   function load(){try{const v=JSON.parse(localStorage.getItem(D.storageKey));if(!C.valid(v)||v.board&&!B.valid(v.board))return null;if(v.board)v.board=B.hydrate(v.board);botFields(v);if(v.names[0]==='나'&&v.names[1]==='딸')v.names=[...D.players];return v;}catch{return null;}}
   function botFields(v){v.auto=Array.isArray(v.auto)&&v.auto.length===2&&v.auto.every(x=>typeof x==='boolean')?v.auto:[false,false];v.speed=D.bot.speeds.includes(v.speed)?v.speed:1;if(!v.decks||typeof v.decks!=='object')v.decks={};if(!v.botMemo||typeof v.botMemo!=='object'||typeof v.botMemo.offers!=='object'||v.botMemo.offers===null)v.botMemo={turn:null,asked:false,steps:0,offers:{}};const who=x=>x===0||x===1,cost=x=>Number.isInteger(x)&&x>=0,logOk=e=>e&&typeof e==='object'&&!!D.board[e.index]&&(e.kind==='buy'?who(e.who)&&cost(e.amount):e.kind==='auction'?e.winner===null&&e.amount===null||who(e.winner)&&cost(e.amount):e.kind==='trade'?who(e.from)&&who(e.to)&&cost(e.amount):e.kind==='swap'?!!D.board[e.give]&&!!D.board[e.take]&&who(e.from)&&who(e.to)&&Number.isInteger(e.amount):e.kind==='reject');v.botLog=Array.isArray(v.botLog)?v.botLog.filter(logOk).slice(0,D.bot.logLines):[];return v;}
-  function save(){try{localStorage.setItem(D.storageKey,JSON.stringify(s));document.getElementById('save-warning').hidden=localStorage.getItem(D.storageKey)===JSON.stringify(s);}catch{document.getElementById('save-warning').hidden=false;}}
-  function render(){root.className='';if(home||s?.screen==='setup')return preparation();({play:play,finish:finish,score:score,result:result}[s.screen])();}
+  function save(){try{const json=JSON.stringify(s);localStorage.setItem(D.storageKey,json);document.getElementById('save-warning').hidden=localStorage.getItem(D.storageKey)===json;}catch{document.getElementById('save-warning').hidden=false;}}
+  function render(){root.className='';if(home||s?.screen==='setup'){stopWalk();preparation();}else ({play:play,finish:finish,score:score,result:result}[s.screen])();syncActivity();}
   function set(next){s=next;save();render();}
   function heading(title,back=true){return `<div class="screen-head"><h1 tabindex="-1">${title}</h1>${back?button('준비','data-action="home"'):''}</div>`;}
   function error(message){const el=document.getElementById(dialog.open?'dialog-error':'action-error');if(el){el.textContent=message;el.hidden=false;el.focus();}}
-  function open(title,body,wide=false){dialog.className=wide?'wide-dialog':'';document.getElementById('rule-content').innerHTML=`<div class="dialog-head"><h2 id="rule-title" tabindex="-1">${richText(title)}</h2>${button(icon('close'),'data-close aria-label="닫기"','icon-button')}</div>${body}<p id="dialog-error" class="error" role="alert" tabindex="-1" hidden></p>`;if(!dialog.open)dialog.showModal();else document.getElementById('rule-title').focus({preventScroll:true});dialog.scrollTop=0;}
+  function open(title,body,wide=false){dialog.className=wide?'wide-dialog':'';document.getElementById('rule-content').innerHTML=`<div class="dialog-head"><h2 id="rule-title" tabindex="-1">${richText(title)}</h2>${button(icon('close'),'data-close aria-label="닫기"','icon-button')}</div>${body}<p id="dialog-error" class="error" role="alert" tabindex="-1" hidden></p>`;if(!dialog.open)dialog.showModal();else document.getElementById('rule-title').focus({preventScroll:true});dialog.scrollTop=0;syncActivity();}
   function preparation(){
     const d=draft,short=d.mode==='short';
     root.className='is-preparing'+(d.minutes===null?' classic-mode':'');applyColors(d.playerColors);
@@ -67,8 +67,8 @@
     const b=s.board;
     root.innerHTML=`<div class="game-shell"><div class="board-stage"><div class="board-viewport" id="board-viewport"><div class="board-map" aria-label="실제 게임판과 같은 40칸">${D.board.map((t,i)=>{let row,col;if(i<=10){row=11;col=11-i;}else if(i<=20){row=21-i;col=1;}else if(i<=30){row=1;col=i-19;}else{row=i-29;col=11;}const deed=b.deeds[i],owner=deed?.owner,owned=owner!==undefined&&owner!==null,art=artwork(i),monopoly=owned&&B.isStreet(i)&&B.ownsSet(b,owner,i);const edge=i<10?'bottom':i<20?'left':i<30?'top':'right';return `<button type="button" class="board-tile ${art?'special':'city'} edge-${edge} ${monopoly?'monopoly':''} ${owned?'owned owner-'+owner:''} ${b.players[p].pos===i?'active-tile active-player-'+p:''}" style="grid-row:${row};grid-column:${col}" data-tile="${i}" aria-label="${tileOption(i)}${owned?' · '+esc(s.names[owner])+' 소유':''}${monopoly?' · 독점':''}${deed?.buildings?' · '+(deed.buildings===5?'호텔':'주택 '+deed.buildings+'채'):''}"><span class="tile-content">${art==='income-tax'?incomeTaxIcon:art?`<img class="space-icon icon-${art}" src="assets/board/${art}.png" alt="" draggable="false">`:''}<span class="tile-name">${t[0]}</span>${owned?`<span class="deed-owner">${esc(s.names[owner])}</span>`:''}</span>${monopoly?'<span class="monopoly-mark" aria-label="독점">독점</span>':''}${deed?buildingYard(i,deed):''}<span class="pawn-lane">${b.players.map((x,j)=>x.pos===i?`<b class="token token-${j}" aria-label="${esc(s.names[j])} 말">${esc(s.names[j].slice(0,1))}</b>`:'').join('')}</span>${owned&&deed.mortgaged?'<span class="mortgage-mark">저당</span>':''}</button>`;}).join('')}</div></div></div>
     <aside class="game-tools"><div class="panel-top"><span id="timer" role="timer" aria-label="남은 시간"></span>${autoControls()}${button(icon('menu'),`data-action="menu" aria-label="메뉴" aria-expanded="${menuOpen}" title="메뉴"`,'icon-button menu-button')}</div>${menuOpen?menuPanel():''}<section class="board-center play-panel"><header class="turn-status" aria-label="현재 차례 정보"><span class="turn-avatar player-${p}" aria-hidden="true">${esc(s.names[p].slice(0,1))}</span><div class="turn-identity"><h2>${esc(s.names[p])} 차례</h2><p class="current-place">${tileName(b.players[p].pos)}${b.players[p].jail?' · 수감':''}</p></div><div class="turn-cash">${money(b.players[p].cash)}</div></header><div class="turn-strip">${s.ending?`<p class="ending">${endingText()}</p>`:''}</div><div class="turn-content">${s.note?`<p class="transaction-note" role="status">${richText(s.note)}</p>`:''}${logView()}<div class="current-task">${task()}</div><p id="action-error" class="error" role="alert" tabindex="-1" hidden></p></div></section><div class="tool-menu tool-icons" role="group" aria-label="관리">${[['cash','돈 마련 · 부지 관리','properties'],['house','집 짓기','build'],['trade','거래','trade'],['bankrupt','파산','bankrupt']].map(([ic,label,act])=>button(icon(ic),`data-action="${act}" aria-label="${label}" title="${label}"`,act==='bankrupt'?'icon-tool danger':'icon-tool')).join('')}</div></aside></div>`;
-    trackMove(b);restoreView(b.players[p].pos,p);
-    updateTimer();
+    fitPanel();trackMove(b);restoreView(b.players[p].pos,p);
+    updateTimer();syncActivity();
   }
   function task(){
     const b=s.board,p=C.current(s),person=b.players[p],q=b.pending;
@@ -102,12 +102,12 @@
   function restoreView(pos,p){applyView(false);const key=p+':'+pos;if(followKey!==key){followKey=key;if(view.z>1&&!walk)requestAnimationFrame(()=>centerOn(pos,true));}if(walk)paintWalk();}
   // 말 이동 연출: 강조 테두리가 지나는 칸을 한 칸씩 밟는다. 기록은 이미 도착 칸이다.
   const WALK_MS=70;let seenPos=null,walk=null;
-  function trackMove(b){const now=b.players.map(x=>x.pos),before=seenPos;seenPos=now;if(!before)return;const mover=[0,1].find(i=>before[i]!==now[i]);if(mover===undefined)return;
+  function trackMove(b){const now=b.players.map(x=>x.pos),before=seenPos;seenPos=now;if(!before||document.hidden)return;const mover=[0,1].find(i=>before[i]!==now[i]);if(mover===undefined)return;
     const from=before[mover],to=now[mover];if(b.players[mover].jail&&to===10)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
     const fwd=(to-from+40)%40,back=(from-to+40)%40,dir=back===3?-1:1,steps=dir>0?fwd:back;
     stopWalk();walk={p:mover,to,i:0,path:Array.from({length:steps},(_,k)=>(from+dir*(k+1)+40)%40)};walk.timer=setInterval(()=>{if(!walk)return;walk.i++;if(walk.i>=walk.path.length){stopWalk();return;}paintWalk();},WALK_MS/speedNow());}
   function paintWalk(){document.querySelectorAll('.walk-focus').forEach(e=>e.classList.remove('walk-focus','walk-p0','walk-p1'));if(!walk)return;document.querySelector(`[data-tile="${walk.to}"]`)?.classList.add('walk-hold');const index=walk.path[walk.i];document.querySelector(`[data-tile="${index}"]`)?.classList.add('walk-focus','walk-p'+walk.p);if(view.z>1)centerOn(index,false);}
-  function stopWalk(){if(walk?.timer)clearInterval(walk.timer);walk=null;document.querySelectorAll('.walk-focus,.walk-hold').forEach(e=>e.classList.remove('walk-focus','walk-p0','walk-p1','walk-hold'));}
+  function stopWalk(){if(walk?.timer)clearInterval(walk.timer);walk=null;document.querySelectorAll('.walk-focus,.walk-hold').forEach(e=>e.classList.remove('walk-focus','walk-p0','walk-p1','walk-hold'));syncActivity();}
   const touches=new Map();let gesture=null,dragged=false;
   root.addEventListener('pointerdown',e=>{const vp=e.target.closest('#board-viewport');if(!vp)return;touches.set(e.pointerId,{x:e.clientX,y:e.clientY});dragged=false;const pts=[...touches.values()],r=vp.getBoundingClientRect();gesture=pts.length>=2?{type:'pinch',dist:Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y),z:view.z,mx:(pts[0].x+pts[1].x)/2-r.left,my:(pts[0].y+pts[1].y)/2-r.top}:{type:'pan',sx:e.clientX,sy:e.clientY,x:view.x,y:view.y};});
   root.addEventListener('pointermove',e=>{if(!touches.has(e.pointerId)||!gesture)return;touches.set(e.pointerId,{x:e.clientX,y:e.clientY});const vp=viewport();if(!vp)return;
@@ -118,17 +118,24 @@
   root.addEventListener('click',e=>{if(dragged&&e.target.closest('#board-viewport')){e.stopPropagation();e.preventDefault();dragged=false;}},true);
   root.addEventListener('wheel',e=>{const vp=e.target.closest('#board-viewport');if(!vp)return;e.preventDefault();const r=vp.getBoundingClientRect();zoomAt(view.z*(e.deltaY<0?1.15:1/1.15),e.clientX-r.left,e.clientY-r.top);},{passive:false});
   window.addEventListener('resize',()=>{fitPanel();applyView(false);});
-  // 오른쪽 칸 비례 축소(planning.html 0.15 2항): 1366×1024 기준 높이 992 에 맞춰 화면 높이 비율로 줄인다. 가로·폭 761px 이상에서만.
-  const PANEL_H=992;
-  function fitPanel(){const on=matchMedia('(orientation: landscape) and (min-width: 761px)').matches;document.documentElement.style.setProperty('--pz',on?String(Math.min(1,(innerHeight-32)/PANEL_H)):'1');}
-  fitPanel();
+  // 보드와 오른쪽 칸을 같은 높이로, 가용 폭·높이에 함께 맞춘다(planning.html 0.20).
+  const PANEL_H=992,PANEL_W=492;
+  function fitPanel(){
+    const on=matchMedia('(orientation: landscape) and (min-width: 761px)').matches;
+    if(!on||!root.classList.contains('is-playing'))return;
+    const css=getComputedStyle(root),gap=parseFloat(getComputedStyle(root.querySelector('.game-shell')??root).columnGap)||16;
+    const w=root.clientWidth-parseFloat(css.paddingLeft)-parseFloat(css.paddingRight)-gap;
+    const h=root.clientHeight-parseFloat(css.paddingTop)-parseFloat(css.paddingBottom);
+    const size=Math.max(0,Math.min(h,w/(1+PANEL_W/PANEL_H)));
+    root.style.setProperty('--game-size',size+'px');root.style.setProperty('--pz',String(size/PANEL_H));
+  }
   function run(fn,note='',close=false,log=null){try{const before=structuredClone(s),wasEnd=s.board.phase==='end',board=fn(s.board);if(!B.valid(board))throw Error('기록을 확인할 수 없습니다.');undo=before;auctionMode=false;s={...s,board,note:'',scores:[null,null]};
     // 최근 기록(planning.html 0.19.4 5항): 오토가 켜진 판의 구입 · 경매 · 거래만 앞뒤 판을 비교해 남긴다.
     if(log&&s.auto?.some(Boolean))s.botLog=[log(before.board,board),...(s.botLog||[])].slice(0,D.bot.logLines);
     // 할 일이 끝나면(차례 마침 단계) 바로 다음 차례로 넘긴다. 되돌리기는 마지막 행동 전 상태를 그대로 쓴다(planning.html 0.11.2).
     if(!wasEnd&&board.phase==='end'&&s.runningSince!==null){const next=C.advance(s,Date.now());s=next.screen==='play'?{...next,board:B.beginTurn(next.board)}:next;save();if(close)dialog.close();render();return true;}
     save();if(close)dialog.close();play();return true;}catch(e){error(e.message);return false;}}
-  function updateTimer(){if(home||s?.screen!=='play')return;const rem=C.remaining(s,Date.now());if(rem===0&&!s.ending){s=C.requestFinish(s);save();play();return;}const el=document.getElementById('timer');if(el){const sec=s.minutes===null?Math.floor(C.elapsed(s,Date.now())/1000):Math.ceil(rem/1000);el.setAttribute('aria-label',s.minutes===null?'플레이 시간':'남은 시간');el.classList.toggle('elapsed-clock',s.minutes===null);el.textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');}}
+  function updateTimer(){if(home||s?.screen!=='play')return;const rem=C.remaining(s,Date.now());if(rem===0&&!s.ending){s=C.requestFinish(s);save();play();return;}const el=document.getElementById('timer');if(el){const sec=s.minutes===null?Math.floor(C.elapsed(s,Date.now())/1000):Math.ceil(rem/1000);el.setAttribute('aria-label',s.minutes===null?'플레이 시간':'남은 시간');el.classList.toggle('elapsed-clock',s.minutes===null);const text=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');if(el.textContent!==text)el.textContent=text;}}
   function cardDetail(c){return c.action==='repairs'?`주택 ${money(c.house)} · 호텔 ${money(c.hotel)}`:['receive','give','otherGive','otherReceive'].includes(c.action)?`${c.action==='receive'?'은행에서 받기':c.action==='give'?'은행에 내기':c.action==='otherGive'?'상대에게 내기':'상대에게 받기'} ${money(c.value)}`:c.action==='nearestStation'?'상대 소유면 임대료 두 배':c.action==='nearestUtility'?'새 주사위 합의 10배':c.action==='escape'?'사용할 때까지 보관':'카드의 칸으로 이동';}
   function touchAmount(label,id,value=0){label=esc(label);return `<div class="touch-amount"><div class="amount-readout"><label id="${id}-label">${label}</label><input type="hidden" id="${id}" value="${value}" data-replace="true"><output id="${id}-display" aria-labelledby="${id}-label" aria-live="polite">${money(value)}</output><div class="amount-add">${[10,50,100].map(n=>button('+'+n,`data-amount-add="${n}" data-amount-id="${id}" aria-label="${label} ${n} 더하기"`)).join('')}</div></div><div class="number-pad" role="group" aria-label="${label} 숫자패드">${[1,2,3,4,5,6,7,8,9,'C',0,'back'].map(n=>button(n==='C'?'초기화':n==='back'?'삭제':n,`data-amount-key="${n}" data-amount-id="${id}" aria-label="${label} ${n==='C'?'초기화':n==='back'?'한 자리 삭제':'숫자 '+n}"`)).join('')}</div></div>`;}
   function setTouchAmount(id,key,add=false){const input=document.getElementById(id);if(!input)return;const old=input.value;let value=add?String(Number(old)+Number(key)):key==='C'?'0':key==='back'?old.slice(0,-1)||'0':(old==='0'?'':old)+key;if(!add&&!['C','back'].includes(key)&&input.dataset.replace==='true')value=String(key);const amount=C.amount(value);if(amount===null)return error('금액이 너무 큽니다.');input.value=String(amount);input.dataset.replace='false';document.getElementById(id+'-display').innerHTML=money(amount);if(id==='auction-amount')refreshAuction();else tradeFees();}
@@ -307,9 +314,9 @@
   document.addEventListener('change',e=>{if(e.target.id.startsWith('trade-')||e.target.id.startsWith('release-'))tradeFees();});
   document.getElementById('confirm-new').addEventListener('click',()=>{confirmDialog.close();if(pendingNew){pendingNew=false;start();}});
   // 오토 돌리개(planning.html 0.19.4 3항): 조건이 맞는 동안 걸음 간격 ÷ 배속마다 봇 행동 하나를 기존 run() 으로 실행한다.
-  let botOffer=null,botDice=null,botWaitFrom=0;
+  let botOffer=null,botDice=null,botTimer=null,clockTimer=null;
   function speedNow(){return s?.auto?.some(Boolean)?(s.speed||1):1;}
-  function botReady(){return !home&&s?.screen==='play'&&!!s.board&&!!s.auto?.[C.current(s)]&&s.runningSince!==null&&!dialog.open&&!confirmDialog.open&&!menuOpen&&!walk&&!gesture&&!auctionMode;}
+  function botReady(){return !document.hidden&&!home&&s?.screen==='play'&&!!s.board&&!!s.auto?.[C.current(s)]&&s.runningSince!==null&&!dialog.open&&!confirmDialog.open&&!menuOpen&&!walk&&!gesture&&!auctionMode;}
   function liveBotCard(){const c=s.botCard,q=s.board.pending;return c&&q?.type==='card'&&q.index===c.index&&c.turn===s.turns.join()&&D.cards[c.deck]?.some(x=>x.id===c.id)?{deck:c.deck,id:c.id}:null;}
   function offerView(o){if(o.type==='swap'){const row=(i,a,c)=>`<p class="dealt-row"><span>${tileName(i)}${s.board.deeds[i].mortgaged?' <small>저당</small>':''}</span><strong>${esc(s.names[a])} → ${esc(s.names[c])}</strong></p>`,payer=o.amount>0?o.from:o.to;return `<div class="bot-offer">${row(o.give,o.from,o.to)}${row(o.take,o.to,o.from)}${o.amount?`<p class="dealt-row"><span>${money(Math.abs(o.amount))}</span><strong>${esc(s.names[payer])} → ${esc(s.names[1-payer])}</strong></p>`:''}</div><div class="button-row">${button('수락','data-bot-offer="yes"','primary')}${button('거절','data-bot-offer="no"')}</div>`;}const seller=o.type==='sell'?o.from:o.to,buyer=1-seller,mortgaged=s.board.deeds[o.index].mortgaged;return `<div class="bot-offer"><p class="dealt-row"><span>${tileName(o.index)}${mortgaged?' <small>저당</small>':''}</span><strong>${esc(s.names[seller])} → ${esc(s.names[buyer])}</strong></p><p class="dealt-row"><span>${money(o.amount)}</span><strong>${esc(s.names[buyer])} → ${esc(s.names[seller])}</strong></p></div><div class="button-row">${button('수락','data-bot-offer="yes"','primary')}${button('거절','data-bot-offer="no"')}</div>`;}
   const buyLog=(p,i)=>(o,n)=>({kind:'buy',who:p,index:i,amount:o.players[p].cash-n.players[p].cash});
@@ -338,6 +345,21 @@
     const log=act.kind==='buy'?buyLog(p,b.pending.index):act.kind==='decline'?auctionLog(b.pending.index):null;
     run(x=>BOT.apply(x,p,act),'',false,log);
   }
-  setInterval(()=>{if(!botReady()){botWaitFrom=0;return;}const now=Date.now();if(!botWaitFrom){botWaitFrom=now;return;}if(now-botWaitFrom>=D.bot.stepMs/speedNow()){botWaitFrom=0;botStep();}},D.bot.pollMs);
-  setInterval(updateTimer,D.tick);document.addEventListener('visibilitychange',()=>{if(!home&&s?.screen==='play')updateTimer();});render();
+  // 대기 중에는 반복 확인하지 않고, 실제 진행할 행동·시계만 예약한다.
+  function syncClock(){
+    const live=!document.hidden&&!home&&s?.screen==='play'&&s.runningSince!==null;
+    if(!live){clearTimeout(clockTimer);clockTimer=null;return;}
+    if(clockTimer===null)clockTimer=setTimeout(()=>{clockTimer=null;updateTimer();syncClock();},D.tick);
+  }
+  function syncActivity(){
+    clearTimeout(botTimer);botTimer=null;syncClock();
+    if(botReady())botTimer=setTimeout(()=>{botTimer=null;if(botReady())botStep();syncActivity();},D.bot.stepMs/speedNow());
+  }
+  const afterInteraction=()=>queueMicrotask(syncActivity);
+  for(const name of ['click','submit','pointerdown','pointerup','pointercancel'])document.addEventListener(name,afterInteraction);
+  dialog.addEventListener('close',afterInteraction);confirmDialog.addEventListener('close',afterInteraction);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){stopWalk();touches.clear();gesture=null;}else if(!home&&s?.screen==='play')updateTimer();syncActivity();});
+  window.addEventListener('pagehide',()=>{stopWalk();clearTimeout(botTimer);clearTimeout(clockTimer);botTimer=clockTimer=null;});
+  window.addEventListener('pageshow',()=>{if(!home&&s?.screen==='play')updateTimer();syncActivity();});
+  render();
 })();
