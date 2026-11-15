@@ -21,7 +21,7 @@ globalThis.MC_DATA = Object.freeze({
   },
   money: [[500,2],[100,4],[50,1],[20,1],[10,2],[5,1],[1,5]],
   rules: [
-    { id:'buy', title:'주인 없는 부지' }, { id:'rent', title:'임대료' },
+    { id:'monopoly', title:'독점' }, { id:'buy', title:'주인 없는 부지' }, { id:'rent', title:'임대료' },
     { id:'card', title:'찬스 · 사회사업기금' }, { id:'tax', title:'소득세 · 사치세' },
     { id:'corner', title:'출발 · 무료 주차장' }, { id:'jail', title:'감옥 · 방문' },
     { id:'double', title:'더블' }, { id:'build', title:'주택 · 호텔' },
@@ -37,7 +37,7 @@ globalThis.MC_DATA = Object.freeze({
     ['감옥으로 가시오!','gotojail'], ['청주','green',300], ['천안','green',300], ['사회사업기금','chest'], ['대전','green',320],
     ['서울역','station',200], ['찬스','chance'], ['인천','blue',350], ['사치세','tax',100], ['서울','blue',400]
   ],
-  stationRents: [25,50,100,200],
+  stationRents: [25,50,100,200], utilityFactors: [4,10],
   // 사용자 제공 한국판 권리증 22장: 기본, 주택 1~4채, 호텔 순서.
   printedDeeds: {
     1:{rents:[2,10,30,90,160,250],house:50},3:{rents:[4,20,60,180,320,450],house:50},

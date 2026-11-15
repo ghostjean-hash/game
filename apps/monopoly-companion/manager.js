@@ -13,6 +13,12 @@
   }
   function guides(names) {
     return {
+      monopoly: {
+        start: {title:'어떤 독점인가요?',text:'같은 묶음을 한 사람이 모두 가지면 독점이에요.',choices:[choice('같은 색 도시','street'),choice('역 4곳','station'),choice('전력회사 · 수자원공사','utility')]},
+        street: {title:'같은 색 도시 전부',text:'건물 없는 땅은 기본 임대료의 2배예요. 주택·호텔을 지을 수 있어요.',note:'그 색에 저당 부지가 있으면 건설할 수 없어요. 저당 부지 자체는 임대료가 없어요.',choices:[done]},
+        station: {title:'역 4곳 독점',text:'역 1곳 M25 · 2곳 M50 · 3곳 M100 · 4곳 M200',note:'주택·호텔은 짓지 않아요. 저당 부지 자체는 임대료가 없고, 카드 지시가 있으면 먼저 따라요.',choices:[done]},
+        utility: {title:'전력회사 · 수자원공사 독점',text:'1곳은 이동 주사위 합의 4배, 두 곳 모두 가지면 10배예요.',note:'주택·호텔은 짓지 않아요. 저당 부지 자체는 임대료가 없고, 카드 지시가 있으면 먼저 따라요.',choices:[done]}
+      },
       buy: {
         start: { title: '이 땅을 살까요?', text: '권리증에 적힌 땅값을 보세요.', choices: [choice('살래요', 'pay'), choice('안 살래요', 'auction')] },
         pay: { title: '땅값을 은행에 내세요.', text: '그 땅의 권리증을 가져오세요.', choices: [done] },

@@ -1,5 +1,7 @@
 # game-hub NEXT-SESSION
 
+> 2026-11-16 모노폴리 결과 팝업·부지/독점 설명·보드 안쪽 말 표시 구현, 미커밋·미배포. 자동76건·브라우저40칸/결과/모드/이동 검증 통과. 다음: 사용자 배포 지시 후 실제 아이패드 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.10.
+
 > 2026-11-16 모노폴리 아이패드 화면·부하 개선 및 x8 배포 완료: fa948bd, SW v250. 공개9주소·파일5개 일치·Pages built 확인. 다음은 실제 아이패드 화면·장시간 발열 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.9.
 
 > 2026-11-16 모노폴리 오토 x8 추가. 네 가로 크기에서 선택·저장·복원·진행 검증. v250 배포 완료(fa948bd). 다음은 실제 아이패드 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.8.

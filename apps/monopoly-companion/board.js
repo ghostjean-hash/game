@@ -161,11 +161,29 @@
     const count=Object.entries(s.deeds).filter(([i,x])=>x.owner===d.owner&&D.board[i][1]===type).length;
     return type==='station'?{amount:D.stationRents[count-1]}:{factor:count===2?10:4};
   }
+  // 권리증 표시도 실제 임대료 자료를 사용한다. 은행·저당은 적용 줄을 강조하지 않는다.
+  function holdingInfo(s,index){
+    const d=s.deeds[index];if(!d)return null;
+    const type=D.board[index][1],street=isStreet(index),indices=street?group(index):Object.keys(s.deeds).map(Number).filter(i=>D.board[i][1]===type);
+    const count=d.owner===null?0:indices.filter(i=>s.deeds[i].owner===d.owner).length,complete=d.owner!==null&&count===indices.length;
+    return {indices,count,complete};
+  }
+  function deedInfo(s,index){
+    const holding=holdingInfo(s,index);if(!holding)return null;
+    const d=s.deeds[index],type=D.board[index][1],street=isStreet(index),{indices,count,complete}=holding;
+    const active=d.owner!==null&&!d.mortgaged;
+    const rents=street?[
+      {label:'기본',amount:d.rents[0],current:active&&!complete&&d.buildings===0},
+      {label:'독점',amount:d.rents[0]*2,current:active&&complete&&d.buildings===0},
+      ...(hotelAt(s)===4?[1,2,3,4,5]:[1,2,3,5]).map(n=>({label:n===5?'호텔':'주택 '+n+'채',amount:d.rents[n],current:active&&d.buildings===n}))
+    ]:type==='station'?D.stationRents.map((amount,k)=>({label:'역 '+(k+1)+'곳'+(k===indices.length-1?' · 독점':''),amount,current:active&&count===k+1})):D.utilityFactors.map((factor,k)=>({label:(k+1)+'곳'+(k===indices.length-1?' · 독점':''),factor,current:active&&count===k+1}));
+    return {indices,count,complete,rents};
+  }
   function tradeReason(s,index){const d=s.deeds[index];if(!d||d.owner===null)return '내 부지가 아닙니다.';if(s.pending?.type==='rent'&&s.pending.index===index)return '이 부지의 임대료부터 처리하세요.';return isStreet(index)&&group(index).some(i=>s.deeds[i].buildings)?'이 색의 건물을 모두 먼저 파세요.':'';}
   function assetOptions(state,p){
     integer(p,0,1);
     const preview=(index,fn)=>{try{const next=fn();return {allowed:true,change:next.players[p].cash-state.players[p].cash,rent:rentInfo(next,index)};}catch(e){return {allowed:false,reason:e.message};}};
-    return Object.entries(state.deeds).filter(([,d])=>d.owner===p).map(([key,d])=>{const index=Number(key);return {index,monopoly:isStreet(index)&&ownsSet(state,p,index),rent:rentInfo(state,index),tradeReason:tradeReason(state,index),
+    return Object.entries(state.deeds).filter(([,d])=>d.owner===p).map(([key,d])=>{const index=Number(key);return {index,monopoly:holdingInfo(state,index).complete,rent:rentInfo(state,index),tradeReason:tradeReason(state,index),
       build:isStreet(index)?preview(index,()=>build(state,p,index,d.houseCost)):null,
       sell:d.buildings?preview(index,()=>sell(state,p,index)):null,
       sellAll:d.buildings?preview(index,()=>sell(state,p,index,true)):null,
@@ -190,5 +208,5 @@
     if(streets.some(i=>{const values=group(i).map(j=>s.deeds[j]?level(s,s.deeds[j]):0);return Math.max(...values)-Math.min(...values)>1;}))return false;
     return keys.every(i=>{const d=s.deeds[i];return d&&[null,0,1].includes(d.owner)&&typeof d.mortgaged==='boolean'&&Number.isInteger(d.buildings)&&d.buildings>=0&&d.buildings<=(isStreet(Number(i))?5:0)&&(d.owner!==null||!d.buildings&&!d.mortgaged)&&!(d.mortgaged&&d.buildings)&&Number.isSafeInteger(d.mortgage)&&d.mortgage>0&&(d.houseCost===null||Number.isSafeInteger(d.houseCost)&&d.houseCost>0)&&d.rents&&Object.entries(d.rents).every(([k,v])=>/^[0-5]$/.test(k)&&Number.isSafeInteger(v)&&v>=0);})&&Number.isInteger(s.doubles)&&s.doubles>=0&&s.doubles<=3&&typeof s.extra==='boolean'&&supplies(s).houses>=0&&supplies(s).hotels>=0;
   }
-  globalThis.MC_BOARD=Object.freeze({create,hydrate,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,printedCard,cardSummary,utilityRoll,build,buildPlan,sell,mortgage,trade,correct,supplies,valid,isStreet,level,hotelAt,buildingValue,group,ownsSet,rentInfo,tradeReason,assetOptions});
+  globalThis.MC_BOARD=Object.freeze({holdingInfo,deedInfo,create,hydrate,beginTurn,roll,jailExit,acknowledge,purchase,recordRent,pay,card,printedCard,cardSummary,utilityRoll,build,buildPlan,sell,mortgage,trade,correct,supplies,valid,isStreet,level,hotelAt,buildingValue,group,ownsSet,rentInfo,tradeReason,assetOptions});
 })();

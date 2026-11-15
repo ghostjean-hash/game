@@ -195,7 +195,8 @@
 //        옛 bot.js · index.html 이 캐시에 남으면 홈 화면 추가 시 브라우저 껍데기가 붙는다.
 
 // v250: 모노폴리 아이패드 준비·보드 높이 맞춤, 대기 부하 절감, 오토 x8 추가.
-const CACHE_VERSION = "v250";
+// v251: 모노폴리 보드 위 결과 팝업, 부지·독점 안내, 중앙에서 부지를 가리키는 말.
+const CACHE_VERSION = "v251";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

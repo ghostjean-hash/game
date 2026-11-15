@@ -33,7 +33,7 @@
   let s=load(),home=true,undo=null,draft=makeDraft(s),managerId=null,path=[],pendingNew=false,diceSelection=[null,null],diceContext=null,auctionMode=false;
   function makeDraft(session){const d=C.createPreset(D.players,session?.mode==='short'?(session.minutes===60?'short60':'short30'):'standard',session?.first??0);d.playerColors=[...(session?.playerColors??D.defaultPlayerColors)];d.bonuses=bonusesOf(session);return d;}
   function bonusesOf(x){return Array.isArray(x?.bonuses)?[...x.bonuses]:[0,x?.bonus??0];}
-  function applyColors(ids){(ids??D.defaultPlayerColors).forEach((id,p)=>{const c=D.playerPalette[id],name=p===0?'dad':'seowoo';root.style.setProperty('--'+name,c.hex);root.style.setProperty('--player-'+p+'-soft',c.soft);root.style.setProperty('--player-'+p+'-rgb',c.rgb);});}
+  function applyColors(ids){(ids??D.defaultPlayerColors).forEach((id,p)=>{const c=D.playerPalette[id],name=p===0?'dad':'seowoo';for(const target of [root,dialog]){target.style.setProperty('--'+name,c.hex);target.style.setProperty('--player-'+p+'-soft',c.soft);target.style.setProperty('--player-'+p+'-rgb',c.rgb);}});}
   function palette(player){const selected=draft.playerColors[player];return `<fieldset class="player-colors"><legend>말 색</legend><div class="color-options">${Object.entries(D.playerPalette).map(([id,c])=>button(`<span class="palette-dot" style="--swatch:${c.hex}">${selected===id?'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 10 3 3 7-7"/></svg>':''}</span>`,`data-player-color="${id}" data-player="${player}" aria-label="${D.players[player]} ${c.name}" title="${c.name}" aria-pressed="${selected===id}"`,'color-option')).join('')}</div></fieldset>`;}
   function load(){try{const v=JSON.parse(localStorage.getItem(D.storageKey));if(!C.valid(v)||v.board&&!B.valid(v.board))return null;if(v.board)v.board=B.hydrate(v.board);botFields(v);if(v.names[0]==='나'&&v.names[1]==='딸')v.names=[...D.players];return v;}catch{return null;}}
   function botFields(v){v.auto=Array.isArray(v.auto)&&v.auto.length===2&&v.auto.every(x=>typeof x==='boolean')?v.auto:[false,false];v.speed=D.bot.speeds.includes(v.speed)?v.speed:1;if(!v.decks||typeof v.decks!=='object')v.decks={};if(!v.botMemo||typeof v.botMemo!=='object'||typeof v.botMemo.offers!=='object'||v.botMemo.offers===null)v.botMemo={turn:null,asked:false,steps:0,offers:{}};const who=x=>x===0||x===1,cost=x=>Number.isInteger(x)&&x>=0,logOk=e=>e&&typeof e==='object'&&!!D.board[e.index]&&(e.kind==='buy'?who(e.who)&&cost(e.amount):e.kind==='auction'?e.winner===null&&e.amount===null||who(e.winner)&&cost(e.amount):e.kind==='trade'?who(e.from)&&who(e.to)&&cost(e.amount):e.kind==='swap'?!!D.board[e.give]&&!!D.board[e.take]&&who(e.from)&&who(e.to)&&Number.isInteger(e.amount):e.kind==='reject');v.botLog=Array.isArray(v.botLog)?v.botLog.filter(logOk).slice(0,D.bot.logLines):[];return v;}
@@ -60,14 +60,28 @@
   function autoControls(){if(!s.auto?.some(Boolean))return s.runningSince===null?'<span class="paused-pill">일시정지</span>':'';const paused=s.runningSince===null;return `<div class="auto-controls" role="group" aria-label="오토 진행">${button(icon(paused?'play':'pause'),`data-action="pause" aria-label="${paused?'계속':'일시정지'}" title="${paused?'계속':'일시정지'}"`,'icon-button auto-pause'+(paused?' is-paused':''))}<div class="speed-options">${D.bot.speeds.map(v=>button('x'+v,`data-speed="${v}" aria-pressed="${s.speed===v}"`,s.speed===v?'primary':'secondary')).join('')}</div></div>`;}
   function sessionButtons(){return `${button(s.runningSince===null?'계속':'일시정지','data-action="pause"')}${s.ending?(C.remaining(s,Date.now())>0?button('마무리 취소','data-action="end-cancel"','ending-on'):button('마무리 중','disabled','ending-on')):button('마무리','data-action="end"')}`;}
   function timerHeader(){return `<div class="session-dock"><span id="timer" role="timer" aria-label="남은 시간"></span><div class="session-controls">${sessionButtons()}${button('준비','data-action="home"')}</div></div>`;}
+  function tileGrid(i){return i<=10?[11,11-i]:i<=20?[21-i,1]:i<=30?[1,i-19]:[i-29,11];}
+  function pawnEdge(i){return ({0:'corner-go',10:'corner-jail',20:'corner-parking',30:'corner-police'})[i]??(i<10?'bottom':i<20?'left':i<30?'top':'right');}
+  function pawnMarkup(p){return `<span class="board-pawn pawn-${p}" data-pawn="${p}" role="img"><span>${esc(s.names[p])}</span></span>`;}
+  function paintPawns(){
+    if(!s?.board)return;
+    const positions=s.board.players.map((x,p)=>walk?.p===p?walk.path[walk.i]:x.pos),current=C.current(s);
+    for(const [p,index] of positions.entries()){
+      const el=root.querySelector(`[data-pawn="${p}"]`);if(!el)continue;
+      const [row,col]=tileGrid(index);el.style.gridRow=row;el.style.gridColumn=col;
+      el.className=`board-pawn pawn-${p} pawn-${pawnEdge(index)}${p===current?' is-current':''}`;
+      el.style.setProperty('--pawn-stack',positions[0]===positions[1]&&p!==current?'1':'0');
+      el.setAttribute('aria-label',`${s.names[p]} 말 · ${tileName(index)}${s.board.players[p].jail?' · 수감':''}`);
+    }
+  }
   function play(){
     const p=C.current(s);
     root.className='is-playing';applyColors(s.playerColors);const nextContext=s.board?[...s.turns,p,s.board.phase,...(s.board.dice??[])].join('|'):null;if(diceContext!==nextContext){diceSelection=[null,null];diceContext=nextContext;}
     if(!s.board){root.innerHTML=timerHeader()+`<section class="legacy"><h2>${esc(s.names[p])} 차례</h2><p>이 판에는 말·현금 기록이 없습니다.</p>${button('현재 판 입력','data-action="import"','primary')}<div class="guide-list">${D.rules.map(r=>button(r.title,`data-rule="${r.id}"`)).join('')}</div>${button('차례 마침','data-action="legacy-next"')}<p id="action-error" class="error" role="alert" hidden></p></section>`;updateTimer();return;}
     const b=s.board;
-    root.innerHTML=`<div class="game-shell"><div class="board-stage"><div class="board-viewport" id="board-viewport"><div class="board-map" aria-label="실제 게임판과 같은 40칸">${D.board.map((t,i)=>{let row,col;if(i<=10){row=11;col=11-i;}else if(i<=20){row=21-i;col=1;}else if(i<=30){row=1;col=i-19;}else{row=i-29;col=11;}const deed=b.deeds[i],owner=deed?.owner,owned=owner!==undefined&&owner!==null,art=artwork(i),monopoly=owned&&B.isStreet(i)&&B.ownsSet(b,owner,i);const edge=i<10?'bottom':i<20?'left':i<30?'top':'right';return `<button type="button" class="board-tile ${art?'special':'city'} edge-${edge} ${monopoly?'monopoly':''} ${owned?'owned owner-'+owner:''} ${b.players[p].pos===i?'active-tile active-player-'+p:''}" style="grid-row:${row};grid-column:${col}" data-tile="${i}" aria-label="${tileOption(i)}${owned?' · '+esc(s.names[owner])+' 소유':''}${monopoly?' · 독점':''}${deed?.buildings?' · '+(deed.buildings===5?'호텔':'주택 '+deed.buildings+'채'):''}"><span class="tile-content">${art==='income-tax'?incomeTaxIcon:art?`<img class="space-icon icon-${art}" src="assets/board/${art}.png" alt="" draggable="false">`:''}<span class="tile-name">${t[0]}</span>${owned?`<span class="deed-owner">${esc(s.names[owner])}</span>`:''}</span>${monopoly?'<span class="monopoly-mark" aria-label="독점">독점</span>':''}${deed?buildingYard(i,deed):''}<span class="pawn-lane">${b.players.map((x,j)=>x.pos===i?`<b class="token token-${j}" aria-label="${esc(s.names[j])} 말">${esc(s.names[j].slice(0,1))}</b>`:'').join('')}</span>${owned&&deed.mortgaged?'<span class="mortgage-mark">저당</span>':''}</button>`;}).join('')}</div></div></div>
+    root.innerHTML=`<div class="game-shell"><div class="board-stage"><div class="board-viewport" id="board-viewport"><div class="board-map" aria-label="실제 게임판과 같은 40칸">${D.board.map((t,i)=>{const [row,col]=tileGrid(i);const deed=b.deeds[i],owner=deed?.owner,owned=owner!==undefined&&owner!==null,art=artwork(i),monopoly=owned&&B.holdingInfo(b,i).complete;const edge=i<10?'bottom':i<20?'left':i<30?'top':'right';return `<button type="button" class="board-tile ${art?'special':'city'} edge-${edge} ${monopoly?'monopoly':''} ${owned?'owned owner-'+owner:''} ${b.players[p].pos===i?'active-tile active-player-'+p:''}" style="grid-row:${row};grid-column:${col}" data-tile="${i}" aria-label="${tileOption(i)}${owned?' · '+esc(s.names[owner])+' 소유':''}${monopoly?' · 독점':''}${deed?.buildings?' · '+(deed.buildings===5?'호텔':'주택 '+deed.buildings+'채'):''}"><span class="tile-content">${art==='income-tax'?incomeTaxIcon:art?`<img class="space-icon icon-${art}" src="assets/board/${art}.png" alt="" draggable="false">`:''}<span class="tile-name">${t[0]}</span>${owned?`<span class="deed-owner">${esc(s.names[owner])}</span>`:''}</span>${monopoly?'<span class="monopoly-mark" aria-label="독점">독점</span>':''}${deed?buildingYard(i,deed):''}${owned&&deed.mortgaged?'<span class="mortgage-mark">저당</span>':''}</button>`;}).join('')}${b.players.map((_,p)=>pawnMarkup(p)).join('')}</div></div></div>
     <aside class="game-tools"><div class="panel-top"><span id="timer" role="timer" aria-label="남은 시간"></span>${autoControls()}${button(icon('menu'),`data-action="menu" aria-label="메뉴" aria-expanded="${menuOpen}" title="메뉴"`,'icon-button menu-button')}</div>${menuOpen?menuPanel():''}<section class="board-center play-panel"><header class="turn-status" aria-label="현재 차례 정보"><span class="turn-avatar player-${p}" aria-hidden="true">${esc(s.names[p].slice(0,1))}</span><div class="turn-identity"><h2>${esc(s.names[p])} 차례</h2><p class="current-place">${tileName(b.players[p].pos)}${b.players[p].jail?' · 수감':''}</p></div><div class="turn-cash">${money(b.players[p].cash)}</div></header><div class="turn-strip">${s.ending?`<p class="ending">${endingText()}</p>`:''}</div><div class="turn-content">${s.note?`<p class="transaction-note" role="status">${richText(s.note)}</p>`:''}${logView()}<div class="current-task">${task()}</div><p id="action-error" class="error" role="alert" tabindex="-1" hidden></p></div></section><div class="tool-menu tool-icons" role="group" aria-label="관리">${[['cash','돈 마련 · 부지 관리','properties'],['house','집 짓기','build'],['trade','거래','trade'],['bankrupt','파산','bankrupt']].map(([ic,label,act])=>button(icon(ic),`data-action="${act}" aria-label="${label}" title="${label}"`,act==='bankrupt'?'icon-tool danger':'icon-tool')).join('')}</div></aside></div>`;
-    fitPanel();trackMove(b);restoreView(b.players[p].pos,p);
+    fitPanel();trackMove(b);restoreView(b.players[p].pos,p);paintPawns();
     updateTimer();syncActivity();
   }
   function task(){
@@ -106,8 +120,8 @@
     const from=before[mover],to=now[mover];if(b.players[mover].jail&&to===10)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
     const fwd=(to-from+40)%40,back=(from-to+40)%40,dir=back===3?-1:1,steps=dir>0?fwd:back;
     stopWalk();walk={p:mover,to,i:0,path:Array.from({length:steps},(_,k)=>(from+dir*(k+1)+40)%40)};walk.timer=setInterval(()=>{if(!walk)return;walk.i++;if(walk.i>=walk.path.length){stopWalk();return;}paintWalk();},WALK_MS/speedNow());}
-  function paintWalk(){document.querySelectorAll('.walk-focus').forEach(e=>e.classList.remove('walk-focus','walk-p0','walk-p1'));if(!walk)return;document.querySelector(`[data-tile="${walk.to}"]`)?.classList.add('walk-hold');const index=walk.path[walk.i];document.querySelector(`[data-tile="${index}"]`)?.classList.add('walk-focus','walk-p'+walk.p);if(view.z>1)centerOn(index,false);}
-  function stopWalk(){if(walk?.timer)clearInterval(walk.timer);walk=null;document.querySelectorAll('.walk-focus,.walk-hold').forEach(e=>e.classList.remove('walk-focus','walk-p0','walk-p1','walk-hold'));syncActivity();}
+  function paintWalk(){document.querySelectorAll('.walk-focus').forEach(e=>e.classList.remove('walk-focus','walk-p0','walk-p1'));if(!walk)return;document.querySelector(`[data-tile="${walk.to}"]`)?.classList.add('walk-hold');const index=walk.path[walk.i];document.querySelector(`[data-tile="${index}"]`)?.classList.add('walk-focus','walk-p'+walk.p);if(view.z>1)centerOn(index,false);paintPawns();}
+  function stopWalk(){if(walk?.timer)clearInterval(walk.timer);walk=null;document.querySelectorAll('.walk-focus,.walk-hold').forEach(e=>e.classList.remove('walk-focus','walk-p0','walk-p1','walk-hold'));paintPawns();syncActivity();}
   const touches=new Map();let gesture=null,dragged=false;
   root.addEventListener('pointerdown',e=>{const vp=e.target.closest('#board-viewport');if(!vp)return;touches.set(e.pointerId,{x:e.clientX,y:e.clientY});dragged=false;const pts=[...touches.values()],r=vp.getBoundingClientRect();gesture=pts.length>=2?{type:'pinch',dist:Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y),z:view.z,mx:(pts[0].x+pts[1].x)/2-r.left,my:(pts[0].y+pts[1].y)/2-r.top}:{type:'pan',sx:e.clientX,sy:e.clientY,x:view.x,y:view.y};});
   root.addEventListener('pointermove',e=>{if(!touches.has(e.pointerId)||!gesture)return;touches.set(e.pointerId,{x:e.clientX,y:e.clientY});const vp=viewport();if(!vp)return;
@@ -117,7 +131,7 @@
   root.addEventListener('pointerup',endTouch);root.addEventListener('pointercancel',endTouch);
   root.addEventListener('click',e=>{if(dragged&&e.target.closest('#board-viewport')){e.stopPropagation();e.preventDefault();dragged=false;}},true);
   root.addEventListener('wheel',e=>{const vp=e.target.closest('#board-viewport');if(!vp)return;e.preventDefault();const r=vp.getBoundingClientRect();zoomAt(view.z*(e.deltaY<0?1.15:1/1.15),e.clientX-r.left,e.clientY-r.top);},{passive:false});
-  window.addEventListener('resize',()=>{fitPanel();applyView(false);});
+  window.addEventListener('resize',()=>{fitPanel();applyView(false);fitResult();});
   // 보드와 오른쪽 칸을 같은 높이로, 가용 폭·높이에 함께 맞춘다(planning.html 0.20).
   const PANEL_H=992,PANEL_W=492;
   function fitPanel(){
@@ -139,7 +153,7 @@
   function cardDetail(c){return c.action==='repairs'?`주택 ${money(c.house)} · 호텔 ${money(c.hotel)}`:['receive','give','otherGive','otherReceive'].includes(c.action)?`${c.action==='receive'?'은행에서 받기':c.action==='give'?'은행에 내기':c.action==='otherGive'?'상대에게 내기':'상대에게 받기'} ${money(c.value)}`:c.action==='nearestStation'?'상대 소유면 임대료 두 배':c.action==='nearestUtility'?'새 주사위 합의 10배':c.action==='escape'?'사용할 때까지 보관':'카드의 칸으로 이동';}
   function touchAmount(label,id,value=0){label=esc(label);return `<div class="touch-amount"><div class="amount-readout"><label id="${id}-label">${label}</label><input type="hidden" id="${id}" value="${value}" data-replace="true"><output id="${id}-display" aria-labelledby="${id}-label" aria-live="polite">${money(value)}</output><div class="amount-add">${[10,50,100].map(n=>button('+'+n,`data-amount-add="${n}" data-amount-id="${id}" aria-label="${label} ${n} 더하기"`)).join('')}</div></div><div class="number-pad" role="group" aria-label="${label} 숫자패드">${[1,2,3,4,5,6,7,8,9,'C',0,'back'].map(n=>button(n==='C'?'초기화':n==='back'?'삭제':n,`data-amount-key="${n}" data-amount-id="${id}" aria-label="${label} ${n==='C'?'초기화':n==='back'?'한 자리 삭제':'숫자 '+n}"`)).join('')}</div></div>`;}
   function setTouchAmount(id,key,add=false){const input=document.getElementById(id);if(!input)return;const old=input.value;let value=add?String(Number(old)+Number(key)):key==='C'?'0':key==='back'?old.slice(0,-1)||'0':(old==='0'?'':old)+key;if(!add&&!['C','back'].includes(key)&&input.dataset.replace==='true')value=String(key);const amount=C.amount(value);if(amount===null)return error('금액이 너무 큽니다.');input.value=String(amount);input.dataset.replace='false';document.getElementById(id+'-display').innerHTML=money(amount);if(id==='auction-amount')refreshAuction();else tradeFees();}
-  const rentText=r=>r.factor?'주사위 × '+r.factor:money(r.amount??0);
+  const rentText=r=>r.factor?'주사위 합 × '+r.factor:money(r.amount??0);
   let portfolioTab='money',cardDue=null,portfolioView='',tradeFrom=null;
   const liveCardDue=()=>{const q=s?.board?.pending;return !!cardDue&&q?.type==='card'&&q.index===cardDue.index&&s.turns.join()===cardDue.turn;};
   function portfolio(p){const tab='money';
@@ -167,12 +181,16 @@
   function property(index){
     const d=s.board.deeds[index],t=D.board[index];
     if(!d){open(t[0],`<p class="tile-fact">${t[1]==='tax'?money(t[2])+' 내기':t[1]==='go'?'지나가면 '+money(t[2]):esc(D.tileFacts[t[1]]??'')}</p>`);return;}
-    const p=d.owner,options=p===null?null:B.assetOptions(s.board,p).find(a=>a.index===index),street=B.isStreet(index),group=street?B.group(index):[];
-    const owned=street&&p!==null?group.filter(i=>s.board.deeds[i].owner===p).length:0,complete=street&&p!==null&&owned===group.length;
-    const sellAll=group.reduce((total,i)=>total+B.buildingValue(s.board,s.board.deeds[i])/2,0);
+    const info=B.deedInfo(s.board,index),p=d.owner,street=B.isStreet(index),group=info.indices,complete=info.complete,owned=info.count;
+    const options=p===null?null:B.assetOptions(s.board,p).find(a=>a.index===index),sellAll=group.reduce((total,i)=>total+B.buildingValue(s.board,s.board.deeds[i])/2,0);
     const actions=p===null?'':`<div class="property-actions">${street?`${d.houseCost===null?field('권리증의 주택 한 채 가격','house-cost','','required'):''}${button(complete?'집 짓기':`집 짓기 <small>(같은 색 ${owned}/${group.length})</small>`,`data-build-plan="${index}" data-owner="${p}" ${complete?'':'disabled'}`,'primary')}${d.buildings?button('건물 한 채 팔기 '+money(d.houseCost/2),`data-property="sell" data-index="${index}" ${options.sell?.allowed?'':'disabled'}`)+button('이 색 건물 모두 팔기 '+money(sellAll),`data-property="sell-all" data-index="${index}"`):''}`:''}${d.mortgaged?button('저당 해제 '+money(Math.ceil(d.mortgage*110/100)),`data-property="mortgage" data-index="${index}"`):button('저당 받기 '+money(d.mortgage),`data-property="mortgage" data-index="${index}" ${options.mortgage?.allowed?'':'disabled'}`)}</div>`;
     const levels=street?(B.hotelAt(s.board)===4?[0,1,2,3,4,5]:[0,1,2,3,5]):[];
-    open(t[0],`<p>${p===null?'은행':esc(s.names[p])} · ${money(t[2])}${d.mortgaged?' · 저당':''}${complete?` · ${icon('star')} 독점`:''}</p>${D.printedDeeds[index]?`<div class="rent-schedule">${D.printedDeeds[index].rents.map((v,n)=>`<span class="${d.buildings===n?'current-rent':''}"><small>${n===0?'기본':n===5?'호텔':'주택 '+n}</small>${money(v)}</span>`).join('')}</div><p>주택·호텔 한 채 ${money(d.houseCost)}</p>`:''}${d.buildings?`<p class="property-buildings">${d.buildings===5?'호텔':'주택 '+d.buildings+'채'}</p>`:''}${actions}<details><summary>실물 권리증과 기록 맞추기</summary><form id="deed-correct" data-index="${index}"><label for="deed-owner">주인</label><select id="deed-owner"><option value="" ${p===null?'selected':''}>은행</option>${s.names.map((n,i)=>`<option value="${i}" ${p===i?'selected':''}>${esc(n)}</option>`).join('')}</select>${street?`<label for="deed-buildings">건물</label><select id="deed-buildings">${levels.map(n=>`<option value="${n}" ${d.buildings===n?'selected':''}>${n===5?'호텔':n+'채'}</option>`).join('')}</select>`:''}<label class="check"><input id="deed-mortgaged" type="checkbox" ${d.mortgaged?'checked':''}>저당</label><button class="primary">기록 수정</button></form></details>`);
+    const note=street?'같은 색 전부 보유 · 빈 땅 임대료 2배 · 주택·호텔 건설 가능':t[1]==='station'?'역 보유 수에 따라 임대료 상승 · 4곳이면 독점':'1곳은 이동 주사위 합 4배 · 두 곳 모두 보유하면 10배';
+    const facts=`<dl class="deed-facts"><div><dt>소유:</dt><dd>${p===null?'은행':esc(s.names[p])}</dd></div><div><dt>가격:</dt><dd>${money(t[2])}</dd></div>${p!==null?`<div><dt>현재 임대료:</dt><dd>${rentText(B.rentInfo(s.board,index))}${d.mortgaged?' <small>저당</small>':''}</dd></div>`:''}</dl>`;
+    const rents=`<section class="deed-rents"><h3>임대료</h3><div class="rent-schedule">${info.rents.map(row=>`<span class="${row.current?'current-rent':''}"><small>${row.label}</small>${row.factor?'주사위 합 × '+row.factor:money(row.amount)}</span>`).join('')}</div></section>`;
+    const monopoly=`<section class="deed-monopoly"><div class="deed-set-heading"><h3>독점</h3><strong>${complete?esc(s.names[p])+' 독점':p===null?'전체 '+group.length+'곳':esc(s.names[p])+' '+owned+'/'+group.length+'곳'}</strong></div><div class="deed-set">${group.map(i=>{const owner=s.board.deeds[i].owner;return button(`<span>${tileName(i)}</span><small>${owner===null?'은행':esc(s.names[owner])}${s.board.deeds[i].mortgaged?' · 저당':''}</small>`,`data-tile="${i}" ${i===index?'aria-current="true"':''}`,owner===null?'secondary':'set-owner-'+owner);}).join('')}</div><p>${note}</p><small>${street?'같은 색에 저당이 있으면 건설 불가.':'주택·호텔 건설 불가.'} 저당 부지는 임대료 없음.${street?'':' 카드 지시 우선.'}</small></section>`;
+    open(t[0],`${facts}${rents}${street?`<p class="building-price">주택·호텔 한 채 가격: <strong>${money(d.houseCost)}</strong></p>`:''}${d.buildings?`<p class="property-buildings">건물: ${d.buildings===5?'호텔':'주택 '+d.buildings+'채'}</p>`:''}${monopoly}${actions}<details><summary>실물 권리증과 기록 맞추기</summary><form id="deed-correct" data-index="${index}"><label for="deed-owner">주인</label><select id="deed-owner"><option value="" ${p===null?'selected':''}>은행</option>${s.names.map((n,i)=>`<option value="${i}" ${p===i?'selected':''}>${esc(n)}</option>`).join('')}</select>${street?`<label for="deed-buildings">건물</label><select id="deed-buildings">${levels.map(n=>`<option value="${n}" ${d.buildings===n?'selected':''}>${n===5?'호텔':n+'채'}</option>`).join('')}</select>`:''}<label class="check"><input id="deed-mortgaged" type="checkbox" ${d.mortgaged?'checked':''}>저당</label><button class="primary">기록 수정</button></form></details>`);
+    dialog.classList.add('deed-dialog');
   }
   // 경매는 대화상자 없이 진행 칸 안에서 구입 표시를 대신한다(planning.html 0.10).
   function auction(){auctionMode=true;play();refreshAuction();}
@@ -222,7 +240,18 @@
   }
   function captureScores(){s.scores=[0,1].map(p=>[0,1,2,3].map(i=>document.getElementById(`score-${p}-${i}`).value));save();}
   function refreshTotals(){[0,1].forEach(p=>{const n=C.total([0,1,2,3].map(i=>document.getElementById(`score-${p}-${i}`).value));document.getElementById('total-'+p).innerHTML=n===null?'입력 필요':money(n);});}
-  function result(){root.innerHTML=heading(s.winner==='tie'?'공동 승리':esc(s.names[s.winner])+' 승리',false)+(s.finishReason==='bankruptcy'?'<p>상대방 파산</p>':`<div class="score-grid">${s.names.map((n,p)=>`<section><h2>${esc(n)}</h2><p class="result-amount">${money(C.total(s.scores[p]))}</p></section>`).join('')}</div>`)+`<div class="button-row">${s.finishReason==='time'?button('결산 수정','data-action="score"'):''}${button('새 판 준비','data-action="home"','primary')}</div>`;}
+  function result(){
+    if(s.board){play();stopWalk();root.classList.add('is-finished');}else{root.className='';root.innerHTML='';}
+    const title=s.winner==='tie'?'공동 승리':s.names[s.winner]+' 승리';
+    open(title,`${s.finishReason==='bankruptcy'?`<p class="result-reason">${esc(s.names[1-s.winner])} 파산</p>`:`<div class="result-scores">${s.names.map((n,p)=>`<section><h3>${esc(n)}</h3><strong>${money(C.total(s.scores[p]))}</strong></section>`).join('')}</div>`}<div class="result-actions">${s.finishReason==='time'?button('결산 수정','data-action="result-score"'):''}${button('새 판 준비','data-action="home"','primary')}</div>`);
+    dialog.classList.add('result-dialog');dialog.querySelector('[data-close]').remove();fitResult();document.getElementById('rule-title').focus({preventScroll:true});
+  }
+  function fitResult(){
+    if(!dialog.classList.contains('result-dialog'))return;
+    const vp=viewport();const anchor=vp&&matchMedia('(orientation:landscape) and (min-width:761px)').matches;
+    dialog.classList.toggle('on-board',!!anchor);
+    if(anchor){const r=vp.getBoundingClientRect();dialog.style.setProperty('--result-x',(r.left+r.width/2)+'px');dialog.style.setProperty('--result-y',(r.top+r.height/2)+'px');dialog.style.setProperty('--result-width',Math.min(r.width-32,560)+'px');}
+  }
   document.addEventListener('click',e=>{
     if(e.target.closest('[data-close]')){e.target.closest('dialog').close();return;}
     if(menuOpen&&!e.target.closest('.menu-pop,[data-action="menu"]')){menuOpen=false;document.querySelector('.menu-pop')?.remove();}
@@ -262,6 +291,7 @@
     if(a==='menu'){menuOpen=!menuOpen;return play();}
     if(a==='rules')return open('규칙',`<div class="menu-list">${D.rules.map(r=>button(r.title,`data-rule="${r.id}"`)).join('')}</div>`);
     if((a==='home'||a==='undo')&&dialog.open)dialog.close();
+    if(a==='result-score'){dialog.close();return set({...s,screen:'score'});}
     if(a==='home'){home=true;auctionMode=false;if(s?.screen==='setup')draft=makeDraft(s);render();return;}
     if(a==='resume'){home=false;render();return;}
     if(a==='start'){if(s){pendingNew=true;confirmDialog.showModal();}else start();return;}
@@ -357,6 +387,7 @@
   }
   const afterInteraction=()=>queueMicrotask(syncActivity);
   for(const name of ['click','submit','pointerdown','pointerup','pointercancel'])document.addEventListener(name,afterInteraction);
+  dialog.addEventListener('cancel',e=>{if(dialog.classList.contains('result-dialog'))e.preventDefault();});
   dialog.addEventListener('close',afterInteraction);confirmDialog.addEventListener('close',afterInteraction);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){stopWalk();touches.clear();gesture=null;}else if(!home&&s?.screen==='play')updateTimer();syncActivity();});
   window.addEventListener('pagehide',()=>{stopWalk();clearTimeout(botTimer);clearTimeout(clockTimer);botTimer=clockTimer=null;});

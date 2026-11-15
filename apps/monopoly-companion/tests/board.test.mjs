@@ -259,3 +259,28 @@ test('a saved short board survives storage and hydrate with its rule',()=>{
   assert.equal(B.build(back,0,18).deeds[18].buildings,5);
 });
 const plainSupplies=s=>JSON.parse(JSON.stringify(B.supplies(s)));
+
+test('deed information distinguishes base, monopoly, buildings and mortgaged rent',()=>{
+  const s=fresh(),before=snapshot(s);const bank=B.deedInfo(s,23);
+  assert.equal(bank.complete,false);assert.equal(bank.count,0);assert.equal(bank.rents.some(r=>r.current),false);
+  assert.equal(bank.rents.find(r=>r.label==='독점').amount,36);assert.equal(snapshot(s),before);
+  s.deeds[23].owner=0;assert.equal(B.deedInfo(s,23).rents.find(r=>r.current).amount,B.rentInfo(s,23).amount);
+  for(const i of [21,23,24])s.deeds[i].owner=0;
+  assert.equal(B.deedInfo(s,23).complete,true);assert.equal(B.deedInfo(s,23).rents.find(r=>r.current).label,'독점');
+  const built=B.build(s,0,23);assert.equal(B.deedInfo(built,23).rents.find(r=>r.current).amount,B.rentInfo(built,23).amount);
+  const mortgaged=B.mortgage(s,0,23);assert.equal(B.deedInfo(mortgaged,23).complete,true);assert.equal(B.deedInfo(mortgaged,23).rents.some(r=>r.current),false);assert.equal(B.rentInfo(mortgaged,23).amount,0);
+  const short={...s,rule:'short'};assert.equal(B.deedInfo(short,23).rents.some(r=>r.label==='주택 4채'),false);assert.equal(B.deedInfo(short,23).rents.at(-1).label,'호텔');
+});
+test('station and utility ownership summaries agree with rent calculation at every holding count',()=>{
+  const s=fresh(),stations=[5,15,25,35],utilities=[12,28];
+  for(let k=0;k<stations.length;k++){
+    s.deeds[stations[k]].owner=0;const info=B.deedInfo(s,5);
+    assert.equal(info.count,k+1);assert.equal(info.complete,k===3);assert.equal(B.assetOptions(s,0).find(a=>a.index===5).monopoly,k===3);assert.equal(info.rents.find(r=>r.current).amount,B.rentInfo(s,5).amount);
+  }
+  for(let k=0;k<utilities.length;k++){
+    s.deeds[utilities[k]].owner=1;const info=B.deedInfo(s,12);
+    assert.equal(info.count,k+1);assert.equal(info.complete,k===1);assert.equal(info.rents.find(r=>r.current).factor,B.rentInfo(s,12).factor);
+  }
+  s.deeds[28].owner=0;assert.equal(B.deedInfo(s,12).complete,false);assert.equal(B.deedInfo(s,12).rents.find(r=>r.current).factor,4);
+  assert.equal(B.deedInfo(s,0),null);
+});

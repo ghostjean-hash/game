@@ -7,8 +7,8 @@ const ctx=vm.createContext({});
 for(const f of ['data.js','core.js','manager.js']) vm.runInContext(readFileSync(new URL('../'+f,import.meta.url),'utf8'),ctx);
 const flows=ctx.MC_MANAGER.flows(['아빠','서우']);
 
-test('all ten manager flows have reachable choices and no dead ends',()=>{
-  assert.equal(Object.keys(flows).length,10);
+test('all registered manager flows have reachable choices and no dead ends',()=>{
+  assert.deepEqual(Object.keys(flows).sort(),Array.from(ctx.MC_DATA.rules,r=>r.id).sort());
   for(const [id,nodes] of Object.entries(flows)){
     const visited=new Set();
     const walk=(key)=>{if(visited.has(key))return;const node=nodes[key];assert.ok(node,`${id}: missing ${key}`);visited.add(key);assert.ok(node.title&&node.text);assert.ok(node.choices.length>=1&&node.choices.length<=3);for(const c of node.choices){assert.ok(c.label);if(!['close','bankrupt0','bankrupt1'].includes(c.next))walk(c.next);}};
@@ -47,4 +47,13 @@ test('build guide says three houses before a hotel in the official short game',(
   const short=ctx.MC_MANAGER.flows(['아빠','서우'],3).build,standard=ctx.MC_MANAGER.flows(['아빠','서우']).build;
   assert.match(short.hotel.title,/세 채/);assert.match(short.hotelpay.text,/세 채/);assert.doesNotMatch(JSON.stringify(short),/네 채/);
   assert.match(standard.hotel.title,/네 채/);
+});
+
+test('monopoly guide separates city, station and utility effects',()=>{
+  const nodes=flows.monopoly;
+  assert.equal(nodes.start.choices.length,3);
+  assert.match(nodes.street.text,/2배/);assert.match(nodes.street.note,/저당/);
+  assert.match(nodes.station.text,/1곳 M25.*2곳 M50.*3곳 M100.*4곳 M200/);
+  assert.match(nodes.utility.text,/4배.*10배/);
+  assert.match(nodes.station.note,/짓지/);assert.match(nodes.utility.note,/짓지/);
 });
