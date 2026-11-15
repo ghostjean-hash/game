@@ -6,7 +6,8 @@
   const owned=(b,p)=>Object.keys(b.deeds).map(Number).filter(i=>b.deeds[i].owner===p);
   const ok=fn=>{try{fn();return true;}catch{return false;}};
   // p 가 i 를 가지면 그 색이 완성되는가(나머지 칸을 p 가 전부 가짐).
-  const completes=(b,p,i)=>B.isStreet(i)&&B.group(i).every(j=>j===i||b.deeds[j].owner===p);
+  // 색 완성 · 막기 판단은 도시 · 역 · 공공 기관 묶음 모두(0.19.3 1항).
+  const completes=(b,p,i)=>fills(b,p,i);
   const hasOther=(b,p,i)=>B.isStreet(i)&&B.group(i).some(j=>j!==i&&b.deeds[j].owner===p);
   const inSet=(b,p,i)=>B.isStreet(i)&&B.ownsSet(b,p,i);
   const unowned=b=>Object.values(b.deeds).filter(d=>d.owner===null).length;
@@ -30,9 +31,12 @@
   // 상대 색 완성을 막는 땅: 남길 돈 없이 사고, 모자라면 혼자 땅을 저당 잡아서라도 산다(planning.html 0.19.3 1항).
   const blocks=(b,p,i)=>completes(b,1-p,i);
   const loneMortgage=(b,p)=>owned(b,p).filter(i=>!b.deeds[i].mortgaged&&!mono(b,p,i)).sort(byMortgage(b));
+  // 상대 땅 중 가장 비싼 현재 임대료의 일부: 이만큼은 손에 남겨 둔다.
+  const threat=(b,p)=>Math.round(Math.max(0,...owned(b,1-p).map(i=>B.rentInfo(b,i).amount??0))*K.threatShare);
   function wantBuy(b,p,i){
-    const reserve=blocks(b,p,i)?K.reserveBlock:completes(b,p,i)?K.reserveKey:tileKind(i)==='utility'?K.utilityReserve:K.reserve;
-    return b.players[p].cash-price(i)>=reserve;
+    if(blocks(b,p,i))return b.players[p].cash-price(i)>=K.reserveBlock;
+    const base=completes(b,p,i)?K.reserveKey:tileKind(i)==='utility'?K.utilityReserve:unowned(b)>=K.earlyUnowned?K.reserveEarly:K.reserve;
+    return b.players[p].cash-price(i)>=Math.max(base,threat(b,p));
   }
   // 막기 땅을 사려고 저당 잡을 땅 하나. 혼자 땅을 다 저당 잡아도 모자라면 null(저당 없이 경매로).
   function blockFunds(b,p,i){
@@ -130,7 +134,7 @@
   }
   // 차례 시작: 독점 색 저당 풀기 → 건설 → 나머지 저당 풀기. 실행 뒤 여유 돈이 남는 만큼만.
   function improve(b,p){
-    const cash=b.players[p].cash,keep=K.keepAfterImprove,mine=owned(b,p);
+    const cash=b.players[p].cash,keep=Math.max(K.keepAfterImprove,threat(b,p)),mine=owned(b,p);
     const release=list=>list.sort((x,y)=>releaseCost(b,x)-releaseCost(b,y)).find(i=>cash-releaseCost(b,i)>=keep);
     let i=release(mine.filter(i=>b.deeds[i].mortgaged&&mono(b,p,i)));
     if(i!==undefined)return {kind:'release',who:p,index:i};

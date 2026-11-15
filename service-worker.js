@@ -191,7 +191,10 @@
 // v248: 모노폴리 동행 - 봇 맞교환 거래 · 맞교환 요청 창 · 최근 기록 맞교환 줄.
 //        옛 bot.js 가 캐시에 남으면 봇끼리 독점이 생기지 않아 판이 끝나지 않는다.
 
-const CACHE_VERSION = "v248";
+// v249: 모노폴리 동행 - 봇 판단 추가 개선(역 · 공공 기관 막기, 초반 구입, 상대 위협만큼 남기기) + 홈 화면 추가 설정.
+//        옛 bot.js · index.html 이 캐시에 남으면 홈 화면 추가 시 브라우저 껍데기가 붙는다.
+
+const CACHE_VERSION = "v249";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

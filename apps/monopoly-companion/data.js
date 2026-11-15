@@ -88,7 +88,7 @@ globalThis.MC_DATA = Object.freeze({
     reserve:150, reserveKey:50, utilityReserve:300, keepAfterImprove:200,
     auctionKeyFactor:1.3, auctionCashKeep:50, auctionStep:10, auctionMin:10,
     setOfferFactor:2, offerCooldownTurns:3, acceptSellFactor:1.4, acceptMonopolyFactor:2,
-    jailEarlyUnowned:8, stepMs:900, pollMs:50, speeds:[1,2,4], maxStepsPerTurn:60, logLines:3, reserveBlock:0, auctionBlockKeep:0, swapBalance:0.5
+    jailEarlyUnowned:8, stepMs:900, pollMs:50, speeds:[1,2,4], maxStepsPerTurn:60, logLines:3, reserveBlock:0, auctionBlockKeep:0, swapBalance:0.5, earlyUnowned:14, reserveEarly:50, threatShare:0.5
   },
   sources: { classic:'https://instructions.hasbro.com/en-in/instruction/monopoly-game', short:'https://www.hasbro.com/common/instruct/monins.pdf' }
 });

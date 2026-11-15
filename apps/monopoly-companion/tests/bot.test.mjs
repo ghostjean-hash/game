@@ -12,8 +12,16 @@ const at=(b,p,index,type='buy')=>({...b,phase:'land',pending:{type,index,amount:
 
 test('buying keeps the reserve, lowers it for a set-completing or blocking street, and is strict for utilities',()=>{
   const b=B.create(false,0);
-  b.players[0].cash=60+K.reserve;assert.equal(BOT.decide(at(b,0,1),0,auto).kind,'buy');
-  b.players[0].cash=60+K.reserve-1;assert.equal(BOT.decide(at(b,0,1),0,auto).kind,'decline');
+  b.players[0].cash=60+K.reserveEarly;assert.equal(BOT.decide(at(b,0,1),0,auto).kind,'buy');
+  b.players[0].cash=60+K.reserveEarly-1;assert.equal(BOT.decide(at(b,0,1),0,auto).kind,'decline');
+  const mid=B.create(false,0);for(const k of Object.keys(mid.deeds).map(Number))if(k>=16)mid.deeds[k].owner=0;
+  mid.players[0].cash=60+K.reserve;assert.equal(BOT.decide(at(mid,0,1),0,auto).kind,'buy');
+  mid.players[0].cash=60+K.reserve-1;assert.equal(BOT.decide(at(mid,0,1),0,auto).kind,'decline');
+  const risk=structuredClone(mid),top=Math.max(...B.group(39));for(const j of B.group(top)){risk.deeds[j].owner=1;risk.deeds[j].buildings=5;}
+  const thr=Math.round(Math.max(...B.group(top).map(j=>B.rentInfo(risk,j).amount))*K.threatShare);assert.ok(thr>K.reserve);
+  risk.players[0].cash=60+thr-1;assert.equal(BOT.decide(at(risk,0,1),0,auto).kind,'decline');
+  risk.players[0].cash=60+thr;assert.equal(BOT.decide(at(risk,0,1),0,auto).kind,'buy');
+  const rail=B.create(false,0);for(const j of [5,15,25])rail.deeds[j].owner=1;rail.players[0].cash=200;assert.equal(BOT.decide(at(rail,0,35),0,auto).kind,'buy');
   b.deeds[3].owner=1;b.players[0].cash=60+K.reserveKey;assert.equal(BOT.decide(at(b,0,1),0,auto).kind,'buy');
   b.players[0].cash=150+K.utilityReserve-1;assert.equal(BOT.decide(at(b,0,12),0,auto).kind,'decline');
   assert.equal(BOT.decide(at(b,0,12),0,{...auto,opponentAuto:false}).kind,'auctionHuman');
