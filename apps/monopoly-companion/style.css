@@ -371,3 +371,18 @@ dialog.finance-dialog[open]{display:flex;flex-direction:column;height:min(880px,
 @media(min-width:761px){.finance-dialog .asset-action{flex-direction:row;align-items:center;gap:8px}
 .finance-dialog .asset-action>button{flex:0 0 auto}
 .finance-dialog .asset-action small,.finance-dialog .asset-actions>small{text-align:left;min-width:0}}
+
+/* 오토 봇(planning.html 0.19.2): 시계 옆 일시정지 · 배속, 메뉴 안 Auto 켜기 · 끄기, 거래 요청 창 */
+.auto-controls{display:flex;align-items:center;gap:6px;margin-left:auto}
+.panel-top .auto-controls+.menu-button{margin-left:6px}
+.panel-top .auto-pause{background:var(--green);color:#fff;border-color:var(--green)}
+.panel-top .auto-pause.is-paused{background:#f6ecd3;color:#7c652e;border-color:#d9bf83}
+.speed-options{display:flex;gap:4px}
+.speed-options>button{min-width:46px;min-height:48px;padding:0 8px;font-size:16px;font-weight:700;white-space:nowrap}
+.menu-auto{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:8px;border-bottom:1px solid #e6ebe0}
+.menu-auto>button{min-height:52px;font-size:17px;white-space:nowrap}
+.menu-auto>button small{font-size:13px;font-weight:700;margin-left:4px;opacity:.75}
+.menu-auto>.auto-on{background:var(--green);color:#fff;border-color:var(--green)}
+.menu-auto>.auto-on small{opacity:1}
+.bot-offer{margin:4px 0 16px}
+.bot-offer small{font-size:13px;color:#7c652e}
