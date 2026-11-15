@@ -113,3 +113,6 @@ planning.html 0.19(사용자 지시, 확인 답변 2건 - 오토 차례만 웹 �
 
 ## 25. 2026-11-16 오토 x8 배속
 사용자 요청으로 planning.html 0.19.2·0.19.4에 x8을 추가한 뒤 data.js bot.speeds를 [1,2,4,8]로 확장했다. 기존 화면·예약·이동·저장 복원이 이 목록을 공용으로 사용하므로 동작을 그대로 확장했다. index.html 자산 판 20261116-02. 가로 네 크기(1024×680/1024×768/1194×834/1366×1024)에서 배속 줄 넘침0, x8 선택·저장·새로고침 복원·실제 오토 진행을 확인했고 브라우저 오류0. 미커밋·미배포.
+
+## 26. 2026-11-16 v250 배포
+사용자 배포 지시로 아이패드 화면·대기 부하 개선과 x8을 함께 커밋·푸시했다(fa948bd). service-worker.js v249→v250. 배포 파이프라인의 모노폴리73건 및 기존 전체 검사 통과, 공개 주소9곳 HTTP200·브라우저 오류0·화면 표시 통과. GitHub Pages 최신 빌드 built/해당 커밋 일치, 공개 index.html/data.js/app.js/style.css/service-worker.js 다섯 파일이 로컬 수정본과 SHA256 일치. 공개 주소 https://ghostjean-hash.github.io/game/apps/monopoly-companion/ . 실제 아이패드 온도·전력은 미측정. 원본 docs/planning.html 0.20·0.19.2 및 배포 커밋.

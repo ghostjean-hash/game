@@ -1,8 +1,10 @@
 # game-hub NEXT-SESSION
 
-> 2026-11-16 모노폴리 오토 x8 추가. 네 가로 크기에서 선택·저장·복원·진행 검증. 미커밋·미배포. 다음은 사용자 배포 지시 후 실제 아이패드 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.8.
+> 2026-11-16 모노폴리 아이패드 화면·부하 개선 및 x8 배포 완료: fa948bd, SW v250. 공개9주소·파일5개 일치·Pages built 확인. 다음은 실제 아이패드 화면·장시간 발열 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.9.
 
-> 2026-11-16 모노폴리 아이패드 화면·대기 부하 개선(planning.html 0.20), 미커밋·미배포. 다음: 사용자 배포 지시 후 실제 iPad Safari/홈 화면의 준비·보드 정렬·장시간 발열 확인. PC 검사73건·화면 다섯 크기 통과. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.7.
+> 2026-11-16 모노폴리 오토 x8 추가. 네 가로 크기에서 선택·저장·복원·진행 검증. v250 배포 완료(fa948bd). 다음은 실제 아이패드 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.8.
+
+> 2026-11-16 모노폴리 아이패드 화면·대기 부하 개선(planning.html 0.20), v250 배포 완료(fa948bd). 다음: 실제 iPad Safari/홈 화면의 준비·보드 정렬·장시간 발열 확인. PC 검사73건·화면 다섯 크기 통과. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.7.
 
 > 2026-11-15 모노폴리 오토 봇(planning.html 0.19) 배포됨 v249 - 다음 행동은 아이패드 실기기 확인, 상세 `apps/monopoly-companion/NEXT-SESSION.md` 0.6.
 > 2026-11-15 모노폴리: planning.html 0.11~0.18 반영(팝업·돈 부족·자동 넘김·마무리·보너스·확대·오른쪽 칸·메뉴 판·이동 연출·돈 마련 창 한 목록), 배포됨 v247. 다음 행동: 아이패드 실기기에서 이동 연출·메뉴 판·확대·돈 마련 창 확인. 상세는 `apps/monopoly-companion/NEXT-SESSION.md`.
