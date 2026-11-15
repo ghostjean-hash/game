@@ -19,6 +19,32 @@ test('buying keeps the reserve, lowers it for a set-completing or blocking stree
   assert.equal(BOT.decide(at(b,0,12),0,{...auto,opponentAuto:false}).kind,'auctionHuman');
 });
 
+test('blocking the opponent set: buys with no reserve, mortgages lone deeds to afford it, auctions only when even that is short',()=>{
+  let b=B.create(false,0);b.deeds[3].owner=1;b.deeds[5].owner=0;b.deeds[15].owner=0;
+  b.players[0].cash=60;assert.equal(BOT.decide(at(b,0,1),0,auto).kind,'buy');
+  b.players[0].cash=10;const m=BOT.decide(at(b,0,1),0,auto);assert.equal(m.kind,'mortgage');assert.ok([5,15].includes(m.index));
+  const after=BOT.apply(at(b,0,1),0,m);assert.equal(B.valid(after),true);
+  const next=BOT.decide(after,0,auto);assert.equal(next.kind,'buy');
+  b.deeds[5].owner=null;b.deeds[15].owner=null;b.players[0].cash=0;
+  assert.equal(BOT.decide(at(b,0,1),0,auto).kind,'decline');
+  assert.equal(BOT.decide(at(b,0,1),0,{...auto,opponentAuto:false}).kind,'auctionHuman');
+  const cheap=B.create(false,0);cheap.deeds[3].owner=1;cheap.deeds[5].owner=0;cheap.deeds[12].owner=0;cheap.players[0].cash=10;
+  const first=BOT.decide(at(cheap,0,1),0,auto);assert.equal(first.kind,'mortgage');assert.equal(first.index,cheap.deeds[5].mortgage<cheap.deeds[12].mortgage?5:12);
+  const big=B.create(false,0),top=Math.max(...Object.keys(big.deeds).map(Number).filter(B.isStreet));for(const j of B.group(top))if(j!==top)big.deeds[j].owner=1;
+  big.deeds[12].owner=0;big.players[0].cash=D.board[top][2]-big.deeds[12].mortgage-1;
+  assert.equal(BOT.decide(at(big,0,top),0,auto).kind,'decline');
+  const own=B.create(false,0);own.deeds[3].owner=0;own.players[0].cash=60+K.reserveKey-1;
+  assert.equal(BOT.decide(at(own,0,1),0,auto).kind,'decline');
+});
+
+test('auction: the blocking bot bids its whole cash, the completing bot keeps its auction cash',()=>{
+  const b=B.create(false,0);b.deeds[3].owner=1;b.players[0].cash=70;b.players[1].cash=1500;
+  const cap0=Math.min(Math.floor(60*K.auctionKeyFactor),70-K.auctionBlockKeep);
+  assert.deepEqual({...BOT.auction(b,1,0)},{winner:1,bid:Math.min(cap0+K.auctionStep,Math.floor(60*K.auctionKeyFactor))});
+  b.players[0].cash=1500;assert.deepEqual({...BOT.auction(b,1,0)},{winner:0,bid:Math.floor(60*K.auctionKeyFactor)});
+  b.players[1].cash=100;assert.deepEqual({...BOT.auction(b,1,0)},{winner:0,bid:100-K.auctionCashKeep+K.auctionStep});
+});
+
 test('two-bot auction: higher cap wins one step above the loser, nobody under the minimum means no sale',()=>{
   const b=B.create(false,0);b.players[0].cash=100;b.players[1].cash=1500;
   assert.deepEqual({...BOT.auction(b,1,0)},{winner:1,bid:50+K.auctionStep});
@@ -39,6 +65,30 @@ test('raising money: lone deeds are mortgaged first, then a trade request, then 
   const fourth=BOT.decide(noHouses,0,{...auto,memo:{fundAsked:true,offers:{}}});assert.equal(fourth.kind,'mortgage');assert.ok(B.group(16).includes(fourth.index));
 });
 
+test('raising money: a deed that completes the opponent set is offered only after every other step, at the monopoly value',()=>{
+  let b=B.create(false,0);b.deeds[1].owner=0;b.deeds[3].owner=1;b.deeds[5].owner=0;b.players[0].cash=0;b.players[1].cash=1500;
+  const due=x=>({...x,phase:'land',pending:{type:'pay',index:4,amount:300,to:null}});
+  const m=fundAsked=>({...auto,memo:{asked:false,fundAsked,offers:{}}});
+  let act=BOT.decide(due(b),0,m([]));assert.equal(act.kind,'mortgage');b=BOT.apply(due(b),0,act);
+  act=BOT.decide(due(b),0,m([]));assert.equal(act.kind,'mortgage');b=BOT.apply(due(b),0,act);
+  act=BOT.decide(due(b),0,m([]));assert.equal(act.kind,'offer');assert.equal(act.index,5);
+  act=BOT.decide(due(b),0,m([5]));assert.equal(act.kind,'offer');assert.equal(act.index,1);
+  assert.equal(act.amount,Math.round(60*K.acceptMonopolyFactor)-b.deeds[1].mortgage);assert.equal(BOT.accept(due(b),act),true);
+  assert.equal(BOT.decide(due(b),0,m([5,1])).kind,'bankrupt');
+  const poor=B.create(false,0);poor.deeds[1].owner=0;poor.deeds[3].owner=1;poor.players[0].cash=0;poor.players[1].cash=200;
+  const cut=BOT.decide(B.mortgage(due(poor),0,1),0,m([]));assert.equal(cut.kind,'offer');assert.equal(cut.index,1);
+  assert.equal(cut.amount,200-Math.ceil(poor.deeds[1].mortgage*10/100)-K.reserve);
+  const big=x=>({...x,phase:'land',pending:{type:'pay',index:4,amount:1000,to:null}});
+  const rail=B.create(false,0);for(const j of [5,15,25,35])rail.deeds[j].owner=0;rail.deeds[12].owner=0;rail.players[0].cash=0;rail.players[1].cash=1500;
+  const r1=BOT.decide(big(rail),0,m([]));assert.equal(r1.kind,'mortgage');assert.equal(r1.index,12);
+  let rb=BOT.apply(big(rail),0,r1);const r2=BOT.decide(rb,0,m([]));assert.equal(r2.kind,'offer');assert.equal(r2.index,12);
+  const r3=BOT.decide(rb,0,m([12]));assert.equal(r3.kind,'mortgage');assert.ok([5,15,25,35].includes(r3.index));
+  for(const j of [5,15,25,35])rb=B.mortgage(rb,0,j);const r4=BOT.decide(rb,0,m([12]));assert.equal(r4.kind,'offer');assert.ok([5,15,25,35].includes(r4.index));
+  const gift=B.create(false,0);gift.deeds[12].owner=1;gift.deeds[12].mortgaged=true;gift.players[1].cash=0;const party={...gift,phase:'land',pending:{type:'card',index:2}};const owe=BOT.decide(party,0,{...auto,card:{deck:'chest',id:'birthday'}});assert.equal(owe.kind,'bankrupt');assert.equal(owe.who,1);
+  const station=B.create(false,0);for(const j of [5,15,25])station.deeds[j].owner=1;station.deeds[35].owner=0;
+  assert.equal(BOT.accept(station,{type:'buy',from:1,to:0,index:35,amount:2000}),false);
+});
+
 test('turn start releases set mortgages, builds evenly with the keep-after amount, then rolls',()=>{
   let b=B.create(true,0);b.players[0].cash=2000;b=B.mortgage(b,0,16);
   assert.equal(BOT.decide(b,0,auto).kind,'release');
@@ -54,14 +104,22 @@ test('jail: pay early while many deeds are unowned, stay and roll late',()=>{
   for(const d of Object.values(b.deeds))d.owner=1;assert.equal(BOT.decide(b,0,auto).kind,'roll');
 });
 
-test('trade acceptance: monopoly-giving needs the higher factor, selling to a bot keeps its reserve',()=>{
+test('trade acceptance: never hands over a monopoly by choice, pays up to the monopoly value only to complete its own set',()=>{
   const b=B.create(false,0);b.deeds[1].owner=0;b.deeds[3].owner=1;
   const offer=amount=>({type:'buy',from:0,to:1,index:3,amount});
-  assert.equal(BOT.accept(b,offer(60*K.acceptMonopolyFactor)),true);
-  assert.equal(BOT.accept(b,offer(60*K.acceptMonopolyFactor-1)),false);
-  b.players[1].cash=60+K.reserve-1;assert.equal(BOT.accept(b,{type:'sell',from:0,to:1,index:1,amount:60}),false);
-  b.players[1].cash=1500;assert.equal(BOT.accept(b,{type:'sell',from:0,to:1,index:1,amount:61}),false);
-  const done=BOT.applyOffer(b,{type:'sell',from:0,to:1,index:1,amount:60});assert.equal(done.deeds[1].owner,1);assert.equal(done.players[0].cash,1560);
+  assert.equal(BOT.accept(b,offer(60*K.acceptMonopolyFactor)),false);
+  assert.equal(BOT.accept(b,offer(60*K.acceptMonopolyFactor*10)),false);
+  const lone=B.create(false,0),j=B.group(6).at(-1),pj=D.board[j][2];lone.deeds[j].owner=1;
+  assert.equal(BOT.accept(lone,{type:'buy',from:0,to:1,index:j,amount:Math.ceil(pj*K.acceptSellFactor)}),true);
+  assert.equal(BOT.accept(lone,{type:'buy',from:0,to:1,index:j,amount:Math.ceil(pj*K.acceptSellFactor)-1}),false);
+  const sell=amount=>({type:'sell',from:0,to:1,index:1,amount});
+  assert.equal(BOT.accept(b,sell(60*K.acceptMonopolyFactor)),true);
+  assert.equal(BOT.accept(b,sell(60*K.acceptMonopolyFactor+1)),false);
+  b.players[1].cash=60+K.reserve-1;assert.equal(BOT.accept(b,sell(60)),false);
+  const plain=B.create(false,0);plain.deeds[j].owner=0;
+  assert.equal(BOT.accept(plain,{type:'sell',from:0,to:1,index:j,amount:pj}),true);
+  assert.equal(BOT.accept(plain,{type:'sell',from:0,to:1,index:j,amount:pj+1}),false);
+  b.players[1].cash=1500;const done=BOT.applyOffer(b,sell(60));assert.equal(done.deeds[1].owner,1);assert.equal(done.players[0].cash,1560);
 });
 
 test('card deck: one full round without repeats, reshuffles after the last card, held escape card is left out',()=>{
@@ -81,11 +139,11 @@ function simulate(seed,maxTurns=400){
   while(turn[0]+turn[1]<maxTurns){
     const act=BOT.decide(b,p,{opponentAuto:true,turnNo:turn[p],memo:m,card});count(act.kind);
     if(++steps>K.maxStepsPerTurn)throw Error(`seed ${seed}: 한 차례 걸음 상한 초과 ${JSON.stringify(act)}`);
-    if(act.kind==='next'){turn[p]++;p=1-p;b=B.beginTurn(b);m={asked:false,fundAsked:false,offers:m.offers};card=null;steps=0;continue;}
+    if(act.kind==='next'){turn[p]++;p=1-p;b=B.beginTurn(b);m={asked:false,fundAsked:[],offers:m.offers};card=null;steps=0;continue;}
     if(act.kind==='bankrupt')return {stats,winner:1-act.who,turns:turn[0]+turn[1]};
     if(['wait','auctionHuman','humanFunds'].includes(act.kind))throw Error(`seed ${seed}: 두 봇 판에서 나오면 안 되는 행동 ${act.kind}`);
     if(act.kind==='draw'){const x=BOT.drawCard(decks,act.deck,b.players.some(v=>v.cards>0),random);decks=x.decks;card={deck:act.deck,id:x.id};continue;}
-    if(act.kind==='offer'){m[act.type==='sell'?'fundAsked':'asked']=true;m.offers[act.index]=turn[act.from];if(BOT.accept(b,act)){b=BOT.applyOffer(b,act);count('trade');}continue;}
+    if(act.kind==='offer'){if(act.type==='sell')m.fundAsked=[...m.fundAsked,act.index];else{m.asked=true;m.offers[act.index]=turn[act.from];}if(BOT.accept(b,act)){b=BOT.applyOffer(b,act);count('trade');}continue;}
     b=BOT.apply(b,p,act,random);if(act.kind==='card')card=null;
     if(!B.valid(b))throw Error(`seed ${seed}: 기록 깨짐 after ${JSON.stringify(act)}`);
   }

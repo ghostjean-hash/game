@@ -36,7 +36,7 @@
   function applyColors(ids){(ids??D.defaultPlayerColors).forEach((id,p)=>{const c=D.playerPalette[id],name=p===0?'dad':'seowoo';root.style.setProperty('--'+name,c.hex);root.style.setProperty('--player-'+p+'-soft',c.soft);root.style.setProperty('--player-'+p+'-rgb',c.rgb);});}
   function palette(player){const selected=draft.playerColors[player];return `<fieldset class="player-colors"><legend>말 색</legend><div class="color-options">${Object.entries(D.playerPalette).map(([id,c])=>button(`<span class="palette-dot" style="--swatch:${c.hex}">${selected===id?'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 10 3 3 7-7"/></svg>':''}</span>`,`data-player-color="${id}" data-player="${player}" aria-label="${D.players[player]} ${c.name}" title="${c.name}" aria-pressed="${selected===id}"`,'color-option')).join('')}</div></fieldset>`;}
   function load(){try{const v=JSON.parse(localStorage.getItem(D.storageKey));if(!C.valid(v)||v.board&&!B.valid(v.board))return null;if(v.board)v.board=B.hydrate(v.board);botFields(v);if(v.names[0]==='나'&&v.names[1]==='딸')v.names=[...D.players];return v;}catch{return null;}}
-  function botFields(v){v.auto=Array.isArray(v.auto)&&v.auto.length===2&&v.auto.every(x=>typeof x==='boolean')?v.auto:[false,false];v.speed=D.bot.speeds.includes(v.speed)?v.speed:1;if(!v.decks||typeof v.decks!=='object')v.decks={};if(!v.botMemo||typeof v.botMemo!=='object'||typeof v.botMemo.offers!=='object'||v.botMemo.offers===null)v.botMemo={turn:null,asked:false,steps:0,offers:{}};return v;}
+  function botFields(v){v.auto=Array.isArray(v.auto)&&v.auto.length===2&&v.auto.every(x=>typeof x==='boolean')?v.auto:[false,false];v.speed=D.bot.speeds.includes(v.speed)?v.speed:1;if(!v.decks||typeof v.decks!=='object')v.decks={};if(!v.botMemo||typeof v.botMemo!=='object'||typeof v.botMemo.offers!=='object'||v.botMemo.offers===null)v.botMemo={turn:null,asked:false,steps:0,offers:{}};const who=x=>x===0||x===1,cost=x=>Number.isInteger(x)&&x>=0,logOk=e=>e&&typeof e==='object'&&!!D.board[e.index]&&(e.kind==='buy'?who(e.who)&&cost(e.amount):e.kind==='auction'?e.winner===null&&e.amount===null||who(e.winner)&&cost(e.amount):e.kind==='trade'?who(e.from)&&who(e.to)&&cost(e.amount):e.kind==='reject');v.botLog=Array.isArray(v.botLog)?v.botLog.filter(logOk).slice(0,D.bot.logLines):[];return v;}
   function save(){try{localStorage.setItem(D.storageKey,JSON.stringify(s));document.getElementById('save-warning').hidden=localStorage.getItem(D.storageKey)===JSON.stringify(s);}catch{document.getElementById('save-warning').hidden=false;}}
   function render(){root.className='';if(home||s?.screen==='setup')return preparation();({play:play,finish:finish,score:score,result:result}[s.screen])();}
   function set(next){s=next;save();render();}
@@ -66,7 +66,7 @@
     if(!s.board){root.innerHTML=timerHeader()+`<section class="legacy"><h2>${esc(s.names[p])} 차례</h2><p>이 판에는 말·현금 기록이 없습니다.</p>${button('현재 판 입력','data-action="import"','primary')}<div class="guide-list">${D.rules.map(r=>button(r.title,`data-rule="${r.id}"`)).join('')}</div>${button('차례 마침','data-action="legacy-next"')}<p id="action-error" class="error" role="alert" hidden></p></section>`;updateTimer();return;}
     const b=s.board;
     root.innerHTML=`<div class="game-shell"><div class="board-stage"><div class="board-viewport" id="board-viewport"><div class="board-map" aria-label="실제 게임판과 같은 40칸">${D.board.map((t,i)=>{let row,col;if(i<=10){row=11;col=11-i;}else if(i<=20){row=21-i;col=1;}else if(i<=30){row=1;col=i-19;}else{row=i-29;col=11;}const deed=b.deeds[i],owner=deed?.owner,owned=owner!==undefined&&owner!==null,art=artwork(i),monopoly=owned&&B.isStreet(i)&&B.ownsSet(b,owner,i);const edge=i<10?'bottom':i<20?'left':i<30?'top':'right';return `<button type="button" class="board-tile ${art?'special':'city'} edge-${edge} ${monopoly?'monopoly':''} ${owned?'owned owner-'+owner:''} ${b.players[p].pos===i?'active-tile active-player-'+p:''}" style="grid-row:${row};grid-column:${col}" data-tile="${i}" aria-label="${tileOption(i)}${owned?' · '+esc(s.names[owner])+' 소유':''}${monopoly?' · 독점':''}${deed?.buildings?' · '+(deed.buildings===5?'호텔':'주택 '+deed.buildings+'채'):''}"><span class="tile-content">${art==='income-tax'?incomeTaxIcon:art?`<img class="space-icon icon-${art}" src="assets/board/${art}.png" alt="" draggable="false">`:''}<span class="tile-name">${t[0]}</span>${owned?`<span class="deed-owner">${esc(s.names[owner])}</span>`:''}</span>${monopoly?'<span class="monopoly-mark" aria-label="독점">독점</span>':''}${deed?buildingYard(i,deed):''}<span class="pawn-lane">${b.players.map((x,j)=>x.pos===i?`<b class="token token-${j}" aria-label="${esc(s.names[j])} 말">${esc(s.names[j].slice(0,1))}</b>`:'').join('')}</span>${owned&&deed.mortgaged?'<span class="mortgage-mark">저당</span>':''}</button>`;}).join('')}</div></div></div>
-    <aside class="game-tools"><div class="panel-top"><span id="timer" role="timer" aria-label="남은 시간"></span>${autoControls()}${button(icon('menu'),`data-action="menu" aria-label="메뉴" aria-expanded="${menuOpen}" title="메뉴"`,'icon-button menu-button')}</div>${menuOpen?menuPanel():''}<section class="board-center play-panel"><header class="turn-status" aria-label="현재 차례 정보"><span class="turn-avatar player-${p}" aria-hidden="true">${esc(s.names[p].slice(0,1))}</span><div class="turn-identity"><h2>${esc(s.names[p])} 차례</h2><p class="current-place">${tileName(b.players[p].pos)}${b.players[p].jail?' · 수감':''}</p></div><div class="turn-cash">${money(b.players[p].cash)}</div></header><div class="turn-strip">${s.ending?`<p class="ending">${endingText()}</p>`:''}</div><div class="turn-content">${s.note?`<p class="transaction-note" role="status">${richText(s.note)}</p>`:''}<div class="current-task">${task()}</div><p id="action-error" class="error" role="alert" tabindex="-1" hidden></p></div></section><div class="tool-menu tool-icons" role="group" aria-label="관리">${[['cash','돈 마련 · 부지 관리','properties'],['house','집 짓기','build'],['trade','거래','trade'],['bankrupt','파산','bankrupt']].map(([ic,label,act])=>button(icon(ic),`data-action="${act}" aria-label="${label}" title="${label}"`,act==='bankrupt'?'icon-tool danger':'icon-tool')).join('')}</div></aside></div>`;
+    <aside class="game-tools"><div class="panel-top"><span id="timer" role="timer" aria-label="남은 시간"></span>${autoControls()}${button(icon('menu'),`data-action="menu" aria-label="메뉴" aria-expanded="${menuOpen}" title="메뉴"`,'icon-button menu-button')}</div>${menuOpen?menuPanel():''}<section class="board-center play-panel"><header class="turn-status" aria-label="현재 차례 정보"><span class="turn-avatar player-${p}" aria-hidden="true">${esc(s.names[p].slice(0,1))}</span><div class="turn-identity"><h2>${esc(s.names[p])} 차례</h2><p class="current-place">${tileName(b.players[p].pos)}${b.players[p].jail?' · 수감':''}</p></div><div class="turn-cash">${money(b.players[p].cash)}</div></header><div class="turn-strip">${s.ending?`<p class="ending">${endingText()}</p>`:''}</div><div class="turn-content">${s.note?`<p class="transaction-note" role="status">${richText(s.note)}</p>`:''}${logView()}<div class="current-task">${task()}</div><p id="action-error" class="error" role="alert" tabindex="-1" hidden></p></div></section><div class="tool-menu tool-icons" role="group" aria-label="관리">${[['cash','돈 마련 · 부지 관리','properties'],['house','집 짓기','build'],['trade','거래','trade'],['bankrupt','파산','bankrupt']].map(([ic,label,act])=>button(icon(ic),`data-action="${act}" aria-label="${label}" title="${label}"`,act==='bankrupt'?'icon-tool danger':'icon-tool')).join('')}</div></aside></div>`;
     trackMove(b);restoreView(b.players[p].pos,p);
     updateTimer();
   }
@@ -122,7 +122,9 @@
   const PANEL_H=992;
   function fitPanel(){const on=matchMedia('(orientation: landscape) and (min-width: 761px)').matches;document.documentElement.style.setProperty('--pz',on?String(Math.min(1,(innerHeight-32)/PANEL_H)):'1');}
   fitPanel();
-  function run(fn,note='',close=false){try{const before=structuredClone(s),wasEnd=s.board.phase==='end',board=fn(s.board);if(!B.valid(board))throw Error('기록을 확인할 수 없습니다.');undo=before;auctionMode=false;s={...s,board,note:'',scores:[null,null]};
+  function run(fn,note='',close=false,log=null){try{const before=structuredClone(s),wasEnd=s.board.phase==='end',board=fn(s.board);if(!B.valid(board))throw Error('기록을 확인할 수 없습니다.');undo=before;auctionMode=false;s={...s,board,note:'',scores:[null,null]};
+    // 최근 기록(planning.html 0.19.4 5항): 오토가 켜진 판의 구입 · 경매 · 거래만 앞뒤 판을 비교해 남긴다.
+    if(log&&s.auto?.some(Boolean))s.botLog=[log(before.board,board),...(s.botLog||[])].slice(0,D.bot.logLines);
     // 할 일이 끝나면(차례 마침 단계) 바로 다음 차례로 넘긴다. 되돌리기는 마지막 행동 전 상태를 그대로 쓴다(planning.html 0.11.2).
     if(!wasEnd&&board.phase==='end'&&s.runningSince!==null){const next=C.advance(s,Date.now());s=next.screen==='play'?{...next,board:B.beginTurn(next.board)}:next;save();if(close)dialog.close();render();return true;}
     save();if(close)dialog.close();play();return true;}catch(e){error(e.message);return false;}}
@@ -248,7 +250,7 @@
     if(el.dataset.bankrupt){dialog.close();undo=structuredClone(s);return set({...C.pause(s,Date.now()),screen:'result',winner:1-Number(el.dataset.bankrupt),finishReason:'bankruptcy'});}
     if(el.dataset.auto!==undefined){if(botDice){botDice=null;diceSelection=[null,null];}const auto=[...(s.auto??[false,false])];auto[Number(el.dataset.auto)]=!auto[Number(el.dataset.auto)];s={...s,auto};save();return play();}
     if(el.dataset.speed!==undefined){s={...s,speed:Number(el.dataset.speed)};save();return play();}
-    if(el.dataset.botOffer!==undefined){const offer=botOffer;botOffer=null;dialog.close();if(el.dataset.botOffer==='yes'&&offer)run(b=>BOT.applyOffer(b,offer));return;}
+    if(el.dataset.botOffer!==undefined){const offer=botOffer;botOffer=null;dialog.close();if(!offer)return;if(el.dataset.botOffer==='yes')run(b=>BOT.applyOffer(b,offer),'',false,tradeLog(offer));else{addLog({kind:'reject',index:offer.index});save();play();}return;}
     const a=el.dataset.action;
     if(a==='menu'){menuOpen=!menuOpen;return play();}
     if(a==='rules')return open('규칙',`<div class="menu-list">${D.rules.map(r=>button(r.title,`data-rule="${r.id}"`)).join('')}</div>`);
@@ -275,7 +277,7 @@
     const op=el.dataset.board;if(!op)return;
     if(op==='ack')run(b=>B.acknowledge(b));
     if(op==='buy')run(b=>B.purchase(b,p),'부지값을 은행에 내고 권리증을 받으세요.');
-    if(op==='no-bid')run(b=>B.purchase(b,p,null),'부지는 은행에 둡니다.',true);
+    if(op==='no-bid')run(b=>B.purchase(b,p,null),'부지는 은행에 둡니다.',true,auctionLog(s.board.pending?.index));
     if(op==='pay')run(b=>B.pay(b,p));
     if(op==='card-jail')run(b=>B.card(b,p,'jail',0),'감옥으로 이동하세요.',true);
     if(op==='card-escape')run(b=>B.card(b,p,'escape',0),'탈출 카드를 보관하세요.',true);
@@ -290,7 +292,7 @@
     if(id==='dice-form'){if(diceSelection.some(n=>n===null))return error('두 주사위의 면을 모두 골라 주세요.');return rollDice(diceSelection[0],diceSelection[1]);}
     if(id==='rent-form')return run(b=>B.recordRent(b,C.amount(document.getElementById('rent-input').value)));
     if(id==='rent-adjust-form')return run(b=>B.recordRent(b,C.amount(document.getElementById('rent-adjust').value),true),'',true);
-    if(id==='auction-form')return run(b=>B.purchase(b,p,Number(document.getElementById('auction-winner').value),C.amount(document.getElementById('auction-amount').value)),'낙찰금을 은행에 내고 권리증을 받으세요.',true);
+    if(id==='auction-form')return run(b=>B.purchase(b,p,Number(document.getElementById('auction-winner').value),C.amount(document.getElementById('auction-amount').value)),'낙찰금을 은행에 내고 권리증을 받으세요.',true,auctionLog(s.board.pending?.index));
     if(id==='trade-form'){const v=[0,1].map(i=>document.getElementById('trade-deed-'+i).value);const back=tradeFrom,done=run(b=>B.trade(b,v[0]===''?null:Number(v[0]),v[1]===''?null:Number(v[1]),C.amount(document.getElementById('trade-cash-0').value),C.amount(document.getElementById('trade-cash-1').value),document.getElementById('release-0').checked,document.getElementById('release-1').checked),'권리증·돈을 교환하고 저당 인수 비용은 은행에 내세요.',back===null);if(done&&back!==null)portfolio(back,'money');return;}
     if(id==='deed-correct'){const index=Number(f.dataset.index);return run(b=>{const next=structuredClone(b),d=next.deeds[index],v=document.getElementById('deed-owner').value;d.owner=v===''?null:Number(v);d.buildings=Number(document.getElementById('deed-buildings')?.value??0);d.mortgaged=document.getElementById('deed-mortgaged').checked;if(d.owner===null&&(d.buildings||d.mortgaged))throw Error('은행 부지에는 건물·저당을 넣을 수 없습니다.');if(d.mortgaged&&d.buildings)throw Error('건물이 있는 부지를 저당 잡을 수 없습니다.');return next;},'실물 권리증 기준으로 맞췄습니다.',true);}
     if(id==='correct-form'){seenPos=null;
@@ -310,9 +312,15 @@
   function botReady(){return !home&&s?.screen==='play'&&!!s.board&&!!s.auto?.[C.current(s)]&&s.runningSince!==null&&!dialog.open&&!confirmDialog.open&&!menuOpen&&!walk&&!gesture&&!auctionMode;}
   function liveBotCard(){const c=s.botCard,q=s.board.pending;return c&&q?.type==='card'&&q.index===c.index&&c.turn===s.turns.join()&&D.cards[c.deck]?.some(x=>x.id===c.id)?{deck:c.deck,id:c.id}:null;}
   function offerView(o){const seller=o.type==='sell'?o.from:o.to,buyer=1-seller,mortgaged=s.board.deeds[o.index].mortgaged;return `<div class="bot-offer"><p class="dealt-row"><span>${tileName(o.index)}${mortgaged?' <small>저당</small>':''}</span><strong>${esc(s.names[seller])} → ${esc(s.names[buyer])}</strong></p><p class="dealt-row"><span>${money(o.amount)}</span><strong>${esc(s.names[buyer])} → ${esc(s.names[seller])}</strong></p></div><div class="button-row">${button('수락','data-bot-offer="yes"','primary')}${button('거절','data-bot-offer="no"')}</div>`;}
+  const buyLog=(p,i)=>(o,n)=>({kind:'buy',who:p,index:i,amount:o.players[p].cash-n.players[p].cash});
+  const auctionLog=i=>(o,n)=>{const w=n.deeds[i].owner;return w===null||w===undefined?{kind:'auction',index:i,winner:null,amount:null}:{kind:'auction',index:i,winner:w,amount:o.players[w].cash-n.players[w].cash};};
+  const tradeLog=o=>{const seller=o.type==='sell'?o.from:o.to;return ()=>({kind:'trade',index:o.index,from:seller,to:1-seller,amount:o.amount});};
+  function addLog(e){if(s.auto?.some(Boolean))s.botLog=[e,...(s.botLog||[])].slice(0,D.bot.logLines);}
+  function logText(e){const t=esc(tileName(e.index));if(e.kind==='buy')return `${esc(s.names[e.who])} 구입 · ${t} ${money(e.amount)}`;if(e.kind==='auction')return e.winner===null?`경매 · ${t} · 유찰`:`경매 · ${t} · ${esc(s.names[e.winner])} ${money(e.amount)} 낙찰`;if(e.kind==='trade')return `거래 · ${t} · ${esc(s.names[e.from])} → ${esc(s.names[e.to])} ${money(e.amount)}`;return `거래 거절 · ${t}`;}
+  function logView(){return s.auto?.some(Boolean)&&s.botLog?.length?`<ol class="bot-log" aria-label="최근 기록">${s.botLog.map(e=>`<li class="log-${e.kind}">${logText(e)}</li>`).join('')}</ol>`:'';}
   function botStep(){
     const p=C.current(s),b=s.board,turnKey=s.turns.join();
-    if(s.botMemo.turn!==turnKey)s.botMemo={...s.botMemo,turn:turnKey,asked:false,fundAsked:false,steps:0};
+    if(s.botMemo.turn!==turnKey)s.botMemo={...s.botMemo,turn:turnKey,asked:false,fundAsked:[],steps:0};
     // 걸음 상한: 판을 멈추고 걸음 수를 비워, 계속을 누르면 다시 상한만큼 진행한다.
     if(++s.botMemo.steps>D.bot.maxStepsPerTurn){s.botMemo.steps=0;s=C.pause(s,Date.now());save();render();return;}
     const act=BOT.decide(b,p,{opponentAuto:!!s.auto[1-p],turnNo:s.turns[p],memo:s.botMemo,card:liveBotCard()});
@@ -323,11 +331,12 @@
     if(act.kind==='auctionHuman')return auction();
     if(act.kind==='humanFunds')return portfolio(act.who,'money');
     if(act.kind==='bankrupt'){undo=structuredClone(s);set({...C.pause(s,Date.now()),screen:'result',winner:1-act.who,finishReason:'bankruptcy'});return;}
-    if(act.kind==='offer'){s.botMemo[act.type==='sell'?'fundAsked':'asked']=true;s.botMemo.offers={...s.botMemo.offers,[act.index]:s.turns[act.from]};save();
-      if(s.auto[act.to]){if(BOT.accept(b,act))run(x=>BOT.applyOffer(x,act));return;}
+    if(act.kind==='offer'){if(act.type==='sell')s.botMemo.fundAsked=[...(Array.isArray(s.botMemo.fundAsked)?s.botMemo.fundAsked:[]),act.index];else s.botMemo.asked=true;if(act.type==='buy')s.botMemo.offers={...s.botMemo.offers,[act.index]:s.turns[act.from]};save();
+      if(s.auto[act.to]){if(BOT.accept(b,act))run(x=>BOT.applyOffer(x,act),'',false,tradeLog(act));else{addLog({kind:'reject',index:act.index});save();play();}return;}
       botOffer=act;return open('거래 요청',offerView(act));}
     if(act.kind==='wait')return;
-    run(x=>BOT.apply(x,p,act));
+    const log=act.kind==='buy'?buyLog(p,b.pending.index):act.kind==='decline'?auctionLog(b.pending.index):null;
+    run(x=>BOT.apply(x,p,act),'',false,log);
   }
   setInterval(()=>{if(!botReady()){botWaitFrom=0;return;}const now=Date.now();if(!botWaitFrom){botWaitFrom=now;return;}if(now-botWaitFrom>=D.bot.stepMs/speedNow()){botWaitFrom=0;botStep();}},D.bot.pollMs);
   setInterval(updateTimer,D.tick);document.addEventListener('visibilitychange',()=>{if(!home&&s?.screen==='play')updateTimer();});render();
