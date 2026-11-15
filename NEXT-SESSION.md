@@ -1,6 +1,7 @@
 # game-hub NEXT-SESSION
 
-> 2026-11-15 모노폴리: planning.html 0.11~0.18 반영(팝업·돈 부족·자동 넘김·마무리·보너스·확대·오른쪽 칸·메뉴 판·이동 연출·돈 마련 창 한 목록), 미배포. 다음 행동: 배포 후 아이패드 실기기에서 이동 연출·메뉴 판·확대·돈 마련 창 확인. 상세는 `apps/monopoly-companion/NEXT-SESSION.md`.
+> 2026-11-15 모노폴리 오토 봇(planning.html 0.19) 배포됨 v249 - 다음 행동은 아이패드 실기기 확인, 상세 `apps/monopoly-companion/NEXT-SESSION.md` 0.6.
+> 2026-11-15 모노폴리: planning.html 0.11~0.18 반영(팝업·돈 부족·자동 넘김·마무리·보너스·확대·오른쪽 칸·메뉴 판·이동 연출·돈 마련 창 한 목록), 배포됨 v247. 다음 행동: 아이패드 실기기에서 이동 연출·메뉴 판·확대·돈 마련 창 확인. 상세는 `apps/monopoly-companion/NEXT-SESSION.md`.
 
 > 다음 세션 진입 시 우선 읽기. SessionStart hook 자동 주입 대상 (§8.3).
 
