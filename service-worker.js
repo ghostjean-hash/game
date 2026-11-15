@@ -188,7 +188,10 @@
 // v247: 모노폴리 동행 - 이동 연출 · 메뉴 판 · 돈 마련 창 · 오토 봇 · 최근 기록 · 봇 판단(막기 땅 · 돈 마련 순서).
 //        옛 app.js · bot.js 가 캐시에 남으면 오토 단추와 최근 기록이 보이지 않는다.
 
-const CACHE_VERSION = "v247";
+// v248: 모노폴리 동행 - 봇 맞교환 거래 · 맞교환 요청 창 · 최근 기록 맞교환 줄.
+//        옛 bot.js 가 캐시에 남으면 봇끼리 독점이 생기지 않아 판이 끝나지 않는다.
+
+const CACHE_VERSION = "v248";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

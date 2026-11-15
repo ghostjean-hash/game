@@ -391,5 +391,5 @@ dialog.finance-dialog[open]{display:flex;flex-direction:column;height:min(880px,
 .bot-log>li{padding:6px 10px;border-radius:8px;border:1px solid #e3e8dc;background:#f7f9f3;font-size:14px;line-height:1.45;color:#5f6d5c;word-break:keep-all}
 .bot-log>li:first-child{font-weight:650;color:#2f3e2f;border-color:#cfd9c8;background:#fff}
 .bot-log>.log-auction{border-left:4px solid #b69a63}
-.bot-log>.log-trade,.bot-log>.log-reject{border-left:4px solid #6f8fb3}
+.bot-log>.log-trade,.bot-log>.log-swap,.bot-log>.log-reject{border-left:4px solid #6f8fb3}
 .bot-log>.log-buy{border-left:4px solid var(--green)}

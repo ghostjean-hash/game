@@ -49,6 +49,9 @@
   }
   // 거래 실행: 판 쪽(seller)이 땅을 넘기고 산 쪽이 amount 를 낸다.
   function applyOffer(b,offer){
+    // 맞교환: from 이 give 를, to 가 take 를 내준다. amount 는 from 이 to 에게 내는 돈(음수면 to 가 낸다).
+    if(offer.type==='swap'){const pay=Math.max(offer.amount,0),get=Math.max(-offer.amount,0);
+      return offer.from===0?B.trade(b,offer.give,offer.take,pay,get):B.trade(b,offer.take,offer.give,get,pay);}
     const seller=offer.type==='sell'?offer.from:offer.to;
     return seller===0?B.trade(b,offer.index,null,0,offer.amount):B.trade(b,null,offer.index,offer.amount,0);
   }
@@ -61,9 +64,28 @@
   const fee=(b,i)=>b.deeds[i].mortgaged?Math.ceil(b.deeds[i].mortgage*10/100):0;
   // 독점을 넘겨주는 값: 땅값의 배수에서 저당금을 뺀 값.
   const monopolyValue=(b,i)=>Math.round(price(i)*K.acceptMonopolyFactor)-(b.deeds[i].mortgaged?b.deeds[i].mortgage:0);
+  // 맞교환(0.19.3 8항): 묶음 가치는 그 묶음 땅값 합계, 더 비싼 묶음을 받는 쪽이 차이 × swapBalance 를 낸다.
+  const setValue=i=>family(i).reduce((t,j)=>t+price(j),0);
+  const swapCash=(give,take)=>Math.round((setValue(take)-setValue(give))*K.swapBalance);
+  const swapKey=(give,take)=>'s'+give+'-'+take;
+  function swapOffer(b,p,ctx){
+    const o=1-p;let best=null;
+    for(const give of owned(b,p).filter(i=>fills(b,o,i)))for(const take of owned(b,o).filter(i=>fills(b,p,i)&&!family(i).includes(give))){
+      const last=ctx.memo?.offers?.[swapKey(give,take)];if(last!==undefined&&ctx.turnNo-last<K.offerCooldownTurns)continue;
+      const offer={kind:'offer',type:'swap',from:p,to:o,give,take,index:give,amount:swapCash(give,take)};
+      let next;try{next=applyOffer(b,offer);}catch{continue;}
+      if(next.players[p].cash<K.reserve||next.players[o].cash<K.reserve)continue;
+      if(!best||setValue(take)>setValue(best.take))best=offer;
+    }
+    return best;
+  }
   function accept(b,offer){
     const r=offer.to,i=offer.index;
     if(!ok(()=>applyOffer(b,offer)))return false;
+    if(offer.type==='swap'){
+      if(!fills(b,r,offer.give)||!fills(b,offer.from,offer.take))return false;
+      return offer.amount>=swapCash(offer.give,offer.take)&&applyOffer(b,offer).players[r].cash>=K.reserve;
+    }
     if(offer.type==='buy'){
       // 상대 독점을 만들어 주는 제안은 늘 거절한다. 독점을 넘기는 것은 내가 돈 마련 마지막 단계에서 요청할 때뿐이다.
       if(fills(b,offer.from,i)||hasOther(b,r,i))return false;
@@ -142,12 +164,13 @@
     if(c.action==='otherReceive'&&c.amount>0)return {who:1-p,amount:c.amount};
     return null;
   }
-  // 다음 행동 하나. ctx = {opponentAuto, turnNo, memo:{asked(색 맞추기 제안), fundAsked(이번 차례 돈 마련 거래를 요청한 땅 번호 목록), offers}, card:{deck,id}|null}
+  // 다음 행동 하나. ctx = {opponentAuto, turnNo, memo:{asked(색 맞추기 제안), swapAsked(맞교환 제안), fundAsked(이번 차례 돈 마련 거래를 요청한 땅 번호 목록), offers}, card:{deck,id}|null}
   function decide(b,p,ctx){
     const me=b.players[p],q=b.pending;
     if(b.phase==='end')return {kind:'next'};
     if(b.phase==='roll'){
       const up=improve(b,p);if(up)return up;
+      if(!ctx.memo?.swapAsked){const swap=swapOffer(b,p,ctx);if(swap)return swap;}
       // 색 맞추기 제안은 상대가 사람일 때만 한다. 상대 봇은 독점을 넘겨주는 제안을 늘 거절한다(0.19.3 5 · 6항).
       if(!ctx.opponentAuto&&!ctx.memo?.asked){const offer=setOffer(b,p,ctx);if(offer)return offer;}
       if(me.jail&&unowned(b)>=K.jailEarlyUnowned){if(me.cards>0)return {kind:'jailCard'};if(me.cash>=50)return {kind:'jailPay'};}
@@ -193,5 +216,5 @@
       default:throw Error('봇 행동을 확인할 수 없습니다.');
     }
   }
-  globalThis.MC_BOT=Object.freeze({decide,apply,auction,accept,applyOffer,drawCard,shuffle,die,wantBuy});
+  globalThis.MC_BOT=Object.freeze({decide,apply,auction,accept,applyOffer,drawCard,shuffle,die,wantBuy,swapKey});
 })();

@@ -89,6 +89,21 @@ test('raising money: a deed that completes the opponent set is offered only afte
   assert.equal(BOT.accept(station,{type:'buy',from:1,to:0,index:35,amount:2000}),false);
 });
 
+test('swap: trades a deed completing the opponent set for one completing mine, the richer set pays half the value gap',()=>{
+  const b=B.create(false,0),blue=B.group(6),take=blue[0];b.deeds[1].owner=0;b.deeds[3].owner=1;b.deeds[take].owner=1;for(const j of blue.slice(1))b.deeds[j].owner=0;
+  const gap=blue.reduce((t,j)=>t+D.board[j][2],0)-B.group(1).reduce((t,j)=>t+D.board[j][2],0),pay=Math.round(gap*K.swapBalance);
+  const act=BOT.decide(b,0,auto);assert.equal(act.kind,'offer');assert.equal(act.type,'swap');
+  assert.deepEqual([act.give,act.take,act.amount],[1,take,pay]);
+  assert.equal(BOT.decide(b,0,{...auto,opponentAuto:false}).type,'swap');
+  assert.equal(BOT.accept(b,act),true);assert.equal(BOT.accept(b,{...act,amount:pay-1}),false);
+  const done=BOT.applyOffer(b,act);assert.equal(done.deeds[1].owner,1);assert.equal(done.deeds[take].owner,0);assert.equal(done.players[0].cash,1500-pay);assert.equal(done.players[1].cash,1500+pay);
+  const flip=BOT.applyOffer(b,{...act,from:1,to:0,give:take,take:1,amount:-pay});assert.equal(flip.deeds[1].owner,1);assert.equal(flip.players[0].cash,1500-pay);
+  assert.notEqual(BOT.decide(b,0,{...auto,memo:{asked:false,offers:{[BOT.swapKey(1,take)]:0}}}).type,'swap');
+  assert.notEqual(BOT.decide(b,0,{...auto,memo:{swapAsked:true,offers:{}}}).type,'swap');
+  const poor=structuredClone(b);poor.players[0].cash=pay+K.reserve-1;assert.notEqual(BOT.decide(poor,0,auto).type,'swap');
+  assert.equal(BOT.accept(b,{...act,from:1,to:0,give:take,take:1,amount:-pay}),true);assert.equal(BOT.accept(b,{...act,from:1,to:0,give:take,take:1,amount:-pay-1}),false);
+});
+
 test('turn start releases set mortgages, builds evenly with the keep-after amount, then rolls',()=>{
   let b=B.create(true,0);b.players[0].cash=2000;b=B.mortgage(b,0,16);
   assert.equal(BOT.decide(b,0,auto).kind,'release');
@@ -139,11 +154,11 @@ function simulate(seed,maxTurns=400){
   while(turn[0]+turn[1]<maxTurns){
     const act=BOT.decide(b,p,{opponentAuto:true,turnNo:turn[p],memo:m,card});count(act.kind);
     if(++steps>K.maxStepsPerTurn)throw Error(`seed ${seed}: 한 차례 걸음 상한 초과 ${JSON.stringify(act)}`);
-    if(act.kind==='next'){turn[p]++;p=1-p;b=B.beginTurn(b);m={asked:false,fundAsked:[],offers:m.offers};card=null;steps=0;continue;}
+    if(act.kind==='next'){turn[p]++;p=1-p;b=B.beginTurn(b);m={asked:false,swapAsked:false,fundAsked:[],offers:m.offers};card=null;steps=0;continue;}
     if(act.kind==='bankrupt')return {stats,winner:1-act.who,turns:turn[0]+turn[1]};
     if(['wait','auctionHuman','humanFunds'].includes(act.kind))throw Error(`seed ${seed}: 두 봇 판에서 나오면 안 되는 행동 ${act.kind}`);
     if(act.kind==='draw'){const x=BOT.drawCard(decks,act.deck,b.players.some(v=>v.cards>0),random);decks=x.decks;card={deck:act.deck,id:x.id};continue;}
-    if(act.kind==='offer'){if(act.type==='sell')m.fundAsked=[...m.fundAsked,act.index];else{m.asked=true;m.offers[act.index]=turn[act.from];}if(BOT.accept(b,act)){b=BOT.applyOffer(b,act);count('trade');}continue;}
+    if(act.kind==='offer'){if(act.type==='sell')m.fundAsked=[...m.fundAsked,act.index];else if(act.type==='swap'){m.swapAsked=true;m.offers[BOT.swapKey(act.give,act.take)]=turn[act.from];}else{m.asked=true;m.offers[act.index]=turn[act.from];}if(BOT.accept(b,act)){b=BOT.applyOffer(b,act);count(act.type==='swap'?'swap':'trade');}continue;}
     b=BOT.apply(b,p,act,random);if(act.kind==='card')card=null;
     if(!B.valid(b))throw Error(`seed ${seed}: 기록 깨짐 after ${JSON.stringify(act)}`);
   }
@@ -153,7 +168,7 @@ function simulate(seed,maxTurns=400){
 test('100 bot-vs-bot games stay valid, never stall, and actually build, mortgage, release and trade',()=>{
   const total={};let finished=0;
   for(let seed=1;seed<=100;seed++){const r=simulate(seed);if(r.winner!==null)finished++;for(const [k,v] of Object.entries(r.stats))total[k]=(total[k]??0)+v;}
-  for(const k of ['build','mortgage','release','trade','buy','decline','card','pay','sell'])assert.ok(total[k]>0,k+' 0회');
+  for(const k of ['build','mortgage','release','trade','swap','buy','decline','card','pay','sell'])assert.ok(total[k]>0,k+' 0회');
   assert.ok(finished>0,'파산으로 끝난 판 0');
   console.log('# bot sim',JSON.stringify({finished,...total}));
 });
