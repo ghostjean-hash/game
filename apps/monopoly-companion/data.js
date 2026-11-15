@@ -3,6 +3,8 @@ globalThis.MC_DATA = Object.freeze({
   durations: [30, 45, 60], reserveMinutes: 10, minute: 60000, tick: 1000,
   presets: [{id:'standard',label:'스탠다드',minutes:null,mode:'standard'},{id:'short30',label:'공식 단축 30분',minutes:30,mode:'short'},{id:'short60',label:'공식 단축 60분',minutes:60,mode:'short'}],
   modes: ['standard','short'], shortDeedsEach: 2, shortHotelAt: 3,
+  // 행동이 없는 칸을 눌렀을 때의 한 줄 설명(세금은 칸 금액으로 따로 표시).
+  tileFacts: { parking:'아무 일 없음', jail:'방문은 그냥 지나가기', gotojail:'감옥으로 이동', chance:'찬스 카드 한 장', chest:'사회사업기금 카드 한 장' },
   defaultPlayerColors: ['blue','rose'],
   playerPalette: {
     blue:{name:'파랑',hex:'#315b85',rgb:'49,91,133',soft:'#e0edf8'},

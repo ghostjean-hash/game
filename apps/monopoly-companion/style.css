@@ -45,7 +45,6 @@ dialog{width:calc(100% - 48px);max-width:760px;max-height:92dvh;overflow:auto;bo
 @media(max-height:820px) and (min-width:900px){.player-colors{margin-top:8px;min-height:38px}.player-colors legend{line-height:38px}.color-option{min-height:38px}.prep-allocation{min-height:65px;padding-top:8px}.prep-player{padding-block:16px}.cash-left{padding-top:12px}}
 @media(max-width:760px){.player-colors{display:block;min-height:0;margin-top:10px}.player-colors legend{float:none;line-height:1.4;margin-bottom:5px}.color-options{flex-wrap:wrap;gap:0}.color-option{width:28px;min-height:34px;padding:3px}.palette-dot{width:22px;height:22px}.prep-config fieldset{display:block}.prep-config legend{float:none;width:auto;margin-bottom:8px}.prep-duration{display:block;padding-top:14px}.prep-duration strong{font-size:28px}.prep-duration .classic-duration{font-size:22px}.prep-duration p{font-size:13px}.prep-allocation{min-height:85px}.prep-player h2{font-size:20px}.set-tag{font-size:9px}}
 
-.is-preparing.classic-mode .prep-bottom{margin-top:18px}
 
 /* 도착 안내 · 세 칸 건물 자리 · 화면 숫자패드 · 돈 마련 */
 
@@ -94,3 +93,41 @@ button:active:not(:disabled){transform:translateY(1px)}.board-tile:active:not(:d
 @media(max-width:760px){.construction-city>div:first-child{justify-content:space-between}}
 
 .construction-owner{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}.construction-owner small{font-size:14px;color:#61715c}
+
+/* 0.10 화면 정리 (2026-11-15) */
+.prep-duration>strong{height:52px;align-items:center}
+@media(max-width:760px){.prep-duration>strong{height:40px}}
+.screen-head{min-height:56px}
+#confirm-dialog{text-align:center}
+#confirm-dialog .button-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;justify-content:stretch}
+#confirm-dialog .button-row>button{width:100%;min-width:150px;min-height:56px;font-size:19px}
+.dealt-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dealt-card{border:1px solid #d8e1d0;border-radius:14px;padding:16px 18px;background:#fffefa}
+.dealt-card h3{margin:0 0 10px;font-size:21px}
+.dealt-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:6px 0;font-size:18px}
+.dealt-row.dealt-cash{margin-top:12px;padding-top:12px;border-top:1px solid #d8e1d0}
+.board-tile.city:before{content:"";position:absolute;pointer-events:none;background:#b9c4b4;z-index:1}
+.board-tile.city.edge-top:before{left:0;right:0;bottom:30%;height:1px}
+.board-tile.city.edge-bottom:before{left:0;right:0;top:30%;height:1px}
+.board-tile.city.edge-left:before{top:0;bottom:0;right:30%;width:1px}
+.board-tile.city.edge-right:before{top:0;bottom:0;left:30%;width:1px}
+.board-tile:has(.mortgage-mark){background-image:repeating-linear-gradient(45deg,transparent 0 5px,rgba(70,55,40,.28) 5px 7px)}
+.mortgage-mark{font-size:11px;font-weight:700;background:#fff7ec;color:#7a5530;border:1px solid #c9a982}
+.board-tile.active-tile:after{border:3px solid rgb(var(--focus-rgb));opacity:1;animation:location-glow 1.6s ease-in-out infinite}
+@keyframes location-glow{0%,100%{box-shadow:inset 0 0 14px rgba(var(--focus-rgb),.55),0 0 22px 4px rgba(var(--focus-rgb),.9)}50%{box-shadow:inset 0 0 4px rgba(var(--focus-rgb),.2),0 0 6px 1px rgba(var(--focus-rgb),.35)}}
+@media(prefers-reduced-motion:reduce){.board-tile.active-tile:after{animation:none;box-shadow:0 0 10px 2px rgba(var(--focus-rgb),.6)}}
+.current-task{margin-block:clamp(14px,3vh,34px) auto}
+.task-question{font-size:23px;margin:4px 0 6px}
+.task-amount{display:block;font-size:38px;margin:0 0 14px}
+.current-task .button-row>button{white-space:nowrap}
+.current-task button small,.auction-players button small{font-size:.68em;font-weight:450;margin-left:4px;opacity:.85}
+.auction-inline{display:grid;gap:10px;justify-items:center}
+.auction-inline .amount-status{min-height:1.4em;margin:0}
+.tile-fact{font-size:22px;margin:4px 0 8px}
+.property-actions button small{font-size:.7em;font-weight:450;margin-left:4px}
+.auction-inline .task-actions>button{padding-inline:24px}
+.board-tile.owned.monopoly:has(.mortgage-mark),.board-tile.owned:has(.mortgage-mark){background-image:repeating-linear-gradient(45deg,transparent 0 5px,rgba(70,55,40,.28) 5px 7px)}
+@media(prefers-reduced-motion:reduce){.board-tile.active-tile:after{box-shadow:none}}
+.auction-players button{flex-direction:row;white-space:nowrap}
+.property-actions button{white-space:nowrap}
+.property-buildings{font-weight:600}
