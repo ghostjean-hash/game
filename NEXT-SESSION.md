@@ -1,8 +1,6 @@
 # game-hub NEXT-SESSION
 
-> 2026-11-21 모노폴리 상용 수준 마감(planning.html 0.23) 구현·검사 끝 - 0.22와 함께 배포 지시 대기(서비스 워커 v252). 상세 apps/monopoly-companion/NEXT-SESSION.md 0.13.
-
-> 2026-11-21 모노폴리 화면 정비(planning.html 0.22, T-120) 구현·검사 끝 - 아이패드 확인 대기, 배포(서비스 워커 v252)는 사용자 지시 대기. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.12.
+> 2026-11-22 모노폴리 화면 정비(0.22)+상용 수준 마감(0.23) 배포 완료(5e024f5, SW v252). 공개 판번호·스타일·조작 확인. 다음: 실제 아이패드 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.13.
 
 > 2026-11-16 모노폴리 결과 팝업·독점 안내·말 표시 개선 v251 배포 완료(431075b). 전체 검사·공개9주소·7파일 내용·공개 화면 조작 확인. 다음은 실제 아이패드 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.11.
 
