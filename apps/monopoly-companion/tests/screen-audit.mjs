@@ -155,6 +155,8 @@ async function runScene(browser, [w, h], [label, state, steps]) {
     await page.waitForTimeout(350);
   }
   await page.waitForTimeout(250);
+  // 0.23: 한 번만 재생되는 열림 움직임(창 떠오름 · 주사위 면 튀김)은 끝난 상태로 잰다. 반복 글로우는 그대로 멈춰 둔다
+  await page.evaluate(() => { for (const a of document.getAnimations()) if (['dialog-in', 'backdrop-in', 'die-pick'].includes(a.animationName)) a.finish(); });
   return { ctx, page, errors, misses };
 }
 
