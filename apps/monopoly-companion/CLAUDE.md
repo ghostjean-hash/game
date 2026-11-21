@@ -20,6 +20,7 @@ data.js는 한국판 40칸/지폐/아빠·서우 기본 이름, core.js는 시�
 ## 4. 확인
 `node --test apps/monopoly-companion/tests/*.test.mjs`.
 브라우저에서 준비 → 진행 → 규칙 → 결산, 새로고침 복원과 좁은 화면을 확인한다.
+화면 규칙(planning.html 0.22.2: 기준 아이패드 프로 12.9 가로 1366×950·1366×1024, 팝업 화면 안·X만으로 닫기 금지·48px 단추)은 개발 서버(`node scripts/dev-server.mjs 8010`)를 켠 뒤 `node apps/monopoly-companion/tests/screen-audit.mjs audit <결과폴더>`로 33장면을 재서 문제 0이어야 한다. 스타일 구조만 바꿀 때는 `styles` 방식으로 전후 적용 스타일 지문을 떠서 같음을 본다. 새 스타일은 style.css 끝 "0.22 화면 규칙" 구간의 정의값(--touch 등)을 쓴다.
 
 돈 마련·부지 관리 창은 현재 현금/부족액, 행동별 받을·낼 돈과 임대료 변화, 실행 불가 이유를 보여준다. board.js의 assetOptions가 실제 기록 함수로 미리 계산한다. 경매와 거래는 hidden 금액 필드와 화면 숫자패드만 사용한다. 집 건설·판매·저당은 차례와 무관하지만 독점·균등·건물 정리·저당·현금·은행 재고 조건을 지킨다. 상세 기준은 docs/planning.html 0.6이다.
 

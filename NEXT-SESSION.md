@@ -1,5 +1,7 @@
 # game-hub NEXT-SESSION
 
+> 2026-11-21 모노폴리 화면 정비(planning.html 0.22, T-120) 설계까지 - 코드 변경 없음, 사용자 설계 확인 대기. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.12.
+
 > 2026-11-16 모노폴리 결과 팝업·독점 안내·말 표시 개선 v251 배포 완료(431075b). 전체 검사·공개9주소·7파일 내용·공개 화면 조작 확인. 다음은 실제 아이패드 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.11.
 
 > 2026-11-16 모노폴리 결과 팝업·부지/독점 설명·보드 안쪽 말 표시 v251 배포 완료(431075b). 자동76건·브라우저40칸/결과/모드/이동 검증 통과. 다음: 실제 아이패드 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.10.
