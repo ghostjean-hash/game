@@ -142,8 +142,9 @@
     if(d.buildings===5&&supplies(s).houses<hotelAt(s))fail('은행 주택이 부족합니다. 이 색의 건물을 모두 팔 수 있습니다.');
     d.buildings=d.buildings===5?hotelAt(s):d.buildings-1;cash(s,p,d.houseCost/2);
   });}
-  // cancel: 같은 돈 마련 창에서 방금 잡은 저당의 실수 취소 - 받은 금액 그대로, 이자 없음(planning.html 0.28.2).
-  function mortgage(state,p,index,value=null,cancel=false){return transact(state,s=>{const d=s.deeds[index];if(!d||d.owner!==p)fail('내 부지가 아닙니다.');if(cancel&&!d.mortgaged)fail('저당 중인 부지가 아닙니다.');if(d.mortgaged){cash(s,p,-(cancel?d.mortgage:Math.ceil(d.mortgage*110/100)));d.mortgaged=false;return;}if(isStreet(index)&&group(index).some(i=>s.deeds[i].buildings))fail('이 색의 건물을 모두 먼저 파세요.');if(value!==null)d.mortgage=integer(value,1);cash(s,p,d.mortgage);d.mortgaged=true;});}
+  // cancel: 같은 차례 안 실수 취소(planning.html 0.29.3 5항). 저당 중이면 받은 저당가만 돌려주고(이자 없음),
+  // 저당이 풀린 부지면 이번 차례에 낸 금액(저당가 + 10%)을 그대로 돌려받고 다시 저당 상태가 된다.
+  function mortgage(state,p,index,value=null,cancel=false){return transact(state,s=>{const d=s.deeds[index];if(!d||d.owner!==p)fail('내 부지가 아닙니다.');if(d.mortgaged){cash(s,p,-(cancel?d.mortgage:Math.ceil(d.mortgage*110/100)));d.mortgaged=false;return;}if(isStreet(index)&&group(index).some(i=>s.deeds[i].buildings))fail('이 색의 건물을 모두 먼저 파세요.');if(value!==null&&!cancel)d.mortgage=integer(value,1);cash(s,p,cancel?Math.ceil(d.mortgage*110/100):d.mortgage);d.mortgaged=true;});}
   function trade(state,fromIndex,toIndex,fromCash,toCash,release0=false,release1=false){return transact(state,s=>{
     integer(fromCash);integer(toCash);
     if(s.pending?.type==='rent'&&[fromIndex,toIndex].includes(s.pending.index))fail('이 부지의 현재 임대료를 먼저 처리하세요.');
@@ -190,7 +191,7 @@
       sellAll:d.buildings?preview(index,()=>sell(state,p,index,true)):null,
       mortgage:d.mortgaged?null:preview(index,()=>mortgage(state,p,index)),
       release:d.mortgaged?preview(index,()=>mortgage(state,p,index)):null,
-      cancel:d.mortgaged?preview(index,()=>mortgage(state,p,index,null,true)):null};});
+      cancel:preview(index,()=>mortgage(state,p,index,null,true))};});
   }
   function valid(s){
     if(!s||s.version!==1||!Array.isArray(s.players)||s.players.length!==2||!['roll','land','end'].includes(s.phase)||!s.deeds)return false;

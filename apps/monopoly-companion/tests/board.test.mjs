@@ -285,9 +285,15 @@ test('station and utility ownership summaries agree with rent calculation at eve
   assert.equal(B.deedInfo(s,0),null);
 });
 
+test('0.29 cancelling a release refunds the paid loan plus 10 percent and mortgages again',()=>{
+  let s=fresh();s.deeds[11].owner=0;const loan=s.deeds[11].mortgage,paid=Math.ceil(loan*110/100);
+  s=B.mortgage(s,0,11);s=B.mortgage(s,0,11);assert.equal(s.players[0].cash,1500+loan-paid);assert.equal(s.deeds[11].mortgaged,false);
+  const back=B.mortgage(s,0,11,null,true);assert.equal(back.players[0].cash,1500+loan);assert.equal(back.deeds[11].mortgaged,true);assert.equal(back.deeds[11].mortgage,loan);assert.equal(B.valid(back),true);
+  s.deeds[13].owner=0;s.deeds[14].owner=0;s.deeds[11].buildings=1;assert.throws(()=>B.mortgage(s,0,11,null,true),/건물/);
+});
+
 test('0.28 mortgage cancel returns the same loan with no interest, release still charges 10 percent',()=>{
   let s=fresh();s.deeds[11].owner=0;const loan=s.deeds[11].mortgage;
-  assert.throws(()=>B.mortgage(s,0,11,null,true),/저당 중/);
   s=B.mortgage(s,0,11);assert.equal(s.players[0].cash,1500+loan);
   const opt=B.assetOptions(s,0).find(a=>a.index===11);assert.equal(opt.cancel.change,-loan);assert.equal(opt.release.change,-Math.ceil(loan*110/100));
   const cancelled=B.mortgage(s,0,11,null,true);assert.equal(cancelled.players[0].cash,1500);assert.equal(cancelled.deeds[11].mortgaged,false);assert.equal(B.valid(cancelled),true);

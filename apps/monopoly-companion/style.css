@@ -6161,11 +6161,6 @@ dialog.result-dialog.on-board {
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
-:root #rule-dialog .trade-simple .trade-side h3 {
-  margin: 0 0 6px;
-  font-size: 17px;
-  text-align: center;
-}
 :root #rule-dialog .trade-simple .trade-deeds {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-auto-rows: var(--r28-deed-row);
@@ -6189,10 +6184,6 @@ dialog.result-dialog.on-board {
   line-height: 1.2;
   white-space: nowrap;
 }
-:root #rule-dialog .trade-simple .check {
-  min-height: var(--touch);
-  margin: 4px 0 0;
-}
 :root #rule-dialog .trade-simple .trade-cash {
   display: grid;
   grid-template-columns: 1fr minmax(0, 250px);
@@ -6207,8 +6198,6 @@ dialog.result-dialog.on-board {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 0;
-}
-:root #rule-dialog .trade-simple .trade-dir {
   padding: 3px;
   gap: 3px;
   align-self: start;
@@ -6219,6 +6208,8 @@ dialog.result-dialog.on-board {
   margin: 0;
 }
 :root #rule-dialog .trade-simple .amount-readout {
+  grid-column: 1;
+  grid-row: 2;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto;
@@ -6248,6 +6239,7 @@ dialog.result-dialog.on-board {
   align-items: center;
   justify-content: flex-start;
   margin: 0 0 4px;
+  font-size: 17px;
 }
 :root #rule-dialog .trade-simple .check {
   position: absolute;
@@ -6290,10 +6282,6 @@ dialog.result-dialog.on-board {
 :root #rule-dialog .trade-simple .touch-amount {
   display: contents;
 }
-:root #rule-dialog .trade-simple .amount-readout {
-  grid-column: 1;
-  grid-row: 2;
-}
 :root #rule-dialog .trade-simple .number-pad {
   grid-column: 2;
   grid-row: 1 / span 2;
@@ -6317,4 +6305,73 @@ dialog.result-dialog.on-board {
   overflow: hidden;
   margin: 6px 0 0;
   text-align: center;
+}
+
+/* 0.29 권리증 5:7 · 모든 권리증 같은 크기 · 독점 표식 · 집 짓기 남는 현금 (planning.html 0.29.3) */
+:root {
+  --r29-deed-w: 270px;
+  --r29-band-h: 56px;
+  --r29-row-font: 14px;
+  --r29-row-pad: 2px;
+  --r29-row-line: 1.35;
+  --r26-sheet-w: var(--r29-deed-w);
+}
+:root .deed-sheet {
+  box-sizing: border-box;
+  width: var(--r29-deed-w);
+  max-width: 100%;
+  aspect-ratio: 5 / 7;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+}
+:root .deed-sheet .deed-band {
+  position: relative;
+  box-sizing: border-box;
+  height: var(--r29-band-h);
+  flex: none;
+  justify-content: center;
+}
+:root .deed-sheet .deed-card-owner {
+  flex: none;
+  text-align: center;
+}
+:root .deed-sheet .deed-rows {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+:root .deed-sheet .deed-rows li {
+  padding-top: var(--r29-row-pad);
+  padding-bottom: var(--r29-row-pad);
+  font-size: var(--r29-row-font);
+  line-height: var(--r29-row-line);
+}
+:root .deed-sheet .deed-costs {
+  flex: none;
+  margin-top: auto;
+}
+:root .deed-sheet .deed-costs div {
+  font-size: var(--r29-row-font);
+  line-height: var(--r29-row-line);
+}
+:root .deed-monopoly-mark {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--r25-paper);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--r25-paper);
+  background: rgb(var(--r25-p0));
+}
+:root .deed-monopoly-mark.player-1 {
+  background: rgb(var(--r25-p1));
+}
+:root #rule-dialog .construction-left.is-short,
+:root #rule-dialog .construction-left.is-short strong {
+  color: var(--r28-out-ink);
 }
