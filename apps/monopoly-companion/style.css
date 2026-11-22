@@ -6387,3 +6387,284 @@ dialog.result-dialog.on-board {
 :root #rule-dialog .construction-left.is-short strong {
   color: var(--r28-out-ink);
 }
+
+/* 0.30 사용성 수정 */
+:root {
+  --r30-construction-w: 760px;
+  --r30-bonus-total: 32px;
+}
+:root .tool-icons {
+  grid-template-columns: repeat(3, 1fr) 1.3fr;
+}
+:root .tool-icons [data-action="bankrupt"] {
+  margin-left: var(--r25-pad);
+}
+:root #rule-dialog.bankruptcy-dialog .dialog-foot > button,
+:root #rule-dialog.correction-dialog .dialog-foot > button {
+  min-width: 0;
+  font-size: 18px;
+}
+:root .bonus-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--r25-pad);
+  font-size: 22px;
+  margin-bottom: var(--r25-target-gap);
+}
+:root .bonus-total strong {
+  font-size: var(--r30-bonus-total);
+  min-width: 6ch;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+:root #rule-dialog.construction-dialog {
+  width: min(var(--r30-construction-w), calc(100vw - var(--dialog-gap) * 2));
+  max-width: var(--r30-construction-w);
+}
+:root .construction-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--r25-pad);
+  margin: 0 0 var(--r25-target-gap);
+}
+:root .construction-head .segmented {
+  flex: 1;
+}
+:root .construction-head > strong {
+  min-width: 10ch;
+  text-align: right;
+  white-space: nowrap;
+}
+:root .house-slot:disabled:not(.is-built) {
+  opacity: .3;
+  cursor: default;
+}
+:root .house-slot.is-planned {
+  opacity: 1;
+}
+:root .auction-person-pick {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent !important;
+  color: transparent !important;
+  box-shadow: none;
+  z-index: 1;
+}
+:root .player-card:has(.auction-person-pick[aria-pressed="true"]) {
+  outline: var(--r25-turn-w) solid var(--r25-ink);
+  outline-offset: -1px;
+}
+:root .play-panel form.auction-inline {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  gap: var(--r25-small-gap);
+}
+:root .auction-deed {
+  display: flex;
+  justify-content: center;
+  margin-block: auto;
+}
+:root .play-panel .auction-inline .touch-amount {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--r25-small-gap);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+:root .play-panel .auction-inline .amount-readout {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--r25-small-gap);
+  padding: 0;
+}
+:root .play-panel .auction-inline .amount-readout output {
+  min-width: 5ch;
+  text-align: left;
+  margin: 0;
+  font-size: 28px;
+}
+:root .play-panel .auction-inline .amount-add {
+  display: none;
+}
+:root .play-panel .auction-inline .number-pad {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: var(--r25-small-gap);
+}
+:root .play-panel .auction-inline .number-pad button {
+  grid-row: auto;
+  grid-column: auto;
+  padding: 0;
+}
+:root .play-panel .auction-inline .task-actions {
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--r25-small-gap);
+  margin-top: auto;
+  width: 100%;
+}
+:root .play-panel .auction-inline .task-actions > button {
+  min-height: var(--r25-main-btn);
+  padding-inline: 0;
+  font-size: 20px;
+}
+:root #rule-dialog.correction-dialog {
+  position: fixed;
+  inset: auto;
+  left: var(--correct-x);
+  top: var(--correct-y);
+  width: var(--correct-w);
+  height: var(--correct-h);
+  max-width: none;
+  max-height: var(--correct-h);
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--r25-pad);
+  z-index: 10;
+}
+:root #rule-dialog.correction-dialog .dialog-head {
+  grid-template-columns: var(--touch) minmax(0, 1fr) var(--touch);
+}
+:root #rule-dialog.correction-dialog .dialog-head h2 {
+  font-size: 19px;
+}
+:root #rule-dialog.correction-dialog .dialog-body {
+  display: flex;
+  overflow: hidden;
+}
+:root .correction-dialog #correct-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  min-height: 0;
+  gap: var(--r25-small-gap);
+}
+:root .correction-dialog .touch-amount {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--r25-small-gap);
+  padding: 0;
+}
+:root .correction-dialog .amount-readout {
+  padding: 0;
+}
+:root .correction-dialog .amount-readout output {
+  margin: 0;
+  min-width: 6ch;
+  font-size: 28px;
+}
+:root .correction-position {
+  display: grid;
+  gap: var(--r25-small-gap);
+  text-align: center;
+}
+:root .correction-position strong {
+  display: block;
+  height: 1.5em;
+  line-height: 1.5;
+  font-size: 19px;
+  white-space: nowrap;
+}
+:root .board-tile[data-tile="10"] .tile-content {
+  position: absolute;
+  inset: 0;
+  padding: 4%;
+  justify-content: flex-end;
+}
+:root .board-tile[data-tile="10"] .icon-prison {
+  position: absolute;
+  width: 53%;
+  height: 53%;
+  max-height: none;
+  top: 7%;
+  left: 20%;
+  transform: rotate(-45deg);
+}
+:root .board-tile[data-tile="10"] .tile-name {
+  position: relative;
+  margin-top: auto;
+  flex: none;
+}
+:root .correction-dialog #correct-form > * {
+  flex: none;
+  margin: 0;
+}
+:root .correction-dialog .amount-readout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--r25-small-gap);
+}
+:root .correction-dialog .amount-readout label {
+  margin: 0;
+  font-size: 17px;
+}
+:root .correction-dialog .amount-add {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;
+  gap: var(--r25-small-gap);
+}
+:root .correction-dialog .amount-add button {
+  margin: 0;
+}
+:root .correction-dialog .number-pad {
+  grid-template-columns: repeat(4, 1fr);
+}
+:root .correction-dialog .number-pad button {
+  padding: 0;
+}
+:root .correction-dialog .correction-players button {
+  margin: 0;
+}
+/* 세로 화면의 좁은 시계 줄: 자동 단추가 나타나도 시계와 메뉴 자리를 고정한다. */
+@media (orientation: portrait) and (min-width: 761px) {
+  :root .panel-top {
+    gap: 4px;
+    padding-inline: 8px;
+  }
+  :root .panel-top #timer {
+    flex: none;
+    width: 76px;
+    min-width: 76px;
+    font-size: 22px;
+  }
+  :root .panel-top .auto-controls {
+    flex: none;
+  }
+}
+@media (orientation: portrait) and (min-width: 761px) {
+  :root .is-playing .game-tools {
+    --touch-in: var(--touch);
+  }
+}
+
+:root {
+  --r30-construction-h: 760px;
+}
+:root #rule-dialog.construction-dialog {
+  height: min(var(--r30-construction-h), calc(100dvh - var(--dialog-gap) * 2));
+}
+
+:root #rule-dialog.finance-dialog .asset-actions:has([data-manage="sellAll"]) .asset-action {
+  flex: 1 1 auto;
+}
+:root #rule-dialog.finance-dialog .asset-actions:has([data-manage="sellAll"]) .asset-action small {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
