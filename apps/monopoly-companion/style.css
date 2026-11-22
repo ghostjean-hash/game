@@ -1681,7 +1681,7 @@ summary {
   margin: 0;
 }
 .space-icon.icon-parking {
-  transform: rotate(225deg) scale(.84);
+  transform: scale(.84); /* 새 SVG는 바퀴가 아래로 바로 서 있다 - 사진용 225도 회전 제거(걸린 지시 4절 목적) */
 }
 .city.edge-top .tile-content {
   padding-bottom: 30%;
