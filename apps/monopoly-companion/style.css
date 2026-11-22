@@ -6371,6 +6371,18 @@ dialog.result-dialog.on-board {
 :root .deed-monopoly-mark.player-1 {
   background: rgb(var(--r25-p1));
 }
+/* 집 짓기 합계: 자릿수 · 음수 기호가 바뀌어도 글자가 밀리지 않게 자리를 잡는다(종전 :has(.construction-presets) 규칙 대체) */
+:root #rule-dialog:has(.construction-cities) .money-digits {
+  display: inline-block;
+  min-width: 6ch;
+  text-align: left;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+:root #rule-dialog .construction-total .money-sign-slot {
+  display: inline-block;
+  width: 1ch;
+  text-align: center;
+}
 :root #rule-dialog .construction-left.is-short,
 :root #rule-dialog .construction-left.is-short strong {
   color: var(--r28-out-ink);
