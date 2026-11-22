@@ -5043,3 +5043,87 @@ dialog.result-dialog.on-board {
 :root .card-catalog span:empty {
   display: none;
 }
+/* 7. 흔들림 0 - 모드에 따라 없는 줄도 같은 자리를 보이지 않게 잡아 둔다 (planning.html 0.24) */
+:root .reserve {
+  visibility: hidden;
+}
+/* 8. 아이콘 단추 - 그림을 단추 한가운데에 */
+:root .bonus-button {
+  justify-content: center;
+  align-items: center;
+}
+/* 9. 흔들림 0 (0.24 전체 조사) - 집 짓기 창은 두 사람 목록을 한 칸에 겹쳐 긴 쪽 높이로 고정 */
+:root .build-stack {
+  display: grid;
+}
+:root .build-stack>.construction-groups {
+  grid-area: 1/1;
+  align-self: start;
+}
+/* 10. 거래 미리보기 - 부지를 고르기 전에도 고른 뒤 높이만큼 자리를 잡아 둔다 */
+:root .trade-preview {
+  align-content: center;
+}
+:root .trade-preview p {
+  margin: 0;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+:root .trade-preview p>strong,
+:root .trade-preview p>small {
+  display: block;
+}
+/* 11. 바뀌는 금액 - 최대 자릿수만큼 자리를 잡아 옆 글자가 밀리지 않게 한다 */
+:root .amount-readout output .money-digits,
+:root .portfolio-head .money-digits,
+:root #rule-dialog:has(.construction-presets) .money-digits {
+  display: inline-block;
+  min-width: 6ch;
+  text-align: left;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+/* 12. 상단 칸 - 오토를 켜고 꺼도 메뉴 단추 자리는 오른쪽 끝 그대로 */
+:root .panel-top .menu-button {
+  flex: none;
+  margin-left: auto;
+}
+:root .panel-top .auto-controls+.menu-button {
+  margin-left: 0;
+}
+:root .trade-preview {
+  position: relative;
+}
+:root .trade-preview.is-short {
+  display: grid;
+}
+:root .trade-preview.is-short p {
+  visibility: hidden;
+}
+:root .trade-preview .trade-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  font-weight: 650;
+  color: #a2413a;
+  text-align: center;
+}
+/* 13. 오토 배속 - 단추 넷 대신 누를 때마다 x1→x2→x4→x8로 바뀌는 단추 하나. 좁은 아이패드에서 메뉴 단추가 화면 밖으로 밀리던 것 해결 */
+:root .panel-top .speed-cycle {
+  flex: none;
+  min-width: 56px;
+  min-height: var(--touch-in,48px);
+  padding: 0 10px;
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+/* 14. 거래 창 - 저당 해제 체크 줄과 은행 비용 줄은 없을 때도 한 줄 자리를 잡아 둔다 */
+:root #trade-fees {
+  line-height: 1.6;
+  min-height: 1.6em;
+}

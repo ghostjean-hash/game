@@ -14,7 +14,7 @@ globalThis.MC_DATA = Object.freeze({
     violet:{name:'보라',hex:'#76569a',rgb:'118,86,154',soft:'#eae2f5'},
     slate:{name:'회색',hex:'#58646f',rgb:'88,100,111',soft:'#e4e9ed'}
   },
-  startingCash: 1500, maxAmount: 9999999,
+  startingCash: 1500, maxAmount: 9999999, touchDigits: 5, // touchDigits: 화면 숫자판 입력 최대 자릿수(planning.html 0.24 - 금액 자리 고정)
   sets: {
     orange: { name: '주황', color: '#e98a39', cost: 560, prices: '180 + 180 + 200', cities: ['창원', '울산', '부산'], house: 100 },
     red: { name: '빨강', color: '#dc4756', cost: 680, prices: '220 + 220 + 240', cities: ['제주', '여수', '광주'], house: 150 }

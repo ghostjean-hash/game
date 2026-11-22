@@ -1,5 +1,6 @@
 // 모노폴리 화면 측정 도구 (기획서 0.22.2 · 0.22.5)
 // 사용: node apps/monopoly-companion/tests/screen-audit.mjs audit [결과폴더] [크기목록]
+//       node apps/monopoly-companion/tests/screen-audit.mjs stable - [크기목록]  (전환 단추 흔들림 · 아이콘 가운데, 0.24)
 //       node apps/monopoly-companion/tests/screen-audit.mjs styles <결과.json> [크기목록]
 // 전제: 개발 서버(node scripts/dev-server.mjs 8010), 시스템 Chrome, 자비스 공용 playwright-core.
 // 브라우저 임시 저장소만 쓰므로 사용자 판 기록에 닿지 않는다. 일반 자동 검사(*.test.mjs)와 따로 돈다.
@@ -179,6 +180,53 @@ if (mode === 'audit') {
   }
   fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 1));
   console.log(`끝 - 장면 ${report.length}개 중 문제 ${bad}개`);
+} else if (mode === 'stable') {
+  // 0.24: 전환·선택 단추를 하나씩 눌러도 다른 상자의 위치·크기가 그대로인지, 아이콘만 있는 단추의 그림이 한가운데인지 잰다
+  const TOGGLES = '[aria-pressed], [role="radio"], [data-amount-key], [data-amount-add]';
+  const rects = () => {
+    const dlg = [...document.querySelectorAll('dialog[open]')].pop();
+    const scope = dlg || document.body, out = {};
+    const walk = (el, p) => {
+      if (el.closest && el.closest('.board-viewport')) return;
+      const cs = getComputedStyle(el);
+      if (cs.display === 'none' || cs.visibility === 'hidden') return;
+      const r = el.getBoundingClientRect();
+      if (r.width > 2 && r.height > 2) out[p] = [el.tagName + '.' + String(el.className || '').split(' ')[0] + ' "' + (el.textContent || '').trim().slice(0, 12) + '" ^' + (el.parentElement?.closest('p, li, label, button, h2, h3, small') || el.parentElement)?.textContent.trim().slice(0, 40) + ' @' + (el.closest('.asset-list > *, .finance-list > *')?.textContent.trim().slice(0, 20) || ''), Math.round(r.x * 2) / 2, Math.round(r.y * 2) / 2, Math.round(r.width * 2) / 2, Math.round(r.height * 2) / 2];
+      [...el.children].forEach((c, i) => walk(c, p + '/' + c.tagName + i));
+    };
+    walk(scope, 's');
+    return out;
+  };
+  const iconsOff = () => {
+    const dlg = [...document.querySelectorAll('dialog[open]')].pop();
+    return [...(dlg || document.body).querySelectorAll('button')].filter(b => !b.closest('.board-viewport') && b.querySelector('svg') && !b.textContent.trim() && b.getClientRects().length).map(b => {
+      const a = b.getBoundingClientRect(), s = b.querySelector('svg').getBoundingClientRect();
+      return [b.getAttribute('aria-label') || b.className, Math.round((s.x + s.width / 2 - a.x - a.width / 2) * 10) / 10, Math.round((s.y + s.height / 2 - a.y - a.height / 2) * 10) / 10];
+    }).filter(([, dx, dy]) => Math.abs(dx) > 0.6 || Math.abs(dy) > 0.6);
+  };
+  const seen = new Set();
+  for (const size of SIZES) for (const scene of SCENES) {
+    const { ctx, page } = await runScene(browser, size, scene);
+    const issues = [];
+    for (const [n, dx, dy] of await page.evaluate(iconsOff)) issues.push(`아이콘 치우침 "${n}" 가로${dx} 세로${dy}`);
+    const count = await page.evaluate(sel => { const dlg = [...document.querySelectorAll('dialog[open]')].pop(); return [...(dlg || document.body).querySelectorAll(sel)].filter(b => !b.closest('.board-viewport') && !b.closest('[inert]') && getComputedStyle(b).visibility !== 'hidden' && !b.disabled && b.getClientRects().length).length; }, TOGGLES);
+    for (let i = 0; i < Math.min(count, 14); i++) {
+      const before = await page.evaluate(rects);
+      const label = await page.evaluate(([sel, i]) => { const dlg = [...document.querySelectorAll('dialog[open]')].pop(); const b = [...(dlg || document.body).querySelectorAll(sel)].filter(b => !b.closest('.board-viewport') && !b.closest('[inert]') && getComputedStyle(b).visibility !== 'hidden' && !b.disabled && b.getClientRects().length)[i]; if (!b) return null; b.click(); return (b.getAttribute('aria-label') || b.textContent || '').trim().slice(0, 14); }, [TOGGLES, i]);
+      if (label === null) break;
+      await page.waitForTimeout(250);
+      await page.evaluate(() => { for (const a of document.getAnimations()) if (['dialog-in', 'backdrop-in', 'die-pick'].includes(a.animationName)) a.finish(); });
+      const after = await page.evaluate(rects);
+      const moved = Object.keys(before).filter(k => after[k] && before[k][0] === after[k][0] && before[k].slice(1).join() !== after[k].slice(1).join());
+      for (const k of moved) before[k][0] = before[k][0].split(' ^')[0];
+      if (moved.length) issues.push(`"${label}" 누르면 ${moved.length}개 움직임: ` + moved.slice(0, 4).map(k => before[k][0] + ' ' + before[k].slice(1).join(',') + '→' + after[k].slice(1).join(',')).join(' ; '));
+    }
+    const key = scene[0] + issues.join('|');
+    if (issues.length) bad++;
+    console.log(`[${size.join('x')}] ${scene[0]}: ${issues.length ? issues.join(' || ') : '통과'}`);
+    await ctx.close();
+  }
+  console.log(`끝 - 문제 장면 ${bad}개`);
 } else if (mode === 'styles') {
   const all = {};
   for (const size of SIZES) for (const scene of SCENES) {
