@@ -19,7 +19,7 @@ const BASE = process.env.SCREEN_URL || 'http://127.0.0.1:8010/apps/monopoly-comp
 const KEY = 'gg.monopoly-companion.session';
 const AUDIT_SIZES = '1366x950,1366x1024';
 const STYLE_SIZES = '1366x950,1366x1024,1194x834,1024x768,1024x680,1024x1366,390x844';
-const SIZES = (sizeArg || (mode === 'styles' ? STYLE_SIZES : AUDIT_SIZES)).split(',').map(s => s.split('x').map(Number));
+const SIZES = (sizeArg || (mode === 'styles' ? STYLE_SIZES : mode === 'stable' ? STYLE_SIZES.split(',').slice(0,6).join(',') : AUDIT_SIZES)).split(',').map(s => s.split('x').map(Number));
 const TOUCH_MIN = 48;
 const fixture = JSON.parse(fs.readFileSync(path.join(here, 'fixtures', 'screen-session.json'), 'utf8'));
 
@@ -51,9 +51,16 @@ const SCENES = [
   ['돈 마련 · 부지 관리', seed(), [['click', '[data-action="properties"]']]],
   ['부지·돈 거래', seed(), [['click', '[data-action="trade"]']]],
   ['거래 부지 많음', seed(s => { for (const i of Object.keys(s.board.deeds)) if (s.board.deeds[i].owner != null) Object.assign(s.board.deeds[i], { owner: Number(i) % 2, buildings: 0 }); }), [['click', '[data-action="trade"]']]],
-  ['집 짓기', seed(s => { for (const i of [1, 3]) Object.assign(s.board.deeds[i], { owner: 0, mortgaged: false }); }), [['click', '[data-action="build"]']]],
-  ['여러 채 짓기', seed(s => { for (const i of [1, 3]) Object.assign(s.board.deeds[i], { owner: 0, mortgaged: false }); s.board.players[0].cash = 2000; }), [['click', '[data-action="build"]'], ['click', '[data-build-plan]']]],
+  ['집 짓기 목록', seed(s => { s.turns=[0,0];s.first=0;for (const i of [1, 3, 6, 8, 9]) Object.assign(s.board.deeds[i], { owner: 0, mortgaged: false }); }), [['click', '[data-action="build"]']]],
+  ['집 짓기 칸', seed(s => { s.turns=[0,0];s.first=0;for (const i of [1, 3]) Object.assign(s.board.deeds[i], { owner: 0, mortgaged: false }); s.board.players[0].cash = 2000; }), [['click', '[data-action="build"]'], ['click', '[data-build-player="0"]'], ['click', '[data-build-plan="1"]']]],
   ['파산', seed(), [['click', '[data-action="bankrupt"]']]],
+  ['파산 확인', seed(), [['click', '[data-action="bankrupt"]'], ['click', '[data-bankrupt="0"]']]],
+  ['파산 결과 되돌리기', seed(), [['click', '[data-action="bankrupt"]'], ['click', '[data-bankrupt="0"]'], ['click', '[data-bankrupt-confirm="0"]']]],
+  ['파산 되돌린 진행', seed(), [['click', '[data-action="bankrupt"]'], ['click', '[data-bankrupt="0"]'], ['click', '[data-bankrupt-confirm="0"]'], ['click', '.result-actions [data-action="undo"]']]],
+  ['돈 마련 건물 막힌 줄', seed(s => { for (const i of [1, 3]) Object.assign(s.board.deeds[i], { owner: 0, buildings: Number(i) === 1 ? 1 : 0, mortgaged: false }); }), [['click', '[data-action="properties"]'], ['click', '[data-portfolio="0"]']]],
+  ['기록 맞추기 보드 선택', seed(), [['click', '[data-action="menu"]'], ['click', '[data-action="correct"]'], ['click', '[data-correct-player="1"]'], ['click', '.board-viewport [data-tile="10"]']]],
+  ['보너스 선택', null, [['click', '[data-bonus-open="0"]'], ['click', '[data-bonus-set="200"]']]],
+  ['감옥 칸 그림', seed(s => { s.board.players[0].pos = 10; }), []],
   ['칸 정보 도시', seed(), [['click', '[data-tile="1"]']]],
   ['칸 정보 역', seed(), [['click', '[data-tile="5"]']]],
   ['칸 정보 공공 기관', seed(), [['click', '[data-tile="12"]']]],
@@ -62,6 +69,8 @@ const SCENES = [
   ['칸 정보 감옥', seed(), [['click', '[data-tile="10"]']]],
   ['구입 처리', seed(land((s) => { const i = firstUnowned(s); return { type: 'buy', index: i, amount: 100 }; })), []],
   ['구입 중 돈 마련', seed(land((s, p) => { const i = firstUnowned(s); s.board.players[p].cash = 10; return { type: 'buy', index: i, amount: 100 }; })), [['click', '[data-action="properties"]']]],
+  ['구입 자금 마련 완료', seed(land((s, p) => { const i = firstUnowned(s); s.board.players[p].cash = 1000; return { type: 'buy', index: i, amount: 100 }; })), [['click', '[data-action="properties"]']]],
+  ['빈 거래', seed(), [['click', '[data-action="trade"]'], ['click', '[data-trade-dir="1"]'], ['click', '[data-amount-key="C"]']]],
   ['경매', seed(land((s) => { const i = firstUnowned(s); return { type: 'buy', index: i, amount: 100 }; })), [['click', '[data-action="auction"]']]],
   ['임대료 처리', seed(land((s, p) => { const i = ownedBy(s, 1 - p)[0]; return { type: 'rent', index: i, from: p, to: 1 - p, amount: 50, kind: 'street', factor: 1, key: 0 }; })), []],
   // 임대료 수정 창은 여는 단추가 화면에 없어(app.js rent-adjust 동작만 남음) 장면에서 뺀다
