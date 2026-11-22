@@ -191,7 +191,7 @@
     {const ready=groupsOf(p).filter(c=>B.ownsSet(s.board,p,c[0]));if(ready.length===1&&!keepPicker)return constructionPlan(p,ready[0][0]);}
     open('집 짓기',`${constructionHead(p)}<div class="build-stack">${list(p)}${list(1-p)}</div>`,false,button('돌아가기','data-close','primary'));dialog.classList.add('construction-dialog','construction-picker');
   }
-  function constructionHead(p,selectable=true){return `<div class="portfolio-head construction-head"><div class="segmented">${s.names.map((n,i)=>button(esc(n),`${selectable?`data-build-player="${i}" data-keep-picker`:"disabled"} aria-pressed="${i===p}"`,i===p?'primary':'secondary')).join('')}</div><strong>현금 ${money(s.board.players[p].cash)}</strong></div>`;}
+  function constructionHead(p){return `<div class="portfolio-head construction-head"><div class="segmented">${s.names.map((n,i)=>button(esc(n),`data-build-player="${i}" data-keep-picker aria-pressed="${i===p}"`,i===p?'primary':'secondary')).join('')}</div><strong>현금 ${money(s.board.players[p].cash)}</strong></div>`;}
   // 0.26: 집 짓기 계획 본문(모두 n채 · 도시별 +/− · 임대료 · 합계)과 건설 단추. 여러 채 짓기 창과 부지 창이 함께 쓴다.
   function constructionBody(p,index){
     const cities=B.group(index),targets=construction.targets,added=targets.reduce((n,t,k)=>n+t-s.board.deeds[cities[k]].buildings,0);let next=null;
@@ -205,7 +205,7 @@
     if(reset)construction={p,index,targets:B.group(index).map(i=>s.board.deeds[i].buildings)};
     if(construction.inProperty!=null)return property(construction.inProperty,true);
     const [body,confirm]=constructionBody(p,index);
-    open('집 짓기',`${constructionHead(p,false)}${body}`,false,`${button('돌아가기','data-close')}${confirm}`);dialog.classList.add('construction-dialog');
+    open('집 짓기',`${constructionHead(p)}${body}`,false,`${button('돌아가기','data-close')}${confirm}`);dialog.classList.add('construction-dialog');
   }
   // 0.26 부지 창: 왼쪽 실물 권리증(색 띠 · 소유자 · 임대료 표 · 가격), 오른쪽 같은 색 묶음 · 집 짓기 · 팔기 · 저당. 설명 문장 없음.
   // 독점 도시는 이 창 안에서 바로 도시별 수량을 정해 짓는다(종전 집 짓기 → 색 고르기 → 여러 채 짓기 세 단계).

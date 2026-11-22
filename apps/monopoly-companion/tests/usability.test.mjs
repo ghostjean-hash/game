@@ -123,8 +123,11 @@ test('0.30 집 짓기 목록과 도시별 창의 제목, 사람 줄, 폭이 같�
   assert.equal(await p.locator('.dialog-foot button').innerText(), '돌아가기');
   await p.click('[data-build-plan="1"]');
   assert.equal(await p.locator('#rule-title').innerText(), '집 짓기');
-  assert.equal((await p.locator('#rule-dialog').boundingBox()).width, before.width);
+  assert.deepEqual(await p.locator('#rule-dialog').boundingBox(), before);
   assert.equal(await p.locator('.construction-head button').count(), 2);
+  await p.click('[data-build-player="1"]');
+  assert.deepEqual(await p.locator('#rule-dialog').boundingBox(), before);
+  assert.equal(await p.locator('.construction-picker').count(), 1);
 });
 test('0.30 기록 맞추기는 숫자판과 보드 선택을 사람별로 보존해 확정한다', async t => {
   const p = await scene(t);
@@ -174,4 +177,16 @@ test('0.30 빈 거래는 방향, 숫자 초기화, 부지 선택 취소 뒤에�
   await p.click('[data-amount-key="C"]'); assert.equal(await confirm.isDisabled(), true);
   await p.click('[data-trade-deed="1"]'); assert.equal(await confirm.isDisabled(), false);
   await p.click('[data-trade-deed=""][data-player="0"]'); assert.equal(await confirm.isDisabled(), true);
+});
+test('0.30 세로 화면에서 자동을 켜도 시계와 메뉴 자리가 유지된다', async t => {
+  const p = await scene(t);
+  await p.setViewportSize({ width: 1024, height: 1366 });
+  const rects = () => p.evaluate(() => ['#timer', '.menu-button'].map(sel => {
+    const { x, y, width, height } = document.querySelector(sel).getBoundingClientRect();
+    return [x, y, width, height];
+  }));
+  const before = await rects();
+  await p.click('[data-action="menu"]'); await p.click('[data-auto="0"]');
+  assert.deepEqual(await rects(), before);
+  assert.ok((await p.locator('.menu-button').boundingBox()).x + 48 <= 1024);
 });

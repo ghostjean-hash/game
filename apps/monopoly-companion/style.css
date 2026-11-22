@@ -6632,8 +6632,31 @@ dialog.result-dialog.on-board {
 :root .correction-dialog .correction-players button {
   margin: 0;
 }
-/* 도시별 창은 소유자만 표시하되 목록 창과 같은 사람 줄 색을 쓴다. */
-:root .construction-head button:disabled {
-  opacity: 1;
-  cursor: default;
+/* 세로 화면의 좁은 시계 줄: 자동 단추가 나타나도 시계와 메뉴 자리를 고정한다. */
+@media (orientation: portrait) and (min-width: 761px) {
+  :root .panel-top {
+    gap: 4px;
+    padding-inline: 8px;
+  }
+  :root .panel-top #timer {
+    flex: none;
+    width: 76px;
+    min-width: 76px;
+    font-size: 22px;
+  }
+  :root .panel-top .auto-controls {
+    flex: none;
+  }
+}
+@media (orientation: portrait) and (min-width: 761px) {
+  :root .is-playing .game-tools {
+    --touch-in: var(--touch);
+  }
+}
+
+:root {
+  --r30-construction-h: 760px;
+}
+:root #rule-dialog.construction-dialog {
+  height: min(var(--r30-construction-h), calc(100dvh - var(--dialog-gap) * 2));
 }
