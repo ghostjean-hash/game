@@ -5148,6 +5148,36 @@ dialog.result-dialog.on-board {
   --r25-deed-w: 240px;
   --r25-due: 40px;
   --r25-pad: 12px;
+  --r25-line-w: 1px;
+  --r25-turn-w: 3px;
+  --r25-real-w: 2px;
+  --r25-real-line: #2a2a2a;
+  --r25-paper: #fff;
+  --r25-on-light: #1f2a24;
+  --r25-chance: #fdf1e2;
+  --r25-chest: #e9f2fb;
+  --r25-p0: var(--player-0-rgb, 49, 91, 133);
+  --r25-p1: var(--player-1-rgb, 169, 92, 120);
+  --r25-tight: 2px;
+  --r25-small-gap: 8px;
+  --r25-btn-radius: 12px;
+  --r25-btn-font: 20px;
+  --r25-status-font: 18px;
+  --r25-label-font: 16px;
+  --r25-owner-font: 15px;
+  --r25-kind-font: 13px;
+  --r25-deed-title: 22px;
+  --r25-deed-rent: 26px;
+  --r25-deed-radius: 6px;
+  --r25-card-radius: 10px;
+  --r25-card-art: 72px;
+  --r25-dot: 12px;
+  --r25-target-gap: 18px;
+  --r25-pause-w: 16px;
+  --r25-pause-h: 20px;
+  --r25-pause-bar: 5px;
+  --r25-head-space: 14px;
+  --r25-card-name: 20px;
 }
 .visually-hidden {
   position: absolute;
@@ -5171,7 +5201,7 @@ dialog.result-dialog.on-board {
 :root .panel-top #timer {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--r25-gap);
   font-variant-numeric: tabular-nums;
 }
 :root .panel-top .paused-pill {
@@ -5183,10 +5213,10 @@ dialog.result-dialog.on-board {
 :root .game-tools.is-paused #timer::after {
   content: '';
   box-sizing: border-box;
-  width: 16px;
-  height: 20px;
-  border-left: 5px solid currentColor;
-  border-right: 5px solid currentColor;
+  width: var(--r25-pause-w);
+  height: var(--r25-pause-h);
+  border-left: var(--r25-pause-bar) solid currentColor;
+  border-right: var(--r25-pause-bar) solid currentColor;
 }
 
 /* 진행 칸 뼈대 */
@@ -5223,30 +5253,30 @@ dialog.result-dialog.on-board {
   padding: var(--r25-pad) var(--r25-pad) 0;
 }
 .player-card {
-  --pc-rgb: var(--player-0-rgb, 49, 91, 133);
+  --pc-rgb: var(--r25-p0);
   position: relative;
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  column-gap: 8px;
-  row-gap: 2px;
-  padding: 10px 12px;
-  border: 1px solid var(--r25-line);
+  column-gap: var(--r25-small-gap);
+  row-gap: var(--r25-tight);
+  padding: calc(var(--r25-pad) - var(--r25-turn-w) + var(--r25-line-w)) var(--r25-pad);
+  border: var(--r25-line-w) solid var(--r25-line);
   border-radius: var(--r25-radius);
   background: var(--r25-surface);
   min-width: 0;
 }
 .player-card.player-1 {
-  --pc-rgb: var(--player-1-rgb, 169, 92, 120);
+  --pc-rgb: var(--r25-p1);
 }
 .player-card.is-turn {
-  padding: 8px 10px;
-  border: 3px solid rgb(var(--pc-rgb));
-  background: color-mix(in srgb, rgb(var(--pc-rgb)) 10%, #fff);
+  padding: calc(var(--r25-pad) - 2 * var(--r25-turn-w) + 2 * var(--r25-line-w)) calc(var(--r25-pad) - var(--r25-turn-w) + var(--r25-line-w));
+  border: var(--r25-turn-w) solid rgb(var(--pc-rgb));
+  background: color-mix(in srgb, rgb(var(--pc-rgb)) 10%, var(--r25-paper));
 }
 .player-dot {
-  width: 12px;
-  height: 12px;
+  width: var(--r25-dot);
+  height: var(--r25-dot);
   border-radius: 50%;
   background: rgb(var(--pc-rgb));
 }
@@ -5260,8 +5290,8 @@ dialog.result-dialog.on-board {
 }
 .player-place {
   position: absolute;
-  top: 11px;
-  right: 12px;
+  top: calc(var(--r25-pad) - var(--r25-turn-w) + 2 * var(--r25-line-w));
+  right: var(--r25-pad);
   max-width: 55%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5270,8 +5300,8 @@ dialog.result-dialog.on-board {
   color: var(--r25-sub);
 }
 .player-card.is-turn .player-place {
-  top: 9px;
-  right: 10px;
+  top: calc(var(--r25-pad) - var(--r25-turn-w));
+  right: calc(var(--r25-pad) - var(--r25-turn-w) + var(--r25-line-w));
   color: var(--r25-ink);
   font-weight: 700;
 }
@@ -5290,7 +5320,7 @@ dialog.result-dialog.on-board {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: var(--r25-target-gap);
 }
 :root .play-panel .current-task>.primary,
 :root .play-panel .current-task>.button-row,
@@ -5304,8 +5334,8 @@ dialog.result-dialog.on-board {
   width: 100%;
   min-height: var(--r25-main-btn);
   margin-inline: 0;
-  border-radius: 12px;
-  font-size: 20px;
+  border-radius: var(--r25-btn-radius);
+  font-size: var(--r25-btn-font);
 }
 :root .play-panel .current-task>.button-row.task-actions {
   display: grid;
@@ -5317,12 +5347,12 @@ dialog.result-dialog.on-board {
   min-height: var(--r25-main-btn);
   width: 100%;
   margin: 0;
-  border-radius: 12px;
-  font-size: 20px;
+  border-radius: var(--r25-btn-radius);
+  font-size: var(--r25-btn-font);
 }
 :root .play-panel .current-task .amount-status {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--r25-status-font);
 }
 :root .play-panel .current-task>.amount-status {
   margin-top: auto;
@@ -5334,14 +5364,18 @@ dialog.result-dialog.on-board {
 /* 주사위 장면: 선택판은 그대로, 요약 줄은 남는 자리 가운데, 이동 단추는 맨 아래 */
 :root .play-panel .current-task .dice-form {
   flex: 1;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr auto;
 }
-:root .play-panel .current-task .dice-form>.dice-picker:first-of-type {
-  justify-self: end;
-}
-:root .play-panel .current-task .dice-form>.dice-picker:nth-of-type(2) {
-  justify-self: start;
+@media (orientation: landscape) and (min-width: 761px) {
+  :root .play-panel .current-task .dice-form {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+  :root .play-panel .current-task .dice-form>.dice-picker:first-of-type {
+    justify-self: end;
+  }
+  :root .play-panel .current-task .dice-form>.dice-picker:nth-of-type(2) {
+    justify-self: start;
+  }
 }
 :root .play-panel .current-task .dice-summary {
   align-self: center;
@@ -5354,55 +5388,55 @@ dialog.result-dialog.on-board {
 .deed-card {
   width: var(--r25-deed-w);
   overflow: hidden;
-  border: 2px solid #2a2a2a;
-  border-radius: 6px;
-  background: #fff;
+  border: var(--r25-real-w) solid var(--r25-real-line);
+  border-radius: var(--r25-deed-radius);
+  background: var(--r25-paper);
   text-align: center;
 }
 .deed-band {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px 8px 10px;
-  border-bottom: 2px solid #2a2a2a;
+  padding: var(--r25-pad) var(--r25-small-gap) calc(var(--r25-pad) - var(--r25-tight));
+  border-bottom: var(--r25-real-w) solid var(--r25-real-line);
   background: var(--deed-band);
-  color: #fff;
+  color: var(--r25-paper);
 }
 .deed-band.is-light {
-  color: #1f2a24;
+  color: var(--r25-on-light);
 }
 .deed-band small {
-  font-size: 13px;
+  font-size: var(--r25-kind-font);
   font-weight: 600;
 }
 .deed-band strong {
-  font-size: 22px;
+  font-size: var(--r25-deed-title);
   font-weight: 800;
   line-height: 1.3;
 }
 .deed-card-owner {
   display: block;
-  padding: 6px;
-  font-size: 15px;
+  padding: calc(var(--r25-small-gap) - var(--r25-tight));
+  font-size: var(--r25-owner-font);
   font-weight: 700;
-  color: #fff;
-  background: rgb(var(--player-0-rgb, 49, 91, 133));
+  color: var(--r25-paper);
+  background: rgb(var(--r25-p0));
 }
 .deed-card-owner.player-1 {
-  background: rgb(var(--player-1-rgb, 169, 92, 120));
+  background: rgb(var(--r25-p1));
 }
 :root .play-panel .deed-card-rent {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0;
-  padding: 14px 8px 16px;
-  font-size: 16px;
+  padding: calc(var(--r25-pad) + var(--r25-tight)) var(--r25-small-gap) calc(var(--r25-pad) + 2 * var(--r25-tight));
+  font-size: var(--r25-label-font);
   line-height: 1.4;
   color: var(--r25-sub);
 }
 .deed-card-rent strong {
-  font-size: 26px;
+  font-size: var(--r25-deed-rent);
   color: var(--r25-ink);
   font-variant-numeric: tabular-nums;
 }
@@ -5412,10 +5446,10 @@ dialog.result-dialog.on-board {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: var(--r25-tight);
 }
 .task-due>span {
-  font-size: 18px;
+  font-size: var(--r25-status-font);
   font-weight: 600;
   color: var(--r25-sub);
 }
@@ -5435,39 +5469,39 @@ dialog.result-dialog.on-board {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  border: 2px solid #2a2a2a;
-  border-radius: 10px;
-  background: #fff;
+  gap: var(--r25-small-gap);
+  border: var(--r25-real-w) solid var(--r25-real-line);
+  border-radius: var(--r25-card-radius);
+  background: var(--r25-paper);
 }
 .card-face img {
-  height: 72px;
+  height: var(--r25-card-art);
   width: auto;
 }
 .card-face strong {
-  font-size: 20px;
+  font-size: var(--r25-card-name);
   color: var(--r25-ink);
 }
 .card-face.card-chance {
-  background: #fdf1e2;
+  background: var(--r25-chance);
 }
 .card-face.card-chest {
-  background: #e9f2fb;
+  background: var(--r25-chest);
 }
 
 /* 부지 정보 창: 제목 줄을 권리증 색 띠로 */
 :root dialog.deed-dialog .dialog-head {
-  margin-bottom: 14px;
-  padding: 12px 14px;
-  border: 2px solid #2a2a2a;
-  border-radius: 10px;
+  margin-bottom: var(--r25-head-space);
+  padding: var(--r25-pad) var(--r25-head-space);
+  border: var(--r25-real-w) solid var(--r25-real-line);
+  border-radius: var(--r25-card-radius);
   background: var(--deed-band);
 }
 :root dialog.deed-dialog .dialog-head h2 {
-  color: #fff;
+  color: var(--r25-paper);
 }
 :root dialog.deed-dialog.deed-light .dialog-head h2 {
-  color: #1f2a24;
+  color: var(--r25-on-light);
 }
 
 /* 준비 화면: 빈 아래 4분의 1을 걷고 시작 단추를 화면 오른쪽 아래에(표준 3.11 · 부록 A.2) */
@@ -5482,4 +5516,24 @@ dialog.result-dialog.on-board {
 }
 :root .placement span {
   color: var(--r25-ink);
+}
+
+/* 0.25 좁은 화면(폭 760px 이하): 처리 대상 그림을 줄인다 */
+@media (max-width: 760px) {
+  :root {
+    --r25-deed-w: 150px;
+    --r25-card-art: 36px;
+    --r25-deed-title: 17px;
+    --r25-deed-rent: 20px;
+    --r25-due: 28px;
+    --r25-target-gap: 8px;
+  }
+  .card-face {
+    aspect-ratio: auto;
+    padding: var(--r25-small-gap);
+  }
+  .task-target {
+    flex-direction: row;
+    justify-content: center;
+  }
 }
