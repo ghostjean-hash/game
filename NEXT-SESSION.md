@@ -1,6 +1,6 @@
 # game-hub NEXT-SESSION
 
-> 2026-11-23 모노폴리 0.30 사용성 수정 v255 배포(d156e24). 다음: 아이패드 실기기 확인, 0.30.2.1 판단(경매 사람 칸 고르기 · 현재 판 입력 숫자판) 답 대기. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.23.
+> 2026-11-23 모노폴리 0.30 사용성 수정 v255 배포(d156e24). 다음: 아이패드 실기기 확인(0.30.2.1 판단은 사용자 "ok"로 확정). 상세 apps/monopoly-companion/NEXT-SESSION.md 0.23.
 > 2026-11-22 모노폴리 v254 배포(25d709d) - 0.28 · 0.29 · 보드 SVG. 다음: 아이패드 확인, 사용성 점검 0.30 범위 답 대기. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.22.
 > 2026-11-22 모노폴리 0.29(권리증 5:7 · 집 짓기 정리 · 독점 표식 · 차례 안 취소) 구현, 미배포. 다음: 화면 확인 → 배포 지시. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.20.
 > 2026-11-22 모노폴리 0.28(이름 통일 · 구입 창 · 권리증 전체 · 돈 마련 창 · 거래 창) 구현 · 독립 검사 2회 통과, 일부 미커밋 · 미배포. 다음: 배포 시점(화면 확인 후 / 바로)과 보드 특수 칸 그림 다시 그리기(자비스 / Codex) 답 대기. 남는 위험 기획서 0.28.6. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.19.
