@@ -6,6 +6,8 @@ globalThis.MC_DATA = Object.freeze({
   // 행동이 없는 칸을 눌렀을 때의 한 줄 설명(세금은 칸 금액으로 따로 표시).
   tileFacts: { parking:'아무 일 없음', jail:'방문은 그냥 지나가기', gotojail:'감옥으로 이동', chance:'찬스 카드 한 장', chest:'사회사업기금 카드 한 장' },
   defaultPlayerColors: ['blue','rose'],
+  // 진행 칸 · 부지 창의 권리증 색 띠(planning.html 0.25). [띠 색, 밝은 띠면 1 = 어두운 글자]. 실물 한국판 권리증 사진 대조 전 임시값.
+  groupColors: { brown:['#8a5a3c',0], lightblue:['#9fd3ee',1], pink:['#d2508f',0], orange:['#e98a39',0], red:['#dc4756',0], yellow:['#f2d23c',1], green:['#2f9e5b',0], blue:['#2c5aa8',0], station:['#2a2a2a',0], utility:['#6b7c86',0] },
   playerPalette: {
     blue:{name:'파랑',hex:'#315b85',rgb:'49,91,133',soft:'#e0edf8'},
     rose:{name:'분홍',hex:'#a95c78',rgb:'169,92,120',soft:'#f5e3eb'},

@@ -5127,3 +5127,359 @@ dialog.result-dialog.on-board {
   line-height: 1.6;
   min-height: 1.6em;
 }
+
+/* ============================================================
+   0.25 앱 화면 UI/UX 표준 재설계 (planning.html 0.25)
+   진행 칸 구조: 두 사람 칸 / 처리 대상 / 주 단추 칸 맨 아래 고정.
+   주사위 선택판 모양(글자 · 3열 2줄 · 면 크기 · 간격)은 건드리지 않는다(걸린 지시 12절).
+   ============================================================ */
+:root {
+  --r25-surface: #fffdf8;
+  --r25-line: #d9d5c8;
+  --r25-ink: #1f3a30;
+  --r25-sub: #55645c;
+  --r25-board: #e6ebdf;
+  --r25-radius: 14px;
+  --r25-gap: 10px;
+  --r25-main-btn: 64px;
+  --r25-name: 17px;
+  --r25-cash: 24px;
+  --r25-place: 14px;
+  --r25-deed-w: 240px;
+  --r25-due: 40px;
+  --r25-pad: 12px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* 보드 가운데: 그러데이션 대신 단색(표준 4.1) */
+:root .board-map {
+  background: var(--r25-board);
+}
+
+/* 시계: "플레이 시간" 이름표 삭제(표준 4.7). 멈춤 상태는 시계 옆 기호 */
+:root .elapsed-clock:before {
+  content: none;
+  display: none;
+}
+:root .panel-top #timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+:root .panel-top .paused-pill {
+  display: none;
+}
+:root .game-tools.is-paused #timer {
+  color: var(--r25-sub);
+}
+:root .game-tools.is-paused #timer::after {
+  content: '';
+  box-sizing: border-box;
+  width: 16px;
+  height: 20px;
+  border-left: 5px solid currentColor;
+  border-right: 5px solid currentColor;
+}
+
+/* 진행 칸 뼈대 */
+:root .play-panel {
+  display: flex;
+  flex-direction: column;
+}
+:root .play-panel .turn-strip:empty {
+  display: none;
+}
+:root .play-panel .turn-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: var(--r25-pad);
+}
+:root .play-panel .current-task {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--r25-pad);
+  max-width: none;
+  text-align: center;
+}
+
+/* 두 사람 칸(표준 3.10 · 8.4): 차례 칸은 플레이어 색 3px 테두리 + 옅은 플레이어 색 바탕 */
+.player-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--r25-gap);
+  padding: var(--r25-pad) var(--r25-pad) 0;
+}
+.player-card {
+  --pc-rgb: var(--player-0-rgb, 49, 91, 133);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--r25-line);
+  border-radius: var(--r25-radius);
+  background: var(--r25-surface);
+  min-width: 0;
+}
+.player-card.player-1 {
+  --pc-rgb: var(--player-1-rgb, 169, 92, 120);
+}
+.player-card.is-turn {
+  padding: 8px 10px;
+  border: 3px solid rgb(var(--pc-rgb));
+  background: color-mix(in srgb, rgb(var(--pc-rgb)) 10%, #fff);
+}
+.player-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgb(var(--pc-rgb));
+}
+:root .player-name {
+  margin: 0;
+  font-size: var(--r25-name);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--r25-ink);
+  white-space: nowrap;
+}
+.player-place {
+  position: absolute;
+  top: 11px;
+  right: 12px;
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--r25-place);
+  color: var(--r25-sub);
+}
+.player-card.is-turn .player-place {
+  top: 9px;
+  right: 10px;
+  color: var(--r25-ink);
+  font-weight: 700;
+}
+.player-cash {
+  grid-column: 1 / 3;
+  font-size: var(--r25-cash);
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--r25-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 처리 대상은 남는 자리 가운데, 주 단추는 칸 맨 아래 같은 자리 · 같은 높이(표준 2.5 · 부록 A.2) */
+.task-target {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+:root .play-panel .current-task>.primary,
+:root .play-panel .current-task>.button-row,
+:root .play-panel .current-task>.card-actions,
+:root .play-panel .current-task .dice-form>.dice-submit {
+  margin-top: auto;
+}
+:root .play-panel .current-task>.primary,
+:root .play-panel .current-task>.card-actions>.primary,
+:root .play-panel .current-task .dice-form>.dice-submit {
+  width: 100%;
+  min-height: var(--r25-main-btn);
+  margin-inline: 0;
+  border-radius: 12px;
+  font-size: 20px;
+}
+:root .play-panel .current-task>.button-row.task-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--r25-gap);
+  width: 100%;
+}
+:root .play-panel .current-task>.button-row.task-actions>button {
+  min-height: var(--r25-main-btn);
+  width: 100%;
+  margin: 0;
+  border-radius: 12px;
+  font-size: 20px;
+}
+:root .play-panel .current-task .amount-status {
+  margin: 0;
+  font-size: 18px;
+}
+:root .play-panel .current-task>.amount-status {
+  margin-top: auto;
+}
+:root .play-panel .current-task>.amount-status+.primary,
+:root .play-panel .current-task>.amount-status+.button-row {
+  margin-top: 0;
+}
+/* 주사위 장면: 선택판은 그대로, 요약 줄은 남는 자리 가운데, 이동 단추는 맨 아래 */
+:root .play-panel .current-task .dice-form {
+  flex: 1;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+}
+:root .play-panel .current-task .dice-form>.dice-picker:first-of-type {
+  justify-self: end;
+}
+:root .play-panel .current-task .dice-form>.dice-picker:nth-of-type(2) {
+  justify-self: start;
+}
+:root .play-panel .current-task .dice-summary {
+  align-self: center;
+}
+:root .play-panel .current-task .dice-form>.dice-submit {
+  justify-self: stretch;
+}
+
+/* 권리증 그림(표준 7.6 · 7.9) */
+.deed-card {
+  width: var(--r25-deed-w);
+  overflow: hidden;
+  border: 2px solid #2a2a2a;
+  border-radius: 6px;
+  background: #fff;
+  text-align: center;
+}
+.deed-band {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px 10px;
+  border-bottom: 2px solid #2a2a2a;
+  background: var(--deed-band);
+  color: #fff;
+}
+.deed-band.is-light {
+  color: #1f2a24;
+}
+.deed-band small {
+  font-size: 13px;
+  font-weight: 600;
+}
+.deed-band strong {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.deed-card-owner {
+  display: block;
+  padding: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: rgb(var(--player-0-rgb, 49, 91, 133));
+}
+.deed-card-owner.player-1 {
+  background: rgb(var(--player-1-rgb, 169, 92, 120));
+}
+:root .play-panel .deed-card-rent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 14px 8px 16px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--r25-sub);
+}
+.deed-card-rent strong {
+  font-size: 26px;
+  color: var(--r25-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 낼 돈 */
+.task-due {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.task-due>span {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--r25-sub);
+}
+.task-due>strong {
+  font-size: var(--r25-due);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--r25-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 카드 장면: 실물 카드 모양 */
+.card-face {
+  width: var(--r25-deed-w);
+  aspect-ratio: 3 / 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid #2a2a2a;
+  border-radius: 10px;
+  background: #fff;
+}
+.card-face img {
+  height: 72px;
+  width: auto;
+}
+.card-face strong {
+  font-size: 20px;
+  color: var(--r25-ink);
+}
+.card-face.card-chance {
+  background: #fdf1e2;
+}
+.card-face.card-chest {
+  background: #e9f2fb;
+}
+
+/* 부지 정보 창: 제목 줄을 권리증 색 띠로 */
+:root dialog.deed-dialog .dialog-head {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 2px solid #2a2a2a;
+  border-radius: 10px;
+  background: var(--deed-band);
+}
+:root dialog.deed-dialog .dialog-head h2 {
+  color: #fff;
+}
+:root dialog.deed-dialog.deed-light .dialog-head h2 {
+  color: #1f2a24;
+}
+
+/* 준비 화면: 빈 아래 4분의 1을 걷고 시작 단추를 화면 오른쪽 아래에(표준 3.11 · 부록 A.2) */
+@media (min-height: 800px) {
+  :root #app.is-preparing {
+    min-height: 100dvh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+:root .placement span {
+  color: var(--r25-ink);
+}
