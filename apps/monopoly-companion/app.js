@@ -247,7 +247,7 @@
   }
   function showRule(id){managerId=id;path=['start'];renderGuide();}
   function renderGuide(){const flow=MC_MANAGER.flows(s?.names??D.players,s?.board?B.hotelAt(s.board):4)[managerId],n=flow?.[path.at(-1)];if(!n)return;open(n.title,`<p class="instruction">${richText(n.text)}</p>${n.note?`<p>${richText(n.note)}</p>`:''}<div class="guide-choices">${n.choices.map((c,i)=>button(richText(c.label),`data-guide="${c.next}"`,i===0?'primary':'secondary')).join('')}</div>${path.length>1?button('이전','data-action="guide-back"'):''}`);}
-  function bankrupt(){open('파산',`<p>건물 판매·저당으로도 빚을 못 갚는 사람</p><div class="button-row">${s.names.map((n,i)=>button(esc(n),`data-bankrupt="${i}"`,'danger')).join('')}</div>`);}
+  function bankrupt(){open('파산',`<p>건물 판매·저당으로도 빚을 못 갚는 사람</p><div class="button-row">${s.names.map((n,i)=>button(esc(n),`data-bankrupt="${i}"`,'danger')).join('')}</div>`,false,button('취소','data-close'));}
   function finish(){
     root.innerHTML=heading('결산')+`<p>두 사람 모두 ${s.turns[0]}차례를 마쳤습니다.</p><p>현금 + 부지 + 건물 구매금액으로 비교합니다. 저당 부지는 저당 가격입니다.</p><div class="button-row">${button('재산 확인','data-action="score"','primary')}${button('마지막 차례로 돌아가기','data-action="return-play"')}</div>`;
   }
@@ -283,7 +283,7 @@
     if(el.dataset.buildPlayer!==undefined)return constructionPicker(Number(el.dataset.buildPlayer),el.hasAttribute('data-keep-picker')||dialog.classList.contains('construction-dialog'));
     if(el.dataset.buildPlan!==undefined)return constructionPlan(Number(el.dataset.owner),Number(el.dataset.buildPlan));
     if(el.dataset.buildLevel!==undefined){construction.targets=B.group(construction.index).map(i=>Math.max(s.board.deeds[i].buildings,Number(el.dataset.buildLevel)));return constructionPlan(construction.p,construction.index,false);}
-    if(el.dataset.buildSet!==undefined){const k=Number(el.dataset.cityKey),i=B.group(construction.index)[k],built=s.board.deeds[i].buildings,v=Number(el.dataset.buildSet),t=construction.targets[k];construction.targets[k]=t>=v?Math.max(built,stepTarget(v,-1)):v;construction.focus=i;constructionPlan(construction.p,construction.index,false);return;}
+    if(el.dataset.buildSet!==undefined){const k=Number(el.dataset.cityKey),i=B.group(construction.index)[k],built=s.board.deeds[i].buildings,v=Number(el.dataset.buildSet),t=construction.targets[k];construction.targets[k]=t===5&&v<5?Math.max(built,v):t>=v?Math.max(built,stepTarget(v,-1)):v;construction.focus=i;constructionPlan(construction.p,construction.index,false);return;}
     if(el.dataset.buildStep!==undefined){const k=Number(el.dataset.cityKey),i=B.group(construction.index)[k];construction.targets[k]=Math.max(s.board.deeds[i].buildings,Math.min(5,stepTarget(construction.targets[k],Number(el.dataset.buildStep))));constructionPlan(construction.p,construction.index,false);document.querySelector('[data-build-step="'+el.dataset.buildStep+'"][data-city-key="'+k+'"]')?.focus({preventScroll:true});return;}
     if(el.hasAttribute('data-build-confirm'))return run(b=>B.buildPlan(b,construction.p,construction.index,construction.targets),'실물'+' 주택·호텔도 계획한 수로 맞추세요.',true);
     if(el.dataset.financeTab)return portfolio(Number(el.dataset.owner));

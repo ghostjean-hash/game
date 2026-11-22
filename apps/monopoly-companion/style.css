@@ -5835,6 +5835,8 @@ dialog.result-dialog.on-board {
   --r27-house: #2f8a4c;
   --r27-hotel: #c2413a;
   --r27-empty: #c9cdc2;
+  --r27-hotel-ratio: 1.5;
+  --r27-card-cols: 3;
 }
 
 /* 1. 팝업 공통 제목 바: [빈 칸 | 제목 가운데 | X] 한 줄, 아래 구분선. X 는 바 안 세로 가운데 */
@@ -5950,8 +5952,8 @@ dialog.result-dialog.on-board {
   color: var(--r27-empty);
 }
 :root #rule-dialog .house-slot.hotel-slot {
-  width: calc(var(--r27-slot) * 1.5);
-  min-width: calc(var(--r27-slot) * 1.5);
+  width: calc(var(--r27-slot) * var(--r27-hotel-ratio));
+  min-width: calc(var(--r27-slot) * var(--r27-hotel-ratio));
 }
 :root #rule-dialog .house-slot svg {
   width: 100%;
@@ -5982,7 +5984,7 @@ dialog.result-dialog.on-board {
 /* 4. 카드 고르기: 카드 전부 스크롤 없이 한 화면(3열) */
 :root #rule-dialog.card-list-dialog .card-catalog {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--r27-card-cols), minmax(0, 1fr));
   gap: var(--r25-small-gap);
 }
 :root #rule-dialog.card-list-dialog .card-catalog button {
@@ -6053,4 +6055,21 @@ dialog.result-dialog.on-board {
 }
 :root #rule-dialog .house-slot:not(.is-built):not(.is-planned) .building-piece path:last-child {
   fill: transparent;
+}
+
+/* 0.27 보정: 돈 마련 창 아래 단추 줄도 같은 폭 · 같은 높이, 시계 글자가 없으면 멈춤 기호도 숨김 */
+:root #rule-dialog .finance-footer {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--r25-gap);
+}
+:root #rule-dialog .finance-footer > button {
+  width: 100%;
+  min-height: var(--foot-button);
+  margin: 0;
+  font-size: var(--r25-btn-font);
+}
+:root .game-tools.is-paused #timer:empty::after {
+  content: none;
 }
