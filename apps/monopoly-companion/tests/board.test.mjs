@@ -284,3 +284,17 @@ test('station and utility ownership summaries agree with rent calculation at eve
   s.deeds[28].owner=0;assert.equal(B.deedInfo(s,12).complete,false);assert.equal(B.deedInfo(s,12).rents.find(r=>r.current).factor,4);
   assert.equal(B.deedInfo(s,0),null);
 });
+
+test('0.28 mortgage cancel returns the same loan with no interest, release still charges 10 percent',()=>{
+  let s=fresh();s.deeds[11].owner=0;const loan=s.deeds[11].mortgage;
+  assert.throws(()=>B.mortgage(s,0,11,null,true),/저당 중/);
+  s=B.mortgage(s,0,11);assert.equal(s.players[0].cash,1500+loan);
+  const opt=B.assetOptions(s,0).find(a=>a.index===11);assert.equal(opt.cancel.change,-loan);assert.equal(opt.release.change,-Math.ceil(loan*110/100));
+  const cancelled=B.mortgage(s,0,11,null,true);assert.equal(cancelled.players[0].cash,1500);assert.equal(cancelled.deeds[11].mortgaged,false);assert.equal(B.valid(cancelled),true);
+  const released=B.mortgage(s,0,11);assert.equal(released.players[0].cash,1500+loan-Math.ceil(loan*110/100));
+});
+
+test('0.28 one-way trade cash: the chosen payer gives, the other gives nothing',()=>{
+  let s=ready(fresh());s.deeds[11].owner=0;s.deeds[13].owner=1;
+  const next=B.trade(s,11,13,0,50);assert.equal(next.deeds[11].owner,1);assert.equal(next.deeds[13].owner,0);assert.equal(next.players[0].cash,1550);assert.equal(next.players[1].cash,1450);
+});

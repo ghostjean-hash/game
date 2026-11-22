@@ -6073,3 +6073,248 @@ dialog.result-dialog.on-board {
 :root .game-tools.is-paused #timer:empty::after {
   content: none;
 }
+/* 0.28 돈 마련 · 구입 · 거래 (planning.html 0.28.3) */
+:root {
+  --r28-in-bg: #f6ecd3;
+  --r28-in-line: #c9a85c;
+  --r28-in-ink: #5a4310;
+  --r28-out-bg: #f8e3de;
+  --r28-out-line: #d08a7a;
+  --r28-out-ink: #8a2f20;
+  --r28-piece: 22px;
+  --r28-deed-row: 48px;
+  --r28-deed-rows: 4;
+}
+/* 받기 금색 · 내기 빨강 */
+:root button.money-in {
+  background: var(--r28-in-bg);
+  border: var(--r25-real-w) solid var(--r28-in-line);
+  color: var(--r28-in-ink);
+  font-weight: 650;
+}
+:root button.money-out {
+  background: var(--r28-out-bg);
+  border: var(--r25-real-w) solid var(--r28-out-line);
+  color: var(--r28-out-ink);
+  font-weight: 650;
+}
+:root button.money-in .money-sign,
+:root button.money-out .money-sign {
+  font-weight: 800;
+  margin-left: 4px;
+}
+/* 돈 마련 창: 건물 그림(자리 크기 고정) · 독점 · 저당 표시 */
+:root #rule-dialog .asset-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+:root #rule-dialog .asset-monopoly,
+:root #rule-dialog .asset-mortgaged {
+  font-size: 13px;
+  font-weight: 650;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--r25-board);
+  color: var(--r25-ink);
+}
+:root #rule-dialog .asset-mortgaged {
+  background: var(--r28-out-bg);
+  color: var(--r28-out-ink);
+}
+:root #rule-dialog .asset-buildings {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: calc(var(--r28-piece) * 4 + 6px);
+  height: var(--r28-piece);
+}
+:root #rule-dialog .asset-buildings .building-piece {
+  width: var(--r28-piece);
+  height: var(--r28-piece);
+}
+:root #rule-dialog .asset-buildings .building-piece.hotel {
+  width: calc(var(--r28-piece) * 2);
+}
+/* 권리증 표: 이름과 금액 사이 최소 간격 */
+:root .deed-sheet .deed-rows li {
+  gap: 12px;
+}
+:root .deed-sheet .deed-rows li strong {
+  white-space: nowrap;
+}
+/* 구입 칸: 질문과 땅값 */
+:root .buy-target .buy-question {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+:root .buy-target .buy-question strong {
+  font-size: 28px;
+}
+/* 거래 창: 부지 단추 한 줄 높이 고정 · 4열, 현금은 [방향 · 금액 | 숫자판] */
+:root #rule-dialog .trade-simple .trade-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+:root #rule-dialog .trade-simple .trade-side h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  text-align: center;
+}
+:root #rule-dialog .trade-simple .trade-deeds {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: var(--r28-deed-row);
+  max-height: calc(var(--r28-deed-row) * var(--r28-deed-rows) + 6px * (var(--r28-deed-rows) - 1));
+  overflow-y: auto;
+  margin: 0;
+}
+:root #rule-dialog .trade-simple .trade-deeds button {
+  min-height: var(--r28-deed-row);
+  height: var(--r28-deed-row);
+  padding: 4px 6px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0;
+  font-size: 15px;
+  line-height: 1.2;
+}
+:root #rule-dialog .trade-simple .trade-deeds small {
+  font-size: 11px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+:root #rule-dialog .trade-simple .check {
+  min-height: var(--touch);
+  margin: 4px 0 0;
+}
+:root #rule-dialog .trade-simple .trade-cash {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 250px);
+  grid-template-rows: auto 1fr;
+  column-gap: 20px;
+  row-gap: 8px;
+  margin-top: 8px;
+}
+:root #rule-dialog .trade-simple .trade-dir {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+}
+:root #rule-dialog .trade-simple .trade-dir {
+  padding: 3px;
+  gap: 3px;
+  align-self: start;
+}
+:root #rule-dialog .trade-simple .trade-dir button {
+  min-height: var(--touch);
+  height: var(--touch);
+  margin: 0;
+}
+:root #rule-dialog .trade-simple .amount-readout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 8px;
+  align-self: end;
+}
+:root #rule-dialog .trade-simple .amount-readout > label {
+  margin: 0;
+}
+:root #rule-dialog .trade-simple .amount-readout > output {
+  font-size: 30px;
+  margin: 0;
+}
+:root #rule-dialog .trade-simple .amount-add {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+/* 받는 저당 바로 풀기: 제목 줄 오른쪽 자리에 겹쳐 두어 보이고 숨을 때 높이가 변하지 않게 한다 */
+:root #rule-dialog .trade-simple .trade-side {
+  position: relative;
+}
+:root #rule-dialog .trade-simple .trade-side h3 {
+  min-height: var(--touch);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 0 4px;
+}
+:root #rule-dialog .trade-simple .check {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  min-height: var(--touch);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+@media (max-height: 900px) {
+  :root {
+    --r28-deed-rows: 3;
+  }
+}
+@media (max-height: 800px) {
+  :root #rule-dialog .trade-simple .trade-cash {
+    margin-top: 0;
+  }
+  :root #rule-dialog .trade-simple .trade-side h3 {
+    margin-bottom: 0;
+  }
+  :root #rule-dialog .trade-simple .trade-grid {
+    margin-bottom: 0;
+  }
+  :root #rule-dialog .trade-simple .trade-preview {
+    margin-top: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  :root #rule-dialog .trade-simple #trade-fees {
+    height: 1.2em;
+    line-height: 1.2;
+    margin-top: 2px;
+    font-size: 14px;
+  }
+}
+:root #rule-dialog .trade-simple .touch-amount {
+  display: contents;
+}
+:root #rule-dialog .trade-simple .amount-readout {
+  grid-column: 1;
+  grid-row: 2;
+}
+:root #rule-dialog .trade-simple .number-pad {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+:root #rule-dialog .trade-simple .trade-preview {
+  margin-top: 10px;
+  text-align: center;
+}
+:root #rule-dialog .trade-simple .trade-preview p {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 8px;
+}
+:root #rule-dialog .trade-simple .trade-preview p b {
+  font-size: 18px;
+}
+:root #rule-dialog .trade-simple #trade-fees {
+  height: 1.5em;
+  line-height: 1.5;
+  overflow: hidden;
+  margin: 6px 0 0;
+  text-align: center;
+}

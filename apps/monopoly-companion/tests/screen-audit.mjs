@@ -61,6 +61,7 @@ const SCENES = [
   ['칸 정보 찬스', seed(), [['click', '[data-tile="7"]']]],
   ['칸 정보 감옥', seed(), [['click', '[data-tile="10"]']]],
   ['구입 처리', seed(land((s) => { const i = firstUnowned(s); return { type: 'buy', index: i, amount: 100 }; })), []],
+  ['구입 중 돈 마련', seed(land((s, p) => { const i = firstUnowned(s); s.board.players[p].cash = 10; return { type: 'buy', index: i, amount: 100 }; })), [['click', '[data-action="properties"]']]],
   ['경매', seed(land((s) => { const i = firstUnowned(s); return { type: 'buy', index: i, amount: 100 }; })), [['click', '[data-action="auction"]']]],
   ['임대료 처리', seed(land((s, p) => { const i = ownedBy(s, 1 - p)[0]; return { type: 'rent', index: i, from: p, to: 1 - p, amount: 50, kind: 'street', factor: 1, key: 0 }; })), []],
   // 임대료 수정 창은 여는 단추가 화면에 없어(app.js rent-adjust 동작만 남음) 장면에서 뺀다

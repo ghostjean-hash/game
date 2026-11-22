@@ -1,5 +1,7 @@
 # game-hub NEXT-SESSION
 
+> 2026-11-22 모노폴리 0.28(이름 통일 · 구입 창 · 권리증 전체 · 돈 마련 창 · 거래 창) 구현 · 검사 통과, 미커밋 · 미배포. 다음: 사용자 화면 확인 → 배포 지시, 보드 특수 칸 그림 다시 그리기(자비스 / Codex) 답 대기. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.19.
+
 > 2026-11-22 모노폴리 v253 배포(1576f7d) - 표준 재설계 0.24~0.27. 다음은 실제 아이패드 확인. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.18.
 
 > 2026-11-22 모노폴리 v252 배포(5e024f5) 뒤 전 화면 흔들림 0·아이콘 중심(0.24) 미배포 - 배포 지시와 상용 수준 시안 방식 답 대기. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.14.
