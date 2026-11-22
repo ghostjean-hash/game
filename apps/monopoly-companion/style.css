@@ -5537,3 +5537,520 @@ dialog.result-dialog.on-board {
     justify-content: center;
   }
 }
+
+/* ============================================================
+   0.26 팝업 틀 · 말 표시 · 부지 창 · 집 짓기 (planning.html 0.26)
+   ============================================================ */
+:root {
+  --r26-pawn: clamp(16px, 3.2cqw, 26px);
+  --r26-pawn-inset: clamp(2px, .4cqw, 4px);
+  --r26-pawn-step: calc(var(--r26-pawn) + var(--r25-tight));
+  --r26-sheet-w: 260px;
+  --r26-row-font: 16px;
+  --r26-row-pad: 6px;
+  --r26-step-btn: 48px;
+  --r26-step-label: 92px;
+  --r26-pawn-font: .55;
+  --r26-help-h: 1.5em;
+}
+
+/* 1. 팝업 틀: 아래 다음 행동 단추는 같은 폭으로 한 줄을 나눠 쓴다(표준 3.1 · 3.2) */
+#rule-dialog .dialog-foot {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--r25-gap);
+}
+#rule-dialog .dialog-foot > button {
+  min-width: 0;
+  width: 100%;
+}
+
+/* 2. 말: 보드 안쪽으로 튀어나온 이름 말풍선 대신 그 칸 안 바깥쪽 모서리의 둥근 말(이름 첫 글자).
+   모서리는 독점 표시 자리(위 우상 · 오른 우하 · 아래 좌하 · 왼 좌상)를 피한다. 같은 칸 두 말은 나란히. */
+:root .board-map .board-pawn {
+  width: var(--r26-pawn);
+  height: var(--r26-pawn);
+  margin: var(--r26-pawn-inset);
+  border-radius: 50%;
+  border: var(--r25-tight) solid var(--r25-paper);
+  box-shadow: none;
+  font-size: calc(var(--r26-pawn) * var(--r26-pawn-font));
+  line-height: 1;
+  --pawn-dir: -1;
+  transform: translateX(calc(var(--pawn-stack) * var(--r26-pawn-step) * var(--pawn-dir)));
+}
+:root .board-map .board-pawn>span {
+  padding: 0;
+}
+:root .board-map .board-pawn:after {
+  content: none;
+}
+:root .board-map .board-pawn.pawn-bottom,
+:root .board-map .board-pawn.pawn-corner-go {
+  align-self: end;
+  justify-self: end;
+  --pawn-dir: -1;
+}
+:root .board-map .board-pawn.pawn-left,
+:root .board-map .board-pawn.pawn-corner-jail {
+  align-self: end;
+  justify-self: start;
+  --pawn-dir: 1;
+}
+:root .board-map .board-pawn.pawn-top,
+:root .board-map .board-pawn.pawn-corner-parking {
+  align-self: start;
+  justify-self: start;
+  --pawn-dir: 1;
+}
+:root .board-map .board-pawn.pawn-right,
+:root .board-map .board-pawn.pawn-corner-police {
+  align-self: start;
+  justify-self: end;
+  --pawn-dir: -1;
+}
+
+/* 3. 부지 창: 왼쪽 실물 권리증, 오른쪽 행동. 이름은 권리증 띠에 한 번만(제목 줄 글자는 화면 읽기용) */
+:root dialog.deed-dialog .dialog-head {
+  margin-bottom: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+:root dialog.deed-dialog .dialog-head h2 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.deed-layout {
+  display: grid;
+  grid-template-columns: var(--r26-sheet-w) minmax(0, 1fr);
+  gap: var(--r25-target-gap);
+  align-items: start;
+}
+.deed-sheet {
+  overflow: hidden;
+  border: var(--r25-real-w) solid var(--r25-real-line);
+  border-radius: var(--r25-deed-radius);
+  background: var(--r25-paper);
+}
+.deed-sheet .deed-card-owner.is-bank {
+  color: var(--r25-ink);
+  background: var(--r25-line);
+}
+.deed-rows {
+  margin: 0;
+  padding: var(--r25-small-gap) var(--r25-pad);
+  list-style: none;
+}
+.deed-rows li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--r26-row-pad) var(--r25-small-gap);
+  border-radius: var(--r25-deed-radius);
+  font-size: var(--r26-row-font);
+  color: var(--r25-sub);
+}
+.deed-rows li strong {
+  color: var(--r25-ink);
+  font-variant-numeric: tabular-nums;
+}
+.deed-rows li.is-current {
+  background: var(--r25-board);
+  color: var(--r25-ink);
+  font-weight: 700;
+}
+:root .deed-costs {
+  margin: 0;
+  padding: var(--r25-small-gap) var(--r25-pad) var(--r25-pad);
+  border-top: var(--r25-line-w) solid var(--r25-line);
+}
+:root .deed-costs div {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--r25-tight) var(--r25-small-gap);
+  font-size: var(--r26-row-font);
+}
+:root .deed-costs dt {
+  color: var(--r25-sub);
+}
+:root .deed-costs dd {
+  margin: 0;
+  color: var(--r25-ink);
+  font-weight: 700;
+}
+.deed-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--r25-pad);
+  min-width: 0;
+}
+.deed-side h3 {
+  margin: 0;
+}
+.deed-side .deed-monopoly,
+.deed-side .deed-build {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.property-manage {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--r25-gap);
+}
+
+/* 4. 집 짓기 계획(부지 창 · 여러 채 짓기 창 공용): 도시 한 줄 = 이름 · −/수량/+ · 임대료 */
+:root .construction-cities {
+  display: flex;
+  flex-direction: column;
+  gap: var(--r25-small-gap);
+}
+:root .construction-city {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--r25-small-gap);
+  padding: var(--r25-small-gap) var(--r25-pad);
+  border: var(--r25-line-w) solid var(--r25-line);
+  border-radius: var(--r25-radius);
+  background: var(--r25-surface);
+}
+:root .construction-city.is-focus {
+  border: var(--r25-turn-w) solid var(--r25-ink);
+  padding: calc(var(--r25-small-gap) - var(--r25-turn-w) + var(--r25-line-w)) calc(var(--r25-pad) - var(--r25-turn-w) + var(--r25-line-w));
+}
+:root .construction-city h3 {
+  margin: 0;
+  text-align: left;
+  font-size: var(--r25-name);
+}
+:root .construction-city .building-stepper {
+  display: grid;
+  grid-template-columns: var(--r26-step-btn) var(--r26-step-label) var(--r26-step-btn);
+  align-items: center;
+  gap: var(--r25-small-gap);
+}
+:root .construction-city .building-stepper button {
+  width: var(--r26-step-btn);
+  min-width: var(--r26-step-btn);
+  height: var(--r26-step-btn);
+  min-height: var(--r26-step-btn);
+  padding: 0;
+}
+:root .construction-city .building-stepper strong {
+  text-align: center;
+  white-space: nowrap;
+}
+.construction-rent {
+  justify-self: end;
+  font-size: var(--r26-row-font);
+  color: var(--r25-sub);
+  white-space: nowrap;
+}
+.construction-rent strong {
+  color: var(--r25-ink);
+  font-variant-numeric: tabular-nums;
+}
+:root .construction-total {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  font-size: var(--r26-row-font);
+}
+:root .construction-help {
+  min-height: var(--r26-help-h);
+  margin: 0;
+}
+
+/* 0.26 보정: 부지 창 닫기 단추는 오른쪽 위 모서리에 띄워 빈 제목 줄을 없앤다. 소제목 왼쪽 정렬 통일 */
+:root #rule-dialog.deed-dialog .dialog-head {
+  position: absolute;
+  top: var(--r25-pad);
+  right: var(--r25-pad);
+  z-index: 1;
+}
+:root #rule-dialog.deed-dialog .deed-set-heading {
+  margin-right: calc(var(--touch) + var(--r25-pad));
+}
+:root #rule-dialog .deed-side h3 {
+  margin: 0 0 var(--r25-small-gap);
+  text-align: left;
+  font-size: var(--r25-name);
+}
+:root #rule-dialog .deed-sheet .deed-card-owner {
+  text-align: center;
+}
+:root #rule-dialog .construction-city h3 {
+  margin: 0;
+  text-align: left;
+}
+@media (max-height: 760px) {
+  :root {
+    --r26-row-pad: 3px;
+  }
+  .deed-side {
+    gap: var(--r25-small-gap);
+  }
+}
+
+/* 0.26 보정: 팝업 안 다음 행동 단추 줄(카드 처리 · 확인 등)도 아래 단추 줄과 같은 모양 - 칸 폭을 같은 폭으로 나누고 같은 높이 */
+#rule-dialog .dialog-body > .button-row,
+#rule-dialog .dialog-body > .card-actions {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--r25-gap);
+  width: 100%;
+  margin-top: var(--r25-target-gap);
+}
+#rule-dialog .dialog-body > .button-row > button,
+#rule-dialog .dialog-body > .card-actions > button {
+  width: 100%;
+  min-height: var(--foot-button);
+  margin: 0;
+  font-size: var(--r25-btn-font);
+}
+
+/* ============================================================
+   0.27 팝업 공통 제목 바 · 말은 칸 밖 보드 안쪽 바닥 · 집 짓기 그림 단추 · 카드 팝업 · 주사위 가운데 (planning.html 0.27)
+   ============================================================ */
+:root {
+  --r27-pawn: clamp(22px, 3.6cqw, 32px);
+  --r27-pawn-gap: clamp(3px, .5cqw, 6px);
+  --r27-pawn-half: calc(var(--r27-pawn) / 2 + 1px);
+  --r27-head-pad: 14px;
+  --r27-title: 24px;
+  --r27-slot: 44px;
+  --r27-slot-gap: 6px;
+  --r27-card-w: 300px;
+  --r27-card-art: 96px;
+  --r27-card-title: 26px;
+  --r27-house: #2f8a4c;
+  --r27-hotel: #c2413a;
+  --r27-empty: #c9cdc2;
+}
+
+/* 1. 팝업 공통 제목 바: [빈 칸 | 제목 가운데 | X] 한 줄, 아래 구분선. X 는 바 안 세로 가운데 */
+:root #rule-dialog .dialog-head,
+:root #rule-dialog.deed-dialog .dialog-head {
+  position: static;
+  display: grid;
+  grid-template-columns: var(--touch) minmax(0, 1fr) var(--touch);
+  align-items: center;
+  gap: var(--r25-small-gap);
+  margin: 0 0 var(--r25-target-gap);
+  padding: 0 0 var(--r27-head-pad);
+  border: 0;
+  border-bottom: var(--r25-line-w) solid var(--r25-line);
+  border-radius: 0;
+  background: none;
+}
+:root #rule-dialog .dialog-head::before {
+  content: '';
+}
+:root #rule-dialog .dialog-head h2,
+:root #rule-dialog.deed-dialog .dialog-head h2,
+:root #rule-dialog.deed-dialog.deed-light .dialog-head h2 {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  grid-column: 2;
+  margin: 0;
+  text-align: center;
+  font-size: var(--r27-title);
+  color: var(--r25-ink);
+}
+:root #rule-dialog .dialog-head .icon-button {
+  grid-column: 3;
+  justify-self: end;
+  margin: 0;
+}
+:root #rule-dialog.deed-dialog .deed-set-heading {
+  margin-right: 0;
+}
+
+/* 2. 말: 칸 밖, 보드 안쪽 빈 바닥에 그 칸에 붙여 둔다. 어느 칸도 덮지 않는다. 같은 칸 두 말은 나란히 */
+:root .board-map .board-pawn {
+  width: var(--r27-pawn);
+  height: var(--r27-pawn);
+  margin: 0;
+  font-size: calc(var(--r27-pawn) * var(--r26-pawn-font));
+  --pawn-pair: 0;
+}
+:root .board-map .board-pawn.pawn-bottom {
+  align-self: start;
+  justify-self: center;
+  transform: translate(calc(var(--pawn-pair) * var(--r27-pawn-half)), calc(-100% - var(--r27-pawn-gap)));
+}
+:root .board-map .board-pawn.pawn-top {
+  align-self: end;
+  justify-self: center;
+  transform: translate(calc(var(--pawn-pair) * var(--r27-pawn-half)), calc(100% + var(--r27-pawn-gap)));
+}
+:root .board-map .board-pawn.pawn-left {
+  align-self: center;
+  justify-self: end;
+  transform: translate(calc(100% + var(--r27-pawn-gap)), calc(var(--pawn-pair) * var(--r27-pawn-half)));
+}
+:root .board-map .board-pawn.pawn-right {
+  align-self: center;
+  justify-self: start;
+  transform: translate(calc(-100% - var(--r27-pawn-gap)), calc(var(--pawn-pair) * var(--r27-pawn-half)));
+}
+:root .board-map .board-pawn.pawn-corner-go {
+  align-self: start;
+  justify-self: start;
+  transform: translate(calc(-100% - var(--r27-pawn-gap) + var(--pawn-pair) * var(--r27-pawn-half)), calc(-100% - var(--r27-pawn-gap)));
+}
+:root .board-map .board-pawn.pawn-corner-jail {
+  align-self: start;
+  justify-self: end;
+  transform: translate(calc(100% + var(--r27-pawn-gap) + var(--pawn-pair) * var(--r27-pawn-half)), calc(-100% - var(--r27-pawn-gap)));
+}
+:root .board-map .board-pawn.pawn-corner-parking {
+  align-self: end;
+  justify-self: end;
+  transform: translate(calc(100% + var(--r27-pawn-gap) + var(--pawn-pair) * var(--r27-pawn-half)), calc(100% + var(--r27-pawn-gap)));
+}
+:root .board-map .board-pawn.pawn-corner-police {
+  align-self: end;
+  justify-self: start;
+  transform: translate(calc(-100% - var(--r27-pawn-gap) + var(--pawn-pair) * var(--r27-pawn-half)), calc(100% + var(--r27-pawn-gap)));
+}
+
+/* 3. 집 짓기: 도시 한 줄 = 이름 · 주택 칸 · 호텔 칸 · 임대료. 지은 것 채움, 계획 채움+굵은 테두리, 빈 칸 연한 그림 */
+:root .construction-city {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+.house-slots {
+  display: flex;
+  gap: var(--r27-slot-gap);
+}
+:root #rule-dialog .house-slot {
+  width: var(--r27-slot);
+  min-width: var(--r27-slot);
+  height: var(--r27-slot);
+  min-height: var(--r27-slot);
+  padding: var(--r27-slot-gap);
+  display: grid;
+  place-items: center;
+  border: var(--r25-line-w) solid var(--r25-line);
+  border-radius: var(--r25-btn-radius);
+  background: var(--r25-paper);
+  color: var(--r27-empty);
+}
+:root #rule-dialog .house-slot.hotel-slot {
+  width: calc(var(--r27-slot) * 1.5);
+  min-width: calc(var(--r27-slot) * 1.5);
+}
+:root #rule-dialog .house-slot svg {
+  width: 100%;
+  height: 100%;
+}
+:root #rule-dialog .house-slot.is-built,
+:root #rule-dialog .house-slot.is-built:disabled {
+  color: var(--r27-house);
+  opacity: 1;
+  border-color: var(--r25-line);
+  background: var(--r25-board);
+}
+:root #rule-dialog .house-slot.hotel-slot.is-built {
+  color: var(--r27-hotel);
+}
+:root #rule-dialog .house-slot.is-planned {
+  color: var(--r27-house);
+  border: var(--r25-turn-w) solid var(--r25-ink);
+  padding: calc(var(--r27-slot-gap) - var(--r25-turn-w) + var(--r25-line-w));
+}
+:root #rule-dialog .house-slot.hotel-slot.is-planned {
+  color: var(--r27-hotel);
+}
+:root #rule-dialog .house-slot.is-replaced {
+  color: var(--r27-empty);
+}
+
+/* 4. 카드 고르기: 카드 전부 스크롤 없이 한 화면(3열) */
+:root #rule-dialog.card-list-dialog .card-catalog {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--r25-small-gap);
+}
+:root #rule-dialog.card-list-dialog .card-catalog button {
+  min-height: var(--touch);
+  padding: var(--r25-small-gap);
+}
+
+/* 5. 카드 한 장 팝업: 실물 카드 모양 */
+.card-face.is-large {
+  width: var(--r27-card-w);
+  margin: 0 auto;
+  padding: var(--r25-target-gap) var(--r25-pad);
+  aspect-ratio: auto;
+}
+.card-face.is-large img {
+  height: var(--r27-card-art);
+}
+.card-face.is-large strong {
+  font-size: var(--r27-card-title);
+  text-align: center;
+}
+.card-detail {
+  font-size: var(--r25-status-font);
+  font-weight: 700;
+  color: var(--r25-ink);
+}
+.card-rate {
+  color: var(--r25-sub);
+}
+:root #rule-dialog.card-dialog .amount-status {
+  margin: var(--r25-pad) 0 0;
+  text-align: center;
+}
+
+/* 6. 주사위: 선택판은 남는 높이의 세로 가운데, 이동 단추는 맨 아래 칸 폭 전체 */
+@media (orientation: landscape) and (min-width: 761px) {
+  :root .play-panel .current-task .dice-form {
+    grid-template-rows: 1fr auto auto 1fr auto;
+  }
+  :root .play-panel .current-task .dice-form>.dice-picker {
+    grid-row: 2;
+  }
+  :root .play-panel .current-task .dice-form>.dice-summary {
+    grid-row: 3;
+  }
+  :root .play-panel .current-task .dice-form>.dice-submit {
+    grid-row: 5;
+  }
+}
+
+/* 0.27 보정: 집 짓기 칸 그림 - 칸을 채우는 크기, 빈 칸은 테두리만(연한 색), 지은 칸 · 계획한 칸은 채움 */
+:root {
+  --r27-piece: 28px;
+  --r27-piece-hotel: 44px;
+}
+:root #rule-dialog .house-slot .building-piece {
+  max-width: var(--r27-piece);
+  max-height: var(--r27-piece);
+  filter: none;
+  color: inherit;
+}
+:root #rule-dialog .house-slot .building-piece.hotel {
+  max-width: var(--r27-piece-hotel);
+}
+:root #rule-dialog .house-slot:not(.is-built):not(.is-planned) .building-piece path:first-child {
+  fill: transparent;
+  stroke: var(--r27-empty);
+}
+:root #rule-dialog .house-slot:not(.is-built):not(.is-planned) .building-piece path:last-child {
+  fill: transparent;
+}
