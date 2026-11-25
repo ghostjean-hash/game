@@ -26,6 +26,9 @@ export const INITIAL_MAX_MANWON = 10000000;
 export const BASE_WEIGHT_MIN = 0;
 export const BASE_WEIGHT_MAX = 100;
 
+// 게임 모드 지수의 기준값(기준 날짜 = 100)
+export const INDEX_BASE = 100;
+
 // 비교 차트 목록 폭(px): 끌어서 조절하는 범위와 처음 폭
 export const LIST_MIN_PX = 180;
 export const LIST_MAX_PX = 480;

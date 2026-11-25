@@ -39,7 +39,14 @@ button { font: inherit; color: inherit; }
 .seg button:last-child { border-right: 0; }
 .seg button[aria-pressed="true"], .seg button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
 .interval.is-off { visibility: hidden; }
-.updated { margin-left: auto; font-size: var(--fs-2); color: var(--ink-mute); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.game-toggle { margin-left: auto; display: inline-flex; align-items: center; gap: var(--sp-1); height: var(--btn-h); padding: 0 var(--sp-3); border: 1px solid var(--line-strong); border-radius: var(--r-1); font-size: var(--fs-2); color: var(--ink-2); cursor: pointer; white-space: nowrap; user-select: none; }
+.game-toggle input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.sec-title { margin: var(--sp-2) 0 var(--sp-1); font-size: var(--fs-3); font-weight: 700; color: var(--ink); }
+.sec-title:empty { display: none; }
+.charts .sec-title { margin: 0; }
+.credit { flex: none; padding: 2px var(--sp-4); font-size: var(--fs-1); color: var(--ink-mute); background: var(--panel); border-top: 1px solid var(--line); }
+.credit a { color: inherit; }
+.updated {font-size: var(--fs-2); color: var(--ink-mute); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .updated.is-stale { color: var(--warn); font-weight: 600; }
 
 .view { flex: 1; min-height: 0; }

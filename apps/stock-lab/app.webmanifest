@@ -1,6 +1,6 @@
 {
-  "name": "주식 뷰 · 시뮬레이터 - game_ghost",
-  "short_name": "주식 뷰",
+  "name": "시뮬레이터 - game_ghost",
+  "short_name": "시뮬레이터",
   "id": "./",
   "start_url": "./",
   "scope": "../../",

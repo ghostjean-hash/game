@@ -202,7 +202,8 @@
 // v255: 모노폴리 0.30 사용성 수정 - 파산 2단계 확인 · 결과 되돌리기, 경매 권리증 · 한 줄 단추, 보너스 확인, 집 짓기 흐림 · 이름 통일, 돈 마련 건물 팔기, 기록 맞추기 숫자판, 돌아가기 통일.
 // v256: 주식 뷰 · 시뮬레이터(apps/stock-lab) 신설 + 등록부 등재, 시세 파일(apps/stock-lab/data/*.json) network-first.
 // v257: 주식 뷰 비교 차트 목록 폭 끌어 조절 · 접기 펴기(둘 다 저장), 처음 열 때 목록 값 최신 날짜로.
-const CACHE_VERSION = "v257";
+// v258: 주식 뷰 → "시뮬레이터" 이름 변경 + 게임 모드(기획서 도면처럼 보이기: 곡선 · D+n · 지수 100 · 지표 A~R · 골드 낱말).
+const CACHE_VERSION = "v258";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.

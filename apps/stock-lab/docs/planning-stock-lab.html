@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>주식 뷰 · 시뮬레이터 기획서</title>
+<title>시뮬레이터 기획서</title>
 <link rel="stylesheet" href="planning-doc.css">
 <style>:root{--page-w:1080px}</style>
 </head>
 <body class="pd">
 
   <aside class="pd-side">
-    <div class="pd-doc-title">주식 뷰 · 시뮬레이터</div>
+    <div class="pd-doc-title">시뮬레이터</div>
     <nav class="pd-toc"></nav>
   </aside>
   <div class="pd-handle"></div>
@@ -19,7 +19,7 @@
     <div class="pd-body">
 
       <div class="titleblock">
-        <h1>주식 뷰 · 시뮬레이터 기획서</h1>
+        <h1>시뮬레이터 기획서</h1>
         <p class="sub">17~18개 시세를 한 화면에서 겹쳐 보는 비교 차트와, 코스피 낙폭에 따라 KODEX 레버리지 비중을 바꾸는 매매 규칙의 10년 모의 계산</p>
       </div>
 
@@ -210,6 +210,34 @@
         </div>
       </section>
 
+      <section id="s4b">
+        <div class="sechead"><span class="n">4.5</span><h2>이름과 게임 모드</h2><span class="rid">SL-06</span></div>
+        <h3><span class="sn">4.5.1</span> 앱 이름</h3>
+        <div class="ol">
+          <div class="oi"><span class="bl"></span><div class="ot">허브 카드 · 브라우저 탭 · 홈 화면 이름은 "시뮬레이터", 카드 부제는 "곡선 비교와 10년 운용 모의 계산"이다</div></div>
+        </div>
+        <h3><span class="sn">4.5.2</span> 게임 모드</h3>
+        <p class="lead">위 줄 오른쪽 "게임 모드" 체크를 켜면 화면을 게임 기획서의 밸런스 도면처럼 보이게 한다. 계산 · 숫자는 그대로이고 보이는 모양과 낱말만 바뀐다. 켜고 끈 상태는 저장하고, 바꾸면 화면을 다시 그린다.</p>
+        <table class="tight">
+          <thead><tr><th>대상</th><th>보통</th><th>게임 모드</th></tr></thead>
+          <tbody>
+            <tr><td>그래프 선</td><td>곧은 선, 실선 격자</td><td>부드러운 곡선, 점선 격자</td></tr>
+            <tr><td>차트 로고 · 꼬리표</td><td>라이브러리 로고, 가리킨 값 꼬리표</td><td>로고 · 가격 꼬리표 숨김. 라이브러리 출처는 화면 맨 아래 한 줄</td></tr>
+            <tr><td>시간축 · 날짜 표기</td><td>날짜</td><td>자료 첫날부터 지난 일수 D+n</td></tr>
+            <tr><td>위 칸 세로축</td><td>등락률 %</td><td>지수(보이는 첫날=100)</td></tr>
+            <tr><td>시세 이름</td><td>실제 이름</td><td>지표 A ~ R, 분류 "성장 곡선 · 이자 곡선". 목록에서 성장 곡선은 원래 값을 숨기고 지수만, 이자 곡선은 단위 없는 값과 변화만</td></tr>
+            <tr><td>탭</td><td>비교 차트 · 시뮬레이터</td><td>곡선 비교 · 운용 시뮬레이션</td></tr>
+            <tr><td>금액 단위</td><td>원</td><td>골드</td></tr>
+            <tr><td>매매 낱말</td><td>매수 · 매도, 급락 · 급등, 새 고점</td><td>투입 · 회수, 하락 이벤트 · 상승 이벤트, 최고점 갱신</td></tr>
+            <tr><td>기준 이름</td><td>코스피 · KODEX 레버리지</td><td>기준 지수(첫날=100) · 2배 자원</td></tr>
+            <tr><td>묶음 제목</td><td>없음</td><td>번호 붙은 절 제목(곡선 비교 탭 1. 곡선 비교 / 운용 시뮬레이션 탭 1. 운용 결과 요약 · 2. 골드 성장 곡선 · 3. 조정 기록). 골드 성장 곡선 세로축은 억 단위 숫자</td></tr>
+          </tbody>
+        </table>
+        <div class="ol">
+          <div class="oi"><span class="bl"></span><div class="ot">주소(<code>apps/stock-lab/</code>)와 자료 파일 이름은 바꾸지 않는다. 저장된 설정을 지키기 위해서다</div></div>
+        </div>
+      </section>
+
       <section id="s5">
         <div class="sechead"><span class="n">5</span><h2>설계</h2><span class="rid">SL-05</span></div>
         <p class="lead">이 설계를 쓰는 쪽은 구현하는 AI다. 사람이 보는 것은 앱 화면이다.</p>
@@ -266,7 +294,7 @@
         </div>
       </section>
 
-      <div class="foot"><span>주식 뷰 · 시뮬레이터 기획서</span><span>r0.4</span></div>
+      <div class="foot"><span>시뮬레이터 기획서</span><span>r0.6</span></div>
     </div>
   </main>
 

@@ -3,6 +3,7 @@ import { SERIES } from '../data/series.js';
 import { COMPARE_INITIAL_YEARS, END_SNAP_BARS } from '../data/numbers.js';
 import { resample, unionDates, fillForward, indexAtOrBefore, baseValue } from '../core/resample.js';
 import { load, save, timeToStr, fmtValue, fmtPct, fmtPp, signClass, CHART_BASE } from './common.js';
+import { GAME, T, dayLabel, seriesName, chartSkin, LINE_TYPE, merge, toIndex } from './skin.js';
 
 const LWC = window.LightweightCharts;
 const STATE_DEFAULT = { interval: 'day', off: {} };
@@ -21,14 +22,14 @@ export function createCompare(raw) {
     hover: document.getElementById('hover-date'),
   };
 
-  const priceChart = LWC.createChart(els.price, {
-    ...CHART_BASE,
-    rightPriceScale: { ...CHART_BASE.rightPriceScale, mode: LWC.PriceScaleMode.Percentage },
-  });
-  const rateChart = LWC.createChart(els.rate, {
-    ...CHART_BASE,
-    localization: { ...CHART_BASE.localization, priceFormatter: (v) => `${v.toFixed(2)}%` },
-  });
+  // 게임 모드는 세로축을 % 대신 지수(보이는 첫날=100)로 그린다.
+  const skin = chartSkin(LWC, timeToStr);
+  const priceChart = LWC.createChart(els.price, merge(merge(CHART_BASE, {
+    rightPriceScale: { mode: GAME ? LWC.PriceScaleMode.IndexedTo100 : LWC.PriceScaleMode.Percentage },
+  }), skin));
+  const rateChart = LWC.createChart(els.rate, merge(merge(CHART_BASE, {
+    localization: { priceFormatter: (v) => (GAME ? v.toFixed(2) : `${v.toFixed(2)}%`) },
+  }), skin));
 
   // 두 칸이 같은 날짜 칸을 쓰도록 모든 시세 날짜를 빈 점으로 깔아 둔다.
   const padPrice = priceChart.addLineSeries({ visible: false, lastValueVisible: false, priceLineVisible: false, crosshairMarkerVisible: false });
@@ -40,6 +41,7 @@ export function createCompare(raw) {
     lines[s.id] = chart.addLineSeries({
       color: s.color,
       lineWidth: 2,
+      lineType: LINE_TYPE(LWC),
       lineStyle: s.dash ? LWC.LineStyle.Dashed : LWC.LineStyle.Solid,
       priceLineVisible: false,
       lastValueVisible: false,
@@ -128,15 +130,16 @@ export function createCompare(raw) {
         const dash = s.dash ? ' stroke-dasharray="5 3"' : '';
         b.innerHTML = `<svg class="sw" viewBox="0 0 22 10" aria-hidden="true"><line x1="1" y1="5" x2="21" y2="5" stroke="${s.color}" stroke-width="3"${dash}/></svg>`
           + `<span class="nm"></span><span class="val"></span><span class="pct"></span>`;
-        b.querySelector('.nm').textContent = s.name;
-        b.title = `${s.name} (${s.unit})`;
+        const nm = seriesName(s, SERIES.indexOf(s));
+        b.querySelector('.nm').textContent = nm;
+        b.title = GAME ? nm : `${s.name} (${s.unit})`;
         b.addEventListener('click', () => toggle(s));
         els.list.appendChild(b);
         rows[s.id] = b;
       }
     };
-    addGroup('지수 · 종목 · 원자재 · 코인', priceList);
-    addGroup('금리', rateList);
+    addGroup(T.grpPrice, priceList);
+    addGroup(T.grpRate, rateList);
   }
 
   function toggle(s) {
@@ -163,18 +166,24 @@ export function createCompare(raw) {
     const lr = priceChart.timeScale().getVisibleLogicalRange();
     const atEnd = !range || (lr && lr.to >= dates.length - END_SNAP_BARS);
     const at = d || (atEnd ? dates[dates.length - 1] : timeToStr(range.to));
-    els.hover.textContent = `${from} 대비 · ${at}`;
+    els.hover.textContent = `${dayLabel(from)} ${T.base} · ${dayLabel(at)}`;
     for (const s of list) {
       const r = data[s.id];
       const i = indexAtOrBefore(r, at);
       const v = i >= 0 ? r[i][1] : null;
       const base = baseValue(r, from);
       const row = rows[s.id];
-      row.querySelector('.val').textContent = fmtValue(v, s.unit);
+      // 게임 모드: 가격 시세의 원래 값은 숨기고 지수(기준=100)만, 금리는 단위 없이 값과 변화
+      row.querySelector('.val').textContent = GAME && s.kind === 'price' ? '' : (GAME ? (v == null ? '-' : v.toFixed(2)) : fmtValue(v, s.unit));
       const pct = row.querySelector('.pct');
       if (v == null || base == null) { pct.textContent = '-'; pct.className = 'pct'; continue; }
       if (s.kind === 'rate') {
-        pct.textContent = fmtPp(v - base);
+        const dv = v - base;
+        pct.textContent = GAME ? `${dv > 0 ? '+' : ''}${dv.toFixed(2)}` : fmtPp(dv);
+        pct.className = 'pct ' + signClass(dv);
+      } else if (GAME) {
+        const idx = toIndex(v, base);
+        pct.textContent = idx.toFixed(1);
         pct.className = 'pct ' + signClass(v - base);
       } else {
         const ch = v / base - 1;

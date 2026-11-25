@@ -1,11 +1,27 @@
-// 주식 뷰 · 시뮬레이터 진입점. 탭 전환과 자료 읽기.
+// 시뮬레이터 진입점. 탭 전환과 자료 읽기, 게임 모드 켜고 끄기.
 import { SERIES } from './data/series.js';
+import { GAME, T, setOrigin } from './ui/skin.js';
 import { STALE_DAYS, LIST_MIN_PX, LIST_MAX_PX, LIST_DEFAULT_PX } from './data/numbers.js';
 import { load, save, fetchSeries, fetchMeta, daysBetween, todayStr } from './ui/common.js';
 import { createCompare } from './ui/compare.js';
 import { createSim } from './ui/sim.js';
 
-const ui = load('ui', { tab: 'compare', listHidden: false });
+const ui = load('ui', { tab: 'compare', listHidden: false, gameMode: false });
+
+// 게임 모드: 체크를 바꾸면 저장하고 화면을 다시 그린다(차트 모양 · 낱말이 처음 그릴 때 정해진다).
+const gameBox = document.getElementById('game-mode');
+gameBox.checked = GAME;
+gameBox.addEventListener('change', () => {
+  ui.gameMode = gameBox.checked;
+  save('ui', ui);
+  location.reload();
+});
+document.body.classList.toggle('game-mode', GAME);
+document.getElementById('tab-compare').textContent = T.tabCompare;
+document.getElementById('tab-sim').textContent = T.tabSim;
+document.getElementById('sec-compare').textContent = T.secCompare;
+if (GAME) document.getElementById('series-list').setAttribute('aria-label', '곡선 켜고 끄기');
+document.getElementById('credit').hidden = !GAME;
 
 // 목록 폭 조절(경계 끌기, 저장)과 접기 · 펴기(저장)
 window.initSidePanel?.({
@@ -42,6 +58,8 @@ const wanted = meta?.ok ? SERIES.filter((s) => meta.ok[s.id]) : SERIES;
 const files = await Promise.all(wanted.map((s) => fetchSeries(s.id)));
 const raw = {};
 wanted.forEach((s, i) => { if (files[i]) raw[s.id] = files[i].rows; });
+// 게임 모드의 D+n 기준일 = 받은 자료 가운데 가장 이른 날
+setOrigin(Object.values(raw).reduce((m, r) => (r.length && (!m || r[0][0] < m) ? r[0][0] : m), null));
 
 // 갱신 날짜: 받은 시세 가운데 가장 오래전에 받기에 성공한 날. 하나라도 오래되면 경고색.
 let oldest = null;
