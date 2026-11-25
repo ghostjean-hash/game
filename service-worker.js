@@ -203,7 +203,8 @@
 // v256: 주식 뷰 · 시뮬레이터(apps/stock-lab) 신설 + 등록부 등재, 시세 파일(apps/stock-lab/data/*.json) network-first.
 // v257: 주식 뷰 비교 차트 목록 폭 끌어 조절 · 접기 펴기(둘 다 저장), 처음 열 때 목록 값 최신 날짜로.
 // v258: 주식 뷰 → "시뮬레이터" 이름 변경 + 게임 모드(기획서 도면처럼 보이기: 곡선 · D+n · 지수 100 · 지표 A~R · 골드 낱말).
-const CACHE_VERSION = "v258";
+// v259: 시뮬레이터 기간 설정(시작 · 끝 날짜, 기본 2026-01-02, 저장) + 세 방식 켜고 끄기. 창 닫힘 자동 커밋이 판 올림 없이 새 코드를 올려 옛 계산 코드가 캐시에 남던 것을 회수.
+const CACHE_VERSION = "v259";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
