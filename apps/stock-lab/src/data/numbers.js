@@ -4,6 +4,9 @@ export const SIM_DEFAULTS = {
   baseWeightPct: 80,    // 기본 비중(%)
   stepPct: 10,          // 단계 폭: 코스피 낙폭 · 반등 기준(%)
   unitPct: 10,          // 매매 단위: 비중 변화(%p)
+  startDate: '2026-01-02', // 기간 시작(이 날 또는 그 뒤 첫 거래일)
+  endDate: '',          // 기간 끝. 빈 값 = 자료 마지막 날
+  ways: { rule: true, hold80: true, hold100: true }, // 결과 방식 켜고 끄기
 };
 
 export const STEP_CHOICES = [10, 5];

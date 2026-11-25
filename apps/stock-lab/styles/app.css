@@ -105,6 +105,10 @@ body.side-panel-resizing { cursor: col-resize; user-select: none; }
   font: inherit; font-size: var(--fs-3); color: var(--ink); text-align: right; font-variant-numeric: tabular-nums;
 }
 .input-unit input.is-bad { border-color: var(--warn); }
+.date-range input { width: 150px; text-align: left; }
+.summary input.way-on { margin: 0 var(--sp-2) 0 0; vertical-align: middle; cursor: pointer; }
+.summary tr.is-off td { color: var(--ink-mute); }
+.summary tr.is-off .sw { opacity: 0.3; }
 .period { margin-left: auto; font-size: var(--fs-2); color: var(--ink-mute); font-variant-numeric: tabular-nums; }
 
 table { border-collapse: collapse; width: 100%; background: var(--panel); font-variant-numeric: tabular-nums; }

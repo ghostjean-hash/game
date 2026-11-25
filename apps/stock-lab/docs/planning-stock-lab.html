@@ -116,7 +116,7 @@
             <tr><td>기본 비중</td><td class="num">80%</td><td>숫자 입력</td></tr>
             <tr><td>단계 폭 (코스피 낙폭 · 반등 기준)</td><td class="num">10%</td><td>10% / 5%</td></tr>
             <tr><td>매매 단위 (비중 변화)</td><td class="num">10%</td><td>10% / 5%</td></tr>
-            <tr><td>기간</td><td>최근 10년</td><td>고정</td></tr>
+            <tr><td>기간 (시작 · 끝 날짜)</td><td>시작 2026-01-02 · 끝 자료 마지막 날</td><td>날짜 고르기 - 받은 자료(최근 10년) 안, 시작이 끝보다 앞</td></tr>
           </tbody>
         </table>
 
@@ -166,6 +166,8 @@
               <li>매매 횟수에는 첫날 매수가 들어간다. 들고 있기는 1회다</li>
             </ul></div></div>
           <div class="oi"><span class="bl"></span><div class="ot">셋의 자산 곡선을 한 차트에 로그 눈금으로 그리고(10년 동안 몇 배로 불어나 보통 눈금이면 앞쪽 해가 납작해진다), 이 규칙의 매수 · 매도 날짜에 화살표(빨강 매수 · 파랑 매도)를 단다</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">결과 표 첫 칸 체크 상자로 세 방식을 각각 켜고 끈다. 끈 방식은 차트 선 · 화살표 · 차트 위 값 표시에서 빠지고 표 줄은 흐리게 남는다. 켜고 끈 상태는 저장된다</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">기간을 바꾸면 고른 시작 날짜를 첫날로 다시 계산한다(첫날 매수 · 코스피 고점 기준도 그날부터)</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">매매 기록 표 - 날짜 · 단계 · 코스피 · 낙폭 · 매매 금액 · 매매 뒤 비중 · 총자산</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">입력을 바꾸면 바로 다시 계산한다. 입력값은 저장된다</div></div>
         </div>
@@ -294,7 +296,7 @@
         </div>
       </section>
 
-      <div class="foot"><span>시뮬레이터 기획서</span><span>r0.6</span></div>
+      <div class="foot"><span>시뮬레이터 기획서</span><span>r0.7</span></div>
     </div>
   </main>
 

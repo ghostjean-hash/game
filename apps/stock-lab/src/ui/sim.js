@@ -1,5 +1,5 @@
 // 시뮬레이터 화면(기획서 3절).
-import { simulate, alignDays } from '../core/simulate.js';
+import { simulate, alignDays, sliceDays } from '../core/simulate.js';
 import {
   SIM_DEFAULTS, STEP_CHOICES, UNIT_CHOICES, FEE_RATE, WON_PER_MANWON,
   INITIAL_MIN_MANWON, INITIAL_MAX_MANWON, BASE_WEIGHT_MIN, BASE_WEIGHT_MAX,
@@ -21,12 +21,18 @@ const SELL_COLOR = '#1f5fbf';
 
 export function createSim(kospiRows, levRows) {
   const state = load('sim', SIM_DEFAULTS);
-  const days = alignDays(kospiRows, levRows);
+  const allDays = alignDays(kospiRows, levRows);
+  const first = allDays.length ? allDays[0][0] : '';
+  const last = allDays.length ? allDays[allDays.length - 1][0] : '';
+  state.ways = { ...SIM_DEFAULTS.ways, ...(state.ways || {}) };
+  let days = [];
   const els = {
     initial: document.getElementById('in-initial'),
     base: document.getElementById('in-base'),
     step: document.getElementById('in-step'),
     unit: document.getElementById('in-unit'),
+    start: document.getElementById('in-start'),
+    end: document.getElementById('in-end'),
     period: document.getElementById('sim-period'),
     summary: document.querySelector('#sim-summary tbody'),
     trades: document.querySelector('#sim-trades tbody'),
@@ -48,11 +54,11 @@ export function createSim(kospiRows, levRows) {
   // 낱말 · 절 제목
   const setText = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
   setText('lb-initial', T.inInitial); setText('lb-initial-unit', T.inInitialUnit);
-  setText('lb-base', T.inBase); setText('lb-step', T.inStep); setText('lb-unit', T.inUnit);
+  setText('lb-base', T.inBase); setText('lb-step', T.inStep); setText('lb-unit', T.inUnit); setText('lb-range', T.inRange);
   setText('sec-summary', T.secSummary); setText('sec-chart', T.secChart); setText('sec-trades', T.secTrades);
   document.querySelectorAll('#sim-summary thead th').forEach((th, i) => { th.textContent = T.sumHead[i]; });
   document.querySelectorAll('#sim-trades thead th').forEach((th, i) => { th.textContent = T.tradeHead[i]; });
-  const k0 = days.length ? days[0][1] : 1;
+  let k0 = 1;
 
   let results = null;
 
@@ -95,6 +101,24 @@ export function createSim(kospiRows, levRows) {
     const v = readNumber(els.base, BASE_WEIGHT_MIN, BASE_WEIGHT_MAX);
     if (v != null) { state.baseWeightPct = v; commit(); }
   });
+  // 기간: 받은 자료 안에서만, 시작이 끝보다 앞이어야 한다. 끝 빈 값 = 자료 마지막 날.
+  for (const e of [els.start, els.end]) { e.min = first; e.max = last; }
+  els.start.value = state.startDate || first;
+  els.end.value = state.endDate || last;
+  function readRange() {
+    const a = els.start.value;
+    const b = els.end.value;
+    const okAB = !!a && !!b && a >= first && b <= last && a < b;
+    els.start.classList.toggle('is-bad', !okAB);
+    els.end.classList.toggle('is-bad', !okAB);
+    if (!okAB) return;
+    state.startDate = a;
+    state.endDate = b === last ? '' : b;
+    commit();
+  }
+  els.start.addEventListener('change', readRange);
+  els.end.addEventListener('change', readRange);
+
   segButtons(els.step, STEP_CHOICES, 'stepPct');
   segButtons(els.unit, UNIT_CHOICES, 'unitPct');
 
@@ -104,6 +128,8 @@ export function createSim(kospiRows, levRows) {
   }
 
   function run() {
+    days = sliceDays(allDays, state.startDate, state.endDate);
+    k0 = days.length ? days[0][1] : 1;
     const initial = state.initialManwon * WON_PER_MANWON;
     const common = { initial, step: state.stepPct / 100, unit: state.unitPct / 100, fee: FEE_RATE };
     results = {
@@ -126,9 +152,21 @@ export function createSim(kospiRows, levRows) {
     for (const w of WAYS) {
       const s = results[w.key].summary;
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td><span class="sw" style="background:${w.color}"></span></td>`
+      const on = state.ways[w.key] !== false;
+      tr.classList.toggle('is-off', !on);
+      tr.innerHTML = `<td><input type="checkbox" class="way-on"><span class="sw" style="background:${w.color}"></span></td>`
         + `<td class="num"></td><td class="num ${signClass(s.totalReturn)}"></td><td class="num ${signClass(s.cagr)}"></td><td class="num down"></td><td class="num"></td>`;
       const td = tr.children;
+      const box = td[0].querySelector('input');
+      box.checked = on;
+      box.setAttribute('aria-label', w.name);
+      box.addEventListener('change', () => {
+        state.ways[w.key] = box.checked;
+        save('sim', state);
+        tr.classList.toggle('is-off', !box.checked);
+        applyWays();
+        renderHover(null);
+      });
       td[0].append(w.name);
       td[1].textContent = money(s.final);
       td[2].textContent = fmtPct(s.totalReturn);
@@ -150,7 +188,13 @@ export function createSim(kospiRows, levRows) {
       shape: t.qty > 0 ? 'arrowUp' : 'arrowDown',
     }));
     series.rule.setMarkers(markers);
+    applyWays();
     chart.timeScale().fitContent();
+  }
+
+  // 끈 방식은 선을 감춘다(매매 화살표는 이 규칙 선에 붙어 있어 함께 감춰진다).
+  function applyWays() {
+    for (const w of WAYS) series[w.key].applyOptions({ visible: state.ways[w.key] !== false });
   }
 
   function renderTrades() {
@@ -178,6 +222,7 @@ export function createSim(kospiRows, levRows) {
     const at = d || daily[daily.length - 1][0];
     const parts = [dayLabel(at)];
     for (const w of WAYS) {
+      if (state.ways[w.key] === false) continue;
       const row = results[w.key].daily.find((x) => x[0] === at);
       if (row) parts.push(`${w.name} ${money(row[1])}`);
     }

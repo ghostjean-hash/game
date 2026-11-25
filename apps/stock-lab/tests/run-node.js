@@ -1,5 +1,5 @@
 // 주식 뷰 · 시뮬레이터 시험. 실행: node apps/stock-lab/tests/run-node.js
-import { simulate, alignDays, summarize } from '../src/core/simulate.js';
+import { simulate, alignDays, summarize, sliceDays } from '../src/core/simulate.js';
 import { resample, unionDates, fillForward, indexAtOrBefore, baseValue } from '../src/core/resample.js';
 import { SERIES } from '../src/data/series.js';
 
@@ -145,6 +145,17 @@ const OPT = { initial: 1000000, baseWeight: 0.8, step: 0.1, unit: 0.1, fee: 0 };
   ok(new Set(SERIES.map((s) => s.id)).size === 18, '13 id 중복 없음');
   const keys = SERIES.filter((s) => s.kind === 'price').map((s) => s.color + s.dash);
   ok(new Set(keys).size === keys.length, '13 가격 시세 색·선 모양 겹침 없음');
+}
+
+// 14. 기간 자르기: 시작 · 끝 날짜 포함, 빈 값은 그쪽 끝을 자르지 않는다. 시작 날짜가 첫날(매수 · 고점 기준)
+{
+  const d = days([100, 90, 80, 70, 60]);
+  ok(JSON.stringify(sliceDays(d, '2020-01-02', '2020-01-04').map((x) => x[0])) === JSON.stringify(['2020-01-02', '2020-01-03', '2020-01-04']), '14 양끝 포함');
+  ok(sliceDays(d, '2020-01-04', '').length === 2, '14 끝 빈 값');
+  ok(sliceDays(d, '', '').length === 5, '14 둘 다 빈 값');
+  const r = simulate(sliceDays(d, '2020-01-03', ''), OPT);
+  ok(r.trades[0].date === '2020-01-03' && r.trades[0].label === '시작', '14 시작 날짜가 첫 매수');
+  ok(r.trades.length === 3, '14 고점 80 기준 급락 2번', JSON.stringify(r.trades.map((t) => t.label)));
 }
 
 console.log(`통과 ${pass} · 실패 ${fail}`);

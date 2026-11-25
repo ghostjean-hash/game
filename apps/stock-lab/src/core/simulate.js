@@ -13,6 +13,11 @@ export function alignDays(kospiRows, levRows) {
   return out;
 }
 
+// 기간 자르기: start 이상 end 이하 날짜만. 빈 값은 그쪽 끝을 자르지 않는다.
+export function sliceDays(days, start, end) {
+  return days.filter(([d]) => (!start || d >= start) && (!end || d <= end));
+}
+
 function rebalance(state, price, targetWeight, fee) {
   const stockVal = state.shares * price;
   const total = state.cash + stockVal;
