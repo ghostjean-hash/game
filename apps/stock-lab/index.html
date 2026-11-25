@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f6f7f9" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="주식 뷰" />
+<link rel="icon" type="image/png" href="../../icons/icon-192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../icons/icon-180.png" />
+<link rel="manifest" href="app.webmanifest" />
+<link rel="stylesheet" href="./styles/tokens.css" />
+<link rel="stylesheet" href="./styles/app.css" />
+<title>주식 뷰 · 시뮬레이터</title>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a href="../../" class="icon-btn" aria-label="홈으로" title="홈으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+    <div class="seg tabs" role="tablist">
+      <button type="button" role="tab" data-tab="compare">비교 차트</button>
+      <button type="button" role="tab" data-tab="sim">시뮬레이터</button>
+    </div>
+    <div class="seg interval" id="interval" role="group" aria-label="기간 단위">
+      <button type="button" data-interval="day">일간</button>
+      <button type="button" data-interval="week">주간</button>
+      <button type="button" data-interval="month">월간</button>
+    </div>
+    <div class="updated" id="updated"></div>
+  </header>
+
+  <main class="view" id="view-compare">
+    <nav class="series-list" id="series-list" aria-label="시세 켜고 끄기"></nav>
+    <section class="charts">
+      <div class="hover-date" id="hover-date"></div>
+      <div class="chart price" id="chart-price"></div>
+      <div class="chart rate" id="chart-rate"></div>
+    </section>
+  </main>
+
+  <main class="view" id="view-sim" hidden>
+    <section class="sim-inputs">
+      <label class="field">시작 금액
+        <span class="input-unit"><input type="number" id="in-initial" inputmode="numeric" step="100" /><span>만 원</span></span>
+      </label>
+      <label class="field">기본 비중
+        <span class="input-unit"><input type="number" id="in-base" inputmode="numeric" step="5" /><span>%</span></span>
+      </label>
+      <div class="field">단계 폭 (코스피)
+        <div class="seg" id="in-step" role="group"></div>
+      </div>
+      <div class="field">매매 단위 (비중)
+        <div class="seg" id="in-unit" role="group"></div>
+      </div>
+      <div class="period" id="sim-period"></div>
+    </section>
+    <div class="table-wrap summary-wrap">
+      <table class="summary" id="sim-summary">
+        <thead><tr><th>방식</th><th class="num">최종 금액</th><th class="num">총수익률</th><th class="num">연평균</th><th class="num">최대 낙폭</th><th class="num">매매 횟수</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="chart-head"><div class="hover-date" id="sim-hover"></div><div class="legend" id="sim-legend"></div></div>
+    <div class="chart equity" id="chart-equity"></div>
+    <div class="trades-wrap">
+      <table class="trades" id="sim-trades">
+        <thead><tr><th>날짜</th><th>단계</th><th class="num">코스피</th><th class="num">낙폭</th><th class="num">매매 금액</th><th class="num">매매 뒤 비중</th><th class="num">총자산</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+<script src="./vendor/lightweight-charts.standalone.production.js"></script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

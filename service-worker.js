@@ -200,7 +200,8 @@
 // v253: 모노폴리 표준 재설계(0.24~0.27) - 흔들림 0, 두 사람 칸 · 권리증 그림, 팝업 공통 제목 바, 말은 칸 밖 보드 안쪽, 주택 그림 눌러 짓기, 카드 창.
 // v254: 모노폴리 0.28 · 0.29 - 받는 현금 통일, 구입 칸 땅값 · 권리증 전체(5:7 통일), 돈 마련 부족액 · 건물 그림 · 받기/내기 색 · 차례 안 저당 취소, 거래 창 단순화, 집 짓기 정리, 독점 표식, 보드 특수 칸 SVG 그림.
 // v255: 모노폴리 0.30 사용성 수정 - 파산 2단계 확인 · 결과 되돌리기, 경매 권리증 · 한 줄 단추, 보너스 확인, 집 짓기 흐림 · 이름 통일, 돈 마련 건물 팔기, 기록 맞추기 숫자판, 돌아가기 통일.
-const CACHE_VERSION = "v255";
+// v256: 주식 뷰 · 시뮬레이터(apps/stock-lab) 신설 + 등록부 등재, 시세 파일(apps/stock-lab/data/*.json) network-first.
+const CACHE_VERSION = "v256";
 const CACHE_NAME = `game-ghost-${CACHE_VERSION}`;
 
 // 항상 network-first로 응답할 경로. 게임 목록 / 게임 메타 / 회차 정적 데이터.
@@ -303,7 +304,9 @@ self.addEventListener("fetch", (event) => {
   // english-reading은 출제 검사기 등 로직이 자주 바뀌므로 JS를 cache-first로 두면 배포해도 옛 로직이 캐시로 남는다 → 항상 최신 fetch.
   const ER_JS = /\/apps\/english-reading\/src\/.*\.js$/.test(url.pathname);
   const MINES_ASSET = /\/games\/mines\/(?:index\.html|app\.webmanifest|src\/.*\.js|styles\/.*\.css)$/.test(url.pathname);
-  if (ER_JS || MINES_ASSET || NETWORK_FIRST_PATHS.some((p) => url.pathname.endsWith(p))) {
+  // 주식 뷰 시세 파일은 매일 새로 받으므로 늘 최신을 먼저 읽는다(캐시는 끊겼을 때만).
+  const STOCK_DATA = /\/apps\/stock-lab\/data\/[^/]+\.json$/.test(url.pathname);
+  if (ER_JS || MINES_ASSET || STOCK_DATA || NETWORK_FIRST_PATHS.some((p) => url.pathname.endsWith(p))) {
     event.respondWith(
       fetch(req)
         .then((res) => {

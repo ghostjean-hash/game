@@ -1,7 +1,7 @@
 {
   "_comment": "web-deploy 파이프라인 설정 (글로벌 skills/web-deploy). 테스트 → 이미지 최적화 → PWA 점검 → push → smoke.",
   "test": {
-    "command": "node tests/cloud-merge.test.mjs && node tests/cloud-sync.test.mjs && node tests/cloud-auth.test.mjs && node tests/fullscreen.test.mjs && node tests/frame.test.mjs && node tests/save.test.mjs && node tests/progress.test.mjs && node tests/wallet.test.mjs && node tests/shop.test.mjs && node tests/smoke.mjs && node apps/english-reading/tests/run-node.mjs && cd apps/lotto && node tests/run-node.js",
+    "command": "node tests/cloud-merge.test.mjs && node tests/cloud-sync.test.mjs && node tests/cloud-auth.test.mjs && node tests/fullscreen.test.mjs && node tests/frame.test.mjs && node tests/save.test.mjs && node tests/progress.test.mjs && node tests/wallet.test.mjs && node tests/shop.test.mjs && node tests/smoke.mjs && node apps/english-reading/tests/run-node.mjs && node apps/stock-lab/tests/run-node.js && cd apps/lotto && node tests/run-node.js",
     "timeoutSec": 300
   },
   "images": {
@@ -46,6 +46,11 @@
       {
         "url": "https://ghostjean-hash.github.io/game/apps/english-reading/",
         "selector": ".passage-card",
+        "mustContain": null
+      },
+      {
+        "url": "https://ghostjean-hash.github.io/game/apps/stock-lab/",
+        "selector": ".si",
         "mustContain": null
       },
       {

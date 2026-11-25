@@ -49,6 +49,17 @@
         "touch"
       ],
       "accent": "#22644e"
+    },
+    {
+      "id": "stock-lab",
+      "title": "주식 뷰 · 시뮬레이터",
+      "subtitle": "18개 시세 비교 차트와 레버리지 분할 매매 10년 모의 계산",
+      "path": "apps/stock-lab/",
+      "status": "wip",
+      "controls": [
+        "touch"
+      ],
+      "accent": "#1f5fbf"
     }
   ]
 }
