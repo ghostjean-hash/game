@@ -2,6 +2,7 @@
 import { simulate, alignDays, summarize, sliceDays } from '../src/core/simulate.js';
 import { resample, unionDates, fillForward, indexAtOrBefore, baseValue } from '../src/core/resample.js';
 import { SERIES } from '../src/data/series.js';
+import { runLab } from './lab-cases.js';
 
 let pass = 0;
 let fail = 0;
@@ -157,6 +158,9 @@ const OPT = { initial: 1000000, baseWeight: 0.8, step: 0.1, unit: 0.1, fee: 0 };
   ok(r.trades[0].date === '2020-01-03' && r.trades[0].label === '시작', '14 시작 날짜가 첫 매수');
   ok(r.trades.length === 3, '14 고점 80 기준 급락 2번', JSON.stringify(r.trades.map((t) => t.label)));
 }
+
+// 15. 전략 실험실(tests/lab-cases.js)
+runLab(ok, eq);
 
 console.log(`통과 ${pass} · 실패 ${fail}`);
 if (fail) process.exit(1);

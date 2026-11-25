@@ -1,10 +1,10 @@
 // 시뮬레이터 진입점. 탭 전환과 자료 읽기, 게임 모드 켜고 끄기.
 import { SERIES } from './data/series.js';
 import { GAME, T, setOrigin } from './ui/skin.js';
-import { STALE_DAYS, LIST_MIN_PX, LIST_MAX_PX, LIST_DEFAULT_PX } from './data/numbers.js';
+import { STALE_DAYS, LIST_MIN_PX, LIST_MAX_PX, LIST_DEFAULT_PX, LAB_LIST_DEFAULT_PX } from './data/numbers.js';
 import { load, save, fetchSeries, fetchMeta, daysBetween, todayStr } from './ui/common.js';
 import { createCompare } from './ui/compare.js';
-import { createSim } from './ui/sim.js';
+import { createLab } from './ui/lab.js';
 
 const ui = load('ui', { tab: 'compare', listHidden: false, gameMode: false });
 
@@ -34,9 +34,21 @@ window.initSidePanel?.({
   default: LIST_DEFAULT_PX,
   side: 'left',
 });
+// 전략 실험실 목록 폭(탭마다 따로 저장)
+window.initSidePanel?.({
+  panel: '#lab-list',
+  handle: '#lab-handle',
+  storageKey: 'stocklab_lab_w',
+  cssVar: '--lab-w',
+  min: LIST_MIN_PX,
+  max: LIST_MAX_PX,
+  default: LAB_LIST_DEFAULT_PX,
+  side: 'left',
+});
 const listToggle = document.getElementById('list-toggle');
 function applyList() {
   document.getElementById('view-compare').classList.toggle('is-collapsed', ui.listHidden);
+  document.getElementById('view-sim').classList.toggle('is-collapsed', ui.listHidden);
   listToggle.setAttribute('aria-pressed', String(!ui.listHidden));
   const label = ui.listHidden ? '목록 펴기' : '목록 접기';
   listToggle.setAttribute('aria-label', label);
@@ -57,7 +69,8 @@ const meta = await fetchMeta();
 const wanted = meta?.ok ? SERIES.filter((s) => meta.ok[s.id]) : SERIES;
 const files = await Promise.all(wanted.map((s) => fetchSeries(s.id)));
 const raw = {};
-wanted.forEach((s, i) => { if (files[i]) raw[s.id] = files[i].rows; });
+const full = {};
+wanted.forEach((s, i) => { if (files[i]) { raw[s.id] = files[i].rows; full[s.id] = files[i]; } });
 // 게임 모드의 D+n 기준일 = 받은 자료 가운데 가장 이른 날
 setOrigin(Object.values(raw).reduce((m, r) => (r.length && (!m || r[0][0] < m) ? r[0][0] : m), null));
 
@@ -87,13 +100,12 @@ function showTab(tab) {
   views.compare.hidden = tab !== 'compare';
   views.sim.hidden = tab !== 'sim';
   intervalBox.classList.toggle('is-off', tab !== 'compare');
-  listToggle.classList.toggle('is-off', tab !== 'compare');
   if (tab === 'compare' && !compare) {
     compare = createCompare(raw);
     markInterval(compare.getInterval());
   }
   if (tab === 'sim' && !simReady && raw.kospi && raw.kodexlev) {
-    createSim(raw.kospi, raw.kodexlev);
+    createLab(raw, full);
     simReady = true;
   }
 }

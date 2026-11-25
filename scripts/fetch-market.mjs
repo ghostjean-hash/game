@@ -28,22 +28,35 @@ async function fetchYahoo(symbol, from) {
   const ts = r.timestamp || [];
   const gmtoff = r.meta?.gmtoffset || 0;
   const adj = r.indicators?.adjclose?.[0]?.adjclose;
-  const close = r.indicators?.quote?.[0]?.close || [];
+  const q = r.indicators?.quote?.[0] || {};
+  const close = q.close || [];
   const vals = adj && adj.length === ts.length ? adj : close;
   const rows = [];
+  // 시가 · 고가 · 저가 · 종가(수정 전 원래 가격). 네 값이 다 있는 날만.
+  const ohlc = [];
+  const fin = (v) => v !== null && v !== undefined && Number.isFinite(v);
   for (let i = 0; i < ts.length; i++) {
+    const d = ymd(new Date((ts[i] + gmtoff) * 1000));
     const v = vals[i];
-    if (v === null || v === undefined || !Number.isFinite(v)) continue;
-    rows.push([ymd(new Date((ts[i] + gmtoff) * 1000)), round(v)]);
+    if (fin(v)) rows.push([d, round(v)]);
+    const o = q.open?.[i];
+    const h = q.high?.[i];
+    const l = q.low?.[i];
+    const c = close[i];
+    if (fin(o) && fin(h) && fin(l) && fin(c)) ohlc.push([d, round(o), round(h), round(l), round(c)]);
   }
   // 장이 아직 열려 있으면 오늘 줄은 종가가 아니므로 뺀다(코인은 하루가 끝나지 않은 줄).
   const end = r.meta?.currentTradingPeriod?.regular?.end;
-  if (end && Date.now() / 1000 < end && rows.length) {
+  if (end && Date.now() / 1000 < end) {
     const endDay = ymd(new Date((end + gmtoff) * 1000));
-    if (rows[rows.length - 1][0] >= endDay) rows.pop();
+    if (rows.length && rows[rows.length - 1][0] >= endDay) rows.pop();
+    if (ohlc.length && ohlc[ohlc.length - 1][0] >= endDay) ohlc.pop();
   }
-  return rows;
+  return { rows, ohlc };
 }
+
+// 시가 · 고가 · 저가 · 종가를 함께 저장하는 시세(전략 실험실 장중 자료, 기획서 3.11)
+const OHLC_IDS = ['kospi', 'kodexlev'];
 
 async function fetchFred(id, from) {
   const url = `https://fred.stlouisfed.org/graph/fredgraph.csv?id=${id}&cosd=${from}`;
@@ -99,18 +112,24 @@ for (const s of SERIES) {
   const from = fullFrom;
   try {
     let rows;
-    if (s.source === 'yahoo') rows = await fetchYahoo(s.symbol, from);
+    let ohlc = null;
+    if (s.source === 'yahoo') ({ rows, ohlc } = await fetchYahoo(s.symbol, from));
     else if (s.source === 'fred') rows = await fetchFred(s.symbol, from);
     else if (s.source === 'ecos') rows = await fetchEcos(s.symbol, from);
     if (rows === null) { skipped.push(s.id); console.log(`건너뜀 ${s.id} (인증키 없음)`); continue; }
     if (!rows.length) throw new Error('받은 줄 0');
     const merged = clean(rows).filter((r) => r[0] >= fullFrom);
-    const text = JSON.stringify({ id: s.id, name: s.name, unit: s.unit, source: s.source, symbol: s.symbol, rows: merged }) + '\n';
+    const body = { id: s.id, name: s.name, unit: s.unit, source: s.source, symbol: s.symbol, rows: merged };
+    if (OHLC_IDS.includes(s.id) && ohlc) {
+      const seen = new Map(ohlc.map((r) => [r[0], r]));
+      body.ohlc = [...seen.values()].filter((r) => r[0] >= fullFrom).sort((a, b) => (a[0] < b[0] ? -1 : 1));
+    }
+    const text = JSON.stringify(body) + '\n';
     let old = null;
     try { old = fs.readFileSync(file, 'utf8'); } catch { /* 새 파일 */ }
     if (old !== text) fs.writeFileSync(file, text);
     meta.ok[s.id] = today;
-    console.log(`완료 ${s.id} ${merged[0][0]} ~ ${merged[merged.length - 1][0]} ${merged.length}줄${old === text ? ' (바뀐 것 없음)' : ''}`);
+    console.log(`완료 ${s.id} ${merged[0][0]} ~ ${merged[merged.length - 1][0]} ${merged.length}줄${body.ohlc ? ` · 시고저종 ${body.ohlc.length}줄` : ''}${old === text ? ' (바뀐 것 없음)' : ''}`);
   } catch (e) {
     failed.push(`${s.id}: ${e.message}`);
     console.log(`실패 ${s.id} ${e.message}`);

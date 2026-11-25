@@ -44,41 +44,35 @@
   </main>
 
   <main class="view" id="view-sim" hidden>
-    <section class="sim-inputs">
-      <label class="field"><span id="lb-initial">시작 금액</span>
-        <span class="input-unit"><input type="number" id="in-initial" inputmode="numeric" step="100" /><span id="lb-initial-unit">만 원</span></span>
-      </label>
-      <label class="field"><span id="lb-base">기본 비중</span>
-        <span class="input-unit"><input type="number" id="in-base" inputmode="numeric" step="5" /><span>%</span></span>
-      </label>
-      <div class="field"><span id="lb-step">단계 폭 (코스피)</span>
-        <div class="seg" id="in-step" role="group"></div>
+    <nav class="series-list lab-list" id="lab-list" aria-label="전략 켜고 끄기"></nav>
+    <div class="list-handle" id="lab-handle" aria-hidden="true"></div>
+    <section class="lab-main" id="lab-main">
+      <section class="sim-inputs lab-inputs">
+        <div class="field"><span>기간</span><div class="seg" id="lab-period" role="group"></div></div>
+        <div class="field"><span>직접 기간</span>
+          <span class="input-unit date-range"><input type="date" id="lab-start" /><span>~</span><input type="date" id="lab-end" /></span>
+        </div>
+        <label class="field"><span id="lab-initial-lb">시작 금액</span>
+          <span class="input-unit"><input type="number" id="lab-initial" inputmode="numeric" step="100" /><span id="lab-initial-unit">만 원</span></span>
+        </label>
+        <div class="field"><span>체결</span><div class="seg" id="lab-exec" role="group"></div></div>
+        <div class="field"><span>비교 묶음</span><div class="seg" id="lab-group" role="group"></div></div>
+      </section>
+      <div class="lab-note" id="lab-note"></div>
+      <h2 class="lab-h">결과</h2>
+      <div class="table-wrap summary-wrap">
+        <table class="summary lab-sum" id="lab-summary"><thead></thead><tbody></tbody></table>
       </div>
-      <div class="field"><span id="lb-unit">매매 단위 (비중)</span>
-        <div class="seg" id="in-unit" role="group"></div>
+      <div class="chart-head"><div class="hover-date" id="lab-hover"></div><div class="legend" id="lab-legend"></div></div>
+      <div class="chart equity" id="lab-chart"></div>
+      <h2 class="lab-h">연도별 (해마다 시작 금액으로 새로 시작) · 2023 ~ 지금 이어서</h2>
+      <div class="table-wrap summary-wrap">
+        <table class="summary lab-years" id="lab-years"><thead></thead><tbody></tbody></table>
       </div>
-      <div class="field"><span id="lb-range">기간</span>
-        <span class="input-unit date-range"><input type="date" id="in-start" /><span>~</span><input type="date" id="in-end" /></span>
-      </div>
-      <div class="period" id="sim-period"></div>
+      <h2 class="lab-h">고른 전략</h2>
+      <section class="lab-detail" id="lab-detail"></section>
+      <div class="lab-disclaimer">과거 자료로 계산한 모의 결과이며 앞으로의 수익을 뜻하지 않습니다.</div>
     </section>
-    <h2 class="sec-title" id="sec-summary"></h2>
-    <div class="table-wrap summary-wrap">
-      <table class="summary" id="sim-summary">
-        <thead><tr><th>방식</th><th class="num">최종 금액</th><th class="num">총수익률</th><th class="num">연평균</th><th class="num">최대 낙폭</th><th class="num">매매 횟수</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <h2 class="sec-title" id="sec-chart"></h2>
-    <div class="chart-head"><div class="hover-date" id="sim-hover"></div><div class="legend" id="sim-legend"></div></div>
-    <div class="chart equity" id="chart-equity"></div>
-    <h2 class="sec-title" id="sec-trades"></h2>
-    <div class="trades-wrap">
-      <table class="trades" id="sim-trades">
-        <thead><tr><th>날짜</th><th>단계</th><th class="num">코스피</th><th class="num">낙폭</th><th class="num">매매 금액</th><th class="num">매매 뒤 비중</th><th class="num">총자산</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
   </main>
   <footer class="credit" id="credit" hidden>차트 라이브러리 <a href="https://www.tradingview.com/lightweight-charts/" target="_blank" rel="noopener">Lightweight Charts</a> (Apache-2.0)</footer>
 </div>

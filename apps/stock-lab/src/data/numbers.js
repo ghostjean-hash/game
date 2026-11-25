@@ -23,6 +23,23 @@ export const CASH_RATE = 0;      // 현금 이자 0%
 export const WON_PER_MANWON = 10000;
 export const DAYS_PER_YEAR = 365.25;
 
+// 전략 실험실(기획서 3절 · 5.6)
+export const LAB_DEFAULTS = {
+  initialManwon: 10000,   // 시작 금액(만 원)
+  period: '2026',         // 2026 · 2025 · 2024 · 2023 · cont(이어서) · custom
+  start: '', end: '',     // 직접 기간
+  nextDay: true,          // 다음 날 종가 체결
+  group: 'all',
+};
+export const LAB_YEARS = ['2023', '2024', '2025', '2026'];
+export const LAB_CONT_FROM = '2023-01-01';  // 이어서 운용 시작
+export const TRADING_DAYS_PER_YEAR = 252;   // 연율 변동성 환산
+export const HIGH_2Y_DAYS = 504;            // 2년 최고 종가 계산 거래일 수
+export const SIGNAL_STD_DAYS = 20;          // 급락 정의 E 의 표준편차 기간
+export const RSI_PERIOD = 2;                // 2일 RSI
+export const QUARTER_HIGH_COUNT = 8;        // 30 down: 최근 2년 = 분기 말 8개
+export const LAB_LIST_DEFAULT_PX = 300;     // 전략 목록 처음 폭
+
 // 입력 칸 허용 범위
 export const INITIAL_MIN_MANWON = 100;
 export const INITIAL_MAX_MANWON = 10000000;
