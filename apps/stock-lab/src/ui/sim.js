@@ -26,6 +26,8 @@ export function createSim(kospiRows, levRows) {
   const last = allDays.length ? allDays[allDays.length - 1][0] : '';
   state.ways = { ...SIM_DEFAULTS.ways, ...(state.ways || {}) };
   let days = [];
+  // 게임 모드 D+n 은 기간 시작일을 D+0 으로 센다.
+  const simLabel = (d) => dayLabel(d, days.length ? days[0][0] : null);
   const els = {
     initial: document.getElementById('in-initial'),
     base: document.getElementById('in-base'),
@@ -45,7 +47,7 @@ export function createSim(kospiRows, levRows) {
     localization: { priceFormatter: (v) => `${(v / 1e8).toFixed(2)}억` },
     // 10년 동안 몇 배로 불어나는 자산이라 로그 눈금으로 그려야 앞쪽 해의 오르내림도 보인다.
     rightPriceScale: { mode: LWC.PriceScaleMode.Logarithmic },
-  }), chartSkin(LWC, timeToStr)));
+  }), chartSkin(LWC, timeToStr, simLabel)));
   const series = {};
   for (const w of WAYS) {
     series[w.key] = chart.addLineSeries({ color: w.color, lineWidth: 2, lineType: LINE_TYPE(LWC), priceLineVisible: false, lastValueVisible: false });
@@ -146,7 +148,7 @@ export function createSim(kospiRows, levRows) {
 
   function renderSummary() {
     const s0 = results.rule.summary;
-    els.period.textContent = s0.start ? T.period(dayLabel(s0.start), dayLabel(s0.end), (FEE_RATE * 100).toFixed(3)) : '자료 없음';
+    els.period.textContent = s0.start ? T.period(simLabel(s0.start), simLabel(s0.end), (FEE_RATE * 100).toFixed(3)) : '자료 없음';
     els.legend.innerHTML = `<span style="color:${BUY_COLOR}">▲ ${T.buy}</span><span style="color:${SELL_COLOR}">▼ ${T.sell}</span>`;
     els.summary.innerHTML = '';
     for (const w of WAYS) {
@@ -188,6 +190,8 @@ export function createSim(kospiRows, levRows) {
       shape: t.qty > 0 ? 'arrowUp' : 'arrowDown',
     }));
     series.rule.setMarkers(markers);
+    // 게임 모드 눈금(D+n)은 기간 시작일 기준이라, 기간이 바뀌면 차트가 기억한 옛 눈금 글자를 새로 만들게 한다.
+    if (GAME) chart.applyOptions(chartSkin(LWC, timeToStr, simLabel));
     applyWays();
     chart.timeScale().fitContent();
   }
@@ -203,7 +207,7 @@ export function createSim(kospiRows, levRows) {
       const tr = document.createElement('tr');
       tr.innerHTML = '<td></td><td></td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td>';
       const td = tr.children;
-      td[0].textContent = dayLabel(t.date);
+      td[0].textContent = simLabel(t.date);
       td[1].textContent = T.stepLabel(t.label);
       // 게임 모드는 실제 코스피 값 대신 첫날=100 지수
       td[2].textContent = GAME ? toIndex(t.kospi, k0).toFixed(1) : t.kospi.toFixed(2);
@@ -220,7 +224,7 @@ export function createSim(kospiRows, levRows) {
     const daily = results.rule.daily;
     if (!daily.length) { els.hover.textContent = ''; return; }
     const at = d || daily[daily.length - 1][0];
-    const parts = [dayLabel(at)];
+    const parts = [simLabel(at)];
     for (const w of WAYS) {
       if (state.ways[w.key] === false) continue;
       const row = results[w.key].daily.find((x) => x[0] === at);

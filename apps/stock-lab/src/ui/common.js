@@ -33,7 +33,7 @@ export async function fetchMeta() {
 export function timeToStr(t) {
   if (t == null) return null;
   if (typeof t === 'string') return t;
-  if (typeof t === 'number') return new Date(t * 1000).toISOString().slice(0, 10);
+  if (typeof t === 'number') return Number.isFinite(t) ? new Date(t * 1000).toISOString().slice(0, 10) : null;
   const p = (n) => String(n).padStart(2, '0');
   return `${t.year}-${p(t.month)}-${p(t.day)}`;
 }

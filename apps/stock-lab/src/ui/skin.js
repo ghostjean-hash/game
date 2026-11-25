@@ -42,9 +42,10 @@ export const T = GAME ? TEXT.game : TEXT.normal;
 // 게임 모드에서 날짜 대신 쓰는 경과 일수의 기준일(자료 첫날)
 let origin = null;
 export function setOrigin(d) { origin = d; }
-export function dayLabel(d) {
-  if (!GAME || !origin || !d) return d;
-  return `D+${daysBetween(origin, d)}`;
+// from 을 주면 그날을 D+0 으로 센다(시뮬레이터 = 기간 시작일).
+export function dayLabel(d, from = origin) {
+  if (!GAME || !from || !d) return d;
+  return `D+${daysBetween(from, d)}`;
 }
 
 // 시세 이름: 게임 모드는 지표 A ~ R (목록 순서)
@@ -53,9 +54,9 @@ export function seriesName(s, index) {
 }
 
 // 차트에 덧붙이는 옵션
-export function chartSkin(LWC, timeToStr) {
+export function chartSkin(LWC, timeToStr, label = dayLabel) {
   if (!GAME) return {};
-  const fmt = (t) => dayLabel(timeToStr(t));
+  const fmt = (t) => { const s = timeToStr(t); return s ? label(s) : ''; };
   return {
     layout: { attributionLogo: false },
     grid: { vertLines: { color: '#e3e7ef', style: LWC.LineStyle.Dotted }, horzLines: { color: '#e3e7ef', style: LWC.LineStyle.Dotted } },
