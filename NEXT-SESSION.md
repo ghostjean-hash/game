@@ -1,5 +1,7 @@
 # game-hub NEXT-SESSION
 
+> 2026-11-26 전략 실험실(apps/stock-lab 기획서 r0.8) Codex 지적 4건(무한매수 원가 · 돌파 미도달 체결 · 정수 칸 · 세로축 고정) 수정, 시험 117건, 앱 CLAUDE.md 갱신. 다음: 사용자 평가 · 개선 지시, 배포 지시 받으면 web-deploy. 사용자에게 지금 레버리지 비중 · 현금 답 받으면 80:20 리밸런싱 알림 가격 계산해 주기. 점검표 node apps/stock-lab/tests/lab-report.js.
+
 > 2026-11-25 시뮬레이터 기간 설정 + 세 방식 켜고 끄기(세로축 고정) + 게임 모드 D+0 = 기간 시작일 v261. 다음: 사용자 화면 확인.
 
 > 2026-11-25 새 앱 주식 뷰 · 시뮬레이터(apps/stock-lab) 배포 v256(fe95913, 수집 스크립트 59cd831), 목록 폭 조절 · 접기 v257, 이름 "시뮬레이터" + 게임 모드 v258. 다음: git log 에서 2026-11-26 07:30 KST 첫 자동 수집 커밋(market-bot) 확인 → 사용자 화면 확인 → 국고채 5년은 사용자가 ECOS 키 대기로 정함(키 오면 저장소 비밀값 ECOS_API_KEY). 문서 apps/stock-lab/docs/planning-stock-lab.html r0.4.

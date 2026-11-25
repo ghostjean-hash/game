@@ -37,6 +37,8 @@ export const TRADING_DAYS_PER_YEAR = 252;   // 연율 변동성 환산
 export const HIGH_2Y_DAYS = 504;            // 2년 최고 종가 계산 거래일 수
 export const SIGNAL_STD_DAYS = 20;          // 급락 정의 E 의 표준편차 기간
 export const RSI_PERIOD = 2;                // 2일 RSI
+export const SIGNAL_SPAN = { B: 2, C: 3, D: 5 }; // 급락 정의 B · C · D 의 누적 일수(기획서 3.3)
+export const INF_SELL_FRAC = 0.25;          // 무한매수법 1/4 매도 · 쿼터손절 1/4(기획서 3.8)
 export const QUARTER_HIGH_COUNT = 8;        // 30 down: 최근 2년 = 분기 말 8개
 export const LAB_LIST_DEFAULT_PX = 300;     // 전략 목록 처음 폭
 

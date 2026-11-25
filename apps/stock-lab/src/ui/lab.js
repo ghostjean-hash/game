@@ -52,7 +52,7 @@ export function createLab(raw, rawFull) {
     const base = PRESETS.map((p) => ({ ...p, params: { ...p.params, ...(lab.params[p.id] || {}) }, defaults: p.params }));
     const P = Object.fromEntries(PRESETS.map((p) => [p.id, p]));
     const cus = lab.custom.filter((c) => P[c.from]).map((c, n) => ({
-      ...P[c.from], id: c.id, name: c.name, group: 'custom', srcGroup: P[c.from].group, color: CUSTOM_COLORS[n % CUSTOM_COLORS.length],
+      ...P[c.from], id: c.id, name: c.name, group: 'custom', srcGroup: P[c.from].group, color: CUSTOM_COLORS[(c.colorIdx ?? n) % CUSTOM_COLORS.length],
       params: { ...P[c.from].params, ...c.params }, defaults: P[c.from].params, custom: true, from: c.from,
     }));
     return [...base, ...cus];
@@ -81,6 +81,9 @@ export function createLab(raw, rawFull) {
   };
   document.getElementById('lab-initial-unit').textContent = T.inInitialUnit;
   document.getElementById('lab-initial-lb').textContent = T.inInitial;
+  document.getElementById('lab-h-sum').textContent = T.labSum;
+  document.getElementById('lab-h-years').textContent = T.labYears;
+  document.getElementById('lab-h-detail').textContent = T.labDetail;
 
   let range = null;
   let runs = {};
@@ -158,11 +161,13 @@ export function createLab(raw, rawFull) {
   function run() {
     const items = allItems();
     const shown = items.filter((it) => isOn(it) && inGroup(it));
-    const need = [...new Map([...shown, ...items.filter((it) => ALWAYS_SHOWN.includes(it.id))].map((it) => [it.id, it])).values()];
+    // 고른 전략은 꺼져 있거나 묶음 밖이어도 상세 칸 매매 기록을 위해 계산한다
+    const need = [...new Map([...shown, ...items.filter((it) => ALWAYS_SHOWN.includes(it.id) || it.id === lab.selected)].map((it) => [it.id, it])).values()];
     const list = need.map((it) => ({ id: it.id, preset: it, params: it.params }));
     const opt = { initial: lab.initialManwon * WON_PER_MANWON, fee: FEE_RATE, nextDay: lab.nextDay };
     range = periodRange();
-    runs = runMany(ind, range, list, opt);
+    // 고른 기간은 모든 전략을 돌린다 - 세로축을 모든 전략 값 범위로 잡아 켜고 꺼도 눈금이 그대로 있게(기획서 5.6.4)
+    runs = runMany(ind, range, items.map((it) => ({ id: it.id, preset: it, params: it.params })), opt);
     yRuns = {};
     for (const { key, range: r } of yearRanges(ind)) yRuns[key] = runMany(ind, r, list, opt);
     cRuns = runMany(ind, continuousRange(ind), list, opt);
@@ -204,7 +209,8 @@ export function createLab(raw, rawFull) {
         nm.className = 'nm';
         nm.textContent = it.name;
         nm.title = it.name;
-        nm.addEventListener('click', () => { lab.selected = it.id; save('lab', lab); renderList(); renderChartMarkers(); renderDetail(); renderHover(null); });
+        // 꺼진 전략을 골라도 상세 칸 매매 기록이 나오게 다시 계산한다
+        nm.addEventListener('click', () => { lab.selected = it.id; save('lab', lab); run(); });
         row.append(box, sw, nm);
         els.list.appendChild(row);
       }
@@ -237,7 +243,13 @@ export function createLab(raw, rawFull) {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'sort';
-      b.textContent = c.name + (lab.sortKey === c.key ? (lab.sortDir < 0 ? ' ▼' : ' ▲') : '');
+      // 화살표 자리를 늘 남겨 둬 줄 세우기를 바꿔도 칸 폭이 흔들리지 않게 한다
+      b.textContent = c.name;
+      const ar = document.createElement('span');
+      ar.className = 'arrow';
+      ar.textContent = lab.sortKey === c.key && lab.sortDir > 0 ? ' ▲' : ' ▼';
+      ar.style.visibility = lab.sortKey === c.key ? 'visible' : 'hidden';
+      b.appendChild(ar);
       b.addEventListener('click', () => {
         if (lab.sortKey === c.key) lab.sortDir = -lab.sortDir;
         else { lab.sortKey = c.key; lab.sortDir = c.key === 'name' || c.key === 'check' ? 1 : -1; }
@@ -268,7 +280,7 @@ export function createLab(raw, rawFull) {
       td[1].textContent = money(s.final);
       td[2].textContent = fmtPct(s.totalReturn);
       td[3].textContent = fmtPct(s.mdd);
-      td[4].textContent = s.recovery == null ? '미회복' : `${s.recovery}일`;
+      td[4].textContent = s.recovery == null ? (s.sinceTrough === 0 ? '미회복(오늘이 바닥)' : `미회복(바닥 뒤 ${s.sinceTrough}일)`) : `${s.recovery}일`;
       td[5].textContent = fmtPct(s.giveBackPct);
       td[6].textContent = `${s.unrecovered}일`;
       td[7].textContent = `${s.tradeCount}회`;
@@ -288,7 +300,7 @@ export function createLab(raw, rawFull) {
     for (const id of want) {
       let s = series.get(id);
       if (!s) {
-        s = chart.addLineSeries({ lineWidth: 2, lineType: LINE_TYPE(LWC), priceLineVisible: false, lastValueVisible: false });
+        s = chart.addLineSeries({ lineWidth: 2, lineType: LINE_TYPE(LWC), priceLineVisible: false, lastValueVisible: false, autoscaleInfoProvider: () => sharedScale() });
         series.set(id, s);
       }
       s.applyOptions({ color: items[id].color, lineWidth: id === lab.selected ? 3 : 1.5 });
@@ -312,6 +324,22 @@ export function createLab(raw, rawFull) {
       if (items[id]) s.applyOptions({ color: items[id].color });
     }
     els.legend.innerHTML = `<span style="color:${BUY_COLOR}">▲ 매수</span><span style="color:${SELL_COLOR}">▼ 매도</span>`;
+  }
+  // 세로축 범위 = 보이는 구간 안 모든 전략(켜고 끈 것 · 비교 묶음과 상관없이) 자산의 최저 ~ 최고
+  function sharedScale() {
+    const vr = chart.timeScale().getVisibleRange();
+    const a = vr ? timeToStr(vr.from) : null;
+    const b = vr ? timeToStr(vr.to) : null;
+    let lo = Infinity;
+    let hi = -Infinity;
+    for (const r of Object.values(runs)) {
+      for (const [d, v] of r.daily) {
+        if ((a && d < a) || (b && d > b)) continue;
+        if (v < lo) lo = v;
+        if (v > hi) hi = v;
+      }
+    }
+    return Number.isFinite(lo) ? { priceRange: { minValue: lo, maxValue: hi } } : null;
   }
   function renderHover(d) {
     const sel = runs[lab.selected];
@@ -395,9 +423,11 @@ export function createLab(raw, rawFull) {
     btns.className = 'lab-btns';
     const mkBtn = (txt, fn) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = txt; b.addEventListener('click', fn); btns.appendChild(b); return b; };
     mkBtn('복제', () => {
-      const n = lab.custom.length + 1;
+      // 번호 · 색은 만든 순서로 한 번 정해 지워도 다른 줄이 바뀌지 않게 한다
+      lab.customSeq = (lab.customSeq || lab.custom.length) + 1;
+      const n = lab.customSeq;
       const id = `c${Date.now().toString(36)}`;
-      lab.custom.push({ id, from: it.custom ? it.from : it.id, name: `${it.name} 복제 ${n}`, params: { ...it.params } });
+      lab.custom.push({ id, from: it.custom ? it.from : it.id, name: `${it.name} 복제 ${n}`, params: { ...it.params }, colorIdx: n - 1 });
       lab.on[id] = true;
       lab.selected = id;
       commit();
@@ -468,7 +498,7 @@ export function createLab(raw, rawFull) {
         inp.classList.toggle('is-changed', changed);
         inp.addEventListener('change', () => {
           const v = Number(inp.value) / scale;
-          const good = inp.value !== '' && Number.isFinite(v) && v >= pm.min - 1e-9 && v <= pm.max + 1e-9;
+          const good = inp.value !== '' && Number.isFinite(v) && v >= pm.min - 1e-9 && v <= pm.max + 1e-9 && (!pm.int || Number.isInteger(v));
           inp.classList.toggle('is-bad', !good);
           if (good) setParam(it, key, v);
         });

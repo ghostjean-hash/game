@@ -21,6 +21,7 @@ const TEXT = {
     period: (a, b, fee) => `${a} ~ ${b} · 매매는 KODEX 레버리지 종가 · 비용 ${fee}%`,
     stepLabel: (l) => l,
     secSummary: '', secChart: '', secTrades: '', secCompare: '',
+    labSum: '결과', labYears: '연도별 (해마다 시작 금액으로 새로 시작) · 2023 ~ 지금 이어서', labDetail: '고른 전략',
   },
   game: {
     tabCompare: '곡선 비교', tabSim: '운용 시뮬레이션',
@@ -35,6 +36,7 @@ const TEXT = {
     period: (a, b, fee) => `${a} ~ ${b} · 조정은 2배 자원 기준 · 비용 ${fee}%`,
     stepLabel: (l) => l.replaceAll('급락', '하락 이벤트').replaceAll('급등', '상승 이벤트').replace('새 고점', '최고점 갱신'),
     secCompare: '1. 곡선 비교', secSummary: '1. 운용 결과 요약', secChart: '2. 골드 성장 곡선', secTrades: '3. 조정 기록',
+    labSum: '1. 운용 결과 요약', labYears: '2. 연도별 운용(해마다 새로 시작) · 이어서 운용', labDetail: '3. 운용 규칙 상세',
   },
 };
 export const T = GAME ? TEXT.game : TEXT.normal;

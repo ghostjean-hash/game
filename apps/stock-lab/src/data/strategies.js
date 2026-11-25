@@ -78,7 +78,7 @@ export const PARAM_META = {
   smaExit: { label: '매도 이동평균', unit: '일', min: 2, max: 50, step: 1 },
   window: { label: '최저 · 최고 종가 기간', unit: '일', min: 2, max: 50, step: 1 },
   rsiLow: { label: 'RSI(2) 매수 기준(미만)', unit: '', min: 1, max: 50, step: 1 },
-  rsiStart: { label: '하락 첫날 RSI(2)(미만)', unit: '', min: 1, max: 100, step: 1 },
+  rsiStart: { label: '첫 하락 출발 RSI(2)(미만)', unit: '', min: 1, max: 100, step: 1 },
   rsiExit: { label: 'RSI(2) 매도 기준(초과)', unit: '', min: 30, max: 99, step: 1 },
   gridStep: { label: '칸 간격', unit: '%', min: 0.01, max: 0.3, step: 0.01 },
   levels: { label: '칸 수', unit: '칸', min: 1, max: 10, step: 1 },
@@ -145,7 +145,7 @@ export const PRESETS = [
     desc: '시장 상태별 목표 비중만 따르고 급락 · 급등 매매는 하지 않는다(GPT S08).', check: CHECK_DAILY, chips: ['exp'], src: GPT_SRC, orig: 'GPT가 가설이라고 밝힌 규칙', changed: '수치 전부 실험용', params: { ...REGIME, trade: 'off' } },
   { id: 'rebound', frame: 'rebound', group: 'user', phase: 1, on: false, color: '#ad1457', name: '반등 확인 후 매수',
     desc: '급락이 나면 기다렸다가 급락 뒤 최저 종가보다 2% 오르면 현금 50%, 4% 오르면 나머지를 산다. 묶음마다 산 날 코스피보다 5% 오르면 팔고 4% 내리면 판다(GPT S05).', check: CHECK_DAILY, chips: ['exp'], src: GPT_SRC, orig: 'GPT가 가설이라고 밝힌 규칙', changed: '손절 4%는 GPT 범위 3~5%의 가운데',
-    params: { base: 0.8, def: 'A', width: 0.05, mult: 2, rb1: 0.02, rb2: 0.04, take: 0.05, stop: 0.04 } },
+    params: { base: 0.8, def: 'A', width: 0.05, mult: 2, buy1: 0.5, rb1: 0.02, rb2: 0.04, take: 0.05, stop: 0.04 } },
   { id: 'user-intra', frame: 'user', group: 'user', phase: 4, on: false, color: '#0d47a1', name: '사용자 원안 · 장중 급락',
     desc: '사용자 원안과 같고 급락 = 코스피 그날 저가가 전날 종가보다 5% 이상 낮음, 급등 = 그날 고가가 5% 이상 높음. 그날 종가에 체결(장중 확인 뒤 마감 체결 가정).', check: '장중 확인 필요', chips: ['exp'], src: USER_SRC, orig: USER_ORIG, changed: '판정을 장중 저가 · 고가로', params: { ...USER, def: 'I' } },
 
@@ -171,7 +171,7 @@ export const PRESETS = [
     src: { who: 'Larry Connors', url: 'https://strategyquant.com/blog/larry-connors-double-7-strategy-tested-on-spy-and-8-other-markets/' },
     orig: 'SPY(1배), 계좌 전체', changed: '코스피로 판단, KODEX 레버리지를 20% 몫으로만', params: { base: POOL_BASE, maLen: 200, window: 7 } },
   { id: 'r3', frame: 'r3', group: 'pool', phase: 2, on: false, color: '#00695c', name: 'R3',
-    desc: '코스피가 200일 평균 위, 2일 RSI가 3일 연속 하락, 하락 첫날 값 60 미만, 오늘 값 10 미만이면 20% 몫 매수. 2일 RSI가 70을 넘으면 판다.', check: CHECK_DAILY, chips: ['orig', 'second'],
+    desc: '코스피가 200일 평균 위, 2일 RSI가 3일 연속 하락, 첫 하락이 시작된 값(하락 전날) 60 미만, 오늘 값 10 미만이면 20% 몫 매수. 2일 RSI가 70을 넘으면 판다.', check: CHECK_DAILY, chips: ['orig', 'second'],
     src: { who: 'Larry Connors', url: 'https://www.tradingview.com/script/5CDSns2I-R3-ETF-Strategy/' },
     orig: 'ETF(1배), 계좌 전체', changed: '코스피로 판단, KODEX 레버리지를 20% 몫으로만', params: { base: POOL_BASE, maLen: 200, rsiLow: 10, rsiStart: 60, rsiExit: 70 } },
   { id: 'infinite', frame: 'infinite', group: 'pool', phase: 2, on: false, color: '#004d40', name: '무한매수법 V2.2',
@@ -221,6 +221,9 @@ export const PRESETS = [
     src: { who: 'Jason Kelly', url: 'https://jasonkelly.com/3sig/' },
     orig: '미국 소형주 1배 80 : 채권 20', changed: 'KODEX 레버리지(2배) : 현금', params: { base: 0.8, growth: 0.03, cashCap: 0.3, crash: 0.3, skipMax: 4 } },
 ];
+
+// 기간 · 횟수 · 칸 수는 정수만 받는다(20.5일 같은 값은 이동평균 계산이 깨짐)
+for (const m of Object.values(PARAM_META)) if (['일', '개월', '회', '칸'].includes(m.unit)) m.int = true;
 
 // 낙폭 사다리 수치 칸(옛 시뮬레이터와 같은 선택지)
 PARAM_META.step = { label: '단계 폭', unit: '%', min: 0.05, max: 0.1, step: 0.05 };

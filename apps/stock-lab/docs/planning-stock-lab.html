@@ -144,13 +144,13 @@
             <tr><td>B 2일</td><td>2거래일 전 종가보다 5% 이상 낮다</td><td>5% 이상 높다</td></tr>
             <tr><td>C 3일</td><td>3거래일 전 종가보다 5% 이상 낮다</td><td>5% 이상 높다</td></tr>
             <tr><td>D 5일</td><td>5거래일 전 종가보다 5% 이상 낮다</td><td>5% 이상 높다</td></tr>
-            <tr><td>E 변동성</td><td>하루 등락이 최근 20거래일 하루 등락 표준편차의 2배 이상 하락</td><td>2배 이상 상승</td></tr>
+            <tr><td>E 변동성</td><td>하루 등락이 최근 20거래일(오늘 포함) 하루 등락 표준편차의 2배 이상 하락</td><td>2배 이상 상승</td></tr>
           </tbody>
         </table>
         <div class="ol">
-          <div class="oi"><span class="bl"></span><div class="ot">B · C · D는 신호가 한 번 나면 그 일수만큼은 같은 방향 신호를 다시 내지 않는다. 같은 급락을 며칠 연속 세지 않기 위해서다</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">B · C · D는 신호가 한 번 나면 다음 날부터 그 일수(2 · 3 · 5거래일) 동안 같은 방향 신호를 다시 내지 않는다. 같은 급락을 며칠 연속 세지 않기 위해서다</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">조금씩 빠져 누적 5%가 된 것은 A · E에서는 급락이 아니다(사용자 원안의 "조금씩 떨어지면 손대지 않는다")</div></div>
-          <div class="oi"><span class="bl"></span><div class="ot">2026년 1월 2일 ~ 11월 24일 종가 기준 A 정의 신호 수: 급락 24번, 급등 18번(실측)</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">2026년 1월 2일 ~ 11월 25일 종가 기준 A 정의 신호 수: 급락 25번, 급등 18번(실측). 장중 저가 · 고가 기준(3.11)은 급락 36번, 급등 26번</div></div>
         </div>
 
         <h3><span class="sn">3.4</span> 전략 목록</h3>
@@ -181,8 +181,8 @@
         <table class="tight">
           <thead><tr><th>이름</th><th>규칙</th><th>표식</th></tr></thead>
           <tbody>
-            <tr><td>사용자 원안</td><td>3.6 상태표. 급락 정의 A, 2차 매수는 남은 현금 전부</td><td><span class="chip c-conf">해석 확인 필요</span></td></tr>
-            <tr><td>사용자 원안 · 급락 B ~ E</td><td>위와 같고 급락 정의만 B · C · D · E (네 줄)</td><td>-</td></tr>
+            <tr><td>사용자 원안</td><td>3.6 상태표. 급락 정의 A, 2차 매수는 남은 현금 전부</td><td><span class="chip c-todo">실험용 설정</span></td></tr>
+            <tr><td>사용자 원안 · 급락 B ~ E</td><td>위와 같고 급락 정의만 B · C · D · E (네 줄)</td><td><span class="chip c-todo">실험용 설정</span></td></tr>
             <tr><td>남은 현금 50%</td><td>사용자 원안에서 매수 때마다 남은 현금의 50%만 산다. 현금이 0이 되지 않는다(GPT S03)</td><td><span class="chip c-todo">실험용 설정</span></td></tr>
             <tr><td>남은 현금 50% · 변동성 급락</td><td>위와 같고 급락 정의 E(GPT S06)</td><td><span class="chip c-todo">실험용 설정</span></td></tr>
             <tr><td>시장 상태별 비중</td><td>3.7 상태 판정으로 목표 비중을 정하고, 그 안에서 급락 매수 · 급등 매도(GPT S04)</td><td><span class="chip c-todo">실험용 설정</span></td></tr>
@@ -196,7 +196,7 @@
         <table class="tight">
           <thead><tr><th>이름 · 출처</th><th>규칙</th><th>몫</th><th>표식</th></tr></thead>
           <tbody>
-            <tr><td>10개월선 - Meb Faber(2007) <a class="ref" href="https://www.cxoadvisory.com/technical-trading/long-term-outperformance-from-trends-defined-by-moving-averages">CXO</a></td><td>매월 마지막 거래일에 코스피 월말 종가가 최근 10개 월말 종가 평균보다 위면 보유, 아래면 전액 현금. 그날 종가에 매매</td><td>전체 비중</td><td><span class="chip c-sys">원문</span> <span class="chip c-conf">2차 출처</span></td></tr>
+            <tr><td>10개월선 - Meb Faber(2007) <a class="ref" href="https://www.cxoadvisory.com/technical-trading/long-term-outperformance-from-trends-defined-by-moving-averages">CXO</a></td><td>매월 마지막 거래일에 코스피 월말 종가가 최근 10개 월말 종가 평균보다 위면 보유, 아래면 전액 현금. 판정은 월말 종가, 체결은 3.2 선택(기본 다음 날 종가)</td><td>전체 비중</td><td><span class="chip c-sys">원문</span> <span class="chip c-conf">2차 출처</span></td></tr>
             <tr><td>200일선 ±1% - Jeremy Siegel <a class="ref" href="https://blog.validea.com/the-moving-average-strategy-good-results-if-you-have-the-discipline/">Validea</a></td><td>매일 코스피 종가가 200일 평균보다 1% 이상 위면 보유, 1% 이상 아래면 현금</td><td>전체 비중</td><td><span class="chip c-sys">원문</span> <span class="chip c-conf">2차 출처</span></td></tr>
             <tr><td>200일선 레버리지 - Gayed · Bilello(2016) <a class="ref" href="https://www.cxoadvisory.com/volatility-effects/leveraging-the-u-s-stock-market-based-on-sma-rules/">CXO</a></td><td>매일 코스피 종가가 200일 평균 위면 레버리지 보유, 아래면 현금(띠 없음)</td><td>전체 비중</td><td><span class="chip c-sys">원문</span> <span class="chip c-conf">2차 출처</span></td></tr>
             <tr><td>200일선 +4% / -3% - TradingView 사용자 스크립트 <a class="ref" href="https://de.tradingview.com/scripts/longterm/">TradingView</a></td><td>200일 평균보다 4% 이상 위면 사고, 3% 이상 아래면 판다</td><td>전체 비중</td><td><span class="chip c-sys">원문</span> <span class="chip c-todo">실험용 설정</span></td></tr>
@@ -208,8 +208,8 @@
             <tr><td>3Sig 80 : 20판 - Jason Kelly <a class="ref" href="https://jasonkelly.com/3sig/">jasonkelly.com</a></td><td>주식 80 : 현금 20, 분기 목표 3%, 현금이 30%에 닿으면 80 : 20으로 되돌림, 30 down은 위와 같다. 원래 1배 소형주용 수치를 2배 상품에 그대로 쓴다</td><td>전체 비중</td><td><span class="chip c-new">참고 변형</span> <span class="chip c-conf">2차 출처</span></td></tr>
             <tr><td>RSI(2) - Larry Connors <a class="ref" href="https://chartschool.stockcharts.com/table-of-contents/trading-strategies-and-models/trading-strategies/rsi-2">StockCharts</a></td><td>코스피 종가가 200일 평균 위이고 2일 RSI가 5 이하면 20% 몫 전액 매수. 코스피 종가가 5일 평균 위로 올라오면 그 몫을 판다. 손절 없음</td><td>20% 몫</td><td><span class="chip c-sys">원문</span> <span class="chip c-conf">2차 출처</span></td></tr>
             <tr><td>Double 7s - Larry Connors <a class="ref" href="https://strategyquant.com/blog/larry-connors-double-7-strategy-tested-on-spy-and-8-other-markets/">StrategyQuant</a></td><td>코스피가 200일 평균 위이고 오늘 종가가 최근 7거래일 최저 종가면 20% 몫 매수, 최근 7거래일 최고 종가면 판다</td><td>20% 몫</td><td><span class="chip c-sys">원문</span> <span class="chip c-conf">2차 출처</span></td></tr>
-            <tr><td>R3 - Larry Connors <a class="ref" href="https://www.tradingview.com/script/5CDSns2I-R3-ETF-Strategy/">TradingView</a></td><td>코스피가 200일 평균 위이고, 2일 RSI가 3일 연속 내려갔고, 내려가기 시작한 첫날 값이 60 미만, 오늘 값이 10 미만이면 20% 몫 매수. 2일 RSI가 70을 넘으면 판다</td><td>20% 몫</td><td><span class="chip c-sys">원문</span> <span class="chip c-conf">2차 출처</span></td></tr>
-            <tr><td>그리드 매매 - 표준 정의 <a class="ref" href="https://quantpedia.com/a-primer-on-grid-trading-strategy/?a=6080">Quantpedia</a></td><td>시작 날 코스피를 기준가로 5% 간격 4칸을 아래로 깐다. 종가가 칸 아래로 내려가면 그 칸 몫(20% 몫 ÷ 4)을 사고, 그 칸 가격보다 5% 위로 올라오면 그 칸 묶음을 판다. 묶음이 하나도 없는데 기준가보다 5% 위로 오르면 기준가를 그날 종가로 올린다. 칸 간격 · 칸 수 <span class="chip c-todo">실험용 설정</span>(표준 수치 없음)</td><td>20% 몫</td><td><span class="chip c-ui">단순화</span></td></tr>
+            <tr><td>R3 - Larry Connors <a class="ref" href="https://www.tradingview.com/script/5CDSns2I-R3-ETF-Strategy/">TradingView</a></td><td>코스피가 200일 평균 위이고, 2일 RSI가 3일 연속 내려갔고, 첫 하락이 시작된 값(하락 전날 값)이 60 미만, 오늘 값이 10 미만이면 20% 몫 매수. 2일 RSI가 70을 넘으면 판다</td><td>20% 몫</td><td><span class="chip c-sys">원문</span> <span class="chip c-conf">2차 출처</span></td></tr>
+            <tr><td>그리드 매매 - 표준 정의 <a class="ref" href="https://quantpedia.com/a-primer-on-grid-trading-strategy/?a=6080">Quantpedia</a></td><td>시작 날 코스피를 기준가로 5% 간격 4칸(기준가 × 0.95, × 0.95², …)을 아래로 깐다. 종가가 칸 아래로 내려가면 그 칸 몫(20% 몫 ÷ 4)을 사고, 그 칸 가격보다 5% 위로 올라오면 그 칸 묶음을 판다. 묶음이 하나도 없는데 기준가보다 5% 위로 오르면 기준가를 그날 종가로 올린다. 칸 간격 · 칸 수 <span class="chip c-todo">실험용 설정</span>(표준 수치 없음)</td><td>20% 몫</td><td><span class="chip c-ui">단순화</span></td></tr>
             <tr><td>무한매수법 V2.2 - 라오어 <a class="ref" href="https://quantstack.app/infinite/v2-2/">quantstack</a></td><td>3.8</td><td>20% 몫</td><td><span class="chip c-ui">단순화</span> <span class="chip c-conf">2차 출처</span></td></tr>
           </tbody>
         </table>
@@ -324,7 +324,7 @@
             <tr><td>첫날 · 전량 매도 직후</td><td>1회분을 종가에 산다</td><td>-</td></tr>
             <tr><td>전반전 T ≤ 19</td><td>반 회분: 종가 ≤ 평단이면 체결. 반 회분: 종가 ≤ 평단 × (1 + 별%)이면 체결</td><td rowspan="2">보유의 1/4: 종가 ≥ 평단 × (1 + 별%)이면 체결. 보유의 3/4: 종가 ≥ 평단 × 1.10이면 체결(원래는 장중 지정가). 전량이 팔리면 처음부터 다시</td></tr>
             <tr><td>후반전 19 &lt; T ≤ 39</td><td>1회분: 종가 ≤ 평단 × (1 + 별%)이면 체결</td></tr>
-            <tr><td>쿼터손절 39 &lt; T</td><td colspan="2">보유의 1/4을 종가에 판다. 남은 현금을 10으로 나눠, 종가 ≤ 평단 × 0.90이면 1회씩 산다. 10회를 채우면 보유의 1/4을 다시 종가에 팔고, 그 매도 가격이 평단 × 0.90보다 높으면 후반전으로 돌아간다</td></tr>
+            <tr><td>쿼터손절 39 &lt; T</td><td colspan="2">보유의 1/4을 종가에 판다. 남은 현금을 10으로 나눠, 종가 ≤ 평단 × 0.90이면 1회씩 산다. 10회(체결 여부와 상관없이 10거래일, 실험용 설정)를 채우면 보유의 1/4을 다시 종가에 팔고, 그 매도 가격이 평단 × 0.90보다 높으면 후반전으로 돌아간다</td></tr>
           </tbody>
         </table>
         <div class="ol">
@@ -370,7 +370,7 @@
           <thead><tr><th>전략</th><th>규칙</th><th>표식 · 확인 주기</th></tr></thead>
           <tbody>
             <tr><td>사용자 원안 · 장중 급락</td><td>3.6 상태표와 같고, 급락 = 코스피 그날 저가가 전날 종가보다 5% 이상 낮음, 급등 = 그날 고가가 전날 종가보다 5% 이상 높음. 매매는 그날 레버리지 종가("장중 확인 뒤 마감 체결" 가정, 체결 선택과 상관없음)</td><td><span class="chip c-todo">실험용 설정</span> 장중 확인 필요</td></tr>
-            <tr><td>변동성 돌파 - Larry Williams <a class="ref" href="https://www.luxalgo.com/library/concept/volatility-breakout/">LuxAlgo</a></td><td>그날 코스피 고가 ≥ 시가 + 0.5 × (전날 고가 − 전날 저가)이면 그날 돌파로 보고 20% 몫을 산 것으로 친다. 산 가격은 레버리지 시가 + 0.5 × (전날 레버리지 고가 − 저가)로 잡고, 다음 날 레버리지 시가에 판다</td><td><span class="chip c-ui">단순화</span> <span class="chip c-conf">2차 출처</span> 장중 주문 필요</td></tr>
+            <tr><td>변동성 돌파 - Larry Williams <a class="ref" href="https://www.luxalgo.com/library/concept/volatility-breakout/">LuxAlgo</a></td><td>그날 코스피 고가 ≥ 시가 + 0.5 × (전날 고가 − 전날 저가)이면 그날 돌파로 보고 20% 몫을 산 것으로 친다. 산 가격은 레버리지 시가 + 0.5 × (전날 레버리지 고가 − 저가)로 잡고, 그날 레버리지 고가가 그 가격에 못 닿으면 미체결로 둔다(다른 가격으로 바꿔 사지 않는다). 코스피가 돌파한 그 순간의 레버리지 가격은 알 수 없으므로 이 체결은 가정이다., 다음 날 레버리지 시가에 판다</td><td><span class="chip c-ui">단순화</span> <span class="chip c-conf">2차 출처</span> 장중 주문 필요</td></tr>
           </tbody>
         </table>
       </section>
@@ -440,7 +440,7 @@
         </table>
         <div class="ol">
           <div class="oi"><span class="bl"></span><div class="ot">주소(<code>apps/stock-lab/</code>)와 자료 파일 이름은 바꾸지 않는다. 저장된 설정을 지키기 위해서다</div></div>
-          <div class="oi"><span class="bl"></span><div class="ot">전략 실험실에서 게임 모드는 금액 단위(골드) · 날짜(D+n) · 차트 모양 · 탭과 묶음 제목만 바꾼다. 전략 이름 · 규칙 설명 · 출처는 실제 낱말 그대로 둔다(출처 글과 맞대어 읽어야 하므로)</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">전략 실험실에서 게임 모드는 금액 단위(골드) · 날짜(D+n) · 차트 모양 · 탭과 묶음 제목(보통: 결과 · 연도별 · 고른 전략 / 게임: 1. 운용 결과 요약 · 2. 연도별 운용 · 3. 운용 규칙 상세)만 바꾼다. 전략 이름 · 규칙 설명 · 출처는 실제 낱말 그대로 둔다(출처 글과 맞대어 읽어야 하므로)</div></div>
         </div>
       </section>
 
@@ -522,10 +522,10 @@
         <div class="ol">
           <div class="oi"><span class="bl"></span><div class="ot"><code>runStrategy(ind, from, to, preset, params, opt)</code> → <code>{ daily, trades, summary }</code>. <code>opt = { initial, fee, nextDay }</code>. from · to 는 날짜 순번</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">계좌: 현금 · 주식 수 · 묶음 목록(묶음 = 꼬리표 · 주식 수 · 산 가격 · 산 날 코스피). 틀에 넘기는 손잡이: <code>buyWon(금액, 이유, 꼬리표)</code> · <code>sellQty(주식 수, 이유)</code> · <code>sellTag(꼬리표, 이유)</code> · <code>setWeight(비중, 이유)</code> · <code>total()</code> · <code>weight()</code> · <code>mem</code>(틀이 자기 상태를 적는 칸)</div></div>
-          <div class="oi"><span class="bl"></span><div class="ot">하루 순서: ① 전날 낸 주문을 오늘 레버리지 종가로 체결(다음 날 체결일 때) ② 체결 결과를 틀의 <code>fill(ctx, 결과)</code>에 알림 ③ 틀이 오늘 판정 <code>day(ctx)</code>로 새 주문을 냄 ④ 같은 날 체결이면 그 주문을 바로 체결하고 다시 <code>fill</code> ⑤ 날짜별 자산 기록</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">하루 순서: ① 전날 낸 주문을 오늘 레버리지 종가로 체결(다음 날 체결일 때) ② 주문 하나가 체결될 때마다 바로 틀의 <code>fill(ctx, 결과)</code>에 알림(같은 날 매도 뒤 매수가 이어지면 그 순간의 보유로 원가 · 회차를 셈) ③ 틀이 오늘 판정 <code>day(ctx)</code>로 새 주문을 냄 ④ 같은 날 체결이면 그 주문을 바로 체결하고 다시 <code>fill</code> ⑤ 날짜별 자산 기록</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">틀의 상태(사용자 원안의 평상 → 1차 매수 같은 것)는 주문을 낼 때가 아니라 <code>fill</code>에서 체결을 확인한 뒤에만 바꾼다. 체결 기다리는 주문이 있는 날에도 틀은 판정하되, 새 주문은 기다리는 주문이 체결된 뒤의 상태를 기준으로 다음 날 낸다(기다리는 주문이 있는 동안 같은 틀은 새 주문을 내지 않는다)</div></div>
-          <div class="oi"><span class="bl"></span><div class="ot">결과 종류: 체결(주식 수 1 이상) / 미체결 - 현금 부족(살 수 있는 주식 수 0) / 미체결 - 팔 주식 없음 / 미체결 - 지정가 안 닿음(무한매수법 · 그리드). 1주 단위로 내려 금액보다 적게 산 것은 부분 체결이 아니라 체결로 본다. 미체결이면 틀의 상태는 그대로이고, 매매 기록에 주식 수 0 · 이유 "미체결(…)" 줄로 남기되 매매 횟수에는 넣지 않는다</div></div>
-          <div class="oi"><span class="bl"></span><div class="ot">한 틀은 하루에 매수 · 매도 중 한쪽 주문만 낸다. 같은 날 매수와 매도 조건이 함께 맞으면 매도(손절 · 매도 신호)를 낸다. 무한매수법과 그리드는 한 날에 여러 주문(칸별 · 1/4 · 3/4)을 내지만 매도를 먼저 체결한다</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">결과 종류: 체결(주식 수 1 이상) / 미체결 - 현금 부족(살 수 있는 주식 수 0) / 미체결 - 팔 주식 없음 / 미체결 - 지정가 안 닿음(무한매수법 · 그리드). 1주 단위로 내려 금액보다 적게 산 것은 부분 체결이 아니라 체결로 본다. 비중 맞추기 주문은 사야 하는데 현금이 없어 1주도 못 사면 현금 부족 미체결, 차이가 1주 값보다 작으면 "이미 맞음"이다. 낙폭 사다리 틀만은 옛 <code>simulate()</code>와 같은 결과를 내려고 목표 비중을 주문 낼 때 바꾼다. 미체결이면 틀의 상태는 그대로이고, 매매 기록에 주식 수 0 · 이유 "미체결(…)" 줄로 남기되 매매 횟수에는 넣지 않는다</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">한 틀은 하루에 매수 · 매도 중 한쪽 주문만 낸다. 같은 날 매수와 매도 조건이 함께 맞으면 매도(손절 · 매도 신호)를 낸다. 무한매수법 · 그리드 · 변동성 돌파(전날 산 몫 시가 매도 + 그날 돌파 매수)는 한 날에 여러 주문(칸별 · 1/4 · 3/4)을 내지만 매도를 먼저 체결한다</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">매수 수량 = floor(금액 ÷ (가격 × (1 + 비용))), 현금을 넘지 않는다. <code>sellQty</code>는 묶음을 최근 산 것부터 줄인다</div></div>
           <div class="oi"><span class="bl"></span><div class="ot"><code>nextDay</code>이면 기간 마지막 날 낸 주문은 체결하지 않고 버린다. 틀에 <code>sameDayOnly</code>가 있으면(무한매수법) 3.2 체결 예외대로 늘 같은 날 판정 · 체결한다</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">매매 기록 한 줄: 날짜 · 이유 · 코스피 · 주식 수(+ 매수, − 매도) · 금액 · 매매 뒤 주식 비중 · 현금 · 총자산. 날짜별 자산: 날짜 · 총자산 · 주식 비중</div></div>
@@ -534,7 +534,7 @@
 
         <h4>5.6.3 규칙 틀 (<code>frames.js</code>)</h4>
         <div class="ol">
-          <div class="oi"><span class="bl"></span><div class="ot">틀 하나 = <code>{ id, kind: 'whole' | 'pool', sameDayOnly?, start(ctx, p), day(ctx, p) }</code>. 3.4의 전략 줄은 틀 + 수치 묶음이다. 틀: 보유 · 낙폭 사다리 · 사용자 원안(3.6) · 시장 상태(3.7, 급락 매매 끄기 수치 포함) · 반등 확인 · 월말 이동평균 · 200일선 띠 · 절대 모멘텀 · 변동성 맞추기 · 리밸런싱 · 트레일링 스톱 · 6Sig · RSI(2) · Double 7s · R3 · 그리드 · 무한매수법</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">틀 하나 = <code>{ start(ctx, p), day(ctx, p), fill?(ctx, p, 결과), sameDayOnly?(p) }</code>. 전체 비중 · 20% 몫 구분은 틀이 아니라 <code>strategies.js</code> 전략 줄의 묶음(group) 값으로 둔다. 3.4의 전략 줄은 틀 + 수치 묶음이다. 틀: 보유 · 낙폭 사다리 · 사용자 원안(3.6) · 시장 상태(3.7, 급락 매매 끄기 수치 포함) · 반등 확인 · 월말 이동평균 · 200일선 띠 · 절대 모멘텀 · 변동성 맞추기 · 리밸런싱 · 트레일링 스톱 · 6Sig · RSI(2) · Double 7s · R3 · 그리드 · 무한매수법</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">'pool' 틀은 첫날 기본 비중(80%)만큼 사서 꼬리표 <code>core</code>로 두고 절대 팔지 않는다. 남은 현금이 20% 몫이고 그 몫으로 산 묶음만 판다</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">첫날 시작 매수(<code>start</code>)는 신호가 아니라 출발 상태라 체결 선택과 상관없이 첫날 종가로 체결한다</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">무한매수법의 T는 보유를 일부 팔면 판 비율만큼 누적 매수 금액도 줄여 다시 센다(쿼터손절 1/4 매도 뒤 T가 약 0.75배가 되어 후반전으로 돌아갈 수 있게) <span class="chip c-todo">실험용 설정</span></div></div>
@@ -546,10 +546,10 @@
         <h4>5.6.4 통계 (<code>stats.js</code>) · 화면 (<code>lab.js</code>)</h4>
         <div class="ol">
           <div class="oi"><span class="bl"></span><div class="ot"><code>yearRanges(ind)</code> - 자료 안의 2023 · 2024 · 2025 · 2026 각 해 첫 · 마지막 거래일 순번. <code>continuousRange(ind)</code> - 2023년 첫 거래일 ~ 자료 마지막 날. <code>yearTable(runs, 묶음)</code> - 전략별 네 해 수익률 · 최대 낙폭, 평균, 80:20 · 100% 보유를 이긴 해 수, 고른 묶음 안에서 해마다 매긴 총수익률 순위의 평균, 이어서 결과</div></div>
-          <div class="oi"><span class="bl"></span><div class="ot">다시 계산할 때 켠 전략 × (고른 기간 + 네 해 + 이어서)를 모두 돌린다. 100% 보유 · 80:20 보유는 켜지 않아도 차이 칸 계산에 쓰려고 늘 돌린다</div></div>
-          <div class="oi"><span class="bl"></span><div class="ot">저장 키 <code>stocklab_lab</code> = <code>{ period, start, end, initialManwon, nextDay, group, on, selected, params, custom, listW }</code> (<code>nextDay</code> 처음 값 true, <code>group</code> 처음 값 '모두'). 처음 켜진 전략: 100% 보유 · 80:20 보유 · 사용자 원안 · 남은 현금 50% · 시장 상태별 비중 · 10개월선 · 고정 비율 밴드판 · RSI(2)</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">다시 계산할 때 고른 기간은 모든 전략을, 네 해 · 이어서는 켠 전략을 돌린다. 자산 곡선 세로축은 보이는 구간 안 모든 전략 값의 최저 ~ 최고로 잡아, 전략을 켜고 끄거나 비교 묶음을 바꿔도 눈금이 바뀌지 않는다. 100% 보유 · 80:20 보유는 켜지 않아도 차이 칸 계산에 쓰려고 늘 돌린다</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">저장 키 <code>stocklab_lab</code> = <code>{ period, start, end, initialManwon, nextDay, group, on, selected, params, custom, customSeq, sortKey, sortDir, showMiss, migrated }</code>. 목록 폭은 비교 차트 목록과 같은 부품이 별도 키 <code>stocklab_lab_w</code>에 저장한다 (<code>nextDay</code> 처음 값 true, <code>group</code> 처음 값 '모두'). 처음 켜진 전략: 100% 보유 · 80:20 보유 · 사용자 원안 · 남은 현금 50% · 시장 상태별 비중 · 10개월선 · 고정 비율 밴드판 · RSI(2)</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">옛 저장 <code>stocklab_sim</code>이 있으면 처음 한 번 시작 금액과 낙폭 사다리 수치(기본 비중 · 단계 폭 · 매매 단위)를 옮겨 온다. 옛 키는 지우지 않는다</div></div>
-          <div class="oi"><span class="bl"></span><div class="ot">수치 칸은 <code>strategies.js</code>의 범위를 벗어나면 빨간 테두리로 두고 계산에 넣지 않는다(지금 입력 칸과 같은 방식). 탭 · 선택으로 상자 크기 · 위치가 바뀌지 않게 표 칸 폭과 상세 칸 높이를 고정한다</div></div>
+          <div class="oi"><span class="bl"></span><div class="ot">수치 칸은 <code>strategies.js</code>의 범위를 벗어나거나, 기간 · 횟수 · 칸 수(일 · 개월 · 회 · 칸) 칸에 정수가 아닌 값이 들어오면 빨간 테두리로 두고 계산에 넣지 않는다(지금 입력 칸과 같은 방식). 탭 · 선택으로 상자가 크게 흔들리지 않게 표 칸에 최소 폭을 두고 줄 세우기 화살표 자리를 늘 남기며, 상세 칸에 최소 높이(PC 900px)를 둔다</div></div>
           <div class="oi"><span class="bl"></span><div class="ot">배포 때 서비스 워커 판을 올린다(새 파일이 옛 캐시에 가리지 않게)</div></div>
         </div>
 

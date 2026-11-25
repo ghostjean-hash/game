@@ -1,13 +1,13 @@
 // 전략 실험실 규칙 틀(기획서 3.4 · 3.6 ~ 3.8 · 3.11 · 5.6.3). 틀 하나 = { start, day, fill?, sameDayOnly? }.
 // 틀은 주문만 내고, 상태는 fill 에서 체결을 확인한 뒤에만 바꾼다.
-import { DOWN_ACTIONS, UP_STEPS, QUARTER_HIGH_COUNT } from '../data/numbers.js';
+import { DOWN_ACTIONS, UP_STEPS, QUARTER_HIGH_COUNT, SIGNAL_SPAN, INF_SELL_FRAC } from '../data/numbers.js';
 
 const EPS = 1e-12;
 const DONE = (r) => r.status === 'filled' || r.status === 'same';
 const pctTxt = (v) => `${Math.round(v * 1000) / 10}%`;
 
 // 급락 · 급등 판정(기획서 3.3 · 3.11). mem 에 B · C · D 의 쉬는 기간을 적는다.
-const SPAN = { B: 2, C: 3, D: 5 };
+const SPAN = SIGNAL_SPAN;
 export function signal(ind, i, p, mem) {
   const out = { down: false, up: false };
   if (i < 1) return out;
@@ -20,8 +20,8 @@ export function signal(ind, i, p, mem) {
     const n = SPAN[p.def];
     const r = ind.ret(i, n);
     if (r === null) return out;
-    if (i >= (mem.sigDown ?? -1) && r <= -w + EPS) { out.down = true; mem.sigDown = i + n; }
-    if (i >= (mem.sigUp ?? -1) && r >= w - EPS) { out.up = true; mem.sigUp = i + n; }
+    if (i >= (mem.sigDown ?? -1) && r <= -w + EPS) { out.down = true; mem.sigDown = i + n + 1; }
+    if (i >= (mem.sigUp ?? -1) && r >= w - EPS) { out.up = true; mem.sigUp = i + n + 1; }
   } else if (p.def === 'E') {
     const r = ind.ret(i, 1);
     const s = ind.signalStd[i];
@@ -167,9 +167,9 @@ const regime = {
     const m = c.mem;
     const r = regimeOf(c, p);
     if (!r) return;
+    const s = signal(c.ind, c.i, p, m);
     if (r !== m.reg) { c.setWeight(regW(p, r), `시장 상태 ${REG_NAME[r]} - 목표 ${pctTxt(regW(p, r))}`, { key: 'reg', reg: r }); return; }
     if (p.trade !== 'on') return;
-    const s = signal(c.ind, c.i, p, m);
     const f = { up: p.fUp, side: p.fSide, down: p.fDown, strong: p.fStrong }[r];
     if (s.down && f > 0) c.buyWon(c.cash * f, `${REG_NAME[r]} 급락 매수`, 'add');
     else if (s.up) {
@@ -196,7 +196,7 @@ const rebound = {
     }
     if (m.wait) {
       m.low = Math.min(m.low, c.k);
-      if (m.buys === 0 && c.k >= m.low * (1 + p.rb1) - EPS) c.buyWon(c.cash * (p.buy1 ?? 0.5), '급락 뒤 반등 확인 - 1차 매수', 'lot1', { key: 'lot1' });
+      if (m.buys === 0 && c.k >= m.low * (1 + p.rb1) - EPS) c.buyWon(c.cash * p.buy1, '급락 뒤 반등 확인 - 1차 매수', 'lot1', { key: 'lot1' });
       else if (m.buys === 1 && c.k >= m.low * (1 + p.rb2) - EPS) c.buyWon(c.cash, '급락 뒤 반등 확인 - 2차 매수', 'lot2', { key: 'lot2' });
       return;
     }
@@ -223,7 +223,7 @@ const maBand = {
   start(c, p) {
     const ma = c.ind.sma(p.maLen)[c.i];
     c.mem.in = false;
-    if (ma != null && c.k > ma) c.setWeight(p.weight, '시작 - 평균 위', { key: 'in' });
+    if (ma != null && c.k > ma * (1 + p.upBand)) c.setWeight(p.weight, '시작 - 평균 위', { key: 'in' });
   },
   day(c, p) {
     const ma = c.ind.sma(p.maLen)[c.i];
@@ -377,7 +377,7 @@ const r3 = {
       if (i < 3 || [r[i], r[i - 1], r[i - 2], r[i - 3]].some((v) => v == null)) return;
       const ma = ind.sma(p.maLen)[i];
       const fall3 = r[i] < r[i - 1] && r[i - 1] < r[i - 2] && r[i - 2] < r[i - 3];
-      if (ma != null && c.k > ma && fall3 && r[i - 2] < p.rsiStart && r[i] < p.rsiLow) c.buyWon(c.cash, 'R3 - 20% 몫 매수', 'pool');
+      if (ma != null && c.k > ma && fall3 && r[i - 3] < p.rsiStart && r[i] < p.rsiLow) c.buyWon(c.cash, 'R3 - 20% 몫 매수', 'pool');
     } else if (r[i] != null && r[i] > p.rsiExit) c.sellTag('pool', `RSI(2) ${r[i].toFixed(1)} - 매도`);
   },
 };
@@ -391,8 +391,8 @@ const grid = {
     if (!anyHeld && c.k >= m.ref * (1 + p.gridStep) - EPS) { m.ref = c.k; return; }
     for (let j = 1; j <= p.levels; j++) {
       const L = m.ref * Math.pow(1 - p.gridStep, j);
-      if (m.held[j] && c.k >= L * (1 + p.gridStep) - EPS) c.sellTag(`g${j}`, `그리드 ${j}칸 매도`, { key: 's', j });
-      else if (!m.held[j] && c.k <= L + EPS) c.buyWon(unit, `그리드 ${j}칸 매수`, `g${j}`, { key: 'b', j });
+      if (m.held[j] && c.k >= L * (1 + p.gridStep) - EPS) { const lv = L * (1 + p.gridStep); c.sellTag(`g${j}`, `그리드 ${j}칸 매도`, { key: 's', j, limit: (x) => c.ind.k[x] >= lv - EPS }); }
+      else if (!m.held[j] && c.k <= L + EPS) c.buyWon(unit, `그리드 ${j}칸 매수`, `g${j}`, { key: 'b', j, limit: (x) => c.ind.k[x] <= L + EPS });
     }
   },
   fill(c, p, r) {
@@ -406,24 +406,30 @@ const grid = {
 // ---- 무한매수법 V2.2(기획서 3.8 · 3.8.1). 주문 가격은 전날까지의 보유 기록으로만 정한다 ----
 const infinite = {
   sameDayOnly: () => true,
-  start(c, p) { poolStart(c, p); const m = c.mem; m.invested = 0; m.cost = 0; m.mode = 'normal'; m.qCount = 0; m.qUnit = 0; },
+  start(c, p) {
+    poolStart(c, p);
+    const m = c.mem;
+    m.invested = 0; m.cost = 0; m.mode = 'normal'; m.qCount = 0; m.qUnit = 0;
+    m.unit = Math.round(((c.total() * (1 - p.base)) / p.splits) * 1e6) / 1e6; // 1 - 0.8 같은 소수 오차로 1주 덜 사지 않게
+    c.buyWon(m.unit, '무한매수 1회분(새로 시작)', 'inf', { key: 'buy' });
+  },
   day(c, p) {
     const m = c.mem;
     const ind = c.ind;
-    const unit = c.poolStart / p.splits;
+    const unit = m.unit;
     const q = c.tagQty('inf');
     if (q === 0) { c.buyWon(unit, '무한매수 1회분(새로 시작)', 'inf', { key: 'buy' }); return; }
     const avg = m.cost / q;
     const T = m.invested / unit;
     const star = (p.starBase - p.starSlope * T) / 100;
     if (m.mode === 'normal') {
-      if (T > p.splits - 1) { c.sellQty(Math.floor(q / 4), `T ${T.toFixed(1)} - 쿼터손절 1/4 매도`, { onlyTag: 'inf', key: 'qsell' }); return; }
+      if (T > p.splits - 1) { c.sellQty(Math.floor(q * INF_SELL_FRAC), `T ${T.toFixed(1)} - 쿼터손절 1/4 매도`, { onlyTag: 'inf', key: 'qsell' }); return; }
       const s1 = avg * (1 + star);
       const s2 = avg * (1 + p.profit);
-      const q1 = Math.floor(q / 4);
+      const q1 = Math.floor(q * INF_SELL_FRAC);
       if (q1 > 0) c.sellQty(q1, `별% 지정가 1/4 매도(평단 ${pctTxt(star)} 위)`, { onlyTag: 'inf', key: 'sell', limit: (j) => ind.p[j] >= s1 - EPS });
       c.sellQty(q - q1, `+${pctTxt(p.profit)} 지정가 3/4 매도`, { onlyTag: 'inf', key: 'sell', limit: (j) => ind.p[j] >= s2 - EPS });
-      if (T <= (p.splits - 1) / 2) {
+      if (T <= Math.floor((p.splits - 1) / 2)) {
         c.buyWon(unit / 2, '평단 장 마감 지정가 매수', 'inf', { key: 'buy', limit: (j) => ind.p[j] <= avg + EPS });
         c.buyWon(unit / 2, '별% 장 마감 지정가 매수', 'inf', { key: 'buy', limit: (j) => ind.p[j] <= s1 + EPS });
       } else {
@@ -432,7 +438,7 @@ const infinite = {
       return;
     }
     // 쿼터손절 중
-    if (m.qCount >= p.qSplits) { c.sellQty(Math.floor(q / 4), '쿼터손절 10회 뒤 1/4 매도', { onlyTag: 'inf', key: 'qsell2', avgAt: avg }); return; }
+    if (m.qCount >= p.qSplits) { c.sellQty(Math.floor(q * INF_SELL_FRAC), '쿼터손절 10회 뒤 1/4 매도', { onlyTag: 'inf', key: 'qsell2', avgAt: avg }); return; }
     const lim = avg * (1 - p.qLoss);
     c.buyWon(m.qUnit, '쿼터손절 장 마감 지정가 매수', 'inf', { key: 'qbuy', limit: (j) => ind.p[j] <= lim + EPS });
   },
@@ -472,8 +478,9 @@ const breakout = {
     if (!kb || !kb0 || !lb || !lb0) return;
     const trig = kb[0] + p.k * (kb0[1] - kb0[2]);
     if (kb[1] >= trig) {
-      const price = Math.min(Math.max(lb[0] + p.k * (lb0[1] - lb0[2]), lb[2]), lb[1]);
-      c.buyWon(Infinity, '변동성 돌파 - 20% 몫 매수', 'pool', { price });
+      // 레버리지 돌파 가격에 그날 고가가 못 닿으면 미체결(다른 가격으로 바꿔 사지 않는다)
+      const price = lb[0] + p.k * (lb0[1] - lb0[2]);
+      c.buyWon(Infinity, '변동성 돌파 - 20% 몫 매수', 'pool', { price, limit: () => lb[1] >= price - EPS });
     }
   },
 };

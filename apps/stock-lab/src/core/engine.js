@@ -65,8 +65,10 @@ export function runStrategy(ind, from, to, preset, params, opt) {
       const stockVal = acct.shares * price;
       if (targetVal > stockVal) {
         side = 'buy';
-        qty = Math.floor((targetVal - stockVal) / (price * (1 + fee)));
-        qty = Math.min(qty, Math.floor(acct.cash / (price * (1 + fee))));
+        const want = Math.floor((targetVal - stockVal) / (price * (1 + fee)));
+        qty = Math.min(want, Math.floor(acct.cash / (price * (1 + fee))));
+        // 사야 하는데 현금이 없어 1주도 못 사면 미체결(틀 상태를 바꾸지 않는다)
+        if (want > 0 && qty <= 0) { record(j, o.reason, 0, price, ST.NOCASH); return { order: o, qty: 0, price, status: ST.NOCASH }; }
       } else if (targetVal < stockVal) {
         side = 'sell';
         qty = Math.floor((stockVal - targetVal) / price);
@@ -104,13 +106,15 @@ export function runStrategy(ind, from, to, preset, params, opt) {
   }
 
   // 매도 먼저, 매수 나중. weight 주문은 체결 때 방향이 정해지므로 현재 비중으로 미리 가른다.
+  // 주문 하나가 체결될 때마다 바로 틀에 알린다(같은 날 매도 뒤 매수가 이어질 때 그 순간의 보유로 원가를 셈)
   function execAll(orders, j) {
     const isSell = (o) => o.side === 'sell' || (o.type === 'weight' && weight(j) > o.w);
     const sells = orders.filter(isSell);
     const buys = orders.filter((o) => !isSell(o));
-    const results = [];
-    for (const o of [...sells, ...buys]) results.push(execOne(o, j));
-    return results;
+    for (const o of [...sells, ...buys]) {
+      const r = execOne(o, j);
+      if (frame.fill) frame.fill(ctx, params, r);
+    }
   }
 
   const ctx = {
@@ -135,24 +139,20 @@ export function runStrategy(ind, from, to, preset, params, opt) {
     note(reason) { record(i, reason, 0, ind.p[i], 'note'); },
   };
 
-  function deliver(results) {
-    if (frame.fill) for (const r of results) frame.fill(ctx, params, r);
-  }
-
   // 첫날: 출발 상태라 늘 같은 날 체결(기획서 5.6.3)
   ctx.orders = [];
   frame.start(ctx, params);
-  deliver(execAll(ctx.orders, i));
+  execAll(ctx.orders, i);
   poolStart = acct.cash;
   daily.push([ind.date[i], total(i), weight(i)]);
 
   for (i = from + 1; i <= to; i++) {
-    if (pending.length) { deliver(execAll(pending, i)); pending = []; }
+    if (pending.length) { execAll(pending, i); pending = []; }
     ctx.orders = [];
     frame.day(ctx, params);
     if (ctx.orders.length) {
       if (nextDay) pending = ctx.orders;
-      else deliver(execAll(ctx.orders, i));
+      else execAll(ctx.orders, i);
     }
     daily.push([ind.date[i], total(i), weight(i)]);
   }
@@ -181,6 +181,8 @@ export function summarizeRun(daily, trades, initial) {
       if (daily[j][1] >= mddPeakVal) { recovery = j - trough; break; }
     }
   } else recovery = 0;
+  // 미회복이면 최대 낙폭 바닥 이후 지난 거래일 수
+  const sinceTrough = recovery === null ? daily.length - 1 - trough : null;
   const unrecovered = final < hi ? daily.length - 1 - hiAt : 0;
   return {
     final,
@@ -188,6 +190,7 @@ export function summarizeRun(daily, trades, initial) {
     cagr: years > 0 ? Math.pow(final / initial, 1 / years) - 1 : 0,
     mdd,
     recovery,
+    sinceTrough,
     unrecovered,
     giveBack: hi - final,
     giveBackPct: final / hi - 1,

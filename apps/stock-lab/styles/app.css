@@ -116,7 +116,9 @@ body.side-panel-resizing { cursor: col-resize; user-select: none; }
 .lab-sum tr.is-sel td, .lab-years tr.is-sel td { background: #eef4fd; }
 .lab-years .sub { color: var(--ink-mute); font-size: var(--fs-1); }
 .lab-sum .sw, .lab-years .sw { display: inline-block; width: 16px; height: 4px; margin-right: var(--sp-2); vertical-align: middle; border-radius: 2px; }
-.lab-detail { min-height: 520px; padding: var(--sp-3); background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-1); }
+.lab-sum th, .lab-sum td, .lab-years th, .lab-years td { min-width: 76px; }
+.lab-sum td:first-child, .lab-years td:first-child { min-width: 220px; }
+.lab-detail { min-height: 900px; padding: var(--sp-3); background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-1); }
 .lab-dhead { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
 .lab-dhead .sw { width: 22px; height: 5px; border-radius: 2px; }
 .lab-dhead strong { font-size: var(--fs-4); }

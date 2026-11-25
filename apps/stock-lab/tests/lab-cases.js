@@ -5,9 +5,9 @@ import { fileURLToPath } from 'url';
 import { prepare } from '../src/core/indicators.js';
 import { runStrategy, summarizeRun } from '../src/core/engine.js';
 import { FRAMES, signal } from '../src/core/frames.js';
-import { yearTable, ranks } from '../src/core/stats.js';
+import { yearTable, ranks, yearRanges } from '../src/core/stats.js';
 import { simulate, alignDays, sliceDays } from '../src/core/simulate.js';
-import { PRESETS } from '../src/data/strategies.js';
+import { PRESETS, PARAM_META } from '../src/data/strategies.js';
 
 export function runLab(ok, eq) {
   const P = Object.fromEntries(PRESETS.map((p) => [p.id, p]));
@@ -213,22 +213,28 @@ export function runLab(ok, eq) {
     ok(J(qtys(r)) === J([8000, 1052, 1111, -1111, -1052, Math.floor(100000 / 99.75)]), 'L16 수량', J(qtys(r)));
   }
 
-  // L17. 무한매수법(4분할 → 1회분 50000)
-  // 첫날 뒤 100 에 500주. 다음 날 종가가 99 면 평단(100) 지정가 · 별% 지정가 둘 다 체결, 105 면 별% 지정가만 체결.
+  // L17. 무한매수법(4분할 → 1회분 = 1e6 × 20% ÷ 4 = 50000)
+  // 첫날 80% 와 1회분을 100 에 산다(500주). 다음 날 종가가 99 면 평단(100) 지정가 · 별% 지정가 둘 다 체결, 105 면 별% 지정가만 체결.
   // 주문 가격은 전날 평단으로 정해지므로 그날 종가를 바꿔도 지정가는 같다.
   {
-    const a = run(mk([100, 100, 99]), 'infinite', { splits: 4 });
-    const b = run(mk([100, 100, 105]), 'infinite', { splits: 4 });
-    const buysA = filled(a).filter((t) => t.qty > 0 && t.date === dates(3)[2]).length;
-    const buysB = filled(b).filter((t) => t.qty > 0 && t.date === dates(3)[2]).length;
+    const a = run(mk([100, 99]), 'infinite', { splits: 4 });
+    const b = run(mk([100, 105]), 'infinite', { splits: 4 });
+    ok(J(qtys(a).slice(0, 2)) === J([8000, 500]), 'L17 첫날 80% 와 1회분', J(qtys(a)));
+    const buysA = filled(a).filter((t) => t.qty > 0 && t.date === dates(2)[1]).length;
+    const buysB = filled(b).filter((t) => t.qty > 0 && t.date === dates(2)[1]).length;
     ok(buysA === 2 && buysB === 1, 'L17 지정가는 전날 평단 기준', `A ${buysA} B ${buysB}`);
-    // 크게 오르면 1/4 · 3/4 모두 팔려 처음부터 다시 1회분을 산다
-    const c = run(mk([100, 100, 99, 111, 111]), 'infinite', { splits: 4 });
-    const day3 = filled(c).filter((t) => t.date === dates(5)[3]);
-    ok(day3.length === 2 && day3.every((t) => t.qty < 0), 'L17 전량 매도', J(day3.map((t) => t.reason)));
-    ok(filled(c).some((t) => t.date === dates(5)[4] && t.reason.includes('새로 시작')), 'L17 전량 매도 뒤 다시 시작');
+    // 평단 지정가 줄의 기준 가격이 그날 종가와 상관없이 전날 평단(100)인지: 100.0001 이면 못 사고 99.9999 면 산다
+    const hi = run(mk([100, 100.0001]), 'infinite', { splits: 4 });
+    const lo = run(mk([100, 99.9999]), 'infinite', { splits: 4 });
+    const avgLine = (r) => r.trades.find((t) => t.date === dates(2)[1] && t.reason.startsWith('평단'));
+    ok(avgLine(hi)?.status === 'nolimit' && avgLine(lo)?.status === 'filled', 'L17 평단 지정가 = 전날 평단 100');
+    // 크게 오르면 1/4 · 3/4 모두 팔려 다음 날 처음부터 다시 1회분을 산다
+    const c = run(mk([100, 111, 111]), 'infinite', { splits: 4 });
+    const day1 = filled(c).filter((t) => t.date === dates(3)[1]);
+    ok(day1.length === 2 && day1.every((t) => t.qty < 0), 'L17 전량 매도', J(day1.map((t) => t.reason)));
+    ok(filled(c).some((t) => t.date === dates(3)[2] && t.reason.includes('새로 시작')), 'L17 전량 매도 뒤 다시 시작');
     // 계속 빠지면 T 가 분할 수 - 1 을 넘어 쿼터손절
-    const d = run(mk([100, 100, 98, 96, 94, 92, 90, 88]), 'infinite', { splits: 4 });
+    const d = run(mk([100, 98, 96, 94, 92, 90, 88]), 'infinite', { splits: 4 });
     ok(filled(d).some((t) => t.reason.includes('쿼터손절 1/4')), 'L17 쿼터손절 진입', J(filled(d).map((t) => t.reason)));
   }
 
@@ -241,11 +247,11 @@ export function runLab(ok, eq) {
     ok(signal(ind, 1, p, {}).down === true, 'L18 장중 저가 -5.1% 급락');
     const s2 = signal(ind, 2, p, {});
     ok(!s2.down && !s2.up, 'L18 같은 날 둘 다면 판정 안 함');
-    // 2일 정의는 신호 뒤 2일 쉬기
+    // 2일 정의는 신호 다음 날부터 2거래일 쉬기: 2번째 날 신호 → 3 · 4번째 날 쉼 → 5번째 날(85/93 = -8.6%) 다시 신호
     const ind2 = mk([100, 98, 94, 93, 88, 85]);
     const mem = {};
     const got = [1, 2, 3, 4, 5].map((i) => signal(ind2, i, { def: 'B', width: 0.05 }, mem).down);
-    ok(J(got) === J([false, true, false, true, false]), 'L18 B 정의 쉬는 기간', J(got));
+    ok(J(got) === J([false, true, false, false, true]), 'L18 B 정의 쉬는 기간', J(got));
   }
 
   // L19. 낙폭 사다리 틀 = 옛 simulate(같은 날 체결) - 실제 2026 자료
@@ -272,5 +278,75 @@ export function runLab(ok, eq) {
     ok(row.win80 === 2 && row.win100 === 1, 'L20 이긴 해 수', J(row));
     eq(row.avgRank, 1.5, 'L20 평균 순위');
     eq(row.avgRet, 0.225, 'L20 평균 수익');
+    // 연도 구간: 자료 안의 2023 · 2024 해만, 첫 · 마지막 거래일
+    const yi = mk([1, 2, 3, 4], ['2023-12-28', '2023-12-29', '2024-01-02', '2024-01-03']);
+    const yr = yearRanges(yi);
+    ok(J(yr.map((x) => [x.key, x.range])) === J([['2023', [0, 1]], ['2024', [2, 3]]]), 'L20 연도 구간', J(yr));
+  }
+
+  // L21. 미체결 · 체결 기다리기 · 지정가 안 닿음
+  {
+    // 기본 비중 100% 라 현금 0: 급락 매수가 현금 부족으로 미체결 → 상태는 평상 그대로라 다음 급등에 팔지 않는다(1차 매수 상태면 '추가로 산 만큼 매도' 줄이 생김)
+    const r = run(mk([100, 94, 99.5]), 'user-A', { base: 1 });
+    ok(r.trades.some((t) => t.status === 'nocash') && !r.trades.some((t) => t.reason.startsWith('급등')), 'L21 현금 부족 뒤 상태 그대로', J(r.trades.map((t) => t.reason)));
+    // 다음 날 체결: 이틀 연속 급락이면 첫 주문은 다음 날 체결되고, 그 뒤에야 2차 매수 주문이 나가 그다음 날 체결
+    const nx = run(mk([100, 94, 88.3, 88]), 'user-A', {}, { nextDay: true });
+    ok(J(filled(nx).map((t) => [t.date, t.reason])) === J([[dates(4)[0], '시작'], [dates(4)[2], '급락 매수 1'], [dates(4)[3], '급락 매수 2']]), 'L21 체결 기다리는 동안 새 주문 없음', J(filled(nx).map((t) => t.reason)));
+    // 그리드 다음 날 체결: 95 에서 낸 1칸 매수가 다음 날 120 이면 칸 가격에 안 닿아 미체결
+    const g = run(mk([100, 95, 120]), 'grid', {}, { nextDay: true });
+    ok(g.trades.some((t) => t.status === 'nolimit' && t.reason.startsWith('그리드 1칸 매수')) && qtys(g).length === 1, 'L21 그리드 지정가 안 닿음', J(g.trades.map((t) => [t.reason, t.status])));
+    // 비중 맞추기 주문이 현금이 없어 1주도 못 사면 미체결
+    FRAMES.__w = { start(c) { c.buyWon(Infinity, '전액', 't'); }, day(c) { if (c.i === 1) c.setWeight(1.5, '더 사기'); } };
+    const w = runStrategy(mk([100, 100]), 0, 1, { frame: '__w' }, {}, { initial: 1e6, fee: 0, nextDay: false });
+    ok(w.trades[1]?.status === 'nocash', 'L21 비중 맞추기 현금 부족 미체결', J(w.trades.map((t) => t.status)));
+    delete FRAMES.__w;
+  }
+
+  // L22. 보유 · 변동성 돌파 · 6Sig 분기 매도 · 4번 건너뛰고 풀림 · R3 실제 매수
+  {
+    const h = run(mk([100, 50, 200]), 'hold100', {});
+    ok(qtys(h).length === 1 && h.daily[2][1] === 1e6 * 2, 'L22 100% 보유 매매 1번 · 최종 2배');
+    // 변동성 돌파: 둘째 날 코스피 고가 106 >= 시가 100 + 0.5 × 전날 폭(110 - 90) = 110 아님 → 없음, 셋째 날 고가 112 >= 101 + 0.5 × (106 - 99) = 104.5 → 매수,
+    // 산 가격 = 레버리지 시가 50 + 0.5 × (전날 폭 52 - 48) = 52, 넷째 날 시가 55 에 매도
+    const ds = dates(4);
+    const kb = new Map([[ds[0], [100, 110, 90, 100]], [ds[1], [100, 106, 99, 101]], [ds[2], [101, 112, 100, 110]], [ds[3], [111, 112, 108, 110]]]);
+    const lb = new Map([[ds[0], [50, 55, 45, 50]], [ds[1], [50, 52, 48, 51]], [ds[2], [50, 56, 49, 55]], [ds[3], [55, 56, 54, 55]]]);
+    const bi = prepare(ds.map((d, i) => [d, [100, 101, 110, 110][i], [50, 51, 55, 55][i]]), { kospi: kb, lev: lb });
+    const br = runStrategy(bi, 0, 3, P.breakout, P.breakout.params, { initial: 1e6, fee: 0, nextDay: true });
+    const bf = filled(br);
+    ok(bf[1]?.date === ds[2] && bf[1].price === 52 && bf[2]?.date === ds[3] && bf[2].price === 55, 'L22 변동성 돌파 매수 · 다음 날 시가 매도', J(bf.map((t) => [t.date, t.qty, t.price])));
+    // 6Sig: 분기 말 주식이 신호선을 넘으면 매도. 30 down 은 매도 4번 건너뛰면 풀린다
+    const qd = ['2020-03-30', '2020-03-31', '2020-06-30', '2020-09-30', '2020-12-31', '2021-03-31', '2021-06-30', '2021-09-30', '2021-10-01'];
+    const sell = run(mk([100, 120, 120, 120, 120, 120, 120, 120, 120], qd), 'sig6', {});
+    ok(filled(sell)[1]?.qty < 0, 'L22 6Sig 분기 신호선 초과 매도', J(qtys(sell)));
+    const cr = run(mk([100, 100, 60, 70, 80, 90, 100, 110, 110], qd), 'sig6', {});
+    const skips = cr.trades.filter((t) => t.reason.includes('건너뜀')).length;
+    ok(skips === 4 && cr.trades.some((t) => t.reason === '30 down 풀림'), 'L22 6Sig 4번 건너뛰고 풀림', J(cr.trades.map((t) => t.reason)));
+    // R3: 코스피가 20일 평균 위에서 RSI(2) 66.9 → 28.8 → 10.6 → 4.0 → 1.5, 첫 하락 출발 28.8 < 60 → 마지막 날 매수
+    const rk = [...Array(15).fill(50), 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120, 119, 117, 114, 110, 105];
+    const r3 = run(mk(rk), 'r3', { maLen: 20 });
+    const buy = filled(r3).find((t) => t.reason.startsWith('R3'));
+    ok(buy && buy.date === dates(rk.length)[rk.length - 1], 'L22 R3 실제 매수', buy?.date);
+  }
+
+  // L23. 같은 날 매도 뒤 매수의 원가 · 돌파 가격 미도달 · 정수 칸
+  {
+    // 무한매수 4분할: 500주 @100 → 109.5 에서 1/4(125주) 매도 뒤 228주 매수 → 남은 603주 원가 = 37500 + 228 × 109.5 = 62466
+    let cost = null;
+    const orig = FRAMES.infinite.fill;
+    FRAMES.infinite.fill = function (c, p, r) { orig.call(this, c, p, r); cost = c.mem.cost; };
+    run(mk([100, 109.5]), 'infinite', { splits: 4 });
+    FRAMES.infinite.fill = orig;
+    eq(cost, 62466, 'L23 무한매수 같은 날 매도 · 매수 원가');
+    // 변동성 돌파: 레버리지 돌파 가격 50 + 0.5 × (60 - 40) = 60 이 그날 고가 51 에 못 닿으면 미체결
+    const d2 = dates(2);
+    const bi = prepare([[d2[0], 100, 50], [d2[1], 120, 50]], {
+      kospi: new Map([[d2[0], [100, 110, 90, 100]], [d2[1], [100, 130, 99, 120]]]),
+      lev: new Map([[d2[0], [50, 60, 40, 50]], [d2[1], [50, 51, 49, 50]]]),
+    });
+    const br = runStrategy(bi, 0, 1, P.breakout, P.breakout.params, { initial: 1e6, fee: 0, nextDay: false });
+    ok(br.trades.some((t) => t.status === 'nolimit' && t.reason.startsWith('변동성 돌파')) && qtys(br).length === 1, 'L23 돌파 가격 미도달 미체결', J(br.trades.map((t) => [t.status, t.price])));
+    // 기간 · 횟수 · 칸 수 칸은 정수만
+    ok(['maLen', 'months', 'splits', 'levels', 'volDays', 'window', 'skipMax'].every((k) => PARAM_META[k].int) && !PARAM_META.width.int, 'L23 정수 칸 표시');
   }
 }
