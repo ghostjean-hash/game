@@ -1,6 +1,6 @@
 # game-hub NEXT-SESSION
 
-> 2026-11-25 새 앱 주식 뷰 · 시뮬레이터(apps/stock-lab) 구현 · 독립 검사 2회차 통과, 미커밋. 다음: 사용자 화면 확인 → 커밋 · 푸시 지시(푸시해야 GitHub Actions 매일 수집이 돈다) → 국고채 5년은 ECOS 인증키 받으면 저장소 비밀값 ECOS_API_KEY 등록. 문서 apps/stock-lab/docs/planning-stock-lab.html r0.4.
+> 2026-11-25 새 앱 주식 뷰 · 시뮬레이터(apps/stock-lab) 배포 v256(fe95913, 수집 스크립트 59cd831), smoke 8건 통과. 다음: git log 에서 2026-11-26 07:30 KST 첫 자동 수집 커밋(market-bot) 확인 → 사용자 화면 확인 → 국고채 5년은 사용자가 ECOS 키 대기로 정함(키 오면 저장소 비밀값 ECOS_API_KEY). 문서 apps/stock-lab/docs/planning-stock-lab.html r0.4.
 
 > 2026-11-23 모노폴리 0.30 사용성 수정 v255 배포(d156e24). 다음: 아이패드 실기기 확인(0.30.2.1 판단은 사용자 "ok"로 확정). 상세 apps/monopoly-companion/NEXT-SESSION.md 0.23.
 > 2026-11-22 모노폴리 v254 배포(25d709d) - 0.28 · 0.29 · 보드 SVG. 다음: 아이패드 확인, 사용성 점검 0.30 범위 답 대기. 상세 apps/monopoly-companion/NEXT-SESSION.md 0.22.
