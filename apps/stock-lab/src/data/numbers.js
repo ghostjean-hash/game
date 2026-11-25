@@ -26,6 +26,14 @@ export const INITIAL_MAX_MANWON = 10000000;
 export const BASE_WEIGHT_MIN = 0;
 export const BASE_WEIGHT_MAX = 100;
 
+// 비교 차트 목록 폭(px): 끌어서 조절하는 범위와 처음 폭
+export const LIST_MIN_PX = 180;
+export const LIST_MAX_PX = 480;
+export const LIST_DEFAULT_PX = 340;
+
+// 보이는 구간 오른쪽 끝이 마지막 날짜에서 이 칸 수 안이면 "맨 끝을 보는 중"으로 본다(끝 막대가 반만 보일 때 포함).
+export const END_SNAP_BARS = 2.5;
+
 // 비교 차트를 처음 열 때 보이는 구간(년)
 export const COMPARE_INITIAL_YEARS = 1;
 

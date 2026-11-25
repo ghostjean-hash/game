@@ -1,6 +1,6 @@
 // 비교 차트 화면(기획서 2절). 가격 시세는 위 칸에 보이는 구간 첫날 대비 등락률로, 금리는 아래 칸에 실제 % 로 그린다.
 import { SERIES } from '../data/series.js';
-import { COMPARE_INITIAL_YEARS } from '../data/numbers.js';
+import { COMPARE_INITIAL_YEARS, END_SNAP_BARS } from '../data/numbers.js';
 import { resample, unionDates, fillForward, indexAtOrBefore, baseValue } from '../core/resample.js';
 import { load, save, timeToStr, fmtValue, fmtPct, fmtPp, signClass, CHART_BASE } from './common.js';
 
@@ -54,7 +54,8 @@ export function createCompare(raw) {
 
   function setInterval(interval, keepRange) {
     const prev = keepRange ? priceChart.timeScale().getVisibleRange() : null;
-    const prevLast = dates.length ? dates[dates.length - 1] : null;
+    const prevLr = keepRange ? priceChart.timeScale().getVisibleLogicalRange() : null;
+    const prevAtEnd = !prevLr || prevLr.to >= dates.length - END_SNAP_BARS;
     const sampled = {};
     for (const s of list) sampled[s.id] = resample(raw[s.id], interval);
     dates = unionDates(Object.values(sampled));
@@ -64,23 +65,26 @@ export function createCompare(raw) {
     padPrice.setData(pad);
     padRate.setData(pad);
     for (const s of list) lines[s.id].setData(data[s.id].map(([d, v]) => ({ time: d, value: v })));
-    let range;
+    // 구간은 날짜 칸 번호로 건다(날짜로 걸면 끝 막대가 빠질 때가 있다).
+    // 바꾼 단위에 없는 날짜(주간 월요일 · 월간 1일)는 그 날짜나 그 앞의 실제 날짜 칸으로 붙인다.
+    const lastIdx = dates.length - 1;
+    const idxOf = (d) => Math.max(0, indexAtOrBefore(dates.map((x) => [x]), d));
+    let fromIdx;
+    let toIdx = lastIdx;
     if (prev) {
-      // 바꾼 단위에 없는 날짜(주간 월요일 · 월간 1일)로는 구간을 못 맞추므로 실제 있는 날짜로 붙인다.
-      const snap = (d) => { const i = indexAtOrBefore(dates.map((x) => [x]), d); return dates[Math.max(0, i)]; };
-      const from = snap(timeToStr(prev.from));
+      fromIdx = idxOf(timeToStr(prev.from));
       // 맨 끝을 보고 있었으면 바꾼 뒤에도 맨 끝(최신 날짜)까지 보인다.
-      const to = timeToStr(prev.to) >= prevLast ? dates[dates.length - 1] : snap(timeToStr(prev.to));
-      range = { from, to: to > from ? to : dates[dates.length - 1] };
+      if (!prevAtEnd) toIdx = idxOf(timeToStr(prev.to));
+      if (toIdx <= fromIdx) toIdx = lastIdx;
     } else {
-      const last = dates[dates.length - 1];
-      const from = new Date(last + 'T00:00:00Z');
+      const from = new Date(dates[lastIdx] + 'T00:00:00Z');
       from.setUTCFullYear(from.getUTCFullYear() - INITIAL_YEARS);
-      range = { from: from.toISOString().slice(0, 10), to: last };
+      fromIdx = idxOf(from.toISOString().slice(0, 10));
     }
     // 두 칸에 같은 구간을 함께 건다. 한 칸에만 걸면 다른 칸의 옛 구간이 맞물림으로 되돌아와 덮는다.
-    priceChart.timeScale().setVisibleRange(range);
-    rateChart.timeScale().setVisibleRange(range);
+    const lr = { from: fromIdx, to: toIdx };
+    priceChart.timeScale().setVisibleLogicalRange(lr);
+    rateChart.timeScale().setVisibleLogicalRange(lr);
     renderValues(null);
   }
 
@@ -155,7 +159,10 @@ export function createCompare(raw) {
     if (!dates.length) return;
     const range = priceChart.timeScale().getVisibleRange();
     const from = range ? timeToStr(range.from) : dates[0];
-    const at = d || (range ? timeToStr(range.to) : dates[dates.length - 1]);
+    // 가리키지 않을 때는 보이는 구간 끝 값. 맨 끝까지 보고 있으면 최신 날짜(끝 막대가 반만 보여도 포함).
+    const lr = priceChart.timeScale().getVisibleLogicalRange();
+    const atEnd = !range || (lr && lr.to >= dates.length - END_SNAP_BARS);
+    const at = d || (atEnd ? dates[dates.length - 1] : timeToStr(range.to));
     els.hover.textContent = `${from} 대비 · ${at}`;
     for (const s of list) {
       const r = data[s.id];

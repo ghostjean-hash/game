@@ -45,7 +45,15 @@ button { font: inherit; color: inherit; }
 .view { flex: 1; min-height: 0; }
 
 /* 비교 차트 */
-#view-compare { display: grid; grid-template-columns: var(--list-w) 1fr; }
+#view-compare { display: grid; grid-template-columns: var(--list-w) var(--handle-w) 1fr; }
+#view-compare.is-collapsed { grid-template-columns: 1fr; }
+#view-compare.is-collapsed .series-list, #view-compare.is-collapsed .list-handle { display: none; }
+.list-handle { cursor: col-resize; background: var(--line); border-left: var(--handle-gap) solid var(--panel); border-right: var(--handle-gap) solid var(--panel); }
+.list-handle:hover, body.side-panel-resizing .list-handle { background: var(--accent); }
+body.side-panel-resizing { cursor: col-resize; user-select: none; }
+.list-toggle { cursor: pointer; padding: 0; }
+.list-toggle[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+.list-toggle.is-off { visibility: hidden; }
 .series-list {
   border-right: 1px solid var(--line);
   background: var(--panel);
@@ -115,6 +123,7 @@ td.num, th.num { text-align: right; }
   .updated { order: 2; }
   .seg button { min-width: 0; padding: 0 var(--sp-2); }
   #view-compare { display: flex; flex-direction: column; }
+  .list-handle { display: none; }
   .series-list {
     flex: none; display: grid; grid-template-columns: 1fr 1fr; max-height: 34vh;
     border-right: 0; border-bottom: 1px solid var(--line); padding: var(--sp-1) 0;

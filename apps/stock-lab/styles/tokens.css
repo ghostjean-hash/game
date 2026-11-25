@@ -29,5 +29,7 @@
   --topbar-h: 52px;
   --btn-h: 34px;
   --list-w: 340px;
+  --handle-w: 6px;
+  --handle-gap: 2px;
   --rate-h: 30%;
 }
