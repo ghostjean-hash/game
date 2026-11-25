@@ -50,7 +50,10 @@ export function createSim(kospiRows, levRows) {
   }), chartSkin(LWC, timeToStr, simLabel)));
   const series = {};
   for (const w of WAYS) {
-    series[w.key] = chart.addLineSeries({ color: w.color, lineWidth: 2, lineType: LINE_TYPE(LWC), priceLineVisible: false, lastValueVisible: false });
+    series[w.key] = chart.addLineSeries({
+      color: w.color, lineWidth: 2, lineType: LINE_TYPE(LWC), priceLineVisible: false, lastValueVisible: false,
+      autoscaleInfoProvider: () => sharedScale(),
+    });
   }
 
   // 낱말 · 절 제목
@@ -183,22 +186,44 @@ export function createSim(kospiRows, levRows) {
     for (const w of WAYS) {
       series[w.key].setData(results[w.key].daily.map(([d, v]) => ({ time: d, value: v })));
     }
-    const markers = results.rule.trades.filter((t) => t.qty !== 0 && t.label !== '시작').map((t) => ({
+    markers = results.rule.trades.filter((t) => t.qty !== 0 && t.label !== '시작').map((t) => ({
       time: t.date,
       position: t.qty > 0 ? 'belowBar' : 'aboveBar',
       color: t.qty > 0 ? BUY_COLOR : SELL_COLOR,
       shape: t.qty > 0 ? 'arrowUp' : 'arrowDown',
     }));
-    series.rule.setMarkers(markers);
     // 게임 모드 눈금(D+n)은 기간 시작일 기준이라, 기간이 바뀌면 차트가 기억한 옛 눈금 글자를 새로 만들게 한다.
     if (GAME) chart.applyOptions(chartSkin(LWC, timeToStr, simLabel));
     applyWays();
     chart.timeScale().fitContent();
   }
 
-  // 끈 방식은 선을 감춘다(매매 화살표는 이 규칙 선에 붙어 있어 함께 감춰진다).
+  // 끈 방식은 선을 투명하게만 감춘다. 선을 빼면(visible: false) 세로축 범위 계산에서도 빠져 눈금이 바뀌므로,
+  // 셋 모두 늘 세로축 계산에 남겨 켜고 꺼도 세로축이 그대로 있게 한다.
+  let markers = [];
+  // 세로축 범위 = 보이는 구간 안 세 방식 값 전체의 최저 ~ 최고. 켜고 끄기와 상관없이 같은 범위.
+  function sharedScale() {
+    if (!results) return null;
+    const vr = chart.timeScale().getVisibleRange();
+    const a = vr ? timeToStr(vr.from) : null;
+    const b = vr ? timeToStr(vr.to) : null;
+    let lo = Infinity;
+    let hi = -Infinity;
+    for (const w of WAYS) {
+      for (const [d, v] of results[w.key].daily) {
+        if ((a && d < a) || (b && d > b)) continue;
+        if (v < lo) lo = v;
+        if (v > hi) hi = v;
+      }
+    }
+    return Number.isFinite(lo) ? { priceRange: { minValue: lo, maxValue: hi } } : null;
+  }
   function applyWays() {
-    for (const w of WAYS) series[w.key].applyOptions({ visible: state.ways[w.key] !== false });
+    for (const w of WAYS) {
+      const on = state.ways[w.key] !== false;
+      series[w.key].applyOptions({ color: on ? w.color : 'transparent', crosshairMarkerVisible: on });
+    }
+    series.rule.setMarkers(state.ways.rule !== false ? markers : []);
   }
 
   function renderTrades() {
